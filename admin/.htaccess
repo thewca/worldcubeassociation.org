@@ -1,0 +1,7 @@
+
+AuthUserFile /home/u1/speedcubing2/html/results/admin/.htpasswd
+AuthName "Protected Area"
+AuthType Basic
+<Limit GET POST>
+require valid-user
+</Limit>

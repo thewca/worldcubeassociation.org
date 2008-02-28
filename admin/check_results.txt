@@ -1,0 +1,37 @@
+
+Definitions:
+
+-2 : did not start (DNS), competitor's decision
+-1 : did not finish (DNF)
+ 0 : no solve, decision of rules/competition/format
+>0 : successful solve
+
+Procedure:
+
+1) Let dns, dnf, zero, suc be the number of values of each kind.
+2) Check that no zero is followed by a non-zero value.
+3) Check zer<5 (there must be at least one non-zero value)
+4) Check dns+dnf+zer+suc=5 (nothing besides these is allowed)
+5) Sort the successful values into v1 .. v_suc
+----------------------------------------------------------------------
+6) compute best
+
+     if suc>0 then v1
+else if dnf>0 then -1 (DNF)
+else -2 (DNS)
+----------------------------------------------------------------------
+7) compute average
+
+set to 0
+
+if format meanOf3:
+     if zer>2 then 0
+else if suc<3 then -1 (DNF)
+else round((v1+v2+v3)/3)
+
+if format averageOf5:
+     if zer>0 then 0
+else if suc<4 then -1 (DNF)
+else round((v2+v3+v4)/3)
+----------------------------------------------------------------------
+8) compare the computed best and average with the stored ones

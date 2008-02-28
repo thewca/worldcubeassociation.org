@@ -1,0 +1,219 @@
+body {
+  margin: 15px;
+  padding: 0;
+  background: #FFF;
+  color: #333;
+}
+
+body, td, th {
+  xfont-size: 90%;
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  line-height: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  background-image: url(images/arrow.png) ;
+  background-repeat: no-repeat;
+  background-position: 0px 3px;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+.clr {
+  clear: both;
+}
+
+#main {
+  text-align: center;
+  margin: 0 auto;
+}
+
+#content {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #CCC;
+  background: #FFF;
+  padding: 2px;
+  text-align: left;
+}
+
+#header {
+  margin: 0;
+  padding: 40px 0 0 105px;
+  height: 65px;
+  background: url(images/logo.gif) no-repeat;
+  text-align: left;
+  vertical-align: middle;
+  color: orange;
+  font-size: 1.25em; /* 20px; */
+  font-weight: bold;
+/*  line-height: 50px */
+}
+
+#rmenu {
+  float: right;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 150px;
+}
+
+#rimenu {
+  border: 1px solid #CCC;
+  padding: 2px;
+  margin: 0;
+}
+
+#choices .space {
+  font-size:   0.75em;
+  font-weight: bold;
+  padding: 2px 8px 0 0;
+}
+
+#choices {
+  padding-left: 10px;
+}
+
+table td.body_outer {
+  padding: 2px;
+  border: 1px solid #CCC;
+}
+
+.back_button {
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.8em;
+  font-weight: bold;
+  border: 3px double #CCC;
+  width: auto;
+  background: url(images/button_bg.png) repeat-x;
+  padding: 0 3px;
+  line-height: 16px;
+  margin: 1px;
+}
+
+.buttborder {
+  border: 3px double #CCC;
+  margin: 1px;
+  padding: 0;
+}
+
+.butt {
+  color: #A40;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  width: auto;
+  background: url(images/button_bg.png) repeat-x;
+  border: 0;
+  padding: 0 0px;
+  margin: 0;
+  line-height: 20px;
+  height: 20px;
+  font-size: 1em;
+}
+
+.chosenButton {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  width: auto;
+  background: url(images/chosen_button_background.png) repeat-x;
+  border: 0;
+  padding: 0 0px;
+  margin: 0;
+  line-height: 20px;
+  height: 20px;
+  font-size: 1em;
+}
+
+.drop {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.butt2 {
+  color: #F60;
+  background-color: #EEE;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.inputbox {
+  padding: 2px;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  font-size: 1em;
+}
+
+h1, h2, h3, table caption, .caption {
+  text-align: center;
+  padding: 0;
+  margin: 0em 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #A20;
+}
+
+h2 {
+  margin: 0.8em 0;
+  font-size: 0.9em;
+}
+
+h3 {
+  text-align: left;
+  margin: 0.8em 0 0.2em 0;
+  font-size: 0.8em;
+}
+
+dt, dd {
+  text-align: left;
+  margin: 0;
+}
+
+dt {
+  padding: 1px 0 0 5px;
+  font-size: 0.75em;
+  color: #A20;
+}
+
+dd {
+  padding: 0 0 0 22px;
+  font-size: 0.8em;
+  color: #333;
+  font-weight: bold;
+}
+
+.errorMessage {
+  font-size: 2em;
+  color:     #F00;
+  text-align: center;
+}
+
+.subtitle {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  text-align: center;
+}
