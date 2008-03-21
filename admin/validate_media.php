@@ -70,7 +70,7 @@ function offerChoices () {
       array( 'pending',   'Pending' ),
       array( 'accepted',   'Accepted' ),
       ), $chosenStatus ),
-    choiceButton( true, 'filter', 'Filter' )
+    choiceButton( true, 'filter' . rand(), 'Filter' )
   ));
 
 }
@@ -144,7 +144,7 @@ function showMedia () {
       competitionLink( $competitionId, $cellName ),
       "<b>$countryName</b>, $cityName",
       $type,
-      externalLink( $uri, $text ),
+      externalLink( htmlEscape( $uri ), htmlEscape( $text )),
 		$button,
     ));
 	 /* FIXME : To many stuff on the table.

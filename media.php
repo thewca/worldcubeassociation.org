@@ -102,7 +102,7 @@ function showMedia () {
       competitionLink( $competitionId, $cellName ),
       "<b>$countryName</b>, $cityName",
       $type,
-      externalLink( $uri, $text ),
+      externalLink( htmlEscape( $uri ), htmlEscape( $text )),
     ));
   }
 

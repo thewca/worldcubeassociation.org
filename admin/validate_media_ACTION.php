@@ -171,11 +171,11 @@ function saveMedium () {
 
   $type = getNormalParam( 'type' );
   $competitionId = getNormalParam( 'competitionId' );
-  $text = getHtmlParam( 'text' );
-  $link = getHtmlParam( 'link' );
-  $submitterName = getHtmlParam( 'submitterName' );
-  $submitterEmail = getHtmlParam( 'submitterEmail' );
-  $submitterComment = getHtmlParam( 'submitterComment' );
+  $text = getMysqlParam( 'text' );
+  $link = getMysqlParam( 'link' );
+  $submitterName = getMysqlParam( 'submitterName' );
+  $submitterEmail = getMysqlParam( 'submitterEmail' );
+  $submitterComment = getMysqlParam( 'submitterComment' );
 
   $command = "
   UPDATE CompetitionsMedia
