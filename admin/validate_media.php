@@ -43,7 +43,7 @@ function showDescription () {
 
   echo "<p>You can consult here all the media, and validate the new ones.</p>";
 
-  echo "<p>You can submit a medium <a href='validate_media_ACTION.php?new42=1'>here</a></p>";
+  echo "<p>You can submit a medium <a href='validate_media_ACTION.php?new42=" . rand() . "'>here</a></p>";
   
   echo "<hr>";
 }

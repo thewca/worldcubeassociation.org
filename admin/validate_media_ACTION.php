@@ -200,7 +200,7 @@ function saveMedium () {
 function getBack () {
 #----------------------------------------------------------------------
 
-  echo "<br /><br />I want to get <a href='validate_media.php'>back</a> !";
+  echo "<br /><br />I want to get <a href='validate_media.php?random=" . rand() . "'>back</a> !";
 
 }
 
