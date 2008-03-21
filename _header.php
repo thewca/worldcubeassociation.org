@@ -24,11 +24,13 @@
 
 <?
   $sections = array(
-    array( 'Home',         'index'        ),
+    array( 'Home',         '../index'     ),
+    array( 'Results',      'index'        ),
     array( 'Events',       'events'       ),
     array( 'Regions',      'regions'      ),
     array( 'Competitions', 'competitions' ),
     array( 'Persons',      'persons'      ),
+    array( 'Multimedia',   'media'        ),
     array( 'Statistics',   'statistics'   )
   );
 ?>

@@ -56,6 +56,9 @@ function showPages () {
   showPage( 'show_competition_infos',
             "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking. Does *NOT* affect the database." );
 
+  showPage( 'validate_media',
+            "Validates media that have been submitted. Does *NOT* affect the database unless you say so." );
+
 #  showPage( 'show_similar_names',
 #            "Shows similar person names inside a competition you choose. Does *NOT* affect the database." );
 

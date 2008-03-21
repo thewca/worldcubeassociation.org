@@ -36,9 +36,9 @@ function showCompetitionInfos () {
   echo "<td style='width:30%'><table>";
   showItem( 'key', "Information",  array( $information ));
   showListItemNew( 'Events', computeCompetitionEvents( $eventSpecs ));
-  showItem( 'choice', 'Reports',    array( processLinkList( 'reports',    $reports    )));
-  showItem( 'choice', 'Articles',   array( processLinkList( 'articles',   $articles   )));
-  showItem( 'choice', 'Multimedia', array( processLinkList( 'multimedia', $multimedia )));
+  showListItemNew( 'Reports', computeMedia( 'report' ));
+  showListItemNew( 'Articles', computeMedia( 'article' ));
+  showListItemNew( 'Multimedia', computeMedia( 'multimedia' ));
   echo "</table></td>";
 
   #--- End table.
@@ -102,4 +102,30 @@ function computeCompetitionEvents ( $eventSpecs ) {
   return $events;
 }
 
+#----------------------------------------------------------------------
+function computeMedia ( $mediaType ) {
+#----------------------------------------------------------------------
+
+  global $chosenCompetitionId;
+
+  assertFoo( preg_match( '/^(article|report|multimedia)$/', $mediaType) , "Bad call of function 'computeMedia',
+                                                                           must be article|report|multimedia" );
+
+  $media = dbQuery("
+    SELECT *
+
+    FROM CompetitionsMedia
+    WHERE competitionId = '$chosenCompetitionId'
+      AND type = '$mediaType'
+  ");
+
+  foreach( $media as $medium ){
+    extract($medium);
+
+    $mediaList .= '[{' . $text . '}{' . $uri . '}]';
+  }
+
+  return $mediaList;
+
+}
 ?>

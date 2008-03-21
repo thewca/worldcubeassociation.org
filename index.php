@@ -32,8 +32,12 @@ function showWelcomeMessage () {
   <dt><a href="persons.php">Persons</a></dt>
   <dd>Information and results of a person.</dd>
 
+  <dt><a href="media.php">Multimedia</a></dt>
+  <dd>Articles, Videos, Pictures and Reports about competitions.</dd>
+
   <dt><a href="statistics.php">Statistics</a></dt>
   <dd>Some additional statistics for fun.</dd>
+
 </dl>
 </div>
 <div>
