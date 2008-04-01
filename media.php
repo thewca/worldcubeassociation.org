@@ -33,8 +33,9 @@ function offerChoices () {
   global $chosenType, $chosenRegionId, $chosenOrder;
 
   #--- Submission
-  echo "<p>You can submit a medium <a href='media_insertion.php'>here</a></p><hr />";
- 
+  echo "<p>You can submit media <a href='media_insertion.php'>here</a></p><hr/><br/>";
+
+
   #--- Filter
   displayChoices( array(
     regionChoice(),

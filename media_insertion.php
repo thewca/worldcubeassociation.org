@@ -35,10 +35,10 @@ function offerChoices () {
 
   if ($chosenUri != '') {
     saveMedium();
-	 echo "Thank you for your submission !";
+	 echo "Thanks for sending us a link to competition media";
     return; 
   } 
-
+  echo "<p>All media will be reviewed before listed on the Media page</p>";
   echo "<form method='POST' action='$_SERVER[PHP_SELF]'>\n";
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
 

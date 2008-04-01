@@ -67,9 +67,9 @@ function infoMedium () {
   $tableList = array (
     array ('Type', $type),
     array ('Competition', competitionLink( $competitionId, $cellName )),
-    array ('Link', externalLink( $uri, $text )),
-    array ('Submitter', emailLink( $submitterEmail, $submitterName )),
-    array ('Comment', $submitterComment),
+    array ('Link', externalLink( htmlEscape( $uri ), htmlEscape( $text ))),
+    array ('Submitter', emailLink( htmlEscape( $submitterEmail ), htmlEscape( $submitterName ))),
+    array ('Comment', htmlEscape( $submitterComment )),
     array ('Submitted on:', $timestampSubmitted),
     array ('Decided on', $timestampDecided),
     array ('Status', $status)
@@ -142,11 +142,11 @@ function editMedium () {
 
 
   $fieldList = array (
-    array ('Text', 'text', $text),
-    array ('Link', 'link', $uri),
-    array ('Submitter Name', 'submitterName', $submitterName),
-    array ('Submitter Email', 'submitterEmail', $submitterEmail),
-    array ('Submitter Comment', 'submitterComment', $submitterComment)
+    array ('Text', 'text', htmlEscape( $text )),
+    array ('Link', 'link', htmlEscape( $uri )),
+    array ('Submitter Name', 'submitterName', htmlEscape( $submitterName )),
+    array ('Submitter Email', 'submitterEmail', htmlEscape( $submitterEmail )),
+    array ('Submitter Comment', 'submitterComment', htmlEscape( $submitterComment ))
   );
 
 

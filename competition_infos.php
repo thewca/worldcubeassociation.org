@@ -117,6 +117,8 @@ function computeMedia ( $mediaType ) {
     FROM CompetitionsMedia
     WHERE competitionId = '$chosenCompetitionId'
       AND type = '$mediaType'
+      AND status = 'accepted'
+    ORDER BY timestampDecided DESC
   ");
 
   foreach( $media as $medium ){

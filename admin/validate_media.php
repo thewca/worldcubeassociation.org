@@ -147,9 +147,6 @@ function showMedia () {
       externalLink( htmlEscape( $uri ), htmlEscape( $text )),
 		$button,
     ));
-	 /* FIXME : To many stuff on the table.
-     * We have to remove at least the comment field !
-     */
   }
 
   #--- End form and table.
