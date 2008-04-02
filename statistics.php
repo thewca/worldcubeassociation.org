@@ -28,54 +28,64 @@ function showContent () {
     $cachedDay = date( "F d Y", filemtime( 'statistics.cached' ));
 
   #--- Build cache new if its too old or missing (or in debug mode). 
-  if( $cachedDay != $today  ||  debug() )
-    buildContentCache();
+  if( $cachedDay != $today  ||  debug() ){
+    beginCache();
+    showResults();
+    endCache();
+  }
 
   #--- Import the cached page.
-  require( 'statistics.cached' );
+  else
+    require( 'statistics.cached' );
 }
 
 #----------------------------------------------------------------------
-function buildContentCache () {
+function beginCache () {
+#----------------------------------------------------------------------
+  
+  ob_start();
+}
+
+#----------------------------------------------------------------------
+function endCache () {
+#----------------------------------------------------------------------
+  
+  $buffer = ob_get_contents();
+
+  ob_end_flush();
+
+  $cacheHandle = fopen( 'statistics.cached', 'w' );
+  fwrite( $cacheHandle, $buffer );
+  fclose( $cacheHandle );
+}
+
+
+#----------------------------------------------------------------------
+function showResults () {
 #----------------------------------------------------------------------
   
   #--- Output the page header.
-  cache( "<h1>Fun Statistics</h1>\n\n" );
-#  cache( "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see various statistics. They're solely intended for entertainment and reflect only Stefan's personal arbitrary curiosity. They're *not* to be considered official WCA statistics.</p>" );
-  cache( "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>" );
+  echo "<h1>Fun Statistics</h1>\n\n";
+  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>";
 
   #--- Get all the list definitions.
   global $lists;
   defineAllLists();
 
   #--- Output the links to the individual lists.  
-  cache( "<ul style='padding-left:20px'>\n" );
+  echo "<ul style='padding-left:20px'>\n";
   foreach( $lists as $list ){
     $ctr++;
-    cache( "<li style='padding-bottom:5px'><a style='color:#33C;font-weight:normal' href='#$ctr'>$list[0]</a></li>\n" );
+    echo "<li style='padding-bottom:5px'><a style='color:#33C;font-weight:normal' href='#$ctr'>$list[0]</a></li>\n";
   }
-  cache( "</ul>\n\n" );
+  echo "</ul>\n\n";
 
   #--- Output the lists.
-  require( '_tables_caching.php' );
+  //require( '_tables_caching.php' );
   $ctr = 0;
   foreach( $lists as $list )
-    addListToCache( $list, ++$ctr );
+    addList( $list, ++$ctr );
 
-  #--- Now actually write the cache file.
-  global $contentCache;
-  $contentCache = implode( '', $contentCache );
-  $cacheHandle = fopen( 'statistics.cached', 'w' );
-  fwrite( $cacheHandle, $contentCache );
-  fclose( $cacheHandle );
-}
-
-#----------------------------------------------------------------------
-function cache ( $string ) {
-#----------------------------------------------------------------------
-  global $contentCache;
-  
-  $contentCache[] = $string;
 }
 
 #----------------------------------------------------------------------
@@ -103,7 +113,7 @@ function defineAllLists () {
 }
 
 #----------------------------------------------------------------------
-function addListToCache ( $list, $id ) {
+function addList ( $list, $id ) {
 #----------------------------------------------------------------------
 
   $competitions = readDatabaseTableWithId( 'Competitions' );
@@ -145,9 +155,9 @@ function addListToCache ( $list, $id ) {
 
   $columnCount = count( $columnNames );
 
-  cacheTableBegin( 'results', $columnCount );
-  cacheTableCaptionNew( false, $id, "$title $subtitle $description" );
-  cacheTableHeader( $columnNames, $attributes );
+  TableBegin( 'results', $columnCount );
+  TableCaptionNew( false, $id, "$title $subtitle $description" );
+  TableHeader( $columnNames, $attributes );
 
   $rows = is_array( $query ) ? $query : dbQuery( $query );
 
@@ -182,10 +192,10 @@ function addListToCache ( $list, $id ) {
     $values[] = '';
 
     #--- Show the row.
-    cacheTableRow( $values );
+    TableRow( $values );
   }
 
-  cacheTableEnd();  
+  TableEnd();  
 }
 
 #----------------------------------------------------------------------
