@@ -15,14 +15,18 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenType, $chosenRegionId, $chosenOrder;
+  global $chosenYears, $chosenRegionId, $chosenOrder;
 
-  $chosenType      = getNormalParam( 'type' );
+  $chosenYears     = getNormalParam( 'years' );
   $chosenRegionId  = getNormalParam( 'regionId' );
   $chosenOrder     = getNormalParam( 'order' );
 
-  if( ! preg_match( '/^(article|report|multimedia)$/', $chosenType ))
-    $chosenType = '';
+  if ( $chosenYears == ''){
+    $years = getAllUsedYears();
+	 $years = $years[0]['year'];
+    $chosenYears = "only $years";
+}
+
   if( ! preg_match( '/^(date|submission)$/', $chosenOrder ))
     $chosenOrder = 'submission';
 }
@@ -30,7 +34,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
 function offerChoices () {
 #----------------------------------------------------------------------
-  global $chosenType, $chosenRegionId, $chosenOrder;
+  global $chosenYears, $chosenRegionId, $chosenOrder;
 
   #--- Submission
   echo "<p>You can submit media <a href='media_insertion.php'>here</a></p><hr/><br/>";
@@ -39,12 +43,7 @@ function offerChoices () {
   #--- Filter
   displayChoices( array(
     regionChoice(),
-    choice( 'type', 'Type', array(
-      array( '',           'All' ),
-      array( 'article',   'Articles' ),
-      array( 'report',    'Reports' ),
-      array( 'multimedia', 'Multimedia' )
-      ), $chosenType ),
+    yearsChoice( false, false, true ),
     choice( 'order', 'Sorted by', array(
       array( 'date',    'Competition Date' ),
       array( 'submission', 'Insertion Date' )
@@ -56,11 +55,12 @@ function offerChoices () {
 #----------------------------------------------------------------------
 function showMedia () {
 #----------------------------------------------------------------------
-  global $chosenType, $chosenRegionId, $chosenOrder;
+  global $chosenYears, $chosenRegionId, $chosenOrder;
 
 
   #--- Prepare conditions.
-  $typeCondition = $chosenType ? "AND type='$chosenType'" : '';
+  $yearCondition = yearCondition();
+  $regionCondition = regionCondition('competition');
   $orderCondition = ($chosenOrder == 'date') ? "ORDER BY competition.year DESC,
                                                          competition.month DESC,
                                                          competition.day DESC"
@@ -74,8 +74,8 @@ function showMedia () {
     WHERE 1
       AND competition.id = competitionId
       AND country.id = countryId
-      $typeCondition
-      " . regionCondition('competition') . "
+      $yearCondition
+      $regionCondition
       AND status = 'accepted'
     $orderCondition, cellName
   ");

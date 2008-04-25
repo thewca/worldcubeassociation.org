@@ -49,12 +49,14 @@ function importAllLists () {
   require( 'statistics/youngest_and_oldest_333bf_solvers.php');
   require( 'statistics/best_medal_collection.php' );
   require( 'statistics/sum_of_345_ranks.php' );
+  #require( 'statistics/sum_of_all_ranks.php' );
   require( 'statistics/appearances_in_333_top_100_results.php' );
 
   #--- Special achievements:
   require( 'statistics/blindfold_333_consecutive_successes.php' );
   require( 'statistics/blindfold_333_success_rate.php' );
   require( 'statistics/world_records_in_most_events.php' );
+  #require( 'statistics/standard_deviation.php' );
 
   #--- Statistics:
   require( 'statistics/oldest_standing_world_records.php' );

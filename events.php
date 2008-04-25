@@ -38,7 +38,7 @@ function offerChoices () {
   displayChoices( array(
     eventChoice( true ),
     regionChoice(),
-    yearsChoice( true, true ),
+    yearsChoice( true, true, true ),
     choice( 'show', 'Show', array(
       array( '100 Persons', '100 Persons' ),
       array( 'All Persons', 'All Persons' ),

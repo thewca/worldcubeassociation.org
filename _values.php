@@ -26,10 +26,26 @@ function formatValue( $value, $format ) {
   if( $format == 'multi' ){
 
     #--- Extract value parts.
-    $time      = $value % 100000; $value = intval( $value / 100000 );
-    $attempted =      $value % 100; $value = intval( $value / 100 );
-    $solved    = 99 - $value % 100; $value = intval( $value / 100 );
-    $ok        = 1 - $value;
+    $old = intval( $value / 1000000000);
+
+    if ( $old ) {
+
+
+      $time      = $value % 100000; $value = intval( $value / 100000 );
+      $attempted =      $value % 100; $value = intval( $value / 100 );
+      $solved    = 99 - $value % 100; $value = intval( $value / 100 );
+
+    }
+
+    else {
+
+      $missed     = $value % 100; $value = intval( $value / 100 );
+      $time       = $value % 100000; $value = intval( $value / 100000 );
+      $difference = 99 - $value % 100;
+      $solved     = $difference + $missed;
+      $attempted  = $solved + $missed;
+
+    }
 
     #--- Build time string.
     if( $time == 99999 ){
@@ -47,7 +63,10 @@ function formatValue( $value, $format ) {
     #$result = $time ? sprintf( "%d:%02d", intval( $time/60 ), $time%60 ) : '?:??';
 
     #--- Combine.
-    return "$solved" . ($ok ? '' : "/$attempted") . " <span style='color:#999'>$result</span>";
+    if ( $old )
+      return "<span style='color:#999'>$solved/$attempted</span> <span style='color:#999'>$result</span>";
+    else      
+      return "$solved/$attempted <span style='color:#999'>$result</span>";
   }
 
   #--- Time...

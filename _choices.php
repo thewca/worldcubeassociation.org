@@ -79,20 +79,22 @@ function competitionChoice ( $required ) {
 }
 
 #----------------------------------------------------------------------
-function yearsChoice ( $until, $only ) {
+function yearsChoice ($all, $until, $only ) {
 #----------------------------------------------------------------------
   global $chosenYears;
 
-  $options[] = array( '', 'All' );
+  if ($all){
+    $options[] = array( '', 'All' );
+    $options[] = array( '', '' );
+  }
 
   if( $until ){
-    $options[] = array( '', '' );
     foreach( getAllUsedYears() as $row )
       $options[] = array( "until $row[year]", "until $row[year]" );
+    $options[] = array( '', '' );
   }
 
   if( $only ){
-    $options[] = array( '', '' );
     foreach( getAllUsedYears() as $row )
       $options[] = array( "only $row[year]", "only $row[year]" );
   }

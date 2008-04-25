@@ -20,6 +20,12 @@ function analyzeChoices () {
   $chosenEventId  = getNormalParam( 'eventId' );
   $chosenRegionId = getNormalParam( 'regionId' );
   $chosenYears    = getNormalParam( 'years' );
+
+  if ( $chosenYears == ''){
+    $years = getAllUsedYears();
+    $years = $years[0]['year'];
+    $chosenYears = "only $years";
+  }
 }
 
 #----------------------------------------------------------------------
@@ -29,10 +35,12 @@ function offerChoices () {
   displayChoices( array(
     eventChoice( false ),
     regionChoice( true ),
-    yearsChoice( false, true ),
+    yearsChoice( false, false, true ),
     choiceButton( true, 'filter', 'Filter' )
   ));
 }
+
+				  
 
 #----------------------------------------------------------------------
 function listCompetitions () {
