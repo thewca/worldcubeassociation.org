@@ -20,7 +20,7 @@ $overall = dbQuery("
     count(pos=2 or null) silver,
     count(pos=3 or null) bronze
   FROM Results
-  $WHERE roundId IN ('f', 'c')
+  $WHERE roundId IN ('f', 'c') AND best>0
   GROUP BY personId
   ORDER BY gold DESC, silver DESC, bronze DESC, personName
   LIMIT 10
