@@ -22,9 +22,7 @@ function analyzeChoices () {
   $chosenYears    = getNormalParam( 'years' );
 
   if ( $chosenYears == ''){
-    $years = getAllUsedYears();
-    $years = $years[0]['year'];
-    $chosenYears = "only $years";
+    $chosenYears = "only " . date( 'Y' );
   }
 }
 
