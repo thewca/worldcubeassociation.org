@@ -22,9 +22,7 @@ function analyzeChoices () {
   $chosenOrder     = getNormalParam( 'order' );
 
   if ( $chosenYears == ''){
-    $years = getAllUsedYears();
-	 $years = $years[0]['year'];
-    $chosenYears = "only $years";
+    $chosenYears = "only " . date( 'Y' );
 }
 
   if( ! preg_match( '/^(date|submission)$/', $chosenOrder ))
