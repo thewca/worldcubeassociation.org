@@ -122,7 +122,7 @@ function checkResult ( $result ) {
     return "shouldn't have zero-values";
 
   #--- 10) same for combined
-  if( $round == 'c'  ||  $round != 'd' ){
+  if( $round == 'c'  ||  $round == 'd' ){
     if( $format == '2'  &&  $zer < 3 )
       return "should have at most two non-zero values";
     if( $format == '3'  &&  $zer < 2 )
