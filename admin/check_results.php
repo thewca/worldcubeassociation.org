@@ -107,9 +107,11 @@ function checkResult ( $result ) {
   if( $result['average'] != $average )
     return "'average' should be $average";
 
-  #--- 9) New tests... TODO: document them!
+  #--- 9) check number of zero values for non combined
   $round = $result['roundId'];
   $f = ($round != 'c'  &&  $round != 'd') ? $format : "";
+  if( $f == '1'  &&  $zer != 4 )
+    return "should have one non-zero values";
   if( $f == '2'  &&  $zer != 3 )
     return "should have two non-zero values";
   if( $f == '3'  &&  $zer != 2 )
@@ -118,6 +120,16 @@ function checkResult ( $result ) {
     return "should have three non-zero values";
   if( $f == 'a'  &&  $zer != 0 )
     return "shouldn't have zero-values";
+
+  #--- 10) same for combined
+  if( $round == 'c'  ||  $round != 'd' ){
+    if( $format == '2'  &&  $zer < 3 )
+      return "should have at most two non-zero values";
+    if( $format == '3'  &&  $zer < 2 )
+      return "should have at most three non-zero values";
+    if( $format == 'm'  &&  $zer < 2 )
+      return "should have at most three non-zero values";
+  }
 }
 
 ?>

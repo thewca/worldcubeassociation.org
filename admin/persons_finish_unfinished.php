@@ -73,7 +73,7 @@ function showUnfinishedPersons () {
 #  $name = 'Andy\'s Taso';
   
     #--- Try to compute the semi-id.
-    $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $name ), 0, 4 ));
+    $semiId = $firstYear . strtoupper( substr( preg_replace( '/\W/', '', $name ), 0, 4 ));
 
     #--- Html-ify name and country.
     $nameHtml = htmlEscape( $name );

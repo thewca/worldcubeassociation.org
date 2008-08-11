@@ -22,7 +22,8 @@ function cloneNewCompetition ( $newCompetitionId, $oldCompetitionId ) {
   $old = dbQuery(
     "SELECT
       name, cellName, countryId, cityName, information, website,
-      organiser, venue, venueAddress, venueDetails, eventSpecs
+      organiser, venue, venueAddress, venueDetails, eventSpecs,
+      wcaDelegate
     FROM Competitions
     WHERE id='$oldCompetitionId'"
   );

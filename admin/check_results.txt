@@ -35,3 +35,9 @@ else if suc<4 then -1 (DNF)
 else round((v2+v3+v4)/3)
 ----------------------------------------------------------------------
 8) compare the computed best and average with the stored ones
+----------------------------------------------------------------------
+9) for non combined rounds, check that there is the right number of
+   zero values according to the format.
+----------------------------------------------------------------------
+10) for combined rounds, check that the number of zero values is
+    higher that the number according to the format.

@@ -42,6 +42,7 @@ function showBody () {
   $currentPerson = array_shift( $persons );
   extract( $currentPerson );
   echo "<h1>$personName ($countryName)</h1>";
+  echo "<p class='subtitle'>WCA ID : $chosenPersonId</p>";
 
   #--- Show previous incarnations if any.
   if( count( $persons )){
