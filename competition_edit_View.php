@@ -9,6 +9,7 @@ function showView () {
   startForm();
   showRegularFields();
   showEventSpecifications();
+  showAdminOptions();
   endForm();
 }
 
@@ -146,6 +147,29 @@ function showEventSpecifications () {
   
   #--- Finish the table.
   echo "</table>";
+}
+
+#----------------------------------------------------------------------
+function showAdminOptions () {
+#----------------------------------------------------------------------
+  global $data;
+
+  $fullEdit = getNormalParam( 'FULLEDIT' );
+  if( $fullEdit != '7247' )
+    return;
+  
+  echo "<input id='FULLEDIT' name='FULLEDIT' type='hidden' value='7247' />";
+
+  if( $data["showAtAll"] )
+    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /> Check if you want the <b>Competition</b> to be visible</p>";
+  else
+    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /> Check if you want the <b>Competition</b> to be visible</p>";
+
+  if( $data["showResults"] )
+    echo "<p><input id='showResults' name='showResults' type='checkbox' checked='checked' /> Check if you want the <b>Results</b> to be visible</p>";
+  else
+    echo "<p><input id='showResults' name='showResults' type='checkbox' /> Check if you want the <b>Results</b> to be visible</p>";
+
 }
 
 #----------------------------------------------------------------------

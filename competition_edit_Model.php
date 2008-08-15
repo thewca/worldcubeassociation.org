@@ -122,30 +122,6 @@ function specifyModel () {
     ),
     array (
       "text",
-      'reports',
-      'Reports',
-      'List of links to reports about the competition.',
-      "[{Sven Gowal}{http://rubik.talk-sep.net/?page=EC2006}]<br />[{Stefan Pochmann}{http://stefan-pochmann.de/spocc/other_stuff/events/euro2006/}]",
-      $patternLinkList
-    ),
-    array (
-      "text",
-      'multimedia',
-      'Multimedia',
-      'List of links to multimedia.',
-      "[{Gunnar Krig}{http://video.google.com/videoplay?docid=-502642045895676758&amp;hl=en}]<br />[{Gilles Roux}{http://grrroux.free.fr/VideosEC2006/ec06.avi}]",
-      $patternLinkList
-    ),
-    array (
-      "text",
-      'articles',
-      'Articles',
-      'List of links to articles.',
-      "[{Belgian newspapers}{http://www.belgiancubes.be:80/news/}]<br />[{5 year old Daniël Hop}{http://www.gelderlander.nl:80/maasenwaal/article690716.ece}]",
-      $patternLinkList
-    ),
-    array (
-      "text",
       'wcaDelegate',
       'WCA Delegate(s)',
       'List of the WCA delegate attending the competition.',
@@ -174,6 +150,10 @@ function specifyModel () {
 #----------------------------------------------------------------------
 function checkData () {
 #----------------------------------------------------------------------
+  global $chosenSubmit;
+
+  if( !$chosenSubmit )
+    return;
 
   checkRegularFields();
   checkEventSpecifications();
@@ -201,13 +181,26 @@ function checkRegularFields () {
 #----------------------------------------------------------------------
 function checkEventSpecifications () {
 #----------------------------------------------------------------------
+  global $data, $dataError;
 
+  foreach( getAllEvents() as $event ){
+    extract( $event );
+
+    if( ! preg_match( "/^(|\d+)$/", $data["personLimit$id"] ))
+      $dataError["event$id"] = true;
+
+    if( ! preg_match( "/^(|\d+(:\d+|))$/", $data["timeLimit$id"] ))
+      $dataError["event$id"] = true;
+  }
 }
 
 #----------------------------------------------------------------------
 function storeData () {
 #----------------------------------------------------------------------
-  global $data, $dataError, $dataSuccessfullySaved;
+  global $data, $dataError, $dataSuccessfullySaved, $chosenSubmit;
+
+  if( !$chosenSubmit )
+    return;
   
   #--- Initially assume we'll fail.
   $dataSuccessfullySaved = false;
@@ -216,6 +209,54 @@ function storeData () {
   if( $dataError )
     return;
 
+  #-- Building eventSpecs
+  $eventSpecs = '';
+  foreach( getAllEvents() as $event ){
+    extract($event);
+
+    if ( $data["offer$id"] ){
+	   if ( preg_match( "/^\d+$/", $data["timeLimit$id"] ))
+		  $data["timeLimit$id"] .= ':00';
+      $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
+    }
+  }
+
+  #-- Building show*
+  $data["showAtAll"] = $data["showAtAll"] ? 1 : 0;
+  $data["showResults"] = $data["showResults"] ? 1 : 0;
+
+  #--- Store data
+  foreach( $data as $key => $value ) $data[$key] = mysql_real_escape_string( $value );
+  extract($data);
+
+  dbCommand("UPDATE Competitions
+               SET name='$name',
+                   cityName='$cityName',
+                   countryId='$countryId',
+                   information='$information',
+                   year='$year',
+                   month='$month',
+                   day='$day',
+                   endMonth='$endMonth',
+                   endDay='$endDay',
+                   eventSpecs='$eventSpecs',
+                   wcaDelegate='$wcaDelegate',
+                   organiser='$organiser',
+                   venue='$venue',
+                   venueAddress='$venueAddress',
+                   venueDetails='$venueDetails',
+                   website='$website',
+                   cellName='$cellName',
+                   showAtAll='$showAtAll',
+                   showResults='$showResults'
+                WHERE id='$competitionId'
+  ");
+
+  foreach( $data as $key => $value ) $data[$key] = stripslashes( $value );
+ 
+  #--- Building the caches again
+  require( 'admin/_helpers.php' );
+  ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
 
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;

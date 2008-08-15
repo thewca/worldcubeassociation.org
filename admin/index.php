@@ -62,6 +62,9 @@ function showPages () {
 #  showPage( 'show_similar_names',
 #            "Shows similar person names inside a competition you choose. Does *NOT* affect the database." );
 
+  showPage( 'competitions_manage',
+            "Manages competitions." );
+
   echo "</dl>\n";
 }
 

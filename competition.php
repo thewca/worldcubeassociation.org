@@ -26,8 +26,8 @@ if( $displayStandard ){
   require( 'competition_infos.php' );
   showCompetitionInfos();
   
-  #--- Show competition results (optional, controlled by flag).
-  if( true || $competition['showResults'] ){
+  #--- Show competition results.
+  if( $competition['showResults'] ){
     offerChoices();
     require( 'competition_results.php' );
     showCompetitionResults();

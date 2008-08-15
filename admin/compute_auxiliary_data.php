@@ -6,9 +6,10 @@
 $dontLoadCachedDatabase = true;
 
 require( '../_header.php' );
+require( '_helpers.php' );
 showDescription();
 computeConciseRecords();
-computeCachedDatabase();
+computeCachedDatabase('../cachedDatabase.php');
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
@@ -61,64 +62,5 @@ function computeConciseRecords () {
   }
 }
 
-#----------------------------------------------------------------------
-function computeCachedDatabase () {
-#----------------------------------------------------------------------
-
-  #--- Define the caches.
-  $caches = array(
-
-    'Events' =>
-      'SELECT * FROM Events ORDER BY rank',
-
-    'Competitions' =>
-      'SELECT id, cellName FROM Competitions ORDER BY year DESC, month DESC, day DESC',
-      
-    'UsedContinents' =>
-      'SELECT DISTINCT continent.*
-       FROM Results result, Countries country, Continents continent
-       WHERE country.id = countryId AND continent.id = continentId
-       ORDER BY continent.name',
-
-    'UsedCountries' =>
-      'SELECT DISTINCT country.*
-       FROM Results result, Countries country
-       WHERE country.id = countryId
-       ORDER BY country.name',
-
-    'UsedYears' =>
-      'SELECT DISTINCT year FROM Competitions ORDER BY year DESC'
-  );
-
-  #--- Compute and store the caches.
-  $handle = fopen( '../cachedDatabase.php', 'w' );
-  fwrite( $handle, "<?\n\n" );
-  foreach( $caches as $name => $query )
-    fwrite( $handle, computeCacheEntry( $name, $query ));
-  fwrite( $handle, "?>\n" );
-  fclose( $handle );
-}
-
-#----------------------------------------------------------------------
-function computeCacheEntry ( $name, $query ) {
-#----------------------------------------------------------------------
-
-  echo "<p>Building cached database entry <b>[</b>$name<b>]</b> ...<p>";
-
-  #--- Process the rows.
-  foreach( dbQuery( $query ) as $row ){
-    $cells = array();
-
-    #--- Process the cells.
-    foreach( $row as $key => $value ){
-      if( ! is_numeric( $key ))
-        $cells[] = "\"$key\"=>\"$value\"";
-    }
-    $rows[] = "array(" . implode( ',', $cells ) . ")";
-  }
-
-  #--- Answer.
-  return "\$cached$name =array(\n" . implode( ",\n", $rows ) . "\n);\n\n";
-}
 
 ?>

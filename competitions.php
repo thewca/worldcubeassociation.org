@@ -21,7 +21,7 @@ function analyzeChoices () {
   $chosenRegionId = getNormalParam( 'regionId' );
   $chosenYears    = getNormalParam( 'years' );
 
-  if ( $chosenYears == ''){
+  if ( getNormalParam( 'filter' ) == '' ){
     $chosenYears = "only " . date( 'Y' );
   }
 }
@@ -33,7 +33,7 @@ function offerChoices () {
   displayChoices( array(
     eventChoice( false ),
     regionChoice( true ),
-    yearsChoice( false, false, true ),
+    yearsChoice( true, false, true ),
     choiceButton( true, 'filter', 'Filter' )
   ));
 }
@@ -62,6 +62,7 @@ function listCompetitions () {
       Countries    country
     WHERE 1
       AND country.id = countryId
+      AND showAtAll = 1
       $eventCondition
       $yearCondition
       $regionCondition

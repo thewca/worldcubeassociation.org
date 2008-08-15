@@ -13,13 +13,24 @@ function handleRedirects () {
   }
 
   if( $createNew || $clone ){
-  
+
     #--- Is the new ID ok?
     if( ! preg_match( '/^\w+$/', $newCompetitionId )){
-      echo "TODO";
+      header( "Location: competitions_manage.php?error=bad" );
       exit;
     }
-    
+
+	 $result = dbQuery(
+       "SELECT *
+       FROM Competitions
+       WHERE id='$newCompetitionId'"
+    );
+
+	 if( count( $result ) > 0 ){
+      header( "Location: competitions_manage.php?error=duplicate" );
+      exit;
+    }
+
     #--- Create the new competition.
     ob_start(); require( '_helpers.php' ); ob_end_clean();
     if( $clone )
@@ -27,8 +38,6 @@ function handleRedirects () {
     else
       createNewCompetition( $newCompetitionId );
       
-    $TODO = "update the auxiliary data";
-     
     #--- Forward to edit page.
     $competitionId = $newCompetitionId;
     $password = getCompetitionPassword( $competitionId );
@@ -67,6 +76,7 @@ require( '../_footer.php' );
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
+  global $errors;
 
   echo "<p><b>This script *DOES* affect the database *WHEN* you tell it to.</b></p>";
 
@@ -80,15 +90,24 @@ function showDescription () {
   echo "</dl>";
   
   echo "<hr>";
+
+  #--- show errors
+
+  if( $errors == 'bad' )
+    echo "<p style='color:#F00;font-weight:bold'>Competition IDs must contain only letters or digits.</p>";
+
+  if( $errors == 'duplicate' )
+    echo "<p style='color:#F00;font-weight:bold'>This ID already exists.</p>";
 }
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenNewPassword;
+  global $chosenCompetitionId, $chosenNewPassword, $errors;
 
   $chosenCompetitionId  = getNormalParam( 'competitionId' );
   $chosenNewPassword = getBooleanParam( 'newPassword' );
+  $errors = getNormalParam( 'error' );
 }
 
 #----------------------------------------------------------------------
