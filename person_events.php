@@ -74,11 +74,11 @@ function showResultsByEvents () {
 
       $formatBest = formatValue( $best, $valueFormat );
 		if ($pbMarkers[$competitionId][$roundCellName] % 2)
-		  $formatBest = "<span style='color:#0E0;font-weight:bold'>$formatBest</span>";
+		  $formatBest = "<span style='color:#F60;font-weight:bold'>$formatBest</span>";
 
       $formatAverage = formatValue( $average, $valueFormat );
 		if ($pbMarkers[$competitionId][$roundCellName] > 1)
-		  $formatAverage = "<span style='color:#0E0;font-weight:bold'>$formatAverage</span>";
+		  $formatAverage = "<span style='color:#F60;font-weight:bold'>$formatAverage</span>";
 
 
       tableRowStyled( ($isNewCompetition ? '' : 'color:#AAA'), array(
