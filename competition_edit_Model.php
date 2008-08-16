@@ -217,7 +217,8 @@ function storeData () {
     if ( $data["offer$id"] ){
 	   if ( preg_match( "/^\d+$/", $data["timeLimit$id"] ))
 		  $data["timeLimit$id"] .= ':00';
-      $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
+		if( $eventSpecs ) $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
+		else $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
     }
   }
 
