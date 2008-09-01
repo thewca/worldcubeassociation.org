@@ -152,24 +152,33 @@ function showEventSpecifications () {
 #----------------------------------------------------------------------
 function showAdminOptions () {
 #----------------------------------------------------------------------
-  global $data;
+  global $data, $chosenCompetitionId;
 
   $fullEdit = getNormalParam( 'FULLEDIT' );
-  if( $fullEdit != '7247' )
-    return;
-  
-  echo "<input id='FULLEDIT' name='FULLEDIT' type='hidden' value='7247' />";
+  if( $fullEdit == '7247' ){
+    $results = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId'" );
 
-  if( $data["showAtAll"] )
-    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /> Check if you want the <b>Competition</b> to be visible</p>";
-  else
-    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /> Check if you want the <b>Competition</b> to be visible</p>";
+	 echo "<input id='FULLEDIT' name='FULLEDIT' type='hidden' value='7247' />";
 
-  if( $data["showResults"] )
-    echo "<p><input id='showResults' name='showResults' type='checkbox' checked='checked' /> Check if you want the <b>Results</b> to be visible</p>";
-  else
-    echo "<p><input id='showResults' name='showResults' type='checkbox' /> Check if you want the <b>Results</b> to be visible</p>";
+    if( $data["showAtAll"] )
+      echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /> Check if you want the <b>Competition</b> to be visible</p>";
+    else
+      echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /> Check if you want the <b>Competition</b> to be visible</p>";
 
+    if( count( $results )){
+      if( $data["showResults"] )
+        echo "<p><input id='showResults' name='showResults' type='checkbox' checked='checked' /> Check if you want the <b>Results</b> to be visible</p>";
+      else
+        echo "<p><input id='showResults' name='showResults' type='checkbox' /> Check if you want the <b>Results</b> to be visible</p>";
+    }
+  }
+
+  else{
+    if( $data["showAtAll"] )
+      echo "<input id='showAtAll' name='showAtAll' type='hidden' value='ok' />";
+    if( $data["showResults"] )
+      echo "<input id='showResults' name='showResults' type='hidden' value='ok' />";
+  }
 }
 
 #----------------------------------------------------------------------
