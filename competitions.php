@@ -82,10 +82,12 @@ function listCompetitions () {
       tableRowEmpty();
     $previousYear = $year;
 
+    $isPast = date( 'Ymd' ) > (10000*$year + 100*$month + $day);
+
     tableRow( array(
       $year,
       competitionDate( $competition ),
-      $showResults ? competitionLink( $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName ),
+      $isPast ? competitionLink( $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName ),
       "<b>$countryName</b>, $cityName",
       processLinks( $venue )
     ));
