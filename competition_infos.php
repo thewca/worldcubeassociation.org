@@ -6,12 +6,7 @@ function showCompetitionInfos () {
   global $chosenCompetitionId;
 
   #--- Get the competition infos from the database.
-  $row = dbQuery( "SELECT * FROM Competitions WHERE id = '$chosenCompetitionId'" );
-  if( ! count( $row )){
-    showErrorMessage( "Unknown competition id [$chosenCompetitionId]" );
-    return;
-  }
-  $competition = $row[0];
+  $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
 
   #--- Show the infos.
@@ -130,4 +125,5 @@ function computeMedia ( $mediaType ) {
   return $mediaList;
 
 }
+
 ?>

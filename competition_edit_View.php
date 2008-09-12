@@ -10,6 +10,7 @@ function showView () {
   showRegularFields();
   showEventSpecifications();
   showAdminOptions();
+  showRegs();
   endForm();
 }
 
@@ -179,6 +180,60 @@ function showAdminOptions () {
     if( $data["showResults"] )
       echo "<input id='showResults' name='showResults' type='hidden' value='ok' />";
   }
+
+  if( $data["showPreregForm"] )
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' checked='checked' /> Check if you want to start a <b>Registration Form</b></p>";
+  else
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' /> Check if you want to start a <b>Registration Form</b></p>";
+
+  if( $data["showPreregList"] )
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /> Check if you want the <b>Registered Competitors</b> to be visible</p>";
+  else
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>";
+
+}
+
+#----------------------------------------------------------------------
+function showRegs () {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId;
+
+  $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
+  
+  if( ! count( $comps)) return;
+
+  #--- Start the table.
+  echo "<br /><b>Registered Competitors</b><br/><table border='1' cellspacing='0' cellpadding='4'>";
+  echo "<tr bgcolor='#CCCCFF'><td>Delete</td><td>Edit</td><td>WCA Id</td><td>Name</td><td>Country</td>";
+  foreach( getAllEvents() as $event ){
+    extract( $event );
+    if( $data["offer$id"] )
+      echo "<td style='font-size:11px'>$id</td>";
+  }
+  echo "</tr>";
+
+  foreach( $comps as $comp ){
+    extract( $comp );
+	 $name = htmlEntities( $name, ENT_QUOTES );
+	 $personId = htmlEntities( $personId, ENT_QUOTES );
+
+    echo "<tr><td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>";
+    echo "<td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>";
+    echo "<td><input type='text' id='reg${id}personId' name='reg${id}personId' value='$personId' size='10' maxlength='10' /></td>";
+    echo "<td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>";
+    echo "<td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' /></td>";
+    foreach( getAllEvents() as $event ){
+      $eventId = $event['id'];
+      if( $data["offer$eventId"] ){
+        if( $comp["E$eventId"] )
+          echo "<td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>";
+        else
+          echo "<td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>";
+      }
+    }
+	 echo "</tr>";
+  }
+
 }
 
 #----------------------------------------------------------------------

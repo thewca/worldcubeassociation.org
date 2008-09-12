@@ -1,9 +1,9 @@
 <?
 
-if( preg_match( '/competition_prereg_form.php/', $_SERVER['PHP_SELF'] ))
+if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
   $standAlone = true;
 
-if( $standAlone2 ){
+if( $standAlone ){
   require_once( '_framework.php' );
   $chosenCompetitionId = getNormalParam( 'competitionId' );
   ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -18,7 +18,7 @@ if( $standAlone2 ){
 
   #--- Get all competition infos.
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
-  
+
   #--- Show form (or display error if competition not found).
   if( $competition ){
     showPreregForm();
@@ -29,41 +29,45 @@ if( $standAlone2 ){
 }
 
 #----------------------------------------------------------------------
-function showPreregFormNow () {
+function showPreregForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $competition;
-  
+
+  if( getBooleanParam( 'isPreregSubmit' ))
+    savePreregForm ();
+
   echo "<h1>Preregistration for: &nbsp; $competition[name]</h1>";
 
   echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organizers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organizers might not be able to offer enough room, food, etc.</p>";
+  
+  echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have a WCA id, which is the case if you already have particpated in an official competition, you can give it instead of your name and country. You can find your WCA id in your <a href='persons.php'>personal page</a>. If not, just leave the field empty.</p>";
 
   echo "<p style='width:90%;margin:1em auto 1em auto;'><u>Additional information from the organizer:</u> ...</p>";
 
-  echo "<form method='POST' action='_display_parameters.php'>";
+  echo "<form method='POST' action='competition.php'>";
   showField( "competitionId hidden $chosenCompetitionId" );
   showField( "isPreregSubmit hidden 1" );
+  showField( "form hidden 1" );
   echo "<table class='prereg'>";
+  showField( "personId text 10 <b>WCA Id</b>" );  
+  echo "<tr height='10'></tr>";
   showField( "firstName text 50 <b>First name</b>" );
   showField( "lastName text 50 <b>Last name</b>" );  
-#<tr><td><label for="country">Citizen of (country)</label></td><td><input id="country" type="text" name="country" size="50" value=""></td></tr>
   showField( "countryId country <b>Citizen of</b>" );
-#  showField( "dateOfBirth text 50 Date of birth<br />(example April 20, 1967)" );
+  echo "<tr height='10'></tr>";
   showField( "birth date <b>Date of birth</b>" );
   showField( "email text 50 <b>E-mail</b> address" );
   showField( "guests area 50 3 Names of the <b>guests</b> accompanying you" );
-  showField( "volunteers area 50 3 Names of the volunteering <b>judges/scramblers</b> (all competitors must be available for judging and scrambling)" );
 
 ?><tr><td><b>Events</b><br /><br />Check the events you want to participate in.<br /><br />Please do not preregister for an event if you do not meet the time limit.</td>
 <td>
 <?
   
   $eventSpecs = split( ' ', $competition['eventSpecs'] );
-#  print_r( $eventSpecs );
   foreach( $eventSpecs as $eventSpec ){
     preg_match( '!^ (\w+) (?: = (\d*) / ([0-9:]*) )? $!x', $eventSpec, $matches );
     list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
     if( ! $personLimit ) $personLimit = "0";
-#  echo "[$eventSpec:$eventId:$personLimit:$timeLimit]";
     showField( "E$eventId event $personLimit $timeLimit" );
   }
   echo "</td></tr>";
@@ -103,9 +107,10 @@ function showField ( $fieldSpec ) {
   #---------------------
     list( $label ) = split( ' ', $rest, 1 );
     $fieldHtml = "<select id='$id' name='$id'>\n";
-    $countries = dbQuery( "SELECT id countryId, name countryName FROM Countries ORDER BY name" );
+    $countries = getAllUsedCountries ();
     foreach( $countries as $country ){
-      extract( $country );
+      $countryId   = $country['id'  ];
+      $countryName = $country['name'];
       $fieldHtml .= "  <option value='$countryId'>$countryName</option>\n";
     }
     $fieldHtml .= "</select>";
@@ -163,4 +168,101 @@ function numberSelect ( $id, $label, $from, $to ) {
 
 }
 
+#----------------------------------------------------------------------
+function savePreregForm () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId;
+ 
+  $personId   = getMysqlParam( 'personId'   );
+  $name       = getMysqlParam( 'firstName'  ) . ' ' . getMysqlParam( 'lastName' );
+  $countryId  = getMysqlParam( 'countryId'  );
+  $birthYear  = getMysqlParam( 'birthYear'  );
+  $birthMonth = getMysqlParam( 'birthMonth' );
+  $birthDay   = getMysqlParam( 'birthDay'   );
+  $email      = getMysqlParam( 'email'      );
+  $guests     = getMysqlParam( 'guests'     );
+  $comments   = getMysqlParam( 'comments'   );
+  
+  if( $personId ){
+    $results = dbQuery( "SELECT name, countryId FROM Persons WHERE id='$personId'" );
+    
+    noticeBox2( count( $results ),
+      "Registration was successfully saved.",
+      "Registration wasn't saved : Invalid WCA id."
+    );
+
+	 if( count( $results )){
+      $name = $results[0]['name'];
+      $countryId = $results[0]['countryId'];
+    }
+    else{
+      return;
+    }
+  }
+
+
+  #--- Building query
+  $into = "competitionId, name, personId, countryId, birthYear, birthMonth, birthDay, email, guests, comments";
+  $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments'";
+  
+  foreach( getAllEvents() as $event ){
+    $eventId = $event['id'];
+    if( getBooleanParam( "E$eventId" )){
+      $into .= ", E$eventId";
+      $values .= ", '1'";
+    }
+  }
+  dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
+
+  echo "<p style='width:90%;margin:1em auto 1em auto;'>Registration complete.</p>";
+}
+
+#----------------------------------------------------------------------
+function showPreregList () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId;
+
+  if( getBooleanParam( 'isPreregSubmit' ))
+    savePreregForm ();
+
+  #--- Get the data.
+  $preregs = dbQuery( "SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'" );
+  $competition = getFullCompetitionInfos( $chosenCompetitionId );
+
+  #--- Get all events of the competition.
+  $eventSpecs = split( ' ', $competition['eventSpecs'] );
+
+  foreach( $eventSpecs as $eventSpec ){
+    preg_match( '!^ (\w+) (?: = (\d*) / ([0-9:]*) )? $!x', $eventSpec, $matches );
+    list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
+    $eventList[] = $eventId;
+  }
+
+  foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
+
+  tableBegin( 'results', 2 + count( $eventList ));
+  tableHeader( split( '\\|', "Person|Citizen of$headerEvent" ),
+               array( 0 => 'class="f"' ));
+
+
+  foreach( $preregs as $prereg ){
+    extract( $prereg );
+
+	 #--- Compute the row.
+    if( $personId ) $row = array( personLink( $personId, $name ));
+    else $row = array( $name );
+
+    $row[] = $countryId;
+
+    foreach( $eventList as $event ){
+      if( $prereg["E$event"] ) $row[] = '|';
+      else $row[] = ' ';
+    }
+
+	 tableRow( $row );
+  }
+
+  tableEnd();
+
+}
 ?>

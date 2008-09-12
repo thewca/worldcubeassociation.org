@@ -28,6 +28,11 @@ a.c:hover                         { color: #229; }
 a.fc:link, a.fc:visited, a.fc:active { color: #C6F; }
 a.fc:hover                           { color: #94C; }
 
+/* ---------- competition with reg - */
+
+a.rg:link, a.rg:visited, a.rg:active { color: #936; }
+a.rg:hover                           { color: #714; }
+
 /* ---------- person --------------- */
 
 a.p:link, a.p:visited, a.p:active { color: #F60; }

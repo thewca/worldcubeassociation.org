@@ -19,24 +19,27 @@ if( ! $competition ){
   exit( 0 );
 }
 
-#--- Display the standard infos+results?  
-if( $displayStandard ){
+#--- Show competition infos.
+require( 'competition_infos.php' );
+showCompetitionInfos();
 
-  #--- Show competition infos.
-  require( 'competition_infos.php' );
-  showCompetitionInfos();
-  
-  #--- Show competition results.
-  if( $competition['showResults'] ){
-    offerChoices();
-    require( 'competition_results.php' );
-    showCompetitionResults();
-  }
+if( date( 'Ymd' ) >= (10000*$competition['year'] + 
+                        100*$competition['month'] + 
+                            $competition['day']) ){
+
+  #--- Show competition results...
+  offerChoicesResults();
+  require( 'competition_results.php' );
+  showCompetitionResults();
 }
 
-#--- Show the prereg form?
-if( $displayPreregForm )
-  showPreregForm();
+else if( $competition['showPreregForm'] ){
+  #--- Show the prereg form.
+  offerChoicesPrereg();
+  require( 'competition_registration.php' );
+  if( $chosenList && $competition['showPreregList'] ) showPreregList();
+  else showPreregForm();
+}
 
 require( '_footer.php' );
 
@@ -45,7 +48,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
   global $chosenAllResults, $chosenTop3, $chosenWinners;
-  global $displayStandard, $displayPreregForm;
+  global $chosenForm, $chosenList;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
 
@@ -55,12 +58,13 @@ function analyzeChoices () {
   if( !$chosenAllResults  &&  !$chosenTop3 )
     $chosenWinners = true;
     
-  $displayPreregForm = getBooleanParam( 'preregForm' );
-  $displayStandard = ! $displayPreregForm;
+  $chosenForm          = getBooleanParam( 'form' );
+  $chosenList          = getBooleanParam( 'list' );
+  if( !$chosenForm ) $chosenList = true;
 }
 
 #----------------------------------------------------------------------
-function offerChoices () {
+function offerChoicesResults () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenAllResults, $chosenTop3, $chosenWinners;
 
@@ -73,12 +77,17 @@ function offerChoices () {
 }
 
 #----------------------------------------------------------------------
-function showPreregForm () {
+function offerChoicesPrereg () {
 #----------------------------------------------------------------------
-  require_once( 'competition_prereg_form.php' );
-  
-  showPreregFormNow();
+  global $chosenCompetitionId, $chosenForm, $chosenList;
+
+  displayChoices( array(
+    choiceButton( $chosenForm, 'form', 'Registration Form' ),
+    choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
+    "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+  ));
 }
+
 
 
 ?>

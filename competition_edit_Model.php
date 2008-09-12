@@ -225,6 +225,8 @@ function storeData () {
   #-- Building show*
   $data["showAtAll"] = $data["showAtAll"] ? 1 : 0;
   $data["showResults"] = $data["showResults"] ? 1 : 0;
+  $data["showPreregForm"] = $data["showPreregForm"] ? 1 : 0;
+  $data["showPreregList"] = $data["showPreregList"] ? 1 : 0;
 
   #--- Store data
   foreach( $data as $key => $value ) $data[$key] = mysql_real_escape_string( $value );
@@ -249,7 +251,9 @@ function storeData () {
                    website='$website',
                    cellName='$cellName',
                    showAtAll='$showAtAll',
-                   showResults='$showResults'
+                   showResults='$showResults',
+                   showPreregForm='$showPreregForm',
+                   showPreregList='$showPreregList'
                 WHERE id='$competitionId'
   ");
 
@@ -258,6 +262,38 @@ function storeData () {
   #--- Building the caches again
   require( 'admin/_helpers.php' );
   ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
+
+  #--- Store registrations
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );
+  foreach( $regIds as $regId ){
+
+    $regId = $regId['id'];
+    #--- Delete registration
+    if( $data["reg${regId}delete"] ){
+      dbCommand( "DELETE FROM Preregs WHERE id='$regId'" );
+    }
+
+	 #--- Edit registration
+    else if( $data["reg${regId}edit"] ){
+
+      #--- Build events query
+		foreach( getAllEvents() as $event ){
+        $eventId = $event['id'];
+
+		  if( $data["offer$eventId"] ){
+          $ee = $data["reg${regId}E$eventId"] ? 1 : 0;
+          $queryEvent .= "E$eventId='$ee', ";
+        }
+      }
+
+		$personId = mysql_real_escape_string( $data["reg${regId}personId"] );
+		$name = mysql_real_escape_string( $data["reg${regId}name"] );
+		$countryId = mysql_real_escape_string( $data["reg${regId}countryId"] );
+       
+      #--- Query
+		dbCommand( "UPDATE Preregs SET $queryEvent name='$name', personId='$personId', countryId='$countryId' WHERE id='$regId'" );
+    }
+  } 
 
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;
