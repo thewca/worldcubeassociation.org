@@ -75,7 +75,7 @@ function showUnfinishedPersons () {
     #--- Try to compute the semi-id.
     $accent   = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûıışÿ";
     $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
-	 $quarterId = strtr( utf8_decode($name), $accent, $noaccent );
+	 $quarterId = strtr( $name, $accent, $noaccent );
 	 $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
     $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
 
