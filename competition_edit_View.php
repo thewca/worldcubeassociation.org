@@ -202,6 +202,8 @@ function showRegs () {
   
   if( ! count( $comps)) return;
 
+
+
   #--- Start the table.
   echo "<br /><b>Registered Competitors</b><br/><table border='1' cellspacing='0' cellpadding='4'>";
   echo "<tr bgcolor='#CCCCFF'><td>Delete</td><td>Edit</td><td>WCA Id</td><td>Name</td><td>Country</td>";
@@ -214,7 +216,7 @@ function showRegs () {
 
   foreach( $comps as $comp ){
     extract( $comp );
-	 $name = htmlEntities( $name, ENT_QUOTES );
+    $name = htmlEntities( $name, ENT_QUOTES );
 	 $personId = htmlEntities( $personId, ENT_QUOTES );
 
     echo "<tr><td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>";
@@ -231,8 +233,13 @@ function showRegs () {
           echo "<td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>";
       }
     }
-	 echo "</tr>";
+    echo "</tr>";
   }
+  echo "</table>";
+
+  echo "<p>Print <a href='registration_information.php?competitionId=$chosenCompetitionId'>registration information</a></p>";
+
+  echo "<p>Download registration excel sheet with <a href='registration_sheet.php?competitionId=$chosenCompetitionId&sep=comma'>comma separators</a> or <a href='registration_sheet.php?competitionId=$chosenCompetitionId&sep=semicolumn'>semicolumn separators</a></p>";
 
 }
 

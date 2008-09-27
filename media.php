@@ -21,9 +21,8 @@ function analyzeChoices () {
   $chosenRegionId  = getNormalParam( 'regionId' );
   $chosenOrder     = getNormalParam( 'order' );
 
-  if ( $chosenYears == ''){
+  if ( getNormalParam( 'filter' ) == '' )
     $chosenYears = "only " . date( 'Y' );
-}
 
   if( ! preg_match( '/^(date|submission)$/', $chosenOrder ))
     $chosenOrder = 'submission';
