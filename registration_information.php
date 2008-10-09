@@ -7,16 +7,43 @@ $currentSection = 'competitions';
 require( '_header.php' );
 
 analyzeChoices();
-showInformation();
+if( checkPassword() )
+  showInformation();
 
 require( '_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $chosenPassword;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
+  $chosenPassword      = getNormalParam( 'password'      );
+}
+
+
+#----------------------------------------------------------------------
+function checkPassword () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId, $chosenPassword;
+
+  $results = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
+
+  #--- Check the competitionId.
+  if( count( $results ) != 1){
+    showErrorMessage( "unknown competitionId [$chosenCompetitionId]" );
+    return false;
+  }
+
+  #--- Check the password.
+  $data = $results[0];
+
+  if( $chosenPassword != $data['password'] ){
+    showErrorMessage( "wrong password" );
+    return false;
+  }
+
+  return true;
 }
 
 #----------------------------------------------------------------------
@@ -26,9 +53,18 @@ function showInformation () {
 
   $results = dbQuery("SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId'");
 
-  echo "<pre>";
-  print_r( $results );
-  echo "</pre>";
+  echo "<h1>Extra information</h1>";
+  foreach( $results as $result ){
+    extract( $result );
+    echo "$name ($personId)<br />\n";
+    echo "<ul><li>Email : $email</li>\n";
+    echo "<ul><li>Guests : $guests</li>\n";
+    echo "<ul><li>Comments : $comments</li></ul><br />\n";
+    $emailList .= $emailList ? ", $email" : "$email";
+  }
+ 
+  echo "<u>Email List :</u><br />\n";
+  echo "<textarea cols='100' rows='6' readonly='readonly'>$emailList</textarea>";
 
 }
 

@@ -96,6 +96,7 @@ function createTablePreregs () {
       name               VARCHAR(80)          NOT NULL,
       personId           VARCHAR(10)          NOT NULL,
       countryId          VARCHAR(50)          NOT NULL,
+      gender             CHAR(1)              NOT NULL,
       birthYear          SMALLINT(6) UNSIGNED NOT NULL,
       birthMonth         TINYINT(4)  UNSIGNED NOT NULL,
       birthDay           TINYINT(4)  UNSIGNED NOT NULL,

@@ -42,7 +42,7 @@ function showPreregForm () {
   
   echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have a WCA id, which is the case if you already have particpated in an official competition, you can give it instead of your name and country. You can find your WCA id in your <a href='persons.php'>personal page</a>. If not, just leave the field empty.</p>";
 
-  echo "<p style='width:90%;margin:1em auto 1em auto;'><u>Additional information from the organizer:</u> ...</p>";
+ // echo "<p style='width:90%;margin:1em auto 1em auto;'><u>Additional information from the organizer:</u> ...</p>";
 
   echo "<form method='POST' action='competition.php'>";
   showField( "competitionId hidden $chosenCompetitionId" );
@@ -55,6 +55,7 @@ function showPreregForm () {
   showField( "lastName text 50 <b>Last name</b>" );  
   showField( "countryId country <b>Citizen of</b>" );
   echo "<tr height='10'></tr>";
+  showField( "gender gender <b>Gender</b>" );
   showField( "birth date <b>Date of birth</b>" );
   showField( "email text 50 <b>E-mail</b> address" );
   showField( "guests area 50 3 Names of the <b>guests</b> accompanying you" );
@@ -118,6 +119,14 @@ function showField ( $fieldSpec ) {
   }
   
   #---------------------
+  if( $type == 'gender' ){
+  #---------------------
+    list( $label ) = split( ' ', $rest, 1 );
+    $fieldHtml = "Male : <input type='radio' id='$id' name='$id' value='m' /> Female : <input type='radio' id='$id' name='$id' value='f' />";
+    $type = 'standard';
+  }
+
+  #---------------------
   if( $type == 'date' ){
   #---------------------
     list( $label ) = split( ' ', $rest, 1 );
@@ -176,6 +185,7 @@ function savePreregForm () {
   $personId   = getMysqlParam( 'personId'   );
   $name       = getMysqlParam( 'firstName'  ) . ' ' . getMysqlParam( 'lastName' );
   $countryId  = getMysqlParam( 'countryId'  );
+  $gender     = getMysqlParam( 'gender'     );
   $birthYear  = getMysqlParam( 'birthYear'  );
   $birthMonth = getMysqlParam( 'birthMonth' );
   $birthDay   = getMysqlParam( 'birthDay'   );
@@ -202,8 +212,8 @@ function savePreregForm () {
 
 
   #--- Building query
-  $into = "competitionId, name, personId, countryId, birthYear, birthMonth, birthDay, email, guests, comments";
-  $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments'";
+  $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments";
+  $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments'";
   
   foreach( getAllEvents() as $event ){
     $eventId = $event['id'];
@@ -240,9 +250,13 @@ function showPreregList () {
 
   foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
 
-  tableBegin( 'results', 2 + count( $eventList ));
-  tableHeader( split( '\\|', "Person|Citizen of$headerEvent" ),
-               array( 0 => 'class="f"' ));
+  for( $i = 2; $i < 2 + count( $eventList ); $i++)
+    $tableStyle[$i] = 'class="c"';
+  $tableStyle[2 + count( $eventList )] = 'class="f"';
+
+  tableBegin( 'results', 3 + count( $eventList ));
+  tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|" ),
+               $tableStyle );
 
 
   foreach( $preregs as $prereg ){
@@ -255,9 +269,11 @@ function showPreregList () {
     $row[] = $countryId;
 
     foreach( $eventList as $event ){
-      if( $prereg["E$event"] ) $row[] = '|';
-      else $row[] = ' ';
+      if( $prereg["E$event"] ) $row[] = 'X';
+      else $row[] = '-';
     }
+
+	 $row[] = '';
 
 	 tableRow( $row );
   }

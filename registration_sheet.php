@@ -58,7 +58,7 @@ function generateSheet () {
   foreach( $results as $result ){
 
     extract( $result );
-    $file .= "$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$sep";
+    $file .= "$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$gender$sep";
     foreach( $eventIds as $eventId ){
       $offer = $result["E$eventId"];
       $file	.= "$sep$offer";

@@ -210,7 +210,7 @@ function showRegs () {
   foreach( getAllEvents() as $event ){
     extract( $event );
     if( $data["offer$id"] )
-      echo "<td style='font-size:11px'>$id</td>";
+      echo "<td style='font-size:9px'>$id</td>";
   }
   echo "</tr>";
 
@@ -223,7 +223,7 @@ function showRegs () {
     echo "<td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>";
     echo "<td><input type='text' id='reg${id}personId' name='reg${id}personId' value='$personId' size='10' maxlength='10' /></td>";
     echo "<td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>";
-    echo "<td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' /></td>";
+    echo "<td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>";
     foreach( getAllEvents() as $event ){
       $eventId = $event['id'];
       if( $data["offer$eventId"] ){
@@ -237,7 +237,7 @@ function showRegs () {
   }
   echo "</table>";
 
-  echo "<p>Print <a href='registration_information.php?competitionId=$chosenCompetitionId'>registration information</a></p>";
+  echo "<p>Print <a href='registration_information.php?competitionId=$chosenCompetitionId&password=$data[password]'>registration information</a></p>";
 
   echo "<p>Download registration excel sheet with <a href='registration_sheet.php?competitionId=$chosenCompetitionId&sep=comma'>comma separators</a> or <a href='registration_sheet.php?competitionId=$chosenCompetitionId&sep=semicolumn'>semicolumn separators</a></p>";
 
