@@ -58,35 +58,42 @@ function showPreregForm () {
     $chosenDay     = $chosenPerson['day'      ];
   }
 
-  else if( getBooleanParam( 'submit' ))
+  else if( getBooleanParam( 'submit' )){
     savePreregForm ();
+    $chosenPersonId = getHtmlParam( 'personId'   );
+    $chosenName     = getHtmlParam( 'name'       );
+    $chosenCountry  = getHtmlParam( 'countryId'  );
+    $chosenGender   = getHtmlParam( 'gender'     );
+    $chosenYear     = getHtmlParam( 'birthYear'  );
+    $chosenMonth    = getHtmlParam( 'birthMonth' );
+    $chosenDay      = getHtmlParam( 'birthDay'   );
+    $chosenEmail    = getHtmlParam( 'email'      );
+    $chosenGuests   = getHtmlParam( 'guests'     );
+    $chosenComments = getHtmlParam( 'comments'   );
+  }
 
   echo "<h1>Preregistration for: &nbsp; $competition[name]</h1>";
 
-  echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organizers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organizers might not be able to offer enough room, food, etc.</p>";
+  echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organisers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organisers might not be able to offer enough room, food, etc.</p>";
   
-  echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have a WCA id, which is the case if you already have particpated in an official competition, you can give it instead of your name and country. You can find your WCA id in your <a href='persons.php'>personal page</a>. If not, just leave the field empty.</p>";
-
- // echo "<p style='width:90%;margin:1em auto 1em auto;'><u>Additional information from the organizer:</u> ...</p>";
+  echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have participated in an official competition, you can use the search function which will fill the information stored in the database. You can then fill the rest.</p>";
 
   echo "<form method='POST' action='competition.php'>";
   showField( "competitionId hidden $chosenCompetitionId" );
   showField( "form hidden 1" );
-  if( getBooleanParam( 'confirm' ))
-    showField( "personId hidden $chosenPersonId" );
-  
   echo "<table class='prereg'>";
-  
+  if( $chosenPersonId )
+    showField( "personId disabled $chosenPersonId 11 <b>WCA Id</b>" );
   showField( "name name 50 <b>Name</b> $chosenName" );
   if( getBooleanParam( 'search' ))
     showField( "namelist namelist <b>$matchingNumber names matching</b>" );
   showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
   showField( "gender gender $chosenGender <b>Gender</b>" );
   showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
-  showField( "email text  50 <b>E-mail</b> address" );
-  showField( "guests area  50 3 Names of the <b>guests</b> accompanying you" );
+  showField( "email text $chosenEmail 50 <b>E-mail</b> address" );
+  showField( "guests area 50 3 Names&nbsp;of&nbsp;the&nbsp;<b>guests</b>&nbsp;accompanying&nbsp;you $chosenGuests" );
 
-?><tr><td><b>Events</b><br /><br />Check the events you want to participate in.<br /><br />Please do not preregister for an event if you do not meet the time limit.</td>
+?><tr><td><b>Events</b><br /><br />Check the events you want to participate in.</td>
 <td>
 <?
   
@@ -95,10 +102,11 @@ function showPreregForm () {
     preg_match( '!^ (\w+) (?: = (\d*) / ([0-9:]*) )? $!x', $eventSpec, $matches );
     list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
     if( ! $personLimit ) $personLimit = "0";
-    showField( "E$eventId event $personLimit $timeLimit" );
+	 $chosenE = getBooleanParam( "E$eventId" );
+    showField( "E$eventId event $personLimit $timeLimit $chosenE" );
   }
   echo "</td></tr>";
-  showField( "comments area  50 5 Room for <b>extra information</b>" );
+  showField( "comments area 50 5 Room&nbsp;for&nbsp;<b>extra&nbsp;information</b> $chosenComments" );
   showField( "ip hidden " . $_SERVER["REMOTE_ADDR"] );
   echo "<tr><td>&nbsp;</td><td style='text-align:center'>";
   echo "<input type='submit' id='submit' name='submit' value='Preregister me!' style='background-color:#9F3;font-weight:bold' /> ";
@@ -127,6 +135,14 @@ function showField ( $fieldSpec ) {
   #---------------------
     list( $default, $size, $label ) = split( ' ', $rest, 3 );
     $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' />";
+    $type = 'standard';
+  }
+
+  #---------------------
+  if( $type == 'disabled' ){
+  #---------------------
+    list( $default, $size, $label ) = split( ' ', $rest, 3 );
+    $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' disabled='disabled' />";
     $type = 'standard';
   }
 
@@ -160,7 +176,7 @@ function showField ( $fieldSpec ) {
   #---------------------
     list( $label, $default ) = split( ' ', $rest, 2 );
     $fieldHtml = "<select id='$id' name='$id'>\n";
-    $countries = getAllUsedCountries ();
+    $countries = dbQuery( "SELECT * FROM Countries" );
     foreach( $countries as $country ){
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
@@ -200,7 +216,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'area' ){
   #---------------------
-    list( $default, $cols, $rows, $label ) = split( ' ', $rest, 4 );
+    list( $cols, $rows, $label, $default ) = split( ' ', $rest, 4 );
     $fieldHtml = "<textarea id='$id' name='$id' cols='$cols' rows='$rows'>$default</textarea>";
     $type = 'standard';
   }
@@ -216,11 +232,14 @@ function showField ( $fieldSpec ) {
   #---------------------
     $eventId = substr( $id, 1 );
     $eventName = eventCellName( $eventId );
-    
-    list( $personLimit, $timeLimit ) = split( ' ', $rest, 2 );
+
+    list( $personLimit, $timeLimit, $default ) = split( ' ', $rest, 3 );
     if( $timeLimit )
       $timeLimit = " (time limit $timeLimit)";
-    echo "<input id='$id' name='$id' type='checkbox' value='yes' />";
+    if( $default )
+      echo "<input id='$id' name='$id' type='checkbox' value='yes' checked='checked' />";
+    else
+      echo "<input id='$id' name='$id' type='checkbox' value='yes' />";
     echo " <label for='$id'>$eventName$timeLimit</label><br />";
   }
 }
@@ -260,6 +279,11 @@ function savePreregForm () {
   
   if( !$name or !$email or !$gender ){
     noticeBox( false, "Fields 'name', 'gender' and 'email' are required." );
+    return;
+  }
+
+  if( !eregi( "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email )){
+    noticeBox( false, "Incorrect email address." );
     return;
   }
 
@@ -355,4 +379,5 @@ function showPreregList () {
   tableEnd();
 
 }
+
 ?>
