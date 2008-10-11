@@ -5,7 +5,7 @@
 
 $currentSection = 'competitions';
 
-header("Content-type: application/octet-stream");
+header("Content-type: text/csv");
 header("Content-Disposition: attachment; filename=registration.csv");
 header("Pragma: no-cache");
 header("Expires: 0");
@@ -21,23 +21,22 @@ generateSheet();
 #----------------------------------------------------------------------
 function analyseChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $separator;
+  global $chosenCompetitionId;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
-  $separator = getNormalParam( 'sep' );
 
 }
 
 #----------------------------------------------------------------------
 function generateSheet () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $separator;
+  global $chosenCompetitionId;
 
   $cr = "\n";
 
-  $sep = ( $separator == 'comma' ) ? ',' : ';';
+  $sep = ',';
 
-  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
+  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId' AND status='a'");
 
   $competition = getFullCompetitionInfos( $chosenCompetitionId);
 

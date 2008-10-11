@@ -103,6 +103,8 @@ function createTablePreregs () {
       email              VARCHAR(80)          NOT NULL,
       guests             TEXT                 NOT NULL,
       comments           TEXT                 NOT NULL,
+      ip                 VARCHAR(16)          NOT NULL,
+      status             CHAR(1)              NOT NULL,
       $eventFields
       PRIMARY KEY ( id )
     )");

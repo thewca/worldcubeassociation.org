@@ -273,25 +273,33 @@ function storeData () {
       dbCommand( "DELETE FROM Preregs WHERE id='$regId'" );
     }
 
-	 #--- Edit registration
-    else if( $data["reg${regId}edit"] ){
+    else {
 
-      #--- Build events query
-		foreach( getAllEvents() as $event ){
-        $eventId = $event['id'];
+      #--- Edit registration
+      if( $data["reg${regId}edit"] ){
 
-		  if( $data["offer$eventId"] ){
-          $ee = $data["reg${regId}E$eventId"] ? 1 : 0;
-          $queryEvent .= "E$eventId='$ee', ";
+        #--- Build events query
+        foreach( getAllEvents() as $event ){
+          $eventId = $event['id'];
+
+          if( $data["offer$eventId"] ){
+            $ee = $data["reg${regId}E$eventId"] ? 1 : 0;
+            $queryEvent .= "E$eventId='$ee', ";
+          }
         }
+
+        $personId = mysql_real_escape_string( $data["reg${regId}personId"] );
+        $name = mysql_real_escape_string( $data["reg${regId}name"] );
+        $countryId = mysql_real_escape_string( $data["reg${regId}countryId"] );
+
+        #--- Query
+        dbCommand( "UPDATE Preregs SET $queryEvent name='$name', personId='$personId', countryId='$countryId' WHERE id='$regId'" );
       }
 
-		$personId = mysql_real_escape_string( $data["reg${regId}personId"] );
-		$name = mysql_real_escape_string( $data["reg${regId}name"] );
-		$countryId = mysql_real_escape_string( $data["reg${regId}countryId"] );
-       
-      #--- Query
-		dbCommand( "UPDATE Preregs SET $queryEvent name='$name', personId='$personId', countryId='$countryId' WHERE id='$regId'" );
+      #--- Accept registration
+      if( $data["reg${regId}accept"] )
+        dbCommand( "UPDATE Preregs SET status='a' WHERE id='$regId'" );
+
     }
   } 
 
