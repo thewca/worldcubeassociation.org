@@ -78,12 +78,12 @@ function showPreregForm () {
   
   echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have participated in an official competition, you can use the search function which will fill the information stored in the database. You can then fill the rest.</p>";
 
-  echo "<form method='POST' action='competition.php'>";
+  echo "<form method='POST' action='c.php?form=Registration+Form&competitionId=$chosenCompetitionId'>";
   showField( "competitionId hidden $chosenCompetitionId" );
   showField( "form hidden 1" );
   echo "<table class='prereg'>";
   if( $chosenPersonId )
-    showField( "personId disabled $chosenPersonId 11 <b>WCA Id</b>" );
+    showField( "personId readonly $chosenPersonId 11 <b>WCA Id</b>" );
   showField( "name name 50 <b>Name</b> $chosenName" );
   if( getBooleanParam( 'search' ))
     showField( "namelist namelist <b>$matchingNumber names matching</b>" );
@@ -139,10 +139,10 @@ function showField ( $fieldSpec ) {
   }
 
   #---------------------
-  if( $type == 'disabled' ){
+  if( $type == 'readonly' ){
   #---------------------
     list( $default, $size, $label ) = split( ' ', $rest, 3 );
-    $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' disabled='disabled' />";
+    $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' readonly='readonly' />";
     $type = 'standard';
   }
 
@@ -181,9 +181,9 @@ function showField ( $fieldSpec ) {
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
 		if( $countryId == $default )
-        $fieldHtml .= "  <option value='$countryId' selected='selected' >$countryName</option>\n";
+        $fieldHtml .= "  <option value=\"$countryId\" selected='selected' >$countryName</option>\n";
       else
-        $fieldHtml .= "  <option value='$countryId'>$countryName</option>\n";
+        $fieldHtml .= "  <option value=\"$countryId\">$countryName</option>\n";
     }
     $fieldHtml .= "</select>";
     $type = 'standard';

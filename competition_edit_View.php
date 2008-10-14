@@ -42,9 +42,7 @@ function startForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenPassword;
     
-  echo "<form method='POST' action='competition_edit.php'>\n";
-  echo "<input id='competitionId' name='competitionId' type='hidden' value='$chosenCompetitionId' />\n";
-  echo "<input id='password' name='password' type='hidden' value='$chosenPassword' />\n";
+  echo "<form method='POST' action='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>\n";
 }
 
 #----------------------------------------------------------------------

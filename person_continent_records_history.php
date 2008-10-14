@@ -26,7 +26,7 @@ function showHistoryOfContinentalRecords () {
       AND competition.id = result.competitionId
       AND round.id = result.roundId
     ORDER BY
-      rank, year DESC, month DESC, day DESC, roundId DESC
+      event.rank, year DESC, month DESC, day DESC, roundId DESC
   ");
 
   if( ! count( $results ))

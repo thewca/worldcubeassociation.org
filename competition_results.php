@@ -114,7 +114,7 @@ function getCompetitionResults () {
       AND country.id    = countryId
       $viewCondition
     ORDER BY
-      event.rank, roundId, pos, average, best, personName
+      event.rank, round.rank, pos, average, best, personName
   ");
 }
 

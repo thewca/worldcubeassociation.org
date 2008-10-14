@@ -49,7 +49,7 @@ function checkPassword () {
 #----------------------------------------------------------------------
 function showInformation () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $chosenPassword;
 
   $results = dbQuery("SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId'");
 
@@ -65,7 +65,8 @@ function showInformation () {
   }
  
   echo "<u>Email List :</u><br />\n";
-  echo "<textarea cols='100' rows='6' readonly='readonly'>$emailList</textarea>";
+  echo "<textarea cols='100' rows='6' readonly='readonly'>$emailList</textarea><br /><br />";
+  echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Back</a>";
 
 }
 
