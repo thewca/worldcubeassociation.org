@@ -103,6 +103,13 @@ table.prereg {
   xborder: 1px solid #CCC;
 }
 
+.prereg th {
+  border: 1px solid #CCC;
+  padding: 3px;
+  background: #DDE;
+  vertical-align: top;
+}
+
 .prereg td {
   border: 1px solid #CCC;
   padding: 3px;

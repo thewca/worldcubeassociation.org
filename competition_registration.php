@@ -6,6 +6,7 @@ if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
 if( $standAlone ){
   require_once( '_framework.php' );
   $chosenCompetitionId = getNormalParam( 'competitionId' );
+  $chosenList = getBooleanParam( 'list' );
   ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -21,7 +22,10 @@ if( $standAlone ){
 
   #--- Show form (or display error if competition not found).
   if( $competition ){
-    showPreregForm();
+    if( $chosenList )
+      showPreregList();
+    else
+      showPreregForm();
   } else {
     noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
   }
@@ -72,14 +76,13 @@ function showPreregForm () {
     $chosenComments = getHtmlParam( 'comments'   );
   }
 
-  echo "<h1>Preregistration for: &nbsp; $competition[name]</h1>";
+  echo "<h1>Registration form</h1>";
 
   echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organisers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organisers might not be able to offer enough room, food, etc.</p>";
   
   echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have participated in an official competition, you can use the search function which will fill the information stored in the database. You can then fill the rest.</p>";
 
-  echo "<form method='POST' action='c.php?form=Registration+Form&competitionId=$chosenCompetitionId'>";
-  showField( "competitionId hidden $chosenCompetitionId" );
+  echo "<form method='POST' action='$_SERVER[PHP_SELF]?competitionId=$chosenCompetitionId'>";
   showField( "form hidden 1" );
   echo "<table class='prereg'>";
   if( $chosenPersonId )
@@ -308,6 +311,8 @@ function showPreregList () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
 
+  echo "<h1>Registered competitors</h1><br />";
+  
   if( getBooleanParam( 'isPreregSubmit' ))
     savePreregForm ();
 
@@ -323,26 +328,22 @@ function showPreregList () {
     list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
     $eventList[] = $eventId;
   }
+  
+  foreach( $eventList as $event ){ $headerEvent .= "<th>$event</th>"; }
 
-  foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
-
-  for( $i = 2; $i < 2 + count( $eventList ); $i++)
-    $tableStyle[$i] = 'class="c"';
-  $tableStyle[2 + count( $eventList )] = 'class="f"';
-
-  tableBegin( 'results', 3 + count( $eventList ));
-  tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|#" ), $tableStyle );
+  echo "<table class='prereg'>\n";
+  echo "<tr><th>Person</th><th>Citizen of</th>$headerEvent<th>#</th></tr>";
 
   foreach( $preregs as $prereg ){
     extract( $prereg );
+    echo "<tr>";
 
-	 #--- Compute the row.
-    if( $personId ) $row = array( personLink( $personId, $name ));
-    else $row = array( $name );
+    if( $personId ) echo "<td><a href='http://www.worldcubeassociation.org/results/p.php?i=$personId'>$name</a></td>";
+    else echo "<td>$name</td>";
 
     $countPerson += 1;
 
-    $row[] = $countryId;
+    echo "<td>$countryId</td>";
 
     if( ! $listCountries[$countryId] ){
       $listCountries[$countryId] = 1;
@@ -353,30 +354,26 @@ function showPreregList () {
 
     foreach( $eventList as $event ){
       if( $prereg["E$event"] ){
-        $row[] = 'X';
+        echo "<td style='text-align:center;'>X</td>";
         $countEvents[$event] += 1;
         $personEvents += 1;
       }
-      else $row[] = '-';
+      else echo "<td style='text-align:center;'>-</td>";
     }
 
-	 $row[] = $personEvents;
-
-	 tableRow( $row );
+	 echo "<td>$personEvents</td></tr>";
   }
 
-  tableRowBlank();
-  tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|" ), $tableStyle );
-  $row = array( $countPerson, $countCountry );
+  /*echo "<tr></tr>";
+  echo "<tr><th>Person</th><th>Citizen of</th>$headerEvent<th></th></tr>";*/
+  echo "<tr style='text-align:center;'><td>$countPerson</td><td>$countCountry</td>";
   foreach( $eventList as $event ){
     if( $countEvents[$event] )
-      $row[] = $countEvents[$event];
+      echo "<td>$countEvents[$event]</td>";
     else
-      $row[] = 0;
+      echo "<td>0</td>";
   }
-  $row[] = '';
-  tableRow( $row );
-  tableEnd();
+  echo "<td></td></tr></table>";
 
 }
 

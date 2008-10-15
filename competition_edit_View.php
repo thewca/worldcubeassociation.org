@@ -34,6 +34,7 @@ function showSaveMessage () {
 function showIntroduction () {
 #----------------------------------------------------------------------
 
+  echo "<h1>General information</h1>";
   echo "<p>Enter the data of the competition, then click the submit button on the bottom of the page to update the data in the database. You can turn a text part into a link using this format:<br />[{text...}{http:...}] or [{text...}{mailto:...}]</p>\n\n";
 }
 
@@ -114,6 +115,7 @@ function showEventSpecifications () {
 #----------------------------------------------------------------------
   global $data;
 
+  echo "<hr><h1>Events</h1>";
   #--- Explain.
   echo "<ul>";
   echo "<li><p>Choose which events the competition will offer.</p></li>\n";
@@ -179,6 +181,15 @@ function showAdminOptions () {
       echo "<input id='showResults' name='showResults' type='hidden' value='ok' />\n";
   }
 
+}
+
+#----------------------------------------------------------------------
+function showRegs () {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId;
+
+  echo "<hr><h1>Registration</h1>";
+
   if( $data["showPreregForm"] )
     echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' checked='checked' /> Check if you want to start a <b>Registration Form</b></p>\n";
   else
@@ -188,14 +199,8 @@ function showAdminOptions () {
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
   else
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
-
-}
-
-#----------------------------------------------------------------------
-function showRegs () {
-#----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
-
+  
+  
   $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   
   if( ! count( $comps)) return;
@@ -204,9 +209,9 @@ function showRegs () {
 
   #--- Start the table.
   echo "<br /><b>Registered Competitors</b><br/>\n";
-  echo "<p>A : Accept, D : Delete, E : Edit.<br />";
-  echo "Pending registrations are in light red, accepted registrations are in light green.<br />\n";
-  echo "If you want to edit a person, first check its 'edit' checkbox for this to work.</p>\n";
+  echo "<ul><li><p>A : Accept, D : Delete, E : Edit.</p></li>\n";
+  echo "<li><p>Pending registrations are in light red, accepted registrations are in light green.</p></li>\n";
+  echo "<li><p>If you want to edit a person, first check its 'edit' checkbox for this to work.</p></li></ul>\n";
   
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
   echo "<tr bgcolor='#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
@@ -243,9 +248,10 @@ function showRegs () {
   }
   echo "</table>\n";
 
-  echo "<p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&password=$data[password]'>extra registration information</a></p>\n";
-
-  echo "<p>Download the <a href='registration_sheet.php?competitionId=$chosenCompetitionId'>registration excel sheet</a> in .csv format.</a></p>\n";
+  echo "<ul><li><p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&password=$data[password]'>extra registration information</a></p></li>\n";
+  echo "<li><p>Download the <a href='registration_sheet.php?competitionId=$chosenCompetitionId'>registration excel sheet</a> in .csv format.</a></p></li>\n";
+  echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n";
+  echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&list=1'>this link</a></p></li></ul>\n";
 
 }
 
