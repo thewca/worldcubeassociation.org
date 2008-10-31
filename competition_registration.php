@@ -22,10 +22,10 @@ if( $standAlone ){
 
   #--- Show form (or display error if competition not found).
   if( $competition ){
-    if( $chosenList )
-      showPreregList();
-    else
-      showPreregForm();
+    if( $chosenList ) 
+      showPreregList(); 
+    else 
+      showPreregForm(); 
   } else {
     noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
   }
@@ -312,7 +312,6 @@ function showPreregList () {
   global $chosenCompetitionId;
 
   echo "<h1>Registered competitors</h1><br />";
-  
   if( getBooleanParam( 'isPreregSubmit' ))
     savePreregForm ();
 
@@ -328,22 +327,26 @@ function showPreregList () {
     list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
     $eventList[] = $eventId;
   }
-  
-  foreach( $eventList as $event ){ $headerEvent .= "<th>$event</th>"; }
 
-  echo "<table class='prereg'>\n";
-  echo "<tr><th>Person</th><th>Citizen of</th>$headerEvent<th>#</th></tr>";
+  foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
+
+  for( $i = 2; $i < 2 + count( $eventList ); $i++)
+    $tableStyle[$i] = 'class="c"';
+  $tableStyle[2 + count( $eventList )] = 'class="f"';
+
+  tableBegin( 'results', 3 + count( $eventList ));
+  tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|#" ), $tableStyle );
 
   foreach( $preregs as $prereg ){
     extract( $prereg );
-    echo "<tr>";
 
-    if( $personId ) echo "<td><a href='http://www.worldcubeassociation.org/results/p.php?i=$personId'>$name</a></td>";
-    else echo "<td>$name</td>";
+	 #--- Compute the row.
+    if( $personId ) $row = array( personLink( $personId, $name ));
+    else $row = array( $name );
 
     $countPerson += 1;
 
-    echo "<td>$countryId</td>";
+    $row[] = $countryId;
 
     if( ! $listCountries[$countryId] ){
       $listCountries[$countryId] = 1;
@@ -354,26 +357,30 @@ function showPreregList () {
 
     foreach( $eventList as $event ){
       if( $prereg["E$event"] ){
-        echo "<td style='text-align:center;'>X</td>";
+        $row[] = 'X';
         $countEvents[$event] += 1;
         $personEvents += 1;
       }
-      else echo "<td style='text-align:center;'>-</td>";
+      else $row[] = '-';
     }
 
-	 echo "<td>$personEvents</td></tr>";
+	 $row[] = $personEvents;
+
+	 tableRow( $row );
   }
 
-  /*echo "<tr></tr>";
-  echo "<tr><th>Person</th><th>Citizen of</th>$headerEvent<th></th></tr>";*/
-  echo "<tr style='text-align:center;'><td>$countPerson</td><td>$countCountry</td>";
+  //tableRowBlank();
+  //tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|" ), $tableStyle );
+  $row = array( $countPerson, $countCountry );
   foreach( $eventList as $event ){
     if( $countEvents[$event] )
-      echo "<td>$countEvents[$event]</td>";
+      $row[] = $countEvents[$event];
     else
-      echo "<td>0</td>";
+      $row[] = 0;
   }
-  echo "<td></td></tr></table>";
+  $row[] = '';
+  tableRowStyled( 'text-align:center', $row );
+  tableEnd();
 
 }
 
