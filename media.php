@@ -39,8 +39,8 @@ function offerChoices () {
 
   #--- Filter
   displayChoices( array(
-    regionChoice(),
-    yearsChoice( true, false, true ),
+    regionChoice( true ),
+    yearsChoice( true, false, false, true ),
     choice( 'order', 'Sorted by', array(
       array( 'date',    'Competition Date' ),
       array( 'submission', 'Insertion Date' )

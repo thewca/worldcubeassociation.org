@@ -55,7 +55,7 @@ function offerChoices () {
   global $chosenType, $chosenStatus, $chosenRegionId, $chosenOrder;
 
   displayChoices( array(
-    regionChoice(),
+    regionChoice( true ),
     choice( 'type', 'Type', array(
       array( '',           'All' ),
       array( 'article',   'Articles' ),

@@ -4,9 +4,18 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
+
+require( '_framework.php' );
+analyzeChoices();
+
+if( $chosenMap ){
+  
+  require( 'map.php' );
+  exit;
+}
+
 require( '_header.php' );
 
-analyzeChoices();
 offerChoices();
 listCompetitions();
 
@@ -15,30 +24,32 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenShow;
+  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenList, $chosenMap;
 
   $chosenEventId  = getNormalParam( 'eventId' );
   $chosenRegionId = getNormalParam( 'regionId' );
   $chosenYears    = getNormalParam( 'years' );
+  $chosenList     = getBooleanParam( 'list' );
+  $chosenMap      = getBooleanParam( 'map' );
 
-  if ( getNormalParam( 'filter' ) == '' ){
-    $chosenYears = "only " . date( 'Y' );
+  if ( ! $chosenList && ! $chosenMap ){
+    $chosenYears = "current";
   }
 }
 
 #----------------------------------------------------------------------
 function offerChoices () {
 #----------------------------------------------------------------------
+  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenList, $chosenMap;
 
   displayChoices( array(
     eventChoice( false ),
     regionChoice( true ),
-    yearsChoice( true, false, true ),
-    choiceButton( true, 'filter', 'Filter' )
+    yearsChoice( true, true, false, true ),
+    choiceButton( $chosenList, 'list', 'List' ),
+    choiceButton( $chosenMap, 'map', 'Map' )
   ));
 }
-
-				  
 
 #----------------------------------------------------------------------
 function listCompetitions () {

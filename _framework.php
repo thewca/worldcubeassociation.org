@@ -101,6 +101,10 @@ function competitionCondition () {
 function yearCondition () {
   global $chosenYears;
 
+  if( $chosenYears == 'current' )
+    return "AND (10000*year+100*month+day)>" . 
+	 date( 'Ymd', mktime(0, 0, 0, date( 'm' ) - 3, date( 'd' ), date( 'Y' )) );
+
   if( preg_match( '/^until (\d+)$/', $chosenYears, $match ))
     return " AND year <= $match[1] ";
 

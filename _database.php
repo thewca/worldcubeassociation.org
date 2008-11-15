@@ -94,6 +94,13 @@ function getAllUsedCountries () {
 }
 
 #----------------------------------------------------------------------
+function getAllUsedCountriesCompetitions () {
+#----------------------------------------------------------------------
+  global $cachedUsedCountriesCompetitions;
+  return $cachedUsedCountriesCompetitions;
+}
+
+#----------------------------------------------------------------------
 function getAllUsedContinents () {
 #----------------------------------------------------------------------
   global $cachedUsedContinents;

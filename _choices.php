@@ -79,12 +79,14 @@ function competitionChoice ( $required ) {
 }
 
 #----------------------------------------------------------------------
-function yearsChoice ($all, $until, $only ) {
+function yearsChoice ($all, $current, $until, $only ) {
 #----------------------------------------------------------------------
   global $chosenYears;
 
-  if ($all){
+  if( $all ){
     $options[] = array( '', 'All' );
+	 if( $current )
+      $options[] = array( 'current', 'Current' );
     $options[] = array( '', '' );
   }
 
@@ -103,7 +105,7 @@ function yearsChoice ($all, $until, $only ) {
 }
 
 #----------------------------------------------------------------------
-function regionChoice () {
+function regionChoice ( $competitions ) {
 #----------------------------------------------------------------------
   global $chosenRegionId;
 
@@ -114,8 +116,13 @@ function regionChoice () {
     $options[] = array( $row['id'], $row['name'] );
 
   $options[] = array( '', '' );
-  foreach( getAllUsedCountries() as $row )
-    $options[] = array( $row['id'], $row['name'] );
+  if( $competitions )
+    foreach( getAllUsedCountriesCompetitions() as $row )
+      $options[] = array( $row['id'], $row['name'] );
+
+  else
+    foreach( getAllUsedCountries() as $row )
+      $options[] = array( $row['id'], $row['name'] );
 
   return choice( 'regionId', 'Region', $options, $chosenRegionId );
 }

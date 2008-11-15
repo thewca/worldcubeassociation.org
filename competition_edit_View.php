@@ -11,6 +11,7 @@ function showView () {
   showEventSpecifications();
   showAdminOptions();
   showRegs();
+  showMap();
   endForm();
 }
 
@@ -252,6 +253,18 @@ function showRegs () {
   echo "<li><p>Download the <a href='registration_sheet.php?competitionId=$chosenCompetitionId'>registration excel sheet</a> in .csv format.</a></p></li>\n"; 
   echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n"; 
   echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&list=1'>this link</a></p></li></ul>\n"; 
+
+}
+
+#----------------------------------------------------------------------
+function showMap () {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId;
+
+  echo "<hr><h1>Map</h1>";
+
+  echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
+  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$data[password]'>Change</a> the coordinates.</p>";
 
 }
 

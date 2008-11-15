@@ -39,7 +39,7 @@ function offerChoices () {
   displayChoices( array(
     regionChoice( false ),
     eventChoice( false ),
-    yearsChoice( true, true, false ),
+    yearsChoice( true, false, true, false ),
     choiceButton( $chosenMixed,    'mixed',    'Mixed' ),
     choiceButton( $chosenSlim,     'slim',     'Slim' ),
     choiceButton( $chosenSeparate, 'separate', 'Separate' ),

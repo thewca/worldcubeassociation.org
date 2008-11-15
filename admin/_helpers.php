@@ -95,6 +95,12 @@ function computeCachedDatabase ( $cacheFile ) {
        WHERE country.id = countryId
        ORDER BY country.name',
 
+    'UsedCountriesCompetitions' =>
+      'SELECT DISTINCT country.*
+       FROM Competitions competition, Countries country
+       WHERE country.id = countryId
+       ORDER BY country.name',
+
     'UsedYears' =>
       'SELECT DISTINCT year FROM Competitions ORDER BY year DESC'
   );

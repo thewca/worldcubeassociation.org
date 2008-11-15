@@ -30,7 +30,7 @@ function offerChoices () {
 
   displayChoices( array(
     eventChoice( false ),
-    regionChoice(),
+    regionChoice( false ),
     textFieldChoice( 'pattern', 'Name or name parts', $chosenPatternHtml ),
     choiceButton( true, 'search', 'Search' )
   ));
