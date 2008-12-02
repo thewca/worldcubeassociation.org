@@ -179,7 +179,7 @@ function showField ( $fieldSpec ) {
   #---------------------
     list( $label, $default ) = split( ' ', $rest, 2 );
     $fieldHtml = "<select id='$id' name='$id'>\n";
-    $countries = dbQuery( "SELECT * FROM Countries" );
+    $countries = getAllUsedCountries();
     foreach( $countries as $country ){
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
@@ -243,7 +243,10 @@ function showField ( $fieldSpec ) {
       echo "<input id='$id' name='$id' type='checkbox' value='yes' checked='checked' />";
     else
       echo "<input id='$id' name='$id' type='checkbox' value='yes' />";
-    echo " <label for='$id'>$eventName$timeLimit</label><br />";
+    if( count( dbQuery( "SELECT * FROM Events WHERE id='$eventId' AND rank<1000" )))
+      echo " <label for='$id'>$eventName$timeLimit</label><br />";
+    else
+      echo " <label for='$id' style='color:#999'>$eventName$timeLimit</label><br />";
   }
 }
 
@@ -294,13 +297,14 @@ function savePreregForm () {
   $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments, ip, status";
   $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments', '$ip', 'p'";
   
-  foreach( getAllEvents() as $event ){
+  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
     $eventId = $event['id'];
     if( getBooleanParam( "E$eventId" )){
       $into .= ", E$eventId";
       $values .= ", '1'";
     }
   }
+
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
 
   noticeBox( true, "Registration complete." );

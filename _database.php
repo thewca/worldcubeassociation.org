@@ -80,6 +80,13 @@ function getAllEvents () {
 }
 
 #----------------------------------------------------------------------
+function getAllUnofficialEvents () {
+#----------------------------------------------------------------------
+  global $cachedUnofficialEvents;
+  return $cachedUnofficialEvents;
+}
+
+#----------------------------------------------------------------------
 function getAllCompetitions () {
 #----------------------------------------------------------------------
   global $cachedCompetitions;

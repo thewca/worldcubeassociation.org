@@ -147,6 +147,22 @@ function showEventSpecifications () {
     echo "</tr>\n";
   }
   
+  #--- List the unofficial events.
+  foreach( getAllUnofficialEvents() as $event ){
+    extract( $event );
+
+    $offer       = $data["offer$id"] ? "checked='checked'" : "";
+    $personLimit = $data["personLimit$id"];
+    $timeLimit   = $data["timeLimit$id"];
+    
+    echo "<tr>\n";
+    echo "  <td><b style='color:#999'>$cellName</b></td>\n";
+    echo "  <td align='center'><input id='offer$id' name='offer$id' type='checkbox' $offer /></td>\n";
+    echo "  <td align='center'><input id='personLimit$id' name='personLimit$id' type='text' size='6' style='background:#FF8' value='$personLimit' /></td>\n";
+    echo "  <td align='center'><input id='timeLimit$id' name='timeLimit$id' type='text' size='6' style='background:#FF8' value='$timeLimit' /></td>\n";
+    echo "</tr>\n";
+  }
+  
   #--- Finish the table.
   echo "</table>\n";
 }
@@ -221,6 +237,11 @@ function showRegs () {
     if( $data["offer$id"] )
       echo "<td style='font-size:9px'>$id</td>\n";
   }
+  foreach( getAllUnofficialEvents() as $event ){
+    extract( $event );
+    if( $data["offer$id"] )
+      echo "<td style='font-size:9px;color:#999'>$id</td>\n";
+  }
   echo "</tr>\n";
 
   foreach( $comps as $comp ){
@@ -235,8 +256,19 @@ function showRegs () {
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>\n";
     echo "  <td><input type='text' id='reg${id}personId' name='reg${id}personId' value='$personId' size='10' maxlength='10' /></td>\n";
     echo "  <td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>\n";
-    echo "  <td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>\n";
-    foreach( getAllEvents() as $event ){
+    
+    echo "  <td><select id='reg${id}countryId' name='reg${id}countryId'>";
+    foreach( getAllUsedCountries() as $country ){
+      $cId   = $country['id'  ];
+      $cName = $country['name'];
+      if( $cId == $countryId )
+        echo "    <option value=\"$cId\" selected='selected' >$cName</option>\n";
+      else
+        echo "    <option value=\"$cId\">$cName</option>\n";
+    }
+    echo "  </select></td>";
+
+    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
       $eventId = $event['id'];
       if( $data["offer$eventId"] ){
         if( $comp["E$eventId"] )

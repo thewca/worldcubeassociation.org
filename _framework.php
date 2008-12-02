@@ -21,7 +21,7 @@ function eventCellName ( $eventId ) {
 }
 
 function getEvent ( $eventId ) {
-  foreach( getAllEvents() as $event )
+  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event )
     if( $event['id'] == $eventId )
       return $event;
 }

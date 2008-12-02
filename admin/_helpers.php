@@ -78,7 +78,10 @@ function computeCachedDatabase ( $cacheFile ) {
   $caches = array(
 
     'Events' =>
-      'SELECT * FROM Events ORDER BY rank',
+      'SELECT * FROM Events WHERE rank<1000 ORDER BY rank',
+
+    'UnofficialEvents' =>
+      'SELECT * FROM Events WHERE rank>1000 ORDER BY rank',
 
     'Competitions' =>
       'SELECT id, cellName FROM Competitions ORDER BY year DESC, month DESC, day DESC',

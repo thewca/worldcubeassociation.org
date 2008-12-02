@@ -211,7 +211,7 @@ function storeData () {
 
   #-- Building eventSpecs
   $eventSpecs = '';
-  foreach( getAllEvents() as $event ){
+  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
     extract($event);
 
     if ( $data["offer$id"] ){
@@ -279,7 +279,7 @@ function storeData () {
       if( $data["reg${regId}edit"] ){
 
         #--- Build events query
-        foreach( getAllEvents() as $event ){
+        foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
           $eventId = $event['id'];
 
           if( $data["offer$eventId"] ){

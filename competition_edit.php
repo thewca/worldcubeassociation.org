@@ -55,7 +55,7 @@ function checkPasswordAndLoadData () {
   if( ! $chosenSubmit ){
   
     #--- Extract the events.
-    foreach( getAllEvents() as $event ){
+    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
       extract( $event );
   
       if( preg_match( "/(^| )$id\b(=(\d+)\/(\d+:\d+))?/", $data['eventSpecs'], $matches )){
