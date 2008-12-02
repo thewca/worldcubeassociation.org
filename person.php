@@ -39,7 +39,9 @@ function getCompetitions () {
       AND result.personId='$chosenPersonId'
       AND competition.id = result.competitionId
     GROUP BY
-      competition.id ");
+      competition.id
+    ORDER BY
+      latitude, longitude, year, month, day");
 
 }
 

@@ -45,9 +45,9 @@ function handleRedirects () {
   }
   
   if( $edit )
-    $goal = "../competition_edit.php?competitionId=$competitionId&password=$password";
+    $goal = "../competition_edit.php?competitionId=$competitionId&password=$password&rand=" . rand();
   if( $fullEdit )
-    $goal = "../competition_edit.php?FULLEDIT=7247&competitionId=$competitionId&password=$password";
+    $goal = "../competition_edit.php?FULLEDIT=7247&competitionId=$competitionId&password=$password&rand=" . rand();
   if( $results )
     $goal = "../competition.php?competitionId=$competitionId";
       

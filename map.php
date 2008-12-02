@@ -38,6 +38,8 @@ function getCompetitions () {
       $eventCondition
       $yearCondition
       $regionCondition
+    ORDER BY
+      longitude, year, month, day
   ");
 
 }

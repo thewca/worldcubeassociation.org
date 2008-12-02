@@ -28,6 +28,7 @@
         map = new GMap2(document.getElementById("map"));
         map.addControl(new GSmallMapControl());
         map.addControl(new GMapTypeControl());
+        map.enableScrollWheelZoom();
 <?
 if( $chosenRegionId && $chosenRegionId != 'World' ){ 
 
@@ -50,37 +51,76 @@ if( $chosenRegionId && $chosenRegionId != 'World' ){
 else
   echo "map.setCenter(new GLatLng(20, 8), 2);";
 
-?>
-        var blueIcon = new GIcon(G_DEFAULT_ICON);
-        blueIcon.image = "images/blue-dot.png";
-        markerBlue = { icon:blueIcon };
+for( $i = 1; $i < 10; $i++ ){
+  echo "var blueIcon$i = new GIcon(G_DEFAULT_ICON);\n";
+  echo "blueIcon$i.image = \"images/blue-dot$i.png\";\n";
+  echo "markerBlue$i = { icon:blueIcon$i };\n";
 
-		  var violetIcon = new GIcon(G_DEFAULT_ICON);
-        violetIcon.image = "images/violet-dot.png";
-        markerViolet = { icon:violetIcon };
+  echo "var violetIcon$i = new GIcon(G_DEFAULT_ICON);\n";
+  echo "violetIcon$i.image = \"images/violet-dot$i.png\";\n";
+  echo "markerViolet$i = { icon:violetIcon$i };\n";
+}
 
-<?
+echo "var blueIconp = new GIcon(G_DEFAULT_ICON);\n";
+echo "blueIconp.image = \"images/blue-dotp.png\";\n";
+echo "markerBluep = { icon:blueIconp };\n";
+
+echo "var violetIconp = new GIcon(G_DEFAULT_ICON);\n";
+echo "violetIconp.image = \"images/violet-dotp.png\";\n";
+echo "markerVioletp = { icon:violetIconp };\n";
+
+
+  $isFirst = true;
+  $countCompetitions = 0;
   foreach( $chosenCompetitions as $competition ){
     extract( $competition );
 
     if( $latitude != 0 or $longitude != 0){
-      $latitude  /= 1000000;
+      if( $isFirst ){
+        $previousLatitude = $latitude;
+        $previousLongitude = $longitude;
+        $isFirst = false;
+      }
+
+      //echo "$countCompetitions";
+
+      if( $latitude != $previousLatitude || $longitude != $previousLongitude ){
+        $previousLatitude /= 1000000;
+        $previousLongitude /= 1000000;
+
+        $infosHtml .= $pastVenue;
+        echo "marker.bindInfoWindowHtml(\"$infosHtml\");\n";
+        echo "map.addOverlay(marker);\n";
+
+        $previousLatitude = $latitude;
+        $previousLongitude = $longitude;
+
+        $countCompetitions = 0;
+        $infosHtml = "";
+
+      }
+
+      $infosHtml .= "<b>" . competitionLink( $id, $cellName ) . "</b> (" . competitionDate( $competition ) . ", $year)<br/>";
+      $pastVenue = processLinks( htmlEntities( $venue , ENT_QUOTES ));
+
+      $latitude /= 1000000;
       $longitude /= 1000000;
+      $countCompetitions++;
+      $cc = $countCompetitions;
+      if( $cc > 9 ) $cc = 'p';
       echo "var point = new GLatLng($latitude, $longitude);\n";
       if( date( 'Ymd' ) > (10000*$year + 100*$month + $day) )
-        echo "var marker = new GMarker(point, markerBlue);\n";
+        echo "var marker = new GMarker(point, markerBlue$cc);\n";
       else
-        echo "var marker = new GMarker(point, markerViolet);\n";
-
-      $infosHtml = "<b>" . competitionLink( $id, $cellName ) . "</b><br/>";
-      $infosHtml .= "<b>Date</b> : " . competitionDate( $competition ) . ", $year<br/>";
-      //$venue = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', $venue );
-      //$infosHtml .= "<b>Venue</b> : $venue";
-      $infosHtml .= "<b>Venue</b> : " . processLinks( htmlEntities( $venue , ENT_QUOTES ));
-      echo "marker.bindInfoWindowHtml(\"$infosHtml\");\n";
-      echo "map.addOverlay(marker);\n";
+        echo "var marker = new GMarker(point, markerViolet$cc);\n";
     }
   }
+  $previousLatitude /= 1000000;
+  $previousLongitude /= 1000000;
+
+  $infosHtml .= $pastVenue;
+  echo "marker.bindInfoWindowHtml(\"$infosHtml\");\n";
+  echo "map.addOverlay(marker);\n";
 
 ?>
       }

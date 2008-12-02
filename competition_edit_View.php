@@ -44,7 +44,7 @@ function startForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenPassword;
     
-  echo "<form method='POST' action='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>\n";
+  echo "<form method='POST' action='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword&rand=" . rand() . "'>\n";
 }
 
 #----------------------------------------------------------------------
@@ -263,6 +263,8 @@ function showMap () {
 
   echo "<hr><h1>Map</h1>";
 
+  echo "<input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
+  echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' />";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
   echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$data[password]'>Change</a> the coordinates.</p>";
 
