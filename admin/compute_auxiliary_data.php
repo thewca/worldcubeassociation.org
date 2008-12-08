@@ -120,10 +120,12 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranks[$personId][$eventId][0] = $rank;
+      $ranks[$personId][$eventId] = $rank;
       $event = $eventId;
       $value = $min;
     }
+
+    unset( $world );
 
     $continent = dbQuery("
       SELECT
@@ -159,12 +161,14 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranks[$personId][$eventId][1] = $rank;
-      $ranks[$personId][$eventId][3] = $min;
+      $ranksContinent[$personId][$eventId] = $rank;
+      $ranksBest[$personId][$eventId] = $min;
       $event = $eventId;
       $value = $min;
       $ct = $continentId;
     }
+
+    unset( $continent );
 
     $country = dbQuery("
       SELECT
@@ -200,25 +204,30 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranks[$personId][$eventId][2] = $rank;
+      $ranksCountry[$personId][$eventId] = $rank;
       $event = $eventId;
       $cy = $countryId;
       $value = $min;
     }
+
+    unset( $country );
 
     $first = true;
     $query = "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
     foreach( $ranks as $personId => $rankse )
       foreach( $rankse as $eventId => $rankspe ){
         if( ! $first ) $query .= ",";
-        $query .= "('$personId', '$eventId', '" . $rankspe[3] . "','";
-        $query .= $rankspe[0] . "','";
-        $query .= $rankspe[1] . "','";
-        $query .= $rankspe[2] . "')";
+        $query .= "('$personId', '$eventId', '" . $ranksBest[$personId][$eventId] . "','";
+        $query .= $rankspe . "','";
+        $query .= $ranksContinent[$personId][$eventId] . "','";
+        $query .= $ranksCountry[$personId][$eventId] . "')";
         $first = false;
       }
 
     unset( $ranks );
+    unset( $ranksContinent );
+    unset( $ranksCountry );
+    unset( $ranksBest );
 
     dbCommand("$query");
 

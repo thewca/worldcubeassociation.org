@@ -90,11 +90,12 @@ function showPreregForm () {
   showField( "name name 50 <b>Name</b> $chosenName" );
   if( getBooleanParam( 'search' ))
     showField( "namelist namelist <b>$matchingNumber names matching</b>" );
-  showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
-  showField( "gender gender $chosenGender <b>Gender</b>" );
-  showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
-  showField( "email text $chosenEmail 50 <b>E-mail</b> address" );
-  showField( "guests area 50 3 Names&nbsp;of&nbsp;the&nbsp;<b>guests</b>&nbsp;accompanying&nbsp;you $chosenGuests" );
+  else {
+    showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
+    showField( "gender gender $chosenGender <b>Gender</b>" );
+    showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
+    showField( "email text $chosenEmail 50 <b>E-mail</b> address" );
+    showField( "guests area 50 3 Names&nbsp;of&nbsp;the&nbsp;<b>guests</b>&nbsp;accompanying&nbsp;you $chosenGuests" );
 
 ?><tr><td><b>Events</b><br /><br />Check the events you want to participate in.</td>
 <td>
@@ -115,7 +116,7 @@ function showPreregForm () {
   echo "<input type='submit' id='submit' name='submit' value='Preregister me!' style='background-color:#9F3;font-weight:bold' /> ";
   echo "<input type='reset' value='Empty form' style='background-color:#F63;font-weight:bold' />";
   echo "</td></tr>";
-
+}
   echo "</table>";
   echo "</form>";
 }
@@ -179,7 +180,7 @@ function showField ( $fieldSpec ) {
   #---------------------
     list( $label, $default ) = split( ' ', $rest, 2 );
     $fieldHtml = "<select id='$id' name='$id'>\n";
-    $countries = getAllUsedCountries();
+    $countries = dbQuery( "SELECT * FROM Countries" );
     foreach( $countries as $country ){
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
@@ -269,7 +270,7 @@ function numberSelect ( $id, $label, $from, $to, $default ) {
 #----------------------------------------------------------------------
 function savePreregForm () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $competition;
  
   $personId   = getMysqlParam( 'personId'   );
   $name       = getMysqlParam( 'name'       );
@@ -306,6 +307,41 @@ function savePreregForm () {
   }
 
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
+
+  $organiserEmail = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2", $competition['organiser'] );
+  $organiserEmail = preg_replace( '/\\\\([\'\"])/', '$1', $organiserEmail );
+  if( preg_match( '/^mailto:([\S]+)/', $organiserEmail, $match )){
+    $mailEmail = $match[1];
+
+    if( $personId )
+      $mailBody = "Name : $name ($personId)\n";
+    else
+      $mailBody = "Name : $name\n";
+
+    $mailBody .= "Country : $countryId\n";
+    $mailBody .= "Gender : $gender\n";
+    $mailBody .= "Date of birth : $birthYear/$birthMonth/$birthDay\n";
+    $mailBody .= "Email : $email\n";
+
+    $mailBody .= "Events :";
+    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
+      $eventId = $event['id'];
+      if( getBooleanParam( "E$eventId" ))
+        $mailBody .= " $eventId";
+    }
+
+    $mailBody .= "\nGuests : $guests\n";
+    $mailBody .= "Comments : $comments\n";
+    $mailBody .= "Ip : $ip";
+
+    $mailSubject = "$competition[cellName] - New registration";
+
+    $mailHeaders = "From: \"WCA\" <rbruchem@worldcubeassociation.org>\r\n";
+    $mailHeaders .= "Reply-To: $email\r\n";
+
+    mail( $mailEmail, $mailSubject, $mailBody, $mailHeaders );
+
+  }
 
   noticeBox( true, "Registration complete." );
 }

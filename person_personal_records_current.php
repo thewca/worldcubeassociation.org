@@ -43,8 +43,8 @@ function showCurrentPersonalRecords () {
 
   tableBegin( 'results', 10 );
   tableCaption( false, "Current Personal Records" );
-  tableHeader( split( " ", "Event  Ranks  Single Average  Ranks  " ),
-               array( "", "class='r'", "class='c'", "class='R'", "class='R2'", "class='R2'", "class='R'", "class='c'", "class='r'", "class='f'" ));
+  tableHeader( split( " ", "Event NR CR WR Single Average WR CR NR " ),
+               array( "", "class='r'", "class='r'", "class='R'", "class='R2'", "class='R2'", "class='R'", "class='r'", "class='r'", "class='f'" ));
 
   foreach( $bests as $best ){
     extract( $best );

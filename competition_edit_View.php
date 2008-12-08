@@ -258,7 +258,7 @@ function showRegs () {
     echo "  <td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>\n";
     
     echo "  <td><select id='reg${id}countryId' name='reg${id}countryId'>";
-    foreach( getAllUsedCountries() as $country ){
+    foreach( dbQuery( "SELECT * FROM Countries" ) as $country ){
       $cId   = $country['id'  ];
       $cName = $country['name'];
       if( $cId == $countryId )
