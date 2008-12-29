@@ -260,8 +260,8 @@ function storeData () {
   foreach( $data as $key => $value ) $data[$key] = stripslashes( $value );
  
   #--- Building the caches again
-  require( 'admin/_helpers.php' );
-  ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
+  //require( 'admin/_helpers.php' );
+  //ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
 
   #--- Store registrations
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );

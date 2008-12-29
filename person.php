@@ -4,14 +4,10 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'persons';
-require( '_framework.php' );
 
-analyzeChoices();
-getCompetitions();
-
-$mapHeaderRequire = True;
 require( '_header.php' );
 
+analyzeChoices();
 showBody();
 
 require( '_footer.php' );
@@ -22,27 +18,6 @@ function analyzeChoices () {
   global $chosenPersonId;
 
   $chosenPersonId = getNormalParam( 'personId' );
-}
-
-#----------------------------------------------------------------------
-function getCompetitions () {
-#----------------------------------------------------------------------
-  global $chosenPersonId, $chosenCompetitions;
-
-  $chosenCompetitions = dbQuery("
-    SELECT 
-      competition.*
-    FROM
-      Results result,
-      Competitions competition
-    WHERE 1
-      AND result.personId='$chosenPersonId'
-      AND competition.id = result.competitionId
-    GROUP BY
-      competition.id
-    ORDER BY
-      latitude, longitude, year, month, day");
-
 }
 
 #----------------------------------------------------------------------
@@ -83,7 +58,6 @@ function showBody () {
   require( 'person_world_records_history.php' );
   require( 'person_continent_records_history.php' );
   require( 'person_events.php' );
-  require( 'person_map.php' );
 }
 
 ?>

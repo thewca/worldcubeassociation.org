@@ -29,7 +29,7 @@ function showResultsByEvents () {
   ");
 
   tableBegin( 'results', 8 );
-  tableCaption( false, 'History' );
+  tableCaption( false, "History (<a href='#' onClick=\"javascript:window.open('person_map.php?i=$chosenPersonId', 'map', config='height=420, width=820, toolbar=0, menubar=0, scrollbars=0, resizable=0, location=0, directories=0, status=0')\">Map</a>)" );
 
   #--- Process results by event.
   foreach( structureBy( $results, 'eventId' ) as $eventResults ){
