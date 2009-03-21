@@ -59,6 +59,9 @@ function showPages () {
   showPage( 'validate_media',
             "Validates media that have been submitted. Does *NOT* affect the database unless you say so." );
 
+  showPage( 'persons_picture',
+            "Validates pictures that have been submitted. Does *NOT* affect the database." );
+
 #  showPage( 'show_similar_names',
 #            "Shows similar person names inside a competition you choose. Does *NOT* affect the database." );
 
