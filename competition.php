@@ -30,7 +30,10 @@ if( date( 'Ymd' ) >= (10000*$competition['year'] +
   #--- Show competition results...
   offerChoicesResults();
   require( 'competition_results.php' );
-  showCompetitionResults();
+  if( $chosenByPerson )
+    showCompetitionResultsByPerson();
+  else
+    showCompetitionResults();
 }
 
 else if( $competition['showPreregForm'] ){
@@ -47,15 +50,16 @@ require( '_footer.php' );
 function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
-  global $chosenAllResults, $chosenTop3, $chosenWinners;
+  global $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
   global $chosenForm, $chosenList;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
 
+  $chosenByPerson      = getBooleanParam( 'byPerson' );
   $chosenAllResults    = getBooleanParam( 'allResults' );
   $chosenTop3          = getBooleanParam( 'top3' );
   $chosenWinners       = getBooleanParam( 'winners' );
-  if( !$chosenAllResults  &&  !$chosenTop3 )
+  if( !$chosenAllResults  &&  !$chosenTop3 && !$chosenByPerson )
     $chosenWinners = true;
     
   $chosenForm          = getBooleanParam( 'form' );
@@ -66,12 +70,13 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
 function offerChoicesResults () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenAllResults, $chosenTop3, $chosenWinners;
+  global $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
   displayChoices( array(
     choiceButton( $chosenWinners,    'winners',    'Winners' ),
     choiceButton( $chosenTop3,       'top3',       'Top 3' ),
     choiceButton( $chosenAllResults, 'allResults', 'All Results' ),
+    choiceButton( $chosenByPerson,   'byPerson',   'By Person' ),
     "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
   ));
 }

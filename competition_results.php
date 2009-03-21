@@ -4,7 +4,7 @@
 function showCompetitionResults () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
-  global $chosenAllResults, $chosenTop3, $chosenWinners;
+  global $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
   #--- Get the results.
   $competitionResults = getCompetitionResults();
@@ -78,9 +78,64 @@ function showCompetitionResults () {
 }
 
 #----------------------------------------------------------------------
+function showCompetitionResultsByPerson () {
+#----------------------------------------------------------------------
+  global $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
+  global $chosenCompetitionId;
+
+  #--- Get the results.
+  $competitionResults = getCompetitionResults();
+   
+  startTimer();
+  tableBegin( 'results', 8 );
+
+    
+  foreach( $competitionResults as $result ){
+    extract( $result );
+
+    $isNewPerson = ($personId != $currentPersonId);
+    $isNewEvent =  ($eventId != $currentEventId || $isNewPerson);
+
+    #--- Welcome new persons.
+    if( $isNewPerson ){
+      if( $currentPersonId ){
+        tableRowBlank();
+      }
+
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
+
+      tableCaptionNew( false, $personId, spaced( array( personLink( $personId, $personName ), $countryName )));
+      tableHeader( split( '\\|', "Event|Round|Place|Best||$headerAverage||$headerAllResults" ),
+                   array( 2 => 'class="r"', 3 => 'class="R"', 5 => 'class="R"', 7 => 'class="f"' ));
+
+
+    }
+
+    #--- One result row.
+    tableRowStyled( ($isNewEvent ? '' : 'color:#AAA'), (array(
+      ($isNewEvent ? eventLink( $eventId, $eventCellName ) : ''),
+      $roundCellName,
+      ($isNewEvent ? "<b>$pos</b>" : $pos),
+      formatValue( $best, $valueFormat ),
+      $regionalSingleRecord,
+      formatValue( $average, $valueFormat ),
+      $regionalAverageRecord,
+      formatAverageSources( $formatId != '1', $result, $valueFormat )
+    )));
+
+    $currentPersonId = $personId;
+    $currentEventId  = $eventId;
+  }
+
+  tableEnd();
+  stopTimer( "printing the huge table" );
+}
+
+#----------------------------------------------------------------------
 function getCompetitionResults () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenAllResults, $chosenTop3, $chosenWinners;
+  global $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
   #--- Some filter conditions depending on the view (winners, top3, all).
   if( $chosenTop3 )
@@ -88,18 +143,24 @@ function getCompetitionResults () {
   if( $chosenWinners )
     $viewCondition = "AND roundId in ('f', 'c') AND pos <= 1";
 
+  if( $chosenByPerson )
+    $order = "personName, event.rank, round.rank DESC";
+  else
+    $order = "event.rank, round.rank, pos, average, best, personName";
+
   #--- Get and return the results.
   return dbQuery("
     SELECT
                      result.*,
                      
-      event.name     eventName,
-      round.name     roundName,
-      format.name    formatName,
-      country.name   countryName,
+      event.name      eventName,
+      round.name      roundName,
+      round.cellName  roundCellName,
+      format.name     formatName,
+      country.name    countryName,
 
-      event.cellName eventCellName,
-      event.format   valueFormat
+      event.cellName  eventCellName,
+      event.format    valueFormat
     FROM
       Results   result,
       Events    event,
@@ -114,7 +175,7 @@ function getCompetitionResults () {
       AND country.id    = countryId
       $viewCondition
     ORDER BY
-      event.rank, round.rank, pos, average, best, personName
+      $order
   ");
 }
 

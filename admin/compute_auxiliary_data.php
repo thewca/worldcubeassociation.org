@@ -96,7 +96,8 @@ function computeRanks () {
         Concise${valueName}Results
       GROUP BY
         eventId,
-        personId
+        personId,
+	countryId
       ORDER BY
         eventId, min
     ");
@@ -137,7 +138,8 @@ function computeRanks () {
         Concise${valueName}Results
       GROUP BY
         eventId,
-        personId
+        personId,
+	countryId
       ORDER BY
         eventId, continentId, min
     ");
@@ -180,7 +182,8 @@ function computeRanks () {
         Concise${valueName}Results
       GROUP BY
         eventId,
-        personId
+        personId,
+	countryId
       ORDER BY
         eventId, countryId, min
     ");

@@ -380,8 +380,13 @@ function showPreregList () {
   foreach( $preregs as $prereg ){
     extract( $prereg );
 
-	 #--- Compute the row.
-    if( $personId ) $row = array( personLink( $personId, $name ));
+    #--- Compute the row.
+    if( $personId ){
+      if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
+        $row = array( "<a target='_blank' class='p' href='p.php?i=$personId'>$name</a>" );
+      else
+        $row = array( personLink( $personId, $name ));
+    }
     else $row = array( $name );
 
     $countPerson += 1;
