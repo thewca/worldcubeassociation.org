@@ -12,6 +12,7 @@ function showView () {
   showAdminOptions();
   showRegs();
   showMap();
+  showAnnouncement();
   endForm();
 }
 
@@ -301,6 +302,99 @@ function showMap () {
   echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$data[password]'>Change</a> the coordinates.</p>";
 
 }
+
+#----------------------------------------------------------------------
+function showAnnouncement() {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId;
+
+  echo "<hr><h1>Announcements</h1>";
+
+  echo "<b>Competition</b><br />";
+
+  $msg  = "The <a href='http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId'>$data[name]</a>";
+  $msg .= " will take place on ";
+  $msg .= competitionDate( $data );
+  $msg .= ", $data[year] in $data[cityName], $data[countryId].";
+  if( $data['website'] )
+  {
+  $websiteAddress = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2", $data['website'] );
+    $msg .= " Check out the <a href='$websiteAddress'>$data[name] website</a> for more information and registration.";
+  }
+  echo "<textarea cols='100' rows='6' readonly='readonly'>$msg</textarea><br /><br />";
+
+  
+  $competitionResults = dbQuery(" SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' ");
+
+  if( $competitionResults ){
+  
+    echo "<b>Results</b><br />";
+
+    //$top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='a' OR roundId='c') ORDER BY pos LIMIT 3 " );
+    $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND roundId='f' ORDER BY pos LIMIT 0, 3 " );
+   
+    $msg = "<a href='http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."'>".$top[0]['personName']."</a> won the ";
+    $msg .= "<a href='http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId'>$data[name]</a> with an average of ";
+    $msg .= formatValue( $top[0]['average'], 'time' );
+    $msg .= " seconds. ";
+
+    $msg .= "<a href='http://www.worldcubeassociation.org/results/p.php?i=".$top[1]['personId']."'>".$top[1]['personName']."</a> finished second (";
+    $msg .= formatValue( $top[1]['average'], 'time' );
+    $msg .= ") and ";
+
+    $msg .= "<a href='http://www.worldcubeassociation.org/results/p.php?i=".$top[2]['personId']."'>".$top[2]['personName']."</a> finished third (";
+    $msg .= formatValue( $top[2]['average'], 'time' );
+    $msg .= ").<br />";
+ 
+    foreach( array( array( 'code' => 'WR',  'name' => 'World' ),
+                    array( 'code' => 'AsR', 'name' => 'Asian' ),
+                    array( 'code' => 'AuR', 'name' => 'Australian' ),
+                    array( 'code' => 'ER',  'name' => 'European' ),
+                    array( 'code' => 'NAR', 'name' => 'North American' ), 
+                    array( 'code' => 'SAR', 'name' => 'South American' )) as $xR ){
+
+      $competitionsRs = dbQuery(" SELECT * FROM Results WHERE 
+                                  competitionId='$chosenCompetitionId' AND
+                                  (roundId='f' OR roundId='c') AND
+                                  (regionalSingleRecord='$xR[code]' OR regionalAverageRecord='$xR[code]')
+                                  ORDER BY personName, eventId");
+
+      if( $competitionsRs ){
+        $msg .= $xR['name'] . " records: ";
+        $previousName = "";
+        foreach( $competitionsRs as $competitionsR ){
+          extract( $competitionsR );
+
+          if( $regionalSingleRecord == $xR['code'] ){ 
+            if( ! $previousName )
+              $msg .= $personName . ' ' . eventCellName( $eventId ) . ' ' . formatValue( $best, valueFormat( $eventId )) . ' (single)';
+            else if( $previousName == $personName )
+              $msg .= ', ' . eventCellName( $eventId ) . ' ' . formatValue( $best, valueFormat( $eventId )) . ' (single)';
+            else{
+              $msg .= ', ' . $personName . ' ' . eventCellName( $eventId ) . ' ' . formatValue( $best, valueFormat( $eventId )) . ' (single)';
+            }
+            $previousName = $personName;
+          }
+    
+          if( $regionalAverageRecord == $xR['code'] ){ 
+            if( ! $previousName )
+              $msg .= $personName . ' ' . eventCellName( $eventId ) . ' ' . formatValue( $average, valueFormat( $eventId )) . ' (average)';
+            else if( $previousName == $personName )
+              $msg .= ', ' . eventCellName( $eventId ) . ' ' . formatValue( $average, valueFormat( $eventId )) . ' (average)';
+            else{
+              $msg .= ', ' . $personName . ' ' . eventCellName( $eventId ) . ' ' . formatValue( $average, valueFormat( $eventId )) . ' (average)';
+            }
+            $previousName = $personName;
+          }
+    
+        }
+      $msg .= '.<br />';
+      }
+    }
+  echo "<textarea cols='100' rows='6' readonly='readonly'>$msg</textarea><br /><br />";
+  }
+}
+
 
 #----------------------------------------------------------------------
 function endForm () {
