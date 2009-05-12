@@ -129,6 +129,11 @@ function checkResult ( $result ) {
       return "should have at most three non-zero values";
     if( $format == 'm'  &&  $zer < 2 )
       return "should have at most three non-zero values";
+
+  #--- 11) check averages over 10 minutes
+  if(( $result['average'] > 60000 ) && ( $result['average'] % 100 ))
+    return "average should be rounded";
+
   }
 }
 
