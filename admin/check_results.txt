@@ -42,4 +42,4 @@ else round((v2+v3+v4)/3)
 10) for combined rounds, check that the number of zero values is
     higher that the number according to the format.
 ----------------------------------------------------------------------
-11) check that averages over 10 minutes are rounded
+11) check that times over 10 minutes are rounded

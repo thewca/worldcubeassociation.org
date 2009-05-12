@@ -100,6 +100,8 @@ function checkResult ( $result ) {
     $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
   if( $format == 'a' )
     $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
+  if( $average > 60000 )
+    $average = ($average - ($average % 100));
 
   #--- 8) compare the computed best and average with the stored ones
   if( $result['best'] != $best )
@@ -129,11 +131,14 @@ function checkResult ( $result ) {
       return "should have at most three non-zero values";
     if( $format == 'm'  &&  $zer < 2 )
       return "should have at most three non-zero values";
+  }
 
-  #--- 11) check averages over 10 minutes
-  if(( $result['average'] > 60000 ) && ( $result['average'] % 100 ))
-    return "average should be rounded";
-
+  #--- 11) check times over 10 minutes
+  if( valueFormat( $result['eventId'] ) == 'time' )
+    foreach( range( 1, 5 ) as $i ){
+      $value = $result["value$i"];
+      if(( $value > 60000 ) && ( $value % 100 ))
+        return "$value should be rounded";
   }
 }
 
