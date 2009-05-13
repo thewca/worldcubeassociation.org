@@ -219,8 +219,12 @@ function showRegs () {
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
 
 
-  $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id" );
-  
+  $fullEdit = getNormalParam( 'FULLEDIT' );
+  if( $fullEdit == '7247' )
+    $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY name" );
+  else
+    $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id" );
+
   if( ! count( $comps)) return;
 
 
