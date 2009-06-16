@@ -215,10 +215,15 @@ function storeData () {
     extract($event);
 
     if ( $data["offer$id"] ){
-	   if ( preg_match( "/^\d+$/", $data["timeLimit$id"] ))
-		  $data["timeLimit$id"] .= ':00';
-		if( $eventSpecs ) $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
-		else $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"];
+/*      if ( preg_match( "/^(\d+):(\d+)$/", $data["timeLimit$id"], $matches ))
+        $data["timeLimit$id"] = (int)$matches[1] * 60 + (int)$matches[2];*/
+
+      $data["qualify$id"] = $data["qualify$id"] ? 1 : 0;
+
+      if( $eventSpecs )
+        $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"];
+      else
+        $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"];
     }
   }
 
@@ -260,8 +265,8 @@ function storeData () {
   foreach( $data as $key => $value ) $data[$key] = stripslashes( $value );
  
   #--- Building the caches again
-  //require( 'admin/_helpers.php' );
-  //ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
+  require( 'admin/_helpers.php' );
+  ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
 
   #--- Store registrations
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );

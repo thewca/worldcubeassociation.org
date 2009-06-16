@@ -103,11 +103,11 @@ function showPreregForm () {
   
   $eventSpecs = split( ' ', $competition['eventSpecs'] );
   foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / ([0-9:]*) )? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
+    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) )? $!x', $eventSpec, $matches );
+    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualify ) = $matches;
     if( ! $personLimit ) $personLimit = "0";
 	 $chosenE = getBooleanParam( "E$eventId" );
-    showField( "E$eventId event $personLimit $timeLimit $chosenE" );
+    showField( "E$eventId event $personLimit $timeLimit $timeFormat $chosenE" );
   }
   echo "</td></tr>";
   showField( "comments area 50 5 Room&nbsp;for&nbsp;<b>extra&nbsp;information</b> $chosenComments" );
@@ -235,16 +235,35 @@ function showField ( $fieldSpec ) {
   if( $type == 'event' ){
   #---------------------
     $eventId = substr( $id, 1 );
-    $eventName = eventCellName( $eventId );
+    $event = getEvent( $eventId );
+    $eventName = $event['cellName'];
+    $eventFormat = $event['format'];
 
-    list( $personLimit, $timeLimit, $default ) = split( ' ', $rest, 3 );
-    if( $timeLimit )
-      $timeLimit = " (time limit $timeLimit)";
+    list( $personLimit, $timeLimit, $timeFormat, $default ) = split( ' ', $rest, 4 );
+
+    if( $timeLimit ) {
+
+      $timeFormat = ( $timeFormat == 's' ) ? 'single' : 'average';
+
+      if( $eventFormat == 'multi' ){ 
+        if( $timeLimit > 1 )
+          $timeLimit = "$timeLimit cubes";
+        else
+          $timeLimit = "1 cube";
+      }
+
+      else
+        $timeLimit = formatValue( $timeLimit, $eventFormat );
+
+      $timeLimit = " ($timeFormat limit $timeLimit)";
+
+    }
+
     if( $default )
       echo "<input id='$id' name='$id' type='checkbox' value='yes' checked='checked' />";
     else
       echo "<input id='$id' name='$id' type='checkbox' value='yes' />";
-    if( count( dbQuery( "SELECT * FROM Events WHERE id='$eventId' AND rank<1000" )))
+    if( count( dbQuery( "SELECT * FROM Events WHERE id='$eventId' AND rank<999" )))
       echo " <label for='$id'>$eventName$timeLimit</label><br />";
     else
       echo " <label for='$id' style='color:#999'>$eventName$timeLimit</label><br />";
@@ -363,33 +382,41 @@ function showPreregList () {
   $eventSpecs = split( ' ', $competition['eventSpecs'] );
 
   foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / ([0-9:]*) )? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit ) = $matches;
+    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*))? $!x', $eventSpec, $matches );
+    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualifications ) = $matches;
     $eventList[] = $eventId;
   }
 
   foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
 
-  for( $i = 2; $i < 2 + count( $eventList ); $i++)
+  for( $i = 3; $i < 3 + count( $eventList ); $i++)
     $tableStyle[$i] = 'class="c"';
-  $tableStyle[2 + count( $eventList )] = 'class="f"';
+  $tableStyle[3 + count( $eventList )] = 'class="f"';
 
-  tableBegin( 'results', 3 + count( $eventList ));
-  tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|#" ), $tableStyle );
+  tableBegin( 'results', 4 + count( $eventList ));
+
+  $countPerson = 0;
 
   foreach( $preregs as $prereg ){
     extract( $prereg );
 
-    #--- Compute the row.
-    if( $personId ){
-      if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
-        $row = array( "<a target='_blank' class='p' href='p.php?i=$personId'>$name</a>" );
-      else
-        $row = array( personLink( $personId, $name ));
-    }
-    else $row = array( $name );
+    if( !( $countPerson % 20 ))
+      tableHeader( split( '\\|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
 
     $countPerson += 1;
+
+    #--- Compute the row.
+
+    $row = array( $countPerson );
+
+    if( $personId ){
+      if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
+        $row[] = "<a target='_blank' class='p' href='p.php?i=$personId'>$name</a>";
+      else
+        $row[] = personLink( $personId, $name );
+    }
+    else $row[] = $name;
+
 
     $row[] = $countryId;
 
@@ -401,10 +428,22 @@ function showPreregList () {
     $personEvents = 0;
 
     foreach( $eventList as $event ){
-      if( $prereg["E$event"] ){
+      if( $prereg["E$event"] == 1 ){
         $row[] = 'X';
         $countEvents[$event] += 1;
         $personEvents += 1;
+      }
+      else if( $prereg["E$event"] == 2 ){
+        $row[] = 'q';
+        $countEventsQualify[$event] += 1;
+        $personEvents += 1;
+        $isQualify = 1;
+      }
+      else if( $prereg["E$event"] == 3 ){
+        $row[] = 'w';
+        $countEventsWaiting[$event] += 1;
+        $personEvents += 1;
+        $isWaiting = 1;
       }
       else $row[] = '-';
     }
@@ -416,15 +455,57 @@ function showPreregList () {
 
   //tableRowBlank();
   //tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|" ), $tableStyle );
-  $row = array( $countPerson, $countCountry );
+
+  $row = array( '', 'Total', $countCountry );
   foreach( $eventList as $event ){
-    if( $countEvents[$event] )
-      $row[] = $countEvents[$event];
+    if( $countEvents[$event] + $countEventsQualify[$event] + $countEventsWaiting[$event] )
+      $row[] = $countEvents[$event] + $countEventsQualify[$event] + $countEventsWaiting[$event];
     else
       $row[] = 0;
   }
   $row[] = '';
-  tableRowStyled( 'text-align:center', $row );
+  tableHeader( $row, $tableStyle );
+  //tableRowStyled( 'text-align:center', $row );
+
+  if( $isQualify or $isWaiting ){
+    $row = array( '', 'Qualified', '' );
+    foreach( $eventList as $event ){
+      if( $countEvents[$event] )
+        $row[] = $countEvents[$event];
+      else
+        $row[] = 0;
+    }
+    $row[] = '';
+    tableHeader( $row, $tableStyle );
+    //tableRowStyled( 'text-align:center', $row );
+  }
+
+  if( $isQualify ){
+    $row = array( '', 'To Qualify', '' );
+    foreach( $eventList as $event ){
+      //if( $countEventsQualify[$event] )
+        $row[] = $countEventsQualify[$event];
+      //else
+      //  $row[] = 0;
+    }
+    $row[] = '';
+    tableHeader( $row, $tableStyle );
+    //tableRowStyled( 'text-align:center', $row );
+  }
+
+  if( $isWaiting ){
+    $row = array( '', 'On Waiting List', '' );
+    foreach( $eventList as $event ){
+      //if( $countEventsWaiting[$event] > 0)
+        $row[] = $countEventsWaiting[$event];
+      //else
+      //  $row[] = 0;
+    }
+    $row[] = '';
+    //tableRowStyled( 'text-align:center', $row );
+    tableHeader( $row, $tableStyle );
+  }
+
   tableEnd();
 
 }

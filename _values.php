@@ -77,7 +77,7 @@ function formatValue( $value, $format ) {
   if ($ret != '' && intval($v / 6000) <= 9)
     $ret .= '0';
   if ($ret != '' && intval($v / 6000) == 0)
-    $ret .= '0';
+    $ret .= '0:';
   if ($v >= 6000)
     $ret .= intval($v / 6000) . ':';
   $v %= 6000;
