@@ -98,7 +98,7 @@ function listCompetitions () {
     tableRow( array(
       $year,
       competitionDate( $competition ),
-      $isPast ? competitionLink( $id, $cellName ) : ($showPreregForm ? competitionLinkClassed( 'rg', $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName )),
+      $isPast ? competitionLink( $id, $cellName ) : (( $showPreregForm || $showPreregList ) ? competitionLinkClassed( 'rg', $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName )),
       "<b>$countryName</b>, $cityName",
       processLinks( $venue )
     ));

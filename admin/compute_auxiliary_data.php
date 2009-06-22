@@ -121,7 +121,10 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranks[$personId][$eventId] = $rank;
+      if( ! $ranks[$personId][$eventId] )
+        $ranks[$personId][$eventId] = $rank;
+      if( ! $ranksBest[$personId][$eventId] )
+        $ranksBest[$personId][$eventId] = $min;
       $event = $eventId;
       $value = $min;
     }
@@ -163,8 +166,18 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranksContinent[$personId][$eventId] = $rank;
-      $ranksBest[$personId][$eventId] = $min;
+      if( $ranksContinent[$personId][$eventId] ){
+        $continents = dbQuery("
+          SELECT country.continentId continent
+          FROM Persons person, Countries country
+          WHERE person.id = '$personId' AND country.id = person.countryId
+          ORDER BY person.subId DESC
+        ");
+        if( $continents[0]['continent'] == $continentId )
+          $ranksContinent[$personId][$eventId] = $rank;
+      }
+      else
+        $ranksContinent[$personId][$eventId] = $rank;
       $event = $eventId;
       $value = $min;
       $ct = $continentId;
@@ -207,7 +220,18 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      $ranksCountry[$personId][$eventId] = $rank;
+      if( $ranksCountry[$personId][$eventId] ){
+        $countries = dbQuery("
+          SELECT countryId
+          FROM Persons
+          WHERE id = '$personId'
+          ORDER BY subId DESC
+        ");
+        if( $countries[0]['countryId'] == $countryId )
+          $ranksCountry[$personId][$eventId] = $rank;
+      }
+      else
+        $ranksCountry[$personId][$eventId] = $rank;
       $event = $eventId;
       $cy = $countryId;
       $value = $min;

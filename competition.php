@@ -36,7 +36,7 @@ if( date( 'Ymd' ) >= (10000*$competition['year'] +
     showCompetitionResults();
 }
 
-else if( $competition['showPreregForm'] ){
+else if( $competition['showPreregForm'] || $competition['showPreregList'] ){
   #--- Show the prereg form.
   offerChoicesPrereg();
   require( 'competition_registration.php' );
@@ -85,14 +85,19 @@ function offerChoicesResults () {
 function offerChoicesPrereg () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenForm, $chosenList;
+  global $competition;
 
-  displayChoices( array(
-    choiceButton( $chosenForm, 'form', 'Registration Form' ),
-    choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
-    "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
-  ));
+  if( $competition['showPreregForm'] )
+    displayChoices( array(
+      choiceButton( $chosenForm, 'form', 'Registration Form' ),
+      choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
+      "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+    ));
+  else
+    displayChoices( array(
+      choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
+      "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+    ));
+
 }
-
-
-
 ?>
