@@ -25,7 +25,7 @@ function showResultsByEvents () {
       AND competition.id = competitionId
       AND round.id = roundId
     ORDER BY
-      event.rank, year DESC, month DESC, day DESC, competitionCellName, roundId DESC
+      event.rank, year DESC, month DESC, day DESC, competitionCellName, round.rank DESC
   ");
 
   tableBegin( 'results', 8 );

@@ -139,8 +139,8 @@ echo "markerVioletp = { icon:violetIconp };\n";
   $sections = array(
     array( 'Home',         '../index'     ),
     array( 'Results',      'index'        ),
-    array( 'Events',       'events'       ),
-    array( 'Regions',      'regions'      ),
+    array( 'Rankings',     'events'       ),
+    array( 'Records',      'regions'      ),
     array( 'Competitions', 'competitions' ),
     array( 'Persons',      'persons'      ),
     array( 'Multimedia',   'media'        ),

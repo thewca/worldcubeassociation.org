@@ -32,7 +32,7 @@ function computeWaitingList () {
   foreach( getAllEvents() as $event ){
     $eventId = $event['id'];
     $eventNumber[$eventId] = 0;
-    if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*))?/", $competition['eventSpecs'], $matches ))
+    if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $competition['eventSpecs'], $matches ))
       $eventsSpecs[$eventId] = $matches;
   }
 
@@ -65,9 +65,9 @@ function computeWaitingList () {
           }
          
           if( count( $best ) == 0 ){
-            if( $eventsSpecs[$eventId][6] == 1 )
+           /* if( $eventsSpecs[$eventId][6] == 1 )
               $competitorNew = 2;
-            else
+            else*/
               $competitorNew = 3;
           }
 
@@ -98,7 +98,7 @@ function computeWaitingList () {
             }
 
             if( $best > $eventsSpecs[$eventId][4] ){
-              if( $eventsSpecs[$eventId][6] == 1 )
+              if(( $eventsSpecs[$eventId][6] == 1 ) && ( $best <= $eventsSpecs[$eventId][7] ))
                 $competitorNew = 2;
               else
                 $competitorNew = 3;
@@ -108,7 +108,7 @@ function computeWaitingList () {
           }
         }
 
-
+        /*
         # Deal with number limit.
         if( $eventsSpecs[$eventId][3] ){
 
@@ -130,6 +130,7 @@ function computeWaitingList () {
               $competitorNew = 3;
           }
         }
+        */
         if( $competitor["E$eventId"] != $competitorNew )
           dbCommand( "UPDATE Preregs SET E$eventId='$competitorNew' WHERE id='$rowId'" );
       }

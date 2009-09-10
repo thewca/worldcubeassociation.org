@@ -103,8 +103,8 @@ function showPreregForm () {
   
   $eventSpecs = split( ' ', $competition['eventSpecs'] );
   foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) )? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualify ) = $matches;
+    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) / (\d*) )? $!x', $eventSpec, $matches );
+    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualify, $qualifyTimeLimit ) = $matches;
     if( ! $personLimit ) $personLimit = "0";
 	 $chosenE = getBooleanParam( "E$eventId" );
     showField( "E$eventId event $personLimit $timeLimit $timeFormat $chosenE" );
@@ -382,8 +382,8 @@ function showPreregList () {
   $eventSpecs = split( ' ', $competition['eventSpecs'] );
 
   foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*))? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualifications ) = $matches;
+    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) / (\d*))? $!x', $eventSpec, $matches );
+    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualifications, $qualificationsTimeLimit ) = $matches;
     $eventList[] = $eventId;
   }
 

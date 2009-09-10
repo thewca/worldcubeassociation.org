@@ -58,12 +58,13 @@ function checkPasswordAndLoadData () {
     foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
       extract( $event );
   
-      if( preg_match( "/(^| )$id\b(=(\d*)\/(\d*)\/(\w*)\/(\d*))?/", $data['eventSpecs'], $matches )){
+      if( preg_match( "/(^| )$id\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $data['eventSpecs'], $matches )){
         $data["offer$id"] = 1;
-        $data["personLimit$id"] = $matches[3];
-        $data["timeLimit$id"]   = $matches[4];
-        $data["timeFormat$id"]  = $matches[5];
-        $data["qualify$id"]     = $matches[6];
+        $data["personLimit$id"]      = $matches[3];
+        $data["timeLimit$id"]        = $matches[4];
+        $data["timeFormat$id"]       = $matches[5];
+        $data["qualify$id"]          = $matches[6];
+        $data["qualifyTimeLimit$id"] = $matches[7];
       }
     }
     

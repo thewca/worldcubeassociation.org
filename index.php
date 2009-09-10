@@ -20,10 +20,10 @@ function showWelcomeMessage () {
 <p>Here you can find all results of official WCA competitions, arranged by these major views:</p>
 
 <dl>
-  <dt><a href="events.php">Events</a></dt>
+  <dt><a href="events.php">Rankings</a></dt>
   <dd>Rubik's Cube records, Megaminx records, 5x5x5 blindfolded records, ...</dd>
 
-  <dt><a href="regions.php">Regions</a></dt>
+  <dt><a href="regions.php">Records</a></dt>
   <dd>World records, European records, Canadian records, ...</dd>
 
   <dt><a href="competitions.php">Competitions</a></dt>

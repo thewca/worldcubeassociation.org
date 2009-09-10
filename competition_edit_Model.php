@@ -221,9 +221,9 @@ function storeData () {
       $data["qualify$id"] = $data["qualify$id"] ? 1 : 0;
 
       if( $eventSpecs )
-        $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"];
+        $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
       else
-        $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"];
+        $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
     }
   }
 

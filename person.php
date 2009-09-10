@@ -43,7 +43,7 @@ function showBody () {
   $currentPerson = array_shift( $persons );
   extract( $currentPerson );
   echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personName</a></h1>";
-  echo "<p class='subtitle'>WCA ID : $chosenPersonId</p>";
+  //echo "<p class='subtitle'>WCA ID : $chosenPersonId</p>";
 
   #--- Show previous incarnations if any.
   if( count( $persons )){
@@ -61,7 +61,7 @@ function showBody () {
     if( is_file( $picture ))
       echo "<center><img width='200' height='300' src='$picture' /></center>";
 
-  /*
+
   #--- Show the details.
   tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
@@ -71,9 +71,10 @@ function showBody () {
     $months = split( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
     $dob = "$months[$month] $day, $year";
   }
-  tableRow( array( $countryName, $chosenPersonId, $dob, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
+  //tableRow( array( $countryName, $chosenPersonId, $dob, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
+  tableRow( array( $countryName, $chosenPersonId, '', $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
   tableEnd();
-  */
+
 
   #--- Now the results.
   require( 'person_personal_records_current.php' );

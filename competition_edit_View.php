@@ -121,16 +121,16 @@ function showEventSpecifications () {
   #--- Explain.
   echo "<ul>";
   echo "<li><p>Choose which events the competition will offer.</p></li>\n";
-  echo "<li><p>If you want to limit the number of competitors in an event, enter a number in the 'Competitors' field, and after reaching the limit, every following registration will be marked 'w' (waiting list)</p></li>\n";
+  //echo "<li><p>If you want to limit the number of competitors in an event, enter a number in the 'Competitors' field, and after reaching the limit, every following registration will be marked 'w' (waiting list)</p></li>\n";
   echo "<li><p>If you want to specify a time limit for an event, enter the number of hundredth of seconds for a time, the result for FM or the number of cubes solved for multi in the 'Time' field. Every competitor that doesn't fit the time limit will be marked 'w'.</p></li>\n";
   echo "<li><p>You also need to specify if you want the limit to be applied on the best single or on the best average (if available).</p></li>\n";
-  echo "<li><p>If you have qualifications for an event, you can check the Qualifications checkbox. Competitors fit the time limit will have a 'q', but if reaching the competitor limit, new competitors get a 'w'.</p></li>\n";
+  echo "<li><p>If you have qualifications for an event, you can check the Qualifications checkbox and enter a Qualifications Time Limit. Competitors who fit this time limit but not the main time limit will have a 'q', others get a 'w'.</p></li>\n";
   echo "<li><p>To run the computation of the waiting list, click <a href='compute_waiting_list.php?id=$chosenCompetitionId'>here</a></p></li>\n";
   echo "</ul>\n\n";
   
   #--- Start the table.
   echo "<table border='1' cellspacing='0' cellpadding='4'>";
-  echo "<tr bgcolor='#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td></tr>\n";
+  echo "<tr bgcolor='#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td><td>Qualifications Time</td></tr>\n";
   
   #--- Get the existing specs.
   $eventSpecs = $data['eventSpecs'];
@@ -139,12 +139,13 @@ function showEventSpecifications () {
   foreach( getAllEvents() as $event ){
     extract( $event );
 
-    $offer          = $data["offer$id"] ? "checked='checked'" : "";
-    $personLimit    = $data["personLimit$id"];
-    $timeLimit      = $data["timeLimit$id"];
-    $timeSingle     = $data["timeFormat$id"] ==  's' ? "checked='checked'" : "";
-    $timeAverage    = $data["timeFormat$id"] ==  'a' ? "checked='checked'" : "";
-    $qualify        = $data["qualify$id"] ? "checked='checked'" : "";
+    $offer            = $data["offer$id"] ? "checked='checked'" : "";
+    $personLimit      = $data["personLimit$id"];
+    $timeLimit        = $data["timeLimit$id"];
+    $timeSingle       = $data["timeFormat$id"] ==  's' ? "checked='checked'" : "";
+    $timeAverage      = $data["timeFormat$id"] ==  'a' ? "checked='checked'" : "";
+    $qualify          = $data["qualify$id"] ? "checked='checked'" : "";
+    $qualifyTimeLimit = $data["qualifyTimeLimit$id"];
     
     echo "<tr>\n";
     echo "  <td><b>$cellName</b></td>\n";
@@ -157,6 +158,7 @@ function showEventSpecifications () {
     else
       echo "  <td></td>\n";
     echo "  <td align='center'><input id='qualify$id' name='qualify$id' type='checkbox' $qualify /></td>\n";
+    echo "  <td align='center'><input id='qualifyTimeLimit$id' name='qualifyTimeLimit$id' type='text' size='6' style='background:#FF8' value='$qualifyTimeLimit' /></td>\n";
     echo "</tr>\n";
   }
   
