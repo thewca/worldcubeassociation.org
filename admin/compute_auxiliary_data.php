@@ -39,21 +39,24 @@ function computeConciseRecords () {
       SELECT
         result.id,
         $valueSource,
-        ($valueSource * 1000000000 + result.id) valueAndId,
+        valueAndId,
         personId,
         eventId,
         country.id countryId,
         continentId,
         year, month, day
       FROM
-        (SELECT * FROM Results WHERE $valueSource>0 ORDER BY $valueSource) result,
+        ( SELECT   MIN($valueSource * 1000000000 + result.id) valueAndId
+          FROM     Results result, Competitions competition
+          WHERE    $valueSource>0 AND competition.id = competitionId
+          GROUP BY personId, eventId, year ) helper,
+        Results      result,
         Competitions competition,
         Countries    country
       WHERE 1
+        AND result.id      = valueAndId % 1000000000
         AND competition.id = competitionId
         AND country.id     = result.countryId
-      GROUP BY
-        personId, eventId, year
       ORDER BY
         $valueSource DESC, personName
     ");
