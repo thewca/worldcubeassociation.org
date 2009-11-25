@@ -17,13 +17,14 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *does* affect the database.<br><br>It computes the auxiliary tables ConciseSingleResults and ConciseAverageResults. It must be run after changes to the database data so that these tables are up-to-date. It displays the time so you can be sure it just got executed and didn't come from some cache.</b></p><hr>";
+  echo "<p><b>This script *does* affect the database.<br><br>It computes the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script. It must be run after changes to the database data so that these tables are up-to-date. It displays the time so you can be sure it just got executed and didn't come from some cache.</b></p><hr>";
 }
 
 #----------------------------------------------------------------------
 function computeConciseRecords () {
 #----------------------------------------------------------------------
 
+  date_default_timezone_set( 'Europe/Berlin' );
   echo date('r') . "<br /><br />\n";
 
   foreach( array( array( 'best', 'Single' ), array( 'average', 'Average' )) as $foo ){
@@ -32,6 +33,7 @@ function computeConciseRecords () {
 
     startTimer();
     echo "Building table Concise${valueName}Records...<br />\n";
+    
     dbCommand( "DROP TABLE IF EXISTS Concise${valueName}Results" );
     dbCommand("
       CREATE TABLE
@@ -60,8 +62,9 @@ function computeConciseRecords () {
       ORDER BY
         $valueSource DESC, personName
     ");
+    
+    stopTimer( "Concise${valueName}Results" );
     echo "... done<br /><br />\n";
-    stopTimer( "Concise${valueName}Records" );
   }
 }
 
@@ -74,7 +77,8 @@ function computeRanks () {
     $valueName = $foo[1];
 
     startTimer();
-    echo "Building table Ranks$valueName...<br />\n";
+    echo "<br />Building table Ranks$valueName...<br />\n";
+
     dbCommand( "DROP TABLE IF EXISTS Ranks$valueName" );
     dbCommand( "CREATE TABLE Ranks$valueName (
       `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -260,8 +264,8 @@ function computeRanks () {
 
     dbCommand("$query");
 
+    stopTimer( "RanksNew$valueName" );
     echo "... done<br /><br />\n";
-    stopTimer( "Ranks$valueName" );
   }
 }
 
