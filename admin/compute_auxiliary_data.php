@@ -245,16 +245,14 @@ function computeRanks () {
 
     unset( $country );
 
-    $first = true;
-    $query = "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
+    $query = "";
     foreach( $ranks as $personId => $rankse ){
       foreach( $rankse as $eventId => $rankspe ){
-        if( ! $first ) $query .= ",";
+        $query .= $query ? "," : "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
         $query .= "('$personId', '$eventId', '" . $ranksBest[$personId][$eventId] . "','";
         $query .= $rankspe . "','";
         $query .= $ranksContinent[$personId][$eventId] . "','";
         $query .= $ranksCountry[$personId][$eventId] . "')";
-        $first = false;
       }
     }
 
