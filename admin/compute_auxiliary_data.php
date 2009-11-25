@@ -24,7 +24,7 @@ function showDescription () {
 function computeConciseRecords () {
 #----------------------------------------------------------------------
 
-  echo date('l dS \of F Y h:i:s A') . "<br /><br />\n";
+  echo date('r') . "<br /><br />\n";
 
   foreach( array( array( 'best', 'Single' ), array( 'average', 'Average' )) as $foo ){
     $valueSource = $foo[0];
