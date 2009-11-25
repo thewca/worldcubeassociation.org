@@ -247,7 +247,7 @@ function computeRanks () {
 
     $first = true;
     $query = "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
-    foreach( $ranks as $personId => $rankse )
+    foreach( $ranks as $personId => $rankse ){
       foreach( $rankse as $eventId => $rankspe ){
         if( ! $first ) $query .= ",";
         $query .= "('$personId', '$eventId', '" . $ranksBest[$personId][$eventId] . "','";
@@ -256,6 +256,7 @@ function computeRanks () {
         $query .= $ranksCountry[$personId][$eventId] . "')";
         $first = false;
       }
+    }
 
     unset( $ranks );
     unset( $ranksContinent );
@@ -264,7 +265,7 @@ function computeRanks () {
 
     dbCommand("$query");
 
-    stopTimer( "RanksNew$valueName" );
+    stopTimer( "Ranks$valueName" );
     echo "... done<br /><br />\n";
   }
 }
