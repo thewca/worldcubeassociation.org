@@ -61,8 +61,7 @@ function computeConciseRecords () {
         $valueSource DESC, personName
     ");
     echo "... done<br /><br />\n";
-
-    stopTimer( "blah" );
+    stopTimer( "Concise${valueName}Records" );
   }
 }
 
@@ -262,8 +261,7 @@ function computeRanks () {
     dbCommand("$query");
 
     echo "... done<br /><br />\n";
-
-    stopTimer( "blah" );
+    stopTimer( "Ranks$valueName" );
   }
 }
 

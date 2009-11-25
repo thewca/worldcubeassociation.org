@@ -14,7 +14,7 @@ function stopTimer ( $message ) {
   global $timerStartTimes;
   $elapsed = microtime_float() - array_pop( $timerStartTimes );
   if( debug() )
-    printf( "<b>%.4f seconds</b> for for '$message'<br />", $elapsed );
+    printf( "<b>%.4f seconds</b> for '$message'<br />", $elapsed );
 }
 
 ?>
