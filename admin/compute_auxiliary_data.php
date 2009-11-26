@@ -93,6 +93,18 @@ function computeRanks () {
     KEY `fk_events` (`eventId`))
     " );
 
+    #--- Determine current country and continent of persons who were updated at least once
+    $personUpdates = dbQuery( "
+      SELECT   person.id personId, countryId, continentId
+      FROM     Persons person, Countries country
+      WHERE    subId>1 AND country.id=countryId
+      ORDER BY subId
+    " );
+    foreach( $personUpdates as $personUpdate ) {
+      $updatedCountry[$personUpdate['personId']] = $personUpdate['countryId'];
+      $updatedContinent[$personUpdate['personId']] = $personUpdate['continentId'];
+    }
+
     $world = dbQuery("
       SELECT
         min($valueSource) min,
@@ -171,18 +183,8 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( $ranksContinent[$personId][$eventId] ){
-        $continents = dbQuery("
-          SELECT country.continentId continent
-          FROM Persons person, Countries country
-          WHERE person.id = '$personId' AND country.id = person.countryId
-          ORDER BY person.subId DESC
-        ");
-        if( $continents[0]['continent'] == $continentId )
+      if( ! $ranksContinent[$personId][$eventId] || $ct==$updatedContinent[$personId] )
           $ranksContinent[$personId][$eventId] = $rank;
-      }
-      else
-        $ranksContinent[$personId][$eventId] = $rank;
       $event = $eventId;
       $value = $min;
       $ct = $continentId;
@@ -201,7 +203,7 @@ function computeRanks () {
       GROUP BY
         eventId,
         personId,
-	countryId
+        countryId
       ORDER BY
         eventId, countryId, min
     ");
@@ -225,17 +227,7 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( $ranksCountry[$personId][$eventId] ){
-        $countries = dbQuery("
-          SELECT countryId
-          FROM Persons
-          WHERE id = '$personId'
-          ORDER BY subId DESC
-        ");
-        if( $countries[0]['countryId'] == $countryId )
-          $ranksCountry[$personId][$eventId] = $rank;
-      }
-      else
+      if( ! $ranksCountry[$personId][$eventId] || $cy==$updatedCountry[$personId] )
         $ranksCountry[$personId][$eventId] = $rank;
       $event = $eventId;
       $cy = $countryId;
