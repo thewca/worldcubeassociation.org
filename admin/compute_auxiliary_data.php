@@ -147,7 +147,7 @@ function computeRanks () {
       GROUP BY
         eventId,
         personId,
-	countryId
+        continentId
       ORDER BY
         eventId, continentId, min
     ");
