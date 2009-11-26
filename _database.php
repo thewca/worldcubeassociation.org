@@ -64,7 +64,10 @@ function dbCommand ( $command ) {
   if( debug() ){
     global $dbCommandCtr;
     $dbCommandCtr++;
-    echo "\n\n<!-- dbCommand(\n$command\n) -->\n\n";
+    $commandForShow = strlen($command) < 1010
+                    ? $command
+                    : substr($command,0,1000) . '[...' . (strlen($command)-1000) . '...]';
+    echo "\n\n<!-- dbCommand(\n$commandForShow\n) -->\n\n";
   }
 
   #--- Execute the command.
