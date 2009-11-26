@@ -183,7 +183,7 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( ! $ranksContinent[$personId][$eventId] || $ct==$updatedContinent[$personId] )
+      if( ! $ranksContinent[$personId][$eventId] || $continentId==$updatedContinent[$personId] )
           $ranksContinent[$personId][$eventId] = $rank;
       $event = $eventId;
       $value = $min;
@@ -227,7 +227,7 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( ! $ranksCountry[$personId][$eventId] || $cy==$updatedCountry[$personId] )
+      if( ! $ranksCountry[$personId][$eventId] || $countryId==$updatedCountry[$personId] )
         $ranksCountry[$personId][$eventId] = $rank;
       $event = $eventId;
       $cy = $countryId;
