@@ -11,12 +11,12 @@ $results = dbQuery("
     country.name     countryName,
     competition.cellName competitionName
   FROM
-    (SELECT eventId recordEventId, MIN(valueAndId)/1000000000 value, 'Single' type
+    (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value, 'Single' type
      FROM ConciseSingleResults
      WHERE 1 " . regionCondition('') . eventCondition() . yearCondition() . "
      GROUP BY eventId
        UNION
-     SELECT eventId recordEventId, MIN(valueAndId)/1000000000 value, 'Average' type
+     SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value, 'Average' type
      FROM ConciseAverageResults
      WHERE 1 " . regionCondition('') . eventCondition() . yearCondition() . "
      GROUP BY eventId) record,
