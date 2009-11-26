@@ -102,8 +102,7 @@ function computeRanks () {
         Concise${valueName}Results
       GROUP BY
         eventId,
-        personId,
-	countryId
+        personId
       ORDER BY
         eventId, min
     ");
