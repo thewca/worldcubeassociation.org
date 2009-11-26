@@ -253,6 +253,10 @@ function computeRanks () {
         $query .= $rankspe . "','";
         $query .= $ranksContinent[$personId][$eventId] . "','";
         $query .= $ranksCountry[$personId][$eventId] . "')";
+        if( strlen( $query ) > 500000 ){
+          dbCommand( $query );
+          $query = "";
+        }
       }
     }
 
@@ -261,7 +265,8 @@ function computeRanks () {
     unset( $ranksCountry );
     unset( $ranksBest );
 
-    dbCommand("$query");
+    if( $query )
+      dbCommand("$query");
 
     stopTimer( "Ranks$valueName" );
     echo "... done<br /><br />\n";
