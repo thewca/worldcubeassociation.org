@@ -90,7 +90,7 @@ function computeRanks () {
       `countryRank` INTEGER NOT NULL DEFAULT '0',
     PRIMARY KEY  (`id`),
     KEY `fk_persons` (`personId`),
-    KEY `fk_events` (`eventId`))
+    KEY `fk_events` (`eventId`)) COLLATE latin1_swedish_ci
     " );
 
     #--- Determine everybody's current country and continent
