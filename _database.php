@@ -30,6 +30,8 @@ function mysqlEscape ( $string ) {
 function dbQuery ( $query ) {
 #----------------------------------------------------------------------
 
+  startTimer();
+
   if( debug() ){
     startTimer();
     global $dbQueryCtr;
@@ -53,6 +55,8 @@ function dbQuery ( $query ) {
   startTimer();
   mysql_free_result( $dbResult );
   stopTimer( "freeing the mysql result" );
+
+  stopTimer( "the whole dbQuery execution" );
 
   return $rows;
 }
