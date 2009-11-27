@@ -68,10 +68,10 @@ function showCurrentPersonalRecords () {
 #----------------------------------------------------------------------
 function colorMe ( $rank ) {
 #----------------------------------------------------------------------
-  if( $rank == 1 )
-    return "<span style='color:#F60;font-weight:bold'>$rank</span";
-  else
-    return $rank;
+
+  if ( $rank  > 1 ) return $rank;
+  if ( $rank == 1 ) return "<span style='color:#F60;font-weight:bold'>$rank</span";
+  return '-';
 }
 
 ?>

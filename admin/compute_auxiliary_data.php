@@ -93,16 +93,17 @@ function computeRanks () {
     KEY `fk_events` (`eventId`))
     " );
 
-    #--- Determine current country and continent of persons who were updated at least once
-    $personUpdates = dbQuery( "
+    #--- Determine everybody's current country and continent
+    $persons = dbQuery( "
       SELECT   person.id personId, countryId, continentId
       FROM     Persons person, Countries country
-      WHERE    subId>1 AND country.id=countryId
+      WHERE    country.id=countryId
       ORDER BY subId
     " );
-    foreach( $personUpdates as $personUpdate ) {
-      $updatedCountry[$personUpdate['personId']] = $personUpdate['countryId'];
-      $updatedContinent[$personUpdate['personId']] = $personUpdate['continentId'];
+    foreach( $persons as $person ) {
+      extract( $person );
+      $currentCountry  [$personId] = $countryId;
+      $currentContinent[$personId] = $continentId;
     }
 
     $world = dbQuery("
@@ -183,7 +184,7 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( ! $ranksContinent[$personId][$eventId] || $continentId==$updatedContinent[$personId] )
+      if( $continentId==$currentContinent[$personId] )
           $ranksContinent[$personId][$eventId] = $rank;
       $event = $eventId;
       $value = $min;
@@ -227,7 +228,7 @@ function computeRanks () {
         $rank += $count;
         $count = 1;
       }
-      if( ! $ranksCountry[$personId][$eventId] || $countryId==$updatedCountry[$personId] )
+      if( $countryId==$currentCountry[$personId] )
         $ranksCountry[$personId][$eventId] = $rank;
       $event = $eventId;
       $cy = $countryId;
@@ -242,8 +243,8 @@ function computeRanks () {
         $command .= $command ? "," : "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
         $command .= "('$personId', '$eventId', '" . $ranksBest[$personId][$eventId] . "','";
         $command .= $rankspe . "','";
-        $command .= $ranksContinent[$personId][$eventId] . "','";
-        $command .= $ranksCountry[$personId][$eventId] . "')";
+        $command .= $ranksContinent[$personId][$eventId]+0 . "','";
+        $command .= $ranksCountry[$personId][$eventId]+0 . "')";
         if( strlen( $command ) > 500000 ){
           dbCommand( $command );
           $command = "";
