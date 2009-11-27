@@ -1,35 +1,50 @@
 <?
 
-$single = dbQuery("
-  SELECT concat(personId,'-',personName), count(*) appearances FROM (SELECT * FROM
-  (
-  SELECT personId, personName, eventId, value1 value FROM Results UNION ALL
-  SELECT personId, personName, eventId, value2 value FROM Results UNION ALL
-  SELECT personId, personName, eventId, value3 value FROM Results UNION ALL
-  SELECT personId, personName, eventId, value4 value FROM Results UNION ALL
-  SELECT personId, personName, eventId, value5 value FROM Results
-  ) singleValue
-  $WHERE value>0 AND eventId = '333'
-  ORDER BY value
-  LIMIT 100
-  ) top100
-  GROUP BY personId
-  ORDER BY appearances DESC, personName
-");
 
-$average = dbQuery("
-  SELECT concat(personId,'-',personName), count(*) appearances
-  FROM (SELECT * FROM Results $WHERE eventId='333' AND average>0 ORDER BY average LIMIT 100) top100
-  GROUP BY personId
-  ORDER BY appearances DESC, personName
-  LIMIT 10
-");
+# COMMIT MESSAGE: Much faster and now also correct!
 
+#--- Known upper bounds for the top 100, can be lowered from time to time
+ $singleBound =  991;
+$averageBound = 1181;
+
+#--- Fetch all results that have a chance to be in the top 100
+$candidates = dbQuery( "
+  SELECT   concat(personId,'-',personName) person,
+           value1, value2, value3, value4, value5,
+           average
+  FROM     Results
+  WHERE    eventId='333' AND (best>0 AND best<=$singleBound OR average>0 AND average<=$averageBound)
+" );
+
+#--- Extract (person,single) pairs and (person,average) pairs
+foreach ( $candidates as $candidate ) {
+  $personAveragePairs[] = array( $candidate['person'], $candidate['average'] );
+  for ( $i=1; $i<=5; $i++ )
+    if ( $candidate["value$i"] > 0 )
+      $personSinglePairs[] = array( $candidate['person'], $candidate["value$i"] );
+}
+
+#--- Build and add this statistic
 $lists[] = array(
   "Appearances in 3x3x3 top 100 results",
   "Single | Average",
   "[P] Person [N] Appearances [T] | [P] Person [N] Appearances",
-  my_merge( $single, $average )
+  my_merge( countTop100Appearances( $personSinglePairs ),
+            countTop100Appearances( $personAveragePairs ) )
 );
+
+#--------------------------------------------------------------------------
+# helper...
+#--------------------------------------------------------------------------
+
+function countTop100Appearances ( $personValuePairs ) {
+  usort( $personValuePairs, create_function('$a,$b', 'return $a[1]-$b[1];') );
+  for( $i=0; $i<100 || $i<count($personValuePairs) && $personValuePairs[$i][1]==$personValuePairs[$i-1][1]; $i++ )
+    $appearances[ $personValuePairs[$i][0] ]++;
+  arsort( $appearances );
+  foreach( $appearances as $person => $counter )
+    $result[] = array( $person, $counter );
+  return $result;
+}
 
 ?>
