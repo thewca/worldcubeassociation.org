@@ -32,39 +32,49 @@
 #
 #----------------------------------------------------------------------
 
-importAllLists();
+#--- Specify the statistics
+$statisticNames = array(
+
+  #--- Special ranks:
+  'youngest_and_oldest_333_solvers',
+  'youngest_and_oldest_333bf_solvers',
+  'best_medal_collection',
+  'sum_of_345_ranks',
+  'sum_of_all_ranks',
+  'appearances_in_333_top_100_results',
+
+  #--- Special achievements:
+  'blindfold_333_consecutive_successes',
+  'blindfold_333_success_rate',
+  'world_records_in_most_events',
+  'standard_deviation',
+
+  #--- Statistics:
+  'best_podium',
+  'oldest_standing_world_records',
+  'most_persons',
+  'most_competitions',
+  'most_countries',
+  'most_solves_attempts_in_one_competition'
+
+);
+
+#--- You can test a single statistic by overwriting the list like this:
+#$statisticNames = array( 'blindfold_333_success_rate' );
+  
+foreach ( $statisticNames as $statisticName )
+  addOneStatistic( $statisticName );
+
 
 #----------------------------------------------------------------------
-function importAllLists () {
+function addOneStatistic ( $statisticName ) {
 #----------------------------------------------------------------------
   global $lists;
   global $WHERE, $sinceDateHtml, $sinceDateMysql, $sinceDateCondition;
-
-  #--- You can test a single statistic like this:
-  #require( 'statistics/333_consecutive_sub20.php' );
-  #return;
-
-  #--- Special ranks:
-  require( 'statistics/youngest_and_oldest_333_solvers.php');
-  require( 'statistics/youngest_and_oldest_333bf_solvers.php');
-  require( 'statistics/best_medal_collection.php' );
-  require( 'statistics/sum_of_345_ranks.php' );
-  require( 'statistics/sum_of_all_ranks.php' );
-  require( 'statistics/appearances_in_333_top_100_results.php' );
-
-  #--- Special achievements:
-  require( 'statistics/blindfold_333_consecutive_successes.php' );
-  require( 'statistics/blindfold_333_success_rate.php' );
-  require( 'statistics/world_records_in_most_events.php' );
-  require( 'statistics/standard_deviation.php' );
-
-  #--- Statistics:
-  require( 'statistics/best_podium.php' );
-  require( 'statistics/oldest_standing_world_records.php' );
-  require( 'statistics/most_persons.php' );
-  require( 'statistics/most_competitions.php' );
-  require( 'statistics/most_countries.php' );
-  require( 'statistics/most_solves_attempts_in_one_competition.php' );
+  
+  startTimer();
+  require( "statistics/$statisticName.php" );
+  stopTimer( "STATISTIC: $statisticName" );
 }
 
 ?>
