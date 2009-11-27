@@ -1,40 +1,51 @@
 <?
 
-$rows = dbQuery("
-  SELECT
-    concat(personId,'-',personName),
-    concat(solves/attempts*100, ' %') rate,
-    solves, attempts,
-    '' spacer,
-    best, sum/solves average, worst
-  FROM(
-    SELECT
-      personId,
-      personName,
-      count(value>0 or null) solves,
-      count(value>0 or value=-1 or null) attempts,
-      min(if(value>0,value,99999999999)) best,
-      sum(if(value>0,value,0)) sum,
-      max(if(value>0,value,0)) worst
-    FROM(
-      SELECT value1 value, personId, personName, eventId, competitionId FROM Results UNION ALL
-      SELECT value2 value, personId, personName, eventId, competitionId FROM Results UNION ALL
-      SELECT value3 value, personId, personName, eventId, competitionId FROM Results UNION ALL
-      SELECT value4 value, personId, personName, eventId, competitionId FROM Results UNION ALL
-      SELECT value5 value, personId, personName, eventId, competitionId FROM Results) helper,
-      Competitions competition
-    WHERE 1
-      AND eventId = '333bf'
-      AND competition.id = competitionId
-      AND $sinceDateCondition
-    GROUP BY personId) helper2
-  $WHERE 1
-    AND attempts >= 5
-  ORDER BY
-    solves/attempts desc, attempts desc, personName
-  LIMIT 10
-");
-  
+#--- Get the blindfold results since one year ago
+$sources = dbQuery( "
+  SELECT concat(personId,'-',personName) person,
+         value1, value2, value3, value4, value5
+  FROM   Results r, Competitions competition
+  WHERE  eventId='333bf' AND competition.id=competitionId AND $sinceDateCondition
+" );
+
+#--- For each person, count the attempts and collect the success times
+foreach ( $sources as $source ) {
+  $person = $source['person'];
+  for ( $i=1; $i<=5; $i++ ) {
+    $value = $source["value$i"];
+    if ( $value > 0 || $value == -1 ) $attempts[$person]++;
+    if ( $value > 0                 ) $validTimes[$person][] = $value;
+  }
+}
+
+#--- Build the rows (person, rate, attempts, solve, spacer, best, average, worst)
+foreach ( $validTimes as $person => $times ) {
+  if ( $attempts[$person] >= 5 ) {
+    $rows[] = array( $person,
+                      sprintf( "%.2f %%", 100 * count($times) / $attempts[$person] ),
+                      count($times),
+                      $attempts[$person],
+                      '',
+                      min($times),
+                      array_sum($times) / count($times),
+                      max($times) );
+  }
+}
+
+#--- Sort the rows, keep only top 10
+usort( $rows, "rowComparison" );
+array_splice( $rows, 10 );
+
+#--- Helper function for sorting rows by (rate,attempts) 
+function rowComparison ( $a, $b ) {
+  list( $attemptsA, $solvesA ) = array( $a[2], $a[3] );
+  list( $attemptsB, $solvesB ) = array( $b[2], $b[3] );
+  if ( $solvesA/$attemptsA > $solvesB/$attemptsB ) return 1;
+  if ( $solvesA/$attemptsA < $solvesB/$attemptsB ) return -1;
+  return $attemptsB - $attemptsA;
+}
+
+#--- Add this statistic to the statistics collection
 $lists[] = array(
   "Blindfold 3x3x3 recent success rate",
   "since $sinceDateHtml - minimum 5 attempts",
