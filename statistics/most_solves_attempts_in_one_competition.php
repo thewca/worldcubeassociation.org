@@ -3,16 +3,10 @@
 $solves = dbQuery("
   SELECT
     concat(personId,'-',personName),
-    count(*) solves,
+    count(if(value1>0,1,null))+count(if(value2>0,1,null))+count(if(value3>0,1,null))+count(if(value4>0,1,null))+count(if(value5>0,1,null)) solves,
     competitionId
   FROM
-    (select value1 value, personId, personName, competitionId, countryId from Results union all
-     select value2 value, personId, personName, competitionId, countryId from Results union all
-     select value3 value, personId, personName, competitionId, countryId from Results union all
-     select value4 value, personId, personName, competitionId, countryId from Results union all
-     select value5 value, personId, personName, competitionId, countryId from Results) x
-  $WHERE
-    value > 0
+    Results
   GROUP BY
     personId, competitionId
   ORDER BY
@@ -23,16 +17,10 @@ $solves = dbQuery("
 $attempts = dbQuery("
   SELECT
     concat(personId,'-',personName),
-    count(*) solves,
+    count(if(value1<>0,1,null))+count(if(value2<>0,1,null))+count(if(value3<>0,1,null))+count(if(value4<>0,1,null))+count(if(value5<>0,1,null)) solves,
     competitionId
   FROM
-    (select value1 value, personId, personName, competitionId, countryId from Results union all
-     select value2 value, personId, personName, competitionId, countryId from Results union all
-     select value3 value, personId, personName, competitionId, countryId from Results union all
-     select value4 value, personId, personName, competitionId, countryId from Results union all
-     select value5 value, personId, personName, competitionId, countryId from Results) x
-  $WHERE
-    value <> 0
+    Results
   GROUP BY
     personId, competitionId
   ORDER BY
