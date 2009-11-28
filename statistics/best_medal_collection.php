@@ -2,7 +2,7 @@
 
 $just3x3 = dbQuery("
   SELECT
-    concat( personId, '-', personName ),
+    personId,
     count(pos=1 or null) gold,
     count(pos=2 or null) silver,
     count(pos=3 or null) bronze
@@ -15,7 +15,7 @@ $just3x3 = dbQuery("
 
 $overall = dbQuery("
   SELECT
-    concat( personId, '-', personName ),
+    personId,
     count(pos=1 or null) gold,
     count(pos=2 or null) silver,
     count(pos=3 or null) bronze

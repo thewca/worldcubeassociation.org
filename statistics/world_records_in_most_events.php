@@ -1,7 +1,7 @@
 <?
 
 $persons = dbQuery("
-  SELECT concat(personId,'-',personName), count(distinct eventId) worldRecordEvents
+  SELECT personId, count(distinct eventId) worldRecordEvents
   FROM Results
   $WHERE regionalSingleRecord='WR' or regionalAverageRecord='WR'
   GROUP BY personId

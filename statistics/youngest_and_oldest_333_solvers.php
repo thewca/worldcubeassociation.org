@@ -57,7 +57,7 @@ function getFirstTen ( $persons ) {
     );
     
 #    $result[] = array( "$id-$name", $ageInDays, $y, $m, $d );
-    $result[] = array( "$id-$name", $y, $m, $d, $best );
+    $result[] = array( $id, $y, $m, $d, $best );
     if( count( $result ) == 10 )
       break;
   }

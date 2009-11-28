@@ -29,7 +29,7 @@ function sdRanking () {
   foreach( $results as $result){
     extract( $result );
 
-    $rows[] = array( $personId . '-' . $personName, formatValue( sqrt( $sd ), 'time' ), formatAverageSources( true, $result, 'time' ));
+    $rows[] = array( $personId, formatValue( sqrt( $sd ), 'time' ), formatAverageSources( true, $result, 'time' ));
   }
 
   return $rows;

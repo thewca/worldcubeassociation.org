@@ -28,7 +28,7 @@ function combinedAllRanking ( $sourceId, $sourceName ) {
       else
         $r += $ranks[$event['id']]['maxrank'];
     }
-    $rows[] = array( $personId . '-' . currentPersonName( $personId ), $r );
+    $rows[] = array( $personId, $r );
   }
   usort( $rows, 'comparePersonAllRanks' );
   return array_slice( $rows, 0, 10 );

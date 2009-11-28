@@ -23,7 +23,7 @@ function combinedRanking ( $sourceId, $sourceName ) {
     $r3 = $ranks3[$personId];
     $r4 = $ranks4[$personId];
     $r5 = $ranks5[$personId];
-    $rows[] = array( $personId . '-' . currentPersonName( $personId ), $r3+$r4+$r5, $r3, $r4, $r5 );
+    $rows[] = array( $personId, $r3+$r4+$r5, $r3, $r4, $r5 );
   }
   usort( $rows, 'comparePersonRanks' );
   return array_slice( $rows, 0, 10 );

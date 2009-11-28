@@ -2,7 +2,7 @@
 
 $rows = 0;
 foreach( split( ' ', 'personId eventId competition.countryId' ) as $source ){
-  $source2 = ( $source != 'personId' ) ? $source : "concat(personId,'-',personName)";
+  $source2 = ( $source != 'personId' ) ? $source : "personId";
   $source3 = ( $source != 'personId' ) ? $source : "personName";
   $r = dbQuery("
     SELECT $source2, count(DISTINCT competitionId) numberOfCompetitions

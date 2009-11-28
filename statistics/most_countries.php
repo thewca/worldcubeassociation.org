@@ -1,7 +1,7 @@
 <?
 
 $persons = dbQuery("
-  SELECT concat(personId,'-',personName), count(DISTINCT competition.countryId) numberOfCountries
+  SELECT personId, count(DISTINCT competition.countryId) numberOfCountries
   FROM Results result, Competitions competition
   $WHERE competition.id = competitionId
   GROUP BY personId

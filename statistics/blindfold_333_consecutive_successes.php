@@ -55,7 +55,7 @@ function add_blindfold_333_consecutive_successes () {
       $formatted[] = $f;
     }
     $persons[] = array (
-      "$personId-$personName",
+      $personId,
       count( $bestStreak ),
       implode( ' &nbsp; ', $formatted ),
       $best

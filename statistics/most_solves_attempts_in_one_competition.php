@@ -2,7 +2,7 @@
 
 $solves = dbQuery("
   SELECT
-    concat(personId,'-',personName),
+    personId,
     count(if(value1>0,1,null))+count(if(value2>0,1,null))+count(if(value3>0,1,null))+count(if(value4>0,1,null))+count(if(value5>0,1,null)) solves,
     competitionId
   FROM
@@ -16,7 +16,7 @@ $solves = dbQuery("
 
 $attempts = dbQuery("
   SELECT
-    concat(personId,'-',personName),
+    personId,
     count(if(value1<>0,1,null))+count(if(value2<>0,1,null))+count(if(value3<>0,1,null))+count(if(value4<>0,1,null))+count(if(value5<>0,1,null)) solves,
     competitionId
   FROM

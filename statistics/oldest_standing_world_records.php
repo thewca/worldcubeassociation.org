@@ -6,7 +6,7 @@ $rows = dbQuery("
     type,
     datediff( curdate(), year*10000+month*100+day ) days,
     value,
-    concat( personId, '-', personName ),
+    personId,
     competitionId
   FROM
     (SELECT eventId, min(best) value, 'Single' type

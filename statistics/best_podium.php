@@ -10,7 +10,7 @@ $lists[] = array(
 #----------------------------------------------------------------------
 function bestPodium () {
 #----------------------------------------------------------------------
-  $results = dbQuery( "SELECT average, competitionId, concat(personId,'-',personName) person, pos
+  $results = dbQuery( "SELECT average, competitionId, personId, pos
                        FROM Results
                        WHERE pos<4 AND eventId='333' AND formatId='a' AND roundId='f'
                        ORDER BY competitionId, roundId, pos ");
@@ -18,7 +18,7 @@ function bestPodium () {
   foreach( $results as $result ){
     extract( $result );
     $compact_list["$competitionId"]["$pos"] = $average;
-    $compact_list["$competitionId"]["p$pos"] = $person;
+    $compact_list["$competitionId"]["p$pos"] = $personId;
     $compact_list["$competitionId"]['sum'] += $average;
   }
 

@@ -170,10 +170,7 @@ function addList ( $list, $id ) {
     foreach( range( 0, $columnCount-2 ) as $i ){
       $value = $row[$i];
       $Class = ucfirst( $columnClasses[$i] );
-      if( $Class == 'P' ){
-        list( $personId, $personName ) = split( '-', $value, 2 );
-        $value = personLink( $personId, $personName );
-      }
+      if( $Class == 'P' ) $value = personLink( $value, currentPersonName( $value ) );
       if( $Class == 'E' ) $value = eventLink( $value, eventCellName( $value ));
       if( $Class == 'C' ) $value = competitionLink( $value, $competitions[$value]['cellName'] );
       if( $Class == 'R' ) $value = formatValue( $value, valueFormat( $row['eventId'] ));

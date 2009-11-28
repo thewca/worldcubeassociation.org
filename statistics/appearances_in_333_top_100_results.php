@@ -9,7 +9,7 @@ $averageBound = 1181;
 
 #--- Fetch all results that have a chance to be in the top 100
 $candidates = dbQuery( "
-  SELECT   concat(personId,'-',personName) person,
+  SELECT   personId,
            value1, value2, value3, value4, value5,
            average
   FROM     Results
@@ -19,10 +19,10 @@ $candidates = dbQuery( "
 #--- Extract (person,single) pairs and (person,average) pairs
 foreach ( $candidates as $candidate ) {
   if ( $candidate['average'] > 0 )
-    $personAveragePairs[] = array( $candidate['person'], $candidate['average'] );
+    $personAveragePairs[] = array( $candidate['personId'], $candidate['average'] );
   for ( $i=1; $i<=5; $i++ )
     if ( $candidate["value$i"] > 0 )
-      $personSinglePairs[] = array( $candidate['person'], $candidate["value$i"] );
+      $personSinglePairs[] = array( $candidate['personId'], $candidate["value$i"] );
 }
 
 #--- Build and add this statistic
@@ -43,8 +43,8 @@ function countTop100Appearances ( $personValuePairs ) {
   for( $i=0; $i<100 || $i<count($personValuePairs) && $personValuePairs[$i][1]==$personValuePairs[$i-1][1]; $i++ )
     $appearances[ $personValuePairs[$i][0] ]++;
   arsort( $appearances );
-  foreach( $appearances as $person => $counter )
-    $result[] = array( $person, $counter );
+  foreach( $appearances as $personId => $counter )
+    $result[] = array( $personId, $counter );
   return $result;
 }
 

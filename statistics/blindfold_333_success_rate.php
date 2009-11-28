@@ -2,7 +2,7 @@
 
 #--- Get the blindfold results since one year ago
 $sources = dbQuery( "
-  SELECT concat(personId,'-',personName) person,
+  SELECT personId,
          value1, value2, value3, value4, value5
   FROM   Results r, Competitions competition
   WHERE  eventId='333bf' AND competition.id=competitionId AND $sinceDateCondition
@@ -10,21 +10,21 @@ $sources = dbQuery( "
 
 #--- For each person, count the attempts and collect the success times
 foreach ( $sources as $source ) {
-  $person = $source['person'];
+  $personId = $source['personId'];
   for ( $i=1; $i<=5; $i++ ) {
     $value = $source["value$i"];
-    if ( $value > 0 || $value == -1 ) $attempts[$person]++;
-    if ( $value > 0                 ) $validTimes[$person][] = $value;
+    if ( $value > 0 || $value == -1 ) $attempts[$personId]++;
+    if ( $value > 0                 ) $validTimes[$personId][] = $value;
   }
 }
 
 #--- Build the rows (person, rate, attempts, solve, spacer, best, average, worst)
-foreach ( $validTimes as $person => $times ) {
-  if ( $attempts[$person] >= 5 ) {
-    $rows[] = array( $person,
-                      sprintf( "%.2f %%", 100 * count($times) / $attempts[$person] ),
+foreach ( $validTimes as $personId => $times ) {
+  if ( $attempts[$personId] >= 5 ) {
+    $rows[] = array( $personId,
+                      sprintf( "%.2f %%", 100 * count($times) / $attempts[$personId] ),
                       count($times),
-                      $attempts[$person],
+                      $attempts[$personId],
                       '',
                       min($times),
                       array_sum($times) / count($times),
