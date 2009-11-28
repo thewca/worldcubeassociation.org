@@ -18,7 +18,8 @@ $candidates = dbQuery( "
 
 #--- Extract (person,single) pairs and (person,average) pairs
 foreach ( $candidates as $candidate ) {
-  $personAveragePairs[] = array( $candidate['person'], $candidate['average'] );
+  if ( $candidate['average'] > 0 )
+    $personAveragePairs[] = array( $candidate['person'], $candidate['average'] );
   for ( $i=1; $i<=5; $i++ )
     if ( $candidate["value$i"] > 0 )
       $personSinglePairs[] = array( $candidate['person'], $candidate["value$i"] );
