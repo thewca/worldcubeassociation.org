@@ -129,6 +129,21 @@ function getAllUsedYears () {
 }
 
 #----------------------------------------------------------------------
+function getAllIDs ( $rows ) {
+#----------------------------------------------------------------------
+  foreach ( $rows as $row )
+    $ids[] = $row['id'];
+  return $ids;
+}
+
+function getAllEventIds                    () { return getAllIDs( getAllEvents()                    ); }
+function getAllUnofficialEventIds          () { return getAllIDs( getAllUnofficialEvents()          ); }
+function getAllCompetitionIds              () { return getAllIDs( getAllCompetitions()              ); }
+function getAllUsedCountrieIds             () { return getAllIDs( getAllUsedCountries()             ); }
+function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCountriesCompetitions() ); }
+function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
+
+#----------------------------------------------------------------------
 function structureBy ( $results, $field ) {
 #----------------------------------------------------------------------
 

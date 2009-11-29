@@ -38,8 +38,7 @@ $statisticNames = array(
   #--- Special ranks:
   'youngest_and_oldest_solvers',
   'best_medal_collection',
-  'sum_of_345_ranks',
-  'sum_of_all_ranks',
+  'sum_of_recent_ranks',
   'appearances_in_333_top_100_results',
 
   #--- Special achievements:
