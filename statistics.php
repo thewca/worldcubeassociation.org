@@ -21,6 +21,7 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function showContent () {
 #----------------------------------------------------------------------
+  global $today;
 
   #--- Compute the dates of today and the last day the cache was built. 
   $today = date( "F d Y", time() );
@@ -63,10 +64,12 @@ function endCache () {
 #----------------------------------------------------------------------
 function showResults () {
 #----------------------------------------------------------------------
+  global $today;
   
   #--- Output the page header.
   echo "<h1>Fun Statistics</h1>\n\n";
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>";
+  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on $today.</p>";
 
   #--- Get all the list definitions.
   global $lists;
