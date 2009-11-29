@@ -23,6 +23,15 @@ function showPages () {
   
   echo "<dl>\n";
 
+  showPage( 'check_results',
+            'Checks the results. Does *NOT* affect the database.' );
+
+  showPage( 'persons_check_finished',
+            'Checks the finished persons in the Persons/Results tables. Does *NOT* affect the database unless you say so.' );
+
+  showPage( 'persons_finish_unfinished',
+            'Finishes persons in Results by adding personId. Does *NOT* affect the database unless you say so.' );
+
   showPage( 'check_regional_record_markers',
             'Computes regional record markers, compares them to the stored ones. *CAN* affect the database, namely if you tell it to.' );
 
@@ -31,9 +40,6 @@ function showPages () {
 
 #  showPage( 'check_persons_inside_competition',
 #            'Checks the persons for one competition, suggests fixes.' );
-
-  showPage( 'check_results',
-            'Checks the results. Does *NOT* affect the database.' );
 
   showPage( 'compute_auxiliary_data',
             'Computes auxiliary database data. *DOES* affect the database.' );
@@ -44,11 +50,7 @@ function showPages () {
 #  showPage( 'persons_reset_demo',
 #            'Somewhat resets the Caltech Winter 2007 results/persons' );
 
-  showPage( 'persons_check_finished',
-            'Checks the finished persons in the Persons/Results tables. Does *NOT* affect the database unless you say so.' );
-
-  showPage( 'persons_finish_unfinished',
-            'Finishes persons in Results by adding personId. Does *NOT* affect the database unless you say so.' );
+  echo "<hr>";
 
   showPage( 'show_competition_details',
             "Shows competition details somewhat like they're shown on the competitions page, but for all competitions on one page for easier checking. Does *NOT* affect the database." );
