@@ -26,6 +26,7 @@ $rows = dbQuery("
   
     AND competition.id = result.competitionId
     AND event.id       = result.eventId
+    AND event.rank < 999
   ORDER BY
     year, month, day, type DESC, event.rank
   LIMIT 10
