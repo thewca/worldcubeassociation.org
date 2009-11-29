@@ -17,10 +17,11 @@ $event = dbQuery( "
 " );
 
 $country = dbQuery( "
-  SELECT    competition.countryId, count(DISTINCT competitionId) numberOfCompetitions
-  FROM      Results, Competitions competition
+  SELECT    countryId, count(*) numberOfCompetitions
+  FROM      (SELECT distinct competitionId FROM Results) competitionsWithResults,
+            Competitions competition
   WHERE     competition.id = competitionId
-  GROUP BY  competition.countryId
+  GROUP BY  countryId
   ORDER BY  numberOfCompetitions DESC
   LIMIT     10
 " );
