@@ -87,10 +87,17 @@ function showPreregForm () {
   echo "<table class='prereg'>";
   if( $chosenPersonId )
     showField( "personId readonly $chosenPersonId 11 <b>WCA Id</b>" );
-  showField( "name name 50 <b>Name</b> $chosenName" );
-  if( getBooleanParam( 'search' ))
+
+  if( getBooleanParam( 'new' ))
+    showField( "name text $chosenName 50 <b>Name</b>" );
+  else
+    showField( "name name 50 <b>Name</b> $chosenName" );
+
+  if( getBooleanParam( 'search' )) {
     showField( "namelist namelist <b>$matchingNumber names matching</b>" );
-  else {
+    echo "<tr><td></td><td><input type='submit' id='new' name='new' value='I am new !' /></td></tr> ";
+  }
+  else if( getBooleanParam( 'confirm' ) || getBooleanParam( 'new' )) {
     showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
     showField( "gender gender $chosenGender <b>Gender</b>" );
     showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
@@ -117,6 +124,8 @@ function showPreregForm () {
   echo "<input type='reset' value='Empty form' style='background-color:#F63;font-weight:bold' />";
   echo "</td></tr>";
 }
+  else
+    echo "<tr><td></td><td><input type='submit' id='new' name='new' value='I am new !' /></td></tr> ";
   echo "</table>";
   echo "</form>";
 }
