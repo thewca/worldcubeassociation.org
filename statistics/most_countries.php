@@ -1,30 +1,29 @@
 <?
 
 $persons = dbQuery("
-  SELECT personId, count(DISTINCT competition.countryId) numberOfCountries
-  FROM Results result, Competitions competition
-  $WHERE competition.id = competitionId
-  GROUP BY personId
-  ORDER BY numberOfCountries DESC, personName
-  LIMIT 10
+  SELECT    personId, count(DISTINCT competition.countryId) numberOfCountries
+  FROM      Results result, Competitions competition
+  $WHERE    competition.id = competitionId
+  GROUP BY  personId
+  ORDER BY  numberOfCountries DESC, personName
+  LIMIT     10
 ");
 
 $events = dbQuery("
-  SELECT eventId, count(DISTINCT competition.countryId) numberOfCountries
-  FROM Results result, Competitions competition
-  $WHERE competition.id = competitionId
-  GROUP BY eventId
-  ORDER BY numberOfCountries DESC, eventId
-  LIMIT 10
+  SELECT    eventId, count(DISTINCT competition.countryId) numberOfCountries
+  FROM      Results result, Competitions competition
+  $WHERE    competition.id = competitionId
+  GROUP BY  eventId
+  ORDER BY  numberOfCountries DESC, eventId
+  LIMIT     10
 ");
 
 $competitions = dbQuery("
-  SELECT competitionId, count(DISTINCT result.countryId) numberOfCountries
-  FROM Results result, Competitions competition
-  $WHERE competition.id = competitionId
-  GROUP BY competitionId
-  ORDER BY numberOfCountries DESC, competitionId
-  LIMIT 10
+  SELECT    competitionId, count(DISTINCT result.countryId) numberOfCountries
+  FROM      Results result
+  GROUP BY  competitionId
+  ORDER BY  numberOfCountries DESC, competitionId
+  LIMIT     10
 ");
 
 $lists[] = array(
