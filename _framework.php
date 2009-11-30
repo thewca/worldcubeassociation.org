@@ -163,4 +163,13 @@ function pathToRoot () {
   return $pathToRoot;
 }
 
+#----------------------------------------------------------------------
+function wcaDate ( $format = "r" ) {
+#----------------------------------------------------------------------
+
+  #--- Set timezone (otherwise date() might complain), then return the date
+  date_default_timezone_set( 'America/Los_Angeles' );
+  return date( $format );
+}
+
 ?>

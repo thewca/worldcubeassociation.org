@@ -10,10 +10,10 @@ function startTimer () {
   $timerStartTimes[] = microtime_float();
 }
 
-function stopTimer ( $message ) {
+function stopTimer ( $message, $forceShow=false ) {
   global $timerStartTimes;
   $elapsed = microtime_float() - array_pop( $timerStartTimes );
-  if( debug() )
+  if( debug() || $forceShow )
     printf( "<b>%.4f seconds</b> for '$message'<br />", $elapsed );
 }
 

@@ -44,6 +44,10 @@ function showPages () {
   showPage( 'compute_auxiliary_data',
             'Computes auxiliary database data. *DOES* affect the database.' );
 
+  showPage( 'update_statistics_page',
+            'Updates the statistics page that normal users can see (youngest/oldest solvers, etc).',
+            '../statistics.php?update8392=1' );
+
 #  showPage( 'compute_competition_events',
 #            'Computes the eventSpecs field in the Competitions table for competitions without (TODO: WITHOUT???) results. *DOES* change the database.' );
 
@@ -74,10 +78,12 @@ function showPages () {
 }
 
 #----------------------------------------------------------------------
-function showPage ( $page, $text ) {
+function showPage ( $page, $text, $href="" ) {
 #----------------------------------------------------------------------
 
-  echo "<dt><a href='$page.php'>$page</a></dt><dd>$text</dd>\n";
+  if ( ! $href )
+    $href = "$page.php";
+  echo "<dt><a href='$href'>$page</a></dt><dd>$text</dd>\n";
 }
 
 ?>

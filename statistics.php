@@ -3,7 +3,7 @@
 #
 #   This script shows the lists defined in the 'statistics' directory.
 #   If you only want to add/modify those lists, you don't need to look
-#   here but in that directory. Start with the README.txt documentation.
+#   here but in that directory. There, ALL_LISTS.php explains more.
 #
 #----------------------------------------------------------------------
 
@@ -21,59 +21,39 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function showContent () {
 #----------------------------------------------------------------------
-  global $today;
 
-  #--- Compute the dates of today and the last day the cache was built. 
-  $today = date( "F d Y", time() );
-  if( file_exists( 'statistics.cached' ))
-    $cachedDay = date( "F d Y", filemtime( 'statistics.cached' ));
-
-  #--- Build cache new if its too old or missing (or in debug mode). 
-  if( $cachedDay != $today  ||  debug() ){
-    beginCache();
+  #--- In debug mode, just calculate freshly and don't cache
+  if ( debug() ) {
     showResults();
-    endCache();
+    return;
   }
 
-  #--- Import the cached page.
-  else
-    require( 'statistics.cached' );
-}
-
-#----------------------------------------------------------------------
-function beginCache () {
-#----------------------------------------------------------------------
+  #--- If there's no cache or this is an update request, then freshly build the cache
+  if ( ! file_exists( 'statistics.cached' ) || getBooleanParam( 'update8392' ) ) {
+    startTimer();
+    ob_start();
+    showResults();
+    file_put_contents( 'statistics.cached', ob_get_contents() );
+    ob_end_clean();
+    stopTimer( "Freshly building the cache", true );
+  }
   
-  ob_start();
+  #--- Show the cache
+  require( 'statistics.cached' );
 }
-
-#----------------------------------------------------------------------
-function endCache () {
-#----------------------------------------------------------------------
-  
-  $buffer = ob_get_contents();
-
-  ob_end_flush();
-
-  $cacheHandle = fopen( 'statistics.cached', 'w' );
-  fwrite( $cacheHandle, $buffer );
-  fclose( $cacheHandle );
-}
-
 
 #----------------------------------------------------------------------
 function showResults () {
 #----------------------------------------------------------------------
-  global $today;
   
   #--- Output the page header.
   echo "<h1>Fun Statistics</h1>\n\n";
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>";
-  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on $today.</p>";
+  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
   #--- Get all the list definitions.
-  global $lists;
   defineAllLists();
+  global $lists;
 
   #--- Output the links to the individual lists.  
   echo "<ul style='padding-left:20px'>\n";
@@ -100,7 +80,7 @@ function defineAllLists () {
   
   $WHERE = "WHERE " . randomDebug() . " AND";
   
-  list( $year, $month, $day ) = split( ' ', date( "Y m d", time() ));
+  list( $year, $month, $day ) = split( ' ', wcaDate( "Y m d" ));
   $year = intval( $year ) - 1;
   $month = intval( $month );
   $day = intval( $day );
@@ -111,7 +91,6 @@ function defineAllLists () {
   $sinceDateCondition = "(year*10000 + month*100 + day) >= $sinceDateMysql";
   
   #--- Import the list definitions.
-  global $lists;
   require( 'statistics/ALL_LISTS.php' );
 }
 
