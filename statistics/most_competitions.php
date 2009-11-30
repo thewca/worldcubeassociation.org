@@ -18,9 +18,9 @@ $event = dbQuery( "
 
 $country = dbQuery( "
   SELECT    countryId, count(*) numberOfCompetitions
-  FROM      (SELECT distinct competitionId FROM Results) competitionsWithResults,
-            Competitions competition
-  WHERE     competition.id = competitionId
+  FROM      Competitions
+  WHERE     showAtAll
+    AND     datediff( year*10000+month*100+day, curdate() ) < 0
   GROUP BY  countryId
   ORDER BY  numberOfCompetitions DESC
   LIMIT     10
