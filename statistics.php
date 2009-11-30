@@ -64,7 +64,6 @@ function showResults () {
   echo "</ul>\n\n";
 
   #--- Output the lists.
-  //require( '_tables_caching.php' );
   $ctr = 0;
   foreach( $lists as $list )
     addList( $list, ++$ctr );
