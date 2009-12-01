@@ -7,7 +7,7 @@ function add_blindfold_333_consecutive_successes () {
   
   #--- Get ...
   $results = dbQuery("
-    SELECT personName, personId, value1, value2, value3, value4, value5
+    SELECT personId, value1, value2, value3, value4, value5
     FROM Results result, Competitions competition
     $WHERE 1
       AND eventId = '333bf'
@@ -42,23 +42,24 @@ function add_blindfold_333_consecutive_successes () {
       }
     }
 
+    #--- This person doesn't have any streak? Next person, please.
     if( ! $bestStreak )
       continue;
-    
-    $best = min( $bestStreak );
-    $worst = max( $bestStreak );
-    $formatted = array();
-    foreach( $bestStreak as $v ){
-      $f = formatValue( $v, 'time' );
-      if( $v == $best ) $f = "<span style='color:#0E0;font-weight:bold'>$f</span>";
-      if( $v == $worst ) $f = "<span style='color:#E33;font-weight:bold'>$f</span>";
-      $formatted[] = $f;
-    }
+
+    #--- Determine properties of the streak.
+    $length  = count( $bestStreak );
+    $best    = min( $bestStreak );
+    $worst   = max( $bestStreak );
+    $average = array_sum( $bestStreak ) / $length;
+
+    #--- Format and memorize this person with its streak
     $persons[] = array (
       $personId,
-      count( $bestStreak ),
-      implode( ' &nbsp; ', $formatted ),
-      $best
+      $length,
+      '',
+      '<span style="color:#0C0">' . formatValue($best) . '</span>',
+      $average,
+      '<span style="color:#E00">' . formatValue($worst) . '</span>'
     );
   }
 
@@ -68,16 +69,19 @@ function add_blindfold_333_consecutive_successes () {
   $lists[] = array(
     "Blindfold 3x3x3 longest success streak",
     "",
-    "[P] Person [N] Length [t] Times",
+    "[P] Person [N] Length [t] &nbsp; [r] Best [r] Avg [r] Worst",
     $persons
   );
 }
 
 function compareBlindfoldStreaks ( $a, $b ) {
+  #--- Compare streak lengths
   if( $a[1] > $b[1] ) return -1;
   if( $a[1] < $b[1] ) return 1;
-  if( $a[3] < $b[3] ) return -1;
-  if( $a[3] > $b[3] ) return 1;
+  #--- Compare best times
+  if( $a[4] < $b[4] ) return -1;
+  if( $a[4] > $b[4] ) return 1;
+  #--- Ok consider them equal
   return 0;
 }
 
