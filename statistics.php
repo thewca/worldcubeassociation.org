@@ -41,7 +41,7 @@ function showContent () {
   }
   
   #--- Show the cache
-  require( 'statistics.cached' );
+  echo file_get_contents( 'statistics.cached' );
 }
 
 #----------------------------------------------------------------------
