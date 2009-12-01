@@ -53,7 +53,7 @@ $statisticNames = array(
   'most_persons',
   'most_competitions',
   'most_countries',
-  'most_solves_attempts_in_one_competition'
+  'most_solves_dnfs_in_one_competition'
 
 );
 
