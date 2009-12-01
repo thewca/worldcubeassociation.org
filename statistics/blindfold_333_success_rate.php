@@ -26,9 +26,9 @@ foreach ( $validTimes as $personId => $times ) {
                       count($times),
                       $attempts[$personId],
                       '',
-                      min($times),
+                      '<span style="color:#0C0">' . formatValue(min($times)) . '</span>',
                       array_sum($times) / count($times),
-                      max($times) );
+                      '<span style="color:#E00">' . formatValue(max($times)) . '</span>' );
   }
 }
 
