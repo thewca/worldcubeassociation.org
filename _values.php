@@ -1,7 +1,7 @@
 <?
 
 #----------------------------------------------------------------------
-function formatValue( $value, $format ) {
+function formatValue( $value, $format='time' ) {
 #----------------------------------------------------------------------
 
   if( !is_numeric($value) )  # TOD?: remove later
