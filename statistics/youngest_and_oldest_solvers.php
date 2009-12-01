@@ -47,10 +47,11 @@ function youngestAndOldest ( $eventId, $eventTitle, $maxAgeForYoungest, $minAgeF
   #--- Build and return the statistic list
   return array(
     "Youngest and oldest $eventTitle solvers",
-    "we don't know everybody's birthdate but the #1 persons should be correct",
+    '',
     "[P] Person [N] Years [n] Months [n] Days [R] Time [T] | [P] Person [N] Years [n] Months [n] Days [R] Time",
     my_merge( formatTop10YoungestAndOldest( $youngest ),
-              formatTop10YoungestAndOldest( $oldest   ) ) );
+              formatTop10YoungestAndOldest( $oldest   ) ),
+    "We don't know everybody's birthdates, but hopefully most of the very young and very old. They might be more inclined to tell, partly because others are curious and because some competitions even award youngest and oldest competitors." );
 }
 
 #----------------------------------------------------------------------

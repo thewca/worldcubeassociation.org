@@ -131,8 +131,10 @@ function addList ( $list, $id ) {
   if( $subtitle )
     $subtitle = "<span style='color:#999'>($subtitle)</span>";
 
-  if( $description )
+  if( $description ){
+    $description = htmlEntities( $description, ENT_QUOTES );
     $description = "(<a title='$description' style='color:#FC0' onclick='alert(\"$description\")'>info</a>)";
+  }
 
   $columnCount = count( $columnNames );
 
