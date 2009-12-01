@@ -7,7 +7,7 @@ function add_blindfold_333_consecutive_successes () {
   
   #--- Get ...
   $results = dbQuery("
-    SELECT personId, value1, value2, value3, value4, value5
+    SELECT personId, value1, value2, value3, value4, value5, year, month
     FROM Results result, Competitions competition
     $WHERE 1
       AND eventId = '333bf'
@@ -18,27 +18,32 @@ function add_blindfold_333_consecutive_successes () {
   foreach( structureBy( $results, 'personId' ) as $personResults ){
     extract( $personResults[0] );
     
-    #--- Collect all values of this person, add a DNF at the end.
-    $values = array();
+    #--- Collect all values of this person, add a 'current DNF' sentinel at the end.
+    unset( $datedValues );
     foreach( $personResults as $personResult ){
       foreach( range( 1, 5 ) as $i ){
         $v = $personResult["value$i"];
         if( $v > 0  ||  $v == -1 )
-          $values[] = $v;
+          $datedValues[] = array( getMonthName($personResult['month']) . " $personResult[year]", $v );
       }
     }
-    $values[] = -1;
-  
+    $datedValues[] = array( 'current', -1 );
+
     #--- Find longest streak.
-    $streak = array();
-    $bestStreak = array();
-    foreach( $values as $v ){
-      if( $v > 0 )
-        $streak[] = $v;
+    unset( $streak, $bestStreak );
+    foreach( $datedValues as $dv ){
+      if( $dv[1] > 0 ){
+        if( !$streak ) $streakFirstDate = $dv[0];
+        $streakLastDate = $dv[0];
+        $streak[] = $dv[1];
+      }
       else {
-        if( count( $streak ) >= count( $bestStreak ))
+        if( count( $streak ) >= count( $bestStreak )){
           $bestStreak = $streak;
-        $streak = array();
+          $bestStreakFirstDate = $streakFirstDate;
+          $bestStreakLastDate = ($dv[0] == 'current') ? 'ongoing...' : $streakLastDate;
+        }
+        unset( $streak );
       }
     }
 
@@ -59,7 +64,8 @@ function add_blindfold_333_consecutive_successes () {
       '',
       '<span style="color:#0C0">' . formatValue($best) . '</span>',
       $average,
-      '<span style="color:#E00">' . formatValue($worst) . '</span>'
+      '<span style="color:#E00">' . formatValue($worst) . '</span>',
+      "$bestStreakFirstDate - $bestStreakLastDate"
     );
   }
 
@@ -69,7 +75,7 @@ function add_blindfold_333_consecutive_successes () {
   $lists[] = array(
     "Blindfold 3x3x3 longest success streak",
     "",
-    "[P] Person [N] Length [t] &nbsp; [r] Best [r] Avg [r] Worst",
+    "[P] Person [N] Length [t] &nbsp; [r] Best [r] Avg [r] Worst [t] When?",
     $persons
   );
 }
