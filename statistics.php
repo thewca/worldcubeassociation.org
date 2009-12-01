@@ -30,12 +30,14 @@ function showContent () {
 
   #--- If there's no cache or this is an update request, then freshly build the cache
   if ( ! file_exists( 'statistics.cached' ) || getBooleanParam( 'update8392' ) ) {
-    startTimer();
+    $startTime = microtime_float();
     ob_start();
     showResults();
     file_put_contents( 'statistics.cached', ob_get_contents() );
     ob_end_clean();
-    stopTimer( "Freshly building the cache", true );
+    $logMessage = sprintf( "%s: Updating took %.2f seconds.", wcaDate(), microtime_float()-$startTime );
+    file_put_contents( 'statistics.log', "$logMessage\n", FILE_APPEND );
+    echo "<p>$logMessage</p>";
   }
   
   #--- Show the cache
