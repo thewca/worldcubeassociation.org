@@ -42,7 +42,7 @@ function polishMostSolvesDnfs ( $query ) {
   foreach ( dbQuery( $query ) as $row ) {
     list( $personId, $competitionId, $ctr, $attempts ) = $row;
     if ( ! $listed[$personId]++ && count($result)<10 )
-      $result[] = array( $personId, "$ctr / $attempts", $competitionId );
+      $result[] = array( $personId, "<b>$ctr</b> / $attempts", $competitionId );
   }
   return $result;
 }
@@ -50,7 +50,7 @@ function polishMostSolvesDnfs ( $query ) {
 $lists[] = array(
   "Most solves or DNFs in one competition",
   "",
-  "[P] Person [N] Solves [C] Competition [T] | [P] Person [N] DNFs [C] Competition",
+  "[P] Person [n] Solves [C] Competition [T] | [P] Person [n] DNFs [C] Competition",
   my_merge( $solves, $attempts )
 );
 
