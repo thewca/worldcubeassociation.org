@@ -38,10 +38,10 @@ array_splice( $rows, 10 );
 
 #--- Helper function for sorting rows by (rate,attempts) 
 function rowComparison ( $a, $b ) {
-  list( $attemptsA, $solvesA ) = array( $a[2], $a[3] );
-  list( $attemptsB, $solvesB ) = array( $b[2], $b[3] );
-  if ( $solvesA/$attemptsA > $solvesB/$attemptsB ) return 1;
-  if ( $solvesA/$attemptsA < $solvesB/$attemptsB ) return -1;
+  list( $attemptsA, $solvesA ) = array( $a[3], $a[2] );
+  list( $attemptsB, $solvesB ) = array( $b[3], $b[2] );
+  if ( $solvesA/$attemptsA > $solvesB/$attemptsB ) return -1;
+  if ( $solvesA/$attemptsA < $solvesB/$attemptsB ) return 1;
   return $attemptsB - $attemptsA;
 }
 
