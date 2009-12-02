@@ -37,7 +37,7 @@ function showBody () {
 
   #--- Output the page header.
   echo "<h1>Age vs Speed</h1>\n\n";
-  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed for solving the 3x3x3, both single and average. The list is made so that between two consecutive entries, there's nobody with age and record in between.</p>";
+  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed for solving the 3x3x3, both single and average. It shows the lowest times achieved at different ages, and is complete in the sense that between two consecutive entries, there's nobody with age and record in between. The current single and average world record are highlighted, and the two lists are adjusted so that those two records are on the same row.</p>";
   echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
   #--- Output the table header
