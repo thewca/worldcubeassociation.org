@@ -1,8 +1,5 @@
 <?
 
-
-# COMMIT MESSAGE: Much faster and now also correct!
-
 #--- Known upper bounds for the top 100, can be lowered from time to time
  $singleBound =  991;
 $averageBound = 1181;
