@@ -30,7 +30,7 @@ function checkResults () {
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
 
   echo "<pre>\n";
-  echo date( 'l dS \of F Y h:i:s A' ) . "\n\n";
+  echo wcaDate() . "\n\n";
 
   #--- Process the results.
   $badIds = array();

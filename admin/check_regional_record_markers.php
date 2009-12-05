@@ -80,7 +80,7 @@ function doTheDarnChecking () {
   tableEnd();
 
   #--- Tell the result.
-  $date = date( 'l dS \of F Y h:i:s A' );
+  $date = wcaDate();
   noticeBox2(
     ! $differencesWereFound,
     "We completely agree.<br />$date",
@@ -94,7 +94,7 @@ UPDATE Results SET regionalSingleRecord='NR' WHERE id=33333
   #--- If differences were found, offer to fix them.
   if( $differencesWereFound )
     echo "<center><input type='submit' value='Execute the agreed $valueName changes!' /></center>\n";
-  
+
   #--- Finish the form.
   echo "</form>\n";
 }

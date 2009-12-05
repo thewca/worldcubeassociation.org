@@ -70,7 +70,7 @@ function validatePicture () {
     echo "<tr><td><input type='radio' id='$personId' name='$personId' value='A' /></td>\n";
     echo "<td><input type='radio' id='$personId' name='$personId' value='D' /></td>\n";
     echo "<td>" . personLink( $personId, $person['name']) . "</td>\n";
-    echo "<td><img src='" . $upload_path . $file . "' width='200' heigth='300' /></td></tr>\n\n";
+    echo "<td><img src='" . $upload_path . $file . "' width='200' height='300' /></td></tr>\n\n";
 
   }
   echo "</table>";
