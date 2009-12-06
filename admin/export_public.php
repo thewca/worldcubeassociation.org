@@ -41,6 +41,9 @@ function exportPublic ( $sources ) {
   #--- We'll work in the /admin/export directory
   chdir( 'export' );
 
+  #--- The prefix for the temporary tables
+  $tmpPrefix = 'tmpXAK_';
+  
   #------------------------------------------
   # PREPARATION
   #------------------------------------------
@@ -57,7 +60,7 @@ function exportPublic ( $sources ) {
   #--- Prepare the sources
   foreach ( $sources as $tableName => $tableSource ) {
     if ( $tableSource != '*' ) {
-      $tableName = "tmpXAK_$tableName";
+      $tableName = "$tmpPrefix$tableName";
       dbCommand( "DROP TABLE IF EXISTS $tableName" );
       dbCommand( "CREATE TABLE $tableName $tableSource" );
     }
@@ -81,7 +84,7 @@ function exportPublic ( $sources ) {
   $sqlFile = "$basename.sql";
   $mysqldumpOptions = "--add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
   $mysqldumpTables = implode( ' ', $tableNames );
-  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/tmpXAK_//g' > $sqlFile" );
+  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/$tmpPrefix//g' > $sqlFile" );
 
   #--- Build the SQL.ZIP file
   echo "<p><b>Build the SQL.ZIP file</b></p>";
@@ -117,7 +120,7 @@ function exportPublic ( $sources ) {
     mysql_free_result( $dbResult );
 
     #--- Store the tsv file
-    $tableName = str_replace( 'tmpXAK_', '', $tableName );
+    $tableName = str_replace( $tmpPrefix, '', $tableName );
     file_put_contents( "$tableName.tsv", $values );
   }
 
@@ -138,9 +141,25 @@ function exportPublic ( $sources ) {
                        'tsvZipFile'     => $tsvZipFile,
                        'tsvZipFileSize' => sprintf( '%.1f MB', filesize( $tsvZipFile ) / 1000000 ) ) );
 
-  #--- Delete files we don't need anymore
-  echo '<p><b>Delete files we don\'t need anymore</b></p>';
-  mySystem( "rm README.txt $sqlFile $oldBasenameStart*" );
+  #------------------------------------------
+  # CLEAN UP and DEPLOY
+  #------------------------------------------
+
+  #--- Delete temporary stuff we don't need anymore
+  echo '<p><b>Delete temporary stuff we don\'t need anymore</b></p>';
+  mySystem( "rm README.txt $sqlFile *.tsv" );
+  foreach ( $tableNames as $tableName )
+    if ( preg_match( "/^$tmpPrefix/", $tableName ) )
+      dbCommand( "DROP TABLE IF EXISTS $tableName" );
+
+  #--- Move new files to public directory
+  echo '<p><b>Move new files to public directory</b></p>';
+  mySystem( "mv $sqlZipFile $tsvZipFile ../../misc/" );
+  mySystem( "mv export.html ../../misc/" );
+
+  #--- Delete previous files from public directory
+  echo '<p><b>Delete previous files from public directory</b></p>';
+  mySystem( "rm ../../misc/$oldBasenameStart*" );
 
   #--- Return to /admin
   chdir( '..' );
@@ -156,7 +175,8 @@ function instantiateTemplate( $filename, $replacements ) {
 function mySystem ( $command ) {
   echo "<p>Executing <span style='background:#FF0'>$command</span></p>";
   system( $command, $retval );
-  echo '<p>' . ($retval ? "Error [$retval]" : "Success!") . '</p>';
+  echo '<p>'.( $retval ? "<span style='background:#F00'>Error [$retval]</span>"
+                       : "<span style='background:#0F0'>Success!</span>" ).'</p>';
 }
 
 ?>
