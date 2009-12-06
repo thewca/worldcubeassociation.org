@@ -6,18 +6,18 @@
 require( '../_header.php' );
 showDescription();
 exportPublic( array(
-  "Results"      => "*",
-  "Rounds"       => "*",
-  "Events"       => "*",
-  "Formats"      => "*",
-  "Countries"    => "*",
-  "Continents"   => "*",
-	"Persons"      => "SELECT id, subid, name, countryId, gender FROM Persons",
-  "Competitions" => "SELECT id, name, cityName, countryId, information, year,
+  'Results'      => '*',
+  'Rounds'       => '*',
+  'Events'       => '*',
+  'Formats'      => '*',
+  'Countries'    => '*',
+  'Continents'   => '*',
+  'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
+  'Competitions' => 'SELECT id, name, cityName, countryId, information, year,
                             month, day, endMonth, endDay, eventSpecs,
                             wcaDelegate, organiser, venue, venueAddress,
                             venueDetails, website, cellName, latitude, longitude
-                     FROM Competitions",
+                     FROM Competitions',
 ) );
 require( '../_footer.php' );
 
@@ -26,8 +26,8 @@ function showDescription () {
 #----------------------------------------------------------------------
 
   echo "<p><b>This script does *not* affect the database.<br><br>Exports the database to the public.</a>.</b></p><hr>";
-  
-  echo "<p style='font-size:3em;color:#F00'>Not finished! Don't make it public yet!</p>"; 
+
+  echo "<p style='font-size:3em;color:#F00'>Not finished! Don't make it public yet!</p>";
 }
 
 #----------------------------------------------------------------------
@@ -44,15 +44,15 @@ function exportPublic ( $sources ) {
   #------------------------------------------
   # PREPARATION
   #------------------------------------------
-  
+
   #--- Get old and new serial number
-  $oldSerial = file_get_contents( "serial.txt" );
+  $oldSerial = file_get_contents( 'serial.txt' );
   $serial = $oldSerial + 1;
-  file_put_contents( "serial.txt", $serial );
-  
+  file_put_contents( 'serial.txt', $serial );
+
   #--- Build the file basename
-  $basename         = sprintf( "WCA_export%03d_%s", $serial,    wcaDate( 'Ymd' ) );
-  $oldBasenameStart = sprintf( "WCA_export%03d_", $oldSerial );
+  $basename         = sprintf( 'WCA_export%03d_%s', $serial,    wcaDate( 'Ymd' ) );
+  $oldBasenameStart = sprintf( 'WCA_export%03d_', $oldSerial );
 
   #--- Prepare the sources
   foreach ( $sources as $tableName => $tableSource ) {
@@ -67,38 +67,39 @@ function exportPublic ( $sources ) {
   #------------------------------------------
   # README
   #------------------------------------------
-  
+
   #--- Build the README file
+  echo "<p><b>Build the README file</b></p>";
   instantiateTemplate( 'README.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
 
   #------------------------------------------
   # SQL
   #------------------------------------------
-  
+
   #--- Build the SQL file
+  echo "<p><b>Build the SQL file</b></p>";
   $sqlFile = "$basename.sql";
-  echo "<p><b>Creating: [$sqlFile]</b></p>";
   $mysqldumpOptions = "--add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
   $mysqldumpTables = implode( ' ', $tableNames );
   mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/tmpXAK_//g' > $sqlFile" );
-  
+
   #--- Build the SQL.ZIP file
+  echo "<p><b>Build the SQL.ZIP file</b></p>";
   $sqlZipFile  = "$sqlFile.zip";
   echo "<p><b>Creating: [$sqlZipFile]</b></p>";
   mySystem( "zip $sqlZipFile README.txt $sqlFile" );
-  
+
   #------------------------------------------
   # TSV
   #------------------------------------------
-  
+
   #--- Build the TSV files
-  echo "<p><b>Creating TSV files</b></p>";
+  echo '<p><b>Build the TSV files</b></p>';
   foreach ( $tableNames as $tableName ) {
-    echo "$tableName...<br />";
 
     #--- Do the query
     $dbResult = mysql_query( "SELECT * FROM $tableName" )
-      or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
+      or die( '<p>Unable to perform database query.<br/>\n(' . mysql_error() . ')</p>\n' );
 
     #--- Reset $values, add head row
     unset( $values, $head );
@@ -114,30 +115,31 @@ function exportPublic ( $sources ) {
 
     #--- Free the query result
     mysql_free_result( $dbResult );
-    
+
     #--- Store the tsv file
     $tableName = str_replace( 'tmpXAK_', '', $tableName );
     file_put_contents( "$tableName.tsv", $values );
   }
-  
+
   #--- Build the TSV.ZIP file
+  echo '<p><b>Build the TSV.ZIP file</b></p>';
   $tsvZipFile  = "$basename.tsv.zip";
-  echo "<p><b>Creating: [$tsvZipFile]</b></p>";
   mySystem( "zip $tsvZipFile README.txt *.tsv" );
-  
+
   #------------------------------------------
   # EXPORT.HTML
   #------------------------------------------
-  
-  #--- Build the export.html file
+
+  #--- Build the HTML file
+  echo '<p><b>Build the HTML file</b></p>';
   instantiateTemplate( 'export.html', array(
                        'sqlZipFile'     => $sqlZipFile,
-                       'sqlZipFileSize' => sprintf( "%.1f MB", filesize( $sqlZipFile ) / 1000000 ),
+                       'sqlZipFileSize' => sprintf( '%.1f MB', filesize( $sqlZipFile ) / 1000000 ),
                        'tsvZipFile'     => $tsvZipFile,
-                       'tsvZipFileSize' => sprintf( "%.1f MB", filesize( $tsvZipFile ) / 1000000 ) ) );
-  
+                       'tsvZipFileSize' => sprintf( '%.1f MB', filesize( $tsvZipFile ) / 1000000 ) ) );
+
   #--- Delete files we don't need anymore
-  echo "<p>rm README.txt $sqlFile $oldBasenameStart*</p>";
+  echo '<p><b>Delete files we don\'t need anymore</b></p>';
   mySystem( "rm README.txt $sqlFile $oldBasenameStart*" );
 
   #--- Return to /admin
@@ -154,7 +156,7 @@ function instantiateTemplate( $filename, $replacements ) {
 function mySystem ( $command ) {
   echo "<p>Executing <span style='background:#FF0'>$command</span></p>";
   system( $command, $retval );
-  echo "<p>" . ($retval ? "Error [$retval]" : "Success!") . "</p>";
+  echo '<p>' . ($retval ? "Error [$retval]" : "Success!") . '</p>';
 }
 
 ?>
