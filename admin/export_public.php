@@ -5,7 +5,20 @@
 
 require( '../_header.php' );
 showDescription();
-exportPublic();
+exportPublic( array(
+  "Results"      => "*",
+  "Rounds"       => "*",
+  "Events"       => "*",
+  "Formats"      => "*",
+  "Countries"    => "*",
+  "Continents"   => "*",
+	"Persons"      => "SELECT id, subid, name, countryId, gender FROM Persons",
+  "Competitions" => "SELECT id, name, cityName, countryId, information, year,
+                            month, day, endMonth, endDay, eventSpecs,
+                            wcaDelegate, organiser, venue, venueAddress,
+                            venueDetails, website, cellName, latitude, longitude
+                     FROM Competitions",
+) );
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
@@ -18,16 +31,12 @@ function showDescription () {
 }
 
 #----------------------------------------------------------------------
-function exportPublic () {
+function exportPublic ( $sources ) {
 #----------------------------------------------------------------------
   global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
 
   #--- Load the local configuration data.
   require( '../framework/_config.php' );
-
-  #--- Define what we want
-  $mysqldumpOptions = "--add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
-  $mysqldumpTables = "Competitions Continents Countries Events Formats Persons Results Rounds CompetitionsMedia";
 
   #--- We'll work in the /admin/export directory
   chdir( 'export' );
@@ -40,20 +49,31 @@ function exportPublic () {
   #--- Build the file basename
   $basename         = sprintf( "WCA_export%03d_%s", $serial,    wcaDate( 'Ymd' ) );
   $oldBasenameStart = sprintf( "WCA_export%03d_", $oldSerial );
-  
+
+  #--- Prepare the sources
+  foreach ( $sources as $tableName => $tableSource ) {
+    if ( $tableSource != '*' ) {
+      $tableName = "tmpXAK_$tableName";
+      dbCommand( "DROP TABLE IF EXISTS $tableName" );
+      dbCommand( "CREATE TABLE $tableName $tableSource" );
+    }
+    $tableNames[] = $tableName;
+  }
+
   #--- Build the README file
   instantiateTemplate( 'README.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
 
   #--- Build the SQL file
   $sqlFile = "$basename.sql";
-  echo "<p>Creating: [$sqlFile]</p>";
-  system( "mysqldump $mysqldumpOptions $mysqldumpTables > $sqlFile", $retval );
-  report( $retval );
+  echo "<p><b>Creating: [$sqlFile]</b></p>";
+  $mysqldumpOptions = "--add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
+  $mysqldumpTables = implode( ' ', $tableNames );
+  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/tmpXAK_//g' > $sqlFile" );
   
   #--- Build the SQL.ZIP file
   $sqlZipFile  = "$sqlFile.zip";
-  system( "zip $sqlZipFile README.txt $sqlFile", $retval );
-  report( $retval );
+  mySystem( "zip $sqlZipFile README.txt $sqlFile" );
+  echo "<p><b>Creating: [$sqlZipFile]</b></p>";
   
   #--- Build the INDEX file
   instantiateTemplate( 'export.html', array(
@@ -66,8 +86,7 @@ function exportPublic () {
   
   #--- Delete files we don't need anymore
   echo "<p>rm README.txt $sqlFile $oldBasenameStart*</p>";
-  system( "rm README.txt $sqlFile $oldBasenameStart*", $retval );
-  report( $retval );
+  mySystem( "rm README.txt $sqlFile $oldBasenameStart*" );
 
   #--- Return to /admin
   chdir( '..' );
@@ -80,7 +99,9 @@ function instantiateTemplate( $filename, $replacements ) {
   file_put_contents( $filename, $contents );
 }
 
-function report ( $retval ) {
+function mySystem ( $command ) {
+  echo "<p>Executing <span style='background:#0F0'>$command</span></p>";
+  system( $command, $retval );
   echo "<p>" . ($retval ? "Error [$retval]" : "Success!") . "</p>";
 }
 
