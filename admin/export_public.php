@@ -139,7 +139,8 @@ function exportPublic ( $sources ) {
                        'sqlZipFile'     => $sqlZipFile,
                        'sqlZipFileSize' => sprintf( '%.1f MB', filesize( $sqlZipFile ) / 1000000 ),
                        'tsvZipFile'     => $tsvZipFile,
-                       'tsvZipFileSize' => sprintf( '%.1f MB', filesize( $tsvZipFile ) / 1000000 ) ) );
+                       'tsvZipFileSize' => sprintf( '%.1f MB', filesize( $tsvZipFile ) / 1000000 ),
+                       'README'         => file_get_contents( 'README.txt' ) ) );
 
   #------------------------------------------
   # CLEAN UP and DEPLOY

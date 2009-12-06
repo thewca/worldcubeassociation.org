@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>WCA results export</title>
     <style type="text/css">
@@ -17,22 +18,30 @@
       dt {
         margin-top: 0.5em;
       }
+      #README {
+        background:   #eee;
+        font-size:    0.8em;
+        padding:      10px;
+        border:       1px solid #888
+      }
     </style>
   </head>
   <body>
-  
+
     <h1>WCA results export</h1>
-    
-    <p>On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. To prevent unnecessary downloads, we number and date the files so you can see whether you have the current version already.</p>
-    
+
+    <p>On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already.</p>
+
     <dl>
       <dt>SQL: <a href='[sqlZipFile]'>[sqlZipFile]</a> ([sqlZipFileSize])</dt>
       <dd>Database dump created with mysqldump, for import into SQL databases.</dd>
       <dt>TSV: <a href='[tsvZipFile]'>[tsvZipFile]</a> ([tsvZipFileSize])</dt>
       <dd>Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc.</dd>
     </dl>
-    
-    <p>Blah infos and conditions...</p>
-    
+
+    <p>The included README.txt contains the terms of use and a general description:</p>
+
+    <pre id='README'>[README]</pre>
+
   </body>
 </html>
