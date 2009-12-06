@@ -82,9 +82,9 @@ function exportPublic ( $sources ) {
   #--- Build the SQL file
   echo "<p><b>Build the SQL file</b></p>";
   $sqlFile = "$basename.sql";
-  $mysqldumpOptions = "--add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
+  $mysqldumpOptions = "-e --add-drop-table --default-character-set=latin1 --host=$configDatabaseHost -u $configDatabaseUser -p$configDatabasePass $configDatabaseName";
   $mysqldumpTables = implode( ' ', $tableNames );
-  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/$tmpPrefix//g' > $sqlFile" );
+  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/$tmpPrefix//g; s/^---/-- /' > $sqlFile" );
 
   #--- Build the SQL.ZIP file
   echo "<p><b>Build the SQL.ZIP file</b></p>";
