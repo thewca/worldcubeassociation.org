@@ -13,6 +13,8 @@ function showDescription () {
 #----------------------------------------------------------------------
 
   echo "<p><b>This script does *not* affect the database.<br><br>Exports the database to the public.</a>.</b></p><hr>";
+  
+  echo "<p style='font-size:3em;color:#F00'>Not finished! Don't make it public yet!</p>"; 
 }
 
 #----------------------------------------------------------------------
@@ -40,7 +42,7 @@ function exportPublic () {
   $oldBasenameStart = sprintf( "WCA_export%03d_", $oldSerial );
   
   #--- Build the README file
-  instantiateTemplate( 'README.template.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
+  instantiateTemplate( 'README.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
 
   #--- Build the SQL file
   $sqlFile = "$basename.sql";
@@ -54,7 +56,7 @@ function exportPublic () {
   report( $retval );
   
   #--- Build the INDEX file
-  instantiateTemplate( 'index.template.html', array(
+  instantiateTemplate( 'export.html', array(
                        'sqlFile'        => $sqlFile,
                        'sqlZipFile'     => $sqlZipFile,
                        'sqlZipFileSize' => sprintf( "%.1f MB", filesize( $sqlZipFile ) / 1000000 ),
@@ -71,11 +73,11 @@ function exportPublic () {
   chdir( '..' );
 }
 
-function instantiateTemplate( $templateFile, $replacements ) {
-  $contents = file_get_contents( $templateFile );
+#--- Instantiate template: Read template, fill data, write output
+function instantiateTemplate( $filename, $replacements ) {
+  $contents = file_get_contents( "template.$filename" );
   $contents = preg_replace( '/\[(\w+)\]/e', '$replacements[$1]', $contents );
-  $outputFile = preg_replace( '/\.template/', '', $templateFile );
-  file_put_contents( $outputFile, $contents );
+  file_put_contents( $filename, $contents );
 }
 
 function report ( $retval ) {
