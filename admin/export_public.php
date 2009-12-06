@@ -41,6 +41,10 @@ function exportPublic ( $sources ) {
   #--- We'll work in the /admin/export directory
   chdir( 'export' );
 
+  #------------------------------------------
+  # PREPARATION
+  #------------------------------------------
+  
   #--- Get old and new serial number
   $oldSerial = file_get_contents( "serial.txt" );
   $serial = $oldSerial + 1;
@@ -60,9 +64,17 @@ function exportPublic ( $sources ) {
     $tableNames[] = $tableName;
   }
 
+  #------------------------------------------
+  # README
+  #------------------------------------------
+  
   #--- Build the README file
   instantiateTemplate( 'README.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
 
+  #------------------------------------------
+  # SQL
+  #------------------------------------------
+  
   #--- Build the SQL file
   $sqlFile = "$basename.sql";
   echo "<p><b>Creating: [$sqlFile]</b></p>";
@@ -72,15 +84,55 @@ function exportPublic ( $sources ) {
   
   #--- Build the SQL.ZIP file
   $sqlZipFile  = "$sqlFile.zip";
-  mySystem( "zip $sqlZipFile README.txt $sqlFile" );
   echo "<p><b>Creating: [$sqlZipFile]</b></p>";
+  mySystem( "zip $sqlZipFile README.txt $sqlFile" );
   
-  #--- Build the INDEX file
+  #------------------------------------------
+  # TSV
+  #------------------------------------------
+  
+  #--- Build the TSV files
+  echo "<p><b>Creating TSV files</b></p>";
+  foreach ( $tableNames as $tableName ) {
+    echo "$tableName...<br />";
+
+    #--- Do the query
+    $dbResult = mysql_query( "SELECT * FROM $tableName" )
+      or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
+
+    #--- Reset $values, add head row
+    unset( $values, $head );
+    for ( $i=0; $i<mysql_num_fields($dbResult); $i++ ) {
+      $meta = mysql_fetch_field( $dbResult, $i );
+      $head[] = $meta->name;
+    }
+    $values[] = implode( "\t", preg_replace( '/\s+/', ' ', $head ) ) . "\n";
+
+    #--- Add data rows
+    while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) )
+      $values[] = implode( "\t", preg_replace( array('/^\s+|\s+$/','/\s+/'), array('',' '),$row ) ) . "\n";
+
+    #--- Free the query result
+    mysql_free_result( $dbResult );
+    
+    #--- Store the tsv file
+    $tableName = str_replace( 'tmpXAK_', '', $tableName );
+    file_put_contents( "$tableName.tsv", $values );
+  }
+  
+  #--- Build the TSV.ZIP file
+  $tsvZipFile  = "$basename.tsv.zip";
+  echo "<p><b>Creating: [$tsvZipFile]</b></p>";
+  mySystem( "zip $tsvZipFile README.txt *.tsv" );
+  
+  #------------------------------------------
+  # EXPORT.HTML
+  #------------------------------------------
+  
+  #--- Build the export.html file
   instantiateTemplate( 'export.html', array(
-                       'sqlFile'        => $sqlFile,
                        'sqlZipFile'     => $sqlZipFile,
                        'sqlZipFileSize' => sprintf( "%.1f MB", filesize( $sqlZipFile ) / 1000000 ),
-                       'tsvFile'        => $tsvFile,
                        'tsvZipFile'     => $tsvZipFile,
                        'tsvZipFileSize' => sprintf( "%.1f MB", filesize( $tsvZipFile ) / 1000000 ) ) );
   
@@ -100,7 +152,7 @@ function instantiateTemplate( $filename, $replacements ) {
 }
 
 function mySystem ( $command ) {
-  echo "<p>Executing <span style='background:#0F0'>$command</span></p>";
+  echo "<p>Executing <span style='background:#FF0'>$command</span></p>";
   system( $command, $retval );
   echo "<p>" . ($retval ? "Error [$retval]" : "Success!") . "</p>";
 }
