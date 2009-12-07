@@ -82,6 +82,7 @@ function exportPublic ( $sources ) {
   #--- Build the SQL file
   echo "<p><b>Build the SQL file</b></p>";
   $sqlFile = "$basename.sql";
+  $configDatabaseHost = str_replace( ':', ' --port=', $configDatabaseHost );
   $mysqldumpOptions = "-e --add-drop-table --default-character-set=latin1 --compress --host=$configDatabaseHost --user=$configDatabaseUser --password=$configDatabasePass $configDatabaseName";
   $mysqldumpTables = implode( ' ', $tableNames );
   mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/$tmpPrefix//g; s/^---/-- /' > $sqlFile" );
