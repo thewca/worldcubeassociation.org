@@ -48,6 +48,9 @@ function showPages () {
             'Updates the statistics page that normal users can see (youngest/oldest solvers, etc).',
             '../statistics.php?update8392=1' );
 
+  showPage( 'export_public',
+            'Exports the database to the public.' );
+
 #  showPage( 'compute_competition_events',
 #            'Computes the eventSpecs field in the Competitions table for competitions without (TODO: WITHOUT???) results. *DOES* change the database.' );
 

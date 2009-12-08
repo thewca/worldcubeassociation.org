@@ -26,8 +26,6 @@ function showDescription () {
 #----------------------------------------------------------------------
 
   echo "<p><b>This script does *not* affect the database.<br><br>Exports the database to the public.</a>.</b></p><hr>";
-
-  echo "<p style='font-size:3em;color:#F00'>Not finished! Don't make it public yet!</p>";
 }
 
 #----------------------------------------------------------------------
@@ -155,6 +153,13 @@ function exportPublic ( $sources ) {
   echo "<p><b>Delete temporary and old stuff we don't need anymore</b></p>";
   mySystem( "rm README.txt $sqlFile *.tsv" );
   mySystem( "rm ../../misc/$oldBasenameStart*" );
+
+  #------------------------------------------
+  # FINISHED
+  #------------------------------------------
+
+  #--- Tell the result
+  noticeBox ( true, "Finished $basename.<br />Have a look at <a href='../misc/export.html'>the results</a>." );
 
   #--- Return to /admin
   chdir( '..' );
