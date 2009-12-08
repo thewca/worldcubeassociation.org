@@ -41,9 +41,6 @@ function exportPublic ( $sources ) {
   #--- We'll work in the /admin/export directory
   chdir( 'export' );
 
-  #--- The prefix for the temporary tables
-  $tmpPrefix = 'tmpXAK_';
-  
   #------------------------------------------
   # PREPARATION
   #------------------------------------------
@@ -57,14 +54,56 @@ function exportPublic ( $sources ) {
   $basename         = sprintf( 'WCA_export%03d_%s', $serial,    wcaDate( 'Ymd' ) );
   $oldBasenameStart = sprintf( 'WCA_export%03d_', $oldSerial );
 
-  #--- Prepare the sources
+  #------------------------------------------
+  # SQL + TSVs
+  #------------------------------------------
+
+  #--- Build SQL and TSV files
+  echo "<p><b>Build SQL and TSV files</b></p>";
+
+  #--- Start the SQL file
+  $sqlFile = "WCA_export.sql";
+  file_put_contents( $sqlFile, "--\n-- $basename\n-- Also read the README.txt\n--\n" );
+
+  #--- Walk the tables, create SQL file and TSV files
   foreach ( $sources as $tableName => $tableSource ) {
-    if ( $tableSource != '*' ) {
-      $tableName = "$tmpPrefix$tableName";
-      dbCommand( "DROP TABLE IF EXISTS $tableName" );
-      dbCommand( "CREATE TABLE $tableName $tableSource" );
+    startTimer();
+
+    #--- Get the query
+    $query = ($tableSource != '*') ? $tableSource : "SELECT * FROM $tableName";
+
+    #--- Add the SQL for creating the table
+    file_put_contents( $sqlFile, getTableCreationSql( $tableName, $query ), FILE_APPEND );
+
+    #--- Do the query
+    $dbResult = mysql_query( $query )
+      or die( '<p>Unable to perform database query.<br/>\n(' . mysql_error() . ')</p>\n' );
+
+    #--- Start the TSV file
+    $tsvFile = "WCA_export_$tableName.tsv";
+    file_put_contents( $tsvFile, getTsvHeader( $dbResult ) );
+
+    #--- Add data rows
+    unset( $tsv, $sqlInserts );
+    while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
+      $niceValues = preg_replace( array('/^\s+|\s+$/','/\s+/'), array('',' '), $row );
+      $tsv .= implode( "\t", $niceValues ) . "\n";
+      $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $niceValues ) ) . "')";
+      if ( strlen($tsv)>200000 ) {
+        $sql = "INSERT INTO `$tableName` VALUES " . implode( ",\n", $sqlInserts ) . ";\n";
+        file_put_contents( $tsvFile, $tsv, FILE_APPEND );
+        file_put_contents( $sqlFile, $sql, FILE_APPEND );
+        unset( $tsv, $sqlInserts );
+      }
     }
-    $tableNames[] = $tableName;
+    $sql = "INSERT INTO `$tableName` VALUES\n" . implode( ",\n", $sqlInserts ) . ";\n";
+    file_put_contents( $tsvFile, $tsv, FILE_APPEND );
+    file_put_contents( $sqlFile, $sql, FILE_APPEND );
+
+    #--- Free the query result
+    mysql_free_result( $dbResult );
+
+    stopTimer( $tableName );
   }
 
   #------------------------------------------
@@ -76,62 +115,18 @@ function exportPublic ( $sources ) {
   instantiateTemplate( 'README.txt', array( 'longDate' => wcaDate( 'F j, Y' ) ) );
 
   #------------------------------------------
-  # SQL
+  # ZIPs
   #------------------------------------------
 
-  #--- Build the SQL file
-  echo "<p><b>Build the SQL file</b></p>";
-  $sqlFile = "$basename.sql";
-  $configDatabaseHost = str_replace( ':', ' --port=', $configDatabaseHost );
-  $mysqldumpOptions = "-e --add-drop-table --default-character-set=latin1 --compress --host=$configDatabaseHost --user=$configDatabaseUser --password=$configDatabasePass $configDatabaseName";
-  $mysqldumpTables = implode( ' ', $tableNames );
-  mySystem( "mysqldump $mysqldumpOptions $mysqldumpTables | perl -pe 's/$tmpPrefix//g; s/^---/-- /' > $sqlFile" );
-
-  #--- Build the SQL.ZIP file
-  echo "<p><b>Build the SQL.ZIP file</b></p>";
-  $sqlZipFile  = "$sqlFile.zip";
-  echo "<p><b>Creating: [$sqlZipFile]</b></p>";
-  mySystem( "zip $sqlZipFile README.txt $sqlFile" );
-
-  #------------------------------------------
-  # TSV
-  #------------------------------------------
-
-  #--- Build the TSV files
-  echo '<p><b>Build the TSV files</b></p>';
-  foreach ( $tableNames as $tableName ) {
-
-    #--- Do the query
-    $dbResult = mysql_query( "SELECT * FROM $tableName" )
-      or die( '<p>Unable to perform database query.<br/>\n(' . mysql_error() . ')</p>\n' );
-
-    #--- Reset $values, add head row
-    unset( $values, $head );
-    for ( $i=0; $i<mysql_num_fields($dbResult); $i++ ) {
-      $meta = mysql_fetch_field( $dbResult, $i );
-      $head[] = $meta->name;
-    }
-    $values[] = implode( "\t", preg_replace( '/\s+/', ' ', $head ) ) . "\n";
-
-    #--- Add data rows
-    while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) )
-      $values[] = implode( "\t", preg_replace( array('/^\s+|\s+$/','/\s+/'), array('',' '),$row ) ) . "\n";
-
-    #--- Free the query result
-    mysql_free_result( $dbResult );
-
-    #--- Store the tsv file
-    $tableName = str_replace( $tmpPrefix, '', $tableName );
-    file_put_contents( "$tableName.tsv", $values );
-  }
-
-  #--- Build the TSV.ZIP file
-  echo '<p><b>Build the TSV.ZIP file</b></p>';
+  #--- Build the ZIP files
+  echo "<p><b>Build the ZIP files</b></p>";
+  $sqlZipFile  = "$basename.sql.zip";
   $tsvZipFile  = "$basename.tsv.zip";
+  mySystem( "zip $sqlZipFile README.txt $sqlFile" );
   mySystem( "zip $tsvZipFile README.txt *.tsv" );
 
   #------------------------------------------
-  # EXPORT.HTML
+  # HTML
   #------------------------------------------
 
   #--- Build the HTML file
@@ -144,37 +139,69 @@ function exportPublic ( $sources ) {
                        'README'         => file_get_contents( 'README.txt' ) ) );
 
   #------------------------------------------
-  # CLEAN UP and DEPLOY
+  # DEPLOY
   #------------------------------------------
-
-  #--- Delete temporary stuff we don't need anymore
-  echo '<p><b>Delete temporary stuff we don\'t need anymore</b></p>';
-  mySystem( "rm README.txt $sqlFile *.tsv" );
-  foreach ( $tableNames as $tableName )
-    if ( preg_match( "/^$tmpPrefix/", $tableName ) )
-      dbCommand( "DROP TABLE IF EXISTS $tableName" );
 
   #--- Move new files to public directory
   echo '<p><b>Move new files to public directory</b></p>';
   mySystem( "mv $sqlZipFile $tsvZipFile ../../misc/" );
   mySystem( "mv export.html ../../misc/" );
 
-  #--- Delete previous files from public directory
-  echo '<p><b>Delete previous files from public directory</b></p>';
+  #------------------------------------------
+  # CLEAN UP
+  #------------------------------------------
+
+  #--- Delete temporary and old stuff we don't need anymore
+  echo "<p><b>Delete temporary and old stuff we don't need anymore</b></p>";
+  mySystem( "rm README.txt $sqlFile *.tsv" );
   mySystem( "rm ../../misc/$oldBasenameStart*" );
 
   #--- Return to /admin
   chdir( '..' );
 }
 
-#--- Instantiate template: Read template, fill data, write output
+#----------------------------------------------------------------------
+function getTableCreationSql ( $tableName, $query ) {
+#----------------------------------------------------------------------
+
+  #--- Get the creator code
+  dbCommand( "DROP TABLE IF EXISTS wca_export_helper" );
+  dbCommand( "CREATE TABLE wca_export_helper $query LIMIT 0" );
+  $rows = dbQuery( "SHOW CREATE TABLE wca_export_helper" );
+  dbCommand( "DROP TABLE IF EXISTS wca_export_helper" );
+  $creator = str_replace( 'wca_export_helper', $tableName, $rows[0][1] );
+
+  #--- Return DROP and CREATE
+  return "\nDROP TABLE IF EXISTS `$tableName`;\n$creator;\n\n";
+}
+
+#----------------------------------------------------------------------
+function getTsvHeader ( $dbResult ) {
+#----------------------------------------------------------------------
+
+  #--- Extract the column names and return a TSV head row
+  for ( $i=0; $i<mysql_num_fields($dbResult); $i++ ) {
+    $meta = mysql_fetch_field( $dbResult, $i );
+    $head[] = $meta->name;
+  }
+  return implode( "\t", $head ) . "\n";
+}
+
+#----------------------------------------------------------------------
 function instantiateTemplate( $filename, $replacements ) {
+#----------------------------------------------------------------------
+
+  #--- Read template, fill data, write output
   $contents = file_get_contents( "template.$filename" );
   $contents = preg_replace( '/\[(\w+)\]/e', '$replacements[$1]', $contents );
   file_put_contents( $filename, $contents );
 }
 
+#----------------------------------------------------------------------
 function mySystem ( $command ) {
+#----------------------------------------------------------------------
+
+  #--- Show the command, execute it, show the result
   echo "<p>Executing <span style='background:#FF0'>" . preg_replace( '/--password=\S+/', '--password=########', $command ) . "</span></p>";
   system( $command, $retval );
   echo '<p>'.( $retval ? "<span style='background:#F00'>Error [$retval]</span>"
