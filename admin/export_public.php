@@ -6,15 +6,15 @@
 require( '../_header.php' );
 showDescription();
 exportPublic( array(
-  'Results'      => 'SELECT competitionId, eventId, roundId, pos,
-                            personName, personId, res.countryId personCountryId,
-                            best, average, formatId,
-                            value1, value2, value3, value4, value5,
-                            regionalSingleRecord, regionalAverageRecord
-                     FROM Results res, Competitions com, Events eve, Rounds rou
-                     WHERE com.id=competitionId AND eve.id=eventId AND rou.id=roundId
-                     ORDER BY com.year, com.month, com.day, com.id,
-                           eve.rank, rou.rank, pos',
+  'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
+                              best, average,
+                              personName, personId, result.countryId personCountryId,
+                              formatId, value1, value2, value3, value4, value5,
+                              regionalSingleRecord, regionalAverageRecord
+                     FROM     Results result, Competitions competition, Events event, Rounds round
+                     WHERE    competition.id=competitionId AND event.id=eventId AND round.id=roundId
+                     ORDER BY competition.year, competition.month, competition.day, competition.id,
+                              event.rank, round.rank, pos, average, best, personName',
   'Rounds'       => '*',
   'Events'       => '*',
   'Formats'      => '*',
