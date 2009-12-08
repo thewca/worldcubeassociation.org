@@ -7,7 +7,7 @@ require( '../_header.php' );
 showDescription();
 exportPublic( array(
   'Results'      => 'SELECT competitionId, eventId, roundId, pos,
-                            personName, personId, res.countryId personCountry,
+                            personName, personId, res.countryId personCountryId,
                             best, average, formatId,
                             value1, value2, value3, value4, value5,
                             regionalSingleRecord, regionalAverageRecord

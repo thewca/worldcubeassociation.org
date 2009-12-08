@@ -182,4 +182,18 @@ function getFullCompetitionInfos ( $id ) {
   return $results[0];
 }
 
+#----------------------------------------------------------------------
+function dbDebug ( $query ) {
+#----------------------------------------------------------------------
+
+  echo "<table border='1'>";
+  foreach ( dbQuery( $query ) as $row ) {
+    echo "<tr>";
+    foreach ( array_values( $row ) as $value )
+      echo "<td>" . htmlEntities( $value ) . "</td>"; 
+    echo "</tr>";
+  }
+  echo "</table>";
+}
+
 ?>
