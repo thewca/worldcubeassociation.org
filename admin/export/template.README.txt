@@ -60,13 +60,13 @@ the Results table need some explanation:
     but also the number of attempted and solved cubes. Writing the value in
     decimal it is interpreted like this:
       old: 1SSAATTTTT
-             timeInSeconds = TTTTT (99999 means unknown)
-             attempted     = AA
              solved        = 99 - SS
-      new: 0DDTTTTTMM
-             missed        = MM
+             attempted     = AA
              timeInSeconds = TTTTT (99999 means unknown)
+      new: 0DDTTTTTMM
              difference    = 99 - DD
+             timeInSeconds = TTTTT (99999 means unknown)
+             missed        = MM
              solved        = difference + missed
              attempted     = solved + missed
     Note that this is designed so that a smaller value means a better result.
