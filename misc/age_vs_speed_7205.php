@@ -3,7 +3,7 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
-$currentSection = 'statistics';
+$currentSection = 'misc';
 
 require( '../_header.php' );
 

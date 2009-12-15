@@ -138,13 +138,13 @@ echo "markerVioletp = { icon:violetIconp };\n";
 <?
   $sections = array(
     array( 'Home',         '../index'     ),
-    array( 'Results',      'index'        ),
     array( 'Rankings',     'events'       ),
     array( 'Records',      'regions'      ),
     array( 'Competitions', 'competitions' ),
     array( 'Persons',      'persons'      ),
     array( 'Multimedia',   'media'        ),
-    array( 'Statistics',   'statistics'   )
+    array( 'Statistics',   'statistics'   ),
+    array( 'Misc',         'misc'         ),
   );
 ?>
 
