@@ -72,8 +72,8 @@ function showBody () {
 website. This may take a few days.</p>
 
 <p>The picture must follow the requirements : 
-<ul><li>200x300 pixels</li>
-<li>50 Ko maximum</li>
+<ul><li>200x300 pixels (width x height)</li>
+<li>50 KB maximum</li>
 <li>Formats accepted : jpg, gif and png</li></ul>
 
 <form method="POST" action="person_set.php" enctype="multipart/form-data">
