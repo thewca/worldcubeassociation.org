@@ -24,10 +24,12 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenList, $chosenMap;
+  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenPatternHtml, $chosenPatternMysql, $chosenList, $chosenMap;
 
   $chosenEventId  = getNormalParam( 'eventId' );
   $chosenRegionId = getNormalParam( 'regionId' );
+  $chosenPatternHtml  = getHtmlParam( 'pattern' );
+  $chosenPatternMysql = getMysqlParam( 'pattern' );
   $chosenYears    = getNormalParam( 'years' );
   $chosenList     = getBooleanParam( 'list' );
   $chosenMap      = getBooleanParam( 'map' );
@@ -40,12 +42,13 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
 function offerChoices () {
 #----------------------------------------------------------------------
-  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenList, $chosenMap;
+  global $chosenEventId, $chosenRegionId, $chosenYears, $chosenPatternHtml, $chosenList, $chosenMap;
 
   displayChoices( array(
     eventChoice( false ),
     regionChoice( true ),
     yearsChoice( true, true, false, true ),
+    textFieldChoice( 'pattern', 'Name or name parts', $chosenPatternHtml ),
     choiceButton( $chosenList, 'list', 'List' ),
     choiceButton( $chosenMap, 'map', 'Map' )
   ));
@@ -54,7 +57,7 @@ function offerChoices () {
 #----------------------------------------------------------------------
 function listCompetitions () {
 #----------------------------------------------------------------------
-  global $chosenEventId, $chosenYears, $chosenRegionId;
+  global $chosenEventId, $chosenYears, $chosenRegionId, $chosenPatternHtml, $chosenPatternMysql;
 
   #--- Prepare stuff for the query.
   if( $chosenEventId )
@@ -62,6 +65,8 @@ function listCompetitions () {
   $yearCondition = yearCondition();
   if( $chosenRegionId  &&  $chosenRegionId != 'World' )
     $regionCondition = "AND (competition.countryId = '$chosenRegionId' OR continentId = '$chosenRegionId')"; #TODP: remove the 'competition.' once we get countryId out of the Results table.
+  foreach( explode( ' ', $chosenPatternMysql ) as $namePart )
+    $nameCondition .= " AND competition.cellName like '%$namePart%'";
 
   #--- Get data of the (matching) competitions.
   $competitions = dbQuery("
@@ -77,12 +82,13 @@ function listCompetitions () {
       $eventCondition
       $yearCondition
       $regionCondition
+      $nameCondition
     ORDER BY
       year DESC, month DESC, day DESC
   ");
 
   tableBegin( 'results', 5 );
-  tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears )));
+  tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears, $chosenPatternHtml ? "\"$chosenPatternHtml\"" : '' )));
   tableHeader( split( '\\|', 'Year|Date|Name|Country, City|Venue' ),
                array( 4 => 'class="f"' ));
 
@@ -93,7 +99,7 @@ function listCompetitions () {
       tableRowEmpty();
     $previousYear = $year;
 
-    $isPast = date( 'Ymd' ) > (10000*$year + 100*$month + $day);
+    $isPast = wcaDate( 'Ymd' ) > (10000*$year + 100*$month + $day);
 
     tableRow( array(
       $year,
