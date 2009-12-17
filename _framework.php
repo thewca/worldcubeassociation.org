@@ -101,9 +101,9 @@ function competitionCondition () {
 function yearCondition () {
   global $chosenYears;
 
+  #--- current = 90 days into the past + all future
   if( $chosenYears == 'current' )
-    return "AND (10000*year+100*month+day)>" . 
-	 date( 'Ymd', mktime(0, 0, 0, date( 'm' ) - 3, date( 'd' ), date( 'Y' )) );
+    return "AND (10000*year+100*month+day)>" . wcaDate( 'Ymd', time() - 90 * 24 * 60 * 60 );
 
   if( preg_match( '/^until (\d+)$/', $chosenYears, $match ))
     return " AND year <= $match[1] ";
@@ -164,12 +164,12 @@ function pathToRoot () {
 }
 
 #----------------------------------------------------------------------
-function wcaDate ( $format = "r" ) {
+function wcaDate ( $format='r', $timestamp=false ) {
 #----------------------------------------------------------------------
 
   #--- Set timezone (otherwise date() might complain), then return the date
-  date_default_timezone_set( 'America/Los_Angeles' );
-  return date( $format );
+  date_default_timezone_set( 'Europe/Berlin' );
+  return date( $format, $timestamp ? $timestamp : time() );
 }
 
 ?>

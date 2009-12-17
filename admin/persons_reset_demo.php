@@ -25,7 +25,7 @@ function showDescription () {
 function resetDemo () {
 #----------------------------------------------------------------------
 
-  echo date('l dS \of F Y h:i:s A') . "<br /><br />\n";
+  echo wcaDate() . "<br /><br />\n";
 
   #--- Delete all persons in Persons that were created at Caltech Winter 2007.
   echo "Deleting all persons in Persons that were created at Caltech Winter 2007.<br>";

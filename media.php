@@ -22,7 +22,7 @@ function analyzeChoices () {
   $chosenOrder     = getNormalParam( 'order' );
 
   if ( getNormalParam( 'filter' ) == '' )
-    $chosenYears = "only " . date( 'Y' );
+    $chosenYears = "only " . wcaDate( 'Y' );
 
   if( ! preg_match( '/^(date|submission)$/', $chosenOrder ))
     $chosenOrder = 'submission';

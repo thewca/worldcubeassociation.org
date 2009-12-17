@@ -23,9 +23,9 @@ if( ! $competition ){
 require( 'competition_infos.php' );
 showCompetitionInfos();
 
-if( date( 'Ymd' ) >= (10000*$competition['year'] + 
-                        100*$competition['month'] + 
-                            $competition['day']) ){
+if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] + 
+                           100*$competition['month'] + 
+                               $competition['day']) ){
 
   #--- Show competition results...
   offerChoicesResults();

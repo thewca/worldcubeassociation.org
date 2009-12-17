@@ -24,8 +24,7 @@ function showDescription () {
 function computeConciseRecords () {
 #----------------------------------------------------------------------
 
-  date_default_timezone_set( 'Europe/Berlin' );
-  echo date('r') . "<br /><br />\n";
+  echo wcaDate() . "<br /><br />\n";
 
   foreach( array( array( 'best', 'Single' ), array( 'average', 'Average' )) as $foo ){
     $valueSource = $foo[0];

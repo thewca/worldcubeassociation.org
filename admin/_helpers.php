@@ -4,7 +4,7 @@
 function generateNewPassword ( $id ) {
 #----------------------------------------------------------------------
 
-  return sha1( $id . "foobidoo" . date( "F d Y, H:i:s" ));
+  return sha1( $id . "foobidoo" . wcaDate() );
 }
 
 #----------------------------------------------------------------------
