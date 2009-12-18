@@ -48,7 +48,7 @@ function offerChoices () {
     eventChoice( false ),
     regionChoice( true ),
     yearsChoice( true, true, false, true ),
-    textFieldChoice( 'pattern', 'Name or name parts', $chosenPatternHtml ),
+    textFieldChoice( 'pattern', 'Name, City or Venue', $chosenPatternHtml ),
     choiceButton( $chosenList, 'list', 'List' ),
     choiceButton( $chosenMap, 'map', 'Map' )
   ));
@@ -66,7 +66,9 @@ function listCompetitions () {
   if( $chosenRegionId  &&  $chosenRegionId != 'World' )
     $regionCondition = "AND (competition.countryId = '$chosenRegionId' OR continentId = '$chosenRegionId')"; #TODP: remove the 'competition.' once we get countryId out of the Results table.
   foreach( explode( ' ', $chosenPatternMysql ) as $namePart )
-    $nameCondition .= " AND competition.cellName like '%$namePart%'";
+    $nameCondition .= " AND (competition.cellName like '%$namePart%' OR
+                             cityName             like '%$namePart%' OR
+                             venue                like '%$namePart%')";
 
   #--- Get data of the (matching) competitions.
   $competitions = dbQuery("
