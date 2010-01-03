@@ -112,6 +112,8 @@ function computeRanks () {
         eventId
       FROM 
         Concise${valueName}Results
+      WHERE
+        eventId <> '333mbo'
       GROUP BY
         eventId,
         personId
@@ -156,6 +158,8 @@ function computeRanks () {
         continentId
       FROM 
         Concise${valueName}Results
+      WHERE
+        eventId <> '333mbo'
       GROUP BY
         eventId,
         personId,
@@ -200,6 +204,8 @@ function computeRanks () {
         countryId
       FROM 
         Concise${valueName}Results
+      WHERE
+        eventId <> '333mbo'
       GROUP BY
         eventId,
         personId,

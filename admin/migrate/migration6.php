@@ -82,7 +82,10 @@ function moveOldMulti () {
     foreach( range( 1, $result['formatId'] ) as $n ){
 
       $value = $result["value$n"];
-      if( $value <= 0 ) continue;
+      if( $value <= 0 ){
+        $values[$n] = $value;
+        continue;
+      }
 
       $old = intval( $value / 1000000000);
 
@@ -119,7 +122,7 @@ function moveOldMulti () {
       }
 
       else
-        $values[$n] = -1;
+        $values[$n] = -2;
 
     }
 

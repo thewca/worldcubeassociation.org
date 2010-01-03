@@ -33,6 +33,7 @@ $results = dbQuery("
     AND event.id       = result.eventId
     AND country.id     = result.countryId
     AND competition.id = result.competitionId
+    AND event.rank < 999
   ORDER BY
     rank, type DESC, year, month, day, roundId, personName
 ");

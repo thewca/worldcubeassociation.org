@@ -22,6 +22,7 @@ function showResultsByEvents () {
     WHERE ".randomDebug()."
       AND personId = '$chosenPersonId'
       AND event.id = eventId
+      AND event.rank < 999
       AND competition.id = competitionId
       AND round.id = roundId
     ORDER BY

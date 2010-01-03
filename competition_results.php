@@ -162,17 +162,20 @@ function getCompetitionResults () {
       event.cellName  eventCellName,
       event.format    valueFormat
     FROM
-      Results   result,
-      Events    event,
-      Rounds    round,
-      Formats   format,
-      Countries country
+      Results      result,
+      Events       event,
+      Rounds       round,
+      Formats      format,
+      Countries    country,
+      Competitions competition
     WHERE ".randomDebug()."
       AND competitionId = '$chosenCompetitionId'
+      AND competition.id = '$chosenCompetitionId'
       AND event.id      = eventId
       AND round.id      = roundId
       AND format.id     = formatId
-      AND country.id    = countryId
+      AND country.id    = result.countryId
+      AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
       $viewCondition
     ORDER BY
       $order
