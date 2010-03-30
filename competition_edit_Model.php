@@ -157,6 +157,7 @@ function checkData () {
 
   checkRegularFields();
   checkEventSpecifications();
+  checkCountrySpecifications();
 }
 
 #----------------------------------------------------------------------
@@ -191,6 +192,24 @@ function checkEventSpecifications () {
 
     if( ! preg_match( "/^(|\d+(:\d+|))$/", $data["timeLimit$id"] ))
       $dataError["event$id"] = true;
+  }
+}
+
+#----------------------------------------------------------------------
+function checkCountrySpecifications () {
+#----------------------------------------------------------------------
+  global $data, $dataError;
+
+  $competitionId = $data['competitionId'];
+
+  $allCountriesIds = getAllUsedCountriesIds();
+
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );
+  foreach( $regIds as $regId ){
+
+    $regId = $regId['id'];
+    $countryId = $data["reg${regId}countryId"];
+    if( !in_array($countryId, $allCountriesIds)) $dataError["reg${regId}countryId"] = true;
   }
 }
 

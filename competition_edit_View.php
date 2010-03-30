@@ -218,7 +218,7 @@ function showAdminOptions () {
 #----------------------------------------------------------------------
 function showRegs () {
 #----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
+  global $data, $dataError, $chosenCompetitionId;
 
   echo "<hr><h1>Registration</h1>";
 
@@ -266,26 +266,17 @@ function showRegs () {
   foreach( $comps as $comp ){
     extract( $comp );
     $name = htmlEntities( $name, ENT_QUOTES );
-	 $personId = htmlEntities( $personId, ENT_QUOTES );
+    $personId = htmlEntities( $personId, ENT_QUOTES );
 
-    if( $status == 'p' ) echo "<tr bgcolor='#FFCCCC'>";
-	 else if ($status == 'a' ) echo "<tr bgcolor='#CCFFCC'>";
+    if( $dataError["reg${id}countryId"] ) echo "<tr bgcolor='#FF3333'>";
+    else if( $status == 'p' ) echo "<tr bgcolor='#FFCCCC'>";
+    else if( $status == 'a' ) echo "<tr bgcolor='#CCFFCC'>";
     echo "  <td><input type='checkbox' id='reg${id}accept' name='reg${id}accept' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>\n";
     echo "  <td><input type='text' id='reg${id}personId' name='reg${id}personId' value='$personId' size='10' maxlength='10' /></td>\n";
     echo "  <td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>\n";
-    
-    echo "  <td><select id='reg${id}countryId' name='reg${id}countryId'>";
-    foreach( dbQuery( "SELECT * FROM Countries" ) as $country ){
-      $cId   = $country['id'  ];
-      $cName = $country['name'];
-      if( $cId == $countryId )
-        echo "    <option value=\"$cId\" selected='selected' >$cName</option>\n";
-      else
-        echo "    <option value=\"$cId\">$cName</option>\n";
-    }
-    echo "  </select></td>";
+    echo "  <td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>\n";    
 
     foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
       $eventId = $event['id'];

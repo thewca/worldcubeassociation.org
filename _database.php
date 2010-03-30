@@ -139,7 +139,7 @@ function getAllIDs ( $rows ) {
 function getAllEventIds                    () { return getAllIDs( getAllEvents()                    ); }
 function getAllUnofficialEventIds          () { return getAllIDs( getAllUnofficialEvents()          ); }
 function getAllCompetitionIds              () { return getAllIDs( getAllCompetitions()              ); }
-function getAllUsedCountrieIds             () { return getAllIDs( getAllUsedCountries()             ); }
+function getAllUsedCountriesIds             () { return getAllIDs( getAllUsedCountries()             ); }
 function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCountriesCompetitions() ); }
 function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
 
