@@ -322,6 +322,8 @@ function savePreregForm () {
     return;
   }
 
+  $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
+
   #--- Building query
   $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments, ip, status";
   $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments', '$ip', 'p'";

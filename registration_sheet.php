@@ -36,11 +36,11 @@ function generateSheet () {
 
   $sep = ',';
 
-  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId' AND status='a'");
+  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
 
   $competition = getFullCompetitionInfos( $chosenCompetitionId);
 
-  $file = "$sep$sep$sep$sep$sep";
+  $file = "Status${sep}Name${sep}Country${sep}WCA ID${sep}Birth Date${sep}Gender$sep";
 
   foreach( getAllEvents() as $event ){
     extract( $event );
@@ -51,17 +51,20 @@ function generateSheet () {
     }
   }
 
-  $file .= $cr;											  
+  $file .= "${sep}Email${sep}Guests${sep}IP";
+  $file .= $cr;
 
 
   foreach( $results as $result ){
 
     extract( $result );
-    $file .= "$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$gender$sep";
+    $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
+    $file .= "$status$sep$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$gender$sep";
     foreach( $eventIds as $eventId ){
       $offer = $result["E$eventId"];
       $file	.= "$sep$offer";
     }
+    $file .= "$sep$email$sep$guests$sep$ip";
     $file .= $cr;
 
   }
