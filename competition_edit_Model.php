@@ -202,14 +202,17 @@ function checkCountrySpecifications () {
 
   $competitionId = $data['competitionId'];
 
-  $allCountriesIds = getAllUsedCountriesIds();
+  $countries = dbQuery("SELECT * FROM Countries");
+    foreach( $countries as $country) $allCountriesIds[] = $country['id'];
 
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );
   foreach( $regIds as $regId ){
-
     $regId = $regId['id'];
-    $countryId = $data["reg${regId}countryId"];
-    if( !in_array($countryId, $allCountriesIds)) $dataError["reg${regId}countryId"] = true;
+    if( $data["reg${regId}edit"] ){
+
+      $countryId = $data["reg${regId}countryId"];
+      if( !in_array($countryId, $allCountriesIds)) $dataError["reg${regId}countryId"] = true;
+    }
   }
 }
 
