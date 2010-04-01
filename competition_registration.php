@@ -63,7 +63,7 @@ function showPreregForm () {
   }
 
   else if( getBooleanParam( 'submit' )){
-    savePreregForm ();
+    $saveSucceeded = savePreregForm ();
     $chosenPersonId = getHtmlParam( 'personId'   );
     $chosenName     = getHtmlParam( 'name'       );
     $chosenCountry  = getHtmlParam( 'countryId'  );
@@ -97,7 +97,7 @@ function showPreregForm () {
     showField( "namelist namelist <b>$matchingNumber names matching</b>" );
     echo "<tr><td></td><td><input type='submit' id='new' name='new' value='I am new !' /></td></tr> ";
   }
-  else if( getBooleanParam( 'confirm' ) || getBooleanParam( 'new' )) {
+  else if(( getBooleanParam( 'submit' ) && ! $saveSucceeded ) || getBooleanParam( 'confirm' ) || getBooleanParam( 'new' )) {
     showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
     showField( "gender gender $chosenGender <b>Gender</b>" );
     showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
@@ -314,12 +314,12 @@ function savePreregForm () {
   
   if( !$name or !$email or !$gender ){
     noticeBox( false, "Fields 'name', 'gender' and 'email' are required." );
-    return;
+    return false;
   }
 
   if( !eregi( "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email )){
     noticeBox( false, "Incorrect email address." );
-    return;
+    return false;
   }
 
   $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
@@ -374,6 +374,7 @@ function savePreregForm () {
   }
 
   noticeBox( true, "Registration complete." );
+  return true;
 }
 
 #----------------------------------------------------------------------
