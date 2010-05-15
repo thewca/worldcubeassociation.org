@@ -7,6 +7,7 @@ require( '../_header.php' );
 
 showDescription();
 getPersonsFromResults();
+getBirthdates();
 showUnfinishedPersons();
 
 require( '../_footer.php' );
@@ -51,15 +52,31 @@ function getPersonsFromResults () {
 }
 
 #----------------------------------------------------------------------
+function getBirthdates () {
+#----------------------------------------------------------------------
+  global $birthdates;
+
+  $persons = dbQuery("
+    SELECT  id,
+            DATE_FORMAT(year*10000+month*100+day,'%e. %b %Y') birthdate
+    FROM    Persons
+  ");
+  foreach( $persons as $person ){
+    extract( $person );
+    $birthdates{$id} = $birthdate ? $birthdate : 'unknown';
+  }
+}
+
+#----------------------------------------------------------------------
 function showUnfinishedPersons () {
 #----------------------------------------------------------------------
-  global $personsFromResults;
+  global $personsFromResults, $birthdates;
 
   #--- Begin the form and table.
   echo "<form action='persons_finish_unfinished_ACTION.php' method='POST'>";
-  tableBegin( 'results', 7 );
-  tableHeader( split( '\\|', '|personName|countryId|personId|personName|countryId|personSemiId' ),
-               array( 5=>'class="6"' ) );
+  tableBegin( 'results', 8 );
+  tableHeader( split( '\\|', '|personName|countryId|personId|birthdate|personName|countryId|personSemiId' ),
+               array( 6=>'class="6"' ) );
 
   #--- Walk over all persons from the Results table.
   foreach( $personsFromResults as $person ){
@@ -92,7 +109,8 @@ function showUnfinishedPersons () {
       "<input type='radio' name='action$caseNr' value='new' />",
       visualize( $name ),
       visualize( $countryId ),
-      '',
+      "<a href='persons_finish_unfinished_peek_at_results.php?name=" . urlencode($name) . "&countryId=" . urlencode($countryId) . "' target='_blank'>(results)</a>",
+      '?',
       "<input type='text' name='name$caseNr' value='$nameHtml' size='20' />",
       "<input type='text' name='country$caseNr' value='$countryIdHtml' size='20' />",
       "<input type='text' name='semiId$caseNr' value='$semiId' size='10' maxlength='8' />",
@@ -125,7 +143,8 @@ function showUnfinishedPersons () {
 #        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
         visualize( $other_name ),
         visualize( $other_countryId ),
-        visualize( $other_id ),
+        "<a class='p' href='p.php?i=$other_id' target='_blank'>$other_id</a>",
+        $birthdates[ $other_id ],
         '', #sprintf( "%.2f", $similarity ),
         '',
         '',
@@ -139,7 +158,7 @@ function showUnfinishedPersons () {
     #--- Offer an explicit skip.
     tableRow( array(
       "<input type='radio' name='action$caseNr' value='skip' />",
-      'I\'m not sure yet', '', '', '', '', ''
+      'I\'m not sure yet', '', '', '', '', '', ''
     ));
     
     #--- Don't show more than 20 unfinished persons.
