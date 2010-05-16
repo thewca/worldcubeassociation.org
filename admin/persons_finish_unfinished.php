@@ -57,14 +57,18 @@ function getBirthdates () {
   global $birthdates;
 
   $persons = dbQuery("
-    SELECT  id,
-            DATE_FORMAT(year*10000+month*100+day,'%e. %b %Y') birthdate
+    SELECT  id, month, day, year
     FROM    Persons
   ");
   foreach( $persons as $person ){
     extract( $person );
-    $birthdates{$id} = $birthdate ? $birthdate : 'unknown';
+    $birthdates[$id] = ($month || $day || $year)
+                       ? ($month ? sprintf("%02d",$month) : '??'  ) . '/' .
+                         ($day   ? sprintf("%02d",$day  ) : '??'  ) . '/' .
+                         ($year  ? sprintf("%02d",$year ) : '????')
+                       : 'unknown';
   }
+  $birthdates[''] = 'unknown';
 }
 
 #----------------------------------------------------------------------
@@ -109,8 +113,8 @@ function showUnfinishedPersons () {
       "<input type='radio' name='action$caseNr' value='new' />",
       visualize( $name ),
       visualize( $countryId ),
-      "<a href='persons_finish_unfinished_peek_at_results.php?name=" . urlencode($name) . "&countryId=" . urlencode($countryId) . "' target='_blank'>(results)</a>",
-      '?',
+      peekLink( $name, $countryId ),
+      'mm/dd/yyyy',
       "<input type='text' name='name$caseNr' value='$nameHtml' size='20' />",
       "<input type='text' name='country$caseNr' value='$countryIdHtml' size='20' />",
       "<input type='text' name='semiId$caseNr' value='$semiId' size='10' maxlength='8' />",
@@ -143,7 +147,7 @@ function showUnfinishedPersons () {
 #        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
         visualize( $other_name ),
         visualize( $other_countryId ),
-        "<a class='p' href='p.php?i=$other_id' target='_blank'>$other_id</a>",
+        ($other_id ? "<a class='p' href='p.php?i=$other_id' target='_blank'>$other_id</a>" : peekLink( $other_name, $other_countryId )),
         $birthdates[ $other_id ],
         '', #sprintf( "%.2f", $similarity ),
         '',
@@ -229,6 +233,14 @@ function highlight ( $sql ) {
   $sql = preg_replace( '/(UPDATE|SET|WHERE|AND|REGEXP)/', '<b>$1</b>', $sql );
   $sql = preg_replace( '/(\\w+)=\'(.*?)\'/', '<span style="color:#00C">$1</span>=\'<span style="color:#F00">$2</span>\'', $sql );
   return $sql;
+}
+
+#----------------------------------------------------------------------
+function peekLink ( $name, $countryId ) {
+#----------------------------------------------------------------------
+  $N = urlencode( $name );
+  $C = urlencode( $countryId );
+  return "<a href='persons_finish_unfinished_peek_at_results.php?name=$N&countryId=$C' target='_blank'>(results)</a>";
 }
 
 ?>
