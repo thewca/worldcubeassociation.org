@@ -58,9 +58,9 @@ function showInformation () {
     extract( $result );
     echo "$name ($personId)<br />\n";
     echo "<ul><li>Email : $email</li>\n";
-    echo "<ul><li>Guests : $guests</li>\n";
-    echo "<ul><li>Comments : $comments</li>\n";
-    echo "<ul><li>Ip : $ip</li></ul><br />\n";
+    echo "<li>Guests : $guests</li>\n";
+    echo "<li>Comments : $comments</li>\n";
+    echo "<li>Ip : $ip</li></ul><br />\n";
     $emailList .= $emailList ? ", $email" : "$email";
   }
  

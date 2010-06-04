@@ -41,13 +41,13 @@ function showPreregForm () {
 
   if( getBooleanParam( 'search' )){
     $chosenPattern = getMysqlParam( 'name' );
-	 $chosenName    = getHtmlParam(  'name' );
+    $chosenName    = getHtmlParam(  'name' );
     
     foreach( explode( ' ', $chosenPattern ) as $namePart )
       $nameCondition .= " AND name like '%$namePart%'";
 
     $persons = dbQuery( "SELECT name, id FROM Persons WHERE 1 $nameCondition ORDER BY name" );
-	 $matchingNumber = count( $persons );
+    $matchingNumber = count( $persons );
   }
 
   else if( getBooleanParam( 'confirm' )){
@@ -60,6 +60,8 @@ function showPreregForm () {
     $chosenYear    = $chosenPerson['year'     ];
     $chosenMonth   = $chosenPerson['month'    ];
     $chosenDay     = $chosenPerson['day'      ];
+
+    $dontPrintDoB  = ( $chosenYear != 0 );
   }
 
   else if( getBooleanParam( 'submit' )){
@@ -74,6 +76,8 @@ function showPreregForm () {
     $chosenEmail    = getHtmlParam( 'email'      );
     $chosenGuests   = getHtmlParam( 'guests'     );
     $chosenComments = getHtmlParam( 'comments'   );
+
+    $dontPrintDoB  = ( $chosenYear == '');
   }
 
   echo "<h1>Registration form</h1>";
@@ -100,7 +104,8 @@ function showPreregForm () {
   else if(( getBooleanParam( 'submit' ) && ! $saveSucceeded ) || getBooleanParam( 'confirm' ) || getBooleanParam( 'new' )) {
     showField( "countryId country <b>Citizen&nbsp;of</b> $chosenCountry" );
     showField( "gender gender $chosenGender <b>Gender</b>" );
-    showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
+    if( ! $dontPrintDoB )
+      showField( "birth date $chosenDay $chosenMonth $chosenYear <b>Date of birth</b>" );
     showField( "email text $chosenEmail 50 <b>E-mail</b> address" );
     showField( "guests area 50 3 Names&nbsp;of&nbsp;the&nbsp;<b>guests</b>&nbsp;accompanying&nbsp;you $chosenGuests" );
 
@@ -321,6 +326,15 @@ function savePreregForm () {
     noticeBox( false, "Incorrect email address." );
     return false;
   }
+
+  if( ! $birthYear ){
+    $chosenPerson = dbQuery( "SELECT * FROM Persons WHERE id='$personId'" );
+    $chosenPerson = $chosenPerson[0];
+    $birthYear    = $chosenPerson['year'     ];
+    $birthMonth   = $chosenPerson['month'    ];
+    $birthDay     = $chosenPerson['day'      ];
+  }
+
 
   $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
 
