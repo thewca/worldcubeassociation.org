@@ -40,8 +40,8 @@ function showRegionalRecordsHistory () {
 
       value1, value2, value3, value4, value5
     FROM
-      (SELECT Results.*, 1 type, best    value, regionalSingleRecord  recordName FROM Results UNION
-       SELECT Results.*, 2 type, average value, regionalAverageRecord recordName FROM Results) result,
+      (SELECT Results.*, 1 type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
+       SELECT Results.*, 2 type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result,
       Events event,
       Competitions competition,
       Countries country
