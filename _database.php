@@ -62,6 +62,27 @@ function dbQuery ( $query ) {
 }
 
 #----------------------------------------------------------------------
+function dbQueryHandle ( $query ) {
+#----------------------------------------------------------------------
+
+  if( debug() ){
+    startTimer();
+    global $dbQueryCtr;
+    $dbQueryCtr++;
+    echo "\n\n<!-- dbQuery(\n$query\n) -->\n\n";
+    echo "<br>";
+    stopTimer( 'printing the query' );
+  }
+  
+  startTimer();
+  $dbResult = mysql_query( $query )
+    or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
+  stopTimer( "pure query" );
+
+  return $dbResult;
+}
+
+#----------------------------------------------------------------------
 function dbCommand ( $command ) {
 #----------------------------------------------------------------------
 

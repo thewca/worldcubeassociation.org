@@ -199,7 +199,7 @@ function computeRanks () {
 
     unset( $continent );
 
-    $country = dbQuery("
+    $country = dbQueryHandle("
       SELECT
         min($valueSource) min,
         personId,
@@ -223,8 +223,8 @@ function computeRanks () {
     $value = -42;
     $count = 1;
 
-    foreach( $country as $c ){
-      extract( $c );
+    while( $row = mysql_fetch_row( $country )){
+      list( $min, $personId, $eventId, $countryId ) = $row;
       if(( $event != $eventId ) || ( $cy != $countryId )){ 
         $rank = 0;
         $count = 1;
@@ -243,6 +243,7 @@ function computeRanks () {
       $value = $min;
     }
 
+    mysql_free_result( $country );
     unset( $country );
 
     $command = "";
