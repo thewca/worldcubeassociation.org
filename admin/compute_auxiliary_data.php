@@ -5,6 +5,9 @@
 
 $dontLoadCachedDatabase = true;
 
+error_reporting(E_ERROR);
+ini_set('display_errors', 1);
+
 require( '../_header.php' );
 require( '_helpers.php' );
 showDescription();
