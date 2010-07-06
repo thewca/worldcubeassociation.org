@@ -12,7 +12,8 @@ require( '../_header.php' );
 require( '_helpers.php' );
 showDescription();
 computeConciseRecords();
-computeRanks();
+computeRanks( 'best', 'Single' );
+computeRanks( 'average', 'Average' );
 computeCachedDatabase('../cachedDatabase.php');
 require( '../_footer.php' );
 
@@ -71,208 +72,103 @@ function computeConciseRecords () {
 }
 
 #----------------------------------------------------------------------
-function computeRanks () {
+function computeRanks ( $valueSource, $valueName ) {
 #----------------------------------------------------------------------
 
-  foreach( array( array( 'best', 'Single' ), array( 'average', 'Average' )) as $foo ){
-    $valueSource = $foo[0];
-    $valueName = $foo[1];
+  startTimer();
+  echo "<br />Building table Ranks$valueName...<br />\n";
 
-    startTimer();
-    echo "<br />Building table Ranks$valueName...<br />\n";
+  #--- Create empty table
+  dbCommand( "DROP TABLE IF EXISTS Ranks$valueName" );
+  dbCommand( "CREATE TABLE Ranks$valueName (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `personId` VARCHAR(10) NOT NULL DEFAULT '',
+    `eventId` VARCHAR(6) NOT NULL DEFAULT '',
+    `best` INTEGER NOT NULL DEFAULT '0',
+    `worldRank` INTEGER NOT NULL DEFAULT '0',
+    `continentRank` INTEGER NOT NULL DEFAULT '0',
+    `countryRank` INTEGER NOT NULL DEFAULT '0',
+  PRIMARY KEY  (`id`),
+  KEY `fk_persons` (`personId`),
+  KEY `fk_events` (`eventId`)) COLLATE latin1_swedish_ci
+  " );
 
-    dbCommand( "DROP TABLE IF EXISTS Ranks$valueName" );
-    dbCommand( "CREATE TABLE Ranks$valueName (
-      `id` INTEGER NOT NULL AUTO_INCREMENT,
-      `personId` VARCHAR(10) NOT NULL DEFAULT '',
-      `eventId` VARCHAR(6) NOT NULL DEFAULT '',
-      `best` INTEGER NOT NULL DEFAULT '0',
-      `worldRank` INTEGER NOT NULL DEFAULT '0',
-      `continentRank` INTEGER NOT NULL DEFAULT '0',
-      `countryRank` INTEGER NOT NULL DEFAULT '0',
-    PRIMARY KEY  (`id`),
-    KEY `fk_persons` (`personId`),
-    KEY `fk_events` (`eventId`)) COLLATE latin1_swedish_ci
-    " );
-
-    #--- Determine everybody's current country and continent
-    $persons = dbQuery( "
-      SELECT   person.id personId, countryId, continentId
-      FROM     Persons person, Countries country
-      WHERE    country.id=countryId
-      ORDER BY subId
-    " );
-    foreach( $persons as $person ) {
-      extract( $person );
-      $currentCountry  [$personId] = $countryId;
-      $currentContinent[$personId] = $continentId;
-    }
-
-    $world = dbQuery("
-      SELECT
-        min($valueSource) min,
-        personId,
-        eventId
-      FROM 
-        Concise${valueName}Results
-      WHERE
-        eventId <> '333mbo'
-      GROUP BY
-        eventId,
-        personId
-      ORDER BY
-        eventId, min
-    ");
-
-    $rank = 0;
-    $event = $world[0]['eventId'];
-    $value = -42;
-    $count = 1;
-
-
-    foreach( $world as $w ){
-      extract( $w );
-      if( $event != $eventId ){
-        $rank = 0;
-        $count = 1;
-        $value = -42;
-      }
-      if( $value == $min )
-        $count++;
-      else { 
-        $rank += $count;
-        $count = 1;
-      }
-      if( ! $ranks[$personId][$eventId] )
-        $ranks[$personId][$eventId] = $rank;
-      if( ! $ranksBest[$personId][$eventId] )
-        $ranksBest[$personId][$eventId] = $min;
-      $event = $eventId;
-      $value = $min;
-    }
-
-    unset( $world );
-
-    $continent = dbQuery("
-      SELECT
-        min($valueSource) min,
-        personId,
-        eventId,
-        continentId
-      FROM 
-        Concise${valueName}Results
-      WHERE
-        eventId <> '333mbo'
-      GROUP BY
-        eventId,
-        personId,
-        continentId
-      ORDER BY
-        eventId, continentId, min
-    ");
-
-    $rank = 0;
-    $event = $continent[0]['eventId'];
-    $ct = $continent[0]['continentId'];
-    $value = -42;
-    $count = 1;
-
-    foreach( $continent as $c ){
-      extract( $c );
-      if(( $event != $eventId ) || ( $ct != $continentId )){
-        $rank = 0;
-        $count = 1;
-        $value = -42;
-      }
-      if( $value == $min )
-        $count++;
-      else { 
-        $rank += $count;
-        $count = 1;
-      }
-      if( $continentId==$currentContinent[$personId] )
-          $ranksContinent[$personId][$eventId] = $rank;
-      $event = $eventId;
-      $value = $min;
-      $ct = $continentId;
-    }
-
-    unset( $continent );
-
-    $country = dbQueryHandle("
-      SELECT
-        min($valueSource) min,
-        personId,
-        eventId,
-        countryId
-      FROM 
-        Concise${valueName}Results
-      WHERE
-        eventId <> '333mbo'
-      GROUP BY
-        eventId,
-        personId,
-        countryId
-      ORDER BY
-        eventId, countryId, min
-    ");
-
-    $rank = 0;
-    $event = $country[0]['eventId'];
-    $cy = $country[0]['countryId'];
-    $value = -42;
-    $count = 1;
-
-    while( $row = mysql_fetch_row( $country )){
-      list( $min, $personId, $eventId, $countryId ) = $row;
-      if(( $event != $eventId ) || ( $cy != $countryId )){ 
-        $rank = 0;
-        $count = 1;
-        $value = -42;
-      }
-      if( $value == $min )
-        $count++;
-      else { 
-        $rank += $count;
-        $count = 1;
-      }
-      if( $countryId==$currentCountry[$personId] )
-        $ranksCountry[$personId][$eventId] = $rank;
-      $event = $eventId;
-      $cy = $countryId;
-      $value = $min;
-    }
-
-    mysql_free_result( $country );
-    unset( $country );
-
-    $command = "";
-    foreach( $ranks as $personId => $rankse ){
-      foreach( $rankse as $eventId => $rankspe ){
-        $command .= $command ? "," : "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES ";
-        $command .= "('$personId', '$eventId', '" . $ranksBest[$personId][$eventId] . "','";
-        $command .= $rankspe . "','";
-        $command .= $ranksContinent[$personId][$eventId]+0 . "','";
-        $command .= $ranksCountry[$personId][$eventId]+0 . "')";
-        if( strlen( $command ) > 500000 ){
-          dbCommand( $command );
-          $command = "";
-        }
-      }
-    }
-
-    unset( $ranks );
-    unset( $ranksContinent );
-    unset( $ranksCountry );
-    unset( $ranksBest );
-
-    if( $command )
-      dbCommand( $command );
-
-    stopTimer( "Ranks$valueName" );
-    echo "... done<br /><br />\n";
+  #--- Determine everybody's current country and continent
+  $persons = dbQuery( "
+    SELECT   person.id personId, countryId, continentId
+    FROM     Persons person, Countries country
+    WHERE    country.id=countryId
+    ORDER BY subId
+  " );
+  foreach( $persons as $person ) {
+    extract( $person );
+    $currentCountry  [$personId] = $countryId;
+    $currentContinent[$personId] = $continentId;
   }
+  unset( $persons );
+
+  #--- Get all personal records (where person=personId+countryId)
+  $personalRecords = dbQueryHandle( "
+    SELECT   personId, countryId, continentId, eventId, min($valueSource) value
+    FROM     Concise${valueName}Results
+    WHERE    eventId <> '333mbo'
+    GROUP BY personId, countryId, eventId
+    ORDER BY eventId, value
+  " );
+
+  #--- Process the personal records
+  while( $row = mysql_fetch_row( $personalRecords )){
+    list( $personId, $countryId, $continentId, $eventId, $value ) = $row;
+    
+    #--- At new event, store the ranks of the previous and reset
+    if ( $eventId != $currentEventId ) {
+      storeRanks( $valueName, $currentEventId, $personRecord, $personWR, $personCR, $personNR );
+      unset( $ctr, $rank, $record, $ranked, $personRecord, $personWR, $personCR, $personNR );
+      $currentEventId = $eventId;
+    }
+
+    #--- Update the region states (unless we have ranked this person there already)
+    foreach( array( 'World', $continentId, $countryId ) as $region ){
+      if ( ! $ranked[$region][$personId] ) {
+        ++$ctr[$region];
+        if ( $value != $record[$region] )
+          $rank[$region] = $ctr[$region];
+        $record[$region] = $value;
+        $ranked[$region][$personId] = true;
+      }
+    }
+
+    #--- Set the person's data (first time the current location is matched)
+    if ( ! $personRecord[$personId] ) {
+      $personRecord[$personId] = $value;
+      $personWR[$personId] = $rank['World'];
+    }
+    if ( $continentId==$currentContinent[$personId] && ! $personCR[$personId] )
+      $personCR[$personId] = $rank[$continentId];
+    if ( $countryId==$currentCountry[$personId] && ! $personNR[$personId] )
+      $personNR[$personId] = $rank[$countryId];
+  }
+
+  #--- Free the result handle
+  mysql_free_result( $personalRecords );
+
+  #--- Store the ranks of the last event  
+  storeRanks( $valueName, $currentEventId, $personRecord, $personWR, $personCR, $personNR );
+
+  stopTimer( "Ranks$valueName" );
+  echo "... done<br /><br />\n";
 }
 
+function storeRanks ( $valueName, $eventId, &$personRecord, &$personWR, &$personCR, &$personNR ) {
+  if ( ! count( $personRecord ) )
+    return;
+  $values = array();
+  foreach ( $personRecord as $personId => $record ) {
+    $v = array( $personId, $eventId, $record, $personWR[$personId], $personCR[$personId]+0, $personNR[$personId]+0 );
+    array_push( $values, "('" . implode( "', '", $v ) . "')" );
+  }
+  $values = implode( ",\n", $values );
+  dbCommand( "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES\n$values" );
+}
 
 ?>
