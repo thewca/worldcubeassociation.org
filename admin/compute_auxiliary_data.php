@@ -11,10 +11,12 @@ ini_set('display_errors', 1);
 require( '../_header.php' );
 require( '_helpers.php' );
 showDescription();
+noticeBox3( 0, "Note: At the end of this, when this page is completed, you should see a green success box at the bottom of the page. If not, something went wrong (like an out-of-memory error we recently had, which killed the script)." );
 computeConciseRecords();
 computeRanks( 'best', 'Single' );
 computeRanks( 'average', 'Average' );
 computeCachedDatabase('../cachedDatabase.php');
+noticeBox3( 1, "Ok, finished." );
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------

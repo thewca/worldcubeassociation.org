@@ -133,13 +133,7 @@ function regionCondition ( $countrySource ) {
 function noticeBox ( $isSuccess, $message ) {
 #----------------------------------------------------------------------
 
-  $color = $isSuccess ? '33CC33' : 'FF0000';
-  $colorInside = $isSuccess ? 'DDFFDD' : 'FFE8E8';
-  echo "<center><table border='0' cellpadding='3' width='90%'><tr><td bgcolor='#$color'>";
-  echo "<table border='0' cellpadding='5' width='100%'><tr><td bgcolor='#$colorInside'>";
-  echo "<p><b style='color:#$color'>$message</b></p>";
-  echo "</td></tr></table>";
-  echo "</td></tr></table></center>";
+  noticeBox3( $isSuccess ? 1 : -1, $message );
 }
 
 #----------------------------------------------------------------------
@@ -147,6 +141,22 @@ function noticeBox2 ( $isSuccess, $yesMessage, $noMessage ) {
 #----------------------------------------------------------------------
 
   noticeBox( $isSuccess, $isSuccess ? $yesMessage : $noMessage );
+}
+
+#----------------------------------------------------------------------
+function noticeBox3 ( $color, $message ) {
+#----------------------------------------------------------------------
+
+  #--- Color: -1=red, 0=yellow, 1=green
+  $colorBorder = array( 'FF0000', 'DDBB00', '33CC33' ); $colorBorder = $colorBorder[ $color+1 ];
+  $colorInside = array( 'FFE8E8', 'FFFF88', 'DDFFDD' ); $colorInside = $colorInside[ $color+1 ];
+  
+  #--- Show the notice
+  echo "<center><table border='0' cellpadding='3' width='90%'><tr><td bgcolor='#$colorBorder'>";
+  echo "<table border='0' cellpadding='5' width='100%'><tr><td bgcolor='#$colorInside'>";
+  echo "<p><b style='color:#$colorBorder'>$message</b></p>";
+  echo "</td></tr></table>";
+  echo "</td></tr></table></center>";
 }
 
 #----------------------------------------------------------------------
