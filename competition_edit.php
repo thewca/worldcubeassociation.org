@@ -57,7 +57,6 @@ function checkPasswordAndLoadData () {
   
   #--- Set the data to the entered values.
   $data = getRawParamsThisShouldBeAnException();
-  $data['id'] = $chosenCompetitionId;
 
   return true;
 }
@@ -76,14 +75,12 @@ function checkData () {
 #----------------------------------------------------------------------
 function checkCountrySpecifications () {
 #----------------------------------------------------------------------
-  global $data, $dataError;
-
-  $competitionId = $data['competitionId'];
+  global $chosenCompetitionId, $data, $dataError;
 
   $countries = dbQuery("SELECT * FROM Countries");
     foreach( $countries as $country) $allCountriesIds[] = $country['id'];
 
-  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   foreach( $regIds as $regId ){
     $regId = $regId['id'];
     if( $data["reg${regId}edit"] ){
@@ -97,7 +94,7 @@ function checkCountrySpecifications () {
 #----------------------------------------------------------------------
 function storeData () {
 #----------------------------------------------------------------------
-  global $data, $dataError, $dataSuccessfullySaved, $chosenSubmit;
+  global $data, $dataError, $dataSuccessfullySaved, $chosenSubmit, $chosenCompetitionId;
 
   if( !$chosenSubmit )
     return;
@@ -114,16 +111,14 @@ function storeData () {
   $showPreregList = $data["showPreregList"] ? 1 : 0;
 
   #--- Store data
-  $competitionId = $data['competitionId'];
-
   dbCommand("UPDATE Competitions
                SET showPreregForm='$showPreregForm',
                    showPreregList='$showPreregList'
-                WHERE id='$competitionId'
+                WHERE id='$chosenCompetitionId'
   ");
 
   #--- Store registrations
-  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$competitionId'" );
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   foreach( $regIds as $regId ){
 
     $regId = $regId['id'];
@@ -217,6 +212,8 @@ function showRegs () {
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
   else
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
+
+  echo "<input type='hidden' name='eventSpecs' id='eventSpecs' value='$data[eventSpecs]' />";
 
   $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id" );
 
