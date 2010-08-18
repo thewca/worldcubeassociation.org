@@ -93,7 +93,10 @@ function newMedium () {
 #----------------------------------------------------------------------
   global $mediumId;
 
-  dbCommand("INSERT INTO CompetitionsMedia (competitionId, status) VALUES ('WC1982', 'pending')");
+  $competitionIds = getAllCompetitionIds();
+  $lastId = $competitionIds[0];
+
+  dbCommand("INSERT INTO CompetitionsMedia (competitionId, status) VALUES ('$lastId', 'pending')");
   $id = dbQuery("SELECT LAST_INSERT_ID()");
   $mediumId = $id[0][0];
   
