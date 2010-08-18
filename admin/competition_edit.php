@@ -47,17 +47,11 @@ function loadData () {
   if( ! $chosenSubmit ){
   
     #--- Extract the events.
-    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
-      extract( $event );
-  
-      if( preg_match( "/(^| )$id\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $data['eventSpecs'], $matches )){
-        $data["offer$id"] = 1;
-        $data["personLimit$id"]      = $matches[3];
-        $data["timeLimit$id"]        = $matches[4];
-        $data["timeFormat$id"]       = $matches[5];
-        $data["qualify$id"]          = $matches[6];
-        $data["qualifyTimeLimit$id"] = $matches[7];
-      }
+    $eventSpecsTree = readEventSpecs( $data['eventSpecs'] );
+    foreach( $eventSpecsTree as $eventId => $eventSpec ) {
+      $data["offer$eventId"] = 1;
+      foreach( array( 'personLimit', 'timeLimit', 'timeFormat', 'qualify', 'qualifyTimeLimit' ) as $param )
+        $data["$param$eventId"] = $eventSpec["$param"];
     }
     
     #--- Done.

@@ -26,6 +26,26 @@ function getEvent ( $eventId ) {
       return $event;
 }
 
+function isOfficialEvent ( $eventId ) {
+  return in_array( $eventId, getAllEventIds() );
+}
+
+function readEventSpecs ( $eventSpecs ) {
+  foreach( array_merge( getAllEventIds(), getAllUnofficialEventIds() ) as $eventId )
+    if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $eventSpecs, $matches )) {
+      $eventSpecsTree["$eventId"]['personLimit']      = $matches[3];
+      $eventSpecsTree["$eventId"]['timeLimit']        = $matches[4];
+      $eventSpecsTree["$eventId"]['timeFormat']       = $matches[5];
+      $eventSpecsTree["$eventId"]['qualify']          = $matches[6];
+      $eventSpecsTree["$eventId"]['qualifyTimeLimit'] = $matches[7];
+    }
+  return $eventSpecsTree;
+}
+
+function getEventSpecsEventIds ( $eventSpecs ) {
+ return( array_keys( readEventSpecs( $eventSpecs )));
+}
+
 function getCompetition ( $id ) {
   foreach( getAllCompetitions() as $competition )
     if( $competition['id'] == $id )

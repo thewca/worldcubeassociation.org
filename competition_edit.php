@@ -50,21 +50,7 @@ function checkPasswordAndLoadData () {
   
   #--- If this is just view, not yet submit, extract the database data and return;
   if( ! $chosenSubmit ){
-  
-    #--- Extract the events.
-    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
-      extract( $event );
-  
-      if( preg_match( "/(^| )$id\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $data['eventSpecs'], $matches )){
-        $data["offer$id"] = 1;
-        $data["personLimit$id"]      = $matches[3];
-        $data["timeLimit$id"]        = $matches[4];
-        $data["timeFormat$id"]       = $matches[5];
-        $data["qualify$id"]          = $matches[6];
-        $data["qualifyTimeLimit$id"] = $matches[7];
-      }
-    }
-    
+
     #--- Done.
     return true;
   }
@@ -236,8 +222,6 @@ function showRegs () {
 
   if( ! count( $comps)) return;
 
-
-
   #--- Start the table.
   echo "<br /><b>Registered Competitors</b><br/>\n";
   echo "<ul><li><p>A : Accept, D : Delete, E : Edit.</p></li>\n";
@@ -246,15 +230,11 @@ function showRegs () {
   
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
   echo "<tr bgcolor='#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
-  foreach( getAllEvents() as $event ){
-    extract( $event );
-    if( $data["offer$id"] )
-      echo "<td style='font-size:9px'>$id</td>\n";
-  }
-  foreach( getAllUnofficialEvents() as $event ){
-    extract( $event );
-    if( $data["offer$id"] )
-      echo "<td style='font-size:9px;color:#999'>$id</td>\n";
+  foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
+    if( isOfficialEvent( $eventId ) )
+      echo "<td style='font-size:9px'>$eventId</td>\n";
+    else
+      echo "<td style='font-size:9px;color:#999'>$eventId</td>\n";
   }
   echo "</tr>\n";
 
@@ -273,14 +253,11 @@ function showRegs () {
     echo "  <td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>\n";
     echo "  <td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>\n";    
 
-    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
-      $eventId = $event['id'];
-      if( $data["offer$eventId"] ){
-        switch ($comp["E$eventId"]) {
-          case 0: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n"; break;
-          case 1: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
-          default:echo "  <td bgcolor='#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
-        }
+    foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
+      switch ($comp["E$eventId"]) {
+        case 0: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n"; break;
+        case 1: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
+        default:echo "  <td bgcolor='#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
       }
     }
     echo "</tr>\n";
