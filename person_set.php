@@ -29,6 +29,16 @@ function uploadFile () {
 
   if( !$chosenSubmit ) return;
 
+  #--- Check if the person exists. If not, show an error and do no more.
+  $persons = dbQuery("
+    SELECT * FROM Persons WHERE id = '$chosenPersonId'
+  ");
+
+  if( ! count( $persons )){
+    showErrorMessage( "Unknown person id <b>[</b>$chosenPersonId<b>]</b>" );
+    return;
+  }
+
   $upload_path = 'upload/';
 
   $max_size = 50000;
