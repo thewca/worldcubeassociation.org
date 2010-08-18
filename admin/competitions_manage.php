@@ -7,7 +7,7 @@ handleRedirects();
 function handleRedirects () {
   extract( $_REQUEST );
 
-  if( $edit || $fullEdit || $createNew || $clone ){
+  if( $registration || $edit || $createNew || $clone ){
     ob_start(); require( '../_framework.php' ); ob_end_clean();
     $password = getCompetitionPassword( $competitionId );
   }
@@ -44,10 +44,10 @@ function handleRedirects () {
     $edit = true;
   }
   
-  if( $edit )
+  if( $registration )
     $goal = "../competition_edit.php?competitionId=$competitionId&password=$password&rand=" . rand();
-  if( $fullEdit )
-    $goal = "../competition_edit.php?FULLEDIT=7247&competitionId=$competitionId&password=$password&rand=" . rand();
+  if( $edit )
+    $goal = "competition_edit.php?competitionId=$competitionId&rand=" . rand();
   if( $results )
     $goal = "../competition.php?competitionId=$competitionId";
       
@@ -81,8 +81,8 @@ function showDescription () {
   echo "<p><b>This script *DOES* affect the database *WHEN* you tell it to.</b></p>";
 
   echo "<dl>";
-  echo "<dt>Edit</dt><dd>Edit competition configuration data like the organizers (i.e. not all fields). You should give the result URL of this to competition organizers so they can configure their own competition.</dd>";
-  echo "<dt>Full Edit</dt><dd>Edit the whole competition configuration data, intended for us admins only. You should *not* give the result URL of this to others.</dd>";
+  echo "<dt>Registration</dt><dd>Manage the registered competitors of a competition. You should give the result URL of this to competition organizers.</dd>";
+  echo "<dt>Edit</dt><dd>Edit the competition configuration data, intended for us admins only.</dd>";
   echo "<dt>Results</dt><dd>Brings you to the results page.</dd>";
   echo "<dt>New Password</dt><dd>Changes the password of the competition. I suggest you do this once the organizer has finished configuring the competition and you make the competition publicly visible (by editing its \"show\" status), in order to prevent the organizer from introducing mistakes.</dd>";
   echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>";
@@ -116,8 +116,8 @@ function showChoices () {
 
   displayChoicesWithMethod( 'POST', array(
     competitionChoice( true ),
+    choiceButton( true, 'registration', 'Registration' ),
     choiceButton( true, 'edit', 'Edit' ),
-    choiceButton( true, 'fullEdit', 'Full Edit' ),
     choiceButton( true, 'results', 'Results' ),
     choiceButton( true, 'newPassword', 'New Password' ),
     textFieldChoice ( 'newCompetitionId', 'New competition ID', '' ),
