@@ -173,7 +173,7 @@ $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[country
     </form>
   </center>
   <?php
-    echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword'&rand=" . rand() . ">Back</a>";
+    echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword&rand=" . rand() . "'>Back</a>";
   ?>
   </body>
 </html>

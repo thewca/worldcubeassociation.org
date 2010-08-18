@@ -3,14 +3,12 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
-$currentSection = 'competitions';
-
-require( '_header.php' );
+require( '../_header.php' );
 
 analyzeChoices();
 computeWaitingList();
 
-require( '_footer.php' );
+require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
@@ -29,8 +27,7 @@ function computeWaitingList () {
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
 
   # Get specification of all events.
-  foreach( getAllEvents() as $event ){
-    $eventId = $event['id'];
+  foreach( getAllEventIds() as $eventId ){
     $eventNumber[$eventId] = 0;
     if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $competition['eventSpecs'], $matches ))
       $eventsSpecs[$eventId] = $matches;
@@ -44,9 +41,7 @@ function computeWaitingList () {
     $rowId        = $competitor['id'];
     $competitorId = $competitor['personId'];
 
-    foreach( getAllEvents() as $event ){ 
-      $eventId = $event['id'];
-
+    foreach( getAllEventIds() as $eventId ){ 
       if( $competitor["E$eventId"] > 0 ){
 
         $competitorNew = $competitor["E$eventId"];
@@ -136,6 +131,9 @@ function computeWaitingList () {
       }
     }
   }
+
+  noticeBox ( TRUE, "Waiting list was successfully computed." );
+  echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&rand=" . rand() . "'>Back</a>";
 }
 
 ?>
