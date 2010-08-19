@@ -262,7 +262,7 @@ function showRegs () {
   echo "</table>\n";
 
   echo "<ul><li><p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&password=$data[password]'>extra registration information</a></p></li>\n"; 
-  echo "<li><p>Download the <a href='registration_sheet.php?competitionId=$chosenCompetitionId'>registration excel sheet</a> in .csv format.</a></p></li>\n"; 
+  echo "<li><p>Download the <a href='registration_set_sheet.php?competitionId=$chosenCompetitionId&password=$data[password]'>registration excel sheet</a> in .xlsx format.</p></li>\n"; 
   echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n"; 
   echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&list=1'>this link</a></p></li></ul>\n"; 
 
