@@ -16,21 +16,21 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *NOT* affect the database unless you say so.</b></p>";
+  echo "<p><b>This script does *NOT* affect the database unless you say so.</b></p>\n\n";
 
-  echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity. A person is called \"finished\" if it has a non-empty personId. A \"semi-id\" is the id without the running number at the end.</p>";
+  echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity. A person is called \"finished\" if it has a non-empty personId. A \"semi-id\" is the id without the running number at the end.</p>\n\n";
 
-  echo "<p>For each unfinished person in the Results table, I show you the few most similar persons. Then you make choices and click \"update\" at the bottom of the page to show and execute your choices. You can:</p>";
+  echo "<p>For each unfinished person in the Results table, I show you the few most similar persons. Then you make choices and click \"update\" at the bottom of the page to show and execute your choices. You can:</p>\n\n";
 
-  echo "<ul>";
-  echo "<li>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly.</li>";
-  echo "<li>Choose another person. This will overwrite the person's name/country/id in the Results table with those of the other person.</li>";
-  echo "<li>Skip it if you're not sure yet.</li>";
-  echo "</ul>";
+  echo "<ul>\n";
+  echo "  <li>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly.</li>\n";
+  echo "  <li>Choose another person. This will overwrite the person's name/country/id in the Results table with those of the other person.</li>\n";
+  echo "  <li>Skip it if you're not sure yet.</li>\n";
+  echo "</ul>\n\n";
 
-  echo "<p>Notice for time limit reasons I can't show you all unfinished persons at once, so I only show up to 20 at a time. After clicking \"Update\" you'll see all commands I execute and a link back to this script with a random parameter in order to really reload this script. Then you should see the next up to 20 unfinished persons, and you can repeat until there are none left.";
+  echo "<p>Notice for time limit reasons I can't show you all unfinished persons at once, so I only show up to 20 at a time. After clicking \"Update\" you'll see all commands I execute and a link back to this script with a random parameter in order to really reload this script. Then you should see the next up to 20 unfinished persons, and you can repeat until there are none left.</p>\n";
   
-  echo "<hr>";
+  echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
@@ -77,7 +77,7 @@ function showUnfinishedPersons () {
   global $personsFromResults, $birthdates;
 
   #--- Begin the form and table.
-  echo "<form action='persons_finish_unfinished_ACTION.php' method='POST'>";
+  echo "<form action='persons_finish_unfinished_ACTION.php' method='post'>";
   tableBegin( 'results', 8 );
   tableHeader( split( '\\|', '|personName|countryId|personId|birthdate|personName|countryId|personSemiId' ),
                array( 6=>'class="6"' ) );

@@ -4,7 +4,7 @@
 function displayChoices ( $choices ) {
 #----------------------------------------------------------------------
 
-  displayChoicesWithMethod( 'GET', $choices );
+  displayChoicesWithMethod( 'get', $choices );
 }
 
 #----------------------------------------------------------------------

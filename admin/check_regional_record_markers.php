@@ -22,21 +22,21 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>";
+  echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>\n\n";
 
-  echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition. If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be huge - btw it'll still take a long computation time).</p>";
+  echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition. If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be huge - btw it'll still take a long computation time).</p>\n\n";
   
-  echo "<p>It computes regional record markers for all valid results (value>0). If a result has a stored or computed regional record marker, it is displayed. If the two markers differ, they're shown in red/green.</p>";
+  echo "<p>It computes regional record markers for all valid results (value>0). If a result has a stored or computed regional record marker, it is displayed. If the two markers differ, they're shown in red/green.</p>\n\n";
 
-  echo "<p>Only strictly previous competitions (other.<b>end</b>Date &lt; this.<b>start</b>Date) are used to compare, not overlapping competitions. Thus I might wrongfully compute a too good record status (because a result was actually beaten earlier in an overlapping competition) but I should never wrongfully compute a too bad record status.</p>";
+  echo "<p>Only strictly previous competitions (other.<b>end</b>Date &lt; this.<b>start</b>Date) are used to compare, not overlapping competitions. Thus I might wrongfully compute a too good record status (because a result was actually beaten earlier in an overlapping competition) but I should never wrongfully compute a too bad record status.</p>\n\n";
 
-  echo "<p>Inside the same competition, results are sorted first by round, then by value, and then they're declared records on a first-come-first-served basis. This results in the records-are-updated-at-the-end-of-each-round rule you requested.</p>";
+  echo "<p>Inside the same competition, results are sorted first by round, then by value, and then they're declared records on a first-come-first-served basis. This results in the records-are-updated-at-the-end-of-each-round rule you requested.</p>\n\n";
 
-  echo "<p>A result does not need to beat another to get a certain record status, equaling is good enough.</p>";
+  echo "<p>A result does not need to beat another to get a certain record status, equaling is good enough.</p>\n\n";
 
-  echo "<p>Please check it and let me know what you'd like me to do. I can modify the script to actually store the computed markers in the database, I can print SQL code to select the differing rows, I can print SQL code to update the differing rows...</p>";
+  echo "<p>Please check it and let me know what you'd like me to do. I can modify the script to actually store the computed markers in the database, I can print SQL code to select the differing rows, I can print SQL code to update the differing rows...</p>\n\n";
 
-  echo "<hr>";
+  echo "<hr />\n\n";
 }
 
 #----------------------------------------------------------------------
@@ -69,7 +69,7 @@ function doTheDarnChecking () {
     
     
   #--- Begin form and table.
-  echo "<form action='check_regional_record_markers_ACTION.php' method='POST'>\n";
+  echo "<form action='check_regional_record_markers_ACTION.php' method='post'>\n";
   tableBegin( 'results', 11 );
 
   #--- Do the checking.
@@ -84,7 +84,7 @@ function doTheDarnChecking () {
   noticeBox2(
     ! $differencesWereFound,
     "We completely agree.<br />$date",
-    "<p>Darn! We disagree!<br />$date</p><p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following. If you then go back in your browser and refresh the page, the changes should be visible.</p><pre>I'm doing this:
+    "<p>Darn! We disagree!<br />$date</p>\n<p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following. If you then go back in your browser and refresh the page, the changes should be visible.</p>\n<pre>I'm doing this:
 UPDATE Results SET regionalSingleRecord='WR' WHERE id=11111
 UPDATE Results SET regionalSingleRecord='ER' WHERE id=22222
 UPDATE Results SET regionalSingleRecord='NR' WHERE id=33333

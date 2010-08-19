@@ -70,7 +70,7 @@ function colorMe ( $rank ) {
 #----------------------------------------------------------------------
 
   if ( $rank == '0' ) return '-';
-  if ( $rank ==  1  ) return "<span style='color:#F60;font-weight:bold'>$rank</span";
+  if ( $rank ==  1  ) return "<span style='color:#F60;font-weight:bold'>$rank</span>";
   return $rank;
 }
 

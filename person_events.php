@@ -30,7 +30,7 @@ function showResultsByEvents () {
   ");
 
   tableBegin( 'results', 8 );
-  tableCaption( false, "History (<a href='#' onClick=\"javascript:window.open('person_map.php?i=$chosenPersonId', 'map', config='height=420, width=820, toolbar=0, menubar=0, scrollbars=0, resizable=0, location=0, directories=0, status=0')\">Map</a>)" );
+  tableCaption( false, "History (<a href='#' onclick=\"javascript:window.open('person_map.php?i=$chosenPersonId', 'map', config='height=420, width=820, toolbar=0, menubar=0, scrollbars=0, resizable=0, location=0, directories=0, status=0')\">Map</a>)" );
 
   #--- Process results by event.
   foreach( structureBy( $results, 'eventId' ) as $eventResults ){
@@ -46,25 +46,22 @@ function showResultsByEvents () {
 
     #--- Compute PB Markers
 
-	 //$pbMarkers = [];
-	 $bestBest = 9999999999;
-	 $bestAverage = 9999999999;
+    //$pbMarkers = [];
+    $bestBest = 9999999999;
+    $bestAverage = 9999999999;
     foreach( array_reverse( $eventResults ) as $result ){
       extract( $result );
 
       $pbMarkers[$competitionId][$roundCellName] = 0;
-      if ($best > 0 && $best <= $bestBest)
-      {
-		  $bestBest = $best;
-		  $pbMarkers[$competitionId][$roundCellName] += 1;
+      if ($best > 0 && $best <= $bestBest) {
+        $bestBest = $best;
+        $pbMarkers[$competitionId][$roundCellName] += 1;
       }
-      if ($average > 0 && $average <= $bestAverage)
-      {
-		  $bestAverage = $average;
-		  $pbMarkers[$competitionId][$roundCellName] += 2;
+      if ($average > 0 && $average <= $bestAverage) {
+        $bestAverage = $average;
+        $pbMarkers[$competitionId][$roundCellName] += 2;
       }
-
-	 }
+    }
 
     #--- Show the results.
     foreach( $eventResults as $result ){
@@ -74,21 +71,21 @@ function showResultsByEvents () {
       $currentCompetitionId = $competitionId;
 
       $formatBest = formatValue( $best, $valueFormat );
-		if ($pbMarkers[$competitionId][$roundCellName] % 2)
-		  $formatBest = "<span style='color:#F60;font-weight:bold'>$formatBest</span>";
+      if ($pbMarkers[$competitionId][$roundCellName] % 2)
+        $formatBest = "<span style='color:#F60;font-weight:bold'>$formatBest</span>";
 
       $formatAverage = formatValue( $average, $valueFormat );
-		if ($pbMarkers[$competitionId][$roundCellName] > 1)
-		  $formatAverage = "<span style='color:#F60;font-weight:bold'>$formatAverage</span>";
+      if ($pbMarkers[$competitionId][$roundCellName] > 1)
+        $formatAverage = "<span style='color:#F60;font-weight:bold'>$formatAverage</span>";
 
 
       tableRowStyled( ($isNewCompetition ? '' : 'color:#AAA'), array(
         ($isNewCompetition ? competitionLink( $competitionId, $competitionCellName ) : ''),
         $roundCellName,
         ($isNewCompetition ? "<b>$pos</b>" : $pos),
-		  $formatBest,
+        $formatBest,
         $regionalSingleRecord,
-		  $formatAverage,
+        $formatAverage,
         $regionalAverageRecord,
         formatAverageSources( true, $result, $valueFormat )
       ));

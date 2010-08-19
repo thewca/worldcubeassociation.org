@@ -12,7 +12,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br><br>Checks all results according to our <a href='check_results.txt'>checking procedure</a>.</b></p><hr>";
+  echo "<p><b>This script does *not* affect the database.<br /><br />Checks all results according to our <a href='check_results.txt'>checking procedure</a>.</b></p><hr />\n";
 }
 
 #----------------------------------------------------------------------

@@ -14,7 +14,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br><br>In this admin section I'll put scripts for us.</b></p><hr>";
+  echo "<p><b>This script does *not* affect the database.<br /><br />In this admin section I'll put scripts for us.</b></p><hr />\n";
 }
 
 #----------------------------------------------------------------------
@@ -57,7 +57,7 @@ function showPages () {
 #  showPage( 'persons_reset_demo',
 #            'Somewhat resets the Caltech Winter 2007 results/persons' );
 
-  echo "<hr>";
+  echo "</dl><hr /><dl>\n";
 
   showPage( 'show_competition_details',
             "Shows competition details somewhat like they're shown on the competitions page, but for all competitions on one page for easier checking. Does *NOT* affect the database." );

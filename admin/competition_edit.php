@@ -15,7 +15,7 @@ if( loadData() ){
   showView();
 }
 
-require( '_footer.php' );
+require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

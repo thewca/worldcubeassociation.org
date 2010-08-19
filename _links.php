@@ -39,11 +39,16 @@ function externalLink ( $url, $text ) {
   if( ! $url )
     return emptyLink( $text );
 
+  $url = htmlEscape( $url );
+
   list( $firstWord, $rest) = preg_split( '/\s/', $text, 2 );
   if( $rest )
     $rest = " $rest";
 
-  return " <a class='external' target='_blank' href='$url'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/external_link.png' border='0' />$firstWord</span>$rest</a>";
+  $firstWord = htmlEscape( $firstWord );
+  $rest = htmlEscape( $rest );
+
+  return " <a class='external' href='$url'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/external_link.png' alt='external link' />$firstWord</span>$rest</a>";
 
 #  return $url
 #    ? " <img src='" . pathToRoot() . "images/external_link.png' /><a class='external' target='_blank' href='$url'>$text</a>"
@@ -60,7 +65,7 @@ function emailLink ( $address, $text ) {
   if( $rest )
     $rest = " $rest";
 
-  return " <a class='email' href='mailto:$address'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/email_link.png' border='0' />$firstWord</span>$rest</a>";
+  return " <a class='email' href='mailto:$address'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/email_link.png' alt='email link' />$firstWord</span>$rest</a>";
 
 #  return $address
 #    ? " <img src='" . pathToRoot() . "images/email_link.png' /><a class='email' href='mailto:$address'>$text</a>"

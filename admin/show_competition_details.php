@@ -12,7 +12,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br><br>It shows the competition details as they'd be shown on the single competition pages, but all of them on one page in order to detect mistakes more easily.</b></p><hr>";
+  echo "<p><b>This script does *not* affect the database.<br /><br />It shows the competition details as they'd be shown on the single competition pages, but all of them on one page in order to detect mistakes more easily.</b></p><hr />\n\n";
 }
 
 #----------------------------------------------------------------------
@@ -33,7 +33,8 @@ function showCompetitionDetails () {
     extract( $row );
 
     if( $value ){
-      echo "<tr><td>" . competitionLink( $id, $id ) . "</td><td>$keey</td>";
+      echo "<tr><td>" . competitionLink( $id, $id ) . "</td>";
+      echo "<td>" . htmlEscape( $keey ) . "</td>";
       echo "<td>" . processLinks( $value ) . "</td></tr>\n";
     }
   }

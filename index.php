@@ -44,8 +44,8 @@ function showWelcomeMessage () {
 <br />
 <br />
 The WCA result pages are designed and built by <?= externalLink( 'http://www.rubikscube.info/', 'Josef Jelinek' ) ?>, <?= externalLink( 'http://www.stefan-pochmann.info/', 'Stefan Pochmann' ) ?> and <?= externalLink( 'http://www.worldcubeassociation.org/results/p.php?i=2004GALL02', 'Clément Gallet' ) ?>.<br />
-We would like to thank them for their great work for the cubing community.<br>
-<br>
+We would like to thank them for their great work for the cubing community.<br />
+<br />
 If you have questions about the rankings or if you want to correct something, then please contact <a href="mailto:rbruchem@worldcubeassociation.org">Ron van Bruchem</a>.
 </div>
 

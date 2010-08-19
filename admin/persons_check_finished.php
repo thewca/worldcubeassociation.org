@@ -24,27 +24,27 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *NOT* affect the database.</b></p>";
+  echo "<p><b>This script does *NOT* affect the database.</b></p>\n\n";
 
-  echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity.</p>";
+  echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity.</p>\n\n";
   
-  echo "<p>I run several phases, listed below. You should always work from top to bottom, i.e. don't work on one phase before all previous phases report \"OK\".";
+  echo "<p>I run several phases, listed below. You should always work from top to bottom, i.e. don't work on one phase before all previous phases report \"OK\".</p>\n\n";
 
-  echo "<ul>";
+  echo "<ul>\n";
 
-  echo "<li><p>Find persons in <b>Persons</b> whose name starts or ends with space or has double spaces.</p></li>";
+  echo "<li><p>Find persons in <b>Persons</b> whose name starts or ends with space or has double spaces.</p></li>\n";
 
-  echo "<li><p>Find persons in <b>Results</b> whose name starts or ends with space or has double spaces.</p></li>";
+  echo "<li><p>Find persons in <b>Results</b> whose name starts or ends with space or has double spaces.</p></li>\n";
     
-  echo "<li><p>Find persons in <b>Persons</b> who don't appear in <b>Results</b>. This should really never happen. I don't know what fix I could offer but I show you similar persons from <b>Results</b>.</p></li>";
+  echo "<li><p>Find persons in <b>Persons</b> who don't appear in <b>Results</b>. This should really never happen. I don't know what fix I could offer but I show you similar persons from <b>Results</b>.</p></li>\n";
   
-  echo "<li><p>Find persons in <b>Results</b> who have ids but who don't appear in <b>Persons</b>. Can be caused by organizers telling you incorrect persons. I show similar persons from <b>Persons</b> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <b>Persons</b> table with new subId.</p></li>";
+  echo "<li><p>Find persons in <b>Results</b> who have ids but who don't appear in <b>Persons</b>. Can be caused by organizers telling you incorrect persons. I show similar persons from <b>Persons</b> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <b>Persons</b> table with new subId.</p></li>\n";
   
-  echo "<li>Find persons in <b>Results</b> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundIds are wrong.";
+  echo "<li><p>Find persons in <b>Results</b> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundIds are wrong.</p></li>\n";
   
   echo "</ul>";
   
-  echo "<hr>";
+  echo "<hr />";
 }
 
 #----------------------------------------------------------------------
@@ -97,7 +97,7 @@ function getPersonsFromResults () {
 #----------------------------------------------------------------------
 function checkSpacesInPersons () {
 #----------------------------------------------------------------------
-  echo "<hr>";
+  echo "<hr />";
   
   $bads = dbQuery("
     SELECT name FROM Persons
@@ -132,7 +132,7 @@ function checkSpacesInPersons () {
 #----------------------------------------------------------------------
 function checkSpacesInResults () {
 #----------------------------------------------------------------------
-  echo "<hr>";
+  echo "<hr />";
   
   $bads = dbQuery("
     SELECT personName FROM Results
@@ -171,7 +171,7 @@ function checkSpacesInResults () {
 function checkTooMuchInPersons () {
 #----------------------------------------------------------------------
   global $personsFromPersons, $personsFromResults;
-  echo "<hr>";
+  echo "<hr />";
   
   #--- Find all that are too much.  
   foreach( array_keys( $personsFromPersons ) as $personKey ){
@@ -197,7 +197,7 @@ function checkTooMuchInPersons () {
       visualize( $countryId ),
       visualize( $id )
     ));
-    foreach( getMostSimilarPersons( $name, $countryId, $personsFromResults ) as $similarPerson ){
+    foreach( getMostSimilarPersons( $id, $name, $countryId, $personsFromResults ) as $similarPerson ){
       extract( $similarPerson );
       tableRow( visualize( array( 'Results', $name, $countryId, $id )));
     }
@@ -210,7 +210,7 @@ function checkTooMuchInPersons () {
 function checkTooMuchInResults () {
 #----------------------------------------------------------------------
   global $personsFromPersons, $personsFromResults;
-  echo "<hr>";
+  echo "<hr />";
   
   #--- Find all that are too much.  
   foreach( array_keys( $personsFromResults ) as $personKey ){
@@ -240,7 +240,7 @@ function checkTooMuchInResults () {
     $currId = $id;
     $currName = $name;
     $currCountryId = $countryId;
-    foreach( getMostSimilarPersons( $name, $countryId, $personsFromPersons ) as $similarPerson ){
+    foreach( getMostSimilarPersons( $id, $name, $countryId, $personsFromPersons ) as $similarPerson ){
       extract( $similarPerson );
       $action = "UPDATE Results SET personId='$id', personName='$name', countryId='$countryId' WHERE personId='$currId' AND personName='$currName' AND countryId='$currCountryId'";
       tableRow( array(
@@ -259,7 +259,7 @@ function checkTooMuchInResults () {
 #----------------------------------------------------------------------
 function checkDuplicatesInCompetition () {
 #----------------------------------------------------------------------
-  echo "<hr>";
+  echo "<hr />";
   
   $duplicates = dbQuery("
     SELECT *
@@ -319,7 +319,7 @@ function checkPersonsInResultsWithoutIds () {
     ));
     
     $similarsCtr = 0;
-    foreach( getMostSimilarPersonsMax( $name, $countryId, $personsFromResults, 10 ) as $similarPerson ){
+    foreach( getMostSimilarPersonsMax( $id, $name, $countryId, $personsFromResults, 10 ) as $similarPerson ){
       extract( $similarPerson, EXTR_PREFIX_ALL, 'other' );
       $checked = ($other_name==$name && $other_countryId==$countryId)
         ? "checked='checked'" : '';
@@ -346,20 +346,21 @@ function checkPersonsInResultsWithoutIds () {
 }
 
 #----------------------------------------------------------------------
-function getMostSimilarPersons ( $name, $countryId, $persons ) {
+function getMostSimilarPersons ( $id, $name, $countryId, $persons ) {
 #----------------------------------------------------------------------
-  return getMostSimilarPersonsMax( $name, $countryId, $persons, 4 );
+  return getMostSimilarPersonsMax( $id, $name, $countryId, $persons, 5 );
 }
 
 #----------------------------------------------------------------------
-function getMostSimilarPersonsMax ( $name, $countryId, $persons, $max ) {
+function getMostSimilarPersonsMax ( $id, $name, $countryId, $persons, $max ) {
 #----------------------------------------------------------------------
   
   #--- Compute similarities to all persons.
   foreach( $persons as $other ) {
     extract( $other, EXTR_PREFIX_ALL, 'other' );
+    $other['idSimilarity'] = ( $id == $other_id );
     similar_text( $name, $other_name, $similarity );
-    $other['similarity'] = $similarity;
+    $other['nameSimilarity'] = $similarity;
     similar_text( $countryId, $other_countryId, $similarity );
     $other['countrySimilarity'] = $similarity;
     $candidates[] = $other;
@@ -373,9 +374,11 @@ function getMostSimilarPersonsMax ( $name, $countryId, $persons, $max ) {
 #----------------------------------------------------------------------
 function compareCandidates ( $a, $b ) {
 #----------------------------------------------------------------------
-
-  if( $a['similarity'] > $b['similarity'] ) return -1;
-  if( $a['similarity'] < $b['similarity'] ) return 1;
+  if( $a['idSimilarity'] ) return -1;
+  if( $b['idSimilarity'] ) return 1;
+  
+  if( $a['nameSimilarity'] > $b['nameSimilarity'] ) return -1;
+  if( $a['nameSimilarity'] < $b['nameSimilarity'] ) return 1;
   
   if( $a['countrySimilarity'] > $b['countrySimilarity'] ) return -1;
   if( $a['countrySimilarity'] < $b['countrySimilarity'] ) return 1;

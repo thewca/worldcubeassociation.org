@@ -43,7 +43,7 @@ function startForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
     
-  echo "<form method='POST' action='competition_edit.php?competitionId=$chosenCompetitionId&rand=" . rand() . "'>\n";
+  echo "<form method='post' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>\n";
 }
 
 #----------------------------------------------------------------------
@@ -73,7 +73,7 @@ function showRegularFields () {
       $inputHtml = "<select id='$id' name='$id' style='background:#FF8'>";
       foreach( $extra as $option ){
         $selected = ($option['id'] == $value) ? "selected='selected'" : "";
-        $inputHtml .= "<option value='$option[id]' $selected>$option[name]</option>";
+        $inputHtml .= "<option value=\"$option[id]\" $selected>$option[name]</option>";
       }
       $inputHtml .= "</select>";
     }
@@ -82,13 +82,13 @@ function showRegularFields () {
     $color = $dataError[$id] ? '#FF3333' : '#CCCCFF';
      
     #--- Show label and input field.        
-    echo "<tr bgcolor='$color'>\n";
+    echo "<tr style='background:$color'>\n";
     echo "  <td><b style='white-space:nowrap'>$label</b></td>\n";
     echo "  <td>$inputHtml</td>\n";
     echo "</tr>\n\n";
 
     #--- Show description.
-    echo "<tr bgcolor='#EEEEEE'>\n";
+    echo "<tr style='background:#EEE'>\n";
 #    echo "<td colspan='2' bgcolor='#EEEEEE'>$description</td>";
     echo "  <td>Description</td>\n";
     echo "  <td>$description</td>\n";
@@ -115,7 +115,7 @@ function showEventSpecifications () {
 #----------------------------------------------------------------------
   global $data, $chosenCompetitionId;
 
-  echo "<hr><h1>Events</h1>";
+  echo "<hr /><h1>Events</h1>";
   #--- Explain.
   echo "<ul>";
   echo "<li><p>Choose which events the competition will offer.</p></li>\n";
@@ -128,7 +128,7 @@ function showEventSpecifications () {
   
   #--- Start the table.
   echo "<table border='1' cellspacing='0' cellpadding='4'>";
-  echo "<tr bgcolor='#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td><td>Qualifications Time</td></tr>\n";
+  echo "<tr style='background:#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td><td>Qualifications Time</td></tr>\n";
   
   #--- Get the existing specs.
   $eventSpecs = $data['eventSpecs'];
@@ -150,9 +150,9 @@ function showEventSpecifications () {
     echo "  <td align='center'><input id='offer$id' name='offer$id' type='checkbox' $offer /></td>\n";
     echo "  <td align='center'><input id='personLimit$id' name='personLimit$id' type='text' size='6' style='background:#FF8' value='$personLimit' /></td>\n";
     echo "  <td align='center'><input id='timeLimit$id' name='timeLimit$id' type='text' size='6' style='background:#FF8' value='$timeLimit' /></td>\n";
-    echo "  <td align='center'><input id='timeFormat$id' name='timeFormat$id' type='radio' value='s' $timeSingle /></td>\n";
+    echo "  <td align='center'><input id='timeFormatSingle$id' name='timeFormat$id' type='radio' value='s' $timeSingle /></td>\n";
     if( count( dbQuery( "SELECT * FROM RanksAverage WHERE eventId='$id'" )))
-      echo "  <td align='center'><input id='timeFormat$id' name='timeFormat$id' type='radio' value='a' $timeAverage /></td>\n";
+      echo "  <td align='center'><input id='timeFormatAverage$id' name='timeFormat$id' type='radio' value='a' $timeAverage /></td>\n"; # TODO: Nasty...
     else
       echo "  <td></td>\n";
     echo "  <td align='center'><input id='qualify$id' name='qualify$id' type='checkbox' $qualify /></td>\n";
@@ -205,9 +205,9 @@ function showAnnouncement() {
 #----------------------------------------------------------------------
   global $data, $chosenCompetitionId;
 
-  echo "<hr><h1>Announcements</h1>";
+  echo "<hr /><h1>Announcements</h1>";
 
-  echo "<b>Competition</b><br />";
+  echo "<h4>Competition</h4>";
 
   $months = split( " ", ". January February March April May June July August September October November December" );
   $date = $months[$data['month']] . ' ' . $data['day'];
@@ -225,14 +225,15 @@ function showAnnouncement() {
   $websiteAddress = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2", $data['website'] );
     $msg .= " Check out the <a href=\"$websiteAddress\">$data[name] website</a> for more information and registration.";
   }
-  echo "<textarea cols='100' rows='6' readonly='readonly'>$msg</textarea><br /><br />";
+  $msg = htmlEscape( $msg );
+  echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
 
   
   $competitionResults = dbQuery(" SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' ");
 
   if( $competitionResults ){
   
-    echo "<b>Results</b><br />";
+    echo "<h4>Results</h4>";
 
     //$top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='a' OR roundId='c') ORDER BY pos LIMIT 3 " );
     $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND roundId='f' ORDER BY pos LIMIT 0, 3 " );
@@ -299,7 +300,8 @@ function showAnnouncement() {
       $msg .= ".<br />\n";
       }
     }
-  echo "<textarea cols='100' rows='6' readonly='readonly'>$msg</textarea><br /><br />";
+  $msg = htmlEscape( $msg );
+  echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
   }
 }
 
@@ -308,10 +310,10 @@ function showAnnouncement() {
 function endForm () {
 #----------------------------------------------------------------------
 
-  echo "<center><table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
-  echo "<td bgcolor='#33FF33'><input id='submit' name='submit' type='submit' value='Submit' /></td>\n";
-  echo "<td bgcolor='#FF0000'><input type='reset' value='Reset' /></td>\n";
-  echo "</tr></table></center>\n";
+  echo "<table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
+  echo "<td style='background:#33FF33'><input id='submit' name='submit' type='submit' value='Submit' /></td>\n";
+  echo "<td style='background:#FF0000'><input type='reset' value='Reset' /></td>\n";
+  echo "</tr></table>\n";
   
   echo "</form>";
 }

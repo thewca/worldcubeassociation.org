@@ -177,7 +177,7 @@ function startForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenPassword;
     
-  echo "<form method='POST' action='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword&rand=" . rand() . "'>\n";
+  echo "<form method='post' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=" . rand() . "'>\n";
 }
 
 #----------------------------------------------------------------------
@@ -213,20 +213,20 @@ function showRegs () {
   else
     echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
 
-  echo "<input type='hidden' name='eventSpecs' id='eventSpecs' value='$data[eventSpecs]' />";
+  echo "<p><input type='hidden' name='eventSpecs' id='eventSpecs' value='$data[eventSpecs]' /></p>\n";
 
   $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id" );
 
   if( ! count( $comps)) return;
 
   #--- Start the table.
-  echo "<br /><b>Registered Competitors</b><br/>\n";
+  echo "<h4>Registered Competitors</h4>\n";
   echo "<ul><li><p>A : Accept, D : Delete, E : Edit.</p></li>\n";
   echo "<li><p>Pending registrations are in light red, accepted registrations are in light green.</p></li>\n";
   echo "<li><p>If you want to edit a person, first check its 'edit' checkbox for this to work.</p></li></ul>\n";
   
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
-  echo "<tr bgcolor='#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
+  echo "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
   foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
     if( isOfficialEvent( $eventId ) )
       echo "<td style='font-size:9px'>$eventId</td>\n";
@@ -237,12 +237,12 @@ function showRegs () {
 
   foreach( $comps as $comp ){
     extract( $comp );
-    $name = htmlEntities( $name, ENT_QUOTES );
-    $personId = htmlEntities( $personId, ENT_QUOTES );
+    $name = htmlEscape( $name );
+    $personId = htmlEscape( $personId );
 
-    if( $dataError["reg${id}countryId"] ) echo "<tr bgcolor='#FF3333'>";
-    else if( $status == 'p' ) echo "<tr bgcolor='#FFCCCC'>";
-    else if( $status == 'a' ) echo "<tr bgcolor='#CCFFCC'>";
+    if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>";
+    else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>";
+    else if( $status == 'a' ) echo "<tr style='background-color:#CCFFCC'>";
     echo "  <td><input type='checkbox' id='reg${id}accept' name='reg${id}accept' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>\n";
@@ -254,17 +254,17 @@ function showRegs () {
       switch ($comp["E$eventId"]) {
         case 0: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n"; break;
         case 1: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
-        default:echo "  <td bgcolor='#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
+        default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
       }
     }
     echo "</tr>\n";
   }
   echo "</table>\n";
 
-  echo "<ul><li><p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&password=$data[password]'>extra registration information</a></p></li>\n"; 
-  echo "<li><p>Download the <a href='registration_set_sheet.php?competitionId=$chosenCompetitionId&password=$data[password]'>registration excel sheet</a> in .xlsx format.</p></li>\n"; 
+  echo "<ul><li><p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>extra registration information</a></p></li>\n"; 
+  echo "<li><p>Download the <a href='registration_set_sheet.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>registration excel sheet</a> in .xlsx format.</p></li>\n"; 
   echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n"; 
-  echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&list=1'>this link</a></p></li></ul>\n"; 
+  echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&amp;list=1'>this link</a></p></li></ul>\n"; 
 
 }
 
@@ -273,12 +273,12 @@ function showMap () {
 #----------------------------------------------------------------------
   global $data, $chosenCompetitionId;
 
-  echo "<hr><h1>Map</h1>";
+  echo "<hr /><h1>Map</h1>";
 
-  echo "<input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
-  echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' />";
+  echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
+  echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
-  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$data[password]'>Change</a> the coordinates.</p>";
+  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>Change</a> the coordinates.</p>";
 
 }
 
@@ -286,10 +286,10 @@ function showMap () {
 function endForm () {
 #----------------------------------------------------------------------
 
-  echo "<center><table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
-  echo "<td bgcolor='#33FF33'><input id='submit' name='submit' type='submit' value='Submit' /></td>\n";
-  echo "<td bgcolor='#FF0000'><input type='reset' value='Reset' /></td>\n";
-  echo "</tr></table></center>\n";
+  echo "<table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
+  echo "<td style='background-color:#33FF33'><input id='submit' name='submit' type='submit' value='Submit' /></td>\n";
+  echo "<td style='background-color:#FF0000'><input type='reset' value='Reset' /></td>\n";
+  echo "</tr></table>\n";
   
   echo "</form>";
 }

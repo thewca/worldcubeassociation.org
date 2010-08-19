@@ -78,18 +78,18 @@ function showDescription () {
 #----------------------------------------------------------------------
   global $errors;
 
-  echo "<p><b>This script *DOES* affect the database *WHEN* you tell it to.</b></p>";
+  echo "<p><b>This script *DOES* affect the database *WHEN* you tell it to.</b></p>\n\n";
 
-  echo "<dl>";
-  echo "<dt>Registration</dt><dd>Manage the registered competitors of a competition. You should give the result URL of this to competition organizers.</dd>";
-  echo "<dt>Edit</dt><dd>Edit the competition configuration data, intended for us admins only.</dd>";
-  echo "<dt>Results</dt><dd>Brings you to the results page.</dd>";
-  echo "<dt>New Password</dt><dd>Changes the password of the competition. I suggest you do this once the organizer has finished configuring the competition and you make the competition publicly visible (by editing its \"show\" status), in order to prevent the organizer from introducing mistakes.</dd>";
-  echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>";
-  echo "<dt>Clone</dt><dd>Clones the competition chosen on the left to a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>";
-  echo "</dl>";
+  echo "<dl>\n";
+  echo "<dt>Registration</dt><dd>Manage the registered competitors of a competition. You should give the result URL of this to competition organizers.</dd>\n";
+  echo "<dt>Edit</dt><dd>Edit the competition configuration data, intended for us admins only.</dd>\n";
+  echo "<dt>Results</dt><dd>Brings you to the results page.</dd>\n";
+  echo "<dt>New Password</dt><dd>Changes the password of the competition. I suggest you do this once the organizer has finished configuring the competition and you make the competition publicly visible (by editing its \"show\" status), in order to prevent the organizer from introducing mistakes.</dd>\n";
+  echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
+  echo "<dt>Clone</dt><dd>Clones the competition chosen on the left to a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
+  echo "</dl>\n";
   
-  echo "<hr>";
+  echo "<hr />\n\n";
 
   #--- show errors
 
@@ -114,7 +114,7 @@ function analyzeChoices () {
 function showChoices () {
 #----------------------------------------------------------------------
 
-  displayChoicesWithMethod( 'POST', array(
+  displayChoicesWithMethod( 'post', array(
     competitionChoice( true ),
     choiceButton( true, 'registration', 'Registration' ),
     choiceButton( true, 'edit', 'Edit' ),
