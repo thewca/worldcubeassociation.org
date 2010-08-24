@@ -217,3 +217,7 @@ dd {
   margin: 0 0 0 0;
   text-align: center;
 }
+
+img {
+  border: 0px;
+}
