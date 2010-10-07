@@ -221,3 +221,8 @@ dd {
 img {
   border: 0px;
 }
+
+img.person {
+  max-width:  600px;
+  max-height: 300px;
+}

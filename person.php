@@ -59,7 +59,7 @@ function showBody () {
   $picture_gif = 'upload/a' . $chosenPersonId . '.gif';
   foreach( array( $picture_jpg, $picture_png, $picture_gif ) as $picture )
     if( is_file( $picture ))
-      echo "<center><img width='200' height='300' src='$picture' /></center>";
+      echo "<center><img class='person' src='$picture' /></center>";
 
 
   #--- Show the details.
