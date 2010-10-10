@@ -5,24 +5,42 @@
 
 $currentSection = 'misc';
 
+ob_start();
 require( '../_header.php' );
 
-showBody();
+#--- Output the page header.
+echo "<h1>Age vs Speed</h1>\n\n";
+echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed. It shows the lowest times achieved at different ages, and is complete in the sense that between two consecutive entries, there's nobody with age and record in between. The current single and average world record are highlighted, and the two lists are adjusted so that those two records are on the same row.</p>";
+echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
+
+$events = dbQuery( "
+  SELECT    id, name
+  FROM      Events
+  WHERE     format='time' and rank<999
+  ORDER BY  rank
+" );
+
+foreach ( $events as $event )
+  showBody( $event['id'], $event['name'] );
 
 require( '../_footer.php' );
+$html = ob_get_clean();
+$html = preg_replace( "/'p.php/", "'../p.php", $html );
+echo $html;
+file_put_contents( 'age_vs_speed.html', $html );
 
 #----------------------------------------------------------------------
-function showBody () {
+function showBody ( $eventId, $eventName ) {
 #----------------------------------------------------------------------
 
-  $eventId = '333';
-  $eventName = '3x3x3';
+  if ( $eventId == '333' )
+    echo "<h3>$eventName</h3>";
   
   #--- Get the four partial lists of values personId/personName/ageInDays/value
-  $singleYoungs  =                extractLowest( 'best',    'ASC' );
-  $averageYoungs =                extractLowest( 'average', 'ASC' );
-  $singleOldies  = array_reverse( extractLowest( 'best',    'DESC' ) );
-  $averageOldies = array_reverse( extractLowest( 'average', 'DESC' ) );
+  $singleYoungs  =                extractLowest( $eventId, 'best',    'ASC' );
+  $averageYoungs =                extractLowest( $eventId, 'average', 'ASC' );
+  $singleOldies  = array_reverse( extractLowest( $eventId, 'best',    'DESC' ) );
+  $averageOldies = array_reverse( extractLowest( $eventId, 'average', 'DESC' ) );
 
   #--- Pad the lists so they're the same length
   $empty = array( '', '', '', '' );
@@ -39,15 +57,13 @@ function showBody () {
   $singles  = array_merge( array_slice( $singleYoungs,  0, -1 ), $singleOldies  );
   $averages = array_merge( array_slice( $averageYoungs, 0, -1 ), $averageOldies );
 
-  #--- Output the page header.
-  echo "<h1>Age vs Speed</h1>\n\n";
-  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed for solving the 3x3x3, both single and average. It shows the lowest times achieved at different ages, and is complete in the sense that between two consecutive entries, there's nobody with age and record in between. The current single and average world record are highlighted, and the two lists are adjusted so that those two records are on the same row.</p>";
-  echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
-
   #--- Create and include the diagram image
   $imageFile = "age_vs_speed/$eventId.png";
   createDiagramImage( $eventName, $imageFile, $singles, $averages );
   echo "<img src='$imageFile' />";
+
+  if ( $eventId != '333' )
+    return;
   
   #--- Output the table header
   TableBegin( 'results', 8 );
@@ -82,7 +98,7 @@ function wr ( $wr, $text ) {
 }
 
 #----------------------------------------------------------------------
-function extractLowest ( $sourceId, $ageOrder ) {
+function extractLowest ( $eventId, $sourceId, $ageOrder ) {
 #----------------------------------------------------------------------
 
   $rows = dbQuery( "
@@ -95,13 +111,14 @@ function extractLowest ( $sourceId, $ageOrder ) {
               Competitions c
     WHERE     p.id = personId
       AND     c.id = competitionId
-      AND     eventId = '333' AND $sourceId>0
+      AND     eventId = '$eventId' AND $sourceId>0
       AND     p.year AND p.month AND p.day
       AND     c.year AND c.month AND c.day
     GROUP BY  personId, competitionId
     ORDER BY  ageInDays $ageOrder, value
   " );
 
+  $result = array();
   foreach ( $rows as $row ) {
     list( $personId, $personName, $ageInDays, $value ) = $row;
     if ( ! $lowest || $value < $lowest ) {
@@ -142,8 +159,10 @@ function createDiagramImage ( $eventName, $imageFile, $singles, $averages ) {
         $minAge = min( $minAge, $ageInYears );
         $maxAge = max( $maxAge, $ageInYears );
       }
-    }
-    
+    }    
+    if ( count( $xdata ) == 0 )
+      continue;
+
     // Create the linear plot
     $lineplot=new LinePlot( $ydata, $xdata );
     $lineplot->SetColor( $color );
@@ -159,8 +178,8 @@ function createDiagramImage ( $eventName, $imageFile, $singles, $averages ) {
 
   $graph->SetScale( 'linlin', floor($min*.8), min($min*7, $max), floor( $minAge-0.1), $maxAge+0.1 );
   $graph->SetMargin( 35, 10, 10, 25 );
-  $graph->img->SetAntiAliasing();
-  $graph->legend->SetPos(0.7,0.2,'right','bottom');
+  #$graph->img->SetAntiAliasing();
+  $graph->legend->SetPos(0.5,0.05,'center','top');
   
   // Store as image file
   if ( file_exists( $imageFile ) )
