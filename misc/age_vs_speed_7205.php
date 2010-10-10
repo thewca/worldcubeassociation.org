@@ -15,6 +15,10 @@ require( '../_footer.php' );
 function showBody () {
 #----------------------------------------------------------------------
 
+  $eventId = '333';
+  $eventName = '3x3x3';
+  
+  #--- Get the four partial lists of values personId/personName/ageInDays/value
   $singleYoungs  =                extractLowest( 'best',    'ASC' );
   $averageYoungs =                extractLowest( 'average', 'ASC' );
   $singleOldies  = array_reverse( extractLowest( 'best',    'DESC' ) );
@@ -40,6 +44,11 @@ function showBody () {
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed for solving the 3x3x3, both single and average. It shows the lowest times achieved at different ages, and is complete in the sense that between two consecutive entries, there's nobody with age and record in between. The current single and average world record are highlighted, and the two lists are adjusted so that those two records are on the same row.</p>";
   echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
+  #--- Create and include the diagram image
+  $imageFile = "age_vs_speed/$eventId.png";
+  createDiagramImage( $eventName, $imageFile, $singles, $averages );
+  echo "<img src='$imageFile' />";
+  
   #--- Output the table header
   TableBegin( 'results', 8 );
   TableHeader( array('Age','Single','Name','|','Age','Average','Name',''),
@@ -101,6 +110,63 @@ function extractLowest ( $sourceId, $ageOrder ) {
     }
   }
   return $result;
+}
+
+#----------------------------------------------------------------------
+function createDiagramImage ( $eventName, $imageFile, $singles, $averages ) {
+#----------------------------------------------------------------------
+
+  require_once ("../jpgraph/jpgraph.php");
+  require_once ("../jpgraph/jpgraph_line.php");
+   
+  // Create the graph
+  $graph = new Graph( 860, 300 );
+  
+  #--- Add the line plots for average and single
+  $min = $minAge = 999999; $max = $maxAge = 0; 
+  foreach ( array( array( 'average', 'red', $averages ), array( 'single', 'blue', $singles ) ) as $lineData ) {
+    list( $name, $color, $rows ) = $lineData;
+    
+    // Gather the data
+    $xdata = array();
+    $ydata = array();
+    foreach ( $rows as $row ) {
+      list( $personId, $personName, $ageInDays, $value, $wr ) = $row;
+      if ( $ageInDays ) {
+        $ageInYears = $ageInDays / 365.25;
+        $v = $value / 100;
+        $xdata[] = $ageInYears;
+        $ydata[] = $v;
+        $min = min( $min, $v );
+        $max = max( $max, $v );
+        $minAge = min( $minAge, $ageInYears );
+        $maxAge = max( $maxAge, $ageInYears );
+      }
+    }
+    
+    // Create the linear plot
+    $lineplot=new LinePlot( $ydata, $xdata );
+    $lineplot->SetColor( $color );
+    $lineplot->SetLegend( "$eventName $name" );
+    
+    $lineplot->mark->SetType( MARK_FILLEDCIRCLE );
+    $lineplot->mark->SetFillColor( $color);
+    $lineplot->mark->SetWidth( 3 );
+    
+    // Add the plot to the graph
+    $graph->Add( $lineplot );
+  }
+
+  $graph->SetScale( 'linlin', floor($min*.8), min($min*7, $max), floor( $minAge-0.1), $maxAge+0.1 );
+  $graph->SetMargin( 35, 10, 10, 25 );
+  $graph->img->SetAntiAliasing();
+  $graph->legend->SetPos(0.7,0.2,'right','bottom');
+  
+  // Store as image file
+  if ( file_exists( $imageFile ) )
+    unlink( $imageFile );
+  $graph->Stroke( $imageFile );
+
 }
 
 ?>
