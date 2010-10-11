@@ -27,7 +27,8 @@ require( '../_footer.php' );
 $html = ob_get_clean();
 $html = preg_replace( "/'p.php/", "'../p.php", $html );
 echo $html;
-file_put_contents( 'age_vs_speed.html', $html );
+if ( ! debug() )
+  file_put_contents( 'age_vs_speed.html', $html );
 
 #----------------------------------------------------------------------
 function showBody ( $eventId, $eventName ) {
@@ -176,7 +177,7 @@ function createDiagramImage ( $eventName, $imageFile, $singles, $averages ) {
     $graph->Add( $lineplot );
   }
 
-  $graph->SetScale( 'linlin', floor($min*.8), min($min*7, $max), floor( $minAge-0.1), $maxAge+0.1 );
+  $graph->SetScale( 'linlin', floor($min*0.0), min($min*7, $max), floor( $minAge-0.1), $maxAge+0.1 );
   $graph->SetMargin( 35, 10, 10, 25 );
   #$graph->img->SetAntiAliasing();
   $graph->legend->SetPos(0.5,0.05,'center','top');
