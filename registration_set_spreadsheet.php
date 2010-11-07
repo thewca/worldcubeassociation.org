@@ -57,18 +57,6 @@ function showView () {
 
   $formats = dbQuery( "SELECT * FROM Formats" );
 
-  #--- Start Table
-
-  echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
-  echo "<tr bgcolor='#CCCCFF'><td>Event</td>";
-
-  #--- Fill header.
-
-  foreach( $formats as $format )
-    echo "<td>" . $format['name'] . "</td>";
-  echo "<td>Use seconds</td><td>Use minutes</td>";
-  echo "</tr>\n";
-
   #--- List of possible formats for each event, according to http://www.worldcubeassociation.org/regulations .
 
   $eventIds = getAllEventIds();
@@ -134,47 +122,86 @@ function showView () {
     "555bf"=>"minutes",
     "333mbf"=>"multi");
 
+  #--- Start Table
+  tableBegin( 'results', 6 );
+  tableHeader( split( '\\|', 'Event|Time Format|Round 1|Round 2|Round 3|Round 4' ),
+               array( 5 => 'class="f"' ));
+
 
   #--- Show the events.
 
   $eventIds = getEventSpecsEventIds( $data['eventSpecs'] );
   foreach( $eventIds as $eventId ) {
-    echo "<tr><td>" . eventCellName( $eventId ) . "</td>";
-
-    #--- Choose Format.
-
-    foreach( $formats as $format ) {
-      $formatId = $format['id'];
-      if( $possibleFormats[$eventId][$formatId] ) {
-        if( $preferedFormat[$eventId] == $formatId )
-          echo "<td><input id='format$eventId$formatId' name='format$eventId' type='radio' value='$formatId' checked='checked' /></td>\n";
-        else
-          echo "<td><input id='format$eventId$formatId' name='format$eventId' type='radio' value='$formatId' /></td>\n";
-      }
-      else
-        echo "<td></td>\n";
-    }
+    if( ! isOfficialEvent( $eventId )) continue;
+    $row = array( eventCellName( $eventId ));
 
     #--- Choose Unit.
 
-
     switch( $preferedUnit[$eventId] ) {
       case 'seconds':
-        echo "<td><input id='unit${eventId}s' name='unit$eventId' type='radio' value='seconds' checked='checked' /></td>";
-        echo "<td><input id='unit${eventId}m' name='unit$eventId' type='radio' value='minutes' /></td>";
+        $unitChoice = "<select class='drop' id='unit$eventId' name='unit$eventId'>\n";
+        $unitChoice .= "  <option value='seconds' selected='selected'>Seconds</option>\n";
+        $unitChoice .= "  <option value='minutes'>Minutes</option>\n";
+        $unitChoice .= "</select>\n";
         break;
       case 'minutes':
-        echo "<td><input id='unit${eventId}s' name='unit$eventId' type='radio' value='seconds' /></td>";
-        echo "<td><input id='unit${eventId}m' name='unit$eventId' type='radio' value='minutes' checked='checked' /></td>";
+        $unitChoice = "<select class='drop' id='unit$eventId' name='unit$eventId'>\n";
+        $unitChoice .= "  <option value='seconds'>Seconds</option>\n";
+        $unitChoice .= "  <option value='minutes' selected='selected'>Minutes</option>\n";
+        $unitChoice .= "</select>\n";
         break;
-      default:
-        echo "<td><input id='unit$eventId' name='unit$eventId' type='hidden' value='".$preferedUnit[$eventId]."' /></td><td></td>"; # Special values.
+      case 'number':
+        $unitChoice = "  Number<input type='hidden' id='unit$eventId' name='unit$eventId' value='number' />\n";
+        break;
+      case 'multi':
+        $unitChoice = "  Multi BLD<input type='hidden' id='unit$eventId' name='unit$eventId' value='multi' />\n";
+        break;
+    }
+    $row[] = $unitChoice;
+
+
+    $row2 = array( '', '' );
+
+    $rounds = dbQuery( "SELECT * FROM Rounds ORDER BY rank" );
+    foreach( array( 1, 2, 3, 4) as $roundNumber ) {
+
+      #--- Choose Round.
+
+      $roundChoice = "<select class='drop' id='round$roundNumber$eventId' name='round$roundNumber$eventId'>\n";
+      $roundChoice .= "  <option value='n' >-</option>\n";
+      foreach( $rounds as $round ){
+        extract( $round );
+        if(( $id == 'f' ) and ( $roundNumber == 1 ))
+          $roundChoice .= "  <option value='$id' selected='selected'>$cellName</option>\n";
+        else
+          $roundChoice .= "  <option value='$id'>$cellName</option>\n";
+      }
+      $row[] = $roundChoice;
+
+      #--- Choose Format.
+
+      $formatChoice = "<select class='drop' id='format$roundNumber$eventId' name='format$roundNumber$eventId'>\n";
+      foreach( $formats as $format ) {
+        $formatId = $format['id'];
+        $formatName = $format['name'];
+        if( $possibleFormats[$eventId][$formatId] ) {
+          if( $preferedFormat[$eventId] == $formatId )
+            $formatChoice .= "  <option value='$formatId' selected='selected'>$formatName</option>\n";
+          else
+            $formatChoice .= "  <option value='$formatId'>$formatName</option>\n";
+        }
+      }
+      $formatChoice .= "</select>\n";
+
+      $row2[] = $formatChoice;
     }
 
-  echo "</tr>\n";
+    tableRow( $row );
+    tableRow( $row2 );
+
   }
 
-  echo "</table>\n";
+  tableEnd();
 
   echo "<input id='submit' name='submit' type='submit' value='Submit' />\n</form><br/>\n";
   echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=".rand()."'>Back</a>\n";

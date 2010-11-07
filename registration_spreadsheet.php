@@ -21,14 +21,18 @@ if( checkPasswordAndLoadData() ) {
 #----------------------------------------------------------------------
 function analyseChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenPassword, $chosenFormat, $chosenUnit;
+  global $chosenCompetitionId, $chosenPassword;
+  global $chosenFormat, $chosenUnit, $chosenRound;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
   $chosenPassword = getNormalParam( 'password' );
 
   foreach( getAllEventIds() as $eventId ) {
-    $chosenFormat[$eventId] = getNormalParam( "format$eventId" );
     $chosenUnit[$eventId] = getNormalParam( "unit$eventId" );
+    foreach( array( 1, 2, 3, 4) as $roundNumber ) {
+      $chosenRound[$eventId][$roundNumber] = getNormalParam( "round$roundNumber$eventId" );
+      $chosenFormat[$eventId][$roundNumber] = getNormalParam( "format$roundNumber$eventId" );
+    }
   }
 }
 
@@ -65,10 +69,14 @@ function initialiseAndCreateSpreadsheet () {
   global $spreadsheet;
 
   error_reporting(E_ALL);
-
+  require_once 'zip/ZipArchive.php';
   require_once 'PHPExcel.php';
 
+  $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+  PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
+
   $spreadsheet = new PHPExcel();
+  $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
 
 }
 
@@ -86,16 +94,6 @@ function fillRegistration () {
 
   $registrationSheet->setShowGridlines( true );
   $registrationSheet->setPrintGridlines( true );
-
-  #--- Set size of columns - Seems to be broken...
-  /*
-  foreach( $registrationSheet->getColumnDimensions() as $columnDimension )
-    $columnDimension->setAutoSize( true );
-
-  $registrationSheet->getColumnDimension( 'B' )->setAutoSize( true );
-  $registrationSheet->getColumnDimension( 'C' )->setAutoSize( true );
-  $registrationSheet->getColumnDimension( 'D' )->setAutoSize( true );
-  */
 
   $registrationSheet->freezePane( 'A4' );
 
@@ -126,6 +124,15 @@ function fillRegistration () {
   $registrationSheet->setCellValueByColumnAndRow( $col+2, 3, 'IP' );
 
 
+  $registrationSheet->duplicateStyleArray(
+    array(
+      'font'    => array(
+        'bold'      => true,
+      ),
+    ),
+    'A3:F3'
+  );
+
   #--- Fill worksheet content.
 
   $row = 4;
@@ -133,7 +140,8 @@ function fillRegistration () {
     extract( $reg );
 
     $registrationSheet->setCellValueByColumnAndRow( 0, $row, $row-3 );
-    $registrationSheet->setCellValueByColumnAndRow( 1, $row, $name );
+    #$registrationSheet->setCellValueByColumnAndRow( 1, $row, $name );
+    $registrationSheet->setCellValueByColumnAndRow( 1, $row, utf8_encode( $name ));
     $registrationSheet->setCellValueByColumnAndRow( 2, $row, $countryId );
     $registrationSheet->setCellValueByColumnAndRow( 3, $row, $personId );
     $registrationSheet->setCellValueByColumnAndRow( 4, $row, $gender );
@@ -150,11 +158,21 @@ function fillRegistration () {
 
     $registrationSheet->setCellValueByColumnAndRow( $col, $row, $email );
     $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
-    $registrationSheet->setCellValueByColumnAndRow( $col+1, $row, $guests );
+    $registrationSheet->setCellValueByColumnAndRow( $col+1, $row, utf8_encode( $guests ));
     $registrationSheet->setCellValueByColumnAndRow( $col+2, $row, $ip );
 
     $row += 1;
   }
+
+  #--- Set size of columns - Seems to be broken...
+
+  foreach( $registrationSheet->getColumnDimensions() as $columnDimension )
+    $columnDimension->setAutoSize( true );
+
+
+  #$registrationSheet->getColumnDimension( 'B' )->setAutoSize( true );
+  #$registrationSheet->getColumnDimension( 'C' )->setAutoSize( true );
+  #$registrationSheet->getColumnDimension( 'D' )->setAutoSize( true );
 
 
 
@@ -163,44 +181,57 @@ function fillRegistration () {
 #----------------------------------------------------------------------
 function fillEvents () {
 #----------------------------------------------------------------------
-  global $spreadsheet, $chosenCompetitionId, $chosenFormat, $chosenUnit, $data;
+  global $spreadsheet, $chosenCompetitionId, $data;
+  global $chosenFormat, $chosenUnit, $chosenRound;
 
   $eventIds = getEventSpecsEventIds( $data['eventSpecs'] );
   $persons = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
 
   foreach( $eventIds as $eventId ) {
+    if( ! isOfficialEvent( $eventId )) continue;
+    foreach( array( 1, 2, 3, 4) as $roundNumber ) {
+      if( $chosenRound[$eventId][$roundNumber] != 'n' ){
 
-    #--- Create event worksheet.
 
-    $eventSheet = $spreadsheet->createSheet();
-    $eventSheet->setTitle( eventCellName( $eventId ));
+        #--- Create event worksheet.
 
-    $eventPersons = null;
-    foreach( $persons as $person )
-      if( $person["E$eventId"] )
-        $eventPersons[] = $person;
+        $eventSheet = $spreadsheet->createSheet();
+        $eventSheet->setTitle( $eventId . '-' . $chosenRound[$eventId][$roundNumber]);
 
-    #--- Fill event worksheet.
+        $eventPersons = null;
+        foreach( $persons as $person )
+          if( $person["E$eventId"] )
+            $eventPersons[] = $person;
 
-    fillEventsHeader  ( $eventSheet, $eventId );
-    fillEventsPersons ( $eventSheet, $eventId, $eventPersons );
-    fillEventsStyle   ( $eventSheet, $eventId, count( $eventPersons ) );
+        #--- Fill event worksheet.
 
+
+
+        fillEventsHeader  ( $eventSheet, $eventId, $roundNumber );
+        fillEventsPersons ( $eventSheet, $eventId, $roundNumber, $eventPersons );
+        fillEventsStyle   ( $eventSheet, $eventId, $roundNumber, count( $eventPersons ) );
+      }
+    }
   }
 }
 
-
 #----------------------------------------------------------------------
-function fillEventsHeader ( $eventSheet, $eventId ) {
+function fillEventsHeader ( $eventSheet, $eventId, $roundNumber ) {
 #----------------------------------------------------------------------
-  global $chosenFormat, $chosenUnit;
+  global $chosenFormat, $chosenUnit, $chosenRound;
 
-  $formatId = $chosenFormat[$eventId];
+  $formatId = $chosenFormat[$eventId][$roundNumber];
+  $roundId = $chosenRound[$eventId][$roundNumber];
   $unit = $chosenUnit[$eventId];
 
   #--- Fill beginning of worksheet.
 
-  $eventSheet->setCellValue( 'A1', eventName( $eventId ));
+  $rounds = dbQuery( "SELECT * FROM Rounds" );
+  foreach( $rounds as $round )
+    if( $round['id'] == $roundId )
+      $roundName = $round['name'];
+
+  $eventSheet->setCellValue( 'A1', eventName( $eventId ) . ' - ' . $roundName);
 
   $formats = dbQuery( "SELECT * FROM Formats" );
   foreach( $formats as $format )
@@ -340,16 +371,18 @@ function fillEventsHeader ( $eventSheet, $eventId ) {
 
 
 #----------------------------------------------------------------------
-function fillEventsPersons ( $eventSheet, $eventId, $persons ) {
+function fillEventsPersons ( $eventSheet, $eventId, $roundNumber, $persons ) {
 #----------------------------------------------------------------------
   global $chosenFormat, $chosenUnit;
 
-  $formatId = $chosenFormat[$eventId];
+  $formatId = $chosenFormat[$eventId][$roundNumber];
   $unit = $chosenUnit[$eventId];
 
   $row = 5;
 
   foreach( $persons as $person ) {
+
+    set_time_limit( 10 );
 
     extract( $person );
 
@@ -399,11 +432,11 @@ function fillEventsPersons ( $eventSheet, $eventId, $persons ) {
     }
 
     #--- Fill persons.
-
-    $eventSheet->setCellValueByColumnAndRow( 1, $row, $name );
-    $eventSheet->setCellValueByColumnAndRow( 2, $row, $countryId );
-    $eventSheet->setCellValueByColumnAndRow( 3, $row, $personId );
-
+    if( $roundNumber == 1 ) {
+      $eventSheet->setCellValueByColumnAndRow( 1, $row, utf8_encode( $name ));
+      $eventSheet->setCellValueByColumnAndRow( 2, $row, $countryId );
+      $eventSheet->setCellValueByColumnAndRow( 3, $row, $personId );
+    }
 
     #--- Fill best and average formulas.
 
@@ -444,7 +477,7 @@ function fillEventsPersons ( $eventSheet, $eventId, $persons ) {
 
         case 'm':
           $eventSheet->setCellValueByColumnAndRow( 7, $row, "=if(min(E$row:G$row)>0,min(E$row:G$row),if(countblank(E$row:G$row)=3,\"\",\"DNF\"))" );
-          $eventSheet->setCellValueByColumnAndRow( 9, $row, "=if(countblank(E$row:G)>0,\"\",if(countif(E$row:I$row,\"DNF\")+countif(E$row:I$row,\"DNS\")>0,\"DNF\",average(E$row:G$row)))" );
+          $eventSheet->setCellValueByColumnAndRow( 9, $row, "=if(countblank(E$row:G$row)>0,\"\",if(countif(E$row:I$row,\"DNF\")+countif(E$row:I$row,\"DNS\")>0,\"DNF\",average(E$row:G$row)))" );
           break;
 
         case 'a':
@@ -461,11 +494,11 @@ function fillEventsPersons ( $eventSheet, $eventId, $persons ) {
 }
 
 #----------------------------------------------------------------------
-function fillEventsStyle ( $eventSheet, $eventId, $nbPersons ) {
+function fillEventsStyle ( $eventSheet, $eventId, $roundNumber, $nbPersons ) {
 #----------------------------------------------------------------------
   global $chosenFormat, $chosenUnit;
 
-  $formatId = $chosenFormat[$eventId];
+  $formatId = $chosenFormat[$eventId][$roundNumber];
   $unit = $chosenUnit[$eventId];
 
   $style = new PHPExcel_Style();
@@ -552,7 +585,7 @@ function writeSpreadsheet () {
   global $spreadsheet, $chosenCompetitionId;
 
   $spreadsheetWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
-  $spreadsheetWriter->save( 'results.xlsx' );
+  $spreadsheetWriter->save( 'results.xls' );
 
 }
 
@@ -567,6 +600,7 @@ function saveSpreadsheet () {
   header('Cache-Control: max-age=0');
 
   $spreadsheetWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+  #$spreadsheetWriter->setPreCalculateFormulas( false );
   $spreadsheetWriter->save('php://output');
 
 }

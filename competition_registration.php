@@ -179,7 +179,7 @@ function showField ( $fieldSpec ) {
     global $persons;
     list( $label ) = split( ' ', $rest, 1 );
     $fieldHtml =  "<select id='$id' name='$id'>\n";
-	 foreach( $persons as $person ){
+      foreach( $persons as $person ){
       $personName = $person['name'];
       $personId   = $person['id'  ];
       $fieldHtml .= "  <option value='$personId'>$personName</option>\n";
@@ -188,6 +188,7 @@ function showField ( $fieldSpec ) {
     $fieldHtml .= "<input type='submit' id='confirm' name='confirm' value='Load' />";
     $type = 'standard';
   }
+
 
   #---------------------
   if( $type == 'country' ){
