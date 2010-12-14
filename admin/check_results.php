@@ -101,7 +101,7 @@ function checkResult ( $result ) {
   if( $format == 'a' )
     $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
   if( $average > 60000 )
-    $average = ($average - ($average % 100));
+    $average = ($average + 50 - (($average + 50) % 100));
 
   #--- 8) compare the computed best and average with the stored ones
   if( $result['best'] != $best )
