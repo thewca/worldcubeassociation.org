@@ -112,12 +112,9 @@ function importLocalNames () {
 
     echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>\n";
 
-    echo "<p>You can add or modify local names here, by upload a text file.</p>\n";
-
-    echo "<p>The syntax is:<br />\n";
-    echo "  <ul><li>one name entry per line</li>\n";
-    echo "    <li>on each line: the WCA id, the tabulation character and the name</li></ul></p>\n";
+    echo "<p>You can add or modify local names here, by upload a file containing the names. The file must be a plain text file encoded in UTF-8. Each line must contain: the WCA id, a comma (',') and the name you would like to add. If you want to remove a name from the database, just leave the name part blank.</p>\n";
   
+    echo "<p>Example: <br /><br />2009WANG20,王超<br />2009WANG62,王宇欣<br />2009WANG13,王宇轩<br />etc.</p>\n";
     echo "<hr>\n";
 
     echo "<table class='prereg'>\n";
