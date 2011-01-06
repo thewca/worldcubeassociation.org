@@ -80,7 +80,7 @@ function spaced ( $parts ) {
 }
 
 function htmlEscape ( $string ) {
-  return htmlEntities( $string, ENT_QUOTES );
+  return htmlEntities( $string, ENT_QUOTES, "UTF-8" );
 }
 
 function chosenRegionName () {

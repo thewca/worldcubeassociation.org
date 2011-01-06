@@ -6,7 +6,7 @@
 
 <head>
 <title>World Cube Association - Official Results</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="author" content="Stefan Pochmann, Josef Jelinek" />
 <meta name="description" content="Official World Cube Association Competition Results" />
 <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
@@ -101,7 +101,7 @@ echo "markerVioletp = { icon:violetIconp };\n";
       }
 
       $infosHtml .= "<b>" . competitionLink( $id, $cellName ) . "</b> (" . competitionDate( $competition ) . ", $year)<br/>";
-      $pastVenue = processLinks( htmlEntities( $venue , ENT_QUOTES ));
+      $pastVenue = processLinks( htmlEntities( $venue , ENT_QUOTES, "UTF-8" ));
 
       $latitude /= 1000000;
       $longitude /= 1000000;

@@ -68,6 +68,9 @@ function showPages () {
   showPage( 'validate_media',
             "Validates media that have been submitted. Does *NOT* affect the database unless you say so." );
 
+  showPage( 'add_local_names',
+            "Add local names to persons. *DOES* affect the database." );
+
   showPage( 'persons_picture',
             "Validates pictures that have been submitted. Does *NOT* affect the database." );
 

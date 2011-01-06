@@ -53,7 +53,7 @@ function specifyModel () {
       'venue',
       'Venue',
       'The venue where the competition takes place.',
-      "[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]",
+      "[{CitÃ© des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]",
       $patternTextWithLinks
     ),
     array (

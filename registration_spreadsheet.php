@@ -600,7 +600,7 @@ function saveSpreadsheet () {
   header('Cache-Control: max-age=0');
 
   $spreadsheetWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
-  #$spreadsheetWriter->setPreCalculateFormulas( false );
+  $spreadsheetWriter->setPreCalculateFormulas( false );
   $spreadsheetWriter->save('php://output');
 
 }

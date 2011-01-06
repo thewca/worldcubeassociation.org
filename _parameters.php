@@ -82,7 +82,7 @@ function getHtmlParam ( $name ) {
 #----------------------------------------------------------------------
 
   $value = urlDecode( getRawParamThisShouldBeAnException( $name ));
-  $value = htmlEntities( $value, ENT_QUOTES );
+  $value = htmlEntities( $value, ENT_QUOTES, "UTF-8" );
   debugParameter( 'html', $name, $value );
   return $value;
 }

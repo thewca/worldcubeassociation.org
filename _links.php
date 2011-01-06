@@ -5,12 +5,12 @@ function competitionLink ( $id, $name ) {
 }
 
 function competitionLinkClassed ( $class, $id, $name ) {
-  $name = htmlEntities( $name );
+  $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
   return "<a class='$class' href='c.php?i=$id'>$name</a>";
 }
 
 function personLink ( $id, $name ) {
-  $name = htmlEntities( $name );
+  $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
   return "<a class='p' href='p.php?i=$id'>$name</a>";
 }
 
@@ -20,12 +20,12 @@ function eventLink ( $id, $name ) {
 }
 
 function eventAverageLink ( $id, $name ) {
-  $name = htmlEntities( $name );
+  $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
   return "<a class='e' href='e.php?i=$id&amp;average=1'>$name</a>";
 }
 
 function internalEventLink ( $href, $name ) {
-  $name = htmlEntities( $name );
+  $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
   return "<a class='internalEvent' href='$href'>$name</a>";
 }
 

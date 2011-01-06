@@ -40,7 +40,7 @@ function choice ( $id, $caption, $options, $chosenOption ) {
   $chosen = urlEncode( $chosenOption );
   foreach( $options as $option ){
     $nick = urlEncode( $option[0] );
-    $text = htmlEntities( $option[1] );
+    $text = htmlEntities( $option[1], ENT_QUOTES, "UTF-8" );
     $selected = ($chosen  &&  $nick == $chosen) ? " selected='selected'" : "";
     $result .= "<option value='$nick'$selected>$text</option>\n";
   }

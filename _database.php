@@ -18,6 +18,8 @@ function establishDatabaseAccess () {
   #--- Select the database.
   mysql_select_db( $configDatabaseName )
     or die( "<p>Unable to access the database.<br />\n(" . mysql_error() . ")</p>\n" );
+
+  dbCommand( "SET NAMES 'utf8'" );
 }
 
 #----------------------------------------------------------------------
