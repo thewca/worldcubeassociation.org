@@ -49,10 +49,11 @@ function importLocalNames () {
       }
 
       list( $wcaId, $localName ) = explode( ',', $nameLine );
+      $wcaId = utf8_decode( $wcaId );
       $persons = dbQuery( "SELECT name personName, localName personLocalName FROM Persons WHERE id='$wcaId'" );
 
       if( count( $persons ) == 0 ){
-        showErrorMessage( "Unknown WCA id " . htmlEscape( $wcaid ) );
+        showErrorMessage( "Unknown WCA id " . htmlEscape( $wcaId ) );
         $oneBad = true;
         continue;
       }
