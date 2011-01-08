@@ -30,7 +30,7 @@ function showBody () {
     SELECT person.name personName, person.localName personLocalName, country.name countryName, day, month, year, gender
     FROM Persons person, Countries country
     WHERE person.id = '$chosenPersonId' AND country.id = person.countryId
-    ORDER BY person.subId DESC
+    ORDER BY person.subId
   ");
 
   #--- If there are none, show an error and do no more.
@@ -43,8 +43,6 @@ function showBody () {
   $currentPerson = array_shift( $persons );
   extract( $currentPerson );
   echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personName</a></h1>";
-  if( $personLocalName )
-    echo "<h1>$personLocalName</h1>";
 
   #--- Show previous incarnations if any.
   if( count( $persons )){

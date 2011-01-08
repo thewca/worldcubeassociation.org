@@ -39,21 +39,22 @@ function importLocalNames () {
     if( ! $chosenConfirm )
       move_uploaded_file( $_FILES['namesFile']['tmp_name'], $upload_path . $chosenFilename . '.txt' );
 
-    $nameLines = file( $upload_path . $chosenFilename . '.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+    $nameLines = file( $upload_path . $chosenFilename . '.txt', FILE_SKIP_EMPTY_LINES );
 
     foreach( $nameLines as $nameLine ){
+      $nameLine = rtrim( $nameLine );
       if( count( explode( ',', $nameLine )) != 2 ){
-        showErrorMessage( "Wrong line syntax: <br /> " . htmlEscape( $nameLine ) );
+        echo "<span style='color:#F00'>Wrong line syntax: <br /> " . htmlEscape( $nameLine ) . "</span><br />\n";
         $oneBad = true;
         continue;
       }
 
       list( $wcaId, $localName ) = explode( ',', $nameLine );
       $wcaId = utf8_decode( $wcaId );
-      $persons = dbQuery( "SELECT name personName, localName personLocalName FROM Persons WHERE id='$wcaId'" );
+      $persons = dbQuery( "SELECT name personName, romanName personRomanName, localName personLocalName FROM Persons WHERE id='$wcaId' AND subId=1" );
 
       if( count( $persons ) == 0 ){
-        showErrorMessage( "Unknown WCA id " . htmlEscape( $wcaId ) );
+        echo "<span style='color:#DB0'>Unknown WCA id " . htmlEscape( $wcaId ) . "</span><br />\n";
         $oneBad = true;
         continue;
       }
@@ -63,7 +64,10 @@ function importLocalNames () {
 
       if( $chosenConfirm ){
         $localName = mysql_real_escape_string( $localName );
-        dbCommand( "UPDATE Persons SET localName='$localName' WHERE id='$wcaId'" );
+        $name = mysql_real_escape_string( $personRomanName ) . ' (' . $localName . ')';
+        dbCommand( "UPDATE Persons SET localName='$localName' WHERE id='$wcaId' AND subId=1" );
+        dbCommand( "UPDATE Persons SET name='$name' WHERE id='$wcaId' AND subId=1" );
+        dbCommand( "UPDATE Results SET personName='$name' WHERE personId='$wcaId'" );
         $oneGood = true;
       }
 
@@ -72,7 +76,7 @@ function importLocalNames () {
         if( $localName == ''){
           if( $personLocalName == '' ){}
           else{
-            echo "<span style='color:#F00'>I will remove name ".htmlEscape( $personLocalName )." from ".htmlEscape( $personName )."($wcaId)</span><br />\n";
+            echo "<span style='color:#3C3'>I will remove name ".htmlEscape( $personLocalName )." from ".htmlEscape( $personName )."($wcaId)</span><br />\n";
           }
         }
 
@@ -81,7 +85,7 @@ function importLocalNames () {
             echo "<span style='color:#3C3'>I will add name ".htmlEscape( $localName )." to ".htmlEscape( $personName )."($wcaId)</span><br />\n";
           }
           else{
-            echo "<span style='color:#DB0'>I will change name ".htmlEscape( $personLocalName )." to ".htmlEscape( $localName )." for ".htmlEscape( $personName )."($wcaId)</span><br />\n";
+            echo "<span style='color:#3C3'>I will change name ".htmlEscape( $personLocalName )." to ".htmlEscape( $localName )." for ".htmlEscape( $personName )."($wcaId)</span><br />\n";
           }
         }
       }

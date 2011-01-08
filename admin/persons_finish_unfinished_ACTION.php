@@ -120,8 +120,8 @@ function insertPerson( $newName, $newCountry, $newId ) {
 
   #--- Build the command.  
   $command = "
-    INSERT INTO Persons (id, subId, name, countryId, gender, year, month, day, comments)
-    VALUES ( '$newId', 1, '$newName', '$newCountry', '', 0, 0, 0, '' ) 
+    INSERT INTO Persons (id, subId, name, romanName, countryId, gender, year, month, day, comments)
+    VALUES ( '$newId', 1, '$newName', '$newName', '$newCountry', '', 0, 0, 0, '' ) 
   ";
 
   #--- Show the command.
