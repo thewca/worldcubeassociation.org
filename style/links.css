@@ -37,6 +37,7 @@ a.rg:hover                           { color: #714; }
 
 a.p:link, a.p:visited, a.p:active { color: #F60; }
 a.p:hover                         { color: #C30; }
+a.p span                          { color: #A20; font-weight: normal; }
 
 /* ---------- event ---------------- */
 

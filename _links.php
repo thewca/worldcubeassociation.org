@@ -11,6 +11,7 @@ function competitionLinkClassed ( $class, $id, $name ) {
 
 function personLink ( $id, $name ) {
   $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
+  $name = preg_replace( '/\((.*)\)$/', '<span>($1)</span>', $name );
   return "<a class='p' href='p.php?i=$id'>$name</a>";
 }
 
