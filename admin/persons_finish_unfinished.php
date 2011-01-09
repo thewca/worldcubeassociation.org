@@ -23,7 +23,7 @@ function showDescription () {
   echo "<p>For each unfinished person in the Results table, I show you the few most similar persons. Then you make choices and click \"update\" at the bottom of the page to show and execute your choices. You can:</p>\n\n";
 
   echo "<ul>\n";
-  echo "  <li>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly.</li>\n";
+  echo "  <li>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly. If this person has both roman and local names, the syntax for the names to be inserted correctly is 'romanName (localName)'. </li>\n";
   echo "  <li>Choose another person. This will overwrite the person's name/country/id in the Results table with those of the other person.</li>\n";
   echo "  <li>Skip it if you're not sure yet.</li>\n";
   echo "</ul>\n\n";
@@ -90,14 +90,12 @@ function showUnfinishedPersons () {
     if( $id )
       continue;
 
-#if( ! $nameHtml )
-#  $name = 'Andy\'s Taso';
-  
     #--- Try to compute the semi-id.
+    $romanName = rtrim( preg_replace( '/\((.*)\)$/', '', $name ));
     $accent   = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûıışÿ";
     $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
-	 $quarterId = strtr( $name, $accent, $noaccent );
-	 $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
+    $quarterId = strtr( $romanName, $accent, $noaccent );
+    $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
     $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
 
     #--- Html-ify name and country.

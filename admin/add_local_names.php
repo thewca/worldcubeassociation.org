@@ -67,7 +67,7 @@ function importLocalNames () {
         $name = mysql_real_escape_string( $personRomanName ) . ' (' . $localName . ')';
         dbCommand( "UPDATE Persons SET localName='$localName' WHERE id='$wcaId' AND subId=1" );
         dbCommand( "UPDATE Persons SET name='$name' WHERE id='$wcaId' AND subId=1" );
-        dbCommand( "UPDATE Results SET personName='$name' WHERE personId='$wcaId'" );
+        dbCommand( "UPDATE Results SET personName='$name' WHERE personId='$wcaId' AND personName='$personName'" );
         $oneGood = true;
       }
 
