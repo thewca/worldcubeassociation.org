@@ -100,7 +100,7 @@ function computeRanks ( $valueSource, $valueName ) {
     SELECT   person.id personId, countryId, continentId
     FROM     Persons person, Countries country
     WHERE    country.id=countryId
-    ORDER BY subId
+      AND    person.subId=1
   " );
   foreach( $persons as $person ) {
     extract( $person );
