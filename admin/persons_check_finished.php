@@ -119,7 +119,7 @@ function checkSpacesInPersons () {
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $name ));
     $regexForBad = preg_replace( '/\s+/', ' +', $name );
-    $action = "UPDATE Persons SET name='$goodPersonName' WHERE name REGEXP '$regexForBad'";
+    $action = "UPDATE Persons SET name=\"$goodPersonName\" WHERE name REGEXP '$regexForBad'";
     tableRow( array(
       visualize( $name ),
       visualize( $goodPersonName ),
@@ -156,7 +156,7 @@ function checkSpacesInResults () {
     $regexForBad = preg_replace( '/\s+/', ' +', $personName );
     $goodPersonName = mysqlEscape( $goodPersonName );
     $regexForBad = mysqlEscape( $regexForBad );
-    $action = "UPDATE Results SET personName='$goodPersonName' WHERE personName REGEXP '$regexForBad'";
+    $action = "UPDATE Results SET personName=\"$goodPersonName\" WHERE personName REGEXP '$regexForBad'";
     tableRow( array(
       visualize( $personName ),
       visualize( $goodPersonName ),
@@ -242,7 +242,7 @@ function checkTooMuchInResults () {
     $currCountryId = $countryId;
     foreach( getMostSimilarPersons( $id, $name, $countryId, $personsFromPersons ) as $similarPerson ){
       extract( $similarPerson );
-      $action = "UPDATE Results SET personId='$id', personName='$name', countryId='$countryId' WHERE personId='$currId' AND personName='$currName' AND countryId='$currCountryId'";
+      $action = "UPDATE Results SET personId='$id', personName=\"$name\", countryId=\"$countryId\" WHERE personId='$currId' AND personName=\"$currName\" AND countryId=\"$currCountryId\"";
       tableRow( array(
         'Persons',
         visualize( $name ),
