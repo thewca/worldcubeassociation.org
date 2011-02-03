@@ -77,6 +77,8 @@ function showBody () {
   tableRow( array( $countryName, $chosenPersonId, '', $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
   tableEnd();
 
+  #--- Try the cache for the results
+  tryCache( 'person', $chosenPersonId );
 
   #--- Now the results.
   require( 'person_personal_records_current.php' );
