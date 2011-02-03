@@ -41,7 +41,7 @@ function add_blindfold_333_consecutive_successes () {
         if( count( $streak ) >= count( $bestStreak )){
           $bestStreak = $streak;
           $bestStreakFirstDate = $streakFirstDate;
-          $bestStreakLastDate = ($dv[0] == 'current') ? 'ongoing...' : $streakLastDate;
+          $bestStreakLastDate = ($dv[0] == 'current') ? '<b>ongoing...</b>' : $streakLastDate;
         }
         unset( $streak );
       }
