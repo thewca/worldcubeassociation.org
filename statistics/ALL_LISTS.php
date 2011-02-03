@@ -40,6 +40,7 @@ $statisticNames = array(
   'best_medal_collection',
   'sum_of_ranks',
   'appearances_in_333_top_100_results',
+  'sub_x',
 
   #--- Special achievements:
   'blindfold_333_consecutive_successes',
