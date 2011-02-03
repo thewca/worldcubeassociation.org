@@ -213,11 +213,21 @@ function currentPersonName ( $personId ) {
 function my_merge ( $a, $b ) {
 #----------------------------------------------------------------------
 
+  $a = fill10( $a );
+  $b = fill10( $b );
   foreach( range( 0, 9 ) as $i ){
     $c[$i] = array_merge( $a[$i], array( ' &nbsp; &nbsp; | &nbsp; &nbsp; ' ), $b[$i] );
   }
   return $c;
 }
 
+#----------------------------------------------------------------------
+function fill10 ( $a ) {
+#----------------------------------------------------------------------
+
+  while ( count($a) < 10 )
+    $a[] = array_fill( 0, count($a[0])-1, '' );
+  return $a;
+}
 
 ?>
