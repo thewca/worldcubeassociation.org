@@ -27,6 +27,9 @@ if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] +
                            100*$competition['month'] + 
                                $competition['day']) ){
 
+  #--- Try the cache
+  tryCache( 'competition', $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners );
+
   #--- Show competition results...
   offerChoicesResults();
   require( 'competition_results.php' );

@@ -16,6 +16,7 @@ computeConciseRecords();
 computeRanks( 'best', 'Single' );
 computeRanks( 'average', 'Average' );
 computeCachedDatabase('../cachedDatabase.php');
+deleteCaches();
 noticeBox3( 1, "Ok, finished." );
 require( '../_footer.php' );
 

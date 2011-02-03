@@ -7,6 +7,7 @@ require '_choices.php';
 require '_tables.php';
 require '_links.php';
 require '_values.php';
+require '_cache.php';
 
 #----------------------------------------------------------------------
 
