@@ -43,8 +43,9 @@ function tryCache ( ) {
   global $cacheFile;
 
   #--- Build whole cacheId
-  $cacheId = implode( '_', func_get_args() );
-  
+  $cacheIdParts = func_get_args();  # indirect because direct usage results in error before PHP 5.3 (see documentation)
+  $cacheId = implode( '_', $cacheIdParts );
+
   #--- If cacheId is invalid or we're debugging, then don't use the cache
   if ( ! preg_match( '/^\w+$/', $cacheId ) || debug() )
     return;
