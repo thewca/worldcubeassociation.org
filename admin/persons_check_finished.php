@@ -226,8 +226,8 @@ function checkTooMuchInResults () {
   echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Results</b> who have an id also appear in <b>Persons</b>:</p>";
   
   #--- Show the Results troublemakers and possible matches in Persons.     
-  tableBegin( 'results', 5 );
-  tableHeader( split( '\\|', 'source|name|countryId|id|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
+  tableBegin( 'results', 6 );
+  tableHeader( split( '\\|', 'source|name|countryId|id|fix...|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInResults as $personKey ){
     extract( $personsFromResults[$personKey] );
     tableRowStyled( 'font-weight:bold', array(
@@ -235,6 +235,7 @@ function checkTooMuchInResults () {
       visualize( $name ),
       visualize( $countryId ),
       visualize( $id ),
+      '',
       ''
     ));
     $currId = $id;
@@ -248,6 +249,7 @@ function checkTooMuchInResults () {
         visualize( $name ),
         visualize( $countryId ),
         visualize( $id ),
+      "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
         highlight( $action )
       ));
     }
