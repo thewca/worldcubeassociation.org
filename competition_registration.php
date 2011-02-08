@@ -383,6 +383,8 @@ function savePreregForm () {
 
     $mailHeaders = "From: \"WCA\" <rbruchem@worldcubeassociation.org>\r\n";
     $mailHeaders .= "Reply-To: $email\r\n";
+    $mailHeaders .= "MIME-Version: 1.0\r\n";
+    $mailHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
     mail( $mailEmail, $mailSubject, $mailBody, $mailHeaders );
 
