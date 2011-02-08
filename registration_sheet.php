@@ -42,14 +42,9 @@ function generateSheet () {
 
   $file = "Status${sep}Name${sep}Country${sep}WCA ID${sep}Birth Date${sep}Gender$sep";
 
-  foreach( getAllEvents() as $event ){
-    extract( $event );
-
-    if( preg_match( "/(^| )$id\b(=(\d+)\/(\d+:\d+))?/", $competition['eventSpecs'], $matches )){
-      $eventIds[] = $id;
-      $file .= "$sep$id";
-    }
-  }
+  $eventIds = getEventSpecsEventIds( $competition['eventSpecs'] );
+  foreach( $eventIds as $eventId )
+    $file .= "$sep$eventId";
 
   $file .= "${sep}Email${sep}Guests${sep}IP";
   $file .= $cr;
