@@ -50,7 +50,12 @@ function offerChoices () {
 #----------------------------------------------------------------------
 function showRecords () {
 #----------------------------------------------------------------------
+  global $chosenRegionId, $chosenEventId, $chosenYears;
   global $chosenMixed, $chosenSlim, $chosenSeparate, $chosenHistory;
+
+  #--- Try the cache
+  tryCache( 'region', preg_replace( '/ /', '', $chosenRegionId ), $chosenEventId, $chosenYears,
+                      $chosenMixed, $chosenSlim, $chosenSeparate, $chosenHistory ); 
 
   if( $chosenMixed    ) require( 'regions_mixed.php' );
   if( $chosenSlim     ) require( 'regions_slim.php' );
