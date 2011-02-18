@@ -47,14 +47,17 @@ function tryCache ( ) {
   $cacheId = implode( '_', $cacheIdParts );
 
   #--- If cacheId is invalid or we're debugging, then don't use the cache
-  if ( ! preg_match( '/^\w+$/', $cacheId ) || debug() )
+  if ( ! preg_match( '/^\w+$/', $cacheId ) || debug() ) {
+    cacheLog( "invalid: $cacheId" );
     return;
+  }
 
   #--- If it's in the cache already, then just deliver from cache and exit
   $cacheFile = "cache/$cacheId.cache";
   if ( file_exists( $cacheFile ) ) {
     echo "<!-- rfc -->\n";
     echo file_get_contents( $cacheFile );
+    cacheLog( "use: $cacheId\t" . filesize($cacheFile) );
     exit;
   }
 
@@ -70,6 +73,7 @@ function finishCache ( ) {
   #--- Store the cache if we're caching
   if ( $cacheFile ) {
     file_put_contents( $cacheFile, ob_get_contents() );
+    cacheLog( "create: $cacheFile\t" . filesize($cacheFile) );
     ob_end_flush();
   }
 }
@@ -79,6 +83,7 @@ function deleteCaches () {
 #----------------------------------------------------------------------
 
   startTimer();
+  cacheLog( "delete all" );
   $cacheFiles = glob( pathToRoot() . 'cache/*.cache' );
   echo "Deleting " . count($cacheFiles) . " cache files...<br />\n";
 
@@ -89,6 +94,13 @@ function deleteCaches () {
 
   stopTimer( "deleteCaches" );
   echo "... done<br /><br />\n";
+}
+
+#----------------------------------------------------------------------
+function cacheLog ( $message ) {
+#----------------------------------------------------------------------
+
+  file_put_contents( pathToRoot() . 'cache_log.txt', "$message\n", FILE_APPEND );
 }
 
 ?>
