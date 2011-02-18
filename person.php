@@ -17,7 +17,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenPersonId;
 
-  $chosenPersonId = getNormalParam( 'personId' );
+  $chosenPersonId = strtoupper( getNormalParam( 'personId' ) );
 }
 
 #----------------------------------------------------------------------
