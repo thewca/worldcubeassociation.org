@@ -55,6 +55,9 @@ function showResults () {
 #----------------------------------------------------------------------
   global $chosenEventId, $chosenRegionId, $chosenYears, $chosenShow, $chosenSingle, $chosenAverage;
 
+  #--- Try the cache
+  tryCache( 'event', $chosenEventId, preg_replace( '/ /', '', $chosenRegionId ), $chosenYears, preg_replace( '/ /', '', $chosenShow ), $chosenSingle, $chosenAverage );
+
   #------------------------------
   # Prepare stuff for the query.
   #------------------------------
