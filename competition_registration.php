@@ -328,6 +328,11 @@ function savePreregForm () {
     return false;
   }
 
+  if( $birthYear == date('Y') ){
+    noticeBox( false, "Please enter your date of birth." );
+    return false;
+  }
+
   if( ! $birthYear ){
     $chosenPerson = dbQuery( "SELECT * FROM Persons WHERE id='$personId'" );
     $chosenPerson = $chosenPerson[0];
@@ -390,7 +395,7 @@ function savePreregForm () {
 
   }
 
-  noticeBox( true, "Registration complete." );
+  noticeBox( true, "Registration complete.<br />Please note that all registrations must be approved by the organiser.<br/>Your registration will appear here within a few days." );
   return true;
 }
 
