@@ -43,3 +43,7 @@ else round((v2+v3+v4)/3)
     higher that the number according to the format.
 ----------------------------------------------------------------------
 11) check that times over 10 minutes are rounded
+----------------------------------------------------------------------
+12) check that countryId appears in the Countries table
+----------------------------------------------------------------------
+13) check that competitionId appears in the Competitions table

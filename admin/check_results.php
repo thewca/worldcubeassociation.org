@@ -18,11 +18,12 @@ function showDescription () {
 #----------------------------------------------------------------------
 function checkResults () {
 #----------------------------------------------------------------------
+  global $competitionIds, $countryIds;
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
     SELECT
-      id, formatId, roundId, personId, competitionId, eventId,
+      id, formatId, roundId, personId, competitionId, eventId, countryId,
       value1, value2, value3, value4, value5, best, average
     FROM Results
     ORDER BY formatId, roundId, id
@@ -32,6 +33,10 @@ function checkResults () {
   echo "<pre>\n";
   echo wcaDate() . "\n\n";
 
+  #--- Build Id arrays
+  $countryIds = getAllIDs( getAllUsedCountries());
+  $competitionIds = getAllIDs( getAllCompetitions());
+
   #--- Process the results.
   $badIds = array();
   while( $result = mysql_fetch_array( $dbResult )){
@@ -39,7 +44,7 @@ function checkResults () {
       extract( $result );
       echo "Error: $error\nid:$id format:$formatId round:$roundId";
       echo " ($value1,$value2,$value3,$value4,$value5) best+average($best,$average)\n";
-      echo "$personId   $competitionId   $eventId\n\n";
+      echo "$personId   $countryId   $competitionId   $eventId\n\n";
       $badIds[] = $id;
     }
   }
@@ -56,6 +61,7 @@ function checkResults () {
 #----------------------------------------------------------------------
 function checkResult ( $result ) {
 #----------------------------------------------------------------------
+  global $competitionIds, $countryIds;
 
   $format = $result['formatId'];
 
@@ -140,6 +146,16 @@ function checkResult ( $result ) {
       if(( $value > 60000 ) && ( $value % 100 ))
         return "$value should be rounded";
   }
+
+
+  #--- 12) check for existing countryId
+  if( ! in_array( $result['countryId'], $countryIds ))
+    return "unknown country " . $result['countryId'];
+
+  #--- 13) check for existing competitionId
+  if( ! in_array( $result['competitionId'], $competitionIds ))
+    return "unknown competition " . $result['competitionId'];
+
 }
 
 ?>
