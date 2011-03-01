@@ -237,22 +237,32 @@ function showAnnouncement() {
 
     //$top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='a' OR roundId='c') ORDER BY pos LIMIT 3 " );
     $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND roundId='f' ORDER BY pos LIMIT 0, 3 " );
+    if( $top ){ # If there was a 3x3x3 event.
   
-    $msg = $top[0]['personName'] . " wins $data[name]\n\n";
+      $msg = $top[0]['personName'] . " wins $data[name]\n\n";
  
-    $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."\">".$top[0]['personName']."</a> won the ";
-    $msg .= "<a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> with an average of ";
-    $msg .= formatValue( $top[0]['average'], 'time' );
-    $msg .= " seconds. ";
+      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."\">".$top[0]['personName']."</a> won the ";
+      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> with an average of ";
+      $msg .= formatValue( $top[0]['average'], 'time' );
+      $msg .= " seconds. ";
 
-    $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[1]['personId']."\">".$top[1]['personName']."</a> finished second (";
-    $msg .= formatValue( $top[1]['average'], 'time' );
-    $msg .= ") and ";
+      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[1]['personId']."\">".$top[1]['personName']."</a> finished second (";
+      $msg .= formatValue( $top[1]['average'], 'time' );
+      $msg .= ") and ";
 
-    $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[2]['personId']."\">".$top[2]['personName']."</a> finished third (";
-    $msg .= formatValue( $top[2]['average'], 'time' );
-    $msg .= ").<br />\n";
+      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[2]['personId']."\">".$top[2]['personName']."</a> finished third (";
+      $msg .= formatValue( $top[2]['average'], 'time' );
+      $msg .= ").<br />\n";
+
+    }
  
+    else{
+
+      $msg = "Results of $data[name] posted\n\n";
+      $msg .= "Results of the <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> are now available.<br />\n";
+
+    }
+
     foreach( array( array( 'code' => 'WR',  'name' => 'World' ),
                     array( 'code' => 'AfR', 'name' => 'African' ),
                     array( 'code' => 'AsR', 'name' => 'Asian' ),
@@ -284,7 +294,7 @@ function showAnnouncement() {
             }
             $previousName = $personName;
           }
-    
+
           if( $regionalAverageRecord == $xR['code'] ){ 
             if( ! $previousName )
               $msg .= $personName . ' ' . $cellName . ' ' . formatValue( $average, $format ) . ' (average)';
@@ -295,13 +305,13 @@ function showAnnouncement() {
             }
             $previousName = $personName;
           }
-    
         }
       $msg .= ".<br />\n";
       }
     }
-  $msg = htmlEscape( $msg );
-  echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
+
+    $msg = htmlEscape( $msg );
+    echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
   }
 }
 
