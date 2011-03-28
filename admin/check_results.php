@@ -4,15 +4,47 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
+analyzeChoices();
 showDescription();
-checkResults();
+
+if( $chosenCheck ){
+  showChoices();
+  checkResults();
+} else {
+  echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, you must click 'Check' first (after optionally choosing competition).</p>";
+  showChoices();
+}
+
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br /><br />Checks all results according to our <a href='check_results.txt'>checking procedure</a>.</b></p><hr />\n";
+  echo "<p><b>This script does *not* affect the database.</b></p>\n\n";
+
+  echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition.</p>\n\n";
+
+  echo "<p>Checks all results according to our <a href='check_results.txt'>checking procedure</a>.</p><hr />\n";
+}
+
+#----------------------------------------------------------------------
+function analyzeChoices () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId, $chosenCheck;
+
+  $chosenCompetitionId  = getNormalParam( 'competitionId' );
+  $chosenCheck          = getBooleanParam( 'check' );
+}
+
+#----------------------------------------------------------------------
+function showChoices () {
+#----------------------------------------------------------------------
+
+  displayChoices( array(
+    competitionChoice( false ),
+    choiceButton( true, 'check', 'Check' )
+  ));
 }
 
 #----------------------------------------------------------------------
@@ -26,6 +58,8 @@ function checkResults () {
       id, formatId, roundId, personId, competitionId, eventId, countryId,
       value1, value2, value3, value4, value5, best, average
     FROM Results
+    WHERE 1
+    " . competitionCondition() . "
     ORDER BY formatId, roundId, id
   ")
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
@@ -34,8 +68,8 @@ function checkResults () {
   echo wcaDate() . "\n\n";
 
   #--- Build Id arrays
-  $countryIds = getAllIDs( getAllUsedCountries());
-  $competitionIds = getAllIDs( getAllCompetitions());
+  $countryIds = array_flip( getAllIDs( dbQuery( "SELECT id FROM Countries" )));
+  $competitionIds = array_flip( getAllIDs( getAllCompetitions()));
 
   #--- Process the results.
   $badIds = array();
@@ -149,11 +183,11 @@ function checkResult ( $result ) {
 
 
   #--- 12) check for existing countryId
-  if( ! in_array( $result['countryId'], $countryIds ))
+  if( ! isset( $countryIds[$result['countryId']] ))
     return "unknown country " . $result['countryId'];
 
   #--- 13) check for existing competitionId
-  if( ! in_array( $result['competitionId'], $competitionIds ))
+  if( ! isset( $competitionIds[$result['competitionId']] ))
     return "unknown competition " . $result['competitionId'];
 
 }
