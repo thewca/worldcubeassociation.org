@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-ob_start(); require( '_framework.php' ); ob_end_clean();
+ob_start(); require( '../_framework.php' ); ob_end_clean();
 
 analyzeChoices();
 if( checkPassword() ){ 

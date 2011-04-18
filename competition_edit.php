@@ -166,7 +166,6 @@ function showView () {
   showSaveMessage();
   startForm();
   showRegs();
-  showMap();
   endForm();
 }
 
@@ -264,20 +263,6 @@ function showRegs () {
   echo "<li><p>Generate the complete <a href='registration_set_spreadsheet.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>registration excel sheet</a> in .xlsx format (almost good).</p></li>\n"; 
   echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n"; 
   echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&amp;list=1'>this link</a></p></li></ul>\n"; 
-
-}
-
-#----------------------------------------------------------------------
-function showMap () {
-#----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
-
-  echo "<hr /><h1>Map</h1>";
-
-  echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
-  echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
-  echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
-  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>Change</a> the coordinates.</p>";
 
 }
 

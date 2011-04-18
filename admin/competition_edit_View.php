@@ -10,6 +10,7 @@ function showView () {
   showRegularFields();
   showEventSpecifications();
   showAdminOptions();
+  showMap();
   showAnnouncement();
   endForm();
 }
@@ -198,6 +199,20 @@ function showAdminOptions () {
     else
       echo "<p><input id='showResults' name='showResults' type='checkbox' /> Check if you want the <b>Results</b> to be visible</p>\n";
   }
+}
+
+#----------------------------------------------------------------------
+function showMap () {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId;
+
+  echo "<hr /><h1>Map</h1>";
+
+  echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
+  echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
+  echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
+  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>Change</a> the coordinates.</p>";
+
 }
 
 #----------------------------------------------------------------------
