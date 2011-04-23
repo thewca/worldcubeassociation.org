@@ -46,9 +46,15 @@ function tryCache ( ) {
   $cacheIdParts = func_get_args();  # indirect because direct usage results in error before PHP 5.3 (see documentation)
   $cacheId = implode( '_', $cacheIdParts );
 
-  #--- If cacheId is invalid or we're debugging, then don't use the cache
-  if ( ! preg_match( '/^\w+$/', $cacheId ) || debug() ) {
+  #--- If cacheId is invalid, then don't use the cache
+  if ( ! preg_match( '/^\w+$/', $cacheId ) ) {
     cacheLog( "invalid: $cacheId" );
+    return;
+  }
+
+  #--- If debugging or caching disabled, then don't use the cache
+  if ( debug() || paramExists('nocache') ) {
+    cacheLog( "debug/noCache: $cacheId" );
     return;
   }
 

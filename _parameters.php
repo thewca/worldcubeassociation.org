@@ -114,6 +114,14 @@ function getRawParamsThisShouldBeAnException () {
 }
 
 #----------------------------------------------------------------------
+function paramExists ( $name ) {
+#----------------------------------------------------------------------
+  global $rawParametersDontUseOutsideParametersModule;
+
+  return array_key_exists( $name, $rawParametersDontUseOutsideParametersModule );
+}
+
+#----------------------------------------------------------------------
 function debugParameter( $type, $name, $value ) {
 #----------------------------------------------------------------------
   if( debug() )
