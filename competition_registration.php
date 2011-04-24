@@ -46,13 +46,13 @@ function showPreregForm () {
     foreach( explode( ' ', $chosenPattern ) as $namePart )
       $nameCondition .= " AND name like '%$namePart%'";
 
-    $persons = dbQuery( "SELECT name, id FROM Persons WHERE 1 $nameCondition ORDER BY name" );
+    $persons = dbQuery( "SELECT name, id FROM Persons WHERE 1 $nameCondition AND subId='1' ORDER BY name" );
     $matchingNumber = count( $persons );
   }
 
   else if( getBooleanParam( 'confirm' )){
     $chosenPersonId = getNormalParam( 'namelist' );
-    $chosenPerson = dbQuery( "SELECT * FROM Persons WHERE id='$chosenPersonId'" );
+    $chosenPerson = dbQuery( "SELECT * FROM Persons WHERE id='$chosenPersonId' AND subId='1'" );
     $chosenPerson = $chosenPerson[0];
     $chosenName    = htmlEscape( $chosenPerson['name'] );
     $chosenCountry = $chosenPerson['countryId'];
