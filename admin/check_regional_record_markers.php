@@ -166,32 +166,31 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
     if( $isNewCompetition )
       $record = getRecordsStrictlyBefore( $startDate );
 
-    #--- Determine whether it's a new region record and update the records.
-    $marker = '';
+    #--- Calculate whether it's a new region record and update the records.
+    $calcedMarker = '';
     if( $value <= $record[$eventId][$countryId] ){
-      $marker = 'NR';
+      $calcedMarker = 'NR';
       $record[$eventId][$countryId] = $value;
     }
     if( $value <= $record[$eventId][$continentId] ){
-      $marker = $continentalRecordName;
+      $calcedMarker = $continentalRecordName;
       $record[$eventId][$continentId] = $value;
     }
     if( $value <= $record[$eventId]['World'] ){
-      $marker = 'WR';
+      $calcedMarker = 'WR';
       $record[$eventId]['World'] = $value;
     }
 
-    #--- Get old (stored) and new (computed) marker.
-    $oldMarker = ($valueId == 'best') ? $regionalSingleRecord : $regionalAverageRecord;
-    $newMarker = $marker;
+    #--- Get the stored marker.
+    $storedMarker = ($valueId == 'best') ? $regionalSingleRecord : $regionalAverageRecord;
 
-    #--- If old or new marker say it's some regional record at all...
-    if( $oldMarker || $newMarker ){
+    #--- If stored or calculated marker say it's some regional record at all...
+    if( $storedMarker || $calcedMarker ){
 
-      #--- Do old and new agree? Choose colors and update list of differences.
-      $same = ($oldMarker == $newMarker);
-      $oldColor = $same ? '999' : 'F00';
-      $newColor = $same ? '999' : '0E0';
+      #--- Do stored and calculated agree? Choose colors and update list of differences.
+      $same = ($storedMarker == $calcedMarker);
+      $storedColor = $same ? '999' : 'F00';
+      $calcedColor = $same ? '999' : '0E0';
       if( ! $same ){
         $selectedIds[] = $id;
         $differencesWereFound = true;
@@ -201,15 +200,15 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       if( !$chosenAnything  &&  $same )
         continue;
 
-      #--- Highlight regions if the new marker thinks it's a record for them.
+      #--- Highlight regions if the calculated marker thinks it's a record for them.
       $countryName = $countryId;
       $continentName = substr( $continentId, 1 );
       $worldName = 'World';
-      if( $newMarker )
+      if( $calcedMarker )
         $countryName = "<b>$countryName</b>";
-      if( $newMarker  &&  $newMarker != 'NR' )
+      if( $calcedMarker  &&  $calcedMarker != 'NR' )
         $continentName = "<b>$continentName</b>";
-      if( $newMarker == 'WR' )
+      if( $calcedMarker == 'WR' )
         $worldName = "<b>$worldName</b>";
 
       #--- Recognize new events/rounds/competitions.
@@ -229,7 +228,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
         tableRowEmpty();
 
       #--- Prepare the checkbox.
-      $checkbox = "<input type='checkbox' name='update$valueName$id' value='$newMarker' />";
+      $checkbox = "<input type='checkbox' name='update$valueName$id' value='$calcedMarker' />";
               
       #--- Show the result.
       tableRow( array(
@@ -242,8 +241,8 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
         $continentName,
         $worldName,
         formatValue( $value, $valueFormat ),
-        "<span style='font-weight:bold;color:#$oldColor'>$oldMarker</span>",
-        "<span style='font-weight:bold;color:#$newColor'>$newMarker</span>",
+        "<span style='font-weight:bold;color:#$storedColor'>$storedMarker</span>",
+        "<span style='font-weight:bold;color:#$calcedColor'>$calcedMarker</span>",
         ($same ? '' : $checkbox)
       ));
     }
