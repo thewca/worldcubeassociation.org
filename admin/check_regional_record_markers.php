@@ -124,12 +124,20 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
   global $chosenAnything, $differencesWereFound;
   
   precomputeStuff( $valueId, $valueName );
-
+  $markerName = ($valueId == 'best') ? 'regionalSingleRecord' : 'regionalAverageRecord';
+  
   #--- Get all successful results.
-  $results = dbQuery("
+  $results = dbQueryHandle("
     SELECT
       year*10000 + month*100 + day startDate,
-      result.*,
+      result.id resultId,
+      result.eventId,
+      result.competitionId,
+      result.roundId,
+      result.personId,
+      result.personName,
+      result.countryId,
+      result.regional${valueName}Record storedMarker,
       $valueId value,
       continentId,
       continent.recordName continentalRecordName,
@@ -151,8 +159,8 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
   ");
 
   #--- Process each result.
-  foreach( $results as $result ){
-    extract( $result );
+  while( $row = mysql_fetch_row( $results )){
+    list( $startDate, $resultId, $eventId, $competitionId, $roundId, $personId, $personName, $countryId, $storedMarker, $value, $continentId, $continentalRecordName, $valueFormat ) = $row;
 
     #--- Handle failures of multi-attempts.
     if( ! isSuccessValue( $value, $valueFormat ))
@@ -181,9 +189,6 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       $record[$eventId]['World'] = $value;
     }
 
-    #--- Get the stored marker.
-    $storedMarker = ($valueId == 'best') ? $regionalSingleRecord : $regionalAverageRecord;
-
     #--- If stored or calculated marker say it's some regional record at all...
     if( $storedMarker || $calcedMarker ){
 
@@ -192,7 +197,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       $storedColor = $same ? '999' : 'F00';
       $calcedColor = $same ? '999' : '0E0';
       if( ! $same ){
-        $selectedIds[] = $id;
+        $selectedIds[] = $resultId;
         $differencesWereFound = true;
       }
 
@@ -228,7 +233,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
         tableRowEmpty();
 
       #--- Prepare the checkbox.
-      $checkbox = "<input type='checkbox' name='update$valueName$id' value='$calcedMarker' />";
+      $checkbox = "<input type='checkbox' name='update$valueName$resultId' value='$calcedMarker' />";
               
       #--- Show the result.
       tableRow( array(
