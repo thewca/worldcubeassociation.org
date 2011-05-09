@@ -7,7 +7,7 @@ $currentSection = 'competitions';
 ob_start(); require( '../_framework.php' ); ob_end_clean();
 
 analyzeChoices();
-if( checkPassword() ){ 
+if( checkCompetition() ){ 
   saveCoords();
   showMap();
 }
@@ -15,21 +15,20 @@ if( checkPassword() ){
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenPassword;
+  global $chosenCompetitionId;
   global $chosenLatitude, $chosenLongitude;
   global $chosenSave;
 
   $chosenCompetitionId = getNormalParam(  'competitionId' );
-  $chosenPassword      = getNormalParam(  'password'      );
   $chosenLatitude      = getMysqlParam(   'latitude'      );
   $chosenLongitude     = getMysqlParam(   'longitude'     );
 }
 
 
 #----------------------------------------------------------------------
-function checkPassword () {
+function checkCompetition () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenPassword, $data;
+  global $chosenCompetitionId, $data;
 
   $results = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
 
@@ -39,13 +38,7 @@ function checkPassword () {
     return false;
   }
 
-  #--- Check the password.
   $data = $results[0];
-
-  if( $chosenPassword != $data['password'] ){
-    showErrorMessage( "wrong password" );
-    return false;
-  }
 
   return true;
 }
@@ -53,7 +46,7 @@ function checkPassword () {
 #----------------------------------------------------------------------
 function saveCoords () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenPassword, $data;
+  global $chosenCompetitionId, $data;
   global $chosenLatitude, $chosenLongitude;
   global $chosenSave;
 
@@ -69,7 +62,7 @@ function saveCoords () {
 #----------------------------------------------------------------------
 function showMap () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenPassword, $data;
+  global $chosenCompetitionId, $data;
   global $chosenLatitude, $chosenLongitude;
 
   if( $chosenLatitude && $chosenLongitude ){
@@ -165,7 +158,6 @@ $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[country
     <input type="button" name="search" value="Search" onclick="showLocation()" />
     <div id="map" style="width: 800px; height: 480px"></div>
     <input type="hidden" name="competitionId" value="<?php echo $chosenCompetitionId ?>" />
-    <input type="hidden" name="password" value="<?php echo $chosenPassword ?>" />
     <input type="hidden" name="rand" value="<?php echo rand() ?>" />
     Latitude : <input type="text" id="latitude" name="latitude" value="" size="20" />
     Longitude : <input type="text" id="longitude" name="longitude" value="" size="20" />
@@ -173,7 +165,7 @@ $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[country
     </form>
   </center>
   <?php
-    echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=" . rand() . "'>Back</a>";
+    echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a>";
   ?>
   </body>
 </html>

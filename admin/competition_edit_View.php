@@ -211,7 +211,7 @@ function showMap () {
   echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
-  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>Change</a> the coordinates.</p>";
+  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId'>Change</a> the coordinates.</p>";
 
 }
 
