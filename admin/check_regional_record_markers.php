@@ -147,15 +147,17 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       Competitions competition,
       Countries    country,
       Continents   continent,
-      Events       event
+      Events       event,
+      Rounds       round
     WHERE 1
       AND $valueId > 0
       AND competition.id = result.competitionId
+      AND round.id       = result.roundId
       AND country.id     = result.countryId
       AND continent.id   = country.continentId
       AND event.id       = result.eventId
       " . eventCondition() . competitionCondition() . "
-    ORDER BY eventId, startDate, competitionId, roundId, $valueId
+    ORDER BY eventId, startDate, competitionId, round.rank, $valueId
   ");
 
   #--- Process each result.
