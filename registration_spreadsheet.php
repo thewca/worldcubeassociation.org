@@ -123,12 +123,11 @@ function fillRegistration () {
   $registrationSheet->setCellValueByColumnAndRow( $col+1, 3, 'Guests' );
   $registrationSheet->setCellValueByColumnAndRow( $col+2, 3, 'IP' );
 
-
   $registrationSheet->duplicateStyleArray(
     array(
       'font'    => array(
-        'bold'      => true,
-      ),
+        'bold'      => true
+      )
     ),
     'A3:F3'
   );
@@ -141,7 +140,7 @@ function fillRegistration () {
 
     $registrationSheet->setCellValueByColumnAndRow( 0, $row, $row-3 );
     #$registrationSheet->setCellValueByColumnAndRow( 1, $row, $name );
-    $registrationSheet->setCellValueByColumnAndRow( 1, $row, utf8_encode( $name ));
+    $registrationSheet->setCellValueByColumnAndRow( 1, $row, $name );
     $registrationSheet->setCellValueByColumnAndRow( 2, $row, $countryId );
     $registrationSheet->setCellValueByColumnAndRow( 3, $row, $personId );
     $registrationSheet->setCellValueByColumnAndRow( 4, $row, $gender );
@@ -158,11 +157,22 @@ function fillRegistration () {
 
     $registrationSheet->setCellValueByColumnAndRow( $col, $row, $email );
     $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
-    $registrationSheet->setCellValueByColumnAndRow( $col+1, $row, utf8_encode( $guests ));
+    $registrationSheet->setCellValueByColumnAndRow( $col+1, $row, $guests );
     $registrationSheet->setCellValueByColumnAndRow( $col+2, $row, $ip );
 
     $row += 1;
   }
+
+  #--- Set alignement
+
+  $registrationSheet->duplicateStyleArray(
+    array(
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+      )
+    ),
+    'H3:'.PHPExcel_Cell::stringFromColumnIndex($col-1).(string)($row-1)
+  );
 
   #--- Set size of columns - Seems to be broken...
 
@@ -433,7 +443,7 @@ function fillEventsPersons ( $eventSheet, $eventId, $roundNumber, $persons ) {
 
     #--- Fill persons.
     if( $roundNumber == 1 ) {
-      $eventSheet->setCellValueByColumnAndRow( 1, $row, utf8_encode( $name ));
+      $eventSheet->setCellValueByColumnAndRow( 1, $row, $name );
       $eventSheet->setCellValueByColumnAndRow( 2, $row, $countryId );
       $eventSheet->setCellValueByColumnAndRow( 3, $row, $personId );
     }
@@ -504,6 +514,36 @@ function fillEventsStyle ( $eventSheet, $eventId, $roundNumber, $nbPersons ) {
   $style = new PHPExcel_Style();
 
 
+  $eventSheet->duplicateStyleArray(
+    array(
+      'font'    => array(
+        'bold'      => true,
+      )
+    ),
+    'A1:A3'
+  );
+
+  $eventSheet->duplicateStyleArray(
+    array(
+      'font'    => array(
+        'bold'      => true,
+      )
+    ),
+    'A4:N4'
+  );
+
+  $eventSheet->duplicateStyleArray(
+    array(
+      'font'    => array(
+        'bold'      => true,
+      ),
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+      )
+    ),
+    'E4:N4'
+  );
+
   if( $unit == 'multi' ) {
   }
 
@@ -545,37 +585,6 @@ function fillEventsStyle ( $eventSheet, $eventId, $roundNumber, $nbPersons ) {
         break;
     }
   }
-
-  #--- TODO, forme à utiliser:
-  /*
-$workbook->getActiveSheet()->duplicateStyleArray(
-	array(
-		'font'    => array(
-			'bold'      => true,
-			'size'      => 14
-		),
-		'alignment' => array(
-			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		),
-		'borders' => array(
-			'top'     => array(
-					'style' => PHPExcel_Style_Border::BORDER_THIN
-					),
-			'left'     => array(
-					'style' => PHPExcel_Style_Border::BORDER_THIN
-					),
-			'bottom'     => array(
-					'style' => PHPExcel_Style_Border::BORDER_THIN
-					),
-			'right'     => array(
-					'style' => PHPExcel_Style_Border::BORDER_THIN
-					)
-		)
-	),
-	'A1:B1'
-);
-*/
-
 }
 
 
@@ -585,7 +594,7 @@ function writeSpreadsheet () {
   global $spreadsheet, $chosenCompetitionId;
 
   $spreadsheetWriter = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
-  $spreadsheetWriter->save( 'results.xls' );
+  $spreadsheetWriter->save( 'results.xlsx' );
 
 }
 
