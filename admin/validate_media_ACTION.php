@@ -160,7 +160,7 @@ function editMedium () {
 
   echo "</table>";
 
-  echo "<input type='submit' class='butt' value='Save' name='save$id' />";
+  echo "<input type='submit' class='butt' value='Save' name='save$id' /> ";
   echo "<input type='submit' class='butt' value='Erase' name='refuse$id' />";
 
   echo "</form>";

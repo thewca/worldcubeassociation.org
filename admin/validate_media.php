@@ -132,8 +132,8 @@ function showMedia () {
     $previousYear = $year;
 
 
-    $button = "<input type='submit' class='butt' value='Info' name='info$id' />";
-    $button .= "<input type='submit' class='butt' value='Edit' name='edit$id' />";
+    $button = "<input type='submit' class='butt' value='Info' name='info$id' /> ";
+    $button .= "<input type='submit' class='butt' value='Edit' name='edit$id' /> ";
     $button .= $accepted ? "<input type='submit' class='butt' value='Erase' name='refuse$id' />"
                          : "<input type='submit' class='butt' value='Accept' name='accept$id' />
                             <input type='submit' class='butt' value='Refuse' name='refuse$id' />";
