@@ -146,6 +146,9 @@ echo "markerVioletp = { icon:violetIconp };\n";
     array( 'Statistics',   'statistics'   ),
     array( 'Misc',         'misc'         ),
   );
+
+  if ( ! preg_match( '/worldcubeassociation.org$/', $_SERVER["SERVER_NAME"] ) )
+    noticeBox3( 0, "Note: This is only a copy of the WCA results system used for testing stuff. The official WCA results are at:<br /><a href='http://www.worldcubeassociation.org/results/'>http://www.worldcubeassociation.org/results/</a>" );
 ?>
 
 <div id="pageMenuFrame">
