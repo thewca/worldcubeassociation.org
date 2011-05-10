@@ -145,7 +145,7 @@ function showUnfinishedPersons () {
 #        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
         visualize( $other_name ),
         visualize( $other_countryId ),
-        ($other_id ? "<a class='p' href='p.php?i=$other_id' target='_blank'>$other_id</a>" : peekLink( $other_name, $other_countryId )),
+        ($other_id ? "<a class='p' href='../p.php?i=$other_id' target='_blank'>$other_id</a>" : peekLink( $other_name, $other_countryId )),
         $birthdates[ $other_id ],
         '', #sprintf( "%.2f", $similarity ),
         '',

@@ -25,7 +25,7 @@ function showCompetitions () {
     $chosenCompetitionId = $competition['id'];
     $competitionResults = dbQuery( "SELECT * FROM Results WHERE competitionId = '$chosenCompetitionId'" );
     echo "<hr>";
-    echo "<a href='../c.php?i=$chosenCompetitionId'>$chosenCompetitionId</a>";
+    echo competitionLink( $chosenCompetitionId, $chosenCompetitionId );
     showCompetitionInfos();
   }
 }
