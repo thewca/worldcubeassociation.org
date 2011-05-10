@@ -1,7 +1,11 @@
-
-AuthUserFile /home/u1/speedcubing2/html/results/admin/.htpasswd
-AuthName "Protected Area"
+AuthUserFile /services/webpages/w/o/worldcubeassociation.org/public/results/admin/.htpasswd
+AuthName "Only access to WCA admins!"
 AuthType Basic
-<Limit GET POST>
-require valid-user
+AuthUserFile "/services/webpages/w/o/worldcubeassociation.org/public/results/admin/.htpasswd"
+<Limit GET POST PUT>
+ require valid-user
+# Order deny,allow
+# Deny from all
+# Allow from 
+# Allow from all
 </Limit>
