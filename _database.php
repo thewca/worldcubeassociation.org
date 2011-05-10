@@ -117,6 +117,13 @@ function getAllUnofficialEvents () {
 }
 
 #----------------------------------------------------------------------
+function getAllRounds () {
+#----------------------------------------------------------------------
+  global $cachedRounds;
+  return $cachedRounds;
+}
+
+#----------------------------------------------------------------------
 function getAllCompetitions () {
 #----------------------------------------------------------------------
   global $cachedCompetitions;
@@ -161,8 +168,9 @@ function getAllIDs ( $rows ) {
 
 function getAllEventIds                    () { return getAllIDs( getAllEvents()                    ); }
 function getAllUnofficialEventIds          () { return getAllIDs( getAllUnofficialEvents()          ); }
+function getAllRoundIds                    () { return getAllIDs( getAllRounds()                    ); }
 function getAllCompetitionIds              () { return getAllIDs( getAllCompetitions()              ); }
-function getAllUsedCountriesIds             () { return getAllIDs( getAllUsedCountries()             ); }
+function getAllUsedCountriesIds            () { return getAllIDs( getAllUsedCountries()             ); }
 function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCountriesCompetitions() ); }
 function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
 

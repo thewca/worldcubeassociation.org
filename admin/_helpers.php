@@ -83,6 +83,9 @@ function computeCachedDatabase ( $cacheFile ) {
     'UnofficialEvents' =>
       'SELECT * FROM Events WHERE rank>1000 ORDER BY rank',
 
+    'Rounds' =>
+      'SELECT * FROM Rounds ORDER BY rank',
+
     'Competitions' =>
       'SELECT id, cellName FROM Competitions ORDER BY year DESC, month DESC, day DESC',
       
@@ -121,7 +124,7 @@ function computeCachedDatabase ( $cacheFile ) {
 function computeCacheEntry ( $name, $query ) {
 #----------------------------------------------------------------------
 
-  echo "<p>Building cached database entry <b>[</b>$name<b>]</b> ...<p>";
+  echo "<p>Building cached database entry <b>[</b>$name<b>]</b> ...</p>";
 
   #--- Process the rows.
   foreach( dbQuery( $query ) as $row ){
