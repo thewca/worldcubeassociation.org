@@ -26,27 +26,22 @@ if( $chosenAverage ){
 #--- Compute $results = ( value, personId, personName, countryName, competitionId, competitioName, [value1-5] ).
 
 else {
+  for ( $i=1; $i<=5; $i++ )
+    $subqueryParts[] = "SELECT   value$i value, personId, personName, country.name countryName, competitionId, competition.cellName competitionName
+                        FROM     Results result,
+                                 Competitions competition,
+                                 Countries country
+                        WHERE    " . randomDebug() . "
+                          AND    value$i>0 $eventCondition $yearCondition $regionCondition
+                          AND    competition.id = competitionId
+                          AND    country.id     = result.countryId
+                        ORDER BY value, personName
+                        $limitCondition";
+  $subquery = '(' . implode( ') UNION ALL (', $subqueryParts ) . ')';
   $results = dbQuery("
-    SELECT
-                           result.*,
-                           value,
-      competition.cellName competitionName,
-      country.name         countryName
-    FROM
-      (SELECT personId, personName, competitionId, countryId, eventId, value1 value FROM Results UNION ALL
-       SELECT personId, personName, competitionId, countryId, eventId, value2 value FROM Results UNION ALL
-       SELECT personId, personName, competitionId, countryId, eventId, value3 value FROM Results UNION ALL
-       SELECT personId, personName, competitionId, countryId, eventId, value4 value FROM Results UNION ALL
-       SELECT personId, personName, competitionId, countryId, eventId, value5 value FROM Results
-      ) result,
-      Competitions competition,
-      Countries country
-    WHERE " . randomDebug() . "
-      AND value>0 $eventCondition $yearCondition $regionCondition
-      AND competition.id = competitionId
-      AND country.id     = result.countryId
-    ORDER
-      BY value, personName
+    SELECT   *
+    FROM    ($subquery) result
+    ORDER BY value, personName
     $limitCondition
   ");
 }
