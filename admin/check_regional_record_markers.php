@@ -102,31 +102,81 @@ UPDATE Results SET regionalSingleRecord='NR' WHERE id=33333
 #----------------------------------------------------------------------
 function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 #----------------------------------------------------------------------
-  global $chosenEventId;
+  global $chosenAnything, $chosenCompetitionId, $differencesWereFound, $previousRecord, $pendingCompetitions, $startDate;
 
-  #--- Only one event or all (one by one)?
-  if( $chosenEventId )
-    computeRegionalRecordMarkersForChosenEvent( $valueId, $valueName );
-  else {
-    foreach( getAllEvents() as $event ){
-      $chosenEventId = $event['id'];
-      computeRegionalRecordMarkersForChosenEvent( $valueId, $valueName );
-      ob_flush();
-      flush();
+  # -----------------------------
+  # Description of the main idea:
+  # -----------------------------
+  # Get all results that are potential regional records. Process them one
+  # event at a time. Inside, process them one competition at a time, in
+  # chronological order of start date. Each competition's results are only
+  # compared against records of strictly previous competitions, not against
+  # parallel competitions. For this, there are these main arrays:
+  #
+  # - $previousRecord[regionId] is a running collection of each region's record,
+  #   covering all competitions *before* the current one.
+  #
+  # - $record[regionId] is based on $previousRecord and is used and updated
+  #   inside the current competition.
+  #
+  # - $pendingCompetitions[regionId] holds $record of competitions already
+  #   processed but not merged into $previousRecord. When a new competition is
+  #   encountered, we merge those that ended before the new one into $previousRecord.
+  #
+  # - $baseRecord[eventId][regionId] is for when a user chose a specific
+  #   competition to check. Then we quickly ask the database for the current
+  #   region records from before that competition. This could be used for
+  #   giving the user a year-option as well, but we don't have that (yet?).
+  # -----------------------------
+
+  #--- If a competition was chosen, we need all records from before it
+  if ( $chosenCompetitionId ) {
+    $startDate = getCompetitionValue( $chosenCompetitionId, "year*10000 + month*100 + day" );
+    $results = dbQueryHandle("
+      SELECT eventId, result.countryId, continentId, min($valueId) value, event.format valueFormat
+      FROM Results result, Competitions competition, Countries country, Events event
+      WHERE $valueId > 0
+        AND competition.id = result.competitionId
+        AND country.id     = result.countryId
+        AND event.id       = result.eventId
+        AND year*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) < $startDate
+      GROUP BY eventId, countryId");
+    while( $row = mysql_fetch_row( $results ) ) {
+      list( $eventId, $countryId, $continentId, $value, $valueFormat ) = $row;
+      if( isSuccessValue( $value, $valueFormat ))
+        foreach( array( $countryId, $continentId, 'World' ) as $regionId )
+          if( !$baseRecord[$eventId][$regionId] || $value < $baseRecord[$eventId][$regionId] )
+            $baseRecord[$eventId][$regionId] = $value;
     }
-    $chosenEventId = '';
   }
-}
+  #--- Otherwise we need the endDate of each competition
+  else {
+    $competitions = dbQuery("
+      SELECT id, year*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) endDate
+      FROM   Competitions competition");
+    foreach ( $competitions as $competition )
+      $endDate[$competition['id']] = $competition['endDate'];
+  }
 
-#----------------------------------------------------------------------
-function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
-#----------------------------------------------------------------------
-  global $chosenAnything, $differencesWereFound;
+  #--- The IDs of relevant results (those already marked as region record and those that could be)
+  $queryRelevantIds = "
+   (SELECT id FROM Results WHERE regional${valueName}Record<>'' " . eventCondition() . competitionCondition() . ")
+   UNION
+   (SELECT id
+    FROM
+      Results result,
+      (SELECT eventId, competitionId, roundId, countryId, min($valueId) value
+       FROM Results
+       WHERE $valueId > 0
+       " . eventCondition() . competitionCondition() . "
+       GROUP BY eventId, competitionId, roundId, countryId) helper
+    WHERE result.eventId       = helper.eventId
+      AND result.competitionId = helper.competitionId
+      AND result.roundId       = helper.roundId
+      AND result.countryId     = helper.countryId
+      AND result.$valueId      = helper.value)";
 
-  precomputeStuff( $valueId, $valueName );
-  $markerName = ($valueId == 'best') ? 'regionalSingleRecord' : 'regionalAverageRecord';
-
-  #--- Get all successful results.
+  #--- Get the results, ordered appropriately
   $results = dbQueryHandle("
     SELECT
       year*10000 + month*100 + day startDate,
@@ -143,6 +193,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       continent.recordName continentalRecordName,
       event.format valueFormat
     FROM
+      ($queryRelevantIds) relevantIds,
       Results      result,
       Competitions competition,
       Countries    country,
@@ -150,13 +201,12 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       Events       event,
       Rounds       round
     WHERE 1
-      AND $valueId > 0
+      AND result.id      = relevantIds.id
       AND competition.id = result.competitionId
       AND round.id       = result.roundId
       AND country.id     = result.countryId
       AND continent.id   = country.continentId
       AND event.id       = result.eventId
-      " . eventCondition() . competitionCondition() . "
     ORDER BY event.rank, startDate, competitionId, round.rank, $valueId
   ");
 
@@ -168,25 +218,40 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
     if( ! isSuccessValue( $value, $valueFormat ))
       continue;
 
-    #--- Recognize new competitions.
-    $isNewCompetition = ($competitionId != $currentCompetitionId);
-    $currentCompetitionId = $competitionId;
+    #--- At new events, reset everything
+    if ( $eventId != $currentEventId ) {
+      $currentEventId = $eventId;
+      $currentCompetitionId = false;
+      $record = $previousRecord = $baseRecord[$eventId];
+      $pendingCompetitions = array();
+    }
 
-    #--- If new competition, load records from strictly earlier competitions.
-    if( $isNewCompetition )
-      $record = getRecordsStrictlyBefore( $startDate );
+    #--- Handle new competitions.
+    if ( $competitionId != $currentCompetitionId ) {
+
+      #--- Add the records of the previously current competition to the set of pending competition records
+      if ( $currentCompetitionId )
+        $pendingCompetitions[] = array( $endDate[$currentCompetitionId], $record );
+
+      #--- Note the current competition
+      $currentCompetitionId = $competitionId;
+
+      #--- Prepare the records this competition will be based on
+      $pendingCompetitions = array_filter ( $pendingCompetitions, "handlePendingCompetition" );
+      $record = $previousRecord;
+    }
 
     #--- Calculate whether it's a new region record and update the records.
     $calcedMarker = '';
-    if( $value <= $record[$eventId][$countryId] ){
+    if( !$record[$countryId] || $value <= $record[$countryId] ){
       $calcedMarker = 'NR';
-      $record[$eventId][$countryId] = $value;
-      if( $value <= $record[$eventId][$continentId] ){
+      $record[$countryId] = $value;
+      if( !$record[$continentId] || $value <= $record[$continentId] ){
         $calcedMarker = $continentalRecordName;
-        $record[$eventId][$continentId] = $value;
-        if( $value <= $record[$eventId]['World'] ){
+        $record[$continentId] = $value;
+        if( !$record['World'] || $value <= $record['World'] ){
           $calcedMarker = 'WR';
-          $record[$eventId]['World'] = $value;
+          $record['World'] = $value;
         }
       }
     }
@@ -256,57 +321,16 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
 }
 
 #----------------------------------------------------------------------
-function precomputeStuff( $valueId, $valueName ) {
+function handlePendingCompetition ( $pendingCompetition ) {
 #----------------------------------------------------------------------
-  global $recordsEndDate, $initialRecord;
+  global $previousRecord, $pendingCompetitions, $startDate;
 
-  #--- Get all records for each competition end date.
-  $recordsEndDate = dbQuery("
-   SELECT
-      year*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) endDate,
-      eventId, result.countryId, continentId, min($valueId) value
-    FROM
-      Results result,
-      Competitions competition,
-      Countries country
-    WHERE 1
-      AND $valueId > 0
-      AND competition.id = competitionId
-      AND country.id = result.countryId
-      " . eventCondition() . regionCondition( 'result' ) . "
-    GROUP BY endDate, eventId, countryId
-    ORDER BY eventId, endDate, countryId, $valueId
-  ");
-
-  #--- Create an initial record list that can be reused later.
-  $tmp = dbQuery("
-    SELECT DISTINCT eventId, countryId, continentId
-    FROM Results, Countries country
-    WHERE country.id = countryId
-  ");
-  foreach( $tmp as $row ){
-    extract( $row );
-    foreach( array( $countryId, $continentId, 'World' ) as $regionId )
-      $initialRecord[$eventId][$regionId] = 2000000000;
-  }
-}
-
-#----------------------------------------------------------------------
-function getRecordsStrictlyBefore( $startDate ) {
-#----------------------------------------------------------------------
-  global $recordsEndDate, $initialRecord;
-
-  $record = $initialRecord;
-  foreach( $recordsEndDate as $row ){
-    extract( $row );
-    if( $endDate < $startDate ){
-      foreach( array( $countryId, $continentId, 'World' ) as $regionId )
-        if( $value < $record[$eventId][$regionId] )
-          $record[$eventId][$regionId] = $value;
-    }
-  }
-
-  return $record;
+  list( $endDate, $pendingRecord ) = $pendingCompetition;
+  if ( $endDate >= $startDate ) return true;
+  foreach ( $pendingRecord as $regionId => $value )
+    if ( !$previousRecord[$regionId] || $pendingRecord[$regionId] < $previousRecord[$regionId] )
+      $previousRecord[$regionId] = $pendingRecord[$regionId];
+  return false;
 }
 
 ?>
