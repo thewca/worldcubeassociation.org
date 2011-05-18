@@ -202,6 +202,14 @@ function getCompetitionPassword ( $id ) {
 }
 
 #----------------------------------------------------------------------
+function getCompetitionValue ( $competitionId, $valueSource ) {
+#----------------------------------------------------------------------
+  $tmp = dbQuery( "SELECT $valueSource value FROM Competitions WHERE id='$competitionId'" );
+  $tmp = $tmp[0];
+  return $tmp['value'];
+}
+
+#----------------------------------------------------------------------
 function getFullCompetitionInfos ( $id ) {
 #----------------------------------------------------------------------
 
