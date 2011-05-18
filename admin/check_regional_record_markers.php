@@ -10,7 +10,7 @@ showDescription();
 
 if( $chosenShow ){
   showChoices();
-  doTheDarnChecking();  
+  doTheDarnChecking();
 } else {
   echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, you must click 'Show' first (after optionally choosing event and/or competition).</p>";
   showChoices();
@@ -25,7 +25,7 @@ function showDescription () {
   echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>\n\n";
 
   echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition. If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be huge - btw it'll still take a long computation time).</p>\n\n";
-  
+
   echo "<p>It computes regional record markers for all valid results (value>0). If a result has a stored or computed regional record marker, it is displayed. If the two markers differ, they're shown in red/green.</p>\n\n";
 
   echo "<p>Only strictly previous competitions (other.<b>end</b>Date &lt; this.<b>start</b>Date) are used to compare, not overlapping competitions. Thus I might wrongfully compute a too good record status (because a result was actually beaten earlier in an overlapping competition) but I should never wrongfully compute a too bad record status.</p>\n\n";
@@ -47,7 +47,7 @@ function analyzeChoices () {
   $chosenEventId        = getNormalParam( 'eventId' );
   $chosenCompetitionId  = getNormalParam( 'competitionId' );
   $chosenShow           = getBooleanParam( 'show' );
-           
+
   $chosenAnything = $chosenEventId || $chosenCompetitionId;
 }
 
@@ -66,8 +66,8 @@ function showChoices () {
 function doTheDarnChecking () {
 #----------------------------------------------------------------------
   global $differencesWereFound;
-    
-    
+
+
   #--- Begin form and table.
   echo "<form action='check_regional_record_markers_ACTION.php' method='post'>\n";
   tableBegin( 'results', 11 );
@@ -75,7 +75,7 @@ function doTheDarnChecking () {
   #--- Do the checking.
   computeRegionalRecordMarkers( 'best', 'Single' );
   computeRegionalRecordMarkers( 'average', 'Average' );
-  
+
   #--- End table.
   tableEnd();
 
@@ -122,10 +122,10 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
 #----------------------------------------------------------------------
   global $chosenAnything, $differencesWereFound;
-  
+
   precomputeStuff( $valueId, $valueName );
   $markerName = ($valueId == 'best') ? 'regionalSingleRecord' : 'regionalAverageRecord';
-  
+
   #--- Get all successful results.
   $results = dbQueryHandle("
     SELECT
@@ -157,7 +157,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
       AND continent.id   = country.continentId
       AND event.id       = result.eventId
       " . eventCondition() . competitionCondition() . "
-    ORDER BY eventId, startDate, competitionId, round.rank, $valueId
+    ORDER BY event.rank, startDate, competitionId, round.rank, $valueId
   ");
 
   #--- Process each result.
@@ -167,7 +167,7 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
     #--- Handle failures of multi-attempts.
     if( ! isSuccessValue( $value, $valueFormat ))
       continue;
-    
+
     #--- Recognize new competitions.
     $isNewCompetition = ($competitionId != $currentCompetitionId);
     $currentCompetitionId = $competitionId;
@@ -181,14 +181,14 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
     if( $value <= $record[$eventId][$countryId] ){
       $calcedMarker = 'NR';
       $record[$eventId][$countryId] = $value;
-    }
-    if( $value <= $record[$eventId][$continentId] ){
-      $calcedMarker = $continentalRecordName;
-      $record[$eventId][$continentId] = $value;
-    }
-    if( $value <= $record[$eventId]['World'] ){
-      $calcedMarker = 'WR';
-      $record[$eventId]['World'] = $value;
+      if( $value <= $record[$eventId][$continentId] ){
+        $calcedMarker = $continentalRecordName;
+        $record[$eventId][$continentId] = $value;
+        if( $value <= $record[$eventId]['World'] ){
+          $calcedMarker = 'WR';
+          $record[$eventId]['World'] = $value;
+        }
+      }
     }
 
     #--- If stored or calculated marker say it's some regional record at all...
@@ -219,27 +219,26 @@ function computeRegionalRecordMarkersForChosenEvent ( $valueId, $valueName ) {
         $worldName = "<b>$worldName</b>";
 
       #--- Recognize new events/rounds/competitions.
-      $isNewEvent = ($eventId != $currentEventId); $currentEventId = $eventId;
-      $isNewRound = ($roundId != $currentRoundId); $currentRoundId = $roundId;
-      $isNewCompo = ($competitionId != $currentCompoId); $currentCompoId = $competitionId;
+      $announceEvent = ($eventId       != $announcedEventId); $announcedEventId = $eventId;
+      $announceRound = ($roundId       != $announcedRoundId); $announcedRoundId = $roundId;
+      $announceCompo = ($competitionId != $announcedCompoId); $announcedCompoId = $competitionId;
 
       #--- If new event, announce it.
-      if( $isNewEvent ){
+      if( $announceEvent ){
         tableCaption( false, "$eventId $valueName" );
         tableHeader( split( '\\|', 'Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
                      array( 7 => "class='R2'" ) );
       }
-      
+
       #--- If new round/competition inside an event, add a separator row.
-      if( ($isNewRound  ||  $isNewCompo)  &&  !$isNewEvent )
+      if( ($announceRound || $announceCompo)  &&  ! $announceEvent )
         tableRowEmpty();
 
       #--- Prepare the checkbox.
       $checkbox = "<input type='checkbox' name='update$valueName$resultId' value='$calcedMarker' />";
-              
+
       #--- Show the result.
       tableRow( array(
-#        $startDate,
         competitionLink( $competitionId, $competitionId ),
         $roundId,
         personLink( $personId, $personName ),
@@ -306,7 +305,7 @@ function getRecordsStrictlyBefore( $startDate ) {
           $record[$eventId][$regionId] = $value;
     }
   }
-  
+
   return $record;
 }
 
