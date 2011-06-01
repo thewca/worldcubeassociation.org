@@ -203,4 +203,22 @@ function wcaDate ( $format='r', $timestamp=false ) {
   return date( $format, $timestamp ? $timestamp : time() );
 }
 
+#----------------------------------------------------------------------
+function extractRomanName ( $name ) {
+#----------------------------------------------------------------------
+  if( preg_match( '/(.*)\((.*)\)$/', $name, $matches ))
+    return( rtrim( $matches[1] ));
+  else
+    return( $name );
+}
+
+#----------------------------------------------------------------------
+function extractLocalName ( $name ) {
+#----------------------------------------------------------------------
+  if( preg_match( '/(.*)\((.*)\)$/', $name, $matches ))
+    return( $matches[2] );
+  else
+    return( '' );
+}
+
 ?>

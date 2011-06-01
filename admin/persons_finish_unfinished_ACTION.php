@@ -113,27 +113,15 @@ function completeId ( $newSemiId ) {
 function insertPerson( $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 
-  #--- Extract names.
-  if( preg_match( '/(.*)\((.*)\)$/', $newName, $matches )){
-    $newRomanName = rtrim( $matches[1] );
-    $newLocalName = $matches[2];
-  }
-  else{
-    $newRomanName = $newName;
-    $newLocalName = '';
-  }
-      
   #--- Mysql-ify.
   $newName      = mysqlEscape( $newName );
-  $newRomanName = mysqlEscape( $newRomanName );
-  $newLocalName = mysqlEscape( $newLocalName );
   $newCountry   = mysqlEscape( $newCountry );
   $newId        = mysqlEscape( $newId );
 
   #--- Build the command.  
   $command = "
-    INSERT INTO Persons (id, subId, name, romanName, localName, countryId, gender, year, month, day, comments)
-    VALUES ( '$newId', 1, '$newName', '$newRomanName', '$newLocalName', '$newCountry', '', 0, 0, 0, '' ) 
+    INSERT INTO Persons (id, subId, name, countryId, gender, year, month, day, comments)
+    VALUES ( '$newId', 1, '$newName', '$newCountry', '', 0, 0, 0, '' ) 
   ";
 
   #--- Show the command.

@@ -51,7 +51,7 @@ function importLocalNames () {
 
       list( $wcaId, $localName ) = explode( ',', $nameLine );
       $wcaId = utf8_decode( $wcaId );
-      $persons = dbQuery( "SELECT name personName, romanName personRomanName, localName personLocalName FROM Persons WHERE id='$wcaId' AND subId=1" );
+      $persons = dbQuery( "SELECT name personName FROM Persons WHERE id='$wcaId' AND subId=1" );
 
       if( count( $persons ) == 0 ){
         echo "<span style='color:#DB0'>Unknown WCA id " . htmlEscape( $wcaId ) . "</span><br />\n";
@@ -64,16 +64,15 @@ function importLocalNames () {
 
       if( $chosenConfirm ){
         $localName = mysql_real_escape_string( $localName );
-        $name = mysql_real_escape_string( $personRomanName ) . ' (' . $localName . ')';
+        $name = mysql_real_escape_string( extractRomanName( $personName )) . ' (' . $localName . ')';
         $personName = mysql_real_escape_string( $personName );
-        dbCommand( "UPDATE Persons SET localName='$localName' WHERE id='$wcaId' AND subId=1" );
         dbCommand( "UPDATE Persons SET name='$name' WHERE id='$wcaId' AND subId=1" );
         dbCommand( "UPDATE Results SET personName='$name' WHERE personId='$wcaId' AND personName='$personName'" );
         $oneGood = true;
       }
 
       else{
-
+        $personLocalName = extractLocalName( $personName );
         if( $localName == ''){
           if( $personLocalName == '' ){}
           else{

@@ -27,7 +27,7 @@ function showBody () {
 
   #--- Get all incarnations of the person.
   $persons = dbQuery("
-    SELECT person.name personName, person.romanName personRomanName, person.localName personLocalName, country.name countryName, day, month, year, gender
+    SELECT person.name personName, country.name countryName, day, month, year, gender
     FROM Persons person, Countries country
     WHERE person.id = '$chosenPersonId' AND country.id = person.countryId
     ORDER BY person.subId
@@ -42,10 +42,7 @@ function showBody () {
   #--- Get and show the current incarnation.
   $currentPerson = array_shift( $persons );
   extract( $currentPerson );
-  if( $personLocalName )
-    echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personRomanName ($personLocalName)</a></h1>";
-  else
-    echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personRomanName</a></h1>";
+  echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personName</a></h1>";
 
   #--- Show previous incarnations if any.
   if( count( $persons )){

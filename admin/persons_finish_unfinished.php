@@ -91,7 +91,7 @@ function showUnfinishedPersons () {
       continue;
 
     #--- Try to compute the semi-id.
-    $romanName = rtrim( preg_replace( '/\((.*)\)$/', '', $name ));
+    $romanName = extractRomanName( $name );
     $accent   = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûıışÿ";
     $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
     $quarterId = strtr( $romanName, $accent, $noaccent );
