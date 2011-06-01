@@ -50,7 +50,6 @@ function checkPasswordAndLoadData () {
   
   #--- If this is just view, not yet submit, extract the database data and return;
   if( ! $chosenSubmit ){
-
     #--- Done.
     return true;
   }
@@ -78,7 +77,7 @@ function checkCountrySpecifications () {
   global $chosenCompetitionId, $data, $dataError;
 
   $countries = dbQuery("SELECT * FROM Countries");
-    foreach( $countries as $country) $allCountriesIds[] = $country['id'];
+    foreach( $countries as $country) $allCountriesIds[$country['id']] = 1;
 
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   foreach( $regIds as $regId ){
@@ -86,7 +85,7 @@ function checkCountrySpecifications () {
     if( $data["reg${regId}edit"] ){
 
       $countryId = $data["reg${regId}countryId"];
-      if( !in_array($countryId, $allCountriesIds)) $dataError["reg${regId}countryId"] = true;
+      if( !isset($allCountriesIds[$countryId])) $dataError["reg${regId}countryId"] = true;
     }
   }
 }
@@ -131,21 +130,23 @@ function storeData () {
 
       #--- Edit registration
       if( $data["reg${regId}edit"] ){
+        $queryEvent = '';
 
         #--- Build events query
         foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-          $ee = $data["reg${regId}E$eventId"] ? 1 : 0;
-          $queryEvent .= "E$eventId='$ee', ";
+          if( $data["reg${regId}E$eventId"] )
+            $queryEvent .= "$eventId ";
         }
+        rtrim( $queryEvent ); # Remove last space.
 
         $personId = mysql_real_escape_string( $data["reg${regId}personId"] );
         $name = mysql_real_escape_string( $data["reg${regId}name"] );
         $countryId = mysql_real_escape_string( $data["reg${regId}countryId"] );
 
-        echo "UPDATE Preregs SET $queryEvent name='$name', personId='$personId', countryId='$countryId' WHERE id='$regId'<br/>\n";
+        echo "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'<br/>\n";
 
         #--- Query
-        dbCommand( "UPDATE Preregs SET $queryEvent name='$name', personId='$personId', countryId='$countryId' WHERE id='$regId'" );
+        dbCommand( "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'" );
       }
 
       #--- Accept registration
@@ -181,7 +182,7 @@ function startForm () {
 function showSaveMessage () {
 #----------------------------------------------------------------------
   global $chosenSubmit, $dataSuccessfullySaved;
-  
+
   #--- If no submit, don't say anything.
   if( ! $chosenSubmit )
     return;
@@ -236,10 +237,11 @@ function showRegs () {
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
+    $eventIdsList = array_flip( split( ' ', $eventIds ));
 
-    if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>";
-    else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>";
-    else if( $status == 'a' ) echo "<tr style='background-color:#CCFFCC'>";
+    if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
+    else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>\n";
+    else if( $status == 'a' ) echo "<tr style='background-color:#CCFFCC'>\n";
     echo "  <td><input type='checkbox' id='reg${id}accept' name='reg${id}accept' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>\n";
@@ -248,11 +250,11 @@ function showRegs () {
     echo "  <td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>\n";    
 
     foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-      switch ($comp["E$eventId"]) {
-        case 0: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n"; break;
-        case 1: echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
-        default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break;
-      }
+      if( isset( $eventIdsList[$eventId]))
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n";
+      else
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n";
+        /* default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break; */
     }
     echo "</tr>\n";
   }

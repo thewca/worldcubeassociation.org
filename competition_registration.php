@@ -345,16 +345,15 @@ function savePreregForm () {
   $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
 
   #--- Building query
-  $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments, ip, status";
-  $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments', '$ip', 'p'";
-  
-  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
-    $eventId = $event['id'];
-    if( getBooleanParam( "E$eventId" )){
-      $into .= ", E$eventId";
-      $values .= ", '1'";
-    }
+  foreach( array_merge( getAllEventIds(), getAllUnofficialEventIds() ) as $eventId ){
+    if( getBooleanParam( "E$eventId" ))
+      $eventIds .= "$eventId ";
   }
+  rtrim( $eventIds ); # Remove last space
+
+  $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments, ip, status, eventIds";
+  $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments', '$ip', 'p', '$eventIds'";
+  
 
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
 
@@ -373,14 +372,9 @@ function savePreregForm () {
     $mailBody .= "Date of birth : $birthYear/$birthMonth/$birthDay\n";
     $mailBody .= "Email : $email\n";
 
-    $mailBody .= "Events :";
-    foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
-      $eventId = $event['id'];
-      if( getBooleanParam( "E$eventId" ))
-        $mailBody .= " $eventId";
-    }
+    $mailBody .= "Events : $eventIds\n";
 
-    $mailBody .= "\nGuests : $guests\n";
+    $mailBody .= "Guests : $guests\n";
     $mailBody .= "Comments : $comments\n";
     $mailBody .= "Ip : $ip";
 
@@ -460,14 +454,15 @@ function showPreregList () {
     }
 
     $personEvents = 0;
+    $eventIdsList = array_flip( split( ' ', $eventIds ));
 
     foreach( $eventList as $event ){
-      if( $prereg["E$event"] == 1 ){
+      if( isset( $eventIdsList[$event] )){
         $row[] = 'X';
         $countEvents[$event] += 1;
         $personEvents += 1;
       }
-      else if( $prereg["E$event"] == 2 ){
+/*      else if( $prereg["E$event"] == 2 ){
         $row[] = 'q';
         $countEventsQualify[$event] += 1;
         $personEvents += 1;
@@ -478,13 +473,12 @@ function showPreregList () {
         $countEventsWaiting[$event] += 1;
         $personEvents += 1;
         $isWaiting = 1;
-      }
+      } */
       else $row[] = '-';
     }
 
-	 $row[] = $personEvents;
-
-	 tableRow( $row );
+    $row[] = $personEvents;
+    tableRow( $row );
   }
 
   //tableRowBlank();

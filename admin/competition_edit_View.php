@@ -121,10 +121,10 @@ function showEventSpecifications () {
   echo "<ul>";
   echo "<li><p>Choose which events the competition will offer.</p></li>\n";
   //echo "<li><p>If you want to limit the number of competitors in an event, enter a number in the 'Competitors' field, and after reaching the limit, every following registration will be marked 'w' (waiting list)</p></li>\n";
-  echo "<li><p>If you want to specify a time limit for an event, enter the number of hundredth of seconds for a time, the result for FM or the number of cubes solved for multi in the 'Time' field. Every competitor that doesn't fit the time limit will be marked 'w'.</p></li>\n";
+  /*echo "<li><p>If you want to specify a time limit for an event, enter the number of hundredth of seconds for a time, the result for FM or the number of cubes solved for multi in the 'Time' field. Every competitor that doesn't fit the time limit will be marked 'w'.</p></li>\n";
   echo "<li><p>You also need to specify if you want the limit to be applied on the best single or on the best average (if available).</p></li>\n";
   echo "<li><p>If you have qualifications for an event, you can check the Qualifications checkbox and enter a Qualifications Time Limit. Competitors who fit this time limit but not the main time limit will have a 'q', others get a 'w'.</p></li>\n";
-  echo "<li><p>To run the computation of the waiting list, click <a href='compute_waiting_list.php?id=$chosenCompetitionId'>here</a></p></li>\n";
+  echo "<li><p>To run the computation of the waiting list, click <a href='compute_waiting_list.php?id=$chosenCompetitionId'>here</a></p></li>\n";*/
   echo "</ul>\n\n";
   
   #--- Start the table.
@@ -152,7 +152,7 @@ function showEventSpecifications () {
     echo "  <td align='center'><input id='personLimit$id' name='personLimit$id' type='text' size='6' style='background:#FF8' value='$personLimit' /></td>\n";
     echo "  <td align='center'><input id='timeLimit$id' name='timeLimit$id' type='text' size='6' style='background:#FF8' value='$timeLimit' /></td>\n";
     echo "  <td align='center'><input id='timeFormatSingle$id' name='timeFormat$id' type='radio' value='s' $timeSingle /></td>\n";
-    if( count( dbQuery( "SELECT * FROM RanksAverage WHERE eventId='$id'" )))
+    if( count( dbQuery( "SELECT * FROM RanksAverage WHERE eventId='$id' LIMIT 1" )))
       echo "  <td align='center'><input id='timeFormatAverage$id' name='timeFormat$id' type='radio' value='a' $timeAverage /></td>\n"; # TODO: Nasty...
     else
       echo "  <td></td>\n";
@@ -250,8 +250,7 @@ function showAnnouncement() {
   
     echo "<h4>Results</h4>";
 
-    //$top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='a' OR roundId='c') ORDER BY pos LIMIT 3 " );
-    $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND roundId='f' ORDER BY pos LIMIT 0, 3 " );
+    $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='f' OR roundId='c') ORDER BY pos LIMIT 3 " );
     if( $top ){ # If there was a 3x3x3 event.
   
       $msg = $top[0]['personName'] . " wins $data[name]\n\n";
