@@ -36,7 +36,8 @@ $lists[] = array (
   "Oldest standing world records",
   "",
   "[E] Event [t] Type [N] Days [R] Result [P] Person [C] Competition",
-  $rows
+  $rows,
+  "Since we don't have the schedules, the first day of the competition is assumed here and thus the ages might be slightly off."
 );
 
 ?>
