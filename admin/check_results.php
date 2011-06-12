@@ -5,13 +5,16 @@
 
 require( '../_header.php' );
 analyzeChoices();
+echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check results</b> (" . wcaDate() . ")</p>\n";
 showDescription();
 
-if( $chosenCheck ){
+if( $chosenCheckRecent || $chosenCheckAll ){
   showChoices();
+  if ( $chosenCheckRecent )
+    $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
   checkResults();
 } else {
-  echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, you must click 'Check' first (after optionally choosing competition).</p>";
+  echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, choose what you want to check...</p>";
   showChoices();
 }
 
@@ -21,20 +24,18 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.</b></p>\n\n";
+  echo "<p style='width:45em'>Checks results according to our <a href='check_results.txt'>checking procedure</a>. Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're old enough).</p>\n";
 
-  echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition.</p>\n\n";
-
-  echo "<p>Checks all results according to our <a href='check_results.txt'>checking procedure</a>.</p><hr />\n";
+  echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenCheck;
+  global $chosenCheckRecent, $chosenCheckAll;
 
-  $chosenCompetitionId  = getNormalParam( 'competitionId' );
-  $chosenCheck          = getBooleanParam( 'check' );
+  $chosenCheckRecent = getBooleanParam( 'checkRecent' );
+  $chosenCheckAll    = getBooleanParam( 'checkAll' );
 }
 
 #----------------------------------------------------------------------
@@ -42,30 +43,29 @@ function showChoices () {
 #----------------------------------------------------------------------
 
   displayChoices( array(
-    competitionChoice( false ),
-    choiceButton( true, 'check', 'Check' )
+    choiceButton( true, 'checkRecent', 'check recent' ),
+    choiceButton( true, 'checkAll', 'check all' ),
   ));
 }
 
 #----------------------------------------------------------------------
 function checkResults () {
 #----------------------------------------------------------------------
-  global $competitionIds, $countryIds;
+  global $dateCondition, $chosenCheckAll, $competitionIds, $countryIds;
+
+  echo "<p>Checking <b>" . ($chosenCheckAll ? 'all' : 'recent') . "</b> results...</p>\n";
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
     SELECT
-      id, formatId, roundId, personId, competitionId, eventId, countryId,
+      result.id, formatId, roundId, personId, competitionId, eventId, result.countryId,
       value1, value2, value3, value4, value5, best, average
-    FROM Results
-    WHERE 1
-    " . competitionCondition() . "
-    ORDER BY formatId, roundId, id
+    FROM Results result, Competitions competition
+    WHERE competition.id = competitionId
+      $dateCondition
+    ORDER BY formatId, competitionId, eventId, roundId, result.id
   ")
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
-
-  echo "<pre>\n";
-  echo wcaDate() . "\n\n";
 
   #--- Build Id arrays
   $countryIds = array_flip( getAllIDs( dbQuery( "SELECT id FROM Countries" )));
@@ -73,6 +73,7 @@ function checkResults () {
 
   #--- Process the results.
   $badIds = array();
+  echo "<pre>\n";
   while( $result = mysql_fetch_array( $dbResult )){
     if( $error = checkResult( $result )){
       extract( $result );
@@ -149,7 +150,7 @@ function checkResult ( $result ) {
   if( $result['average'] != $average )
     return "'average' should be $average";
 
-  #--- 9) check number of zero values for non combined
+  #--- 9) check number of zero values for non-combined rounds
   $round = $result['roundId'];
   $f = ($round != 'c'  &&  $round != 'd') ? $format : "";
   if( $f == '1'  &&  $zer != 4 )
@@ -163,7 +164,7 @@ function checkResult ( $result ) {
   if( $f == 'a'  &&  $zer != 0 )
     return "shouldn't have zero-values";
 
-  #--- 10) same for combined
+  #--- 10) same for combined rounds
   if( $round == 'c'  ||  $round == 'd' ){
     if( $format == '2'  &&  $zer < 3 )
       return "should have at most two non-zero values";
