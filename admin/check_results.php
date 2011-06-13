@@ -137,41 +137,28 @@ function checkResult ( $result ) {
 
   #--- 7) compute average
   $average = 0;
-  if( $format == 'm' )
-    $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
-  if( $format == 'a' )
-    $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
-  if( $average > 60000 )
-    $average = ($average + 50 - (($average + 50) % 100));
+  if( $format == 'm'   ) $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
+  if( $format == 'a'   ) $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
+  if( $average > 60000 ) $average = ($average + 50 - (($average + 50) % 100));
 
   #--- 8) compare the computed best and average with the stored ones
-  if( $result['best'] != $best )
-    return "'best' should be $best";
-  if( $result['average'] != $average )
-    return "'average' should be $average";
+  if( $result['best']    != $best    ) return    "'best' should be $best";
+  if( $result['average'] != $average ) return "'average' should be $average";
 
   #--- 9) check number of zero values for non-combined rounds
   $round = $result['roundId'];
-  $f = ($round != 'c'  &&  $round != 'd') ? $format : "";
-  if( $f == '1'  &&  $zer != 4 )
-    return "should have one non-zero values";
-  if( $f == '2'  &&  $zer != 3 )
-    return "should have two non-zero values";
-  if( $f == '3'  &&  $zer != 2 )
-    return "should have three non-zero values";
-  if( $f == 'm'  &&  $zer != 2 )
-    return "should have three non-zero values";
-  if( $f == 'a'  &&  $zer != 0 )
-    return "shouldn't have zero-values";
-
+  if ( $round != 'c'  &&  $round != 'd' ) {
+    if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
+    if( $format == '2'  &&  $zer != 3 ) return "should have two non-zero values";
+    if( $format == '3'  &&  $zer != 2 ) return "should have three non-zero values";
+    if( $format == 'm'  &&  $zer != 2 ) return "should have three non-zero values";
+    if( $format == 'a'  &&  $zer != 0 ) return "shouldn't have zero-values";
+  }
   #--- 10) same for combined rounds
-  if( $round == 'c'  ||  $round == 'd' ){
-    if( $format == '2'  &&  $zer < 3 )
-      return "should have at most two non-zero values";
-    if( $format == '3'  &&  $zer < 2 )
-      return "should have at most three non-zero values";
-    if( $format == 'm'  &&  $zer < 2 )
-      return "should have at most three non-zero values";
+  else {
+    if( $format == '2'  &&  $zer < 3 ) return "should have at most two non-zero values";
+    if( $format == '3'  &&  $zer < 2 ) return "should have at most three non-zero values";
+    if( $format == 'm'  &&  $zer < 2 ) return "should have at most three non-zero values";
   }
 
   #--- 11) check times over 10 minutes
