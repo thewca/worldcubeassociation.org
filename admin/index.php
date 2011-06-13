@@ -27,7 +27,7 @@ function showPages () {
             'Checks the Results table data.' );
 
   showPage( 'persons_check_finished',
-            'Checks the finished persons in the Persons/Results tables. Does *NOT* affect the database unless you say so.' );
+            'Checks the finished persons in the Persons/Results tables.' );
 
   showPage( 'persons_finish_unfinished',
             'Finishes persons in Results by adding personId. Does *NOT* affect the database unless you say so.' );

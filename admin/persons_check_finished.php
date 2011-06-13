@@ -5,26 +5,39 @@
 
 require( '../_header.php' );
 analyzeChoices();
-
+echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check finished persons</b> (" . wcaDate() . ")</p>\n";
 showDescription();
-#showChoices();
-getPersonsFromPersons();
-getPersonsFromResults();
+showChoices();
 
-checkSpacesInPersons();
-checkSpacesInResults();
-checkTooMuchInPersons();
-checkTooMuchInResults();
-checkDuplicatesInCompetition();
-#checkPersonsInResultsWithoutIds();
+if( $chosenCheck ){
+  echo "<hr /><p>Checking... (wait for the result message box at the end)</p>\n";
+
+  #--- Prepare the data
+  getPersonsFromPersons();
+  getPersonsFromResults();
+
+  #--- Run the checks
+  $success = true;
+  checkSpacesInPersons();
+  checkSpacesInResults();
+  checkTooMuchInPersons();
+  checkTooMuchInResults();
+  checkDuplicatesInCompetition();
+  #checkPersonsInResultsWithoutIds();
+
+  #--- Tell the result
+  noticeBox2(
+    $success,
+    "Finished. All checks successful.<br />" . wcaDate(),
+    "Finished. Some errors found.<br />" . wcaDate()
+  );
+}
 
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
-
-  echo "<p><b>This script does *NOT* affect the database.</b></p>\n\n";
 
   echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity.</p>\n\n";
   
@@ -50,9 +63,9 @@ function showDescription () {
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCheck;
 
-  $chosenCompetitionId  = getNormalParam( 'competitionId' );
+  $chosenCheck  = getNormalParam( 'check' );
 }
 
 #----------------------------------------------------------------------
@@ -60,8 +73,7 @@ function showChoices () {
 #----------------------------------------------------------------------
 
   displayChoices( array(
-    competitionChoice( true ),
-    choiceButton( true, 'show', 'Show' )
+    choiceButton( true, 'check', 'Check now' )
   ));
 }
 
@@ -111,8 +123,9 @@ function checkSpacesInPersons () {
     echo "<p style='color:#6C6'><b>OK!</b> No person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
     return;
   }
-  echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
   
+  #--- Otherwise, show the errors
+  echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
   tableBegin( 'results', 3 );
   tableHeader( split( '\\|', 'current|suggested|SQL' ), array( 2=>'class="f"' ));
   foreach( $bads as $bad ){
@@ -127,6 +140,7 @@ function checkSpacesInPersons () {
     ));
   }
   tableEnd();
+  $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
@@ -146,8 +160,9 @@ function checkSpacesInResults () {
     echo "<p style='color:#6C6'><b>OK!</b> No person names in <b>Results</b> start or end with a space or have double spaces.</p>";
     return;
   }
+
+  #--- Otherwise, show the errors
   echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Results</b> start or end with a space or have double spaces.</p>";
-  
   tableBegin( 'results', 4 );
   tableHeader( split( '\\|', 'current|suggested|fix...|SQL' ), array( 3=>'class="f"' ));
   foreach( $bads as $bad ){
@@ -165,6 +180,7 @@ function checkSpacesInResults () {
     ));
   }
   tableEnd();
+  $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
@@ -184,9 +200,9 @@ function checkTooMuchInPersons () {
     echo "<p style='color:#6C6'><b>OK!</b> All persons in <b>Persons</b> also appear in <b>Results</b>.</p>";
     return;
   }
-  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Persons</b> also appear in <b>Results</b>:</p>";
   
-  #--- Show the Persons troublemakers and possible matches in Results.     
+  #--- Otherwise, show the Persons troublemakers and possible matches in Results.
+  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Persons</b> also appear in <b>Results</b>:</p>";
   tableBegin( 'results', 4 );
   tableHeader( split( '\\|', 'source|name|countryId|id' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInPersons as $personKey ){
@@ -204,6 +220,7 @@ function checkTooMuchInPersons () {
     tableRowEmpty();
   }
   tableEnd();
+  $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
@@ -223,9 +240,9 @@ function checkTooMuchInResults () {
     echo "<p style='color:#6C6'><b>OK!</b> All persons in <b>Results</b> who have an id also appear in <b>Persons</b>.</p>";
     return;
   }
-  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Results</b> who have an id also appear in <b>Persons</b>:</p>";
   
-  #--- Show the Results troublemakers and possible matches in Persons.     
+  #--- Otherwise, show the Results troublemakers and possible matches in Persons.
+  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Results</b> who have an id also appear in <b>Persons</b>:</p>";
   tableBegin( 'results', 6 );
   tableHeader( split( '\\|', 'source|name|countryId|id|fix...|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInResults as $personKey ){
@@ -256,6 +273,7 @@ function checkTooMuchInResults () {
     tableRowEmpty();
   }
   tableEnd();
+  $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
@@ -277,8 +295,9 @@ function checkDuplicatesInCompetition () {
     echo "<p style='color:#6C6'><b>OK!</b> There are no personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
     return;
   }
-  echo "<p style='color:#F00'><b>BAD!</b> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
 
+  #--- Otherwise, show the errors
+  echo "<p style='color:#F00'><b>BAD!</b> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
   tableBegin( 'results', 7 );
   tableHeader( split( '\\|', 'personId|personName|countryId|competitionId|eventId|roundId|#Occurances' ),
                array( 6=>'class="f"' ));
@@ -289,6 +308,7 @@ function checkDuplicatesInCompetition () {
     )));
   }
   tableEnd();
+  $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
@@ -344,7 +364,10 @@ function checkPersonsInResultsWithoutIds () {
       break;
   }
 
-  tableEnd();  
+  tableEnd();
+
+  if( $ctr )
+    $GLOBALS["success"] = false;
 }
 
 #----------------------------------------------------------------------
