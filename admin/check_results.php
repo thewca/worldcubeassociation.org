@@ -7,16 +7,13 @@ require( '../_header.php' );
 analyzeChoices();
 echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check results</b> (" . wcaDate() . ")</p>\n";
 showDescription();
+showChoices();
 
-if( $chosenCheckRecent || $chosenCheckAll ){
-  showChoices();
-  if ( $chosenCheckRecent )
-    $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
+if ( $chosenCheckRecent )
+  $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
+
+if( $chosenCheckRecent || $chosenCheckAll )
   checkResults();
-} else {
-  echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, choose what you want to check...</p>";
-  showChoices();
-}
 
 require( '../_footer.php' );
 
@@ -24,7 +21,9 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p style='width:45em'>Checks results according to our <a href='check_results.txt'>checking procedure</a>. Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're old enough).</p>\n";
+  echo "<p style='width:45em'>Checks results according to our <a href='check_results.txt'>checking procedure</a>.</p>\n";
+
+  echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
 
   echo "<hr />\n";
 }
@@ -53,7 +52,7 @@ function checkResults () {
 #----------------------------------------------------------------------
   global $dateCondition, $chosenCheckAll, $competitionIds, $countryIds;
 
-  echo "<p>Checking <b>" . ($chosenCheckAll ? 'all' : 'recent') . "</b> results...</p>\n";
+  echo "<hr /><p>Checking <b>" . ($chosenCheckAll ? 'all' : 'recent') . "</b> results... (wait for the result message box at the end)</p>\n";
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
@@ -83,14 +82,17 @@ function checkResults () {
       $badIds[] = $id;
     }
   }
+  echo "</pre>";
 
   #--- Free the results.
   mysql_free_result( $dbResult );
 
-  #--- Print query to get all results with errors.
-  echo count( $badIds ) . " errors found. Get them with this:<br />\n";
-  echo "SELECT * FROM Results WHERE id in (" . implode( ',', $badIds ) . ")";
-  echo "</pre>";
+  #--- Tell the result.
+  noticeBox2(
+    ! count( $badIds ),
+    "All checked results pass our checking procedure successfully.<br />" . wcaDate(),
+    count( $badIds ) . " errors found. Get them with this:<br /><br />SELECT * FROM Results WHERE id in (" . implode( ', ', $badIds ) . ")"
+  );
 }
 
 #----------------------------------------------------------------------
@@ -100,7 +102,7 @@ function checkResult ( $result ) {
 
   $format = $result['formatId'];
 
-  #--- 1) Let dns, dnf, zero, suc be the number of values of each kind.
+  #--- 1) Let dns, dnf, zer, suc be the number of values of each kind.
   foreach( range( 1, 5 ) as $i ){
     $value = $result["value$i"];
     $dns += $value == -2;
@@ -109,7 +111,7 @@ function checkResult ( $result ) {
     $suc += $value > 0;
   }
 
-  #--- 2) Check that no zero value is followed by a non-zero value.
+  #--- 2) Check that no zero-value is followed by a non-zero value.
   foreach( range( 1, 4 ) as $i )
     if( $result["value$i"] == 0  &&  $result["value".($i+1)] != 0 )
       return "Zero must not be followed by non-zero.";
@@ -145,9 +147,9 @@ function checkResult ( $result ) {
   if( $result['best']    != $best    ) return    "'best' should be $best";
   if( $result['average'] != $average ) return "'average' should be $average";
 
-  #--- 9) check number of zero values for non-combined rounds
+  #--- 9) check number of zero-values for non-combined rounds
   $round = $result['roundId'];
-  if ( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' ) {
+  if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' ){
     if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
     if( $format == '2'  &&  $zer != 3 ) return "should have two non-zero values";
     if( $format == '3'  &&  $zer != 2 ) return "should have three non-zero values";
