@@ -14,7 +14,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br /><br />In this admin section I'll put scripts for us.</b></p><hr />\n";
+  echo "<p><b>Welcome to the WCA results administration!</b></p><hr />\n";
 }
 
 #----------------------------------------------------------------------
@@ -24,7 +24,7 @@ function showPages () {
   echo "<dl>\n";
 
   showPage( 'check_results',
-            'Checks the results. Does *NOT* affect the database.' );
+            'Checks the Results table data.' );
 
   showPage( 'persons_check_finished',
             'Checks the finished persons in the Persons/Results tables. Does *NOT* affect the database unless you say so.' );

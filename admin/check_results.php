@@ -9,11 +9,13 @@ echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check results</b> (" . wcaD
 showDescription();
 showChoices();
 
-if ( $chosenCheckRecent )
+if ( $chosenCheckRecentIndividually || $chosenCheckRecentRelatively )
   $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
 
-if( $chosenCheckRecent || $chosenCheckAll )
-  checkResults();
+if( $chosenCheckRecentIndividually || $chosenCheckAllIndividually )
+  checkIndividually();
+if( $chosenCheckRecentRelatively || $chosenCheckAllRelatively )
+  checkRelatively();
 
 require( '../_footer.php' );
 
@@ -21,7 +23,9 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p style='width:45em'>Checks results according to our <a href='check_results.txt'>checking procedure</a>.</p>\n";
+  echo "<p style='width:45em'>First, check the results individually, according to our <a href='check_results.txt'>checking procedure</a> (mostly that value1-value5 make sense and that average and best are correct).</p>\n";
+
+  echo "<p style='width:45em'>Then, once they're correct individually, check them relatively. This compares results with others in the same round to check each competitor's place. Differences between calculated and stored places can be agreed to and then executed on the bottom of the page.\n";
 
   echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
 
@@ -31,10 +35,12 @@ function showDescription () {
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCheckRecent, $chosenCheckAll;
+  global $chosenCheckRecentIndividually, $chosenCheckAllIndividually, $chosenCheckRecentRelatively, $chosenCheckAllRelatively;
 
-  $chosenCheckRecent = getBooleanParam( 'checkRecent' );
-  $chosenCheckAll    = getBooleanParam( 'checkAll' );
+  $chosenCheckRecentIndividually = getBooleanParam( 'checkRecentIndividually' );
+  $chosenCheckAllIndividually    = getBooleanParam( 'checkAllIndividually' );
+  $chosenCheckRecentRelatively   = getBooleanParam( 'checkRecentRelatively' );
+  $chosenCheckAllRelatively      = getBooleanParam( 'checkAllRelatively' );
 }
 
 #----------------------------------------------------------------------
@@ -42,17 +48,21 @@ function showChoices () {
 #----------------------------------------------------------------------
 
   displayChoices( array(
-    choiceButton( true, 'checkRecent', 'check recent' ),
-    choiceButton( true, 'checkAll', 'check all' ),
+    'Check individually:<br />&nbsp;',
+    choiceButton( true, 'checkRecentIndividually', ' recent ' ),
+    choiceButton( true, 'checkAllIndividually', ' all ' ),
+    'Check relatively:<br />&nbsp;',
+    choiceButton( true, 'checkRecentRelatively', ' recent ' ),
+    choiceButton( true, 'checkAllRelatively', ' all ' ),
   ));
 }
 
 #----------------------------------------------------------------------
-function checkResults () {
+function checkIndividually () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenCheckAll, $competitionIds, $countryIds;
+  global $dateCondition, $chosenCheckAllIndividually, $competitionIds, $countryIds;
 
-  echo "<hr /><p>Checking <b>" . ($chosenCheckAll ? 'all' : 'recent') . "</b> results... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b>" . ($chosenCheckAllIndividually ? 'all' : 'recent') . "</b> results <b>individually</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
@@ -180,6 +190,173 @@ function checkResult ( $result ) {
   if( ! isset( $competitionIds[$result['competitionId']] ))
     return "unknown competition " . $result['competitionId'];
 
+}
+
+#----------------------------------------------------------------------
+function checkRelatively () {
+#----------------------------------------------------------------------
+  global $dateCondition, $chosenCheckAllRelatively;
+
+  echo "<hr /><p>Checking <b>" . ($chosenCheckAllRelatively ? 'all' : 'recent') . "</b> results <b>relatively</b>... (wait for the result message box at the end)</p>\n";
+
+  #--- Get all results (except the trick-duplicated (old) multiblind)
+  $rows = dbQueryHandle("
+    SELECT   result.id, competitionId, eventId, roundId, average, best, pos, personName
+    FROM     Results result, Competitions competition
+    WHERE    competition.id = competitionId
+      $dateCondition
+      AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundId, if(average>0, average, 2147483647), if(best>0, best, 2147483647), pos
+  ");
+
+  #--- Begin the form
+  echo "<form action='check_results_ACTION.php' method='post'>\n";
+
+  #--- Check the pos values
+  while( $row = mysql_fetch_row( $rows ) ) {
+    list( $resultId, $competitionId, $eventId, $roundId, $average, $best, $storedPos, $personName ) = $row;
+    $round = "$competitionId|$eventId|$roundId";
+    $result = "$average|$best";
+    if ( $round != $prevRound )
+      $ctr = $calcedPos = 1;
+    if ( $ctr > 1  &&  $result != $prevResult )
+      $calcedPos = $ctr;
+    if ( $storedPos != $calcedPos ) {
+
+      #--- Before the first difference in a round, show the round's full results
+      if ( $round != $shownRound ) {
+        $wrongRounds++;
+        $wrongComp[$competitionId] = true;
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        showCompetitionResults( $competitionId, $eventId, $roundId );
+        $shownRound = $round;
+      }
+
+      #--- Show each difference, with a checkbox to agree
+      $change = $calcedPos-$storedPos; if( $change>0 ) $change = "+$change";
+      $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' />";
+      printf( "$checkbox Place $storedPos should be place $calcedPos (change by $change) --- $personName<br />" );
+      $wrongs++;
+    }
+    $prevRound = $round;
+    $prevResult = $result;
+    $ctr++;
+  }
+  mysql_free_result( $rows );
+
+  #--- Tell the result.
+  $date = wcaDate();
+  noticeBox2(
+    ! $wrongs,
+    "We agree about all checked places.<br />$date",
+    "<p>Darn! We disagree: $wrongs possibly wrong places, in $wrongRounds rounds, in " . count($wrongComp) . " competitions<br /><br />$date</p>"
+    ."<p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following.</p>"
+    ."<pre>I'm doing this:\n"
+    ."UPDATE Results SET pos=111 WHERE id=11111\n"
+    ."UPDATE Results SET pos=222 WHERE id=22222\n"
+    ."UPDATE Results SET pos=333 WHERE id=33333\n"
+    ."</pre>"
+  );
+
+  #--- If differences were found, offer to fix them.
+  if( $wrongs )
+    echo "<center><input type='submit' value='Execute the agreed changes!' /></center>\n";
+
+  #--- Finish the form.
+  echo "</form>\n";
+}
+
+#----------------------------------------------------------------------
+function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
+#----------------------------------------------------------------------
+
+  # NOTE: This is mostly a copy of the same function in competition_results.php
+
+  #--- Get the results.
+  $competitionResults = getCompetitionResults( $competitionId, $eventId, $roundId );
+
+  tableBegin( 'results', 8 );
+
+  foreach( $competitionResults as $result ){
+    extract( $result );
+
+    $isNewEvent = ($eventId != $currentEventId);
+    $isNewRound = ($roundId != $currentRoundId);
+
+    #--- Welcome new rounds.
+    if( $isNewEvent  ||  $isNewRound ){
+
+      $anchors = ($isNewEvent ? "$eventId " : "") . "${eventId}_$roundId";
+      $eventHtml = eventLink( $eventId, $eventName );
+      $caption = spaced( array( $eventHtml, $roundName, $formatName ));
+      tableCaptionNew( false, $anchors, $caption );
+
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
+      tableHeader( split( '\\|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
+                   array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
+    }
+
+    #--- One result row.
+    tableRow( array(
+      $pos,
+      personLink( $personId, $personName ),
+      formatValue( $best, $valueFormat ),
+      $regionalSingleRecord,
+      formatValue( $average, $valueFormat ),
+      $regionalAverageRecord,
+      $countryName,
+      formatAverageSources( $formatId != '1', $result, $valueFormat )
+    ));
+
+    $currentEventId = $eventId;
+    $currentRoundId = $roundId;
+  }
+
+  tableEnd();
+}
+
+#----------------------------------------------------------------------
+function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
+#----------------------------------------------------------------------
+
+  # NOTE: This is mostly a copy of the same function in competition_results.php
+
+  $order = "event.rank, round.rank, pos, average, best, personName";
+
+  #--- Get and return the results.
+  return dbQuery("
+    SELECT
+                     result.*,
+
+      event.name      eventName,
+      round.name      roundName,
+      round.cellName  roundCellName,
+      format.name     formatName,
+      country.name    countryName,
+
+      event.cellName  eventCellName,
+      event.format    valueFormat
+    FROM
+      Results      result,
+      Events       event,
+      Rounds       round,
+      Formats      format,
+      Countries    country,
+      Competitions competition
+    WHERE ".randomDebug()."
+      AND competitionId  = '$competitionId'
+      AND competition.id = '$competitionId'
+      AND eventId        = '$eventId'
+      AND event.id       = '$eventId'
+      AND roundId        = '$roundId'
+      AND round.id       = '$roundId'
+      AND format.id     = formatId
+      AND country.id    = result.countryId
+      AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
+    ORDER BY
+      $order
+  ");
 }
 
 ?>
