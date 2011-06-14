@@ -4,19 +4,22 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
-
+analyzeChoices();
+adminHeadline( 'Finish unfinished persons' );
 showDescription();
-getPersonsFromResults();
-getBirthdates();
-showUnfinishedPersons();
+showChoices();
+
+if( $chosenCheck ) {
+  getPersonsFromResults();
+  getBirthdates();
+  showUnfinishedPersons();
+}
 
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
-
-  echo "<p><b>This script does *NOT* affect the database unless you say so.</b></p>\n\n";
 
   echo "<p>In this script, a \"person\" always means a triple of id/name/countryId, and \"similar\" always means just name similarity. A person is called \"finished\" if it has a non-empty personId. A \"semi-id\" is the id without the running number at the end.</p>\n\n";
 
@@ -31,6 +34,23 @@ function showDescription () {
   echo "<p>Notice for time limit reasons I can't show you all unfinished persons at once, so I only show up to 20 at a time. After clicking \"Update\" you'll see all commands I execute and a link back to this script with a random parameter in order to really reload this script. Then you should see the next up to 20 unfinished persons, and you can repeat until there are none left.</p>\n";
   
   echo "<hr />\n";
+}
+
+#----------------------------------------------------------------------
+function analyzeChoices () {
+#----------------------------------------------------------------------
+  global $chosenCheck;
+
+  $chosenCheck = getNormalParam( 'check' );
+}
+
+#----------------------------------------------------------------------
+function showChoices () {
+#----------------------------------------------------------------------
+
+  displayChoices( array(
+    choiceButton( true, 'check', ' Check now ' )
+  ));
 }
 
 #----------------------------------------------------------------------

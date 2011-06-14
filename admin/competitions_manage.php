@@ -66,6 +66,7 @@ analyzeChoices();
 
 #print_r( getRawParamsThisShouldBeAnException() );
 
+adminHeadline( 'Manage competitions' );
 showDescription();
 showChoices();
 if( $chosenNewPassword )
@@ -77,8 +78,6 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
   global $errors;
-
-  echo "<p><b>This script *DOES* affect the database *WHEN* you tell it to.</b></p>\n\n";
 
   echo "<dl>\n";
   echo "<dt>Registration</dt><dd>Manage the registered competitors of a competition. You should give the result URL of this to competition organizers.</dd>\n";

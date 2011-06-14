@@ -4,6 +4,7 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
+adminHeadline( 'Show competition details' );
 showDescription();
 showCompetitionDetails();
 require( '../_footer.php' );
@@ -12,7 +13,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br /><br />It shows the competition details as they'd be shown on the single competition pages, but all of them on one page in order to detect mistakes more easily.</b></p><hr />\n\n";
+  echo "<p>This compactly lists details of all competitions, in order to detect mistakes more easily.</p><hr />\n";
 }
 
 #----------------------------------------------------------------------

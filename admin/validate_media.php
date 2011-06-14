@@ -6,6 +6,7 @@
 require( '../_header.php' );
 
 analyzeChoices();
+adminHeadline( 'Validate media' );
 showDescription();
 offerChoices();
 showMedia();
@@ -39,13 +40,11 @@ function analyzeChoices () {
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>";
-
   echo "<p>You can consult here all the media, and validate the new ones.</p>";
 
   echo "<p>You can submit a medium <a href='validate_media_ACTION.php?new42=" . rand() . "'>here</a></p>";
   
-  echo "<hr>";
+  echo "<hr />";
 }
 
 
@@ -70,7 +69,7 @@ function offerChoices () {
       array( 'pending',   'Pending' ),
       array( 'accepted',   'Accepted' ),
       ), $chosenStatus ),
-    choiceButton( true, 'filter' . rand(), 'Filter' )
+    choiceButton( true, 'filter' . rand(), ' Filter ' )
   ));
 
 }

@@ -30,10 +30,10 @@ function showPages () {
             'Checks the finished persons in the Persons/Results tables.' );
 
   showPage( 'persons_finish_unfinished',
-            'Finishes persons in Results by adding personId. Does *NOT* affect the database unless you say so.' );
+            'Lets you finish persons in Results by adding personId.' );
 
   showPage( 'check_regional_record_markers',
-            'Computes regional record markers, compares them to the stored ones. *CAN* affect the database, namely if you tell it to.' );
+            'Computes regional record markers, compares them to the stored ones.' );
 
 #  showPage( 'check_persons',
 #            'Checks the persons in the Persons/Results tables. Does *NOT* affect the database.' );
@@ -42,7 +42,7 @@ function showPages () {
 #            'Checks the persons for one competition, suggests fixes.' );
 
   showPage( 'compute_auxiliary_data',
-            'Computes auxiliary database data. *DOES* affect the database.' );
+            'Computes auxiliary database data.' );
 
   showPage( 'update_statistics_page',
             'Updates the statistics page that normal users can see (youngest/oldest solvers, etc).',
@@ -60,19 +60,19 @@ function showPages () {
   echo "</dl><hr /><dl>\n";
 
   showPage( 'show_competition_details',
-            "Shows competition details somewhat like they're shown on the competitions page, but for all competitions on one page for easier checking. Does *NOT* affect the database." );
+            "Shows competition details somewhat like they're shown on the competitions page, but for all competitions on one page for easier checking." );
 
   showPage( 'show_competition_infos',
-            "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking. Does *NOT* affect the database." );
+            "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking." );
 
   showPage( 'validate_media',
-            "Validates media that have been submitted. Does *NOT* affect the database unless you say so." );
+            "Validates media that have been submitted." );
 
   showPage( 'add_local_names',
-            "Add local names to persons. *DOES* affect the database." );
+            "Add local names to persons." );
 
   showPage( 'persons_picture',
-            "Validates pictures that have been submitted. Does *NOT* affect the database." );
+            "Validates pictures that have been submitted." );
 
 #  showPage( 'show_similar_names',
 #            "Shows similar person names inside a competition you choose. Does *NOT* affect the database." );

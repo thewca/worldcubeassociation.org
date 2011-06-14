@@ -5,6 +5,7 @@
 
 require( '../_header.php' );
 
+adminHeadline( 'Person pictures' );
 validatePicture();
 
 require( '../_footer.php' );

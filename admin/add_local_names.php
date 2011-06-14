@@ -115,7 +115,7 @@ function importLocalNames () {
 
   if( ! $chosenUpload ){
 
-    echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>\n";
+    adminHeadline( 'Add local names' );
 
     echo "<p>You can add or modify local names here, by upload a file containing the names. The file must be a plain text file encoded in UTF-8. Each line must contain: the WCA id, a comma (',') and the name you would like to add. If you want to remove a name from the database, just leave the name part blank.</p>\n";
   

@@ -5,7 +5,7 @@
 
 require( '../_header.php' );
 analyzeChoices();
-echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check results</b> (" . wcaDate() . ")</p>\n";
+adminHeadline( 'Check results' );
 showDescription();
 showChoices();
 

@@ -10,35 +10,59 @@ ini_set('display_errors', 1);
 
 require( '../_header.php' );
 require( '_helpers.php' );
+analyzeChoices();
+adminHeadline( 'Compute auxiliary data' );
 showDescription();
-noticeBox3( 0, "Note: At the end of this, when this page is completed, you should see a green success box at the bottom of the page. If not, something went wrong (like an out-of-memory error we recently had, which killed the script)." );
-computeConciseRecords();
-computeRanks( 'best', 'Single' );
-computeRanks( 'average', 'Average' );
-computeCachedDatabase('../cachedDatabase.php');
-deleteCaches();
-noticeBox3( 1, "Ok, finished." );
+showChoices();
+
+if( $chosenDoIt ){
+  noticeBox3( 0, "Note: At the end of this, when this page is completed, you should see a green success box at the bottom of the page. If not, something went wrong (like an out-of-memory error we recently had, which killed the script)." );
+  computeConciseRecords();
+  computeRanks( 'best', 'Single' );
+  computeRanks( 'average', 'Average' );
+  computeCachedDatabase('../cachedDatabase.php');
+  deleteCaches();
+  noticeBox3( 1, "Ok, finished.<br />" . wcaDate() );
+}
+
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *does* affect the database.<br><br>It computes the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script. It must be run after changes to the database data so that these tables are up-to-date. It displays the time so you can be sure it just got executed and didn't come from some cache.</b></p><hr>";
+  echo "<p>This computes the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script, and clears the caches.</p>\n";
+
+  echo "<p>Do it after changes to the database data so that these things are up-to-date.</p><hr />\n";
+}
+
+#----------------------------------------------------------------------
+function analyzeChoices () {
+#----------------------------------------------------------------------
+  global $chosenDoIt;
+
+  $chosenDoIt = getNormalParam( 'doit' );
+}
+
+#----------------------------------------------------------------------
+function showChoices () {
+#----------------------------------------------------------------------
+
+  displayChoices( array(
+    choiceButton( true, 'doit', ' Do it now ' )
+  ));
 }
 
 #----------------------------------------------------------------------
 function computeConciseRecords () {
 #----------------------------------------------------------------------
 
-  echo wcaDate() . "<br /><br />\n";
-
   foreach( array( array( 'best', 'Single' ), array( 'average', 'Average' )) as $foo ){
     $valueSource = $foo[0];
     $valueName = $foo[1];
 
     startTimer();
-    echo "Building table Concise${valueName}Records...<br />\n";
+    echo "Building table Concise${valueName}Results...<br />\n";
     
     dbCommand( "DROP TABLE IF EXISTS Concise${valueName}Results" );
     dbCommand("

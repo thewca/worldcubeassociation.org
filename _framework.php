@@ -184,13 +184,13 @@ function noticeBox3 ( $color, $message ) {
 function pathToRoot () {
 #----------------------------------------------------------------------
   global $pathToRoot;
-  
+
   if( ! isset( $pathToRoot )){
     $pathToRoot = "";
     while( ! file_exists( "${pathToRoot}_root.txt" ))
       $pathToRoot .= "../";
   }
-  
+
   return $pathToRoot;
 }
 
@@ -219,6 +219,12 @@ function extractLocalName ( $name ) {
     return( $matches[2] );
   else
     return( '' );
+}
+
+#----------------------------------------------------------------------
+function adminHeadline ( $title ) {
+#----------------------------------------------------------------------
+  echo "<p><span style='background:#f4f4f4; padding:3px; border:1px solid #ddd'><a href='./'>Administration</a> &gt;&gt; <b>$title</b> &nbsp;(" . wcaDate() . ")</span></p>\n";
 }
 
 ?>

@@ -5,7 +5,7 @@
 
 require( '../_header.php' );
 analyzeChoices();
-echo "<p><a href='./'>Administration</a> &gt;&gt; <b>Check finished persons</b> (" . wcaDate() . ")</p>\n";
+adminHeadline( 'Check finished persons' );
 showDescription();
 showChoices();
 
@@ -65,7 +65,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenCheck;
 
-  $chosenCheck  = getNormalParam( 'check' );
+  $chosenCheck = getNormalParam( 'check' );
 }
 
 #----------------------------------------------------------------------
@@ -73,7 +73,7 @@ function showChoices () {
 #----------------------------------------------------------------------
 
   displayChoices( array(
-    choiceButton( true, 'check', 'Check now' )
+    choiceButton( true, 'check', ' Check now ' )
   ));
 }
 

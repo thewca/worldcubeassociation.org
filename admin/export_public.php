@@ -4,36 +4,60 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
+analyzeChoices();
+adminHeadline( 'Export to public' );
 showDescription();
-exportPublic( array(
-  'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
-                              best, average,
-                              personName, personId, result.countryId personCountryId,
-                              formatId, value1, value2, value3, value4, value5,
-                              regionalSingleRecord, regionalAverageRecord
-                     FROM     Results result, Competitions competition, Events event, Rounds round
-                     WHERE    competition.id=competitionId AND event.id=eventId AND round.id=roundId
-                     ORDER BY competition.year, competition.month, competition.day, competition.id,
-                              event.rank, round.rank, pos, average, best, personName',
-  'Rounds'       => '*',
-  'Events'       => '*',
-  'Formats'      => '*',
-  'Countries'    => '*',
-  'Continents'   => '*',
-  'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
-  'Competitions' => 'SELECT id, name, cityName, countryId, information, year,
-                            month, day, endMonth, endDay, eventSpecs,
-                            wcaDelegate, organiser, venue, venueAddress,
-                            venueDetails, website, cellName, latitude, longitude
-                     FROM Competitions',
-) );
+showChoices();
+
+if( $chosenExport ){
+  exportPublic( array(
+    'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
+                                best, average,
+                                personName, personId, result.countryId personCountryId,
+                                formatId, value1, value2, value3, value4, value5,
+                                regionalSingleRecord, regionalAverageRecord
+                       FROM     Results result, Competitions competition, Events event, Rounds round
+                       WHERE    competition.id=competitionId AND event.id=eventId AND round.id=roundId
+                       ORDER BY competition.year, competition.month, competition.day, competition.id,
+                                event.rank, round.rank, pos, average, best, personName',
+    'Rounds'       => '*',
+    'Events'       => '*',
+    'Formats'      => '*',
+    'Countries'    => '*',
+    'Continents'   => '*',
+    'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
+    'Competitions' => 'SELECT id, name, cityName, countryId, information, year,
+                              month, day, endMonth, endDay, eventSpecs,
+                              wcaDelegate, organiser, venue, venueAddress,
+                              venueDetails, website, cellName, latitude, longitude
+                       FROM Competitions',
+  ) );
+}
+
 require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script does *not* affect the database.<br><br>Exports the database to the public.</a>.</b></p><hr>";
+  echo "<p>This creates the <a href='../misc/export.html'>public export</a> of our database.</p><hr />";
+}
+
+#----------------------------------------------------------------------
+function analyzeChoices () {
+#----------------------------------------------------------------------
+  global $chosenExport;
+
+  $chosenExport = getNormalParam( 'export' );
+}
+
+#----------------------------------------------------------------------
+function showChoices () {
+#----------------------------------------------------------------------
+
+  displayChoices( array(
+    choiceButton( true, 'export', ' Export now ' )
+  ));
 }
 
 #----------------------------------------------------------------------

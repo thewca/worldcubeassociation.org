@@ -5,16 +5,12 @@
 
 require( '../_header.php' );
 analyzeChoices();
-
+adminHeadline( 'Check regional record markers' );
 showDescription();
+showChoices();
 
-if( $chosenShow ){
-  showChoices();
+if( $chosenShow )
   doTheDarnChecking();
-} else {
-  echo "<p style='color:#F00;font-weight:bold'>I haven't done any checking yet, you must click 'Show' first (after optionally choosing event and/or competition).</p>";
-  showChoices();
-}
 
 require( '../_footer.php' );
 
@@ -22,11 +18,7 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *CAN* affect the database, namely if you tell it to.</b></p>\n\n";
-
-  echo "<p style='color:#3C3;font-weight:bold'>New: You can now filter by competition. If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be huge - btw it'll still take a long computation time).</p>\n\n";
-
-  echo "<p>It computes regional record markers for all valid results (value>0). If a result has a stored or computed regional record marker, it is displayed. If the two markers differ, they're shown in red/green.</p>\n\n";
+  echo "<p>This computes regional record markers for all successful results (value>0). If a result has a stored or computed regional record marker, it is displayed. If the two markers differ, they're shown in red/green.</p>\n\n";
 
   echo "<p>Only strictly previous competitions (other.<b>end</b>Date &lt; this.<b>start</b>Date) are used to compare, not overlapping competitions. Thus I might wrongfully compute a too good record status (because a result was actually beaten earlier in an overlapping competition) but I should never wrongfully compute a too bad record status.</p>\n\n";
 
@@ -34,7 +26,7 @@ function showDescription () {
 
   echo "<p>A result does not need to beat another to get a certain record status, equaling is good enough.</p>\n\n";
 
-  echo "<p>Please check it and let me know what you'd like me to do. I can modify the script to actually store the computed markers in the database, I can print SQL code to select the differing rows, I can print SQL code to update the differing rows...</p>\n\n";
+  echo "<p>If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be huge).</p>\n\n";
 
   echo "<hr />\n\n";
 }
@@ -58,7 +50,7 @@ function showChoices () {
   displayChoices( array(
     eventChoice( false ),
     competitionChoice( false ),
-    choiceButton( true, 'show', 'Show' )
+    choiceButton( true, 'show', ' Show ' )
   ));
 }
 
@@ -148,6 +140,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
           if( !$baseRecord[$eventId][$regionId] || $value < $baseRecord[$eventId][$regionId] )
             $baseRecord[$eventId][$regionId] = $value;
     }
+    mysql_free_result( $results );
   }
   #--- Otherwise we need the endDate of each competition
   else {
@@ -318,6 +311,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       ));
     }
   }
+  mysql_free_result( $results );
 }
 
 #----------------------------------------------------------------------
