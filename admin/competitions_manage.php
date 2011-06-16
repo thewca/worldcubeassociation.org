@@ -7,26 +7,23 @@ handleRedirects();
 function handleRedirects () {
   extract( $_REQUEST );
 
+  #--- Fetch competition password if needed
   if( $registration || $edit || $createNew || $clone ){
     ob_start(); require( '../_framework.php' ); ob_end_clean();
     $password = getCompetitionPassword( $competitionId );
   }
 
+  #--- Create new competition (possibly cloning an old one)
   if( $createNew || $clone ){
 
-    #--- Is the new ID ok?
+    #--- Error if that competitionId has wrong syntax
     if( ! preg_match( '/^\w+$/', $newCompetitionId )){
       header( "Location: competitions_manage.php?error=bad" );
       exit;
     }
 
-	 $result = dbQuery(
-       "SELECT *
-       FROM Competitions
-       WHERE id='$newCompetitionId'"
-    );
-
-	 if( count( $result ) > 0 ){
+    #--- Error if that competitionId already exists
+    if( count( dbQuery("SELECT * FROM Competitions WHERE id='$newCompetitionId'") ) ){
       header( "Location: competitions_manage.php?error=duplicate" );
       exit;
     }
@@ -37,20 +34,22 @@ function handleRedirects () {
       cloneNewCompetition( $newCompetitionId, $competitionId );
     else
       createNewCompetition( $newCompetitionId );
-      
+
     #--- Forward to edit page.
     $competitionId = $newCompetitionId;
     $password = getCompetitionPassword( $competitionId );
     $edit = true;
   }
-  
+
+  #--- Shall we go somewhere?
   if( $registration )
     $goal = "../competition_edit.php?competitionId=$competitionId&password=$password&rand=" . rand();
   if( $edit )
     $goal = "competition_edit.php?competitionId=$competitionId&rand=" . rand();
   if( $results )
     $goal = "../competition.php?competitionId=$competitionId";
-      
+
+  #--- If so, then go there now
   if( $goal ){
     header( "Location: $goal" );
     exit;
@@ -63,8 +62,6 @@ function handleRedirects () {
 
 require( '../_header.php' );
 analyzeChoices();
-
-#print_r( getRawParamsThisShouldBeAnException() );
 
 adminHeadline( 'Manage competitions' );
 showDescription();
@@ -87,7 +84,7 @@ function showDescription () {
   echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "<dt>Clone</dt><dd>Clones the competition chosen on the left to a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "</dl>\n";
-  
+
   echo "<hr />\n\n";
 
   #--- show errors
@@ -132,7 +129,7 @@ function setNewPassword () {
 
   #--- Get the old password.
   $oldPassword = getCompetitionPassword( $chosenCompetitionId );
-  
+
   #--- Generate a new password.
   require_once( '_helpers.php' );
   $newPassword = generateNewPassword( $chosenCompetitionId );
@@ -143,7 +140,7 @@ function setNewPassword () {
   #--- Get the competition name.
   $competition = getCompetition( $chosenCompetitionId );
   $name = $competition['cellName'];
-  
+
   #--- Show what we've done.
   echo "<p>Password for competition <b>$name</b> changed<br />from: $oldPassword<br />to: $newPassword";
 }
