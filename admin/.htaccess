@@ -1,3 +1,8 @@
+# Force SSL
+SSLOptions +StrictRequire
+SSLRequireSSL
+ErrorDocument 403 https://worldcubeassociation.org/results/admin/
+
 AuthUserFile /services/webpages/w/o/worldcubeassociation.org/public/results/admin/.htpasswd
 AuthName "Only access to WCA admins!"
 AuthType Basic
