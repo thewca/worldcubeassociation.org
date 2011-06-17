@@ -35,12 +35,6 @@ function showPages () {
   showPage( 'check_regional_record_markers',
             'Computes regional record markers, compares them to the stored ones.' );
 
-#  showPage( 'check_persons',
-#            'Checks the persons in the Persons/Results tables. Does *NOT* affect the database.' );
-
-#  showPage( 'check_persons_inside_competition',
-#            'Checks the persons for one competition, suggests fixes.' );
-
   showPage( 'compute_auxiliary_data',
             'Computes auxiliary database data.' );
 
@@ -50,12 +44,6 @@ function showPages () {
 
   showPage( 'export_public',
             'Exports the database to the public.' );
-
-#  showPage( 'compute_competition_events',
-#            'Computes the eventSpecs field in the Competitions table for competitions without (TODO: WITHOUT???) results. *DOES* change the database.' );
-
-#  showPage( 'persons_reset_demo',
-#            'Somewhat resets the Caltech Winter 2007 results/persons' );
 
   echo "</dl><hr /><dl>\n";
 
@@ -73,9 +61,6 @@ function showPages () {
 
   showPage( 'persons_picture',
             "Validates pictures that have been submitted." );
-
-#  showPage( 'show_similar_names',
-#            "Shows similar person names inside a competition you choose. Does *NOT* affect the database." );
 
   showPage( 'competitions_manage',
             "Manages competitions." );
