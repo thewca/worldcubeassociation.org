@@ -163,10 +163,10 @@ $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[country
     Longitude : <input type="text" id="longitude" name="longitude" value="" size="20" />
     <input type="submit" name="save" value="Save" />
     </form>
-  </center>
   <?php
-    echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a>";
+    echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
   ?>
+    </center>
   </body>
 </html>
 
