@@ -7,10 +7,10 @@
 <head>
 <title>World Cube Association - Official Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="author" content="Stefan Pochmann, Josef Jelinek" />
+<meta name="author" content="Ron van Bruchem, Stefan Pochmann, Clément Gallet, Josef Jelinek" />
 <meta name="description" content="Official World Cube Association Competition Results" />
 <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
-<link rel="shortcut icon" href="images/wca.ico" />
+<link rel="shortcut icon" href="<?= pathToRoot() ?>images/wca.ico" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/general.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/pageMenu.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />

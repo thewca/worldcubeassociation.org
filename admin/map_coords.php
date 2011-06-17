@@ -86,10 +86,10 @@ function showMap () {
   <head>
     <title>World Cube Association - Official Results</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <meta name="author" content="Stefan Pochmann, Josef Jelinek" />
+    <meta name="author" content="Ron van Bruchem, Stefan Pochmann, Clément Gallet, Josef Jelinek" />
     <meta name="description" content="Official World Cube Association Competition Results" />
     <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
-    <link rel="shortcut icon" href="images/wca.ico" />
+    <link rel="shortcut icon" href="<?= pathToRoot() ?>images/wca.ico" />
     <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/general.css" />
     <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAGU1lxRKjKY2msINWGWVpGBQbYy8YqffdsRVCI9c6jAKj6rG0nxSHbmoN9OgZk4LBxdzm88fVVb-Ncg" type="text/javascript"></script>
