@@ -4,8 +4,9 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
-
 analyzeChoices();
+adminHeadline( 'Compute competition waiting list' );
+
 computeWaitingList();
 
 require( '../_footer.php' );
@@ -133,7 +134,7 @@ function computeWaitingList () {
   }
 
   noticeBox ( TRUE, "Waiting list was successfully computed." );
-  echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&rand=" . rand() . "'>Back</a>";
+  echo "<a href='competition_edit.php?competitionId=$chosenCompetitionId&rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId";
 }
 
 ?>

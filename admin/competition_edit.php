@@ -8,6 +8,8 @@ require( 'competition_edit_Model.php' );
 require( 'competition_edit_View.php' );
 
 analyzeChoices();
+adminHeadline( 'Edit competition' );
+
 specifyModel();
 if( loadData() ){
   checkData();
