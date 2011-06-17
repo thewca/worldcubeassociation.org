@@ -4,12 +4,9 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
-
-#echo "<pre>";
-#print_r( getRawParamsThisShouldBeAnException() );
-#echo "</pre>";
-
+adminHeadline( 'Finish unfinished persons', 'persons_finish_unfinished' );
 showDescription();
+
 finishUnfinishedPersons();
 
 require( '../_footer.php' );
@@ -18,11 +15,9 @@ require( '../_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p><b>This script *DOES* affect the database.</b></p>";
-
-  echo "<p>Shows the commands I executed for the choices you made. <a href='persons_finish_unfinished.php?random=" . rand() . "'><b>Click here to continue with the remaining unfinished persons.</b></a></p>";
+  echo "<p>The following commands were executed.</p>\n";
   
-  echo "<hr>";
+  echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------

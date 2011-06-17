@@ -222,9 +222,11 @@ function extractLocalName ( $name ) {
 }
 
 #----------------------------------------------------------------------
-function adminHeadline ( $title ) {
+function adminHeadline ( $title, $scriptIfExecution=false ) {
 #----------------------------------------------------------------------
-  echo "<p><span style='background:#f4f4f4; padding:3px; border:1px solid #ddd'><a href='./'>Administration</a> &gt;&gt; <b>$title</b> &nbsp;(" . wcaDate() . ")</span></p>\n";
+  echo "<p><span style='background:#f4f4f4; padding:3px; border:1px solid #ddd'><a href='./'>Administration</a> &gt;&gt; "
+     . (!$scriptIfExecution ? "<b>$title</b>" : "<a href='$scriptIfExecution.php?forceReload=".time()."'>$title</a> &gt;&gt; <b>Execution</b>")
+     . " &nbsp;(" . wcaDate() . ")</span></p>\n";
 }
 
 ?>

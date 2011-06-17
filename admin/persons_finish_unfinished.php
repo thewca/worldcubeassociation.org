@@ -26,12 +26,12 @@ function showDescription () {
   echo "<p>For each unfinished person in the Results table, I show you the few most similar persons. Then you make choices and click \"update\" at the bottom of the page to show and execute your choices. You can:</p>\n\n";
 
   echo "<ul>\n";
-  echo "  <li>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly. If this person has both roman and local names, the syntax for the names to be inserted correctly is 'romanName (localName)'. </li>\n";
-  echo "  <li>Choose another person. This will overwrite the person's name/country/id in the Results table with those of the other person.</li>\n";
-  echo "  <li>Skip it if you're not sure yet.</li>\n";
+  echo "  <li><p>Choose the person as \"new\", optionally modifying name, country and semi-id. This will add the person to the Persons table (with appropriately extended id) and change its Results accordingly. If this person has both roman and local names, the syntax for the names to be inserted correctly is 'romanName (localName)'.</p></li>\n";
+  echo "  <li><p>Choose another person. This will overwrite the person's name/country/id in the Results table with those of the other person.</p></li>\n";
+  echo "  <li><p>Skip it if you're not sure yet.</p></li>\n";
   echo "</ul>\n\n";
 
-  echo "<p>Notice for time limit reasons I can't show you all unfinished persons at once, so I only show up to 20 at a time. After clicking \"Update\" you'll see all commands I execute and a link back to this script with a random parameter in order to really reload this script. Then you should see the next up to 20 unfinished persons, and you can repeat until there are none left.</p>\n";
+  echo "<p><span style='color:#F00;font-weight:bold'>Note:</span> For time reasons I don't show more than 20 unfinished persons at once, so you might have to repeat checking and fixing a few times until there are no unfinished persons left.</p>\n";
   
   echo "<hr />\n";
 }

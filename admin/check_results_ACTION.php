@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
-echo "<p><a href='./'>Administration</a> &gt;&gt; <a href='check_results.php?forceReload=".time()."'>Check results</a> &gt;&gt; <b>Execution</b> (" . wcaDate() . ")</p>\n";
+adminHeadline( 'Check results', 'check_results' );
 
 showUpdateSQL();
 

@@ -4,9 +4,9 @@
 #----------------------------------------------------------------------
 
 require( '../_header.php' );
+adminHeadline( 'Validate media', 'validate_media' );
 
 showUpdateSQL();
-getBack();
 
 require( '../_footer.php' );
 
@@ -196,17 +196,5 @@ function saveMedium () {
   echo $command;
 
 }
-
-
-
-#----------------------------------------------------------------------
-function getBack () {
-#----------------------------------------------------------------------
-
-  echo "<br /><br />I want to get <a href='validate_media.php?random=" . rand() . "'>back</a> !";
-
-}
-
-
 
 ?>
