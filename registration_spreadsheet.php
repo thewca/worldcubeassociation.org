@@ -112,8 +112,8 @@ function fillRegistration () {
   $registrationSheet->setCellValue( 'F3', 'Date-of-birth' );
 
   $col = 7;
-  $eventIds = getEventSpecsEventIds( $data['eventSpecs'] );
-  foreach( $eventIds as $eventId ) {
+  $eventIdsList = getEventSpecsEventIds( $data['eventSpecs'] );
+  foreach( $eventIdsList as $eventId ) {
     $letter = chr( ord( 'A' ) + $col );
     $registrationSheet->setCellValueByColumnAndRow( $col, 2, "=SUM(${letter}4:$letter" . ( 4+$regsCount ) . ")");
     $registrationSheet->setCellValueByColumnAndRow( $col, 3, $eventId );
@@ -150,8 +150,9 @@ function fillRegistration () {
     $registrationSheet->getStyleByColumnAndRow( 5, $row )->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2);
 
     $col = 7;
-    foreach( $eventIds as $eventId ) {
-      $registrationSheet->setCellValueByColumnAndRow( $col, $row, $reg["E$eventId"] );
+    $eventIdsReg = array_flip( split( ' ', $eventIds ));
+    foreach( $eventIdsList as $eventId ) {
+      $registrationSheet->setCellValueByColumnAndRow( $col, $row, isset( $eventIdsReg[$eventId] )?1:0 );
       $col += 1;
     }
 
@@ -194,10 +195,10 @@ function fillEvents () {
   global $spreadsheet, $chosenCompetitionId, $data;
   global $chosenFormat, $chosenUnit, $chosenRound;
 
-  $eventIds = getEventSpecsEventIds( $data['eventSpecs'] );
+  $eventIdsList = getEventSpecsEventIds( $data['eventSpecs'] );
   $persons = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
 
-  foreach( $eventIds as $eventId ) {
+  foreach( $eventIdsList as $eventId ) {
     if( ! isOfficialEvent( $eventId )) continue;
     foreach( array( 1, 2, 3, 4) as $roundNumber ) {
       if( $chosenRound[$eventId][$roundNumber] != 'n' ){
@@ -209,10 +210,11 @@ function fillEvents () {
         $eventSheet->setTitle( $eventId . '-' . $chosenRound[$eventId][$roundNumber]);
 
         $eventPersons = null;
-        foreach( $persons as $person )
-          if( $person["E$eventId"] )
+        foreach( $persons as $person ){
+          $eventIdsPerson = array_flip( split( ' ', $person['eventIds'] ));
+          if( isset( $eventIdsPerson[$eventId] ))
             $eventPersons[] = $person;
-
+        }
         #--- Fill event worksheet.
 
 

@@ -42,8 +42,8 @@ function generateSheet () {
 
   $file = "Status${sep}Name${sep}Country${sep}WCA ID${sep}Birth Date${sep}Gender$sep";
 
-  $eventIds = getEventSpecsEventIds( $competition['eventSpecs'] );
-  foreach( $eventIds as $eventId )
+  $eventIdsList = getEventSpecsEventIds( $competition['eventSpecs'] );
+  foreach( $eventIdsList as $eventId )
     $file .= "$sep$eventId";
 
   $file .= "${sep}Email${sep}Guests${sep}IP";
@@ -55,9 +55,10 @@ function generateSheet () {
     extract( $result );
     $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
     $file .= "$status$sep$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$gender$sep";
-    foreach( $eventIds as $eventId ){
-      $offer = $result["E$eventId"];
-      $file	.= "$sep$offer";
+    $eventIdsPerson = array_flip( split( ' ', $eventIds ));
+    foreach( $eventIdsList as $eventId ){
+      $offer = isset( $eventIdsPerson[$eventId] )?1:0 ;
+      $file .= "$sep$offer";
     }
     $file .= "$sep$email$sep$guests$sep$ip";
     $file .= $cr;
