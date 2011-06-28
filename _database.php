@@ -13,11 +13,11 @@ function establishDatabaseAccess () {
 
   #--- Connect to the database server.
   mysql_connect( $configDatabaseHost, $configDatabaseUser, $configDatabasePass )
-    or die( "<p>Unable to connect to the database.<br />\n(" . mysql_error() . ")</p>\n" );
+    or showDatabaseError( "Unable to connect to the database." );
     
   #--- Select the database.
   mysql_select_db( $configDatabaseName )
-    or die( "<p>Unable to access the database.<br />\n(" . mysql_error() . ")</p>\n" );
+    or showDatabaseError( "Unable to access the database." );
 
   dbCommand( "SET NAMES 'utf8'" );
 }
@@ -45,7 +45,7 @@ function dbQuery ( $query ) {
   
   startTimer();
   $dbResult = mysql_query( $query )
-    or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
+    or showDatabaseError( "Unable to perform database query." );
   stopTimer( "pure query" );
 
   startTimer();
@@ -78,7 +78,7 @@ function dbQueryHandle ( $query ) {
   
   startTimer();
   $dbResult = mysql_query( $query )
-    or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
+    or showDatabaseError( "Unable to perform database query." );
   stopTimer( "pure query" );
 
   return $dbResult;
@@ -99,7 +99,7 @@ function dbCommand ( $command ) {
 
   #--- Execute the command.
   $dbResult = mysql_query( $command )
-    or die("<p>Unable to perform database command.<br/>\n(" . mysql_error() . ")</p>\n");
+    or showDatabaseError( "Unable to perform database command." );
 }
 
 #----------------------------------------------------------------------
@@ -233,6 +233,16 @@ function dbDebug ( $query ) {
     echo "</tr>";
   }
   echo "</table>";
+}
+
+#----------------------------------------------------------------------
+function showDatabaseError ( $message ) {
+#----------------------------------------------------------------------
+
+  #--- Normal users just get a "Sorry", developers/debuggers get more details
+  die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  debug()
+       ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
+       : "<p>Problem with the database, sorry. Should be fixed soon, please try again later.</p>" );
 }
 
 ?>
