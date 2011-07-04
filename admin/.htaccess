@@ -1,12 +1,12 @@
 # Force SSL
 SSLOptions +StrictRequire
 SSLRequireSSL
-ErrorDocument 403 https://worldcubeassociation.org/results/admin/
+ErrorDocument 403 https://worldcubeassociation.org:62830/results/admin/
 
-AuthUserFile /services/webpages/w/o/worldcubeassociation.org/public/results/admin/.htpasswd
+AuthUserFile /home/www/worldcubeassociation.org/results/admin/.htpasswd
 AuthName "Only access to WCA admins!"
 AuthType Basic
-AuthUserFile "/services/webpages/w/o/worldcubeassociation.org/public/results/admin/.htpasswd"
+AuthUserFile "/home/www/worldcubeassociation.org/results/admin/.htpasswd"
 <Limit GET POST PUT>
  require valid-user
 # Order deny,allow
