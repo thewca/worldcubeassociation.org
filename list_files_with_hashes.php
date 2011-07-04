@@ -1,18 +1,65 @@
-<pre><?php
+<html><body><pre>
+<?php
 
+#  ^cache|^scrambles|^upload|^PHPExcel|^jpgraph|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
+#  ^cache|^scrambles|^upload|^PHPExcel|^jpgraph|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
+
+#--- Preparation: check whether we're local, and specify what to ignore
+$isLocal = $_SERVER['SERVER_NAME'] == 'localhost';
+$ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|', trim( '
+  ^./admin/export/serial.txt$
+  ^./cache$
+  ^./cache_log.txt$
+  ^./cachedDatabase.php$
+  ^./d.php$
+  ^./framework/_config.php$
+  ^./framework/speedcubing2.site.aplus.net$
+  ^./jpgraph$
+  ^./misc/WCA_export\\d+_\\d+.(sql|tsv).zip$
+  ^./misc/age_vs_speed(.html)?$
+  ^./misc/export.html$
+  ^./misc/statistics_fail.php$
+  ^./misc/wc2009.php$
+  ^./PHPExcel(.php)?$
+  ^./statistics.cached$
+  ^./statistics.log$
+  ^./upload$
+  ^./WC2011.php$
+')));
+echo "[$ignorePattern]\n";
+
+#--- Run the analysis
 analyze( '.' );
 
-function analyze ( $dir ) {
-  foreach ( scandir( $dir ) as $entry ) {
-    if ( preg_match( '/^\\.$|^\\.\\.$|^zzz|\\.svn|^cache$|PHPExcel|jpgraph|^scrambles|^upload/', $entry ) )
+#--- Report the results
+echo "\n[CHECKED]\n{$checked}[/CHECKED]\n";
+echo "\n[IGNORED]\n{$ignored}[/IGNORED]\n";
+
+#----------------------------------------------------------------------
+function analyze ( $path ) {
+#----------------------------------------------------------------------
+
+  #--- Process all child entries in the directory
+  foreach( scandir( $path ) as $child ){
+
+    #--- Totally ignore the . and .. navigation directories
+    if( preg_match( '/^\\.$|^\\.\\.$/', $child ) )
       continue;
-    $entry = "$dir/$entry";
-    if ( is_dir( $entry ) )
-      analyze( "$entry" );
-    $size = is_file( $entry ) ? filesize( $entry ) : '';
-    $hash = is_file( $entry ) ? sha1_file ( $entry ) : '';
-    printf( "%9s %40s $entry\n", $size, $hash );
+
+    #--- Ignore local .svn and zzz*
+    if( $GLOBALS['isLocal']  &&  preg_match( '/^\\.svn|^zzz/', $child ))
+      continue;
+
+    $child = "$path/$child";
+    $ignore = preg_match( '{'.$GLOBALS['ignorePattern'].'}', $child );
+
+    $size = is_file( $child ) ? filesize( $child ) : '';
+    $hash = is_file( $child ) && !$ignore ? substr(sha1_file($child),30) : '';
+    $GLOBALS[$ignore?'ignored':'checked'] .= sprintf( "%8s %10s $child\n", $size, $hash );
+    if( is_dir( $child ) && !$ignore )
+      analyze( $child );
   }
 }
 
-?></pre>
+?>
+</pre></body></html>
