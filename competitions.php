@@ -55,9 +55,9 @@ function offerChoices () {
 }
 
 #----------------------------------------------------------------------
-function listCompetitions () {
+function getCompetitions ( $for = 'list' ) {
 #----------------------------------------------------------------------
-  global $chosenEventId, $chosenYears, $chosenRegionId, $chosenPatternHtml, $chosenPatternMysql;
+  global $chosenEventId, $chosenRegionId, $chosenPatternMysql;
 
   #--- Prepare stuff for the query.
   if( $chosenEventId )
@@ -69,6 +69,7 @@ function listCompetitions () {
     $nameCondition .= " AND (competition.cellName like '%$namePart%' OR
                              cityName             like '%$namePart%' OR
                              venue                like '%$namePart%')";
+  $orderBy = ($for == 'list') ? 'year DESC, month DESC, day DESC' : 'longitude, year, month, day';
 
   #--- Get data of the (matching) competitions.
   $competitions = dbQuery("
@@ -86,8 +87,19 @@ function listCompetitions () {
       $regionCondition
       $nameCondition
     ORDER BY
-      year DESC, month DESC, day DESC
+      $orderBy
   ");
+
+  #--- Return them
+  return $competitions;
+}
+
+#----------------------------------------------------------------------
+function listCompetitions () {
+#----------------------------------------------------------------------
+  global $chosenEventId, $chosenYears, $chosenRegionId, $chosenPatternHtml;
+
+  $competitions = getCompetitions();
 
   tableBegin( 'results', 5 );
   tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears, $chosenPatternHtml ? "\"$chosenPatternHtml\"" : '' )));
