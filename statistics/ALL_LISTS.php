@@ -46,7 +46,6 @@ $statisticNames = array(
   'blindfold_333_consecutive_successes',
   'blindfold_333_success_rate',
   'world_records_in_most_events',
-  'standard_deviation',
 
   #--- Statistics:
   'best_podium',

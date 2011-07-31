@@ -15,7 +15,7 @@ for ( $s=9; $s>=6; $s-- ) {
 }
 
 $lists[] = array(
-  "Most Sub-X solves in 3x3x3",
+  "Most Sub-X solves in Rubik's Cube",
   "",
   "[P] Name [N] &lt;10 [T] | [P] Name [N] &lt;9 [T] | [P] Name [N] &lt;8 [T] | [P] Name [N] &lt;7",
   my_merge( my_merge( $temp[0], $temp[1] ), my_merge( $temp[2], $temp[3] ) ),

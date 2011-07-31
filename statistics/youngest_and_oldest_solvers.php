@@ -1,8 +1,8 @@
 <?
 
 #--- The age bounds make it faster, can be updated once in a while
-$lists[] = youngestAndOldest( '333', '3x3', 6, 68 );
-$lists[] = youngestAndOldest( '333bf', '3x3 blindfolded', 13, 46 );
+$lists[] = youngestAndOldest( '333', "Rubik's Cube", 6, 68 );
+$lists[] = youngestAndOldest( '333bf', "Rubik's Cube blindfolded", 13, 46 );
 $lists[] = youngestAndOldest( 'magic', 'Magic', 8, 47 );
 
 #----------------------------------------------------------------------

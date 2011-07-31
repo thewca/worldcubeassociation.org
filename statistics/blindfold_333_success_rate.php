@@ -51,7 +51,7 @@ function rowComparison ( $a, $b ) {
 
 #--- Add this statistic to the statistics collection
 $lists[] = array(
-  "Blindfold 3x3x3 recent success rate",
+  "Rubik's Cube Blindfolded recent success rate",
   "since $sinceDateHtml - minimum 5 attempts",
   "[P] Person [N] Rate [n] Solves [n] Attempts [t] &nbsp; [r] Best [r] Avg [r] Worst",
   $rows

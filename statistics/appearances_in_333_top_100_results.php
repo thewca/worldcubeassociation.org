@@ -24,7 +24,7 @@ foreach ( $candidates as $candidate ) {
 
 #--- Build and add this statistic
 $lists[] = array(
-  "Appearances in 3x3x3 top 100 results",
+  "Appearances in Rubik's Cube top 100 results",
   "Single | Average",
   "[P] Person [N] Appearances [T] | [P] Person [N] Appearances",
   my_merge( countTop100Appearances( $personSinglePairs ),
