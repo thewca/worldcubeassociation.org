@@ -190,6 +190,25 @@ function checkResult ( $result ) {
   if( ! isset( $competitionIds[$result['competitionId']] ))
     return "unknown competition " . $result['competitionId'];
 
+  #--- 14) check correctness of multi results according to H1b and H1c
+  if( $result['eventId'] == '333mbf' ){
+    foreach( range( 1, 5 ) as $i ){
+      $value = $result["value$i"];
+      if( $value < 1 )
+        continue;
+      $missed     = $value % 100; $value = intval( $value / 100 );
+      $time       = $value % 100000; $value = intval( $value / 100000 );
+      $difference = 99 - $value % 100;
+      $solved     = $difference + $missed;
+      $attempted  = $solved + $missed;
+
+      if( $time > 3600 )
+        return  formatValue( $result["value$i"], 'multi') . " should be below one hour";
+      if( $time > ( 600 * $attempted ))
+        return  formatValue( $result["value$i"], 'multi') . " should be below 10 minutes times the number of cubes";
+    }
+  }
+
 }
 
 #----------------------------------------------------------------------

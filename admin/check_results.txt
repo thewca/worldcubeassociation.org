@@ -47,3 +47,5 @@ Procedure to check one row of the Results table:
 12) Check that countryId appears in the Countries table
 ----------------------------------------------------------------------
 13) Check that competitionId appears in the Competitions table
+----------------------------------------------------------------------
+14) Check that multi results are correct according to H1b and H1c
