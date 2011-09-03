@@ -9,13 +9,15 @@ adminHeadline( 'Check results' );
 showDescription();
 showChoices();
 
-if ( $chosenCheckRecentIndividually || $chosenCheckRecentRelatively )
+if ( $chosenCheckRecentIndividually || $chosenCheckRecentRelatively || $chosenCheckRecentRounds )
   $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
 
 if( $chosenCheckRecentIndividually || $chosenCheckAllIndividually )
   checkIndividually();
 if( $chosenCheckRecentRelatively || $chosenCheckAllRelatively )
   checkRelatively();
+if( $chosenCheckRecentRounds || $chosenCheckAllRounds )
+  checkRounds();
 
 require( '../_footer.php' );
 
@@ -27,6 +29,8 @@ function showDescription () {
 
   echo "<p style='width:45em'>Then, once they're correct individually, check them relatively. This compares results with others in the same round to check each competitor's place. Differences between calculated and stored places can be agreed to and then executed on the bottom of the page.\n";
 
+  echo "<p style='width:45em'>You can also check rounds, to see if rules 9m and 9p about the number of rounds and the qualifications are followed.\n";
+
   echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
 
   echo "<hr />\n";
@@ -35,12 +39,14 @@ function showDescription () {
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCheckRecentIndividually, $chosenCheckAllIndividually, $chosenCheckRecentRelatively, $chosenCheckAllRelatively;
+  global $chosenCheckRecentIndividually, $chosenCheckAllIndividually, $chosenCheckRecentRelatively, $chosenCheckAllRelatively, $chosenCheckRecentRounds, $chosenCheckAllRounds;
 
   $chosenCheckRecentIndividually = getBooleanParam( 'checkRecentIndividually' );
   $chosenCheckAllIndividually    = getBooleanParam( 'checkAllIndividually' );
   $chosenCheckRecentRelatively   = getBooleanParam( 'checkRecentRelatively' );
   $chosenCheckAllRelatively      = getBooleanParam( 'checkAllRelatively' );
+  $chosenCheckRecentRounds       = getBooleanParam( 'checkRecentRounds' );
+  $chosenCheckAllRounds          = getBooleanParam( 'checkAllRounds' );
 }
 
 #----------------------------------------------------------------------
@@ -54,6 +60,9 @@ function showChoices () {
     'Check relatively:<br />&nbsp;',
     choiceButton( true, 'checkRecentRelatively', ' recent ' ),
     choiceButton( true, 'checkAllRelatively', ' all ' ),
+    'Check rounds:<br />&nbsp;',
+    choiceButton( true, 'checkRecentRounds', ' recent ' ),
+    choiceButton( true, 'checkAllRounds', ' all ' ),
   ));
 }
 
@@ -284,6 +293,313 @@ function checkRelatively () {
   #--- Finish the form.
   echo "</form>\n";
 }
+
+#----------------------------------------------------------------------
+function checkRounds () {
+#----------------------------------------------------------------------
+  global $dateCondition, $chosenCheckAllRounds;
+
+  echo "<hr /><p>Checking <b>" . ($chosenCheckAllRounds ? 'all' : 'recent') . " rounds</b>... (wait for the result message box at the end)</p>\n";
+
+  #--- Get the number of competitors per round
+  $roundRows = dbQueryHandle("
+    SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundId, round.cellName
+    FROM     Results result, Competitions competition, Rounds round
+    WHERE    competition.id = competitionId
+      $dateCondition
+      AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
+      AND    result.roundId <> 'b'
+      AND    result.roundId = round.id
+    GROUP BY competitionId, eventId, roundId
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, round.rank
+  ");
+
+  #--- Get the number of competitors per event
+  $eventRows = dbQueryHandle("
+    SELECT   count(distinct result.personId) nbPersons, competitionId, eventId
+    FROM     Results result, Competitions competition
+    WHERE    competition.id = competitionId
+      $dateCondition
+      AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
+      AND    result.roundId <> 'b'
+    GROUP BY competitionId, eventId
+    ORDER BY year desc, month desc, day desc, competitionId, eventId
+  ");
+
+  #--- Begin the form
+  echo "<form action='check_results_ACTION.php' method='post'>\n";
+
+  #--- Check the pos values
+  while( $roundRow = mysql_fetch_row( $roundRows ) ) {
+    list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName ) = $roundRow;
+    $event = "$competitionId|$eventId";
+
+    # First round
+    if ( $event != $prevEvent ) {
+      $nbRounds = 1;
+      $eventRow = mysql_fetch_row( $eventRows );
+      list( $nbTotalPersons, $eventCompetitionId, $eventEventId ) = $eventRow;
+      assert( $eventCompetitionId == $competitionId );
+      assert( $eventEventId == $eventId );
+
+      $isThisRoundQuals = ( $roundId == '0');
+
+      if (( $nbTotalPersons != $nbPersons ) and ( $roundId != '0' )) {
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "Not all persons that competed in $eventId are in $roundCellName. It should thus be indicated as Qualification round";
+        addQuals( $competitionId, $eventId );
+        $isThisRoundQuals = true;
+        $wrongs++;
+      }
+
+      if (( $nbTotalPersons == $nbPersons ) and ( $roundId == '0' )) {
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "All persons that competed in $eventId are in $roundCellName. It should thus not be indicated as Qualification round";
+        removeQuals( $competitionId, $eventId );
+        $isThisRoundQuals = false;
+        $wrongs++;
+      }
+    }
+
+    # Following rounds
+    else {
+      $isThisRoundQuals = false;
+
+      # Article 9m, since April 9, 2008
+      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 9, 2008 ))
+        if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total";
+          $wrongs++;
+      }
+
+      # Article 9m/n/o, since July 20, 2006 until April 8, 2008
+      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 9, 2008 )))
+        if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total";
+          $wrongs++;
+      }
+
+      $nbQualPersons = $isPrevRoundQuals ? getQualifications( $competitionId, $eventId, $prevRoundId, $roundId ) : $nbPersons;
+
+      # Article 9p1, since April 14, 2010
+      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 14, 2010 ))
+        if ( $nbQualPersons > ( 3*$prevNbPersons/4 )) {
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}'>$competitionId - $eventId</a></p>";
+          showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
+          echo "From round $prevRoundCellName with $prevNbPersons competitors, $nbQualPersons were qualified to round $roundCellName which is more than 75%";
+          $wrongs++;
+        }
+
+      # Article 9p, since July 20, 2006 until April 13, 2010
+      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 14, 2010 )))
+        if ( $nbQualPersons >= $prevNbPersons ) {
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}'>$competitionId - $eventId</a></p>";
+          showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
+          echo "From round $prevRoundCellName to round $roundCellName, at least one competitor must not proceed";
+          $wrongs++;
+        }
+    }
+    $nbRounds += 1;
+    $prevNbPersons = $nbPersons;
+    $prevEvent = $event;
+    $prevRoundId = $roundId;
+    $prevRoundCellName = $roundCellName;
+    $isPrevRoundQuals = $isThisRoundQuals;
+
+  }
+
+  #--- Tell the result.
+  $date = wcaDate();
+  noticeBox2(
+    ! ( $wrongs ),
+    "We didn't find any mistake.<br />$date",
+    "<p>Darn! We disagree: $wrongs incorrect rounds found<br /><br />$date</p>"
+    ."<p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following.</p>"
+    ."<pre>I'm doing this:\n"
+    ."UPDATE Results SET pos=111 WHERE id=11111\n"
+    ."UPDATE Results SET pos=222 WHERE id=22222\n"
+    ."UPDATE Results SET pos=333 WHERE id=33333\n"
+    ."</pre>"
+  );
+
+  #--- If differences were found, offer to fix them.
+  if( $wrongs )
+    echo "<center><input type='submit' value='Execute the agreed changes!' /></center>\n";
+
+  #--- Finish the form.
+  echo "</form>\n";
+}
+
+#----------------------------------------------------------------------
+function getQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
+#----------------------------------------------------------------------
+  global $competitionResults1, $competitionResults2, $personsBothRounds;
+
+  #--- Get the results.
+  $competitionResults1 = getCompetitionResults( $competitionId, $eventId, $roundId1 );
+  $competitionResults2 = getCompetitionResults( $competitionId, $eventId, $roundId2 );
+
+  #--- Intersection of the two rounds
+  foreach( $competitionResults1 as $row )
+    $personsRound1[] = $row['personId'];
+  foreach( $competitionResults2 as $row )
+    $personsRound2[] = $row['personId'];
+  $personsBothRounds = array_intersect( $personsRound1, $personsRound2 );
+
+  return( count( $personsBothRounds ));
+}
+
+#----------------------------------------------------------------------
+function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
+#----------------------------------------------------------------------
+  global $competitionResults1, $competitionResults2, $personsBothRounds;// getQualifications() was previously called
+
+  getQualifications ( $competitionId, $eventId, $roundId1, $roundId2 );
+
+  tableBegin( 'results', 8 );
+
+  $nbRound1 = count( $competitionResults1 );
+
+  foreach( $competitionResults2 as $result ){
+
+    $inRound1 = false;
+
+    extract( $result );
+    foreach ( range(0, $nbRound1 - 1 ) as $row )
+      if( $competitionResults1[$row]['personId'] == $personId ) {
+        extract( $competitionResults1[$row], EXTR_PREFIX_ALL, 'r1' );
+        unset( $competitionResults1[$row] );
+        $inRound1 = true;
+        break;
+      }
+
+
+    if( ! $captionShowed ){
+      $anchors = "$eventId " . "${eventId}_$roundId";
+      $eventHtml = eventLink( $eventId, $eventName );
+      $caption = spaced( array( $eventHtml, $roundName, $formatName ));
+      tableCaptionNew( false, $anchors, $caption );
+
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
+      tableHeader( split( '\\|', "Person|Place|Best|$headerAverage|Place|Best|$headerAverage|" ),
+                 array( 1 => 'class="r"', 2 => 'class="R"', 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="R"', 6 => 'class="R"', 7 => 'class="f"' ));
+
+      $captionShowed = true;
+    }
+
+    #--- One result row.
+    tableRow( array(
+      personLink( $personId, $personName ),
+      $inRound1?$r1_pos : "",
+      $inRound1?formatValue( $r1_best, $r1_valueFormat ) : "",
+      $inRound1?formatValue( $r1_average, $r1_valueFormat ) : "",
+      $pos,
+      formatValue( $best, $valueFormat ),
+      formatValue( $average, $valueFormat ),
+      ''
+    ));
+
+  }
+
+  foreach( $competitionResults1 as $result ){
+
+    extract( $result );
+
+    #--- One result row.
+    tableRow( array(
+      personLink( $personId, $personName ),
+      $pos,
+      formatValue( $best, $valueFormat ),
+      formatValue( $average, $valueFormat ),
+      '',
+      '',
+      '',
+      ''
+    ));
+
+  }
+
+  tableEnd();
+}
+
+#----------------------------------------------------------------------
+function addQuals ( $competitionId, $eventId ) {
+#----------------------------------------------------------------------
+
+  #--- Table of round translation
+  $translateRounds = array( '1' => '0', 'd' => 'O', 'e' => 'd', '2' => '1', 'b' => 'b', '3' => '1', 'g' => 'e', 'c' => 'c', 'f' => 'f' );
+
+  changeRounds( $competitionId, $eventId, $translateRounds );
+
+}
+
+#----------------------------------------------------------------------
+function removeQuals ( $competitionId, $eventId ) {
+#----------------------------------------------------------------------
+
+  #--- Table of round translation
+  $translateRounds = array( 0 => 1, 'd' => 'e', '1' => '2', 'b' => 'b', '2' => '3', 'e' => 'g', '3' => '3', 'g' => 'g', 'c' => 'c', 'f' => 'f' );
+
+  changeRounds( $competitionId, $eventId, $translateRounds );
+
+}
+
+#----------------------------------------------------------------------
+function changeRounds ( $competitionId, $eventId, $translateRounds ) {
+#----------------------------------------------------------------------
+
+  #--- Get rounds of the event
+  $roundRows = dbQuery("
+    SELECT   roundId, round.cellName
+    FROM     Results result, Rounds round
+    WHERE    result.competitionId = '$competitionId'
+      AND    result.eventId = '$eventId'
+      AND    result.roundId = round.id
+    GROUP BY competitionId, eventId, roundId
+    ORDER BY round.rank
+  ");
+
+  tableBegin( 'results', 3 );
+  tableHeader( split( '\\|', "Current round|New round|" ),
+               array( 2 => 'class="f"' ));
+
+  foreach( $roundRows as $roundRow ){
+    extract( $roundRow );
+
+    $formId = "setround$competitionId/$eventId/$roundId";
+    tableRow( array( $cellName, listRounds( $translateRounds[$roundId], $formId), '' )); 
+
+  }
+  tableEnd();
+
+  $checkbox = "<input type='checkbox' name='confirmround$competitionId/$eventId' value='1' />";
+  echo "$checkbox Update<br/>";
+
+}
+
+
+#----------------------------------------------------------------------
+function listRounds ( $selectedRoundId, $formId ) {
+#----------------------------------------------------------------------
+
+  $result = "<select class='drop' id='$formId' name='$formId'>\n";
+  foreach( getAllRounds() as $round ){
+    extract( $round );
+
+    $selected = ($id == $selectedRoundId) ? " selected='selected'" : "";
+    $result .= "<option value='$id'$selected>$cellName</option>\n";
+  }
+
+  $result .= "</select>";
+  return $result;
+
+}
+
+
+
 
 #----------------------------------------------------------------------
 function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
