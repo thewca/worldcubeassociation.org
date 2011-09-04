@@ -37,6 +37,13 @@ function showUpdateSQL () {
       echo "$command\n";
       dbCommand( $command );
     }
+
+    if( preg_match( '/^deleteres([1-9]\d*)$/', $key, $match )){
+      $id = $match[1];
+      $command = "DELETE FROM Results WHERE id=$id";
+      echo "$command\n";
+      dbCommand( $command );
+    }
   }
  
   foreach( $updateRounds as $competitionId => $eventIds ){
