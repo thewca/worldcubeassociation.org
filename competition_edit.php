@@ -137,7 +137,7 @@ function storeData () {
           if( $data["reg${regId}E$eventId"] )
             $queryEvent .= "$eventId ";
         }
-        rtrim( $queryEvent ); # Remove last space.
+        $queryEvent = rtrim( $queryEvent ); # Remove last space.
 
         $personId = mysql_real_escape_string( $data["reg${regId}personId"] );
         $name = mysql_real_escape_string( $data["reg${regId}name"] );
