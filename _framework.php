@@ -53,6 +53,17 @@ function getCompetition ( $id ) {
       return $competition;
 }
 
+function roundCellName ( $roundId ) {
+  $round = getRound( $roundId );
+  return $round['cellName'];
+}
+
+function getRound ( $roundId ) {
+  foreach( getAllRounds() as $round )
+    if( $round['id'] == $roundId )
+      return $round;
+}
+
 function valueFormat ( $eventId ) {
   $event = getEvent( $eventId );
   return $event['format'];
