@@ -351,9 +351,9 @@ function checkRounds () {
       $roundInfos = array();
 
       #--- Checks for qualification round
-      $isThisRoundQuals = ( $roundId == '0');
+      $isThisRoundQuals = (( $roundId == '0' or $roundId == 'h' ));
 
-      if (( $nbTotalPersons != $nbPersons ) and ( $roundId != '0' )) {
+      if (( $nbTotalPersons != $nbPersons ) and ( ! $isThisRoundQuals )) {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
@@ -369,7 +369,7 @@ function checkRounds () {
         $wrongs++;
       }
 
-      if (( $nbTotalPersons == $nbPersons ) and ( $roundId == '0' )) {
+      if (( $nbTotalPersons == $nbPersons ) and ( $isThisRoundQuals )) {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
@@ -437,8 +437,7 @@ function checkRounds () {
     $prevRoundId = $roundId;
     $prevRoundCellName = $roundCellName;
     $isPrevRoundQuals = $isThisRoundQuals;
-    if(( $roundId != 'b' ) && ( $roundId != '0' ))
-      $roundInfos[] = array( $roundId, $roundCellName, $formatId, $isNotCombined );
+    $roundInfos[] = array( $roundId, $roundCellName, $formatId, $isNotCombined );
 
   }
 
@@ -473,16 +472,14 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
   #--- Switch between combined and not combined
   $switchCombined = array('h' => '0', '0' => 'h', 'd' => '1', '1' => 'd', '2' => 'e', 'e' => '2', 'g' => '3', '3' => 'g', 'c' => 'f', 'f' => 'c' );
 
-  $translateRounds = array( '0' => '0', 'b' => 'b' );
-
   $normalRoundIds = array( 0 => array(), 1 => array( 'f' ), 2 => array( '1', 'f' ), 3 => array( '1', '2', 'f' ), 4 => array( '1', '2', '3', 'f' )); 
 
   $nbErrors = 0;
+  $nbRounds = (( $roundInfos[0][0] == '0' ) or ( $roundInfos[0][0] == 'h' )) ? count( $roundInfos ) - 1 : count( $roundInfos );
 
   foreach( $roundInfos as $roundInfo ){
 
     list( $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundInfo;
-    $normalRoundId = array_shift( $normalRoundIds[count( $roundInfos )] );
     $backRoundId = $roundId;
 
     #--- Check for round "combined-ness"
@@ -493,12 +490,15 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
       $nbErrors += 1;
     }
 
-    #--- Check for round name
-    if(( $listCombined[$roundId]?$switchCombined[$roundId]:$roundId ) != $normalRoundId ){
-      $roundId = $listCombined[$roundId]?$switchCombined[$normalRoundId]:$normalRoundId; 
-      echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
-      echo "<p>Round $roundCellName should be ". roundCellName( $roundId ) . "</p>";
-      $nbErrors += 1;
+    if(( $backRoundId != '0' ) and ( $backRoundId != 'h' )){
+      #--- Check for round name
+      $normalRoundId = array_shift( $normalRoundIds[$nbRounds] );
+      if(( $listCombined[$roundId]?$switchCombined[$roundId]:$roundId ) != $normalRoundId ){
+        $roundId = $listCombined[$roundId]?$switchCombined[$normalRoundId]:$normalRoundId; 
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
+        echo "<p>Round $roundCellName should be ". roundCellName( $roundId ) . "</p>";
+        $nbErrors += 1;
+      }
     }
 
     $translateRounds[$backRoundId] = $roundId;
@@ -633,7 +633,7 @@ function addQuals ( $competitionId, $eventId ) {
 #----------------------------------------------------------------------
 
   #--- Table of round translation
-  $translateRounds = array( '1' => '0', 'd' => 'O', 'e' => 'd', '2' => '1', 'b' => 'b', '3' => '1', 'g' => 'e', 'c' => 'c', 'f' => 'f' );
+  $translateRounds = array( '1' => '0', 'd' => 'h', 'e' => 'd', '2' => '1', 'b' => 'b', '3' => '1', 'g' => 'e', 'c' => 'c', 'f' => 'f' );
 
   changeRounds( $competitionId, $eventId, $translateRounds, false );
 
@@ -644,7 +644,7 @@ function removeQuals ( $competitionId, $eventId ) {
 #----------------------------------------------------------------------
 
   #--- Table of round translation
-  $translateRounds = array( 0 => 1, 'd' => 'e', '1' => '2', 'b' => 'b', '2' => '3', 'e' => 'g', '3' => '3', 'g' => 'g', 'c' => 'c', 'f' => 'f' );
+  $translateRounds = array( 0 => 1, 'h' => 'd', 'd' => 'e', '1' => '2', 'b' => 'b', '2' => '3', 'e' => 'g', '3' => '3', 'g' => 'g', 'c' => 'c', 'f' => 'f' );
 
   changeRounds( $competitionId, $eventId, $translateRounds, false );
 
@@ -661,6 +661,7 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
     WHERE    result.competitionId = '$competitionId'
       AND    result.eventId = '$eventId'
       AND    result.roundId = round.id
+      AND    result.roundId <> 'b'
     GROUP BY competitionId, eventId, roundId
     ORDER BY round.rank
   ");
