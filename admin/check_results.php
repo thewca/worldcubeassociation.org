@@ -168,7 +168,7 @@ function checkResult ( $result ) {
 
   #--- 9) check number of zero-values for non-combined rounds
   $round = $result['roundId'];
-  if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' ){
+  if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' && $round != 'h' ){
     if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
     if( $format == '2'  &&  $zer != 3 ) return "should have two non-zero values";
     if( $format == '3'  &&  $zer != 2 ) return "should have three non-zero values";
