@@ -5,7 +5,7 @@
 
 require( '../_header.php' );
 analyzeChoices();
-adminHeadline( 'Check results' );
+adminHeadline( 'Check rounds' );
 showDescription();
 showChoices();
 
