@@ -82,7 +82,7 @@ function checkRounds () {
   ");
 
   #--- Begin the form
-  echo "<form action='check_results_ACTION.php' method='post'>\n";
+  echo "<form action='check_rounds_ACTION.php' method='post'>\n";
 
   foreach( $roundRows as $i => $roundRow ){
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
@@ -150,6 +150,7 @@ function checkRounds () {
         if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
+          removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
       }
@@ -159,6 +160,7 @@ function checkRounds () {
         if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
+          removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
       }
@@ -398,11 +400,28 @@ function removeQuals ( $competitionId, $eventId ) {
 #----------------------------------------------------------------------
 
   #--- Table of round translation
-  $translateRounds = array( 0 => 1, 'h' => 'd', 'd' => 'e', '1' => '2', 'b' => 'b', '2' => '3', 'e' => 'g', '3' => '3', 'g' => 'g', 'c' => 'c', 'f' => 'f' );
+  $translateRounds = array( '0' => '1', 'h' => 'd', 'd' => 'e', '1' => '2', 'b' => 'b', '2' => '3', 'e' => 'g', '3' => '3', 'g' => 'g', 'c' => 'c', 'f' => 'f' );
 
   changeRounds( $competitionId, $eventId, $translateRounds, false );
 
 }
+
+#----------------------------------------------------------------------
+function removeRound ( $competitionId, $eventId, $nbRounds ) {
+#----------------------------------------------------------------------
+
+  #--- Table of round translation
+  if( $nbRounds == 2 )
+    $translateRounds = array( '0' => '0', 'h' => 'h', 'd' => 'c', '1' => 'f', 'b' => 'b', '2' => 'f', 'e' => 'c', '3' => 'f', 'g' => 'c', 'c' => 'del', 'f' => 'del' );
+  if( $nbRounds == 3 )
+    $translateRounds = array( '0' => '0', 'h' => 'h', 'd' => 'd', '1' => '1', 'b' => 'b', '2' => 'f', 'e' => 'c', '3' => 'f', 'g' => 'c', 'c' => 'del', 'f' => 'del' );
+  if( $nbRounds == 4 )
+    $translateRounds = array( '0' => '0', 'h' => 'h', 'd' => 'd', '1' => '1', 'b' => 'b', '2' => '2', 'e' => 'e', '3' => 'f', 'g' => 'c', 'c' => 'del', 'f' => 'del' );
+
+  changeRounds( $competitionId, $eventId, $translateRounds, false );
+
+}
+
 
 #----------------------------------------------------------------------
 function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
@@ -444,6 +463,10 @@ function listRounds ( $selectedRoundId, $formId ) {
 #----------------------------------------------------------------------
 
   $result = "<select class='drop' id='$formId' name='$formId'>\n";
+
+  $selected = ($selectedRoundId == 'del') ? " selected='selected'" : "";
+  $result .= "<option value='del'$selected>[delete]</option>\n";
+
   foreach( getAllRounds() as $round ){
     extract( $round );
 
