@@ -32,6 +32,9 @@ function showPages () {
   showPage( 'persons_finish_unfinished',
             'Lets you finish persons in Results by adding personId.' );
 
+  showPage( 'check_rounds',
+            'Checks for rounds.' );
+
   showPage( 'check_regional_record_markers',
             'Computes regional record markers, compares them to the stored ones.' );
 
