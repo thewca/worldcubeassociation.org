@@ -110,13 +110,6 @@ function getAllEvents () {
 }
 
 #----------------------------------------------------------------------
-function getAllUnofficialEvents () {
-#----------------------------------------------------------------------
-  global $cachedUnofficialEvents;
-  return $cachedUnofficialEvents;
-}
-
-#----------------------------------------------------------------------
 function getAllRounds () {
 #----------------------------------------------------------------------
   global $cachedRounds;
@@ -167,7 +160,6 @@ function getAllIDs ( $rows ) {
 }
 
 function getAllEventIds                    () { return getAllIDs( getAllEvents()                    ); }
-function getAllUnofficialEventIds          () { return getAllIDs( getAllUnofficialEvents()          ); }
 function getAllRoundIds                    () { return getAllIDs( getAllRounds()                    ); }
 function getAllCompetitionIds              () { return getAllIDs( getAllCompetitions()              ); }
 function getAllUsedCountriesIds            () { return getAllIDs( getAllUsedCountries()             ); }

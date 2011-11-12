@@ -132,7 +132,6 @@ function showView () {
 
   $eventIds = getEventSpecsEventIds( $data['eventSpecs'] );
   foreach( $eventIds as $eventId ) {
-    if( ! isOfficialEvent( $eventId )) continue;
     $row = array( eventCellName( $eventId ));
 
     #--- Choose Unit.

@@ -211,7 +211,7 @@ function storeData () {
 
   #-- Building eventSpecs
   $eventSpecs = '';
-  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event ){
+  foreach( getAllEvents() as $event ){
     extract($event);
 
     if ( $data["offer$id"] ){

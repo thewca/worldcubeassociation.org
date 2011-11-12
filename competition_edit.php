@@ -226,10 +226,7 @@ function showRegs () {
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
   echo "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
   foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-    if( isOfficialEvent( $eventId ) )
-      echo "<td style='font-size:9px'>$eventId</td>\n";
-    else
-      echo "<td style='font-size:9px;color:#999'>$eventId</td>\n";
+    echo "<td style='font-size:9px'>$eventId</td>\n";
   }
   echo "</tr>\n";
 

@@ -31,7 +31,6 @@ function showCompetitionInfos () {
   echo "<td style='width:30%'><table>";
   showItem( 'key', "Information",  array( $information ));
   showListItemNew( 'Events', computeCompetitionEvents( $eventSpecs ));
-  showListItemNew( 'Unofficial Events', computeCompetitionUnofficialEvents( $eventSpecs ));
   showListItemNew( 'Reports', computeMedia( 'report' ));
   showListItemNew( 'Articles', computeMedia( 'article' ));
   showListItemNew( 'Multimedia', computeMedia( 'multimedia' ));
@@ -92,21 +91,6 @@ function computeCompetitionEvents ( $eventSpecs ) {
     extract( $event );
     if( preg_match( "/(^| )$id\b/", $eventSpecs )){
       $url = $chosenAllResults ? "#$id" : "competition.php?competitionId=$chosenCompetitionId&amp;allResults=1#$id";
-      $events .= '[{' . $cellName . '}{' . $url . '}]';
-    }
-  }
-  return $events;
-}
-
-#----------------------------------------------------------------------
-function computeCompetitionUnofficialEvents ( $eventSpecs ) {
-#----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenAllResults;
-
-  foreach( getAllUnofficialEvents() as $event ){
-    extract( $event );
-    if( preg_match( "/(^| )$id\b/", $eventSpecs )){
-      $url = "http://www.speedcubing.com/results/competition.php?competitionId=$chosenCompetitionId&amp;allResults=1#$id";
       $events .= '[{' . $cellName . '}{' . $url . '}]';
     }
   }

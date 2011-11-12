@@ -80,9 +80,6 @@ function computeCachedDatabase ( $cacheFile ) {
     'Events' =>
       'SELECT * FROM Events WHERE rank<999 ORDER BY rank',
 
-    'UnofficialEvents' =>
-      'SELECT * FROM Events WHERE rank>1000 ORDER BY rank',
-
     'Rounds' =>
       'SELECT * FROM Rounds ORDER BY rank',
 

@@ -199,7 +199,6 @@ function fillEvents () {
   $persons = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
 
   foreach( $eventIdsList as $eventId ) {
-    if( ! isOfficialEvent( $eventId )) continue;
     foreach( array( 1, 2, 3, 4) as $roundNumber ) {
       if( $chosenRound[$eventId][$roundNumber] != 'n' ){
 

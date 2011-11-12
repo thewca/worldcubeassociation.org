@@ -22,17 +22,13 @@ function eventCellName ( $eventId ) {
 }
 
 function getEvent ( $eventId ) {
-  foreach( array_merge( getAllEvents(), getAllUnofficialEvents() ) as $event )
+  foreach( getAllEvents() as $event )
     if( $event['id'] == $eventId )
       return $event;
 }
 
-function isOfficialEvent ( $eventId ) {
-  return in_array( $eventId, getAllEventIds() );
-}
-
 function readEventSpecs ( $eventSpecs ) {
-  foreach( array_merge( getAllEventIds(), getAllUnofficialEventIds() ) as $eventId )
+  foreach( getAllEventIds() as $eventId )
     if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $eventSpecs, $matches )) {
       $eventSpecsTree["$eventId"]['personLimit']      = $matches[3];
       $eventSpecsTree["$eventId"]['timeLimit']        = $matches[4];

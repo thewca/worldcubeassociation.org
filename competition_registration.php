@@ -113,12 +113,11 @@ function showPreregForm () {
 <td>
 <?
   
-  $eventSpecs = split( ' ', $competition['eventSpecs'] );
-  foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) / (\d*) )? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualify, $qualifyTimeLimit ) = $matches;
+  $eventSpecs = readEventSpecs( $competition['eventSpecs'] );
+  foreach( $eventSpecs as $eventId => $eventSpec ){
+    extract( $eventSpec );
     if( ! $personLimit ) $personLimit = "0";
-	 $chosenE = getBooleanParam( "E$eventId" );
+      $chosenE = getBooleanParam( "E$eventId" );
     showField( "E$eventId event $personLimit $timeLimit $timeFormat $chosenE" );
   }
   echo "</td></tr>";
@@ -345,7 +344,7 @@ function savePreregForm () {
   $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
 
   #--- Building query
-  foreach( array_merge( getAllEventIds(), getAllUnofficialEventIds() ) as $eventId ){
+  foreach( getAllEventIds() as $eventId ){
     if( getBooleanParam( "E$eventId" ))
       $eventIds .= "$eventId ";
   }
@@ -407,13 +406,7 @@ function showPreregList () {
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
 
   #--- Get all events of the competition.
-  $eventSpecs = split( ' ', $competition['eventSpecs'] );
-
-  foreach( $eventSpecs as $eventSpec ){
-    preg_match( '!^ (\w+) (?: = (\d*) / (\d*) / (\w*) / (\d*) / (\d*))? $!x', $eventSpec, $matches );
-    list( $all, $eventId, $personLimit, $timeLimit, $timeFormat, $qualifications, $qualificationsTimeLimit ) = $matches;
-    $eventList[] = $eventId;
-  }
+  $eventList = getEventSpecsEventIds( $competition['eventSpecs'] );
 
   foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
 
