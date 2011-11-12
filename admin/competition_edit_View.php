@@ -208,7 +208,7 @@ function showAnnouncement() {
 
   echo "<h4>Competition</h4>";
 
-  $months = split( " ", ". January February March April May June July August September October November December" );
+  $months = explode( " ", ". January February March April May June July August September October November December" );
   $date = $months[$data['month']] . ' ' . $data['day'];
   if( $data['endMonth'] != $data['month'] )
     $date .= " - " . $months[$data['endMonth']] . ' ' . $data['endDay'];

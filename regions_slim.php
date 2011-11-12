@@ -15,7 +15,7 @@ function showRegionalRecordsSlim () {
   if( $caption ) tableCaption( true, $caption );
   else tableRowBlank();
 
-  tableHeader( split( '\\|', 'Person|Single|Event|Average|Person|Result Details' ),
+  tableHeader( explode( '|', 'Person|Single|Event|Average|Person|Result Details' ),
                array( 1 => "class='R2'", 2 => "class='c'", 3 => "class='R2'", 5 => 'class="f"' ));
 
   #--- Process events.

@@ -79,7 +79,7 @@ function showMatchingPersons () {
     chosenRegionName( $chosenRegionId ),
     $chosenPatternHtml ? "\"$chosenPatternHtml\"" : ''
   )));
-  tableHeader( split( '\\|', 'Person|Citizen of' ),
+  tableHeader( explode( '|', 'Person|Citizen of' ),
                array( 1 => 'class="f"' ));
 
   foreach( $persons as $person ){

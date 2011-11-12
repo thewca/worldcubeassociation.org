@@ -93,7 +93,7 @@ $headerSources = $chosenAverage ? 'Result Details' : '';
 
 tableBegin( 'results', 5 );
 tableCaption( true, spaced( array( $eventName, $chosenShow, $regionName, $chosenYears )));
-tableHeader( split( '\\|', "Region|Result|Person|Competition|$headerSources" ),
+tableHeader( explode( '|', "Region|Result|Person|Competition|$headerSources" ),
              array( 0 => 'class="L"', 1 => "class='R2'", 4 => 'class="f"' ));
 
 if( $bestOfCountry){

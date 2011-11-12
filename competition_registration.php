@@ -138,7 +138,7 @@ function showPreregForm () {
 function showField ( $fieldSpec ) {
 #----------------------------------------------------------------------
 
-  list( $id, $type, $rest ) = split( ' ', $fieldSpec, 3 );
+  list( $id, $type, $rest ) = explode( ' ', $fieldSpec, 3 );
 
   #---------------------
   if( $type == 'hidden' ){
@@ -150,7 +150,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'text' ){
   #---------------------
-    list( $default, $size, $label ) = split( ' ', $rest, 3 );
+    list( $default, $size, $label ) = explode( ' ', $rest, 3 );
     $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' />";
     $type = 'standard';
   }
@@ -158,7 +158,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'readonly' ){
   #---------------------
-    list( $default, $size, $label ) = split( ' ', $rest, 3 );
+    list( $default, $size, $label ) = explode( ' ', $rest, 3 );
     $fieldHtml = "<input id='$id' name='$id' type='text' value='$default' size='$size' readonly='readonly' />";
     $type = 'standard';
   }
@@ -166,7 +166,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'name' ){
   #---------------------
-    list( $size, $label, $default ) = split( ' ', $rest, 3 );
+    list( $size, $label, $default ) = explode( ' ', $rest, 3 );
     $fieldHtml =  "<input id='$id' name='$id' type='text' value='$default' size='$size' />";
     $fieldHtml .= "<input type='submit' id='search' name='search' value='Search' />";
     $type = 'standard';
@@ -176,7 +176,7 @@ function showField ( $fieldSpec ) {
   if( $type == 'namelist' ){
   #---------------------
     global $persons;
-    list( $label ) = split( ' ', $rest, 1 );
+    list( $label ) = explode( ' ', $rest, 1 );
     $fieldHtml =  "<select id='$id' name='$id'>\n";
       foreach( $persons as $person ){
       $personName = $person['name'];
@@ -192,7 +192,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'country' ){
   #---------------------
-    list( $label, $default ) = split( ' ', $rest, 2 );
+    list( $label, $default ) = explode( ' ', $rest, 2 );
     $fieldHtml = "<select id='$id' name='$id'>\n";
     $countries = dbQuery( "SELECT * FROM Countries" );
     foreach( $countries as $country ){
@@ -210,7 +210,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'gender' ){
   #---------------------
-    list( $default, $label ) = split( ' ', $rest, 2 );
+    list( $default, $label ) = explode( ' ', $rest, 2 );
     if( $default == 'm' )
       $fieldHtml = "Male : <input type='radio' id='$id' name='$id' value='m' checked='checked' /> Female : <input type='radio' id='$id' name='$id' value='f' />";
     else if( $default == 'f' )
@@ -223,7 +223,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'date' ){
   #---------------------
-    list( $defaultDay, $defaultMonth, $defaultYear, $label ) = split( ' ', $rest, 4 );
+    list( $defaultDay, $defaultMonth, $defaultYear, $label ) = explode( ' ', $rest, 4 );
     echo "  <tr><td>$label</td><td>";
     echo numberSelect( "${id}Day", "Day", 1, 31, $defaultDay );
     echo numberSelect( "${id}Month", "Month", 1, 12, $defaultMonth );
@@ -234,7 +234,7 @@ function showField ( $fieldSpec ) {
   #---------------------
   if( $type == 'area' ){
   #---------------------
-    list( $cols, $rows, $label, $default ) = split( ' ', $rest, 4 );
+    list( $cols, $rows, $label, $default ) = explode( ' ', $rest, 4 );
     $fieldHtml = "<textarea id='$id' name='$id' cols='$cols' rows='$rows'>$default</textarea>";
     $type = 'standard';
   }
@@ -253,7 +253,7 @@ function showField ( $fieldSpec ) {
     $eventName = $event['cellName'];
     $eventFormat = $event['format'];
 
-    list( $personLimit, $timeLimit, $timeFormat, $default ) = split( ' ', $rest, 4 );
+    list( $personLimit, $timeLimit, $timeFormat, $default ) = explode( ' ', $rest, 4 );
 
     if( $timeLimit ) {
 
@@ -422,7 +422,7 @@ function showPreregList () {
     extract( $prereg );
 
     if( !( $countPerson % 20 ))
-      tableHeader( split( '\\|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
+      tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
 
     $countPerson += 1;
 
@@ -447,7 +447,7 @@ function showPreregList () {
     }
 
     $personEvents = 0;
-    $eventIdsList = array_flip( split( ' ', $eventIds ));
+    $eventIdsList = array_flip( explode( ' ', $eventIds ));
 
     foreach( $eventList as $event ){
       if( isset( $eventIdsList[$event] )){

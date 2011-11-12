@@ -35,7 +35,7 @@ function showHistoryOfWorldRecords () {
 
   tableBegin( 'results', 6 );
   tableCaption( false, 'History of World Records' );
-  tableHeader( split( '\\|', 'Event|Single|Average|Competition|Round|Result Details' ),
+  tableHeader( explode( '|', 'Event|Single|Average|Competition|Round|Result Details' ),
                array( 1 => "class='R2'", 2 => "class='R2'", 5 => "class='f'" ));
 
   foreach( $results as $result ){

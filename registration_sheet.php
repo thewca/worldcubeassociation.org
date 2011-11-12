@@ -55,7 +55,7 @@ function generateSheet () {
     extract( $result );
     $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
     $file .= "$status$sep$name$sep$countryId$sep$personId$sep$birthYear-$birthMonth-$birthDay$sep$gender$sep";
-    $eventIdsPerson = array_flip( split( ' ', $eventIds ));
+    $eventIdsPerson = array_flip( explode( ' ', $eventIds ));
     foreach( $eventIdsList as $eventId ){
       $offer = isset( $eventIdsPerson[$eventId] )?1:0 ;
       $file .= "$sep$offer";

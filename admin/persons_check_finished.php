@@ -127,7 +127,7 @@ function checkSpacesInPersons () {
   #--- Otherwise, show the errors
   echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
   tableBegin( 'results', 3 );
-  tableHeader( split( '\\|', 'current|suggested|SQL' ), array( 2=>'class="f"' ));
+  tableHeader( explode( '|', 'current|suggested|SQL' ), array( 2=>'class="f"' ));
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $name ));
@@ -164,7 +164,7 @@ function checkSpacesInResults () {
   #--- Otherwise, show the errors
   echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Results</b> start or end with a space or have double spaces.</p>";
   tableBegin( 'results', 4 );
-  tableHeader( split( '\\|', 'current|suggested|fix...|SQL' ), array( 3=>'class="f"' ));
+  tableHeader( explode( '|', 'current|suggested|fix...|SQL' ), array( 3=>'class="f"' ));
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $personName ));
@@ -204,7 +204,7 @@ function checkTooMuchInPersons () {
   #--- Otherwise, show the Persons troublemakers and possible matches in Results.
   echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Persons</b> also appear in <b>Results</b>:</p>";
   tableBegin( 'results', 4 );
-  tableHeader( split( '\\|', 'source|name|countryId|id' ), array( 3=>'class="f"' ) );
+  tableHeader( explode( '|', 'source|name|countryId|id' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInPersons as $personKey ){
     extract( $personsFromPersons[$personKey] );
     tableRowStyled( 'font-weight:bold', array(
@@ -244,7 +244,7 @@ function checkTooMuchInResults () {
   #--- Otherwise, show the Results troublemakers and possible matches in Persons.
   echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Results</b> who have an id also appear in <b>Persons</b>:</p>";
   tableBegin( 'results', 6 );
-  tableHeader( split( '\\|', 'source|name|countryId|id|fix...|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
+  tableHeader( explode( '|', 'source|name|countryId|id|fix...|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInResults as $personKey ){
     extract( $personsFromResults[$personKey] );
     tableRowStyled( 'font-weight:bold', array(
@@ -299,7 +299,7 @@ function checkDuplicatesInCompetition () {
   #--- Otherwise, show the errors
   echo "<p style='color:#F00'><b>BAD!</b> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
   tableBegin( 'results', 7 );
-  tableHeader( split( '\\|', 'personId|personName|countryId|competitionId|eventId|roundId|#Occurances' ),
+  tableHeader( explode( '|', 'personId|personName|countryId|competitionId|eventId|roundId|#Occurances' ),
                array( 6=>'class="f"' ));
   foreach( $duplicates as $duplicate ){
     extract( $duplicate );
@@ -322,7 +322,7 @@ function checkPersonsInResultsWithoutIds () {
 #    return;
 
   tableBegin( 'results', 6 );
-  tableHeader( split( '\\|', '|personName|countryId|personId||' ), array( 5=>'class="f"' ) );
+  tableHeader( explode( '|', '|personName|countryId|personId||' ), array( 5=>'class="f"' ) );
 
   foreach( $personsFromResults as $person ){
     extract( $person );

@@ -312,7 +312,7 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
 
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
-      tableHeader( split( '\\|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
+      tableHeader( explode( '|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
                    array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
     }
 

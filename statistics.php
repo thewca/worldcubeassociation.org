@@ -81,7 +81,7 @@ function defineAllLists () {
   
   $WHERE = "WHERE " . randomDebug() . " AND";
   
-  list( $year, $month, $day ) = split( ' ', wcaDate( "Y m d" ));
+  list( $year, $month, $day ) = explode( ' ', wcaDate( "Y m d" ));
   $year = intval( $year ) - 1;
   $month = intval( $month );
   $day = intval( $day );
@@ -198,7 +198,7 @@ function getMonthName ( $month ) {
 
   static $monthNames;
   if( ! $monthNames )
-    $monthNames = split( ' ', ' Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec' );
+    $monthNames = explode( ' ', ' Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec' );
   return $monthNames[$month];
 }
 

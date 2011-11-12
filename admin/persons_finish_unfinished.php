@@ -99,7 +99,7 @@ function showUnfinishedPersons () {
   #--- Begin the form and table.
   echo "<form action='persons_finish_unfinished_ACTION.php' method='post'>";
   tableBegin( 'results', 8 );
-  tableHeader( split( '\\|', '|personName|countryId|personId|birthdate|personName|countryId|personSemiId' ),
+  tableHeader( explode( '|', '|personName|countryId|personId|birthdate|personName|countryId|personSemiId' ),
                array( 6=>'class="6"' ) );
 
   #--- Walk over all persons from the Results table.

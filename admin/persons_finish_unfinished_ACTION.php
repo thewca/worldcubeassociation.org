@@ -36,7 +36,7 @@ function finishUnfinishedPersons () {
       break;
 
     #--- Separate old name and country, and get the action.
-    list( $oldName, $oldCountry ) = split( '\\|', $oldNameAndCountry );    
+    list( $oldName, $oldCountry ) = explode( '|', $oldNameAndCountry );    
     $action = getRawParamThisShouldBeAnException( "action$caseNr" );
 
     #--- If no action or 'skip' chosen, skip it.
@@ -64,13 +64,13 @@ function finishUnfinishedPersons () {
     else {
     
       #--- Scream if error.      
-      if( count( split( '\\|', $action )) != 3 ){
+      if( count( explode( '|', $action )) != 3 ){
         showErrorMessage( "invalid action '$action'" );
         continue;
       }
       
       #--- Get the data from the other person.
-      list( $newName, $newCountry, $newId ) = split( '\\|', $action );
+      list( $newName, $newCountry, $newId ) = explode( '|', $action );
 
       #--- Adapt the Results table entries.
       adaptResults( $oldName, $oldCountry, $newName, $newCountry, $newId );      

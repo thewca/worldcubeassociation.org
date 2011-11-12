@@ -98,7 +98,7 @@ function showResults () {
     $chosenShow
   )));
   $headerSources = $chosenAverage ? 'Result Details' : '';
-  tableHeader( split( '\\|', "Rank|Person|Result|Citizen of|Competition|$headerSources" ),
+  tableHeader( explode( '|', "Rank|Person|Result|Citizen of|Competition|$headerSources" ),
                array( 0=>"class='r'", 2=>"class='R2'", 5=>'class="f"' ));
 
   foreach( $results as $result ){

@@ -150,7 +150,7 @@ function fillRegistration () {
     $registrationSheet->getStyleByColumnAndRow( 5, $row )->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2);
 
     $col = 7;
-    $eventIdsReg = array_flip( split( ' ', $eventIds ));
+    $eventIdsReg = array_flip( explode( ' ', $eventIds ));
     foreach( $eventIdsList as $eventId ) {
       $registrationSheet->setCellValueByColumnAndRow( $col, $row, isset( $eventIdsReg[$eventId] )?1:0 );
       $col += 1;
@@ -210,7 +210,7 @@ function fillEvents () {
 
         $eventPersons = null;
         foreach( $persons as $person ){
-          $eventIdsPerson = array_flip( split( ' ', $person['eventIds'] ));
+          $eventIdsPerson = array_flip( explode( ' ', $person['eventIds'] ));
           if( isset( $eventIdsPerson[$eventId] ))
             $eventPersons[] = $person;
         }

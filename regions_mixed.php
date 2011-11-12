@@ -11,7 +11,7 @@ function showRegionalRecordsMixed () {
 
   tableBegin( 'results', 6 );
   tableCaption( false, spaced( array( chosenRegionName(), $chosenYears )));
-  tableHeader( split( '\\|', 'Type|Result|Person|Citizen of|Competition|Result Details' ),
+  tableHeader( explode( '|', 'Type|Result|Person|Citizen of|Competition|Result Details' ),
                array( 1 => "class='R2'", 5 => 'class="f"' ));
 
   foreach( $results as $result ){

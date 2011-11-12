@@ -13,11 +13,11 @@ function showCompetitionResults () {
   tableBegin( 'results', 8 );
 
   if( $chosenWinners )
-    tableHeader( split( '\\|', 'Event|Person|Best||Average||Citizen of|Result Details' ),
+    tableHeader( explode( '|', 'Event|Person|Best||Average||Citizen of|Result Details' ),
                  array( 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
 
   if( $chosenTop3 )
-      tableHeader( split( '\\|', 'Place|Person|Best||Average||Citizen of|Result Details' ),
+      tableHeader( explode( '|', 'Place|Person|Best||Average||Citizen of|Result Details' ),
                    array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
     
   foreach( $competitionResults as $result ){
@@ -53,7 +53,7 @@ function showCompetitionResults () {
 
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
-      tableHeader( split( '\\|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
+      tableHeader( explode( '|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
                    array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
     }
 
@@ -106,7 +106,7 @@ function showCompetitionResultsByPerson () {
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
 
       tableCaptionNew( false, $personId, spaced( array( personLink( $personId, $personName ), $countryName )));
-      tableHeader( split( '\\|', "Event|Round|Place|Best||$headerAverage||$headerAllResults" ),
+      tableHeader( explode( '|', "Event|Round|Place|Best||$headerAverage||$headerAllResults" ),
                    array( 2 => 'class="r"', 3 => 'class="R"', 5 => 'class="R"', 7 => 'class="f"' ));
 
 

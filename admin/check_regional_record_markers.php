@@ -284,7 +284,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       #--- If new event, announce it.
       if( $announceEvent ){
         tableCaption( false, "$eventId $valueName" );
-        tableHeader( split( '\\|', 'Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
+        tableHeader( explode( '|', 'Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
                      array( 7 => "class='R2'" ) );
       }
 

@@ -64,10 +64,10 @@ function showBody () {
   #--- Show the details.
   tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
-  tableHeader( split( '\\|', 'Country|WCA Id|Date of birth|Gender' ), array(3 => 'class="f"'));
+  tableHeader( explode( '|', 'Country|WCA Id|Date of birth|Gender' ), array(3 => 'class="f"'));
 
   if( $year > 0 ){
-    $months = split( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
+    $months = explode( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
     $dob = "$months[$month] $day, $year";
   }
   //tableRow( array( $countryName, $chosenPersonId, $dob, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));

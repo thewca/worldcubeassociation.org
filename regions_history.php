@@ -66,7 +66,7 @@ function showRegionalRecordsHistory () {
     if( $eventId != $currentEventId ){
       $currentEventId = $eventId;
       tableCaptionNew( false, $eventId, eventLink( $eventId, $eventName ));
-      tableHeader( split( '\\|', '|Single|Average|Person|Citizen of|Competition|Result Details' ),
+      tableHeader( explode( '|', '|Single|Average|Person|Citizen of|Competition|Result Details' ),
                    array( 1 => 'class="R2"', 2 => 'class="R2"', 6 => 'class="f"' ));
     }
 

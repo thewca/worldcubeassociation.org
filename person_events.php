@@ -38,7 +38,7 @@ function showResultsByEvents () {
 
     #--- Announce the event.
     tableCaptionNew( false, $eventId, eventLink( $eventId, $eventName ));
-    tableHeader( split( '\\|', 'Competition|Round|Place|Best||Average||Result Details' ),
+    tableHeader( explode( '|', 'Competition|Round|Place|Best||Average||Result Details' ),
                  array( 2 => 'class="r"', 3 => 'class="R"', 5 => 'class="R"', 7 => 'class="f"' ));
 
     #--- Initialize.

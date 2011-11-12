@@ -103,7 +103,7 @@ function listCompetitions () {
 
   tableBegin( 'results', 5 );
   tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears, $chosenPatternHtml ? "\"$chosenPatternHtml\"" : '' )));
-  tableHeader( split( '\\|', 'Year|Date|Name|Country, City|Venue' ),
+  tableHeader( explode( '\\|', 'Year|Date|Name|Country, City|Venue' ),
                array( 4 => 'class="f"' ));
 
   foreach( $competitions as $competition ){

@@ -21,7 +21,7 @@ function tableCaptionNew ( $separate, $ids, $value ) {
   global $tableOddRow, $tableColumns;
 
   $anchor = '&nbsp;';
-  foreach( split( ' ', $ids ) as $id )
+  foreach( explode( ' ', $ids ) as $id )
     if( $id )
       $anchor .= "<a name='$id'>&nbsp;</a>";
 

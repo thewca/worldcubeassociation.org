@@ -124,7 +124,7 @@ function showView () {
 
   #--- Start Table
   tableBegin( 'results', 6 );
-  tableHeader( split( '\\|', 'Event|Time Format|Round 1|Round 2|Round 3|Round 4' ),
+  tableHeader( explode( '|', 'Event|Time Format|Round 1|Round 2|Round 3|Round 4' ),
                array( 5 => 'class="f"' ));
 
 

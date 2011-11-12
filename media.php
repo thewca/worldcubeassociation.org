@@ -80,7 +80,7 @@ function showMedia () {
   #--- Print the data.
   tableBegin( 'results', 6 );
 #  tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears )));
-  tableHeader( split( '\\|', 'Insertion Date|Competition Date|Competition|Country, City|Type|Link' ),
+  tableHeader( explode( '|', 'Insertion Date|Competition Date|Competition|Country, City|Type|Link' ),
                array( 5 => 'class="f"' ));
 
   foreach( $media as $data ){

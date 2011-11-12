@@ -234,7 +234,7 @@ function showRegs () {
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
-    $eventIdsList = array_flip( split( ' ', $eventIds ));
+    $eventIdsList = array_flip( explode( ' ', $eventIds ));
 
     if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
     else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>\n";

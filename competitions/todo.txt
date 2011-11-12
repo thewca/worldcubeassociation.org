@@ -1,3 +1,0 @@
-- Ron wants form alone so that it can be included by organizers in iframe.
-- Suggest personIds after entering name/country (like I do on persons page).
-- new prereg html: http://www.speedcubing.com/events/wc2007/prereg.html

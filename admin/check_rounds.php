@@ -313,7 +313,7 @@ function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
 
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
-      tableHeader( split( '\\|', "Person|Place|Best|$headerAverage|Place|Best|$headerAverage|" ),
+      tableHeader( explode( '|', "Person|Place|Best|$headerAverage|Place|Best|$headerAverage|" ),
                  array( 1 => 'class="r"', 2 => 'class="R"', 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="R"', 6 => 'class="R"', 7 => 'class="f"' ));
 
       $captionShowed = true;
@@ -358,7 +358,7 @@ function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
 
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
-      tableHeader( split( '\\|', "Person|Place|Best|$headerAverage|Place|Best|$headerAverage|" ),
+      tableHeader( explode( '|', "Person|Place|Best|$headerAverage|Place|Best|$headerAverage|" ),
                  array( 1 => 'class="r"', 2 => 'class="R"', 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="R"', 6 => 'class="R"', 7 => 'class="f"' ));
 
       $captionShowed = true;
@@ -440,7 +440,7 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
   ");
 
   tableBegin( 'results', 3 );
-  tableHeader( split( '\\|', "Current round|New round|" ),
+  tableHeader( explode( '|', "Current round|New round|" ),
                array( 2 => 'class="f"' ));
 
   foreach( $roundRows as $roundRow ){

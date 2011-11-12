@@ -70,7 +70,7 @@ function competitionDate ( $competition ) {
 #----------------------------------------------------------------------
   extract( $competition );
 
-  $months = split( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
+  $months = explode( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
   $date = $month ? $months[$month] : '&nbsp;';
   if( $day )
     $date .= " $day";

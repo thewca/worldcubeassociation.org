@@ -12,7 +12,7 @@ function showRegionalRecordsSeparate () {
   tableBegin( 'results', 6 );
 
   tableCaption( false, "Single" );
-  tableHeader( split( '\\|', 'Event|Result|Person|Citizen of|Competition|' ),
+  tableHeader( explode( '|', 'Event|Result|Person|Citizen of|Competition|' ),
                array( 1 => "class='R2'", 5 => 'class="f"' ));
 
   foreach( $results as $result ){
@@ -32,7 +32,7 @@ function showRegionalRecordsSeparate () {
   }
 
   tableCaption( false, "Average" );
-  tableHeader( split( '\\|', 'Event|Result|Person|Citizen of|Competition|Result Details' ),
+  tableHeader( explode( '|', 'Event|Result|Person|Citizen of|Competition|Result Details' ),
                array( 1 => "class='R2'", 5 => 'class="f"' ));
 
   $currentEventId = '';
