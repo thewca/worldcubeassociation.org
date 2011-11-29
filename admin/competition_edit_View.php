@@ -264,7 +264,7 @@ function showAnnouncement() {
     foreach( array( array( 'code' => 'WR',  'name' => 'World' ),
                     array( 'code' => 'AfR', 'name' => 'African' ),
                     array( 'code' => 'AsR', 'name' => 'Asian' ),
-                    array( 'code' => 'AuR', 'name' => 'Australian' ),
+                    array( 'code' => 'OcR', 'name' => 'Oceanian' ),
                     array( 'code' => 'ER',  'name' => 'European' ),
                     array( 'code' => 'NAR', 'name' => 'North American' ), 
                     array( 'code' => 'SAR', 'name' => 'South American' )) as $xR ){
