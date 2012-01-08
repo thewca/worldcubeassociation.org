@@ -16,16 +16,19 @@ require( '_footer.php' );
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenPersonId, $chosenSubmit;
+  global $chosenPersonId, $chosenSubmit, $chosenYear, $chosenMonth, $chosenDay;
 
   $chosenPersonId = getNormalParam( 'personId' );
-  $chosenSubmit = getBooleanParam( 'submit' );
+  $chosenSubmit   = getBooleanParam( 'submit' );
+  $chosenYear     = getHtmlParam( 'year'  );
+  $chosenMonth    = getHtmlParam( 'month' );
+  $chosenDay      = getHtmlParam( 'day'   );
 }
 
 #----------------------------------------------------------------------
 function uploadFile () {
 #----------------------------------------------------------------------
-  global $chosenPersonId, $chosenSubmit;
+  global $chosenPersonId, $chosenSubmit, $chosenYear, $chosenMonth, $chosenDay;
 
   if( !$chosenSubmit ) return;
 
@@ -37,6 +40,13 @@ function uploadFile () {
   if( ! count( $persons )){
     showErrorMessage( "Unknown person id <b>[</b>$chosenPersonId<b>]</b>" );
     return;
+  }
+
+  $person = $persons[0];
+
+  #--- Check the birth date.
+  if (( $chosenYear != $person['year'] ) or ( $chosenMonth != $person['month'] ) or ( $chosenDay != $person['day'] )){
+    $error = "Incorrect birth date.";
   }
 
   $upload_path = 'upload/';
@@ -70,9 +80,25 @@ function uploadFile () {
 }
 
 #----------------------------------------------------------------------
+function numberSelect ( $id, $label, $from, $to, $default ) {
+#----------------------------------------------------------------------
+
+  $result = "<select id='$id' name='$id' style='width:6em'>\n";
+  foreach( range( $from, $to ) as $i ){
+    if( $i == $default )
+      $result .= "<option value='$i' selected='selected'>$i</option>\n";
+    else
+      $result .= "<option value='$i'>$i</option>\n";
+  }
+  $result .= "</select>\n\n";
+  return "<label for='$id'>$label:</label> $result";  
+
+}
+
+#----------------------------------------------------------------------
 function showBody () {
 #----------------------------------------------------------------------
-  global $chosenPersonId;
+  global $chosenPersonId, $chosenYear, $chosenMonth, $chosenDay;
 
 ?>
 
@@ -87,9 +113,14 @@ website. This may take a few days.</p>
 <li>Formats accepted : jpg, gif and png</li></ul>
 
 <form method="POST" action="person_set.php" enctype="multipart/form-data">
-<? echo "<input type='hidden' id='personId' name='personId' value='$chosenPersonId'>"; ?>
-  File : <input type="file" id="picture" name="picture">
-  <input type="submit" id="submit" name="submit" value="Submit">
+<? echo "<input type='hidden' id='personId' name='personId' value='$chosenPersonId' />"; ?>
+  File: <input type="file" id="picture" name="picture" /><br /><br />
+<?  echo "Enter your birth date: ";
+    echo numberSelect( "day", "Day", 1, 31, $chosenDay );
+    echo numberSelect( "month", "Month", 1, 12, $chosenMonth );
+    echo numberSelect( "year", "Year", date("Y"), date("Y")-100, $chosenYear );
+?>
+  <br/><input type="submit" id="submit" name="submit" value="Submit" /><br/>
 </form><br />
 
 <p>Go <a href="p.php?i=<? echo "$chosenPersonId"; ?> ">back</a></p>
