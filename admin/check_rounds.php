@@ -554,19 +554,26 @@ function checkEvents () {
     $arrayEventsCompetition[$id] = getEventSpecsEventIds ( $eventSpecs );
   }
 
+  $ok = true;
   #--- Compare events.
-  foreach( array_keys($arrayEventsResults) as $competitionId ){
+  if( $arrayEventsResults ) foreach( array_keys($arrayEventsResults) as $competitionId ){
     # Sort tables to compare them.
     sort($arrayEventsResults[$competitionId], SORT_STRING);
     sort($arrayEventsCompetition[$competitionId], SORT_STRING);
 
     if( $arrayEventsResults[$competitionId] != $arrayEventsCompetition[$competitionId] ){
+      $ok = false;
       echo "<p>Update competition $competitionId.<br />\n";
-      echo "  Old events list: " . implode(' ', $arrayEventsCompetition[$competitionId]) . "<br />\n";
-      $newEvents = implode(' ', $arrayEventsResults[$competitionId]);
-      echo "  New events list: " . $newEvents . "</p>\n";
-      dbCommand( "UPDATE Competitions SET eventSpecs='$newEvents' WHERE id='$competitionId'" );
+      $intersect = array_intersect( $arrayEventsResults[$competitionId], $arrayEventsCompetition[$competitionId] );
+      $resultsOnly = array_diff( $arrayEventsResults[$competitionId], $arrayEventsCompetition[$competitionId] );
+      $competitionOnly = array_diff( $arrayEventsCompetition[$competitionId], $arrayEventsResults[$competitionId] );
+      echo "  Old events list: ".implode(' ', $intersect)." <b style='color:#F00'>".implode(' ',$competitionOnly)."</b><br />\n";
+      echo "  New events list: ".implode(' ', $intersect)." <b style='color:#3C3'>".implode(' ',$resultsOnly)."</b><br />\n";
+      dbCommand( "UPDATE Competitions SET eventSpecs='".implode(' ', $arrayEventsResults[$competitionId])."' WHERE id='$competitionId'" );
     }
   }
+
+  noticeBox2( $ok, 'No mistakes found in the database', 'Some errors were fixed, you *should* check what has been updated' );
+
 }
 ?>
