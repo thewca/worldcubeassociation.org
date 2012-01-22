@@ -59,6 +59,9 @@ function showPages () {
   showPage( 'validate_media',
             "Validates media that have been submitted." );
 
+  showPage( 'change_person',
+            'Fix or update a person\'s data.' );
+
   showPage( 'add_local_names',
             "Add local names to persons." );
 

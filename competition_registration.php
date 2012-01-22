@@ -193,12 +193,13 @@ function showField ( $fieldSpec ) {
   if( $type == 'country' ){
   #---------------------
     list( $label, $default ) = explode( ' ', $rest, 2 );
+
     $fieldHtml = "<select id='$id' name='$id'>\n";
     $countries = dbQuery( "SELECT * FROM Countries" );
     foreach( $countries as $country ){
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
-		if( $countryId == $default )
+      if( $countryId == $default )
         $fieldHtml .= "  <option value=\"$countryId\" selected='selected' >$countryName</option>\n";
       else
         $fieldHtml .= "  <option value=\"$countryId\">$countryName</option>\n";
