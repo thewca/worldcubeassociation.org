@@ -5,7 +5,7 @@ function specifyModel () {
 #----------------------------------------------------------------------
   global $modelSpecs;
   
-  $patternLink = "\[\{  [^}]+  }\{  (http:|mailto:)[^}]+  }]";
+  $patternLink = "\[\{  [^}]+  }\{  (https?:|mailto:)[^}]+  }]";
   $patternLinkList = "^($patternLink\s*)*$";
   $patternTextWithLinks = "^  [^{}]*  ($patternLink  [^{}]*)*  $";
     
