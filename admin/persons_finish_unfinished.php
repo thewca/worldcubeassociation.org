@@ -208,7 +208,7 @@ function getMostSimilarPersonsMax ( $name, $countryId, $persons, $max ) {
   #--- Compute similarities to all persons.
   foreach( $persons as $other ) {
     extract( $other, EXTR_PREFIX_ALL, 'other' );
-    similar_text( $name, $other_name, $similarity );
+    similar_text( extractRomanName( $name ), extractRomanName( $other_name ), $similarity );
     $other['similarity'] = $similarity;
     similar_text( $countryId, $other_countryId, $similarity );
     $other['countrySimilarity'] = $similarity;
