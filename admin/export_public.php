@@ -20,6 +20,8 @@ if( $chosenExport ){
                        WHERE    competition.id=competitionId AND event.id=eventId AND round.id=roundId
                        ORDER BY competition.year, competition.month, competition.day, competition.id,
                                 event.rank, round.rank, pos, average, best, personName',
+    'RanksSingle'  => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksSingle',
+    'RanksAverage' => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksAverage',
     'Rounds'       => '*',
     'Events'       => '*',
     'Formats'      => '*',
