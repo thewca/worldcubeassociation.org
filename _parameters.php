@@ -40,10 +40,10 @@
 // Is magic quotes on?
 if( get_magic_quotes_gpc() ){
   // Yes? Strip the added slashes
-  $_REQUEST = array_map( 'stripslashes', $_REQUEST );
-  $_GET = array_map( 'stripslashes', $_GET );
-  $_POST = array_map( 'stripslashes', $_POST );
-  $_COOKIE = array_map( 'stripslashes', $_COOKIE );
+  $_REQUEST = array_map_recursive( 'stripslashes', $_REQUEST );
+  $_GET = array_map_recursive( 'stripslashes', $_GET );
+  $_POST = array_map_recursive( 'stripslashes', $_POST );
+  $_COOKIE = array_map_recursive( 'stripslashes', $_COOKIE );
 }
 
 $rawParametersDontUseOutsideParametersModule = $_REQUEST;
@@ -133,6 +133,16 @@ function debug () {
 #----------------------------------------------------------------------
 
   return getRawParamThisShouldBeAnException( 'debug5926' );
+}
+
+#----------------------------------------------------------------------
+function array_map_recursive( $fn, $arr ) {
+#----------------------------------------------------------------------
+  $rarr = array();
+  foreach ($arr as $k => $v) {
+    $rarr[$k] = is_array($v) ? array_map_recursive($fn, $v) : call_user_func($fn, $v); // or call_user_func($fn, $v)
+  }
+  return $rarr;
 }
 
 ?>

@@ -23,6 +23,7 @@ function analyzeChoices () {
   $chosenCompetitionId = getNormalParam( 'competitionId' );
   $chosenPassword = getNormalParam( 'password' );
   $chosenSubmit = getBooleanParam( 'submit' );
+
 }
 
 #----------------------------------------------------------------------
@@ -82,9 +83,9 @@ function checkCountrySpecifications () {
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   foreach( $regIds as $regId ){
     $regId = $regId['id'];
-    if( $data["reg${regId}edit"] ){
+    if( $data['reg'][$regId]['edit'] ){
 
-      $countryId = $data["reg${regId}countryId"];
+      $countryId = $data['reg'][$regId]['countryId'];
       if( !isset($allCountriesIds[$countryId])) $dataError["reg${regId}countryId"] = true;
     }
   }
@@ -97,7 +98,7 @@ function storeData () {
 
   if( !$chosenSubmit )
     return;
-  
+
   #--- Initially assume we'll fail.
   $dataSuccessfullySaved = false;
   
@@ -122,35 +123,35 @@ function storeData () {
 
     $regId = $regId['id'];
     #--- Delete registration
-    if( $data["reg${regId}delete"] ){
+    if( $data['reg'][$regId]['delete'] ){
       dbCommand( "DELETE FROM Preregs WHERE id='$regId'" );
     }
 
     else {
 
       #--- Edit registration
-      if( $data["reg${regId}edit"] ){
+      if( $data['reg'][$regId]['edit'] ){
         $queryEvent = '';
 
         #--- Build events query
         foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-          if( $data["reg${regId}E$eventId"] )
+          if( $data['reg'][$regId]["E$eventId"] )
             $queryEvent .= "$eventId ";
         }
         $queryEvent = rtrim( $queryEvent ); # Remove last space.
 
-        $personId = mysql_real_escape_string( $data["reg${regId}personId"] );
-        $name = mysql_real_escape_string( $data["reg${regId}name"] );
-        $countryId = mysql_real_escape_string( $data["reg${regId}countryId"] );
+        $personId = mysql_real_escape_string( $data['reg'][$regId]['personId'] );
+        $name = mysql_real_escape_string( $data['reg'][$regId]['name'] );
+        $countryId = mysql_real_escape_string( $data['reg'][$regId]['countryId'] );
 
-        echo "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'<br/>\n";
+        # echo "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'<br/>\n";
 
         #--- Query
         dbCommand( "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'" );
       }
 
       #--- Accept registration
-      if( $data["reg${regId}accept"] )
+      if( $data['reg'][$regId]['accept'] )
         dbCommand( "UPDATE Preregs SET status='a' WHERE id='$regId'" );
 
     }
@@ -175,7 +176,7 @@ function startForm () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenPassword;
     
-  echo "<form method='post' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=" . rand() . "'>\n";
+  echo "<form method='post' enctype='multipart/form-data' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=" . rand() . "'>\n";
 }
 
 #----------------------------------------------------------------------
@@ -239,18 +240,18 @@ function showRegs () {
     if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
     else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>\n";
     else if( $status == 'a' ) echo "<tr style='background-color:#CCFFCC'>\n";
-    echo "  <td><input type='checkbox' id='reg${id}accept' name='reg${id}accept' value='1' /></td>\n";
-    echo "  <td><input type='checkbox' id='reg${id}delete' name='reg${id}delete' value='1' /></td>\n";
-    echo "  <td><input type='checkbox' id='reg${id}edit' name='reg${id}edit' value='1' /></td>\n";
-    echo "  <td><input type='text' id='reg${id}personId' name='reg${id}personId' value='$personId' size='10' maxlength='10' /></td>\n";
-    echo "  <td><input type='text' id='reg${id}name' name='reg${id}name' value='$name' size='25' /></td>\n";
-    echo "  <td><input type='text' id='reg${id}countryId' name='reg${id}countryId' value='$countryId' size='15' /></td>\n";    
+    echo "  <td><input type='checkbox' id='reg${id}accept' name='reg[${id}][accept]' value='1' /></td>\n";
+    echo "  <td><input type='checkbox' id='reg${id}delete' name='reg[${id}][delete]' value='1' /></td>\n";
+    echo "  <td><input type='checkbox' id='reg${id}edit' name='reg[${id}][edit]' value='1' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}personId' name='reg[${id}][personId]' value='$personId' size='10' maxlength='10' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}name' name='reg[${id}][name]' value='$name' size='25' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}countryId' name='reg[${id}][countryId]' value='$countryId' size='15' /></td>\n";    
 
     foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
       if( isset( $eventIdsList[$eventId]))
-        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n";
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' checked='checked' /></td>\n";
       else
-        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' /></td>\n";
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' /></td>\n";
         /* default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break; */
     }
     echo "</tr>\n";
