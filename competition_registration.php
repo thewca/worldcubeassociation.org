@@ -195,7 +195,7 @@ function showField ( $fieldSpec ) {
     list( $label, $default ) = explode( ' ', $rest, 2 );
 
     $fieldHtml = "<select id='$id' name='$id'>\n";
-    $countries = dbQuery( "SELECT * FROM Countries" );
+    $countries = dbQuery( "SELECT * FROM Countries ORDER BY name" );
     foreach( $countries as $country ){
       $countryId   = $country['id'  ];
       $countryName = $country['name'];
