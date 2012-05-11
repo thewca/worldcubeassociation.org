@@ -98,7 +98,7 @@ function fillRegistration () {
   $registrationSheet->freezePane( 'A4' );
 
 
-  $regs = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
+  $regs = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId' ORDER BY name");
   $regsCount = count( $regs );
 
   #--- Fill worksheet header.
@@ -196,7 +196,7 @@ function fillEvents () {
   global $chosenFormat, $chosenUnit, $chosenRound;
 
   $eventIdsList = getEventSpecsEventIds( $data['eventSpecs'] );
-  $persons = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId'");
+  $persons = dbQuery("SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId' ORDER BY name");
 
   foreach( $eventIdsList as $eventId ) {
     foreach( array( 1, 2, 3, 4) as $roundNumber ) {
