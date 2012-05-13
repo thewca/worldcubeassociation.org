@@ -131,11 +131,13 @@ function checkSpacesInPersons () {
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $name ));
-    $regexForBad = preg_replace( '/\s+/', ' +', $name );
-    $action = "UPDATE Persons SET name=\"$goodPersonName\" WHERE name REGEXP '$regexForBad'";
+    $goodPersonName = mysqlEscape( $goodPersonName );
+    $badPersonName = mysqlEscape( $name );
+    $action = "UPDATE Persons SET name=\"$goodPersonName\" WHERE name=\"$badPersonName\"";
     tableRow( array(
       visualize( $name ),
       visualize( $goodPersonName ),
+      "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
       highlight( $action )
     ));
   }
@@ -149,7 +151,7 @@ function checkSpacesInResults () {
   echo "<hr />";
   
   $bads = dbQuery("
-    SELECT personName FROM Results
+    SELECT DISTINCT personName FROM Results
     WHERE personName like ' %'
        OR personName like '% '
        OR personName like '%  %'
@@ -168,15 +170,14 @@ function checkSpacesInResults () {
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $personName ));
-    $regexForBad = preg_replace( '/\s+/', ' +', $personName );
     $goodPersonName = mysqlEscape( $goodPersonName );
-    $regexForBad = mysqlEscape( $regexForBad );
-    $action = "UPDATE Results SET personName=\"$goodPersonName\" WHERE personName REGEXP '$regexForBad'";
+    $badPersonName = mysqlEscape( $personName );
+    $action = "UPDATE Results SET personName=\"$goodPersonName\" WHERE personName=\"$badPersonName\"";
     tableRow( array(
       visualize( $personName ),
       visualize( $goodPersonName ),
       "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
-      ( $action ),
+      highlight( $action ),
     ));
   }
   tableEnd();
