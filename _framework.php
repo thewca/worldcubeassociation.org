@@ -8,6 +8,7 @@ require '_tables.php';
 require '_links.php';
 require '_values.php';
 require '_cache.php';
+require '_map.php';
 
 #----------------------------------------------------------------------
 

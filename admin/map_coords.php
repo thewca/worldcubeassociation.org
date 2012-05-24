@@ -4,13 +4,15 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-ob_start(); require( '../_framework.php' ); ob_end_clean();
+require( '../_header.php' );
 
 analyzeChoices();
 if( checkCompetition() ){ 
   saveCoords();
   showMap();
 }
+
+require( '../_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
@@ -78,99 +80,20 @@ function showMap () {
     $longitude = -117.259605;
   }
 
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title>World Cube Association - Official Results</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <meta name="author" content="Ron van Bruchem, Stefan Pochmann, Clément Gallet, Josef Jelinek" />
-    <meta name="description" content="Official World Cube Association Competition Results" />
-    <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
-    <link rel="shortcut icon" href="<?= pathToRoot() ?>images/wca.ico" />
-    <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/general.css" />
-    <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAGU1lxRKjKY2msINWGWVpGBQbYy8YqffdsRVCI9c6jAKj6rG0nxSHbmoN9OgZk4LBxdzm88fVVb-Ncg" type="text/javascript"></script>
-    <script type="text/javascript">
-    var geocoder;
-	 var center;
-	 var marker;
-    var map;
-
-    function load() {
-      if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById("map"));
-        map.addControl(new GSmallMapControl());
-        map.addControl(new GMapTypeControl());
-        //map.addControl(new GOverviewMapControl());
-        map.setCenter(new GLatLng(20, 8), 2);
-        geocoder = new GClientGeocoder();
-        center = new GLatLng(<?php echo $latitude ?>, <?php echo $longitude ?>);
-        marker = new GMarker(center, {draggable: true});
-        GEvent.addListener(marker, "dragend", fillForm);
-        map.addOverlay(marker);
-
-      }
-    }
-
-    function fillForm() {
-      var latlen = new GLatLng(0, 0);
-      latlen = marker.getLatLng();
-      document.forms[0].latitude.value = parseInt( latlen.lat() * 1000000 );
-      document.forms[0].longitude.value = parseInt( latlen.lng() * 1000000 );
-	 }
-
-
-    function addAddressToMap(response) {
-      map.clearOverlays();
-      if (!response || response.Status.code != 200) {
-        alert("Sorry, we were unable to geocode that address");
-      } else {
-        place = response.Placemark[0];
-        point = new GLatLng(place.Point.coordinates[1],
-        place.Point.coordinates[0]);
-		  marker.setLatLng(point);
-		  fillForm();
-        map.addOverlay(marker);
-      }
-    }
-
-
-    function showLocation() {
-      var address = document.forms[0].add.value;
-      geocoder.getLocations(address, addAddressToMap);
-    }
-    </script>
-  </head>
-  <body onload="load()" onunload="GUnload()">
-  <center>
-<?php
+  echo "<center>\n";
 $address = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', htmlEntities( $data['venue'], ENT_QUOTES ));
 if( $data['venueAddress'] ) $address .= ", " . htmlEntities( $data[venueAddress], ENT_QUOTES);
 $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[countryId]";
-?>
 
+  displayGeocode( 800, 480, $address, $latitude, $longitude );
 
-	 <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
-    Address : <input type="text" id="add" name="add" value="<?php echo $address ?>" size="100" />
-    <input type="button" name="search" value="Search" onclick="showLocation()" />
-    <div id="map" style="width: 800px; height: 480px"></div>
-    <input type="hidden" name="competitionId" value="<?php echo $chosenCompetitionId ?>" />
-    <input type="hidden" name="rand" value="<?php echo rand() ?>" />
-    Latitude : <input type="text" id="latitude" name="latitude" value="" size="20" />
-    Longitude : <input type="text" id="longitude" name="longitude" value="" size="20" />
-    <input type="submit" name="save" value="Save" />
-    </form>
-  <?php
-    echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
+  echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
   ?>
     </center>
   </body>
 </html>
 
-<?php
+<?
 
 }
 

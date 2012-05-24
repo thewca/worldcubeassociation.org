@@ -5,17 +5,9 @@
 
 $currentSection = 'competitions';
 
-require( '_framework.php' );
-analyzeChoices();
-
-if( $chosenMap ){
-  
-  require( 'map.php' );
-  exit;
-}
-
 require( '_header.php' );
 
+analyzeChoices();
 offerChoices();
 listCompetitions();
 
@@ -55,7 +47,7 @@ function offerChoices () {
 }
 
 #----------------------------------------------------------------------
-function getCompetitions ( $for = 'list' ) {
+function getCompetitions ( $sortList ) {
 #----------------------------------------------------------------------
   global $chosenEventId, $chosenRegionId, $chosenPatternMysql;
 
@@ -69,7 +61,7 @@ function getCompetitions ( $for = 'list' ) {
     $nameCondition .= " AND (competition.cellName like '%$namePart%' OR
                              cityName             like '%$namePart%' OR
                              venue                like '%$namePart%')";
-  $orderBy = ($for == 'list') ? 'year DESC, month DESC, day DESC' : 'longitude, year, month, day';
+  $orderBy = $sortList ? 'year DESC, month DESC, day DESC' : 'longitude, year, month, day';
 
   #--- Get data of the (matching) competitions.
   $competitions = dbQuery("
@@ -98,33 +90,42 @@ function getCompetitions ( $for = 'list' ) {
 function listCompetitions () {
 #----------------------------------------------------------------------
   global $chosenEventId, $chosenYears, $chosenRegionId, $chosenPatternHtml;
+  global $chosenList, $chosenMap;
+  global $chosenCompetitions;
 
-  $competitions = getCompetitions();
+  $chosenCompetitions = getCompetitions( $chosenList );
 
   tableBegin( 'results', 5 );
   tableCaption( false, spaced(array( eventName($chosenEventId), chosenRegionName(), $chosenYears, $chosenPatternHtml ? "\"$chosenPatternHtml\"" : '' )));
-  tableHeader( explode( '\\|', 'Year|Date|Name|Country, City|Venue' ),
-               array( 4 => 'class="f"' ));
 
-  foreach( $competitions as $competition ){
-    extract( $competition );
+  if( $chosenList ){ 
 
-    if( $previousYear  &&  $year != $previousYear )
-      tableRowEmpty();
-    $previousYear = $year;
+    tableHeader( explode( '\\|', 'Year|Date|Name|Country, City|Venue' ),
+                 array( 4 => 'class="f"' ));
 
-    $isPast = wcaDate( 'Ymd' ) > (10000*$year + 100*$month + $day);
+    foreach( $chosenCompetitions as $competition ){
+      extract( $competition );
 
-    tableRow( array(
-      $year,
-      competitionDate( $competition ),
-      $isPast ? competitionLink( $id, $cellName ) : (( $showPreregForm || $showPreregList ) ? competitionLinkClassed( 'rg', $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName )),
-      "<b>$countryName</b>, $cityName",
-      processLinks( $venue )
-    ));
+      if( $previousYear  &&  $year != $previousYear )
+        tableRowEmpty();
+      $previousYear = $year;
+
+      $isPast = wcaDate( 'Ymd' ) > (10000*$year + 100*$month + $day);
+
+      tableRow( array(
+        $year,
+        competitionDate( $competition ),
+        $isPast ? competitionLink( $id, $cellName ) : (( $showPreregForm || $showPreregList ) ? competitionLinkClassed( 'rg', $id, $cellName ) : competitionLinkClassed( 'fc', $id, $cellName )),
+        "<b>$countryName</b>, $cityName",
+        processLinks( $venue )
+      ));
+    }
   }
 
   tableEnd();
+
+  if( $chosenMap ) 
+    displayMap(600, 480);
 }
 
 ?>
