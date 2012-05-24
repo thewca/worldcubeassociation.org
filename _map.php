@@ -56,7 +56,7 @@ function initGeocode ( $latitude, $longitude ){
 
 
 function initMap ( $width, $height ) {
-  $width = ($width == 0) ? "${width}%" : "${width}px";
+  $width = ($width == 0) ? "100%" : "${width}px";
   echo "<div id='map' style='width: $width; height: ${height}px'></div>\n";
 
 ?>

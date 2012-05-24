@@ -100,7 +100,7 @@ function listCompetitions () {
 
   if( $chosenList ){ 
 
-    tableHeader( explode( '\\|', 'Year|Date|Name|Country, City|Venue' ),
+    tableHeader( explode( '|', 'Year|Date|Name|Country, City|Venue' ),
                  array( 4 => 'class="f"' ));
 
     foreach( $chosenCompetitions as $competition ){
@@ -125,7 +125,7 @@ function listCompetitions () {
   tableEnd();
 
   if( $chosenMap ) 
-    displayMap(600, 480);
+    displayMap(0, 480);
 }
 
 ?>
