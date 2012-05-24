@@ -29,6 +29,9 @@ function analyzeChoices () {
   if ( ! $chosenList && ! $chosenMap ){
     $chosenYears = "current";
   }
+  if ( ! $chosenMap )
+    $chosenList = true;
+
 }
 
 #----------------------------------------------------------------------
