@@ -76,8 +76,6 @@ function alterTableCompetitions () {
   dbCommand("ALTER TABLE Competitions
                DROP COLUMN `showResults`");
 
-ALTER [COLUMN] col_name {SET DEFAULT literal
-
   #--- Generate admin passwords for all competitions.
   reportAction( "Competitions", "Generate admin passwords" );
   $competitions = dbQuery( "SELECT id FROM Competitions" );
