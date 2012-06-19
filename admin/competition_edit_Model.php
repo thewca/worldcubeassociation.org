@@ -156,7 +156,7 @@ function checkData () {
     return;
 
   checkRegularFields();
-  checkEventSpecifications();
+  //checkEventSpecifications();
 }
 
 #----------------------------------------------------------------------
@@ -178,6 +178,7 @@ function checkRegularFields () {
   }
 }
 
+/*
 #----------------------------------------------------------------------
 function checkEventSpecifications () {
 #----------------------------------------------------------------------
@@ -186,6 +187,7 @@ function checkEventSpecifications () {
   foreach( getAllEvents() as $event ){
     extract( $event );
 
+
     if( ! preg_match( "/^(|\d+)$/", $data["personLimit$id"] ))
       $dataError["event$id"] = true;
 
@@ -193,6 +195,7 @@ function checkEventSpecifications () {
       $dataError["event$id"] = true;
   }
 }
+*/
 
 #----------------------------------------------------------------------
 function storeData () {
@@ -218,12 +221,16 @@ function storeData () {
 /*      if ( preg_match( "/^(\d+):(\d+)$/", $data["timeLimit$id"], $matches ))
         $data["timeLimit$id"] = (int)$matches[1] * 60 + (int)$matches[2];*/
 
-      $data["qualify$id"] = $data["qualify$id"] ? 1 : 0;
+
+      //$data["qualify$id"] = $data["qualify$id"] ? 1 : 0;
 
       if( $eventSpecs )
-        $eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
+        //$eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
+        $eventSpecs .= " $id";
       else
-        $eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
+        //$eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
+        $eventSpecs = "$id";
+
     }
   }
 

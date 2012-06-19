@@ -129,7 +129,8 @@ function showEventSpecifications () {
   
   #--- Start the table.
   echo "<table border='1' cellspacing='0' cellpadding='4'>";
-  echo "<tr style='background:#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td><td>Qualifications Time</td></tr>\n";
+  //echo "<tr style='background:#CCCCFF'><td>Event</td><td>Offer</td><td>Competitors</td><td>Time</td><td>Single</td><td>Average</td><td>Qualifications</td><td>Qualifications Time</td></tr>\n";
+  echo "<tr style='background:#CCCCFF'><td>Event</td><td>Offer</td></tr>\n";
   
   #--- Get the existing specs.
   $eventSpecs = $data['eventSpecs'];
@@ -139,16 +140,19 @@ function showEventSpecifications () {
     extract( $event );
 
     $offer            = $data["offer$id"] ? "checked='checked'" : "";
+    /*
     $personLimit      = $data["personLimit$id"];
     $timeLimit        = $data["timeLimit$id"];
     $timeSingle       = $data["timeFormat$id"] ==  's' ? "checked='checked'" : "";
     $timeAverage      = $data["timeFormat$id"] ==  'a' ? "checked='checked'" : "";
     $qualify          = $data["qualify$id"] ? "checked='checked'" : "";
     $qualifyTimeLimit = $data["qualifyTimeLimit$id"];
+    */
     
     echo "<tr>\n";
     echo "  <td><b>$cellName</b></td>\n";
     echo "  <td align='center'><input id='offer$id' name='offer$id' type='checkbox' $offer /></td>\n";
+    /*
     echo "  <td align='center'><input id='personLimit$id' name='personLimit$id' type='text' size='6' style='background:#FF8' value='$personLimit' /></td>\n";
     echo "  <td align='center'><input id='timeLimit$id' name='timeLimit$id' type='text' size='6' style='background:#FF8' value='$timeLimit' /></td>\n";
     echo "  <td align='center'><input id='timeFormatSingle$id' name='timeFormat$id' type='radio' value='s' $timeSingle /></td>\n";
@@ -158,6 +162,7 @@ function showEventSpecifications () {
       echo "  <td></td>\n";
     echo "  <td align='center'><input id='qualify$id' name='qualify$id' type='checkbox' $qualify /></td>\n";
     echo "  <td align='center'><input id='qualifyTimeLimit$id' name='qualifyTimeLimit$id' type='text' size='6' style='background:#FF8' value='$qualifyTimeLimit' /></td>\n";
+    */
     echo "</tr>\n";
   }
   
