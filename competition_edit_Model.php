@@ -78,7 +78,7 @@ function specifyModel () {
       'Year',
       'Year when the competition takes place (number with four digits).',
       "2006",
-      '^\d{4}$'
+      '^(0|\d{4})$'
     ),
     array (
       "line",
@@ -86,7 +86,7 @@ function specifyModel () {
       'Month',
       'What month does the competition start? (number in 1..12)',
       "9",
-      '^([1-9]|1[0-2])$'
+      '^([0-9]|1[0-2])$'
     ),
     array (
       "line",
@@ -94,7 +94,7 @@ function specifyModel () {
       'Day',
       'What day does the competition start? (number in 1..31)',
       "23",
-      '^([1-9]|[1-3]\d)$'
+      '^([0-9]|[1-3]\d)$'
     ),
     array (
       "line",
@@ -102,7 +102,7 @@ function specifyModel () {
       'End-Month',
       'What month does the competition end? (number in 1..12)',
       "9",
-      '^([1-9]|1[0-2])$'
+      '^([0-9]|1[0-2])$'
     ),
     array (
       "line",
@@ -110,7 +110,7 @@ function specifyModel () {
       'End-Day',
       'What day does the competition end? (number in 1..31)',
       "24",
-      '^([1-9]|[1-3]\d)$'
+      '^([0-9]|[1-3]\d)$'
     ),
     array (
       "text",
@@ -151,11 +151,15 @@ function specifyModel () {
 function checkData () {
 #----------------------------------------------------------------------
   global $chosenSubmit;
+  global $isAdmin, $isConfirmed;
 
   if( !$chosenSubmit )
     return;
 
-  checkRegularFields();
+  if( $isAdmin || (! $isConfirmed ))
+    checkRegularFields();
+
+  checkCountrySpecifications();
   //checkEventSpecifications();
 }
 
@@ -175,6 +179,25 @@ function checkRegularFields () {
     #--- Check the field.
     if( ! preg_match( "/$pattern/x", $data[$id] ))
       $dataError[$id] = true;
+  }
+}
+
+#----------------------------------------------------------------------
+function checkCountrySpecifications () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId, $data, $dataError;
+
+  $countries = dbQuery("SELECT * FROM Countries");
+    foreach( $countries as $country) $allCountriesIds[$country['id']] = 1;
+
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
+  foreach( $regIds as $regId ){
+    $regId = $regId['id'];
+    if( $data['reg'][$regId]['edit'] ){
+
+      $countryId = $data['reg'][$regId]['countryId'];
+      if( !isset($allCountriesIds[$countryId])) $dataError["reg${regId}countryId"] = true;
+    }
   }
 }
 
@@ -200,46 +223,107 @@ function checkEventSpecifications () {
 #----------------------------------------------------------------------
 function storeData () {
 #----------------------------------------------------------------------
-  global $data, $dataError, $dataSuccessfullySaved, $chosenSubmit;
+  global $data, $dataError, $dataSuccessfullySaved, $chosenSubmit, $chosenConfirm, $isConfirmed;
+  global $isAdmin, $chosenCompetitionId;
 
   if( !$chosenSubmit )
     return;
   
   #--- Initially assume we'll fail.
   $dataSuccessfullySaved = false;
-  
+
   #--- If errors were found, don't store and return.
   if( $dataError )
     return;
 
+  #####----- Validation
+
+  if( $chosenConfirm ){
+    dbCommand("UPDATE Competitions
+               SET isConfirmed='1'
+                WHERE id='$chosenCompetitionId'
+    ");
+    $isConfirmed = true;
+  }
+
+  #####----- Registration
+
+  #-- Building show*
+  $showPreregForm = $data["showPreregForm"] ? 1 : 0;
+  $showPreregList = $data["showPreregList"] ? 1 : 0;
+
+  #--- Store data
+  dbCommand("UPDATE Competitions
+               SET showPreregForm='$showPreregForm',
+                   showPreregList='$showPreregList'
+                WHERE id='$chosenCompetitionId'
+  ");
+
+  #--- Store registrations
+  $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
+  foreach( $regIds as $regId ){
+
+    $regId = $regId['id'];
+    #--- Delete registration
+    if( $data['reg'][$regId]['delete'] ){
+      dbCommand( "DELETE FROM Preregs WHERE id='$regId'" );
+    }
+
+    else {
+
+      #--- Edit registration
+      if( $data['reg'][$regId]['edit'] ){
+        $queryEvent = '';
+
+        #--- Build events query
+        foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
+          if( $data['reg'][$regId]["E$eventId"] )
+            $queryEvent .= "$eventId ";
+        }
+        $queryEvent = rtrim( $queryEvent ); # Remove last space.
+
+        $personId = mysql_real_escape_string( $data['reg'][$regId]['personId'] );
+        $name = mysql_real_escape_string( $data['reg'][$regId]['name'] );
+        $countryId = mysql_real_escape_string( $data['reg'][$regId]['countryId'] );
+
+        # echo "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'<br/>\n";
+
+        #--- Query
+        dbCommand( "UPDATE Preregs SET name='$name', personId='$personId', countryId='$countryId', eventIds='$queryEvent' WHERE id='$regId'" );
+      }
+
+      #--- Accept registration
+      if( $data['reg'][$regId]['accept'] )
+        dbCommand( "UPDATE Preregs SET status='a' WHERE id='$regId'" );
+
+    }
+  } 
+
+  $dataSuccessfullySaved = true;
+
+  if(( ! $isAdmin ) && $isConfirmed ) return;
+
+  $dataSuccessfullySaved = false;
+
+  ####----- Competition
+
   #-- Building eventSpecs
   $eventSpecs = '';
-  foreach( getAllEvents() as $event ){
-    extract($event);
+  foreach( getAllEventIds() as $eventId ){
 
-    if ( $data["offer$id"] ){
-/*      if ( preg_match( "/^(\d+):(\d+)$/", $data["timeLimit$id"], $matches ))
-        $data["timeLimit$id"] = (int)$matches[1] * 60 + (int)$matches[2];*/
-
-
-      //$data["qualify$id"] = $data["qualify$id"] ? 1 : 0;
-
+    if ( $data["offer$eventId"] ){
       if( $eventSpecs )
-        //$eventSpecs .= " $id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
-        $eventSpecs .= " $id";
+        $eventSpecs .= " $eventId";
       else
-        //$eventSpecs = "$id=" . $data["personLimit$id"] . "/" . $data["timeLimit$id"] . "/" . $data["timeFormat$id"] . "/" . $data["qualify$id"] . "/" . $data["qualifyTimeLimit$id"];
-        $eventSpecs = "$id";
-
+        $eventSpecs = "$eventId";
     }
   }
 
   #-- Building show*
   $data["showAtAll"] = $data["showAtAll"] ? 1 : 0;
-  $data["showResults"] = $data["showResults"] ? 1 : 0;
 
   #--- Store data
-  foreach( $data as $key => $value ) $data[$key] = mysql_real_escape_string( $value );
+  foreach( $data as $key => $value ) if( gettype($value) == 'string' ) $data[$key] = mysql_real_escape_string( $value );
   extract($data);
 
   dbCommand("UPDATE Competitions
@@ -260,16 +344,15 @@ function storeData () {
                    venueDetails='$venueDetails',
                    website='$website',
                    cellName='$cellName',
-                   showAtAll='$showAtAll',
-                   showResults='$showResults'
+                   showAtAll='$showAtAll'
                 WHERE id='$competitionId'
   ");
 
-  foreach( $data as $key => $value ) $data[$key] = stripslashes( $value );
- 
+  foreach( $data as $key => $value ) if( gettype($value) == 'string' ) $data[$key] = stripslashes( $value );
+
   #--- Building the caches again
-  require( '_helpers.php' );
-  ob_start(); computeCachedDatabase( '../cachedDatabase.php' ); ob_end_clean();
+  require( 'admin/_helpers.php' );
+  ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
 
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;

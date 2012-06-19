@@ -10,7 +10,7 @@ function handleRedirects () {
   #--- Fetch competition password if needed
   if( $registration || $edit || $createNew || $clone ){
     ob_start(); require( '../_framework.php' ); ob_end_clean();
-    $password = getCompetitionPassword( $competitionId );
+    $password = getCompetitionPassword( $competitionId, $edit );
   }
 
   #--- Create new competition (possibly cloning an old one)
@@ -37,15 +37,13 @@ function handleRedirects () {
 
     #--- Forward to edit page.
     $competitionId = $newCompetitionId;
-    $password = getCompetitionPassword( $competitionId );
     $edit = true;
+    $password = getCompetitionPassword( $competitionId, $edit );
   }
 
   #--- Shall we go somewhere?
-  if( $registration )
+  if( $registration || $edit )
     $goal = "../competition_edit.php?competitionId=$competitionId&password=$password&rand=" . rand();
-  if( $edit )
-    $goal = "competition_edit.php?competitionId=$competitionId&rand=" . rand();
   if( $results )
     $goal = "../competition.php?competitionId=$competitionId";
 
@@ -66,8 +64,8 @@ analyzeChoices();
 adminHeadline( 'Manage competitions' );
 showDescription();
 showChoices();
-if( $chosenNewPassword )
-  setNewPassword();
+if( $chosenNewAdminPassword || $chosenNewOrganiserPassword )
+  setNewPassword( $chosenNewAdminPassword );
 
 require( '../_footer.php' );
 
@@ -77,10 +75,11 @@ function showDescription () {
   global $errors;
 
   echo "<dl>\n";
-  echo "<dt>Registration</dt><dd>Manage the registered competitors of a competition. You should give the result URL of this to competition organizers.</dd>\n";
-  echo "<dt>Edit</dt><dd>Edit the competition configuration data, intended for us admins only.</dd>\n";
+  echo "<dt>Organiser View</dt><dd>You should give the result URL of this to competition organisers. They have to enter the competition's details and then validate. After that, they will only be able to manage the registered competitors of a competition. You can see if a competition has been validated on the Admin page.</dd>\n";
+  echo "<dt>Admin View</dt><dd>Edit the competition configuration data, intended for us admins only.</dd>\n";
   echo "<dt>Results</dt><dd>Brings you to the results page.</dd>\n";
-  echo "<dt>New Password</dt><dd>Changes the password of the competition. I suggest you do this once the organizer has finished configuring the competition and you make the competition publicly visible (by editing its \"show\" status), in order to prevent the organizer from introducing mistakes.</dd>\n";
+  echo "<dt>New Organiser Password</dt><dd>Changes the organiser password of the competition.</dd>\n";
+  echo "<dt>New Admin Password</dt><dd>Changes the admin password of the competition.</dd>\n";
   echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "<dt>Clone</dt><dd>Clones the competition chosen on the left to a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "</dl>\n";
@@ -99,10 +98,11 @@ function showDescription () {
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $chosenNewPassword, $errors;
+  global $chosenCompetitionId, $chosenNewAdminPassword, $chosenNewOrganiserPassword, $errors;
 
   $chosenCompetitionId  = getNormalParam( 'competitionId' );
-  $chosenNewPassword = getBooleanParam( 'newPassword' );
+  $chosenNewAdminPassword = getBooleanParam( 'newAdminPassword' );
+  $chosenNewOrganiserPassword = getBooleanParam( 'newOrganiserPassword' );
   $errors = getNormalParam( 'error' );
 }
 
@@ -112,10 +112,11 @@ function showChoices () {
 
   displayChoicesWithMethod( 'post', array(
     competitionChoice( true ),
-    choiceButton( true, 'registration', 'Registration' ),
-    choiceButton( true, 'edit', 'Edit' ),
+    choiceButton( true, 'registration', 'Organiser View' ),
+    choiceButton( true, 'edit', 'Admin View' ),
     choiceButton( true, 'results', 'Results' ),
-    choiceButton( true, 'newPassword', 'New Password' ),
+    choiceButton( true, 'newOrganiserPassword', 'New Organiser Password' ),
+    choiceButton( true, 'newAdminPassword', 'New Admin Password' ),
     textFieldChoice ( 'newCompetitionId', 'New competition ID', '' ),
     choiceButton( true, 'createNew', 'Create new' ),
     choiceButton( true, 'clone', 'Clone' ),
@@ -123,26 +124,32 @@ function showChoices () {
 }
 
 #----------------------------------------------------------------------
-function setNewPassword () {
+function setNewPassword ( $admin ) {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
 
   #--- Get the old password.
-  $oldPassword = getCompetitionPassword( $chosenCompetitionId );
+  $oldPassword = getCompetitionPassword( $chosenCompetitionId, $admin );
 
   #--- Generate a new password.
   require_once( '_helpers.php' );
-  $newPassword = generateNewPassword( $chosenCompetitionId );
+  $newPassword = generateNewPassword( $chosenCompetitionId, 'foo' );
 
   #--- Store the new password.
-  dbCommand( "UPDATE Competitions SET password='$newPassword' WHERE id='$chosenCompetitionId'" );
+  if( $admin )
+    dbCommand( "UPDATE Competitions SET adminPassword='$newPassword' WHERE id='$chosenCompetitionId'" );
+  else
+    dbCommand( "UPDATE Competitions SET organiserPassword='$newPassword' WHERE id='$chosenCompetitionId'" );
 
   #--- Get the competition name.
   $competition = getCompetition( $chosenCompetitionId );
   $name = $competition['cellName'];
 
   #--- Show what we've done.
-  echo "<p>Password for competition <b>$name</b> changed<br />from: $oldPassword<br />to: $newPassword";
+  if( $admin )
+    echo "<p>Admin password for competition <b>$name</b> changed<br />from: $oldPassword<br />to: $newPassword";
+  else
+    echo "<p>Organiser password for competition <b>$name</b> changed<br />from: $oldPassword<br />to: $newPassword";
 }
 
 ?>

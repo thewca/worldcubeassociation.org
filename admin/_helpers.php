@@ -1,10 +1,10 @@
 <?php
 
 #----------------------------------------------------------------------
-function generateNewPassword ( $id ) {
+function generateNewPassword ( $id, $randomString ) {
 #----------------------------------------------------------------------
 
-  return sha1( $id . "foobidoo" . wcaDate() );
+  return sha1( $id . "foobidoo" . $randomString . wcaDate() );
 }
 
 #----------------------------------------------------------------------
@@ -29,12 +29,13 @@ function cloneNewCompetition ( $newCompetitionId, $oldCompetitionId ) {
   );
   $old = $old[0];
 
-  #--- Generate a password for the new competition.
-  $password = generateNewPassword( $newCompetitionId );
+  #--- Generate two passwords for the new competition.
+  $adminPassword = generateNewPassword( $newCompetitionId, 'foo' );
+  $organiserPassword = generateNewPassword( $newCompetitionId, 'bar' );
 
   #--- First provide id and password ...
-  $keys = "id, password";
-  $values = "'$newCompetitionId', '$password'";
+  $keys = "id, adminPassword, organiserPassword";
+  $values = "'$newCompetitionId', '$adminPassword', '$organiserPassword'";
 
   #--- ... then add the other data.
   foreach( $old as $key => $value ){
@@ -54,10 +55,11 @@ function createNewCompetition ( $id ) {
 #----------------------------------------------------------------------
 
   $name = "NEW COMPETITION $id";
-  $password = generateNewPassword( $id );
+  $adminPassword = generateNewPassword( $id, 'foo' );
+  $organiserPassword = generateNewPassword( $id, 'bar' );
   dbCommand("
-    INSERT INTO Competitions ( id, name, cellName, password )
-    VALUES ( '$id', '$name', '$name', '$password' )
+    INSERT INTO Competitions ( id, name, cellName, adminPassword, organiserPassword )
+    VALUES ( '$id', '$name', '$name', '$adminPassword', '$organiserPassword' )
   ");
 }   
 

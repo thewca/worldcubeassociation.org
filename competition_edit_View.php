@@ -3,48 +3,55 @@
 #----------------------------------------------------------------------
 function showView () {
 #----------------------------------------------------------------------
+  global $isAdmin, $isConfirmed;
 
   showSaveMessage();
-  showIntroduction();
   startForm();
-  showRegularFields();
-  showEventSpecifications();
-  showAdminOptions();
-  showMap();
-  showAnnouncement();
+  if( $isAdmin ){
+    showAdminOptions();
+    showAnnouncement();
+  }
+  if( $isAdmin || (! $isConfirmed )){
+    showRegularFields();
+    showEventSpecifications();
+  }
+  showRegs();
+  if( $isAdmin || (! $isConfirmed )){
+    showRegsOptions();
+    showMap();
+  }
   endForm();
 }
 
 #----------------------------------------------------------------------
 function showSaveMessage () {
 #----------------------------------------------------------------------
-  global $chosenSubmit, $dataSuccessfullySaved;
+  global $chosenSubmit, $chosenConfirm, $dataSuccessfullySaved;
   
   #--- If no submit, don't say anything.
   if( ! $chosenSubmit )
     return;
   
   #--- Report success or error.
-  noticeBox2( $dataSuccessfullySaved,
-    "Data was successfully saved.",
-    "Data wasn't saved. See red fields below for invalid data."
-  );
-}
-
-#----------------------------------------------------------------------
-function showIntroduction () {
-#----------------------------------------------------------------------
-
-  echo "<h1>General information</h1>";
-  echo "<p>Enter the data of the competition, then click the submit button on the bottom of the page to update the data in the database. You can turn a text part into a link using this format:<br />[{text...}{http:...}] or [{text...}{mailto:...}]</p>\n\n";
+  if( $chosenConfirm ){
+    noticeBox2( $dataSuccessfullySaved,
+      "The competition has been validated.",
+      "The competition has not been validated. See red fields below for invalid data."
+    );
+  } else {
+    noticeBox2( $dataSuccessfullySaved,
+      "Data was successfully saved.",
+      "Data wasn't saved. See red fields below for invalid data."
+    );
+  }
 }
 
 #----------------------------------------------------------------------
 function startForm () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $chosenPassword;
     
-  echo "<form method='post' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>\n";
+  echo "<form method='post' enctype='multipart/form-data' action='competition_edit.php?competitionId=$chosenCompetitionId&amp;password=$chosenPassword&amp;rand=" . rand() . "'>\n";
 }
 
 #----------------------------------------------------------------------
@@ -52,6 +59,9 @@ function showRegularFields () {
 #----------------------------------------------------------------------
   global $data, $dataError, $modelSpecs;
   
+  echo "<h1>General information</h1>";
+  echo "<p>Enter the data of the competition, then click the submit button on the bottom of the page to update the data in the database. You can turn a text part into a link using this format:<br />[{text...}{http:...}] or [{text...}{mailto:...}]</p>\n\n";
+
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
   
   #--- Show the fields.
@@ -173,35 +183,122 @@ function showEventSpecifications () {
 #----------------------------------------------------------------------
 function showAdminOptions () {
 #----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
+  global $data, $chosenCompetitionId, $isConfirmed;
 
-  $results = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId'" );
+  echo "<p>You can give this link to an organiser or a delegate to manage a competition: <br />
+http://www.worldcubeassociation.org/results/competition_edit.php?competitionId=$chosenCompetitionId&password=$data[organiserPassword]</p>";
+
+  echo "<p><input type='hidden' name='organiserPassword' id='organiserPassword' value='$data[organiserPassword]' /></p>\n";
+
+  if( $isConfirmed )
+    echo "<p>The competition has been <span style='color:#3C3'>validated</span> by the organisers/delegate</p>";
+  else
+    echo "<p>The competition is currently <span style='color:#F00'>not validated</span> by the organisers/delegate</p>";
+
+  echo "<p>If you agree with all the informations, you can simply change the competition's state to visible, which is now by default not the case.</p>";
 
   if( $data["showAtAll"] )
     echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /> Check if you want the <b>Competition</b> to be visible</p>\n";
   else
     echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /> Check if you want the <b>Competition</b> to be visible</p>\n";
 
-  if( count( $results )){
-    if( $data["showResults"] )
-      echo "<p><input id='showResults' name='showResults' type='checkbox' checked='checked' /> Check if you want the <b>Results</b> to be visible</p>\n";
-    else
-      echo "<p><input id='showResults' name='showResults' type='checkbox' /> Check if you want the <b>Results</b> to be visible</p>\n";
+}
+
+#----------------------------------------------------------------------
+function showRegsOptions () {
+#----------------------------------------------------------------------
+  global $data, $dataError, $chosenCompetitionId;
+
+  if( $data["showPreregForm"] )
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' checked='checked' /> Check if you want to start a <b>Registration Form</b></p>\n";
+  else
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' /> Check if you want to start a <b>Registration Form</b></p>\n";
+
+  if( $data["showPreregList"] )
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
+  else
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
+
+}
+
+#----------------------------------------------------------------------
+function showRegs () {
+#----------------------------------------------------------------------
+  global $data, $dataError, $chosenCompetitionId;
+
+  echo "<hr />\n";
+  echo "<h1>Registration</h1>";
+
+  echo "<p><input type='hidden' name='eventSpecs' id='eventSpecs' value='$data[eventSpecs]' /></p>\n";
+
+  $comps = dbQuery( "SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id" );
+
+  if( ! count( $comps)){
+    echo "Nobody registered yet.";
+    return;
   }
+
+  #--- Start the table.
+  echo "<h4>Registered Competitors</h4>\n";
+  echo "<ul><li><p>A : Accept, D : Delete, E : Edit.</p></li>\n";
+  echo "<li><p>Pending registrations are in light red, accepted registrations are in light green.</p></li>\n";
+  echo "<li><p>If you want to edit a person, first check its 'edit' checkbox for this to work.</p></li></ul>\n";
+  
+  echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
+  echo "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
+  foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
+    echo "<td style='font-size:9px'>$eventId</td>\n";
+  }
+  echo "</tr>\n";
+
+  foreach( $comps as $comp ){
+    extract( $comp );
+    $name = htmlEscape( $name );
+    $personId = htmlEscape( $personId );
+    $eventIdsList = array_flip( explode( ' ', $eventIds ));
+
+    if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
+    else if( $status == 'p' ) echo "<tr style='background-color:#FFCCCC'>\n";
+    else if( $status == 'a' ) echo "<tr style='background-color:#CCFFCC'>\n";
+    echo "  <td><input type='checkbox' id='reg${id}accept' name='reg[${id}][accept]' value='1' /></td>\n";
+    echo "  <td><input type='checkbox' id='reg${id}delete' name='reg[${id}][delete]' value='1' /></td>\n";
+    echo "  <td><input type='checkbox' id='reg${id}edit' name='reg[${id}][edit]' value='1' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}personId' name='reg[${id}][personId]' value='$personId' size='10' maxlength='10' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}name' name='reg[${id}][name]' value='$name' size='25' /></td>\n";
+    echo "  <td><input type='text' id='reg${id}countryId' name='reg[${id}][countryId]' value='$countryId' size='15' /></td>\n";    
+
+    foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
+      if( isset( $eventIdsList[$eventId]))
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' checked='checked' /></td>\n";
+      else
+        echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' /></td>\n";
+        /* default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break; */
+    }
+    echo "</tr>\n";
+  }
+  echo "</table>\n";
+
+  echo "<ul><li><p>See <a href='registration_information.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>extra registration information</a></p></li>\n"; 
+  echo "<li><p>Download the <a href='registration_sheet.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>registration excel sheet</a> in .csv format.</p></li>\n"; 
+  echo "<li><p>Generate the complete <a href='registration_set_spreadsheet.php?competitionId=$chosenCompetitionId&amp;password=$data[password]'>registration excel sheet</a> in .xlsx format.</p></li>\n"; 
+  echo "<li><p>If you want to include the <b>form</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId'>this link</a></p></li>\n"; 
+  echo "<li><p>If you want to include the <b>list</b> in your website, use an iframe with <a href='http://www.worldcubeassociation.org/results/competition_registration.php?competitionId=$chosenCompetitionId&amp;list=1'>this link</a></p></li></ul>\n"; 
+
 }
 
 #----------------------------------------------------------------------
 function showMap () {
 #----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
+  global $data, $chosenCompetitionId, $chosenPassword;
 
   echo "<hr /><h1>Map</h1>";
 
   echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
-  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId'>Change</a> the coordinates.</p>";
+  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
 
+  echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
@@ -316,15 +413,23 @@ function showAnnouncement() {
     $msg = htmlEscape( $msg );
     echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
   }
+  echo "<hr />\n";
 }
 
 
 #----------------------------------------------------------------------
 function endForm () {
 #----------------------------------------------------------------------
+  global $isAdmin, $isConfirmed;
 
+  if(( ! $isAdmin ) && ( ! $isConfirmed )){
+    echo "<p>Click 'Save' if you want to save your current information, without submitting yet to the WCA Board.</p>";
+    echo "<p>Click 'Confirm' if you want to submit the competition's details for approval to the WCA Board. <span style='font-weight:bold;'>Be careful</span>, you won't be able to modify any information after that. You will still be able moderate the registrations on this page if you choose to use the registration feature.</p>";
+  }
   echo "<table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
-  echo "<td style='background:#33FF33'><input id='submit' name='submit' type='submit' value='Submit' /></td>\n";
+  echo "<td style='background:#33FF33'><input id='submit' name='submit' type='submit' value='Save' /></td>\n";
+  if(( ! $isAdmin ) && ( ! $isConfirmed ))
+    echo "<td style='background:#FFFF88'><input id='confirm' name='confirm' type='submit' value='Confirm' /></td>\n";
   echo "<td style='background:#FF0000'><input type='reset' value='Reset' /></td>\n";
   echo "</tr></table>\n";
   

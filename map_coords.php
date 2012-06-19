@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-require( '../_header.php' );
+require( '_header.php' );
 
 analyzeChoices();
 if( checkCompetition() ){ 
@@ -12,16 +12,17 @@ if( checkCompetition() ){
   showMap();
 }
 
-require( '../_footer.php' );
+require( '_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $chosenPassword;
   global $chosenLatitude, $chosenLongitude;
   global $chosenSave;
 
   $chosenCompetitionId = getNormalParam(  'competitionId' );
+  $chosenPassword      = getNormalParam(  'password'      );
   $chosenLatitude      = getMysqlParam(   'latitude'      );
   $chosenLongitude     = getMysqlParam(   'longitude'     );
 }
@@ -30,7 +31,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
 function checkCompetition () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $data;
+  global $chosenCompetitionId, $chosenPassword, $data;
 
   $results = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
 
@@ -41,6 +42,12 @@ function checkCompetition () {
   }
 
   $data = $results[0];
+
+  #--- Check the password.
+  if(( $chosenPassword != $data['organiserPassword'] ) && ( $chosenPassword != $data['adminPassword'] )){
+    showErrorMessage( "wrong password" );
+    return false;
+  }
 
   return true;
 }
@@ -65,7 +72,7 @@ function saveCoords () {
 function showMap () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $data;
-  global $chosenLatitude, $chosenLongitude;
+  global $chosenLatitude, $chosenLongitude, $chosenPassword;
 
   if( $chosenLatitude && $chosenLongitude ){
     $latitude =  $chosenLatitude / 1000000;
@@ -87,7 +94,7 @@ $address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[country
 
   displayGeocode( 800, 480, $address, $latitude, $longitude );
 
-  echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&amp;rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
+  echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword&rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
   ?>
     </center>
   </body>

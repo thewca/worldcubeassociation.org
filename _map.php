@@ -7,7 +7,7 @@ function displayMap ( $width, $height ){
 }
 
 function displayGeocode ( $width, $height, $address, $latitude, $longitude ){
- global $chosenCompetitionId;
+ global $chosenCompetitionId, $chosenPassword;
 ?>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
     Address : <input type="text" id="add" name="add" value="<?php echo $address ?>" size="100" />
@@ -17,6 +17,7 @@ function displayGeocode ( $width, $height, $address, $latitude, $longitude ){
   initGeocode ($latitude, $longitude);
 ?>
     <input type="hidden" name="competitionId" value="<?php echo $chosenCompetitionId ?>" />
+    <input type="hidden" name="password" value="<?php echo $chosenPassword ?>" />
     <input type="hidden" name="rand" value="<?php echo rand() ?>" />
     Latitude : <input type="text" id="latitude" name="latitude" value="" size="20" />
     Longitude : <input type="text" id="longitude" name="longitude" value="" size="20" />
