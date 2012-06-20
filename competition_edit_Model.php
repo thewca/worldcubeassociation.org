@@ -308,14 +308,14 @@ function storeData () {
   ####----- Competition
 
   #-- Building eventSpecs
-  $eventSpecs = '';
+  $events = '';
   foreach( getAllEventIds() as $eventId ){
 
     if ( $data["offer$eventId"] ){
-      if( $eventSpecs )
+      if( $events )
         $eventSpecs .= " $eventId";
       else
-        $eventSpecs = "$eventId";
+        $events = "$eventId";
     }
   }
 
@@ -336,7 +336,7 @@ function storeData () {
                    day='$day',
                    endMonth='$endMonth',
                    endDay='$endDay',
-                   eventSpecs='$eventSpecs',
+                   eventSpecs='$events',
                    wcaDelegate='$wcaDelegate',
                    organiser='$organiser',
                    venue='$venue',

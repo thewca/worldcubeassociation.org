@@ -16,8 +16,8 @@ function showView () {
     showEventSpecifications();
   }
   showRegs();
+  showRegsOptions();
   if( $isAdmin || (! $isConfirmed )){
-    showRegsOptions();
     showMap();
   }
   endForm();
