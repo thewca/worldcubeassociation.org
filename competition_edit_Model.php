@@ -313,7 +313,7 @@ function storeData () {
 
     if ( $data["offer$eventId"] ){
       if( $events )
-        $eventSpecs .= " $eventId";
+        $events .= " $eventId";
       else
         $events = "$eventId";
     }
