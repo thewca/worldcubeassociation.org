@@ -236,16 +236,6 @@ function storeData () {
   if( $dataError )
     return;
 
-  #####----- Validation
-
-  if( $chosenConfirm ){
-    dbCommand("UPDATE Competitions
-               SET isConfirmed='1'
-                WHERE id='$chosenCompetitionId'
-    ");
-    $isConfirmed = true;
-  }
-
   #####----- Registration
 
   #-- Building show*
@@ -353,6 +343,16 @@ function storeData () {
   #--- Building the caches again
   require( 'admin/_helpers.php' );
   ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
+
+  #####----- Validation
+
+  if( $chosenConfirm ){
+    dbCommand("UPDATE Competitions
+               SET isConfirmed='1'
+                WHERE id='$chosenCompetitionId'
+    ");
+    $isConfirmed = true;
+  }
 
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;
