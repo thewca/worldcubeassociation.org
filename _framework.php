@@ -26,6 +26,11 @@ function getEvent ( $eventId ) {
   foreach( getAllEvents() as $event )
     if( $event['id'] == $eventId )
       return $event;
+
+  // Failed to get from cache file
+  $event = dbQuery( "SELECT * FROM Events WHERE id='$eventId'" );
+  if( count( $event ) == 1 )
+    return $event[0];
 }
 
 function readEventSpecs ( $eventSpecs ) {

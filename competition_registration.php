@@ -22,11 +22,16 @@ if( $standAlone ){
 
   #--- Show form (or display error if competition not found).
   if( $competition ){
-    if( $chosenList ) 
-      showPreregList(); 
-    else 
-      showPreregForm(); 
-  } else {
+    if( $chosenList ){
+      if( $competition['showPreregList'] ) showPreregList();
+      else showPreregForm();
+    }
+    else {
+      if( $competition['showPreregForm'] ) showPreregForm();
+      else showPreregList();
+    }
+  }
+  else {
     noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
   }
   ?></body></html><?
