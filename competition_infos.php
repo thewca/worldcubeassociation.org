@@ -30,7 +30,7 @@ function showCompetitionInfos () {
   #--- Right part.
   echo "<td style='width:30%'><table>";
   showItem( 'key', "Information",  array( $information ));
-  showListItemNew( 'Events', computeCompetitionEvents( $eventSpecs ));
+  showListItemNew( 'View results for', computeCompetitionEvents( $eventSpecs ));
   showListItemNew( 'Reports', computeMedia( 'report' ));
   showListItemNew( 'Articles', computeMedia( 'article' ));
   showListItemNew( 'Multimedia', computeMedia( 'multimedia' ));
@@ -87,12 +87,9 @@ function computeCompetitionEvents ( $eventSpecs ) {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenAllResults;
 
-  foreach( getAllEvents() as $event ){
-    extract( $event );
-    if( preg_match( "/(^| )$id\b/", $eventSpecs )){
-      $url = $chosenAllResults ? "#$id" : "competition.php?competitionId=$chosenCompetitionId&amp;allResults=1#$id";
-      $events .= '[{' . $cellName . '}{' . $url . '}]';
-    }
+  foreach( getEventSpecsEventIds( $eventSpecs ) as $eventId ){
+    $url = $chosenAllResults ? "#$eventId" : "competition.php?competitionId=$chosenCompetitionId&amp;allResults=1#$eventId";
+    $events .= '[{' . eventCellName( $eventId ) . '}{' . $url . '}]';
   }
   return $events;
 }
