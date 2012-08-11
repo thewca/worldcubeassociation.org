@@ -48,7 +48,7 @@ function tableHeader ( $values, $attributes ) {
   echo "<tr>\n";
   foreach( $values as $value ){
     if( ! $value ) $value = '&nbsp;';
-    $value = preg_replace( '/ /', '&nbsp;', $value );
+    //$value = preg_replace( '/ /', '&nbsp;', $value );
     $attr = $attributes[0+$columnCtr++];
     if( $attr ) $attr = " $attr";
     echo "<th $attr>$value</th>\n";

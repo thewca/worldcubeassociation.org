@@ -403,9 +403,17 @@ function showPreregList () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
 
-  echo "<h1>Registered competitors</h1><br />";
   if( getBooleanParam( 'isPreregSubmit' ))
     savePreregForm ();
+
+  $eventId = getNormalParam ( 'eventId' );
+
+  if( $eventId ){
+    showPsychSheet( $eventId );
+    return;
+  }
+
+  echo "<h1>Registered competitors</h1><br />";
 
   #--- Get the data.
   $preregs = dbQuery( "SELECT * FROM Preregs WHERE competitionId = '$chosenCompetitionId' AND status='a' ORDER BY countryId, name" );
@@ -414,7 +422,10 @@ function showPreregList () {
   #--- Get all events of the competition.
   $eventList = getEventSpecsEventIds( $competition['eventSpecs'] );
 
-  foreach( $eventList as $event ){ $headerEvent .= "|$event"; }
+  foreach( $eventList as $event ){
+    $headerEvent .= "|$event";
+    $headerEventLink .= "|<a href='c.php?list=1&competitionId=$chosenCompetitionId&eventId=$event'>$event</a>";
+  }
 
   for( $i = 3; $i < 3 + count( $eventList ); $i++)
     $tableStyle[$i] = 'class="c"';
@@ -427,8 +438,16 @@ function showPreregList () {
   foreach( $preregs as $prereg ){
     extract( $prereg );
 
-    if( !( $countPerson % 20 ))
-      tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
+    if( !( $countPerson % 20 )){
+      if( $countPerson )
+        tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
+      else{
+        if( $standAlone )
+          tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
+        else
+          tableHeader( explode( '|', "#|Person|Citizen of${headerEventLink}|" ), $tableStyle );
+      }
+    }
 
     $countPerson += 1;
 
@@ -461,27 +480,12 @@ function showPreregList () {
         $countEvents[$event] += 1;
         $personEvents += 1;
       }
-/*      else if( $prereg["E$event"] == 2 ){
-        $row[] = 'q';
-        $countEventsQualify[$event] += 1;
-        $personEvents += 1;
-        $isQualify = 1;
-      }
-      else if( $prereg["E$event"] == 3 ){
-        $row[] = 'w';
-        $countEventsWaiting[$event] += 1;
-        $personEvents += 1;
-        $isWaiting = 1;
-      } */
       else $row[] = '-';
     }
 
     $row[] = $personEvents;
     tableRow( $row );
   }
-
-  //tableRowBlank();
-  //tableHeader( split( '\\|', "Person|Citizen of${headerEvent}|" ), $tableStyle );
 
   $row = array( '', 'Total', $countCountry );
   foreach( $eventList as $event ){
@@ -492,45 +496,96 @@ function showPreregList () {
   }
   $row[] = '';
   tableHeader( $row, $tableStyle );
-  //tableRowStyled( 'text-align:center', $row );
 
-  if( $isQualify or $isWaiting ){
-    $row = array( '', 'Qualified', '' );
-    foreach( $eventList as $event ){
-      if( $countEvents[$event] )
-        $row[] = $countEvents[$event];
-      else
-        $row[] = 0;
+  tableEnd();
+
+}
+
+#----------------------------------------------------------------------
+function showPsychSheet ( $eventId ) {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId;
+
+  echo "<h1>Psych Sheet</h1><br />";
+ 
+  #--- Best or Average ?
+  $avg = dbQuery( "SELECT * FROM RanksAverage WHERE eventId='$eventId' LIMIT 1" );
+  if( count( $avg ) > 0 ){
+    $isAvg = true;
+    $table = 'Average';
+  }
+  else
+    $table = 'Single';
+
+  #--- Get the data.
+
+  $preregs = dbQuery( "
+    SELECT prereg.*, rank.best best, rank.worldRank worldRank
+    FROM Preregs prereg, Ranks$table rank
+    WHERE prereg.competitionId = '$chosenCompetitionId'
+      AND prereg.status = 'a'
+      AND prereg.personId = rank.personId
+      AND rank.eventId = '$eventId'
+    ORDER BY rank.best, prereg.countryId, prereg.name" );
+
+  $newPreregs = dbQuery( "
+    SELECT prereg.*
+    FROM Preregs prereg
+    WHERE prereg.competitionId = '$chosenCompetitionId'
+      AND prereg.status = 'a'
+      AND NOT EXISTS (
+        SELECT *
+        FROM Ranks$table
+        WHERE prereg.personId = personId
+          AND eventId = '$eventId'
+      )
+    ORDER BY prereg.countryId, prereg.name" );
+
+  tableBegin( 'results', 6);
+  tableCaption( false, eventName( $eventId ));
+  if( $isAvg )
+    tableHeader( explode( '|', "Rank|Person|Citizen of|Best average|WR|" ), array( 3 => 'class="c"', 4 => 'class="r"', 5 => 'class="f"' ));
+  else
+    tableHeader( explode( '|', "Rank|Person|Citizen of|Best single|WR|" ), array( 3 => 'class="c"', 4 => 'class="r"', 5 => 'class="f"' ));
+
+  $curRank = 0;
+  $incRank = 1;
+  $wRank = 0;
+
+  foreach( $preregs as $prereg ){
+    extract( $prereg );
+
+    #--- Check if the competitor is registered for the event
+    $eventIdsList = explode( ' ', $eventIds );
+    if (! in_array( $eventId, $eventIdsList ))
+      continue;
+
+    if( $worldRank == $wRank ){
+      $incRank += 1;
     }
-    $row[] = '';
-    tableHeader( $row, $tableStyle );
-    //tableRowStyled( 'text-align:center', $row );
+    else{
+      $curRank += $incRank;
+      $incRank = 1;
+    }
+    $wRank = $worldRank;
+
+    #--- Compute the row.
+    tableRow( array( $curRank, personLink( $personId, $name ), $countryId, formatValue( $best, valueFormat( $eventId )), $worldRank, '' ));
   }
 
-  if( $isQualify ){
-    $row = array( '', 'To Qualify', '' );
-    foreach( $eventList as $event ){
-      //if( $countEventsQualify[$event] )
-        $row[] = $countEventsQualify[$event];
-      //else
-      //  $row[] = 0;
-    }
-    $row[] = '';
-    tableHeader( $row, $tableStyle );
-    //tableRowStyled( 'text-align:center', $row );
-  }
+  $curRank += $incRank;
 
-  if( $isWaiting ){
-    $row = array( '', 'On Waiting List', '' );
-    foreach( $eventList as $event ){
-      //if( $countEventsWaiting[$event] > 0)
-        $row[] = $countEventsWaiting[$event];
-      //else
-      //  $row[] = 0;
-    }
-    $row[] = '';
-    //tableRowStyled( 'text-align:center', $row );
-    tableHeader( $row, $tableStyle );
+  #--- New competitors
+  foreach( $newPreregs as $newPrereg ){
+    extract( $newPrereg );
+
+    #--- Check if the competitor is registered for the event
+    $eventIdsList = explode( ' ', $eventIds );
+    if (! in_array( $eventId, $eventIdsList ))
+      continue;
+
+    #--- Compute the row.
+    tableRow( array( $curRank, $personId ? personLink( $personId, $name ) : $name, $countryId, '', '', '' ));
   }
 
   tableEnd();
