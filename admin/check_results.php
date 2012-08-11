@@ -406,22 +406,28 @@ function checkDuplicates () {
 
   ");
 
-  #--- Check the pos values
+  tableBegin( 'results', 4 );
   foreach( $rows as $row ){
-    list( $competitionId, $value1, $value2, $value3, $value4, $value5, $whoWhere ) = $row;
+    extract( $row );
     $competition = getCompetition ( $competitionId );
     $competitionName = $competition['cellName'];
-    echo "<p>Found duplicate results for competition <a href='../c.php?i=$competitionId'>$competitionName</a> with values $value1, $value2, $value3, $value4, $value5</p>\n";
     $whos = explode( '||', $whoWhere);
-    tableBegin( 'results', 4 );
-    tableHeader( explode( '|', "Person|Event|Round|" ),
+    tableCaption( false, competitionLink ( $competitionId, $competitionName ) );
+    tableHeader( explode( '|', "Person|Event|Round|Result Details" ),
                  array( 3 => 'class="f"' ));
     foreach( $whos as $who ){
       list( $eventId, $roundId, $personName, $personId ) = explode( '|', $who );
-      tableRow( array( personLink( $personId, $personName ), eventCellName( $eventId ), roundCellName( $roundId ), ''));
+      tableRow(
+        array(
+          personLink( $personId, $personName ),
+          eventCellName( $eventId ),
+          roundCellName( $roundId ),
+          formatAverageSources( true, $row, valueFormat( $eventId ))
+	)
+      );
     }
-    tableEnd();
   }
+  tableEnd();
 
   #--- Tell the result.
   $date = wcaDate();
