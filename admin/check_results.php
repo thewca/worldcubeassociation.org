@@ -9,13 +9,20 @@ adminHeadline( 'Check results' );
 showDescription();
 showChoices();
 
-if ( $chosenCheckRecentIndividually || $chosenCheckRecentRelatively || $chosenCheckRecentRounds )
+if ( $chosenWhich == 'recent' )
   $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
 
-if( $chosenCheckRecentIndividually || $chosenCheckAllIndividually )
-  checkIndividually();
-if( $chosenCheckRecentRelatively || $chosenCheckAllRelatively )
-  checkRelatively();
+switch ( $chosenWhat ){
+  case 'single':
+    checkIndividually();
+    break;
+  case 'ranks':
+    checkRelatively();
+    break;
+  case 'duplicates':
+    checkDuplicates();
+    break;
+}
 
 require( '../_footer.php' );
 
@@ -25,7 +32,9 @@ function showDescription () {
 
   echo "<p style='width:45em'>First, check the results individually, according to our <a href='check_results.txt'>checking procedure</a> (mostly that value1-value5 make sense and that average and best are correct).</p>\n";
 
-  echo "<p style='width:45em'>Then, once they're correct individually, check them relatively. This compares results with others in the same round to check each competitor's place. Differences between calculated and stored places can be agreed to and then executed on the bottom of the page.\n";
+  echo "<p style='width:45em'>Then, once they're correct individually, check ranks. This compares results with others in the same round to check each competitor's place. Differences between calculated and stored places can be agreed to and then executed on the bottom of the page.\n";
+
+  echo "<p style='width:45em'>You can also print duplicate results that happened during a competition. It might reveal errors in score taking, although some duplicates can be due to chance.</p>\n";
 
   echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
 
@@ -35,34 +44,31 @@ function showDescription () {
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCheckRecentIndividually, $chosenCheckAllIndividually, $chosenCheckRecentRelatively, $chosenCheckAllRelatively;
+  global $chosenWhich, $chosenWhat;
 
-  $chosenCheckRecentIndividually = getBooleanParam( 'checkRecentIndividually' );
-  $chosenCheckAllIndividually    = getBooleanParam( 'checkAllIndividually' );
-  $chosenCheckRecentRelatively   = getBooleanParam( 'checkRecentRelatively' );
-  $chosenCheckAllRelatively      = getBooleanParam( 'checkAllRelatively' );
+  $chosenWhich = getNormalParamDefault( 'which', 'recent' );
+  $chosenWhat = getNormalParamDefault( 'what', 'single' );
 }
 
 #----------------------------------------------------------------------
 function showChoices () {
 #----------------------------------------------------------------------
+  global $chosenWhich, $chosenWhat;
 
   displayChoices( array(
-    'Check individually:<br />&nbsp;',
-    choiceButton( true, 'checkRecentIndividually', ' recent ' ),
-    choiceButton( true, 'checkAllIndividually', ' all ' ),
-    'Check relatively:<br />&nbsp;',
-    choiceButton( true, 'checkRecentRelatively', ' recent ' ),
-    choiceButton( true, 'checkAllRelatively', ' all ' ),
+    'Check',
+    choice( 'which', '', array( array( 'recent', 'recent' ), array( 'all', 'all' )), $chosenWhich ),
+    choice( 'what', '', array( array( 'single', 'single results' ), array( 'ranks', 'ranks' ), array( 'duplicates', 'duplicates' )), $chosenWhat ),
+    choiceButton( true, 'go', 'Go' )
   ));
 }
 
 #----------------------------------------------------------------------
 function checkIndividually () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenCheckAllIndividually, $competitionIds, $countryIds;
+  global $dateCondition, $chosenWhich, $competitionIds, $countryIds;
 
-  echo "<hr /><p>Checking <b>" . ($chosenCheckAllIndividually ? 'all' : 'recent') . "</b> results <b>individually</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b>" . $chosenWhich . " single results</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
@@ -214,9 +220,9 @@ function checkResult ( $result ) {
 #----------------------------------------------------------------------
 function checkRelatively () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenCheckAllRelatively;
+  global $dateCondition, $chosenWhich;
 
-  echo "<hr /><p>Checking <b>" . ($chosenCheckAllRelatively ? 'all' : 'recent') . "</b> results <b>relatively</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b>" . $chosenWhich . " ranks</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get all results (except the trick-duplicated (old) multiblind)
   $rows = dbQueryHandle("
@@ -376,6 +382,55 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
     ORDER BY
       $order
   ");
+}
+
+#----------------------------------------------------------------------
+function checkDuplicates () {
+#----------------------------------------------------------------------
+  global $dateCondition, $chosenWhich;
+
+  echo "<hr /><p>Checking <b>" . $chosenWhich . " duplicate results</b>... (wait for the result message box at the end)</p>\n";
+
+  #--- Get all duplicate results (except old-new multiblind)
+  $rows = dbQuery("
+    SELECT competitionId, value1, value2, value3, value4, value5, whoWhere FROM
+      (SELECT competitionId, value1, value2, value3, value4, value5, count(*) ctr,
+              group_concat(concat_ws('|',eventId,roundId,personName,personId) SEPARATOR  '||') whoWhere
+       FROM Results, Competitions competition
+       WHERE eventId<>'333mbo'
+         AND competition.id = competitionId
+             $dateCondition
+       GROUP BY competitionId, value1, value2, value3, value4, value5) tmp
+    WHERE ctr>1 AND (value1>0)+(value2>0)+(value3>0)+(value4>0)+(value5>0) >= 2
+    ORDER BY greatest(value1, value2, value3, value4, value5) DESC
+
+  ");
+
+  #--- Check the pos values
+  foreach( $rows as $row ){
+    list( $competitionId, $value1, $value2, $value3, $value4, $value5, $whoWhere ) = $row;
+    $competition = getCompetition ( $competitionId );
+    $competitionName = $competition['cellName'];
+    echo "<p>Found duplicate results for competition <a href='../c.php?i=$competitionId'>$competitionName</a> with values $value1, $value2, $value3, $value4, $value5</p>\n";
+    $whos = explode( '||', $whoWhere);
+    tableBegin( 'results', 4 );
+    tableHeader( explode( '|', "Person|Event|Round|" ),
+                 array( 3 => 'class="f"' ));
+    foreach( $whos as $who ){
+      list( $eventId, $roundId, $personName, $personId ) = explode( '|', $who );
+      tableRow( array( personLink( $personId, $personName ), eventCellName( $eventId ), roundCellName( $roundId ), ''));
+    }
+    tableEnd();
+  }
+
+  #--- Tell the result.
+  $date = wcaDate();
+  noticeBox2(
+    count( $rows ) == 0,
+    "No duplicate results where found.<br />$date",
+    "Duplicate results where found.<br />$date"
+  );
+
 }
 
 ?>
