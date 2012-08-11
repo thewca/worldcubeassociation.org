@@ -525,6 +525,7 @@ function showPsychSheet ( $eventId ) {
     WHERE prereg.competitionId = '$chosenCompetitionId'
       AND prereg.status = 'a'
       AND prereg.personId = rank.personId
+      AND prereg.personId <> ''
       AND rank.eventId = '$eventId'
     ORDER BY rank.best, prereg.countryId, prereg.name" );
 
@@ -537,6 +538,7 @@ function showPsychSheet ( $eventId ) {
         SELECT *
         FROM Ranks$table
         WHERE prereg.personId = personId
+          AND personId <> ''
           AND eventId = '$eventId'
       )
     ORDER BY prereg.countryId, prereg.name" );
@@ -544,9 +546,9 @@ function showPsychSheet ( $eventId ) {
   tableBegin( 'results', 6);
   tableCaption( false, eventName( $eventId ));
   if( $isAvg )
-    tableHeader( explode( '|', "Rank|Person|Citizen of|Best average|WR|" ), array( 3 => 'class="c"', 4 => 'class="r"', 5 => 'class="f"' ));
+    tableHeader( explode( '|', "Rank|Person|Citizen of|WR|Best average|" ), array( 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="f"' ));
   else
-    tableHeader( explode( '|', "Rank|Person|Citizen of|Best single|WR|" ), array( 3 => 'class="c"', 4 => 'class="r"', 5 => 'class="f"' ));
+    tableHeader( explode( '|', "Rank|Person|Citizen of|WR|Best single|" ), array( 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="f"' ));
 
   $curRank = 0;
   $incRank = 1;
@@ -570,7 +572,7 @@ function showPsychSheet ( $eventId ) {
     $wRank = $worldRank;
 
     #--- Compute the row.
-    tableRow( array( $curRank, personLink( $personId, $name ), $countryId, formatValue( $best, valueFormat( $eventId )), $worldRank, '' ));
+    tableRow( array( $curRank, personLink( $personId, $name ), $countryId, $worldRank, formatValue( $best, valueFormat( $eventId )), '' ));
   }
 
   $curRank += $incRank;
