@@ -37,9 +37,6 @@ function saveChoices () {
 
   if( $chosenFix ){
 
-    #--- Change the Persons table
-    dbCommand( "UPDATE Persons SET name='$chosenName', countryId='$chosenCountryId', gender='$chosenGender', year='$chosenYear', month='$chosenMonth', day='$chosenDay' WHERE id='$chosenId' AND subId='1'" );
-
     #--- Change the Results table if the name has been changed.
     $persons = dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND subId=1" );
     if( count( $persons ) == 0 ){
@@ -48,8 +45,12 @@ function saveChoices () {
     }
     $person = array_shift( $persons );
 
-    if( $person['name'] != $chosenName )
-      dbCommand( "UPDATE Results SET personName='$chosenName' WHERE personId='$chosenId'" );
+    $oldPersonName = $person['name'];
+    if( $oldPersonName != $chosenName )
+      dbCommand( "UPDATE Results SET personName='$chosenName' WHERE personId='$chosenId' AND personName='$oldPersonName'" );
+
+    #--- Change the Persons table
+    dbCommand( "UPDATE Persons SET name='$chosenName', countryId='$chosenCountryId', gender='$chosenGender', year='$chosenYear', month='$chosenMonth', day='$chosenDay' WHERE id='$chosenId' AND subId='1'" );
 
     noticeBox( true, "Successfully fixed $chosenNameHtml($chosenId).");
 
