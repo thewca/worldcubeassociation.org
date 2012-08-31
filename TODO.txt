@@ -1,0 +1,59 @@
+# Notes on the Regulations
+
+Quick notes for revision.
+
+## Specific Regulations
+
+1c3a) Must?
+1c4) phrasing: multi-day competitions?
+1c) Must?
+1h) Justificatoin should be a Guideline.
+2s) Needs a heading
+2t) must?
+4b) We should make clear that delegates should never re-generate any scrambles to replace other ones, because that is considered filtering. Thus, it would not be permitted to glance at the scrambles and generate the entire competition again in order to generate "fairer" scrambles.
+4d) Split up into subrules.
+7c) Regulation about how displays are nice, but not as important as the timers.
+8b) should be 8e, to avoid conflicts?
+9f4) Clarification that DNS may mean competitor decline *OR* didn't qualify
+9g) Find a nice way to describe combined rounds, while staying general
+10f) At least a guideline about "closest state" / "closer to solved than another state"
+11e) Catch-22?
+11f) Guideline about why no video evidence (competitors need to ask for disputes / rulings then and now.)
+A1a) Time limits used to be by event. Changing to "per round". Also, I don't remember hearing about it how often does this get broken in practice? (e.g. raising the time limit and allowing competitors more solves, which might have affeted their strategy)
+A1a2) Cumulative time limits are also mentioned in 9f6
+
+## General Notes
+
+- Make a style guide out of this.
+- For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
+- Consistent bulleting (along with punctuation, e.g. commes and colons at the end of lines)
+
+## Consistency of Terminology
+
+- "score" vs. "results" vs. "time"
+- Records vs. results, and recognition.
+- eligible vs. permitted vs. allowed
+- solve vs. attempt vs. competing (vs. active competitor
+- From the forum: disqualification > DNF? "penalty : disqualification of the solve (DNF)" ? ( http://www.worldcubeassociation.org/forum/viewtopic.php?f=4&t=1022&p=5867#p5867 )
+
+## Consistency of Grammar
+
+- Consistent use of consecutive "and"s/"or"s, with serial comma.
+- Consistent examples in parentheses.
+- Use "discretion" instead of "courtesy"
+- Consistent use of "If x is the case" vs. "Should x be the case" (I think "if" is equally clear, and simpler.)
+- Consistent capitalization and full use of "WCA Regulations"
+
+## Keep it simple, and in line with the past where possible.
+
+- While "If ... in a solve, then ... in said solve." might be more accurate, I think "the" instead of "said" is simpler and just as clear in most cases.
+- Sarah had an interesting qualification / elimination round distinction, but I've removed it because 1) it doesn't fit our usual way of talking about things, 2) if there's only one round, there is no elimination, and 3) "elimination" sounds a little negative for the spirit of the WCA.
+- Keep it DRY.
+
+## Consistent Formatting
+
+- be consistent about "x" in round formats.
+- For each type of round and type of event, define the result used for ranking, and what counts as "better"
+- Normalize penalties and the Regulations mention them
+- A two-second penalty should be written as "+2" in quotes.
+- Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
