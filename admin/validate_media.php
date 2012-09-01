@@ -114,7 +114,7 @@ function showMedia () {
   #--- Begin form and table.
   echo "<form action='validate_media_ACTION.php' method='POST'>\n";
   tableBegin( 'results', 7 );
-  tableHeader( explode( '\\|', $headerDate . ' Date|Competition Date|Competition|Country, City|Type|Link|' ),
+  tableHeader( explode( '|', $headerDate . ' Date|Competition Date|Competition|Country, City|Type|Link|' ),
                array( 5 => 'class="f"' ));
 
   #--- Print results.
