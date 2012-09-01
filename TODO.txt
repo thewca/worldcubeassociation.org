@@ -7,9 +7,11 @@ Quick notes for revision.
 1c3a) Must?
 1c4) phrasing: multi-day competitions?
 1c) Must?
+1g2) The score sheet itself probably doesn't get changed, it's "overridden" or something like that.
 1h) Justificatoin should be a Guideline.
 2s) Needs a heading
 2t) must?
+3a1) Guideline: clarify that the intention of this rule is to prevent puzzle borrowing from slowing down the competition.
 4b) We should make clear that delegates should never re-generate any scrambles to replace other ones, because that is considered filtering. Thus, it would not be permitted to glance at the scrambles and generate the entire competition again in order to generate "fairer" scrambles.
 4d) Split up into subrules.
 7c) Regulation about how displays are nice, but not as important as the timers.
@@ -24,17 +26,24 @@ A1a2) Cumulative time limits are also mentioned in 9f6
 
 ## General Notes
 
+- Include a note at the top that certain terms are based on the Constitution. Possibly say something like "The World Cube Association WCA), WCA Board, WCA Delegates, WCA Regulations Committee (WRC), ... are defined in the WCA Constitution"
+- Decide how to mandate the offical scrambler, and whether / how to allow others for now.
 - Make a style guide out of this.
 - For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
 - Consistent bulleting (along with punctuation, e.g. commes and colons at the end of lines)
+- Suspension isn't defined; what are the rights of the board to deal with competitors / community members / incidents
 
 ## Consistency of Terminology
 
+- A "regulation" vs. a "rule"
 - "score" vs. "results" vs. "time"
+- event vs. round vs. group (i.e. which one is a judge assigned to?)
 - Records vs. results, and recognition.
 - eligible vs. permitted vs. allowed
 - solve vs. attempt vs. competing (vs. active competitor
+- scramble vs. scramble sequence
 - From the forum: disqualification > DNF? "penalty : disqualification of the solve (DNF)" ? ( http://www.worldcubeassociation.org/forum/viewtopic.php?f=4&t=1022&p=5867#p5867 )
+- competition date?
 
 ## Consistency of Grammar
 
@@ -43,6 +52,8 @@ A1a2) Cumulative time limits are also mentioned in 9f6
 - Use "discretion" instead of "courtesy"
 - Consistent use of "If x is the case" vs. "Should x be the case" (I think "if" is equally clear, and simpler.)
 - Consistent capitalization and full use of "WCA Regulations"
+- ALL OVER THE PLACE: Singular vs. plural
+- Each vs. all vs. every
 
 ## Keep it simple, and in line with the past where possible.
 
@@ -57,3 +68,18 @@ A1a2) Cumulative time limits are also mentioned in 9f6
 - Normalize penalties and the Regulations mention them
 - A two-second penalty should be written as "+2" in quotes.
 - Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
+- Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
+- Four-space indentation, make sure to spell-check and check for accidental double-spaces ("  ")
+
+## WCA Constitution
+
+- Any way we can combine the mission and the spirit?
+- 2b2b) Does the Board + WCA Chairman count as a single body for deciding WRC members?
+- 3a2b1) "supersede" is the more common spelling?
+- 3a2b1) may take immediate effect after they've been passed? Can the Board set the changes to go into effect at a certain time?
+- "Sponsorship" doesn't sound quite right for WCA overview of a competition.
+- 2d1: extra period at end
+- 3b1b) Must contain all normative rules??
+- There are a lot of "shall"s. Some could be changed to "are" or removed.
+- 3c1a) All... competition incidents? It coule be that non-competition event merit a clarification in the log. Also, perhaps it would make sense to talk about both the log and whatever we call announcements about Regulation changes / updates.
+- 3c2a2) The WRC should be reporting all major incidents, i.e. "descriptions of the incident, its circumstances, and its resolution". Clarify the distinction for announcements by the Board vs. log entries by the WRC?
