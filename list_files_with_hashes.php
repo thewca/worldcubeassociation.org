@@ -7,11 +7,16 @@
 #--- Preparation: check whether we're local, and specify what to ignore
 $isLocal = $_SERVER['SERVER_NAME'] == 'localhost';
 $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|', trim( '
+  ^./admin/.htaccess$
+  ^./admin/.htpasswd$
   ^./admin/export/serial.txt$
+  ^./admin/projectlocker.txt$
   ^./cache$
   ^./cache_log.txt$
   ^./cachedDatabase.php$
+  ^./competitions$
   ^./d.php$
+  ^./euro2012.php$
   ^./framework/_config.php$
   ^./framework/speedcubing2.site.aplus.net$
   ^./jpgraph$
