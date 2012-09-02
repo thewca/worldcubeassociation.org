@@ -8,6 +8,7 @@ $ranksAverage = getRanks( 'Average' );
 list( $single  ) = sumOfRanks( 'Single',  array( '333', '444', '555' ), $ranksSingle   );
 list( $average ) = sumOfRanks( 'Average', array( '333', '444', '555' ), $ranksAverage );
 $lists[] = array(
+  "sum_ranks_345",
   "Sum of 3x3/4x4/5x5 ranks",
   "Single | Average",
   "[P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5 [T] | [P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5",
@@ -16,11 +17,11 @@ $lists[] = array(
 
 #--- Sum of all single ranks
 list( $rows, $header ) = sumOfRanks( 'Single',  getAllEventIds(), $ranksSingle  );
-$lists[] = array( "Sum of all single ranks", "", $header, $rows );
+$lists[] = array( "sum_ranks_single", "Sum of all single ranks", "", $header, $rows );
 
 #--- Sum of all average ranks
 list( $rows, $header ) = sumOfRanks( 'Average', getAllEventIds(), $ranksAverage );
-$lists[] = array( "Sum of all average ranks", "", $header, $rows );
+$lists[] = array( "sum_ranks_average", "Sum of all average ranks", "", $header, $rows );
 
 #----------------------------------------------------------------------
 function getRanks ( $sourceName ) {

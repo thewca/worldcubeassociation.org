@@ -28,6 +28,7 @@ $competitions = dbQuery("
 ");
 
 $lists[] = array(
+  "wrs_in_most_events",
   "World records in most events",
   "current and past",
   "[P] Person [N] Events [T] | [C] Competition [N] Events [T] | [T] Country [N] Events",

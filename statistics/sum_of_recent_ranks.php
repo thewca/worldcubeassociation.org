@@ -8,6 +8,7 @@ $ranksAverage = getRecentRanks( 'average' );
 list( $single  ) = sumOfRecentRanks( 'Single',  array( '333', '444', '555' ), $ranksSingle   );
 list( $average ) = sumOfRecentRanks( 'Average', array( '333', '444', '555' ), $ranksAverage );
 $lists[] = array(
+  "sum_recent_ranks_345",
   "Sum of recent 3x3/4x4/5x5 ranks",
   "Single | Average - considering results since $sinceDateHtml",
   "[P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5 [T] | [P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5",
@@ -16,11 +17,11 @@ $lists[] = array(
 
 #--- Sum of all single ranks
 list( $rows, $header ) = sumOfRecentRanks( 'Single',  getAllEventIds(), $ranksSingle   );
-$lists[] = array( "Sum of recent single ranks",  "considering results since $sinceDateHtml", $header, $rows );
+$lists[] = array( "sum_recent_ranks_single", "Sum of recent single ranks",  "considering results since $sinceDateHtml", $header, $rows );
 
 #--- Sum of all average ranks
 list( $rows, $header ) = sumOfRecentRanks( 'Average', getAllEventIds(), $ranksAverage );
-$lists[] = array( "Sum of recent average ranks", "considering results since $sinceDateHtml", $header, $rows );
+$lists[] = array( "sum_recent_ranks_average", "Sum of recent average ranks", "considering results since $sinceDateHtml", $header, $rows );
 
 #----------------------------------------------------------------------
 function getRecentRanks ( $sourceId ) {

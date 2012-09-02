@@ -27,6 +27,7 @@ $competitions = dbQuery("
 ");
 
 $lists[] = array(
+  "most_countries",
   "Most Countries",
   "",
   "[P] Person [N] Countries [T] | [E] Event [N] Countries [T] | [C] Competition [N] Countries",

@@ -59,17 +59,14 @@ function showResults () {
 
   #--- Output the links to the individual lists.  
   echo "<ul style='padding-left:20px'>\n";
-  foreach( $lists as $list ){
-    $ctr++;
-    echo "<li style='padding-bottom:5px'><a style='color:#33C;font-weight:normal' href='#$ctr'>$list[0]</a></li>\n";
-  }
+  foreach( $lists as $list )
+    echo "<li style='padding-bottom:5px'><a style='color:#33C;font-weight:normal' href='#$list[0]'>$list[1]</a></li>\n";
   echo "</ul>\n\n";
 
   #--- Output the lists.
   $ctr = 0;
   foreach( $lists as $list )
     addList( $list, ++$ctr );
-
 }
 
 #----------------------------------------------------------------------
@@ -96,12 +93,12 @@ function defineAllLists () {
 }
 
 #----------------------------------------------------------------------
-function addList ( $list, $id ) {
+function addList ( $list, $legacyId ) {
 #----------------------------------------------------------------------
 
   $competitions = readDatabaseTableWithId( 'Competitions' );
 
-  list( $title, $subtitle, $header, $query, $description ) = $list;
+  list( $id, $title, $subtitle, $header, $query, $description ) = $list;
 
   $header = "$header [f] &nbsp;";
   $header = preg_replace( '/\\|/', ' &nbsp; &nbsp; | &nbsp; &nbsp; ', $header );
@@ -140,8 +137,9 @@ function addList ( $list, $id ) {
 
   $columnCount = count( $columnNames );
 
+  echo "<div id='$id'>\n";
   TableBegin( 'results', $columnCount );
-  TableCaptionNew( false, $id, "$title $subtitle $description" );
+  TableCaptionNew( false, $legacyId, "$title $subtitle $description" );
   TableHeader( $columnNames, $attributes );
 
   $rows = is_array( $query ) ? $query : dbQuery( $query );
@@ -178,6 +176,7 @@ function addList ( $list, $id ) {
   }
 
   TableEnd();  
+  echo "</div>\n";
 }
 
 #----------------------------------------------------------------------

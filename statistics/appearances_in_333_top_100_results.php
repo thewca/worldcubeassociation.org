@@ -24,6 +24,7 @@ foreach ( $candidates as $candidate ) {
 
 #--- Build and add this statistic
 $lists[] = array(
+  "appearances_top100_3x3",
   "Appearances in Rubik's Cube top 100 results",
   "Single | Average",
   "[P] Person [N] Appearances [T] | [P] Person [N] Appearances",

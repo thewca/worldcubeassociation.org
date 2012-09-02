@@ -47,6 +47,7 @@ function youngestAndOldest ( $eventId, $eventTitle, $maxAgeForYoungest, $minAgeF
 
   #--- Build and return the statistic list
   return array(
+    "youngest_oldest_$eventId",
     "Youngest and oldest $eventTitle solvers",
     '',
     "[P] Person [N] Years [n] Months [n] Days [R] Time [T] | [P] Person [N] Years [n] Months [n] Days [R] Time",

@@ -226,3 +226,8 @@ img.person {
   max-width:  600px;
   max-height: 300px;
 }
+
+div:target {
+  border-left: 5px solid #0C0;
+  padding-left: 5px;
+}

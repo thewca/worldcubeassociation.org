@@ -15,6 +15,7 @@ for ( $s=9; $s>=6; $s-- ) {
 }
 
 $lists[] = array(
+  "subx_3x3_solves",
   "Most Sub-X solves in Rubik's Cube",
   "",
   "[P] Name [N] &lt;10 [T] | [P] Name [N] &lt;9 [T] | [P] Name [N] &lt;8 [T] | [P] Name [N] &lt;7",

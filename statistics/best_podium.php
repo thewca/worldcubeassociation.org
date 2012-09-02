@@ -1,6 +1,7 @@
 <?
 
 $lists[] = array(
+  "podiums_3x3",
   "Best Podiums in Rubik's Cube event",
   "",
   "[C] Competition [N] Sum [P] First [n] &nbsp; [P] Second [n] &nbsp; [P] Third [n] &nbsp;",

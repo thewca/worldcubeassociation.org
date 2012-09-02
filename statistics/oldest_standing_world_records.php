@@ -33,6 +33,7 @@ $rows = dbQuery("
 ");
 
 $lists[] = array (
+  "oldest_world_records",
   "Oldest standing world records",
   "",
   "[E] Event [t] Type [N] Days [R] Result [P] Person [C] Competition",

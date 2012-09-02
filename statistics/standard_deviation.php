@@ -1,6 +1,7 @@
 <?
 
 $lists[] = array(
+  "standard_deviation_3x3",
   "3x3x3 best standard deviation",
   "",
   "[P] Person [T] Standard Deviation [t] Times",

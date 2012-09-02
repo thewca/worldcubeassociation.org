@@ -60,6 +60,7 @@ function add_333_consecutive_sub20 () {
   
   #--- Specify the list.
   $lists[] = array(
+    "sub20_streak_3x3",
     "3x3x3 longest sub20 streak",
     "all-time / ongoing",
     "[P] Person [N] Length [N] Best [N] Average [N] Worst [T] | [P] Person [N] Length [N] Best [N] Average [N] Worst [T]",

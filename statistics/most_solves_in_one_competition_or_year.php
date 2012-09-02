@@ -49,6 +49,7 @@ function polishMostSolvesDnfs ( $query ) {
 }
 
 $lists[] = array(
+  "most_solves",
   "Most solves in one competition or year",
   "",
   "[P] Person [n] Solves [C] Competition [T] | [P] Person [n] Solves [N] Year",

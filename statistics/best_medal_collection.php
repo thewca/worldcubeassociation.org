@@ -27,6 +27,7 @@ $overall = dbQuery("
 ");
 
 $lists[] = array(
+  "medal_collection",
   "Best \"medal collection\"",
   "3x3x3 and overall",
   "[P] Person [N] Gold [n] Silver [n] Bronze [T] | [P] Person [N] Gold [n] Silver [n] Bronze",
