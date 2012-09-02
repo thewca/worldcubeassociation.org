@@ -58,7 +58,8 @@ function dbQuery ( $query ) {
   mysql_free_result( $dbResult );
   stopTimer( "freeing the mysql result" );
 
-  stopTimer( "the whole dbQuery execution" );
+  global $dbQueryTotalTime;
+  $dbQueryTotalTime += stopTimer( "the whole dbQuery execution" );
 
   return $rows;
 }
@@ -79,7 +80,8 @@ function dbQueryHandle ( $query ) {
   startTimer();
   $dbResult = mysql_query( $query )
     or showDatabaseError( "Unable to perform database query." );
-  stopTimer( "pure query" );
+  global $dbQueryTotalTime;
+  $dbQueryTotalTime += stopTimer( "pure query" );
 
   return $dbResult;
 }
