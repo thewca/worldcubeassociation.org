@@ -41,9 +41,10 @@ function offerChoices () {
     yearsChoice( true, false, true, true ),
     choice( 'show', 'Show', array(
       array( '100 Persons', '100 Persons' ),
-      array( 'All Persons', 'All Persons' ),
+      array( '1000 Persons', '1000 Persons' ),
       array( 'By Region',   'By Region' ),
-      array( '100 Results', '100 Results' )
+      array( '100 Results', '100 Results' ),
+      array( '1000 Results', '1000 Results' ),
       ), $chosenShow ),
     choiceButton( $chosenSingle,  'single', 'Single' ),
     choiceButton( $chosenAverage, 'average', 'Average' )
@@ -65,8 +66,10 @@ function showResults () {
   $eventCondition = eventCondition();
   $yearCondition  = yearCondition();
   $regionCondition = regionCondition( 'result' );
-  if( $chosenShow == '100 Persons'  ||  $chosenShow == '100 Results' )
-    $limitCondition = 'LIMIT 110';
+  if ( preg_match( '/^10+/', $chosenShow, $matches ) ) {
+    $limitNumber = $matches[0];
+    $limitCondition = 'LIMIT ' . 2*$limitNumber;
+  }
 
   $valueSource = $chosenAverage ? 'average' : 'best';
   $valueName   = $chosenAverage ? 'Average' : 'Single';
@@ -78,7 +81,7 @@ function showResults () {
     require( 'events_regions.php' );
     return;
   }
-  if( $chosenShow == '100 Results' )
+  if( $chosenShow == '100 Results' || $chosenShow == '1000 Results' )
     require( 'events_results.php' );
   else
     require( 'events_persons.php' );
@@ -105,7 +108,7 @@ function showResults () {
     extract( $result );
     $ctr++;
     $no = ($value == $previousValue) ? '&nbsp;' : $ctr;
-    if( $limitCondition  &&  $no > 100 )
+    if( $limitCondition  &&  $no > $limitNumber )
       break;
     tableRow( array(
       $no,
