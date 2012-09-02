@@ -89,8 +89,6 @@ function computeConciseRecords () {
         AND result.id      = valueAndId % 1000000000
         AND competition.id = competitionId
         AND country.id     = result.countryId
-      ORDER BY
-        $valueSource DESC, personName
     ");
     
     stopTimer( "Concise${valueName}Results" );
