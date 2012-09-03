@@ -37,6 +37,12 @@ Quick notes for revision.
   - By the competitor, on purpose
   - By the competitor, by accident
 - Run everything through some spell- and grammar-checkers
+- 9i is out of place.
+- 9r1 should be factored out and referenced, along with other responsibilities
+- A4e) Why were penalties not cumulative?
+- Explain extra attempts
+- What was the reasoning for B1c?
+- H1b) Multi BLD attempts under 10 minutes are now measured to hundredths, for consistency
 
 ## Consistency of Terminology
 
@@ -46,7 +52,7 @@ Quick notes for revision.
 - Records vs. results, and recognition (vs. ranking, e..g WR on site)
 - eligible vs. permitted vs. allowed
 - solve vs. attempt vs. competing (vs. active competitor)
-  - Attempt: everything from handing the cube to the scrambler to signing the scoresheet?
+  - Attempt: everything from handing the cube to the scrambler to signing the scoresheet? (Vincent: Use "attempt" whever possible?)
   - Solve: The timed portion of an attempt (note: this definition might be strained for FMC, BLD, or other potential events). (Does this include inspection?)
   - See A6a2 for a place where we need to describe something inbetween: puzzle possibly already scrambled, but solve not begun yet. Also, BLD has inspection/memorization and solving
 - scramble vs. scramble sequence
@@ -67,6 +73,8 @@ Quick notes for revision.
 - such taht vs. so that
 - "apply" a move vs. "make" a move
 - consent vs. discretion of the delegate
+- stop vs. end vs. completion of the solve / attempt
+- All event names (particularly feet, multi BLD, and OH)
 
 ## Consistency of Grammar
 
@@ -89,7 +97,7 @@ Quick notes for revision.
 
 - be consistent about "x" in round formats.
 - For each type of round and type of event, define the result used for ranking, and what counts as "better"
-- Normalize penalties and the Regulations mention them
+- Normalize penalties and the Regulations mention them ("disqualification of the attempt", not "solve")
 - A two-second penalty should be written as "+2" in quotes.
 - Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
@@ -99,6 +107,8 @@ Quick notes for revision.
 - Book-style capitalization of section titles.
 - Capitalizatino of hyphenated words, e.g. "Foot solving" vs. "Foot Solving" at the beginning of a sentence, or "One-Handed" vs. "One-handed"
 - Formatting of the articles for the events, e.g. "Scrambling" and "Inspection" headings
+- The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
+- "WCA Delegate", not just "Delegate"
 
 ## WCA Constitution
 
