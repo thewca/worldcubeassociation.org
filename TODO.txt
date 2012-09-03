@@ -44,6 +44,7 @@ Quick notes for revision.
 - What was the reasoning for B1c?
 - H1b) Multi BLD attempts under 10 minutes are now measured to hundredths, for consistency
 - Remove "(Draft)" from the titles.
+- Make 1e1a at the discretion of the Delegate?
 
 ## Consistency of Terminology
 
@@ -76,6 +77,7 @@ Quick notes for revision.
 - consent vs. discretion of the delegate
 - stop vs. end vs. completion of the solve / attempt
 - All event names (particularly feet, multi BLD, and OH)
+- Guidelines: Explicitly label each rule with "Clarification" / "Explanation" / etc.
 
 ## Consistency of Grammar
 
@@ -123,3 +125,7 @@ Quick notes for revision.
 - There are a lot of "shall"s. Some could be changed to "are" or removed.
 - 3c1a) All... competition incidents? It coule be that non-competition event merit a clarification in the log. Also, perhaps it would make sense to talk about both the log and whatever we call announcements about Regulation changes / updates.
 - 3c2a2) The WRC should be reporting all major incidents, i.e. "descriptions of the incident, its circumstances, and its resolution". Clarify the distinction for announcements by the Board vs. log entries by the WRC?
+
+## Guidelines
+
+- Guideline about what (version of their) name competitors may/must provide?
