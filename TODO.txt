@@ -15,7 +15,7 @@ Quick notes for revision.
 - Do we need to clarify that the things the judge has to say don't need to be done literally? I would prefer to neaten the regulations so that we don't have little things like this that are technically being broken all the time. The Regulations should be constructed so that a properly held modern competition can adhere to it in practice.
 - We could have a catch-all rule that the spirit of fairness rules is that each competitor should receive a random scramble, and should not know any information about the particular scramble in advance.
 - It is never clarified what the score taker does with the score sheets / scors
-- Cubes often get lost at competitions. Clarify that the organizers are not liable for that? Perhaps only liable 
+- Cubes often get lost at competitions. Clarify that the organizers are not liable for that? Perhaps only liable
 - Possibly clarify that competitors cannot ask the judge for help by giving information about the solve. For example, during BLD "If my corners aren't solved, feel free to stop me, because I'll be wasting competition time." If competitors get okar with asking that, and someone accidentally does it but tries to go on, that would not be good. Better to keep things clear.
 - Explain anything about FMC conditions, like a separate, private competition area?
 - For feet, the +2 penalty might actually be used strategically. Make it +5 or +10?
@@ -46,6 +46,8 @@ Quick notes for revision.
 - Remove "(Draft)" from the titles.
 - Make 1e1a at the discretion of the Delegate?
 - We're clarifying that stopwatch times should be recorded be recorded to the nearest hundredth if they're under 10 minutes
+- Adding rounds (e.g. when?)
+- For valid citizenship (2e), we need an impartial, updating list... without getting into politics.
 
 ## Consistency of Terminology
 
@@ -113,6 +115,11 @@ Quick notes for revision.
 - Formatting of the articles for the events, e.g. "Scrambling" and "Inspection" headings
 - The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
 - "WCA Delegate", not just "Delegate"
+- Regexes:
+    - "said" > "the"
+    - four spaces and nothing else on a line
+    - too much indentation
+    - blank spaces at the end of a line
 
 ## WCA Constitution
 
