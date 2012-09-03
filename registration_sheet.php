@@ -5,7 +5,8 @@
 
 $currentSection = 'competitions';
 
-header("Content-type: text/csv");
+header('Content-Encoding: UTF-8');
+header("Content-type: text/csv; charset=UTF-8");
 header("Content-Disposition: attachment; filename=registration.csv");
 header("Pragma: no-cache");
 header("Expires: 0");
