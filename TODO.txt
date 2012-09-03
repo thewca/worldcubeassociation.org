@@ -43,6 +43,7 @@ Quick notes for revision.
 - Explain extra attempts
 - What was the reasoning for B1c?
 - H1b) Multi BLD attempts under 10 minutes are now measured to hundredths, for consistency
+- Remove "(Draft)" from the titles.
 
 ## Consistency of Terminology
 
