@@ -42,6 +42,7 @@ function offerChoices () {
     choice( 'show', 'Show', array(
       array( '100 Persons', '100 Persons' ),
       array( '1000 Persons', '1000 Persons' ),
+      array( 'All Persons', 'All Persons' ),
       array( 'By Region',   'By Region' ),
       array( '100 Results', '100 Results' ),
       array( '1000 Results', '1000 Results' ),
