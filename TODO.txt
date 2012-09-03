@@ -2,28 +2,6 @@
 
 Quick notes for revision.
 
-## Specific Regulations
-
-1c3a) Must?
-1c4) phrasing: multi-day competitions?
-1c) Must?
-1g2) The score sheet itself probably doesn't get changed, it's "overridden" or something like that.
-1h) Justificatoin should be a Guideline.
-2s) Needs a heading
-2t) must?
-3a1) Guideline: clarify that the intention of this rule is to prevent puzzle borrowing from slowing down the competition.
-4b) We should make clear that delegates should never re-generate any scrambles to replace other ones, because that is considered filtering. Thus, it would not be permitted to glance at the scrambles and generate the entire competition again in order to generate "fairer" scrambles.
-4d) Split up into subrules.
-7c) Regulation about how displays are nice, but not as important as the timers.
-8b) should be 8e, to avoid conflicts?
-9f4) Clarification that DNS may mean competitor decline *OR* didn't qualify
-9g) Find a nice way to describe combined rounds, while staying general
-10f) At least a guideline about "closest state" / "closer to solved than another state"
-11e) Catch-22?
-11f) Guideline about why no video evidence (competitors need to ask for disputes / rulings then and now.)
-A1a) Time limits used to be by event. Changing to "per round". Also, I don't remember hearing about it how often does this get broken in practice? (e.g. raising the time limit and allowing competitors more solves, which might have affeted their strategy)
-A1a2) Cumulative time limits are also mentioned in 9f6
-
 ## General Notes
 
 - Include a note at the top that certain terms are based on the Constitution. Possibly say something like "The World Cube Association WCA), WCA Board, WCA Delegates, WCA Regulations Committee (WRC), ... are defined in the WCA Constitution"
