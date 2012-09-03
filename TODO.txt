@@ -4,24 +4,69 @@ Quick notes for revision.
 
 ## General Notes
 
+- 1e2) and 1f2). How can we have a penalty for a "should"?
 - Include a note at the top that certain terms are based on the Constitution. Possibly say something like "The World Cube Association WCA), WCA Board, WCA Delegates, WCA Regulations Committee (WRC), ... are defined in the WCA Constitution"
 - Decide how to mandate the offical scrambler, and whether / how to allow others for now.
 - Make a style guide out of this.
 - For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
 - Consistent bulleting (along with punctuation, e.g. commes and colons at the end of lines)
 - Suspension isn't defined; what are the rights of the board to deal with competitors / community members / incidents
+- Provisions for the US runner system (which doesn't fit squarely with some rules, like A2d)?
+- Do we need to clarify that the things the judge has to say don't need to be done literally? I would prefer to neaten the regulations so that we don't have little things like this that are technically being broken all the time. The Regulations should be constructed so that a properly held modern competition can adhere to it in practice.
+- We could have a catch-all rule that the spirit of fairness rules is that each competitor should receive a random scramble, and should not know any information about the particular scramble in advance.
+- It is never clarified what the score taker does with the score sheets / scors
+- Cubes often get lost at competitions. Clarify that the organizers are not liable for that? Perhaps only liable 
+- Possibly clarify that competitors cannot ask the judge for help by giving information about the solve. For example, during BLD "If my corners aren't solved, feel free to stop me, because I'll be wasting competition time." If competitors get okar with asking that, and someone accidentally does it but tries to go on, that would not be good. Better to keep things clear.
+- Explain anything about FMC conditions, like a separate, private competition area?
+- For feet, the +2 penalty might actually be used strategically. Make it +5 or +10?
+- Assumed citizenship
+- From Vincent: Final rounds must have only one group?
+  - Issue: A lot of small competitions have single-round events that use groups so that there are enough judges. Mayve just require this for multi-round events
+- Publish changesets
+  - Highlights for competitors
+  - Highlights for judges
+  - Highlights for everyone else
+- Clarification about when competitors use timers (e.g. what is G1a) an exception to?)
+- There's no consistent place for all he things that are "provided by" the judge / organization team.
+- How are you called G1a)
+- Soften the defitinition of competitors
+- Check all the references to covering puzzles, make sure Article A covers it.
+- Specify roles instead of "X must be made to happen" or "The competitor should submit X cubes"
+- Single-corner Twists
+  - By the scrambler
+  - By the competitor, on purpose
+  - By the competitor, by accident
+- Run everything through some spell- and grammar-checkers
 
 ## Consistency of Terminology
 
 - A "regulation" vs. a "rule"
 - "score" vs. "results" vs. "time"
 - event vs. round vs. group (i.e. which one is a judge assigned to?)
-- Records vs. results, and recognition.
+- Records vs. results, and recognition (vs. ranking, e..g WR on site)
 - eligible vs. permitted vs. allowed
-- solve vs. attempt vs. competing (vs. active competitor
+- solve vs. attempt vs. competing (vs. active competitor)
+  - Attempt: everything from handing the cube to the scrambler to signing the scoresheet?
+  - Solve: The timed portion of an attempt (note: this definition might be strained for FMC, BLD, or other potential events). (Does this include inspection?)
+  - See A6a2 for a place where we need to describe something inbetween: puzzle possibly already scrambled, but solve not begun yet. Also, BLD has inspection/memorization and solving
 - scramble vs. scramble sequence
 - From the forum: disqualification > DNF? "penalty : disqualification of the solve (DNF)" ? ( http://www.worldcubeassociation.org/forum/viewtopic.php?f=4&t=1022&p=5867#p5867 )
+  - Formatting idea:  "Penalty: 2 second time penalty" and "Penalty: disqualification (DNF)"
 - competition date?
+- "start" vs. "begin"
+- score sheet vs. scoresheet vs. scorecard vs. competition sheet. How about something that is more accurate, like "time sheet" or "time card" or "result sheet"? (see "score" vs. "results" vs. "time")
+- plural adjectival nouns "Regulations Committee", "results sheet"
+- "give" vs. "apply" vs. "assign" a penalty
+- listing alternatives (A7b vs. 1b2)
+- "writing down" vs. "recording" a result
+- "The competitor must" vs. "a competitor must" vs. "competitors must" vs. "each / every competitor must" vs. "all competitors must"
+- thereby vs. thus (i.e. "thereby starting the timer")
+- Rules about covers
+- Stackmat vs. Stackmat timer vs. Stackmat (i.e. the mat)
+- "the X" vs. "a X" (e.g. X = blindfold)
+- such taht vs. so that
+- "apply" a move vs. "make" a move
+- consent vs. discretion of the delegate
 
 ## Consistency of Grammar
 
@@ -32,6 +77,7 @@ Quick notes for revision.
 - Consistent capitalization and full use of "WCA Regulations"
 - ALL OVER THE PLACE: Singular vs. plural
 - Each vs. all vs. every
+- "allotted"
 
 ## Keep it simple, and in line with the past where possible.
 
@@ -48,6 +94,11 @@ Quick notes for revision.
 - Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
 - Four-space indentation, make sure to spell-check and check for accidental double-spaces ("  ")
+- "default" procedures
+- Mention of stopwatch in relation to timer regulations
+- Book-style capitalization of section titles.
+- Capitalizatino of hyphenated words, e.g. "Foot solving" vs. "Foot Solving" at the beginning of a sentence, or "One-Handed" vs. "One-handed"
+- Formatting of the articles for the events, e.g. "Scrambling" and "Inspection" headings
 
 ## WCA Constitution
 
