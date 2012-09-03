@@ -45,6 +45,7 @@ Quick notes for revision.
 - H1b) Multi BLD attempts under 10 minutes are now measured to hundredths, for consistency
 - Remove "(Draft)" from the titles.
 - Make 1e1a at the discretion of the Delegate?
+- We're clarifying that stopwatch times should be recorded be recorded to the nearest hundredth if they're under 10 minutes
 
 ## Consistency of Terminology
 
