@@ -1,6 +1,6 @@
 <?
 
-for ( $s=9; $s>=6; $s-- ) {
+for ( $s=9; $s>=5; $s-- ) {
   $temp[] = dbQuery("
     SELECT    *
     FROM (
@@ -18,8 +18,8 @@ $lists[] = array(
   "subx_3x3_solves",
   "Most Sub-X solves in Rubik's Cube",
   "",
-  "[P] Name [N] &lt;10 [T] | [P] Name [N] &lt;9 [T] | [P] Name [N] &lt;8 [T] | [P] Name [N] &lt;7",
-  my_merge( $temp[0], $temp[1], $temp[2], $temp[3] ),
+  "[P] Name [N] &lt;10 [T] | [P] Name [N] &lt;9 [T] | [P] Name [N] &lt;8 [T] | [P] Name [N] &lt;7 [T] | [P] Name [N] &lt;6",
+  my_merge( $temp[0], $temp[1], $temp[2], $temp[3], $temp[4] ),
   ""
 );
 
