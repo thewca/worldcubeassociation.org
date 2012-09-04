@@ -98,11 +98,11 @@ function addList ( $list, $legacyId ) {
 
   $competitions = readDatabaseTableWithId( 'Competitions' );
 
-  list( $id, $title, $subtitle, $header, $query, $description ) = $list;
+  list( $id, $title, $subtitle, $columnDefs, $rows, $info ) = $list;
 
-  $header = "$header [f] &nbsp;";
-  $header = preg_replace( '/\\|/', ' &nbsp; &nbsp; | &nbsp; &nbsp; ', $header );
-  preg_match_all( '/\[(\w+)\]\s*([^[]*[^[ ])/', $header, $matches );
+  $columnDefs = "$columnDefs [f] &nbsp;";
+  $columnDefs = preg_replace( '/\\|/', ' &nbsp; &nbsp; | &nbsp; &nbsp; ', $columnDefs );
+  preg_match_all( '/\[(\w+)\]\s*([^[]*[^[ ])/', $columnDefs, $matches );
   $columnClasses = $matches[1];
   $columnNames = $matches[2];
 
@@ -130,19 +130,17 @@ function addList ( $list, $legacyId ) {
   if( $subtitle )
     $subtitle = "<span style='color:#999'>($subtitle)</span>";
 
-  if( $description ){
-    $description = htmlEntities( $description, ENT_QUOTES );
-    $description = "(<a title='$description' style='color:#FC0' onclick='alert(\"$description\")'>info</a>)";
+  if( $info ){
+    $info = htmlEntities( $info, ENT_QUOTES );
+    $info = "(<a title='$info' style='color:#FC0' onclick='alert(\"$info\")'>info</a>)";
   }
 
   $columnCount = count( $columnNames );
 
   echo "<div id='$id'>\n";
   TableBegin( 'results', $columnCount );
-  TableCaptionNew( false, $legacyId, "$title $subtitle $description" );
+  TableCaptionNew( false, $legacyId, "$title $subtitle $info" );
   TableHeader( $columnNames, $attributes );
-
-  $rows = is_array( $query ) ? $query : dbQuery( $query );
 
   #--- Display the table.
   foreach( $rows as $row ){

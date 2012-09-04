@@ -5,16 +5,18 @@
 #   page and in what order.
 #
 #   If you want to add a ist, write a file like the others and include
-#   it on the bottom of this script.
+#   it in the list in this script.
 # 
-#   Each list definition appends to $lists an array of four values:
+#   Each list definition appends to $lists an array with these values:
 # 
-#     - Title
-#     - Subtitle
-#     - Column definition
-#     - Query
+#     - Id (used as html anchor)
+#     - Title (for the top-list and shown in brown-red above the stat)
+#     - Subtitle (shown in gray)
+#     - Column definitions (see description below)
+#     - Rows (the actual data to show)
+#     - Info (optional, provides longer explanation on yellow "info")
 #
-#   The column definition must reflect the query results. Each column
+#   The column definitions must reflect the query results. Each column
 #   is defined as "[type] name" with these possible types:
 # 
 #     [P] Person.      For person ids.
