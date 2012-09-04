@@ -4,7 +4,7 @@
 #   This script specifies which lists shall be shown on the statistics
 #   page and in what order.
 #
-#   If you want to add a ist, write a file like the others and include
+#   If you want to add a list, write a file like the others and include
 #   it in the list in this script.
 # 
 #   Each list definition appends to $lists an array with these values:
@@ -27,6 +27,8 @@
 #     [r] Result.      For result values. The query must also provide
 #                      an event id for this to work because I need to
 #                      get the value format.
+#     [f] Filler.      Automatically added later, used for last column
+#                      to fill the table to make it page width.
 # 
 #   Moreover, types [T], [N] and [R] are bold versions of their lower
 #   case versions and should be used for important values while the
@@ -35,7 +37,7 @@
 #----------------------------------------------------------------------
 
 #--- Specify the statistics
-$statisticNames = array(
+$statisticFiles = array(
 
   #--- Special ranks:
   'youngest_and_oldest_solvers',
@@ -60,21 +62,21 @@ $statisticNames = array(
 );
 
 #--- You can test a single statistic by overwriting the list like this:
-#$statisticNames = array( 'blindfold_333_success_rate' );
+#$statisticFiles = array( 'sub_x' );
   
-foreach ( $statisticNames as $statisticName )
-  addOneStatistic( $statisticName );
+foreach ( $statisticFiles as $statisticFile )
+  addOneStatistic( $statisticFile );
 
 
 #----------------------------------------------------------------------
-function addOneStatistic ( $statisticName ) {
+function addOneStatistic ( $statisticFile ) {
 #----------------------------------------------------------------------
   global $lists;
   global $WHERE, $sinceDateHtml, $sinceDateMysql, $sinceDateCondition;
   
   startTimer();
-  require( "statistics/$statisticName.php" );
-  stopTimer( "STATISTIC: $statisticName" );
+  require( "statistics/$statisticFile.php" );
+  stopTimer( "STATISTIC: $statisticFile" );
 }
 
 ?>
