@@ -46,9 +46,9 @@ function showCompetitionResults () {
     #--- Welcome new rounds.
     if( $chosenAllResults  &&  ($isNewEvent  ||  $isNewRound) ){
 
-      $anchors = ($isNewEvent ? "$eventId " : "") . "${eventId}_$roundId";
+      $anchors = ($isNewEvent ? "$eventId " : "") . "e${eventId}_$roundId";
       $eventHtml = eventLink( $eventId, $eventName );
-      $caption = spaced( array( $eventHtml, $roundName, $formatName ));
+      $caption = spaced( array( $eventHtml, $roundName, $formatName, "<a href='#e${eventId}_$roundId'>link</a>" ));
       tableCaptionNew( false, $anchors, $caption );
 
       $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
