@@ -100,6 +100,10 @@ function addList ( $list, $legacyId ) {
 
   list( $id, $title, $subtitle, $columnDefs, $rows, $info ) = $list;
 
+  #--- From column definitions like "[P] Person [N] Appearances [T] | [P] Person [N] Appearances"
+  #--- extract classes and names like:
+  #--- ('P', 'N', 'T', 'P', 'N', 'f')
+  #--- ('Person', 'Appearances, '&nbsp; &nbsp; | &nbsp; &nbsp;', 'Person', 'Appearances', '&nbsp;')
   $columnDefs = "$columnDefs [f] &nbsp;";
   $columnDefs = preg_replace( '/\\|/', ' &nbsp; &nbsp; | &nbsp; &nbsp; ', $columnDefs );
   preg_match_all( '/\[(\w+)\]\s*([^[]*[^[ ])/', $columnDefs, $matches );
@@ -207,23 +211,34 @@ function currentPersonName ( $personId ) {
 }
 
 #----------------------------------------------------------------------
-function my_merge ( $a, $b ) {
+function my_merge () {  # call with two or more parameters
 #----------------------------------------------------------------------
 
-  $a = fill10( $a );
-  $b = fill10( $b );
+  #--- Get all sub-statistic data with standard length (10 rows)
+  foreach( func_get_args() as $subStat )
+    $subStats[] = fill10( $subStat );
+
+  #--- Combine the sub-statistics into just one (concatenating their rows)
   foreach( range( 0, 9 ) as $i ){
-    $c[$i] = array_merge( $a[$i], array( ' &nbsp; &nbsp; | &nbsp; &nbsp; ' ), $b[$i] );
+    $merged[$i] = $sep = array();
+    foreach( $subStats as $subStat ){
+      $merged[$i] = array_merge( $merged[$i], $sep, $subStat[$i] );
+      $sep = array( ' &nbsp; &nbsp; | &nbsp; &nbsp; ' );
+    }
   }
-  return $c;
+  return $merged;
 }
 
 #----------------------------------------------------------------------
 function fill10 ( $a ) {
 #----------------------------------------------------------------------
 
-  while ( count($a) < 10 )
-    $a[] = array_fill( 0, count($a[0])-1, '' );
+  while ( count($a) < 10 ) {
+    $emptyRow = array();
+    while ( array_key_exists( count($emptyRow), $a[0] ) )
+      $emptyRow[] = '';
+    $a[] = $emptyRow;
+  }
   return $a;
 }
 

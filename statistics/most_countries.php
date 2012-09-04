@@ -31,7 +31,7 @@ $lists[] = array(
   "Most Countries",
   "",
   "[P] Person [N] Countries [T] | [E] Event [N] Countries [T] | [C] Competition [N] Countries",
-  my_merge( my_merge( $persons, $events ), $competitions ),
+  my_merge( $persons, $events, $competitions ),
   "[Person] In how many countries the person participated. [Event] In how many countries the event has been offered. [Competition] Of how many countries persons participated."
 );
 

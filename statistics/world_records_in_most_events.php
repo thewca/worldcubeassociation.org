@@ -32,7 +32,7 @@ $lists[] = array(
   "World records in most events",
   "current and past",
   "[P] Person [N] Events [T] | [C] Competition [N] Events [T] | [T] Country [N] Events",
-  my_merge( my_merge( $persons, $competitions ), $countries )
+  my_merge( $persons, $competitions, $countries )
 );
 
 ?>
