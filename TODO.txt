@@ -2,10 +2,18 @@
 
 Quick notes for revision.
 
+## To Be Discussed by the WCA Board / WRC
+
+- How official scrambling programs are decided made available.
+- When may rounds be added to an event, and what is allowed?
+- We need an impartial list of valid citizenships that will stay updated without requiring political decisions by the WCA.
+
+## For Website formatting
+- Table of contents
+- Cross-links for certain terms
+
 ## General Notes
 
-- Decide how to mandate the offical scrambler, and whether / how to allow others for now.
-- Make a style guide out of this.
 - For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
 - Consistent bulleting (along with punctuation, e.g. commes and colons at the end of lines)
 - Suspension isn't defined; what are the rights of the board to deal with competitors / community members / incidents
@@ -17,11 +25,14 @@ Quick notes for revision.
   - By the competitor, by accident
 - Run everything through some spell- and grammar-checkers
 - 9i is out of place.
-- 9r1 should be factored out and referenced, along with other responsibilities
-- Explain extra attempts
 - Remove "(Draft)" from the titles.
-- Adding rounds (e.g. when?)
-- For valid citizenship (2e), we need an impartial, updating list... without getting into politics.
+- Ron's policy of putting cubers in contact with media requests, not the other way around
+- Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
+- correct indentation
+- British English
+- Guideline: Cubes may be of any reasonable size
+- Still need to fix English in Articles 10, 12. (e.g. 10h)
+- Guideline 8a4)
 
 ## Consistency of Terminology
 
@@ -94,6 +105,8 @@ Quick notes for revision.
     - four spaces and nothing else on a line
     - too much indentation
     - blank spaces at the end of a line
+- Formatting of tables and images-
+- Emphasize cubing terms *like this* or _like this_?
 
 ## WCA Constitution
 
