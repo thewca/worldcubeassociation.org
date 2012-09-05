@@ -9,7 +9,8 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ## Formatting Conventions
 
-- References to the "(WCA) Regulations" and "(WCA) Guidelines" should be capitalized. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that "Regulations" refers to the body of the WCA Regulations.
+- References to the "(WCA) Regulations" and "(WCA) Guidelines" are capitalized. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that "Regulations" refers to the body of the WCA Regulations.
+- Puzzles names are capitalized. Event formats like "One-Handed Solving" are also capitalized. A puzzle name + event format should omits word "Solving" (e.g. Rubik's Cube: One-Handed). See Regulation 9b for official puzzles and event formats.
 
 ### Specific Formatting in Markdown.
 
