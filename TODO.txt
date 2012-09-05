@@ -15,7 +15,7 @@ Quick notes for revision.
 ## General Notes
 
 - For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
-- Consistent bulleting (along with punctuation, e.g. commes and colons at the end of lines)
+- Consistent bulleting (along with punctuation, e.g. commas and colons at the end of lines)
 - Suspension isn't defined; what are the rights of the board to deal with competitors / community members / incidents
 - There's no consistent place for all he things that are "provided by" the judge / organization team.
 - Specify roles instead of "X must be made to happen" or "The competitor should submit X cubes"
@@ -28,11 +28,16 @@ Quick notes for revision.
 - Remove "(Draft)" from the titles.
 - Ron's policy of putting cubers in contact with media requests, not the other way around
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
-- correct indentation
 - British English
 - Guideline: Cubes may be of any reasonable size
 - Still need to fix English in Articles 10, 12. (e.g. 10h)
 - Guideline 8a4)
+- Fix Â° (degree) formatting/encoding
+- Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
+- Find some way to make misalignment rulings from 10f clear
+- Rephrase the intro to Article Z, and try to find some way to number it.
+- Still need a justification of video evidence frmo the board fo 11f
+- Make 9b) more DRY.
 
 ## Consistency of Terminology
 
@@ -40,6 +45,8 @@ Quick notes for revision.
 - "score" vs. "results" vs. "time"
 - event vs. round vs. group (i.e. which one is a judge assigned to?)
 - Records vs. results, and recognition (vs. ranking, e..g WR on site)
+- rank vs. ranking vs. position
+- registration vs. pre-registration
 - eligible vs. permitted vs. allowed
 - solve vs. attempt vs. competing (vs. active competitor)
   - Attempt: everything from handing the cube to the scrambler to signing the scoresheet? (Vincent: Use "attempt" whever possible?)
@@ -95,7 +102,7 @@ Quick notes for revision.
 - Four-space indentation, make sure to spell-check and check for accidental double-spaces ("  ")
 - "default" procedures
 - Mention of stopwatch in relation to timer regulations
-- Book-style capitalization of section titles.
+- Book-style capitalization of section titles (Also, consistent colons)
 - Capitalizatino of hyphenated words, e.g. "Foot solving" vs. "Foot Solving" at the beginning of a sentence, or "One-Handed" vs. "One-handed"
 - Formatting of the articles for the events, e.g. "Scrambling" and "Inspection" headings
 - The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
