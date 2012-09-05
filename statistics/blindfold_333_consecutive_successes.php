@@ -30,10 +30,13 @@ function add_blindfold_333_consecutive_successes () {
     $datedValues[] = array( 'current', -1 );
 
     #--- Find longest streak.
-    unset( $streak, $bestStreak );
+    $streak = array();
+    $bestStreak = array();
+    $streakFirstDate = "";
+    $streakLastDate = "";
     foreach( $datedValues as $dv ){
       if( $dv[1] > 0 ){
-        if( !$streak ) $streakFirstDate = $dv[0];
+        if( ! $streak ) $streakFirstDate = $dv[0];
         $streakLastDate = $dv[0];
         $streak[] = $dv[1];
       }
@@ -43,7 +46,7 @@ function add_blindfold_333_consecutive_successes () {
           $bestStreakFirstDate = $streakFirstDate;
           $bestStreakLastDate = ($dv[0] == 'current') ? '<b>ongoing...</b>' : $streakLastDate;
         }
-        unset( $streak );
+        $streak = array();
       }
     }
 

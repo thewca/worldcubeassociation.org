@@ -48,6 +48,7 @@ function showMatchingPersons () {
   }
 
   #--- Build the nameCondition (all searched parts must occur).
+  $nameCondition = "";
   foreach( explode( ' ', $chosenPatternMysql ) as $namePart )
     $nameCondition .= " AND person.name like '%$namePart%'";
 
@@ -55,6 +56,10 @@ function showMatchingPersons () {
   if( $chosenEventId ){
     $eventConditionPart1 = ", (SELECT DISTINCT personId FROM ConciseSingleResults WHERE 1 " . eventCondition() . ") result";
     $eventConditionPart2 = "AND person.id = result.personId";
+  }
+  else {
+    $eventConditionPart1 = "";
+    $eventConditionPart2 = "";
   }
   
   #--- Do the query!

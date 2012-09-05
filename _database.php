@@ -1,5 +1,8 @@
 <?
 
+if( ! isset( $dontLoadCachedDatabase ))
+  $dontLoadCachedDatabase = false;
+
 establishDatabaseAccess();
 if( ! $dontLoadCachedDatabase )
   require( 'cachedDatabase.php' );
@@ -172,16 +175,17 @@ function getAllUsedContinentIds            () { return getAllIDs( getAllUsedCont
 function structureBy ( $results, $field ) {
 #----------------------------------------------------------------------
 
+  $allParts = array();
   foreach( $results as $result ){
-    if( $result[$field] != $current ){
+    if( !isset($current) || $result[$field] != $current ){
       $current = $result[$field];
-      if( $thisPart )
+      if( isset( $thisPart ))
         $allParts[] = $thisPart;
       $thisPart = array();
     }
     $thisPart[] = $result;
   }
-  if( $thisPart )
+  if( isset( $thisPart ))
     $allParts[] = $thisPart;
 
   return $allParts;

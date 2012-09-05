@@ -40,15 +40,19 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
 #----------------------------------------------------------------------
 
   #--- Compute the event-missing penalties and their sum
+  $allPenalties = 0;
   foreach ( $eventIds as $eventId )
-    if ( $ranks[$eventId] )
+    if ( isset( $ranks[$eventId] ))
       $allPenalties += $penalty[$eventId] = count( $ranks[$eventId] ) + 1;
 
   #--- Compute everybody's sum of ranks
   foreach ( $eventIds as $eventId )
-    if ( $ranks[$eventId] )
-      foreach ( $ranks[$eventId] as $personId => $rank )
+    if ( isset( $ranks[$eventId] ))
+      foreach ( $ranks[$eventId] as $personId => $rank ){
+        if( ! isset( $rankSum[$personId] ))
+	  $rankSum[$personId] = 0;
         $rankSum[$personId] += $rank - $penalty[$eventId];
+      }
   foreach ( array_keys( $rankSum ) as $personId )
     $rankSum[$personId] += $allPenalties;
 
@@ -59,8 +63,8 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
   foreach ( array_slice( $rankSum, 0, 10 ) as $personId => $sum ) {
     $row = array( $personId, $sum );
     foreach ( $eventIds as $eventId ) {
-      if ( $penalty[$eventId] )
-        $row[] = $ranks[$eventId][$personId]
+      if ( isset( $penalty[$eventId] ))
+        $row[] = isset( $ranks[$eventId][$personId] )
                ? $ranks[$eventId][$personId]
                : "<span style='color:#F00'>" . $penalty[$eventId] . "</span>";
     }
@@ -72,7 +76,7 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
   foreach ( $eventIds as $eventId ) {
     $e = preg_replace( '/333(.+)/e', 'strtoupper($1)', $eventId );
     $e = str_replace( array('minx','pyram','clock','mmagic','magic','444bf','555bf'), array('meg','pyr','clo','mma','mag','4BF','5BF'), $e );
-    if ( $penalty[$eventId] )
+    if ( isset( $penalty[$eventId] ))
       $header .= " [n] $e";
   }
 

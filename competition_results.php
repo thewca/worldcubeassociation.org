@@ -23,8 +23,10 @@ function showCompetitionResults () {
   foreach( $competitionResults as $result ){
     extract( $result );
 
-    $isNewEvent = ($eventId != $currentEventId);
-    $isNewRound = ($roundId != $currentRoundId);
+    $isNewEvent = (! isset( $currentEventId ) || $eventId != $currentEventId);
+    $currentEventId = $eventId;
+    $isNewRound = (! isset( $currentRoundId ) || $roundId != $currentRoundId);
+    $currentRoundId = $roundId;
 
     #--- Welcome new events.
     $winnerEvent = '';
@@ -69,8 +71,6 @@ function showCompetitionResults () {
       formatAverageSources( $formatId != '1', $result, $valueFormat )
     ));
 
-    $currentEventId = $eventId;
-    $currentRoundId = $roundId;
   }
 
   tableEnd();
@@ -93,12 +93,12 @@ function showCompetitionResultsByPerson () {
   foreach( $competitionResults as $result ){
     extract( $result );
 
-    $isNewPerson = ($personId != $currentPersonId);
-    $isNewEvent =  ($eventId != $currentEventId || $isNewPerson);
+    $isNewPerson = (! isset( $currentPersonId ) || $personId != $currentPersonId);
+    $isNewEvent = (! isset( $currentEventId ) || $eventId != $currentEventId || $isNewPerson);
 
     #--- Welcome new persons.
     if( $isNewPerson ){
-      if( $currentPersonId ){
+      if( isset( $currentPersonId )){
         tableRowBlank();
       }
 
@@ -138,6 +138,7 @@ function getCompetitionResults () {
   global $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
   #--- Some filter conditions depending on the view (winners, top3, all).
+  $viewCondition = "";
   if( $chosenTop3 )
     $viewCondition = "AND roundId in ('f', 'c') AND pos <= 3";
   if( $chosenWinners )

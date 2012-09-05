@@ -105,10 +105,11 @@ function showResults () {
   tableHeader( explode( '|', "Rank|Person|Result|Citizen of|Competition|$headerSources" ),
                array( 0=>"class='r'", 2=>"class='R2'", 5=>'class="f"' ));
 
+  $ctr = 0;
   foreach( $results as $result ){
     extract( $result );
     $ctr++;
-    $no = ($value == $previousValue) ? '&nbsp;' : $ctr;
+    $no = (isset($previousValue) && $value == $previousValue) ? '&nbsp;' : $ctr;
     if( $limitCondition  &&  $no > $limitNumber )
       break;
     tableRow( array(

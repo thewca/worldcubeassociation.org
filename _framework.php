@@ -36,11 +36,11 @@ function getEvent ( $eventId ) {
 function readEventSpecs ( $eventSpecs ) {
   foreach( getAllEventIds() as $eventId )
     if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $eventSpecs, $matches )) {
-      $eventSpecsTree["$eventId"]['personLimit']      = $matches[3];
-      $eventSpecsTree["$eventId"]['timeLimit']        = $matches[4];
-      $eventSpecsTree["$eventId"]['timeFormat']       = $matches[5];
-      $eventSpecsTree["$eventId"]['qualify']          = $matches[6];
-      $eventSpecsTree["$eventId"]['qualifyTimeLimit'] = $matches[7];
+      $eventSpecsTree["$eventId"]['personLimit']      = isset( $matches[3] ) ? $matches[3] : "";
+      $eventSpecsTree["$eventId"]['timeLimit']        = isset( $matches[4] ) ? $matches[4] : "";
+      $eventSpecsTree["$eventId"]['timeFormat']       = isset( $matches[5] ) ? $matches[5] : "";
+      $eventSpecsTree["$eventId"]['qualify']          = isset( $matches[6] ) ? $matches[6] : "";
+      $eventSpecsTree["$eventId"]['qualifyTimeLimit'] = isset( $matches[7] ) ? $matches[7] : "";
     }
   return $eventSpecsTree;
 }

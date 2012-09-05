@@ -87,6 +87,7 @@ function computeCompetitionEvents ( $eventSpecs ) {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenAllResults;
 
+  $events = "";
   foreach( getEventSpecsEventIds( $eventSpecs ) as $eventId ){
     $url = $chosenAllResults ? "#$eventId" : "competition.php?competitionId=$chosenCompetitionId&amp;allResults=1#$eventId";
     $events .= '[{' . eventCellName( $eventId ) . '}{' . $url . '}]';
@@ -113,6 +114,7 @@ function computeMedia ( $mediaType ) {
     ORDER BY timestampDecided DESC
   ");
 
+  $mediaList = "";
   foreach( $media as $medium ){
     extract($medium);
 

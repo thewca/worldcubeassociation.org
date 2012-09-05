@@ -55,6 +55,9 @@ function getCompetitions ( $sortList ) {
   global $chosenEventId, $chosenRegionId, $chosenPatternMysql;
 
   #--- Prepare stuff for the query.
+  $eventCondition = "";
+  $regionCondition = "";
+  $nameCondition = "";
   if( $chosenEventId )
     $eventCondition = "AND eventSpecs REGEXP '[[:<:]]${chosenEventId}[[:>:]]'";
   $yearCondition = yearCondition();
@@ -109,7 +112,7 @@ function listCompetitions () {
     foreach( $chosenCompetitions as $competition ){
       extract( $competition );
 
-      if( $previousYear  &&  $year != $previousYear )
+      if( isset( $previousYear )  &&  $year != $previousYear )
         tableRowEmpty();
       $previousYear = $year;
 

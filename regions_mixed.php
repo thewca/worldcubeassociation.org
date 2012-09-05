@@ -5,7 +5,7 @@ showRegionalRecordsMixed();
 #----------------------------------------------------------------------
 function showRegionalRecordsMixed () {
 #----------------------------------------------------------------------
-  global $chosenRegionId;
+  global $chosenRegionId, $chosenYears;
 
   require( 'regions_get_current_records.php' );
 
@@ -17,8 +17,8 @@ function showRegionalRecordsMixed () {
   foreach( $results as $result ){
     extract( $result );
 
-    $isNewEvent = ($eventId != $currentEventId); $currentEventId = $eventId;
-    $isNewType = $isNewEvent || ($type != $currentType); $currentType = $type;
+    $isNewEvent = (!isset($currentEventId) || $eventId != $currentEventId); $currentEventId = $eventId;
+    $isNewType = $isNewEvent || !isset($currentType) || $type != $currentType; $currentType = $type;
 
     if( $isNewEvent )
       tableCaption( false, eventLink( $eventId, $eventName ));

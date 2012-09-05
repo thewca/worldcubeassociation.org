@@ -10,6 +10,7 @@ function showRegionalRecordsHistory () {
   #--- Compute the region condition and the normal record name.
   if( preg_match( '/^(world)?$/i', $chosenRegionId )){
     $regionCondition = "AND recordName = 'WR'";
+    $normalRecordName = '';
   } elseif( preg_match( '/^_/', $chosenRegionId )){
     $tmp = dbQuery( "SELECT recordName FROM Continents WHERE id = '$chosenRegionId'" );
     $normalRecordName = $tmp[0][0];
@@ -59,11 +60,11 @@ function showRegionalRecordsHistory () {
 
   #--- Process the results.
   tableBegin( 'results', 7 );
-  foreach( $results as $results ){
-    extract( $results );
+  foreach( $results as $result ){
+    extract( $result );
 
     #--- Announce the event.
-    if( $eventId != $currentEventId ){
+    if( !isset( $currentEventId ) || $eventId != $currentEventId ){
       $currentEventId = $eventId;
       tableCaptionNew( false, $eventId, eventLink( $eventId, $eventName ));
       tableHeader( explode( '|', '|Single|Average|Person|Citizen of|Competition|Result Details' ),

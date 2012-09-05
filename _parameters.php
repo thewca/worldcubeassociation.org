@@ -102,7 +102,9 @@ function getRawParamThisShouldBeAnException ( $name ) {
 #----------------------------------------------------------------------
   global $rawParametersDontUseOutsideParametersModule;
 
-  return $rawParametersDontUseOutsideParametersModule[$name];
+  if( isset( $rawParametersDontUseOutsideParametersModule[$name] ))
+    return $rawParametersDontUseOutsideParametersModule[$name];
+  return;
 }
 
 #----------------------------------------------------------------------

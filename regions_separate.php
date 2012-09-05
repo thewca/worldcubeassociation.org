@@ -19,7 +19,7 @@ function showRegionalRecordsSeparate () {
     extract( $result );
 
     if( $type == 'Single' ){
-      $isNewEvent = ($eventId != $currentEventId); $currentEventId = $eventId;
+      $isNewEvent = (!isset($currentEventId) || $eventId != $currentEventId); $currentEventId = $eventId;
       tableRow( array(
         $isNewEvent ? eventLink( $eventId, $eventCellName ) : '',
         $isNewEvent ? formatValue( $value, $format ) : '',

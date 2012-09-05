@@ -20,8 +20,13 @@ function showRegionalRecordsSlim () {
 
   #--- Process events.
   foreach( structureBy( $results, 'eventId' ) as $eventResults ){
-    list( $singles, $averages ) = structureBy( $eventResults, 'type' );
-    if( ! $averages ) $averages = array();
+    $structure = structureBy( $eventResults, 'type' );
+    if( count( $structure ) == 2 )
+      list( $singles, $averages ) = $structure;
+    else {
+      list( $singles ) = $structure;
+      $averages = array();
+    }
     $wasShownSinglePerson = $wasShownAveragePerson = array();
 
     #--- Process records for this event.
@@ -30,12 +35,12 @@ function showRegionalRecordsSlim () {
 
       #--- Get next single.
       $s = array_shift( $singles );
-      if( $wasShownSinglePerson[$s['personId']] ) $s = false;
+      if( isset( $wasShownSinglePerson[$s['personId']] )) $s = false;
       $wasShownSinglePerson[$s['personId']] = true;
 
       #--- Get next average.
       $a = array_shift( $averages );
-      if( $wasShownAveragePerson[$a['personId']] ) $a = false;
+      if( isset( $wasShownAveragePerson[$a['personId']] )) $a = false;
       $wasShownAveragePerson[$a['personId']] = true;
 
       if( $s || $a ){

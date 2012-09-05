@@ -46,12 +46,15 @@ function tableHeader ( $values, $attributes ) {
   assertFoo( $tc == $tableColumns, "Wrong number of table header cells ($tc instead of $tableColumns)" );
 
   echo "<tr>\n";
+  $columnCtr = 0;
   foreach( $values as $value ){
     if( ! $value ) $value = '&nbsp;';
     //$value = preg_replace( '/ /', '&nbsp;', $value );
-    $attr = $attributes[0+$columnCtr++];
-    if( $attr ) $attr = " $attr";
-    echo "<th $attr>$value</th>\n";
+    $attr = "";
+    if( isset( $attributes[$columnCtr] ))
+      $attr = " " . $attributes[$columnCtr];
+    echo "<th$attr>$value</th>\n";
+    $columnCtr++;
   }
   echo "</tr>\n\n";
   $tableOddRow = false;
@@ -76,11 +79,14 @@ function tableRowStyled ( $style, $values ) {
     $style = " style='$style'";
 
   echo "<tr$style" . (($tableOddRow = !$tableOddRow) ? "" : " class='e'" ) . ">";
+  $columnCtr = 0;
   foreach( $values as $value ){
     if( ! $value ) $value = '&nbsp;';
-    $attr = $tableAttributes[0+$columnCtr++];
-    if( $attr ) $attr = " $attr";
+    $attr = "";
+    if( isset( $tableAttributes[$columnCtr] ))
+      $attr = " ".$tableAttributes[$columnCtr];
     echo "<td$attr>$value</td>";
+    $columnCtr++;
   }
   echo "</tr>\n";
 }

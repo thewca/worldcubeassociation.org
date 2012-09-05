@@ -38,8 +38,11 @@ $lists[] = array(
 
 function countTop100Appearances ( $personValuePairs ) {
   usort( $personValuePairs, create_function('$a,$b', 'return $a[1]-$b[1];') );
-  for( $i=0; $i<100 || $i<count($personValuePairs) && $personValuePairs[$i][1]==$personValuePairs[$i-1][1]; $i++ )
+  for( $i=0; $i<100 || $i<count($personValuePairs) && $personValuePairs[$i][1]==$personValuePairs[$i-1][1]; $i++ ){
+    if( ! isset( $appearances[ $personValuePairs[$i][0] ] ))
+      $appearances[ $personValuePairs[$i][0] ] = 0;
     $appearances[ $personValuePairs[$i][0] ]++;
+  }
   arsort( $appearances );
   foreach( $appearances as $personId => $counter )
     $result[] = array( $personId, $counter );

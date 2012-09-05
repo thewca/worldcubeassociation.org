@@ -147,6 +147,7 @@ function addList ( $list, $legacyId ) {
   TableHeader( $columnNames, $attributes );
 
   #--- Display the table.
+  $rowCtr = 0;
   foreach( $rows as $row ){
     $values = array();
     $numbers = '';
@@ -165,7 +166,7 @@ function addList ( $list, $legacyId ) {
 
     #--- Add the rank.
     $rowCtr++;
-    $rank = ($numbers == $prevNumbers) ? '' : $rowCtr;
+    $rank = (isset( $prevNumbers ) && $numbers == $prevNumbers) ? '' : $rowCtr;
 ###  $rank = $rowCtr;
     $prevNumbers = $numbers;
 #    $values[0] = $rank;
@@ -186,7 +187,7 @@ function readDatabaseTableWithId ( $name ) {
 #----------------------------------------------------------------------
   global $cachedDatabaseTableWithId;
   
-  if( ! $cachedDatabaseTableWithId[$name] )
+  if( ! isset( $cachedDatabaseTableWithId[$name] ))
     foreach( dbQuery( "SELECT * FROM $name" ) as $row )
       $cachedDatabaseTableWithId[$name][$row['id']] = $row;
       

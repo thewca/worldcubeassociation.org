@@ -63,9 +63,9 @@ foreach( $results as $result ){
     $showContinent[$continentId] = true;
   }
 
-  if( ! $bestValueOfWorld )
+  if( ! isset( $bestValueOfWorld ))
     $bestValueOfWorld = $result['value'];
-  if( ! $bestValueOfContinent[$continentId] )
+  if( ! isset( $bestValueOfContinent[$continentId] ))
     $bestValueOfContinent[$continentId] = $result['value'];
 }
 
@@ -74,7 +74,7 @@ foreach( $results as $result ){
   extract( $result );
 
   $result['regionName'] = $continentName;
-  if( $showContinent[$continentId]  &&  $value == $bestValueOfContinent[$continentId] )
+  if( isset($showContinent[$continentId])  &&  $value == $bestValueOfContinent[$continentId] )
     $bestOfContinent[] = $result;
 
   $result['regionName'] = 'World';
@@ -104,7 +104,8 @@ if( $bestOfCountry){
       continue;
     }
     extract( $row );
-    $isNewRegion = ($regionName != $previousRegionName); $previousRegionName = $regionName;
+    $isNewRegion = (! isset( $previousRegionName ) || $regionName != $previousRegionName);
+    $previousRegionName = $regionName;
     tableRow( array(
       $isNewRegion ? $regionName : '',
       $isNewRegion ? formatValue( $value, $valueFormat ) : '',

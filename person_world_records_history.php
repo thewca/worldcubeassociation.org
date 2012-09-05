@@ -40,10 +40,10 @@ function showHistoryOfWorldRecords () {
 
   foreach( $results as $result ){
     extract( $result );
-    if( $currentEventId  &&  $eventId != $currentEventId )
+    if( isset( $currentEventId ) &&  $eventId != $currentEventId )
       tableRowEmpty();
     tableRow( array(
-      ($eventId == $currentEventId) ? '' : eventLink( $eventId, $eventCellName ),
+      (isset($currentEventId) && $eventId == $currentEventId) ? '' : eventLink( $eventId, $eventCellName ),
       ($regionalSingleRecord == 'WR') ? formatValue( $best, $valueFormat ) : '',
       ($regionalAverageRecord == 'WR') ? formatValue( $average, $valueFormat ) : '',
       competitionLink( $competitionId, $competitionCellName ),

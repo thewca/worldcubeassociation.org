@@ -42,9 +42,15 @@ function externalLink ( $url, $text ) {
 
   $url = htmlEscape( $url );
 
-  list( $firstWord, $rest) = preg_split( '/\s/', $text, 2 );
-  if( $rest )
+  $splitText = preg_split( '/\s/', $text, 2 );
+  if( count( $splitText ) == 1 ){
+    list( $firstWord ) = $splitText;
+    $rest = "";
+  }
+  else{
+    list( $firstWord, $rest ) = $splitText;
     $rest = " $rest";
+  }
 
   $firstWord = htmlEscape( $firstWord );
   $rest = htmlEscape( $rest );

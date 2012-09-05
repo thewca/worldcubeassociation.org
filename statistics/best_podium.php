@@ -20,7 +20,10 @@ function bestPodium () {
     extract( $result );
     $compact_list["$competitionId"]["$pos"] = $average;
     $compact_list["$competitionId"]["p$pos"] = $personId;
-    $compact_list["$competitionId"]['sum'] += $average;
+    if( isset( $compact_list["$competitionId"]['sum'] ))
+      $compact_list["$competitionId"]['sum'] += $average;
+    else
+      $compact_list["$competitionId"]['sum'] = $average;
   }
 
   uasort ($compact_list, "compare");

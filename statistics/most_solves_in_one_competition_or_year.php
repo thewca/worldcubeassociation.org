@@ -42,8 +42,10 @@ $attempts = polishMostSolvesDnfs( "
 function polishMostSolvesDnfs ( $query ) {
   foreach ( dbQuery( $query ) as $row ) {
     list( $personId, $whereId, $ctr, $attempts ) = $row;
-    if ( ! $listed[$personId]++ && count($result)<10 )
+    if ( ! isset( $listed[$personId] ) && count($result)<10 ){
       $result[] = array( $personId, "<b>$ctr</b> / $attempts", $whereId );
+      $listed[$personId] = true;
+    }
   }
   return $result;
 }

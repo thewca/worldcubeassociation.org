@@ -94,9 +94,11 @@ function showPreregForm () {
   echo "<form method='POST' action='$_SERVER[PHP_SELF]?competitionId=$chosenCompetitionId'>";
   showField( "form hidden 1" );
   echo "<table class='prereg'>";
-  if( $chosenPersonId )
+  if( isset( $chosenPersonId ))
     showField( "personId readonly $chosenPersonId 11 <b>WCA Id</b>" );
 
+  if( ! isset( $chosenName ))
+    $chosenName = "";
   if( getBooleanParam( 'new' ))
     showField( "name text $chosenName 50 <b>Name</b>" );
   else
@@ -422,6 +424,8 @@ function showPreregList () {
   #--- Get all events of the competition.
   $eventList = getEventSpecsEventIds( $competition['eventSpecs'] );
 
+  $headerEvent = "";
+  $headerEventLink = "";
   foreach( $eventList as $event ){
     $headerEvent .= "|$event";
     $headerEventLink .= "|<a href='c.php?list=1&competitionId=$chosenCompetitionId&eventId=$event'>$event</a>";
@@ -442,7 +446,7 @@ function showPreregList () {
       if( $countPerson )
         tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
       else{
-        if( $standAlone )
+        if( isset( $standAlone ))
           tableHeader( explode( '|', "#|Person|Citizen of${headerEvent}|" ), $tableStyle );
         else
           tableHeader( explode( '|', "#|Person|Citizen of${headerEventLink}|" ), $tableStyle );
@@ -466,7 +470,8 @@ function showPreregList () {
 
     $row[] = $countryId;
 
-    if( ! $listCountries[$countryId] ){
+    $countCountry = 0;
+    if( ! isset( $listCountries[$countryId] )){
       $listCountries[$countryId] = 1;
       $countCountry += 1;
     }
@@ -477,7 +482,7 @@ function showPreregList () {
     foreach( $eventList as $event ){
       if( isset( $eventIdsList[$event] )){
         $row[] = 'X';
-        $countEvents[$event] += 1;
+        $countEvents[$event] = isset( $countEvents[$event] ) ? $countEvents[$event] + 1 : 1;
         $personEvents += 1;
       }
       else $row[] = '-';
@@ -489,8 +494,8 @@ function showPreregList () {
 
   $row = array( '', 'Total', $countCountry );
   foreach( $eventList as $event ){
-    if( $countEvents[$event] + $countEventsQualify[$event] + $countEventsWaiting[$event] )
-      $row[] = $countEvents[$event] + $countEventsQualify[$event] + $countEventsWaiting[$event];
+    if( isset( $countEvents[$event] ))
+      $row[] = $countEvents[$event];
     else
       $row[] = 0;
   }

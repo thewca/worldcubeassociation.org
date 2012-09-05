@@ -11,6 +11,8 @@ $sources = dbQuery( "
 #--- For each person, count the attempts and collect the success times
 foreach ( $sources as $source ) {
   $personId = $source['personId'];
+  if( ! isset( $attempts[$personId] ))
+    $attempts[$personId] = 0;
   for ( $i=1; $i<=5; $i++ ) {
     $value = $source["value$i"];
     if ( $value > 0 || $value == -1 ) $attempts[$personId]++;
