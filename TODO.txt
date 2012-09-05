@@ -14,12 +14,16 @@ Quick notes for revision.
 
 ## Specific Regulations
 
+- 1b2) parentheses sbould be moved to Guidelines?
 - Still need to fix English in Articles 10, 12. (e.g. 10h)
+- Article 5: fix formatting
 - Guideline 8a4)
 - Rephrase the intro to Article Z, and try to find some way to number it.
 - Make 9b) more DRY.
-- 11e1 "CORRESPONDING" typo.
+- 11e1 is missing (should have a strongly worded reminder and a reference to 4f)
 - 10f)
+- 10g) "degree" still not fixed?
+- E3) still missing sub-regulation numberings
 
 ## General Notes
 
@@ -35,14 +39,27 @@ Quick notes for revision.
 - Run everything through some spell- and grammar-checkers
 - 9i is out of place.
 - Remove "(Draft)" from the titles.
-- Ron's policy of putting cubers in contact with media requests, not the other way around
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
 - British English
-- Guideline: Cubes may be of any reasonable size
-- Fix Â° (degree) formatting/encoding
 - Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
-- Find some way to make misalignment rulings from 10f clear
+- Find some way to make misalignment rulings from 10f clear without images.
 - Still need a justification of video evidence frmo the board fo 11f
+- Competing in a round outside of the regular time frame
+  - Systematic exceptions: judges round, accomodtions for event conflicts
+  - Special exceptions: competitors leaving early / arriving late (whether their fault or not), individual organisers going at irregular times to facilitate organisation / scheduling
+- Bathroom breaks for multi BLD: Have those ever been allowed?
+
+## Guidelines to Add
+
+- Ron's policy of putting cubers in contact with media requests, not the other way around
+- Guideline: Cubes may be of any reasonable size
+
+## Things to put in the Style Guide
+
+- For most formatting questions, see current Regulations: serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs
+- Capitalization of event names and e.g. committees
+- Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
+- Spelling of terms like "Competitors Area"
 
 ## Consistency of Terminology
 
@@ -89,6 +106,7 @@ Quick notes for revision.
 - ALL OVER THE PLACE: Singular vs. plural
 - Each vs. all vs. every
 - "allotted"
+- Passive/active voice, descriptive vs. prescriptive, past vs. present
 
 ## Keep it simple, and in line with the past where possible.
 
