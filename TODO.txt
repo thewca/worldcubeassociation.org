@@ -14,16 +14,14 @@ Quick notes for revision.
 
 ## Specific Regulations
 
-- 1b2) parentheses sbould be moved to Guidelines?
-- Still need to fix English in Articles 10, 12. (e.g. 10h)
-- Article 5: fix formatting
-- Guideline 8a4)
-- Rephrase the intro to Article Z, and try to find some way to number it.
+- 2k2) Remove "suspected"?
 - Make 9b) more DRY.
-- 11e1 is missing (should have a strongly worded reminder and a reference to 4f)
-- 10f)
-- 10g) "degree" still not fixed?
-- E3) still missing sub-regulation numberings
+- 9f1) Pull Vincen't rounding correction
+- 9f8) and 9f10) Arithmetic mean
+- 9i is out of place.
+- 9r is not well-typed.
+- Rephrase the intro to Article Z, and try to find some way to number it.
+- H1d) example should be a Guideline, make it normative that only the pre-penalty time must be under the time limit. Also, needs to be normalized into a general time limit / penalty resolution clause
 
 ## General Notes
 
@@ -36,37 +34,37 @@ Quick notes for revision.
   - By the scrambler
   - By the competitor, on purpose
   - By the competitor, by accident
-- Run everything through some spell- and grammar-checkers
-- 9i is out of place.
 - Remove "(Draft)" from the titles.
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
-- British English
 - Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
 - Find some way to make misalignment rulings from 10f clear without images.
-- Still need a justification of video evidence frmo the board fo 11f
 - Competing in a round outside of the regular time frame
   - Systematic exceptions: judges round, accomodtions for event conflicts
   - Special exceptions: competitors leaving early / arriving late (whether their fault or not), individual organisers going at irregular times to facilitate organisation / scheduling
 - Bathroom breaks for multi BLD: Have those ever been allowed?
+- Mandate certain officials to read the full Regulations and Guidelines? (i.e. not just Delegates, but also main organizers)
+- 3a1) is out of order in the Guidelines
+- Capitalize "Delegate"
+- Make every Guideline correspond to a Regulation (what about prizes?)
 
 ## Guidelines to Add
 
-- Ron's policy of putting cubers in contact with media requests, not the other way around
-- Guideline: Cubes may be of any reasonable size
+- 11f) Still need a justification from the Board.
 
 ## Things to put in the Style Guide
 
-- For most formatting questions, see current Regulations: serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs
-- Capitalization of event names and e.g. committees
+- For most formatting questions, see current Regulations: serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, references to specific Regulations / Guidelines
+- Capitalization of event names and e.g. committees and officials (e.g. Delegate)
 - Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
 - Spelling of terms like "Competitors Area"
+- Do the Guidelines need to be readable independent of the Regulations?
 
 ## Consistency of Terminology
 
 - A "regulation" vs. a "rule"
 - "score" vs. "results" vs. "time"
 - event vs. round vs. group (i.e. which one is a judge assigned to?)
-- Records vs. results, and recognition (vs. ranking, e..g WR on site)
+- Records vs. results, and recognition (vs. ranking, e.g. WR on site)
 - rank vs. ranking vs. position
 - registration vs. pre-registration
 - eligible vs. permitted vs. allowed
@@ -93,20 +91,20 @@ Quick notes for revision.
 - "apply" a move vs. "make" a move
 - consent vs. discretion of the delegate
 - stop vs. end vs. completion of the solve / attempt
-- All event names (particularly feet, multi BLD, and OH)
 - Guidelines: Explicitly label each rule with "Clarification" / "Explanation" / etc.
+- Speed solving vs. speedsolving
 
 ## Consistency of Grammar
 
-- Consistent use of consecutive "and"s/"or"s, with serial comma.
+- Consistent use of consecutive "and"s/"or"s, with serial comma. (see 9b)
 - Consistent examples in parentheses.
-- Use "discretion" instead of "courtesy"
 - Consistent use of "If x is the case" vs. "Should x be the case" (I think "if" is equally clear, and simpler.)
 - Consistent capitalization and full use of "WCA Regulations"
 - ALL OVER THE PLACE: Singular vs. plural
 - Each vs. all vs. every
 - "allotted"
 - Passive/active voice, descriptive vs. prescriptive, past vs. present
+- Apposatives (e.g. "at the discretion of...") need commas.
 
 ## Keep it simple, and in line with the past where possible.
 
@@ -142,6 +140,7 @@ Quick notes for revision.
 
 - Misformatted indentation, e.g. 2a2)
 - Any way we can combine the mission and the spirit?
+- 2a3a) Extra words (also, other similar paragraphs)
 - 2b2b) Does the Board + WCA Chairman count as a single body for deciding WRC members?
 - 3a2b1) "supersede" is the more common spelling?
 - 3a2b1) may take immediate effect after they've been passed? Can the Board set the changes to go into effect at a certain time?
@@ -151,7 +150,3 @@ Quick notes for revision.
 - There are a lot of "shall"s. Some could be changed to "are" or removed.
 - 3c1a) All... competition incidents? It coule be that non-competition event merit a clarification in the log. Also, perhaps it would make sense to talk about both the log and whatever we call announcements about Regulation changes / updates.
 - 3c2a2) The WRC should be reporting all major incidents, i.e. "descriptions of the incident, its circumstances, and its resolution". Clarify the distinction for announcements by the Board vs. log entries by the WRC?
-
-## Guidelines
-
-- Guideline about what (version of their) name competitors may/must provide?
