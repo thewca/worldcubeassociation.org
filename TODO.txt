@@ -12,6 +12,15 @@ Quick notes for revision.
 - Table of contents
 - Cross-links for certain terms
 
+## Specific Regulations
+
+- Still need to fix English in Articles 10, 12. (e.g. 10h)
+- Guideline 8a4)
+- Rephrase the intro to Article Z, and try to find some way to number it.
+- Make 9b) more DRY.
+- 11e1 "CORRESPONDING" typo.
+- 10f)
+
 ## General Notes
 
 - For anything might make a reader think "Why is it phrased like that?", ther should be another Regulation / Guideline, or some note should be made in the style guide to clarify that some particular choice of phrasing was on purpose.
@@ -30,14 +39,10 @@ Quick notes for revision.
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
 - British English
 - Guideline: Cubes may be of any reasonable size
-- Still need to fix English in Articles 10, 12. (e.g. 10h)
-- Guideline 8a4)
 - Fix Â° (degree) formatting/encoding
 - Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
 - Find some way to make misalignment rulings from 10f clear
-- Rephrase the intro to Article Z, and try to find some way to number it.
 - Still need a justification of video evidence frmo the board fo 11f
-- Make 9b) more DRY.
 
 ## Consistency of Terminology
 
@@ -117,6 +122,7 @@ Quick notes for revision.
 
 ## WCA Constitution
 
+- Misformatted indentation, e.g. 2a2)
 - Any way we can combine the mission and the spirit?
 - 2b2b) Does the Board + WCA Chairman count as a single body for deciding WRC members?
 - 3a2b1) "supersede" is the more common spelling?
