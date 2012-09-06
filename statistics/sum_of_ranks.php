@@ -74,7 +74,7 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
   #--- Prepare the statistic header
   $header = "[P] Person [N] Sum [T]";
   foreach ( $eventIds as $eventId ) {
-    $e = preg_replace( '/333(.+)/e', 'strtoupper($1)', $eventId );
+    $e = preg_replace( '/333(.+)/e', 'strtoupper("$1")', $eventId );
     $e = str_replace( array('minx','pyram','clock','mmagic','magic','444bf','555bf'), array('meg','pyr','clo','mma','mag','4BF','5BF'), $e );
     if ( isset( $penalty[$eventId] ))
       $header .= " [n] $e";

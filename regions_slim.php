@@ -21,12 +21,8 @@ function showRegionalRecordsSlim () {
   #--- Process events.
   foreach( structureBy( $results, 'eventId' ) as $eventResults ){
     $structure = structureBy( $eventResults, 'type' );
-    if( count( $structure ) == 2 )
-      list( $singles, $averages ) = $structure;
-    else {
-      list( $singles ) = $structure;
-      $averages = array();
-    }
+    $singles = $structure[0];
+    $averages = isset( $structure[1] ) ? $structure[1] : array();
     $wasShownSinglePerson = $wasShownAveragePerson = array();
 
     #--- Process records for this event.
