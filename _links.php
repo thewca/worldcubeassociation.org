@@ -41,21 +41,13 @@ function externalLink ( $url, $text ) {
     return emptyLink( $text );
 
   $url = htmlEscape( $url );
+  $img = "<img src='" . pathToRoot() . "images/external_link.png' alt='external link' />";
 
   $splitText = preg_split( '/\s/', $text, 2 );
-  if( count( $splitText ) == 1 ){
-    list( $firstWord ) = $splitText;
-    $rest = "";
-  }
-  else{
-    list( $firstWord, $rest ) = $splitText;
-    $rest = " $rest";
-  }
+  $firstWord = htmlEscape( $splitText[0] );
+  $rest      = count( $splitText ) > 1 ? " ".htmlEscape( $splitText[1] ) : "";
 
-  $firstWord = htmlEscape( $firstWord );
-  $rest = htmlEscape( $rest );
-
-  return " <a class='external' href='$url'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/external_link.png' alt='external link' />$firstWord</span>$rest</a>";
+  return " <a class='external' href='$url'><span style='white-space:nowrap'>$img$firstWord</span>$rest</a>";
 
 #  return $url
 #    ? " <img src='" . pathToRoot() . "images/external_link.png' /><a class='external' target='_blank' href='$url'>$text</a>"
