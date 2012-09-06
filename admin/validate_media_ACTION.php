@@ -32,7 +32,6 @@ function refuseMedium () {
   dbCommand( $command );
   echo "I just did this : \n";
   echo $command;
-
 }
 
 #----------------------------------------------------------------------
@@ -44,7 +43,6 @@ function acceptMedium () {
   dbCommand( $command );
   echo "I just did this : \n";
   echo $command;
-
 }
 
 #----------------------------------------------------------------------
@@ -54,11 +52,10 @@ function infoMedium () {
 
   $infos = dbQuery("
     SELECT media.*, competition.cellName
-	 FROM CompetitionsMedia media, Competitions competition
-	 WHERE media.id = '$mediumId'
-	   AND competition.id = media.competitionId
+    FROM CompetitionsMedia media, Competitions competition
+    WHERE media.id = '$mediumId'
+      AND competition.id = media.competitionId
   ");
-
 
   extract($infos[0]);
 
@@ -85,7 +82,6 @@ function infoMedium () {
     choiceButton( false, "refuse$mediumId", 'Erase' ),
     choiceButton( false, "accept$mediumId", 'Accept' )
   ));
-
 }
 
 #----------------------------------------------------------------------
@@ -101,7 +97,6 @@ function newMedium () {
   $mediumId = $id[0][0];
   
   editMedium();
-
 }
 
 #----------------------------------------------------------------------
@@ -111,10 +106,9 @@ function editMedium () {
 
   $infos = dbQuery("
     SELECT *
-	 FROM CompetitionsMedia
-	 WHERE id = '$mediumId'
+    FROM CompetitionsMedia
+    WHERE id = '$mediumId'
   ");
-
 
   extract($infos[0]);
   echo "<form method='POST' action='validate_media_ACTION.php'>\n";
@@ -124,7 +118,7 @@ function editMedium () {
   $optionsComp = "<td><select class='drop' id='competitionId' name='competitionId'>\n";
   foreach( getAllCompetitions() as $competition ) {
     $optionId = $competition['id'];
-	 $optionName = $competition['cellName'];
+    $optionName = $competition['cellName'];
     if ($optionId == $competitionId)
       $optionsComp .= "<option value='$optionId' selected='selected'>$optionName</option>\n";
     else

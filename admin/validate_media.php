@@ -35,7 +35,6 @@ function analyzeChoices () {
 
 }
 
-
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
@@ -46,7 +45,6 @@ function showDescription () {
   
   echo "<hr />";
 }
-
 
 #----------------------------------------------------------------------
 function offerChoices () {
@@ -64,16 +62,15 @@ function offerChoices () {
     choice( 'order', 'Sorted by', array(
       array( 'date',    'Competition Date' ),
       array( 'submission', 'Submission/Insertion Date' )
-		), $chosenOrder ),
+      ), $chosenOrder ),
     choice( 'status', 'Status', array(
       array( 'pending',   'Pending' ),
       array( 'accepted',   'Accepted' ),
       ), $chosenStatus ),
     choiceButton( true, 'filter' . rand(), ' Filter ' )
   ));
-
 }
-														  
+
 #----------------------------------------------------------------------
 function showMedia () {
 #----------------------------------------------------------------------
@@ -110,7 +107,6 @@ function showMedia () {
     $orderCondition, cellName
   ");
 
-
   #--- Begin form and table.
   echo "<form action='validate_media_ACTION.php' method='POST'>\n";
   tableBegin( 'results', 7 );
@@ -130,7 +126,6 @@ function showMedia () {
       tableRowEmpty();
     $previousYear = $year;
 
-
     $button = "<input type='submit' class='butt' value='Info' name='info$id' /> ";
     $button .= "<input type='submit' class='butt' value='Edit' name='edit$id' /> ";
     $button .= $accepted ? "<input type='submit' class='butt' value='Erase' name='refuse$id' />"
@@ -144,7 +139,7 @@ function showMedia () {
       "<b>$countryName</b>, $cityName",
       $type,
       externalLink( htmlEscape( $uri ), htmlEscape( $text )),
-		$button,
+      $button,
     ));
   }
 
@@ -152,6 +147,5 @@ function showMedia () {
   tableEnd();
   echo "</form>";
 }
-
 
 ?>

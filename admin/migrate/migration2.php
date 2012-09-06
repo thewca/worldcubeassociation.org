@@ -78,7 +78,7 @@ function buildTableCompetitionsMedia () {
       type               VARCHAR(15)      NOT NULL,
       text               VARCHAR(100)     NOT NULL,
       uri                VARCHAR(500)     NOT NULL,
-		submitterName      VARCHAR(50)      NOT NULL,
+      submitterName      VARCHAR(50)      NOT NULL,
       submitterComment   VARCHAR(500)     NOT NULL,
       submitterEmail     VARCHAR(45)      NOT NULL,
       timestampSubmitted TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -104,7 +104,7 @@ function buildTableCompetitionsMedia () {
     extract( $data ); # competitionId, type, data
 
     $competition = getFullCompetitionInfos( $competitionId );
-	 $timestampComp = $competition['year'] . '-' . $competition['month'] . '-' . $competition['day'];
+    $timestampComp = $competition['year'] . '-' . $competition['month'] . '-' . $competition['day'];
     //noticeBox( true, "One timestamp of comp $competitionId : $timestampComp" );
 
     preg_match_all( '/\[ \{ ([^}]+) } \{ ([^}]+) } ]/x', $data, $matches, PREG_SET_ORDER );

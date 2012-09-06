@@ -50,7 +50,7 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
     if ( isset( $ranks[$eventId] ))
       foreach ( $ranks[$eventId] as $personId => $rank ){
         if( ! isset( $rankSum[$personId] ))
-	  $rankSum[$personId] = 0;
+          $rankSum[$personId] = 0;
         $rankSum[$personId] += $rank - $penalty[$eventId];
       }
   foreach ( array_keys( $rankSum ) as $personId )

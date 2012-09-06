@@ -76,26 +76,22 @@ function showResults () {
     $currentCompetitionId = '';
 
     #--- Compute PB Markers
-
-	 //$pbMarkers = [];
-	 $bestBest = 9999999999;
-	 $bestAverage = 9999999999;
+    //$pbMarkers = [];
+    $bestBest = 9999999999;
+    $bestAverage = 9999999999;
     foreach( array_reverse( $eventResults ) as $result ){
       extract( $result );
 
       $pbMarkers[$competitionId][$roundCellName] = 0;
-      if ($best > 0 && $best <= $bestBest)
-      {
-		  $bestBest = $best;
-		  $pbMarkers[$competitionId][$roundCellName] += 1;
+      if( $best > 0 && $best <= $bestBest ){
+        $bestBest = $best;
+        $pbMarkers[$competitionId][$roundCellName] += 1;
       }
-      if ($average > 0 && $average <= $bestAverage)
-      {
-		  $bestAverage = $average;
-		  $pbMarkers[$competitionId][$roundCellName] += 2;
+      if( $average > 0 && $average <= $bestAverage ){
+        $bestAverage = $average;
+        $pbMarkers[$competitionId][$roundCellName] += 2;
       }
-
-	 }
+     }
 
     #--- Show the results.
     foreach( $eventResults as $result ){
@@ -105,21 +101,20 @@ function showResults () {
       $currentCompetitionId = $competitionId;
 
       $formatBest = formatValue( $best, $valueFormat );
-		if ($pbMarkers[$competitionId][$roundCellName] % 2)
-		  $formatBest = "<span style='color:#F60;font-weight:bold'>$formatBest</span>";
+      if ($pbMarkers[$competitionId][$roundCellName] % 2)
+        $formatBest = "<span style='color:#F60;font-weight:bold'>$formatBest</span>";
 
       $formatAverage = formatValue( $average, $valueFormat );
-		if ($pbMarkers[$competitionId][$roundCellName] > 1)
-		  $formatAverage = "<span style='color:#F60;font-weight:bold'>$formatAverage</span>";
-
+      if ($pbMarkers[$competitionId][$roundCellName] > 1)
+        $formatAverage = "<span style='color:#F60;font-weight:bold'>$formatAverage</span>";
 
       tableRowStyled( ($isNewCompetition ? '' : 'color:#AAA'), array(
         ($isNewCompetition ? competitionLink( $competitionId, $competitionCellName ) : ''),
         $roundCellName,
         ($isNewCompetition ? "<b>$pos</b>" : $pos),
-		  $formatBest,
+        $formatBest,
         $regionalSingleRecord,
-		  $formatAverage,
+        $formatAverage,
         $regionalAverageRecord,
         formatAverageSources( true, $result, $valueFormat )
       ));

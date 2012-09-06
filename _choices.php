@@ -89,7 +89,7 @@ function yearsChoice ($all, $current, $until, $only ) {
 
   if( $all ){
     $options[] = array( '', 'All' );
-	 if( $current )
+    if( $current )
       $options[] = array( 'current', 'Current' );
     $options[] = array( '', '' );
   }

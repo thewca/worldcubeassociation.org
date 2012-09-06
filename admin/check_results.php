@@ -187,7 +187,6 @@ function checkResult ( $result ) {
         return "$value should be rounded";
   }
 
-
   #--- 12) check for existing countryId
   if( ! isset( $countryIds[$result['countryId']] ))
     return "unknown country " . $result['countryId'];
@@ -214,7 +213,6 @@ function checkResult ( $result ) {
         return  formatValue( $result["value$i"], 'multi') . " should be below 10 minutes times the number of cubes";
     }
   }
-
 }
 
 #----------------------------------------------------------------------
@@ -423,7 +421,7 @@ function checkDuplicates () {
           eventCellName( $eventId ),
           roundCellName( $roundId ),
           formatAverageSources( true, $row, valueFormat( $eventId ))
-	)
+        )
       );
     }
   }
@@ -436,7 +434,6 @@ function checkDuplicates () {
     "No duplicate results where found.<br />$date",
     "Duplicate results where found.<br />$date"
   );
-
 }
 
 ?>

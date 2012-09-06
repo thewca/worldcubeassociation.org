@@ -35,7 +35,7 @@ function offerChoices () {
 
   if ($chosenUri != '') {
     saveMedium();
-	 echo "Thanks for sending us a link to competition media";
+    echo "Thanks for sending us a link to competition media";
     return; 
   } 
   echo "<p>All media will be reviewed before listed on the Media page</p>";
@@ -46,7 +46,7 @@ function offerChoices () {
   $optionsComp = "<td><select class='drop' id='competitionId' name='competitionId'>\n";
   foreach( getAllCompetitions() as $competition ) {
     $optionId = $competition['id'];
-	 $optionName = $competition['cellName'];
+    $optionName = $competition['cellName'];
     $optionsComp .= "<option value='$optionId'>$optionName</option>\n";
   }
   $optionsComp .= "</select></td></tr>";
@@ -93,8 +93,8 @@ function saveMedium () {
   INSERT INTO CompetitionsMedia
       (competitionId, type, text, uri, submitterName, submitterEmail, submitterComment, status)
     VALUES
-	   ('$chosenCompetitionId', '$chosenType', '$chosenText', '$chosenUri',
-		 '$chosenSubmitterName', '$chosenSubmitterEmail', '$chosenSubmitterComment', 'pending')";
+      ('$chosenCompetitionId', '$chosenType', '$chosenText', '$chosenUri',
+       '$chosenSubmitterName', '$chosenSubmitterEmail', '$chosenSubmitterComment', 'pending')";
 
   dbCommand( $command );
 }
