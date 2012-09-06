@@ -37,38 +37,27 @@ function emptyLink ( $text ) {
 #----------------------------------------------------------------------
 
 function externalLink ( $url, $text ) {
-  if( ! $url )
-    return emptyLink( $text );
-
-  $url = htmlEscape( $url );
-  $img = "<img src='" . pathToRoot() . "images/external_link.png' alt='external link' />";
-
-  $splitText = preg_split( '/\s/', $text, 2 );
-  $firstWord = htmlEscape( $splitText[0] );
-  $rest      = count( $splitText ) > 1 ? " ".htmlEscape( $splitText[1] ) : "";
-
-  return " <a class='external' href='$url'><span style='white-space:nowrap'>$img$firstWord</span>$rest</a>";
-
-#  return $url
-#    ? " <img src='" . pathToRoot() . "images/external_link.png' /><a class='external' target='_blank' href='$url'>$text</a>"
-#    : emptyLink( $text );
+  return $url ? _linkWithImage( htmlEscape( $url ), $text, 'external' )
+              : emptyLink( $text );
 }
 
 #----------------------------------------------------------------------
 
 function emailLink ( $address, $text ) {
-  if( ! $address )
-    return emptyLink( $text );
+  return $address ? _linkWithImage( "mailto:$address", $text, 'email' )
+                  : emptyLink( $text );
+}
 
-  list( $firstWord, $rest) = preg_split( '/\s/', $text, 2 );
-  if( $rest )
-    $rest = " $rest";
+#----------------------------------------------------------------------
 
-  return " <a class='email' href='mailto:$address'><span style='white-space:nowrap'><img src='" . pathToRoot() . "images/email_link.png' alt='email link' />$firstWord</span>$rest</a>";
+function _linkWithImage ( $href, $text, $class ) {
+  $img = "<img src='" . pathToRoot() . "images/{$class}_link.png' alt='$class link' />";
 
-#  return $address
-#    ? " <img src='" . pathToRoot() . "images/email_link.png' /><a class='email' href='mailto:$address'>$text</a>"
-#    : emptyLink( $text );
+  $splitText = preg_split( '/\s/', $text, 2 );
+  $firstWord = htmlEscape( $splitText[0] );
+  $rest      = count( $splitText ) > 1 ? " ".htmlEscape( $splitText[1] ) : "";
+
+  return " <a class='$class' href='$href'><span style='white-space:nowrap'>$img$firstWord</span>$rest</a>";
 }
 
 #----------------------------------------------------------------------
