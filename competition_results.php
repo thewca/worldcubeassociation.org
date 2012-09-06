@@ -23,10 +23,8 @@ function showCompetitionResults () {
   foreach( $competitionResults as $result ){
     extract( $result );
 
-    $isNewEvent = (! isset( $currentEventId ) || $eventId != $currentEventId);
-    $currentEventId = $eventId;
-    $isNewRound = (! isset( $currentRoundId ) || $roundId != $currentRoundId);
-    $currentRoundId = $roundId;
+    $isNewEvent = (! isset( $previousEventId ) || $eventId != $previousEventId);
+    $isNewRound = (! isset( $previousRoundId ) || $roundId != $previousRoundId);
 
     #--- Welcome new events.
     $winnerEvent = '';
@@ -39,7 +37,7 @@ function showCompetitionResults () {
       if( $chosenWinners )
         $winnerEvent = internalEventLink( $internalEventHref, $eventCellName );
 
-      if( $chosenAllResults  &&  $currentEventId ){
+      if( $chosenAllResults  &&  isset( $previousEventId ) ){
         tableRowBlank();
         tableRowBlank();
       }
@@ -71,6 +69,8 @@ function showCompetitionResults () {
       formatAverageSources( $formatId != '1', $result, $valueFormat )
     ));
 
+    $previousEventId = $eventId;
+    $previousRoundId = $roundId;
   }
 
   tableEnd();
@@ -93,12 +93,12 @@ function showCompetitionResultsByPerson () {
   foreach( $competitionResults as $result ){
     extract( $result );
 
-    $isNewPerson = (! isset( $currentPersonId ) || $personId != $currentPersonId);
-    $isNewEvent = (! isset( $currentEventId ) || $eventId != $currentEventId || $isNewPerson);
+    $isNewPerson = (! isset( $previousPersonId ) || $personId != $previousPersonId);
+    $isNewEvent = (! isset( $previousEventId ) || $eventId != $previousEventId || $isNewPerson);
 
     #--- Welcome new persons.
     if( $isNewPerson ){
-      if( isset( $currentPersonId )){
+      if( isset( $previousPersonId )){
         tableRowBlank();
       }
 
@@ -124,8 +124,8 @@ function showCompetitionResultsByPerson () {
       formatAverageSources( $formatId != '1', $result, $valueFormat )
     )));
 
-    $currentPersonId = $personId;
-    $currentEventId  = $eventId;
+    $previousPersonId = $personId;
+    $previousEventId  = $eventId;
   }
 
   tableEnd();
