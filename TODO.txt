@@ -14,14 +14,12 @@ Quick notes for revision.
 
 ## Specific Regulations
 
-- 2k2) Remove "suspected"?
+- 1c3b) Second sentence to Guidelines
 - Make 9b) more DRY.
-- 9f1) Pull Vincen't rounding correction
-- 9f8) and 9f10) Arithmetic mean
+- 9f12b) Remove "Rubik's Cube:"
 - 9i is out of place.
-- 9r is not well-typed.
-- Rephrase the intro to Article Z, and try to find some way to number it.
-- H1d) example should be a Guideline, make it normative that only the pre-penalty time must be under the time limit. Also, needs to be normalized into a general time limit / penalty resolution clause
+- 7h3) missing "the"
+- D1c) needs to not rely on reference to the Regulations.
 
 ## General Notes
 
@@ -37,6 +35,7 @@ Quick notes for revision.
 - Remove "(Draft)" from the titles.
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
 - Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
+- Make every Guideline correspond to a Regulation (what about prizes?)
 - Find some way to make misalignment rulings from 10f clear without images.
 - Competing in a round outside of the regular time frame
   - Systematic exceptions: judges round, accomodtions for event conflicts
@@ -44,8 +43,9 @@ Quick notes for revision.
 - Bathroom breaks for multi BLD: Have those ever been allowed?
 - Mandate certain officials to read the full Regulations and Guidelines? (i.e. not just Delegates, but also main organizers)
 - 3a1) is out of order in the Guidelines
-- Capitalize "Delegate"
-- Make every Guideline correspond to a Regulation (what about prizes?)
+- ASCII sanity check regex: [^A-Za-z \.\n\d\-:;\"\+\#\/\,''\(\)\[\]%\?<>=\*]
+- How do you rcord inter-relations between Regulations (e.g. if Mean of 3 is added for BLD)
+- Official abbreviations may not match community standards (no "BLD", database used fm and bf)
 
 ## Guidelines to Add
 
@@ -53,7 +53,8 @@ Quick notes for revision.
 
 ## Things to put in the Style Guide
 
-- For most formatting questions, see current Regulations: serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, references to specific Regulations / Guidelines
+- Explanation of normativity, using W3C conventions.
+- For most formatting questions, see current Regulations: two-space nested indentation, spacing, serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, single quotes (and interaction with punctuation) references to specific Regulations / Guidelines
 - Capitalization of event names and e.g. committees and officials (e.g. Delegate)
 - Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
 - Spelling of terms like "Competitors Area"
@@ -77,6 +78,7 @@ Quick notes for revision.
   - Formatting idea:  "Penalty: 2 second time penalty" and "Penalty: disqualification (DNF)"
 - competition date?
 - "start" vs. "begin"
+- stop vs. halt
 - score sheet vs. scoresheet vs. scorecard vs. competition sheet. How about something that is more accurate, like "time sheet" or "time card" or "result sheet"? (see "score" vs. "results" vs. "time")
 - plural adjectival nouns "Regulations Committee", "results sheet"
 - "give" vs. "apply" vs. "assign" a penalty
@@ -99,7 +101,7 @@ Quick notes for revision.
 - Consistent use of consecutive "and"s/"or"s, with serial comma. (see 9b)
 - Consistent examples in parentheses.
 - Consistent use of "If x is the case" vs. "Should x be the case" (I think "if" is equally clear, and simpler.)
-- Consistent capitalization and full use of "WCA Regulations"
+- Consistent capitalization and full use of "WCA Regulations" - and maybe other terms? Competitors Area?
 - ALL OVER THE PLACE: Singular vs. plural
 - Each vs. all vs. every
 - "allotted"
@@ -114,7 +116,6 @@ Quick notes for revision.
 
 ## Consistent Formatting
 
-- be consistent about "x" in round formats.
 - For each type of round and type of event, define the result used for ranking, and what counts as "better"
 - Normalize penalties and the Regulations mention them ("disqualification of the attempt", not "solve")
 - A two-second penalty should be written as "+2" in quotes.
@@ -135,18 +136,9 @@ Quick notes for revision.
     - blank spaces at the end of a line
 - Formatting of tables and images-
 - Emphasize cubing terms *like this* or _like this_?
+- double quotes > single quotes
 
 ## WCA Constitution
 
-- Misformatted indentation, e.g. 2a2)
 - Any way we can combine the mission and the spirit?
-- 2a3a) Extra words (also, other similar paragraphs)
-- 2b2b) Does the Board + WCA Chairman count as a single body for deciding WRC members?
-- 3a2b1) "supersede" is the more common spelling?
-- 3a2b1) may take immediate effect after they've been passed? Can the Board set the changes to go into effect at a certain time?
-- "Sponsorship" doesn't sound quite right for WCA overview of a competition.
-- 2d1: extra period at end
-- 3b1b) Must contain all normative rules??
-- There are a lot of "shall"s. Some could be changed to "are" or removed.
-- 3c1a) All... competition incidents? It coule be that non-competition event merit a clarification in the log. Also, perhaps it would make sense to talk about both the log and whatever we call announcements about Regulation changes / updates.
 - 3c2a2) The WRC should be reporting all major incidents, i.e. "descriptions of the incident, its circumstances, and its resolution". Clarify the distinction for announcements by the Board vs. log entries by the WRC?
