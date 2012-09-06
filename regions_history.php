@@ -83,7 +83,7 @@ function showRegionalRecordsHistory () {
       personLink( $personId, $personName ),
       $countryName,
       competitionLink( $competitionId, $competitionName ),
-      formatAverageSources( $type == 2, $results, $valueFormat )
+      formatAverageSources( $type == 2, $result, $valueFormat )
     ));
   }
 

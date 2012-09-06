@@ -79,7 +79,6 @@ function formatValue( $value, $format='time' ) {
 #----------------------------------------------------------------------
 function formatAverageSources ( $indeedShow, $sources, $format ) {
 #----------------------------------------------------------------------
-  global $value1, $value2, $value3, $value4, $value5;
   if( ! $indeedShow )
     return '&nbsp;';
   extract( $sources );
