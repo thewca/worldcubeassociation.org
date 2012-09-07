@@ -36,8 +36,10 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "Thus" instead of "thereby".
 - "Discretion" (of the delegate) instead of "consent".
 - "State" (of a puzzle) instead of "position".
+- "Allot" (a maximum number of attempts) instead of "give".
 
 - "If X, ..." instead of "Should X be the case, ...".
+- "For X, ..." or "during X, ..." instead of "In X, ..."
 
 - "Start" and "stop" (verbs).
 - "Beginning" and "end" (nouns).

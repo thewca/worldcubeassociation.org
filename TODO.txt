@@ -81,13 +81,10 @@ Quick notes for revision.
 
 - Consistent capitalization and full use of "WCA Regulations" - and maybe other terms? Competitors Area?
 - ALL OVER THE PLACE: Singular vs. plural
-- allot vs. give
-- In this case vs. for this case
 
 ## Consistent Formatting
 
 - For each type of round and type of event, define the result used for ranking, and what counts as "better"
-- Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
 - "default" procedures
 - The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
