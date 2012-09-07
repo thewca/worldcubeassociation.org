@@ -15,6 +15,7 @@ Quick notes for revision.
 
 ## Specific Regulations
 
+- 4d)
 - 9i is out of place.
 
 ## General Notes
@@ -39,7 +40,7 @@ Quick notes for revision.
 - ASCII sanity check regex: [^A-Za-z \.\n\d\-:;\"\+\#\/\,''\(\)\[\]%\?<>=\*]
 - How do you record inter-relations between Regulations (e.g. if Mean of 3 is added for BLD)
 - Official abbreviations may not match community standards (no "BLD", database used fm and bf)
-- wca-constitution has +x flags set.
+- Use only dashes in repo file names, remove +x flag from wca-constitution.
 - Corner twist.
 - A6e) Require the competitor to sign the score sheet before touching the puzzle?
 - Round formats, types, capitalizations (Combined round)
@@ -61,26 +62,14 @@ Quick notes for revision.
 ## Things to put in the Style Guide
 
 - Explanation of normativity, using W3C conventions.
-- For most formatting questions, see current Regulations: two-space nested indentation, spacing, serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, single quotes (and interaction with punctuation) references to specific Regulations / Guidelines
+- For most formatting questions, see current Regulations: two-space nested indentation, spacing, serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), punctuation at the end of every line, capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, single quotes (and interaction with punctuation) references to specific Regulations / Guidelines, e.g. and i.e. (instead of "for example"/"that is")
 - Consistent mention of DNF and +2 (imagine someone searching for all rules that may result in a DNF)
 - Capitalization of event names and e.g. committees and officials (e.g. Delegate)
 - Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
-- Spelling of terms like "Competitors Area"
+- Spelling of terms like "Competitors Area" and "WCA Delegate".
+- Check indentation and nesting (no orphans in Regulations, Guidelines all one level, Regs and Constitution have different base indentation levels), as well as for stray tabs and double spaces, and extra spaces at the end of lines.
 - Do the Guidelines need to be readable independent of the Regulations?
 - When searching for words, be careful about alternate spellings (e.g. search "solv" for "solve"/"solving", "apple" for "apply"/"applied", "penalt" for "penalty"/"penalties").
-
-## List of Terms
-
-- (WCA) World Rankings
-
-## Informal vs. formal definitions
-
-- 2 second time penalty ("+2")
-- Speed Solving (2 words, consistent with "_____ Solving")
-
-## Consistency of Terminology
-
-- Delegate > WCA Delegate
 
 ### Done
 
@@ -89,45 +78,19 @@ Quick notes for revision.
 
 ## Consistency of Grammar
 
-- Consistent use of consecutive "and"s/"or"s, with serial comma. (see 9b)
-- Consistent examples in parentheses.
-- Consistent use of "If x is the case" vs. "Should x be the case" (I think "if" is equally clear, and simpler.)
 - Consistent capitalization and full use of "WCA Regulations" - and maybe other terms? Competitors Area?
 - ALL OVER THE PLACE: Singular vs. plural
 - Each vs. all vs. every
-- "allotted"
-- Passive/active voice, descriptive vs. prescriptive, past vs. present
-- Apposatives (e.g. "at the discretion of...") need commas.
-- "retroactively disqualified" and other split infinitives
-
-## Keep it simple, and in line with the past where possible.
-
-- While "If ... in a solve, then ... in said solve." might be more accurate, I think "the" instead of "said" is simpler and just as clear in most cases.
-- Sarah had an interesting qualification / elimination round distinction, but I've removed it because 1) it doesn't fit our usual way of talking about things, 2) if there's only one round, there is no elimination, and 3) "elimination" sounds a little negative for the spirit of the WCA.
-- Keep it DRY.
 
 ## Consistent Formatting
 
 - For each type of round and type of event, define the result used for ranking, and what counts as "better"
-- A two-second penalty should be written as "+2" in quotes.
 - Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
-- Four-space indentation, make sure to spell-check and check for accidental double-spaces ("  ")
 - "default" procedures
-- Mention of stopwatch in relation to timer regulations
-- Book-style capitalization of section titles (Also, consistent colons)
-- Capitalizatino of hyphenated words, e.g. "Foot solving" vs. "Foot Solving" at the beginning of a sentence, or "One-Handed" vs. "One-handed"
-- Formatting of the articles for the events, e.g. "Scrambling" and "Inspection" headings
 - The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
 - "WCA Delegate", not just "Delegate"
-- Regexes:
-    - "said" > "the"
-    - four spaces and nothing else on a line
-    - too much indentation
-    - blank spaces at the end of a line
-- Formatting of tables and images-
 - Emphasize cubing terms *like this* or _like this_?
-- double quotes > single quotes
 
 ## WCA Constitution
 

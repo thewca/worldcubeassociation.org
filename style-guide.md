@@ -37,13 +37,20 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "Discretion" (of the delegate) instead of "consent".
 - "State" (of a puzzle) instead of "position".
 
+- "If X, ..." instead of "Should X be the case, ...".
+
 - "Start" and "stop" (verbs).
 - "Beginning" and "end" (nouns).
 - "Finish" (verb).
 - "Completed" (adjective).
 
 
-### Definitions
+## Notable Differences between the Regulations and Common Use
+
+- "Speed Solving" is two words, to be consistent with other "_____ Solving" events.
+
+
+## Definitions
 
 - Scramble sequence: An list of moves ("algorithm") used to scramble a puzzle. Informally also called a "scramble".
 - Scramble: The scrambled state of a puzzle after a scramble sequence has been applied to it.
