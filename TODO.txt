@@ -53,6 +53,7 @@ Quick notes for revision.
 - Regulations metadata + credits (inc. RFC mention; look a top and bottom of current Regs)
 - Speed solving events vs. special events and formats vs. blindfolded events
 - Sub-Regulations without direct parents one level above?
+- Exception: keep in the same Regulation or a sub-Regulation?
 
 ## Guidelines to Add
 
@@ -80,7 +81,8 @@ Quick notes for revision.
 
 - Consistent capitalization and full use of "WCA Regulations" - and maybe other terms? Competitors Area?
 - ALL OVER THE PLACE: Singular vs. plural
-- Each vs. all vs. every
+- allot vs. give
+- In this case vs. for this case
 
 ## Consistent Formatting
 

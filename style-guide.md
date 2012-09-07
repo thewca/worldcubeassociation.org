@@ -44,6 +44,10 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "Finish" (verb).
 - "Completed" (adjective).
 
+- "All" (collective) instead of "every".
+- "Each" (individual).
+- "Any" (potential, i.e. in case of applicability).
+
 
 ## Notable Differences between the Regulations and Common Use
 
