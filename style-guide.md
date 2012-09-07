@@ -5,60 +5,105 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 ## General Information
 
 - The documents are formatted in [Markdown](http://daringfireball.net/projects/markdown/), a plain-text format created by John Gruber. This makes it easy to focus on the raw text (and any changes), so that it is readable on its own and can also be converted into a fancier format (i.e. HTML).
+  - Indentation is two spaces, and nested for the Regulations and the Constitution.
+  - The Guidelines have an irregular correspondence to numbering in the Regulations, thus Guidelines have no indentation in the source.
+- To make the regulations easier to read we use 'he' where the reader should read 'she or he'.
+- The division into Regulations Guidelines roughly mirrors the normative vs. non-normative (informative) distinction employed by W3C standards.
+  - The use of the words 'must (not)', 'shall (not)', 'should (not)', and 'may (not)' (requirement levels) conform to RFC 2119.
+  - The Regulations must not rely on the Guidelines for completeness or consistency. Any normative Guidelines must be be implicit in the Regulations (e.g. labeled [REMINDER]).
+  - As a rule of thumb, anything with 'must' or 'shall' should be in the Regulations, and anything with 'should' or 'may' should be in the Guidelines.
 - The documents are written in British English.
 
-## Formatting Conventions
 
-- References to the "(WCA) Regulations" and "(WCA) Guidelines" are capitalized. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that "Regulations" refers to the body of the WCA Regulations.
-- Puzzles names are capitalized. Event formats like "One-Handed Solving" are also capitalized. A puzzle name + event format should omits word "Solving" (e.g. Rubik's Cube: One-Handed). See Regulation 9b for official puzzles and event formats.
+## Formatting Conventions
 
 ### Specific Formatting in Markdown.
 
 - The Regulations should limit itself to standard ASCII, for maximum encoding compatibility. This facilitates safe conversion and parsing.
-    - "Degrees" should be spelled out instead of using the degree sign.
+    - 'Degrees' should be spelled out instead of using the degree sign.
+
+### Formatting the Document
+
+- Ensure that the Regulations are well-constructed and organized. This is common sense, but requires conscious effort:
+  - Foremost, make the Regulations easy for a human to search and read, and don't let anything get in the way of accuracy and clarity.
+    - For example, put the main subject of a Regulation near the beginning, even if the grammaer might be neater otherwise (see Regulations 9f4 and 9f5 for a good example).
+  - Keep it 'DRY' ('Don't Repeat Yourself').
+    - As a rule of thumb, if a change in one place requires a change in another place to keep the Regulations consistent, it's not DRY.
+  - Use consistent formatting to help make the document easier to understand for a human and to search by computer (e.g. every rule that can result in a DNF explicitly mentions 'DNF').
+  - Address contingencies that help ensure fair interpretation across different competitions, but leave unusual exceptions to the WCA Delegate. (In a sense, the Guidelines are a formalized FAQ to standardize unwritten rules).
+  - Future-proof the documents for subsequent changes (e.g. don't assume that cross-references remain valid, don't construct delicately related rules).
+
+### Specific Formatting Conventions
+
+- Most formatting conventions can be inferred from the documents themselves. This includes the following:
+  - Indentation and spacing.
+    - Conservative levels of indentation (at most three in the Regulations and Guidelines).
+  - Listing examples (either in parentheses or numbered bullets)
+    - Use of 'e.g.' and 'i.e.' (instead of "for example"/"that is").
+    - Use of the serial comma.
+  - Punctuation:
+    - Single quote marks, not double quote marks.
+    - 'Logical punctuation' (whether to place punctuation inside quotes).
+    - Use of comma/colon/semicolon.
+    - Punctuation at the end of every line.
+  - Capitalization and spelling.
+  - Formatting of references (e.g. to Articles/Regulations/Guidelines).
+
+
+### Terms and Capitalization
+
+- References to the '(WCA) Regulations' and '(WCA) Guidelines' are capitalized. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that 'Regulations' refers to the body of the WCA Regulations.
+- Also should be capitalized: Competitors Area.
+- The WCA Delegate should be mentioned by his full title.
+- Puzzles names are capitalized. Event formats like 'One-Handed Solving' are also capitalized. A puzzle name + event format should omits word 'Solving' (e.g. Rubik's Cube: One-Handed). See Regulation 9b for official puzzles and event formats.
 
 ### Recommended Word Choices
 
-- "Regulation" or "Guideline" instead of "rule".
-- "Result" instead of "score" (except for "score sheet" and "score taker").
-- "Ranking" instead of "rank".
-- "Permitted" instead of "allowed"
-- "Attempt" instead of "solve" (unless specifically referring to the timed portion).
-- "Scramble sequence" instead of "scramble".
-- "Start" instead of "begin".
-- "Stop" instead of "halt" or "finish"
-- "Registration" instead of "pre-registration" (unless specifically referring to registration before the day of the competition).
-- A judge "[shall] call" instead of "says".
-- "Score sheet" (two words) instead of "score card".
-- "Apply" (moves or scramble sequence) instead of "perform" or "do".
-- "Assign" (a penalty) instead of "apply".
-- "Record" a result instead of "write down".
-- "Thus" instead of "thereby".
-- "Discretion" (of the delegate) instead of "consent".
-- "State" (of a puzzle) instead of "position".
-- "Allot" (a maximum number of attempts) instead of "give".
+- 'Regulation' or 'Guideline' instead of 'rule'.
+- 'Result' instead of 'score' (except for 'score sheet' and 'score taker').
+- 'Ranking' instead of 'rank'.
+- 'Permitted' instead of 'allowed'
+- 'Attempt' instead of 'solve' (unless specifically referring to the timed portion).
+- 'Scramble sequence' instead of 'scramble'.
+- 'Start' instead of 'begin'.
+- 'Stop' instead of 'halt' or 'finish'
+- 'Registration' instead of 'pre-registration' (unless specifically referring to registration before the day of the competition).
+- A judge '[shall] call' instead of 'says'.
+- 'Score sheet' (two words) instead of 'score card'.
+- 'Apply' (moves or scramble sequence) instead of 'perform' or 'do'.
+- 'Assign' (a penalty) instead of 'apply'.
+- 'Record' a result instead of 'write down'.
+- 'Thus' instead of 'thereby'.
+- 'Discretion' (of the delegate) instead of 'consent'.
+- 'State' (of a puzzle) instead of 'position'.
+- 'Allot' (a maximum number of attempts) instead of 'give'.
 
-- "If X, ..." instead of "Should X be the case, ...".
-- "For X, ..." or "during X, ..." instead of "In X, ..."
+- 'If X, ...' instead of 'Should X be the case, ...'.
+- 'For X, ...' or 'during X, ...' instead of 'In X, ...'
 
-- "Start" and "stop" (verbs).
-- "Beginning" and "end" (nouns).
-- "Finish" (verb).
-- "Completed" (adjective).
+- 'Start' and 'stop' (verbs).
+- 'Beginning' and 'end' (nouns).
+- 'Finish' (verb).
+- 'Completed' (adjective).
 
-- "All" (collective) instead of "every".
-- "Each" (individual).
-- "Any" (potential, i.e. in case of applicability).
+- 'All' (collective) instead of 'every'.
+- 'Each' (individual).
+- 'Any' (potential, i.e. in case of applicability).
 
+### Notable Differences between the Regulations and Common Use
 
-## Notable Differences between the Regulations and Common Use
+- 'Speed Solving' is two words, to be consistent with other '_____ Solving' events.
 
-- "Speed Solving" is two words, to be consistent with other "_____ Solving" events.
+### Checklist for formatting the Regulations
+
+- Re-normalize indentation. (Use re-indent.sh, but make sure to adapt the script source for the document and sanity-diff the changes.)
+- Search for stray tabs, double-spaces, extra spaces/missing punctuation at the end of lines.
+- When searching for words/phrases, be careful about alternate spellings and search for a conservative substring (e.g. search "solv" for "solve"/"solving", "apple" for "apply"/"applied", "penalt" for "penalty"/"penalties"). Be careful about a blind search/replace.
 
 
 ## Definitions
 
-- Scramble sequence: An list of moves ("algorithm") used to scramble a puzzle. Informally also called a "scramble".
+- Scramble sequence: An list of moves ('algorithm') used to scramble a puzzle. Informally also called a 'scramble'.
 - Scramble: The scrambled state of a puzzle after a scramble sequence has been applied to it.
 - Attempt: The time frame starting when the competitor acknowledges his readiness to to begin (see Regulation A3b1) and ending when the score sheet is complete (see Regulation A7c).
 - Solve: Generally, the part of the attempt when the timer is running.

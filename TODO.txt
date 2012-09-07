@@ -8,6 +8,8 @@ Quick notes for revision.
 - When may rounds be added to an event, and what is allowed?
 - We need an impartial list of valid citizenships that will stay updated without requiring political decisions by the WCA.
 - 9e) At the beginning? Remove this Regulation? Or do we need it for security?
+- 11f) Still need a justification from the Board.
+- Ask: Can we swtich to double quotes?
 
 ## For Website formatting
 - Table of contents
@@ -15,7 +17,6 @@ Quick notes for revision.
 
 ## Specific Regulations
 
-- 4d)
 - 9i is out of place.
 
 ## General Notes
@@ -55,25 +56,6 @@ Quick notes for revision.
 - Sub-Regulations without direct parents one level above?
 - Exception: keep in the same Regulation or a sub-Regulation?
 
-## Guidelines to Add
-
-- SURFACE on top of timer clarification
-- 11f) Still need a justification from the Board.
-
-## Things to put in the Style Guide
-
-- Explanation of normativity, using W3C conventions.
-- For most formatting questions, see current Regulations: two-space nested indentation, spacing, serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), punctuation at the end of every line, capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, single quotes (and interaction with punctuation) references to specific Regulations / Guidelines, e.g. and i.e. (instead of "for example"/"that is")
-- Consistent mention of DNF and +2 (imagine someone searching for all rules that may result in a DNF)
-- Capitalization of event names and e.g. committees and officials (e.g. Delegate)
-- Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
-- Spelling of terms like "Competitors Area" and "WCA Delegate".
-- Check indentation and nesting (no orphans in Regulations, Guidelines all one level, Regs and Constitution have different base indentation levels), as well as for stray tabs and double spaces, and extra spaces at the end of lines.
-- Do the Guidelines need to be readable independent of the Regulations?
-- When searching for words, be careful about alternate spellings (e.g. search "solv" for "solve"/"solving", "apple" for "apply"/"applied", "penalt" for "penalty"/"penalties").
-
-### Done
-
 ### TODO
 - "The competitor must" vs. "a competitor must" vs. "competitors must" vs. "each / every competitor must" vs. "all competitors must" (same for various officials in place of the competitor)
 
@@ -88,7 +70,6 @@ Quick notes for revision.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
 - "default" procedures
 - The subject material of a Regulation should be at the front, even if it might be grammatically neater to put it last. (Think: someone will be scanning the first few words of each line.)
-- "WCA Delegate", not just "Delegate"
 - Emphasize cubing terms *like this* or _like this_?
 
 ## WCA Constitution
