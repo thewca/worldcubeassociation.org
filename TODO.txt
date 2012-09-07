@@ -7,6 +7,7 @@ Quick notes for revision.
 - How official scrambling programs are decided made available.
 - When may rounds be added to an event, and what is allowed?
 - We need an impartial list of valid citizenships that will stay updated without requiring political decisions by the WCA.
+- 9e) At the beginning? Remove this Regulation? Or do we need it for security?
 
 ## For Website formatting
 - Table of contents
@@ -14,30 +15,7 @@ Quick notes for revision.
 
 ## Specific Regulations
 
-- 1h1) is negated.
-- G-1h1) indentation
-- 2e1a) Dead references, also needs quote marks
-- 2s3) Guideline it?
-- 3b) Grammar
-- 3e) of uniform shade > uniform
-- 4b) until the end of the round? (Guideline: end of competition, only break for e.g. WRs)
-- 4d1) Needs a guideline about scrambling with black stickers
-- G-3a1) Clarify that borrowing a puzzle that another competitor is curreclty using is not a valid excuse
-- Make 9b) more DRY.
-- 7f1) Custom mats should be allowed.
-- 7f2a) Add comma.
-- 9b1) Remove X=4, 5, and Mean of 3 for those puzzles.
 - 9i is out of place.
-- 9f13), 9f14) should be 'Average of 5'
-- 9e) At the beginning? Remove this Regulation? Or do we need it for security?
-- A1c) use disqualification instead of DNF
-- A6e) given > assigned (search full document)
-- G-B5b) "attempt" typo
-- 5b4) use of "may"
-- B5c) must not touch the puzzle any more?
-- D3) D4) Add "The" to the beginning of subregs.
-- H1b1) "without being disqualified for reaching the time limit"
-- G-H1d)
 
 ## General Notes
 
@@ -72,6 +50,8 @@ Quick notes for revision.
 - 9f5) DNS in the middle of a round.
 - Pendantic: cumulative time limits... don't include penalties? Either case, how lenient are cumulative time penalties allowed to be, since they're just for making sure the competition runs on time?
 - Regulations metadata + credits (inc. RFC mention; look a top and bottom of current Regs)
+- Speed solving events vs. special events and formats vs. blindfolded events
+- Sub-Regulations without direct parents one level above?
 
 ## Guidelines to Add
 
@@ -99,6 +79,8 @@ Quick notes for revision.
 - Speed Solving (2 words, consistent with "_____ Solving")
 
 ## Consistency of Terminology
+
+- Delegate > WCA Delegate
 
 ### Done
 
