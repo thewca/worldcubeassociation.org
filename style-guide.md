@@ -16,3 +16,41 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 - The Regulations should limit itself to standard ASCII, for maximum encoding compatibility. This facilitates safe conversion and parsing.
     - "Degrees" should be spelled out instead of using the degree sign.
+
+### Recommended Word Choices
+
+- "Regulation" or "Guideline" instead of "rule".
+- "Result" instead of "score" (except for "score sheet" and "score taker").
+- "Ranking" instead of "rank".
+- "Permitted" instead of "allowed"
+- "Attempt" instead of "solve" (unless specifically referring to the timed portion).
+- "Scramble sequence" instead of "scramble".
+- "Start" instead of "begin".
+- "Stop" instead of "halt" or "finish"
+- "Registration" instead of "pre-registration" (unless specifically referring to registration before the day of the competition).
+- A judge "[shall] call" instead of "says".
+- "Score sheet" (two words) instead of "score card".
+- "Apply" (moves or scramble sequence) instead of "perform" or "do".
+- "Assign" (a penalty) instead of "apply".
+- "Record" a result instead of "write down".
+- "Thus" instead of "thereby".
+- "Discretion" (of the delegate) instead of "consent".
+- "State" (of a puzzle) instead of "position".
+
+- "Start" and "stop" (verbs).
+- "Beginning" and "end" (nouns).
+- "Finish" (verb).
+- "Completed" (adjective).
+
+
+### Definitions
+
+- Scramble sequence: An list of moves ("algorithm") used to scramble a puzzle. Informally also called a "scramble".
+- Scramble: The scrambled state of a puzzle after a scramble sequence has been applied to it.
+- Attempt: The time frame starting when the competitor acknowledges his readiness to to begin (see Regulation A3b1) and ending when the score sheet is complete (see Regulation A7c).
+- Solve: Generally, the part of the attempt when the timer is running.
+- Original recorded time: The time showing on the timer/stopwatch, before time penalties
+- Result: An official time, either the time for an attempt including penalties, or a derived result (e.g. mean/average).
+- Rankings: An ordered list of results (e.g. first round rankings, world rankings).
+- Ranking/Rank: An ordinal number representing a result's order in a list of results (e.g. ranking in a round, world rank).
+- Record: A best-ranked result (e.g. of comparable results for a region, or of results for a competitor)

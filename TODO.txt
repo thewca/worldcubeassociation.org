@@ -14,12 +14,30 @@ Quick notes for revision.
 
 ## Specific Regulations
 
-- 1c3b) Second sentence to Guidelines
+- 1h1) is negated.
+- G-1h1) indentation
+- 2e1a) Dead references, also needs quote marks
+- 2s3) Guideline it?
+- 3b) Grammar
+- 3e) of uniform shade > uniform
+- 4b) until the end of the round? (Guideline: end of competition, only break for e.g. WRs)
+- 4d1) Needs a guideline about scrambling with black stickers
+- G-3a1) Clarify that borrowing a puzzle that another competitor is curreclty using is not a valid excuse
 - Make 9b) more DRY.
-- 9f12b) Remove "Rubik's Cube:"
+- 7f1) Custom mats should be allowed.
+- 7f2a) Add comma.
+- 9b1) Remove X=4, 5, and Mean of 3 for those puzzles.
 - 9i is out of place.
-- 7h3) missing "the"
-- D1c) needs to not rely on reference to the Regulations.
+- 9f13), 9f14) should be 'Average of 5'
+- 9e) At the beginning? Remove this Regulation? Or do we need it for security?
+- A1c) use disqualification instead of DNF
+- A6e) given > assigned (search full document)
+- G-B5b) "attempt" typo
+- 5b4) use of "may"
+- B5c) must not touch the puzzle any more?
+- D3) D4) Add "The" to the beginning of subregs.
+- H1b1) "without being disqualified for reaching the time limit"
+- G-H1d)
 
 ## General Notes
 
@@ -34,67 +52,58 @@ Quick notes for revision.
   - By the competitor, by accident
 - Remove "(Draft)" from the titles.
 - Mention the Guidelines in the Regulations (e.g. with Delegate's tasks)
-- Mark [CLARIFICATION] vs. [EXAMPLE] vs. [RECOMMENDATION]
-- Make every Guideline correspond to a Regulation (what about prizes?)
 - Find some way to make misalignment rulings from 10f clear without images.
 - Competing in a round outside of the regular time frame
   - Systematic exceptions: judges round, accomodtions for event conflicts
   - Special exceptions: competitors leaving early / arriving late (whether their fault or not), individual organisers going at irregular times to facilitate organisation / scheduling
 - Bathroom breaks for multi BLD: Have those ever been allowed?
 - Mandate certain officials to read the full Regulations and Guidelines? (i.e. not just Delegates, but also main organizers)
-- 3a1) is out of order in the Guidelines
 - ASCII sanity check regex: [^A-Za-z \.\n\d\-:;\"\+\#\/\,''\(\)\[\]%\?<>=\*]
-- How do you rcord inter-relations between Regulations (e.g. if Mean of 3 is added for BLD)
+- How do you record inter-relations between Regulations (e.g. if Mean of 3 is added for BLD)
 - Official abbreviations may not match community standards (no "BLD", database used fm and bf)
+- wca-constitution has +x flags set.
+- Corner twist.
+- A6e) Require the competitor to sign the score sheet before touching the puzzle?
+- Round formats, types, capitalizations (Combined round)
+- Comptitor's ranking for an event is the rank in the final round participated in?
+- Rules about pre-registration
+- Fair competitor registration fees?
+- Entering events late (wanting to join late, missing the first attempt of FMC for some reason, hearing the scrambles are nice...)
+- 9f5) DNS in the middle of a round.
+- Pendantic: cumulative time limits... don't include penalties? Either case, how lenient are cumulative time penalties allowed to be, since they're just for making sure the competition runs on time?
+- Regulations metadata + credits (inc. RFC mention; look a top and bottom of current Regs)
 
 ## Guidelines to Add
 
+- SURFACE on top of timer clarification
 - 11f) Still need a justification from the Board.
 
 ## Things to put in the Style Guide
 
 - Explanation of normativity, using W3C conventions.
 - For most formatting questions, see current Regulations: two-space nested indentation, spacing, serial comma, contractions, use of i.e. and e.g., listing examples (in parentheses or bullets), capitalizations, no tabs, parentheses (unnested) but no brackets, conservative levels of nesting, use of comma/semicolon/colon, single quotes (and interaction with punctuation) references to specific Regulations / Guidelines
+- Consistent mention of DNF and +2 (imagine someone searching for all rules that may result in a DNF)
 - Capitalization of event names and e.g. committees and officials (e.g. Delegate)
 - Mention how experience has shown tht we need to cover all contingencies instead of trusting things too much. That said, the delegate can handle most exceptions.
 - Spelling of terms like "Competitors Area"
 - Do the Guidelines need to be readable independent of the Regulations?
+- When searching for words, be careful about alternate spellings (e.g. search "solv" for "solve"/"solving", "apple" for "apply"/"applied", "penalt" for "penalty"/"penalties").
+
+## List of Terms
+
+- (WCA) World Rankings
+
+## Informal vs. formal definitions
+
+- 2 second time penalty ("+2")
+- Speed Solving (2 words, consistent with "_____ Solving")
 
 ## Consistency of Terminology
 
-- A "regulation" vs. a "rule"
-- "score" vs. "results" vs. "time"
-- event vs. round vs. group (i.e. which one is a judge assigned to?)
-- Records vs. results, and recognition (vs. ranking, e.g. WR on site)
-- rank vs. ranking vs. position
-- registration vs. pre-registration
-- eligible vs. permitted vs. allowed
-- solve vs. attempt vs. competing (vs. active competitor)
-  - Attempt: everything from handing the cube to the scrambler to signing the scoresheet? (Vincent: Use "attempt" whever possible?)
-  - Solve: The timed portion of an attempt (note: this definition might be strained for FMC, BLD, or other potential events). (Does this include inspection?)
-  - See A6a2 for a place where we need to describe something inbetween: puzzle possibly already scrambled, but solve not begun yet. Also, BLD has inspection/memorization and solving
-- scramble vs. scramble sequence
-- From the forum: disqualification > DNF? "penalty : disqualification of the solve (DNF)" ? ( http://www.worldcubeassociation.org/forum/viewtopic.php?f=4&t=1022&p=5867#p5867 )
-  - Formatting idea:  "Penalty: 2 second time penalty" and "Penalty: disqualification (DNF)"
-- competition date?
-- "start" vs. "begin"
-- stop vs. halt
-- score sheet vs. scoresheet vs. scorecard vs. competition sheet. How about something that is more accurate, like "time sheet" or "time card" or "result sheet"? (see "score" vs. "results" vs. "time")
-- plural adjectival nouns "Regulations Committee", "results sheet"
-- "give" vs. "apply" vs. "assign" a penalty
-- listing alternatives (A7b vs. 1b2)
-- "writing down" vs. "recording" a result
-- "The competitor must" vs. "a competitor must" vs. "competitors must" vs. "each / every competitor must" vs. "all competitors must"
-- thereby vs. thus (i.e. "thereby starting the timer")
-- Rules about covers
-- Stackmat vs. Stackmat timer vs. Stackmat (i.e. the mat)
-- "the X" vs. "a X" (e.g. X = blindfold)
-- such taht vs. so that
-- "apply" a move vs. "make" a move
-- consent vs. discretion of the delegate
-- stop vs. end vs. completion of the solve / attempt
-- Guidelines: Explicitly label each rule with "Clarification" / "Explanation" / etc.
-- Speed solving vs. speedsolving
+### Done
+
+### TODO
+- "The competitor must" vs. "a competitor must" vs. "competitors must" vs. "each / every competitor must" vs. "all competitors must" (same for various officials in place of the competitor)
 
 ## Consistency of Grammar
 
@@ -107,6 +116,7 @@ Quick notes for revision.
 - "allotted"
 - Passive/active voice, descriptive vs. prescriptive, past vs. present
 - Apposatives (e.g. "at the discretion of...") need commas.
+- "retroactively disqualified" and other split infinitives
 
 ## Keep it simple, and in line with the past where possible.
 
@@ -117,7 +127,6 @@ Quick notes for revision.
 ## Consistent Formatting
 
 - For each type of round and type of event, define the result used for ranking, and what counts as "better"
-- Normalize penalties and the Regulations mention them ("disqualification of the attempt", not "solve")
 - A two-second penalty should be written as "+2" in quotes.
 - Every rule in a section is not indented. Every subrule is indented exactly four spaces, no matter how deeply nested. This was a good choice by Clément.
 - Incidents? Maybe make it a technical term based on the Constitution, and capitalize it?
