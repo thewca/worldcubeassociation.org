@@ -1,0 +1,9 @@
+cachedDatabase.php
+statistics.cached
+misc/age_vs_speed/*.png
+misc/age_vs_speed.html
+cache/*.cache
+upload/*
+admin/.htpasswd
+admin/export/serial.txt
+framework/_config.php
