@@ -92,7 +92,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Notable Differences between the Regulations and Common Use
 
-- 'Speed Solving' is two words, to be consistent with other '_____ Solving' events.
+- For consistency, event formats have 'Solving' as a separate word, e.g. Speed Solving' and 'Feewst Moves Solving'.
 
 ### Checklist for formatting the Regulations
 
