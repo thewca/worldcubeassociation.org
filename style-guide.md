@@ -9,7 +9,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
   - The Guidelines have an irregular correspondence to numbering in the Regulations, thus Guidelines have no indentation in the source.
 - To make the regulations easier to read we use 'he' where the reader should read 'she or he'.
 - The division into Regulations Guidelines roughly mirrors the normative vs. non-normative (informative) distinction employed by W3C standards.
-  - The use of the words 'must (not)', 'shall (not)', 'should (not)', and 'may (not)' (requirement levels) conform to RFC 2119.
+  - The use of the words 'must (not)', 'shall (not)', 'should (not)', and 'may (not)' (requirement levels) conform to RFC 2119. In particular, note that "shall" indicates a (non-optional) requirement.
   - The Regulations must not rely on the Guidelines for completeness or consistency. Any normative Guidelines must be be implicit in the Regulations (e.g. labeled [REMINDER]).
   - As a rule of thumb, anything with 'must' or 'shall' should be in the Regulations, and anything with 'should' or 'may' should be in the Guidelines.
 - The documents are written in British English.
@@ -77,6 +77,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - 'Discretion' (of the delegate) instead of 'consent'.
 - 'State' (of a puzzle) instead of 'position'.
 - 'Allot' (a maximum number of attempts) instead of 'give'.
+- 'Choose' instead of 'decide.'
 
 - 'If X, ...' instead of 'Should X be the case, ...'.
 - 'For X, ...' or 'during X, ...' instead of 'In X, ...'
