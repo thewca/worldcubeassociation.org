@@ -11,13 +11,16 @@ Quick notes for revision.
 
 ## General Notes
 
-- Z4, add comma to first come, first serve
-- G-4b1) "fairer" > "more fair"
+- Transfer definitions from style guide to Regs / Guidelines?
 
 ## For Website formatting
 - Table of contents
 - Cross-links for certain terms
+- Images for misalignments.
 
+## Discuss
+
+- From Vincent: 9f should be 1mm.
 
 ## Things that are probably not important enough to address in the current documents:
 

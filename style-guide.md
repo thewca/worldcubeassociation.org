@@ -32,6 +32,8 @@ This document is meant to clarify some of the implicit conventions adopted in WC
   - Use consistent formatting to help make the document easier to understand for a human and to search by computer (e.g. every rule that can result in a DNF explicitly mentions 'DNF').
   - Address contingencies that help ensure fair interpretation across different competitions, but leave unusual exceptions to the WCA Delegate. (In a sense, the Guidelines are a formalized FAQ to standardize unwritten rules).
   - Future-proof the documents for subsequent changes (e.g. don't assume that cross-references remain valid, don't construct delicately related rules).
+- NOTE: There are many gaps in the numbering of the Regulations. This is because we don't change around numberings when a Regulation is removed. For the same reason, there is now no Article 6.
+  - When adding a Regulation an article/list of sub-regulations, make sure that you don't number it the same as a deleted regulation from a previous official version.
 
 ### Specific Formatting Conventions
 
@@ -48,6 +50,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
     - Punctuation at the end of every line.
   - Capitalization and spelling.
   - Formatting of references (e.g. to Articles/Regulations/Guidelines).
+  - Write numbers as numerals when possible.
 
 
 ### Terms and Capitalization
@@ -77,7 +80,8 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - 'Discretion' (of the delegate) instead of 'consent'.
 - 'State' (of a puzzle) instead of 'position'.
 - 'Allot' (a maximum number of attempts) instead of 'give'.
-- 'Choose' instead of 'decide.'
+- 'Choose' instead of 'decide'.
+- 'Spectators' instead of 'audience'.
 
 - 'If X, ...' instead of 'Should X be the case, ...'.
 - 'For X, ...' or 'during X, ...' instead of 'In X, ...'
@@ -93,7 +97,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Notable Differences between the Regulations and Common Use
 
-- For consistency, event formats have 'Solving' as a separate word, e.g. Speed Solving' and 'Feewst Moves Solving'.
+- For consistency, event formats have 'Solving' as a separate word, e.g. 'Speed Solving' and 'Fewest Moves Solving'.
 
 ### Checklist for formatting the Regulations
 
@@ -104,11 +108,11 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ## Definitions
 
-- Scramble sequence: An list of moves ('algorithm') used to scramble a puzzle. Informally also called a 'scramble'.
+- Scramble sequence: A list of moves ('algorithm') used to scramble a puzzle. Informally also called a 'scramble'.
 - Scramble: The scrambled state of a puzzle after a scramble sequence has been applied to it.
 - Attempt: The time frame starting when the competitor acknowledges his readiness to to begin (see Regulation A3b1) and ending when the score sheet is complete (see Regulation A7c).
 - Solve: Generally, the part of the attempt when the timer is running.
-- Original recorded time: The time showing on the timer/stopwatch, before time penalties
+- Original recorded time: The time showing on the timer/stopwatch, before time penalties.
 - Result: An official time, either the time for an attempt including penalties, or a derived result (e.g. mean/average).
 - Rankings: An ordered list of results (e.g. first round rankings, world rankings).
 - Ranking/Rank: An ordinal number representing a result's order in a list of results (e.g. ranking in a round, world rank).
