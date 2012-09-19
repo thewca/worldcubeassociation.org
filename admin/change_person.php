@@ -91,7 +91,7 @@ function offerChoices () {
 
   echo "<hr />";
 
-  echo "<form method='POST' action='$_SERVER[PHP_SELF]'>\n";
+  echo "<form method='POST' action='" . urlencode($_SERVER[PHP_SELF]) . "'>\n";
   echo "<table class='prereg'>\n";
   textField( 'id', 'WCA Id', $chosenId, 11 );
 
