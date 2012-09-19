@@ -9,7 +9,7 @@ function displayMap ( $width, $height ){
 function displayGeocode ( $width, $height, $address, $latitude, $longitude ){
  global $chosenCompetitionId, $chosenPassword;
 ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
+    <form action="<?php echo urlencode($_SERVER['PHP_SELF']); ?>">
     Address : <input type="text" id="add" name="add" value="<?php echo $address ?>" size="100" />
     <input type="button" name="search" value="Search" onclick="showLocation()" />
 <?
