@@ -105,7 +105,7 @@ function importLocalNames () {
     }
 
     else{
-      echo "<form method='POST' action='$_SERVER[PHP_SELF]'>\n";
+      echo "<form method='POST' action='" . urlencode($_SERVER[PHP_SELF]) . "'>\n";
       echo "<input type='hidden' id='namesFile' name='namesFile' value='".htmlEscape($chosenNamesFile)."' />\n";
       echo "<input type='hidden' id='upload' name='upload' value='$chosenUpload' />\n";
       echo "<input type='hidden' id='filename' name='filename' value='".htmlEscape($chosenFilename)."' />\n";
@@ -123,7 +123,7 @@ function importLocalNames () {
     echo "<hr>\n";
 
     echo "<table class='prereg'>\n";
-    echo "  <form method='POST' action='$_SERVER[PHP_SELF]' enctype='multipart/form-data'>\n";
+    echo "  <form method='POST' action='" . urlencode($_SERVER[PHP_SELF]) . "' enctype='multipart/form-data'>\n";
     echo "  <tr><td width='30%'><label for='namesFile'>Upload file: </label></td>\n";
     echo "      <td><input type='file' id='namesFile' name='namesFile' /></td>\n";
     echo "      <td><input type='submit' id='upload' name='upload' value='Upload' /></td></tr></form>\n";
