@@ -25,9 +25,10 @@ $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|'
   ^./misc/export.html$
   ^./misc/statistics_fail.php$
   ^./misc/wc2009.php$
-  ^./PHPExcel(.php)?$
+  ^./results.xls$
   ^./statistics.cached$
   ^./statistics.log$
+  ^XX./thirdparty/PHPExcel$
   ^./upload$
   ^./WC2011.php$
 ')));
@@ -51,15 +52,21 @@ function analyze ( $path ) {
     if( preg_match( '/^\\.$|^\\.\\.$/', $child ) )
       continue;
 
-    #--- Ignore local .svn and zzz*
-    if( $GLOBALS['isLocal']  &&  preg_match( '/^\\.svn|^zzz/', $child ))
+    #--- Ignore local .svn, .git and zzz*
+    if( $GLOBALS['isLocal']  &&  preg_match( '/^\\.svn|\\.git|^zzz/', $child ))
       continue;
 
     $child = "$path/$child";
     $ignore = preg_match( '{'.$GLOBALS['ignorePattern'].'}', $child );
 
-    $size = is_file( $child ) ? filesize( $child ) : '';
-    $hash = is_file( $child ) && !$ignore ? substr(sha1_file($child),30) : '';
+    $size = $hash = '';
+    if ( is_file( $child ) ) {
+      $data = file_get_contents( $child );
+      if ( preg_match( '/\\.(php|txt|htaccess|template)$/', $child ) )
+        $data = str_replace( "\r\n", "\n", $data );
+      $size = strlen( $data );
+      $hash = substr( sha1( $data ), 30 );
+    }
     $GLOBALS[$ignore?'ignored':'checked'] .= sprintf( "%8s %10s $child\n", $size, $hash );
     if( is_dir( $child ) && !$ignore )
       analyze( $child );
