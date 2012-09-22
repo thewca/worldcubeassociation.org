@@ -3,6 +3,7 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
+require_once('thirdparty/recaptchalib.php');
 require( '_header.php' );
 
 analyzeChoices();
@@ -15,6 +16,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenType, $chosenText, $chosenUri;
   global $chosenSubmitterName, $chosenSubmitterEmail, $chosenSubmitterComment;
+  global $chosenRecaptchaChallenge, $chosenRecaptchaResponse;
 
   $chosenCompetitionId   = getNormalParam( 'competitionId'    );
   $chosenType            = getNormalParam( 'type'             );
@@ -23,6 +25,9 @@ function analyzeChoices () {
   $chosenSumitterName    = getMysqlParam(  'submitterName'    );
   $chosenSumitterEmail   = getMysqlParam(  'submitterEmail'   );
   $chosenSumitterComment = getMysqlParam(  'submitterComment' );
+
+  $chosenRecaptchaChallenge = getRawParamThisShouldBeAnException( 'recaptcha_challenge_field' );
+  $chosenRecaptchaResponse = getRawParamThisShouldBeAnException( 'recaptcha_response_field' );
 
 }
 
@@ -34,9 +39,8 @@ function offerChoices () {
 
 
   if ($chosenUri != '') {
-    saveMedium();
-    echo "Thanks for sending us a link to competition media";
-    return; 
+    $success = saveMedium();
+    noticeBox2( $success, 'Thanks for sending us a link to competition media', 'The reCAPTCHA was not entered correctly. Try it again.' );
   } 
   echo "<p>All media will be reviewed before listed on the Media page</p>";
   echo "<form method='POST' action=''>\n";
@@ -76,6 +80,9 @@ function offerChoices () {
 
   echo "</table>";
 
+  $publickey = "6LeVzdYSAAAAAJFfxgi5tVwGQtwXTxQ9dEf31SBz";
+  echo recaptcha_get_html($publickey);
+
   echo "<input type='submit' class='butt' value='Save' />";
 
   echo "</form>";
@@ -88,15 +95,24 @@ function saveMedium () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenType, $chosenText, $chosenUri;
   global $chosenSubmitterName, $chosenSubmitterEmail, $chosenSubmitterComment;
+  global $chosenRecaptchaChallenge, $chosenRecaptchaResponse;
 
-  $command = "
-  INSERT INTO CompetitionsMedia
-      (competitionId, type, text, uri, submitterName, submitterEmail, submitterComment, status)
-    VALUES
-      ('$chosenCompetitionId', '$chosenType', '$chosenText', '$chosenUri',
-       '$chosenSubmitterName', '$chosenSubmitterEmail', '$chosenSubmitterComment', 'pending')";
+  $privatekey = "6LeVzdYSAAAAAGjv_lIUF-BKQUBD_HRRvy9STIgf";
+  $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $chosenRecaptchaChallenge, $chosenRecaptchaResponse);
 
-  dbCommand( $command );
+  if (!$resp->is_valid)
+    return false;
+  else {
+    $command = "
+    INSERT INTO CompetitionsMedia
+        (competitionId, type, text, uri, submitterName, submitterEmail, submitterComment, status)
+      VALUES
+        ('$chosenCompetitionId', '$chosenType', '$chosenText', '$chosenUri',
+         '$chosenSubmitterName', '$chosenSubmitterEmail', '$chosenSubmitterComment', 'pending')";
+
+    dbCommand( $command );
+    return true;
+  }
 }
 
 ?>
