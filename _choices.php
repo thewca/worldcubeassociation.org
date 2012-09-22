@@ -14,7 +14,7 @@ function displayChoicesWithMethod ( $method, $choices ) {
   if( debug() )
     $choices[] = "<input type='hidden' name='debug5926' value='1' />";
 
-  echo "<form action='" . urlencode($_SERVER['PHP_SELF']) . "' method='$method'>\n";
+  echo "<form action='' method='$method'>\n";
   echo "  <table cellpadding='0' cellspacing='0' id='choices'>\n";
   echo "    <tr>\n\n";
   foreach( $choices as $choice )

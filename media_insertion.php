@@ -39,7 +39,7 @@ function offerChoices () {
     return; 
   } 
   echo "<p>All media will be reviewed before listed on the Media page</p>";
-  echo "<form method='POST' action='" . urlencode($_SERVER[PHP_SELF]) . "'>\n";
+  echo "<form method='POST' action=''>\n";
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
 
   echo "<tr><td>Competition</td>";
