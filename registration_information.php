@@ -38,7 +38,7 @@ function checkPassword () {
   #--- Check the password.
   $data = $results[0];
 
-  if( $chosenPassword != $data['password'] ){
+  if(( $chosenPassword != $data['organiserPassword'] ) && ( $chosenPassword != $data['adminPassword'] )){
     showErrorMessage( "wrong password" );
     return false;
   }

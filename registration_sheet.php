@@ -17,15 +17,44 @@ ob_end_clean();
 
 
 analyseChoices();
-generateSheet();
+if( checkPassword() ) {
+  generateSheet();
+}
 
 #----------------------------------------------------------------------
 function analyseChoices () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId;
+  global $chosenCompetitionId, $chosenPassword;
 
   $chosenCompetitionId = getNormalParam( 'competitionId' );
+  $chosenPassword = getNormalParam( 'password' );
 
+}
+
+#----------------------------------------------------------------------
+function checkPassword () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId, $chosenPassword;
+
+  #--- Load the competition data from the database.
+  $results = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
+  
+  #--- Check the competitionId.
+  if( count( $results ) != 1 ){
+    showErrorMessage( "unknown competitionId [$chosenCompetitionId]" );
+    return false;
+  }
+
+  #--- Competition exists, so get its data.
+  $data = $results[0];
+
+  #--- Check the password.
+  if(( $chosenPassword != $data['organiserPassword'] ) && ( $chosenPassword != $data['adminPassword'] )){
+    showErrorMessage( "wrong password" );
+    return false;
+  }
+
+  return true;
 }
 
 #----------------------------------------------------------------------

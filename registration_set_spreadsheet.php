@@ -40,7 +40,7 @@ function checkPasswordAndLoadData () {
   $data = $results[0];
 
   #--- Check the password.
-  if( $chosenPassword != $data['password'] ){
+  if(( $chosenPassword != $data['organiserPassword'] ) && ( $chosenPassword != $data['adminPassword'] )){
     showErrorMessage( "wrong password" );
     return false;
   }
