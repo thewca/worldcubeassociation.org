@@ -4,8 +4,12 @@ if( ! isset( $dontLoadCachedDatabase ))
   $dontLoadCachedDatabase = false;
 
 establishDatabaseAccess();
-if( ! $dontLoadCachedDatabase )
-  require( 'cachedDatabase.php' );
+if( ! $dontLoadCachedDatabase ){
+  if( file_exists( pathToRoot() . 'cachedDatabase.php' ))
+    require( 'cachedDatabase.php' );
+  else
+    noticeBox( false, 'I could not find the cachedDatabase.php file. Go <a href="admin/compute_auxiliary_data.php">here</a> to generate this file.' );
+}
 
 #----------------------------------------------------------------------
 function establishDatabaseAccess () {
