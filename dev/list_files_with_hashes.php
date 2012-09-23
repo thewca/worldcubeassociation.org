@@ -12,13 +12,15 @@ $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|'
   ^./admin/export/serial.txt$
   ^./admin/projectlocker.txt$
   ^./cache$
-  ^./cache_log.txt$
-  ^./cachedDatabase.php$
   ^./competitions$
   ^./d.php$
   ^./euro2012.php$
   ^./framework/_config.php$
   ^./framework/speedcubing2.site.aplus.net$
+  ^./generated/cache_log.txt$
+  ^./generated/cachedDatabase.php$
+  ^./generated/statistics.cached$
+  ^./generated/statistics.log$
   ^./jpgraph$
   ^./misc/WCA_export\\d+_\\d+.(sql|tsv).zip$
   ^./misc/age_vs_speed(.html)?$
@@ -26,8 +28,6 @@ $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|'
   ^./misc/statistics_fail.php$
   ^./misc/wc2009.php$
   ^./results.xls$
-  ^./statistics.cached$
-  ^./statistics.log$
   ^XX./thirdparty/PHPExcel$
   ^./upload$
   ^./WC2011.php$

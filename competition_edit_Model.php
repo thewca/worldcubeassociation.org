@@ -342,7 +342,7 @@ function storeData () {
 
   #--- Building the caches again
   require( 'admin/_helpers.php' );
-  ob_start(); computeCachedDatabase( 'cachedDatabase.php' ); ob_end_clean();
+  ob_start(); computeCachedDatabase( 'generated/cachedDatabase.php' ); ob_end_clean();
 
   #####----- Validation
 
