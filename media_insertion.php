@@ -16,15 +16,22 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenType, $chosenText, $chosenUri;
   global $chosenSubmitterName, $chosenSubmitterEmail, $chosenSubmitterComment;
+  global $chosenTextHtml, $chosenUriHtml, $chosenSubmitterNameHtml, $chosenSubmitterEmailHtml, $chosenSubmitterCommentHtml;
   global $chosenRecaptchaChallenge, $chosenRecaptchaResponse;
 
-  $chosenCompetitionId   = getNormalParam( 'competitionId'    );
-  $chosenType            = getNormalParam( 'type'             );
-  $chosenText            = getMysqlParam(  'text'             );
-  $chosenUri             = getMysqlParam(  'uri'              );
-  $chosenSumitterName    = getMysqlParam(  'submitterName'    );
-  $chosenSumitterEmail   = getMysqlParam(  'submitterEmail'   );
-  $chosenSumitterComment = getMysqlParam(  'submitterComment' );
+  $chosenCompetitionId    = getNormalParam( 'competitionId'    );
+  $chosenType             = getNormalParam( 'type'             );
+  $chosenText             = getMysqlParam(  'text'             );
+  $chosenUri              = getMysqlParam(  'uri'              );
+  $chosenSubmitterName    = getMysqlParam(  'submitterName'    );
+  $chosenSubmitterEmail   = getMysqlParam(  'submitterEmail'   );
+  $chosenSubmitterComment = getMysqlParam(  'submitterComment' );
+
+  $chosenTextHtml             = getHtmlParam(  'text'             );
+  $chosenUriHtml              = getHtmlParam(  'uri'              );
+  $chosenSubmitterNameHtml    = getHtmlParam(  'submitterName'    );
+  $chosenSubmitterEmailHtml   = getHtmlParam(  'submitterEmail'   );
+  $chosenSubmitterCommentHtml = getHtmlParam(  'submitterComment' );
 
   $chosenRecaptchaChallenge = getRawParamThisShouldBeAnException( 'recaptcha_challenge_field' );
   $chosenRecaptchaResponse = getRawParamThisShouldBeAnException( 'recaptcha_response_field' );
@@ -36,7 +43,8 @@ function analyzeChoices () {
 function offerChoices () {
 #----------------------------------------------------------------------
   global $chosenUri;
-
+  global $chosenCompetitionId, $chosenType;
+  global $chosenTextHtml, $chosenUriHtml, $chosenSubmitterNameHtml, $chosenSubmitterEmailHtml, $chosenSubmitterCommentHtml;
 
   if ($chosenUri != '') {
     $success = saveMedium();
@@ -51,7 +59,10 @@ function offerChoices () {
   foreach( getAllCompetitions() as $competition ) {
     $optionId = $competition['id'];
     $optionName = $competition['cellName'];
-    $optionsComp .= "<option value='$optionId'>$optionName</option>\n";
+    if( $optionId == $chosenCompetitionId )
+      $optionsComp .= "<option value='$optionId' selected='selected'>$optionName</option>\n";
+    else
+      $optionsComp .= "<option value='$optionId'>$optionName</option>\n";
   }
   $optionsComp .= "</select></td></tr>";
   
@@ -61,15 +72,18 @@ function offerChoices () {
   echo "<tr><td>Type</td>";
   echo "<td><select class='drop' id='type' name='type'>\n";
   foreach (array('article', 'report', 'multimedia') as $typeString)
-    echo "<option value='$typeString'>$typeString</option>";
+    if( $typeString == $chosenType )
+      echo "<option value='$typeString' selected='selected'>$typeString</option>";
+    else
+      echo "<option value='$typeString'>$typeString</option>";
 
 
   $fieldList = array (
-    array ('Text', 'text', ''),
-    array ('Link', 'uri', 'http://'),
-    array ('Submitter Name', 'submitterName', ''),
-    array ('Submitter Email', 'submitterEmail', ''),
-    array ('Submitter Comment', 'submitterComment', '')
+    array ('Text', 'text', $chosenTextHtml),
+    array ('Link', 'uri', $chosenUriHtml ? "$chosenUriHtml" : 'http://'),
+    array ('Submitter Name', 'submitterName', $chosenSubmitterNameHtml),
+    array ('Submitter Email', 'submitterEmail', $chosenSubmitterEmailHtml),
+    array ('Submitter Comment', 'submitterComment', $chosenSubmitterCommentHtml)
   );
 
 
