@@ -67,6 +67,7 @@ showDescription();
 showChoices();
 if( $chosenNewAdminPassword || $chosenNewOrganiserPassword )
   setNewPassword( $chosenNewAdminPassword );
+showCompetitions();
 
 require( '../_footer.php' );
 
@@ -122,6 +123,36 @@ function showChoices () {
     choiceButton( true, 'createNew', 'Create new' ),
     choiceButton( true, 'clone', 'Clone' ),
   ));
+}
+
+#----------------------------------------------------------------------
+function showCompetitions () {
+#----------------------------------------------------------------------
+
+  $competitions = dbQuery("
+    SELECT id, date_format(year*10000+month*100+day,'%e %b %Y') date, name, cityName, countryId, wcaDelegate, organiser, venue, cellName
+    FROM Competitions
+    ORDER BY year desc, month desc, day desc, id"
+  );
+  tableBegin( 'results', 3 );
+  tableCaption( true, 'You can click a competition below to reload the page with that competition filled in above' );
+  tableHeader( explode( '|', "Date|ID, CellName, Name|Where, Delegate, Organiser" ), array( 0=>"class='r'", 2=>'class="f"' ) );
+  foreach( $competitions as $competition ){
+    extract( $competition );
+    $where = implode( ', ', array_filter( array( $venue, $cityName, $countryId ) ) );
+    tableRow( array(
+      $date,
+      "<a href='competitions_manage.php?competitionId=$id'>$id<br />$cellName<br />$name</a>",
+      unTag( $where ) . '<br />' . unTag( $wcaDelegate ) . '<br />' . unTag( $organiser )
+    ));
+  }
+  tableEnd();
+}
+
+#----------------------------------------------------------------------
+function unTag ( $tagged ) {
+#----------------------------------------------------------------------
+  return preg_replace( '/\\[\\{(.*?)\\}\\{.*?\\}\\]/', ' $1', $tagged );
 }
 
 #----------------------------------------------------------------------
