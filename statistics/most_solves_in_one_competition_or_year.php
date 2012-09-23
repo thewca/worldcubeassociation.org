@@ -1,6 +1,6 @@
 <?
 
-$solves = polishMostSolvesDnfs( "
+$solves = polishMostSolvesAttempts( "
   SELECT    personId,
             competitionId whereId,
             count(value1>0 or null)+
@@ -19,7 +19,7 @@ $solves = polishMostSolvesDnfs( "
   LIMIT     50
 " );
 
-$attempts = polishMostSolvesDnfs( "
+$attempts = polishMostSolvesAttempts( "
   SELECT    personId,
             year whereId,
             count(value1>0 or null)+
@@ -39,7 +39,7 @@ $attempts = polishMostSolvesDnfs( "
   LIMIT     50
 " );
 
-function polishMostSolvesDnfs ( $query ) {
+function polishMostSolvesAttempts ( $query ) {
   $result = array();
   foreach ( dbQuery( $query ) as $row ) {
     list( $personId, $whereId, $ctr, $attempts ) = $row;

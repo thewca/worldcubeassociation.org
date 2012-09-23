@@ -16,7 +16,7 @@
 #     - Rows (the actual data to show)
 #     - Info (optional, provides longer explanation on yellow "info")
 #
-#   The column definitions must reflect the query results. Each column
+#   The column definitions must reflect the data rows. Each column
 #   is defined as "[type] name" with these possible types:
 # 
 #     [P] Person.      For person ids.
@@ -24,9 +24,9 @@
 #     [C] Competition. For competition ids.
 #     [t] Text.        Just any text.
 #     [n] Number.      For numbers.
-#     [r] Result.      For result values. The query must also provide
-#                      an event id for this to work because I need to
-#                      get the value format.
+#     [r] Result.      For result values. Each data row must also provide
+#                      the eventId to determine the format, otherwise I'll
+#                      guess it's a 'time' format event.
 #     [f] Filler.      Automatically added later, used for last column
 #                      to fill the table to make it page width.
 # 

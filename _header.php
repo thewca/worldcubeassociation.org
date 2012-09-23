@@ -15,8 +15,8 @@
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/pageMenu.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
-
 </head>
+
 <body>
 <? if( ! $standAlone ){ ?>
 <div id="main">
@@ -47,7 +47,7 @@
      $name   = $section[0];
      $active = ($section[1] == $currentSection) ? 'id="activePage"' : '';
      $href   = pathToRoot() . (isset($section[2]) ? $section[2] : $section[1].'.php');
-     echo "<td><div class='item'><a href='$href' $active>$name</a></div></td>";
+     echo "<td><div class='item'><a href='$href' $active>$name</a></div></td>\n";
    } ?>
     </tr></table>
   </div>

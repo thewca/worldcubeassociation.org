@@ -14,7 +14,7 @@ if ( $chosenWhich == 'recent' )
   $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
 
 switch ( $chosenWhat ){
-  case 'single':
+  case 'individual':
     checkIndividually();
     break;
   case 'ranks':
@@ -48,7 +48,7 @@ function analyzeChoices () {
   global $chosenWhich, $chosenWhat;
 
   $chosenWhich = getNormalParamDefault( 'which', 'recent' );
-  $chosenWhat = getNormalParamDefault( 'what', 'single' );
+  $chosenWhat = getNormalParamDefault( 'what', 'individual' );
 }
 
 #----------------------------------------------------------------------
@@ -59,7 +59,7 @@ function showChoices () {
   displayChoices( array(
     'Check',
     choice( 'which', '', array( array( 'recent', 'recent' ), array( 'all', 'all' )), $chosenWhich ),
-    choice( 'what', '', array( array( 'single', 'single results' ), array( 'ranks', 'ranks' ), array( 'duplicates', 'duplicates' )), $chosenWhat ),
+    choice( 'what', '', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'duplicates', 'duplicates' )), $chosenWhat ),
     choiceButton( true, 'go', 'Go' )
   ));
 }
@@ -69,7 +69,7 @@ function checkIndividually () {
 #----------------------------------------------------------------------
   global $dateCondition, $chosenWhich, $competitionIds, $countryIds;
 
-  echo "<hr /><p>Checking <b>" . $chosenWhich . " single results</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b>" . $chosenWhich . " individual results</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("

@@ -120,6 +120,12 @@ function showErrorMessage( $message ) {
   echo "<div class='errorMessage'>Error: $message</div>";
 }
 
+function pretty ( $object ) {
+  echo "<pre>";
+  print_r( $object );
+  echo "</pre>";
+}
+
 #----------------------------------------------------------------------
 
 function eventCondition () {
