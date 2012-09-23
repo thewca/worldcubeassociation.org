@@ -40,6 +40,7 @@ $attempts = polishMostSolvesDnfs( "
 " );
 
 function polishMostSolvesDnfs ( $query ) {
+  $result = array();
   foreach ( dbQuery( $query ) as $row ) {
     list( $personId, $whereId, $ctr, $attempts ) = $row;
     if ( ! isset( $listed[$personId] ) && count($result)<10 ){

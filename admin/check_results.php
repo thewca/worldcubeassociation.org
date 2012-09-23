@@ -120,6 +120,7 @@ function checkResult ( $result ) {
   $format = $result['formatId'];
 
   #--- 1) Let dns, dnf, zer, suc be the number of values of each kind.
+  $dns = $dnf = $zer = $suc = 0;
   foreach( range( 1, 5 ) as $i ){
     $value = $result["value$i"];
     $dns += $value == -2;

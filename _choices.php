@@ -36,8 +36,7 @@ function choiceButton ( $chosen, $id, $text ) {
 function choice ( $id, $caption, $options, $chosenOption ) {
 #----------------------------------------------------------------------
 
-  if( $caption )
-    $result = "<label for='$id'>$caption:<br />";
+  $result = $caption ? "<label for='$id'>$caption:<br />" : '';
   $result .= "<select class='drop' id='$id' name='$id'>\n";
   $chosen = urlEncode( $chosenOption );
   foreach( $options as $option ){

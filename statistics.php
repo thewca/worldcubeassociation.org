@@ -98,8 +98,9 @@ function addList ( $list, $legacyId ) {
 
   $competitions = readDatabaseTableWithId( 'Competitions' );
 
-  list( $id, $title, $subtitle, $columnDefs, $rows, $info ) = $list;
-
+  list( $id, $title, $subtitle, $columnDefs, $rows ) = $list;
+  $info = isset($list[5]) ? $list[5] : '';
+  
   #--- From column definitions like "[P] Person [N] Appearances [T] | [P] Person [N] Appearances"
   #--- extract classes and names like:
   #--- ('P', 'N', 'T', 'P', 'N', 'f')
@@ -156,10 +157,10 @@ function addList ( $list, $legacyId ) {
     foreach( range( 0, $columnCount-2 ) as $i ){
       $value = $row[$i];
       $Class = ucfirst( $columnClasses[$i] );
-      if( $Class == 'P' ) $value = personLink( $value, extractRomanName( currentPersonName( $value ) ) );
+      if( $Class == 'P' && $value ) $value = personLink( $value, extractRomanName( currentPersonName( $value ) ) );
       if( $Class == 'E' ) $value = eventLink( $value, eventCellName( $value ));
       if( $Class == 'C' ) $value = competitionLink( $value, $competitions[$value]['cellName'] );
-      if( $Class == 'R' ) $value = formatValue( $value, valueFormat( $row['eventId'] ));
+      if( $Class == 'R' ) $value = formatValue( $value, isset($row['eventId']) ? valueFormat($row['eventId']) : 'time' );
       $values[] = $value;
       if( $Class == 'N' ) $numbers .= "$value|";
     }
