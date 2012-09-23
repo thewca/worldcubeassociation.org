@@ -4,6 +4,7 @@
 #----------------------------------------------------------------------
 
 require_once('thirdparty/recaptchalib.php');
+$currentSection = 'media';
 require( '_header.php' );
 
 analyzeChoices();

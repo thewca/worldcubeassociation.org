@@ -86,7 +86,7 @@ UPDATE Results SET regionalSingleRecord='NR' WHERE id=33333
 
   #--- If differences were found, offer to fix them.
   if( $differencesWereFound )
-    echo "<center><input type='submit' value='Execute the agreed $valueName changes!' /></center>\n";
+    echo "<center><input type='submit' value='Execute the agreed changes!' /></center>\n";
 
   #--- Finish the form.
   echo "</form>\n";
@@ -138,7 +138,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       list( $eventId, $countryId, $continentId, $value, $valueFormat ) = $row;
       if( isSuccessValue( $value, $valueFormat ))
         foreach( array( $countryId, $continentId, 'World' ) as $regionId )
-          if( !$baseRecord[$eventId][$regionId] || $value < $baseRecord[$eventId][$regionId] )
+          if( !isset($baseRecord[$eventId][$regionId]) || $value < $baseRecord[$eventId][$regionId] )
             $baseRecord[$eventId][$regionId] = $value;
     }
     mysql_free_result( $results );
@@ -205,6 +205,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
   ");
 
   #--- Process each result.
+  $currentEventId = $announcedEventId = $announcedRoundId = $announcedCompoId = NULL;
   while( $row = mysql_fetch_row( $results )){
     list( $startDate, $resultId, $eventId, $competitionId, $roundId, $personId, $personName, $countryId, $storedMarker, $value, $continentId, $continentalRecordName, $valueFormat ) = $row;
 
@@ -216,7 +217,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
     if ( $eventId != $currentEventId ) {
       $currentEventId = $eventId;
       $currentCompetitionId = false;
-      $record = $previousRecord = $baseRecord[$eventId];
+      $record = $previousRecord = isset($baseRecord[$eventId]) ? $baseRecord[$eventId] : array();
       $pendingCompetitions = array();
     }
 
@@ -237,13 +238,13 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 
     #--- Calculate whether it's a new region record and update the records.
     $calcedMarker = '';
-    if( !$record[$countryId] || $value <= $record[$countryId] ){
+    if( !isset($record[$countryId]) || $value <= $record[$countryId] ){
       $calcedMarker = 'NR';
       $record[$countryId] = $value;
-      if( !$record[$continentId] || $value <= $record[$continentId] ){
+      if( !isset($record[$continentId]) || $value <= $record[$continentId] ){
         $calcedMarker = $continentalRecordName;
         $record[$continentId] = $value;
-        if( !$record['World'] || $value <= $record['World'] ){
+        if( !isset($record['World']) || $value <= $record['World'] ){
           $calcedMarker = 'WR';
           $record['World'] = $value;
         }
@@ -323,7 +324,7 @@ function handlePendingCompetition ( $pendingCompetition ) {
   list( $endDate, $pendingRecord ) = $pendingCompetition;
   if ( $endDate >= $startDate ) return true;
   foreach ( $pendingRecord as $regionId => $value )
-    if ( !$previousRecord[$regionId] || $pendingRecord[$regionId] < $previousRecord[$regionId] )
+    if ( !isset($previousRecord[$regionId]) || $pendingRecord[$regionId] < $previousRecord[$regionId] )
       $previousRecord[$regionId] = $pendingRecord[$regionId];
   return false;
 }
