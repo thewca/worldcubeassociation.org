@@ -80,8 +80,8 @@ function offerChoices () {
 
   echo "</table>";
 
-  $publickey = "6LeVzdYSAAAAAJFfxgi5tVwGQtwXTxQ9dEf31SBz";
-  echo recaptcha_get_html($publickey);
+  global $recaptchaPublickey;
+  echo recaptcha_get_html($recaptchaPublickey);
 
   echo "<input type='submit' class='butt' value='Save' />";
 
@@ -97,8 +97,8 @@ function saveMedium () {
   global $chosenSubmitterName, $chosenSubmitterEmail, $chosenSubmitterComment;
   global $chosenRecaptchaChallenge, $chosenRecaptchaResponse;
 
-  $privatekey = "6LeVzdYSAAAAAGjv_lIUF-BKQUBD_HRRvy9STIgf";
-  $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $chosenRecaptchaChallenge, $chosenRecaptchaResponse);
+  global $recaptchaPrivatekey;
+  $resp = recaptcha_check_answer ($recaptchaPrivatekey, $_SERVER["REMOTE_ADDR"], $chosenRecaptchaChallenge, $chosenRecaptchaResponse);
 
   if (!$resp->is_valid)
     return false;

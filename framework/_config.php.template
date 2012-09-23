@@ -5,4 +5,8 @@ $configDatabaseUser = '...';
 $configDatabasePass = '...';
 $configDatabaseName = '...';
 
+global $recaptchaPublickey, $recaptchaPrivatekey;
+$recaptchaPublickey  = '...';
+$recaptchaPrivatekey = '...';
+
 ?>
