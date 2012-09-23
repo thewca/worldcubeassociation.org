@@ -20,7 +20,7 @@ if( $chosenDoIt ){
   computeConciseRecords();
   computeRanks( 'best', 'Single' );
   computeRanks( 'average', 'Average' );
-  computeCachedDatabase('../cachedDatabase.php');
+  computeCachedDatabase('../generated/cachedDatabase.php');
   deleteCaches();
   noticeBox3( 1, "Ok, finished.<br />" . wcaDate() );
 }

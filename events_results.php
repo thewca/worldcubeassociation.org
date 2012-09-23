@@ -18,7 +18,7 @@ if( $chosenAverage ){
       AND competition.id = competitionId
       AND country.id     = result.countryId
     ORDER BY
-      value, best, personName
+      value, best, personName, competitionId, roundId
     $limitCondition
   ");
 }
@@ -27,7 +27,7 @@ if( $chosenAverage ){
 
 else {
   for ( $i=1; $i<=5; $i++ )
-    $subqueryParts[] = "SELECT   value$i value, personId, personName, country.name countryName, competitionId, competition.cellName competitionName
+    $subqueryParts[] = "SELECT   value$i value, personId, personName, country.name countryName, competitionId, competition.cellName competitionName, roundId
                         FROM     Results result,
                                  Competitions competition,
                                  Countries country
@@ -41,7 +41,7 @@ else {
   $results = dbQuery("
     SELECT   *
     FROM    ($subquery) result
-    ORDER BY value, personName
+    ORDER BY value, personName, competitionId, roundId
     $limitCondition
   ");
 }

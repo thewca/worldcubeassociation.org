@@ -106,7 +106,7 @@ function deleteCaches () {
 function cacheLog ( $message ) {
 #----------------------------------------------------------------------
 
-  file_put_contents( pathToRoot() . 'cache_log.txt', "$message\n", FILE_APPEND );
+  file_put_contents( pathToRoot() . 'generated/cache_log.txt', "$message\n", FILE_APPEND );
 }
 
 ?>

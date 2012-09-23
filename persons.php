@@ -71,7 +71,7 @@ function showMatchingPersons () {
       " . regionCondition( '' ) . "
       AND country.id = person.countryId
       $eventConditionPart2
-    ORDER BY personName, countryName
+    ORDER BY personName, countryName, personId
   ");
 
   $count = count( $persons );

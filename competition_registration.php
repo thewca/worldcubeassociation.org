@@ -438,6 +438,7 @@ function showPreregList () {
   tableBegin( 'results', 4 + count( $eventList ));
 
   $countPerson = 0;
+  $countCountry = 0;
 
   foreach( $preregs as $prereg ){
     extract( $prereg );
@@ -470,7 +471,6 @@ function showPreregList () {
 
     $row[] = $countryId;
 
-    $countCountry = 0;
     if( ! isset( $listCountries[$countryId] )){
       $listCountries[$countryId] = 1;
       $countCountry += 1;
