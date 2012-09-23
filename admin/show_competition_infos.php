@@ -3,6 +3,7 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
+$currentSection = 'admin';
 require( '../_header.php' );
 require( '../competition_infos.php' );
 adminHeadline( 'Show competition infos' );

@@ -8,6 +8,7 @@ $dontLoadCachedDatabase = true;
 error_reporting(E_ERROR);
 ini_set('display_errors', 1);
 
+$currentSection = 'admin';
 require( '../_header.php' );
 require( '_helpers.php' );
 analyzeChoices();

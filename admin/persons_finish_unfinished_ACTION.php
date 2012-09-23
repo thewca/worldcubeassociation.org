@@ -3,6 +3,7 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
+$currentSection = 'admin';
 require( '../_header.php' );
 adminHeadline( 'Finish unfinished persons', 'persons_finish_unfinished' );
 showDescription();

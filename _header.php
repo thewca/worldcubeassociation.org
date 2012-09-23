@@ -24,7 +24,7 @@
 
 <?
   $sections = array(
-    array( 'Home',         '../index'     ),
+    array( 'Home',         'home', '../'  ),
     array( 'Rankings',     'events'       ),
     array( 'Records',      'regions'      ),
     array( 'Competitions', 'competitions' ),
@@ -33,6 +33,8 @@
     array( 'Statistics',   'statistics'   ),
     array( 'Misc',         'misc'         ),
   );
+  if ( $currentSection == 'admin' )
+    $sections[] = array( 'Admin', 'admin', 'admin/' );
 
   if ( ! preg_match( '/worldcubeassociation.org$/', $_SERVER["SERVER_NAME"] ) )
     noticeBox3( 0, "Note: This is only a copy of the WCA results system used for testing stuff. The official WCA results are at:<br /><a href='http://www.worldcubeassociation.org/results/'>http://www.worldcubeassociation.org/results/</a>" );
@@ -42,11 +44,11 @@
   <div id="pageMenu">
     <table summary="This table gives other relevant links" cellspacing="0" cellpadding="0"><tr>
 <? foreach( $sections as $section ){
-    $name   = $section[0];
-    $id     = $section[1];
-    $active = ($id == $currentSection) ? 'id="activePage"' : ''; ?>
-<td><div class="item"><a href="<?= pathToRoot() . $id ?>.php" <?= $active ?>><?= $name ?></a></div></td>
-<? } ?>
+     $name   = $section[0];
+     $active = ($section[1] == $currentSection) ? 'id="activePage"' : '';
+     $href   = pathToRoot() . (isset($section[2]) ? $section[2] : $section[1].'.php');
+     echo "<td><div class='item'><a href='$href' $active>$name</a></div></td>";
+   } ?>
     </tr></table>
   </div>
 </div>
