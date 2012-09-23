@@ -4,45 +4,34 @@ $lists[] = array(
   "podiums_3x3",
   "Best Podiums in Rubik's Cube event",
   "",
-  "[C] Competition [N] Sum [P] First [n] &nbsp; [P] Second [n] &nbsp; [P] Third [n] &nbsp;",
-  bestPodium()
+  "[C] Competition [R] Sum [P] First [r] &nbsp; [P] Second [r] &nbsp; [P] Third [r] &nbsp;",
+  bestPodiums()
 );
 
 #----------------------------------------------------------------------
-function bestPodium () {
+function bestPodiums () {
 #----------------------------------------------------------------------
   $results = dbQuery( "SELECT average, competitionId, personId, pos
                        FROM Results
-                       WHERE pos<4 AND eventId='333' AND formatId='a' AND roundId='f'
+                       WHERE pos<=3 AND eventId='333' AND formatId='a' AND average>0 AND roundId in ('f','c')
                        ORDER BY competitionId, roundId, pos ");
 
-  foreach( $results as $result ){
-    extract( $result );
-    $compact_list["$competitionId"]["$pos"] = $average;
-    $compact_list["$competitionId"]["p$pos"] = $personId;
-    if( isset( $compact_list["$competitionId"]['sum'] ))
-      $compact_list["$competitionId"]['sum'] += $average;
-    else
-      $compact_list["$competitionId"]['sum'] = $average;
-  }
+  foreach( structureBy( $results, 'competitionId' ) as $top3 )
+    if( count( $top3 ) >= 3 )
+      $list[] = array( $top3[0]['competitionId'], $top3[0]['average'] + $top3[1]['average'] + $top3[2]['average'],
+                       $top3[0]['personId'],      $top3[0]['average'],
+                       $top3[1]['personId'],      $top3[1]['average'],
+                       $top3[2]['personId'],      $top3[2]['average'] );
 
-  uasort ($compact_list, "compare");
-
-  foreach( $compact_list as $comp => $values ) 
-    $list[] = array( $comp, formatValue( $values['sum'], 'time' ),
-                     $values['p1'], formatValue( $values['1'], 'time' ),
-                     $values['p2'], formatValue( $values['2'], 'time' ),
-                     $values['p3'], formatValue( $values['3'], 'time' ));
-
+  uasort( $list, 'comparePodiums' );
   return array_slice( $list, 0, 10 );
-
 }
 
 #----------------------------------------------------------------------
-function compare ( $a, $b ) {
+function comparePodiums ( $a, $b ) {
 #----------------------------------------------------------------------
 
-  return ($a['sum'] > $b['sum']);
+  return ($a[1] > $b[1]);
 }
 
 ?>
