@@ -114,7 +114,7 @@ function showUnfinishedPersons () {
     $romanName = extractRomanName( $name );
     $accent   = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûıışÿ";
     $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
-    $quarterId = strtr( $romanName, $accent, $noaccent );
+    $quarterId = strtr( utf8_decode($romanName), $accent, $noaccent );
     $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
     $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
 
