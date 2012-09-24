@@ -5,3 +5,6 @@ upload/*
 admin/.htpasswd
 admin/export/serial.txt
 framework/_config.php
+dev/test_files/*
+generated/*
+zzz*
