@@ -57,6 +57,7 @@ function initGeocode ( $latitude, $longitude ){
 
 
 function initMap ( $width, $height ) {
+  global $chosenRegionId;
   $width = ($width == 0) ? "100%" : "${width}px";
   echo "<div id='map' style='width: $width; height: ${height}px'></div>\n";
 
@@ -77,11 +78,11 @@ if( $chosenRegionId && $chosenRegionId != 'World' ){
 
   $continent = dbQuery("SELECT * FROM Continents WHERE id='$chosenRegionId' ");
   
-  if( count( $continent ))
+  if( count( $continent ) && ( $continent[0]['zoom'] != 0 ))
     $coords = $continent[0];
   else {
     $country = dbQuery("SELECT * FROM Countries WHERE id='$chosenRegionId' ");
-    if( count( $country ))
+    if( count( $country ) && ( $country[0]['zoom'] != 0 ))
       $coords = $country[0];
   }
 }
