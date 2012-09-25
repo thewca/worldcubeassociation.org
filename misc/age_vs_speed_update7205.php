@@ -13,13 +13,15 @@ echo "<h1>Age vs Speed</h1>\n\n";
 echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This is an analysis of age vs speed. It shows the lowest times achieved at different ages, and is complete in the sense that between two consecutive entries, there's nobody with age and record in between. The current single and average world record are highlighted, and the two lists are adjusted so that those two records are on the same row.</p>";
 echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
+if( ! file_exists( 'age_vs_speed' ) )
+  mkdir( 'age_vs_speed' );
+
 $events = dbQuery( "
   SELECT    id, name
   FROM      Events
   WHERE     format='time' and rank<999
   ORDER BY  rank
 " );
-
 foreach ( $events as $event )
   showBody( $event['id'], $event['name'] );
 
@@ -134,8 +136,8 @@ function extractLowest ( $eventId, $sourceId, $ageOrder ) {
 function createDiagramImage ( $eventName, $imageFile, $singles, $averages ) {
 #----------------------------------------------------------------------
 
-  require_once ("../jpgraph/jpgraph.php");
-  require_once ("../jpgraph/jpgraph_line.php");
+  require_once ("../thirdparty/jpgraph/jpgraph.php");
+  require_once ("../thirdparty/jpgraph/jpgraph_line.php");
    
   // Create the graph
   $graph = new Graph( 860, 300 );

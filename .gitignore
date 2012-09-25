@@ -7,4 +7,5 @@ admin/export/serial.txt
 framework/_config.php
 dev/test_files/*
 generated/*
+thirdparty/jpgraph/*
 zzz*
