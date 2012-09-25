@@ -4,13 +4,13 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'regions';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 offerChoices();
 showRecords();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
@@ -57,10 +57,10 @@ function showRecords () {
   tryCache( 'region', preg_replace( '/ /', '', $chosenRegionId ), $chosenEventId, $chosenYears,
                       $chosenMixed, $chosenSlim, $chosenSeparate, $chosenHistory ); 
 
-  if( $chosenMixed    ) require( 'regions_mixed.php' );
-  if( $chosenSlim     ) require( 'regions_slim.php' );
-  if( $chosenSeparate ) require( 'regions_separate.php' );
-  if( $chosenHistory  ) require( 'regions_history.php' );
+  if( $chosenMixed    ) require( 'includes/regions_mixed.php' );
+  if( $chosenSlim     ) require( 'includes/regions_slim.php' );
+  if( $chosenSeparate ) require( 'includes/regions_separate.php' );
+  if( $chosenHistory  ) require( 'includes/regions_history.php' );
 }
 
 ?>

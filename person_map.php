@@ -1,6 +1,6 @@
 <?php
 
-require_once( '_framework.php' );
+require_once( 'includes/_framework.php' );
 
 getCompetitions();
 showMap();

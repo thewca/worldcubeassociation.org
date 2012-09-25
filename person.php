@@ -5,12 +5,12 @@
 
 $currentSection = 'persons';
 
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 showBody();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
@@ -78,10 +78,10 @@ function showBody () {
   tryCache( 'person', $chosenPersonId );
 
   #--- Now the results.
-  require( 'person_personal_records_current.php' );
-  require( 'person_world_records_history.php' );
-  require( 'person_continent_records_history.php' );
-  require( 'person_events.php' );
+  require( 'includes/person_personal_records_current.php' );
+  require( 'includes/person_world_records_history.php' );
+  require( 'includes/person_continent_records_history.php' );
+  require( 'includes/person_events.php' );
 }
 
 ?>

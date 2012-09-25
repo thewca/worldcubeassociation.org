@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 analyzeChoices();
 adminHeadline( 'Check results' );
 showDescription();
@@ -25,7 +25,7 @@ switch ( $chosenWhat ){
     break;
 }
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

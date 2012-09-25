@@ -5,9 +5,9 @@
 
 $currentSection = 'index';
 
-require( '_header.php' );
+require( 'includes/_header.php' );
 showWelcomeMessage();
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showWelcomeMessage () {

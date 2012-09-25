@@ -6,7 +6,7 @@ if( ! isset( $dontLoadCachedDatabase ))
 establishDatabaseAccess();
 if( ! $dontLoadCachedDatabase ){
   if( file_exists( pathToRoot() . 'generated/cachedDatabase.php' ))
-    require( 'generated/cachedDatabase.php' );
+    require( pathToRoot() . 'generated/cachedDatabase.php' );
   else
     noticeBox( false, 'I could not find the cachedDatabase.php file. Go <a href="admin/compute_auxiliary_data.php">here</a> to generate this file.' );
 }
@@ -16,7 +16,7 @@ function establishDatabaseAccess () {
 #----------------------------------------------------------------------
 
   #--- Load the local configuration data.
-  require( 'framework/_config.php' );
+  require( '_config.php' );
 
   #--- Connect to the database server.
   mysql_connect( $configDatabaseHost, $configDatabaseUser, $configDatabasePass )

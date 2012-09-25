@@ -4,12 +4,12 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
-require( '../competition_infos.php' );
+require( '../includes/_header.php' );
+require( '../includes/competition_infos.php' );
 adminHeadline( 'Show competition infos' );
 showDescription();
 showCompetitions();
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

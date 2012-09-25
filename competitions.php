@@ -5,13 +5,13 @@
 
 $currentSection = 'competitions';
 
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 offerChoices();
 listCompetitions();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'misc';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 ?>
 
@@ -20,6 +20,6 @@ require( '_header.php' );
 
 <?php
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 ?>

@@ -33,8 +33,12 @@ These folders are used internally by the above parts and use `.htaccess` to deny
 ### `/dev`
 Developer stuff, so far some tools Stefan uses and is working on. Denying web access for now.
 
-### `/framework`
-Currently only `_config.php.template` (template for a `_config.php`).
+### `/includes`
+Our helper scripts that are only used internally by those accessible on the web.
+Those starting with underscores like `_tables.php` are our general tool scripts,
+the other ones like `events_results.php` have prefixes like `events_` telling
+what they belong to. Also here is `_config.php.template`, a template for the `_config.php`
+file necessary to run the server.
 
 ### `/generated`
 For stuff that is generated again and again (logs, precomputed stuff).

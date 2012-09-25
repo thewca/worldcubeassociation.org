@@ -4,13 +4,13 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 if( checkPassword() )
   showInformation();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

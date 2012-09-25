@@ -21,7 +21,7 @@ function handleRedirects () {
 
   #--- Fetch competition password if needed
   if( $registration || $edit || $createNew || $clone ){
-    ob_start(); require( '../_framework.php' ); ob_end_clean();
+    ob_start(); require( '../includes/_framework.php' ); ob_end_clean();
     $password = getCompetitionPassword( $competitionId, $edit );
   }
 
@@ -72,7 +72,7 @@ function handleRedirects () {
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 analyzeChoices();
 
 adminHeadline( 'Manage competitions' );
@@ -82,7 +82,7 @@ if( $chosenNewAdminPassword || $chosenNewOrganiserPassword )
   setNewPassword( $chosenNewAdminPassword );
 showCompetitions();
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

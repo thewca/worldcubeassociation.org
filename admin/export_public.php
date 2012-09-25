@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 analyzeChoices();
 adminHeadline( 'Export to public' );
 showDescription();
@@ -37,7 +37,7 @@ if( $chosenExport ){
   ) );
 }
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {
@@ -69,7 +69,7 @@ function exportPublic ( $sources ) {
   global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
 
   #--- Load the local configuration data.
-  require( '../framework/_config.php' );
+  require( '../includes/_config.php' );
 
   #--- We'll work in the /admin/export directory
   chdir( 'export' );

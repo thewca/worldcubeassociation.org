@@ -4,9 +4,9 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-require( '_header.php' );
-require( 'competition_edit_Model.php' );
-require( 'competition_edit_View.php' );
+require( 'includes/_header.php' );
+require( 'includes/competition_edit_Model.php' );
+require( 'includes/competition_edit_View.php' );
 
 analyzeChoices();
 
@@ -21,7 +21,7 @@ if( checkPasswordAndLoadData() ){
   showView();
 }
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

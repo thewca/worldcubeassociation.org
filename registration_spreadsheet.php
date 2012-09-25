@@ -6,7 +6,7 @@
 $currentSection = 'competitions';
 
 ob_start();
-require( '_header.php' );
+require( 'includes/_header.php' );
 ob_end_clean();
 
 analyseChoices();

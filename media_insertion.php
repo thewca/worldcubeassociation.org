@@ -5,12 +5,12 @@
 
 require_once('thirdparty/recaptchalib.php');
 $currentSection = 'media';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 offerChoices();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

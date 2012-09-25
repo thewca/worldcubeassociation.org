@@ -1,4 +1,4 @@
-<? require( '_framework.php' ) ?>
+<? require( 'includes/_framework.php' ) ?>
 
 <?php
 

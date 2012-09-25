@@ -6,7 +6,7 @@
 $currentSection = 'misc';
 
 ob_start();
-require( '../_header.php' );
+require( '../includes/_header.php' );
 
 #--- Output the page header.
 echo "<h1>Age vs Speed</h1>\n\n";
@@ -25,7 +25,7 @@ $events = dbQuery( "
 foreach ( $events as $event )
   showBody( $event['id'], $event['name'] );
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 $html = ob_get_clean();
 $html = preg_replace( "/'p.php/", "'../p.php", $html );
 echo $html;

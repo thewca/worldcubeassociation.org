@@ -4,13 +4,13 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 adminHeadline( 'Finish unfinished persons', 'persons_finish_unfinished' );
 showDescription();
 
 finishUnfinishedPersons();
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

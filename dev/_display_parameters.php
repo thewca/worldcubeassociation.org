@@ -3,12 +3,12 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
-require( '_header.php' );
+require( '../includes/_header.php' );
 
 echo "<pre>";
 print_r( getRawParamsThisShouldBeAnException() );
 echo "</pre>";
 
-require( '_footer.php' );
+require( '../includes/_footer.php' );
 
 ?>

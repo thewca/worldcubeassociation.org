@@ -4,11 +4,11 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 adminHeadline( 'Documentation' );
 showDescription();
 showBody();
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

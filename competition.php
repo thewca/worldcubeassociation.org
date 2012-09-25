@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 #--- Get the parameters.
 analyzeChoices();
@@ -15,12 +15,12 @@ $competition = getFullCompetitionInfos( $chosenCompetitionId );
 #--- If competition not found, say so and stop.
 if( ! $competition ){
   noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
-  require( '_footer.php' );
+  require( 'includes/_footer.php' );
   exit( 0 );
 }
 
 #--- Show competition infos.
-require( 'competition_infos.php' );
+require( 'includes/competition_infos.php' );
 showCompetitionInfos();
 
 if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] + 
@@ -32,7 +32,7 @@ if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] +
 
   #--- Show competition results...
   offerChoicesResults();
-  require( 'competition_results.php' );
+  require( 'includes/competition_results.php' );
   if( $chosenByPerson )
     showCompetitionResultsByPerson();
   else
@@ -53,7 +53,7 @@ else if( $competition['showPreregForm'] || $competition['showPreregList'] ){
   }
 }
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {

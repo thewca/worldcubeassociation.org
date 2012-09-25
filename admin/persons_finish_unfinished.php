@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 analyzeChoices();
 adminHeadline( 'Finish unfinished persons' );
 showDescription();
@@ -16,7 +16,7 @@ if( $chosenCheck ) {
   showUnfinishedPersons();
 }
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

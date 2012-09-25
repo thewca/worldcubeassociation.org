@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 analyzeChoices();
 adminHeadline( 'Check rounds/events' );
 showDescription();
@@ -18,7 +18,7 @@ if( $chosenCheckRecentRounds || $chosenCheckAllRounds )
 if( $chosenCheckRecentEvents || $chosenCheckAllEvents )
   checkEvents();
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function showDescription () {

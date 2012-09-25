@@ -4,13 +4,13 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'events';
-require( '_header.php' );
+require( 'includes/_header.php' );
 
 analyzeChoices();
 offerChoices();
 showResults();
 
-require( '_footer.php' );
+require( 'includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
@@ -79,13 +79,13 @@ function showResults () {
   # Get results from database.
   #------------------------------
   if( $chosenShow == 'By Region' ){
-    require( 'events_regions.php' );
+    require( 'includes/events_regions.php' );
     return;
   }
   if( $chosenShow == '100 Results' || $chosenShow == '1000 Results' )
-    require( 'events_results.php' );
+    require( 'includes/events_results.php' );
   else
-    require( 'events_persons.php' );
+    require( 'includes/events_persons.php' );
 
   #------------------------------
   # Show the table.

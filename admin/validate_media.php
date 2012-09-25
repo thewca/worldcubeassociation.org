@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../_header.php' );
+require( '../includes/_header.php' );
 
 analyzeChoices();
 adminHeadline( 'Validate media' );
@@ -12,7 +12,7 @@ showDescription();
 offerChoices();
 showMedia();
 
-require( '../_footer.php' );
+require( '../includes/_footer.php' );
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
