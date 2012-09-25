@@ -5,7 +5,19 @@
 
 handleRedirects();
 function handleRedirects () {
-  extract( $_REQUEST );
+
+  #--- Which redirect (if any)?
+  $registration  = isset( $_REQUEST['registration'] );
+  $edit          = isset( $_REQUEST['edit'] );
+  $results       = isset( $_REQUEST['results'] );
+  $createNew     = isset( $_REQUEST['createNew'] );
+  $clone         = isset( $_REQUEST['clone'] );
+  if ( !$registration && !$edit && !$results && !$createNew && !$clone )
+    return;
+
+  #--- Also get chosen/entered competition IDs
+  $competitionId    = $_REQUEST['competitionId'];
+  $newCompetitionId = $_REQUEST['newCompetitionId'];
 
   #--- Fetch competition password if needed
   if( $registration || $edit || $createNew || $clone ){
@@ -42,6 +54,7 @@ function handleRedirects () {
   }
 
   #--- Shall we go somewhere?
+  $goal = '';
   if( $registration || $edit )
     $goal = "../competition_edit.php?competitionId=$competitionId&password=$password&rand=" . rand();
   if( $results )
