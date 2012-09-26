@@ -75,7 +75,7 @@ function addOneStatistic ( $statisticFile ) {
   global $WHERE, $sinceDateHtml, $sinceDateMysql, $sinceDateCondition;
   
   startTimer();
-  require( "statistics/$statisticFile.php" );
+  require( "$statisticFile.php" );
   stopTimer( "STATISTIC: $statisticFile" );
 }
 

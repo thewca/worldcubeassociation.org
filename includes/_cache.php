@@ -59,7 +59,7 @@ function tryCache ( ) {
   }
 
   #--- If it's in the cache already, then just deliver from cache and exit
-  $cacheFile = "cache/$cacheId.cache";
+  $cacheFile = "generated/cache/$cacheId.cache";
   if ( file_exists( $cacheFile ) ) {
     echo "<!-- rfc -->\n";
     echo file_get_contents( $cacheFile );
@@ -90,7 +90,7 @@ function deleteCaches () {
 
   startTimer();
   cacheLog( "delete all" );
-  $cacheFiles = glob( pathToRoot() . 'cache/*.cache' );
+  $cacheFiles = glob( pathToRoot() . 'generated/cache/*.cache' );
   echo "Deleting " . count($cacheFiles) . " cache files...<br />\n";
 
   foreach ( $cacheFiles as $cacheFile ) {
@@ -106,7 +106,7 @@ function deleteCaches () {
 function cacheLog ( $message ) {
 #----------------------------------------------------------------------
 
-  file_put_contents( pathToRoot() . 'generated/cache_log.txt', "$message\n", FILE_APPEND );
+  file_put_contents( pathToRoot() . 'generated/cache.log', "$message\n", FILE_APPEND );
 }
 
 ?>

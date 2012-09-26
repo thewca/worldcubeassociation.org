@@ -1,7 +1,7 @@
 <?php
 #----------------------------------------------------------------------
 #
-#   This script shows the lists defined in the 'statistics' directory.
+#   This script shows the lists defined in '/includes/statistics'.
 #   If you only want to add/modify those lists, you don't need to look
 #   here but in that directory. There, ALL_LISTS.php explains more.
 #
@@ -29,11 +29,11 @@ function showContent () {
   }
 
   #--- If there's no cache or this is an update request, then freshly build the cache
-  if ( ! file_exists( 'generated/statistics.cached' ) || getBooleanParam( 'update8392' ) ) {
+  if ( ! file_exists( 'generated/statistics.cache' ) || getBooleanParam( 'update8392' ) ) {
     $startTime = microtime_float();
     ob_start();
     showResults();
-    file_put_contents( 'generated/statistics.cached', ob_get_contents() );
+    file_put_contents( 'generated/statistics.cache', ob_get_contents() );
     ob_end_clean();
     $logMessage = sprintf( "%s: Updating took %.2f seconds.", wcaDate(), microtime_float()-$startTime );
     file_put_contents( 'generated/statistics.log', "$logMessage\n", FILE_APPEND );
@@ -41,7 +41,7 @@ function showContent () {
   }
   
   #--- Show the cache
-  echo file_get_contents( 'generated/statistics.cached' );
+  echo file_get_contents( 'generated/statistics.cache' );
 }
 
 #----------------------------------------------------------------------
@@ -89,7 +89,7 @@ function defineAllLists () {
   $sinceDateCondition = "(year*10000 + month*100 + day) >= $sinceDateMysql";
   
   #--- Import the list definitions.
-  require( 'statistics/ALL_LISTS.php' );
+  require( 'includes/statistics/ALL_LISTS.php' );
 }
 
 #----------------------------------------------------------------------

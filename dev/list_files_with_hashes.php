@@ -10,7 +10,6 @@ $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|'
   ^./admin/.htaccess$
   ^./admin/.htpasswd$
   ^./admin/export/serial.txt$
-  ^./cache$
   ^./competitions$
   ^./d.php$
   ^./dev/.htaccess$
