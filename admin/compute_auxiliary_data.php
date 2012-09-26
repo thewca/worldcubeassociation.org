@@ -5,7 +5,7 @@
 
 $dontLoadCachedDatabase = true;
 
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $currentSection = 'admin';
@@ -133,7 +133,7 @@ function computeRanks ( $valueSource, $valueName ) {
   }
   unset( $persons );
 
-  #--- Get all personal records (where person=personId+countryId)
+  #--- Get all personal records (note: country-switchers appear once for each country)
   $personalRecords = dbQueryHandle( "
     SELECT   personId, countryId, continentId, eventId, min($valueSource) value
     FROM     Concise${valueName}Results
@@ -147,17 +147,17 @@ function computeRanks ( $valueSource, $valueName ) {
     list( $personId, $countryId, $continentId, $eventId, $value ) = $row;
     
     #--- At new event, store the ranks of the previous and reset
-    if ( $eventId != $currentEventId ) {
-      storeRanks( $valueName, $currentEventId, $personRecord, $personWR, $personCR, $personNR );
+    if ( isset($latestEventId)  &&  $eventId != $latestEventId ) {
+      storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
       unset( $ctr, $rank, $record, $ranked, $personRecord, $personWR, $personCR, $personNR );
-      $currentEventId = $eventId;
     }
 
-    #--- Update the region states (unless we have ranked this person there already)
+    #--- Update the region states (unless we have ranked this person there already, for
+    #--- example 2008SEAR01 twice in North America and World because of his two countries)
     foreach( array( 'World', $continentId, $countryId ) as $region ){
-      if ( ! $ranked[$region][$personId] ) {
-        ++$ctr[$region];
-        if ( $value != $record[$region] )
+      if ( ! isset($ranked[$region][$personId]) ) {
+        $ctr[$region] = isset($ctr[$region]) ? $ctr[$region] + 1 : 1;    # ctr always increases
+        if ( !isset($record[$region])  ||  $value > $record[$region] )   # rank only if value worse than previous
           $rank[$region] = $ctr[$region];
         $record[$region] = $value;
         $ranked[$region][$personId] = true;
@@ -165,21 +165,23 @@ function computeRanks ( $valueSource, $valueName ) {
     }
 
     #--- Set the person's data (first time the current location is matched)
-    if ( ! $personRecord[$personId] ) {
+    if ( ! isset($personRecord[$personId]) ) {
       $personRecord[$personId] = $value;
       $personWR[$personId] = $rank['World'];
     }
-    if ( $continentId==$currentContinent[$personId] && ! $personCR[$personId] )
+    if ( $continentId==$currentContinent[$personId] && ! isset($personCR[$personId]) )
       $personCR[$personId] = $rank[$continentId];
-    if ( $countryId==$currentCountry[$personId] && ! $personNR[$personId] )
+    if ( $countryId==$currentCountry[$personId] && ! isset($personNR[$personId]) )
       $personNR[$personId] = $rank[$countryId];
+
+    $latestEventId = $eventId;
   }
 
   #--- Free the result handle
   mysql_free_result( $personalRecords );
 
   #--- Store the ranks of the last event  
-  storeRanks( $valueName, $currentEventId, $personRecord, $personWR, $personCR, $personNR );
+  storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
 
   stopTimer( "Ranks$valueName" );
   echo "... done<br /><br />\n";
@@ -190,7 +192,9 @@ function storeRanks ( $valueName, $eventId, &$personRecord, &$personWR, &$person
     return;
   $values = array();
   foreach ( $personRecord as $personId => $record ) {
-    $v = array( $personId, $eventId, $record, $personWR[$personId], $personCR[$personId]+0, $personNR[$personId]+0 );
+    $cr = isset($personCR[$personId]) ? $personCR[$personId] : 0;   # It's possible have a world/continental rank (from
+    $nr = isset($personNR[$personId]) ? $personNR[$personId] : 0;   # previous country) but no continental/national rank
+    $v = array( $personId, $eventId, $record, $personWR[$personId], $cr, $nr );
     array_push( $values, "('" . implode( "', '", $v ) . "')" );
   }
   $values = implode( ",\n", $values );
