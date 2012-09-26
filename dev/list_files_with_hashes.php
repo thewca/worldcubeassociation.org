@@ -10,25 +10,21 @@ $ignorePattern = preg_replace( '/\\./', '\\.', preg_replace( '/\\s*\n\\s*/', '|'
   ^./admin/.htaccess$
   ^./admin/.htpasswd$
   ^./admin/export/serial.txt$
-  ^./admin/projectlocker.txt$
   ^./cache$
   ^./competitions$
   ^./d.php$
+  ^./dev/.htaccess$
+  ^./dev/test_files$
   ^./euro2012.php$
-  ^./framework/_config.php$
-  ^./framework/speedcubing2.site.aplus.net$
-  ^./generated/cache_log.txt$
-  ^./generated/cachedDatabase.php$
-  ^./generated/statistics.cached$
-  ^./generated/statistics.log$
-  ^./jpgraph$
+  ^./generated$
+  ^./includes/_config.php$
   ^./misc/WCA_export\\d+_\\d+.(sql|tsv).zip$
   ^./misc/age_vs_speed(.html)?$
   ^./misc/export.html$
   ^./misc/statistics_fail.php$
   ^./misc/wc2009.php$
   ^./results.xls$
-  ^XX./thirdparty/PHPExcel$
+  ^./thirdparty$
   ^./upload$
   ^./WC2011.php$
 ')));
@@ -53,7 +49,7 @@ function analyze ( $path ) {
       continue;
 
     #--- Ignore local .svn, .git and zzz*
-    if( $GLOBALS['isLocal']  &&  preg_match( '/^\\.svn|\\.git|^zzz/', $child ))
+    if( $GLOBALS['isLocal']  &&  preg_match( '/^\\.svn|^\\.git|^zzz/', $child ))
       continue;
 
     $child = "$path/$child";
@@ -62,7 +58,7 @@ function analyze ( $path ) {
     $size = $hash = '';
     if ( is_file( $child ) ) {
       $data = file_get_contents( $child );
-      if ( preg_match( '/\\.(php|txt|htaccess|template)$/', $child ) )
+      if ( preg_match( '/\\.(php|css|txt|htaccess|template|md)$/', $child ) )
         $data = str_replace( "\r\n", "\n", $data );
       $size = strlen( $data );
       $hash = substr( sha1( $data ), 30 );

@@ -69,7 +69,6 @@ function initialiseAndCreateSpreadsheet () {
   global $spreadsheet;
 
   error_reporting(E_ALL);
-  //require_once 'zip/ZipArchive.php';
   require_once 'thirdparty/PHPExcel/Classes/PHPExcel.php';
 
   $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;

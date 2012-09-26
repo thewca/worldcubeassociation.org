@@ -6,7 +6,6 @@ body {
 }
 
 body, td, th {
-  /* xfont-size: 90%; */
   font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
@@ -59,7 +58,6 @@ form {
   color: orange;
   font-size: 1.25em; /* 20px; */
   font-weight: bold;
-  
 }
 
 #rmenu {
@@ -123,9 +121,9 @@ table td.body_outer {
 }
 
 input::-moz-focus-inner {
-	/* center button text in ff */
-	border: 0;
-	padding: 0;
+  /* center button text in ff */
+  border: 0;
+  padding: 0;
 }
 
 .butt {

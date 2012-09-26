@@ -96,7 +96,7 @@ function offerChoices () {
   echo "</table>";
 
   global $recaptchaPublickey;
-  echo recaptcha_get_html($recaptchaPublickey);
+  echo recaptcha_get_html($recaptchaPublickey, null, true);
 
   echo "<input type='submit' class='butt' value='Save' />";
 

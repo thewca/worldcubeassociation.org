@@ -19,6 +19,9 @@ For miscellaneous stuff like the public data export and the age-vs-speed statist
 ### `/style`
 CSS and images.
 
+### `/upload`
+Currently only used for the uploaded competitor photos shown on their personal pages.
+
 
 ## Protected web access
 
