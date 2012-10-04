@@ -41,7 +41,7 @@ function dbQuery ( $query ) {
 
   startTimer();
 
-  if( debug() ){
+  if( wcaDebug() ){
     startTimer();
     global $dbQueryCtr;
     $dbQueryCtr++;
@@ -75,7 +75,7 @@ function dbQuery ( $query ) {
 function dbQueryHandle ( $query ) {
 #----------------------------------------------------------------------
 
-  if( debug() ){
+  if( wcaDebug() ){
     startTimer();
     global $dbQueryCtr;
     $dbQueryCtr++;
@@ -97,7 +97,7 @@ function dbQueryHandle ( $query ) {
 function dbCommand ( $command ) {
 #----------------------------------------------------------------------
 
-  if( debug() ){
+  if( wcaDebug() ){
     global $dbCommandCtr;
     $dbCommandCtr++;
     $commandForShow = strlen($command) < 1010
@@ -245,7 +245,7 @@ function showDatabaseError ( $message ) {
 #----------------------------------------------------------------------
 
   #--- Normal users just get a "Sorry", developers/debuggers get more details
-  die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  debug()
+  die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  wcaDebug()
        ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
        : "<p>Problem with the database, sorry. Should be fixed soon, please try again later.</p>" );
 }

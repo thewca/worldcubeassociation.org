@@ -126,12 +126,12 @@ function paramExists ( $name ) {
 #----------------------------------------------------------------------
 function debugParameter( $type, $name, $value ) {
 #----------------------------------------------------------------------
-  if( debug() )
+  if( wcaDebug() )
     echo "parameter($type) <b>[</b>$name<b>]</b> = <b>[</b>$value<b>]</b><br />\n";
 }
 
 #----------------------------------------------------------------------
-function debug () {
+function wcaDebug () {
 #----------------------------------------------------------------------
 
   return getRawParamThisShouldBeAnException( 'debug5926' );

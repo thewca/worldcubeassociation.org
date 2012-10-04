@@ -108,7 +108,7 @@ function chosenEventName () {
 }
 
 function randomDebug () {
-  return debug() ? rand( 1, 30000 ) : 1;
+  return wcaDebug() ? rand( 1, 30000 ) : 1;
 }
 
 function assertFoo ( $check, $message ) {

@@ -23,7 +23,7 @@ function showContent () {
 #----------------------------------------------------------------------
 
   #--- In debug mode, just calculate freshly and don't cache
-  if ( debug() ) {
+  if ( wcaDebug() ) {
     showResults();
     return;
   }

@@ -29,7 +29,7 @@ require( '../includes/_footer.php' );
 $html = ob_get_clean();
 $html = preg_replace( "/'p.php/", "'../p.php", $html );
 echo $html;
-if ( ! debug() )
+if ( ! wcaDebug() )
   file_put_contents( 'age_vs_speed.html', $html );
 
 #----------------------------------------------------------------------

@@ -53,7 +53,7 @@ function tryCache ( ) {
   }
 
   #--- If debugging or caching disabled, then don't use the cache
-  if ( debug() || paramExists('nocache') ) {
+  if ( wcaDebug() || paramExists('nocache') ) {
     cacheLog( "debug/noCache: $cacheId" );
     return;
   }

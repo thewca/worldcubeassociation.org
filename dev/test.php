@@ -32,7 +32,7 @@ if ( ! file_exists( 'test_files' ) )
 $getstoreCalls = $filesExisted = 0;
 
 #--- Start the timer
-function debug() { return true; }
+function wcaDebug() { return true; }
 startTimer();
 
 #--- Store each main page

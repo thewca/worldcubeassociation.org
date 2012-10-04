@@ -11,7 +11,7 @@ function displayChoices ( $choices ) {
 function displayChoicesWithMethod ( $method, $choices ) {
 #----------------------------------------------------------------------
 
-  if( debug() )
+  if( wcaDebug() )
     $choices[] = "<input type='hidden' name='debug5926' value='1' />";
 
   echo "<form action='' method='$method'>\n";
