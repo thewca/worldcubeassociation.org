@@ -1,5 +1,8 @@
 <?php
 
+if( ! file_exists( pathToRoot() . 'admin/.htaccess' ) )
+  exit( 'check your config file' );
+
 $configDatabaseHost = '...';
 $configDatabaseUser = '...';
 $configDatabasePass = '...';
