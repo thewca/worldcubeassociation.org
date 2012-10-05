@@ -1,5 +1,7 @@
 misc/age_vs_speed/*.png
 misc/age_vs_speed.html
+misc/evolution/charts_data.js
+misc/evolution/index.php
 cache/*.cache
 upload/*
 admin/.htaccess

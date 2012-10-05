@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/pageMenu.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
+<?= isset( $extraHeaderStuff ) ? $extraHeaderStuff : '' ?>
 </head>
 
 <body>
