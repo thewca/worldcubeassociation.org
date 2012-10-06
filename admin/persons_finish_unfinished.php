@@ -59,17 +59,15 @@ function getPersonsFromResults () {
 #----------------------------------------------------------------------
   global $personsFromResults;
 
-  $persons = dbQuery("
+  $persons = dbQueryHandle("
     SELECT personId id, personName name, result.countryId, min(year) firstYear
     FROM Results result, Competitions competition
     WHERE competition.id = competitionId
     GROUP BY BINARY personId, BINARY personName, BINARY result.countryId
   ");
-  foreach( $persons as $person ){
-    extract( $person );
-    $personsFromResults["$id/$name/$countryId"] = $person;
-#    echo "[$id]";
-  }
+  while( $row = mysql_fetch_row( $persons ))
+    $personsFromResults[] = $row;
+  mysql_free_result( $persons );
 }
 
 #----------------------------------------------------------------------
@@ -97,6 +95,13 @@ function showUnfinishedPersons () {
 #----------------------------------------------------------------------
   global $personsFromResults, $birthdates;
 
+  #--- Pre-compute the candidate tuples: (id, name, countryId, romanName, romanNameSimilarityPlaceHolder, countryIdSimilarityPlaceHolder)
+  $candidates = array();
+  foreach( $personsFromResults as $person ){
+    list( $id, $name, $countryId, $firstYear ) = $person;
+    $candidates[] = array( $id, $name, $countryId, extractRomanName($name), 0, 0 );
+  }
+
   #--- Begin the form and table.
   echo "<form action='persons_finish_unfinished_ACTION.php' method='post'>";
   tableBegin( 'results', 8 );
@@ -104,8 +109,9 @@ function showUnfinishedPersons () {
                array( 6=>'class="6"' ) );
 
   #--- Walk over all persons from the Results table.
+  $caseNr = 0;
   foreach( $personsFromResults as $person ){
-    extract( $person );
+    list( $id, $name, $countryId, $firstYear ) = $person;
     
     #--- If the person is finished, skip it.
     if( $id )
@@ -141,8 +147,8 @@ function showUnfinishedPersons () {
 
     #--- Show most similar persons.
     $similarsCtr = 0;
-    foreach( getMostSimilarPersonsMax( $name, $countryId, $personsFromResults, 10 ) as $similarPerson ){
-      extract( $similarPerson, EXTR_PREFIX_ALL, 'other' );
+    foreach( getMostSimilarPersonsMax( extractRomanName($name), $countryId, $candidates, 10 ) as $similarPerson ){
+      list( $other_id, $other_name, $other_countryId ) = $similarPerson;
       
       #--- If name and country match the unfinished persons, pre-select it.
       $checked = ($other_name==$name && $other_countryId==$countryId)
@@ -185,7 +191,7 @@ function showUnfinishedPersons () {
     ));
     
     #--- Don't show more than 20 unfinished persons.
-    if( ++$ctr == 20 )
+    if( $caseNr == 20 )
       break;
   }
 
@@ -197,45 +203,43 @@ function showUnfinishedPersons () {
 }
 
 #----------------------------------------------------------------------
-function getMostSimilarPersons ( $name, $countryId, $persons ) {
-#----------------------------------------------------------------------
-  return getMostSimilarPersonsMax( $name, $countryId, $persons, 4 );
-}
-
-#----------------------------------------------------------------------
-function getMostSimilarPersonsMax ( $name, $countryId, $persons, $max ) {
+function getMostSimilarPersonsMax ( $romanName, $countryId, &$candidates, $max ) {
 #----------------------------------------------------------------------
 
   #--- Compute similarities to all persons.
-  foreach( $persons as $other ) {
-    extract( $other, EXTR_PREFIX_ALL, 'other' );
-    similar_text( extractRomanName( $name ), extractRomanName( $other_name ), $similarity );
-    $other['similarity'] = $similarity;
-    similar_text( $countryId, $other_countryId, $similarity );
-    $other['countrySimilarity'] = $similarity;
-    $candidates[] = $other;
+  $justSims = array();
+  foreach( $candidates as &$candidate ) {
+    similar_text( $romanName, $candidate[3], $candidate[4] );
+    similar_text( $countryId, $candidate[2], $candidate[5] );
+    $justSims[] = $candidate[4];
   }
 
-#print_r( $candidates );
-  #--- Sort candidates and return up to three most promising.
-  usort( $candidates, 'compareCandidates' );
-  return array_slice( $candidates, 0, $max );
+  #--- Gather good candidates.
+  rsort( $justSims );
+  $goodCandidates = array();
+  foreach( $candidates as $candidate )
+    if( $candidate[4] >= $justSims[2 * $max] )
+      $goodCandidates[] = $candidate;
+
+  #--- Sort the good candidates and return the very best.
+  usort( $goodCandidates, 'compareCandidates' );
+  return array_slice( $goodCandidates, 0, $max );
 }
 
 #----------------------------------------------------------------------
 function compareCandidates ( $a, $b ) {
 #----------------------------------------------------------------------
 
-  if( $a['similarity'] > $b['similarity'] ) return -1;
-  if( $a['similarity'] < $b['similarity'] ) return 1;
+  if( $a[4] > $b[4] ) return -1;
+  if( $a[4] < $b[4] ) return 1;
 
-  if( $a['countrySimilarity'] > $b['countrySimilarity'] ) return -1;
-  if( $a['countrySimilarity'] < $b['countrySimilarity'] ) return 1;
+  if( $a[5] > $b[5] ) return -1;
+  if( $a[5] < $b[5] ) return 1;
 
-  if( $a['id'] ) return -1;
-  if( $b['id'] ) return 1;
-#echo( "[$a[id]]" );
-#echo( "($b[id])" );
+  if( $a[0] ) return -1;
+  if( $b[0] ) return 1;
+#echo( "[$a[0]]" );
+#echo( "($b[0])" );
   return 0;
 }
 
