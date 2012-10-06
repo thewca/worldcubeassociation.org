@@ -90,7 +90,7 @@ function formatAgeTimePerson ( $ageTimePerson, $ender ) {
 #----------------------------------------------------------------------
   list( $personId, $personName, $ageInDays, $value, $wr ) = $ageTimePerson;
   if ( ! $personName ) return array( '', '', '', $ender );
-  return array( wr($wr, sprintf("$a%.2f years$b",$ageInDays/365.25) ),
+  return array( wr($wr, sprintf("$a%.1f",$ageInDays/365.25) ),
                 wr($wr, formatValue($value) ),
                 personLink( $personId, $personName ),
                 $ender);
