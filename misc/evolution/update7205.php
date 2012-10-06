@@ -4,22 +4,23 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'misc';
-$extraHeaderStuff = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>'."\n"             # See http://jquery.com/download/
-                  . '<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>'."\n"                               # See http://code.highcharts.com/
+$extraHeaderStuff = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>'."\n"           # See http://jquery.com/download/
+                  . '<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>'."\n"                             # See http://code.highcharts.com/
                   . '<link type="text/css" href="jquery-ui-1.8.24.tabs/css/ui-lightness/jquery-ui-1.8.24.custom.css" rel="stylesheet" />'."\n" # See jquery-ui-1.8.24.custom/README.md
                   . '<script type="text/javascript" src="jquery-ui-1.8.24.tabs/js/jquery-ui-1.8.24.custom.min.js"></script>'."\n"              # See jquery-ui-1.8.24.custom/README.md
-                  . '<script src="charts_data.js" type="text/javascript"></script>'."\n"                                                         # Our computed data
-                  . '<script type="text/javascript"> $(function(){ $(\'#tabs\').tabs(); }); </script>'."\n";                                     # Starting jQuery
+                  . '<script src="charts_data.js" type="text/javascript"></script>'."\n"                                                       # Our computed data
+                  . "<script type='text/javascript'> $(function(){ $('#tabs').tabs(); }); </script>\n";                                        # Starting jQuery
 ob_start();
 require( '../../includes/_header.php' );
 
-# TODO: for multi+moves: integer lines only
-# TODO: show minutes in format 1:23.45, not 83.45. Both on the axis and in the tool tips
 # TODO: speed it up
 # TODO: clean up
-# TODO: include old multi in gray on the new multi image
+# TODO: include old multi in gray on the new multi image?
 # TODO: end(array) statt array[count-1]?
+# TODO: make the tabs linkable/bookmarkable (and with nice anchors), look at http://blog.rootsmith.ca/jquery/how-to-make-jquery-ui-tabs-linkable-or-bookmarkable/ and http://jqueryui.com/demos/tabs/
 # TODO: Date in days since sometime 2003 for short exact encoding?
+# TODO: http://code.jquery.com/jquery-latest.js as shown on http://twitter.github.com/bootstrap/getting-started.html
+#    or http://code.jquery.com/jquery.min.js    as shown on http://code.jquery.com/
 # TODO: very short encoding: "5,4 7,3" meaning two points, one 5 days and 0.04s since the previous, then another 7 more days and 0.03s more
 # TODO: For 1 and 10, maybe show the person name as well? But for 1st place, make sure you get the right one in case of a WR tie on the same day. And no, the new 10th place person might've just been bumped up from place 9 by someone else, so he became 10th without doing anything. So only do this for world record if at all.
 # TODO: reply to this? http://www.speedsolving.com/forum/showthread.php?26121-Odd-WCA-stats-Stats-request-Thread&p=616708&viewfull=1#post616708
@@ -28,8 +29,6 @@ require( '../../includes/_header.php' );
 echo "<h1>Evolution of Records</h1>\n\n";
 echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>This page shows how records evolved, both average and single, and not just the world record (place 1) at the time but also places 10 and 100. Records are considered at the end of the day, and the first day of the competition is assumed. Thus some values might be slightly off, but this page is just intended to show the big picture anyway.</p>";
 echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
-
-echo "<p style='padding-left:20px;padding-right:20px;color:red;font-weight:bold'>NOTE: this is not quite finished, take it with a grain of salt until this note disappears.</p>";
 
 echo "<p></p>";
 
@@ -42,7 +41,19 @@ $whats = explode( ' ', '333:3x3 444:4x4 555:5x5 222:2x2 333bf:bld 333oh:hand 333
 #$whats = explode( ' ', 'magic:magic' );
 
 #--- Build and store the javascript for the graphs, and add links/containers to the page
-$eventChartsJs = '$(function () { $(document).ready(function() {'."\n\n";
+$eventChartsJs = <<<EOD
+$(function () { $(document).ready(function() {
+function formatValue(value, divide, showCentis) {
+  if (divide == 1)
+    return value;
+  var minutes = Math.floor(value / 6000);
+  var seconds = Math.floor(value / 100) % 60;
+  var centis  = value % 100;
+  if (minutes > 0 && seconds < 10) seconds = '0' + seconds;
+  if (centis < 10) centis = '0' + centis;
+  return (minutes > 0 ? minutes + ':' : '') + seconds + (showCentis ? '.' + centis : '');
+}\n\n
+EOD;
 foreach ( $whats as $what ) {
   list( $eventId, $eventName, $divide ) = explode( ':', "$what:100" );
   #pretty("$eventId, $eventName, $divide");
@@ -61,17 +72,6 @@ if ( ! wcaDebug() )
   file_put_contents( 'index.php', $html );
 
 #----------------------------------------------------------------------
-
-// The callback that converts timestamp to minutes and seconds
-function FormatCallback( $value ) {
-  global $eventId;
-  if ( $eventId=='333fm' || $eventId=='333mbf' ) return $value;
-  $value /= 100;
-  if ( $eventId=='magic' || $eventId=='mmagic' ) return sprintf( '%.2f', $value );
-  return sprintf( '%d:%02d', $value/60, $value%60 );
-}
-
-#----------------------------------------------------------------------
 function buildGraph ( $eventName, $eventId, $divide ) {
 #----------------------------------------------------------------------
 
@@ -79,6 +79,7 @@ function buildGraph ( $eventName, $eventId, $divide ) {
 
   $series = array();
   $highestCurrent = 0;
+  $yMax = 0;
 
   #--- Build the series of this event
   foreach ( array( '1 best green', '1 average green', '10 best blue', '10 average blue', '100 best red', '100 average red' ) as $lineData ) {
@@ -162,6 +163,7 @@ function buildGraph ( $eventName, $eventId, $divide ) {
     $xdata[] = 2222;
     $ydata[] = end($ydata);
     $data[] = array( 2222, end($ydata) );
+    $yMax = max($yMax, max($ydata));
 
     $valueName = ($valueId == 'best') ? 'Single' : 'Average';
     $series[] = "{ name: '#$n $valueName', color:'$color', data: " . json_encode( $data ) . '}';
@@ -171,9 +173,9 @@ function buildGraph ( $eventName, $eventId, $divide ) {
   $chartJs = file_get_contents( 'charts_template.js' );
   $chartJs = str_replace( '$eventId'  , $eventId, $chartJs );
   $chartJs = str_replace( '$xMax'     , 1970 + time()/60/60/24/365.25, $chartJs );
-  $chartJs = str_replace( '$yMax'     , ($direction > 0 ? 3 : 1) * $highestCurrent, $chartJs );
+  $chartJs = str_replace( '$yMax'     , min($yMax, ($direction > 0 ? 3 : 1) * $highestCurrent), $chartJs );
   $chartJs = str_replace( '$divide'   , $divide, $chartJs );
-  $chartJs = str_replace( '$eventName', $eventName, $chartJs );
+  $chartJs = str_replace( '$eventName', json_encode(eventName($eventId)), $chartJs );
   $chartJs = str_replace( '$series'   , implode( ",\n    ", $series ), $chartJs );
   return $chartJs;
 }

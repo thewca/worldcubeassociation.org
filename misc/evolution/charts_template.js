@@ -1,9 +1,15 @@
 new Highcharts.Chart({
   chart: {
     renderTo: 'container_$eventId',
+    zoomType: 'xy',
     type: 'line'
   },
-  title: false,
+  title: {
+    text: $eventName
+  },
+  subtitle: {
+    text: 'Drag in the plot area to zoom in'
+  },
   xAxis: {
     labels: {
       formatter: function() {
@@ -17,18 +23,21 @@ new Highcharts.Chart({
     title: false,
     labels: {
       formatter: function() {
-        return this.value / $divide;
+        return formatValue(this.value, $divide, false);
       }
     },
     min: 0,
-    max: $yMax
+    max: $yMax,
+    minTickInterval: $divide,
+    allowDecimals: false
   },
   tooltip: {
     formatter: function() {
       return this.series.name +'<br />'+
-             '<b>' + Highcharts.numberFormat(this.y/$divide, 2) + '</b><br />' +
+             '<b>' + formatValue(this.y, $divide, true) + '</b><br />' +
              'on ' + this.x;
-    }
+    },
+    crosshairs: true
   },
   plotOptions: {
     series: {
@@ -39,7 +48,6 @@ new Highcharts.Chart({
     }
   },
   series: [
-    { name: '$eventName', color:'white', data: []},
     $series
   ]
 });
