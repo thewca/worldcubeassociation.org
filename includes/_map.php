@@ -123,6 +123,7 @@ function addMarkers (){
 
   $isFirst = true;
   $countCompetitions = 0;
+  $infosHtml = $pastVenue = '';
   foreach( $chosenCompetitions as $competition ){
     extract( $competition );
 
@@ -164,8 +165,6 @@ function addMarkers (){
         echo "var marker = new CM.Marker(point, { icon:violetIcon$cc });\n";
     }
   }
-  $previousLatitude /= 1000000;
-  $previousLongitude /= 1000000;
 
   $infosHtml .= $pastVenue;
   echo "marker.bindInfoWindow(\"$infosHtml\");\n";

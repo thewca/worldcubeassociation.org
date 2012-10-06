@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------
 # DESCRIPTION:
 #
-#   This tool currently downloads 545 pages of our system into its
+#   This tool currently downloads 514 pages of our system into its
 #   'test_files' folder. It can be used to test the effects of code
 #   changes (mainly to detect unintentional side effects) and I have
 #   already found some mistakes with it (and then fixed them).
@@ -12,6 +12,7 @@
 #   you guys can maybe try it already or give feedback.
 #
 # TODO:
+#   - Test invalid parameters (e.g., 'Europe' instead of '_Europe')
 #   - Look for identical files (can point out misspelled and thus unrecognized parameters)
 #   - Compare the number of actual files produced with the number of expected files
 #   - Don't hardcode the competition password. Specify the competitionId and read them from the database.
@@ -29,7 +30,9 @@ ini_set( 'memory_limit', '-1' );
 set_time_limit( 0 );
 if ( ! file_exists( 'test_files' ) )
   mkdir( 'test_files' );
-$getstoreCalls = $filesExisted = 0;
+if ( ! file_exists( 'test_files/error' ) )
+  mkdir( 'test_files/error' );
+$getstoreCalls = $filesExisted = $errorFilesExisted = $numberErrors = 0;
 
 #--- Start the timer
 function wcaDebug() { return true; }
@@ -47,7 +50,7 @@ getstore( 'misc.php', 'misc.html' );
 
 #--- Store some event rankings
 foreach( array( '', '555', '333fm' ) as $eventId )
-  foreach( array( '', 'Europe', 'USA' ) as $regionId )
+  foreach( array( '', '_Europe', 'USA' ) as $regionId )
     foreach( array( '', 'until%2B2011', 'only%2B2010' ) as $years )
       foreach( array( '', 'All%2BPersons', 'By%2BRegion', '1000%2BResults' ) as $show )
         foreach( array( 'single=Single', 'average=Average' ) as $button )
@@ -56,7 +59,7 @@ foreach( array( '', '555', '333fm' ) as $eventId )
 
 #--- Store some regional records
 foreach( array( '', '555', '333fm' ) as $eventId )
-  foreach( array( '', 'Europe', 'USA' ) as $regionId )
+  foreach( array( '', '_Europe', 'USA' ) as $regionId )
     foreach( array( '', 'until%2B2011' ) as $years )
       foreach( array( 'mixed=Mixed', 'slim=Slim', 'separate=Separate', 'history=History' ) as $button )
         getstore( "regions.php?eventId=$eventId&regionId=$regionId&years=$years&$button",
@@ -64,7 +67,7 @@ foreach( array( '', '555', '333fm' ) as $eventId )
 
 #--- Store some competiton pages
 foreach( array( '', '555', '333fm' ) as $eventId )
-  foreach( array( '', 'Europe', 'USA' ) as $regionId )
+  foreach( array( '', '_Europe', 'USA' ) as $regionId )
     foreach( array( '', 'current', 'only%2B2010' ) as $years )
       foreach( array( '', 'f' ) as $pattern )
         foreach( array( 'list=List', 'map=Map' ) as $button )
@@ -77,7 +80,7 @@ foreach( explode( ' ', 'WC2011 AsianChampionship2010 USNationals2012 WC2013' ) a
 
 #--- Store some person pages
 foreach( array( '', '555', '333fm' ) as $eventId )
-  foreach( array( '', 'Europe', 'USA' ) as $regionId )
+  foreach( array( '', '_Europe', 'USA' ) as $regionId )
     foreach( array( '', 'and', 'c+u+b+e' ) as $pattern )
       getstore( "persons.php?eventId=$eventId&regionId=$regionId&pattern=$pattern&search=Search",
                 "persons_{$eventId}_{$regionId}_{$pattern}.html" );
@@ -87,7 +90,7 @@ foreach( explode( ' ', '2003POCH01 2009ZEMD01 2006GALE01 2003BURT01 2008COUR01 2
 }
 
 #--- Store some media pages
-foreach( array( '', 'Europe', 'USA' ) as $regionId )
+foreach( array( '', '_Europe', 'USA' ) as $regionId )
   foreach( array( '', 'until%2B2011', 'only%2B2010' ) as $years )
     foreach( array( '', 'submission', 'date' ) as $order )
       getstore( "media.php?regionId=$regionId&years=$years&order=$order&filter=Filter",
@@ -127,18 +130,25 @@ getstore( "map_coords.php?competitionId=France2012&password=$passAdmin",        
 #--- Show statistics
 stopTimer('the whole thing');
 echo "<p>$getstoreCalls calls to getstore(...)</p>";
-echo "<p>$filesExisted files already existed</p>";
+echo "<p>$numberErrors files with errors</p>";
+echo "<p>$filesExisted files already existed without errors</p>";
+echo "<p>$errorFilesExisted files already existed with errors</p>";
 
 #----------------------------------------------------------------------
 function getstore ( $urlFromBase, $filename ) {
 #----------------------------------------------------------------------
-  global $getstoreCalls, $filesExisted;
+  global $getstoreCalls, $filesExisted, $errorFilesExisted, $numberErrors;
   $getstoreCalls++;
 
   #--- Build filename and URL
+  $errorFilename = "test_files/error/$filename";
   $filename = "test_files/$filename";
   if ( file_exists( $filename ) && filesize( $filename ) > 0 ) {
     $filesExisted++;
+    return;
+  }
+  if ( file_exists( $errorFilename ) && filesize( $errorFilename ) > 0 ) {
+    $errorFilesExisted++;
     return;
   }
   $url = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? 'https://' : 'http://')
@@ -150,8 +160,6 @@ function getstore ( $urlFromBase, $filename ) {
 
   #--- Download the from the URL
   $html = file_get_contents( $url );
-  if ( strstr( $html, 'xdebug-error' ) )
-    echo "<p style='background-color:red'>ERROR !!!</p>";
 
   #--- Normalize
   $html = str_replace( 'wca-website', 'wcar_clean_svn', $html );
@@ -163,6 +171,13 @@ function getstore ( $urlFromBase, $filename ) {
   $html = preg_replace( '/"rand" value="\\d+"/', '"rand" value="12345"', $html );
   $html = preg_replace( '/Updating took \\d+.\\d\\d seconds/', 'Updating took 12.34 seconds', $html );
 
+  #--- Point out errors and save in the 'error' subfolder
+  if ( strstr( $html, 'xdebug-error' ) ){
+    echo "<p style='background-color:red'>ERROR !!!</p>";
+    $filename = $errorFilename;
+    $numberErrors++;
+  }
+  
   #--- Store
   file_put_contents( $filename, $html );
 

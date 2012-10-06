@@ -96,7 +96,7 @@ tableCaption( true, spaced( array( $eventName, $chosenShow, $regionName, $chosen
 tableHeader( explode( '|', "Region|Result|Person|Competition|$headerSources" ),
              array( 0 => 'class="L"', 1 => "class='R2'", 4 => 'class="f"' ));
 
-if( $bestOfCountry){
+if( isset($bestOfCountry) ){
   $all = array_merge( $bestOfWorld, array(0), $bestOfContinent, array(0), $bestOfCountry );
   foreach( $all as $row ){
     if( !$row ){

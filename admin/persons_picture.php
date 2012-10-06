@@ -16,6 +16,7 @@ function validatePicture () {
 #----------------------------------------------------------------------
 
   $upload_path = '../upload/';
+  $files = array();
   if ( $handle = opendir( $upload_path )) {
     while ( false !== ( $file = readdir( $handle ))) 
       if ($file[0] == 'p' )
@@ -43,7 +44,7 @@ function validatePicture () {
     }
 
   $count = 0;
-  unset( $files );
+  $files = array();
   if ( $handle = opendir( $upload_path )) {
     while (( $count < 10 ) && ( false !== ( $file = readdir( $handle ))))
       if( $file[0] == 'p' ){

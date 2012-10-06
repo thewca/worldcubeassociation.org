@@ -67,6 +67,7 @@ function showResults () {
   $eventCondition = eventCondition();
   $yearCondition  = yearCondition();
   $regionCondition = regionCondition( 'result' );
+  $limitCondition = '';
   if ( preg_match( '/^10+/', $chosenShow, $matches ) ) {
     $limitNumber = $matches[0];
     $limitCondition = 'LIMIT ' . 2*$limitNumber;
