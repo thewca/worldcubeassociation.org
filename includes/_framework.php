@@ -66,6 +66,12 @@ function getRound ( $roundId ) {
       return $round;
 }
 
+function getCountry ( $countryId ) {
+  foreach( getAllUsedCountries() as $country )
+    if( $country['id'] == $countryId )
+      return $country;
+}
+
 function valueFormat ( $eventId ) {
   $event = getEvent( $eventId );
   return $event['format'];
