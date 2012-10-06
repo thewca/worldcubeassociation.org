@@ -46,8 +46,11 @@ function showCurrentPersonalRecords () {
   tableHeader( explode( " ", "Event NR CR WR Single Average WR CR NR " ),
                array( "", "class='r'", "class='r'", "class='R'", "class='R2'", "class='R2'", "class='R'", "class='r'", "class='r'", "class='f'" ));
 
+  $oddMessage = "A missing or worse country/continent rank compared to a larger region rank is due to the change of country because results from previous regions don&#39;t count for differing current regions.";
   foreach( $bests as $best ){
     extract( $best );
+    $odd = $singleRankCountry > $singleRankContinent || $singleRankContinent > $singleRank || $averageRankCountry > $averageRankContinent || $averageRankContinent > $averageRank
+        || !$singleRankCountry && $singleRankContinent || !$singleRankContinent && $singleRank || !$averageRankCountry && $averageRankContinent || !$averageRankContinent && $averageRank;
     tableRow( array(
       internalEventLink( "#$eventId", eventCellName( $eventId )),
       "<span style='color:#999'>" . colorMe( $singleRankCountry ) . "</span>",
@@ -58,7 +61,7 @@ function showCurrentPersonalRecords () {
       colorMe( $averageRank ),
       colorMe( $averageRankContinent ),
       "<span style='color:#999'>" . colorMe( $averageRankCountry ) . "</span>",
-      ''
+      $odd ? "<a title='$oddMessage' style='color:#66F' onclick='alert(\"$oddMessage\")'>(*)</a>" : ''
     ));
   }
 
