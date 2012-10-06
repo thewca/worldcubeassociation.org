@@ -143,9 +143,14 @@ function computeRanks ( $valueSource, $valueName ) {
   " );
 
   #--- Process the personal records
+  $missingPersonIDs = false;
   while( $row = mysql_fetch_row( $personalRecords )){
     list( $personId, $countryId, $continentId, $eventId, $value ) = $row;
-    
+    if( ! $personId ){
+      $missingPersonIDs = true;
+      continue;
+    }
+
     #--- At new event, store the ranks of the previous and reset
     if ( isset($latestEventId)  &&  $eventId != $latestEventId ) {
       storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
@@ -183,6 +188,8 @@ function computeRanks ( $valueSource, $valueName ) {
   #--- Store the ranks of the last event  
   storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
 
+  if( $missingPersonIDs )
+    noticeBox3( 0, 'Warning: some results are ignored because they are missing a personId' );
   stopTimer( "Ranks$valueName" );
   echo "... done<br /><br />\n";
 }
