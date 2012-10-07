@@ -17,8 +17,9 @@ function showCompetitionInfos () {
 
   #--- Left part.
   echo "<td style='width:70%'><table>";
+  $country = getCountry($countryId);
   showItem( 'key', "Date",         array( competitionDate( $competition ), $year ));
-  showItem( 'key', "City",         array( $cityName, getCountry($countryId)['name'] ));
+  showItem( 'key', "City",         array( $cityName, $country['name'] ));
   showItem( 'key', "Venue",        array( $venue ));
   showItem( 'sub', "Address",      array( $venueAddress ));
   showItem( 'sub', "Details",      array( $venueDetails ));
