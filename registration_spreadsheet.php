@@ -69,7 +69,7 @@ function initialiseAndCreateSpreadsheet () {
   global $spreadsheet;
 
   error_reporting(E_ALL);
-  require_once 'thirdparty/PHPExcel/Classes/PHPExcel.php';
+  require_once 'include/thirdparty/PHPExcel/Classes/PHPExcel.php';
 
   $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
   PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
