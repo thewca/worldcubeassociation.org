@@ -1,0 +1,3 @@
+[submodule "includes/thirdparty/PHPExcel"]
+	path = includes/thirdparty/PHPExcel
+	url = git://github.com/PHPOffice/PHPExcel.git
