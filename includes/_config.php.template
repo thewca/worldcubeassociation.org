@@ -1,5 +1,6 @@
 <?php
 
+#--- Note: make sure you protect the admin folder, you can use the .htaccess.template there
 if( ! file_exists( pathToRoot() . 'admin/.htaccess' ) )
   exit( 'check your config file' );
 
