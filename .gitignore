@@ -12,3 +12,4 @@ dev/test_files/*
 generated/*
 thirdparty/jpgraph/*
 zzz*
+/misc/missing_averages/index.php

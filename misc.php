@@ -14,6 +14,9 @@ require( 'includes/_header.php' );
   <dt><a href='misc/evolution/'>Evolution of Records</a></dt>
   <dd>How the records evolved over time (as well as the #10 and #100).</dd>
 
+  <dt><a href='misc/missing_averages/'>Missing Averages</a></dt>
+  <dd>Lists for events without official averages.</dd>
+
   <dt><a href='misc/age_vs_speed.html'>Age vs Speed</a></dt>
   <dd>A little analysis comparing age vs speed.</dd>
 
