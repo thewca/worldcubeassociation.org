@@ -103,8 +103,9 @@ function htmlEscape ( $string ) {
   return htmlentities( $string, ENT_QUOTES, "UTF-8" );
 }
 
-function chosenRegionName () {
+function chosenRegionName ( $visibleWorld = false ) {
   global $chosenRegionId;
+  if ( !$chosenRegionId && $visibleWorld ) return 'World';
   return preg_replace( '/^_/', '', $chosenRegionId );
 }
 

@@ -59,7 +59,7 @@ function tryCache ( ) {
   }
 
   #--- If it's in the cache already, then just deliver from cache and exit
-  $cacheFile = "generated/cache/$cacheId.cache";
+  $cacheFile = pathToRoot() . "generated/cache/$cacheId.cache";
   if ( file_exists( $cacheFile ) ) {
     echo "<!-- rfc -->\n";
     echo file_get_contents( $cacheFile );

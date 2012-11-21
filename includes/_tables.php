@@ -73,7 +73,7 @@ function tableRowStyled ( $style, $values ) {
 
   # debug
   $tc = count( $values );
-  assertFoo( $tc == $tableColumns, "Wrong number of table header cells ($tc instead of $tableColumns)" );
+  assertFoo( $tc == $tableColumns, "Wrong number of table row cells ($tc instead of $tableColumns)" );
 
   if( $style )
     $style = " style='$style'";

@@ -14,6 +14,9 @@ require( 'includes/_header.php' );
   <dt><a href='misc/evolution/'>Evolution of Records</a></dt>
   <dd>How the records evolved over time (as well as the #10 and #100).</dd>
 
+  <dt><a href='misc/sum_of_ranks/'>Sum of Ranks</a></dt>
+  <dd>Sum of ranks ranklist for each region.</dd>
+
   <dt><a href='misc/missing_averages/'>Missing Averages</a></dt>
   <dd>Lists for events without official averages.</dd>
 

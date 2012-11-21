@@ -1,34 +1,44 @@
 <?
 
-#--- Get event ranks
-$ranksSingle  = getRanks( 'Single'  );
-$ranksAverage = getRanks( 'Average' );
+if ( ! isset($onlyProvideFunctions) ) {
 
-#--- Sum of 3x3/4x4/5x5 ranks, single and average
-list( $single  ) = sumOfRanks( 'Single',  array( '333', '444', '555' ), $ranksSingle   );
-list( $average ) = sumOfRanks( 'Average', array( '333', '444', '555' ), $ranksAverage );
-$lists[] = array(
-  "sum_ranks_345",
-  "Sum of 3x3/4x4/5x5 ranks",
-  "Single | Average",
-  "[P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5 [T] | [P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5",
-  my_merge( $single, $average )
-);
+  #--- Get event ranks
+  $ranksSingle  = getRanks( 'Single'  );
+  $ranksAverage = getRanks( 'Average' );
 
-#--- Sum of all single ranks
-list( $rows, $header ) = sumOfRanks( 'Single',  getAllEventIds(), $ranksSingle  );
-$lists[] = array( "sum_ranks_single", "Sum of all single ranks", "", $header, $rows );
+  #--- Sum of 3x3/4x4/5x5 ranks, single and average
+  list( $single  ) = sumOfRanks( 'Single',  array( '333', '444', '555' ), $ranksSingle   );
+  list( $average ) = sumOfRanks( 'Average', array( '333', '444', '555' ), $ranksAverage );
+  $lists[] = array(
+    "sum_ranks_345",
+    "Sum of 3x3/4x4/5x5 ranks",
+    "Single | Average",
+    "[P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5 [T] | [P] Person [N] Sum [n] 3x3 [n] 4x4 [n] 5x5",
+    my_merge( $single, $average )
+  );
 
-#--- Sum of all average ranks
-list( $rows, $header ) = sumOfRanks( 'Average', getAllEventIds(), $ranksAverage );
-$lists[] = array( "sum_ranks_average", "Sum of all average ranks", "", $header, $rows );
+  #--- Sum of all single ranks
+  list( $rows, $header ) = sumOfRanks( 'Single',  getAllEventIds(), $ranksSingle  );
+  $lists[] = array( "sum_ranks_single", "Sum of all single ranks", "", $header, $rows );
+
+  #--- Sum of all average ranks
+  list( $rows, $header ) = sumOfRanks( 'Average', getAllEventIds(), $ranksAverage );
+  $lists[] = array( "sum_ranks_average", "Sum of all average ranks", "", $header, $rows );
+}
 
 #----------------------------------------------------------------------
-function getRanks ( $sourceName ) {
+function getRanks ( $sourceName, $regionId = '' ) {
 #----------------------------------------------------------------------
+
+  #--- Build query for the requested region
+  $query = "SELECT eventId, personId, worldRank FROM Ranks$sourceName";
+  if (in_array($regionId, getAllUsedCountriesIds()))
+    $query = "SELECT eventId, personId, countryRank FROM Ranks$sourceName, Persons WHERE Persons.id=personId AND subId=1 AND countryId='$regionId'";
+  if (in_array($regionId, getAllUsedContinentIds()))
+    $query = "SELECT eventId, personId, continentRank FROM Ranks$sourceName, Persons, Countries WHERE Persons.id=personId AND subId=1 AND Countries.id=countryId AND continentId='$regionId'";
 
   #--- Process the personal records, build ranks[event][person]
-  foreach( dbQuery( "SELECT eventId, personId, worldRank FROM Ranks$sourceName" ) as $row )
+  foreach( dbQuery( $query ) as $row )
     $ranks[ $row[0] ][ $row[1] ] = $row[2];
 
   #--- Return the event ranks
@@ -36,7 +46,7 @@ function getRanks ( $sourceName ) {
 }
 
 #----------------------------------------------------------------------
-function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
+function sumOfRanks ( $sourceName, $eventIds, $ranks, $limit = 10 ) {
 #----------------------------------------------------------------------
 
   #--- Compute the event-missing penalties and their sum
@@ -60,7 +70,7 @@ function sumOfRanks ( $sourceName, $eventIds, $ranks ) {
   asort( $rankSum );
 
   #--- Prepare the top 10 sum persons for output
-  foreach ( array_slice( $rankSum, 0, 10 ) as $personId => $sum ) {
+  foreach ( array_slice( $rankSum, 0, $limit ) as $personId => $sum ) {
     $row = array( $personId, $sum );
     foreach ( $eventIds as $eventId ) {
       if ( isset( $penalty[$eventId] ))
