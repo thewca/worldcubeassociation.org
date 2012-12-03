@@ -12,10 +12,16 @@ Quick notes for revision.
 ## General Notes
 
 - Transfer definitions from style guide to Regs / Guidelines?
+- Multi BL Dis always recorded to seconds
+- Gen 2 or Gen 3 http://www.worldcubeassociation.org/forum/viewtopic.php?f=16&t=1036
+- Stickerless should apply to all puzzles
+- Consider adding a note that Article 6 is entirely in the Guidelines.
+- H1d: "at one 60"
 
 ## For Website formatting
 - Table of contents
 - Cross-links for certain terms
+  - Hyperlinks for RFC, etc.
 - Images for misalignments.
 
 ## Discuss
