@@ -1,7 +1,7 @@
 #!/bin/bash
 
-HTML_FILE_REGS="wca-regulations.html"
-HTML_FILE_GUIDES="wca-guidelines.html"
+HTML_FILE_REGS="index.html"
+HTML_FILE_GUIDES="guidelines.html"
 
 rm "${HTML_FILE_REGS}"
 cat html_header.html >> "${HTML_FILE_REGS}"
