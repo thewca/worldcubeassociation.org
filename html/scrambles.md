@@ -24,10 +24,12 @@ Last official change: January 1, 2013
 3. Wait for the loading bar to finish and click the "Scramble!" button that appears.  
   A *.zip* file will download in your browser.
 
-- Note: 4x4x4 scrambles **may take a few minutes** to initialize and generate.  
+### Notes
+
+- 4x4x4 scrambles **may take a few minutes** to initialize and generate.  
   If you are generating 4x4x4 scrambles, be patient while the loading bar may appear to be stuck.
-- Also note that TNoodle creates a *tnoodle_resources* folder with a few MB of files (mostly cached tables) in the same folder it is run.  
-  Keep this folder if want to generate more 4x4x4 scrambles more quickly in the future, but feel free to delete it if you need to reclaim disk space.
+- TNoodle creates a *tnoodle_resources* folder with a few MB of files (mostly cached tables) in the same folder it is run.  
+  Keep this folder if you want to generate more 4x4x4 scrambles more quickly in the future, but feel free to delete it if you need to reclaim disk space.
 
 ## About TNoodle
 

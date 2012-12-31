@@ -27,3 +27,14 @@ In particular, note that the Regulations had many revisions in 2013. Older trans
 - [Spanish (2010)](http://rubikaz.com/competicion/reglamento2010.htm) by Alexandre Toledo Guill&eacute;n and [Carlos Angosto](http://www.rubikaz.com)
 - [Thai (2009)](http://www.thailandcube.com/index.php?option=com_content&view=article&id=97&Itemid=55) by Chonlathep Kitsinthopchai
 - [Ukranian (2010)](http://cubing.com.ua/wca/) by [Roman Ostapenko](mailto:ostapenko@cubing.com.ua)
+
+## Translating the Regulations
+
+If you'd like to (re)-translate the Regulations:
+
+- Download the [current source](https://github.com/cubing/wca-documents/archive/official.zip) of the Regulations.
+  - If you're familiar with `git`/GitHub, you're also welcome to fork it.
+- Translate `wca-guidelines-2013.md` and `wca-regulations-2013.md`
+  - Try to keep all the formatting intact and only change the words.
+  - Read through the [style guide](https://github.com/cubing/wca-documents-extra/blob/master/style-guide.md) for detailed information about how the Regulations are formatted.
+- Contact the [WRC](http://www.worldcubeassociation.org/contact/wrc) for converting the documents into cross-linked webpages and uploading them to the WCA website.
