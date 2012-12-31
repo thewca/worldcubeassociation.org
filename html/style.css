@@ -65,6 +65,13 @@ li {
   box-shadow: 0px 0px 20px #888;
 }
 
+#header_logo {
+  display: inline;
+  margin: -2px 10px 2px;
+  height: 48px;
+  vertical-align: middle;
+}
+
 #header ul {
   margin: 0px;
   list-style: none;
