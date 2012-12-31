@@ -1,4 +1,4 @@
-# WCA Regulations: Translations
+# WCA Regulations and Guidelines: Translations
 
 ## Available Translations
 

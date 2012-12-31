@@ -8,6 +8,7 @@ cd ..
 cp html/*.html site/
 cp "html/style.css" site/
 cp "html/wca_logo.svg" site/
+rm site/html_*
 
 cd pdf
 ./create_pdf.sh

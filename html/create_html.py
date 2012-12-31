@@ -32,7 +32,7 @@ regsTOC = "<ul id=\"table_of_contents\">\n" + "".join(["<li>Article " + num + ":
 regsText   = re.sub(r'<table-of-contents>', regsTOC, regsText)
 
 allGuidesArticles = re.findall(r'<h2><([^>]*)><([^>]*)> Article ([A-Za-z0-9]+): ([^<]*)</h2>', guidesText)
-guidesTOC = "<ul id=\"table_of_contents\">\n" + "".join(["<li>Article " + num + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n" for (new, old, num, title) in allGuidesArticles]) + "</ul>\n"
+guidesTOC = "<ul>\n" + "".join(["<li>Article " + num + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n" for (new, old, num, title) in allGuidesArticles]) + "</ul>\n"
 guidesText   = re.sub(r'<table-of-contents>', guidesTOC, guidesText)
 
 
@@ -45,6 +45,11 @@ regsText   = re.sub(r'<h2><([^>]*)><([^>]*)> Article ([A-Za-z0-9]+):',
 guidesText = re.sub(r'<h2><([^>]*)><([^>]*)> Article ([A-Za-z0-9]+):',
                     r'<span id="\2"></span><span id="\3"></span><h2 id="article-\3-\1"><a href="#article-\3-\1" class="local_link">Article \3</a>:', guidesText)
 
+
+regsText   = re.sub(r'<contents>',
+                    r'<h2 id="contents"><a href="#contents">Contents</a></h2>', regsText)
+guidesText = re.sub(r'<contents>',
+                    r'<h2 id="contents"><a href="#contents">Contents</a></h2>', guidesText)
 
 # Logo
 regsText   = re.sub(r'<logo>',
@@ -73,24 +78,24 @@ regsText   = re.sub(r'<Guideline ([^>]*)>',
 guidesText = re.sub(r'<Guideline ([^>]*)>',
                     r'<a href="guidelines.html#\1" class="guideline-link">Guideline \a>', guidesText)
 
-regsText   = re.sub(r'<WCA Regulations>',
+regsText   = re.sub(r'<regs>WCA Regulations',
                     r'<a href="./">WCA Regulations</a>', regsText)
-guidesText = re.sub(r'<WCA Regulations>',
+guidesText = re.sub(r'<regs>WCA Regulations',
                     r'<a href="./">WCA Regulations</a>', guidesText)
 
-regsText   = re.sub(r'<WCA Guidelines>',
+regsText   = re.sub(r'<guides>WCA Guidelines',
                     r'<a href="guidelines.html">WCA Guidelines</a>', regsText)
-guidesText = re.sub(r'<WCA Guidelines>',
+guidesText = re.sub(r'<guides>WCA Guidelines',
                     r'<a href="guidelines.html">WCA Guidelines</a>', guidesText)
 
 regsText   = re.sub(r'<wca-title>WCA Regulations 2013',
-                    r'World Cube Association: Competition Regulations 2013', regsText)
+                    r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\nCompetition Regulations 2013', regsText)
 guidesText = re.sub(r'<wca-title>WCA Guidelines 2013',
-                    r'World Cube Association: Competition Guidelines 2013', guidesText)
+                    r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\nCompetition Guidelines 2013', guidesText)
 
-regsText   = re.sub(r'<version>\[([^]]*)\]',
+regsText   = re.sub(r'<p><version>([^<]*)</p>',
                     r'<div class="version">\1</div>', regsText)
-guidesText = re.sub(r'<version>\[([^]]*)\]',
+guidesText = re.sub(r'<p><version>([^<]*)</p>',
                     r'<div class="version">\1</div>', guidesText)
 
 
