@@ -1,16 +1,19 @@
 #!/bin/bash
 
-HTML_FILE_REGS="index.html"
-HTML_FILE_GUIDES="guidelines.html"
+function htmlify {
+  FILE="${1}"
+  SOURCE="${2}"
 
-rm "${HTML_FILE_REGS}"
-cat html_header.html >> "${HTML_FILE_REGS}"
-markdown ../wca-documents/wca-regulations-2013.md >> "${HTML_FILE_REGS}"
-cat html_footer.html >> "${HTML_FILE_REGS}"
+  rm "${FILE}"
+  cat html_header.html >> "${FILE}"
+  markdown "${SOURCE}" >> "${FILE}"
+  cat html_footer.html >> "${FILE}"
+}
 
-rm "${HTML_FILE_GUIDES}"
-cat html_header.html >> "${HTML_FILE_GUIDES}"
-markdown ../wca-documents/wca-guidelines-2013.md >> "${HTML_FILE_GUIDES}"
-cat html_footer.html >> "${HTML_FILE_GUIDES}"
+htmlify "index.html"        "../wca-documents/wca-regulations-2013.md"
+htmlify "guidelines.html"   "../wca-documents/wca-guidelines-2013.md"
+htmlify "history.html"      "history.md"
+htmlify "translations.html" "translations.md"
+htmlify "scrambles.html"    "scrambles.md"
 
 ./create_html.py
