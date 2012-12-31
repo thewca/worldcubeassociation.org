@@ -10,7 +10,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - To make the regulations easier to read we use 'he' where the reader should read 'she or he'.
 - The division into Regulations Guidelines roughly mirrors the normative vs. non-normative (informative) distinction employed by W3C standards.
   - The use of the words 'must (not)', 'shall (not)', 'should (not)', and 'may (not)' (requirement levels) conform to RFC 2119. In particular, note that "shall" indicates a (non-optional) requirement.
-  - The Regulations must not rely on the Guidelines for completeness or consistency. Any normative Guidelines must be be implicit in the Regulations (e.g. labeled [REMINDER]).
+  - The Regulations must not rely on the Guidelines for completeness or consistency. Any normative Guidelines must be be implicit in the Regulations (e.g. labelled [REMINDER]).
   - As a rule of thumb, anything with 'must' or 'shall' should be in the Regulations, and anything with 'should' or 'may' should be in the Guidelines.
 - The documents are written in British English.
 
@@ -24,13 +24,13 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Formatting the Document
 
-- Ensure that the Regulations are well-constructed and organized. This is common sense, but requires conscious effort:
+- Ensure that the Regulations are well-constructed and organised. This is common sense, but requires conscious effort:
   - Foremost, make the Regulations easy for a human to search and read, and don't let anything get in the way of accuracy and clarity.
-    - For example, put the main subject of a Regulation near the beginning, even if the grammaer might be neater otherwise (see Regulations 9f4 and 9f5 for a good example).
+    - For example, put the main subject of a Regulation near the beginning, even if the grammar might be neater otherwise (see Regulations 9f4 and 9f5 for a good example).
   - Keep it 'DRY' ('Don't Repeat Yourself').
     - As a rule of thumb, if a change in one place requires a change in another place to keep the Regulations consistent, it's not DRY.
   - Use consistent formatting to help make the document easier to understand for a human and to search by computer (e.g. every rule that can result in a DNF explicitly mentions 'DNF').
-  - Address contingencies that help ensure fair interpretation across different competitions, but leave unusual exceptions to the WCA Delegate. (In a sense, the Guidelines are a formalized FAQ to standardize unwritten rules).
+  - Address contingencies that help ensure fair interpretation across different competitions, but leave unusual exceptions to the WCA Delegate. (In a sense, the Guidelines are a formalised FAQ to standardise unwritten rules).
   - Future-proof the documents for subsequent changes (e.g. don't assume that cross-references remain valid, don't construct delicately related rules).
 - NOTE: There are many gaps in the numbering of the Regulations. This is because we don't change around numberings when a Regulation is removed. For the same reason, there is now no Article 6.
   - When adding a Regulation an article/list of sub-regulations, make sure that you don't number it the same as a deleted regulation from a previous official version.
@@ -55,10 +55,10 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Terms and Capitalization
 
-- References to the '(WCA) Regulations' and '(WCA) Guidelines' are capitalized. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that 'Regulations' refers to the body of the WCA Regulations.
-- Also should be capitalized: Competitors Area.
+- References to the '(WCA) Regulations' and '(WCA) Guidelines' are capitalised. For example, Regulation 1a) is a regulation in the Regulations. This makes it clear that 'Regulations' refers to the body of the WCA Regulations.
+- Also should be capitalised: Competitors Area.
 - The WCA Delegate should be mentioned by his full title.
-- Puzzles names are capitalized. Event formats like 'One-Handed Solving' are also capitalized. A puzzle name + event format should omits word 'Solving' (e.g. Rubik's Cube: One-Handed). See Regulation 9b for official puzzles and event formats.
+- Puzzles names are capitalised. Event formats like 'One-Handed Solving' are also capitalised. A puzzle name + event format should omit the word 'Solving' (e.g. Rubik's Cube: One-Handed). See Regulation 9b for official puzzles and event formats.
 
 ### Recommended Word Choices
 
@@ -101,7 +101,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Checklist for formatting the Regulations
 
-- Re-normalize indentation. (Use re-indent.sh, but make sure to adapt the script source for the document and sanity-diff the changes.)
+- Re-normalise indentation. (Use re-indent.sh, but make sure to adapt the script source for the document and sanity-diff the changes.)
 - Search for stray tabs, double-spaces, extra spaces/missing punctuation at the end of lines.
 - When searching for words/phrases, be careful about alternate spellings and search for a conservative substring (e.g. search "solv" for "solve"/"solving", "apple" for "apply"/"applied", "penalt" for "penalty"/"penalties"). Be careful about a blind search/replace.
 
