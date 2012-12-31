@@ -6,7 +6,7 @@ function htmlify {
 
   rm "${FILE}"
   cat html_header.html >> "${FILE}"
-  markdown "${SOURCE}" >> "${FILE}"
+  rdiscount "${SOURCE}" >> "${FILE}" # Markdown doesn't handle the nested lists properly.
   cat html_footer.html >> "${FILE}"
 }
 
