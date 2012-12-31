@@ -1,10 +1,10 @@
 # Scrambles
 
-The current official scrambler is *TNoodle-0.7.2.jar*. It generates high-quality scrambles for all the events of a competition at once.
+The current official scrambler is *TNoodle-0.7.4.jar*. It generates high-quality scrambles for all the events of a competition at once.
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scrambler:<br><a href="scrambles/tnoodle/TNoodle-0.7.2.jar" style="font-weight: bold;">TNoodle-0.7.2.jar</a><br></span>
+Download the official scrambler:<br><a href="scrambles/tnoodle/TNoodle-0.7.4.jar" style="font-weight: bold;">TNoodle-0.7.4.jar</a><br></span>
 <br>
 Last official change: January 1, 2013
 </center>
