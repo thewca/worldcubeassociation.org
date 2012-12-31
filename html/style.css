@@ -1,0 +1,65 @@
+body {
+  font-family: Helvetica, Tahoma, sans-serif;
+  background: #AAA;
+  line-height: 1.2em;
+}
+
+#content {
+  margin: 30px auto;
+  padding: 20px 3%;
+  width: 90%;
+  background: #FFF;
+  border-radius: 1em;
+  box-shadow: 0px 0px 100px #888;
+}
+
+#logo {
+  width: 2em;
+  vertical-align: middle;
+  padding: 0 0.5em 0 0;
+}
+
+h2 {
+  margin-top: 2em;
+  padding: 10px 16px 8px 16px;
+  background: #EEE;
+  border-radius: 4px;
+}
+
+li {
+  padding-top: 10px
+}
+
+.label {
+  padding: 4px 4px 2px 4px;
+  margin: 0px 2px;
+  border-radius: 4px;
+  background: #DDD;
+}
+
+.SEPARATE {
+  background: #E8E8E8;
+}
+
+.linked {
+  background: #DEF;
+}
+
+.linked a {
+  text-decoration: none;
+  color: #00F;
+}
+
+.linked a:hover {
+  text-decoration: underline;
+}
+
+a[href^="#"] {
+  text-decoration: none;
+  font-weight: bold;
+  color: blue;
+}
+
+a[href^="#"]:hover {
+  text-decoration: underline;
+}
