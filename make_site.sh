@@ -7,7 +7,7 @@ cd html
 cd ..
 cp html/*.html site/
 cp "html/style.css" site/
-cp "html/wca_logo.svg" site/
+cp html/*.svg site/
 rm site/html_*
 
 cd pdf
