@@ -14,3 +14,6 @@ cd pdf
 ./create_pdf.sh
 cd ..
 cp pdf/wca-regulations-and-guidelines-2013.pdf build/
+
+cd build
+open "http://localhost:${1:-8080}/" && python -m SimpleHTTPServer ${1:-8080}
