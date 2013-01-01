@@ -1,19 +1,19 @@
 # WCA Scrambles
 
-The current official scrambler is *TNoodle-0.7.4.jar*. It generates high-quality scrambles for all the events of a competition at once.
+The current official scramble program is *TNoodle-0.7.4.jar*. It generates high-quality scramble sequences for all the events of a competition at once.
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scrambler:<br><a href="scrambles/tnoodle/TNoodle-0.7.4.jar" style="font-weight: bold;">TNoodle-0.7.4.jar</a><br></span>
+Download the official scramble program:<br><a href="scrambles/tnoodle/TNoodle-0.7.4.jar" style="font-weight: bold;">TNoodle-0.7.4.jar</a><br></span>
 <br>
 Last official change: January 1, 2013
 </center>
 
 ## Important Notes for Delegates
 
-- Official competitions must always use the current version of the official scrambler.
+- Official competitions must always use the current version of the official scramble program.
 - Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).
-- Delegates must save all scrambles generated for an official competition, and send them with the delegate report (see [Regulation 1c3a](./#1c3a)).
+- Delegates must save all scramble sequences generated for an official competition, and send them with the delegate report (see [Regulation 1c3a](./#1c3a)).
 
 ## Detailed Instructions for TNoodle
 
@@ -26,10 +26,10 @@ Last official change: January 1, 2013
 
 ### Notes
 
-- 4x4x4 scrambles **may take a few minutes** to initialize and generate.  
-  If you are generating 4x4x4 scrambles, be patient while the loading bar may appear to be stuck.
+- 4x4x4 scramble sequences **may take a few minutes** to initialize and generate.
+  If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck.
 - TNoodle creates a *tnoodle_resources* folder with a few MB of files (mostly cached tables) in the same folder it is run.  
-  Keep this folder if you want to generate more 4x4x4 scrambles more quickly in the future, but feel free to delete it if you need to reclaim disk space.
+  Keep this folder if you want to generate more 4x4x4 scramble sequences more quickly in the future, but feel free to delete it if you need to reclaim disk space.
 
 ## About TNoodle
 
