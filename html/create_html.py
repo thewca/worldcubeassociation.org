@@ -72,11 +72,16 @@ guidesText = re.sub(r'<Regulation ([^>]*)>',
                     r'<a href="./#\1" class="regulation-link">Regulation \1</a>', guidesText)
 
 # Guideline hyperlinks from the Regulation. None right now, probably should never be (since the Regulations should be stand-alone)
+guideRefsinRegs = re.findall(r'<Guideline ([^>]*)>', regsText)
+if (guideRefsinRegs != []):
+    print "\n\nWARNING: REFERENCE TO GUIDELINES IN REGULATIONS: " + str(guideRefsinRegs) + "\n\n"
+
+# Convert them anyhow.
 regsText   = re.sub(r'<Guideline ([^>]*)>',
-                    r'<a href="#\1" class="guideline-link">Guideline \1</a>', regsText)
+                    r'<a href="#guidelines.html\1" class="guideline-link">Guideline \1</a>', regsText)
 # Guideline hyperlinks in the Guidelines
 guidesText = re.sub(r'<Guideline ([^>]*)>',
-                    r'<a href="guidelines.html#\1" class="guideline-link">Guideline \a>', guidesText)
+                    r'<a href="#\1" class="guideline-link">Guideline \1</a>', guidesText)
 
 regsText   = re.sub(r'<regs>WCA Regulations',
                     r'<a href="./">WCA Regulations</a>', regsText)
