@@ -70,7 +70,7 @@ function processLink ( $text, $link ) {
   $text = preg_replace( '/\\\\([\'\"])/', '$1', $text );
   $link = preg_replace( '/\\\\([\'\"])/', '$1', $link );
   if( preg_match( '/^mailto:(.*)$/', $link, $match )) return emailLink( $match[1], $text );
-  if( preg_match( '/^http:(.*)$/',   $link, $match )) return externalLink( $link, $text );
+  if( preg_match( '/^https?:(.*)$/',   $link, $match )) return externalLink( $link, $text );
   return emptyLink( '[{' . $text . '}{' . $link . '}]' );
 }
 
