@@ -25,7 +25,8 @@ htmlify "translations.html" "WCA Translations"        "translations.md"
 htmlify "scrambles.html"    "WCA Scrambles"           "scrambles.md"
 
 pushd "../wca-documents" > /dev/null
-VERSION=$(git rev-parse --short HEAD)
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+GIT_VERSION=$(git rev-parse --short HEAD)
 popd > /dev/null
 
-./create_html.py --git-hash "${VERSION}"
+./create_html.py --git-branch "${GIT_BRANCH}" --git-hash "${GIT_VERSION}"

@@ -17,15 +17,15 @@ numGuidesArticles = 17
 # Arguments
 
 parser = argparse.ArgumentParser(description='Post-process the WCA Regulations and Guidelines in HTML form. This script makes significant assumptions about the formatting of the HTML.')
-parser.add_argument('--git-hash', default="", help="git hash of the current Regulations and Guidelines.")
+parser.add_argument('--git-branch', default="", help="git branch of the Regulations and Guidelines we're building.")
+parser.add_argument('--git-hash', default="", help="git hash of the Regulations and Guidelines we're building.")
 
 args = parser.parse_args()
 
 gitHash = args.git_hash
-if gitHash != "":
-    print "Git hash: ", gitHash
-else:
-    print "No git hash available."
+gitBranch = args.git_branch
+print "Git branch: ", gitHash
+print "Git hash: ", gitBranch
 
 
 # Read and close files
@@ -181,19 +181,19 @@ if includeTitleLogo:
     wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
 
 numReplacements = replaceRegs(1, 
-    r'<wca-title>WCA Regulations 2013',
-    wcaTitleLogoSource + r'Competition Regulations 2013'
+    r'<h1><wca-title>([^<]*)</h1>',
+    r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
 
 numReplacements = replaceGuides(1, 
-    r'<wca-title>WCA Guidelines 2013',
-    wcaTitleLogoSource + r'Competition Guidelines 2013'
+    r'<h1><wca-title>([^<]*)</h1>',
+    r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
 
 # Version
 gitLink =r''
 if (gitHash != ""):
-    gitLink = r'Generated from <a href="https://github.com/cubing/wca-documents/tree/' + gitHash + r'">' + gitHash + r'</a>.';
+    gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' +gitBranch + r'</a>:' +r'<a href="https://github.com/cubing/wca-documents/tree/' + gitHash + r'">' +gitHash + r'</a></code>]';
 
 numReplacements = replaceBothWithSame(1, 1, 
     r'<p><version>([^<]*)</p>',
