@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -e
+
+VERSION="${1}"
+MARKDOWN_PROGRAM="rdiscount" # Markdown.py and the python markdown package both don't handle the nested lists properly.
+
 function htmlify {
   FILE="${1}"
   TITLE="${2}"
@@ -9,7 +14,7 @@ function htmlify {
   cat html_header_1.html >> "${FILE}"
   echo -n "${TITLE}" >> "${FILE}"
   cat html_header_2.html >> "${FILE}"
-  rdiscount "${SOURCE}" >> "${FILE}" # Markdown doesn't handle the nested lists properly.
+  "${MARKDOWN_PROGRAM}" "${SOURCE}" >> "${FILE}"
   cat html_footer.html >> "${FILE}"
 }
 
@@ -19,4 +24,8 @@ htmlify "history.html"      "WCA Regulations History" "history.md"
 htmlify "translations.html" "WCA Translations"        "translations.md"
 htmlify "scrambles.html"    "WCA Scrambles"           "scrambles.md"
 
-./create_html.py
+pushd "../wca-documents" > /dev/null
+VERSION=$(git rev-parse --short HEAD)
+popd > /dev/null
+
+./create_html.py --git-hash "${VERSION}"

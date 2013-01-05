@@ -129,21 +129,12 @@ li {
   background: #DEF;
 }
 
-.linked a {
-  text-decoration: none;
-  color: #00F;
-}
-
-.linked a:hover {
-  text-decoration: underline;
-}
-
-a[href^="#"] {
+#content a {
   text-decoration: none;
   font-weight: bold;
   color: blue;
 }
 
-a[href^="#"]:hover {
+#content a:hover {
   text-decoration: underline;
 }
