@@ -109,7 +109,7 @@ li {
 }
 
 .version {
-  margin-top: 1em;
+  margin: 1em 0em;
   text-align: center;
   font-weight: bold;
 }

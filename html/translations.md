@@ -2,7 +2,8 @@
 
 ## Available Translations
 
-Please note that the translations are unofficial (even though some are provided on the WCA website): they may be useful, but they do not come without any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.  
+Note: Even though these translations are provided on the WCA website, they are not official versions: they may be useful to you, but they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.  
+
 In particular, note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
 
 - [Chinese (2010)](http://www.mf8-china.com/wca/regulations_chs.htm) by [Shihang Wang](mailto:wangshihang@foxmail.com)
@@ -15,7 +16,7 @@ In particular, note that the Regulations had many revisions in 2013. Older trans
 - [French (2010)](http://www.speedcubingfrance.org/speedcubing/reglement/reglementWCA.pdf) by Guillaume Erbibou
 - [German (2010)](http://cube.hackvalue.de/wca/) by Florian Weingarten
 - [Hungarian (2010)](http://www.rubikkocka.hu/pages/wcaszabalyzat2010.html) by [Oliv&eacute;r Nagy](http://www.rubikkocka.hu/)
-- [Indonesian (Bahasa) (2010)](http://nsa.or.id/wca-indo.html) by Dhany Surya Ratana, Aditya Putra Patria, Kingman Husada and Ardianto Satriawan
+- [Indonesian (Bahasa) (2013)](http://www.worldcubeassociation.org/regulations/translations/indonesian/) by Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
 - [Italian (2009)](http://spazioinwind.libero.it/gaetzum/approfondimenti/regolamento_wca/regolamento_wca.htm) by Luca Feliciotto
 - [Japanese (2010)](http://jrca.cc/rule/WCAregulationJ2010.htm) by [Kentaro Nishi](mailto:jrca-2010honyaku@freeml.com), Takeshi Akuzawa, Yohei Oka, Toru Omura, Shun Sakurai, Kotaro Terada, Takafumi Haseda and Ayano Yoshida
 - [Korean (2008)](http://www.cube.or.kr/competition/WCAregulations2008.htm) by Park Joon-Ho
