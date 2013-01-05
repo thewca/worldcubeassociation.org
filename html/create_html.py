@@ -45,30 +45,32 @@ guidesFile.close();
 # Match/Replace constants
 
 regOrGuide2Slots = r'([A-Za-z0-9]+)' + r'(\+*)'
-ANY_NUMBER = -1
+ANY = -1
 
 # Replacement functions
 
 def replaceRegs(expected, rgxMatch, rgxReplace):
     global regsText
     (regsText, num) = re.subn(rgxMatch, rgxReplace, regsText)
-    if (expected != ANY_NUMBER and num != expected):
+    if (expected != ANY and num != expected):
         print >> sys.stderr, "Expected", expected, "replacements for Regulations, there were", num
         print >> sys.stderr, "Matching: ", rgxMatch
         print >> sys.stderr, "Replacing: ", rgxReplace
         traceback.print_stack()
         exit(-1)
+    print "Regulations: [" + str(num) + "]", rgxMatch, "\nRegulations:  ->", rgxReplace
     return num
 
 def replaceGuides(expected, rgxMatch, rgxReplace):
     global guidesText
     (guidesText, num) = re.subn(rgxMatch, rgxReplace, guidesText)
-    if (expected != ANY_NUMBER and num != expected):
+    if (expected != ANY and num != expected):
         print >> sys.stderr, "Expected", expected, "replacements for Guidelines, there were", num
         print >> sys.stderr, "Matching: ", rgxMatch
         print >> sys.stderr, "Replacing: ", rgxReplace
         traceback.print_stack()
         exit(-1)
+    print "Guidelines:  [" + str(num) + "]", rgxMatch, "\nGuidelines:   ->", rgxReplace
     return num
 
 def replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplaceRegs, rgxReplaceGuides):
@@ -79,9 +81,8 @@ def replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplaceReg
 def replaceBothWithSame(expectedReg, expectedGuide, rgxMatch, rgxReplace):
     return replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplace, rgxReplace)
 
-def hyperLinkReplace(linkMatch, linkReplace, textReplace):
-    print (r'<a href="' + linkMatch + r'">([^<]*)</a>')
-    res = replaceBothWithSame(ANY_NUMBER, ANY_NUMBER,
+def hyperLinkReplace(expectedReg, expectedGuide, linkMatch, linkReplace, textReplace):
+    res = replaceBothWithSame(expectedReg, expectedGuide,
         r'<a href="' + linkMatch + r'">([^<]*)</a>',
         r'<a href="' + linkReplace + r'">' + textReplace + r'</a>'
     )
@@ -105,8 +106,6 @@ articleMatch = r'<h2><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>
 
 allRegsArticles = re.findall(articleMatch, regsText)
 allGuidesArticles = re.findall(articleMatch, guidesText)
-
-print allRegsArticles
 
 def makeTOC(articles):
     return "<ul id=\"table_of_contents\">\n" + "".join([
@@ -140,22 +139,22 @@ regOrGuideLiReplace = r'<li id="\1\2"><a href="#\1\2">\1\2</a>)'
 matchLabel1Slot = r'\[([^\]]+)\]'
 
 ## Numbering/links in the Regulations
-replaceRegs(ANY_NUMBER,
+replaceRegs(ANY,
     regOrGuideLiMatch,
     regOrGuideLiReplace
 )
 ## Numbering/links in the Guidelines for ones that don't correspond to a Regulation.
-replaceGuides(ANY_NUMBER,
+replaceGuides(ANY,
     regOrGuideLiMatch + r' \[SEPARATE\]' + matchLabel1Slot,
     regOrGuideLiReplace + r' <span class="SEPARATE \3 label">\3</span>'
 )
 ## Numbering/links in the Guidelines for ones that *do* correspond to a Regulation.
-replaceGuides(ANY_NUMBER,
+replaceGuides(ANY,
     regOrGuideLiMatch + r' ' + matchLabel1Slot,
     regOrGuideLiReplace  +  r' <span class="\3 label linked"><a href="' + regsURL + r'#\1">\3</a></span>'
 )
 ## Explanation labels
-replaceGuides(ANY_NUMBER,
+replaceGuides(ANY,
     r'<label>' + matchLabel1Slot,
     r'<span class="example \1 label">\1</span>'
 )
@@ -163,17 +162,17 @@ replaceGuides(ANY_NUMBER,
 
 # Hyperlinks
 
-hyperLinkReplace(r'regulations:article:' + regOrGuide2Slots, regsURL + r'#article-\1\2', r'\3')
-hyperLinkReplace(r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#article-\1\2', r'\3')
+hyperLinkReplace(ANY, ANY, r'regulations:article:' + regOrGuide2Slots, regsURL + r'#article-\1\2', r'\3')
+hyperLinkReplace(  0, ANY, r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#article-\1\2', r'\3')
 
-hyperLinkReplace(r'regulations:regulation:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
-hyperLinkReplace(r'guidelines:guideline:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
+hyperLinkReplace(ANY, ANY, r'regulations:regulation:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
+hyperLinkReplace(  0, ANY, r'guidelines:guideline:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
 
-hyperLinkReplace(r'regulations:top', regsURL, r'\1')
-hyperLinkReplace(r'guidelines:top', guidesURL, r'\1')
+hyperLinkReplace(ANY, ANY, r'regulations:top', regsURL, r'\1')
+hyperLinkReplace(ANY, ANY, r'guidelines:top', guidesURL, r'\1')
 
-hyperLinkReplace(r'regulations:contents', regsURL + r'#contents', r'\1')
-hyperLinkReplace(r'guidelines:contents', guidesURL + r'#contents', r'\1')
+hyperLinkReplace(1, 0, r'regulations:contents', regsURL + r'#contents', r'\1')
+hyperLinkReplace(0, 1, r'guidelines:contents', guidesURL + r'#contents', r'\1')
 
 
 # Title
