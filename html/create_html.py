@@ -17,6 +17,8 @@ numGuidesArticles = 17
 # Arguments
 
 parser = argparse.ArgumentParser(description='Post-process the WCA Regulations and Guidelines in HTML form. This script makes significant assumptions about the formatting of the HTML.')
+parser.add_argument('--regulations-file', default="index.html", help="Regulations file (modified in-place).")
+parser.add_argument('--guidelines-file', default="guidelines.html", help="Regulations file (modified in-place).")
 parser.add_argument('--git-branch', default="", help="git branch of the Regulations and Guidelines we're building.")
 parser.add_argument('--git-hash', default="", help="git hash of the Regulations and Guidelines we're building.")
 
@@ -27,11 +29,11 @@ gitBranch = args.git_branch
 print "Git branch: ", gitHash
 print "Git hash: ", gitBranch
 
+regsFileName = args.regulations_file
+guidesFileName = args.guidelines_file
+
 
 # Read and close files
-
-regsFileName = "index.html"
-guidesFileName = "guidelines.html"
 
 regsFile = open(regsFileName, "r")
 regsText = regsFile.read()

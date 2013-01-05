@@ -29,4 +29,8 @@ GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 GIT_VERSION=$(git rev-parse --short HEAD)
 popd > /dev/null
 
-./create_html.py --git-branch "${GIT_BRANCH}" --git-hash "${GIT_VERSION}"
+./create_html.py \
+  --regulations-file "index.html" \
+  --guidelines-file "guidelines.html" \
+  --git-branch "${GIT_BRANCH}" \
+  --git-hash "${GIT_VERSION}"
