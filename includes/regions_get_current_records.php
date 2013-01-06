@@ -40,7 +40,7 @@ function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {
       AND event.id       = result.eventId
       AND country.id     = result.countryId
       AND competition.id = result.competitionId
-      AND event.rank < 999";
+      AND event.rank < 990";
 }
 
 ?>

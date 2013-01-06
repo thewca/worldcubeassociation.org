@@ -23,7 +23,7 @@ function showHistoryOfContinentalRecords () {
       AND result.personId = '$chosenPersonId'
       AND ((result.regionalSingleRecord != '' AND result.regionalSingleRecord != 'NR' AND result.regionalSingleRecord != 'WR') OR (result.regionalAverageRecord != '' AND result.regionalAverageRecord != 'NR' AND result.regionalAverageRecord != 'WR'))
       AND event.id = result.eventId
-      AND event.rank < 999
+      AND event.rank < 1000
       AND competition.id = result.competitionId
       AND round.id = result.roundId
     ORDER BY

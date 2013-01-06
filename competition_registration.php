@@ -285,7 +285,7 @@ function showField ( $fieldSpec ) {
       echo "<input id='$id' name='$id' type='checkbox' value='yes' checked='checked' />";
     else
       echo "<input id='$id' name='$id' type='checkbox' value='yes' />";
-    if( count( dbQuery( "SELECT * FROM Events WHERE id='$eventId' AND rank<999" )))
+    if( count( dbQuery( "SELECT * FROM Events WHERE id='$eventId' AND rank<990" )))
       echo " <label for='$id'>$eventName$timeLimit</label><br />";
     else
       echo " <label for='$id' style='color:#999'>$eventName$timeLimit</label><br />";

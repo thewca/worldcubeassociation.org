@@ -3,7 +3,6 @@
 #--- The age bounds make it faster, can be updated once in a while
 $lists[] = youngestAndOldest( '333', "Rubik's Cube", 5, 75 );
 $lists[] = youngestAndOldest( '333bf', "Rubik's Cube blindfolded", 12, 50 );
-$lists[] = youngestAndOldest( 'magic', 'Magic', 6, 49 );
 
 #----------------------------------------------------------------------
 function youngestAndOldest ( $eventId, $eventTitle, $maxAgeForYoungest, $minAgeForOldest ) {

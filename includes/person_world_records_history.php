@@ -25,7 +25,7 @@ function showHistoryOfWorldRecords () {
       AND event.id = result.eventId
       AND competition.id = result.competitionId
       AND round.id = result.roundId
-      AND event.rank < 999
+      AND event.rank < 1000
     ORDER BY
       event.rank, year DESC, month DESC, day DESC, roundId DESC
   ");

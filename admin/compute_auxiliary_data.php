@@ -80,8 +80,8 @@ function computeConciseRecords () {
         year, month, day
       FROM
         ( SELECT   MIN($valueSource * 1000000000 + result.id) valueAndId
-          FROM     Results result, Competitions competition
-          WHERE    $valueSource>0 AND competition.id = competitionId
+          FROM     Results result, Competitions competition, Events event
+          WHERE    $valueSource>0 AND competition.id = competitionId AND event.id = eventId AND event.rank < 990
           GROUP BY personId, eventId, year ) helper,
         Results      result,
         Competitions competition,

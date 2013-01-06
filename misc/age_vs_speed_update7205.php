@@ -19,7 +19,7 @@ if( ! file_exists( 'age_vs_speed' ) )
 $events = dbQuery( "
   SELECT    id, name
   FROM      Events
-  WHERE     format='time' and rank<999
+  WHERE     format='time' and rank<990
   ORDER BY  rank
 " );
 foreach ( $events as $event )

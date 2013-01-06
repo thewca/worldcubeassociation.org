@@ -55,7 +55,7 @@ function showResults () {
       AND result.countryId  = '$chosenCountryIdMysql'
       AND result.personId = ''
       AND event.id = eventId
-      AND event.rank < 999
+      AND event.rank < 990
       AND competition.id = competitionId
       AND round.id = roundId
     ORDER BY
