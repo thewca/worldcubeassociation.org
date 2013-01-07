@@ -34,7 +34,8 @@ function getEvent ( $eventId ) {
 }
 
 function readEventSpecs ( $eventSpecs ) {
-  foreach( getAllEventIds() as $eventId )
+  $eventSpecsTree = array();
+  foreach( getAllEventIdsIncludingObsolete() as $eventId )
     if( preg_match( "/(^| )$eventId\b(=(\d*)\/(\d*)\/(\w*)\/(\d*)\/(\d*))?/", $eventSpecs, $matches )) {
       $eventSpecsTree["$eventId"]['personLimit']      = isset( $matches[3] ) ? $matches[3] : "";
       $eventSpecsTree["$eventId"]['timeLimit']        = isset( $matches[4] ) ? $matches[4] : "";

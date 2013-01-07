@@ -175,6 +175,10 @@ function getAllUsedCountriesIds            () { return getAllIDs( getAllUsedCoun
 function getAllUsedCountriesCompetitionIds () { return getAllIDs( getAllUsedCountriesCompetitions() ); }
 function getAllUsedContinentIds            () { return getAllIDs( getAllUsedContinents()            ); }
 
+function getAllEventIdsIncludingObsolete () {
+  return getAllIDs(dbQuery("SELECT id FROM Events WHERE rank<1000 ORDER BY rank"));
+}
+
 #----------------------------------------------------------------------
 function structureBy ( $results, $field ) {
 #----------------------------------------------------------------------
