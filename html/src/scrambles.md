@@ -33,4 +33,4 @@ Last official change: January 1, 2013
 
 ## About TNoodle
 
-TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Cl&eacute;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the [TNoodle project on GitHub](https://github.com/cubing/tnoodle) to view the source, report and issue, or contribute to its development.
+TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Cl&eacute;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the [TNoodle project on GitHub](https://github.com/cubing/tnoodle) to view the source, report an issue, or contribute to its development.
