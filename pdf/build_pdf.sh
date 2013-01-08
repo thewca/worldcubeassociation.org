@@ -10,4 +10,4 @@ cat "templates/tex_middle.tex" >> "${TEX_FILE}"
 pandoc -t latex ../wca-documents/wca-guidelines-2013.md >> "${TEX_FILE}"
 cat "templates/tex_footer.tex" >> "${TEX_FILE}"
 
-pdflatex -interaction=batchmode -output-directory="${BUILD_DIR}" "${TEX_FILE}"
+pdflatex -output-directory="${BUILD_DIR}" "${TEX_FILE}"
