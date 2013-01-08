@@ -118,10 +118,7 @@ function showUnfinishedPersons () {
       continue;
 
     #--- Try to compute the semi-id.
-    $romanName = extractRomanName( $name );
-    $accent   = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõöøùúûıışÿ";
-    $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
-    $quarterId = strtr( utf8_decode($romanName), $accent, $noaccent );
+    $quarterId = removeUglyAccentsAndStuff( extractRomanName( $name ));
     $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
     $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
 
@@ -200,6 +197,23 @@ function showUnfinishedPersons () {
   tableRowFull( "<input type='submit' value='Update' />" );
   tableEnd();
   echo "</form>";
+}
+
+#----------------------------------------------------------------------
+function removeUglyAccentsAndStuff ( $ugly ) {
+#----------------------------------------------------------------------
+
+    $accent   = "Ã€ÃÃ‚ÃƒÃ„Ã…Ã†Ä‚Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã˜Ã™ÃšÃ›ÃœÃÃÃŸÅÈ˜ÅŸÈ™Å¢ÈšÅ£È›Ã Ã¡Ã¢Ã£Ã¤Ã¥Ã¦ÄƒÃ§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã½Ã½Ã¾Ã¿";
+    $noaccent = "aaaaaaaaceeeeiiiidnoooooouuuuybsssssttttaaaaaaaaceeeeiiiidnoooooouuuyyby";
+
+    $nice = '';
+    for( $i=0; $i<mb_strlen($ugly, 'UTF-8'); $i++ ){
+      $chr = mb_substr($ugly, $i, 1, 'UTF-8');
+      $j = mb_strpos($accent, $chr, 0, 'UTF-8');
+      $nice .= ($j === FALSE) ? $chr : mb_substr($noaccent, $j, 1, 'UTF-8');
+    }
+
+    return $nice;
 }
 
 #----------------------------------------------------------------------
