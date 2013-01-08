@@ -16,7 +16,7 @@ function htmlify {
   TITLE="${2}"
   SOURCE="${3}"
 
-  if [ -f "${FILE}" ]; then rm "${FILE}"; fi
+  rm -f "${FILE}"
   cat "templates/html_header_1.html" >> "${FILE}"
   echo -n "${TITLE}" >> "${FILE}"
   cat "templates/html_header_2.html" >> "${FILE}"
