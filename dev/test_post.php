@@ -1,10 +1,16 @@
 <?php
 
-$load_drupal_api = TRUE;
-include("../_framework.php");
+/**
+hitting this file should create a drupal post.
+Make sure DRUPAL_ROOT is set correctly in includes/_config.php.
+This will also need Drupal database correctly configured for this to work.
+This doesn't work for all countries yet... in particular, it doesn't work for the USA.
+**/
 
-$conn = new wcaDBConn("localhost", "wca", "L@m3P@$$", "wca");
-$comp = new competitionData("NewAlbany2013", $conn);
+$load_drupal_api = TRUE;
+include("../includes/_framework.php");
+
+$comp = new competitionData("NewAlbany2013", $wcadb_conn);
 $post = new drupalPost("competition_announcement");
 
 // Need to handle nonstandard result system dates specially.  (Results doesn't use a timestamp or anything standard.)

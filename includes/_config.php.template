@@ -13,4 +13,4 @@ global $recaptchaPublickey, $recaptchaPrivatekey;
 $recaptchaPublickey  = '...';
 $recaptchaPrivatekey = '...';
 
-?>
+define('DRUPAL_ROOT', '/path/to/drupal/install');

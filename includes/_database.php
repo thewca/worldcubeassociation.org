@@ -1,4 +1,9 @@
-<?
+<?php
+
+/**
+ PLEASE NOTE: FUNCTIONALITY IN THIS FILE IS SET TO BE DEPRECATED.  Eventually PHP will no longer support the MySQL API, so this code
+ needs to be phased out. Instead, please use or extend the mysqli connection class for any new code needing mysql functionality.
+**/
 
 if( ! isset( $dontLoadCachedDatabase ))
   $dontLoadCachedDatabase = false;
@@ -15,8 +20,7 @@ if( ! $dontLoadCachedDatabase ){
 function establishDatabaseAccess () {
 #----------------------------------------------------------------------
 
-  #--- Load the local configuration data.
-  require( '_config.php' );
+  global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
 
   #--- Connect to the database server.
   mysql_connect( $configDatabaseHost, $configDatabaseUser, $configDatabasePass )
@@ -253,5 +257,3 @@ function showDatabaseError ( $message ) {
        ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
        : "<p>Problem with the database, sorry. Should be fixed soon, please try again later.</p>" );
 }
-
-?>

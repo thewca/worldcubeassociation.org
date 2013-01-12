@@ -1,5 +1,27 @@
-<?
+<?php
 
+/*
+ * @file
+ * Including this file should load all result system functionality.  All includes should be done in this file, not elsewhere.
+ */
+
+// let's include all system constants first.
+require_once( '_config.php' );
+
+// then create a global database connection object.
+require_once('_mysqli_conn.class.php');
+$wcadb_conn = new wcaDBConn($configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName);
+
+// website class definitions can go here
+require_once('_competition.class.php');
+
+// include drupal API functions if the page depends on them - $load_drupal_api must be set to TRUE.
+if(isset($load_drupal_api) && $load_drupal_api)
+{
+  require_once('_drupal_post.php');
+}
+
+// current results system functionality
 require '_timer.php';
 require '_parameters.php';
 require '_database.php';
@@ -9,6 +31,7 @@ require '_links.php';
 require '_values.php';
 require '_cache.php';
 require '_map.php';
+
 
 #----------------------------------------------------------------------
 
@@ -255,5 +278,3 @@ function adminHeadline ( $title, $scriptIfExecution=false ) {
      . (!$scriptIfExecution ? "<b>$title</b>" : "<a href='$scriptIfExecution.php?forceReload=".time()."'>$title</a> &gt;&gt; <b>Execution</b>")
      . " &nbsp;(" . wcaDate() . ")</span></p>\n";
 }
-
-?>

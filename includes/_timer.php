@@ -1,8 +1,8 @@
-<?
+<?php
 
 function microtime_float () {
- list( $usec, $sec ) = explode( " ", microtime() );
- return (float)$usec + (float)$sec;
+  list( $usec, $sec ) = explode( " ", microtime() );
+  return (float)$usec + (float)$sec;
 }
 
 function startTimer () {
@@ -17,5 +17,3 @@ function stopTimer ( $message, $forceShow=false ) {
     printf( "<b>%.4f seconds</b> for '$message'<br />", $elapsed );
   return $elapsed;
 }
-
-?>

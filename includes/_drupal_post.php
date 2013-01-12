@@ -7,8 +7,6 @@
  * 
  */
 
-define('DRUPAL_ROOT', '/var/www/drupal');
-
 try
 {
     require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
@@ -54,6 +52,7 @@ class drupalPost
 
     protected $node = NULL;
     protected $formState = NULL;
+    protected $postError = FALSE;
 
     public function __construct($type, $nid = NULL)
     {
@@ -97,20 +96,20 @@ class drupalPost
     }
 
     // set a Field API value (and return object) or retreive a Field API value
-    public function field($field, $value = "")
+    public function field($field, $value = "", $special = 'value')
     {
         $formState = $this->formState;
 
         if("" != $value)
         {
             // field api values are stored in a $formState array per-language and per-field:
-            $formState['values'][$field][$this->node->language][0]['value'] = $value;
+            $formState['values'][$field][$this->node->language][0][$special] = $value;
             $this->formState = $formState;
             
             return $this;
         }
 
-        return $formState['values'][$field][$this->node->language][0]['value'];
+        return $formState['values'][$field][$this->node->language][0][$special];
     }
 
     // set a value not associated with Field API, or retreive value
@@ -139,7 +138,9 @@ class drupalPost
         // attempt to submit "form"...
         $result = drupal_form_submit("{$node->type}_node_form", $formState, $node);
 
+        $this->postError = FALSE;
         if(form_get_errors()) {
+            $this->postError = form_get_errors();
             // if things didn't work or validate for some reason, let's generate a non-fatal error message.
             foreach(form_get_errors() as $id => $error)
             {
@@ -148,6 +149,11 @@ class drupalPost
         }
 
         return $this;
+    }
+
+    public function postError()
+    {
+        return $this->postError;
     }
 
 }
