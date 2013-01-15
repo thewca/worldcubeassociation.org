@@ -95,8 +95,9 @@ function offerChoices () {
 
   echo "</table>";
 
-  global $recaptchaPublickey;
-  echo recaptcha_get_html($recaptchaPublickey, null, true);
+  global $config;
+  $recaptcha = $config->get('recaptcha');
+  echo recaptcha_get_html($recaptcha['publickey'], null, true);
 
   echo "<input type='submit' class='butt' value='Save' />";
 
@@ -112,8 +113,9 @@ function saveMedium () {
   global $chosenSubmitterName, $chosenSubmitterEmail, $chosenSubmitterComment;
   global $chosenRecaptchaChallenge, $chosenRecaptchaResponse;
 
-  global $recaptchaPrivatekey;
-  $resp = recaptcha_check_answer ($recaptchaPrivatekey, $_SERVER["REMOTE_ADDR"], $chosenRecaptchaChallenge, $chosenRecaptchaResponse);
+  global $config;
+  $recaptcha = $config->get('recaptcha');
+  $resp = recaptcha_check_answer ($recaptcha['privatekey'], $_SERVER["REMOTE_ADDR"], $chosenRecaptchaChallenge, $chosenRecaptchaResponse);
 
   if (!$resp->is_valid)
     return false;

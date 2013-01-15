@@ -19,15 +19,15 @@ if( ! $dontLoadCachedDatabase ){
 #----------------------------------------------------------------------
 function establishDatabaseAccess () {
 #----------------------------------------------------------------------
-
-  global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
+  global $config;
+  $db_config = $config->get('database');
 
   #--- Connect to the database server.
-  mysql_connect( $configDatabaseHost, $configDatabaseUser, $configDatabasePass )
+  mysql_connect( $db_config['host'], $db_config['user'], $db_config['pass'] )
     or showDatabaseError( "Unable to connect to the database." );
     
   #--- Select the database.
-  mysql_select_db( $configDatabaseName )
+  mysql_select_db( $db_config['name'] )
     or showDatabaseError( "Unable to access the database." );
 
   dbCommand( "SET NAMES 'utf8'" );

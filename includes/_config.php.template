@@ -1,21 +1,13 @@
 <?php
 
-#--- Note: make sure you protect the admin folder, you can use the .htaccess.template there
-if( ! file_exists( pathToRoot() . 'admin/.htaccess' ) )
-  exit( 'check your config file' );
+// data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
-if (!defined('DRUPAL_ROOT')) {
-	define('DRUPAL_ROOT', '/var/www/wca/drupal');
-}
+$conf['drupal']['path'] = '/path/to/your/drupal/install';  // no trailing slash!
 
-global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
-$configDatabaseHost = '...';
-$configDatabaseUser = '...';
-$configDatabasePass = '...';
-$configDatabaseName = '...';
+$conf['database']['host'] = '...';
+$conf['database']['user'] = '...';
+$conf['database']['pass'] = '...';
+$conf['database']['name'] = '...';
 
-global $recaptchaPublickey, $recaptchaPrivatekey;
-$recaptchaPublickey  = '...';
-$recaptchaPrivatekey = '...';
-
-define('DRUPAL_ROOT', '/path/to/drupal/install');
+$conf['recaptcha']['publickey'] = '...';
+$conf['recaptcha']['privatekey'] = '...';

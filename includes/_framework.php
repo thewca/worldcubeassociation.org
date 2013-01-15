@@ -6,11 +6,14 @@
  */
 
 // let's include all system constants first.
-require_once( '_config.php' );
+require_once( '_config.class.php' );
+global $config;
+$config = new configurationData();
 
 // then create a global database connection object.
 require_once('_mysqli_conn.class.php');
-$wcadb_conn = new wcaDBConn($configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName);
+global $wcadb_conn;
+$wcadb_conn = new wcaDBConn($config->get("database"));
 
 // website class definitions can go here
 require_once('_competition.class.php');

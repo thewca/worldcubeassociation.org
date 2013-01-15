@@ -9,7 +9,12 @@
 
 try
 {
-    require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
+    $drupal_conf = $config->get('drupal');
+    if (!defined('DRUPAL_ROOT')) {
+        define('DRUPAL_ROOT', $drupal_conf['path']);  // Drupal needs this to be defined in order to work.
+    }
+
+    require_once  DRUPAL_ROOT . '/includes/bootstrap.inc';
     drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
     module_load_include('inc', 'node', 'node.pages');
 

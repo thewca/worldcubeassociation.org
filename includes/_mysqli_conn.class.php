@@ -21,9 +21,9 @@ class DBConn
     public $conn;
     private $debug = FALSE;
 
-    public function __construct($host, $user, $pass, $db, $charset = "utf8")
+    public function __construct($config, $charset = "utf8")
     {
-        $this->conn = new mysqli($host, $user, $pass, $db);
+        $this->conn = new mysqli($config['host'], $config['user'], $config['pass'], $config['name']);
         if($this->conn->connect_errno)
         {
             trigger_error("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error, E_USER_ERROR);
