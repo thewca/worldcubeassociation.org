@@ -4,6 +4,11 @@
 if( ! file_exists( pathToRoot() . 'admin/.htaccess' ) )
   exit( 'check your config file' );
 
+if (!defined('DRUPAL_ROOT')) {
+	define('DRUPAL_ROOT', '/var/www/wca/drupal');
+}
+
+global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
 $configDatabaseHost = '...';
 $configDatabaseUser = '...';
 $configDatabasePass = '...';
