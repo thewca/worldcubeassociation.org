@@ -87,5 +87,3 @@ function checkPasswordAndLoadData () {
 
   return true;
 }
-
-?>

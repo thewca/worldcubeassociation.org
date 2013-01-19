@@ -21,7 +21,8 @@ function specifyModel () {
       "Name",
       'The full name of the competition.',
       "European Rubik's Cube Championship 2006",
-      "."
+      ".",
+      NULL
     ),
     array (
       "line",
@@ -29,7 +30,8 @@ function specifyModel () {
       'Nickname',
       'A short name for display inside lists, try to get close to 16 characters (including space characters).',
       "Europe 2006",
-      "."
+      ".",
+      NULL
     ),
     array (
       'choice',
@@ -46,7 +48,8 @@ function specifyModel () {
       'City name',
       'Name of the city where the competition takes place.',
       "[{Paris}{http://www.wikipedia.com/Paris}] TODO + SLASH?",
-      "."
+      ".",
+      NULL
     ),
     array (
       "line",
@@ -54,7 +57,8 @@ function specifyModel () {
       'Venue',
       'The venue where the competition takes place.',
       "[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]",
-      $patternTextWithLinks
+      $patternTextWithLinks,
+      NULL
     ),
     array (
       "line",
@@ -62,7 +66,8 @@ function specifyModel () {
       'Venue address',
       "The address of the venue.",
       "30 avenue Corentin-Cariou, 75930 Paris",
-      ""
+      "",
+      NULL
     ),
     array (
       "line",
@@ -70,7 +75,8 @@ function specifyModel () {
       'Venue details',
       "Details about the venue.",
       "On the first floor far in the back, follow the signs.",
-      ""
+      "",
+      NULL
     ),
     array (
       "line",
@@ -78,7 +84,8 @@ function specifyModel () {
       'Year',
       'Year when the competition takes place (number with four digits).',
       "2006",
-      '^(0|\d{4})$'
+      '^(0|\d{4})$',
+      NULL
     ),
     array (
       "line",
@@ -86,7 +93,8 @@ function specifyModel () {
       'Month',
       'What month does the competition start? (number in 1..12)',
       "9",
-      '^([0-9]|1[0-2])$'
+      '^([0-9]|1[0-2])$',
+      NULL
     ),
     array (
       "line",
@@ -94,7 +102,8 @@ function specifyModel () {
       'Day',
       'What day does the competition start? (number in 1..31)',
       "23",
-      '^([0-9]|[1-3]\d)$'
+      '^([0-9]|[1-3]\d)$',
+      NULL
     ),
     array (
       "line",
@@ -102,7 +111,8 @@ function specifyModel () {
       'End-Month',
       'What month does the competition end? (number in 1..12)',
       "9",
-      '^([0-9]|1[0-2])$'
+      '^([0-9]|1[0-2])$',
+      NULL
     ),
     array (
       "line",
@@ -110,7 +120,8 @@ function specifyModel () {
       'End-Day',
       'What day does the competition end? (number in 1..31)',
       "24",
-      '^([0-9]|[1-3]\d)$'
+      '^([0-9]|[1-3]\d)$',
+      NULL
     ),
     array (
       "text",
@@ -118,7 +129,8 @@ function specifyModel () {
       'Information',
       'Some information text about the competition.',
       "Euro 2006 is open to citizens of the European countries and Israel. [{Euro 2006 registration page}{http://www.speedcubing.com/events/euro2006/registration.html}]",
-      $patternTextWithLinks
+      $patternTextWithLinks,
+      NULL
     ),
     array (
       "text",
@@ -126,7 +138,8 @@ function specifyModel () {
       'WCA Delegate(s)',
       'List of the WCA delegate attending the competition.',
       "[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br />[{Gilles Roux}{mailto:grrroux@free.fr}]",
-      $patternTextWithLinks
+      $patternTextWithLinks,
+      NULL
     ),
     array (
       "text",
@@ -134,7 +147,8 @@ function specifyModel () {
       'Organiser(s)',
       "List of the competition organizers.",
       "[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br />[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]",
-      $patternTextWithLinks
+      $patternTextWithLinks,
+      NULL
     ),
     array (
       "line",
@@ -142,7 +156,8 @@ function specifyModel () {
       'Website',
       'The website of the competition.',
       "[{Rubiks.com}{http://www.rubiks.com}]",
-      $patternTextWithLinks
+      $patternTextWithLinks,
+      NULL
     )
   );
 }
@@ -193,7 +208,7 @@ function checkCountrySpecifications () {
   $regIds = dbQuery( "SELECT id FROM Preregs WHERE competitionId='$chosenCompetitionId'" );
   foreach( $regIds as $regId ){
     $regId = $regId['id'];
-    if( $data['reg'][$regId]['edit'] ){
+    if( isset($data['reg'][$regId]['edit']) && $data['reg'][$regId]['edit'] ){
 
       $countryId = $data['reg'][$regId]['countryId'];
       if( !isset($allCountriesIds[$countryId])) $dataError["reg${regId}countryId"] = true;
@@ -255,19 +270,19 @@ function storeData () {
 
     $regId = $regId['id'];
     #--- Delete registration
-    if( $data['reg'][$regId]['delete'] ){
+    if( isset($data['reg'][$regId]['delete']) && $data['reg'][$regId]['delete'] ){
       dbCommand( "DELETE FROM Preregs WHERE id='$regId'" );
     }
 
     else {
 
       #--- Edit registration
-      if( $data['reg'][$regId]['edit'] ){
+      if( isset($data['reg'][$regId]['edit']) && $data['reg'][$regId]['edit'] ){
         $queryEvent = '';
 
         #--- Build events query
         foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-          if( $data['reg'][$regId]["E$eventId"] )
+          if( isset($data['reg'][$regId]["E$eventId"]) && $data['reg'][$regId]["E$eventId"] )
             $queryEvent .= "$eventId ";
         }
         $queryEvent = rtrim( $queryEvent ); # Remove last space.
@@ -283,7 +298,7 @@ function storeData () {
       }
 
       #--- Accept registration
-      if( $data['reg'][$regId]['accept'] )
+      if( isset($data['reg'][$regId]['accept']) && $data['reg'][$regId]['accept'] )
         dbCommand( "UPDATE Preregs SET status='a' WHERE id='$regId'" );
 
     }
@@ -357,5 +372,3 @@ function storeData () {
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;
 }
-
-?>

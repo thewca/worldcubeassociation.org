@@ -18,8 +18,7 @@ try
     drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
     module_load_include('inc', 'node', 'node.pages');
 
-    if(0 == $user->uid)
-    {
+    if(0 == $user->uid) {
         drupal_save_session(FALSE);
         $user = user_load(1);
     }
@@ -65,12 +64,9 @@ class drupalPost
         $user = isset($_GLOBALS['user']) ? $_GLOBALS['user'] : user_load(1);
 
         // load a node if $nid is specified, otherwise create and initialize a new node object
-        if($nid)
-        {
+        if($nid) {
             $node = node_load($nid);
-        }
-        else
-        {
+        } else {
             // new object of certain type/language
             $node = new stdClass();
             $node->type = $type;
@@ -105,8 +101,7 @@ class drupalPost
     {
         $formState = $this->formState;
 
-        if("" != $value)
-        {
+        if("" != $value) {
             // field api values are stored in a $formState array per-language and per-field:
             $formState['values'][$field][$this->node->language][0][$special] = $value;
             $this->formState = $formState;
@@ -122,8 +117,7 @@ class drupalPost
     {
         $formState = $this->formState;
 
-        if("" != $value)
-        {
+        if("" != $value) {
             // values are stored in $formState array as $id => $value pairs
             $formState['values'][$id] = $value;
             $this->formState = $formState;
@@ -147,8 +141,7 @@ class drupalPost
         if(form_get_errors()) {
             $this->postError = form_get_errors();
             // if things didn't work or validate for some reason, let's generate a non-fatal error message.
-            foreach(form_get_errors() as $id => $error)
-            {
+            foreach(form_get_errors() as $id => $error) {
                 trigger_error("Drupal form submission error while processing <pre>{$id}</pre>:<br /><pre>{$error}</pre>", E_USER_WARNING);
             }
         }

@@ -9,6 +9,7 @@
   border:  1px solid #CCC;
   padding: 2px;
   margin:  0;
+  overflow: hidden;
 }
 
 #activePage {
@@ -20,14 +21,26 @@ a#activePage:hover {
   color: #E15704;
 }
 
-div.item {
+ul.navigation {
+  margin: 0;
+  padding: 0;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  list-style: none;
+}
+
+ul.navigation li.item {
+  float: left;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
   background: url(images/menu_bg.png) 0% -25px no-repeat;
 }
 
-div.item a,
-div.item a:link,
-div.item a:visited {
+ul.navigation li.item a,
+ul.navigation li.item a:link,
+ul.navigation li.item a:visited {
   display:         block;
   background:      url(images/menu_bg.png) 0% 0% no-repeat;
   vertical-align:  middle;
@@ -42,11 +55,11 @@ div.item a:visited {
   text-decoration: none;
 }
 
-div.item a:hover {
+ul.navigation li.item a:hover {
   background-image: none;
   color: #333;
 }
 
-div.item a:active {
+ul.navigation li.item a:active {
   color: #000;
 }

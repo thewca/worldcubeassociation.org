@@ -11,3 +11,9 @@ $conf['database']['name'] = '...';
 
 $conf['recaptcha']['publickey'] = '...';
 $conf['recaptcha']['privatekey'] = '...';
+
+// pathToRoot and filesPath are determined by config class - just a placeholder here.
+// pathToRoot is for web urls, etc.  May be different than filesystem paths.
+$config['pathToRoot'] = "";
+// filesPath is absolute path for system files.  May be different that web urls.
+$config['filesPath'] = "";

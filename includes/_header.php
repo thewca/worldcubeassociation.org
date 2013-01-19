@@ -1,15 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
 <?php
+// session information needs to be created before <html> tag is output.  Thus this php code should come at the beginning of the file.
 if ( ! preg_match( '/worldcubeassociation.org$/i', $_SERVER["SERVER_NAME"] ) ) {
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
 }
 require_once( '_framework.php' );
 $standAlone = getBooleanParam( 'standAlone' );
-?>
 
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>World Cube Association - Official Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -25,11 +24,10 @@ $standAlone = getBooleanParam( 'standAlone' );
 </head>
 
 <body>
-<? if( ! $standAlone ){ ?>
+<?php if (!$standAlone) { ?>
 <div id="main">
 <div id="content">
-
-<?
+<?php
   $sections = array(
     array( 'Home',         'home', '../'  ),
     array( 'Rankings',     'events'       ),
@@ -40,27 +38,29 @@ $standAlone = getBooleanParam( 'standAlone' );
     array( 'Statistics',   'statistics'   ),
     array( 'Misc',         'misc'         ),
   );
-  if ( $currentSection == 'admin' )
-    $sections[] = array( 'Admin', 'admin', 'admin/' );
+  if ($currentSection == 'admin') {
+    $sections[] = array('Admin', 'admin', 'admin/');
+  }
 
-  if ( ! preg_match( '/worldcubeassociation.org$/', $_SERVER["SERVER_NAME"] ) )
+  if (!preg_match( '/worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
     noticeBox3( 0, "Note: This is only a copy of the WCA results system used for testing stuff. The official WCA results are at:<br /><a href='http://www.worldcubeassociation.org/results/'>http://www.worldcubeassociation.org/results/</a>" );
+  }
+
+  // only show errors in admin section
+  if($currentSection == 'admin' && isset($installation_errors) && !empty($installation_errors)) {
+    showErrors($installation_errors);
+  }
 ?>
 
 <div id="pageMenuFrame">
   <div id="pageMenu">
-    <table summary="This table gives other relevant links" cellspacing="0" cellpadding="0"><tr>
-<? foreach( $sections as $section ){
-     $name   = $section[0];
-     $active = ($section[1] == $currentSection) ? 'id="activePage"' : '';
-     $href   = pathToRoot() . (isset($section[2]) ? $section[2] : $section[1].'.php');
-     echo "<td><div class='item'><a href='$href' $active>$name</a></div></td>\n";
-   } ?>
-    </tr></table>
+    <ul class="navigation">
+      <?php print_menu($sections, $currentSection); ?>
+    </ul>
   </div>
 </div>
 
 <div id='header'>World Cube Association<br />Official Results</div>
-<? } ?>
+<?php } ?>
 
-<? startTimer() ?>
+<?php startTimer(); ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 # Summary:
 #
@@ -40,7 +40,7 @@
 #----------------------------------------------------------------------
 function tryCache ( ) {
 #----------------------------------------------------------------------
-  global $cacheFile;
+  global $cacheFile, $config;
 
   #--- Build whole cacheId
   $cacheIdParts = func_get_args();  # indirect because direct usage results in error before PHP 5.3 (see documentation)
@@ -59,7 +59,7 @@ function tryCache ( ) {
   }
 
   #--- If it's in the cache already, then just deliver from cache and exit
-  $cacheFile = pathToRoot() . "generated/cache/$cacheId.cache";
+  $cacheFile = $config->get('filesPath') . "generated/cache/$cacheId.cache";
   if ( file_exists( $cacheFile ) ) {
     echo "<!-- rfc -->\n";
     echo file_get_contents( $cacheFile );
@@ -79,7 +79,11 @@ function finishCache ( ) {
   #--- Store the cache if we're caching
   if ( $cacheFile ) {
     file_put_contents( $cacheFile, ob_get_contents() );
-    cacheLog( "create: $cacheFile\t" . filesize($cacheFile) );
+    if(file_exists($cacheFile)) {
+      cacheLog( "Created: {$cacheFile}\t" . filesize($cacheFile) );
+    } else {
+      cacheLog( "Error: Unable to create {$cacheFile}");
+    }
     ob_end_flush();
   }
 }
@@ -87,10 +91,10 @@ function finishCache ( ) {
 #----------------------------------------------------------------------
 function deleteCaches () {
 #----------------------------------------------------------------------
-
   startTimer();
   cacheLog( "delete all" );
-  $cacheFiles = glob( pathToRoot() . 'generated/cache/*.cache' );
+  global $config;
+  $cacheFiles = glob( $config->get('filesPath') . 'generated/cache/*.cache' );
   echo "Deleting " . count($cacheFiles) . " cache files...<br />\n";
 
   foreach ( $cacheFiles as $cacheFile ) {
@@ -105,8 +109,6 @@ function deleteCaches () {
 #----------------------------------------------------------------------
 function cacheLog ( $message ) {
 #----------------------------------------------------------------------
-
-  file_put_contents( pathToRoot() . 'generated/cache.log', "$message\n", FILE_APPEND );
+  global $config;
+  file_put_contents( $config->get('filesPath') . 'generated/cache.log', "$message\n", FILE_APPEND );
 }
-
-?>

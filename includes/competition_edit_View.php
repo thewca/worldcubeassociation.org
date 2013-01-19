@@ -435,5 +435,3 @@ function endForm () {
   
   echo "</form>";
 }
-
-?>

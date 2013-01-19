@@ -28,12 +28,9 @@ class competitionData
     public function __construct($competitionId, $dbconn)
     {
         // do a bit of connection validation here...
-        if(is_object($dbconn) && method_exists($dbconn, "dbQuery") && $dbconn->conn->stat())
-        {
+        if (is_object($dbconn) && method_exists($dbconn, "dbQuery") && $dbconn->conn->stat()) {
             // Great! We seem to be connected.
-        }
-        else
-        {
+        } else {
             trigger_error("Unable to use database connection!", E_USER_ERROR);
         }
 
@@ -46,8 +43,7 @@ class competitionData
         $id = $this->dbconn->mysqlEscape($id);
         $competition_data = $this->dbconn->dbQuery("SELECT * FROM Competitions WHERE id='{$id}'");
 
-        if(count($competition_data) != 1)
-        {
+        if(count($competition_data) != 1) {
             trigger_error("Unable to load - unique competition not found!", E_USER_ERROR);
         }
 

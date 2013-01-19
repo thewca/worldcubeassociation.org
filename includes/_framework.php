@@ -9,6 +9,8 @@
 require_once( '_config.class.php' );
 global $config;
 $config = new configurationData();
+// some basic installation checks here
+$installation_errors = $config->validateInstall();
 
 // then create a global database connection object.
 require_once('_mysqli_conn.class.php');
@@ -34,6 +36,7 @@ require '_links.php';
 require '_values.php';
 require '_cache.php';
 require '_map.php';
+require '_navigation.php';
 
 
 #----------------------------------------------------------------------
@@ -222,29 +225,29 @@ function noticeBox3 ( $color, $message ) {
 #----------------------------------------------------------------------
 
   #--- Color: -1=red, 0=yellow, 1=green
-  $colorBorder = array( 'FF0000', 'DDBB00', '33CC33' ); $colorBorder = $colorBorder[ $color+1 ];
-  $colorInside = array( 'FFE8E8', 'FFFF88', 'DDFFDD' ); $colorInside = $colorInside[ $color+1 ];
-  
+  $colorBorder = array( 'failure', 'warning', 'success' ); $colorBorder = $colorBorder[ $color+1 ];
+
   #--- Show the notice
-  echo "<center><table border='0' cellpadding='3' width='90%'><tr><td bgcolor='#$colorBorder'>";
-  echo "<table border='0' cellpadding='5' width='100%'><tr><td bgcolor='#$colorInside'>";
-  echo "<p><b style='color:#$colorBorder'>$message</b></p>";
-  echo "</td></tr></table>";
-  echo "</td></tr></table></center>";
+  echo "<div class='notice $colorBorder'>$message</div>";
+}
+
+function showErrors($errors) {
+  if(!empty($errors)) {
+    $message = "<p>Uh-oh! There seem to be some problems with your installation:</p>";
+    $message .= "<ul>";
+    foreach($errors as $error) {
+        $message .= "<li>{$error}</li>";
+    }
+    $message .= "</ul>";
+    noticeBox(FALSE, $message);
+  }
 }
 
 #----------------------------------------------------------------------
 function pathToRoot () {
 #----------------------------------------------------------------------
-  global $pathToRoot;
-
-  if( ! isset( $pathToRoot )){
-    $pathToRoot = "";
-    while( ! file_exists( "${pathToRoot}_root.txt" ))
-      $pathToRoot .= "../";
-  }
-
-  return $pathToRoot;
+  global $config;
+  return $config->get('pathToRoot');
 }
 
 #----------------------------------------------------------------------

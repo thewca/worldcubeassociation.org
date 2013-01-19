@@ -10,10 +10,8 @@ if( ! isset( $dontLoadCachedDatabase ))
 
 establishDatabaseAccess();
 if( ! $dontLoadCachedDatabase ){
-  if( file_exists( pathToRoot() . 'generated/cachedDatabase.php' ))
-    require( pathToRoot() . 'generated/cachedDatabase.php' );
-  else
-    noticeBox( false, 'I could not find the cachedDatabase.php file. Go <a href="admin/compute_auxiliary_data.php">here</a> to generate this file.' );
+  if( file_exists( $config->get('filesPath') . 'generated/cachedDatabase.php' ))
+    require( $config->get('filesPath') . 'generated/cachedDatabase.php' );
 }
 
 #----------------------------------------------------------------------

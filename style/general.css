@@ -264,3 +264,33 @@ div:target {
   border-left: 5px solid #0C0;
   padding-left: 5px;
 }
+
+/* notice boxes */
+
+div .notice {
+  width: 90%;
+  margin: 5px auto;
+  padding: 10px 5px;
+  border: 5px solid #777;
+  color: #000;
+  background-color: #EEE;
+  font-weight: bold;
+}
+
+div .notice.failure {
+  border-color: #F00;
+  color: #F00;
+  background-color: #FEE;
+}
+
+div .notice.warning {
+  border-color: #DB0;
+  color: #DB0;
+  background-color: #FF8; 
+}
+
+div .notice.success {
+  border-color: #3C3;
+  color: #3C3;
+  background-color: #DFD;
+}
