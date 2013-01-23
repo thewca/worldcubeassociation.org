@@ -94,7 +94,7 @@ def hyperLinkReplace(expectedReg, expectedGuide, linkMatch, linkReplace, textRep
 # Article Lists
 
 ## Table of Contents Header
-numReplacements = replaceBothWithSame(1, 1,
+replaceBothWithSame(1, 1,
     r'<h2><contents>',
     r'<h2 id="contents">'
 )
@@ -118,16 +118,16 @@ def makeTOC(articles):
 
 ## Table of Contents
 regsTOC = makeTOC(allRegsArticles)
-numReplacements = replaceRegs(1, r'<table-of-contents>', regsTOC)
+replaceRegs(1, r'<table-of-contents>', regsTOC)
 
 guidesTOC = makeTOC(allGuidesArticles)
-numReplacements = replaceGuides(1, r'<table-of-contents>', guidesTOC)
+replaceGuides(1, r'<table-of-contents>', guidesTOC)
 
 ## Article Numbering. We want to
-  # Support old links with the old meh acnchanchor names.
+  # Support old links with the old meh anchor names.
   # Support linking using just the number/letter (useful if you have to generate a link from a reference automatically, but don't have the name of the article).
   # Encourage a new format with the article number *and* better anchor names.
-numReplacements = replaceBothWithSame(numRegsArticles, numGuidesArticles,
+replaceBothWithSame(numRegsArticles, numGuidesArticles,
     articleMatch,
     r'<span id="\1"></span><span id="\3"></span><h2 id="article-\1-\2"> <a href="#article-\1-\2">\4</a>: \5</h2>'
 )
@@ -135,7 +135,7 @@ numReplacements = replaceBothWithSame(numRegsArticles, numGuidesArticles,
 
 # Numbering
 
-regOrGuideLiMatch =  r'<li>' + regOrGuide2Slots + r'\)'
+regOrGuideLiMatch = r'<li>' + regOrGuide2Slots + r'\)'
 regOrGuideLiReplace = r'<li id="\1\2"><a href="#\1\2">\1\2</a>)'
 
 matchLabel1Slot = r'\[([^\]]+)\]'
@@ -182,22 +182,23 @@ wcaTitleLogoSource = r'World Cube Association<br>'
 if includeTitleLogo:
     wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
 
-numReplacements = replaceRegs(1, 
+replaceRegs(1, 
     r'<h1><wca-title>([^<]*)</h1>',
     r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
 
-numReplacements = replaceGuides(1, 
+replaceGuides(1, 
     r'<h1><wca-title>([^<]*)</h1>',
     r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
+
 
 # Version
 gitLink =r''
 if (gitHash != ""):
     gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' +gitBranch + r'</a>:' +r'<a href="https://github.com/cubing/wca-documents/tree/' + gitHash + r'">' +gitHash + r'</a></code>]';
 
-numReplacements = replaceBothWithSame(1, 1, 
+replaceBothWithSame(1, 1, 
     r'<p><version>([^<]*)</p>',
     r'<div class="version">\1<br>' + gitLink + r'</div>'
 )
