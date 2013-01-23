@@ -2,7 +2,7 @@
 
 TEX_FILE="wca-regulations-and-guidelines-2013.tex"
 
-rm "${TEX_FILE}"
+if [ -f "${TEX_FILE}" ]; then rm "${TEX_FILE}"; fi
 cat tex_header.tex >> "${TEX_FILE}"
 pandoc -t latex ../wca-documents/wca-regulations-2013.md >> "${TEX_FILE}"
 cat tex_middle.tex >> "${TEX_FILE}"
