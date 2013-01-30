@@ -14,7 +14,7 @@ In particular, note that the Regulations had many revisions in 2013. Older trans
 - [Farsi (2010)](WCARegulationsFarsi2010.pdf) by Arash Maslehatjoo and Iran Cube Committee
 - [Finnish (2008)](http://speedcubing.dy.fi/files/wca_saannot_suomeksi_2008_10_19.doc) by Petri Vanhala
 - [French (2010)](http://www.speedcubingfrance.org/speedcubing/reglement/reglementWCA.pdf) by Guillaume Erbibou
-- [German (2010)](http://cube.hackvalue.de/wca/) by Florian Weingarten
+- [German (2013)](http://www.worldcubeassociation.org/regulations/translations/german/) by [S&eacute;bastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and[Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
 - [Hungarian (2010)](http://www.rubikkocka.hu/pages/wcaszabalyzat2010.html) by [Oliv&eacute;r Nagy](http://www.rubikkocka.hu/)
 - [Indonesian (Bahasa) (2013)](http://www.worldcubeassociation.org/regulations/translations/indonesian/) by Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
 - [Italian (2009)](http://spazioinwind.libero.it/gaetzum/approfondimenti/regolamento_wca/regolamento_wca.htm) by Luca Feliciotto
