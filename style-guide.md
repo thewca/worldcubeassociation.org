@@ -5,7 +5,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 ## General Information
 
 - The documents are formatted in [Markdown](http://daringfireball.net/projects/markdown/), a plain-text format created by John Gruber. This makes it easy to focus on the raw text (and any changes), so that it is readable on its own and can also be converted into a fancier format (i.e. HTML).
-  - Indentation is two spaces, and nested for the Regulations and the Constitution.
+  - Indentation is four spaces, and nested for the Regulations and the Constitution.
   - The Guidelines have an irregular correspondence to numbering in the Regulations, thus Guidelines have no indentation in the source.
 - To make the regulations easier to read we use 'he' where the reader should read 'she or he'.
 - The division into Regulations Guidelines roughly mirrors the normative vs. non-normative (informative) distinction employed by W3C standards.

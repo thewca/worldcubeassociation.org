@@ -3,7 +3,11 @@
 set -e
 
 VERSION="${1}"
-MARKDOWN_PROGRAM="rdiscount" # Markdown.py and the python markdown package both don't handle the nested lists properly.
+function markdown_program {
+  pandoc -s -t html $@
+  # rdiscount < $@ # Doesnt' handle character encoding correctly.
+  # markdown < $@ # Several issues.
+}
 
 function htmlify {
   FILE="${1}"
@@ -14,7 +18,7 @@ function htmlify {
   cat html_header_1.html >> "${FILE}"
   echo -n "${TITLE}" >> "${FILE}"
   cat html_header_2.html >> "${FILE}"
-  "${MARKDOWN_PROGRAM}" "${SOURCE}" >> "${FILE}"
+  markdown_program "${SOURCE}" >> "${FILE}"
   cat html_footer.html >> "${FILE}"
 }
 

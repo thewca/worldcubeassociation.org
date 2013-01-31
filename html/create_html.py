@@ -93,18 +93,12 @@ def hyperLinkReplace(expectedReg, expectedGuide, linkMatch, linkReplace, textRep
 
 # Article Lists
 
-## Table of Contents Header
-replaceBothWithSame(1, 1,
-    r'<h2><contents>',
-    r'<h2 id="contents">'
-)
-
 # \1: Article "number" (or letter) [example: B]
 # \2: new anchor name part [example: blindfolded]
 # \3: old anchor name [example: blindfoldedsolving]
 # \4: Article name, may be translated [example: Article B]
 # \5: Title [example: Blindfolded Solving]
-articleMatch = r'<h2><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>';
+articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>';
 
 allRegsArticles = re.findall(articleMatch, regsText)
 allGuidesArticles = re.findall(articleMatch, guidesText)
@@ -183,12 +177,12 @@ if includeTitleLogo:
     wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
 
 replaceRegs(1, 
-    r'<h1><wca-title>([^<]*)</h1>',
+    r'<h1[^>]*><wca-title>([^<]*)</h1>',
     r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
 
 replaceGuides(1, 
-    r'<h1><wca-title>([^<]*)</h1>',
+    r'<h1[^>]*><wca-title>([^<]*)</h1>',
     r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
 )
 

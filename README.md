@@ -12,6 +12,5 @@ This repository contains files related to the maintenance of the [wca-documents]
 ## Dependencies
 
 - `Python`
-- `rdiscount` (`Markdown.pl` doesn't handle nested lists properly.)
 - `pdflatex`
 - `pandoc`
