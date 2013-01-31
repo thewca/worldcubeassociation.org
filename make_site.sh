@@ -19,7 +19,7 @@ then
   cd pdf
   ./create_pdf.sh
   cd ..
-  cp pdf/wca-regulations-and-guidelines-2013.pdf build/
+  cp "pdf/build/wca-regulations-and-guidelines-2013.pdf" build/
 else
   echo "" && echo ""
   echo "WARNING: NOT GENERATING PDF"
