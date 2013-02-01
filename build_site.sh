@@ -25,5 +25,5 @@ else
 fi
 
 cd build
-if [ "$(uname)" = "Darwin" ]; then open "http://localhost:${1:-8080}/"; fi
-python -m SimpleHTTPServer ${1:-8080}
+# if [ "$(uname)" = "Darwin" ]; then open "http://localhost:${1:-8080}/"; fi
+# python -m SimpleHTTPServer ${1:-8080}

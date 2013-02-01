@@ -1,1 +1,7 @@
 build/*
+
+script-generate-all.sh
+script-generate-language.sh
+script-publish.sh
+script-serve.sh
+upload
