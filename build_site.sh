@@ -7,14 +7,14 @@ set -e
 mkdir -p build
 
 cd html
-./create_html.sh
+./build_html.sh
 cd ..
 cp html/build/* build/
 
 if [ "${GENERATE_PDF}" == "1" ]
 then
   cd pdf
-  ./create_pdf.sh
+  ./build_pdf.sh
   cd ..
   cp "pdf/build/wca-regulations-and-guidelines-2013.pdf" build/
 else

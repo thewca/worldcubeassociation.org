@@ -7,7 +7,7 @@ This repository contains files related to the maintenance of the [wca-documents]
     git clone git@github.com:cubing/wca-documents-extra.git
     cd wca-documents-extra
     git submodule update --init
-    ./make_site.sh
+    ./build_site.sh
 
 ## Dependencies
 
