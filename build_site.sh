@@ -4,6 +4,7 @@ GENERATE_PDF="1"
 
 set -e
 
+rm -rf build
 mkdir -p build
 
 cd html
