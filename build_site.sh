@@ -10,7 +10,7 @@ mkdir -p build
 cd html
 ./build_html.sh
 cd ..
-cp html/build/* build/
+cp -r html/build/* build/
 
 if [ "${GENERATE_PDF}" == "1" ]
 then

@@ -21,6 +21,7 @@ parser.add_argument('--regulations-file', default="index.html", help="Regulation
 parser.add_argument('--guidelines-file', default="guidelines.html", help="Regulations file (modified in-place).")
 parser.add_argument('--git-branch', default="", help="git branch of the Regulations and Guidelines we're building.")
 parser.add_argument('--git-hash', default="", help="git hash of the Regulations and Guidelines we're building.")
+parser.add_argument('--fragment', default="0", help="Is html fragment, rather than standalone.")
 
 args = parser.parse_args()
 
@@ -32,6 +33,7 @@ print "Git hash: ", gitBranch
 regsFileName = args.regulations_file
 guidesFileName = args.guidelines_file
 
+isFragment = args.fragment
 
 # Read and close files
 
@@ -172,19 +174,20 @@ hyperLinkReplace(0, 1, r'guidelines:contents', guidesURL + r'#contents', r'\1')
 
 
 # Title
-wcaTitleLogoSource = r'World Cube Association<br>'
-if includeTitleLogo:
-    wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
+if isFragment == "0":
+    wcaTitleLogoSource = r'World Cube Association<br>'
+    if includeTitleLogo:
+        wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
 
-replaceRegs(1, 
-    r'<h1[^>]*><wca-title>([^<]*)</h1>',
-    r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-)
+    replaceRegs(1, 
+        r'<h1[^>]*><wca-title>([^<]*)</h1>',
+        r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+    )
 
-replaceGuides(1, 
-    r'<h1[^>]*><wca-title>([^<]*)</h1>',
-    r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-)
+    replaceGuides(1, 
+        r'<h1[^>]*><wca-title>([^<]*)</h1>',
+        r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+    )
 
 
 # Version
