@@ -67,10 +67,12 @@ popd > /dev/null
   --git-hash "${GIT_VERSION}" \
   --fragment 0
 
-# process content only
+# process content only - URLs here need to be specific to the WCA's Drupal install.
 ./process_html.py \
   --regulations-file "${BUILD_DIR}/content_files/index.content.html" \
   --guidelines-file "${BUILD_DIR}/content_files/guidelines.content.html" \
   --git-branch "${GIT_BRANCH}" \
   --git-hash "${GIT_VERSION}" \
-  --fragment 1
+  --fragment 1 \
+  --regs-url "/regulations/main" \
+  --guides-url "/regulations/guidelines"

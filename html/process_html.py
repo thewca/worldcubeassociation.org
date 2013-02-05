@@ -23,6 +23,10 @@ parser.add_argument('--git-branch', default="", help="git branch of the Regulati
 parser.add_argument('--git-hash', default="", help="git hash of the Regulations and Guidelines we're building.")
 parser.add_argument('--fragment', default="0", help="Is html fragment, rather than standalone.")
 
+parser.add_argument('--regs-url', default=regsURL, help="url for regulations content")
+parser.add_argument('--guides-url', default=guidesURL, help="url for guidelines content")
+
+
 args = parser.parse_args()
 
 gitHash = args.git_hash
@@ -32,6 +36,8 @@ print "Git hash: ", gitBranch
 
 regsFileName = args.regulations_file
 guidesFileName = args.guidelines_file
+regsURL = args.regs_url
+guidesURL = args.guides_url
 
 isFragment = args.fragment
 
