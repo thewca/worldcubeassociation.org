@@ -253,5 +253,5 @@ function showDatabaseError ( $message ) {
   #--- Normal users just get a "Sorry", developers/debuggers get more details
   die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  wcaDebug()
        ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
-       : "<p>Problem with the database, sorry. Should be fixed soon, please try again later.</p>" );
+       : "<p>Problem with the database, sorry. Please <a href='mailto:wca-website@googlegroups.com'>contact the WCA Website team at wca-website@googlegroups.com</a> and let us know immediately.</p>" );
 }

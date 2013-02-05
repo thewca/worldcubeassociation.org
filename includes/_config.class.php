@@ -29,22 +29,26 @@ class configurationData
             trigger_error("Config settings not found!", E_USER_ERROR);
         }
 
-        // let's also determine the current domain being used (this is for use in output links, etc)
-        // do a check for unusual server configuration here.
-        $docs_path = realpath($includes_directory . "/..");
-        $script_path = realpath($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME']); // this should always be longer!
-        // check equivalency
-        $path_equiv = substr($script_path, 0, strlen($docs_path)) == $docs_path;
-        if (!$path_equiv) {
-            // Uh-oh, server settings have been corrupted somehow!  We'll have to guess something, so use /results/ as default.
-            $config["pathToRoot"] = "/results/";
-        } else {
-            $part_to_strip = strlen($_SERVER['DOCUMENT_ROOT']);
-            $config["pathToRoot"] = substr(realpath($includes_directory . "/.."), $part_to_strip);
+        if(!isset($config['pathToRoot']) || "" == $config['pathToRoot']) {
+            // let's determine the current domain being used (this is for use in output links, etc)
+            // do a check for unusual server configuration here.
+            $docs_path = realpath($includes_directory . "/..");
+            $script_path = realpath($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME']); // this should always be longer!
+            // check equivalency
+            $path_equiv = substr($script_path, 0, strlen($docs_path)) == $docs_path;
+            if (!$path_equiv) {
+                // Uh-oh, server settings have been corrupted somehow!  We'll have to guess something, so use /results/ as default.
+                $config["pathToRoot"] = "/results/";
+            } else {
+                $part_to_strip = strlen($_SERVER['DOCUMENT_ROOT']);
+                $config["pathToRoot"] = substr(realpath($includes_directory . "/.."), $part_to_strip);
+            }
         }
 
-        // And the current directory being used (this is for includes, etc)
-        $config["filesPath"] = realpath($includes_directory . "/..");
+        if(!isset($config['filesPath']) || "" == $config['filesPath']) {
+            // And the current directory being used (this is for includes, etc)
+            $config["filesPath"] = realpath($includes_directory . "/..");
+        }
 
         // append trailing slash to paths if needed
         if (substr($config["pathToRoot"], -1) != "/") {
@@ -85,7 +89,7 @@ class configurationData
         foreach($writable_paths as $path) {
             $fullpath = $filesPath . $path;
             if (!is_writable($fullpath) || !file_exists($fullpath)) {
-                $errors[] = $path . " is missing or not writable!";
+                $errors[] = "Directory/File '" . $path . "' is missing or not writable!";
             }            
         }
 

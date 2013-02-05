@@ -2,18 +2,18 @@
 
 // data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
-$conf['drupal']['path'] = '/path/to/your/drupal/install';  // no trailing slash!
+$config['drupal']['path'] = '/path/to/your/drupal/install';  // no trailing slash!
 
-$conf['database']['host'] = '...';
-$conf['database']['user'] = '...';
-$conf['database']['pass'] = '...';
-$conf['database']['name'] = '...';
+$config['database']['host'] = '...';
+$config['database']['user'] = '...';
+$config['database']['pass'] = '...';
+$config['database']['name'] = '...';
 
-$conf['recaptcha']['publickey'] = '...';
-$conf['recaptcha']['privatekey'] = '...';
+$config['recaptcha']['publickey'] = '...';
+$config['recaptcha']['privatekey'] = '...';
 
-// pathToRoot and filesPath are determined by config class - just a placeholder here.
-// pathToRoot is for web urls, etc.  May be different than filesystem paths.
+// pathToRoot and filesPath are determined by config class - just a placeholder here.  You can enter an explicit value if desired.  Include trailing slash.
+// pathToRoot is for web urls, etc.  May be different than filesystem paths.  Eg, "/results/".
 $config['pathToRoot'] = "";
-// filesPath is absolute path for system files.  May be different that web urls.
+// filesPath is absolute path for system files.  May be different that web urls.  Eg, "/var/www/results/".
 $config['filesPath'] = "";
