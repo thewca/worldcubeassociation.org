@@ -22,8 +22,8 @@ fi
 
 cd wca-documents
 git checkout "${BRANCH}"
-git pull
-git push origin "${BRANCH}"
+# git pull
+# git push origin "${BRANCH}"
 cd ..
 
 ./build_site.sh "${HTML_FRAGMENT}"
