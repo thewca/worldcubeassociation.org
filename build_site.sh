@@ -3,7 +3,7 @@
 GENERATE_PDF="1"
 HTML_FRAGMENT="0"
 
-if [ "$#" -lt "2" ]
+if [ "$#" -gt "0" ]
 then
   HTML_FRAGMENT="${1}"
 fi

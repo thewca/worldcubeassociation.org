@@ -17,7 +17,7 @@ function htmlify {
 
   rm -f "${FILE}"
     
-  if [ ! "${FRAGMENT}" ]
+  if [ ! "${FRAGMENT}" = "1" ]
   then
     cat "templates/html_header_1.html" >> "${FILE}"
     echo -n "${TITLE}" >> "${FILE}"
@@ -26,7 +26,7 @@ function htmlify {
 
   markdown_program "${SOURCE}" >> "${FILE}"
 
-  if [ ! "${FRAGMENT}" ]
+  if [ ! "${FRAGMENT}" = "1" ]
   then
     cat "templates/html_footer.html" >> "${FILE}"
   fi
