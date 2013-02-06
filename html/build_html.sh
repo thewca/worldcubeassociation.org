@@ -7,9 +7,7 @@ BUILD_DIR="build"
 FRAGMENT="${1}"
 
 function markdown_program {
-  pandoc -s -t html $@
-  # rdiscount < $@ # Doesnt' handle character encoding correctly.
-  # markdown < $@ # Several issues.
+  pandoc -t html $@
 }
 
 function htmlify {
