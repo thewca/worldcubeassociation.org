@@ -1,6 +1,12 @@
 #!/bin/bash
 
 GENERATE_PDF="1"
+HTML_FRAGMENT="0"
+
+if [ "$#" -lt "2" ]
+then
+  HTML_FRAGMENT="${1}"
+fi
 
 set -e
 
@@ -8,9 +14,9 @@ rm -rf build
 mkdir -p build
 
 cd html
-./build_html.sh
+./build_html.sh "${HTML_FRAGMENT}"
 cd ..
-cp -r html/build/* build/
+cp html/build/* build/
 
 if [ "${GENERATE_PDF}" == "1" ]
 then
