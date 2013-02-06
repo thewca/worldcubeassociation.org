@@ -1,5 +1,7 @@
 build/*
 
+upload.tgz
+
 script-generate-all.sh
 script-generate-language.sh
 script-publish.sh

@@ -16,5 +16,7 @@ rm -rf ./upload
 ./script-generate-language.sh "${HTML_FRAGMENT}" chinese
 ./script-generate-language.sh "${HTML_FRAGMENT}" hungarian
 
+tar -zcf upload.tgz upload/
+
 cd wca-documents
 git checkout master
