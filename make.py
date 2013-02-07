@@ -5,7 +5,6 @@ import os
 import shutil
 import subprocess
 import sys
-
 import webbrowser
 
 # Script constants
@@ -40,7 +39,9 @@ parser.add_argument(
 parser.add_argument(
   '--language', '-l',
   default=None,
-  help="Check out the branch (of wca-documents) and build ino the appropriate subdirectory for the given language. Available languages: " + (", ".join(translations))
+  help="Check out the branch (of wca-documents) and " +
+    "build into the appropriate subdirectory for the given language. " +
+    "Available languages: " + (", ".join(translations))
 )
 
 parser.add_argument(
@@ -85,29 +86,62 @@ parser.add_argument(
   help="Run a local test server and open build directory."
 )
 
-args = parser.parse_args()
+# Main
+
+
+def main():
+
+  args = parser.parse_args()
+  validateLanguage(args)
+
+  if args.clean:
+    clean(args)
+
+  if not args.do_not_build:
+    build(args)
+
+  if args.archive:
+    archive(args)
+
+  if args.server:
+    server(args)
 
 
 # Arguments
 
 
-if args.language not in (translations + [None]):
-  sys.stderr.write("\nInvalid language: " + args.language + "\n\n")
-  parser.print_help()
-  exit(-1)
+def validateLanguage(args):
+  if args.language not in (translations + [None]):
+    sys.stderr.write("\nInvalid language: " + args.language + "\n\n")
+    parser.print_help()
+    sys.exit(-1)
 
 
 # Clean
 
-
-if args.clean and os.path.exists(buildRootDir):
-  shutil.rmtree(buildRootDir)
+def clean(args):
+  if os.path.exists(buildRootDir):
+    shutil.rmtree(buildRootDir)
 
 
 # Build!
 
 
-def checkoutWCADocumentsBranch(branchName):
+def build(args):
+  if args.all:
+    [buildTranslation(args, lang) for lang in translations]
+    checkoutWCADocumentsBranch(args, "official")
+
+  elif args.language == None:
+    buildToDirectory(args, "")
+
+  elif args.language in translations:
+    buildTranslation(args, args.language)
+
+  print "Finished building."
+
+
+def checkoutWCADocumentsBranch(args, branchName):
   subprocess.check_call([
     "git",
     "--git-dir=./wca-documents/.git",
@@ -117,7 +151,7 @@ def checkoutWCADocumentsBranch(branchName):
   ])
 
 
-def build(directory):
+def buildToDirectory(args, directory):
 
   buildDir = buildRootDir + directory
   if not os.path.exists(buildDir):
@@ -131,45 +165,33 @@ def build(directory):
 
   if not args.no_pdf:
     subprocess.check_call(["pdf/build_pdf.sh"])
-    subprocess.check_call(["cp", "pdf/build/wca-regulations-and-guidelines-2013.pdf", buildDir])
+    subprocess.check_call([
+      "cp",
+      "pdf/build/wca-regulations-and-guidelines-2013.pdf",
+      buildDir
+    ])
 
 
-def buildBranch(branchName, directory):
-  checkoutWCADocumentsBranch(branchName)
-  build(directory)
+def buildBranch(args, branchName, directory):
+  checkoutWCADocumentsBranch(args, branchName)
+  buildToDirectory(args, directory)
 
 
-def buildTranslation(lang):
+def buildTranslation(args, lang):
   branchName = "translation-" + lang
   directory = "translations/" + lang + "/"
-  # url = "http://www.worldcubeassociation.org/regulations/translations/" + lang + "/"
 
   if lang == "english":
     branchName = "official"
     directory = ""
 
-  buildBranch(branchName, directory)
+  buildBranch(args, branchName, directory)
 
 
-def buildEnglish():
-  buildBranch("official", "")
+# Non-Build Actions
 
 
-if not args.do_not_build:
-  if args.all:
-    [buildTranslation(lang) for lang in translations]
-    checkoutWCADocumentsBranch("official")
-
-  elif args.language == None:
-    build("")
-
-  elif args.language in translations:
-    buildTranslation(args.language)
-
-  print "Finished building."
-
-
-if args.archive:
+def archive(args):
   subprocess.check_call(["rm", "-rf", archiveFile])
   subprocess.check_call([
     "tar", "--exclude", ".DS_Store", "-zcf",
@@ -177,7 +199,7 @@ if args.archive:
   ])
 
 
-if args.server:
+def server(args):
 
   localURL = "http://localhost:8081/build/"
   if args.language in translations:
@@ -189,3 +211,10 @@ if args.server:
 
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m",  "SimpleHTTPServer", "8081"])
+
+
+# Make the script work standalone.
+
+
+if __name__ == "__main__":
+    main()
