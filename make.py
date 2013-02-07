@@ -40,8 +40,8 @@ parser.add_argument(
   '--language', '-l',
   default=None,
   help="Check out the branch (of wca-documents) and " +
-    "build into the appropriate subdirectory for the given language. " +
-    "Available languages: " + (", ".join(translations))
+    "build into the appropriate subdirectory for the given language.",
+  choices=translations
 )
 
 parser.add_argument(
@@ -92,7 +92,6 @@ parser.add_argument(
 def main():
 
   args = parser.parse_args()
-  validateLanguage(args)
 
   if args.clean:
     clean(args)
@@ -105,16 +104,6 @@ def main():
 
   if args.server:
     server(args)
-
-
-# Arguments
-
-
-def validateLanguage(args):
-  if args.language not in (translations + [None]):
-    sys.stderr.write("\nInvalid language: " + args.language + "\n\n")
-    parser.print_help()
-    sys.exit(-1)
 
 
 # Clean
