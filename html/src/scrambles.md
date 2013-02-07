@@ -13,7 +13,7 @@ Last official change: February 6, 2013
 
 - Official competitions must always use the current version of the official scramble program.
 - Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).
-- Delegates must save all scramble sequences generated for an official competition, and send them with the delegate report (see [Regulation 1c3a](./#1c3a)).
+- Delegates must save all scramble sequences generated for an official competition, and send them with the delegate report (see [Regulation 1c3a](../#1c3a)).
 
 ## Detailed Instructions for TNoodle
 
