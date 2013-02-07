@@ -9,11 +9,12 @@ import webbrowser
 
 # Script constants
 
-languages_file = "languages.json"
+languages_file = "config/languages.json"
 
 with open(languages_file, "r") as fileHandle:
   languages = json.load(fileHandle)
 
+upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
 archiveFile = "build.tgz"
 
@@ -34,8 +35,14 @@ def main():
   if args.archive:
     archive(args)
 
+  if args.upload:
+    upload(args)
+
   if args.server:
     server(args)
+
+  if args.reset_to_master:
+    reset_to_master(args)
 
 
 # Script Parameters
@@ -96,6 +103,20 @@ parser.add_argument(
   action='store_true',
   default=False,
   help="Produce a compressed archive of the build folder."
+)
+
+parser.add_argument(
+  '--reset-to-master', '-m',
+  action='store_true',
+  default=False,
+  help="Reset wca-documents to master at the end."
+)
+
+parser.add_argument(
+  '--upload', '-u',
+  action='store_true',
+  default=False,
+  help="Upload to an SFTP server on completion, using rsync."
 )
 
 parser.add_argument(
@@ -188,6 +209,19 @@ def archive(args):
   ])
 
 
+def upload(args):
+  with open(upload_server_file, "r") as fileHandle:
+    upload_server = json.load(fileHandle)
+
+  subprocess.check_call([
+    "rsync",
+    "-avz",
+    buildRootDir,
+    upload_server["sftp_path"]
+  ])
+  print "Done uploading to SFTP server. Visit " + upload_server["base_url"]
+
+
 def server(args):
 
   localURL = "http://localhost:8081/build/"
@@ -200,6 +234,10 @@ def server(args):
 
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m",  "SimpleHTTPServer", "8081"])
+
+
+def reset_to_master(args):
+  checkoutWCADocumentsBranch(args, "master")
 
 
 # Make the script work standalone.
