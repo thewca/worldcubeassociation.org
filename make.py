@@ -1,22 +1,18 @@
 #!/usr/bin/python
 
 import argparse
+import json
 import os
 import shutil
 import subprocess
-import sys
 import webbrowser
 
 # Script constants
 
-translations = [
-  "english",
-  "german",
-  "indonesian",
-  "russian",
-  "chinese",
-  "hungarian"
-]
+languages_file = "languages.json"
+
+with open(languages_file, "r") as fileHandle:
+  languages = json.load(fileHandle)
 
 buildRootDir = "build/"
 archiveFile = "build.tgz"
@@ -41,7 +37,7 @@ parser.add_argument(
   default=None,
   help="Check out the branch (of wca-documents) and " +
     "build into the appropriate subdirectory for the given language.",
-  choices=translations
+  choices=languages
 )
 
 parser.add_argument(
@@ -118,13 +114,13 @@ def clean(args):
 
 def build(args):
   if args.all:
-    [buildTranslation(args, lang) for lang in translations]
+    [buildTranslation(args, lang) for lang in languages]
     checkoutWCADocumentsBranch(args, "official")
 
   elif args.language == None:
     buildToDirectory(args, "")
 
-  elif args.language in translations:
+  elif args.language in languages:
     buildTranslation(args, args.language)
 
   print "Finished building."
@@ -191,7 +187,7 @@ def archive(args):
 def server(args):
 
   localURL = "http://localhost:8081/build/"
-  if args.language in translations:
+  if args.language in languages:
     localURL = localURL + "translations/" + args.language + "/"
   webbrowser.open(localURL)
 
