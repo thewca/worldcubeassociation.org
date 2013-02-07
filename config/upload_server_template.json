@@ -1,3 +1,4 @@
+// Copy this file to upload_server.json, change the paths, and remove this first line.
 {
   "sftp_path": "towns.dreamhost.com:~/cubing.net/wca-regs-test/",
   "base_url": "http://www.cubing.net/wca-regs-test/"
