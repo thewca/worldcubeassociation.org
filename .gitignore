@@ -1,9 +1,6 @@
-build/*
+build
 
+upload
 upload.tgz
 
-script-generate-all.sh
-script-generate-language.sh
-script-publish.sh
-script-serve.sh
-upload
+script-*.sh
