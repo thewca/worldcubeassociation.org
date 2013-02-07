@@ -1,6 +1,4 @@
 build
-
-upload
-upload.tgz
+build.tgz
 
 script-*.sh

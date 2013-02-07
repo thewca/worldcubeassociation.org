@@ -1,6 +1,11 @@
 #!/bin/bash
 
+cd $(dirname "${0}")
+
 BUILD_DIR="build"
+rm -rf "${BUILD_DIR}"
+mkdir -p "${BUILD_DIR}"
+
 TEX_FILE="${BUILD_DIR}/wca-regulations-and-guidelines-2013.tex"
 
 if [ -f "${TEX_FILE}" ]; then rm "${TEX_FILE}"; fi

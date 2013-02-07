@@ -2,7 +2,11 @@
 
 set -e
 
+cd $(dirname "${0}")
+
 BUILD_DIR="build"
+rm -rf "${BUILD_DIR}"
+mkdir -p "${BUILD_DIR}"
 
 FRAGMENT="${1}"
 
