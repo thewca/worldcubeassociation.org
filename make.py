@@ -17,6 +17,27 @@ with open(languages_file, "r") as fileHandle:
 buildRootDir = "build/"
 archiveFile = "build.tgz"
 
+
+# Main
+
+
+def main():
+
+  args = parser.parse_args()
+
+  if args.clean:
+    clean(args)
+
+  if not args.do_not_build:
+    build(args)
+
+  if args.archive:
+    archive(args)
+
+  if args.server:
+    server(args)
+
+
 # Script Parameters
 
 
@@ -58,7 +79,9 @@ parser.add_argument(
   '--fragment', '-f',
   action='store_true',
   default=False,
-  help="Generate html fragment files, rather than standalone."
+  help="Generate html fragment files, rather than standalone. " +
+    "Note that translations may look like gibberish in a browser, " +
+    "because don't have a tag to specify UTF8 encoding."
 )
 
 parser.add_argument(
@@ -81,25 +104,6 @@ parser.add_argument(
   default=False,
   help="Run a local test server and open build directory."
 )
-
-# Main
-
-
-def main():
-
-  args = parser.parse_args()
-
-  if args.clean:
-    clean(args)
-
-  if not args.do_not_build:
-    build(args)
-
-  if args.archive:
-    archive(args)
-
-  if args.server:
-    server(args)
 
 
 # Clean
