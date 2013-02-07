@@ -57,7 +57,11 @@ class DBConn
 
     public function mysqlEscape($val)
     {
-        if(is_numeric($val))
+        if($val === "")
+        {
+            return "";
+        }
+        elseif(is_numeric($val))
         {
             return $val;
         }
@@ -109,7 +113,7 @@ class DBConn
             $this->printCommand($command);
         }
 
-        $result = $this->conn->query($query);
+        $result = $this->conn->query($command);
 
         if($this->conn->error)
         {
