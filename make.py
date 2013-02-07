@@ -133,6 +133,7 @@ parser.add_argument(
 def clean(args):
   if os.path.exists(buildRootDir):
     shutil.rmtree(buildRootDir)
+  subprocess.check_call(["rm", "-rf", archiveFile])
 
 
 # Build!
