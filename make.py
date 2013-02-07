@@ -41,7 +41,7 @@ def main():
   if args.server:
     server(args)
 
-  if args.reset_to_master:
+  if not args.keep_branch:
     reset_to_master(args)
 
 
@@ -106,10 +106,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--reset-to-master', '-m',
+  '--keep-branch', '-k',
   action='store_true',
   default=False,
-  help="Reset wca-documents to master at the end."
+  help="Do not reset wca-documents to master at the end. " +
+    "Useful for testing builds on a branch repeatedly."
 )
 
 parser.add_argument(
@@ -161,7 +162,7 @@ def checkoutWCADocumentsBranch(args, branchName):
   ])
 
 
-def buildToDirectory(args, directory):
+def buildToDirectory(args, directory, translation=False):
 
   buildDir = buildRootDir + directory
   if not os.path.exists(buildDir):
@@ -169,7 +170,8 @@ def buildToDirectory(args, directory):
 
   subprocess.check_call([
     "html/build_html.sh",
-    ("1" if args.fragment else "0")
+    ("1" if args.fragment else "0"),
+    ("1" if translation else "0")
   ])
   subprocess.check_call(["cp", "-r", "html/build/", buildDir])
 
@@ -182,20 +184,22 @@ def buildToDirectory(args, directory):
     ])
 
 
-def buildBranch(args, branchName, directory):
+def buildBranch(args, branchName, directory, translation=False):
   checkoutWCADocumentsBranch(args, branchName)
-  buildToDirectory(args, directory)
+  buildToDirectory(args, directory, translation)
 
 
 def buildTranslation(args, lang):
   branchName = "translation-" + lang
   directory = "translations/" + lang + "/"
+  translation = True
 
   if lang == "english":
     branchName = "official"
     directory = ""
+    translation = False
 
-  buildBranch(args, branchName, directory)
+  buildBranch(args, branchName, directory, translation=translation)
 
 
 # Non-Build Actions

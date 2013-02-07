@@ -4,7 +4,7 @@ The current official scramble program is *TNoodle-0.7.5.jar*. It generates high-
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scramble program:<br><a href="scrambles/tnoodle/TNoodle-0.7.5.jar" style="font-weight: bold;">TNoodle-0.7.5.jar</a><br></span>
+Download the official scramble program:<br><a href="tnoodle/TNoodle-0.7.5.jar" style="font-weight: bold;">TNoodle-0.7.5.jar</a><br></span>
 <br>
 Last official change: February 6, 2013
 </center>

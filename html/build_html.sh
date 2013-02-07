@@ -9,6 +9,7 @@ rm -rf "${BUILD_DIR}"
 mkdir -p "${BUILD_DIR}"
 
 FRAGMENT="${1}"
+TRANSLATION="${2}"
 
 function markdown_program {
   pandoc -t html $@
@@ -18,6 +19,7 @@ function htmlify {
   FILE="${BUILD_DIR}/${1}"
   TITLE="${2}"
   SOURCE="${3}"
+  HEADER_2="${4}"
 
   rm -f "${FILE}"
     
@@ -25,7 +27,8 @@ function htmlify {
   then
     cat "templates/html_header_1.html" >> "${FILE}"
     echo -n "${TITLE}" >> "${FILE}"
-    cat "templates/html_header_2.html" >> "${FILE}"
+
+    cat "${HEADER_2}" >> "${FILE}"
   fi
 
   markdown_program "${SOURCE}" >> "${FILE}"
@@ -38,11 +41,50 @@ function htmlify {
 
 cp files/* build/
 
-htmlify "index.html"        "WCA Regulations 2013"    "../wca-documents/wca-regulations-2013.md"
-htmlify "guidelines.html"   "WCA Guidelines 2013"     "../wca-documents/wca-guidelines-2013.md"
-htmlify "history.html"      "WCA Regulations History" "src/history.md"
-htmlify "translations.html" "WCA Translations"        "src/translations.md"
-htmlify "scrambles.html"    "WCA Scrambles"           "src/scrambles.md"
+
+if [ "${TRANSLATION}" = "1" ]
+then
+  HEADER_2="templates/html_header_2_for_translations.html"
+else
+  HEADER_2="templates/html_header_2.html"
+fi
+
+htmlify \
+  "index.html" \
+  "WCA Regulations 2013" \
+  "../wca-documents/wca-regulations-2013.md" \
+  "${HEADER_2}"
+
+htmlify \
+  "guidelines.html" \
+  "WCA Guidelines 2013" \
+  "../wca-documents/wca-guidelines-2013.md" \
+  "${HEADER_2}"
+
+if [ "${TRANSLATION}" = "0" ]
+then
+
+  mkdir "${BUILD_DIR}/history"
+  htmlify \
+    "history/index.html" \
+    "WCA Regulations History" \
+    "src/history.md" \
+    "templates/html_header_2_for_subdirectories.html"
+
+  mkdir "${BUILD_DIR}/translations"
+  htmlify \
+    "translations/index.html" \
+    "WCA Translations" \
+    "src/translations.md" \
+    "templates/html_header_2_for_subdirectories.html"
+
+  mkdir "${BUILD_DIR}/scrambles"
+  htmlify \
+    "scrambles/index.html" \
+    "WCA Scrambles" \
+    "src/scrambles.md" \
+    "templates/html_header_2_for_subdirectories.html"
+fi
 
 pushd "../wca-documents" > /dev/null
 GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
