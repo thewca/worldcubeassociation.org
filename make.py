@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import webbrowser
 
 # Script constants
@@ -215,6 +216,12 @@ def archive(args):
 
 
 def upload(args):
+
+  if not os.path.exists(upload_server_file):
+    sys.stderr.write("Config file for server uploads does not exist.\n")
+    sys.stderr.write("Please create one at " + upload_server_file + " using the template.\n")
+    sys.exit(-1)
+
   with open(upload_server_file, "r") as fileHandle:
     upload_server = json.load(fileHandle)
 
