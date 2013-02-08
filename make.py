@@ -166,8 +166,8 @@ def currentBranch():
     "git",
     "--git-dir=./wca-documents/.git",
     "--work-tree=./wca-documents",
-    "symbolic-ref",
-    "--short",
+    "rev-parse",
+    "--abbrev-ref",
     "HEAD"
   ])
 
