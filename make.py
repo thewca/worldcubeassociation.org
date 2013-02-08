@@ -103,7 +103,7 @@ parser.add_argument(
   default=False,
   help="Generate html fragment files, rather than standalone. " +
     "Note that translations may look like gibberish in a browser, " +
-    "because don't have a tag to specify UTF8 encoding."
+    "because they don't have a tag to specify UTF8 encoding."
 )
 
 parser.add_argument(
@@ -125,7 +125,7 @@ parser.add_argument(
   action='store_true',
   default=False,
   help="Reset wca-documents by checking out master at the end. " +
-    "Useful with -d in order to reset wca-documents for commits."
+    "Useful with -d in order to reset wca-documents-extra for commits."
 )
 
 parser.add_argument(
