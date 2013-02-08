@@ -27,6 +27,12 @@ def main():
 
   args = parser.parse_args()
 
+  if args.wca:
+    args.clean = True
+    args.all = True
+    args.pdf = True
+    args.archive = True
+
   if args.clean:
     clean(args)
 
@@ -126,6 +132,14 @@ parser.add_argument(
   action='store_true',
   default=False,
   help="Run a local test server and open build directory."
+)
+
+parser.add_argument(
+  '--wca', '-w',
+  action='store_true',
+  default=False,
+  help="Full WCA release build. Equivalent to -capz. " +
+    "Does *not* currently include -f."
 )
 
 
