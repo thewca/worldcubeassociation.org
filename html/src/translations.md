@@ -13,7 +13,7 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Russian - 2013](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 
-In particular, note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
+Note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
 
 - [Chinese - 2010](http://www.mf8-china.com/wca/regulations_chs.htm) by [Shihang Wang](mailto:wangshihang@foxmail.com)
 - [Chinese, Traditional - 2010](WCARegulationsTC.html) by [Han Wu](mailto:hanwu85@yahoo.com.tw)
@@ -45,7 +45,7 @@ If you'd like to (re)-translate the Regulations, please use the following proces
     - Try to keep all the formatting intact and only change the words.
     - Read through the [style guide](https://github.com/cubing/wca-documents-extra/blob/master/style-guide.md) for detailed information about how the Regulations are formatted.
 - Contact the [WRC](http://www.worldcubeassociation.org/contact/wrc) for converting adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
-    - The translated Regulations and Guidelines
+    - The translated Regulations and Guidelines.
     - The "latest commit" value your translation is based on.
     - The names of the translators, along with WCA IDs, and (optionally) personal homepages to link from this page.
     - Translations of the following:
@@ -56,5 +56,5 @@ If you'd like to (re)-translate the Regulations, please use the following proces
 
 All translations will be kept [on GitHub](https://github.com/cubing/wca-documents/branches).
 If you're familiar with `git`/GitHub, you're also welcome to fork the `wca-documents` repository. This makes it easy for you to make changes that the WRC can update on the site.
-(As of early February 2012, we're already using this to track the German and Russian translation.)
+(As of early February 2012, we're already using this to track the [German](https://github.com/fw42/wca-documents-german/) and [Russian](https://github.com/Claster/wca-documents) translations.)
 If you're not familiar with GitHub, don't worry about it, and just send us your translation.
