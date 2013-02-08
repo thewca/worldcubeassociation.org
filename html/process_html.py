@@ -166,8 +166,8 @@ replaceGuides(ANY,
 
 # Hyperlinks
 
-hyperLinkReplace(ANY, ANY, r'regulations:article:' + regOrGuide2Slots, regsURL + r'#article-\1\2', r'\3')
-hyperLinkReplace(  0, ANY, r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#article-\1\2', r'\3')
+hyperLinkReplace(ANY, ANY, r'regulations:article:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
+hyperLinkReplace(  0, ANY, r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
 
 hyperLinkReplace(ANY, ANY, r'regulations:regulation:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
 hyperLinkReplace(  0, ANY, r'guidelines:guideline:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
