@@ -93,10 +93,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--no-pdf',
+  '--pdf', '-p',
   action='store_true',
   default=False,
-  help="Do not generate PDF."
+  help="Generate PDF."
 )
 
 parser.add_argument(
@@ -177,7 +177,7 @@ def buildToDirectory(args, directory, translation=False):
   ])
   subprocess.check_call(["cp", "-r", "html/build/", buildDir])
 
-  if not args.no_pdf:
+  if args.pdf:
     subprocess.check_call(["pdf/build_pdf.sh"])
     subprocess.check_call([
       "cp",
