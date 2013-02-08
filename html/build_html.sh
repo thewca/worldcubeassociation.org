@@ -93,7 +93,7 @@ popd > /dev/null
 
 REGS_URL="./"
 GUIDES_URL="guidelines.html"
-if [ "${FRAGMENT}" ]
+if [ "${FRAGMENT}" = "1" ]
 then
   REGS_URL="/regulations/main"
   GUIDES_URL="/regulations/guidelines"
