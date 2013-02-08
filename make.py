@@ -33,23 +33,31 @@ def main():
     args.pdf = True
     args.archive = True
 
-  if args.clean:
-    clean(args)
+  startingBranch = currentBranch()
 
-  if not args.do_not_build:
-    build(args)
+  try:
 
-  if args.archive:
-    archive(args)
+    if args.clean:
+      clean(args)
 
-  if args.upload:
-    upload(args)
+    if not args.do_not_build:
+      build(args)
 
-  if args.server:
-    server(args)
+    if args.archive:
+      archive(args)
 
-  if not args.keep_branch:
-    reset_to_master(args)
+    if args.upload:
+      upload(args)
+
+    if args.server:
+      server(args)
+
+  finally:
+
+    if args.reset_to_master:
+      checkoutWCADocs("master")
+    else:
+      checkoutWCADocs(startingBranch)
 
 
 # Script Parameters
@@ -113,11 +121,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--keep-branch', '-k',
+  '--reset-to-master', '-m',
   action='store_true',
   default=False,
-  help="Do not reset wca-documents to master at the end. " +
-    "Useful for testing builds on a branch repeatedly."
+  help="Reset wca-documents by checking out master at the end. " +
+    "Useful with -d in order to reset wca-documents for commits."
 )
 
 parser.add_argument(
@@ -151,13 +159,38 @@ def clean(args):
   subprocess.check_call(["rm", "-rf", archiveFile])
 
 
+# Git Operations
+
+def currentBranch():
+  output = subprocess.check_output([
+    "git",
+    "--git-dir=./wca-documents/.git",
+    "--work-tree=./wca-documents",
+    "symbolic-ref",
+    "--short",
+    "HEAD"
+  ])
+
+  return output.strip()
+
+
+def checkoutWCADocs(branchName):
+  subprocess.check_call([
+    "git",
+    "--git-dir=./wca-documents/.git",
+    "--work-tree=./wca-documents",
+    "checkout",
+    branchName
+  ])
+
+
 # Build!
 
 
 def build(args):
   if args.all:
     [buildTranslation(args, lang) for lang in languages]
-    checkoutWCADocumentsBranch(args, "official")
+    checkoutWCADocs("official")
 
   elif args.language == None:
     buildToDirectory(args, "")
@@ -166,16 +199,6 @@ def build(args):
     buildTranslation(args, args.language)
 
   print "Finished building."
-
-
-def checkoutWCADocumentsBranch(args, branchName):
-  subprocess.check_call([
-    "git",
-    "--git-dir=./wca-documents/.git",
-    "--work-tree=./wca-documents",
-    "checkout",
-    branchName
-  ])
 
 
 def buildToDirectory(args, directory, translation=False):
@@ -201,7 +224,7 @@ def buildToDirectory(args, directory, translation=False):
 
 
 def buildBranch(args, branchName, directory, translation=False):
-  checkoutWCADocumentsBranch(args, branchName)
+  checkoutWCADocs(branchName)
   buildToDirectory(args, directory, translation)
 
 
@@ -234,7 +257,7 @@ def upload(args):
   if not os.path.exists(upload_server_file):
     sys.stderr.write("Config file for server uploads does not exist.\n")
     sys.stderr.write("Please create one at " + upload_server_file + " using the template.\n")
-    sys.exit(-1)
+    return
 
   with open(upload_server_file, "r") as fileHandle:
     upload_server = json.load(fileHandle)
@@ -260,10 +283,6 @@ def server(args):
 
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m",  "SimpleHTTPServer", "8081"])
-
-
-def reset_to_master(args):
-  checkoutWCADocumentsBranch(args, "master")
 
 
 # Make the script work standalone.
