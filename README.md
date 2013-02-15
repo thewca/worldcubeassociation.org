@@ -16,5 +16,5 @@ Run the following to view the resulting files in your browser:
 ## Dependencies
 
 - `Python`
-- `pdflatex`
-- `pandoc`
+- [`pandoc`](http://johnmacfarlane.net/pandoc/installing.html) (for converting the documents from Markdown to HTML/LaTeX)
+- `pdflatex` (for converting LaTeX to PDF)
