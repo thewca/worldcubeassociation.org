@@ -212,7 +212,7 @@ def buildToDirectory(args, directory, translation=False):
     ("1" if args.fragment else "0"),
     ("1" if translation else "0")
   ])
-  subprocess.check_call(["cp", "-r", "html/build/", buildDir])
+  subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
   if args.pdf:
     subprocess.check_call(["pdf/build_pdf.sh"])
