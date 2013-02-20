@@ -95,6 +95,8 @@ function checkRounds () {
   #--- Begin the form
   echo "<form action='check_rounds_ACTION.php' method='post'>\n";
 
+  $prevEvent = '';
+  $wrongs = 0;
   foreach( $roundRows as $i => $roundRow ){
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";

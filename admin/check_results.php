@@ -67,7 +67,7 @@ function showChoices () {
 #----------------------------------------------------------------------
 function checkIndividually () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenWhich, $competitionIds, $countryIds;
+  global $dateCondition, $chosenWhich;
 
   echo "<hr /><p>Checking <b>" . $chosenWhich . " individual results</b>... (wait for the result message box at the end)</p>\n";
 
@@ -83,15 +83,18 @@ function checkIndividually () {
   ")
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
 
-  #--- Build Id arrays
-  $countryIds = array_flip( getAllIDs( dbQuery( "SELECT id FROM Countries" )));
-  $competitionIds = array_flip( getAllIDs( getAllCompetitions()));
+  #--- Build id sets
+  $countryIdSet     = array_flip( getAllIDs( dbQuery( "SELECT id FROM Countries" )));
+  $competitionIdSet = array_flip( getAllIDs( dbQuery( "SELECT id FROM Competitions" )));
+  $eventIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Events" )));
+  $formatIdSet      = array_flip( getAllIDs( dbQuery( "SELECT id FROM Formats" )));
+  $roundIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Rounds" )));
 
   #--- Process the results.
   $badIds = array();
   echo "<pre>\n";
   while( $result = mysql_fetch_array( $dbResult )){
-    if( $error = checkResult( $result )){
+    if( $error = checkResult( $result, $countryIdSet, $competitionIdSet, $eventIdSet, $formatIdSet, $roundIdSet )){
       extract( $result );
       echo "Error: $error\nid:$id format:$formatId round:$roundId";
       echo " ($value1,$value2,$value3,$value4,$value5) best+average($best,$average)\n";
@@ -113,13 +116,17 @@ function checkIndividually () {
 }
 
 #----------------------------------------------------------------------
-function checkResult ( $result ) {
+function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet, &$formatIdSet, &$roundIdSet ) {  # pass-by-reference just for speed
 #----------------------------------------------------------------------
-  global $competitionIds, $countryIds;
 
-  $format = $result['formatId'];
+  #--- 1) Check the ids (except persons cause they're a bigger beast checked elsewhere)
+  if( ! isset( $countryIdSet[$result['countryId']] ))         return "bad countryId " . $result['countryId'];
+  if( ! isset( $competitionIdSet[$result['competitionId']] )) return "bad competitionId " . $result['competitionId'];
+  if( ! isset( $eventIdSet[$result['eventId']] ))             return "bad eventId " . $result['eventId'];
+  if( ! isset( $formatIdSet[$result['formatId']] ))           return "bad formatId " . $result['formatId'];
+  if( ! isset( $roundIdSet[$result['roundId']] ))             return "bad roundId " . $result['roundId'];
 
-  #--- 1) Let dns, dnf, zer, suc be the number of values of each kind.
+  #--- 2) Let dns, dnf, zer, suc be the number of values of each kind.
   $dns = $dnf = $zer = $suc = 0;
   foreach( range( 1, 5 ) as $i ){
     $value = $result["value$i"];
@@ -129,20 +136,20 @@ function checkResult ( $result ) {
     $suc += $value > 0;
   }
 
-  #--- 2) Check that no zero-value is followed by a non-zero value.
+  #--- 3) Check that no zero-value is followed by a non-zero value.
   foreach( range( 1, 4 ) as $i )
     if( $result["value$i"] == 0  &&  $result["value".($i+1)] != 0 )
       return "Zero must not be followed by non-zero.";
 
-  #--- 3) Check zer<5 (there must be at least one non-zero value)
+  #--- 4) Check zer<5 (there must be at least one non-zero value)
   if( $zer == 5 )
     return "There must be at least one non-zero value";
 
-  #--- 4) Check dns+dnf+zer+suc=5 (nothing besides these is allowed)
+  #--- 5) Check dns+dnf+zer+suc=5 (nothing besides these is allowed)
   if( $dns + $dnf + $zer + $suc != 5 )
     return "Invalid value";
 
-  #--- 5) Sort the successful values into v_1 .. v_suc
+  #--- 6) Sort the successful values into v_1 .. v_suc
   $v = array();
   foreach( range( 1, 5 ) as $i ){
     $value = $result["value$i"];
@@ -152,20 +159,21 @@ function checkResult ( $result ) {
   sort( $v );
   array_unshift( $v, 0 );
 
-  #--- 6) compute best
+  #--- 7) compute best
   $best = ($suc > 0) ? $v[1] : (($dnf > 0) ? -1 : -2);
 
-  #--- 7) compute average
+  #--- 8) compute average
   $average = 0;
+  $format = $result['formatId'];
   if( $format == 'm'   ) $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
   if( $format == 'a'   ) $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
   if( $average > 60000 ) $average = ($average + 50 - (($average + 50) % 100));
 
-  #--- 8) compare the computed best and average with the stored ones
+  #--- 9) compare the computed best and average with the stored ones
   if( $result['best']    != $best    ) return    "'best' should be $best";
   if( $result['average'] != $average ) return "'average' should be $average";
 
-  #--- 9) check number of zero-values for non-combined rounds
+  #--- 10) check number of zero-values for non-combined rounds
   $round = $result['roundId'];
   if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' && $round != 'h' ){
     if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
@@ -174,14 +182,14 @@ function checkResult ( $result ) {
     if( $format == 'm'  &&  $zer != 2 ) return "should have three non-zero values";
     if( $format == 'a'  &&  $zer != 0 ) return "shouldn't have zero-values";
   }
-  #--- 10) same for combined rounds
+  #--- 11) same for combined rounds
   else {
     if( $format == '2'  &&  $zer < 3 ) return "should have at most two non-zero values";
     if( $format == '3'  &&  $zer < 2 ) return "should have at most three non-zero values";
     if( $format == 'm'  &&  $zer < 2 ) return "should have at most three non-zero values";
   }
 
-  #--- 11) check times over 10 minutes
+  #--- 12) check times over 10 minutes
   if( valueFormat( $result['eventId'] ) == 'time' )
     foreach( range( 1, 5 ) as $i ){
       $value = $result["value$i"];
@@ -189,15 +197,7 @@ function checkResult ( $result ) {
         return "$value should be rounded";
   }
 
-  #--- 12) check for existing countryId
-  if( ! isset( $countryIds[$result['countryId']] ))
-    return "unknown country " . $result['countryId'];
-
-  #--- 13) check for existing competitionId
-  if( ! isset( $competitionIds[$result['competitionId']] ))
-    return "unknown competition " . $result['competitionId'];
-
-  #--- 14) check correctness of multi results according to H1b and H1c
+  #--- 13) check correctness of multi results according to H1b and H1c
   if( $result['eventId'] == '333mbf' ){
     foreach( range( 1, 5 ) as $i ){
       $value = $result["value$i"];
@@ -215,6 +215,9 @@ function checkResult ( $result ) {
         return  formatValue( $result["value$i"], 'multi') . " should be below 10 minutes times the number of cubes";
     }
   }
+
+  #--- No error
+  return false;
 }
 
 #----------------------------------------------------------------------
@@ -238,6 +241,9 @@ function checkRelatively () {
   echo "<form action='check_results_ACTION.php' method='post'>\n";
 
   #--- Check the pos values
+  $prevRound = $shownRound = '';
+  $wrongs = $wrongRounds = 0;
+  $wrongComp = array();
   while( $row = mysql_fetch_row( $rows ) ) {
     list( $resultId, $competitionId, $eventId, $roundId, $average, $best, $storedPos, $personName ) = $row;
     $round = "$competitionId|$eventId|$roundId";
@@ -252,13 +258,13 @@ function checkRelatively () {
       if ( $round != $shownRound ) {
         $wrongRounds++;
         $wrongComp[$competitionId] = true;
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
         showCompetitionResults( $competitionId, $eventId, $roundId );
         $shownRound = $round;
       }
 
       #--- Show each difference, with a checkbox to agree
-      $change = $calcedPos-$storedPos; if( $change>0 ) $change = "+$change";
+      $change = sprintf('%+d', $calcedPos-$storedPos);
       $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' />";
       printf( "$checkbox Place $storedPos should be place $calcedPos (change by $change) --- $personName<br />" );
       $wrongs++;
@@ -302,11 +308,12 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
 
   tableBegin( 'results', 8 );
 
+  $prevEventId = $prevRoundId = '';
   foreach( $competitionResults as $result ){
     extract( $result );
 
-    $isNewEvent = ($eventId != $currentEventId);
-    $isNewRound = ($roundId != $currentRoundId);
+    $isNewEvent = ($eventId != $prevEventId);
+    $isNewRound = ($roundId != $prevRoundId);
 
     #--- Welcome new rounds.
     if( $isNewEvent  ||  $isNewRound ){
@@ -334,8 +341,8 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
       formatAverageSources( $formatId != '1', $result, $valueFormat )
     ));
 
-    $currentEventId = $eventId;
-    $currentRoundId = $roundId;
+    $prevEventId = $eventId;
+    $prevRoundId = $roundId;
   }
 
   tableEnd();
