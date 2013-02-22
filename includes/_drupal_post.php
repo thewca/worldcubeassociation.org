@@ -96,6 +96,17 @@ class drupalPost
         );
     }
 
+    // retreive a node parameter
+    public function getNodeParam($param)
+    {
+        if(isset($this->node->$param)) {
+            return $this->node->$param;
+        } else {
+            trigger_error("Invalid attempt to access node parameter.", E_USER_WARNING);
+            return;
+        }
+    }
+
     // set a Field API value (and return object) or retreive a Field API value
     public function field($field, $value = "", $special = 'value')
     {
