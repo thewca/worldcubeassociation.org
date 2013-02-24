@@ -149,7 +149,7 @@ function showEventSpecifications () {
   foreach( getAllEvents() as $event ){
     extract( $event );
 
-    $offer            = $data["offer$id"] ? "checked='checked'" : "";
+    $offer            = isset($data["offer$id"]) ? "checked='checked'" : "";
     /*
     $personLimit      = $data["personLimit$id"];
     $timeLimit        = $data["timeLimit$id"];
@@ -297,8 +297,6 @@ function showMap () {
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
   echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
-
-  echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
@@ -421,6 +419,8 @@ function showAnnouncement() {
 function endForm () {
 #----------------------------------------------------------------------
   global $isAdmin, $isConfirmed;
+
+  echo "<hr />\n";
 
   if(( ! $isAdmin ) && ( ! $isConfirmed )){
     echo "<p>Click 'Save' if you want to save your current information, without submitting yet to the WCA Board.</p>";
