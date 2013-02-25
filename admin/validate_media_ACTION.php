@@ -112,7 +112,7 @@ function editMedium () {
   ");
 
   extract($infos[0]);
-  echo "<form method='POST' action='validate_media_ACTION.php'>\n";
+  echo "<form method='POST'>\n";
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
 
   echo "<tr><td>Competition</td>";

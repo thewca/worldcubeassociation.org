@@ -14,7 +14,7 @@ function displayChoicesWithMethod ( $method, $choices ) {
   if( wcaDebug() )
     $choices[] = "<input type='hidden' name='debug5926' value='1' />";
 
-  echo "<form action='' method='$method'>\n";
+  echo "<form method='$method'>\n";
   echo "  <table cellpadding='0' cellspacing='0' id='choices'>\n";
   echo "    <tr>\n\n";
   foreach( $choices as $choice )

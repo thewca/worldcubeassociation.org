@@ -59,7 +59,7 @@ function validatePicture () {
     return;
   }
 
-  echo "<form method='POST' action='persons_picture.php'>\n";
+  echo "<form method='POST'>\n";
   echo "<table><tr><th>A</th><th>D</th><th>Name</th><th>Picture</th></tr>\n";
 
   foreach( $files as $file ){ 

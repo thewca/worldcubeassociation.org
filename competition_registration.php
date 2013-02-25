@@ -91,7 +91,8 @@ function showPreregForm () {
   
   echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have participated in an official competition, you can use the search function which will fill the information stored in the database. You can then fill the rest.</p>";
 
-  echo "<form method='POST' action='$_SERVER[PHP_SELF]?competitionId=$chosenCompetitionId'>";
+  echo "<form method='POST'>";
+  showField( "competitionId hidden $chosenCompetitionId" );
   showField( "form hidden 1" );
   echo "<table class='prereg'>";
   if( isset( $chosenPersonId ))

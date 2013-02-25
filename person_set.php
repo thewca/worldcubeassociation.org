@@ -112,7 +112,7 @@ website. This may take a few days.</p>
 <li>50 KB maximum</li>
 <li>Formats accepted : jpg, gif and png</li></ul>
 
-<form method="POST" action="person_set.php" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data">
 <? echo "<input type='hidden' id='personId' name='personId' value='$chosenPersonId' />"; ?>
   File: <input type="file" id="picture" name="picture" /><br /><br />
 <?  echo "Enter your birth date: ";

@@ -52,7 +52,7 @@ function offerChoices () {
     noticeBox2( $success, 'Thanks for sending us a link to competition media', 'The reCAPTCHA was not entered correctly. Try it again.' );
   } 
   echo "<p>All media will be reviewed before listed on the Media page</p>";
-  echo "<form method='POST' action=''>\n";
+  echo "<form method='POST'>\n";
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
 
   echo "<tr><td>Competition</td>";
