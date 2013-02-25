@@ -48,6 +48,7 @@ function showPreregForm () {
     $chosenPattern = getMysqlParam( 'name' );
     $chosenName    = getHtmlParam(  'name' );
     
+    $nameCondition = '';
     foreach( explode( ' ', $chosenPattern ) as $namePart )
       $nameCondition .= " AND name like '%$namePart%'";
 
@@ -65,6 +66,9 @@ function showPreregForm () {
     $chosenYear    = $chosenPerson['year'     ];
     $chosenMonth   = $chosenPerson['month'    ];
     $chosenDay     = $chosenPerson['day'      ];
+    $chosenEmail   = '';
+    $chosenGuests  = '';
+    $chosenComments= '';
 
     $dontPrintDoB  = ( $chosenYear != 0 );
   }
@@ -331,7 +335,7 @@ function savePreregForm () {
     return false;
   }
 
-  if( !eregi( "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email )){
+  if( !preg_match( "/^[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+)*@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*(\.[a-zA-Z]{2,3})$/", $email )){
     noticeBox( false, "Incorrect email address." );
     return false;
   }
@@ -353,6 +357,7 @@ function savePreregForm () {
   $guests = str_replace(array("\r\n", "\n", "\r", ","), ";", $guests);
 
   #--- Building query
+  $eventIds = '';
   foreach( getAllEventIds() as $eventId ){
     if( getBooleanParam( "E$eventId" ))
       $eventIds .= "$eventId ";
