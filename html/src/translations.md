@@ -10,6 +10,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By Nikolett Placskó and [Perge Olivér](mailto:pergeoliver@gmail.com)
 - [Indonesian (Bahasa) - 2013](./indonesian/)
     - By Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
+- [Italian (Italiano) - 2013](./italian/)
+    - By [Lorenzo Vigani Poli](http://worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](http://worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](http://worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](http://worldcubeassociation.org/results/p.php?i=2009COLO03).
 - [Russian - 2013](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 
