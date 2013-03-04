@@ -424,7 +424,7 @@ function endForm () {
 
   if(( ! $isAdmin ) && ( ! $isConfirmed )){
     echo "<p>Click 'Save' if you want to save your current information, without submitting yet to the WCA Board.</p>";
-    echo "<p>Click 'Confirm' if you want to submit the competition's details for approval to the WCA Board. <span style='font-weight:bold;'>Be careful</span>, you won't be able to modify any information after that. You will still be able moderate the registrations on this page if you choose to use the registration feature.</p>";
+    echo "<p>Click 'Confirm' if you want to validate the competition's details. Please contact the WCA Board afterwards for approval. <span style='font-weight:bold;'>Be careful</span>, you won't be able to modify any information after that. You will still be able moderate the registrations on this page if you choose to use the registration feature.</p>";
   }
   echo "<table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
   echo "<td style='background:#33FF33'><input id='submit' name='submit' type='submit' value='Save' /></td>\n";

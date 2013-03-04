@@ -47,7 +47,7 @@ function specifyModel () {
       'cityName',
       'City name',
       'Name of the city where the competition takes place.',
-      "[{Paris}{http://www.wikipedia.com/Paris}] TODO + SLASH?",
+      "Paris",
       ".",
       NULL
     ),
