@@ -199,7 +199,7 @@ if isFragment == "0":
 # Version
 gitLink =r''
 if (gitHash != ""):
-    gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' +gitBranch + r'</a>:' +r'<a href="https://github.com/cubing/wca-documents/tree/' + gitHash + r'">' +gitHash + r'</a></code>]';
+    gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' +gitBranch + r'</a>:' +r'<a href="https://github.com/cubing/wca-documents/commits/' + gitBranch + r'">' +gitHash + r'</a></code>]';
 
 replaceBothWithSame(1, 1, 
     r'<p><version>([^<]*)</p>',
