@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import argparse
+import csv
 import json
 import os
 import shutil
@@ -10,11 +11,7 @@ import webbrowser
 
 # Script constants
 
-languages_file = "config/languages.json"
-
-with open(languages_file, "r") as fileHandle:
-  languages = json.load(fileHandle)
-
+languages_file = "config/languages.csv"
 upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
 archiveFile = "build.tgz"
@@ -58,6 +55,20 @@ def main():
       checkoutWCADocs("master")
     else:
       checkoutWCADocs(startingBranch)
+
+
+# Language Data Setup
+
+languageData = {}
+with open(languages_file, "r") as fileHandle:
+  reader = csv.reader(fileHandle)
+  keys = reader.next()[1:]
+
+  for row in reader:
+    language = row[0]
+    languageData[language] = dict(zip(keys, row[1:]))
+
+languages = languageData.keys()
 
 
 # Script Parameters
