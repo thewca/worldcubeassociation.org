@@ -212,7 +212,7 @@ def build(args):
   print "Finished building."
 
 
-def buildToDirectory(args, directory, translation=False):
+def buildToDirectory(args, directory, lang=None, translation=False):
 
   buildDir = buildRootDir + directory
   if not os.path.exists(buildDir):
@@ -221,22 +221,28 @@ def buildToDirectory(args, directory, translation=False):
   subprocess.check_call([
     "html/build_html.sh",
     ("1" if args.fragment else "0"),
-    ("1" if translation else "0")
+    ("1" if translation else "0"),
+    lang
   ])
   subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
+  #TODO: Better fallback for building default branch
+  pdfName = languageData["english"]["pdf"]
+  if lang != None:
+    pdfName = languageData[lang]["pdf"]
+
   if args.pdf:
-    subprocess.check_call(["pdf/build_pdf.sh"])
+    subprocess.check_call(["pdf/build_pdf.sh", pdfName])
     subprocess.check_call([
       "cp",
-      "pdf/build/wca-regulations-and-guidelines-2013.pdf",
+      "pdf/build/" + pdfName + "-2013.pdf",
       buildDir
     ])
 
 
-def buildBranch(args, branchName, directory, translation=False):
+def buildBranch(args, branchName, directory, lang=None, translation=False):
   checkoutWCADocs(branchName)
-  buildToDirectory(args, directory, translation)
+  buildToDirectory(args, directory, lang, translation)
 
 
 def buildTranslation(args, lang):
@@ -249,7 +255,7 @@ def buildTranslation(args, lang):
     directory = ""
     translation = False
 
-  buildBranch(args, branchName, directory, translation=translation)
+  buildBranch(args, branchName, directory, lang=lang, translation=translation)
 
 
 # Non-Build Actions
