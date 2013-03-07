@@ -10,7 +10,7 @@ mkdir -p "${BUILD_DIR}"
 
 FRAGMENT="${1}"
 TRANSLATION="${2}"
-LANGUAGE="${3}"
+#LANGUAGE="${3}"
 
 function markdown_program {
   pandoc -t html $@
@@ -107,5 +107,5 @@ fi
   --git-hash "${GIT_VERSION}" \
   --fragment "${FRAGMENT}" \
   --regs-url "${REGS_URL}" \
-  --guides-url "${GUIDES_URL}" \
-  --language "${LANGUAGE}"
+  --guides-url "${GUIDES_URL}"
+  #--language "${LANGUAGE}"

@@ -16,6 +16,7 @@ upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
 archiveFile = "build.tgz"
 
+defaultLang = "default"
 
 # Main
 
@@ -212,7 +213,7 @@ def build(args):
   print "Finished building."
 
 
-def buildToDirectory(args, directory, lang=None, translation=False):
+def buildToDirectory(args, directory, lang=defaultLang, translation=False):
 
   buildDir = buildRootDir + directory
   if not os.path.exists(buildDir):
@@ -221,18 +222,17 @@ def buildToDirectory(args, directory, lang=None, translation=False):
   subprocess.check_call([
     "html/build_html.sh",
     ("1" if args.fragment else "0"),
-    ("1" if translation else "0"),
-    lang
+    ("1" if translation else "0")
+    #lang
   ])
   subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
   #TODO: Better fallback for building default branch
-  pdfName = languageData["english"]["pdf"]
-  if lang != None:
-    pdfName = languageData[lang]["pdf"]
+  pdfName = languageData[lang]["pdf"]
+  texHeader = languageData[lang]["tex_header"]
 
   if args.pdf:
-    subprocess.check_call(["pdf/build_pdf.sh", pdfName])
+    subprocess.check_call(["pdf/build_pdf.sh", pdfName, texHeader])
     subprocess.check_call([
       "cp",
       "pdf/build/" + pdfName + "-2013.pdf",
@@ -240,7 +240,7 @@ def buildToDirectory(args, directory, lang=None, translation=False):
     ])
 
 
-def buildBranch(args, branchName, directory, lang=None, translation=False):
+def buildBranch(args, branchName, directory, lang=defaultLang, translation=False):
   checkoutWCADocs(branchName)
   buildToDirectory(args, directory, lang, translation)
 
