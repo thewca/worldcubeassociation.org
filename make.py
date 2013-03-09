@@ -67,10 +67,10 @@ with open(languages_file, "r") as fileHandle:
 
   for row in reader:
     language = row[0]
-    if language != defaultLang:
-      languageData[language] = dict(zip(keys, row[1:]))
+    languageData[language] = dict(zip(keys, row[1:]))
 
 languages = languageData.keys()
+languages.remove(defaultLang)
 
 
 # Script Parameters
