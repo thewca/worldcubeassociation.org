@@ -19,4 +19,4 @@ cat "templates/tex_middle.tex" >> "${TEX_FILE}"
 pandoc -t latex ../wca-documents/wca-guidelines-2013.md >> "${TEX_FILE}"
 cat "templates/tex_footer.tex" >> "${TEX_FILE}"
 
-"${LATEX_COMMAND}" -output-directory="${BUILD_DIR}" "${TEX_FILE}"
+"${LATEX_COMMAND}" -halt-on-error -output-directory="${BUILD_DIR}" "${TEX_FILE}"
