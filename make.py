@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import argparse
+import csv
 import json
 import os
 import shutil
@@ -10,15 +11,12 @@ import webbrowser
 
 # Script constants
 
-languages_file = "config/languages.json"
-
-with open(languages_file, "r") as fileHandle:
-  languages = json.load(fileHandle)
-
+languages_file = "config/languages.csv"
 upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
 archiveFile = "build.tgz"
 
+defaultLang = "default"
 
 # Main
 
@@ -58,6 +56,21 @@ def main():
       checkoutWCADocs("master")
     else:
       checkoutWCADocs(startingBranch)
+
+
+# Language Data Setup
+
+languageData = {}
+with open(languages_file, "r") as fileHandle:
+  reader = csv.reader(fileHandle)
+  keys = reader.next()[1:]
+
+  for row in reader:
+    language = row[0]
+    if language != defaultLang:
+      languageData[language] = dict(zip(keys, row[1:]))
+
+languages = languageData.keys()
 
 
 # Script Parameters
@@ -201,7 +214,7 @@ def build(args):
   print "Finished building."
 
 
-def buildToDirectory(args, directory, translation=False):
+def buildToDirectory(args, directory, lang=defaultLang, translation=False):
 
   buildDir = buildRootDir + directory
   if not os.path.exists(buildDir):
@@ -211,21 +224,29 @@ def buildToDirectory(args, directory, translation=False):
     "html/build_html.sh",
     ("1" if args.fragment else "0"),
     ("1" if translation else "0")
+    #lang
   ])
   subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
+  pdfName = languageData[lang]["pdf"]
+
   if args.pdf:
-    subprocess.check_call(["pdf/build_pdf.sh"])
+    subprocess.check_call([
+      "pdf/build_pdf.sh",
+      pdfName,
+      languageData[lang]["tex_header"],
+      languageData[lang]["tex_command"]
+    ])
     subprocess.check_call([
       "cp",
-      "pdf/build/wca-regulations-and-guidelines-2013.pdf",
+      "pdf/build/" + pdfName + "-2013.pdf",
       buildDir
     ])
 
 
-def buildBranch(args, branchName, directory, translation=False):
+def buildBranch(args, branchName, directory, lang=defaultLang, translation=False):
   checkoutWCADocs(branchName)
-  buildToDirectory(args, directory, translation)
+  buildToDirectory(args, directory, lang, translation)
 
 
 def buildTranslation(args, lang):
@@ -238,7 +259,7 @@ def buildTranslation(args, lang):
     directory = ""
     translation = False
 
-  buildBranch(args, branchName, directory, translation=translation)
+  buildBranch(args, branchName, directory, lang=lang, translation=translation)
 
 
 # Non-Build Actions
