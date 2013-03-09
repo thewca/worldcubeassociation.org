@@ -4,8 +4,10 @@
 
 Note: Even though these translations are provided on the WCA website, they are not official versions: they may be useful to you, but they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.  
 
-- [German - 2013](./german/)
-    - By [S&eacute;bastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
+- [Chinese - 2013](./chinese)
+    - By [Shuang Chen](http://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
+- [German (Deutsch) - 2013](./german/)
+    - By [Sébastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
 - [Hungarian - 2013](./hungarian/)
     - By Nikolett Placskó and [Perge Olivér](mailto:pergeoliver@gmail.com)
 - [Indonesian (Bahasa) - 2013](./indonesian/)
@@ -18,10 +20,10 @@ Note: Even though these translations are provided on the WCA website, they are n
 Note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
 
 - [Chinese - 2010](http://www.mf8-china.com/wca/regulations_chs.htm) by [Shihang Wang](mailto:wangshihang@foxmail.com)
-- [Chinese, Traditional - 2010](WCARegulationsTC.html) by [Han Wu](mailto:hanwu85@yahoo.com.tw)
+- [Chinese, Traditional - 2010](../history/files/old-translations/WCARegulationsTC.html) by [Han Wu](mailto:hanwu85@yahoo.com.tw)
 - [Croatian - 2010](WCAregulationsCroatian2011.doc) by Igor Saravanja
 - [Czech - 2006 v1](http://rubikscube.info/pravidla/) by [Josef Jelinek](http://rubikscube.info)
-- [Estonian - 2010](http://www.wombat.pri.ee/failid/Reeglid.pdf) by Ivo Kruusam&auml;gi
+- [Estonian - 2010](http://www.wombat.pri.ee/failid/Reeglid.pdf) by Ivo Kruusamägi
 - [Farsi - 2010](WCARegulationsFarsi2010.pdf) by Arash Maslehatjoo and Iran Cube Committee
 - [Finnish - 2008](http://speedcubing.dy.fi/files/wca_saannot_suomeksi_2008_10_19.doc) by Petri Vanhala
 - [French - 2010](http://www.speedcubingfrance.org/speedcubing/reglement/reglementWCA.pdf) by Guillaume Erbibou
@@ -29,10 +31,10 @@ Note that the Regulations had many revisions in 2013. Older translations are lik
 - [Japanese - 2010](http://jrca.cc/rule/WCAregulationJ2010.htm) by [Kentaro Nishi](mailto:jrca-2010honyaku@freeml.com), Takeshi Akuzawa, Yohei Oka, Toru Omura, Shun Sakurai, Kotaro Terada, Takafumi Haseda and Ayano Yoshida
 - [Korean - 2008](http://www.cube.or.kr/competition/WCAregulations2008.htm) by Park Joon-Ho
 - [Polish - 2010](http://stefanlapicki.cba.pl/pliki/regulations2010.html) by Stefan Lapicki
-- [Portuguese - 2010](WCA_regulations2010_portuguese_final.doc) by [Pedro Santos Guimar&atilde;es](http://www.cuber.com.br), [Carlos Alberto de Alc&acirc;ntara Jr.](http://www.cubomagicobrasil.com) and [Rafael Werneck Cinoto](http://www.cinoto.com.br)
+- [Portuguese - 2010](WCA_regulations2010_portuguese_final.doc) by [Pedro Santos Guimarães](http://www.cuber.com.br), [Carlos Alberto de Alcântara Jr.](http://www.cubomagicobrasil.com) and [Rafael Werneck Cinoto](http://www.cinoto.com.br)
 - [Romanian - 2010](http://www.speedcubing.ro/p-9/regulament-world-cube-association-wca) by [Radu Faciu](http://www.speedcubing.ro)
 - [Slovenian - 2010](http://www.rubik.si/klub/wca_pravilnik/) by Ziga Lesar
-- [Spanish - 2010](http://rubikaz.com/competicion/reglamento2010.htm) by Alexandre Toledo Guill&eacute;n and [Carlos Angosto](http://www.rubikaz.com)
+- [Spanish - 2010](http://rubikaz.com/competicion/reglamento2010.htm) by Alexandre Toledo Guillén and [Carlos Angosto](http://www.rubikaz.com)
 - [Thai - 2009](http://www.thailandcube.com/index.php?option=com_content&view=article&id=97&Itemid=55) by Chonlathep Kitsinthopchai
 - [Ukranian - 2010](http://cubing.com.ua/wca/) by [Roman Ostapenko](mailto:ostapenko@cubing.com.ua)
 
