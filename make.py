@@ -67,7 +67,8 @@ with open(languages_file, "r") as fileHandle:
 
   for row in reader:
     language = row[0]
-    languageData[language] = dict(zip(keys, row[1:]))
+    if language != defaultLang:
+      languageData[language] = dict(zip(keys, row[1:]))
 
 languages = languageData.keys()
 
@@ -227,12 +228,15 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
   ])
   subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
-  #TODO: Better fallback for building default branch
   pdfName = languageData[lang]["pdf"]
-  texHeader = languageData[lang]["tex_header"]
 
   if args.pdf:
-    subprocess.check_call(["pdf/build_pdf.sh", pdfName, texHeader])
+    subprocess.check_call([
+      "pdf/build_pdf.sh",
+      pdfName,
+      languageData[lang]["tex_header"],
+      languageData[lang]["tex_command"]
+    ])
     subprocess.check_call([
       "cp",
       "pdf/build/" + pdfName + "-2013.pdf",

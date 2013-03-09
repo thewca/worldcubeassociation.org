@@ -4,6 +4,7 @@ cd $(dirname "${0}")
 
 PDF_NAME="${1}"
 TEX_HEADER="${2}"
+LATEX_COMMAND="${3}"
 
 BUILD_DIR="build"
 rm -rf "${BUILD_DIR}"
@@ -18,4 +19,4 @@ cat "templates/tex_middle.tex" >> "${TEX_FILE}"
 pandoc -t latex ../wca-documents/wca-guidelines-2013.md >> "${TEX_FILE}"
 cat "templates/tex_footer.tex" >> "${TEX_FILE}"
 
-xelatex -output-directory="${BUILD_DIR}" "${TEX_FILE}"
+"${LATEX_COMMAND}" -output-directory="${BUILD_DIR}" "${TEX_FILE}"
