@@ -28,7 +28,7 @@ function specifyModel () {
       "line",
       'cellName',
       'Nickname',
-      'A short name for display inside lists, try to get close to 16 characters (including space characters).',
+      'A short name for display inside lists, try to get close to 16 characters.',
       "Europe 2006",
       ".",
       NULL
