@@ -20,6 +20,8 @@ function showView () {
   if( $isAdmin || (! $isConfirmed )){
     showMap();
   }
+  if( $isAdmin )
+    showResultsUpload();
   endForm();
 }
 
@@ -297,6 +299,16 @@ function showMap () {
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
   echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
+}
+
+#----------------------------------------------------------------------
+function showResultsUpload () {
+#----------------------------------------------------------------------
+  global $data, $chosenCompetitionId, $chosenPassword;
+
+  echo "<hr /><h1>Results Upload</h1>";
+
+  echo "<p><a href='competition_results_upload.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Upload</a> the results.<br />Note: not finished yet, only preview now.</p>";
 }
 
 #----------------------------------------------------------------------

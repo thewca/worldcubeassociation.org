@@ -1,13 +1,13 @@
 <?php
 
 #----------------------------------------------------------------------
-function showCompetitionResults () {
+function showCompetitionResults ($resultsTable = 'Results') {
 #----------------------------------------------------------------------
   global $chosenCompetitionId;
   global $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
-
+  
   #--- Get the results.
-  $competitionResults = getCompetitionResults();
+  $competitionResults = getCompetitionResults($resultsTable);
    
   startTimer();
   tableBegin( 'results', 8 );
@@ -133,7 +133,7 @@ function showCompetitionResultsByPerson () {
 }
 
 #----------------------------------------------------------------------
-function getCompetitionResults () {
+function getCompetitionResults ($resultsTable) {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
@@ -163,7 +163,7 @@ function getCompetitionResults () {
       event.cellName  eventCellName,
       event.format    valueFormat
     FROM
-      Results      result,
+      $resultsTable result,
       Events       event,
       Rounds       round,
       Formats      format,
