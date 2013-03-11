@@ -369,6 +369,14 @@ function storeData () {
     $isConfirmed = true;
   }
 
+  if( $data['unvalidate'] ){
+    dbCommand("UPDATE Competitions
+               SET isConfirmed='0'
+                WHERE id='$chosenCompetitionId'
+    ");
+    $isConfirmed = false;
+  }
+
   #--- Wow, we succeeded!
   $dataSuccessfullySaved = true;
 }
