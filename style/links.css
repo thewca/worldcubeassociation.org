@@ -52,6 +52,11 @@ a.internalEvent:hover                                                 { color: #
 
 /* ---------- external ---------- */
 
+a.external {
+  background: url('images/external_link.png') no-repeat left center;
+  padding-left: 16px;
+}
+
 a.external:link, a.external:visited, a.external:active {
   color: #66F;
 }
@@ -61,6 +66,11 @@ a.external:hover {
 }
 
 /* ---------- email ---------- */
+
+a.email {
+  background: url('images/email_link.png') no-repeat left center;
+  padding-left: 16px;
+}
 
 a.email:link, a.email:visited, a.email:active {
   color: #66F;

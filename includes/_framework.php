@@ -231,9 +231,9 @@ function noticeBox3 ( $color, $message ) {
   echo "<div class='notice $colorBorder'>$message</div>";
 }
 
-function showErrors($errors) {
+function showErrors($errors, $message = "Uh-oh!  The following errors were encountered:") {
   if(!empty($errors)) {
-    $message = "<p>Uh-oh! There seem to be some problems with your installation:</p>";
+    $message = "<p>{$message}</p>";
     $message .= "<ul>";
     foreach($errors as $error) {
         $message .= "<li>{$error}</li>";
