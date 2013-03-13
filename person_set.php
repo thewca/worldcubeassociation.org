@@ -2,7 +2,6 @@
 $currentSection = 'persons';
 require( 'includes/_header.php' );
 
-
 $chosenPersonId = getNormalParam( 'personId' );
 $chosenSubmit   = getBooleanParam( 'submit' );
 $chosenYear     = getHtmlParam( 'year'  );
@@ -14,21 +13,19 @@ if($chosenSubmit) {
   $persons = $wcadb_conn->dbQuery("SELECT * FROM Persons WHERE id = '{$chosenPersonId}'");
 
   if(count($persons) != 1) {
-    showErrorMessage( "Unknown person id <b>[</b>{$chosenPersonId}<b>]</b>." );
+    showErrorMessage("Unknown person id <b>[</b>{$chosenPersonId}<b>]</b>.");
   } else {
     $person = $persons[0];
     $errors = array();
 
     #--- Check the birth date.
-    if (( $chosenYear != $person->year ) or ( $chosenMonth != $person->month ) or ( $chosenDay != $person->day )){
+    if (($chosenYear != $person->year) or ($chosenMonth != $person->month) or ($chosenDay != $person->day)){
       $errors[] = "Incorrect birth date.";
     }
 
     $upload_path = 'upload/';
 
-    $max_size = 50000;
-    $size = filesize($_FILES['picture']['tmp_name']);
-
+    // validate file extension by looking at upload file type
     $file_ext = "";
     if ($_FILES['picture']['type'] == "image/gif") {
       $file_ext = "gif";
@@ -37,21 +34,24 @@ if($chosenSubmit) {
     } elseif ($_FILES['picture']['type'] == "image/jpeg") {
       $file_ext = "jpg";
     }
-    $file = 'p' . $chosenPersonId . "." . $file_ext;
-
     if("" == $file_ext) {
       $errors[] = 'You must upload a file in png, gif, or jpg format.';
     }
 
+    // validate image filesize
+    $max_size = 50000;
+    $size = filesize($_FILES['picture']['tmp_name']);
     if($size > $max_size) {
       $errors[] = 'The file size is too big.';
     }
 
+    // upload file if valid
     if(count($errors) == 0) {
+      $file = 'p' . $chosenPersonId . "." . $file_ext;
       if( move_uploaded_file( $_FILES['picture']['tmp_name'], $upload_path . $file)) {
-        noticeBox( true, "Upload successful." );
+        noticeBox(true, "Upload successful.");
       } else {
-        noticeBox( false, 'Upload failed' );
+        noticeBox(false, 'Upload failed');
       }
     } else {
       showErrors($errors);
