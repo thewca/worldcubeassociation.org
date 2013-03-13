@@ -159,20 +159,3 @@ function textField ( $id, $label, $default, $size ) {
 #----------------------------------------------------------------------
   echo "  <tr><td width='30%'><label for='$id'><b>$label</b></label></td><td><input id='$id' name='$id' type='text' value='$default' size='$size' /></td></tr>\n";
 }
-
-#----------------------------------------------------------------------
-function numberSelect ( $id, $label, $from, $to, $default ) {
-#----------------------------------------------------------------------
-
-  $result = "<select id='$id' name='$id' style='width:5em'>\n";
-  foreach( range( $from, $to ) as $i ){
-    if( $i == $default )
-      $result .= "<option value='$i' selected='selected'>$i</option>\n";
-    else
-      $result .= "<option value='$i'>$i</option>\n";
-  }
-  $result .= "</select>\n\n";
-  return "<label for='$id'>$label:</label> $result";  
-}
-
-?>
