@@ -78,18 +78,17 @@ function showCompetitionResults ($resultsTable = 'Results') {
 }
 
 #----------------------------------------------------------------------
-function showCompetitionResultsByPerson () {
+function showCompetitionResultsByPerson ($resultsTable = 'Results') {
 #----------------------------------------------------------------------
   global $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
   global $chosenCompetitionId;
 
   #--- Get the results.
-  $competitionResults = getCompetitionResults();
-   
+  $competitionResults = getCompetitionResults($resultsTable);
+
   startTimer();
   tableBegin( 'results', 8 );
 
-    
   foreach( $competitionResults as $result ){
     extract( $result );
 
