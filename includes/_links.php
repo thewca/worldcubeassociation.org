@@ -1,4 +1,4 @@
-<?
+<?php
 
 function competitionLink ( $id, $name ) {
   return competitionLinkClassed( 'c', $id, $name );
@@ -37,27 +37,21 @@ function emptyLink ( $text ) {
 #----------------------------------------------------------------------
 
 function externalLink ( $url, $text ) {
-  return $url ? _linkWithImage( htmlEscape( $url ), $text, 'external' )
+  return $url ? _linkWithClass( htmlEscape( $url ), $text, 'external' )
               : emptyLink( $text );
 }
 
 #----------------------------------------------------------------------
 
 function emailLink ( $address, $text ) {
-  return $address ? _linkWithImage( "mailto:$address", $text, 'email' )
+  return $address ? _linkWithClass( "mailto:{$address}", $text, 'email' )
                   : emptyLink( $text );
 }
 
 #----------------------------------------------------------------------
 
-function _linkWithImage ( $href, $text, $class ) {
-  $img = "<img src='" . pathToRoot() . "images/{$class}_link.png' alt='$class link' />";
-
-  $splitText = preg_split( '/\s/', $text, 2 );
-  $firstWord = htmlEscape( $splitText[0] );
-  $rest      = count( $splitText ) > 1 ? " ".htmlEscape( $splitText[1] ) : "";
-
-  return " <a class='$class' href='$href'><span style='white-space:nowrap'>$img$firstWord</span>$rest</a>";
+function _linkWithClass ( $href, $text, $class ) {
+  return "<a class='link-{$class} {$class}' href='{$href}' title='{$class} link'>" . htmlEscape($text) . "</a>";
 }
 
 #----------------------------------------------------------------------
@@ -73,5 +67,3 @@ function processLink ( $text, $link ) {
   if( preg_match( '/^https?:(.*)$/',   $link, $match )) return externalLink( $link, $text );
   return emptyLink( '[{' . $text . '}{' . $link . '}]' );
 }
-
-?>

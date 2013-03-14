@@ -5,6 +5,8 @@
  * Including this file should load all result system functionality.  All includes should be done in this file, not elsewhere.
  */
 
+session_start();
+
 // let's include all system constants first.
 require_once( '_config.class.php' );
 global $config;
@@ -19,6 +21,7 @@ $wcadb_conn = new wcaDBConn($config->get("database"));
 
 // website class definitions can go here
 require_once('_competition.class.php');
+require_once('_form.class.php');
 
 // include drupal API functions if the page depends on them - $load_drupal_api must be set to TRUE.
 if(isset($load_drupal_api) && $load_drupal_api)
@@ -231,9 +234,9 @@ function noticeBox3 ( $color, $message ) {
   echo "<div class='notice $colorBorder'>$message</div>";
 }
 
-function showErrors($errors) {
+function showErrors($errors, $message = "Uh-oh!  The following errors were encountered:") {
   if(!empty($errors)) {
-    $message = "<p>Uh-oh! There seem to be some problems with your installation:</p>";
+    $message = "<p>{$message}</p>";
     $message .= "<ul>";
     foreach($errors as $error) {
         $message .= "<li>{$error}</li>";

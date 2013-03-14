@@ -1,4 +1,4 @@
-<?
+<?php
 
 if( preg_match( '/competition_registration.php/', $_SERVER['PHP_SELF'] ))
   $standAlone = true;
@@ -295,22 +295,6 @@ function showField ( $fieldSpec ) {
     else
       echo " <label for='$id' style='color:#999'>$eventName$timeLimit</label><br />";
   }
-}
-
-#----------------------------------------------------------------------
-function numberSelect ( $id, $label, $from, $to, $default ) {
-#----------------------------------------------------------------------
-
-  $result = "<select id='$id' name='$id' style='width:5em'>\n";
-  foreach( range( $from, $to ) as $i ){
-    if( $i == $default )
-      $result .= "<option value='$i' selected='selected'>$i</option>\n";
-    else
-      $result .= "<option value='$i'>$i</option>\n";
-  }
-  $result .= "</select>\n\n";
-  return "<label for='$id'>$label:</label> $result";  
-
 }
 
 #----------------------------------------------------------------------

@@ -19,7 +19,7 @@ li {
   line-height: 15px;
   padding-left: 15px;
   padding-top: 0px;
-  background-image: url(images/arrow.png) ;
+  background-image: url('images/arrow.png');
   background-repeat: no-repeat;
   background-position: 0px 3px;
 }
@@ -27,6 +27,23 @@ li {
 form {
   margin: 0;
   padding: 0;
+}
+
+fieldset {
+  margin: 10px 15px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 2px 2px 3px #EEE;
+  padding: 10px;
+}
+
+fieldset legend {
+  border: 1px solid #000;
+  border-radius: 3px;
+  background-color: #F2F2F2;
+  padding: 2px 4px;
+  font-style: italic;
+  font-size: 0.8em;
 }
 
 .clr {
@@ -48,15 +65,21 @@ form {
   text-align: left;
 }
 
+#index-indent {
+  width: 85%;
+  margin: 0 auto;
+  font-size: 1.3em;
+}
+
 #header {
   margin: 0;
   padding: 40px 0 0 105px;
   height: 65px;
-  background: url(images/logo.gif) no-repeat;
+  background: url('images/logo.gif') no-repeat;
   text-align: left;
   vertical-align: middle;
   color: orange;
-  font-size: 1.25em; /* 20px; */
+  font-size: 1.25em;
   font-weight: bold;
 }
 
@@ -271,7 +294,7 @@ div .notice {
   width: 90%;
   margin: 5px auto;
   padding: 10px 5px;
-  border: 5px solid #777;
+  border: 3px solid #777;
   color: #000;
   background-color: #EEE;
   font-weight: bold;
@@ -293,4 +316,8 @@ div .notice.success {
   border-color: #3C3;
   color: #3C3;
   background-color: #DFD;
+}
+
+div .notice p, div.notice ul {
+  margin: 5px 10px;
 }

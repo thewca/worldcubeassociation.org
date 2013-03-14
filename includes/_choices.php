@@ -1,4 +1,4 @@
-<?
+<?php
 
 #----------------------------------------------------------------------
 function displayChoices ( $choices ) {
@@ -137,4 +137,19 @@ function textFieldChoice ( $id, $caption, $content ) {
   return "$caption:<br /><input name='$id' type='text' value='$content' />";
 }
 
-?>
+
+#----------------------------------------------------------------------
+function numberSelect ( $id, $label, $from, $to, $default ) {
+#----------------------------------------------------------------------
+
+  $result = "<select id='$id' name='$id' style='width:6em'>\n";
+  foreach( range( $from, $to ) as $i ){
+    if( $i == $default )
+      $result .= "<option value='$i' selected='selected'>$i</option>\n";
+    else
+      $result .= "<option value='$i'>$i</option>\n";
+  }
+  $result .= "</select>\n\n";
+  return "<label for='$id'>$label:</label> $result";  
+
+}

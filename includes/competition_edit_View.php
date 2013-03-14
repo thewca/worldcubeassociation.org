@@ -192,8 +192,10 @@ http://www.worldcubeassociation.org/results/competition_edit.php?competitionId=$
 
   echo "<p><input type='hidden' name='organiserPassword' id='organiserPassword' value='$data[organiserPassword]' /></p>\n";
 
-  if( $isConfirmed )
+  if( $isConfirmed ){
     echo "<p>The competition has been <span style='color:#3C3'>validated</span> by the organisers/delegate</p>";
+    echo "<p><input id='unvalidate' name='unvalidate' type='checkbox' /> Check if you want to <b>unvalidate</b> so that organisers can change again some informations.</p>\n";
+  }
   else
     echo "<p>The competition is currently <span style='color:#F00'>not validated</span> by the organisers/delegate</p>";
 
