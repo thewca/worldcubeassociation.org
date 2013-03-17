@@ -105,8 +105,9 @@ def hyperLinkReplace(expectedReg, expectedGuide, linkMatch, linkReplace, textRep
 # \2: new anchor name part [example: blindfolded]
 # \3: old anchor name [example: blindfoldedsolving]
 # \4: Article name, may be translated [example: Article B]
-# \5: Title [example: Blindfolded Solving]
-articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>';
+# \5: Colon
+# \6: Title [example: Blindfolded Solving]
+articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:\xef\xbc\x9a]*)(\: |\xef\xbc\x9a)([^<]*)</h2>';
 
 allRegsArticles = re.findall(articleMatch, regsText)
 allGuidesArticles = re.findall(articleMatch, guidesText)
@@ -114,7 +115,7 @@ allGuidesArticles = re.findall(articleMatch, guidesText)
 def makeTOC(articles):
     return "<ul id=\"table_of_contents\">\n" + "".join([
         "<li>" + name + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n" 
-        for (num, new, old, name, title)
+        for (num, new, old, name, colon, title)
         in articles
     ]) + "</ul>\n"
 
