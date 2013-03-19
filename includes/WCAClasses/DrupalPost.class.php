@@ -1,11 +1,11 @@
 <?php
-
 /* @file
  * 
  * This file loads the Drupal API and provides a simple class @drupalPost for posting nodes.
  * Specify a $nid to load a previous competition announcement or post for modification.
  * 
  */
+namespace WCAClasses;
 
 try
 {

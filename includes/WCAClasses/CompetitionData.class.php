@@ -4,6 +4,7 @@
  * This file contains a class which can be used for storing/accessing competition data.
  * 
  */
+namespace WCAClasses;
 
 /*
  * @var competitionData
@@ -17,7 +18,7 @@
  *  - load($competitionId): (re-)load another competition.
  *
  */
-class competitionData
+class CompetitionData
 {
 
     // For now, data is just an array containing competition information.

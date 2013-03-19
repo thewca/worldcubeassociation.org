@@ -4,6 +4,7 @@
  * This file contains a class which can be used for accessing configuration settings.
  * 
  */
+namespace WCAClasses;
 
 /*
  * @var configurationData
@@ -13,7 +14,7 @@
  *  - validateInstall: performs some basic checks seeing whether or not the install is valid.
  *
  */
-class configurationData
+class ConfigurationData
 {
     // For now, data is just an array containing configuration settings.
     protected $data = NULL;
@@ -21,7 +22,7 @@ class configurationData
     public function __construct()
     {
         // this directory... no trailing slash here
-        $includes_directory = dirname(__file__);
+        $includes_directory = dirname(__file__) . "/..";
         // expect an associated _config.php file (which shouldn't be included anywhere else!)
         require_once($includes_directory . "/_config.php");
 

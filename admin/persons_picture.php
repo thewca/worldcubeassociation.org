@@ -1,85 +1,106 @@
 <?php
-#----------------------------------------------------------------------
-#   Initialization and page contents.
-#----------------------------------------------------------------------
 
 $currentSection = 'admin';
-require( '../includes/_header.php' );
+require('../includes/_header.php');
 
-adminHeadline( 'Person pictures' );
-validatePicture();
+adminHeadline('Person pictures');
+$upload_path = "../upload/";
 
-require( '../includes/_footer.php' );
-
-#----------------------------------------------------------------------
-function validatePicture () {
-#----------------------------------------------------------------------
-
-  $upload_path = '../upload/';
-  $files = array();
-  if ( $handle = opendir( $upload_path )) {
-    while ( false !== ( $file = readdir( $handle ))) 
-      if ($file[0] == 'p' )
-        $files[] = $file;
-  closedir($handle);
-  }
-
-  if( count( $files ) > 0 )
-    foreach( $files as $file ){ 
-      $personId = substr( $file, 1, 10 );
-
-      if( getNormalParam( "$personId" ) == 'A' ){
-        if ( $handle = opendir( $upload_path )) {
-          while ( false !== ( $a_file = readdir( $handle ))) 
-            if ( substr( $a_file, 0, 11 ) == ( 'a' . $personId ))
-              unlink( $upload_path . $a_file );
-        closedir($handle);
-        }
-      
-        rename( $upload_path . $file, $upload_path . 'a' . substr( $file, 1) );
-      }
-
-      if( getNormalParam( "$personId" ) == 'D' )
-        unlink( $upload_path . $file );
+// get list of unapproved photo files
+$count = 0;
+$files = array();
+if($handle = opendir($upload_path)) {
+  while(($count < 10) && (false !== ($file = readdir($handle)))) {
+    if($file[0] == 'p'){
+      $count += 1;
+      $files[] = $file;
     }
-
-  $count = 0;
-  $files = array();
-  if ( $handle = opendir( $upload_path )) {
-    while (( $count < 10 ) && ( false !== ( $file = readdir( $handle ))))
-      if( $file[0] == 'p' ){
-        $count += 1;
-        $files[] = $file;
-      }
+  }
   closedir($handle);
-  }
-
-  if( count( $files ) == 0 ){
-    echo "<p>No picture submitted</p>";
-    return;
-  }
-
-  echo "<form method='POST'>\n";
-  echo "<table><tr><th>A</th><th>D</th><th>Name</th><th>Picture</th></tr>\n";
-
-  foreach( $files as $file ){ 
-
-    $personId = substr( $file, 1, 10 );
-    $extension = strrchr( $file, '.' );
-
-    $person = dbQuery( "SELECT * FROM Persons WHERE id='$personId'" );
-    $person = $person[0];
-
-    echo "<tr><td><input type='radio' id='$personId' name='$personId' value='A' /></td>\n";
-    echo "<td><input type='radio' id='$personId' name='$personId' value='D' /></td>\n";
-    echo "<td>" . personLink( $personId, $person['name']) . "</td>\n";
-    echo "<td><img src='" . $upload_path . $file . "' width='200' height='300' /></td></tr>\n\n";
-
-  }
-  echo "</table>";
-  echo "<input type='submit' value='Do !' />";
-  echo "</form>";
-
 }
 
-?>
+// Form for validating submissions
+$form = new WCAClasses\FormBuilder("photo-submission-approval");
+foreach($files as $file) {
+  $personId = substr($file, 1, 10);
+  $person = $wcadb_conn->boundQuery("SELECT * FROM Persons WHERE id = ?", array('s', &$personId));
+  if(count($person) == 1) {
+    $person = $person[0];
+    $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer")));
+  } else {
+    print "ERROR - picture present not associated with a valid ID (" . o($personId) . ")!";
+  }
+}
+
+// process form submission
+if($form->submitted()) {
+  if($form->validate() === TRUE) {
+    $submitted_data = $form->submittedData();
+    // (re)move files that have been (dis)approved.
+    if(count($files) > 0) {
+      foreach($files as $file){
+        $personId = substr($file, 1, 10);
+        if($submitted_data[$personId] == 'A'){
+          if($handle = opendir($upload_path)) {
+            while(false !== ($a_file = readdir($handle))) 
+              if(substr($a_file, 0, 11) == ('a' . $personId))
+                unlink($upload_path . $a_file);
+            closedir($handle);
+          }
+          rename($upload_path . $file, $upload_path . 'a' . substr($file, 1));
+        }
+        if($submitted_data[$personId] == 'D') {
+          unlink($upload_path . $file);
+        }
+      }
+    }
+  } else {
+    showErrors($form->validate());
+  }
+}
+
+// re-read files / repopulate form.
+$count = 0;
+$files = array();
+if($handle = opendir($upload_path)) {
+  while(($count < 10) && (false !== ($file = readdir($handle)))) {
+    if($file[0] == 'p'){
+      $count += 1;
+      $files[] = $file;
+    }
+  }
+  closedir($handle);
+}
+
+// display form for any new needed photos
+if(count($files) == 0){
+  // if no files to accept, then:
+  print "<p>No new pictures have been submitted.</p>";
+} else {
+  // otherwise, output form:
+  $form = new WCAClasses\FormBuilder("photo-submission-approval");
+  $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<fieldset><legend>Photo Submission Approval</legend>"));
+
+  foreach($files as $file) {
+    $personId = substr($file, 1, 10);
+    $person = $wcadb_conn->boundQuery("SELECT * FROM Persons WHERE id = ?", array('s', &$personId));
+
+    if(count($person) == 1) {
+      $person = $person[0];
+      $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer")));
+      $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div class='titled-image'>
+        <img src='" . $upload_path . $file . "' class='person' />
+        <span class='titled-image-title'>" . personLink($personId, $person['name']) . "</span></div>"
+        ));
+    } else {
+      print "ERROR - picture present not associated with a valid ID (" . o($personId) . ")!";
+    }
+  }
+  $submit_element = new WCAClasses\FormBuilderEntities\Input("submit", "submit");
+  $submit_element->attribute("value", "Submit!");
+  $form->addEntity($submit_element);
+  $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("</fieldset>"));
+  print $form->render();
+}
+
+require( '../includes/_footer.php' );

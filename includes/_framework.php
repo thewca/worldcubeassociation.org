@@ -1,33 +1,24 @@
 <?php
-
 /*
  * @file
- * Including this file should load all result system functionality.  All includes should be done in this file, not elsewhere.
+ * Including this file should load all result system functionality.
+ * All includes (if necessary) should be done in this file, not elsewhere.
  */
-
 session_start();
 
-// let's include all system constants first.
-require_once( '_config.class.php' );
+// classes are autoloaded.
+require_once("WCAClasses/autoload.php");
+
+// Let's set up system configuration data first.
 global $config;
-$config = new configurationData();
-// some basic installation checks here
+$config = new WCAClasses\ConfigurationData();
+// perform some basic installation checks here
 $installation_errors = $config->validateInstall();
 
-// then create a global database connection object.
-require_once('_mysqli_conn.class.php');
+// Create a global database connection object.
 global $wcadb_conn;
-$wcadb_conn = new wcaDBConn($config->get("database"));
+$wcadb_conn = new WCAClasses\WCADBConn($config->get("database"));
 
-// website class definitions can go here
-require_once('_competition.class.php');
-require_once('_form.class.php');
-
-// include drupal API functions if the page depends on them - $load_drupal_api must be set to TRUE.
-if(isset($load_drupal_api) && $load_drupal_api)
-{
-  require_once('_drupal_post.php');
-}
 
 // current results system functionality
 require '_timer.php';
@@ -40,6 +31,18 @@ require '_values.php';
 require '_cache.php';
 require '_map.php';
 require '_navigation.php';
+
+
+#----------------------------------------------------------------------
+
+/*
+ * Shorthand for html entities.
+ * Need to move this to somewhere more appropriate eventually.
+ */
+function o($value, $flags = ENT_QUOTES)
+{
+  return htmlentities($value, $flags);
+}
 
 
 #----------------------------------------------------------------------

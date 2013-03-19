@@ -1,14 +1,14 @@
 <?php
 // session information needs to be created before <html> tag is output.  Thus this php code should come at the beginning of the file.
 if ( ! preg_match( '/worldcubeassociation.org$/i', $_SERVER["SERVER_NAME"] ) ) {
+  // if not on WCA server, in development environment - show errors.
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
 }
 require_once( '_framework.php' );
 $standAlone = getBooleanParam( 'standAlone' );
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+?><!doctype html><html lang="en">
 <head>
 <title>World Cube Association - Official Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,7 +20,7 @@ $standAlone = getBooleanParam( 'standAlone' );
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/pageMenu.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
-<?= isset( $extraHeaderStuff ) ? $extraHeaderStuff : '' ?>
+<?php print isset( $extraHeaderStuff ) ? $extraHeaderStuff : ''; ?>
 </head>
 
 <body>

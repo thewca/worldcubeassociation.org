@@ -1,4 +1,4 @@
-<?
+<?php
 
 #----------------------------------------------------------------------
 function formatValue( $value, $format='time' ) {
@@ -92,6 +92,3 @@ function isSuccessValue ( $value, $format ) {
 
   return ($format != 'multi') ? ($value > 0) : ($value < 1000000000);
 }
-
-
-?>

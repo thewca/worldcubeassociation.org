@@ -1,11 +1,9 @@
 <?php
 
-include("../includes/_form.class.php");
+$currentSection = 'persons';
+require( '../includes/_header.php' );
 
-$form = new FormBuilder();
-$form->element("user")->setAttribute("type", "text")->setLabel("Enter username:");
-$form->element("password")->setAttribute("type", "password")->setLabel("Enter password:");
-$form->element("Submit")->setAttribute("type", "submit")->setAttribute("value", "'Submit'");
+$form = new WCAClasses\FormBuilder("submission");
+$form->render();
 
-print $form->render();
-
+require( '../includes/_footer.php' );

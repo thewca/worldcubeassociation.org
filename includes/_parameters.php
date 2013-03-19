@@ -1,4 +1,4 @@
-<?
+<?php
 #----------------------------------------------------------------------
 #   This module handles all incoming parameters. First it does is
 #   hide them all in a variable no other script should use (somewhat
@@ -146,5 +146,3 @@ function array_map_recursive( $fn, $arr ) {
   }
   return $rarr;
 }
-
-?>

@@ -1,5 +1,5 @@
 <?php
-
+die("Probably doesn't work right now.");
 /**
 hitting this file should create a drupal post.
 Make sure $config['drupal']['path'] is set correctly in includes/_config.php.

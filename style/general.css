@@ -24,28 +24,6 @@ li {
   background-position: 0px 3px;
 }
 
-form {
-  margin: 0;
-  padding: 0;
-}
-
-fieldset {
-  margin: 10px 15px;
-  border: 1px solid #000;
-  border-radius: 3px;
-  box-shadow: 2px 2px 3px #EEE;
-  padding: 10px;
-}
-
-fieldset legend {
-  border: 1px solid #000;
-  border-radius: 3px;
-  background-color: #F2F2F2;
-  padding: 2px 4px;
-  font-style: italic;
-  font-size: 0.8em;
-}
-
 .clr {
   clear: both;
 }
@@ -301,8 +279,8 @@ div .notice {
 }
 
 div .notice.failure {
-  border-color: #F00;
-  color: #F00;
+  border-color: #C00;
+  color: #C00;
   background-color: #FEE;
 }
 
@@ -321,3 +299,104 @@ div .notice.success {
 div .notice p, div.notice ul {
   margin: 5px 10px;
 }
+
+/* form elements */
+form {
+  margin: 0;
+  padding: 0;
+}
+
+fieldset {
+  margin: 10px 15px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 2px 2px 3px #EEE;
+  padding: 10px;
+}
+
+fieldset legend {
+  border: 1px solid #000;
+  border-radius: 3px;
+  background-color: #F2F2F2;
+  padding: 2px 4px;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+input[error], select[error] {
+  border: 1px solid #C00;
+  background-color: #FEE;
+  background-color: #;
+}
+
+.form-element-wrapper {
+  display: block;
+  float: left;
+  overflow: hidden;
+  clear: both;
+}
+
+.form-element-wrapper label {
+  display: block;
+  float: left;
+  text-align: right;
+  margin: 4px 10px 4px 0;
+  width: 200px;
+}
+
+.form-element-radio-option {
+  display: block;
+  overflow: hidden;
+}
+
+/* specific form styles - photo submission */
+form#photo-submissions div.form-element-wrapper {
+  display: inline;
+  float: none;
+}
+
+form#photo-submissions .form-element-wrapper label {
+  display: inline;
+  float: none;
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+/* specific form styles - photo approval */
+form#photo-submission-approval .titled-image {
+  display: block;
+  text-align: center;
+  float: left;
+  clear: none;
+  margin-bottom: 5px;
+}
+
+form#photo-submission-approval .titled-image img {
+  height: 150px;
+  width: auto;
+}
+
+form#photo-submission-approval .titled-image-title {
+  display: block;
+  clear: both;
+  text-align: center;
+}
+
+form#photo-submission-approval .form-element-radio-option label {
+  width: 100px;
+  margin-top: 0;
+}
+
+form#photo-submission-approval .form-element-wrapper .form-element-radio-option {
+  margin: 20px 15px 0 0;
+  color: #090;
+}
+form#photo-submission-approval .form-element-wrapper .form-element-radio-option
+  + .form-element-radio-option {
+  color: #900;
+}
+form#photo-submission-approval .form-element-wrapper .form-element-radio-option
+  + .form-element-radio-option + .form-element-radio-option {
+  color: #A90;
+}
+
