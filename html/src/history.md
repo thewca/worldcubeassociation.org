@@ -5,7 +5,7 @@
 Until 2011, the Regulations were maintained by Ron van Bruchem and the WCA Board. Since then, the [WCA Regulations Committee](http://www.worldcubeassociation.org/contact/wrc) is in charge of them.  
 For the 2013 release, the Regulations were split into two documents: the Regulations and the Guidelines.
 
-Here are older versions regulations. None of them are official anymore.
+Here are older versions of the regulations. None of them are official anymore.
 
 - 2012: No new Regulations
 - 2011: No new Regulations
