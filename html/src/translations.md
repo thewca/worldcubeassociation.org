@@ -14,6 +14,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
 - [Italian (Italiano) - 2013](./italian/)
     - By [Lorenzo Vigani Poli](http://worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](http://worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](http://worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](http://worldcubeassociation.org/results/p.php?i=2009COLO03).
+- [Japanese - 2013](./japanese)
+    - By [Shuto Ueno (上野柊斗)](http://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](http://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Kotaro Terada (寺田晃太朗)](http://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Wataru Hashimura (端村航)](http://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](http://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](http://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
 - [Russian - 2013](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 
@@ -28,7 +30,6 @@ Note that the Regulations had many revisions in 2013. Older translations are lik
 - [Finnish - 2008](http://speedcubing.dy.fi/files/wca_saannot_suomeksi_2008_10_19.doc) by Petri Vanhala
 - [French - 2010](http://www.speedcubingfrance.org/speedcubing/reglement/reglementWCA.pdf) by Guillaume Erbibou
 - [Italian - 2009](http://spazioinwind.libero.it/gaetzum/approfondimenti/regolamento_wca/regolamento_wca.htm) by Luca Feliciotto
-- [Japanese - 2010](http://jrca.cc/rule/WCAregulationJ2010.htm) by [Kentaro Nishi](mailto:jrca-2010honyaku@freeml.com), Takeshi Akuzawa, Yohei Oka, Toru Omura, Shun Sakurai, Kotaro Terada, Takafumi Haseda and Ayano Yoshida
 - [Korean - 2008](http://www.cube.or.kr/competition/WCAregulations2008.htm) by Park Joon-Ho
 - [Polish - 2010](http://stefanlapicki.cba.pl/pliki/regulations2010.html) by Stefan Lapicki
 - [Portuguese - 2010](WCA_regulations2010_portuguese_final.doc) by [Pedro Santos Guimarães](http://www.cuber.com.br), [Carlos Alberto de Alcântara Jr.](http://www.cubomagicobrasil.com) and [Rafael Werneck Cinoto](http://www.cinoto.com.br)
