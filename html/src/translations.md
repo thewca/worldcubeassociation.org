@@ -18,6 +18,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Shuto Ueno (上野柊斗)](http://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](http://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Kotaro Terada (寺田晃太朗)](http://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Wataru Hashimura (端村航)](http://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](http://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](http://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
 - [Russian - 2013](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
+- [Spanish - 2013](./spanish/)
+    - By [Carlos Méndez García-Barroso](http://worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](http://worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](http://worldcubeassociation.org/results/p.php?i=2009SANC01).
 
 Note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
 
