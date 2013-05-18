@@ -46,7 +46,7 @@ Note that the Regulations had many revisions in 2013. Older translations are lik
 If you'd like to (re)-translate the Regulations, please use the following process:
 
 - Download the [current source](https://github.com/cubing/wca-documents/archive/official.zip) of the Regulations.
-    - When you do this, please also visit [https://github.com/cubing/wca-documents](the GitHub page) and record the current "latest commit" value so we can tell which version you translated.
+    - When you do this, please also visit [the GitHub page](https://github.com/cubing/wca-documents) and record the current "latest commit" value so we can tell which version you translated.
 - Translate `wca-guidelines-2013.md` and `wca-regulations-2013.md`
     - Add a section at the top of the Regulations called "Translation", which should include any useful information about the translation, as well as a translation of the following text: "Please note that this translations is not an official version (even though it is provided on the WCA website): it may be useful, but it does not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used."
     - Try to keep all the formatting intact and only change the words.
