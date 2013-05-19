@@ -234,7 +234,7 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
     subprocess.check_call([
       "pdf/build_pdf.sh",
       pdfName,
-      languageData[lang]["tex_header"],
+      languageData[lang]["tex_encoding"],
       languageData[lang]["tex_command"]
     ])
     subprocess.check_call([

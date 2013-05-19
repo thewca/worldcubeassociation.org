@@ -1,4 +1,4 @@
-"language","name","native","regulations","guidelines","pdf","tex_command","tex_header"
+"language","name","native","regulations","guidelines","pdf","tex_command","tex_encoding"
 "default","English","English","Regulations","Guidelines","wca-regulations-and-guidelines","pdflatex","default"
 "english","English","English","Regulations","Guidelines","wca-regulations-and-guidelines","xelatex","default"
 "german","German","Deutsch","Regeln","Richtlinien","wca-regeln-und-richtlinien","pdflatex","utf8"
