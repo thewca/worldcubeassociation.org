@@ -34,6 +34,7 @@ For all official `wca-documents` updates:
 - Git
     - Create a `wca-documents` commit with all the changes, and the new date.
     - Update `wca-documents/official` to point to it.
+    - Tag the official release commit with `official-YYYY-MM-DD`.
     - Push to [GitHub](https://github.com/cubing/wca-documents).
 - Web
     - Build wca-documents-extra using `./make -w`
