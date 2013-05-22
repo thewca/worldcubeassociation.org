@@ -206,7 +206,7 @@ def build(args):
     checkoutWCADocs("official")
 
   elif args.language == None:
-    buildToDirectory(args, "")
+    buildToDirectory(args, "dev")
 
   elif args.language in languages:
     buildTranslation(args, args.language)
