@@ -25,6 +25,11 @@ def main():
 
   args = parser.parse_args()
 
+  if args.release:
+    args.wca = True
+    args.upload = True
+    args.transfer = True
+
   if args.wca:
     args.clean = True
     args.all = True
@@ -46,6 +51,9 @@ def main():
 
     if args.upload:
       upload(args)
+
+    if args.transfer:
+      transfer(args)
 
     if args.server:
       server(args)
@@ -71,6 +79,12 @@ with open(languages_file, "r") as fileHandle:
 
 languages = languageData.keys()
 languages.remove(defaultLang)
+
+
+# Configuration
+
+with open(upload_server_file, "r") as fileHandle:
+  upload_server = json.load(fileHandle)
 
 
 # Script Parameters
@@ -161,6 +175,20 @@ parser.add_argument(
   default=False,
   help="Full WCA release build. Equivalent to -capz. " +
     "Does *not* currently include -f."
+)
+
+parser.add_argument(
+  '--transfer', '-t',
+  action='store_true',
+  default=False,
+  help="Ping WCA transfer URL."
+)
+
+parser.add_argument(
+  '--release', '-r',
+  action='store_true',
+  default=False,
+  help="Equivalent to -wut"
 )
 
 
@@ -280,9 +308,6 @@ def upload(args):
     sys.stderr.write("Please create one at " + upload_server_file + " using the template.\n")
     return
 
-  with open(upload_server_file, "r") as fileHandle:
-    upload_server = json.load(fileHandle)
-
   subprocess.check_call([
     "rsync",
     "-avz",
@@ -293,6 +318,17 @@ def upload(args):
   print "Done uploading to SFTP server."
   print "Visit " + upload_server["base_url"]
   print "Archive is at " + upload_server["base_url"] + archiveFile
+
+
+def transfer(args):
+
+  print "Opening transfer URL in browser."
+  print "Caveat: This may only work in OSX."
+
+  subprocess.check_call([
+    "open",
+    upload_server["transfer_url"]
+  ])
 
 
 def server(args):
