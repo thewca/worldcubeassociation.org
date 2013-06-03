@@ -27,7 +27,6 @@ def main():
 
   if args.release:
     args.wca = True
-    args.upload = True
     args.transfer = True
 
   if args.wca:
@@ -181,14 +180,14 @@ parser.add_argument(
   '--transfer', '-t',
   action='store_true',
   default=False,
-  help="Ping WCA transfer URL."
+  help="Transfer to WCA server."
 )
 
 parser.add_argument(
   '--release', '-r',
   action='store_true',
   default=False,
-  help="Equivalent to -wut"
+  help="Equivalent to -wt"
 )
 
 
@@ -294,6 +293,9 @@ def buildTranslation(args, lang):
 
 
 def archive(args):
+
+  print "Archiving", buildRootDir, "to", archiveFile, "."
+
   subprocess.check_call(["rm", "-rf", archiveFile])
   subprocess.check_call([
     "tar", "--exclude", ".DS_Store", "-zcf",
@@ -322,12 +324,27 @@ def upload(args):
 
 def transfer(args):
 
-  print "Opening transfer URL in browser."
-  print "Caveat: This may only work in OSX."
+  print "Uploading", archiveFile, "via FTPS."
+
+  lftpCommand = ("set ftp:ssl-force true && "
+    "set ssl:verify-certificate false && "
+    "connect " + upload_server["transfer_server"] + " && "
+    "put " + archiveFile + " && "
+    "bye")
 
   subprocess.check_call([
-    "open",
-    upload_server["transfer_url"]
+    "lftp",
+    "-c",
+    lftpCommand
+  ])
+
+  print "Unpacking", archiveFile, "on server."
+
+  subprocess.check_call([
+    "curl",
+    upload_server["transfer_url"],
+    "--data",
+    upload_server["transfer_post_data"]
   ])
 
 
