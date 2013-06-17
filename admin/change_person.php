@@ -46,6 +46,12 @@ function saveChoices () {
     }
     $person = array_shift( $persons );
 
+    // do not allow country to be 'fixed' (affects records).
+    if($person['countryId'] != $chosenCountryId) {
+      noticeBox(false, "Cannot fix country - might affect records.");
+      return;
+    }
+
     $oldPersonName = $person['name'];
     if( $oldPersonName != $chosenName )
       dbCommand( "UPDATE Results SET personName='$chosenName' WHERE personId='$chosenId' AND personName='$oldPersonName'" );

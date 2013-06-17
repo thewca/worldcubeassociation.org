@@ -21,7 +21,8 @@ if( $chosenCheck ){
   $success = true;
   checkSpacesInPersons();
   checkSpacesInResults();
-  checkTooMuchInPersons();
+  // Removed this - orphaned persons entries are OK to have.
+  // checkTooMuchInPersons();
   checkTooMuchInResults();
   checkDuplicatesInCompetition();
   #checkPersonsInResultsWithoutIds();
