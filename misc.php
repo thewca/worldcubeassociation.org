@@ -20,9 +20,6 @@ require( 'includes/_header.php' );
   <dt><a href='misc/missing_averages/'>Missing Averages</a></dt>
   <dd>Lists for events without official averages.</dd>
 
-  <dt><a href='misc/age_vs_speed.html'>Age vs Speed</a></dt>
-  <dd>A little analysis comparing age vs speed.</dd>
-
   <dt><a href='misc/export.html'>WCA database export</a></dt>
   <dd>Export of the WCA database in several formats, allowing to analyze the data at large.</dd>
 </dl>
