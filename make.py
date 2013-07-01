@@ -322,7 +322,7 @@ def upload(args):
   print "Archive is at " + upload_server["base_url"] + archiveFile
 
 
-def transfer(args):
+def transfer_ftps(args):
 
   print "Uploading", archiveFile, "via FTPS."
 
@@ -347,6 +347,8 @@ def transfer(args):
     upload_server["transfer_post_data"]
   ])
 
+# Currently using SFTP.
+transfer = upload
 
 def server(args):
 
