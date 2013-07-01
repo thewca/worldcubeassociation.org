@@ -6,6 +6,8 @@ Note: Even though these translations are provided on the WCA website, they are n
 
 - [Chinese - 2013](./chinese)
     - By [Shuang Chen](http://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
+- [Chinese, Traditional - 2013](./chinese-traditional)
+    - By [David Guo](http://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](http://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).
 - [German (Deutsch) - 2013](./german/)
     - By [Sébastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
 - [Hungarian - 2013](./hungarian/)
