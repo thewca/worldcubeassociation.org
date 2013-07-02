@@ -45,6 +45,9 @@ def main():
 
   try:
 
+    if args.setup_wca_documents:
+      setup_wca_documents(args)
+
     if args.clean:
       clean(args)
 
@@ -62,9 +65,6 @@ def main():
 
     if args.server:
       server(args)
-
-    if args.setup_wca_documents:
-      setup_wca_documents(args)
 
   finally:
 
