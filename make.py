@@ -91,9 +91,11 @@ languages.remove(defaultLang)
 
 # Configuration
 
-with open(upload_server_file, "r") as fileHandle:
-  upload_server = json.load(fileHandle)
-
+try:
+  with open(upload_server_file, "r") as fileHandle:
+    upload_server = json.load(fileHandle)
+except IOError:
+    upload_server = {}  # Might not be needed.
 
 # Script Parameters
 
