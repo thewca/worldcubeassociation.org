@@ -57,6 +57,9 @@ def main():
     if args.server:
       server(args)
 
+    if args.setup_wca_documents:
+      setup_wca_documents(args)
+
   finally:
 
     if args.reset_to_master:
@@ -190,6 +193,13 @@ parser.add_argument(
   help="Equivalent to -wt"
 )
 
+parser.add_argument(
+  '--setup-wca-documents',
+  action='store_true',
+  default=False,
+  help="Set up remotes for wca-documents."
+)
+
 
 # Clean
 
@@ -277,7 +287,7 @@ def buildBranch(args, branchName, directory, lang=defaultLang, translation=False
 
 
 def buildTranslation(args, lang):
-  branchName = "translation-" + lang
+  branchName = languageData[lang]["branch"]
   directory = "translations/" + lang + "/"
   translation = True
 
@@ -362,6 +372,40 @@ def server(args):
 
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m",  "SimpleHTTPServer", "8081"])
+
+
+def setup_wca_documents(args):
+  for lang in languages:
+    if languageData[lang]["remote_name"] != "":
+      l = languageData[lang]
+      subprocess.call([
+        "git",
+        "--git-dir=./wca-documents/.git",
+        "--work-tree=./wca-documents",
+        "remote",
+        "add",
+        l["remote_name"],
+        l["remote_url"]
+      ])
+      subprocess.call([
+        "git",
+        "--git-dir=./wca-documents/.git",
+        "--work-tree=./wca-documents",
+        "fetch",
+        "--no-tags",
+        l["remote_name"],
+        l["remote_branch"] + ":refs/remotes/" +
+          l["remote_name"] + "/" + l["remote_branch"]
+      ])
+      subprocess.call([
+        "git",
+        "--git-dir=./wca-documents/.git",
+        "--work-tree=./wca-documents",
+        "branch",
+        "--track",
+        l["branch"],
+        l["remote_name"] + "/" + l["remote_branch"]
+      ])
 
 
 # Make the script work standalone.
