@@ -12,6 +12,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Sébastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
 - [Hungarian - 2013](./hungarian/)
     - By Nikolett Placskó and [Perge Olivér](mailto:pergeoliver@gmail.com)
+- [Korean - 2013](./korean/)
+    - By Park Si-Woo (박시우), Kim Ah-Young (김아영), and [Yeom Seok-Hoon (염석훈)](https://worldcubeassociation.org/results/p.php?i=2007SEOK01).
 - [Indonesian (Bahasa) - 2013](./indonesian/)
     - By Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
 - [Italian (Italiano) - 2013](./italian/)
