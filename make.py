@@ -18,6 +18,12 @@ archiveFile = "build.tgz"
 
 defaultLang = "default"
 
+git_command = [
+  "git",
+  "--git-dir=./wca-documents/.git",
+  "--work-tree=./wca-documents"
+]
+
 # Main
 
 
@@ -212,10 +218,7 @@ def clean(args):
 # Git Operations
 
 def currentBranch():
-  output = subprocess.check_output([
-    "git",
-    "--git-dir=./wca-documents/.git",
-    "--work-tree=./wca-documents",
+  output = subprocess.check_output(git_command + [
     "rev-parse",
     "--abbrev-ref",
     "HEAD"
@@ -225,10 +228,7 @@ def currentBranch():
 
 
 def checkoutWCADocs(branchName):
-  subprocess.check_call([
-    "git",
-    "--git-dir=./wca-documents/.git",
-    "--work-tree=./wca-documents",
+  subprocess.check_call(git_command + [
     "checkout",
     branchName
   ])
@@ -378,29 +378,20 @@ def setup_wca_documents(args):
   for lang in languages:
     if languageData[lang]["remote_name"] != "":
       l = languageData[lang]
-      subprocess.call([
-        "git",
-        "--git-dir=./wca-documents/.git",
-        "--work-tree=./wca-documents",
+      subprocess.call(git_command + [
         "remote",
         "add",
         l["remote_name"],
         l["remote_url"]
       ])
-      subprocess.call([
-        "git",
-        "--git-dir=./wca-documents/.git",
-        "--work-tree=./wca-documents",
+      subprocess.call(git_command + [
         "fetch",
         "--no-tags",
         l["remote_name"],
         l["remote_branch"] + ":refs/remotes/" +
           l["remote_name"] + "/" + l["remote_branch"]
       ])
-      subprocess.call([
-        "git",
-        "--git-dir=./wca-documents/.git",
-        "--work-tree=./wca-documents",
+      subprocess.call(git_command + [
         "branch",
         "--track",
         l["branch"],
