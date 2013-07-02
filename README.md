@@ -13,6 +13,10 @@ Run the following to view the resulting files in your browser:
 
     ./make.py -ds
 
+In order to set up all the branches in the `wca-documents` folder to track the translation repos, run:
+
+    ./make.py -d --setup-wca-documents
+
 ## Dependencies
 
 - `Python`
