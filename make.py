@@ -378,20 +378,17 @@ def server(args):
 
 def setup_wca_documents(args):
   for lang in languages:
-    if languageData[lang]["remote_name"] != "":
-      l = languageData[lang]
+    l = languageData[lang]
+    if l["remote_name"] != "":
       subprocess.call(git_command + [
         "remote",
         "add",
+        "--no-tags",
+        "-t",
+        l["remote_branch"],
+        "-f",
         l["remote_name"],
         l["remote_url"]
-      ])
-      subprocess.call(git_command + [
-        "fetch",
-        "--no-tags",
-        l["remote_name"],
-        l["remote_branch"] + ":refs/remotes/" +
-          l["remote_name"] + "/" + l["remote_branch"]
       ])
       subprocess.call(git_command + [
         "branch",
@@ -399,7 +396,13 @@ def setup_wca_documents(args):
         l["branch"],
         l["remote_name"] + "/" + l["remote_branch"]
       ])
-
+    else:
+      subprocess.call(git_command + [
+        "branch",
+        "--track",
+        l["branch"],
+        "origin" + "/" + l["branch"]
+      ])
 
 # Make the script work standalone.
 
