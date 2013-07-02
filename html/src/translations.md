@@ -27,8 +27,6 @@ Note: Even though these translations are provided on the WCA website, they are n
 
 Note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
 
-- [Chinese - 2010](http://www.mf8-china.com/wca/regulations_chs.htm) by [Shihang Wang](mailto:wangshihang@foxmail.com)
-- [Chinese, Traditional - 2010](../history/files/old-translations/WCARegulationsTC.html) by [Han Wu](mailto:hanwu85@yahoo.com.tw)
 - [Croatian - 2010](WCAregulationsCroatian2011.doc) by Igor Saravanja
 - [Czech - 2006 v1](http://rubikscube.info/pravidla/) by [Josef Jelinek](http://rubikscube.info)
 - [Estonian - 2010](http://www.wombat.pri.ee/failid/Reeglid.pdf) by Ivo Kruusamägi
@@ -36,7 +34,6 @@ Note that the Regulations had many revisions in 2013. Older translations are lik
 - [Finnish - 2008](http://speedcubing.dy.fi/files/wca_saannot_suomeksi_2008_10_19.doc) by Petri Vanhala
 - [French - 2010](http://www.speedcubingfrance.org/speedcubing/reglement/reglementWCA.pdf) by Guillaume Erbibou
 - [Italian - 2009](http://spazioinwind.libero.it/gaetzum/approfondimenti/regolamento_wca/regolamento_wca.htm) by Luca Feliciotto
-- [Korean - 2008](http://www.cube.or.kr/competition/WCAregulations2008.htm) by Park Joon-Ho
 - [Polish - 2010](http://stefanlapicki.cba.pl/pliki/regulations2010.html) by Stefan Lapicki
 - [Portuguese - 2010](WCA_regulations2010_portuguese_final.doc) by [Pedro Santos Guimarães](http://www.cuber.com.br), [Carlos Alberto de Alcântara Jr.](http://www.cubomagicobrasil.com) and [Rafael Werneck Cinoto](http://www.cinoto.com.br)
 - [Romanian - 2010](http://www.speedcubing.ro/p-9/regulament-world-cube-association-wca) by [Radu Faciu](http://www.speedcubing.ro)
