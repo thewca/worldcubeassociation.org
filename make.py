@@ -41,6 +41,10 @@ def main():
     args.pdf = True
     args.archive = True
 
+  # Override previous PDF settings at the end
+  if args.no_pdf:
+    args.pdf = False
+
   startingBranch = currentBranch()
 
   try:
@@ -148,6 +152,13 @@ parser.add_argument(
   action='store_true',
   default=False,
   help="Generate PDF."
+)
+
+parser.add_argument(
+  '--no-pdf',
+  action='store_true',
+  default=False,
+  help="Do not generate PDF. Useful for -w when PDF generation has issues."
 )
 
 parser.add_argument(
