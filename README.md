@@ -22,6 +22,7 @@ In order to set up all the branches in the `wca-documents` folder to track the t
 - `Python`
 - [`pandoc`](http://johnmacfarlane.net/pandoc/installing.html) (for converting the documents from Markdown to HTML/LaTeX)
 - `pdflatex` (for converting LaTeX to PDF)
+- `git` (to switch among translation sources automatically)
 
 ## Release Process
 
