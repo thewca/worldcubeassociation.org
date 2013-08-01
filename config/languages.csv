@@ -8,6 +8,6 @@
 "indonesian","translation-indonesian","Indonesian","Indonesian","Regulations","Guidelines","wca-regulations-and-guidelines","xelatex","default","","",""
 "italian","translation-italian","Italian","Italiano","Regolamento","Linee Guida","regolamento-e-linee-guida-wca","xelatex","default","","",""
 "japanese","translation-japanese","Japanese","Japanese","Regulations","Guidelines","wca-regulations-and-guidelines","xelatex","cjk","https://github.com/speedsolve/wca-documents-japanese.git","repo-japanese","translation-japanese"
-"korean","translation-korean","Korean","Korean","Regulations","Guidelines","wca-regulations-and-guidelines","xelatex","korean","https://github.com/CubeHoon/wca-documents-korean.git","repo-korean","official"
+"korean","translation-korean","Korean","Korean","Regulations","Guidelines","wca-regulations-and-guidelines","xelatex","korean","https://github.com/CubeHoon/wca-documents-korean.git","repo-korean","translation-korean"
 "russian","translation-russian","Russian","Russian","Regulations","Guidelines","wca-regulations-and-guidelines","pdflatex","russian","https://github.com/Claster/wca-documents.git","repo-russian","official"
 "spanish","translation-spanish","Spanish","Español","Reglamento","Directrices","wca-reglamento-y-directrices","pdflatex","utf8","https://github.com/Luis-J-Ianez/wca-documents-spanish.git","repo-spanish","translation-spanish"
