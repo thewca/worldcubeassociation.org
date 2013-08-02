@@ -79,6 +79,7 @@ function showBody () {
 
   #--- Now the results.
   require( 'includes/person_personal_records_current.php' );
+  require( 'includes/person_world_championship_podiums.php' );
   require( 'includes/person_world_records_history.php' );
   require( 'includes/person_continent_records_history.php' );
   require( 'includes/person_events.php' );
