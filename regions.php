@@ -57,7 +57,7 @@ function showRecords () {
 
   #--- Try the cache
   tryCache( 'region', preg_replace( '/ /', '', $chosenRegionId ), $chosenEventId, $chosenYears,
-                      $chosenMixed, $chosenSlim, $chosenSeparate, $chosenHistory ); 
+                      $chosenMixed, $chosenSlim, $chosenSeparate, $chosenHistory, $chosenMixHist ); 
 
   if( $chosenMixed    ) require( 'includes/regions_mixed.php' );
   if( $chosenSlim     ) require( 'includes/regions_slim.php' );
