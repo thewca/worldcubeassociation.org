@@ -1,12 +1,13 @@
 <?php
 
-function competitionLink ( $id, $name ) {
-  return competitionLinkClassed( 'c', $id, $name );
+function competitionLink ( $id, $name, $eventId=false, $roundId=false ) {
+  return competitionLinkClassed( 'c', $id, $name, $eventId, $roundId );
 }
 
-function competitionLinkClassed ( $class, $id, $name ) {
+function competitionLinkClassed ( $class, $id, $name, $eventId=false, $roundId=false ) {
   $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
-  return "<a class='$class' href='" . pathToRoot() . "c.php?i=$id'>$name</a>";
+  $inpageLink = $eventId ? ("&allResults=1#e$eventId" . ($roundId ? "_$roundId" : '')) : '';
+  return "<a class='$class' href='" . pathToRoot() . "c.php?i=$id$inpageLink'>$name</a>";
 }
 
 function personLink ( $id, $name ) {

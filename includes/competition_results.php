@@ -46,7 +46,7 @@ function showCompetitionResults ($resultsTable = 'Results') {
     #--- Welcome new rounds.
     if( $chosenAllResults  &&  ($isNewEvent  ||  $isNewRound) ){
 
-      $anchors = ($isNewEvent ? "$eventId " : "") . "e${eventId}_$roundId";
+      $anchors = ($isNewEvent ? "$eventId e$eventId " : "") . "e${eventId}_$roundId";
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName, "<a href='#e${eventId}_$roundId'>link</a>" ));
       tableCaptionNew( false, $anchors, $caption );
