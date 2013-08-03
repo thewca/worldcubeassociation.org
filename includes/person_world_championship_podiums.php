@@ -47,7 +47,7 @@ function showWorldChampionshipPodiums () {
     tableRow( array(
       ($year != $lastYear) ? $year : '',
       eventLink( $eventId, $eventCellName ),
-      competitionLink( $competitionId, $pos, $eventId ),
+      competitionLink( $competitionId, $pos, $eventId, $roundId ),
       formatValue( $best, $valueFormat ),
       formatValue( $average, $valueFormat ),
       formatAverageSources( true, $result, $valueFormat )
