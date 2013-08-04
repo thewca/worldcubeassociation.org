@@ -258,26 +258,9 @@ function compareCandidates ( $a, $b ) {
 }
 
 #----------------------------------------------------------------------
-function visualize ( $text ) {
-#----------------------------------------------------------------------
-
-  return preg_replace( '/\s/', '<span style="color:#F00">#</span>', $text );
-}
-
-#----------------------------------------------------------------------
-function highlight ( $sql ) {
-#----------------------------------------------------------------------
-  $sql = preg_replace( '/(UPDATE|SET|WHERE|AND|REGEXP)/', '<b>$1</b>', $sql );
-  $sql = preg_replace( '/(\\w+)=\'(.*?)\'/', '<span style="color:#00C">$1</span>=\'<span style="color:#F00">$2</span>\'', $sql );
-  return $sql;
-}
-
-#----------------------------------------------------------------------
 function peekLink ( $name, $countryId ) {
 #----------------------------------------------------------------------
   $N = urlencode( $name );
   $C = urlencode( $countryId );
   return "<a href='persons_finish_unfinished_peek_at_results.php?name=$N&countryId=$C' target='_blank'>(results)</a>";
 }
-
-?>

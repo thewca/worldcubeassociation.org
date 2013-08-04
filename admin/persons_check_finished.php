@@ -51,7 +51,7 @@ function showDescription () {
 
   echo "<li><p>Find persons in <b>Results</b> whose name starts or ends with space or has double spaces.</p></li>\n";
     
-  echo "<li><p>Find persons in <b>Persons</b> who don't appear in <b>Results</b>. This should really never happen. I don't know what fix I could offer but I show you similar persons from <b>Results</b>.</p></li>\n";
+//  echo "<li><p>Find persons in <b>Persons</b> who don't appear in <b>Results</b>. This should really never happen. I don't know what fix I could offer but I show you similar persons from <b>Results</b>.</p></li>\n";
   
   echo "<li><p>Find persons in <b>Results</b> who have ids but who don't appear in <b>Persons</b>. Can be caused by organizers telling you incorrect persons. I show similar persons from <b>Persons</b> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <b>Persons</b> table with new subId.</p></li>\n";
   
@@ -415,20 +415,3 @@ function compareCandidates ( $a, $b ) {
   
   return 0;
 }
-
-#----------------------------------------------------------------------
-function visualize ( $text ) {
-#----------------------------------------------------------------------
-
-  return preg_replace( '/\s/', '<span style="color:#F00">#</span>', $text );
-}
-
-#----------------------------------------------------------------------
-function highlight ( $sql ) {
-#----------------------------------------------------------------------
-  $sql = preg_replace( '/(UPDATE|SET|WHERE|AND|REGEXP)/', '<b>$1</b>', $sql );
-  $sql = preg_replace( '/(\\w+)=\'(.*?)\'/', '<span style="color:#00C">$1</span>=\'<span style="color:#F00">$2</span>\'', $sql );
-  return $sql;
-}
-
-?>

@@ -51,7 +51,7 @@ function showChoices () {
   displayChoices( array(
     eventChoice( false ),
     competitionChoice( false ),
-    choiceButton( true, 'show', ' Show ' )
+    choiceButton( true, 'show', 'Show' )
   ));
 }
 
@@ -77,11 +77,14 @@ function doTheDarnChecking () {
   noticeBox2(
     ! $differencesWereFound,
     "We completely agree.<br />$date",
-    "<p>Darn! We disagree!<br />$date</p>\n<p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following. If you then go back in your browser and refresh the page, the changes should be visible.</p>\n<pre>I'm doing this:
-UPDATE Results SET regionalSingleRecord='WR' WHERE id=11111
-UPDATE Results SET regionalSingleRecord='ER' WHERE id=22222
-UPDATE Results SET regionalSingleRecord='NR' WHERE id=33333
-</pre>"
+    "<p>Darn! We disagree!<br />$date</p>
+     <p>Choose the changes you agree with above, then click the 'Execute...' button below. It will result in something like the following.
+        If you then go back in your browser and refresh the page, the changes should be visible.</p>
+        \n<pre>
+            Queries similar to the following will be executed:
+              UPDATE Results SET regionalSingleRecord = ? WHERE id = ?
+              UPDATE Results SET regionalAverageRecord = ? WHERE id = ?
+          </pre>"
   );
 
   #--- If differences were found, offer to fix them.
