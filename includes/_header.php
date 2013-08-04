@@ -12,14 +12,39 @@ $standAlone = getBooleanParam( 'standAlone' );
 <head>
 <title>World Cube Association - Official Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="author" content="Ron van Bruchem, Stefan Pochmann, Clément Gallet, Josef Jelinek" />
+<meta name="author" content="WCA Website Team" />
 <meta name="description" content="Official World Cube Association Competition Results" />
 <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
-<link rel="shortcut icon" href="<?= pathToRoot() ?>images/wca.ico" />
-<link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/general.css" />
-<link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/pageMenu.css" />
-<link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />
-<link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/links.css" />
+<link rel="shortcut icon" href="<?php print pathToRoot(); ?>images/wca.ico" />
+
+<?php
+
+/* Deal with scripts here, for now */
+$scripts = new WCAClasses\WCAScripts();
+if(isset($jQuery) && $jQuery) {
+  $scripts->add('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js');
+}
+if(isset($jQueryUI) && $jQueryUI) {
+  $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
+}
+print $scripts->getHTMLAll();
+
+
+/* Deal with styles here, for now */
+$styles = new WCAClasses\WCAStyles();
+$styles->add('general.css');
+$styles->add('pageMenu.css');
+$styles->add('tables.css');
+$styles->add('links.css');
+if(isset($currentSection) && $currentSection == 'admin') {
+  $styles->add('admin.css');
+}
+print $styles->getHTMLAll();
+
+
+?>
+
+
 <?php print isset( $extraHeaderStuff ) ? $extraHeaderStuff : ''; ?>
 </head>
 

@@ -19,6 +19,9 @@ $installation_errors = $config->validateInstall();
 global $wcadb_conn;
 $wcadb_conn = new WCAClasses\WCADBConn($config->get("database"));
 
+// misc. display functions
+require '_ui.php';
+
 
 // current results system functionality
 require '_timer.php';
@@ -32,17 +35,6 @@ require '_cache.php';
 require '_map.php';
 require '_navigation.php';
 
-
-#----------------------------------------------------------------------
-
-/*
- * Shorthand for html entities.
- * Need to move this to somewhere more appropriate eventually.
- */
-function o($value, $flags = ENT_QUOTES)
-{
-  return htmlentities($value, $flags);
-}
 
 
 #----------------------------------------------------------------------
@@ -131,14 +123,6 @@ function competitionDate ( $competition ) {
 
 #----------------------------------------------------------------------
 
-function spaced ( $parts ) {
-  return implode( str_repeat( '&nbsp;', 10 ), array_filter( $parts ));
-}
-
-function htmlEscape ( $string ) {
-  return htmlentities( $string, ENT_QUOTES, "UTF-8" );
-}
-
 function chosenRegionName ( $visibleWorld = false ) {
   global $chosenRegionId;
   if ( !$chosenRegionId && $visibleWorld ) return 'World';
@@ -152,21 +136,6 @@ function chosenEventName () {
 
 function randomDebug () {
   return wcaDebug() ? rand( 1, 30000 ) : 1;
-}
-
-function assertFoo ( $check, $message ) {
-  if( ! $check )
-    showErrorMessage( $message );
-}
-
-function showErrorMessage( $message ) {
-  echo "<div class='errorMessage'>Error: $message</div>";
-}
-
-function pretty ( $object ) {
-  echo "<pre>";
-  print_r( $object );
-  echo "</pre>";
 }
 
 #----------------------------------------------------------------------
@@ -212,81 +181,14 @@ function regionCondition ( $countrySource ) {
   return " AND ${countrySource}countryId = '$chosenRegionId'";
 }
 
-#----------------------------------------------------------------------
-function noticeBox ( $isSuccess, $message ) {
-#----------------------------------------------------------------------
-
-  noticeBox3( $isSuccess ? 1 : -1, $message );
-}
-
-#----------------------------------------------------------------------
-function noticeBox2 ( $isSuccess, $yesMessage, $noMessage ) {
-#----------------------------------------------------------------------
-
-  noticeBox( $isSuccess, $isSuccess ? $yesMessage : $noMessage );
-}
-
-#----------------------------------------------------------------------
-function noticeBox3 ( $color, $message ) {
-#----------------------------------------------------------------------
-
-  #--- Color: -1=red, 0=yellow, 1=green
-  $colorBorder = array( 'failure', 'warning', 'success' ); $colorBorder = $colorBorder[ $color+1 ];
-
-  #--- Show the notice
-  echo "<div class='notice $colorBorder'>$message</div>";
-}
-
-function showErrors($errors, $message = "Uh-oh!  The following errors were encountered:") {
-  if(!empty($errors)) {
-    $message = "<p>{$message}</p>";
-    $message .= "<ul>";
-    foreach($errors as $error) {
-        $message .= "<li>{$error}</li>";
-    }
-    $message .= "</ul>";
-    noticeBox(FALSE, $message);
-  }
-}
-
-#----------------------------------------------------------------------
 function pathToRoot () {
-#----------------------------------------------------------------------
   global $config;
   return $config->get('pathToRoot');
 }
 
-#----------------------------------------------------------------------
 function wcaDate ( $format='r', $timestamp=false ) {
-#----------------------------------------------------------------------
-
   #--- Set timezone (otherwise date() might complain), then return the date
   date_default_timezone_set( 'Europe/Berlin' );
   return date( $format, $timestamp ? $timestamp : time() );
 }
 
-#----------------------------------------------------------------------
-function extractRomanName ( $name ) {
-#----------------------------------------------------------------------
-  if( preg_match( '/(.*)\((.*)\)$/', $name, $matches ))
-    return( rtrim( $matches[1] ));
-  else
-    return( $name );
-}
-
-#----------------------------------------------------------------------
-function extractLocalName ( $name ) {
-#----------------------------------------------------------------------
-  if( preg_match( '/(.*)\((.*)\)$/', $name, $matches ))
-    return( $matches[2] );
-  else
-    return( '' );
-}
-
-#----------------------------------------------------------------------
-function adminHeadline ( $title, $scriptIfExecution=false ) {
-#----------------------------------------------------------------------
-  echo "<p><span style='background:#f4f4f4; padding:3px; border:1px solid #ddd'><a href='".pathToRoot()."admin/'>Administration</a> &gt;&gt; "
-     . (!$scriptIfExecution ? "<b>$title</b>" : "<a href='$scriptIfExecution.php?forceReload=".time()."'>$title</a> &gt;&gt; <b>Execution</b>")
-     . " &nbsp;(" . wcaDate() . ")</span></p>\n";
-}
