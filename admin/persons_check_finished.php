@@ -21,11 +21,9 @@ if( $chosenCheck ){
   $success = true;
   checkSpacesInPersons();
   checkSpacesInResults();
-  // Removed this - orphaned persons entries are OK to have.
-  // checkTooMuchInPersons();
+
   checkTooMuchInResults();
   checkDuplicatesInCompetition();
-  #checkPersonsInResultsWithoutIds();
 
   #--- Tell the result
   noticeBox2(
@@ -47,15 +45,13 @@ function showDescription () {
 
   echo "<ul>\n";
 
-  echo "<li><p>Find persons in <b>Persons</b> whose name starts or ends with space or has double spaces.</p></li>\n";
+  echo "<li><p>Find persons in <strong>Persons</strong> whose name starts or ends with space or has double spaces.</p></li>\n";
 
-  echo "<li><p>Find persons in <b>Results</b> whose name starts or ends with space or has double spaces.</p></li>\n";
-    
-//  echo "<li><p>Find persons in <b>Persons</b> who don't appear in <b>Results</b>. This should really never happen. I don't know what fix I could offer but I show you similar persons from <b>Results</b>.</p></li>\n";
+  echo "<li><p>Find persons in <strong>Results</strong> whose name starts or ends with space or has double spaces.</p></li>\n";
+
+  echo "<li><p>Find persons in <strong>Results</strong> who have ids but who don't appear in <strong>Persons</strong>. Can be caused by organizers telling you incorrect persons. I show similar persons from <strong>Persons</strong> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <strong>Persons</strong> table with new subId.</p></li>\n";
   
-  echo "<li><p>Find persons in <b>Results</b> who have ids but who don't appear in <b>Persons</b>. Can be caused by organizers telling you incorrect persons. I show similar persons from <b>Persons</b> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <b>Persons</b> table with new subId.</p></li>\n";
-  
-  echo "<li><p>Find persons in <b>Results</b> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundIds are wrong.</p></li>\n";
+  echo "<li><p>Find persons in <strong>Results</strong> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundIds are wrong.</p></li>\n";
   
   echo "</ul>";
   
@@ -122,25 +118,22 @@ function checkSpacesInPersons () {
   
   #--- If all OK, say so and return.
   if( ! $bads ){
-    echo "<p style='color:#6C6'><b>OK!</b> No person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
+    echo "<p style='color:#6C6'><strong>OK!</strong> No person names in <strong>Persons</strong> start or end with a space or have double spaces.</p>";
     return;
   }
   
   #--- Otherwise, show the errors
-  echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Persons</b> start or end with a space or have double spaces.</p>";
+  echo "<p style='color:#F00'><strong>BAD!</strong> Some person names in <strong>Persons</strong> start or end with a space or have double spaces.</p>";
   tableBegin( 'results', 3 );
-  tableHeader( explode( '|', 'current|suggested|SQL' ), array( 2=>'class="f"' ));
+  tableHeader( explode( '|', '|Current|Suggested' ), array( 2=>'class="f"' ));
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $name ));
-    $goodPersonName = mysqlEscape( $goodPersonName );
-    $badPersonName = mysqlEscape( $name );
-    $action = "UPDATE Persons SET name=\"$goodPersonName\" WHERE name=\"$badPersonName\"";
+    $badPersonName = $name;
     tableRow( array(
-      visualize( $name ),
-      visualize( $goodPersonName ),
-      "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
-      highlight( $action )
+      '<a href="persons_check_finished_ACTION.php?action=fix_person_name&old_name='.urlEncode($badPersonName).'&new_name='.urlEncode($goodPersonName).'">Change:</a>',
+      visualize($name),
+      visualize($goodPersonName),
     ));
   }
   tableEnd();
@@ -161,70 +154,29 @@ function checkSpacesInResults () {
   
   #--- If all OK, say so and return.
   if( ! $bads ){
-    echo "<p style='color:#6C6'><b>OK!</b> No person names in <b>Results</b> start or end with a space or have double spaces.</p>";
+    echo "<p style='color:#6C6'><strong>OK!</strong> No person names in <strong>Results</strong> start or end with a space or have double spaces.</p>";
     return;
   }
 
   #--- Otherwise, show the errors
-  echo "<p style='color:#F00'><b>BAD!</b> Some person names in <b>Results</b> start or end with a space or have double spaces.</p>";
-  tableBegin( 'results', 4 );
-  tableHeader( explode( '|', 'current|suggested|fix...|SQL' ), array( 3=>'class="f"' ));
+  echo "<p style='color:#F00'><strong>BAD!</strong> Some person names in <strong>Results</strong> start or end with a space or have double spaces.</p>";
+  tableBegin( 'results', 3 );
+  tableHeader( explode( '|', '|Current|Suggested' ), array( 2=>'class="f"' ));
   foreach( $bads as $bad ){
     extract( $bad );
     $goodPersonName = preg_replace( '/\s+/', ' ', trim( $personName ));
-    $goodPersonName = mysqlEscape( $goodPersonName );
-    $badPersonName = mysqlEscape( $personName );
+    $badPersonName = $personName;
     $action = "UPDATE Results SET personName=\"$goodPersonName\" WHERE personName=\"$badPersonName\"";
     tableRow( array(
+      '<a href="persons_check_finished_ACTION.php?action=fix_results_name&old_name='.urlEncode($badPersonName).'&new_name='.urlEncode($goodPersonName).'">Change:</a>',
       visualize( $personName ),
       visualize( $goodPersonName ),
-      "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
-      highlight( $action ),
     ));
   }
   tableEnd();
   $GLOBALS["success"] = false;
 }
 
-#----------------------------------------------------------------------
-function checkTooMuchInPersons () {
-#----------------------------------------------------------------------
-  global $personsFromPersons, $personsFromResults;
-  echo "<hr />";
-  
-  #--- Find all that are too much.  
-  foreach( array_keys( $personsFromPersons ) as $personKey ){
-    if( ! $personsFromResults[$personKey] )
-      $tooMuchInPersons[] = $personKey;
-  }
-  
-  #--- If all OK, say so and return.
-  if( ! $tooMuchInPersons ){
-    echo "<p style='color:#6C6'><b>OK!</b> All persons in <b>Persons</b> also appear in <b>Results</b>.</p>";
-    return;
-  }
-  
-  #--- Otherwise, show the Persons troublemakers and possible matches in Results.
-  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Persons</b> also appear in <b>Results</b>:</p>";
-  tableBegin( 'results', 4 );
-  tableHeader( explode( '|', 'source|name|countryId|id' ), array( 3=>'class="f"' ) );
-  foreach( $tooMuchInPersons as $personKey ){
-    extract( $personsFromPersons[$personKey] );
-    tableRowStyled( 'font-weight:bold', array(
-      'Persons',
-      visualize( $name ),
-      visualize( $countryId ),
-      visualize( $id )
-    ));
-    foreach( getMostSimilarPersons( $id, $name, $countryId, $personsFromResults ) as $similarPerson ){
-      extract( $similarPerson );
-      tableRow( visualize( array( 'Results', $name, $countryId, $id )));
-    }
-    tableRowEmpty();
-  }
-  tableEnd();
-  $GLOBALS["success"] = false;
-}
 
 #----------------------------------------------------------------------
 function checkTooMuchInResults () {
@@ -232,45 +184,48 @@ function checkTooMuchInResults () {
   global $personsFromPersons, $personsFromResults;
   echo "<hr />";
   
-  #--- Find all that are too much.  
+  $tooMuchInResults = array();
+  #--- Find all ('finished') entries in Results that don't have a match in Persons.
   foreach( array_keys( $personsFromResults ) as $personKey ){
-    if( $personsFromResults[$personKey]['id']  &&  ! $personsFromPersons[$personKey] )
+    if( $personsFromResults[$personKey]['id']  &&  ! isset($personsFromPersons[$personKey]) )
       $tooMuchInResults[] = $personKey;
   }
   
   #--- If all OK, say so and return.
-  if( ! $tooMuchInResults ){
-    echo "<p style='color:#6C6'><b>OK!</b> All persons in <b>Results</b> who have an id also appear in <b>Persons</b>.</p>";
+  if( empty($tooMuchInResults) ){
+    echo "<p style='color:#6C6'><strong>OK!</strong> All persons in <strong>Results</strong> who have an id also appear in <strong>Persons</strong>.</p>";
     return;
   }
   
   #--- Otherwise, show the Results troublemakers and possible matches in Persons.
-  echo "<p style='color:#F00'><b>BAD!</b> Not all persons in <b>Results</b> who have an id also appear in <b>Persons</b>:</p>";
-  tableBegin( 'results', 6 );
-  tableHeader( explode( '|', 'source|name|countryId|id|fix...|SQL to adopt other person\'s data' ), array( 3=>'class="f"' ) );
+  echo "<p style='color:#F00'><strong>BAD!</strong> Not all persons in <strong>Results</strong> who have an id also appear in <strong>Persons</strong>:</p>";
+  tableBegin( 'results', 4 );
+  tableHeader( explode( '|', '|Name|countryId|id' ), array( 3=>'class="f"' ) );
   foreach( $tooMuchInResults as $personKey ){
     extract( $personsFromResults[$personKey] );
     tableRowStyled( 'font-weight:bold', array(
-      'Results',
+      '',
       visualize( $name ),
       visualize( $countryId ),
       visualize( $id ),
-      '',
-      ''
     ));
     $currId = $id;
     $currName = $name;
     $currCountryId = $countryId;
     foreach( getMostSimilarPersons( $id, $name, $countryId, $personsFromPersons ) as $similarPerson ){
       extract( $similarPerson );
-      $action = "UPDATE Results SET personId='$id', personName=\"$name\", countryId=\"$countryId\" WHERE personId='$currId' AND personName=\"$currName\" AND countryId=\"$currCountryId\"";
       tableRow( array(
-        'Persons',
+        '<a href="persons_check_finished_ACTION.php?action=fix_results_data'
+          . '&old_name=' . urlEncode($currName)
+          . '&new_name=' . urlEncode($name)
+          . '&old_id=' . urlEncode($currId)
+          . '&new_id=' . urlEncode($id)
+          . '&old_country=' . urlEncode($currCountryId)
+          . '&new_country=' . urlEncode($countryId)
+          . '">Change to:</a>',
         visualize( $name ),
         visualize( $countryId ),
         visualize( $id ),
-      "<a href='_execute_sql_command.php?command=" . urlEncode($action) . "'>fix...</a>",
-        highlight( $action )
       ));
     }
     tableRowEmpty();
@@ -295,12 +250,12 @@ function checkDuplicatesInCompetition () {
   
   #--- If all OK, say so and return.
   if( ! $duplicates ){
-    echo "<p style='color:#6C6'><b>OK!</b> There are no personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
+    echo "<p style='color:#6C6'><strong>OK!</strong> There are no personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <strong>Results</strong>.</p>";
     return;
   }
 
   #--- Otherwise, show the errors
-  echo "<p style='color:#F00'><b>BAD!</b> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <b>Results</b>.</p>";
+  echo "<p style='color:#F00'><strong>BAD!</strong> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <strong>Results</strong>.</p>";
   tableBegin( 'results', 7 );
   tableHeader( explode( '|', 'personId|personName|countryId|competitionId|eventId|roundId|#Occurances' ),
                array( 6=>'class="f"' ));
@@ -314,64 +269,8 @@ function checkDuplicatesInCompetition () {
   $GLOBALS["success"] = false;
 }
 
-#----------------------------------------------------------------------
-function checkPersonsInResultsWithoutIds () {
-#----------------------------------------------------------------------
-  global $personsFromPersons, $personsFromResults;
-  echo "<hr>";
 
-#  global $chosenCompetitionId;
-#  if( ! $chosenCompetitionId )
-#    return;
 
-  tableBegin( 'results', 6 );
-  tableHeader( explode( '|', '|personName|countryId|personId||' ), array( 5=>'class="f"' ) );
-
-  foreach( $personsFromResults as $person ){
-    extract( $person );
-    if( $id )
-      continue;
-      
-    #--- Show the new person.
-    $idPrefix = strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $name ), 0, 4 ));
-    tableRowStyled( 'font-weight:bold', array(
-      "<input type='radio' name='$name/$countryId' />",
-      visualize( $name ),
-      visualize( $countryId ),
-      "$firstYear<input type='text' value='$idPrefix' size='5' maxlength='4' />??",
-      '',
-      ''
-    ));
-    
-    $similarsCtr = 0;
-    foreach( getMostSimilarPersonsMax( $id, $name, $countryId, $personsFromResults, 10 ) as $similarPerson ){
-      extract( $similarPerson, EXTR_PREFIX_ALL, 'other' );
-      $checked = ($other_name==$name && $other_countryId==$countryId)
-        ? "checked='checked'" : '';
-      if( $checked && !$other_id )
-        continue;
-      tableRow( array(
-        "<input type='radio' name='$name/$countryId' $checked />",
-#        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
-        visualize( $other_name ),
-        visualize( $other_countryId ),
-        visualize( $other_id ),
-        '', #sprintf( "%.2f", $similarity ),
-        ''
-      ));
-      if( ++$similarsCtr == 4 )
-        break;
-    }
-    tableRowEmpty();
-    if( ++$ctr == 20 )
-      break;
-  }
-
-  tableEnd();
-
-  if( $ctr )
-    $GLOBALS["success"] = false;
-}
 
 #----------------------------------------------------------------------
 function getMostSimilarPersons ( $id, $name, $countryId, $persons ) {
