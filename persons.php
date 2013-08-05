@@ -16,22 +16,11 @@ require( 'includes/_footer.php' );
 function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenEventId, $chosenRegionId, $chosenPatternHtml, $chosenPatternMysql;
-  global $wcadb_conn;
 
   $chosenEventId      = getNormalParam( 'eventId' );
   $chosenRegionId     = getNormalParam( 'regionId' );
   $chosenPatternHtml  = getHtmlParam( 'pattern' );
   $chosenPatternMysql = getMysqlParam( 'pattern' );
-
-  $pattern = trim(getRawParamThisShouldBeAnException('pattern'));
-  if(preg_match('/^(19|20)\d{2}[A-Z]{4}\d{2}$/i', $pattern)) {
-    $matches = $wcadb_conn->boundQuery('SELECT id FROM Persons WHERE id = ?', array('s', &$pattern));
-    if(!empty($matches)) {
-      header('Location: p.php?i='.urlEncode($pattern));
-      print '<a href="p.php?i='.urlEncode($pattern).'"></a>';
-      die();
-    }
-  }
 
 }
 
@@ -60,34 +49,53 @@ function showMatchingPersons () {
     return;
   }
 
+  #--- The pattern should contain at least 2 non-whitespace characters.
+  if(!preg_match('/\S.*\S/', $chosenPatternHtml)){
+    noticeBox("Please Enter at least 2 characters.");
+    echo "<div style='width:85%; margin:auto; font-size:1.00em; font-weight:bold'><p>For the name field search, enter any name or name parts and don't worry about letter variations. For example, 'or joe' (enter without the quotes) will among others also find Jo&euml;l van Noort.</p></div>";
+    return;
+  }
+
+  #--- Otherwise, build up a query to search for people.
+  global $wcadb_conn;
+  $params = array(0 => '');
+  $parts = array();
+  $rawPattern = getRawParamThisShouldBeAnException('pattern');
+
   #--- Build the nameCondition (all searched parts must occur).
   $nameCondition = "";
-  foreach( explode( ' ', $chosenPatternMysql ) as $namePart )
-    $nameCondition .= " AND (person.name LIKE '%$namePart%' OR person.id LIKE '%$namePart%')";
+  foreach(explode(' ', $rawPattern) as $namePart) {
+    $parts[$namePart] = '%' . $namePart . '%';
+    $nameCondition .= ' AND (person.name LIKE ? OR person.id LIKE ?)';
+    $params[0] .= 'ss';
+    $params[] = &$parts[$namePart];
+    $params[] = &$parts[$namePart];
+  }
 
   #--- Build the eventCondition (if any).
   if( $chosenEventId ){
-    $eventConditionPart1 = ", (SELECT DISTINCT personId FROM ConciseSingleResults WHERE 1 " . eventCondition() . ") result";
-    $eventConditionPart2 = "AND person.id = result.personId";
+    $eventConditionPart1 = ', (SELECT DISTINCT personId FROM ConciseSingleResults WHERE 1 ' . eventCondition() . ') result';
+    $eventConditionPart2 = 'AND person.id = result.personId';
   }
   else {
-    $eventConditionPart1 = "";
-    $eventConditionPart2 = "";
+    $eventConditionPart1 = '';
+    $eventConditionPart2 = '';
   }
   
   #--- Do the query!
-  $persons = dbQuery("
-    SELECT DISTINCT person.id personId, person.name personName, country.name countryName
-    FROM Persons person, Countries country $eventConditionPart1 
-    WHERE " . randomDebug() . "
-      $nameCondition
-      " . regionCondition( '' ) . "
-      AND country.id = person.countryId
-      $eventConditionPart2
-    ORDER BY personName, countryName, personId
-  ");
+  $query = 'SELECT DISTINCT person.id AS personId, person.name AS personName, country.name AS countryName
+            FROM Persons AS person, Countries AS country'
+         . $eventConditionPart1 
+         . ' WHERE ' . randomDebug()
+         . $nameCondition
+         . regionCondition('')
+         . ' AND country.id = person.countryId'
+         . $eventConditionPart2
+         . ' ORDER BY personName, countryName, personId';
+  $persons = $wcadb_conn->boundQuery($query, $params);
 
-  $count = count( $persons );
+
+  $count = count($persons);
   $ext = ($count != 1) ? 's' : '';
 
   tableBegin( 'results', 3 );
