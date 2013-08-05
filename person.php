@@ -25,6 +25,13 @@ function showBody () {
 #----------------------------------------------------------------------
   global $chosenPersonId;
 
+  // simple validation first...
+  if(!preg_match('/\d{4}\w{4}\d{2}/', $chosenPersonId)) {
+    showErrorMessage( 'Invalid WCA id Format <strong>[</strong>'.o($chosenPersonId).'<strong>]</strong>' );
+    print '<p><a href="persons.php">Click here to search for people.</a></p>';
+    return;
+  }
+
   #--- Get all incarnations of the person.
   $persons = dbQuery("
     SELECT person.name personName, country.name countryName, day, month, year, gender
@@ -35,7 +42,9 @@ function showBody () {
 
   #--- If there are none, show an error and do no more.
   if( ! count( $persons )){
-    showErrorMessage( "Unknown person id <b>[</b>$chosenPersonId<b>]</b>" );
+    showErrorMessage('Unknown person id <strong>[</strong>'.o($chosenPersonId).'<strong>]</strong>' );
+    $namepart = substr($chosenPersonId, 4, 4);
+    print '<p><a href="persons.php?pattern='.urlEncode($namepart).'">Click to search for people with `'.o($namepart).'` in their name.</a></p>';
     return;
   }
 

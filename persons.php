@@ -37,8 +37,9 @@ function offerChoices () {
   ));
   print '</div>';
 
+
   print '<div id="search-wcaid" style="float: left;">';
-  $form = new WCAClasses\FormBuilder("search-wcaid-submissions", array('method' => 'GET' , 'action' => 'p.php', 'class' => 'choices_form'), FALSE);
+  $form = new WCAClasses\FormBuilder("search-wcaid-submissions", array('method' => 'GET', 'action' => 'p.php', 'class' => 'choices_form'), FALSE);
 
   $search_field = new WCAClasses\FormBuilderEntities\Input("i", "");
   $search_field->label("Or go to WCA id");
