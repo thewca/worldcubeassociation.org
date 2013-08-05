@@ -16,11 +16,23 @@ require( 'includes/_footer.php' );
 function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenEventId, $chosenRegionId, $chosenPatternHtml, $chosenPatternMysql;
+  global $wcadb_conn;
 
   $chosenEventId      = getNormalParam( 'eventId' );
   $chosenRegionId     = getNormalParam( 'regionId' );
   $chosenPatternHtml  = getHtmlParam( 'pattern' );
   $chosenPatternMysql = getMysqlParam( 'pattern' );
+
+  $pattern = getRawParamThisShouldBeAnException('pattern');
+  if(preg_match('/(19|20)\d{2}[A-Z]{4}\d{2}/i', $pattern)) {
+    $matches = $wcadb_conn->boundQuery('SELECT id FROM Persons WHERE id = ?', array('s', &$pattern));
+    if(!empty($matches)) {
+      header('Location: p.php?i='.$chosenPatternMysql);
+      print '<a href="p.php?i='.$chosenPatternMysql.'"></a>';
+      die();
+    }
+  }
+
 }
 
 #----------------------------------------------------------------------
@@ -28,33 +40,12 @@ function offerChoices () {
 #----------------------------------------------------------------------
   global $chosenPatternHtml;
 
-  print '<div id="search-name" style="float: left;">';
   displayChoices( array(
     eventChoice( false ),
     regionChoice( false ),
-    textFieldChoice( 'pattern', 'Name or name parts', $chosenPatternHtml ),
+    textFieldChoice( 'pattern', 'Name, parts, or WCA id', $chosenPatternHtml ),
     choiceButton( true, 'search', 'Search' )
   ));
-  print '</div>';
-
-
-  print '<div id="search-wcaid" style="float: left;">';
-  $form = new WCAClasses\FormBuilder("search-wcaid-submissions", array('method' => 'GET', 'action' => 'p.php', 'class' => 'choices_form'), FALSE);
-
-  $search_field = new WCAClasses\FormBuilderEntities\Input("i", "");
-  $search_field->label("Or go to WCA id");
-  $form->addEntity($search_field);
-
-  $submit_element = new WCAClasses\FormBuilderEntities\Input("submit", "submit");
-  $submit_element->attribute("value", "Go");
-  $submit_element->attribute("class", "chosenButton");
-  $form->addEntity($submit_element);
-
-  print $form->render();
-
-  print '</div>';
-
-  print '<br style="clear: both;" />';
 
 }
 
@@ -72,7 +63,7 @@ function showMatchingPersons () {
   #--- Build the nameCondition (all searched parts must occur).
   $nameCondition = "";
   foreach( explode( ' ', $chosenPatternMysql ) as $namePart )
-    $nameCondition .= " AND person.name like '%$namePart%'";
+    $nameCondition .= " AND (person.name LIKE '%$namePart%' OR person.id LIKE '%$namePart%')";
 
   #--- Build the eventCondition (if any).
   if( $chosenEventId ){
