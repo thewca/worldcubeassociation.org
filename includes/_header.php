@@ -85,7 +85,7 @@ print $styles->getHTMLAll();
   </div>
 </div>
 
-<div id='header'>World Cube Association<br />Official Results</div>
+<div id='header'><a href='https://www.worldcubeassociation.org/'>World Cube Association<br />Official Results</a></div>
 <?php } ?>
 
 <?php startTimer(); ?>

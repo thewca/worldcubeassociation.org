@@ -51,7 +51,7 @@ function showMatchingPersons () {
 
   #--- The pattern should contain at least 2 non-whitespace characters.
   if(!preg_match('/\S.*\S/', $chosenPatternHtml)){
-    noticeBox("Please Enter at least 2 characters.");
+    noticeBox3(-1, "Please Enter at least 2 characters.");
     echo "<div style='width:85%; margin:auto; font-size:1.00em; font-weight:bold'><p>For the name field search, enter any name or name parts and don't worry about letter variations. For example, 'or joe' (enter without the quotes) will among others also find Jo&euml;l van Noort.</p></div>";
     return;
   }
