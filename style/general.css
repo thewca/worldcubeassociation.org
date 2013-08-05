@@ -400,3 +400,36 @@ form#photo-submission-approval .form-element-wrapper .form-element-radio-option
   color: #A90;
 }
 
+/* specific form styles - 'choices' form */
+
+form.choices_form .form-element-wrapper {
+  display: block;
+  float: left;
+  overflow: hidden;
+  clear: none;
+}
+form.choices_form .form-element-wrapper label {
+  display: block;
+  float: left;
+  text-align: left;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 2px 0;
+  margin: 0; width: auto;
+}
+form.choices_form .form-element-wrapper .form-element {
+  display: block;
+  float: left;
+  clear: both;
+  margin:; 0;
+} 
+
+form.choices_form .form-element-wrapper #form-element-submit {
+  display: block;
+  border: 3.4px double #CCC;
+  font-size: 12px;
+  margin: 17px 0 0 8px;
+  height: 26px;
+  padding: 0px 3px;
+}
+

@@ -28,12 +28,33 @@ function offerChoices () {
 #----------------------------------------------------------------------
   global $chosenPatternHtml;
 
+  print '<div id="search-name" style="float: left;">';
   displayChoices( array(
     eventChoice( false ),
     regionChoice( false ),
     textFieldChoice( 'pattern', 'Name or name parts', $chosenPatternHtml ),
     choiceButton( true, 'search', 'Search' )
   ));
+  print '</div>';
+
+  print '<div id="search-wcaid" style="float: left;">';
+  $form = new WCAClasses\FormBuilder("search-wcaid-submissions", array('method' => 'GET' , 'action' => 'p.php', 'class' => 'choices_form'), FALSE);
+
+  $search_field = new WCAClasses\FormBuilderEntities\Input("i", "");
+  $search_field->label("Or go to WCA id");
+  $form->addEntity($search_field);
+
+  $submit_element = new WCAClasses\FormBuilderEntities\Input("submit", "submit");
+  $submit_element->attribute("value", "Go");
+  $submit_element->attribute("class", "chosenButton");
+  $form->addEntity($submit_element);
+
+  print $form->render();
+
+  print '</div>';
+
+  print '<br style="clear: both;" />';
+
 }
 
 #----------------------------------------------------------------------
@@ -77,19 +98,19 @@ function showMatchingPersons () {
   $count = count( $persons );
   $ext = ($count != 1) ? 's' : '';
 
-  tableBegin( 'results', 2 );
+  tableBegin( 'results', 3 );
   tableCaption( false, spaced( array(
     "$count person$ext matching:",
     eventName($chosenEventId),
     chosenRegionName( $chosenRegionId ),
     $chosenPatternHtml ? "\"$chosenPatternHtml\"" : ''
   )));
-  tableHeader( explode( '|', 'Person|Citizen of' ),
-               array( 1 => 'class="f"' ));
+  tableHeader( explode( '|', 'Person|WCA id|Citizen of' ),
+               array( 2 => 'class="f"' ));
 
   foreach( $persons as $person ){
     extract( $person );
-    tableRow( array( personLink( $personId, $personName ), $countryName ));
+    tableRow( array( personLink( $personId, $personName ), $personId, $countryName ));
   }
 
   tableEnd();
