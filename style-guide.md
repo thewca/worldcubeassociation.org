@@ -62,6 +62,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 ### Recommended Word Choices
 
+- 'Puzzle' instead of 'cube', wherever applicable.
 - 'Regulation' or 'Guideline' instead of 'rule'.
 - 'Result' instead of 'score' (except for 'score sheet' and 'score taker').
 - 'Ranking' instead of 'rank'.
