@@ -23,12 +23,12 @@ function analyzeChoices () {
   $chosenPatternHtml  = getHtmlParam( 'pattern' );
   $chosenPatternMysql = getMysqlParam( 'pattern' );
 
-  $pattern = getRawParamThisShouldBeAnException('pattern');
-  if(preg_match('/(19|20)\d{2}[A-Z]{4}\d{2}/i', $pattern)) {
+  $pattern = trim(getRawParamThisShouldBeAnException('pattern'));
+  if(preg_match('/^(19|20)\d{2}[A-Z]{4}\d{2}$/i', $pattern)) {
     $matches = $wcadb_conn->boundQuery('SELECT id FROM Persons WHERE id = ?', array('s', &$pattern));
     if(!empty($matches)) {
-      header('Location: p.php?i='.$chosenPatternMysql);
-      print '<a href="p.php?i='.$chosenPatternMysql.'"></a>';
+      header('Location: p.php?i='.urlEncode($pattern));
+      print '<a href="p.php?i='.urlEncode($pattern).'"></a>';
       die();
     }
   }
