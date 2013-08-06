@@ -1,11 +1,15 @@
 <?php
 
+# TODO: order by Rounds.rank instead of roundId?
+# TODO idea: If single and average in same round by same person, show them on same row?
+# TODO idea: show round? Maybe as number like "Competition (round)"?
+
 showRegionalRecordsHistory();
 
 #----------------------------------------------------------------------
 function showRegionalRecordsHistory () {
 #----------------------------------------------------------------------
-  global $chosenRegionId;
+  global $chosenRegionId, $chosenHistory, $chosenMixHist;
 
   #--- Compute the region condition and the normal record name.
   if( preg_match( '/^(world)?$/i', $chosenRegionId )){
@@ -20,11 +24,19 @@ function showRegionalRecordsHistory () {
     $normalRecordName = 'NR';
   }
 
+  #--- Order: normal history or mixed?
+  $order = $chosenHistory
+           ? 'event.rank, type, value, year desc, month desc, day desc, roundId desc'
+           : 'year desc, month desc, day desc, roundId desc, event.rank, type, value';
+
   #--- Get the results.
   $results = dbQuery("
     SELECT
+      year, month, day,
+
       event.id         eventId,
       event.name       eventName,
+      event.cellName   eventCellName,
 
       result.type      type,
       result.value     value,
@@ -54,17 +66,25 @@ function showRegionalRecordsHistory () {
       $regionCondition
       " . eventCondition() . yearCondition() . "
     ORDER BY
-      event.rank, type, value, year desc, month desc, day desc, roundId DESC  # TOD?: how to do it right?
-#      event.rank, type, year desc, month desc, day desc, value  # TOD?: how to do it right?
+      $order
   ");
 
+  #--- Start the table
+  if( $chosenHistory ){
+    tableBegin( 'results', 7 );
+  } else {
+    tableBegin( 'results', 9 );
+    tableHeader( explode( '|', 'Date|Event|What|Single|Average|Person|Citizen of|Competition|Result Details' ),
+                 array( 3 => 'class="R2"', 4 => 'class="R2"', 8 => 'class="f"' ));
+  }
+
   #--- Process the results.
-  tableBegin( 'results', 7 );
+  $currentEventId = false;
   foreach( $results as $result ){
     extract( $result );
 
-    #--- Announce the event.
-    if( !isset( $currentEventId ) || $eventId != $currentEventId ){
+    #--- Announce the event (only for normal history, not mixed)
+    if( $chosenHistory  &&  $eventId != $currentEventId ){
       $currentEventId = $eventId;
       tableCaptionNew( false, $eventId, eventLink( $eventId, $eventName ));
       tableHeader( explode( '|', '|Single|Average|Person|Citizen of|Competition|Result Details' ),
@@ -75,8 +95,8 @@ function showRegionalRecordsHistory () {
     if( $recordName != $normalRecordName )
       $recordName = "<span style='color:#f93;font-weight:bold'>$recordName</span>";
 
-    #--- Show the table row.
-    tableRow( array(
+    #--- Prepare the table row.
+    $data = array(
       $recordName,
       (($type == 1) ? formatValue( $value, $valueFormat ) : ''),
       (($type == 2) ? formatValue( $value, $valueFormat ) : ''),
@@ -84,7 +104,14 @@ function showRegionalRecordsHistory () {
       $countryName,
       competitionLink( $competitionId, $competitionName ),
       formatAverageSources( $type == 2, $result, $valueFormat )
-    ));
+    );
+    if( $chosenMixHist )
+      array_unshift( $data,
+                     sprintf( '%4d-%02d-%02d', $year, $month, $day ),
+                     eventLink( $eventId, $eventCellName ) );
+
+    #--- Show the table row.
+    tableRow( $data );
   }
 
   tableEnd();

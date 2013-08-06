@@ -62,8 +62,7 @@ function showRecords () {
   if( $chosenMixed    ) require( 'includes/regions_mixed.php' );
   if( $chosenSlim     ) require( 'includes/regions_slim.php' );
   if( $chosenSeparate ) require( 'includes/regions_separate.php' );
-  if( $chosenHistory  ) require( 'includes/regions_history.php' );
-  if( $chosenMixHist  ) require( 'includes/regions_mixed_history.php' );
+  if( $chosenHistory || $chosenMixHist ) require( 'includes/regions_history.php' );
 }
 
 ?>
