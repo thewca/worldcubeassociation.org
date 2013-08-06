@@ -60,7 +60,7 @@ function showRegionalRecordsHistory () {
       Countries country
     WHERE " . randomDebug() . "
       AND event.id = eventId
-      AND event.rank < 990
+      AND event.rank < 1000
       AND competition.id = competitionId
       AND country.id = result.countryId
       $regionCondition
