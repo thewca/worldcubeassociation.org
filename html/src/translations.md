@@ -5,11 +5,11 @@
 Note: Even though these translations are provided on the WCA website, they are not official versions: they may be useful to you, but they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.  
 
 - [Chinese - 2013](./chinese)
-    - By [Shuang Chen](http://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
+    - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2013](./chinese-traditional)
-    - By [David Guo](http://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](http://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).
+    - By [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).
 - [German (Deutsch) - 2013](./german/)
-    - By [Sébastien Auroux](http://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](http://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](http://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](http://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
+    - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](https://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](https://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](https://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
 - [Hungarian - 2013](./hungarian/)
     - By Nikolett Placskó and [Perge Olivér](mailto:pergeoliver@gmail.com)
 - [Korean - 2013](./korean/)
@@ -19,7 +19,7 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Italian (Italiano) - 2013](./italian/)
     - By [Lorenzo Vigani Poli](http://worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](http://worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](http://worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](http://worldcubeassociation.org/results/p.php?i=2009COLO03).
 - [Japanese - 2013](./japanese)
-    - By [Shuto Ueno (上野柊斗)](http://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](http://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Kotaro Terada (寺田晃太朗)](http://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Wataru Hashimura (端村航)](http://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](http://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](http://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
+    - By [Shuto Ueno (上野柊斗)](https://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](https://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Kotaro Terada (寺田晃太朗)](https://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Wataru Hashimura (端村航)](https://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](https://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](https://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
 - [Russian - 2013](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 - [Spanish - 2013](./spanish/)
@@ -39,7 +39,7 @@ Note that the Regulations had many revisions in 2013. Older translations are lik
 - [Romanian - 2010](http://www.speedcubing.ro/p-9/regulament-world-cube-association-wca) by [Radu Faciu](http://www.speedcubing.ro)
 - [Slovenian - 2010](http://www.rubik.si/klub/wca_pravilnik/) by Ziga Lesar
 - [Thai - 2009](http://www.thailandcube.com/index.php?option=com_content&view=article&id=97&Itemid=55) by Chonlathep Kitsinthopchai
-- [Turkish - 2010](http://www.worldcubeassociation.org/regulations/history/files/old-translations/WCA%20Kurallari.pdf) by Batuhan Şanli, Can Çetin, Emir Ali Özdemir, Fatih Aydin, Furkan Çakar, Gamze Akşahin, and Hikmet Ödül Özçelik.
+- [Turkish - 2010](https://www.worldcubeassociation.org/regulations/history/files/old-translations/WCA%20Kurallari.pdf) by Batuhan Şanli, Can Çetin, Emir Ali Özdemir, Fatih Aydin, Furkan Çakar, Gamze Akşahin, and Hikmet Ödül Özçelik.
 - [Ukranian - 2010](http://cubing.com.ua/wca/) by [Roman Ostapenko](mailto:ostapenko@cubing.com.ua)
 
 ## Translating the Regulations
@@ -52,7 +52,7 @@ If you'd like to (re)-translate the Regulations, please use the following proces
     - Add a section at the top of the Regulations called "Translation", which should include any useful information about the translation, as well as a translation of the following text: "Please note that this translations is not an official version (even though it is provided on the WCA website): it may be useful, but it does not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used."
     - Try to keep all the formatting intact and only change the words.
     - Read through the [style guide](https://github.com/cubing/wca-documents-extra/blob/master/style-guide.md) for detailed information about how the Regulations are formatted.
-- Contact the [WRC](http://www.worldcubeassociation.org/contact/wrc) for converting adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
+- Contact the [WRC](https://www.worldcubeassociation.org/contact/wrc) for converting adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
     - The translated Regulations and Guidelines.
     - The "latest commit" value your translation is based on.
     - The names of the translators, along with WCA IDs, and (optionally) personal homepages to link from this page.

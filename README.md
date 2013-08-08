@@ -32,7 +32,6 @@ For all official `wca-documents` updates:
     - Create a (proposed) announcement in `announcements`. This will be used/updated several times.
     - Include a summarized list of changes.
     - Follow previous formatting.
-    - Make sure not to use HTTPS links to [worldcubeassociation.org](http://worldcubeassociation.org/). The public will see a certificate error.
 - Board approval
     - Email the for Board the proposal for changes (announcement + diff).
     - Get explicit Board approval.
@@ -46,6 +45,6 @@ For all official `wca-documents` updates:
     - Upload to the WCA server.
 - Post Announcement
     - Make sure links are up to date, and the date the changes go into effect is listed.
-    - [WCA Homepage](http://worldcubeassociation.org/) Drupal
-    - [WCA forum](http://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
+    - [WCA Homepage](https://worldcubeassociation.org/) Drupal
+    - [WCA forum](https://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
     - Email `wca-delegates` list.
