@@ -135,14 +135,15 @@ class Entity
     public function validate()
     {
         // if already invalidated, say so
-        if(!$this->value_is_valid) {
+        if(is_null($this->validator_function)) {
             return $this->value_is_valid;
         }
         // if a validator function exists, apply it to the value and return its response
         if($this->validator_function) {
             $this->value_is_valid = call_user_func($this->validator_function, $this);
-            return $this->value_is_valid === TRUE ? TRUE : FALSE;
+            return ($this->value_is_valid === TRUE) ? TRUE : FALSE;
         }
+
         // otherwise, no validation function call possible.
         trigger_error("Unable to call error function.", E_USER_WARNING);
     }

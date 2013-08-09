@@ -21,7 +21,7 @@ class Markup extends Entity
     {
         parent::__construct("");        
         $this->markup = $markup;
-        $this->validator_function = NULL; // Can't really validate this.
+        $this->validator(NULL); // Can't really validate this.
     }
 
     public function render()
