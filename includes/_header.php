@@ -27,8 +27,10 @@ if(isset($jQuery) && $jQuery) {
 if(isset($jQueryUI) && $jQueryUI) {
   $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
 }
+if(isset($currentSection) && $currentSection != 'admin') {
+  $scripts->add('ga.js');
+}
 print $scripts->getHTMLAll();
-
 
 /* Deal with styles here, for now */
 $styles = new WCAClasses\WCAStyles();
