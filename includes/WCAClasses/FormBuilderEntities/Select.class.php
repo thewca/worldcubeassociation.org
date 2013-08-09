@@ -18,7 +18,7 @@ class Select extends Entity
         parent::__construct($name);
         
         $this->options = $options;
-        $this->validator_function = "WCAClasses\FormBuilderEntities\Select::valueIsOption"; // value is one of the options
+        $this->validator("valueIsOption"); // value is one of the options
 
         if($force_selected) {
             $this->selected_option = $force_selected;

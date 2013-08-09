@@ -28,7 +28,7 @@ class Entity
     public function __construct($name)
     {
         $this->name = $name;
-        $this->validator_function = "WCAClasses\FormBuilderEntities\Entity::valueIsSubmitted"; // required field by default.
+        $this->validator("valueIsSubmitted"); // fields are required by default.
         $this->value_is_valid = TRUE;
         $this->error_message = "Invalid value submitted for field '{$name}'.";
         $this->label = "";
@@ -112,21 +112,24 @@ class Entity
             $this->error_message = $error_message;
         }
 
-        // remove function?
+        // remove function? (causes element to always validate)
         if(!$function_name) {
             $this->validator_function = NULL;
             return $this;
         }
+
+        // a method in this class should override any generic function
+        if(method_exists($this, $function_name)) {
+            $this->validator_function = $function_name;
+            return $this;
+        }
+
         // look for generic function
         if(function_exists($function_name)) {
             $this->validator_function = $function_name;
             return $this;
         }
-        // a method in this class should override any generic function
-        if(method_exists($this, $function_name)) {
-            $this->validator_function = array($this, $function_name);
-            return $this;
-        }
+
         user_error("Function referenced does not seem to exist", E_USER_WARNING);
         return $this;
     }
@@ -134,12 +137,20 @@ class Entity
     /* Element value validation - execute validation function functions should return only bool TRUE on success */
     public function validate()
     {
-        // if already invalidated, say so
+        // no validation if no function exists
         if(is_null($this->validator_function)) {
-            return $this->value_is_valid;
+            return TRUE;
         }
+
+        // if a Method exists here, apply it to the value and return its response
+        if(method_exists($this, $this->validator_function)) {
+            $validator = $this->validator_function;
+            $this->value_is_valid = $this->$validator($this);
+            return ($this->value_is_valid === TRUE) ? TRUE : FALSE;
+        }
+
         // if a validator function exists, apply it to the value and return its response
-        if($this->validator_function) {
+        if(function_exists($this->validator_function)) {
             $this->value_is_valid = call_user_func($this->validator_function, $this);
             return ($this->value_is_valid === TRUE) ? TRUE : FALSE;
         }
@@ -151,7 +162,7 @@ class Entity
     /* invoke this to invalidate a form element (alternative to using a validation function) */
     public function invalidate($message = "Invalid entry.")
     {
-        $this->value_is_valid = FALSE;
+        $this->validator('isNotValid');
         $this->error_message = $message;
         return $this;
     }
@@ -179,6 +190,14 @@ class Entity
         if($element->value()*1 != 0) {
             return TRUE;
         }
+        return FALSE;
+    }
+    public function isValid($element)
+    {
+        return TRUE;
+    }
+    public function isNotValid($element)
+    {
         return FALSE;
     }
 
