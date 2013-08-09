@@ -71,12 +71,18 @@ function showBody () {
 
 
   #--- Show the details.
-  tableBegin( 'results', 4 );
+  tableBegin( 'results', 3 );
   tableCaption( false, 'Details' );
   tableHeader( explode( '|', 'Country|WCA Id|Gender' ), array(2 => 'class="f"'));
 
-  //tableRow( array( $countryName, $chosenPersonId, $dob, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
-  tableRow( array( $countryName, $chosenPersonId, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
+  $gender_text = '';
+  if($gender == 'm') {
+    $gender_text = 'Male';
+  } elseif($gender == 'f') {
+    $gender_text = 'Female';
+  }
+
+  tableRow(array($countryName, $chosenPersonId, $gender_text));
   tableEnd();
 
   #--- Try the cache for the results
