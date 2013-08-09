@@ -73,14 +73,10 @@ function showBody () {
   #--- Show the details.
   tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
-  tableHeader( explode( '|', 'Country|WCA Id|Date of birth|Gender' ), array(3 => 'class="f"'));
+  tableHeader( explode( '|', 'Country|WCA Id|Gender' ), array(2 => 'class="f"'));
 
-  if( $year > 0 ){
-    $months = explode( " ", ". Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec" );
-    $dob = "$months[$month] $day, $year";
-  }
   //tableRow( array( $countryName, $chosenPersonId, $dob, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
-  tableRow( array( $countryName, $chosenPersonId, '', $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
+  tableRow( array( $countryName, $chosenPersonId, $gender == 'm' ? 'Male' : ( $gender == 'f' ? 'Female' : '' )));
   tableEnd();
 
   #--- Try the cache for the results
