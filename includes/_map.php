@@ -62,7 +62,7 @@ function initMap ( $width, $height ) {
   echo "<div id='map' style='width: $width; height: ${height}px'></div>\n";
 
 ?>
-  <script type="text/javascript" src="http://tile.cloudmade.com/wml/latest/web-maps-lite.js"></script>
+  <script type="text/javascript" src="https://ssl_tiles.cloudmade.com/wml/latest/web-maps-lite.js"></script>
   <script type="text/javascript">
     var cloudmade = new CM.Tiles.CloudMade.Web({key: 'b367992b0094416eae5409ac153d146f'});
     var map = new CM.Map('map', cloudmade);

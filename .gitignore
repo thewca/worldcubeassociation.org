@@ -15,3 +15,5 @@ zzz*
 /misc/missing_averages/index.php
 dev/.htaccess
 .htaccess
+misc/export.html
+misc/*.zip
