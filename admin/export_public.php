@@ -112,7 +112,7 @@ function exportPublic ( $sources ) {
     file_put_contents( $sqlFile, getTableCreationSql( $tableName, $query ), FILE_APPEND );
 
     #--- Do the query
-    $dbResult = mysql_query( $query )
+    $dbResult = mysql_unbuffered_query( $query )
       or die( '<p>Unable to perform database query.<br/>\n(' . mysql_error() . ')</p>\n' );
 
     #--- Start the TSV file
