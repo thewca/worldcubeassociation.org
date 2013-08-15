@@ -14,7 +14,7 @@ if( $chosenExport ){
   exportPublic( array(
     'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
                                 best, average,
-                                personName, personId, result.countryId personCountryId,
+                                personName, personId, result.countryId AS personCountryId,
                                 formatId, value1, value2, value3, value4, value5,
                                 regionalSingleRecord, regionalAverageRecord
                        FROM     Results result, Competitions competition, Events event, Rounds round
@@ -120,19 +120,27 @@ function exportPublic ( $sources ) {
     file_put_contents( $tsvFile, getTsvHeader( $dbResult ) );
 
     #--- Add data rows
-    unset( $tsv, $sqlInserts );
+    $sqlStart = "INSERT INTO `$tableName` VALUES ";
+    $tsv = '';
+    $sqlInserts = '';
     while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
-      $niceValues = preg_replace( array('/^\s+|\s+$/','/\s+/'), array('',' '), $row );
-      $tsv .= implode( "\t", $niceValues ) . "\n";
-      $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $niceValues ) ) . "')";
+      // remove characters that would break the tsv file format
+      $niceValues = str_replace( array("\t", "\n", "\r"), ' ', $row );
+
+      // data to write
+      $tsv .= implode( "\t", $niceValues ) . "\n";)
+      $sqlInserts[] = '(\'' . implode( '\',\'', array_map( 'addslashes', $niceValues ) ) . '\')';
+
+      // Periodically write data so variable size doesn't 
       if ( strlen($tsv)>200000 ) {
-        $sql = "INSERT INTO `$tableName` VALUES " . implode( ",\n", $sqlInserts ) . ";\n";
+        $sql =  $sqlStart . implode( ",\n", $sqlInserts ) . ";\n";
         file_put_contents( $tsvFile, $tsv, FILE_APPEND );
         file_put_contents( $sqlFile, $sql, FILE_APPEND );
-        unset( $tsv, $sqlInserts );
+        $tsv = '';
+        $sqlInserts = '';
       }
     }
-    $sql = "INSERT INTO `$tableName` VALUES\n" . implode( ",\n", $sqlInserts ) . ";\n";
+    $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
     file_put_contents( $tsvFile, $tsv, FILE_APPEND );
     file_put_contents( $sqlFile, $sql, FILE_APPEND );
 
@@ -236,7 +244,7 @@ function instantiateTemplate( $filename, $replacements ) {
 
   #--- Read template, fill data, write output
   $contents = file_get_contents( "template.$filename" );
-  $contents = preg_replace( '/\[(\w+)\]/e', '$replacements[$1]', $contents );
+  $contents = preg_replace( '/\[(\w+)\]/e', '$replacements[\'$1\']', $contents );
   file_put_contents( $filename, $contents );
 }
 
@@ -250,5 +258,3 @@ function mySystem ( $command ) {
   echo '<p>'.( $retval ? "<span style='background:#F00'>Error [$retval]</span>"
                        : "<span style='background:#0F0'>Success!</span>" ).'</p>';
 }
-
-?>
