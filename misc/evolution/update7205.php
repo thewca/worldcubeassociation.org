@@ -5,7 +5,7 @@
 
 $currentSection = 'misc';
 $extraHeaderStuff = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>'."\n"           # See http://jquery.com/download/
-                  . '<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>'."\n"                             # See http://code.highcharts.com/
+                  . '<script src="//code.highcharts.com/highcharts.js" type="text/javascript"></script>'."\n"                                  # See http://code.highcharts.com/
                   . '<link type="text/css" href="jquery-ui-1.8.24.tabs/css/ui-lightness/jquery-ui-1.8.24.custom.css" rel="stylesheet" />'."\n" # See jquery-ui-1.8.24.custom/README.md
                   . '<script type="text/javascript" src="jquery-ui-1.8.24.tabs/js/jquery-ui-1.8.24.custom.min.js"></script>'."\n"              # See jquery-ui-1.8.24.custom/README.md
                   . '<script src="charts_data.js" type="text/javascript"></script>'."\n"                                                       # Our computed data
