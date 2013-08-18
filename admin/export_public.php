@@ -122,13 +122,13 @@ function exportPublic ( $sources ) {
     #--- Add data rows
     $sqlStart = "INSERT INTO `$tableName` VALUES ";
     $tsv = '';
-    $sqlInserts = '';
+    $sqlInserts = array();
     while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
       // remove characters that would break the tsv file format
       $niceValues = str_replace( array("\t", "\n", "\r"), ' ', $row );
 
       // data to write
-      $tsv .= implode( "\t", $niceValues ) . "\n";)
+      $tsv .= implode( "\t", $niceValues ) . "\n";
       $sqlInserts[] = '(\'' . implode( '\',\'', array_map( 'addslashes', $niceValues ) ) . '\')';
 
       // Periodically write data so variable size doesn't 
@@ -137,7 +137,7 @@ function exportPublic ( $sources ) {
         file_put_contents( $tsvFile, $tsv, FILE_APPEND );
         file_put_contents( $sqlFile, $sql, FILE_APPEND );
         $tsv = '';
-        $sqlInserts = '';
+        $sqlInserts = array();
       }
     }
     $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
