@@ -104,6 +104,7 @@ function exportPublic ( $sources ) {
   #--- Walk the tables, create SQL file and TSV files
   foreach ( $sources as $tableName => $tableSource ) {
     startTimer();
+    echo "$tableName ";
 
     #--- Get the query
     $query = ($tableSource != '*') ? $tableSource : "SELECT * FROM $tableName";
@@ -148,6 +149,7 @@ function exportPublic ( $sources ) {
     #--- Free the query result
     mysql_free_result( $dbResult );
 
+    echo "<br />\n";
     stopTimer( $tableName );
   }
 
