@@ -138,6 +138,7 @@ function exportPublic ( $sources ) {
         file_put_contents( $sqlFile, $sql, FILE_APPEND );
         $tsv = '';
         $sqlInserts = array();
+        echo '.';  # shows both Apache and the user that the script is doing stuff and not hanging
       }
     }
     $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
