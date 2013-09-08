@@ -71,9 +71,9 @@ function showBody () {
 
 
   #--- Show the details.
-  tableBegin( 'results', 3 );
+  tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
-  tableHeader( explode( '|', 'Country|WCA Id|Gender' ), array(2 => 'class="f"'));
+  tableHeader( explode( '|', 'Country|WCA Id|Gender|Competitions' ), array(3 => 'class="f"'));
 
   $gender_text = '';
   if($gender == 'm') {
@@ -82,7 +82,9 @@ function showBody () {
     $gender_text = 'Female';
   }
 
-  tableRow(array($countryName, $chosenPersonId, $gender_text));
+  $numberOfCompetitions = dbValue("SELECT count(distinct competitionId) FROM Results where personId='$chosenPersonId'");
+
+  tableRow(array($countryName, $chosenPersonId, $gender_text, $numberOfCompetitions));
   tableEnd();
 
   #--- Try the cache for the results
