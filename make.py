@@ -336,8 +336,7 @@ def upload(args):
   subprocess.check_call([
     "rsync",
     "-avz",
-    buildRootDir] +
-    ([archiveFile] if os.path.exists(archiveFile) else []) + [
+    buildRootDir,
     upload_server["sftp_path"]
   ])
   print "Done uploading to SFTP server."
