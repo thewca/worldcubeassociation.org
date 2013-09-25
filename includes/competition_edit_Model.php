@@ -28,7 +28,7 @@ function specifyModel () {
       "line",
       'cellName',
       'Nickname',
-      'A short name for display inside lists, try to get close to 16 characters.',
+      'A short name for display inside lists, such as the list of competitions.  If the name of the competition is already short, just use the name.'
       "Europe 2006",
       ".",
       NULL
@@ -46,8 +46,8 @@ function specifyModel () {
       "line",
       'cityName',
       'City name',
-      'Name of the city where the competition takes place.',
-      "Paris",
+      'Name of the city where the competition takes place.  For competitions in the USA please include the state.',
+      "Paris OR San Francisco, California",
       ".",
       NULL
     ),
