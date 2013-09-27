@@ -28,7 +28,7 @@ function specifyModel () {
       "line",
       'cellName',
       'Nickname',
-      'A short name for display inside lists, such as the list of competitions.  If the name of the competition is already short, just use the name.'
+      'A short name for display inside lists, such as the list of competitions.  If the name of the competition is already short, just use the name.',
       "Europe 2006",
       ".",
       NULL
