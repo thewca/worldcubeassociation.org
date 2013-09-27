@@ -247,15 +247,21 @@ function showRegs () {
   echo "<ul><li><p>A : Accept, D : Delete, E : Edit.</p></li>\n";
   echo "<li><p>Pending registrations are in light red, accepted registrations are in light green.</p></li>\n";
   echo "<li><p>If you want to edit a person, first check its 'edit' checkbox for this to work.</p></li></ul>\n";
-  
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
-  echo "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
-  foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
-    echo "<td style='font-size:9px'>$eventId</td>\n";
-  }
-  echo "</tr>\n";
 
+  #--- Prepare the table header row.
+  $header = "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
+  foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId )
+    $header .= "<td style='font-size:9px'>$eventId</td>\n";
+  $header .= "</tr>\n";
+
+  #--- Show the table.
+  $countPerson = 0;
   foreach( $comps as $comp ){
+    if( $countPerson % 20 == 0 )
+      echo $header;
+    $countPerson++;
+
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
