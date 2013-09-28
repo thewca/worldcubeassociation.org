@@ -1,10 +1,10 @@
 # WCA Scrambles
 
-The current official scramble program is *TNoodle-0.7.8.jar*. It generates high-quality scramble sequences for all the events of a competition at once.
+The current official scramble program is *TNoodle-0.7.10.jar*. It generates high-quality scramble sequences for all the events of a competition at once.
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scramble program:<br><a href="tnoodle/TNoodle-0.7.8.jar" style="font-weight: bold;">TNoodle-0.7.8.jar</a><br></span>
+Download the official scramble program:<br><a href="tnoodle/TNoodle-0.7.10.jar" style="font-weight: bold;">TNoodle-0.7.8.jar</a><br></span>
 <br>
 Last official change: April 26, 2013
 </center>
@@ -30,6 +30,7 @@ Last official change: April 26, 2013
   If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck.
 - TNoodle creates a *tnoodle_resources* folder with a few MB of files (mostly cached tables) in the same folder it is run.  
   Keep this folder if you want to generate more 4x4x4 scramble sequences more quickly in the future, but feel free to delete it if you need to reclaim disk space.
+- TNoodle performs scramble filtering according to rules set by the WCA Board. Check its readme if you would like to know the current rules.
 
 ## About TNoodle
 
