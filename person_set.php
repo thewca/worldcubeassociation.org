@@ -81,6 +81,9 @@ if($form->submitted()) {
         $file = 'p' . o($submitted_data['personId']) . "." . $file_ext;
         // Don't overwrite (or else a malicious file might be uploaded between
         // a moderator reviewing an uploaded file and accepting it).
+        // Note: It's still not perfect. If two moderators review uploaded pictures at the same
+        // time, a malicious file could be uploaded between both of them trying to accept an ok
+        // one. We should fix this properly.
         if (file_exists($upload_path . $file)) {
             noticeBox(false, 'Another picture is already waiting for review, please wait.');
         } elseif (move_uploaded_file($_FILES['picture']['tmp_name'], $upload_path . $file)) {
