@@ -3,6 +3,9 @@
 $currentSection = 'persons';
 require( 'includes/_header.php' );
 
+echo "<p>Picture upload temporarily deactivated, sorry.</p>";
+require( 'includes/_footer.php' );
+exit;
 
 /* build up form */
 $form = new WCAClasses\FormBuilder("photo-submissions", array('method' => 'POST' , 'enctype' => 'multipart/form-data'));
