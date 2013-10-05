@@ -79,7 +79,11 @@ if($form->submitted()) {
     if($form->validate() === TRUE) {
         $upload_path = 'upload/';
         $file = 'p' . o($submitted_data['personId']) . "." . $file_ext;
-        if(move_uploaded_file($_FILES['picture']['tmp_name'], $upload_path . $file)) {
+        // Don't overwrite (or else a malicious file might be uploaded between
+        // a moderator reviewing an uploaded file and accepting it).
+        if (file_exists($upload_path . $file)) {
+            noticeBox(false, 'Another picture is already waiting for review, please wait.');
+        } elseif (move_uploaded_file($_FILES['picture']['tmp_name'], $upload_path . $file)) {
             noticeBox(true, "Upload successful.");
         } else {
             noticeBox(false, 'Upload failed');
