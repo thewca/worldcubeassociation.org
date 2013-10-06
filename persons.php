@@ -66,10 +66,15 @@ function showMatchingPersons () {
   $nameCondition = "";
   foreach(explode(' ', $rawPattern) as $namePart) {
     $parts[$namePart] = '%' . $namePart . '%';
-    $nameCondition .= ' AND (person.name LIKE ? OR person.id LIKE ?)';
-    $params[0] .= 'ss';
+    $params[0] .= 's';
     $params[] = &$parts[$namePart];
-    $params[] = &$parts[$namePart];
+    $likeId = '';
+    if(ctype_alnum($namePart)) {
+      $params[0] .= 's';
+      $params[] = &$parts[$namePart];
+      $likeId = ' OR person.id LIKE ?';
+    }
+    $nameCondition .= ' AND (person.name LIKE ?' . $likeId . ')';
   }
 
   #--- Build the eventCondition (if any).
