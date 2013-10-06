@@ -130,11 +130,11 @@ function exportPublic ( $sources ) {
 
       // data to write
       $tsv .= implode( "\t", $niceValues ) . "\n";
-      $sqlInserts[] = '(\'' . implode( '\',\'', array_map( 'addslashes', $niceValues ) ) . '\')';
+      $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $niceValues ) ) . "')";
 
-      // Periodically write data so variable size doesn't 
-      if ( strlen($tsv)>200000 ) {
-        $sql =  $sqlStart . implode( ",\n", $sqlInserts ) . ";\n";
+      // Periodically write data so variable size doesn't explode
+      if ( strlen($tsv) > 200000 ) {
+        $sql = $sqlStart . implode( ",\n", $sqlInserts ) . ";\n";
         file_put_contents( $tsvFile, $tsv, FILE_APPEND );
         file_put_contents( $sqlFile, $sql, FILE_APPEND );
         $tsv = '';
