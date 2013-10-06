@@ -56,17 +56,26 @@ if($form->submitted()) {
         $form->invalidate("year", "Incorrect birthday.")->invalidate("month")->invalidate("day");
     }
 
-    // Extra validation: verify image file extension by looking at upload file type
-    $file_ext = "";
-    if ($_FILES['picture']['type'] == "image/gif") {
-      $file_ext = "gif";
-    } elseif ($_FILES['picture']['type'] == "image/png") {
-      $file_ext = "png";    
-    } elseif ($_FILES['picture']['type'] == "image/jpeg") {
-      $file_ext = "jpg";
+    // Check extension and types provided by human (original filename extension),
+    // by agent (what the browser said) and by finfo (what the Fileinfo function
+    // "mime_content_type" thinks). In the end, $file_ext is one of ''/'gif'/'jpg'/'png'.
+    $extByHuman = '';
+    $extByAgent = '';
+    $extByFinfo = '';
+    $rawByHuman = strtolower(pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION));
+    $rawByAgent = $_FILES['picture']['type'];
+    $rawByFinfo = mime_content_type($_FILES['picture']['tmp_name']);
+    foreach (array('gif'=>'gif', 'jpeg'=>'jpg', 'png'=>'png') as $type => $ext) {
+      if ($rawByHuman == $ext || $rawByHuman == $type) $extByHuman = $ext;
+      if ($rawByAgent == "image/$type")                $extByAgent = $ext;
+      if ($rawByFinfo == "image/$type")                $extByFinfo = $ext;
     }
-    if("" == $file_ext) {
-        $form->invalidate("picture", 'You must upload a file in png, gif, or jpg format.');
+    $file_ext = '';
+    if ($extByHuman && $extByHuman == $extByAgent && $extByHuman == $extByFinfo) {
+      $file_ext = $extByHuman;
+    } else {
+      $hint = ($extByHuman && $extByFinfo) ? ", and yours looks like a $extByFinfo file with wrong extension '.$extByHuman'." : '';
+      $form->invalidate('picture', "You can only upload jpg/gif/png images with correct filename extension .gif/.jpg/.jpeg/.png$hint");
     }
 
     // Extra validation: restrict image filesize
