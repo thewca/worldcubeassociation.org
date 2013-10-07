@@ -30,7 +30,7 @@ class Radio extends Select
             	$output .= "<label for='" . o($this->attributes['id']) . "-{$value}'>{$option}: </label>";
             }
             if($value == $this->selected_option) {
-                $output .= "<input type='radio' name='" . o($this->name) . "' id='" . o($this->attributes['id']) . "-{$value}' value='{$value}' selected />";
+                $output .= "<input type='radio' name='" . o($this->name) . "' id='" . o($this->attributes['id']) . "-{$value}' value='{$value}' checked='checked' />";
             } else {
                 $output .= "<input type='radio' name='" . o($this->name) . "' id='" . o($this->attributes['id']) . "-{$value}' value='{$value}' />";
             }

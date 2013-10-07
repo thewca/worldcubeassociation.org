@@ -81,7 +81,7 @@ if(count($files) == 0){
 
     if(count($person) == 1) {
       $person = $person[0];
-      $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer")));
+      $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer"), "R"));
       $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div class='titled-image'>
         <img src='" . $upload_path . $file . "' class='person' />
         <span class='titled-image-title'>" . personLink($personId, $person['name']) . ", " . genderText($person['gender']) . "</span></div>"
