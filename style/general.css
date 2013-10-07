@@ -373,12 +373,13 @@ form#photo-submission-approval .titled-image {
   text-align: center;
   float: left;
   clear: none;
-  margin-bottom: 5px;
+  margin-bottom: 1.2em;
 }
 
 form#photo-submission-approval .titled-image img {
   height: 150px;
   width: auto;
+  border: 2px dashed blue;
 }
 
 form#photo-submission-approval .titled-image-title {

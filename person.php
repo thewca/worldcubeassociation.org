@@ -72,16 +72,8 @@ function showBody () {
   tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
   tableHeader( explode( '|', 'Country|WCA Id|Gender|Competitions' ), array(3 => 'class="f"'));
-
-  $gender_text = '';
-  if($gender == 'm') {
-    $gender_text = 'Male';
-  } elseif($gender == 'f') {
-    $gender_text = 'Female';
-  }
-
+  $gender_text = genderText($gender);
   $numberOfCompetitions = dbValue("SELECT count(distinct competitionId) FROM Results where personId='$chosenPersonId'");
-
   tableRow(array($countryName, $chosenPersonId, $gender_text, $numberOfCompetitions));
   tableEnd();
 
