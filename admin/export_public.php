@@ -125,10 +125,10 @@ function exportPublic ( $sources ) {
     $tsv = '';
     $sqlInserts = array();
     while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
-      // remove characters that would break the tsv file format
+      // Polish the whitespace (especially remove characters that would break the tsv file format)
       $niceValues = preg_replace( '/\s+/', ' ', array_map( 'trim', $row ) );
 
-      // data to write
+      // Data to write
       $tsv .= implode( "\t", $niceValues ) . "\n";
       $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $niceValues ) ) . "')";
 
