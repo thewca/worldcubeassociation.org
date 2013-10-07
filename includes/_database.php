@@ -49,19 +49,19 @@ function dbQuery ( $query ) {
     $dbQueryCtr++;
     echo "\n\n<!-- dbQuery(\n$query\n) -->\n\n";
     echo "<br>";
-    stopTimer( 'printing the query' );
+    stopTimer( 'printing the database query' );
   }
   
   startTimer();
   $dbResult = mysql_query( $query )
     or showDatabaseError( "Unable to perform database query." );
-  stopTimer( "pure query" );
+  stopTimer( "pure database query" );
 
   startTimer();
   $rows = array();
   while( $row = mysql_fetch_array( $dbResult ))
     $rows[] = $row;
-  stopTimer( "fetching query results" );
+  stopTimer( "fetching database query results" );
 
   startTimer();
   mysql_free_result( $dbResult );
@@ -83,14 +83,14 @@ function dbQueryHandle ( $query ) {
     $dbQueryCtr++;
     echo "\n\n<!-- dbQuery(\n$query\n) -->\n\n";
     echo "<br>";
-    stopTimer( 'printing the query' );
+    stopTimer( 'printing the database query' );
   }
   
   startTimer();
   $dbResult = mysql_query( $query )
     or showDatabaseError( "Unable to perform database query." );
   global $dbQueryTotalTime;
-  $dbQueryTotalTime += stopTimer( "pure query" );
+  $dbQueryTotalTime += stopTimer( "pure database query" );
 
   return $dbResult;
 }
@@ -107,17 +107,22 @@ function dbCommand ( $command ) {
 #----------------------------------------------------------------------
 
   if( wcaDebug() ){
+    startTimer();
     global $dbCommandCtr;
     $dbCommandCtr++;
     $commandForShow = strlen($command) < 1010
                     ? $command
                     : substr($command,0,1000) . '[...' . (strlen($command)-1000) . '...]';
     echo "\n\n<!-- dbCommand(\n$commandForShow\n) -->\n\n";
+    stopTimer( 'printing the database command' );
   }
 
   #--- Execute the command.
+  startTimer();
   $dbResult = mysql_query( $command )
     or showDatabaseError( "Unable to perform database command." );
+  global $dbCommandTotalTime;
+  $dbCommandTotalTime += stopTimer( "executing database command" );
 }
 
 #----------------------------------------------------------------------
@@ -260,5 +265,18 @@ function showDatabaseError ( $message ) {
   #--- Normal users just get a "Sorry", developers/debuggers get more details
   die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  wcaDebug()
        ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
-       : "<p>Problem with the database, sorry. Please <a href='mailto:wca-website@googlegroups.com'>contact the WCA Website team at wca-website@googlegroups.com</a> and let us know immediately.</p>" );
+       : "<p>Problem with the database, sorry. If this persists for several minutes, " .
+         "please tell us at <a href='mailto:wca-website@googlegroups.com'>wca-website@googlegroups.com</a></p>" );
+}
+
+#----------------------------------------------------------------------
+function showDatabaseStatistics () {
+#----------------------------------------------------------------------
+
+  if( wcaDebug() ){
+    global $dbQueryCtr, $dbQueryTotalTime, $dbCommandCtr, $dbCommandTotalTime;
+    $queryStats = isset($dbQueryCtr) ? sprintf('<br />%d queries in %.4f seconds total', $dbQueryCtr, $dbQueryTotalTime) : '';
+    $commandStats = isset($dbCommandCtr) ? sprintf('<br />%d commands in %.4f seconds total', $dbCommandCtr, $dbCommandTotalTime) : '';
+    echo "<p style='color:#666'>$queryStats$commandStats</p>";
+  }
 }
