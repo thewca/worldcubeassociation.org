@@ -35,6 +35,7 @@ require( 'includes/competition_results.php' );
 #   - Check the password
 #   - Warn about unreasonable birth dates
 #   - Person name and id are in wrong order, should be in JSON like it is in the database (and I think in excel, too)
+#   - Warn if two people have the same birthdate or if birthdate suspicious (like January 1st, or year<1920)
 
 analyzeChoices();
 echo "<p>Note: This is not finished yet, this is a preview only. So far you can upload a .json file produced by Lars' tool and some checks will be run on it and the data is stored in the inbox tables and shown from there, but the checking isn't finished yet and there's no transfer from inbox to main tables yet.<p>\n";
