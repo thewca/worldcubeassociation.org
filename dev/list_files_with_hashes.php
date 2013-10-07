@@ -1,8 +1,8 @@
 <html><body><pre>
 <?php
 
-#  ^cache|^scrambles|^upload|^PHPExcel|^jpgraph|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
-#  ^cache|^scrambles|^upload|^PHPExcel|^jpgraph|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
+#  ^cache|^scrambles|^upload|^PHPExcel|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
+#  ^cache|^scrambles|^upload|^PHPExcel|^statistics\\.(cached|log)|^speedcubing2.site.aplus.net/', $child )
 
 #--- Preparation: check whether we're local, and specify what to ignore
 $isLocal = $_SERVER['SERVER_NAME'] == 'localhost';
