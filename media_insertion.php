@@ -3,7 +3,7 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
-require_once('thirdparty/recaptchalib.php');
+require_once('includes/thirdparty/recaptchalib.php');
 $currentSection = 'media';
 require( 'includes/_header.php' );
 
