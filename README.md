@@ -1,7 +1,6 @@
 # WCA results website
 
-A little overview of our system. Not quite finished and will slightly change soon,
-as Stefan is rearranging the include-files.
+A little by-folder overview of our system.
 
 
 ## Public web access
@@ -11,7 +10,10 @@ The PHP scripts for the public pages, currently also containing password-protect
 access to competition organisation/administration pages.
 
 ### `/images`
-Just icons right now.
+Just icons right now. Could be merged with `/style` maybe.
+
+### `/js`
+Some JavaScript files.
 
 ### `/misc`
 For miscellaneous stuff like the public data export and the age-vs-speed statistic.
@@ -43,15 +45,16 @@ the other ones like `events_results.php` have prefixes like `events_` telling
 what they belong to. Also here is `_config.php.template`, a template for the `_config.php`
 file necessary to run the server.
 
+### `includes/statistics`
+All the little scripts computing the statistics on the statistics page, the
+order (and selection) is defined in `ALL_LISTS.php`. Used by `/statistics.php`.
+
+### `/includes/thirdparty`
+Stuff like PHPExcel and reCAPTCHA. Where possible, we link to the repository
+on GitHub (as "submodule" - to get it, type `git submodule init` and then
+`git submodule update`).
+
 ### `/generated`
 For stuff that is generated again and again (logs, precomputed stuff).
 Collecting it in here to not clutter the root folder, deny web access,
 and ignore using `.gitignore`.
-
-### `/statistics`
-All the little scripts computing the statistics on the statistics page, the
-order (and selection) is defined in `ALL_LISTS.php`. Used by `/statistics.php`.
-
-### `/thirdparty`
-Stuff like PHPExcel and reCAPTCHA. Where possible, we link to the repository
-on GitHub.
