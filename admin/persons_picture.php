@@ -7,12 +7,10 @@ adminHeadline('Person pictures');
 $upload_path = "../upload/";
 
 // get list of unapproved photo files
-$count = 0;
 $files = array();
 if($handle = opendir($upload_path)) {
-  while(($count < 10) && (false !== ($file = readdir($handle)))) {
+  while((count($files) < 10) && (false !== ($file = readdir($handle)))) {
     if($file[0] == 'p'){
-      $count += 1;
       $files[] = $file;
     }
   }
@@ -37,21 +35,19 @@ if($form->submitted()) {
   if($form->validate() === TRUE) {
     $submitted_data = $form->submittedData();
     // (re)move files that have been (dis)approved.
-    if(count($files) > 0) {
-      foreach($files as $file){
-        $personId = substr($file, 1, 10);
-        if($submitted_data[$personId] == 'A'){
-          if($handle = opendir($upload_path)) {
-            while(false !== ($a_file = readdir($handle))) 
-              if(substr($a_file, 0, 11) == ('a' . $personId))
-                unlink($upload_path . $a_file);
-            closedir($handle);
-          }
-          rename($upload_path . $file, $upload_path . 'a' . substr($file, 1));
+    foreach($files as $file){
+      $personId = substr($file, 1, 10);
+      if($submitted_data[$personId] == 'A'){
+        if($handle = opendir($upload_path)) {
+          while(false !== ($a_file = readdir($handle))) 
+            if(substr($a_file, 0, 11) == ('a' . $personId))
+              unlink($upload_path . $a_file);
+          closedir($handle);
         }
-        if($submitted_data[$personId] == 'D') {
-          unlink($upload_path . $file);
-        }
+        rename($upload_path . $file, $upload_path . 'a' . substr($file, 1));
+      }
+      if($submitted_data[$personId] == 'D') {
+        unlink($upload_path . $file);
       }
     }
   } else {
@@ -60,12 +56,10 @@ if($form->submitted()) {
 }
 
 // re-read files / repopulate form.
-$count = 0;
 $files = array();
 if($handle = opendir($upload_path)) {
-  while(($count < 10) && (false !== ($file = readdir($handle)))) {
+  while((count($files) < 10) && (false !== ($file = readdir($handle)))) {
     if($file[0] == 'p'){
-      $count += 1;
       $files[] = $file;
     }
   }
