@@ -126,7 +126,7 @@ function exportPublic ( $sources ) {
     $sqlInserts = array();
     while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
       // remove characters that would break the tsv file format
-      $niceValues = str_replace( array("\t", "\n", "\r"), ' ', $row );
+      $niceValues = preg_replace( '/\s+/', ' ', array_map( 'trim', $row ) );
 
       // data to write
       $tsv .= implode( "\t", $niceValues ) . "\n";
