@@ -197,3 +197,12 @@ function genderText ($gender) {
   if ($gender == 'f') return 'Female';
   return '';
 }
+
+function getCurrentPictureFile ($upload_path, $personId) {
+  $files = glob($upload_path . "a$personId.*");
+  return $files ? $files[0] : FALSE;
+}
+function getWaitingPictureFile ($upload_path, $personId) {
+  $files = glob($upload_path . "p$personId.*");
+  return $files ? $files[0] : FALSE;
+}

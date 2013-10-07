@@ -62,11 +62,9 @@ function showBody () {
   }
 
   #--- Show the picture if any.
-  foreach( array('jpg', 'png', 'gif') as $ext ) {
-    $picture = 'upload/a' . $chosenPersonId . '.' . $ext;
-    if( is_file( $picture ))
-      echo "<center><img class='person' src='$picture' /></center>";
-  }
+  $picture = getCurrentPictureFile('upload/', $chosenPersonId);
+  if( $picture )
+    echo "<center><img class='person' src='$picture' /></center>";
 
   #--- Show the details.
   tableBegin( 'results', 4 );

@@ -38,12 +38,9 @@ if($form->submitted()) {
     foreach($files as $file){
       $personId = substr($file, 1, 10);
       if($submitted_data[$personId] == 'A'){
-        if($handle = opendir($upload_path)) {
-          while(false !== ($a_file = readdir($handle))) 
-            if(substr($a_file, 0, 11) == ('a' . $personId))
-              unlink($upload_path . $a_file);
-          closedir($handle);
-        }
+        $old_file = getCurrentPictureFile($upload_path, $personId);
+        if($old_file)
+          rename($old_file, $upload_path . 'old/' . basename($old_file));
         rename($upload_path . $file, $upload_path . 'a' . substr($file, 1));
       }
       if($submitted_data[$personId] == 'D') {
