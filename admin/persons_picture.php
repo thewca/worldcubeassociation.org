@@ -38,10 +38,7 @@ if($form->submitted()) {
     foreach($files as $file){
       $personId = substr($file, 1, 10);
       if($submitted_data[$personId] == 'A'){
-        $old_file = getCurrentPictureFile($upload_path, $personId);
-        if($old_file)
-          rename($old_file, $upload_path . 'old/' . basename($old_file));
-        rename($upload_path . $file, $upload_path . 'a' . substr($file, 1));
+        acceptNewPictureFile($upload_path, $personId, $file);
       }
       if($submitted_data[$personId] == 'D') {
         unlink($upload_path . $file);
@@ -80,11 +77,16 @@ if(count($files) == 0){
       $person = $person[0];
       $currentPic = getCurrentPictureFile($upload_path, $personId);
       $currentPic = $currentPic ? "Current: <img src='$currentPic' />" : "";
+      $previousPics = '';
+      foreach(getPreviousPictureFiles($upload_path . 'old/', $personId) as $prevPic)
+        $previousPics .= " <img src='$prevPic' class='previous' />";
+      $previousPics = $previousPics ? "Previous:$previousPics" : '';
       $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer"), "R"));
       $form->addEntity(new WCAClasses\FormBuilderEntities\Markup(
         "<div class='titled-image'>
            New: <img src='" . $upload_path . $file . "' class='person' />
            $currentPic
+           $previousPics
            <span class='titled-image-title'>" . personLink($personId, $person['name']) . ", " . genderText($person['gender']) . "</span>
          </div>"
       ));

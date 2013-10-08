@@ -206,3 +206,15 @@ function getWaitingPictureFile ($upload_path, $personId) {
   $files = glob($upload_path . "p$personId.*");
   return $files ? $files[0] : FALSE;
 }
+function getPreviousPictureFiles ($upload_path, $personId) {
+  return array_reverse(glob($upload_path . "a$personId*"));
+}
+function acceptNewPictureFile ($upload_path, $personId, $newFile) {
+  $currFile = getCurrentPictureFile($upload_path, $personId);
+  if($currFile){
+    $datetime = date('_Ymd_His.', filemtime($currFile));
+    $backupFile = $upload_path . "old/a$personId$datetime" . pathinfo($currFile, PATHINFO_EXTENSION);
+    rename($currFile, $backupFile);
+  }
+  rename($upload_path . $newFile, $upload_path . 'a' . substr($newFile, 1));
+}

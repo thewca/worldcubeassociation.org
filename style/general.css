@@ -382,6 +382,11 @@ form#photo-submission-approval .titled-image img {
   border: 2px dashed blue;
 }
 
+form#photo-submission-approval .titled-image img.previous {
+  max-width:50px;
+  height: auto;
+}
+
 form#photo-submission-approval .titled-image-title {
   display: block;
   clear: both;
