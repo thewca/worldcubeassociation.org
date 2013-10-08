@@ -51,7 +51,7 @@ function showInformation () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $chosenPassword;
 
-  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId'");
+  $results = dbQuery("SELECT * FROM Preregs WHERE competitionId='$chosenCompetitionId' ORDER BY id");
 
   echo "<h1>Extra information</h1>";
   foreach( $results as $result ){
