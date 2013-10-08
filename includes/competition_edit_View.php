@@ -250,7 +250,7 @@ function showRegs () {
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
 
   #--- Prepare the table header row.
-  $header = "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
+  $header = "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>?</td><td>Country</td>\n";
   foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId )
     $header .= "<td style='font-size:9px'>$eventId</td>\n";
   $header .= "</tr>\n";
@@ -265,6 +265,7 @@ function showRegs () {
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
+    $extraInfo = htmlEscape( "[Email] $email\n[Guests] $guests\n[Comments] $comments\n[Ip] $ip" );
     $eventIdsList = array_flip( explode( ' ', $eventIds ));
 
     if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
@@ -275,6 +276,7 @@ function showRegs () {
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg[${id}][edit]' value='1' /></td>\n";
     echo "  <td><input type='text' id='reg${id}personId' name='reg[${id}][personId]' value='$personId' size='10' maxlength='10' /></td>\n";
     echo "  <td><input type='text' id='reg${id}name' name='reg[${id}][name]' value='$name' size='25' /></td>\n";
+    echo "  <td title='$extraInfo'>?</td>\n";
     echo "  <td><input type='text' id='reg${id}countryId' name='reg[${id}][countryId]' value='$countryId' size='15' /></td>\n";    
 
     foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
