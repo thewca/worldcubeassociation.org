@@ -72,13 +72,15 @@ if(count($files) == 0){
       foreach(getPreviousPictureFiles($upload_path . 'old/', $personId) as $prevPic)
         $previousPics .= " <img src='$prevPic' class='previous' />";
       $previousPics = $previousPics ? "Previous:$previousPics" : '';
+      $genderText = genderText($person['gender']);
+      $googleSearch = "<a href='http://images.google.com/searchbyimage?image_url=https://www.worldcubeassociation.org/results/upload/$file' class='external'>google image search</a>";
       $form->addEntity(new WCAClasses\FormBuilderEntities\Radio($personId, array("A" => "Accept", "D" => "Decline", "R" => "Defer"), "R"));
       $form->addEntity(new WCAClasses\FormBuilderEntities\Markup(
         "<div class='titled-image'>
            New: <img src='" . $upload_path . $file . "' class='person' />
            $currentPic
            $previousPics
-           <span class='titled-image-title'>" . personLink($personId, $person['name']) . ", " . genderText($person['gender']) . "</span>
+           <span class='titled-image-title'>" . personLink($personId, $person['name']) . ", $genderText, $googleSearch</span>
          </div>"
       ));
     } else {
