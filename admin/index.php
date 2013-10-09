@@ -57,8 +57,10 @@ function showPages () {
   showPage( 'show_competition_infos',
             "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking." );
 
+  $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
+  $color = $waiting ? 'red' : 'green';
   showPage( 'validate_media',
-            "Validates media that have been submitted." );
+            "Validates media that have been submitted. <span style='color:$color'>[$waiting waiting]</span>" );
 
   showPage( 'change_person',
             'Fix or update a person\'s data.' );
