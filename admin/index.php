@@ -66,8 +66,9 @@ function showPages () {
   showPage( 'add_local_names',
             "Add local names to persons." );
 
+  $waiting = count(getWaitingPictureFiles('../upload/'));
   showPage( 'persons_picture',
-            "Validates pictures that have been submitted." );
+            "Validates pictures that have been submitted." . ($waiting ? " <span style='color:red'>[$waiting waiting]</span>" : ''));
 
   showPage( 'competitions_manage',
             "Manages competitions." );

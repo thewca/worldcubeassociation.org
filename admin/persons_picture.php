@@ -7,15 +7,7 @@ adminHeadline('Person pictures');
 $upload_path = "../upload/";
 
 // get list of unapproved photo files
-$files = array();
-if($handle = opendir($upload_path)) {
-  while((count($files) < 10) && (false !== ($file = readdir($handle)))) {
-    if($file[0] == 'p'){
-      $files[] = $file;
-    }
-  }
-  closedir($handle);
-}
+$files = array_slice(getWaitingPictureFiles($upload_path), 0, 10);
 
 // Form for validating submissions
 $form = new WCAClasses\FormBuilder("photo-submission-approval");
@@ -50,15 +42,7 @@ if($form->submitted()) {
 }
 
 // re-read files / repopulate form.
-$files = array();
-if($handle = opendir($upload_path)) {
-  while((count($files) < 10) && (false !== ($file = readdir($handle)))) {
-    if($file[0] == 'p'){
-      $files[] = $file;
-    }
-  }
-  closedir($handle);
-}
+$files = array_slice(getWaitingPictureFiles($upload_path), 0, 10);
 
 // display form for any new needed photos
 if(count($files) == 0){

@@ -218,3 +218,6 @@ function acceptNewPictureFile ($upload_path, $personId, $newFile) {
   }
   rename($upload_path . $newFile, $upload_path . 'a' . substr($newFile, 1));
 }
+function getWaitingPictureFiles ($upload_path) {
+  return array_map('basename', glob($upload_path . 'p*'));
+}
