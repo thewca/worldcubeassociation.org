@@ -123,7 +123,7 @@ function showMedia () {
     if ( $chosenOrder == 'submission' )
       $year = preg_replace( '/-.*/', '', $timestamp );
 
-    if( $previousYear  &&  $year != $previousYear )
+    if( isset($previousYear)  &&  $year != $previousYear )
       tableRowEmpty();
     $previousYear = $year;
 
