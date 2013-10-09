@@ -1,4 +1,7 @@
 <?php
+#----------------------------------------------------------------------
+#   Initialization.
+#----------------------------------------------------------------------
 
 $currentSection = 'admin';
 require('../includes/_header.php');
@@ -6,8 +9,12 @@ require('../includes/_header.php');
 adminHeadline('Person pictures');
 $upload_path = "../upload/";
 
+#----------------------------------------------------------------------
+#   Page contents.
+#----------------------------------------------------------------------
+
 // get list of unapproved photo files
-$files = array_slice(getWaitingPictureFiles($upload_path), 0, 10);
+$files = getWaitingPictureFiles($upload_path);
 
 // Form for validating submissions
 $form = new WCAClasses\FormBuilder("photo-submission-approval");
@@ -42,7 +49,7 @@ if($form->submitted()) {
 }
 
 // re-read files / repopulate form.
-$files = array_slice(getWaitingPictureFiles($upload_path), 0, 10);
+$files = getWaitingPictureFiles($upload_path);
 
 // display form for any new needed photos
 if(count($files) == 0){
