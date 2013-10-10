@@ -1,0 +1,15 @@
+{
+  "api_version": "0.0.0-beta",
+  "current": [
+    "TNoodle-0.7.12.jar"
+  ],
+  "allowed": [
+    "TNoodle-0.7.12.jar"
+  ],
+  "history": [
+    "TNoodle-0.7.4.jar",
+    "TNoodle-0.7.5.jar",
+    "TNoodle-0.7.8.jar",
+    "TNoodle-0.7.12.jar"
+  ]
+}

@@ -40,7 +40,7 @@ function htmlify {
   fi
 }
 
-cp files/* build/
+cp -R files/* build/
 
 
 if [ "${TRANSLATION}" = "1" ]
@@ -79,7 +79,7 @@ then
     "src/translations.md" \
     "templates/html_header_2_for_subdirectories.html"
 
-  mkdir "${BUILD_DIR}/scrambles"
+  mkdir -p "${BUILD_DIR}/scrambles"
   htmlify \
     "scrambles/index.html" \
     "WCA Scrambles" \
