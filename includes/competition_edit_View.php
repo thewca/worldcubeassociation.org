@@ -265,7 +265,8 @@ function showRegs () {
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
-    $extraInfo = htmlEscape( "[Email] $email\n[Guests] $guests\n[Comments] $comments\n[Ip] $ip" );
+    $extraInfo = "[Email] " . htmlEscape($email) . "<br />[Guests] " . htmlEscape($guests) . "<br />[Comments] " . htmlEscape($comments) . "<br />[Ip] " . htmlEscape($ip);
+    $toggle = "onclick='extra = document.getElementById(\"extra_$id\").style; extra.display = extra.display ? \"\" : \"none\";'";  # todo: should be jQuery
     $eventIdsList = array_flip( explode( ' ', $eventIds ));
 
     if( $dataError["reg${id}countryId"] ) echo "<tr style='background-color:#FF3333'>\n";
@@ -276,17 +277,20 @@ function showRegs () {
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg[${id}][edit]' value='1' /></td>\n";
     echo "  <td><input type='text' id='reg${id}personId' name='reg[${id}][personId]' value='$personId' size='10' maxlength='10' /></td>\n";
     echo "  <td><input type='text' id='reg${id}name' name='reg[${id}][name]' value='$name' size='25' /></td>\n";
-    echo "  <td title='$extraInfo'>?</td>\n";
+    echo "  <td $toggle><a class='emptyLink'>?</a></td>\n";
     echo "  <td><input type='text' id='reg${id}countryId' name='reg[${id}][countryId]' value='$countryId' size='15' /></td>\n";    
 
+    $columns = 7;
     foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId ){
       if( isset( $eventIdsList[$eventId]))
         echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' checked='checked' /></td>\n";
       else
         echo "  <td><input type='checkbox' id='reg${id}E$eventId' name='reg[${id}][E$eventId]' value='1' /></td>\n";
         /* default:echo "  <td style='background-color:#FFCCCC'><input type='checkbox' id='reg${id}E$eventId' name='reg${id}E$eventId' value='1' checked='checked' /></td>\n"; break; */
+      $columns++;
     }
     echo "</tr>\n";
+    echo "<tr id='extra_$id' style='display: none'><td colspan='$columns'>$extraInfo</td></tr>\n";
   }
   echo "</table>\n";
 
