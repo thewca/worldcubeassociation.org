@@ -104,9 +104,10 @@ function showPreregForm () {
 
   if( ! isset( $chosenName ))
     $chosenName = "";
-  if( getBooleanParam( 'new' ))
+  if( getBooleanParam( 'new' )) {
     showField( "name text $chosenName 50 <b>Name</b>" );
-  else
+    echo "<tr><td>&nbsp;</td><td>Enter your name <b>correctly</b>, for example \"<span style='color:#393;font-weight:bold'>Stefan Pochmann</span>\". Not sloppily like \"<span style='color:#c00;font-weight:bold'>s pochman</span>\".</td></tr>";
+  } else
     showField( "name name 50 <b>Name</b> $chosenName" );
 
   if( getBooleanParam( 'search' )) {
