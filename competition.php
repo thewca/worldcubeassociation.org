@@ -13,7 +13,7 @@ analyzeChoices();
 $competition = getFullCompetitionInfos( $chosenCompetitionId );
 
 #--- If competition not found, say so and stop.
-if( ! $competition ){
+if( ! $competition || ! $competition['showAtAll'] ){
   noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
   require( 'includes/_footer.php' );
   exit( 0 );
