@@ -154,5 +154,18 @@
     "remote_url": "https://github.com/Luis-J-Ianez/wca-documents-spanish.git",
     "remote_name": "repo-spanish",
     "remote_branch": "translation-spanish"
+  },
+  "belarusian": {
+    "branch": "translation-belarusian",
+    "name": "Belarusian",
+    "native": "Беларуская мова",
+    "regulations": "Палажэнні",
+    "guidelines": "Дапаўненні да Палажэнняў",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "pdflatex",
+    "tex_encoding": "russian",
+    "remote_url": "https://github.com/timhabermaas/wca-documents.git",
+    "remote_name": "repo-belarusian",
+    "remote_branch": "translation-belarusian"
   }
 }

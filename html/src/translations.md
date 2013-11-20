@@ -2,8 +2,10 @@
 
 ## Available Translations
 
-Note: Even though these translations are provided on the WCA website, they are not official versions: they may be useful to you, but they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.  
+Note: Even though these translations are provided on the WCA website, they are not official versions: they may be useful to you, but they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.
 
+- [Belarusian - 2013](./belarusian)
+    - By [Anatolii Kalinin](https://www.worldcubeassociation.org/results/p.php?i=2011KALI01) and [Ilya Tereshko](https://www.worldcubeassociation.org/results/p.php?i=2012TERE01).
 - [Chinese - 2013](./chinese)
     - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2013](./chinese-traditional)
