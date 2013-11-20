@@ -81,7 +81,7 @@ if(count($files) == 0){
            <span class='titled-image-title'>New Pic For " . personLink($personId, $person['name']) . "<br />$genderText, $googleSearch</span>
          </div>"
          .($currentPic ? "<div class='titled-image'>$currentPic<span class='titled-image-title'>Current</span></div>" : '')
-         .($$previousPics ? "<div class='titled-image'>$previousPics<span class='titled-image-title'>Previous</span></div>" : '')
+         .($previousPics ? "<div class='titled-image'>$previousPics<span class='titled-image-title'>Previous</span></div>" : '')
       ));
     } else {
       print "ERROR - picture present not associated with a valid ID (" . o($personId) . ")!";
