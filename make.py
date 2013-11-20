@@ -11,7 +11,7 @@ import webbrowser
 
 # Script constants
 
-languages_file = "config/languages.csv"
+languages_file = "config/languages.json"
 upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
 archiveFile = "build.tgz"
@@ -82,12 +82,7 @@ def main():
 
 languageData = {}
 with open(languages_file, "r") as fileHandle:
-  reader = csv.reader(fileHandle)
-  keys = reader.next()[1:]
-
-  for row in reader:
-    language = row[0]
-    languageData[language] = dict(zip(keys, row[1:]))
+  languageData = json.load(fileHandle)
 
 languages = languageData.keys()
 languages.remove(defaultLang)
