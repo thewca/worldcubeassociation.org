@@ -308,7 +308,7 @@ function showMap () {
   global $data, $chosenCompetitionId, $chosenPassword;
 
   echo "<hr /><h1>Map</h1>";
-  echo "<input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
+  echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
   echo "<p>Please save any changes you have made before going to the coordinates page!  <a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
