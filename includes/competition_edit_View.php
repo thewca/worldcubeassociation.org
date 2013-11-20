@@ -62,7 +62,7 @@ function showRegularFields () {
   global $data, $dataError, $modelSpecs;
   
   echo "<h1>General information</h1>";
-  echo "<p>Enter the data of the competition, then click the submit button on the bottom of the page to update the data in the database. You can turn a text part into a link using this format:<br />[{text...}{http:...}] or [{text...}{mailto:...}]</p>\n\n";
+  echo "<p>Enter the data of the competition, then click the submit button on the bottom of the page to update the data in the database. You can sometimes turn a text part into a link using this format:<br />[{text...}{http:...}] or [{text...}{mailto:...}]</p>\n\n";
 
   echo "<table border='0' cellspacing='0' cellpadding='2' width='100%'>\n";
   
@@ -92,7 +92,7 @@ function showRegularFields () {
     }
 
     #--- Color: blue for ok, red for errors.
-    $color = $dataError[$id] ? '#FF3333' : '#CCCCFF';
+    $color = (isset($dataError[$id]) && $dataError[$id]) ? '#FF3333' : '#CCCCFF';
      
     #--- Show label and input field.        
     echo "<tr style='background:$color'>\n";
@@ -308,11 +308,10 @@ function showMap () {
   global $data, $chosenCompetitionId, $chosenPassword;
 
   echo "<hr /><h1>Map</h1>";
-
-  echo "<p><input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
+  echo "<input type='hidden' name='latitude' id='latitude' value='$data[latitude]' />";
   echo "<input type='hidden' name='longitude' id='longitude' value='$data[longitude]' /></p>";
   echo "<p>Current coordinates are Latitude = " . $data['latitude'] . " and Longitude = " . $data['longitude'] . ".</p>";
-  echo "<p><a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
+  echo "<p>Please save any changes you have made before going to the coordinates page!  <a href='map_coords.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Change</a> the coordinates.</p>";
 }
 
 #----------------------------------------------------------------------
@@ -450,7 +449,9 @@ function endForm () {
 
   if(( ! $isAdmin ) && ( ! $isConfirmed )){
     echo "<p>Click 'Save' if you want to save your current information, without submitting yet to the WCA Board.</p>";
-    echo "<p>Click 'Confirm' if you want to validate the competition's details. Please contact the WCA Board afterwards for approval. <span style='font-weight:bold;'>Be careful</span>, you won't be able to modify any information after that. You will still be able moderate the registrations on this page if you choose to use the registration feature.</p>";
+    echo "<p>Once you have everything saved and double-checked, please click on Confirm, and send the Board a message stating that it is done.
+          <span style='font-weight:bold;'>Be careful</span>, you won't be able to modify any information after that. You will still be able moderate the registrations on this page if you choose to use the registration feature.
+          </p>";
   }
   echo "<table border='0' cellspacing='10' cellpadding='5' width='10'><tr>\n";
   echo "<td style='background:#33FF33'><input id='submit' name='submit' type='submit' value='Save' /></td>\n";

@@ -18,19 +18,19 @@ function specifyModel () {
     array (
       "line",
       "name",
-      "Name",
-      'The full name of the competition.',
+      "Competition Name",
+      'The full name of the competition including the year at the end (max 50 chars).',
       "European Rubik's Cube Championship 2006",
-      ".",
+      '^.{1,45}\ (19|20)\d{2}$',
       NULL
     ),
     array (
       "line",
       'cellName',
-      'Nickname',
-      'A short name for display inside lists, such as the list of competitions.  If the name of the competition is already short, just use the name.',
-      "Europe 2006",
-      ".",
+      'Competition Nickname',
+      'A short name for displaying. If the name of the competition is already short, you can re-use the name.',
+      'Europe 2006',
+      '^.{1,40}\ (19|20)\d{2}$',
       NULL
     ),
     array (
@@ -46,7 +46,7 @@ function specifyModel () {
       "line",
       'cityName',
       'City name',
-      'Name of the city where the competition takes place.  For competitions in the USA please include the state.',
+      'Name of the city and state (if applicable) where the competition takes place.  Do not include country.',
       "Paris OR San Francisco, California",
       ".",
       NULL
@@ -128,8 +128,8 @@ function specifyModel () {
       'information',
       'Information',
       'Some information text about the competition.',
-      "Euro 2006 is open to citizens of the European countries and Israel. [{Euro 2006 registration page}{http://www.speedcubing.com/events/euro2006/registration.html}]",
-      $patternTextWithLinks,
+      "Euro 2006 is open to citizens of the European countries and Israel.",
+      '.',
       NULL
     ),
     array (
@@ -254,8 +254,8 @@ function storeData () {
   #####----- Registration
 
   #-- Building show*
-  $showPreregForm = $data["showPreregForm"] ? 1 : 0;
-  $showPreregList = $data["showPreregList"] ? 1 : 0;
+  $showPreregForm = (isset($data["showPreregForm"]) && $data["showPreregForm"]) ? 1 : 0;
+  $showPreregList = (isset($data["showPreregList"]) && $data["showPreregList"]) ? 1 : 0;
 
   #--- Store data
   dbCommand("UPDATE Competitions
