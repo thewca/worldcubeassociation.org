@@ -167,5 +167,18 @@
     "remote_url": "https://github.com/timhabermaas/wca-documents.git",
     "remote_name": "repo-belarusian",
     "remote_branch": "translation-belarusian"
+  },
+  "portuguese": {
+    "branch": "translation-portuguese",
+    "name": "Portuguese",
+    "native": "Português",
+    "regulations": "Regulamento",
+    "guidelines": "Orientações",
+    "pdf": "regulamento-e-orientacoes-wca",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8",
+    "remote_url": "https://github.com/timhabermaas/wca-documents.git",
+    "remote_name": "repo-portuguese",
+    "remote_branch": "translation-portuguese"
   }
 }
