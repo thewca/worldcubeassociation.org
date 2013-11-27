@@ -164,7 +164,7 @@
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "pdflatex",
     "tex_encoding": "russian",
-    "remote_url": "https://github.com/timhabermaas/wca-documents.git",
+    "remote_url": "https://github.com/cubing/wca-documents.git",
     "remote_name": "repo-belarusian",
     "remote_branch": "translation-belarusian"
   },
