@@ -54,15 +54,14 @@ If you'd like to (re)-translate the Regulations, please use the following proces
     - Add a section at the top of the Regulations called "Translation", which should include any useful information about the translation, as well as a translation of the following text: "Please note that this translations is not an official version (even though it is provided on the WCA website): it may be useful, but it does not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used."
     - Try to keep all the formatting intact and only change the words.
     - Read through the [style guide](https://github.com/cubing/wca-documents-extra/blob/master/style-guide.md) for detailed information about how the Regulations are formatted.
-- Contact the [WRC](https://www.worldcubeassociation.org/contact/wrc) for converting adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
+- Contact the [WRC](https://www.worldcubeassociation.org/contact/wrc) for adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
     - The translated Regulations and Guidelines.
     - The "latest commit" value your translation is based on.
     - The names of the translators, along with WCA IDs, and (optionally) personal homepages to link from this page.
     - Translations of the following:
         - The native name of your translation language, in that language.
-        - Regulations
-        - Guidelines
-        - A suitable translation of the file name `wca-regulations-and-guidelines-2013.pdf` for downloads (preferably without accent marks or special letters)
+        - The words/phrases for "Regulations" and "Guidelines".
+        - A suitable translation of the file name `wca-regulations-and-guidelines-2013.pdf` for downloads (preferably without accent marks or special letters).
 
 All translations will be kept [on GitHub](https://github.com/cubing/wca-documents/branches).
 If you're familiar with `git`/GitHub, you're also welcome to fork the `wca-documents` repository. This makes it easy for you to make changes that the WRC can update on the site.
