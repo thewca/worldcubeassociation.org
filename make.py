@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import argparse
-import csv
 import json
 import os
 import shutil
@@ -238,7 +237,7 @@ def build(args):
     [buildTranslation(args, lang) for lang in languages]
     checkoutWCADocs("official")
 
-  elif args.language == None:
+  elif not args.language:
     buildToDirectory(args, "dev")
 
   elif args.language in languages:
@@ -338,7 +337,7 @@ def server(args):
   print "Press Ctrl-C to halt."
 
   # This seems to work better than trying to call it from Python.
-  subprocess.call(["python", "-m",  "SimpleHTTPServer", "8081"])
+  subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"])
 
 
 def setup_wca_documents(args):
