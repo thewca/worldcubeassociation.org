@@ -168,17 +168,30 @@
     "remote_name": "repo-belarusian",
     "remote_branch": "translation-belarusian"
   },
-  "portuguese": {
-    "branch": "translation-portuguese",
-    "name": "Portuguese",
-    "native": "Português",
-    "regulations": "Regulamento",
+  "portuguese-european": {
+    "branch": "translation-portuguese-european",
+    "name": "Portuguese (European)",
+    "native": "Português Europeu",
+    "regulations": "Regulamentos",
     "guidelines": "Orientações",
-    "pdf": "regulamento-e-orientacoes-wca",
+    "pdf": "wca-regulamentos-e-orientacoes",
     "tex_command": "pdflatex",
     "tex_encoding": "utf8",
-    "remote_url": "https://github.com/timhabermaas/wca-documents.git",
-    "remote_name": "repo-portuguese",
-    "remote_branch": "translation-portuguese"
+    "remote_url": "https://github.com/cubizh/wca-documents.git",
+    "remote_name": "repo-portuguese-european",
+    "remote_branch": "translation-portuguese-european"
+  },
+  "portuguese-brazilian": {
+    "branch": "translation-portuguese-brazilian",
+    "name": "Portuguese (Brazilian)",
+    "native": "Português do Brasil",
+    "regulations": "Regulamentos",
+    "guidelines": "Orientações",
+    "pdf": "wca-regulamentos-e-orientacoes",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8",
+    "remote_url": "",
+    "remote_name": "",
+    "remote_branch": ""
   }
 }
