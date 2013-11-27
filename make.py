@@ -33,13 +33,12 @@ def main():
 
   if args.release:
     args.wca = True
-    args.transfer = True
+    args.upload = True
 
   if args.wca:
     args.clean = True
     args.all = True
     args.pdf = True
-    args.archive = True
 
   # Override previous PDF settings at the end
   if args.no_pdf:
@@ -63,9 +62,6 @@ def main():
 
     if args.upload:
       upload(args)
-
-    if args.transfer:
-      transfer(args)
 
     if args.server:
       server(args)
@@ -160,7 +156,7 @@ parser.add_argument(
   '--archive', '-z',
   action='store_true',
   default=False,
-  help="Produce a compressed archive of the build folder."
+  help="Produce a compressed archive (" + archiveFile + ") of the build folder."
 )
 
 parser.add_argument(
@@ -189,22 +185,14 @@ parser.add_argument(
   '--wca', '-w',
   action='store_true',
   default=False,
-  help="Full WCA release build. Equivalent to -capz. " +
-    "Does *not* currently include -f."
-)
-
-parser.add_argument(
-  '--transfer', '-t',
-  action='store_true',
-  default=False,
-  help="Transfer to WCA server."
+  help="Full WCA release build. Equivalent to -cap."
 )
 
 parser.add_argument(
   '--release', '-r',
   action='store_true',
   default=False,
-  help="Equivalent to -wt"
+  help="Equivalent to -wu"
 )
 
 parser.add_argument(
@@ -338,34 +326,6 @@ def upload(args):
   print "Visit " + upload_server["base_url"]
   print "Archive is at " + upload_server["base_url"] + archiveFile
 
-
-def transfer_ftps(args):
-
-  print "Uploading", archiveFile, "via FTPS."
-
-  lftpCommand = ("set ftp:ssl-force true && "
-    "set ssl:verify-certificate false && "
-    "connect " + upload_server["transfer_server"] + " && "
-    "put " + archiveFile + " && "
-    "bye")
-
-  subprocess.check_call([
-    "lftp",
-    "-c",
-    lftpCommand
-  ])
-
-  print "Unpacking", archiveFile, "on server."
-
-  subprocess.check_call([
-    "curl",
-    upload_server["transfer_url"],
-    "--data",
-    upload_server["transfer_post_data"]
-  ])
-
-# Currently using SFTP.
-transfer = upload
 
 def server(args):
 
