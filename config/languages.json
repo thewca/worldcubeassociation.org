@@ -179,7 +179,7 @@
     "tex_encoding": "utf8",
     "remote_url": "https://github.com/cubizh/wca-documents.git",
     "remote_name": "repo-portuguese-european",
-    "remote_branch": "translation-portuguese-european"
+    "remote_branch": "master"
   },
   "portuguese-brazilian": {
     "branch": "translation-portuguese-brazilian",
