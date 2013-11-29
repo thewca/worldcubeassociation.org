@@ -54,7 +54,7 @@ function cloneNewCompetition ( $newCompetitionId, $oldCompetitionId ) {
 function createNewCompetition ( $id ) {
 #----------------------------------------------------------------------
 
-  $name = "NEW COMPETITION $id";
+  $name = "NEW COMPETITION " . trim(preg_replace('/(\\d{4})/', ' $1 ', $id));
   $adminPassword = generateNewPassword( $id, 'foo' );
   $organiserPassword = generateNewPassword( $id, 'bar' );
   dbCommand("

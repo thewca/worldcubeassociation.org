@@ -129,7 +129,7 @@ function specifyModel () {
       'Information',
       'Some information text about the competition.',
       "Euro 2006 is open to citizens of the European countries and Israel.",
-      '.',
+      '',
       NULL
     ),
     array (
