@@ -111,7 +111,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 
 - Scramble sequence: A list of moves ('algorithm') used to scramble a puzzle. Informally also called a 'scramble'.
 - Scramble: The scrambled state of a puzzle after a scramble sequence has been applied to it.
-- Attempt: The time frame starting when the competitor acknowledges his readiness to to begin (see Regulation A3b1) and ending when the score sheet is complete (see Regulation A7c).
+- Attempt: The time frame starting when the competitor acknowledges his readiness to begin (see Regulation A3b1) and ending when the score sheet is complete (see Regulation A7c).
 - Solve: Generally, the part of the attempt when the timer is running.
 - Original recorded time: The time showing on the timer/stopwatch, before time penalties.
 - Result: An official time, either the time for an attempt including penalties, or a derived result (e.g. mean/average).
