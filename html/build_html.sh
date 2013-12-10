@@ -65,6 +65,12 @@ htmlify \
 if [ "${TRANSLATION}" = "0" ]
 then
 
+  htmlify \
+    "process.html" \
+    "WCA Regulations/Guidelines Process" \
+    "src/process.md" \
+    "${HEADER_2}"
+
   mkdir "${BUILD_DIR}/history"
   htmlify \
     "history/index.html" \
