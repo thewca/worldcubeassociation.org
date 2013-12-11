@@ -33,4 +33,4 @@ if __name__ == "__main__":
   json_data = route(path)
   print "Content-type: application/json"
   print ""
-  print json.dumps(json_data)
+  print json.dumps(json_data, indent=2)
