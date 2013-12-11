@@ -1,17 +1,17 @@
 {
   "api_version": "0.0.0-beta",
   "current": {
-    "name": "TNoodle-0.7.12.jar",
+    "name": "TNoodle-0.7.12",
     "information": "https://www.worldcubeassociation.org/regulations/scrambles/",
     "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-0.7.12.jar"
   },
   "allowed": [
-    "TNoodle-0.7.12.jar"
+    "TNoodle-0.7.12"
   ],
   "history": [
-    "TNoodle-0.7.4.jar",
-    "TNoodle-0.7.5.jar",
-    "TNoodle-0.7.8.jar",
-    "TNoodle-0.7.12.jar"
+    "TNoodle-0.7.4",
+    "TNoodle-0.7.5",
+    "TNoodle-0.7.8",
+    "TNoodle-0.7.12"
   ]
 }
