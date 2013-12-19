@@ -119,3 +119,5 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - Rankings: An ordered list of results (e.g. first round rankings, world rankings).
 - Ranking/Rank: An ordinal number representing a result's order in a list of results (e.g. ranking in a round, world rank).
 - Record: A best-ranked result (e.g. of comparable results for a region, or of results for a competitor)
+- Part: A subset of puzzle components (in particular, any individual piece, cap, sticker, etc.).
+- Piece: A part of the puzzle that stays together during normal use of a puzzle (e.g. a cubie with its stickers).
