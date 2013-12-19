@@ -68,6 +68,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - 'Ranking' instead of 'rank'.
 - 'Permitted' instead of 'allowed'
 - 'Attempt' instead of 'solve' (unless specifically referring to the timed portion).
+- "The attempt" instead of "an attempt", except the first mention of an attempt that has not been identified yet.
 - 'Scramble sequence' instead of 'scramble'.
 - 'Start' instead of 'begin'.
 - 'Stop' instead of 'halt' or 'finish'
