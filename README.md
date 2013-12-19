@@ -49,3 +49,8 @@ For all official `wca-documents` updates:
     - [WCA Homepage](https://worldcubeassociation.org/) Drupal
     - [WCA forum](https://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
     - Email `wca-delegates` list.
+
+
+For scrambling program updates:
+
+- Follow most of the process for a `wca-documents` update.
