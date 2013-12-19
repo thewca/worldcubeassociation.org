@@ -44,6 +44,7 @@ For all official `wca-documents` updates:
     - Build wca-documents-extra using `./make -w`
     - Upload to the WCA server.
 - Post Announcement
+    - Release only Monday/Tuesday if possible, Wednesday is okay. See [the first WRC announcement](https://www.worldcubeassociation.org/regulations/announcements/introducing-wrc-announcements). (Does not apply to the yearly change, which should go into effect Jan. 1.)
     - Make sure links are up to date, and the date the changes go into effect is listed.
     - [WCA Homepage](https://worldcubeassociation.org/) Drupal
     - [WCA forum](https://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
