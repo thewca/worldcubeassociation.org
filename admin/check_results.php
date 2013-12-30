@@ -125,12 +125,12 @@ function checkRelatively () {
 
   #--- Get all results (except the trick-duplicated (old) multiblind)
   $rows = dbQueryHandle("
-    SELECT   result.id, competitionId, eventId, roundId, average, best, pos, personName
+    SELECT   result.id, competitionId, eventId, roundId, formatId, average, best, pos, personName
     FROM     Results result, Competitions competition
     WHERE    competition.id = competitionId
       $dateCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
-    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundId, if(average>0, average, 2147483647), if(best>0, best, 2147483647), pos
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundId, IF(formatId IN ('a','m') AND average>0, average, 2147483647), if(best>0, best, 2147483647), pos
   ");
 
   #--- Begin the form
@@ -141,9 +141,13 @@ function checkRelatively () {
   $wrongs = $wrongRounds = 0;
   $wrongComp = array();
   while( $row = mysql_fetch_row( $rows ) ) {
-    list( $resultId, $competitionId, $eventId, $roundId, $average, $best, $storedPos, $personName ) = $row;
+    list( $resultId, $competitionId, $eventId, $roundId, $formatId, $average, $best, $storedPos, $personName ) = $row;
     $round = "$competitionId|$eventId|$roundId";
-    $result = "$average|$best";
+    if($formatId == 'm' || $formatId == 'a') {
+      $result = "$average|$best";
+    } else {
+      $result = $best;
+    }
     if ( $round != $prevRound )
       $ctr = $calcedPos = 1;
     if ( $ctr > 1  &&  $result != $prevResult )
@@ -218,8 +222,8 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName ));
       tableCaptionNew( false, $anchors, $caption );
-
-      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $bo3_as_mo3 = ($formatId=='3' && ($eventId=='333bf' || $eventId=='333fm' || $eventId=='333ft'));
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm' || $bo3_as_mo3) ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
       tableHeader( explode( '|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
                    array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));

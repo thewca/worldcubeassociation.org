@@ -50,9 +50,14 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
   #--- 8) compute average
   $average = 0;
   $format = $result['formatId'];
-  if( $format == 'm'   ) $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
-  if( $format == 'a'   ) $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
-  if( $average > 60000 ) $average = ($average + 50 - (($average + 50) % 100));
+  $event = $result['eventId'];
+  $bo3_as_mo3 = ($format=='3' && ($event=='333bf' || $event=='333fm' || $event=='333ft'));
+  if( $format == 'm' || $bo3_as_mo3)
+    $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
+  if( $format == 'a' )
+    $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
+  if( $average > 60000 )
+    $average = ($average + 50 - (($average + 50) % 100));
 
   #--- 9) compare the computed best and average with the stored ones
   if( $result['best']    != $best    ) return    "'best' should be $best";

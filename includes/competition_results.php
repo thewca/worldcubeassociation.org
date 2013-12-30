@@ -50,8 +50,8 @@ function showCompetitionResults ($resultsTable = 'Results') {
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName, "<a href='#e${eventId}_$roundId'>link</a>" ));
       tableCaptionNew( false, $anchors, $caption );
-
-      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $bo3_as_mo3 = ($formatId=='3' && ($eventId=='333bf' || $eventId=='333fm' || $eventId=='333ft'));
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm' || $bo3_as_mo3) ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
       tableHeader( explode( '|', "Place|Person|Best||$headerAverage||Citizen of|$headerAllResults" ),
                    array( 0 => 'class="r"', 2 => 'class="R"', 4 => 'class="R"', 7 => 'class="f"' ));
@@ -101,7 +101,8 @@ function showCompetitionResultsByPerson ($resultsTable = 'Results') {
         tableRowBlank();
       }
 
-      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm') ? 'Average' : '';
+      $bo3_as_mo3 = ($formatId=='3' && ($eventId=='333bf' || $eventId=='333fm' || $eventId=='333ft'));
+      $headerAverage    = ($formatId == 'a'  ||  $formatId == 'm' || $bo3_as_mo3) ? 'Average' : '';
       $headerAllResults = ($formatId != '1') ? 'Result Details' : '';
 
       tableCaptionNew( false, $personId, spaced( array( personLink( $personId, $personName ), $countryName )));

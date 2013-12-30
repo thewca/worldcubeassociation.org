@@ -18,6 +18,10 @@ showChoices();
 
 if( $chosenDoIt ){
   noticeBox3( 0, "Note: At the end of this, when this page is completed, you should see a green success box at the bottom of the page. If not, something went wrong (like an out-of-memory error we recently had, which killed the script)." );
+
+  // Adding best-3 mean computations, for 2014 mean/3 recognition.
+  computeBest3();
+
   computeConciseRecords();
   computeRanks( 'best', 'Single' );
   computeRanks( 'average', 'Average' );
@@ -32,7 +36,7 @@ require( '../includes/_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p>This computes the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script, and clears the caches.</p>\n";
+  echo "<p>This computes means for 3x3 bld, the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script, and clears the caches.</p>\n";
 
   echo "<p>Do it after changes to the database data so that these things are up-to-date.</p><hr />\n";
 }
@@ -52,6 +56,42 @@ function showChoices () {
   displayChoices( array(
     choiceButton( true, 'doit', ' Do it now ' )
   ));
+}
+
+#----------------------------------------------------------------------
+function computeBest3 () {
+#----------------------------------------------------------------------
+
+  echo "Computing means for best-of-3 results in 333bf...<br />\n";
+  startTimer();
+
+  // Set new DNF averages
+  dbCommand("
+    UPDATE Results
+    SET average = -1
+      WHERE eventId = '333bf'
+        AND average = 0
+        AND formatId ='3'
+        AND value1 != 0
+        AND value2 != 0
+        AND value3 != 0
+        AND (value1<0 OR value2<0 OR value3<0)
+    ");
+
+  // Set new averages (round times > 10:00)
+  dbCommand("
+    UPDATE Results
+    SET average = IF( (value1+value2+value3)/3.0 > 60000, (value1+value2+value3)/3.0 - MOD((value1+value2+value3)/3.0,100), (value1+value2+value3)/3.0)
+      WHERE eventId = '333bf'
+        AND average = 0
+        AND formatId ='3'
+        AND value1 > 0
+        AND value2 > 0
+        AND value3 > 0
+    ");
+
+  stopTimer( "Best3Means" );
+  echo "... done<br /><br />\n";
 }
 
 #----------------------------------------------------------------------
@@ -207,5 +247,3 @@ function storeRanks ( $valueName, $eventId, &$personRecord, &$personWR, &$person
   $values = implode( ",\n", $values );
   dbCommand( "INSERT INTO Ranks$valueName (personId, eventId, best, worldRank, continentRank, countryRank) VALUES\n$values" );
 }
-
-?>
