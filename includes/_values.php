@@ -20,7 +20,7 @@ function formatValue( $value, $format='time' ) {
 
   #--- Just a number?
   if( $format == 'number' )
-    return $v;
+    return ($v < 1000) ? $v : sprintf('%.2f', $v/100);
 
   #--- Multi.
   if( $format == 'multi' ){
