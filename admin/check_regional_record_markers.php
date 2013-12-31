@@ -63,7 +63,7 @@ function doTheDarnChecking () {
 
   #--- Begin form and table.
   echo "<form action='check_regional_record_markers_ACTION.php' method='post'>\n";
-  tableBegin( 'results', 11 );
+  tableBegin( 'results', 12 );
 
   #--- Do the checking.
   computeRegionalRecordMarkers( 'best', 'Single' );
@@ -207,6 +207,11 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
     ORDER BY event.rank, startDate, competitionId, round.rank, $valueId
   ");
 
+  #--- For displaying the dates, fetch all competitions
+  $allCompetitions = array();
+  foreach ( dbQuery("SELECT * FROM Competitions") as $row )
+    $allCompetitions[$row['id']] = $row;
+
   #--- Process each result.
   $currentEventId = $announcedEventId = $announcedRoundId = $announcedCompoId = NULL;
   while( $row = mysql_fetch_row( $results )){
@@ -289,7 +294,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       #--- If new event, announce it.
       if( $announceEvent ){
         tableCaption( false, "$eventId $valueName" );
-        tableHeader( explode( '|', 'Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
+        tableHeader( explode( '|', 'Date|Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
                      array( 7 => "class='R2'" ) );
       }
 
@@ -302,6 +307,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 
       #--- Show the result.
       tableRow( array(
+        competitionDate($allCompetitions[$competitionId]),
         competitionLink( $competitionId, $competitionId ),
         $roundId,
         personLink( $personId, $personName ),
