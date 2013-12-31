@@ -52,8 +52,9 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
   $format = $result['formatId'];
   $event = $result['eventId'];
   $bo3_as_mo3 = ($format=='3' && ($event=='333bf' || $event=='333fm' || $event=='333ft'));
+  $scaler = ($event=='333fm') ? 100 : 1;
   if( $format == 'm' || $bo3_as_mo3)
-    $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) / 3));
+    $average = ($zer > 2) ? 0 : (($suc < 3) ? -1 : round(($v[1] + $v[2] + $v[3]) * $scaler / 3));
   if( $format == 'a' )
     $average = ($zer > 0) ? 0 : (($suc < 4) ? -1 : round(($v[2] + $v[3] + $v[4]) / 3));
   if( $average > 60000 )
