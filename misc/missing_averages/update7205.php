@@ -34,12 +34,12 @@ echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>
 
 #--- Tabbing div and links
 $tabLinks = '';
-foreach ( array( '333bf', '333fm', '444bf', '555bf' ) as $eventId )
+foreach ( array( '444bf', '555bf' ) as $eventId )
   $tabLinks .= "<li><a href=\"#container_$eventId\">$eventId</a></li>\n";
 echo "\n<div id=\"tabs\" style=\"font-size:1.0em; width:980px; margin:auto; background:white \">\n<ul>\n$tabLinks</ul>\n";
 
 #--- Tabbing contents
-foreach ( array( '333bf', '333fm', '444bf', '555bf' ) as $eventId ) {
+foreach ( array( '444bf', '555bf' ) as $eventId ) {
   echo "<div id=\"container_$eventId\">";
   showBody( $eventId );
   echo "</div>\n";
@@ -88,8 +88,8 @@ function showBody ( $eventId ) {
   foreach ( $rows as $row ) {
     list( $personId, $personName, $minSum, $means, $minSum2, $means2 ) = $row;
     if ( !isset($listed[$personId]) ) {
-      $mean  = $eventId == '333fm' ? sprintf('%.2f',$minSum/3) : formatValue(round($minSum/3));
-      $mean2 = $eventId == '333fm' ? '' : formatValue(round($minSum2/2));
+      $mean  = formatValue(round($minSum/3));
+      $mean2 = formatValue(round($minSum2/2));
       TableRow( array( ++$pos, personLink( $personId, $personName ), $mean, $means, $mean2, $means2, '' ) );
     }
     $listed[$personId] = true;

@@ -105,6 +105,7 @@ function buildGraph ( $eventName, $eventId, $divide ) {
     while( $row = mysql_fetch_row( $rows ) ) {
       list( $personId, $value, $date ) = $row;
       if ( $eventId == '333mbf' ) $value = (($value - $value%10000000) / 10000000) - 99;
+      if ( $eventId == '333fm' && $valueId == 'average') $value /= 100;
 #      if ( $eventId == '333mbf' ) echo "$value ";
 
       //--- Skip values worse than n-th place
