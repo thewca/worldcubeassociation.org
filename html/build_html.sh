@@ -52,14 +52,14 @@ fi
 
 htmlify \
   "index.html" \
-  "WCA Regulations 2013" \
-  "../wca-documents/wca-regulations-2013.md" \
+  "WCA Regulations" \
+  "../wca-documents/wca-regulations.md" \
   "${HEADER_2}"
 
 htmlify \
   "guidelines.html" \
-  "WCA Guidelines 2013" \
-  "../wca-documents/wca-guidelines-2013.md" \
+  "WCA Guidelines" \
+  "../wca-documents/wca-guidelines.md" \
   "${HEADER_2}"
 
 if [ "${TRANSLATION}" = "0" ]

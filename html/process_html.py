@@ -12,7 +12,7 @@ includeTitleLogo = True
 
 ## Sanity checks
 numRegsArticles = 19
-numGuidesArticles = 17
+numGuidesArticles = 18
 
 # Arguments
 

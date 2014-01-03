@@ -271,7 +271,7 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
     ])
     subprocess.check_call([
       "cp",
-      "pdf/build/" + pdfName + "-2013.pdf",
+      "pdf/build/" + pdfName + ".pdf",
       buildDir
     ])
 
