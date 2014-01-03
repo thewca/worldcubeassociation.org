@@ -162,7 +162,7 @@ function showEventSpecifications () {
     */
     
     echo "<tr>\n";
-    echo "  <td><b>$cellName</b></td>\n";
+    echo "  <td><label for='offer$id'><b>$cellName</b></label></td>\n";
     echo "  <td align='center'><input id='offer$id' name='offer$id' type='checkbox' $offer /></td>\n";
     /*
     echo "  <td align='center'><input id='personLimit$id' name='personLimit$id' type='text' size='6' style='background:#FF8' value='$personLimit' /></td>\n";
@@ -188,13 +188,13 @@ function showAdminOptions () {
   global $data, $chosenCompetitionId, $isConfirmed;
 
   echo "<p>You can give this link to an organiser or a delegate to manage a competition: <br />
-http://www.worldcubeassociation.org/results/competition_edit.php?competitionId=$chosenCompetitionId&password=$data[organiserPassword]</p>";
+  <input style='width:80%' type='text' value='http://www.worldcubeassociation.org/results/competition_edit.php?competitionId=$chosenCompetitionId&password=$data[organiserPassword]' /></p>";
 
   echo "<p><input type='hidden' name='organiserPassword' id='organiserPassword' value='$data[organiserPassword]' /></p>\n";
 
   if( $isConfirmed ){
     echo "<p>The competition has been <span style='color:#3C3'>validated</span> by the organisers/delegate</p>";
-    echo "<p><input id='unvalidate' name='unvalidate' type='checkbox' /> Check if you want to <b>unvalidate</b> so that organisers can change again some informations.</p>\n";
+    echo "<p><input id='unvalidate' name='unvalidate' type='checkbox' /><label for='unvalidate'> Check if you want to <b>unvalidate</b> so that organisers can change again some informations.</label></p>\n";
   }
   else
     echo "<p>The competition is currently <span style='color:#F00'>not validated</span> by the organisers/delegate</p>";
@@ -202,9 +202,9 @@ http://www.worldcubeassociation.org/results/competition_edit.php?competitionId=$
   echo "<p>If you agree with all the informations, you can simply change the competition's state to visible, which is now by default not the case.</p>";
 
   if( $data["showAtAll"] )
-    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /> Check if you want the <b>Competition</b> to be visible</p>\n";
+    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' checked='checked' /><label for='showAtAll'> Check if you want the <b>Competition</b> to be visible</label></p>\n";
   else
-    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /> Check if you want the <b>Competition</b> to be visible</p>\n";
+    echo "<p><input id='showAtAll' name='showAtAll' type='checkbox' /><label for='showAtAll'> Check if you want the <b>Competition</b> to be visible</label></p>\n";
 
 }
 
@@ -214,14 +214,14 @@ function showRegsOptions () {
   global $data, $dataError, $chosenCompetitionId;
 
   if( $data["showPreregForm"] )
-    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' checked='checked' /> Check if you want to start a <b>Registration Form</b></p>\n";
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' checked='checked' /><label for='showPreregForm'> Check if you want to start a <b>Registration Form</b></label></p>\n";
   else
-    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' /> Check if you want to start a <b>Registration Form</b></p>\n";
+    echo "<p><input id='showPreregForm' name='showPreregForm' type='checkbox' /><label for='showPreregForm'> Check if you want to start a <b>Registration Form</b></label></p>\n";
 
   if( $data["showPreregList"] )
-    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' checked='checked' /><label for='showPreregList'> Check if you want the <b>Registered Competitors</b> to be visible</label></p>\n";
   else
-    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /> Check if you want the <b>Registered Competitors</b> to be visible</p>\n";
+    echo "<p><input id='showPreregList' name='showPreregList' type='checkbox' /><label for='showPreregList'> Check if you want the <b>Registered Competitors</b> to be visible</label></p>\n";
 
 }
 
@@ -250,7 +250,7 @@ function showRegs () {
   echo "<table border='1' cellspacing='0' cellpadding='4'>\n";
 
   #--- Prepare the table header row.
-  $header = "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>WCA Id</td><td>Name</td><td>?</td><td>Country</td>\n";
+  $header = "<tr style='background-color:#CCCCFF'><td>A</td><td>D</td><td>E</td><td>?</td><td>WCA Id</td><td>Name</td><td>Country</td>\n";
   foreach( getEventSpecsEventIds( $data['eventSpecs'] ) as $eventId )
     $header .= "<td style='font-size:9px'>$eventId</td>\n";
   $header .= "</tr>\n";
@@ -275,9 +275,9 @@ function showRegs () {
     echo "  <td><input type='checkbox' id='reg${id}accept' name='reg[${id}][accept]' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}delete' name='reg[${id}][delete]' value='1' /></td>\n";
     echo "  <td><input type='checkbox' id='reg${id}edit' name='reg[${id}][edit]' value='1' /></td>\n";
+    echo "  <td $toggle><a class='emptyLink moreInfo' title='more info...'>&nbsp;</a></td>\n";
     echo "  <td><input type='text' id='reg${id}personId' name='reg[${id}][personId]' value='$personId' size='10' maxlength='10' /></td>\n";
     echo "  <td><input type='text' id='reg${id}name' name='reg[${id}][name]' value='$name' size='25' /></td>\n";
-    echo "  <td $toggle><a class='emptyLink'>?</a></td>\n";
     echo "  <td><input type='text' id='reg${id}countryId' name='reg[${id}][countryId]' value='$countryId' size='15' /></td>\n";    
 
     $columns = 7;

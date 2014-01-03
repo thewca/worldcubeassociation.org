@@ -18,6 +18,15 @@ a:hover {
 }
 
 
+.moreInfo {
+  background: url('images/more-info.gif') transparent no-repeat 0 0;
+  display: block;
+  height: 11px;
+  width: 13px;
+  padding: 3px;
+}
+
+
 /* ---------- competition ---------- */
 
 a.c:link, a.c:visited, a.c:active { color: #33F; }
@@ -84,4 +93,8 @@ a.email:hover {
 
 .emptyLink {
   font-weight: bold;
+  cursor: pointer;
 }
+
+
+
