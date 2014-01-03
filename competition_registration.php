@@ -301,7 +301,7 @@ function showField ( $fieldSpec ) {
 #----------------------------------------------------------------------
 function savePreregForm () {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $competition;
+  global $chosenCompetitionId, $competition, $config;
  
   $personId   = getMysqlParam( 'personId'   );
   $name       = getMysqlParam( 'name'       );
@@ -378,12 +378,39 @@ function savePreregForm () {
 
     $mailSubject = "$competition[cellName] - New registration";
 
-    $mailHeaders = "From: \"WCA\" <board@worldcubeassociation.org>\r\n";
-    $mailHeaders .= "Reply-To: $email\r\n";
-    $mailHeaders .= "MIME-Version: 1.0\r\n";
-    $mailHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $mail_config = $config->get('mail');
 
-    mail( $mailEmail, $mailSubject, $mailBody, $mailHeaders, "-fboard@worldcubeassociation.org" );
+    // only send mails on the real website
+    if(preg_match( '/worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
+      if($mail_config['pear']) {
+        // send smtp mail
+        $headers = array ('From' => $mail_config['from'],
+         'To' => $mailEmail,
+         'Subject' => $mailSubject);
+
+        $smtp = Mail::factory('smtp',
+          array ('host' => $mail_config['host'],
+           'port' => $mail_config['port'],
+           'auth' => true,
+           'username' => $mail_config['user'],
+           'password' => $mail_config['pass'])
+        );
+
+        $mail = $smtp->send($to, $headers, $body);
+
+      } else {
+        // normal php mail
+        $mailHeaders = "From: \"WCA\" <" . $mail_config['from'] . ">\r\n";
+        $mailHeaders .= "Reply-To: board@worldcubeassociation.org\r\n";
+        $mailHeaders .= "MIME-Version: 1.0\r\n";
+        $mailHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
+
+        mail( $mailEmail, $mailSubject, $mailBody, $mailHeaders, "-f" . $mail_config['from'] );
+      }
+    } else {
+      // just print out message when testing
+      noticeBox3(0, "Mail not sent (test website): " . $mailBody);
+    }
 
   }
 

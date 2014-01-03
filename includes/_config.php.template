@@ -12,6 +12,30 @@ $config['database']['name'] = '...';
 $config['recaptcha']['publickey'] = '...';
 $config['recaptcha']['privatekey'] = '...';
 
+
+// check for PEAR (try to send auth email)
+$config['mail']['pear'] = false;
+try {
+  @ include "Mail.php";
+  if(class_exists('Mail')) {
+  	$config['mail']['pear'] = true;
+  }
+} catch(Exception $e) {
+  // don't worry about this
+  $config['mail']['pear'] = false;
+}
+
+if($config['mail']['pear']) {
+  $config['mail']['from'] = '';
+  $config['mail']['host'] = '';
+  $config['mail']['port'] = '';
+  $config['mail']['user'] = '';
+  $config['mail']['pass'] = '';
+} else {
+  $config['mail']['from'] = 'no-reply@worldcubeassociation.org';
+}
+
+
 // pathToRoot and filesPath are determined by config class - just a placeholder here.  You can enter an explicit value if desired.  Include trailing slash.
 // pathToRoot is for web urls, etc.  May be different than filesystem paths.  Eg, "/results/".
 $config['pathToRoot'] = "";

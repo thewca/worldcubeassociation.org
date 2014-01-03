@@ -20,8 +20,10 @@ function showView () {
   if( $isAdmin || (! $isConfirmed )){
     showMap();
   }
-  if( $isAdmin )
+  if( $isAdmin ) {
     showResultsUpload();
+    showScrambleUpload();
+  }
   endForm();
 }
 
