@@ -6,12 +6,12 @@ Note: Even though these translations are provided on the WCA website, they are n
 
 - [Belarusian - 2013](./belarusian)
     - By [Anatolii Kalinin](https://www.worldcubeassociation.org/results/p.php?i=2011KALI01) and [Ilya Tereshko](https://www.worldcubeassociation.org/results/p.php?i=2012TERE01).
-- [Chinese - 2013](./chinese)
+- [Chinese - 2014](./chinese)
     - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2013](./chinese-traditional)
     - By [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).
-- [German (Deutsch) - 2013](./german/)
-    - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Stefan Huber](https://www.worldcubeassociation.org/results/p.php?i=2007HUBE01), [Leon Schmidtchen](https://www.worldcubeassociation.org/results/p.php?i=2010SCHM01), and [Florian Weingarten](https://www.worldcubeassociation.org/results/p.php?i=2007WEIN01).
+- [German (Deutsch) - 2014](./german/)
+    - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Laura Ohrndorf](https://www.worldcubeassociation.org/results/p.php?i=2009OHRN01), and [Gregor Billing](https://www.worldcubeassociation.org/results/p.php?i=2012BILL01).
 - [Hungarian - 2013](./hungarian/)
     - By Nikolett Placskó and [Perge Olivér](mailto:pergeoliver@gmail.com)
 - [Korean - 2013](./korean/)
