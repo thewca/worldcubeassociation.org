@@ -25,6 +25,7 @@ parser.add_argument('--fragment', default="0", help="Is html fragment, rather th
 
 parser.add_argument('--regs-url', default=regsURL, help="url for regulations content")
 parser.add_argument('--guides-url', default=guidesURL, help="url for guidelines content")
+parser.add_argument('--year', default="0", help="year for regulations and guidelines")
 
 
 args = parser.parse_args()
@@ -38,6 +39,7 @@ regsFileName = args.regulations_file
 guidesFileName = args.guidelines_file
 regsURL = args.regs_url
 guidesURL = args.guides_url
+year = args.year
 
 isFragment = args.fragment
 
@@ -51,6 +53,9 @@ guidesFile = open(guidesFileName, "r")
 guidesText = guidesFile.read()
 guidesFile.close();
 
+# Adapt the sanity check (dirty hack)
+if year == "2013":
+  numGuidesArticles = 17
 
 # Match/Replace constants
 

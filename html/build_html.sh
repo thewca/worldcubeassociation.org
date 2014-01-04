@@ -10,6 +10,7 @@ mkdir -p "${BUILD_DIR}"
 
 FRAGMENT="${1}"
 TRANSLATION="${2}"
+YEAR="${3}"
 #LANGUAGE="${3}"
 
 function markdown_program {
@@ -50,17 +51,35 @@ else
   HEADER_2="templates/html_header_2.html"
 fi
 
-htmlify \
-  "index.html" \
-  "WCA Regulations" \
-  "../wca-documents/wca-regulations.md" \
-  "${HEADER_2}"
+if [ "${YEAR}" = "0" ]
+then
+    htmlify \
+      "index.html" \
+      "WCA Regulations" \
+      "../wca-documents/wca-regulations.md" \
+      "${HEADER_2}"
+else
+    htmlify \
+      "index.html" \
+      "WCA Regulations ${YEAR}" \
+      "../wca-documents/wca-regulations-${YEAR}.md" \
+      "${HEADER_2}"
+fi
 
-htmlify \
-  "guidelines.html" \
-  "WCA Guidelines" \
-  "../wca-documents/wca-guidelines.md" \
-  "${HEADER_2}"
+if [ "${YEAR}" = "0" ]
+then
+    htmlify \
+      "guidelines.html" \
+      "WCA Guidelines" \
+      "../wca-documents/wca-guidelines.md" \
+      "${HEADER_2}"
+else
+    htmlify \
+      "guidelines.html" \
+      "WCA Guidelines ${YEAR}" \
+      "../wca-documents/wca-guidelines-${YEAR}.md" \
+      "${HEADER_2}"
+fi
 
 if [ "${TRANSLATION}" = "0" ]
 then
@@ -113,5 +132,6 @@ fi
   --git-hash "${GIT_VERSION}" \
   --fragment "${FRAGMENT}" \
   --regs-url "${REGS_URL}" \
-  --guides-url "${GUIDES_URL}"
+  --guides-url "${GUIDES_URL}"\
+  --year "${YEAR}"
   #--language "${LANGUAGE}"
