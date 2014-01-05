@@ -8,6 +8,10 @@ Starting with 2013, updates (with lists of changes changes) will be announced on
 
 Here are older versions of the regulations. None of them are official anymore.
 
+- [2014-01-01](./official/2014-01-01) ([Changes](TODO))
+- [2013-05-21](./official/2013-05-21) ([Changes](TODO))
+    - [2013-05-10](./official/2013-05-10) ([Changes](TODO))
+    - [2013-01-01](./official/2013-01-01) ([Changes](TODO))
 - 2012: No new Regulations
 - 2011: No new Regulations
 - [2010](./files/regulations2010.html) ([Changes](./files/regulations_history2010.html))
@@ -15,7 +19,7 @@ Here are older versions of the regulations. None of them are official anymore.
 - [2008](./files/regulations2008.html) ([Changes](./files/regulations_history2009.html))
 - [2007](./files/regulations2007.html) ([Changes](./files/regulations_history2008.html))
 - [2006 v2](./files/regulations2006v2.html)
-- [2006](./files/regulations2006.html)
+    - [2006](./files/regulations2006.html)
 - [2005](./files/regulations2005.html)
 - [2004](./files/regulations2004.html)
 
