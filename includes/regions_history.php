@@ -74,7 +74,7 @@ function showRegionalRecordsHistory () {
     tableBegin( 'results', 7 );
   } else {
     tableBegin( 'results', 9 );
-    tableHeader( explode( '|', 'Date|Event|What|Single|Average|Person|Citizen of|Competition|Result Details' ),
+    tableHeader( explode( '|', 'Date circa|Event|What|Single|Average|Person|Citizen of|Competition|Result Details' ),
                  array( 3 => 'class="R2"', 4 => 'class="R2"', 8 => 'class="f"' ));
   }
 
