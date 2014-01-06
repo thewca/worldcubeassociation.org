@@ -36,6 +36,7 @@ You will also need some fonts for specific translations such as Chinese, Japanes
 - `AR PL UMing CN`
 
 Their installation depends on your Operating System, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a debian-like system.
+In case you have trouble to find them, there is a copy of these fonts in the directory `pdf/fonts`.
 
 ## Release Process
 
