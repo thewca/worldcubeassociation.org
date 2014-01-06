@@ -19,10 +19,23 @@ In order to set up all the branches in the `wca-documents` folder to track the t
 
 ## Dependencies
 
+If you want to build the Regulations without creating the pdf :
+
 - `Python`
 - [`pandoc`](http://johnmacfarlane.net/pandoc/installing.html) (for converting the documents from Markdown to HTML/LaTeX)
-- `pdflatex` (for converting LaTeX to PDF)
 - `git` (to switch among translation sources automatically)
+
+If you want to create the pdf version of the Regulations :
+
+- `pdflatex` (for converting LaTeX to PDF)
+- `xelatex` (for converting LaTeX to PDF)
+
+You will also need some fonts for specific translations such as Chinese, Japanese, and Korean :
+
+- `UnBatang`
+- `AR PL UMing CN`
+
+Their installation depends on your Operating System, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a debian-like system.
 
 ## Release Process
 
