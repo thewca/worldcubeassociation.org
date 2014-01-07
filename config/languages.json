@@ -51,6 +51,19 @@
     "remote_name": "repo-chinese-traditional",
     "remote_branch": "official"
   },
+  "french": {
+    "branch": "translation-french",
+    "name": "French",
+    "native": "Français",
+    "regulations": "Règlement",
+    "guidelines": "Recommandations",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8",
+    "remote_url": "https://github.com/viroulep/wca-documents.git",
+    "remote_name": "repo-french",
+    "remote_branch": "translation-french"
+  },
   "german": {
     "branch": "translation-german",
     "name": "German",
