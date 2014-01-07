@@ -1,4 +1,4 @@
 language: python
 before_install:
  - sudo apt-get install -qq pandoc
-script: python make.py -w --no-pdf
+script: python make.py -w --no-pdf --setup-wca-documents
