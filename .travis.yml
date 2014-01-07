@@ -4,4 +4,4 @@ before_install:
  - sudo apt-get -y update
  - sudo apt-get install --no-install-recommends -qq -y pandoc fonts-unfonts-core fonts-arphic-uming
  - sudo apt-get install --no-install-recommends -qq -y texlive-lang-all texlive-xetex texlive-latex-recommended texlive-latex-extra lmodern
-script: python make.py -w
+script: python make.py -w --setup-wca-documents
