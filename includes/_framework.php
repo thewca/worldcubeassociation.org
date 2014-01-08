@@ -9,6 +9,9 @@ session_start();
 // classes are autoloaded.
 require_once("WCAClasses/autoload.php");
 
+// Try to include the pear mail package
+@ include "Mail.php";
+
 // Let's set up system configuration data first.
 global $config;
 $config = new WCAClasses\ConfigurationData();

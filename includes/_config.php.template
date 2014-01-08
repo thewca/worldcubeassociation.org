@@ -13,15 +13,10 @@ $config['recaptcha']['publickey'] = '...';
 $config['recaptcha']['privatekey'] = '...';
 
 
-// check for PEAR (try to send auth email)
-$config['mail']['pear'] = false;
-try {
-  @ include "Mail.php";
-  if(class_exists('Mail')) {
-  	$config['mail']['pear'] = true;
-  }
-} catch(Exception $e) {
-  // don't worry about this
+// check for PEAR mail (to send auth email)
+if(class_exists('Mail')) {
+  $config['mail']['pear'] = true;
+} else {
   $config['mail']['pear'] = false;
 }
 
