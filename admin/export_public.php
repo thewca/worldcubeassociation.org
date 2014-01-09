@@ -66,13 +66,9 @@ function showChoices () {
 #----------------------------------------------------------------------
 function exportPublic ( $sources ) {
 #----------------------------------------------------------------------
-  global $configDatabaseHost, $configDatabaseUser, $configDatabasePass, $configDatabaseName;
 
   #--- No time limit
   set_time_limit( 0 );
-
-  #--- Load the local configuration data.
-  require( '../includes/_config.php' );
 
   #--- We'll work in the /admin/export directory
   chdir( 'export' );
