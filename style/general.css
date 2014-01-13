@@ -331,7 +331,6 @@ fieldset legend {
 input[error], select[error] {
   border: 1px solid #C00;
   background-color: #FEE;
-  background-color: #;
 }
 
 .form-element-wrapper {

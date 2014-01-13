@@ -5,16 +5,18 @@
 
 $currentSection = 'competitions';
 require( 'includes/_header.php' );
+
+// functionality for competiton data form
 require( 'includes/competition_edit_Model.php' );
 require( 'includes/competition_edit_View.php' );
 
 analyzeChoices();
-
 specifyModel();
-if( checkPasswordAndLoadData() ){
+if(checkPasswordAndLoadData()) {
 
-  if( $isAdmin )
-    adminHeadline( 'Edit competition' );
+  if($isAdmin) {
+    adminHeadline('Edit competition');
+  }
 
   checkData();
   storeData();

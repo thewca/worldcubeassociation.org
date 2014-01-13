@@ -57,6 +57,9 @@ function showPages () {
   showPage( 'show_competition_infos',
             "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking." );
 
+  showPage( 'upload_scrambles',
+            "Upload scrambles for a competition." );
+
   $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
   $color = $waiting ? 'red' : 'green';
   showPage( 'validate_media',

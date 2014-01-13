@@ -327,6 +327,14 @@ function showResultsUpload () {
 }
 
 #----------------------------------------------------------------------
+function showScrambleUpload () {
+#----------------------------------------------------------------------
+  global $chosenCompetitionId;
+  echo "<hr /><h1>Upload Scrambles</h1>";
+  echo "<p><a href='admin/upload_scrambles.php?competitionId=$chosenCompetitionId'>Upload</a> competition scrambles.<br /></p>";
+}
+
+#----------------------------------------------------------------------
 function showAnnouncement() {
 #----------------------------------------------------------------------
   global $data, $chosenCompetitionId;

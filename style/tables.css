@@ -39,7 +39,6 @@ table.results caption {
   padding:    0.2em 0 0.2em 5px;
   margin:     0;
   font-size:  0.85em;
-  text-weight: bold;
 }
 
 table.results {
@@ -119,7 +118,6 @@ table.prereg {
   padding:    5px;
   margin:     auto auto 20px auto;
   font-size:  0.85em;
-  xborder: 1px solid #CCC;
 }
 
 .prereg td {

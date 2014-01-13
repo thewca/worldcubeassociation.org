@@ -8,7 +8,7 @@
  */
 function o($value, $flags = ENT_QUOTES)
 {
-  return htmlentities($value, $flags);
+  return htmlentities($value, $flags, 'UTF-8', FALSE);
 }
 
 /* 'longhand?' */
