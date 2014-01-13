@@ -352,31 +352,42 @@ function savePreregForm () {
   $into = "competitionId, name, personId, countryId, gender, birthYear, birthMonth, birthDay, email, guests, comments, ip, status, eventIds";
   $values = "'$chosenCompetitionId', '$name', '$personId', '$countryId', '$gender', '$birthYear', '$birthMonth', '$birthDay', '$email', '$guests', '$comments', '$ip', 'p', '$eventIds'";
   
-
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
+
 
   $organiserEmail = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2 ", $competition['organiser'] );
   $organiserEmail = preg_replace( '/\\\\([\'\"])/', '$1', $organiserEmail );
   if( preg_match( '/^mailto:([\S]+)/', $organiserEmail, $match )){
+
+    // load more competition data for a nicer email
+    $result = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
+    $competition_data = $result[0];
+
     $mailEmail = $match[1];
 
-    if( $personId )
-      $mailBody = "Name : $name ($personId)\n";
-    else
-      $mailBody = "Name : $name\n";
-
+    $mailBody = "A new competitor has registered for your competition - ".$competition['cellName']."! ";
+    $mailBody .= "Their information is below.\n-------------------\n";
+    if($personId) {
+      $mailBody .= "Name : $name";
+      $mailBody .= "     $personId - https://www.worldcubeassociation.org/results/p.php?i=$personId\n";
+    } else {
+      $mailBody .= "Name : $name\n";
+    }
     $mailBody .= "Country : $countryId\n";
     $mailBody .= "Gender : $gender\n";
     $mailBody .= "Date of birth : $birthYear/$birthMonth/$birthDay\n";
     $mailBody .= "Email : $email\n";
-
     $mailBody .= "Events : $eventIds\n";
-
     $mailBody .= "Guests : $guests\n";
     $mailBody .= "Comments : $comments\n";
-    $mailBody .= "Ip : $ip";
+    $mailBody .= "Ip : $ip\n";
+    $mailBody .= "-------------------\n";
+    $mailBody .= "You may edit this registration (and others) at:\n";
+    $mailBody .= "http://www.worldcubeassociation.org/results/competition_edit.php?competitionId="
+                  . $chosenCompetitionId . "&password="
+                  . $competition_data['organiserPassword']."\n";
 
-    $mailSubject = "$competition[cellName] - New registration";
+    $mailSubject = $competition['cellName'] . " - New registration";
 
     $mail_config = $config->get('mail');
 
@@ -396,7 +407,7 @@ function savePreregForm () {
            'password' => $mail_config['pass'])
         );
 
-        $mail = $smtp->send($to, $headers, $body);
+        $mail = $smtp->send($mailEmail, $headers, $body);
 
       } else {
         // normal php mail
