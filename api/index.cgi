@@ -7,18 +7,19 @@ data = {
   "/api/": {"info": "This API is not stable. There is only one guaranteed endpoint at the moment: https://www.worldcubeassociation.org/api/v0/scramble-program"},
   "/api/v0/scramble-program": {
     "current": {
-      "name": "TNoodle-0.7.12",
+      "name": "TNoodle-WCA-0.8.0",
       "information": "https://www.worldcubeassociation.org/regulations/scrambles/",
-      "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-0.7.12.jar"
+      "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-WCA-0.8.0.jar"
     },
     "allowed": [
-      "TNoodle-0.7.12"
+      "TNoodle-WCA-0.8.0"
     ],
     "history": [
       "TNoodle-0.7.4",
       "TNoodle-0.7.5",
       "TNoodle-0.7.8",
-      "TNoodle-0.7.12"
+      "TNoodle-0.7.12",
+      "TNoodle-WCA-0.8.0"
     ]
   }
 }
