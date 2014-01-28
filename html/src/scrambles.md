@@ -1,12 +1,12 @@
 # WCA Scrambles
 
-The current official scramble program is *TNoodle-WCA-0.8.1.jar*. It generates high-quality scramble sequences for all the events of a competition at once.
+The current official scramble program is *TNoodle-WCA-0.8.2.jar*. It generates high-quality scramble sequences for all the events of a competition at once.
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scramble program:<br><a href="tnoodle/TNoodle-WCA-0.8.1.jar" style="font-weight: bold;">TNoodle-WCA-0.8.1.jar</a><br></span>
+Download the official scramble program:<br><a href="tnoodle/TNoodle-WCA-0.8.2.jar" style="font-weight: bold;">TNoodle-WCA-0.8.2.jar</a><br></span>
 <br>
-Last official change: January 14, 2014
+Last official change: January 28, 2014
 </center>
 
 ## Important Notes for Delegates
@@ -19,7 +19,7 @@ Last official change: January 14, 2014
 
 TNoodle requires <a href="https://www.java.com/en/">Java</a> to be installed on your computer.
 
-1. Run the *TNoodle-WCA-0.8.1.jar* file on your computer.  
+1. Run the *TNoodle-WCA-0.8.2.jar* file on your computer.  
   It will open the page <http://localhost:8080/scramble> in your browser.
 2. Enter the details for your competition (competition name, number of rounds for each event, details for each round).  
   If you would like to password protect the file, enter a password.
@@ -38,6 +38,12 @@ TNoodle requires <a href="https://www.java.com/en/">Java</a> to be installed on 
 
 TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Cl&eacute;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the [TNoodle project on GitHub](https://github.com/cubing/tnoodle) to view the source, report an issue, or contribute to its development.
 
-### Previous Official Releases
+### History of Official Releases
 
-- TNoodle 0.7.12: October 01, 2013
+- [TNoodle-0.7.4](tnoodle/old/0.7.4.jar) (2013-01-01)
+- [TNoodle-0.7.5](tnoodle/old/0.7.5.jar) (2013-02-26)
+- [TNoodle-0.7.8](tnoodle/old/0.7.8.jar) (2013-04-26)
+- [TNoodle-0.7.12](tnoodle/old/0.7.12.jar) (2013-10-01)
+- [TNoodle-WCA-0.8.0](tnoodle/old/WCA-0.8.0.jar) (2014-01-13)
+- [TNoodle-WCA-0.8.1](tnoodle/old/WCA-0.8.1.jar) (2014-01-14)
+- [TNoodle-WCA-0.8.2](tnoodle/old/WCA-0.8.2.jar) (2014-01-28)
