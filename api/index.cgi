@@ -7,12 +7,12 @@ data = {
   "/api/": {"info": "This API is not stable. There is only one guaranteed endpoint at the moment: https://www.worldcubeassociation.org/api/v0/scramble-program"},
   "/api/v0/scramble-program": {
     "current": {
-      "name": "TNoodle-WCA-0.8.1",
+      "name": "TNoodle-WCA-0.8.2",
       "information": "https://www.worldcubeassociation.org/regulations/scrambles/",
-      "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-WCA-0.8.1.jar"
+      "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-WCA-0.8.2.jar"
     },
     "allowed": [
-      "TNoodle-WCA-0.8.1"
+      "TNoodle-WCA-0.8.2"
     ],
     "history": [
       "TNoodle-0.7.4",       # 2013-01-01
@@ -21,6 +21,7 @@ data = {
       "TNoodle-0.7.12",      # 2013-10-01
       "TNoodle-WCA-0.8.0",   # 2014-01-13
       "TNoodle-WCA-0.8.1"    # 2014-01-14
+      "TNoodle-WCA-0.8.2"    # 2014-01-28
     ]
   }
 }
