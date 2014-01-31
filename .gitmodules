@@ -1,4 +1,3 @@
 [submodule "wca-documents"]
 	path = wca-documents
 	url = https://github.com/cubing/wca-documents.git
-  ignore = all
