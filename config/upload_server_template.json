@@ -1,5 +1,5 @@
-// Copy this file to upload_server.json, change the username/path, and remove this first line.
 {
-  "sftp_path": "username@worldcubeassociation.org:~/wrc/regulations",
+  "comment": "Copy this file to upload_server.json, and change the username/path.",
+  "sftp_path": "username@worldcubeassociation.org:/home/cubing/systems/wrc/regulations/",
   "base_url": "https://www.worldcubeassociation.org/regulations/"
 }

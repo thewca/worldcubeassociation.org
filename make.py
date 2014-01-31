@@ -327,7 +327,11 @@ def upload(args):
 
   subprocess.check_call([
     "rsync",
-    "-avz",
+    "-rl",  # recursive, copy symlinks
+    "-vz",  # verbose, compressed transfer
+    "-p",  # copy/set permissions
+    "--chmod=ug=rwx",  # permissions to use (group-writable)
+    "--exclude=.DS_Store",
     buildRootDir,
     upload_server["sftp_path"]
   ])
