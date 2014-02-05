@@ -14,7 +14,6 @@ import re
 languages_file = "config/languages.json"
 upload_server_file = "config/upload_server.json"
 buildRootDir = "build/"
-archiveFile = "build.tgz"
 
 defaultLang = "default"
 
@@ -56,9 +55,6 @@ def main():
 
     if not args.do_not_build:
       build(args)
-
-    if args.archive:
-      archive(args)
 
     if args.upload:
       upload(args)
@@ -119,7 +115,7 @@ parser.add_argument(
   '--do-not-build', '-d',
   action='store_true',
   default=False,
-  help="Don't build. Useful for server and archive options."
+  help="Don't build. Useful for server option."
 )
 
 parser.add_argument(
@@ -150,13 +146,6 @@ parser.add_argument(
   action='store_true',
   default=False,
   help="Do not generate PDF. Useful for -w when PDF generation has issues."
-)
-
-parser.add_argument(
-  '--archive', '-z',
-  action='store_true',
-  default=False,
-  help="Produce a compressed archive (" + archiveFile + ") of the build folder."
 )
 
 parser.add_argument(
@@ -208,7 +197,6 @@ parser.add_argument(
 def clean(args):
   if os.path.exists(buildRootDir):
     shutil.rmtree(buildRootDir)
-  subprocess.check_call(["rm", "-rf", archiveFile])
 
 
 # Git Operations
@@ -307,17 +295,6 @@ def buildTranslation(args, lang):
 # Non-Build Actions
 
 
-def archive(args):
-
-  print "Archiving", buildRootDir, "to", archiveFile, "."
-
-  subprocess.check_call(["rm", "-rf", archiveFile])
-  subprocess.check_call([
-    "tar", "--exclude", ".DS_Store", "-zcf",
-    archiveFile, buildRootDir
-  ])
-
-
 def upload(args):
 
   if not os.path.exists(upload_server_file):
@@ -337,7 +314,6 @@ def upload(args):
   ])
   print "Done uploading to SFTP server."
   print "Visit " + upload_server["base_url"]
-  print "Archive is at " + upload_server["base_url"] + archiveFile
 
 
 def server(args):
