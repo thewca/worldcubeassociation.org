@@ -115,8 +115,8 @@ class html():
     with open(self.build_folder + "/guidelines.html", "w") as f:
       f.write(self.header1 + "WCA Regulations" + header + guidelines_text + self.footer)
 
-    shutil.copy("files/style.css", self.build_folder + "/style.css")
-    shutil.copy("files/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
+    shutil.copy("files/html/style.css", self.build_folder + "/style.css")
+    shutil.copy("files/html/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
 
     if not translation:
       self.pages()
