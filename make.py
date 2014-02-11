@@ -10,6 +10,7 @@ import webbrowser
 import re
 
 import html
+import pdf
 
 # Script constants
 
@@ -263,18 +264,13 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
     pdfName += "-" + year
 
   if args.pdf:
-    subprocess.check_call([
-      "pdf/build_pdf.sh",
+    pdf.pdf(
+      lang,
+      translation,
       pdfName,
       languageData[lang]["tex_encoding"],
-      languageData[lang]["tex_command"],
-      year
-    ])
-    subprocess.check_call([
-      "cp",
-      "pdf/build/" + pdfName + ".pdf",
-      buildDir
-    ])
+      languageData[lang]["tex_command"]
+    )
 
 
 def buildBranch(args, branchName, directory, lang=defaultLang, translation=False):
