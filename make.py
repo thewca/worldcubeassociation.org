@@ -9,6 +9,8 @@ import sys
 import webbrowser
 import re
 
+import html
+
 # Script constants
 
 languages_file = "config/languages.json"
@@ -242,18 +244,19 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
     os.makedirs(buildDir)
   year = "0"
   files = [f for f in os.listdir('wca-documents')
-          if re.match(r'wca-regulations-[0-9]+\.md', f)]
+           if re.match(r'wca-regulations-[0-9]+\.md', f)]
   if len(files) > 0:
     year = re.sub(r'wca-regulations-([0-9]+)\.md', r'\1', files[0])
 
-  subprocess.check_call([
-    "html/build_html.sh",
-    ("1" if args.fragment else "0"),
-    ("1" if translation else "0"),
-    year
-    #lang
-  ])
-  subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
+  html.html(lang, translation=translation)
+  # subprocess.check_call([
+  #   "html/build_html.sh",
+  #   ("1" if args.fragment else "0"),
+  #   ("1" if translation else "0"),
+  #   year
+  #   #lang
+  # ])
+  # subprocess.check_call(["cp", "-R", "html/build/.", buildDir])
 
   pdfName = languageData[lang]["pdf"]
   if year != "0":
