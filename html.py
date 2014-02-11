@@ -13,7 +13,7 @@ def md2html(filename):
     "pandoc",
     "--from", "markdown",
     "--to", "html",
-    "--ascii",
+    "--ascii",  # UTF-8 causes trouble, so we encode straight to HTML-escaped unicode.
     filename
   ])
 

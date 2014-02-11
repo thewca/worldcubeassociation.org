@@ -10,7 +10,6 @@ def md2tex(filename):
     "pandoc",
     "--from", "markdown",
     "--to", "latex",
-    "--ascii",
     filename
   ])
 
