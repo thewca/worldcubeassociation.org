@@ -259,8 +259,6 @@ def build(args):
     f = functools.partial(buildTranslationPooled, args)
     pool.map(f, languages)
 
-    checkoutWCADocs("official")
-
   elif not args.language:
     buildToDirectory(args, "dev")
 
