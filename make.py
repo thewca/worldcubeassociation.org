@@ -21,12 +21,6 @@ buildRootDir = "build/"
 
 defaultLang = "default"
 
-git_command = [
-  "git",
-  "--git-dir=./wca-documents/.git",
-  "--work-tree=./wca-documents"
-]
-
 # Main
 
 
@@ -225,8 +219,15 @@ def clean(args):
 
 # Git Operations
 
+main_git_command = [
+  "git",
+  "--git-dir=./wca-documents/.git",
+  "--work-tree=./wca-documents"
+]
+
+
 def currentBranch():
-  output = subprocess.check_output(git_command + [
+  output = subprocess.check_output(main_git_command + [
     "rev-parse",
     "--abbrev-ref",
     "HEAD"
@@ -237,7 +238,7 @@ def currentBranch():
 
 def checkoutWCADocs(branchName):
   if branchName == "official":
-    subprocess.check_call(git_command + [
+    subprocess.check_call(main_git_command + [
       "checkout",
       branchName
     ])
@@ -275,7 +276,7 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
   if not os.path.exists(buildDir):
     os.makedirs(buildDir)
 
-  html.html(lang, translation=translation, verbose=args.verbose)
+  html.html(lang, gitBranch=languageData[lang]["branch"], translation=translation, verbose=args.verbose)
 
   pdfName = languageData[lang]["pdf"]
 
@@ -355,32 +356,43 @@ def server(args):
 
 
 def setup_wca_documents(args):
+
+  subprocess.check_call([
+    "git",
+    "submodule",
+    "update",
+    "--init"
+  ])
+
   for lang in languages:
-    l = languageData[lang]
-    if l["remote_name"] != "":
-      subprocess.call(git_command + [
-        "remote",
-        "add",
-        "--no-tags",
-        "-t",
-        l["remote_branch"],
-        "-f",
-        l["remote_name"],
-        l["remote_url"]
-      ])
-      subprocess.call(git_command + [
-        "branch",
-        "--track",
-        l["branch"],
-        l["remote_name"] + "/" + l["remote_branch"]
-      ])
-    else:
+    if lang != "english":
+
+      git_command = [
+        "git",
+        "--git-dir=./translations/" + lang + "/.git",
+        "--work-tree=./translations/" + lang
+      ]
+
+      if languageData[lang]["remote_url"]:
+        subprocess.call(git_command + [
+          "remote",
+          "add",
+          languageData[lang]["remote_name"],
+          languageData[lang]["remote_url"]
+        ])
+
       subprocess.call(git_command + [
         "branch",
         "--track",
-        l["branch"],
-        "origin" + "/" + l["branch"]
+        languageData[lang]["branch"],
+        "origin" + "/" + languageData[lang]["branch"]
       ])
+
+      subprocess.call(git_command + [
+        "checkout",
+        lang
+      ])
+
 
 # Make the script work standalone.
 

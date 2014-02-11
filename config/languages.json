@@ -26,7 +26,7 @@
     "remote_branch": "official"
   },
   "chinese": {
-    "branch": "translation-chinese",
+    "branch": "chinese",
     "name": "Chinese",
     "native": "Chinese",
     "regulations": "Regulations",
@@ -39,7 +39,7 @@
     "remote_branch": "translation-chinese"
   },
   "chinese-traditional": {
-    "branch": "translation-chinese-traditional",
+    "branch": "chinese-traditional",
     "name": "Chinese, Traditional",
     "native": "Chinese, Traditional",
     "regulations": "Regulations",
@@ -52,7 +52,7 @@
     "remote_branch": "official"
   },
   "french": {
-    "branch": "translation-french",
+    "branch": "french",
     "name": "French",
     "native": "Français",
     "regulations": "Règlement",
@@ -65,7 +65,7 @@
     "remote_branch": "translation-french"
   },
   "german": {
-    "branch": "translation-german",
+    "branch": "german",
     "name": "German",
     "native": "Deutsch",
     "regulations": "Regeln",
@@ -78,7 +78,7 @@
     "remote_branch": "translation-german"
   },
   "hungarian": {
-    "branch": "translation-hungarian",
+    "branch": "hungarian",
     "name": "Hungarian",
     "native": "magyar",
     "regulations": "Szabályzat",
@@ -91,7 +91,7 @@
     "remote_branch": ""
   },
   "indonesian": {
-    "branch": "translation-indonesian",
+    "branch": "indonesian",
     "name": "Indonesian",
     "native": "Indonesian",
     "regulations": "Regulations",
@@ -104,7 +104,7 @@
     "remote_branch": ""
   },
   "italian": {
-    "branch": "translation-italian",
+    "branch": "italian",
     "name": "Italian",
     "native": "Italiano",
     "regulations": "Regolamento",
@@ -117,7 +117,7 @@
     "remote_branch": ""
   },
   "japanese": {
-    "branch": "translation-japanese",
+    "branch": "japanese",
     "name": "Japanese",
     "native": "Japanese",
     "regulations": "Regulations",
@@ -130,7 +130,7 @@
     "remote_branch": "translation-japanese"
   },
   "korean": {
-    "branch": "translation-korean",
+    "branch": "korean",
     "name": "Korean",
     "native": "Korean",
     "regulations": "Regulations",
@@ -143,7 +143,7 @@
     "remote_branch": "translation-korean"
   },
   "russian": {
-    "branch": "translation-russian",
+    "branch": "russian",
     "name": "Russian",
     "native": "Russian",
     "regulations": "Regulations",
@@ -156,7 +156,7 @@
     "remote_branch": "official"
   },
   "spanish": {
-    "branch": "translation-spanish",
+    "branch": "spanish",
     "name": "Spanish",
     "native": "Español",
     "regulations": "Reglamento",
@@ -169,7 +169,7 @@
     "remote_branch": "translation-spanish"
   },
   "belarusian": {
-    "branch": "translation-belarusian",
+    "branch": "belarusian",
     "name": "Belarusian",
     "native": "Беларуская мова",
     "regulations": "Палажэнні",
@@ -182,7 +182,7 @@
     "remote_branch": "translation-belarusian"
   },
   "portuguese-european": {
-    "branch": "translation-portuguese-european",
+    "branch": "portuguese-european",
     "name": "Portuguese (European)",
     "native": "Português Europeu",
     "regulations": "Regulamentos",
@@ -195,7 +195,7 @@
     "remote_branch": "master"
   },
   "portuguese-brazilian": {
-    "branch": "translation-portuguese-brazilian",
+    "branch": "portuguese-brazilian",
     "name": "Portuguese (Brazilian)",
     "native": "Português do Brasil",
     "regulations": "Regulamentos",

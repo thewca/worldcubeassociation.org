@@ -86,12 +86,13 @@ class html():
 </body>
 </html>"""
 
-  def __init__(self, language, translation=False, verbose=False):
+  def __init__(self, language, gitBranch, translation=False, verbose=False):
 
     print "Generating HTML for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.build_folder = "build/translations/" + language if translation else "build"
+    self.translation = translation
     self.verbose = verbose
 
     regulations_text = md2html(self.docs_folder + "/wca-regulations.md")
@@ -103,7 +104,7 @@ class html():
 
     regulations_text, guidelines_text = self.process_html({
       "git_hash": version,
-      "git_branch": language,
+      "git_branch": gitBranch,
       "regs_text": regulations_text,
       "guides_text": guidelines_text,
       "regs_url": "./",
@@ -325,7 +326,8 @@ class html():
     # Version
     gitLink = r''
     if (gitHash != ""):
-        gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' + gitBranch + r'</a>:' + r'<a href="https://github.com/cubing/wca-documents/commits/' + gitBranch + r'">' + gitHash + r'</a></code>]'
+        repo = "https://github.com/cubing/wca-documents-translations" if self.translation else "https://github.com/cubing/wca-documents"
+        gitLink = '[<code><a href="%s/tree/%s">%s</a>:<a href="%s/commits/%s">%s</a></code>]' % (repo, gitBranch, gitBranch, repo, gitBranch, gitHash)
 
     self.replaceBothWithSame([1], [1],
                              r'<p><version>([^<]*)</p>',
