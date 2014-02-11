@@ -218,6 +218,7 @@ parser.add_argument(
 # Clean
 
 def clean(args):
+  print "Cleaning build folder: %s" % buildRootDir
   if os.path.exists(buildRootDir):
     shutil.rmtree(buildRootDir)
 
@@ -252,6 +253,7 @@ pool = {}
 def build(args):
   if args.all:
 
+    print "Using %d workers." % args.num_workers
     pool = multiprocessing.Pool(processes=args.num_workers)
     f = functools.partial(buildTranslationPooled, args)
     pool.map(f, languages)
