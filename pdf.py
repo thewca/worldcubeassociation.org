@@ -17,11 +17,9 @@ def md2tex(filename):
 
 class pdf():
 
-  documentclass = """\documentclass[12pt]{article}
-  """
+  documentclass = """\documentclass[12pt]{article}"""
 
-  header = """
-\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+  header = """\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 
 \usepackage[bookmarksopen=true]{hyperref}
 \hypersetup{pdfborderstyle={/S/U/W 1},pdfborder=0 0 1}
@@ -39,41 +37,18 @@ class pdf():
 
 \\begin{document}
 
-\maketitle
-"""
+\maketitle"""
 
-  middle = """
-\\newpage
-"""
-
-  footer = """
-\end{document}
-"""
+  middle = """\\newpage"""
+  footer = """\end{document}"""
 
   encoding = {
-    "cjk": """
-\usepackage{xeCJK}
-\setCJKmainfont{AR PL UMing CN}
-""",
-    "default": """
-""",
-    "hungarian": """
-\usepackage[magyar]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
-""",
-    "korean": """
-\usepackage[fallback]{xeCJK}
-\usepackage{fontspec}
-\setCJKmainfont{UnBatang}
-""",
-    "russian": """
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-""",
-    "utf8": """
-\usepackage[utf8]{inputenc}
-"""
+    "default": [],
+    "cjk": ["\usepackage{xeCJK}", "\setCJKmainfont{AR PL UMing CN}"],
+    "hungarian": ["\usepackage[magyar]{babel}", "\usepackage[T1]{fontenc}", "\usepackage[utf8x]{inputenc}"],
+    "korean": ["\usepackage[fallback]{xeCJK}", "\usepackage{fontspec}", "\setCJKmainfont{UnBatang}"],
+    "russian": ["\usepackage[utf8]{inputenc}", "\usepackage[russian]{babel}"],
+    "utf8": ["\usepackage[utf8]{inputenc}"]
   }
 
   def __init__(self, language, translation, pdf_name, tex_encoding, tex_command, verbose=False):
@@ -92,7 +67,7 @@ class pdf():
 
     text = "\n".join([
               self.documentclass,
-              self.encoding[tex_encoding],
+              "\n".join(self.encoding[tex_encoding]),
               self.header,
               regulations_text,
               self.middle,
