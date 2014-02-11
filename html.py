@@ -98,7 +98,7 @@ class html():
       "git", "rev-parse", "--short", "HEAD"
     ], cwd=self.docs_folder).strip()
 
-    regulations_text, guidelines_text = process_html({
+    regulations_text, guidelines_text = self.process_html({
       "git_hash": version,
       "git_branch": language,
       "regs_text": regulations_text,
@@ -136,52 +136,30 @@ class html():
     self.write_page(self.build_folder + "/translations", "index.html", self.header2_subdirs, md2html("pages/translations.md"))
     self.write_page(self.build_folder, "process.html", self.header2, md2html("pages/process.md"))
 
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  # TODO: Replace the code below with clean code (BeautifulSoup?).
+  #
+  #
 
-# TODO: Replace the code below with clean, parallelizable code
-
-regsText = ""
-guidesText = ""
-
-
-def process_html(args):
-  global regsText
-  global guidesText
-
-  # Script parameters
-
-  regsURL = "./"
-  guidesURL = "guidelines.html"
-
-  includeTitleLogo = True
-
-  ## Sanity checks
-  numRegsArticles = [19]
-  numGuidesArticles = [17, 18]
-
-  # Arguments
-
-  gitHash = args["git_hash"]
-  gitBranch = args["git_branch"]
-
-  regsText = args["regs_text"]
-  guidesText = args["guides_text"]
-  regsURL = args["regs_url"]
-  guidesURL = args["guides_url"]
-
-  isFragment = args["fragment"]
-
-  # Match/Replace constants
-
-  regOrGuide2Slots = r'([A-Za-z0-9]+)' + r'(\+*)'
   ANY = -1
 
   # Replacement functions
 
-  def replaceRegs(expected, rgxMatch, rgxReplace):
-      global regsText
-      # print ""
-      (regsText, num) = re.subn(rgxMatch, rgxReplace, regsText)
-      if (expected != ANY and num not in expected):
+  def replaceRegs(self, expected, rgxMatch, rgxReplace):
+
+      (self.regsText, num) = re.subn(rgxMatch, rgxReplace, self.regsText)
+      if (expected != self.ANY and num not in expected):
           print >> sys.stderr, "Expected", expected, "replacements for Regulations, there were", num
           print >> sys.stderr, "Matching: ", rgxMatch
           print >> sys.stderr, "Replacing: ", rgxReplace
@@ -190,10 +168,10 @@ def process_html(args):
       print "Regulations: [" + str(num) + "]", rgxMatch, "\nRegulations:  ->", rgxReplace
       return num
 
-  def replaceGuides(expected, rgxMatch, rgxReplace):
-      global guidesText
-      (guidesText, num) = re.subn(rgxMatch, rgxReplace, guidesText)
-      if (expected != ANY and num not in expected):
+  def replaceGuides(self, expected, rgxMatch, rgxReplace):
+
+      (self.guidesText, num) = re.subn(rgxMatch, rgxReplace, self.guidesText)
+      if (expected != self.ANY and num not in expected):
           print >> sys.stderr, "Expected", expected, "replacements for Guidelines, there were", num
           print >> sys.stderr, "Matching: ", rgxMatch
           print >> sys.stderr, "Replacing: ", rgxReplace
@@ -202,124 +180,153 @@ def process_html(args):
       print "Guidelines:  [" + str(num) + "]", rgxMatch, "\nGuidelines:   ->", rgxReplace
       return num
 
-  def replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplaceRegs, rgxReplaceGuides):
-      numRegs = replaceRegs(expectedReg, rgxMatch, rgxReplaceRegs)
-      numGuides = replaceGuides(expectedGuide, rgxMatch, rgxReplaceGuides)
+  def replaceBothWithDifferent(self, expectedReg, expectedGuide, rgxMatch, rgxReplaceRegs, rgxReplaceGuides):
+      numRegs = self.replaceRegs(expectedReg, rgxMatch, rgxReplaceRegs)
+      numGuides = self.replaceGuides(expectedGuide, rgxMatch, rgxReplaceGuides)
       return (numRegs, numGuides)
 
-  def replaceBothWithSame(expectedReg, expectedGuide, rgxMatch, rgxReplace):
-      return replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplace, rgxReplace)
+  def replaceBothWithSame(self, expectedReg, expectedGuide, rgxMatch, rgxReplace):
+      return self.replaceBothWithDifferent(expectedReg, expectedGuide, rgxMatch, rgxReplace, rgxReplace)
 
-  def hyperLinkReplace(expectedReg, expectedGuide, linkMatch, linkReplace, textReplace):
-      res = replaceBothWithSame(expectedReg, expectedGuide,
-                                r'<a href="' + linkMatch + r'">([^<]*)</a>',
-                                r'<a href="' + linkReplace + r'">' + textReplace + r'</a>'
-                                )
+  def hyperLinkReplace(self, expectedReg, expectedGuide, linkMatch, linkReplace, textReplace):
+      res = self.replaceBothWithSame(expectedReg, expectedGuide,
+                                     r'<a href="' + linkMatch + r'">([^<]*)</a>',
+                                     r'<a href="' + linkReplace + r'">' + textReplace + r'</a>'
+                                     )
       return res
 
-  # Article Lists
+  def process_html(self, args):
 
-  # \1: Article "number" (or letter) [example: B]
-  # \2: new anchor name part [example: blindfolded]
-  # \3: old anchor name [example: blindfoldedsolving]
-  # \4: Article name, may be translated [example: Article B]
-  # \5: Title [example: Blindfolded Solving]
-  articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>'
+    # Script parameters
 
-  allRegsArticles = re.findall(articleMatch, regsText)
-  allGuidesArticles = re.findall(articleMatch, guidesText)
+    regsURL = "./"
+    guidesURL = "guidelines.html"
 
-  def makeTOC(articles):
-      return "<ul id=\"table_of_contents\">\n" + "".join([
-          "<li>" + name + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n"
-          for (num, new, old, name, title)
-          in articles
-      ]) + "</ul>\n"
+    includeTitleLogo = True
 
-  ## Table of Contents
-  regsTOC = makeTOC(allRegsArticles)
-  replaceRegs([1], r'<table-of-contents>', regsTOC)
+    ## Sanity checks
+    numRegsArticles = [19]
+    numGuidesArticles = [17, 18]
 
-  guidesTOC = makeTOC(allGuidesArticles)
-  replaceGuides([1], r'<table-of-contents>', guidesTOC)
+    # Arguments
 
-  ## Article Numbering. We want to
-    # Support old links with the old meh anchor names.
-    # Support linking using just the number/letter (useful if you have to generate a link from a reference automatically, but don't have the name of the article).
-    # Encourage a new format with the article number *and* better anchor names.
-  replaceBothWithSame(numRegsArticles, numGuidesArticles,
-                      articleMatch,
-                      r'<span id="\1"></span><span id="\3"></span><h2 id="article-\1-\2"> <a href="#article-\1-\2">\4</a>: \5</h2>'
-                      )
+    gitHash = args["git_hash"]
+    gitBranch = args["git_branch"]
 
-  # Numbering
+    self.regsText = args["regs_text"]
+    self.guidesText = args["guides_text"]
+    regsURL = args["regs_url"]
+    guidesURL = args["guides_url"]
 
-  regOrGuideLiMatch = r'<li>' + regOrGuide2Slots + r'\)'
-  regOrGuideLiReplace = r'<li id="\1\2"><a href="#\1\2">\1\2</a>)'
+    isFragment = args["fragment"]
 
-  matchLabel1Slot = r'\[([^\]]+)\]'
+    # Match/Replace constants
 
-  ## Numbering/links in the Regulations
-  replaceRegs(ANY,
-              regOrGuideLiMatch,
-              regOrGuideLiReplace
-              )
-  ## Numbering/links in the Guidelines for ones that don't correspond to a Regulation.
-  replaceGuides(ANY,
-                regOrGuideLiMatch + r' \[SEPARATE\]' + matchLabel1Slot,
-                regOrGuideLiReplace + r' <span class="SEPARATE \3 label">\3</span>'
-                )
-  ## Numbering/links in the Guidelines for ones that *do* correspond to a Regulation.
-  replaceGuides(ANY,
-                regOrGuideLiMatch + r' ' + matchLabel1Slot,
-                regOrGuideLiReplace + r' <span class="\3 label linked"><a href="' + regsURL + r'#\1">\3</a></span>'
-                )
-  ## Explanation labels
-  replaceGuides(ANY,
-                r'<label>' + matchLabel1Slot,
-                r'<span class="example \1 label">\1</span>'
-                )
+    regOrGuide2Slots = r'([A-Za-z0-9]+)' + r'(\+*)'
 
-  # Hyperlinks
+    # Article Lists
 
-  hyperLinkReplace(ANY, ANY, r'regulations:article:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
-  hyperLinkReplace([0], ANY, r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
+    # \1: Article "number" (or letter) [example: B]
+    # \2: new anchor name part [example: blindfolded]
+    # \3: old anchor name [example: blindfoldedsolving]
+    # \4: Article name, may be translated [example: Article B]
+    # \5: Title [example: Blindfolded Solving]
+    articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>'
 
-  hyperLinkReplace(ANY, ANY, r'regulations:regulation:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
-  hyperLinkReplace([0], ANY, r'guidelines:guideline:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
+    allRegsArticles = re.findall(articleMatch, self.regsText)
+    allGuidesArticles = re.findall(articleMatch, self.guidesText)
 
-  hyperLinkReplace(ANY, ANY, r'regulations:top', regsURL, r'\1')
-  hyperLinkReplace(ANY, ANY, r'guidelines:top', guidesURL, r'\1')
+    def makeTOC(articles):
+        return "<ul id=\"table_of_contents\">\n" + "".join([
+            "<li>" + name + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n"
+            for (num, new, old, name, title)
+            in articles
+        ]) + "</ul>\n"
 
-  hyperLinkReplace([1], [0], r'regulations:contents', regsURL + r'#contents', r'\1')
-  hyperLinkReplace([0], [1], r'guidelines:contents', guidesURL + r'#contents', r'\1')
+    ## Table of Contents
+    regsTOC = makeTOC(allRegsArticles)
+    self.replaceRegs([1], r'<table-of-contents>', regsTOC)
 
-  # Title
-  if isFragment == "0":
-      wcaTitleLogoSource = r'World Cube Association<br>'
-      if includeTitleLogo:
-          wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
+    guidesTOC = makeTOC(allGuidesArticles)
+    self.replaceGuides([1], r'<table-of-contents>', guidesTOC)
 
-      replaceRegs([1],
-                  r'<h1[^>]*><wca-title>([^<]*)</h1>',
-                  r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-                  )
+    ## Article Numbering. We want to
+      # Support old links with the old meh anchor names.
+      # Support linking using just the number/letter (useful if you have to generate a link from a reference automatically, but don't have the name of the article).
+      # Encourage a new format with the article number *and* better anchor names.
+    self.replaceBothWithSame(numRegsArticles, numGuidesArticles,
+                             articleMatch,
+                             r'<span id="\1"></span><span id="\3"></span><h2 id="article-\1-\2"> <a href="#article-\1-\2">\4</a>: \5</h2>'
+                             )
 
-      replaceGuides([1],
-                    r'<h1[^>]*><wca-title>([^<]*)</h1>',
-                    r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-                    )
+    # Numbering
 
-  # Version
-  gitLink = r''
-  if (gitHash != ""):
-      gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' + gitBranch + r'</a>:' + r'<a href="https://github.com/cubing/wca-documents/commits/' + gitBranch + r'">' + gitHash + r'</a></code>]'
+    regOrGuideLiMatch = r'<li>' + regOrGuide2Slots + r'\)'
+    regOrGuideLiReplace = r'<li id="\1\2"><a href="#\1\2">\1\2</a>)'
 
-  replaceBothWithSame([1], [1],
-                      r'<p><version>([^<]*)</p>',
-                      r'<div class="version">\1<br>' + gitLink + r'</div>'
-                      )
+    matchLabel1Slot = r'\[([^\]]+)\]'
 
-  # Write files back out.
+    ## Numbering/links in the Regulations
+    self.replaceRegs(self.ANY,
+                     regOrGuideLiMatch,
+                     regOrGuideLiReplace
+                     )
+    ## Numbering/links in the Guidelines for ones that don't correspond to a Regulation.
+    self.replaceGuides(self.ANY,
+                       regOrGuideLiMatch + r' \[SEPARATE\]' + matchLabel1Slot,
+                       regOrGuideLiReplace + r' <span class="SEPARATE \3 label">\3</span>'
+                       )
+    ## Numbering/links in the Guidelines for ones that *do* correspond to a Regulation.
+    self.replaceGuides(self.ANY,
+                       regOrGuideLiMatch + r' ' + matchLabel1Slot,
+                       regOrGuideLiReplace + r' <span class="\3 label linked"><a href="' + regsURL + r'#\1">\3</a></span>'
+                       )
+    ## Explanation labels
+    self.replaceGuides(self.ANY,
+                       r'<label>' + matchLabel1Slot,
+                       r'<span class="example \1 label">\1</span>'
+                       )
 
-  return regsText, guidesText
+    # Hyperlinks
+
+    self.hyperLinkReplace(self.ANY, self.ANY, r'regulations:article:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
+    self.hyperLinkReplace([0], self.ANY, r'guidelines:article:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
+
+    self.hyperLinkReplace(self.ANY, self.ANY, r'regulations:regulation:' + regOrGuide2Slots, regsURL + r'#\1\2', r'\3')
+    self.hyperLinkReplace([0], self.ANY, r'guidelines:guideline:' + regOrGuide2Slots, guidesURL + r'#\1\2', r'\3')
+
+    self.hyperLinkReplace(self.ANY, self.ANY, r'regulations:top', regsURL, r'\1')
+    self.hyperLinkReplace(self.ANY, self.ANY, r'guidelines:top', guidesURL, r'\1')
+
+    self.hyperLinkReplace([1], [0], r'regulations:contents', regsURL + r'#contents', r'\1')
+    self.hyperLinkReplace([0], [1], r'guidelines:contents', guidesURL + r'#contents', r'\1')
+
+    # Title
+    if isFragment == "0":
+        wcaTitleLogoSource = r'World Cube Association<br>'
+        if includeTitleLogo:
+            wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
+
+        self.replaceRegs([1],
+                         r'<h1[^>]*><wca-title>([^<]*)</h1>',
+                         r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+                         )
+
+        self.replaceGuides([1],
+                           r'<h1[^>]*><wca-title>([^<]*)</h1>',
+                           r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+                           )
+
+    # Version
+    gitLink = r''
+    if (gitHash != ""):
+        gitLink = r'[<code><a href="' + r'https://github.com/cubing/wca-documents/tree/' + gitBranch + '">' + gitBranch + r'</a>:' + r'<a href="https://github.com/cubing/wca-documents/commits/' + gitBranch + r'">' + gitHash + r'</a></code>]'
+
+    self.replaceBothWithSame([1], [1],
+                             r'<p><version>([^<]*)</p>',
+                             r'<div class="version">\1<br>' + gitLink + r'</div>'
+                             )
+
+    # Write files back out.
+
+    return self.regsText, self.guidesText
