@@ -1,10 +1,10 @@
 # WCA Scrambles
 
-The current official scramble program is *TNoodle-WCA-0.8.2*. It generates high-quality scramble sequences for all the events of a competition at once.
+The current official scramble program is *TNoodle-WCA-0.8.4*. It generates high-quality scramble sequences for all the events of a competition at once.
   
 <br>
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
-Download the official scramble program:<br><a href="tnoodle/TNoodle-WCA-0.8.2.jar" style="font-weight: bold;">TNoodle-WCA-0.8.2.jar</a><br></span>
+Download the official scramble program:<br><a href="tnoodle/TNoodle-WCA-0.8.4.jar" style="font-weight: bold;">TNoodle-WCA-0.8.4.jar</a><br></span>
 <br>
 Last official change: January 28, 2014
 </center>
@@ -19,7 +19,7 @@ Last official change: January 28, 2014
 
 TNoodle requires <a href="https://www.java.com/en/">Java</a> to be installed on your computer.
 
-1. Run the `TNoodle-WCA-0.8.2.jar` file on your computer.  
+1. Run the `TNoodle-WCA-0.8.4.jar` file on your computer.  
   It will open the page <http://localhost:8080/scramble> in your browser.
 2. Enter the details for your competition (competition name, number of rounds for each event, details for each round).  
   If you would like to password protect the file, enter a password.
@@ -49,3 +49,4 @@ Old versions must not be used without permission from the WCA Board. These are p
 - [TNoodle-WCA-0.8.0](tnoodle/old/TNoodle-WCA-0.8.0.jar) (2014-01-13)
 - [TNoodle-WCA-0.8.1](tnoodle/old/TNoodle-WCA-0.8.1.jar) (2014-01-14)
 - [TNoodle-WCA-0.8.2](tnoodle/old/TNoodle-WCA-0.8.2.jar) (2014-01-28)
+- [TNoodle-WCA-0.8.4](tnoodle/TNoodle-WCA-0.8.4.jar) (2014-02-10)

@@ -38,7 +38,7 @@ You will also need some fonts for specific translations such as Chinese, Japanes
 Their installation depends on your Operating System, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a debian-like system.
 In case you have trouble finding them, there is a copy of these fonts in the directory `pdf/fonts`.
 
-## Release Process
+## Regulations Release Process
 
 For all official `wca-documents` updates:
 
@@ -65,9 +65,16 @@ For all official `wca-documents` updates:
     - Email `wca-delegates` list.
 
 
-For scrambling program updates:
+## Scramble Program Release Process
 
-- Follow most of the process for a `wca-documents` update.
+- Follow appropriate parts of the process from the `wca-documents` update.
+- Release only on Monday, except for extremely critical updates.
+- On the scramble page, update:
+  - All mentions of the current scramble program version.
+  - List the latest update.
+  - Update the list of old versions.
+- Update the API with the new version.
+
 
 ## Known Issues
 
