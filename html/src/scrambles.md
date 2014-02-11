@@ -6,7 +6,7 @@ The current official scramble program is *TNoodle-WCA-0.8.4*. It generates high-
 <center><span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
 Download the official scramble program:<br><a href="tnoodle/TNoodle-WCA-0.8.4.jar" style="font-weight: bold;">TNoodle-WCA-0.8.4.jar</a><br></span>
 <br>
-Last official change: January 28, 2014
+Last official change: February 10, 2014
 </center>
 
 ## Important Notes for Delegates

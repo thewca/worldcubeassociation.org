@@ -61,6 +61,9 @@ For all official `wca-documents` updates:
     - Release only Monday/Tuesday if possible, Wednesday is okay. See [the first WRC announcement](https://www.worldcubeassociation.org/regulations/announcements/introducing-wrc-announcements). (Does not apply to the yearly change, which should go into effect Jan. 1.)
     - Make sure links are up to date, and the date the changes go into effect is listed.
     - [WCA Homepage](https://worldcubeassociation.org/) Drupal
+        - Log into Drupal and go to Content > Create Content > WRC Announcement
+        - Change the text format to "Full HTML" (there isn't a way to set this as default. :-( ).
+        - Change the URL path setting. Look at past posts for the appropriate format.
     - [WCA forum](https://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
     - Email `wca-delegates` list.
 
@@ -70,9 +73,9 @@ For all official `wca-documents` updates:
 - Follow appropriate parts of the process from the `wca-documents` update.
 - Release only on Monday, except for extremely critical updates.
 - On the scramble page, update:
-  - All mentions of the current scramble program version.
-  - List the latest update.
-  - Update the list of old versions.
+    - All mentions of the current scramble program version.
+    - List the latest update.
+    - Update the list of old versions.
 - Update the API with the new version.
 
 
