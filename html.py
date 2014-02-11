@@ -117,7 +117,7 @@ class html():
     with open(self.build_folder + "/index.html", "w") as f:
       f.write(self.header1 + "WCA Regulations" + header + regulations_text + self.footer)
     with open(self.build_folder + "/guidelines.html", "w") as f:
-      f.write(self.header1 + "WCA Regulations" + header + guidelines_text + self.footer)
+      f.write(self.header1 + "WCA Guidelines" + header + guidelines_text + self.footer)
 
     shutil.copy("files/html/style.css", self.build_folder + "/style.css")
     shutil.copy("files/html/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
@@ -125,20 +125,20 @@ class html():
     if not translation:
       self.pages()
 
-  def write_page(self, path, filename, header2, text):
+  def write_page(self, title, path, filename, header2, text):
 
     if not os.path.isdir(path):
       os.makedirs(path)
 
     with open(path + "/" + filename, "w") as f:
-      f.write(self.header1 + header2 + text + self.footer)
+      f.write(self.header1 + title + header2 + text + self.footer)
 
   def pages(self):
 
-    self.write_page(self.build_folder + "/history", "index.html", self.header2_subdirs, md2html("pages/history.md"))
-    self.write_page(self.build_folder + "/scrambles", "index.html", self.header2_subdirs, md2html("pages/scrambles.md"))
-    self.write_page(self.build_folder + "/translations", "index.html", self.header2_subdirs, md2html("pages/translations.md"))
-    self.write_page(self.build_folder, "process.html", self.header2, md2html("pages/process.md"))
+    self.write_page("WCA Regulations History", self.build_folder + "/history", "index.html", self.header2_subdirs, md2html("pages/history.md"))
+    self.write_page("WCA Scrambles", self.build_folder + "/scrambles", "index.html", self.header2_subdirs, md2html("pages/scrambles.md"))
+    self.write_page("WCA Translations", self.build_folder + "/translations", "index.html", self.header2_subdirs, md2html("pages/translations.md"))
+    self.write_page("WCA Regulations/Guidelines Process", self.build_folder, "process.html", self.header2, md2html("pages/process.md"))
 
   #
   #
