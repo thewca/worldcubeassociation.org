@@ -207,6 +207,13 @@ parser.add_argument(
   help="Number of workers. Defaults to the number of cores available."
 )
 
+parser.add_argument(
+  '--verbose',
+  action='store_true',
+  default=False,
+  help="Print lots of debug/progress info."
+)
+
 
 # Clean
 
@@ -266,7 +273,7 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
   if not os.path.exists(buildDir):
     os.makedirs(buildDir)
 
-  html.html(lang, translation=translation)
+  html.html(lang, translation=translation, verbose=args.verbose)
 
   pdfName = languageData[lang]["pdf"]
 
@@ -276,7 +283,8 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
       translation,
       pdfName,
       languageData[lang]["tex_encoding"],
-      languageData[lang]["tex_command"]
+      languageData[lang]["tex_command"],
+      verbose=args.verbose
     )
 
 

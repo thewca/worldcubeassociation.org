@@ -86,10 +86,13 @@ class html():
 </body>
 </html>"""
 
-  def __init__(self, language, translation=False):
+  def __init__(self, language, translation=False, verbose=False):
+
+    print "Generating HTML for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.build_folder = "build/translations/" + language if translation else "build"
+    self.verbose = verbose
 
     regulations_text = md2html(self.docs_folder + "/wca-regulations.md")
     guidelines_text = md2html(self.docs_folder + "/wca-guidelines.md")
@@ -165,7 +168,8 @@ class html():
           print >> sys.stderr, "Replacing: ", rgxReplace
           traceback.print_stack()
           exit(-1)
-      print "Regulations: [" + str(num) + "]", rgxMatch, "\nRegulations:  ->", rgxReplace
+      if self.verbose:
+        print "Regulations: [" + str(num) + "]", rgxMatch, "\nRegulations:  ->", rgxReplace
       return num
 
   def replaceGuides(self, expected, rgxMatch, rgxReplace):
@@ -177,7 +181,8 @@ class html():
           print >> sys.stderr, "Replacing: ", rgxReplace
           traceback.print_stack()
           exit(-1)
-      print "Guidelines:  [" + str(num) + "]", rgxMatch, "\nGuidelines:   ->", rgxReplace
+      if self.verbose:
+        print "Guidelines:  [" + str(num) + "]", rgxMatch, "\nGuidelines:   ->", rgxReplace
       return num
 
   def replaceBothWithDifferent(self, expectedReg, expectedGuide, rgxMatch, rgxReplaceRegs, rgxReplaceGuides):

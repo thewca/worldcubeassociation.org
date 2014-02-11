@@ -76,7 +76,9 @@ class pdf():
 """
   }
 
-  def __init__(self, language, translation, pdf_name, tex_encoding, tex_command):
+  def __init__(self, language, translation, pdf_name, tex_encoding, tex_command, verbose=False):
+
+    print "Generating PDF for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.temp_folder = "temp/" + language
@@ -87,8 +89,6 @@ class pdf():
 
     if not os.path.exists(self.temp_folder):
       os.makedirs(self.temp_folder)
-
-    print self.header
 
     text = "\n".join([
               self.documentclass,
@@ -104,12 +104,14 @@ class pdf():
     with open(tex_file, "w") as f:
       f.write(text)
 
-    subprocess.check_call([
+    s = subprocess.check_call if verbose else subprocess.check_output
+
+    s([
       tex_command,
       "-halt-on-error",
       "-output-directory", self.temp_folder,
       tex_file
-    ])
+      ])
 
     shutil.copy(
       self.temp_folder + "/" + pdf_name + ".pdf",
