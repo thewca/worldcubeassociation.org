@@ -33,20 +33,6 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Spanish - 2013](./spanish/)
     - By [Carlos Méndez García-Barroso](http://worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](http://worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](http://worldcubeassociation.org/results/p.php?i=2009SANC01).
 
-Note that the Regulations had many revisions in 2013. Older translations are likely to have incorrect sections.
-
-- [Croatian - 2010](WCAregulationsCroatian2011.doc) by Igor Saravanja
-- [Czech - 2006 v1](http://rubikscube.info/pravidla/) by [Josef Jelinek](http://rubikscube.info)
-- [Estonian - 2010](http://www.wombat.pri.ee/failid/Reeglid.pdf) by Ivo Kruusamägi
-- [Farsi - 2010](WCARegulationsFarsi2010.pdf) by Arash Maslehatjoo and Iran Cube Committee
-- [Finnish - 2008](http://speedcubing.dy.fi/files/wca_saannot_suomeksi_2008_10_19.doc) by Petri Vanhala
-- [Polish - 2010](http://stefanlapicki.cba.pl/pliki/regulations2010.html) by Stefan Lapicki
-- [Romanian - 2010](http://www.speedcubing.ro/p-9/regulament-world-cube-association-wca) by [Radu Faciu](http://www.speedcubing.ro)
-- [Slovenian - 2010](http://www.rubik.si/klub/wca_pravilnik/) by Ziga Lesar
-- [Thai - 2009](http://www.thailandcube.com/index.php?option=com_content&view=article&id=97&Itemid=55) by Chonlathep Kitsinthopchai
-- [Turkish - 2010](https://www.worldcubeassociation.org/regulations/history/files/old-translations/WCA%20Kurallari.pdf) by Batuhan Şanli, Can Çetin, Emir Ali Özdemir, Fatih Aydin, Furkan Çakar, Gamze Akşahin, and Hikmet Ödül Özçelik.
-- [Ukranian - 2010](http://cubing.com.ua/wca/) by [Roman Ostapenko](mailto:ostapenko@cubing.com.ua)
-
 ## Translating the Regulations
 
 If you'd like to (re)-translate the Regulations, please use the following process:
