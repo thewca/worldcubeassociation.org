@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import argparse
+import functools
 import json
+import multiprocessing
 import os
 import shutil
 import subprocess
@@ -193,6 +195,18 @@ parser.add_argument(
   help="Set up remotes for wca-documents."
 )
 
+try:
+  num_cores_available = multiprocessing.cpu_count()
+except:
+  num_cores_available = 1
+
+parser.add_argument(
+  '--num-workers',
+  type=int,
+  default=num_cores_available,
+  help="Number of workers. Defaults to the number of cores available."
+)
+
 
 # Clean
 
@@ -214,18 +228,27 @@ def currentBranch():
 
 
 def checkoutWCADocs(branchName):
-  subprocess.check_call(git_command + [
-    "checkout",
-    branchName
-  ])
+  if branchName == "official":
+    subprocess.check_call(git_command + [
+      "checkout",
+      branchName
+    ])
 
 
 # Build!
 
+# We want the pool to be accessible to the workers, so that they can cut off in cast of a keyboard interrupt.
+# However, this is impossible to do by passing around/currying the pool, so we're making it a "global" variable.
+pool = {}
+
 
 def build(args):
   if args.all:
-    [buildTranslation(args, lang) for lang in languages]
+
+    pool = multiprocessing.Pool(processes=args.num_workers)
+    f = functools.partial(buildTranslationPooled, args)
+    pool.map(f, languages)
+
     checkoutWCADocs("official")
 
   elif not args.language:
@@ -263,16 +286,24 @@ def buildBranch(args, branchName, directory, lang=defaultLang, translation=False
 
 
 def buildTranslation(args, lang):
-  branchName = languageData[lang]["branch"]
-  directory = "translations/" + lang + "/"
-  translation = True
+    branchName = languageData[lang]["branch"]
+    directory = "translations/" + lang + "/"
+    translation = True
 
-  if lang == "english":
-    branchName = "official"
-    directory = ""
-    translation = False
+    if lang == "english":
+      branchName = "official"
+      directory = ""
+      translation = False
 
-  buildBranch(args, branchName, directory, lang=lang, translation=translation)
+    buildBranch(args, branchName, directory, lang=lang, translation=translation)
+
+
+def buildTranslationPooled(args, lang):
+  try:
+    buildTranslation(args, lang)
+  except KeyboardInterrupt:
+      pool.terminate()
+      pool.wait()
 
 
 # Non-Build Actions
