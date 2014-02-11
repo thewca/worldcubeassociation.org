@@ -86,12 +86,12 @@ class html():
 </body>
 </html>"""
 
-  def __init__(self, language, gitBranch, translation=False, verbose=False):
+  def __init__(self, language, buildDir, gitBranch, translation=False, verbose=False):
 
     print "Generating HTML for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
-    self.build_folder = "build/translations/" + language if translation else "build"
+    self.build_folder = buildDir
     self.translation = translation
     self.verbose = verbose
 

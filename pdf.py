@@ -50,13 +50,13 @@ class pdf():
     "utf8": ["\usepackage[utf8]{inputenc}"]
   }
 
-  def __init__(self, language, translation, pdf_name, tex_encoding, tex_command, verbose=False):
+  def __init__(self, language, buildDir, translation, pdf_name, tex_encoding, tex_command, verbose=False):
 
     print "Generating PDF for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.temp_folder = "temp/" + language
-    self.build_folder = "build/translations/" + language if translation else "build"
+    self.build_folder = buildDir
 
     regulations_text = re.sub("--", "-{}-", md2tex(self.docs_folder + "/wca-regulations.md"))
     guidelines_text = re.sub("--", "-{}-", md2tex(self.docs_folder + "/wca-guidelines.md"))
