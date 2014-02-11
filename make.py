@@ -195,14 +195,14 @@ except:
   num_cores_available = 1
 
 parser.add_argument(
-  '--num-workers',
+  '--num-workers', '-#',
   type=int,
   default=num_cores_available,
   help="Number of workers. Defaults to the number of cores available."
 )
 
 parser.add_argument(
-  '--verbose',
+  '--verbose', '-v',
   action='store_true',
   default=False,
   help="Print lots of debug/progress info."
