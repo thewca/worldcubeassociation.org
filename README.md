@@ -36,14 +36,16 @@ If you want to create the pdf version of the Regulations :
 - `pdflatex` (for converting LaTeX to PDF)
 - `xelatex` (for converting LaTeX to PDF)
 
+### Fonts
+
 You will also need some fonts for specific translations (e.g. Chinese, Japanese, and Korean):
 
-- `UnBatang` ([source](http://kldp.net/projects/unfonts/download))
-- `AR PL UMing CN` ([source](http://www.freedesktop.org/wiki/Software/CJKUnifonts/Download/))
+- [UnBatang](http://kldp.net/projects/unfonts/download)
+    - Direct download: [`UnBatang_0613.ttf`](http://kldp.net/projects/unfonts/download/4706?filename=UnBatang_0613.ttf)
+- [AR PL UMing CN](http://www.freedesktop.org/wiki/Software/CJKUnifonts/Download/)
+    - Direct download: [`ttf-arphic-uming_0.2.20080216.1.orig.tar.gz`](http://archive.ubuntu.com/ubuntu/pool/main/t/ttf-arphic-uming/ttf-arphic-uming_0.2.20080216.1.orig.tar.gz) (only `uming.ttc` is needed)
 
 Their installation depends on your operating system, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a Debian-like system.
-In case you have trouble finding them, there is a copy of these fonts in the `files/fonts` directory.
-
 
 ## Regulations Release Process
 
