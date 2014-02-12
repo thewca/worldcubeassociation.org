@@ -90,6 +90,7 @@ class html():
 
     print "Generating HTML for %s..." % language
 
+    self.language = language
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.build_folder = buildDir
     self.translation = translation
@@ -109,8 +110,7 @@ class html():
       "regs_text": regulations_text,
       "guides_text": guidelines_text,
       "regs_url": "./",
-      "guides_url": "guidelines.html",
-      "fragment": "0",
+      "guides_url": "guidelines.html"
     })
 
     header = self.header2_translations if translation else self.header2
@@ -225,8 +225,6 @@ class html():
     regsURL = args["regs_url"]
     guidesURL = args["guides_url"]
 
-    isFragment = args["fragment"]
-
     # Match/Replace constants
 
     regOrGuide2Slots = r'([A-Za-z0-9]+)' + r'(\+*)'
@@ -296,7 +294,7 @@ class html():
 
     # PDF
 
-    self.hyperLinkReplace([0, 1], [0], r'link:pdf', self.pdf_name, r'\1') # TODO: Remove 0 once this is on the wca-documents official branch.
+    self.hyperLinkReplace([0, 1], [0], r'link:pdf', self.pdf_name, r'\1')  # TODO: Remove 0 once this is on the wca-documents official branch.
 
     # Hyperlinks
 
@@ -313,20 +311,19 @@ class html():
     self.hyperLinkReplace([0], [1], r'guidelines:contents', guidesURL + r'#contents', r'\1')
 
     # Title
-    if isFragment == "0":
-        wcaTitleLogoSource = r'World Cube Association<br>'
-        if includeTitleLogo:
-            wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
+    wcaTitleLogoSource = r'World Cube Association<br>'
+    if includeTitleLogo:
+        wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
 
-        self.replaceRegs([1],
-                         r'<h1[^>]*><wca-title>([^<]*)</h1>',
-                         r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-                         )
+    self.replaceRegs([1],
+                     r'<h1[^>]*><wca-title>([^<]*)</h1>',
+                     r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+                     )
 
-        self.replaceGuides([1],
-                           r'<h1[^>]*><wca-title>([^<]*)</h1>',
-                           r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
-                           )
+    self.replaceGuides([1],
+                       r'<h1[^>]*><wca-title>([^<]*)</h1>',
+                       r'<h1>' + wcaTitleLogoSource + r'\1</h1>'
+                       )
 
     # Version
     gitLink = r''
