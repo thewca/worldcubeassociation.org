@@ -62,8 +62,8 @@ def main():
 
   finally:
 
-    if args.reset_to_master:
-      checkoutWCADocs("master")
+    if args.reset_to_official:
+      checkoutWCADocs("official")
     else:
       checkoutWCADocs(startingBranch)
 
@@ -138,10 +138,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--reset-to-master', '-m',
+  '--reset-to-official', '-o',
   action='store_true',
   default=False,
-  help="Reset wca-documents by checking out master at the end. " +
+  help="Reset wca-documents by checking out official at the end. " +
     "Useful with -d in order to reset wca-documents-extra for commits."
 )
 
@@ -228,7 +228,6 @@ def currentBranch():
 
 
 def checkoutWCADocs(branchName):
-  if branchName == "official":
     subprocess.check_call(main_git_command + [
       "checkout",
       branchName
@@ -282,7 +281,8 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
 
 
 def buildBranch(args, branchName, directory, lang=defaultLang, translation=False):
-  checkoutWCADocs(branchName)
+  if branchName == "official":
+    checkoutWCADocs(branchName)
   buildToDirectory(args, directory, lang, translation)
 
 
