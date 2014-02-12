@@ -33,26 +33,7 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Spanish - 2013](./spanish/)
     - By [Carlos Méndez García-Barroso](http://worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](http://worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](http://worldcubeassociation.org/results/p.php?i=2009SANC01).
 
-## Translating the Regulations
 
-If you'd like to (re)-translate the Regulations, please use the following process:
+## Translating the Regulation
 
-- Download the [current source](https://github.com/cubing/wca-documents/archive/official.zip) of the Regulations.
-    - When you do this, please also visit [the GitHub page](https://github.com/cubing/wca-documents) and record the current "latest commit" value so we can tell which version you translated.
-- Translate `wca-guidelines-2013.md` and `wca-regulations-2013.md`
-    - Add a section at the top of the Regulations called "Translation", which should include any useful information about the translation, as well as a translation of the following text: "Please note that this translations is not an official version (even though it is provided on the WCA website): it may be useful, but it does not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used."
-    - Try to keep all the formatting intact and only change the words.
-    - Read through the [style guide](https://github.com/cubing/wca-documents-extra/blob/master/style-guide.md) for detailed information about how the Regulations are formatted.
-- Contact the [WRC](https://www.worldcubeassociation.org/contact/wrc) for adding your translations to the GitHub repository and uploading them to the WCA website. Please sent us:
-    - The translated Regulations and Guidelines.
-    - The "latest commit" value your translation is based on.
-    - The names of the translators, along with WCA IDs, and (optionally) personal homepages to link from this page.
-    - Translations of the following:
-        - The native name of your translation language, in that language.
-        - The words/phrases for "Regulations" and "Guidelines".
-        - A suitable translation of the file name `wca-regulations-and-guidelines-2013.pdf` for downloads (preferably without accent marks or special letters).
-
-All translations will be kept [on GitHub](https://github.com/cubing/wca-documents/branches).
-If you're familiar with `git`/GitHub, you're also welcome to fork the `wca-documents` repository. This makes it easy for you to make changes that the WRC can update on the site.
-(As of early February 2012, we're already using this to track the [German](https://github.com/fw42/wca-documents-german/) and [Russian](https://github.com/Claster/wca-documents) translations.)
-If you're not familiar with GitHub, don't worry about it, and just send us your translation.
+If you're interested in adding/updating a translation, please view [the instructions on the GitHub repository for translations](https://github.com/cubing/wca-documents-translations#translation-instructions).
