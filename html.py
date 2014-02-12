@@ -86,13 +86,14 @@ class html():
 </body>
 </html>"""
 
-  def __init__(self, language, buildDir, gitBranch, translation=False, verbose=False):
+  def __init__(self, language, buildDir, pdfName, gitBranch, translation=False, verbose=False):
 
     print "Generating HTML for %s..." % language
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.build_folder = buildDir
     self.translation = translation
+    self.pdf_name = pdfName
     self.verbose = verbose
 
     regulations_text = md2html(self.docs_folder + "/wca-regulations.md")
@@ -292,6 +293,10 @@ class html():
                        r'<label>' + matchLabel1Slot,
                        r'<span class="example \1 label">\1</span>'
                        )
+
+    # PDF
+
+    self.hyperLinkReplace([0, 1], [0], r'link:pdf', self.pdf_name, r'\1') # TODO: Remove 0 once this is on the wca-documents official branch.
 
     # Hyperlinks
 

@@ -265,9 +265,9 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
   if not os.path.exists(buildDir):
     os.makedirs(buildDir)
 
-  html.html(lang, buildDir, gitBranch=languageData[lang]["branch"], translation=translation, verbose=args.verbose)
-
   pdfName = languageData[lang]["pdf"]
+
+  html.html(lang, buildDir, pdfName + ".pdf", gitBranch=languageData[lang]["branch"], translation=translation, verbose=args.verbose)
 
   if args.pdf:
     pdf.pdf(
