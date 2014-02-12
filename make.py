@@ -124,15 +124,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--fragment', '-f',
-  action='store_true',
-  default=False,
-  help="Generate html fragment files, rather than standalone. " +
-    "Note that translations may look like gibberish in a browser, " +
-    "because they don't have a tag to specify UTF8 encoding."
-)
-
-parser.add_argument(
   '--pdf', '-p',
   action='store_true',
   default=False,
