@@ -21,7 +21,7 @@ To build everything, including all translations, run:
 
     git submodule update --init # Run this once to set up the translations.
 
-    ./make.py -w
+    ./make.py --wca
 
 ## Dependencies
 
