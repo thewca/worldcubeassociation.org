@@ -4,20 +4,24 @@ This repository contains files related to the maintenance of the [wca-documents]
 
 [![Build Status](https://travis-ci.org/cubing/wca-documents-extra.png?branch=master)](https://travis-ci.org/cubing/wca-documents-extra)
 
+
 ## Build the WCA documents
 
     git clone https://github.com/cubing/wca-documents-extra.git
     cd wca-documents-extra
-    git submodule update --init
+    git submodule update --init ./wca-documents
+
     ./make.py
 
-Run the following to view the resulting files in your browser:
+To view the result in your browser (OSX):
 
     ./make.py -ds
 
-In order to set up all the branches in the `wca-documents` folder to track the translation repos, run:
+To build everything, including all translations, run:
 
-    ./make.py -d --setup-wca-documents
+    git submodule update --init # Run this once to set up the translations.
+
+    ./make.py -w
 
 ## Dependencies
 
@@ -32,13 +36,14 @@ If you want to create the pdf version of the Regulations :
 - `pdflatex` (for converting LaTeX to PDF)
 - `xelatex` (for converting LaTeX to PDF)
 
-You will also need some fonts for specific translations such as Chinese, Japanese, and Korean :
+You will also need some fonts for specific translations (e.g. Chinese, Japanese, and Korean):
 
 - `UnBatang` ([source](http://kldp.net/projects/unfonts/download))
 - `AR PL UMing CN` ([source](http://www.freedesktop.org/wiki/Software/CJKUnifonts/Download/))
 
-Their installation depends on your Operating System, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a debian-like system.
-In case you have trouble finding them, there is a copy of these fonts in the directory `files/fonts`.
+Their installation depends on your operating system, but you can have a look at the file `.travis.yml` of this repository to see the minimal requirements to build on a Debian-like system.
+In case you have trouble finding them, there is a copy of these fonts in the `files/fonts` directory.
+
 
 ## Regulations Release Process
 
@@ -78,4 +83,4 @@ For all official `wca-documents` updates:
     - All mentions of the current scramble program version.
     - List the latest update.
     - Update the list of old versions.
-- Update the API with the new version.
+- Update [the API](https://github.com/cubing/wca-website/tree/api) with the new version.
