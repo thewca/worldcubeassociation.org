@@ -79,8 +79,3 @@ For all official `wca-documents` updates:
     - List the latest update.
     - Update the list of old versions.
 - Update the API with the new version.
-
-
-## Known Issues
-
-- "--" is displayed as a large hyphen in LaTeX. A work-around has been to filter input file in the `build_pdf.sh` script.

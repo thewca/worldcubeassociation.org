@@ -58,6 +58,8 @@ class pdf():
     self.temp_folder = "temp/" + language
     self.build_folder = buildDir
 
+    # LaTeX will render two dashes as an em hyphen.
+    # This regex replacement makes sure Megaminx notation is rendered correctly.
     regulations_text = re.sub("--", "-{}-", md2tex(self.docs_folder + "/wca-regulations.md"))
     guidelines_text = re.sub("--", "-{}-", md2tex(self.docs_folder + "/wca-guidelines.md"))
 
