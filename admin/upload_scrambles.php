@@ -71,8 +71,16 @@ if($form->submitted()) {
     $form->invalidate("scrambles", 'The file size is too big.');
   }
   $contents = file_get_contents($_FILES['scrambles']['tmp_name']);
-  if(!($scramble_data = json_decode($contents))) {
+  if(!($competition_data = json_decode($contents))) {
     $form->invalidate('scrambles', 'Please upload a valid JSON file.');
+  }
+
+  if(is_object($competition_data)) {
+    if(property_exists($competition_data, 'scrambles')) {
+      $scramble_data = $competition_data->scrambles;
+    } else {
+      $form->invalidate('scrambles', 'Please upload a JSON file containing scrambles.');
+    }
   }
 
   // deal with uploaded data
@@ -80,15 +88,15 @@ if($form->submitted()) {
     $compId = $submitted_data['competitionId'];
     // store JSON in db
     $round_errors = array();
-    foreach ($scramble_data->rounds as $round => $data) {
+    foreach ($scramble_data->sheets as $round => $data) {
       // round data
-      $eventId = property_exists($data, 'eventId') ? ($data->eventId) : false;
-      $roundId = property_exists($data, 'roundId') ? ($data->roundId) : false;
-      $groupId = property_exists($data, 'groupId') ? ($data->groupId) : false;
+      $eventId = property_exists($data, 'event') ? ($data->event) : false;
+      $roundId = property_exists($data, 'round') ? ($data->round) : false;
+      $groupId = property_exists($data, 'group') ? ($data->group) : false;
 
       if($eventId && $roundId && $groupId) {
         
-        // remove any existing scrambles for this round?
+        // remove any existing scrambles for this round/group?
         $existing_scrambles = $wcadb_conn->boundQuery("SELECT scrambleId FROM Scrambles
               WHERE competitionId=? AND eventId=? AND roundId=? AND groupId=?",
             array('ssss', &$compId, &$eventId, &$roundId, &$groupId)

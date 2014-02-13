@@ -407,7 +407,7 @@ function savePreregForm () {
            'password' => $mail_config['pass'])
         );
 
-        $mail = $smtp->send($mailEmail, $headers, $body);
+        $mail = $smtp->send($mailEmail, $headers, $mailBody);
 
       } else {
         // normal php mail
