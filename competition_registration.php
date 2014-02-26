@@ -566,9 +566,9 @@ function showPsychSheet ( $eventId ) {
     extract( $prereg );
     $prereg['score1'] = isset($score1[$personId]) ? $score1[$personId] : array(0, 0);  # PHP suuuucks
     $prereg['score2'] = isset($score2[$personId]) ? $score2[$personId] : array(0, 0);
-    $s = isset($score1[$personId]) ? $score1[$personId][1] : 999999999;
-    $a = isset($score2[$personId]) ? $score2[$personId][1] : 999999999;
-    $prereg['cmpKey'] = sprintf('%09d%09d', $s, $a);
+    $s1 = isset($score1[$personId]) ? $score1[$personId][1] : 999999999;
+    $s2 = isset($score2[$personId]) ? $score2[$personId][1] : 999999999;
+    $prereg['cmpKey'] = sprintf('%09d%09d', $s1, $s2);
   }
 
   #--- Sort the preregs.
