@@ -570,6 +570,7 @@ function showPsychSheet ( $eventId ) {
     $s2 = isset($score2[$personId]) ? $score2[$personId][1] : 999999999;
     $prereg['cmpKey'] = sprintf('%09d%09d', $s1, $s2);
   }
+  unset($prereg);  # Because otherwise PHP is a weirdo and messes up the table-foreach below.
 
   #--- Sort the preregs.
   function cmp($a, $b) {
