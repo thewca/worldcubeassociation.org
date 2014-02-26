@@ -541,91 +541,62 @@ function showPsychSheet ( $eventId ) {
   global $chosenCompetitionId;
 
   echo "<h1>Psych Sheet</h1><br />";
- 
-  #--- Best or Average ?
-  $avg = dbQuery( "SELECT * FROM RanksAverage WHERE eventId='$eventId' LIMIT 1" );
-  if( count( $avg ) > 0 ){
-    $isAvg = true;
-    $table = 'Average';
+
+  #--- What's first, single or average?
+  $order = count(dbQuery("SELECT * FROM Results WHERE eventId='$eventId' AND formatId in ('a','m') LIMIT 1"))
+         ? array('Average', 'Single') : array('Single', 'Average');
+
+  #--- Get singles, averages and preregs.
+  $score1 = array();
+  foreach( dbQuery("SELECT personId, best, worldRank FROM Ranks{$order[0]} WHERE eventId='$eventId'") as $row )
+    $score1[$row['personId']] = array($row['best'], $row['worldRank']);
+  $score2 = array();
+  foreach( dbQuery("SELECT personId, best, worldRank FROM Ranks{$order[1]} WHERE eventId='$eventId'") as $row )
+    $score2[$row['personId']] = array($row['best'], $row['worldRank']);
+  $preregs = dbQuery("
+    SELECT personId, name, countryId
+    FROM   Preregs
+    WHERE  competitionId = '$chosenCompetitionId'
+      AND  status = 'a'
+      AND  eventIds rlike '[[:<:]]{$eventId}[[:>:]]'
+  ");
+
+  #--- Add singles, averages and a comparison key to the preregs.
+  foreach( $preregs as &$prereg ){
+    extract( $prereg );
+    $prereg['score1'] = isset($score1[$personId]) ? $score1[$personId] : array(0, 0);  # PHP suuuucks
+    $prereg['score2'] = isset($score2[$personId]) ? $score2[$personId] : array(0, 0);
+    $s = isset($score1[$personId]) ? $score1[$personId][1] : 999999999;
+    $a = isset($score2[$personId]) ? $score2[$personId][1] : 999999999;
+    $prereg['cmpKey'] = sprintf('%09d%09d', $s, $a);
   }
-  else
-    $table = 'Single';
 
-  #--- Get the data.
+  #--- Sort the preregs.
+  function cmp($a, $b) {
+    if( $a['cmpKey'] == $b['cmpKey'] )
+      return 0;
+    return $a['cmpKey'] < $b['cmpKey'] ? -1 : 1;
+  }
+  usort($preregs, 'cmp');
 
-  $preregs = dbQuery( "
-    SELECT prereg.*, rank.best best, rank.worldRank worldRank
-    FROM Preregs prereg, Ranks$table rank
-    WHERE prereg.competitionId = '$chosenCompetitionId'
-      AND prereg.status = 'a'
-      AND prereg.personId = rank.personId
-      AND prereg.personId <> ''
-      AND rank.eventId = '$eventId'
-    ORDER BY rank.best, prereg.countryId, prereg.name" );
-
-  $newPreregs = dbQuery( "
-    SELECT prereg.*
-    FROM Preregs prereg
-    WHERE prereg.competitionId = '$chosenCompetitionId'
-      AND prereg.status = 'a'
-      AND NOT EXISTS (
-        SELECT *
-        FROM Ranks$table
-        WHERE prereg.personId = personId
-          AND personId <> ''
-          AND eventId = '$eventId'
-      )
-    ORDER BY prereg.countryId, prereg.name" );
-
-  tableBegin( 'results', 6);
+  #--- Show the preregs table.
+  tableBegin( 'results', 8);
   tableCaption( false, eventName( $eventId ));
-  if( $isAvg )
-    tableHeader( explode( '|', "Rank|Person|Citizen of|WR|Best average|" ), array( 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="f"' ));
-  else
-    tableHeader( explode( '|', "Rank|Person|Citizen of|WR|Best single|" ), array( 3 => 'class="R"', 4 => 'class="r"', 5 => 'class="f"' ));
-
-  $curRank = 0;
-  $incRank = 1;
-  $wRank = 0;
-
+  tableHeader( explode( '|', "Rank|Person|Citizen of|Best {$order[0]}|WR|Best {$order[1]}|WR|" ), array( 0 => 'class="r"', 3 => 'class="R"', 4 => 'class="R"', 5 => 'class="r"', 6 => 'class="r"', 7 => 'class="f"' ));
+  $ctr = 0;
+  $lastCmpKey = '';
   foreach( $preregs as $prereg ){
     extract( $prereg );
-
-    #--- Check if the competitor is registered for the event
-    $eventIdsList = explode( ' ', $eventIds );
-    if (! in_array( $eventId, $eventIdsList ))
-      continue;
-
-    if( $worldRank == $wRank ){
-      $incRank += 1;
-    }
-    else{
-      $curRank += $incRank;
-      $incRank = 1;
-    }
-    $wRank = $worldRank;
-
-    #--- Compute the row.
-    tableRow( array( $curRank, personLink( $personId, $name ), $countryId, $worldRank, formatValue( $best, valueFormat( $eventId )), '' ));
+    $ctr++;
+    $rank = ($cmpKey > $lastCmpKey) ? $ctr : '';
+    $lastCmpKey = $cmpKey;
+    tableRow( array( $rank,
+                     $personId ? personLink( $personId, $name ) : $name,
+                     $countryId,
+                     formatValue( $score1[0], valueFormat( $eventId )), $score1[1],
+                     formatValue( $score2[0], valueFormat( $eventId )), $score2[1], '' ));
   }
-
-  $curRank += $incRank;
-
-  #--- New competitors
-  foreach( $newPreregs as $newPrereg ){
-    extract( $newPrereg );
-
-    #--- Check if the competitor is registered for the event
-    $eventIdsList = explode( ' ', $eventIds );
-    if (! in_array( $eventId, $eventIdsList ))
-      continue;
-
-    #--- Compute the row.
-    tableRow( array( $curRank, $personId ? personLink( $personId, $name ) : $name, $countryId, '', '', '' ));
-  }
-
   tableEnd();
-
 }
 
 ?>
