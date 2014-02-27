@@ -573,12 +573,9 @@ function showPsychSheet ( $eventId ) {
   unset($prereg);  # Because otherwise PHP is a weirdo and messes up the table-foreach below.
 
   #--- Sort the preregs.
-  function cmp($a, $b) {
-    if( $a['cmpKey'] == $b['cmpKey'] )
-      return 0;
-    return $a['cmpKey'] < $b['cmpKey'] ? -1 : 1;
-  }
-  usort($preregs, 'cmp');
+  usort($preregs, function($a, $b) {
+    return strcmp($a['cmpKey'], $b['cmpKey']);
+  });
 
   #--- Show the preregs table.
   tableBegin( 'results', 8);
