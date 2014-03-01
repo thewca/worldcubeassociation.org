@@ -15,7 +15,7 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [German (Deutsch) - 2014](./german/)
     - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Laura Ohrndorf](https://www.worldcubeassociation.org/results/p.php?i=2009OHRN01), and [Gregor Billing](https://www.worldcubeassociation.org/results/p.php?i=2012BILL01).
 - [Hungarian (magyar) - 2014](./hungarian/)
-    - By [Nikolett Placskó](https://www.worldcubeassociation.org/results/p.php?i=2008PLACS01) and [Perge Olivér](https://www.worldcubeassociation.org/results/p.php?i=2007PERG01).
+    - By [Nikolett Placskó](https://www.worldcubeassociation.org/results/p.php?i=2008PLAC01) and [Perge Olivér](https://www.worldcubeassociation.org/results/p.php?i=2007PERG01).
 - [Korean - 2013](./korean/)
     - By Park Si-Woo (박시우), Kim Ah-Young (김아영), [Chae Ji-Seok (채지석)](https://worldcubeassociation.org/results/p.php?i=2008JISE02), and [Yeom Seok-Hoon (염석훈)](https://worldcubeassociation.org/results/p.php?i=2007SEOK01).
 - [Indonesian (Bahasa) - 2013](./indonesian/)
