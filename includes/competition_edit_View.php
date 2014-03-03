@@ -267,7 +267,7 @@ function showRegs () {
     extract( $comp );
     $name = htmlEscape( $name );
     $personId = htmlEscape( $personId );
-    $extraInfo = "[Email] " . htmlEscape($email) . "<br />[Guests] " . htmlEscape($guests) . "<br />[Comments] " . htmlEscape($comments) . "<br />[Ip] " . htmlEscape($ip);
+    $extraInfo = "[Email] <a href='mailto:".rawurlencode($email)."'>" . htmlEscape($email) . "</a><br />[Guests] " . htmlEscape($guests) . "<br />[Comments] " . htmlEscape($comments) . "<br />[Ip] " . htmlEscape($ip);
     $toggle = "onclick='extra = document.getElementById(\"extra_$id\").style; extra.display = extra.display ? \"\" : \"none\";'";  # todo: should be jQuery
     $eventIdsList = array_flip( explode( ' ', $eventIds ));
 
