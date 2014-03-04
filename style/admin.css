@@ -6,7 +6,11 @@
   border: 1px solid #ddd;
 }
 
-#scramble_help_container {
+#results-submission #notice_area {
+  padding-top: 10px;
+}
+
+#upload_help_container {
   width: 90%;
   margin: 0 auto 10px;
   border: 3px solid #AAA;

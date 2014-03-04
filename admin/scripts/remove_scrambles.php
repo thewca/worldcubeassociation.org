@@ -1,6 +1,6 @@
 <?php
 
-include "../includes/_framework.php";
+include "../../includes/_framework.php";
 
 $compId = getNormalParam('c');
 $eventId = getNormalParam('e');
