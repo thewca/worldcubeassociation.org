@@ -21,12 +21,12 @@ print "<div class='notice'>
 // Alert about any existing result/scramble data
 $competition_has_results = $wcadb_conn->boundQuery( "SELECT * FROM Results WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_results ) > 0 ){
-  noticeBox3(-1, 'Warning: This competition already has some official results entered.  Importing more data may cause duplicate entries.');
+  noticeBox3(-1, 'This competition has result data imported.  Importing more data may cause duplicate entries.');
 }
 $competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxResults WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_inbox_results ) > 0 ){
   noticeBox3(0, 'This competition is in the process of having result data uploaded.  Importing more data may cause duplicate entries.
-                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" id="clear_comp_data">Clear the below Results/Person/Scramble data...</a>');
+                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the below Results/Person/Scramble data...</a>');
 }
 $competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_scrambles ) > 0 ){
@@ -36,8 +36,12 @@ if( count( $competition_has_scrambles ) > 0 ){
 
 
 print "<div id='upload_help_container'>";
+print "<ol id='result-upload-list'>";
+
+print "<li><p>(todo) Perform some initial sanity checks: show table of temporary rounds vs scrambles vs # competitors, etc?</p></li>";
 
 // Print Some Result Data
+print "<li>";
 $results_view = $wcadb_conn->boundQuery(
   "SELECT r.*, p.*,
         d.cellName as roundCellName,
@@ -51,7 +55,8 @@ $results_view = $wcadb_conn->boundQuery(
   array('s', &$compId)
   );
 if(count( $results_view ) > 0) {
-  print "<h1>Import in Progress - Result Data</h1>";
+  print "<p><a href='scripts/import_results.php?c=".o($compId)."' class='link-external external call_and_refresh' target='_blank'>Finish importing results:</a></p>";
+  print "<div class='contain-overflow'>";
   tableBegin('results', 11);
   tableHeader(array('Event', 'Round', 'Person', 'Pos', 'Best', 'Average', 'Details:', '','','',''), array());
   foreach($results_view as $result) {
@@ -66,40 +71,66 @@ if(count( $results_view ) > 0) {
     ));
   }
   tableEnd();
-  print "<p>These results have not been fully imported.
-        <a href='' class='link-external external' target='_blank'>Import them now...</a></p>";
+  print "</div>";
 } else {
-  print "<h3>Result data upload not in progress.</h3>";
+  print "There is no result data to finish importing.";
 }
+print "</li>";
+
+
+// Scripts should be run next...
+print "<li><p>Run a couple scripts:</p>
+         <ol type='a'>
+           <li><a href='check_results.php' target='_blank' class='link-external external'>check_results</a></li>
+           <li><a href='persons_check_finished.php' target='_blank' class='link-external external'>persons_check_finished</a></li>
+           <li><a href='persons_finish_unfinished.php' target='_blank' class='link-external external'>persons_finish_unfinished</a></li>
+         </ol>
+       </li>";
 
 
 // Print Person Data
+print "<li>";
 $persons_view = $wcadb_conn->boundQuery(
   "SELECT * from InboxPersons WHERE competitionId=? ORDER BY name",
   array('s', &$compId)
   );
 if(count( $persons_view ) > 0) {
-  print "<h1>Import in Progress - Person Data</h1>";
+  if(count( $results_view ) <= 0) {
+    print "<p><a href='scripts/import_persons.php?c=".o($compId)."' class='link-external external call_and_refresh' target='_blank'>Finish importing persons...</a></p>";
+  } else {
+    print "<p>You must finish importing results data before importing person data.</p>";
+  }
+  print "<div class='contain-overflow'>";
   tableBegin('results', 4);
   tableHeader(array('Name', 'WCA id', 'Country', 'Birthdate'), array());
   foreach($persons_view as $result) {
     tableRow(array($result['name'], $result['wcaId'], $result['countryId'], $result['dob']));
   }
   tableEnd();
-
-  print "<p>These persons have not been fully imported. ";
-  if(count( $results_view ) <= 0) {
-    print "<a href='' class='link-external external' target='_blank'>Import them now...</a></p>";
-  } else {
-    print "Please finish importing all results, and run scripts before importing them.</p>";
-  }
-
+  print "</div>";
 } else {
-  print "<h3>Person data upload not in progress.</h3>";
+  print "There is no person data to finish importing.";
 }
+print "</li>";
+
+
+// more scripts...
+print "<li><p>Run some more scripts:</p>
+         <ol type='a'>
+           <li><a href='check_rounds.php' target='_blank' class='link-external external'>check_rounds</a></li>
+           <li><a href='check_regional_record_markers.php' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
+         </ol>
+       </li>";
 
 
 // table to check existence of results vs scrambles
+print "<li><p>Sanity Checks:</p>
+         <ol type='a'>
+           <li><a href='../c.php?i=".o($compId)."' target='_blank' class='link-external external'>View the Public competition page</a></li>
+           <li>Post the <a href='../competition_edit.php?competitionId=".$compId."&amp;password=".$competition_data['adminPassword']."' target='_blank' class='link-external external'>results announcement</a>
+                in <a href='/node/add/story' target='_blank' class='link-external external'>Drupal</a>
+                [<a href='/user?destination=/node/add/story' target='_blank' class='link-external external'>log in</a>]</li>
+           <li>";
 $checks_table = $wcadb_conn->boundQuery(
    "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundId FROM (
         SELECT s.eventId as event, s.roundId as round, s.eventId as hasscr, r.eventId as hasevent FROM
@@ -118,11 +149,11 @@ $checks_table = $wcadb_conn->boundQuery(
     array('ssss', &$compId, &$compId, &$compId, &$compId)
   );
 if(count( $checks_table ) > 0) {
-  print "<h1>Fully Imported Scramble vs Result Data</h1>";
+  print "Compare imported scramble vs result data:<br /><br />";
   $good_cell_attr = 'class="good_cell"';
   $bad_cell_attr = 'class="bad_cell"';
   tableBegin('scramble_help', 4);
-  tableHeader(array('Event: ', 'Round', 'Has Results Import', 'Has Scrambles'), array());
+  tableHeader(array('Event: ', 'Round', 'Fully Imported Results', 'Fully Imported Scrambles'), array());
   foreach($checks_table as $round) {
     if($round['hasevent'] && $round['hasscr']) {
       $class = 'has_both';
@@ -154,7 +185,21 @@ if(count( $checks_table ) > 0) {
   }
   tableEnd();
 } else {
-  print "<h3>No fully imported result or scramble data exists.</h3>";
+  print "No fully imported result or scramble data exists to compare.";
 }
+print "</li></ol></li>";
+
+
+// Final scripts...
+print "<li><p>Run Some More Scripts:</p>
+         <ol type='a'>
+           <li><a href='compute_auxiliary_data.php' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
+           <li><a href='update_statistics_page.php' target='_blank' class='link-external external'>update_statistics_page</a></li>
+           <li><a href='export_public.php' target='_blank' class='link-external external'>export_public</a></li>
+         </ol>
+       </li>";
+
+print "<li><p>Good job, you're done!</p></li>";
+
 
 print "</div>";

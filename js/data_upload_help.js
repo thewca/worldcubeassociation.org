@@ -25,8 +25,8 @@ function get_comp_info(obj) {
       });
     });
 
-    // remove competition data link
-    $('#notice_area a#clear_comp_data').click(function(e) {
+    // remove competition data; import data links
+    $('#notice_area a.call_and_refresh').click(function(e) {
       e.preventDefault();
       var link = $(this);
       //Load page into table cell.
