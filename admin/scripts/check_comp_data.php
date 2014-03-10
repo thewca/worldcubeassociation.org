@@ -21,17 +21,30 @@ print "<div class='notice'>
 // Alert about any existing result/scramble data
 $competition_has_results = $wcadb_conn->boundQuery( "SELECT * FROM Results WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_results ) > 0 ){
-  noticeBox3(-1, 'This competition has result data imported.  Importing more data may cause duplicate entries.');
-}
-$competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxResults WHERE competitionId=? LIMIT 1", array('s', &$compId));
-if( count( $competition_has_inbox_results ) > 0 ){
-  noticeBox3(0, 'This competition is in the process of having result data uploaded.  Importing more data may cause duplicate entries.
-                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the below Results/Person/Scramble data...</a>');
+  noticeBox3(-1, 'This competition has result data imported.  Uploading more data may cause duplicate entries.');
 }
 $competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_scrambles ) > 0 ){
-  noticeBox3(0, 'This competition has scramble data uploaded.  Importing more data may cause duplicate entries.
+  noticeBox3(-1, 'This competition has scramble data uploaded.  Uploading more data may cause duplicate entries.
                  You may remove scrambles using the interface below.');
+}
+$competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxResults WHERE competitionId=? LIMIT 1", array('s', &$compId));
+$competition_has_inbox_persons = $wcadb_conn->boundQuery( "SELECT * FROM InboxPersons WHERE competitionId=? LIMIT 1", array('s', &$compId));
+if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
+  noticeBox3(0, 'This competition is in the process of having result data uploaded.  Uploading more data may cause duplicate entries.
+                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the below Results/Person/Scramble data...</a>');
+}
+
+
+// if there is no data at all, nothing has been uploaded, so let's not display anything:
+$competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
+if( count( $competition_has_scrambles ) == 0
+    && count( $competition_has_inbox_results ) == 0
+    && count( $competition_has_results ) == 0
+    && count( $competition_has_inbox_persons ) == 0
+    ){
+  noticeBox3(0, 'This competition has no data yet.  Upload something to get started.');
+  die();
 }
 
 
@@ -50,24 +63,27 @@ $results_view = $wcadb_conn->boundQuery(
       LEFT JOIN Events AS e ON e.id = r.eventId
       LEFT JOIN Rounds AS d ON d.id = r.roundId
       LEFT JOIN InboxPersons AS p ON p.id = r.personId
-    WHERE r.competitionId = ? AND r.pos >= 1
+    WHERE r.competitionId = ?
+    AND r.pos >= 1
+    AND p.competitionId = ?
     ORDER BY e.rank, d.rank, r.pos, r.average, r.best, p.name",
-  array('s', &$compId)
+  array('ss', &$compId, &$compId)
   );
 if(count( $results_view ) > 0) {
   print "<p><a href='scripts/import_results.php?c=".o($compId)."' class='link-external external call_and_refresh' target='_blank'>Finish importing results:</a></p>";
   print "<div class='contain-overflow'>";
-  tableBegin('results', 11);
-  tableHeader(array('Event', 'Round', 'Person', 'Pos', 'Best', 'Average', 'Details:', '','','',''), array());
+  tableBegin('results', 5);
+  $lastround = "";
   foreach($results_view as $result) {
+    if($lastround != $result['eventCellName'] . $result['roundCellName']) {
+      $lastround = $result['eventCellName'] . $result['roundCellName'];
+      tableCaption(false, $result['eventCellName'] . " - " . $result['roundCellName']);
+      tableHeader(array('Person', 'Pos', 'Best', 'Average', 'Details:'), array());
+    }
     tableRow(array(
-      $result['eventCellName'], $result['roundCellName'], $result['name'], $result['pos'],
+      $result['name'], $result['pos'],
       formatValue($result['best']), formatValue($result['average']),
-      formatValue($result['value1']),
-      formatValue($result['value2']),
-      formatValue($result['value3']),
-      formatValue($result['value4']),
-      formatValue($result['value5'])
+      formatValue($result['value1'])." ".formatValue($result['value2'])." ".formatValue($result['value3'])." ".formatValue($result['value4'])." ".formatValue($result['value5'])
     ));
   }
   tableEnd();
@@ -165,9 +181,18 @@ if(count( $checks_table ) > 0) {
       // link to remove scrambles for this round
       // should protect this if we keep using the php system
       // jQuery attempts to load this
-      $has_scrambles = 'Y&nbsp;&nbsp;&nbsp;(<a class="remove_link" href="scripts/remove_scrambles.php?c='.$compId.'&amp;e='.$round['eventId'].'&amp;r='.$round['roundId'].'&" target="_blank" title="Remove Scrambles">X</a>)';
+      $has_scrambles = 'Y&nbsp;&nbsp;&nbsp;(<a class="remove_link" href="scripts/remove_data.php?t=Scrambles&c='.$compId.'&amp;e='.$round['eventId'].'&amp;r='.$round['roundId'].'&" target="_blank" title="Remove Scrambles">X</a>)';
     } else {
       $has_scrambles = 'N';
+    }
+
+    if($round['hasevent']) {
+      // link to remove results for this round
+      // should protect this if we keep using the php system
+      // jQuery attempts to load this
+      $has_results = 'Y&nbsp;&nbsp;&nbsp;(<a class="remove_link" href="scripts/remove_data.php?t=Results&c='.$compId.'&amp;e='.$round['eventId'].'&amp;r='.$round['roundId'].'&" target="_blank" title="Remove Results">X</a>)';
+    } else {
+      $has_results = 'N';
     }
 
     $tableOddRow = false; // global used in tableRowStyled; we don't want stripes here.
@@ -178,12 +203,13 @@ if(count( $checks_table ) > 0) {
     tableRowStyled($class, array(
           $round['event'].": ",
           $round['round'],
-          $round['hasevent'] ? "Y" : "N",
+          $has_results,
           $has_scrambles
         )
       );
   }
   tableEnd();
+  print "<br /><strong style='color: #900'>Please be careful removing data!  Data in the above table is live.</strong><br />";
 } else {
   print "No fully imported result or scramble data exists to compare.";
 }
