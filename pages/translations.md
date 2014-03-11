@@ -26,7 +26,7 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Shuto Ueno (上野柊斗)](https://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](https://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Kotaro Terada (寺田晃太朗)](https://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Wataru Hashimura (端村航)](https://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](https://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](https://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
 - [Portuguese, Brazilian (Português do Brasil) - 2013](./portuguese-brazilian/)
     - By [Daniel Buck Silva](https://www.worldcubeassociation.org/results/p.php?i=2012SILV10), [Pedro Santos Guimarães](https://www.worldcubeassociation.org/results/p.php?i=2007GUIM01) and Matheus Oliveira Silva.
-- [Portuguese, European (Português Europeu) - 2013](./portuguese-european/)
+- [Portuguese, European (Português Europeu) - 2014](./portuguese-european/)
     - By António Gomes.
 - [Russian - 2014](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
