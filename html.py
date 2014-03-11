@@ -7,6 +7,9 @@ import sys
 import traceback
 
 
+MAX_LANG_WIDTH = 20
+
+
 def md2html(filename):
 
   return subprocess.check_output([
@@ -88,7 +91,7 @@ class html():
 
   def __init__(self, language, buildDir, pdfName, gitBranch, translation=False, verbose=False):
 
-    print "Generating HTML for %s..." % language
+    print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
 
     self.language = language
     self.docs_folder = "translations/" + language if translation else "wca-documents"

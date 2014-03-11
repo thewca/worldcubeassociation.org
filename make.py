@@ -17,7 +17,7 @@ import pdf
 
 languages_file = "config/languages.json"
 upload_server_file = "config/upload_server.json"
-buildRootDir = "build/"
+buildRootDir = "./build/"
 
 defaultLang = "default"
 

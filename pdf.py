@@ -3,6 +3,8 @@ import re
 import shutil
 import subprocess
 
+MAX_LANG_WIDTH = 20
+
 
 def md2tex(filename):
 
@@ -52,7 +54,7 @@ class pdf():
 
   def __init__(self, language, buildDir, translation, pdf_name, tex_encoding, tex_command, verbose=False):
 
-    print "Generating PDF for %s..." % language
+    print "%s Generating  PDF in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
 
     self.docs_folder = "translations/" + language if translation else "wca-documents"
     self.temp_folder = "temp/" + language
