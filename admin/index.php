@@ -24,6 +24,30 @@ function showPages () {
   
   echo "<dl>\n";
 
+  // most common tasks
+
+  showPage( 'upload_results',
+            "Upload results for a competition." );
+
+  showPage( 'competitions_manage',
+            "Manage competitions." );
+
+  showPage( 'change_person',
+            'Fix or update a person\'s data.' );
+
+  $waiting = count(getWaitingPictureFiles('../upload/'));
+  $color = $waiting ? 'red' : 'green';
+  showPage( 'persons_picture',
+            "Validates pictures that have been submitted. <span style='color:$color'>[$waiting waiting]</span>");
+
+  $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
+  $color = $waiting ? 'red' : 'green';
+  showPage( 'validate_media',
+            "Validates media that have been submitted. <span style='color:$color'>[$waiting waiting]</span>" );
+
+
+  echo "</dl><hr /><dl>\n";
+
   showPage( 'check_results',
             'Checks the Results table data.' );
 
@@ -57,27 +81,8 @@ function showPages () {
   showPage( 'show_competition_infos',
             "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking." );
 
-  showPage( 'upload_scrambles',
-            "Upload scrambles for a competition." );
-
-  $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
-  $color = $waiting ? 'red' : 'green';
-  showPage( 'validate_media',
-            "Validates media that have been submitted. <span style='color:$color'>[$waiting waiting]</span>" );
-
-  showPage( 'change_person',
-            'Fix or update a person\'s data.' );
-
   showPage( 'add_local_names',
             "Add local names to persons." );
-
-  $waiting = count(getWaitingPictureFiles('../upload/'));
-  $color = $waiting ? 'red' : 'green';
-  showPage( 'persons_picture',
-            "Validates pictures that have been submitted. <span style='color:$color'>[$waiting waiting]</span>");
-
-  showPage( 'competitions_manage',
-            "Manages competitions." );
 
   echo "</dl>\n";
 }

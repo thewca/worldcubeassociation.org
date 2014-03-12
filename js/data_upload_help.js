@@ -43,6 +43,7 @@ function get_comp_info(obj) {
 }
 
 $(document).ready(function() {
+  $('#form-element-competitionId').chosen();
   get_comp_info(0);
   $('#form-element-competitionId').change(get_comp_info);
 });

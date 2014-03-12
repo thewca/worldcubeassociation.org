@@ -85,8 +85,12 @@ function computeCachedDatabase ( $cacheFile ) {
     'Rounds' =>
       'SELECT * FROM Rounds ORDER BY rank',
 
+    // order these with 'nearby' competitions listed first; helps with ordering select lists.
     'Competitions' =>
-      'SELECT id, cellName FROM Competitions ORDER BY year DESC, month DESC, day DESC',
+      "SELECT id, cellName
+       FROM Competitions
+       ORDER BY (STR_TO_DATE(CONCAT(year,',',month,',',day),'%Y,%m,%d') BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND DATE_ADD(NOW(), INTERVAL 7 DAY)) DESC,
+         year DESC, month DESC, day DESC",
       
     'UsedContinents' =>
       'SELECT DISTINCT continent.*

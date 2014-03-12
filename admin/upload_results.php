@@ -1,6 +1,7 @@
 <?php
 
 $jQuery = 1;
+$jQuery_chosen = 1;
 $currentSection = 'admin';
 require('../includes/_header.php');
 adminHeadline('Upload Competition Results &amp; Scrambles');
@@ -35,11 +36,12 @@ $form->addEntity($competition_element);
 
 // competition data area
 $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div id='notice_area' style='clear: both;'></div>"));
+$form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div class='thick-outlined'><p><em>Upload Competition Data</em></p>"));
 
 // json file upload element
 $file_element = new WCAClasses\FormBuilderEntities\Input("json", "file");
 $file_element->attribute("accept", ".json")
-       ->label("Import JSON File")
+       ->label("Select JSON File to Import")
        ->validator("");
 $form->addEntity($file_element);
 
@@ -53,7 +55,7 @@ $submit_element = new WCAClasses\FormBuilderEntities\Input("submit", "submit");
 $submit_element->attribute("value", "Upload");
 $form->addEntity($submit_element);
 
-
+$form->addEntity(new WCAClasses\FormBuilderEntities\Markup("</div>"));
 $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("</fieldset>"));
 
 // process submitted data

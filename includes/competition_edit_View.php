@@ -22,7 +22,7 @@ function showView () {
   }
   if( $isAdmin ) {
     showResultsUpload();
-    showScrambleUpload();
+    // showScrambleUpload();
   }
   endForm();
 }
@@ -322,17 +322,9 @@ function showResultsUpload () {
   global $data, $chosenCompetitionId, $chosenPassword;
 
   echo "<hr /><h1>Results Upload</h1>";
-
-  echo "<p><a href='competition_results_upload.php?competitionId=$chosenCompetitionId&password=$chosenPassword'>Upload</a> the results.<br />Note: not finished yet, only preview now.</p>";
+  echo "<p><a href='admin/upload_results.php?competitionId=$chosenCompetitionId'>Upload results</a>.</p>";
 }
 
-#----------------------------------------------------------------------
-function showScrambleUpload () {
-#----------------------------------------------------------------------
-  global $chosenCompetitionId;
-  echo "<hr /><h1>Upload Scrambles</h1>";
-  echo "<p><a href='admin/upload_scrambles.php?competitionId=$chosenCompetitionId'>Upload</a> competition scrambles.<br /></p>";
-}
 
 #----------------------------------------------------------------------
 function showAnnouncement() {

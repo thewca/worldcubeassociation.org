@@ -27,6 +27,9 @@ if(isset($jQuery) && $jQuery) {
 if(isset($jQueryUI) && $jQueryUI) {
   $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
 }
+if(isset($jQuery_chosen) && $jQuery_chosen) {
+  $scripts->add('chosen.jquery.min.js');
+}
 if(isset($currentSection) && $currentSection != 'admin') {
   $scripts->add('ga.js');
 }
@@ -38,6 +41,7 @@ $styles->add('general.css');
 $styles->add('pageMenu.css');
 $styles->add('tables.css');
 $styles->add('links.css');
+$styles->add('chosen.min.css');
 if(isset($currentSection) && $currentSection == 'admin') {
   $styles->add('admin.css');
 }

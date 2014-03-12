@@ -21,18 +21,18 @@ print "<div class='notice'>
 // Alert about any existing result/scramble data
 $competition_has_results = $wcadb_conn->boundQuery( "SELECT * FROM Results WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_results ) > 0 ){
-  noticeBox3(-1, 'This competition has result data imported.  Uploading more data may cause duplicate entries.');
+  noticeBox3(-1, 'This competition has result data imported. Uploading more data may cause duplicate entries.');
 }
 $competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_scrambles ) > 0 ){
-  noticeBox3(-1, 'This competition has scramble data uploaded.  Uploading more data may cause duplicate entries.
+  noticeBox3(-1, 'This competition has scramble data uploaded. Uploading more data may cause duplicate entries.
                  You may remove scrambles using the interface below.');
 }
 $competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxResults WHERE competitionId=? LIMIT 1", array('s', &$compId));
 $competition_has_inbox_persons = $wcadb_conn->boundQuery( "SELECT * FROM InboxPersons WHERE competitionId=? LIMIT 1", array('s', &$compId));
 if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
   noticeBox3(0, 'This competition is in the process of having result data uploaded.  Uploading more data may cause duplicate entries.
-                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the below Results/Person/Scramble data...</a>');
+                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
 }
 
 
@@ -48,10 +48,10 @@ if( count( $competition_has_scrambles ) == 0
 }
 
 
-print "<div id='upload_help_container'>";
+print "<div id='upload_help_container' class='thick-outlined'>";
 print "<ol id='result-upload-list'>";
 
-print "<li><p>(todo) Perform some initial sanity checks: show table of temporary rounds vs scrambles vs # competitors, etc?</p></li>";
+// print "<li><p>(todo) Perform some initial sanity checks: show table of temporary rounds vs scrambles vs # competitors, etc?</p></li>";
 
 // Print Some Result Data
 print "<li>";
@@ -83,7 +83,11 @@ if(count( $results_view ) > 0) {
     tableRow(array(
       $result['name'], $result['pos'],
       formatValue($result['best']), formatValue($result['average']),
-      formatValue($result['value1'])." ".formatValue($result['value2'])." ".formatValue($result['value3'])." ".formatValue($result['value4'])." ".formatValue($result['value5'])
+      formatValue($result['value1'])."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value2'])."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value3'])."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value4'])."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value5'])
     ));
   }
   tableEnd();
@@ -134,7 +138,8 @@ print "</li>";
 print "<li><p>Run some more scripts:</p>
          <ol type='a'>
            <li><a href='check_rounds.php' target='_blank' class='link-external external'>check_rounds</a></li>
-           <li><a href='check_regional_record_markers.php' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
+           <li><a href='check_regional_record_markers.php?competitionId=".o($compId)."' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
+           <li><a href='compute_auxiliary_data.php' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
          </ol>
        </li>";
 
@@ -219,8 +224,7 @@ print "</li></ol></li>";
 // Final scripts...
 print "<li><p>Run Some More Scripts:</p>
          <ol type='a'>
-           <li><a href='compute_auxiliary_data.php' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
-           <li><a href='update_statistics_page.php' target='_blank' class='link-external external'>update_statistics_page</a></li>
+           <li><a href='../statistics.php?update8392=1' target='_blank' class='link-external external'>update_statistics_page</a></li>
            <li><a href='export_public.php' target='_blank' class='link-external external'>export_public</a></li>
          </ol>
        </li>";
