@@ -138,9 +138,12 @@ function exportPublic ( $sources ) {
         echo '.';  # shows both Apache and the user that the script is doing stuff and not hanging
       }
     }
-    $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
-    file_put_contents( $tsvFile, $tsv, FILE_APPEND );
-    file_put_contents( $sqlFile, $sql, FILE_APPEND );
+    //Check if any sql need to be exported
+    if ($sqlInserts !== array()) {
+      $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
+      file_put_contents( $tsvFile, $tsv, FILE_APPEND );
+      file_put_contents( $sqlFile, $sql, FILE_APPEND );
+    }
 
     #--- Free the query result
     mysql_free_result( $dbResult );
