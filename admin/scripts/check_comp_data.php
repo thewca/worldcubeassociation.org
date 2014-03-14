@@ -75,19 +75,29 @@ if(count( $results_view ) > 0) {
   tableBegin('results', 5);
   $lastround = "";
   foreach($results_view as $result) {
+
     if($lastround != $result['eventCellName'] . $result['roundCellName']) {
       $lastround = $result['eventCellName'] . $result['roundCellName'];
       tableCaption(false, $result['eventCellName'] . " - " . $result['roundCellName']);
       tableHeader(array('Person', 'Pos', 'Best', 'Average', 'Details:'), array());
     }
+
+    if($result['eventId'] == '333fm') {
+      $result_format = 'number';
+    } elseif($result['eventId'] == '333mbf') {
+      $result_format = 'multi';
+    } else {
+      $result_format = 'time';
+    }
+
     tableRow(array(
       $result['name'], $result['pos'],
-      formatValue($result['best']), formatValue($result['average']),
-      formatValue($result['value1'])."&nbsp;&nbsp;&nbsp;"
-        .formatValue($result['value2'])."&nbsp;&nbsp;&nbsp;"
-        .formatValue($result['value3'])."&nbsp;&nbsp;&nbsp;"
-        .formatValue($result['value4'])."&nbsp;&nbsp;&nbsp;"
-        .formatValue($result['value5'])
+      formatValue($result['best'], $result_format), formatValue($result['average'], $result_format),
+      formatValue($result['value1'], $result_format)."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value2'], $result_format)."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value3'], $result_format)."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value4'], $result_format)."&nbsp;&nbsp;&nbsp;"
+        .formatValue($result['value5'], $result_format)
     ));
   }
   tableEnd();

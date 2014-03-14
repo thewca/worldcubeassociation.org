@@ -71,16 +71,20 @@ function handleRedirects () {
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
+$jQuery = 1;
+$jQuery_chosen = 1;
 $currentSection = 'admin';
 require( '../includes/_header.php' );
 analyzeChoices();
 
 adminHeadline( 'Manage competitions' );
-showDescription();
 showChoices();
 if( $chosenNewAdminPassword || $chosenNewOrganiserPassword )
   setNewPassword( $chosenNewAdminPassword );
-showCompetitions();
+showDescription();
+
+print '<script type="text/javascript">$(document).ready(function(){$("#competitionId").chosen();});</script>';
+// showCompetitions();
 
 require( '../includes/_footer.php' );
 
@@ -88,6 +92,8 @@ require( '../includes/_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
   global $errors;
+
+  echo "<hr />\n\n";
 
   echo "<dl>\n";
   echo "<dt>Organiser View</dt><dd>You should give the result URL of this to competition organisers. They have to enter the competition's details and then validate. After that, they will only be able to manage the registered competitors of a competition. You can see if a competition has been validated on the Admin page.</dd>\n";
@@ -98,8 +104,6 @@ function showDescription () {
   echo "<dt>Create New</dt><dd>Creates a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "<dt>Clone</dt><dd>Clones the competition chosen on the left to a new competition with the ID entered in the \"New competition ID\" field, then lets you edit it (by jumping to the edit page).</dd>\n";
   echo "</dl>\n";
-
-  echo "<hr />\n\n";
 
   #--- show errors
 
@@ -124,6 +128,7 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
 function showChoices () {
 #----------------------------------------------------------------------
+  echo "<br />\n\n";
 
   displayChoicesWithMethod( 'post', array(
     competitionChoice( true ),
