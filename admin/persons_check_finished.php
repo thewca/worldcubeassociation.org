@@ -240,12 +240,10 @@ function checkDuplicatesInCompetition () {
   echo "<hr />";
   
   $duplicates = dbQuery("
-    SELECT *
-    FROM
-      (SELECT personId, personName, countryId, competitionId, eventId, roundId, count(*) occurances
-        FROM Results
-        GROUP BY personId, personName, countryId, competitionId, eventId, roundId) helper
-    WHERE occurances > 1
+    SELECT personId, personName, countryId, competitionId, eventId, roundId, count(*) AS occurances
+    FROM Results
+    GROUP BY competitionId, personId, eventId, roundId, personName, countryId
+    HAVING occurances > 1
   ");
   
   #--- If all OK, say so and return.
