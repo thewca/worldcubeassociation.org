@@ -40,7 +40,7 @@ if($form->submitted()) {
         acceptNewPictureFile($upload_path, $personId, $file);
       }
       if($submitted_data[$personId] == 'D') {
-        unlink($upload_path . $file);
+        declineNewPictureFile($upload_path, $personId, $file);
       }
     }
   } else {

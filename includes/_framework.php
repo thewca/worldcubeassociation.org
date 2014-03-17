@@ -221,6 +221,11 @@ function acceptNewPictureFile ($upload_path, $personId, $newFile) {
   }
   rename($upload_path . $newFile, $upload_path . 'a' . substr($newFile, 1));
 }
+function declineNewPictureFile ($upload_path, $personId, $newFile) {
+  $datetime = date('_Ymd_His.', filemtime($upload_path . $newFile));
+  $backupFile = $upload_path . "declined/p$personId$datetime" . pathinfo($upload_path . $newFile, PATHINFO_EXTENSION);
+  rename($upload_path . $newFile, $backupFile);
+}
 function getWaitingPictureFiles ($upload_path) {
   return array_map('basename', glob($upload_path . 'p*'));
 }
