@@ -353,6 +353,21 @@ input[error], select[error] {
   overflow: hidden;
 }
 
+/* selectify styles */
+.selectize-control {
+  width: 400px;
+}
+
+.wca-selectify-label {
+  font-weight: normal;
+  font-size: 0.95em;
+}
+.wca-selectify-caption {
+  font-weight: normal;
+  font-size: 0.85em;
+}
+
+
 /* specific form styles - photo submission */
 form#photo-submissions div.form-element-wrapper {
   display: inline;

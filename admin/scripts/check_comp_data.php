@@ -7,7 +7,7 @@ $compId = getNormalParam('competitionId');
 // Load competition data from the database and check ID
 $competition_data = $wcadb_conn->boundQuery( "SELECT * FROM Competitions WHERE id=?", array('s', &$compId));
 if( count( $competition_data ) != 1 ){
-  showErrorMessage( "unknown competitionId [".o($compId)."]" );
+  noticeBox3(1, 'Please select a competition.');
   die();
 }
 $competition_data = $competition_data[0];
@@ -20,21 +20,14 @@ print "<div class='notice'>
 
 // Alert about any existing result/scramble data
 $competition_has_results = $wcadb_conn->boundQuery( "SELECT * FROM Results WHERE competitionId=? LIMIT 1", array('s', &$compId));
-if( count( $competition_has_results ) > 0 ){
-  noticeBox3(-1, 'This competition has result data imported. Uploading more data may cause duplicate entries.');
-}
 $competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
-if( count( $competition_has_scrambles ) > 0 ){
-  noticeBox3(-1, 'This competition has scramble data uploaded. Uploading more data may cause duplicate entries.
-                 You may remove scrambles using the interface below.');
-}
 $competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxResults WHERE competitionId=? LIMIT 1", array('s', &$compId));
 $competition_has_inbox_persons = $wcadb_conn->boundQuery( "SELECT * FROM InboxPersons WHERE competitionId=? LIMIT 1", array('s', &$compId));
-if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
-  noticeBox3(0, 'This competition is in the process of having result data uploaded.  Uploading more data may cause duplicate entries.
-                 <br /><a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
-}
 
+if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
+  noticeBox3(1, 'This competition is in the process of having result data uploaded.
+                 <a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
+}
 
 // if there is no data at all, nothing has been uploaded, so let's not display anything:
 $competition_has_scrambles = $wcadb_conn->boundQuery( "SELECT * FROM Scrambles WHERE competitionId=? LIMIT 1", array('s', &$compId));
@@ -43,7 +36,7 @@ if( count( $competition_has_scrambles ) == 0
     && count( $competition_has_results ) == 0
     && count( $competition_has_inbox_persons ) == 0
     ){
-  noticeBox3(0, 'This competition has no data yet.  Upload something to get started.');
+  noticeBox3(1, 'This competition has no data yet.  Upload something to get started.');
   die();
 }
 
@@ -243,3 +236,19 @@ print "<li><p>Good job, you're done!</p></li>";
 
 
 print "</div>";
+
+
+// upload form is below this; these notices go last.
+if( count( $competition_has_results ) > 0 ){
+  noticeBox3(0, 'This competition has result data imported. Uploading more data may cause duplicate entries.');
+}
+
+if( count( $competition_has_scrambles ) > 0 ){
+  noticeBox3(0, 'This competition has scramble data uploaded. Uploading more data may cause duplicate entries.
+                 You may remove scrambles using the interface above.');
+}
+
+if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
+  noticeBox3(0, 'This competition has temporary data uploaded. Uploading more data may cause duplicate entries.');
+}
+

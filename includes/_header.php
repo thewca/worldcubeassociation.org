@@ -27,13 +27,9 @@ if(isset($jQuery) && $jQuery) {
 if(isset($jQueryUI) && $jQueryUI) {
   $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
 }
-if(isset($jQuery_chosen) && $jQuery_chosen) {
-  $scripts->add('chosen.jquery.min.js');
-}
 if(isset($currentSection) && $currentSection != 'admin') {
   $scripts->add('ga.js');
 }
-print $scripts->getHTMLAll();
 
 /* Deal with styles here, for now */
 $styles = new WCAClasses\WCAStyles();
@@ -41,12 +37,20 @@ $styles->add('general.css');
 $styles->add('pageMenu.css');
 $styles->add('tables.css');
 $styles->add('links.css');
-$styles->add('chosen.min.css');
 if(isset($currentSection) && $currentSection == 'admin') {
   $styles->add('admin.css');
 }
-print $styles->getHTMLAll();
 
+if(isset($jQuery_chosen) && $jQuery_chosen) {
+  $scripts->add('selectize.min.js');
+  $scripts->add('selectize_field.js');
+  $styles->add('selectize.default.css');
+}
+
+
+// print html
+print $scripts->getHTMLAll();
+print $styles->getHTMLAll();
 
 ?>
 

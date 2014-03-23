@@ -9,6 +9,7 @@ adminHeadline('Upload Competition Results &amp; Scrambles');
 $scripts = new WCAClasses\WCAScripts();
 $scripts->add('data_upload_help.js');
 print $scripts->getHTMLAll();
+print '<script type="text/javascript">$(document).ready(function(){selectize_competition_field("#competitionId");});</script>';
 
 
 // create form structure
@@ -25,18 +26,27 @@ $form->addEntity(
   );
 
 // competition to upload JSON for
-$competitions_raw = getAllCompetitions();
-$competitions = array();
-foreach($competitions_raw as $data) {
-  $competitions[$data['id']] = $data['cellName'];
+$competitions_query = "SELECT id, name, countryId, wcaDelegate
+                       FROM Competitions
+                       ORDER BY (STR_TO_DATE(CONCAT(year,',',month,',',day),'%Y,%m,%d') BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND DATE_ADD(NOW(), INTERVAL 7 DAY)) DESC,
+                          year DESC, month DESC, day DESC
+                       ";
+$competitions = $wcadb_conn->dbQuery($competitions_query);
+$options = array();
+foreach($competitions as $competition) {
+  $options[$competition->id] =
+          ($competition->name) . " | "
+          . ($competition->id) . " | "
+          . ($competition->countryId) . " | "
+          . strip_tags(processLinks($competition->wcaDelegate));
 }
-$competition_element = new WCAClasses\FormBuilderEntities\Select("competitionId", $competitions);
+$competition_element = new WCAClasses\FormBuilderEntities\Select("competitionId", $options);
 $competition_element->label("Competition");
 $form->addEntity($competition_element);
 
 // competition data area
 $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div id='notice_area' style='clear: both;'></div>"));
-$form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div class='thick-outlined'><p><em>Upload Competition Data</em></p>"));
+$form->addEntity(new WCAClasses\FormBuilderEntities\Markup("<div class='thick-outlined'>"));
 
 // json file upload element
 $file_element = new WCAClasses\FormBuilderEntities\Input("json", "file");
@@ -61,11 +71,6 @@ $form->addEntity(new WCAClasses\FormBuilderEntities\Markup("</fieldset>"));
 // process submitted data
 if($form->submitted()) {
   $submitted_data = $form->submittedData();
-
-  // Submitting for a valid competition?
-  if(!array_key_exists($submitted_data['competitionId'], $competitions)) {
-    $form->invalidate('competitionId', 'Invalid Competition.');
-  }
 
   // make sure file contains valid JSON
   if(!isset($_FILES['json'])) {

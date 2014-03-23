@@ -83,7 +83,8 @@ if( $chosenNewAdminPassword || $chosenNewOrganiserPassword )
   setNewPassword( $chosenNewAdminPassword );
 showDescription();
 
-print '<script type="text/javascript">$(document).ready(function(){$("#competitionId").chosen();});</script>';
+print '<script type="text/javascript">$(document).ready(function(){selectize_competition_field("#competitionId");});</script>';
+
 // showCompetitions();
 
 require( '../includes/_footer.php' );
@@ -130,8 +131,9 @@ function showChoices () {
 #----------------------------------------------------------------------
   echo "<br />\n\n";
 
+  // Bad hack here. Whatever.
   displayChoicesWithMethod( 'post', array(
-    competitionChoice( true ),
+    "</td><td colspan='8'><div class='space'>".competitionChoice(true)."</div></td></tr><tr><td></td>",
     choiceButton( true, 'registration', 'Organiser View' ),
     choiceButton( true, 'edit', 'Admin View' ),
     choiceButton( true, 'results', 'Results' ),
