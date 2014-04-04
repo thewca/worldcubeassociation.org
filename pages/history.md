@@ -8,7 +8,8 @@ Starting with 2013, updates (with lists of changes changes) will be announced on
 
 Here are older versions of the regulations. None of them are official anymore.
 
-- [2014-01-01](./official/2014-01-01) ([Changes](https://github.com/cubing/wca-documents/compare/diff-base-2013...official-2014-01-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/2014-01-01))
+- [2014-04-03](./official/2014-04-03) ([Changes](https://github.com/cubing/wca-documents/compare/official-2014-01-01...official-2014-04-03#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/2014-04-03))
+    - [2014-01-01](./official/2014-01-01) ([Changes](https://github.com/cubing/wca-documents/compare/diff-base-2013...official-2014-01-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/2014-01-01))
 - [2013-05-21](./official/2013-05-21) ([Changes](https://github.com/cubing/wca-documents/compare/official-2013-05-10...official-2013-05-21#files_bucket))
     - [2013-05-10](./official/2013-05-10) ([Changes](https://github.com/cubing/wca-documents/compare/official-2013-01-01...official-2013-05-10#files_bucket))
     - [2013-01-01](./official/2013-01-01)

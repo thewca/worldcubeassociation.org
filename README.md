@@ -75,6 +75,7 @@ For all official `wca-documents` updates:
         - Change the URL path setting. Look at past posts for the appropriate format.
     - [WCA forum](https://www.worldcubeassociation.org/forum/viewforum.php?f=9) - one thread per year
     - Email `wca-delegates` list.
+- Update the [WCA Regulations History](https://www.worldcubeassociation.org/regulations/history/)
 
 
 ## Scramble Program Release Process
