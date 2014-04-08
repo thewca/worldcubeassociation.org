@@ -220,20 +220,19 @@ if($form->submitted()) {
           }
 
           // Store extra scrambles
-          if(!property_exists($group, 'extraScrambles')) {
-            $round_errors[] = "Group has no extra scramble data: `".o($eventId)."`:`".o($roundId)."`:`".o($groupId)."`.";
-            $group->extraScrambles = array();
+          if(property_exists($group, 'extraScrambles')) {
+            // no alert if these don't exist
+            $num = 1;
+            foreach($group->extraScrambles as $scramble) {
+              $wcadb_conn->boundCommand("INSERT INTO Scrambles
+                    (competitionId, eventId, roundId, groupId, isExtra, scrambleNum, scramble)
+                    VALUES (?, ?, ?, ?, 1, ?, ?)",
+                  array('ssssis', &$compId, &$eventId, &$roundId, &$groupId, &$num, &$scramble)
+                );
+              $num++;
+            }
           }
-          $num = 1;
-          foreach($group->extraScrambles as $scramble) {
-            $wcadb_conn->boundCommand("INSERT INTO Scrambles
-                  (competitionId, eventId, roundId, groupId, isExtra, scrambleNum, scramble)
-                  VALUES (?, ?, ?, ?, 1, ?, ?)",
-                array('ssssis', &$compId, &$eventId, &$roundId, &$groupId, &$num, &$scramble)
-              );
-            $num++;
-          }
-
+          
         }
 
       } // end cycling through rounds
