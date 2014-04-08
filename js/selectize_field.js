@@ -25,7 +25,8 @@ function selectize_competition_field(selector) {
     create: false
   });
 
-  var sobj = $(selector)[0].selectize;
-  sobj.clear();
+// not working right... (don't clear on form reload) fix later.
+//var sobj = $(selector)[0].selectize;
+//sobj.clear();
 
 }
