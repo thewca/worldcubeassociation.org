@@ -69,7 +69,7 @@ function eventChoice ( $required ) {
 #----------------------------------------------------------------------
 function competitionChoice ( $required ) {
 #----------------------------------------------------------------------
-  global $chosenCompetitionId, $wcadb_conn;
+  global $wcadb_conn;
 
   if( ! $required ){
     $options[] = array( '', 'All' );
@@ -92,7 +92,7 @@ function competitionChoice ( $required ) {
             . strip_tags(processLinks($competition->wcaDelegate))
 
         );
-  return choice( 'competitionId', 'Competition', $options, $chosenCompetitionId );
+  return choice( 'competitionId', 'Competition', $options, '' );
 }
 
 #----------------------------------------------------------------------

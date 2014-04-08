@@ -9,8 +9,6 @@ adminHeadline('Upload Competition Results &amp; Scrambles');
 $scripts = new WCAClasses\WCAScripts();
 $scripts->add('data_upload_help.js');
 print $scripts->getHTMLAll();
-print '<script type="text/javascript">$(document).ready(function(){selectize_competition_field("#competitionId");});</script>';
-
 
 // create form structure
 $form = new WCAClasses\FormBuilder(
@@ -232,7 +230,7 @@ if($form->submitted()) {
               $num++;
             }
           }
-          
+
         }
 
       } // end cycling through rounds

@@ -1,6 +1,8 @@
 /* Helper functions for selectize */
 
 function selectize_competition_field(selector) {
+  $(selector).attr("placeholder", "Pick a competition...");
+
   $(selector).selectize({
     create: false,
     render: {
@@ -17,6 +19,13 @@ function selectize_competition_field(selector) {
                 (caption ? '<span class="wca-selectify-caption">' + caption + '</span>' : '') +
             '</div>';
         }
-    }
+    },
+    maxItems: 1,
+    maxOptions: 20,
+    create: false
   });
+
+  var sobj = $(selector)[0].selectize;
+  sobj.clear();
+
 }

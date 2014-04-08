@@ -22,10 +22,10 @@ $standAlone = getBooleanParam( 'standAlone' );
 /* Deal with scripts here, for now */
 $scripts = new WCAClasses\WCAScripts();
 if(isset($jQuery) && $jQuery) {
-  $scripts->add('//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js');
+  $scripts->add('//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js');
 }
 if(isset($jQueryUI) && $jQueryUI) {
-  $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
+  $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js');
 }
 if(isset($currentSection) && $currentSection != 'admin') {
   $scripts->add('ga.js');
