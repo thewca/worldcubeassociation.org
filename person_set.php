@@ -53,19 +53,24 @@ if($form->submitted()) {
     }
 
     // Check extension and types provided by human (original filename extension),
-    // by agent (what the browser said) and by finfo (what the Fileinfo function
-    // "mime_content_type" thinks). In the end, $file_ext is one of ''/'gif'/'jpg'/'png'.
+    // by agent (what the browser said) and by finfo thinks. In the end, $file_ext
+    // is one of ''/'gif'/'jpg'/'png'.
     $extByHuman = '';
     $extByAgent = '';
     $extByFinfo = '';
+    
     $rawByHuman = strtolower(pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION));
     $rawByAgent = $_FILES['picture']['type'];
-    $rawByFinfo = mime_content_type($_FILES['picture']['tmp_name']);
+    // mime_content_type is deprecated.
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $rawByFinfo = finfo_file($finfo, $_FILES['picture']['tmp_name']);
+
     foreach (array('gif'=>'gif', 'jpeg'=>'jpg', 'png'=>'png') as $type => $ext) {
       if ($rawByHuman == $ext || $rawByHuman == $type) $extByHuman = $ext;
       if ($rawByAgent == "image/$type")                $extByAgent = $ext;
       if ($rawByFinfo == "image/$type")                $extByFinfo = $ext;
     }
+
     $file_ext = '';
     if ($extByHuman && $extByHuman == $extByAgent && $extByHuman == $extByFinfo) {
       $file_ext = $extByHuman;
@@ -105,7 +110,7 @@ if($form->submitted()) {
 /* display page / form */
 // check to see if personId is set
 $personId = getRawParamThisShouldBeAnException('personId');
-$result = $wcadb_conn->boundQuery("SELECT * FROM Persons WHERE id = ?", array('s', &$personId));
+$result = $wcadb_conn->boundQuery("SELECT * FROM Persons WHERE id = ? AND subid = 1", array('s', &$personId));
 if(count($result) != 1) {
     showErrorMessage("Unknown person id <pre>" . o($personId) . "</pre>");
     require('includes/_footer.php');

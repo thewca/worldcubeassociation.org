@@ -10,6 +10,9 @@ session_start();
 require_once("WCAClasses/autoload.php");
 
 // Try to include the pear mail package
+$UserDir = dirname($_SERVER['DOCUMENT_ROOT']);
+$pear_user_config = $UserDir . "/.pearrc";
+set_include_path("." . PATH_SEPARATOR . $UserDir . "/pear/php" . PATH_SEPARATOR . get_include_path());
 @ include "Mail.php";
 
 // Let's set up system configuration data first.
