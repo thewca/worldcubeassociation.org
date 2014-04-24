@@ -6,7 +6,7 @@ Until 2011, the Regulations were maintained by Ron van Bruchem and the WCA Board
 For the 2013 release, the Regulations were split into two documents: the Regulations and the Guidelines.  
 Starting with 2013, updates (with lists of changes changes) will be announced on the [WRC Announcements page](https://www.worldcubeassociation.org/regulations/announcements/).
 
-Here are older versions of the regulations. None of them are official anymore.
+Here are all past and current versions of the Regulations.
 
 - [2014-04-03](./official/2014-04-03) ([Changes](https://github.com/cubing/wca-documents/compare/official-2014-01-01...official-2014-04-03#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/2014-04-03))
     - [2014-01-01](./official/2014-01-01) ([Changes](https://github.com/cubing/wca-documents/compare/diff-base-2013...official-2014-01-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/2014-01-01))
