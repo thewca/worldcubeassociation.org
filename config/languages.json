@@ -155,10 +155,10 @@
     "remote_name": "repo-russian",
     "remote_branch": "official"
   },
-  "spanish": {
-    "branch": "spanish",
-    "name": "Spanish",
-    "native": "Español",
+  "spanish-european": {
+    "branch": "spanish-european",
+    "name": "Spanish (European)",
+    "native": "Español de España",
     "regulations": "Reglamento",
     "guidelines": "Directrices",
     "pdf": "wca-reglamento-y-directrices",
@@ -167,6 +167,19 @@
     "remote_url": "https://github.com/Luis-J-Ianez/wca-documents-spanish.git",
     "remote_name": "repo-spanish",
     "remote_branch": "translation-spanish"
+  },
+  "spanish-american": {
+    "branch": "spanish-american",
+    "name": "Spanish (American)",
+    "native": "Español Americano",
+    "regulations": "Reglamento",
+    "guidelines": "Directrices",
+    "pdf": "wca-reglamento-y-directrices",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8",
+    "remote_url": "",
+    "remote_name": "",
+    "remote_branch": ""
   },
   "belarusian": {
     "branch": "belarusian",

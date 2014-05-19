@@ -44,3 +44,9 @@
 [submodule "translations/portuguese-brazilian"]
 	path = translations/portuguese-brazilian
 	url = https://github.com/cubing/wca-documents-translations.git
+[submodule "translations/spanish-american"]
+	path = translations/spanish-american
+	url = https://github.com/cubing/wca-documents-translations.git
+[submodule "translations/spanish-european"]
+	path = translations/spanish-european
+	url = https://github.com/cubing/wca-documents-translations.git
