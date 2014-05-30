@@ -24,8 +24,8 @@ function analyzeChoices () {
 
   $chosenCompetitionId = getNormalParam(  'competitionId' );
   $chosenPassword      = getNormalParam(  'password'      );
-  $chosenLatitude      = getMysqlParam(   'latitude'      );
-  $chosenLongitude     = getMysqlParam(   'longitude'     );
+  $chosenLatitude      = round(getMysqlParam(   'latitude'      )*1000000);
+  $chosenLongitude     = round(getMysqlParam(   'longitude'     )*1000000);
 }
 
 
@@ -75,7 +75,8 @@ function showMap () {
   global $chosenCompetitionId, $data;
   global $chosenLatitude, $chosenLongitude, $chosenPassword;
 
-  // WHOO MEGADEGREES
+  // WHOO MICRODEGREES
+  // change this to degrees...
   if( $chosenLatitude && $chosenLongitude ){
     $latitude =  $chosenLatitude / 1000000;
     $longitude = $chosenLongitude / 1000000;

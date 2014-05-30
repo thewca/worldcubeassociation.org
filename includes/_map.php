@@ -133,7 +133,7 @@ function addMarkers (){
 function displayGeocode($address, $latitude, $longitude) {
   global $chosenCompetitionId, $chosenPassword;
 
-  $lat = $latitude; $lng = longitude;
+  $lat = $latitude; $lng = $longitude;
 
 ?>
 
@@ -157,18 +157,18 @@ function initialize() {
 
   <?php if($lat*1 && $lng*1) { ?>
     var latlng = new google.maps.LatLng({
-      lat: <?php print o($lat*1); ?>,
-      lng: <?php print o($lng*1); ?>
+      lat: <?php print number_format($lat,9,'.',''); ?>,
+      lng: <?php print number_format($lng,9,'.',''); ?>
     });
     var marker = new google.maps.Marker({
       map: map,
       icon: image,
       draggable: true,
-      position: {lat: <?php print o($lat*1); ?>, lng: <?php print o($lng*1); ?>}
+      position: {lat: <?php print number_format($lat,9,'.',''); ?>, lng: <?php print number_format($lng,9,'.',''); ?>}
     });
     var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(<?php print o($lat*1); ?>-.1, <?php print o($lng*1); ?>-.1),
-      new google.maps.LatLng(<?php print o($lat*1); ?>+.1, <?php print o($lng*1); ?>+.1));
+      new google.maps.LatLng(<?php print number_format($lat,9,'.',''); ?>-.1, <?php print number_format($lng,9,'.',''); ?>-.1),
+      new google.maps.LatLng(<?php print number_format($lat,9,'.',''); ?>+.1, <?php print number_format($lng,9,'.',''); ?>+.1));
 
   <?php } else { ?>
     var marker = new google.maps.Marker({
@@ -232,8 +232,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
     <input type="hidden" name="competitionId" value="<?php echo $chosenCompetitionId ?>" />
     <input type="hidden" name="password" value="<?php echo $chosenPassword ?>" />
     <input type="hidden" name="rand" value="<?php echo rand(); ?>" />
-    Latitude : <input type="text" id="latitude" name="latitude" value="<?php print o($latitude*1); ?>" size="20" />
-    Longitude : <input type="text" id="longitude" name="longitude" value="<?php print o($longitude*1); ?>" size="20" />
+    Latitude : <input type="text" id="latitude" name="latitude" value="<?php print number_format($latitude,9,'.',''); ?>" size="20" />
+    Longitude : <input type="text" id="longitude" name="longitude" value="<?php print number_format($longitude,9,'.',''); ?>" size="20" />
     <input type="submit" name="save" value="Save" />
     </form>
 
