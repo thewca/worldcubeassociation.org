@@ -12,6 +12,7 @@ $config['database']['name'] = '...';
 $config['recaptcha']['publickey'] = '...';
 $config['recaptcha']['privatekey'] = '...';
 
+$config['maps']['api_key'] = '';
 
 // check for PEAR mail (to send auth email)
 if(class_exists('Mail')) {

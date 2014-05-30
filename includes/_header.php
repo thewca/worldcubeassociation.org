@@ -30,6 +30,10 @@ if(isset($jQueryUI) && $jQueryUI) {
 if(isset($currentSection) && $currentSection != 'admin') {
   $scripts->add('ga.js');
 }
+if(isset($mapsAPI) && $mapsAPI) {
+  $maps_settings = $config->get("maps");
+  $scripts->add('https://maps.googleapis.com/maps/api/js?v=3.17&amp;key='.($maps_settings['api_key']).'&amp;sensor=false&amp;libraries=places');
+}
 
 /* Deal with styles here, for now */
 $styles = new WCAClasses\WCAStyles();

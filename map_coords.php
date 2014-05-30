@@ -4,6 +4,7 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
+$mapsAPI = true;
 require( 'includes/_header.php' );
 
 analyzeChoices();
@@ -74,6 +75,7 @@ function showMap () {
   global $chosenCompetitionId, $data;
   global $chosenLatitude, $chosenLongitude, $chosenPassword;
 
+  // WHOO MEGADEGREES
   if( $chosenLatitude && $chosenLongitude ){
     $latitude =  $chosenLatitude / 1000000;
     $longitude = $chosenLongitude / 1000000;
@@ -82,26 +84,13 @@ function showMap () {
     $latitude =  ($data['latitude']  / 1000000);
     $longitude = ($data['longitude'] / 1000000);
   }
-  else{
-    $latitude = 32.855293;
-    $longitude = -117.259605;
-  }
 
-  echo "<center>\n";
-$address = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', htmlEntities( $data['venue'], ENT_QUOTES ));
-if( $data['venueAddress'] ) $address .= ", " . htmlEntities( $data[venueAddress], ENT_QUOTES);
-$address .= ", " . htmlEntities( $data[cityName], ENT_QUOTES) . ", $data[countryId]";
+  $address = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', htmlEntities( $data['venue'], ENT_QUOTES ));
+  if( isset($data['venueAddress']) ) $address .= ", " . htmlEntities( $data['venueAddress'], ENT_QUOTES);
+  $address .= ", " . htmlEntities( $data['cityName'], ENT_QUOTES) . ", ".$data['countryId'];
 
-  displayGeocode( 800, 480, $address, $latitude, $longitude );
+  displayGeocode($address, $latitude, $longitude);
 
   echo "<p><a href='competition_edit.php?competitionId=$chosenCompetitionId&password=$chosenPassword&rand=" . rand() . "'>Back</a> to editing $chosenCompetitionId<br />(don't forget to save first)</p>\n";
-  ?>
-    </center>
-  </body>
-</html>
-
-<?
 
 }
-
-?>
