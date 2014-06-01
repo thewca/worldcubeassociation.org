@@ -85,5 +85,3 @@ function showBody () {
   require( 'includes/person_continent_records_history.php' );
   require( 'includes/person_events.php' );
 }
-
-?>

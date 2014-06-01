@@ -1,134 +1,71 @@
 <?php
 
-/* old CM functionality */
+/**
+ * Google maps: create list of markers.
+ */
 
-function displayMap ( $width, $height ){
-  initMap ( $width, $height );
-  initMarkers ();
-  addMarkers ();
+function displayMap($markers){
+
+  ?>
+<div id='map-canvas' style='width: 900px; height: 400px; margin: 10px auto;'></div>
+<script type="text/javascript">
+
+function initialize() {
+
+  /* create and center map */
+  var map = new google.maps.Map(document.getElementById('map-canvas'), {
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  var defaultBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(-45, -90),
+    new google.maps.LatLng(45, 90)
+  );
+  map.fitBounds(defaultBounds);
+
+  // for making markers
+  function createMarker(lat, lng, info) {
+    var infowindow = new google.maps.InfoWindow({
+      content: info
+    });
+    var latLng = new google.maps.LatLng(lat, lng);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker);
+    });
+
+    return marker;
+  }
+
+  // make all the markers
+  var markers = [];
+  <?php foreach($markers as $marker){ ?>
+    markers.push(createMarker(
+      <?php print $marker['latitude']/1000000; ?>,
+      <?php print $marker['longitude']/1000000; ?>,
+      "<?php print $marker['info']; /* can be HTML, can't have double-quotes... */ ?>"
+    ));    
+  <?php } ?>
+  var markerCluster = new MarkerClusterer(map, markers);
+
 }
 
-function initMap ( $width, $height ) {
-  global $chosenRegionId;
-  $width = ($width == 0) ? "100%" : "${width}px";
-  echo "<div id='map' style='width: $width; height: ${height}px'></div>\n";
+google.maps.event.addDomListener(window, 'load', initialize);
 
-?>
-  <script type="text/javascript" src="https://ssl_tiles.cloudmade.com/wml/latest/web-maps-lite.js"></script>
-  <script type="text/javascript">
-    var cloudmade = new CM.Tiles.CloudMade.Web({key: 'b367992b0094416eae5409ac153d146f'});
-    var map = new CM.Map('map', cloudmade);
-    map.addControl(new CM.LargeMapControl());
+</script>
 
 <?php
-
-$coords['latitude'] = 20000000;
-$coords['longitude'] = 8000000;
-$coords['zoom'] = 2;
-
-if( $chosenRegionId && $chosenRegionId != 'World' ){ 
-
-  $continent = dbQuery("SELECT * FROM Continents WHERE id='$chosenRegionId' ");
-  
-  if( count( $continent ) && ( $continent[0]['zoom'] != 0 ))
-    $coords = $continent[0];
-  else {
-    $country = dbQuery("SELECT * FROM Countries WHERE id='$chosenRegionId' ");
-    if( count( $country ) && ( $country[0]['zoom'] != 0 ))
-      $coords = $country[0];
-  }
-}
-
-  $coords['latitude'] /= 1000000;
-  $coords['longitude'] /= 1000000;
-  echo "map.setCenter(new CM.LatLng($coords[latitude], $coords[longitude]), $coords[zoom]);";
-}
-
-function initMarkers (){
-
-for( $i = 1; $i < 10; $i++ ){
-  echo "var blueIcon$i = new CM.Icon();\n";
-  echo "blueIcon$i.image = \"images/blue-dot$i.png\";\n";
-  echo "blueIcon$i.iconSize = new CM.Size(20, 34);\n";
-  echo "blueIcon$i.iconAnchor = new CM.Point(0, 30);\n";
-
-  echo "var violetIcon$i = new CM.Icon();\n";
-  echo "violetIcon$i.image = \"images/violet-dot$i.png\";\n";
-  echo "violetIcon$i.iconSize = new CM.Size(20, 34);\n";
-  echo "violetIcon$i.iconAnchor = new CM.Point(0, 30);\n";
-}
-
-echo "var blueIconp = new CM.Icon();\n";
-echo "blueIconp.image = \"images/blue-dotp.png\";\n";
-echo "blueIconp.iconSize = new CM.Size(20, 34);\n";
-echo "blueIconp.iconAnchor = new CM.Point(0, 30);\n";
-
-echo "var violetIconp = new CM.Icon();\n";
-echo "violetIconp.image = \"images/violet-dotp.png\";\n";
-echo "violetIconp.iconSize = new CM.Size(20, 34);\n";
-echo "violetIconp.iconAnchor = new CM.Point(0, 30);\n";
-
-}
-
-function addMarkers (){
-  global $chosenCompetitions;
-
-  $isFirst = true;
-  $countCompetitions = 0;
-  $infosHtml = $pastVenue = '';
-  foreach( $chosenCompetitions as $competition ){
-    extract( $competition );
-
-    if( $latitude != 0 or $longitude != 0){
-      if( $isFirst ){
-        $previousLatitude = $latitude;
-        $previousLongitude = $longitude;
-        $isFirst = false;
-      }
-
-      if( $latitude != $previousLatitude || $longitude != $previousLongitude ){
-        $previousLatitude /= 1000000;
-        $previousLongitude /= 1000000;
-
-        $infosHtml .= $pastVenue;
-        echo "marker.bindInfoWindow(\"$infosHtml\");\n";
-        echo "map.addOverlay(marker);\n";
-
-        $previousLatitude = $latitude;
-        $previousLongitude = $longitude;
-
-        $countCompetitions = 0;
-        $infosHtml = "";
-
-      }
-
-      $infosHtml .= "<b>" . competitionLink( $id, $cellName ) . "</b> (" . competitionDate( $competition ) . ", $year)<br/>";
-      $pastVenue = processLinks( htmlEntities( $venue , ENT_QUOTES, "UTF-8" ));
-
-      $latitude /= 1000000;
-      $longitude /= 1000000;
-      $countCompetitions++;
-      $cc = $countCompetitions;
-      if( $cc > 9 ) $cc = 'p';
-      echo "var point = new CM.LatLng($latitude, $longitude);\n";
-      if( date( 'Ymd' ) > (10000*$year + 100*$month + $day) )
-        echo "var marker = new CM.Marker(point, { icon:blueIcon$cc });\n";
-      else
-        echo "var marker = new CM.Marker(point, { icon:violetIcon$cc });\n";
-    }
-  }
-
-  $infosHtml .= $pastVenue;
-  echo "marker.bindInfoWindow(\"$infosHtml\");\n";
-  echo "map.addOverlay(marker);\n";
-
-  echo "</script>";
 }
 
 
 
 
-/* new google maps functionality*/
+/**
+ * Google maps: search for location coordinates
+ */
 
 function displayGeocode($address, $latitude, $longitude) {
   global $chosenCompetitionId, $chosenPassword;
