@@ -5,7 +5,6 @@
  */
 
 function displayMap($markers){
-
   ?>
 <div id='map-canvas' style='width: 900px; height: 400px; margin: 10px auto;'></div>
 <script type="text/javascript">
@@ -22,8 +21,13 @@ function initialize() {
   );
   map.fitBounds(defaultBounds);
 
+  // Nearby markers should spider
+  var oms = new OverlappingMarkerSpiderfier(map, {
+    keepSpiderfied: true
+  });
+
   // for making markers
-  function createMarker(lat, lng, info) {
+  function createMarker(lat, lng, info, oms) {
     var infowindow = new google.maps.InfoWindow({
       content: info
     });
@@ -37,6 +41,8 @@ function initialize() {
       infowindow.open(map,marker);
     });
 
+    oms.addMarker(marker);
+
     return marker;
   }
 
@@ -46,10 +52,14 @@ function initialize() {
     markers.push(createMarker(
       <?php print $marker['latitude']/1000000; ?>,
       <?php print $marker['longitude']/1000000; ?>,
-      "<?php print $marker['info']; /* can be HTML, can't have double-quotes... */ ?>"
+      "<?php print $marker['info']; /* can be HTML, but can't have double-quotes */ ?>",
+      oms
     ));    
   <?php } ?>
-  var markerCluster = new MarkerClusterer(map, markers);
+  var markerCluster = new MarkerClusterer(map, markers, {
+    maxZoom: 10,
+    clusterSize: 30
+  });
 
 }
 
