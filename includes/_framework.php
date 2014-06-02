@@ -28,6 +28,8 @@ $wcadb_conn = new WCAClasses\WCADBConn($config->get("database"));
 // misc. display functions
 require '_ui.php';
 
+// session functionality
+require '_session.php';
 
 // current results system functionality
 require '_timer.php';

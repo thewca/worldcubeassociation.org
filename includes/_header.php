@@ -78,7 +78,10 @@ print $styles->getHTMLAll();
     array( 'Statistics',   'statistics'   ),
     array( 'Misc',         'misc'         ),
   );
-  if ($currentSection == 'admin') {
+
+  // "Remember" administrators - try to make this link persistent if people have visited an admin page.
+  // (see _session.php file for implementation)
+  if ($is_admin) {
     $sections[] = array('Admin', 'admin', 'admin/');
   }
 
