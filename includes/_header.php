@@ -27,7 +27,7 @@ if(isset($jQuery) && $jQuery) {
 if(isset($jQueryUI) && $jQueryUI) {
   $scripts->add('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js');
 }
-if(isset($currentSection) && $currentSection != 'admin') {
+if(!isset($is_admin) || !$is_admin) {
   $scripts->add('ga.js');
 }
 if(isset($mapsAPI) && $mapsAPI) {
@@ -42,7 +42,7 @@ $styles->add('general.css');
 $styles->add('pageMenu.css');
 $styles->add('tables.css');
 $styles->add('links.css');
-if(isset($currentSection) && $currentSection == 'admin') {
+if(isset($is_admin) && $is_admin) {
   $styles->add('admin.css');
 }
 

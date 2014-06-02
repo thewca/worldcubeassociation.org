@@ -66,16 +66,12 @@ google.maps.event.addDomListener(window, 'load', initialize);
 /**
  * Google maps: search for location coordinates
  */
-
-function displayGeocode($address, $latitude, $longitude) {
+function displayGeocode($address, $lat, $lng) {
   global $chosenCompetitionId, $chosenPassword;
-
-  $lat = $latitude; $lng = $longitude;
-
 ?>
 
 <div id='map-canvas' style='width: 900px; height: 400px; margin: 10px auto;'></div>
-<input id="pac-input" class="controls" type="text" placeholder="Search Box" value="<?php print o($address); ?>" style='width: 500px; height: 20px; font-size: 16px; padding: 5px; margin: 10px;'>
+<input id="pac-input" autofocus="autofocus" class="controls" type="text" placeholder="Search Box" value="<?php print o($address); ?>" style='width: 500px; height: 20px; font-size: 16px; padding: 5px; margin: 10px;'>
 
 <script>
 function initialize() {
@@ -83,6 +79,11 @@ function initialize() {
   var map = new google.maps.Map(document.getElementById('map-canvas'), {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
+
+  // Create the search box and link it to the UI element.
+  var input = document.getElementById('pac-input');
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  var searchBox = new google.maps.places.SearchBox(input);
 
   var image = {
     url: "http://soliton.case.edu/wca/results/wca-website/images/violet-dotp.png",
@@ -92,7 +93,9 @@ function initialize() {
     scaledSize: new google.maps.Size(20, 34)
   };
 
+  // create the marker
   <?php if($lat*1 && $lng*1) { ?>
+    // Coordinates have already been specified
     var latlng = new google.maps.LatLng({
       lat: <?php print number_format($lat,9,'.',''); ?>,
       lng: <?php print number_format($lng,9,'.',''); ?>
@@ -105,30 +108,42 @@ function initialize() {
     });
     var defaultBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(<?php print number_format($lat,9,'.',''); ?>-.1, <?php print number_format($lng,9,'.',''); ?>-.1),
-      new google.maps.LatLng(<?php print number_format($lat,9,'.',''); ?>+.1, <?php print number_format($lng,9,'.',''); ?>+.1));
+      new google.maps.LatLng(<?php print number_format($lat,9,'.',''); ?>+.1, <?php print number_format($lng,9,'.',''); ?>+.1)
+    );
 
   <?php } else { ?>
+
+    // Coordinates have not been specified
     var marker = new google.maps.Marker({
       map: map,
       icon: image,
-      draggable: true
+      draggable: true,
+      position: {lat: 0, lng: 0}
     });
     var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(-45, -90),
-      new google.maps.LatLng(45, 90));
+      new google.maps.LatLng(-60, -90),
+      new google.maps.LatLng(60, 90)
+    );
+
+    <?php if($address) { ?>
+      // Perform an initial search using the existing address
+      var request = {
+        query: '<?php print o($address); ?>'
+      };
+      var service = new google.maps.places.PlacesService(map);
+      service.textSearch(request, function(places, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          if(places.length > 0) {
+            marker.setPosition(places[0].geometry.location);
+          }
+        }
+      });
+    <?php } ?>
+
   <?php } ?>
   map.fitBounds(defaultBounds);
 
-  // Create the search box and link it to the UI element.
-  var input = /** @type {HTMLInputElement} */(
-      document.getElementById('pac-input'));
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-  var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
-
-  // Create a marker for the place.
-  var place;
+  // Have the marker listen for changes to the place.
   google.maps.event.addListener(marker, 'dragend', function() {
     document.getElementById('latitude').value = this.getPosition().lat();
     document.getElementById('longitude').value = this.getPosition().lng();
@@ -140,7 +155,6 @@ function initialize() {
   google.maps.event.addListener(searchBox, 'places_changed', function() {
     // Only use the first place - get the icon, place name, and location.
     var places = searchBox.getPlaces();
-    var bounds = new google.maps.LatLngBounds();
     var place = places[0];
     
     marker.setPosition(place.geometry.location);
@@ -149,7 +163,6 @@ function initialize() {
 
     document.getElementById('latitude').value = place.geometry.location.lat();
     document.getElementById('longitude').value = place.geometry.location.lng();
-
   });
   // [END region_getplaces]
 
@@ -166,11 +179,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 <form method="post">
-    <input type="hidden" name="competitionId" value="<?php echo $chosenCompetitionId ?>" />
-    <input type="hidden" name="password" value="<?php echo $chosenPassword ?>" />
+    <input type="hidden" name="competitionId" value="<?php print o($chosenCompetitionId); ?>" />
+    <input type="hidden" name="password" value="<?php print o($chosenPassword); ?>" />
     <input type="hidden" name="rand" value="<?php echo rand(); ?>" />
-    Latitude : <input type="text" id="latitude" name="latitude" value="<?php print number_format($latitude,9,'.',''); ?>" size="20" />
-    Longitude : <input type="text" id="longitude" name="longitude" value="<?php print number_format($longitude,9,'.',''); ?>" size="20" />
+    Latitude : <input type="text" id="latitude" name="latitude" value="<?php print number_format($lat,9,'.',''); ?>" size="20" />
+    Longitude : <input type="text" id="longitude" name="longitude" value="<?php print number_format($lng,9,'.',''); ?>" size="20" />
     <input type="submit" name="save" value="Save" />
     </form>
 

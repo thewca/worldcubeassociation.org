@@ -7,8 +7,12 @@ $currentSection = 'competitions';
 $mapsAPI = true;
 require( 'includes/_header.php' );
 
+if($is_admin) {
+  adminHeadline('Edit competition Coordinates');
+}
+
 analyzeChoices();
-if( checkCompetition() ){ 
+if( checkCompetition() ){
   saveCoords();
   showMap();
 }
@@ -74,21 +78,30 @@ function showMap () {
 #----------------------------------------------------------------------
   global $chosenCompetitionId, $data;
   global $chosenLatitude, $chosenLongitude, $chosenPassword;
+  $latitude = $longitude = 0;
+
 
   // WHOO MICRODEGREES
   // change this to degrees...
   if( $chosenLatitude && $chosenLongitude ){
-    $latitude =  $chosenLatitude / 1000000;
+    $latitude = $chosenLatitude / 1000000;
     $longitude = $chosenLongitude / 1000000;
   }
-  else if( $data['latitude'] != 0 or $data['longitude'] != 0 ){
+  if( $data['latitude'] != 0 or $data['longitude'] != 0 ){
     $latitude =  ($data['latitude']  / 1000000);
     $longitude = ($data['longitude'] / 1000000);
   }
 
-  $address = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', htmlEntities( $data['venue'], ENT_QUOTES ));
-  if( isset($data['venueAddress']) ) $address .= ", " . htmlEntities( $data['venueAddress'], ENT_QUOTES);
-  $address .= ", " . htmlEntities( $data['cityName'], ENT_QUOTES) . ", ".$data['countryId'];
+  if($data['cityName'] || $data['venueAddress'] || $data['countryId'] || $data['venue']) {
+    $address = preg_replace( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', '$1', htmlEntities( $data['venue'], ENT_QUOTES ));
+    if( isset($data['venueAddress']) ) $address .= ", " . htmlEntities( $data['venueAddress'], ENT_QUOTES);
+    $address .= ", " . htmlEntities( $data['cityName'], ENT_QUOTES) . ", ".$data['countryId'];
+  } else {
+    $address = "";
+  }
+
+  echo "<p>You can search for a location using the map input field below, or drag the marker to a location.  Make sure to save any changes!</p>";
+  echo "<hr />";
 
   displayGeocode($address, $latitude, $longitude);
 
