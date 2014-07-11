@@ -20,7 +20,7 @@ Last official change: February 10, 2014
 TNoodle requires <a href="https://www.java.com/en/">Java</a> to be installed on your computer.
 
 1. Run the `TNoodle-WCA-0.8.4.jar` file on your computer.  
-  It will open the page <http://localhost:8080/scramble> in your browser.
+  It will open the page <http://localhost:2014/scramble> in your browser.
 2. Enter the details for your competition (competition name, number of rounds for each event, details for each round).  
   If you would like to password protect the file, enter a password.
 3. Wait for the loading bar to finish and click the "Scramble!" button that appears.  
