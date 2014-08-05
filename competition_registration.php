@@ -355,7 +355,7 @@ function savePreregForm () {
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
 
 
-  $organiserEmail = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2 ", $competition['organiser'] );
+  $organiserEmail = preg_replace( '/.*\[{ ([^}]+) }{ ([^}]+) }].*/x', "$2 ", $competition['organiser'] );
   $organiserEmail = preg_replace( '/\\\\([\'\"])/', '$1', $organiserEmail );
   if( preg_match( '/^mailto:([\S]+)/', $organiserEmail, $match )){
 
