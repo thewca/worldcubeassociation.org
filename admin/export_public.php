@@ -34,6 +34,7 @@ if( $chosenExport ){
                               wcaDelegate, organiser, venue, venueAddress,
                               venueDetails, website, cellName, latitude, longitude
                        FROM Competitions',
+    'Scrambles'   => '*',
   ) );
 }
 

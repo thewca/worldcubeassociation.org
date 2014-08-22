@@ -45,6 +45,7 @@ The export consists of these tables:
   Formats        The round formats (best of 3, average of 5, etc)
   Countries      Countries according to http://en.wikipedia.org/wiki/List_of_countries
   Continents     Continents
+  Scrambles      Scrambles
 
 Most of the tables should be self-explanatory, but the result values of
 the Results table need some explanation:
