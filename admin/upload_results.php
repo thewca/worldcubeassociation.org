@@ -176,7 +176,7 @@ if($form->submitted()) {
           $average = property_exists($result, 'average') ? ($result->average) : false;
 
           // all values are required; results can be '0' though
-          if($eventId && $roundId && $formatId && $personId && $position && $results && $best !== false && $average !== false) {
+          if($eventId !== false && $roundId !== false && $formatId !== false && $personId !== false && $position !== false && $results !== false && $best !== false && $average !== false) {
             // submit data
             $wcadb_conn->boundCommand("INSERT INTO InboxResults
                     (competitionId, eventId, roundId, formatId, personId,
