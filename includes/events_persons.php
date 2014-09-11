@@ -1,4 +1,4 @@
-<?
+<?php
 
 #--- Get the results.
 $results = dbQuery("

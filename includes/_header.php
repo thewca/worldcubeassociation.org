@@ -19,6 +19,8 @@ $standAlone = getBooleanParam( 'standAlone' );
 
 <?php
 
+$jQuery = true; // For bootstrap.
+
 /* Deal with scripts here, for now */
 $scripts = new WCAClasses\WCAScripts();
 if(isset($jQuery) && $jQuery) {
@@ -37,8 +39,13 @@ if(isset($mapsAPI) && $mapsAPI) {
   $scripts->add('oms.js');
 }
 
+// TODO: Move to end of file for faster loading?
+$scripts->add('bootstrap.min.js');
+
 /* Deal with styles here, for now */
 $styles = new WCAClasses\WCAStyles();
+$styles->add('bootstrap.min.css');
+$styles->add('navbar-static-top.css');
 $styles->add('general.css');
 $styles->add('pageMenu.css');
 $styles->add('tables.css');
@@ -65,6 +72,68 @@ print $styles->getHTMLAll();
 </head>
 
 <body>
+
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <a href="/"><img src="<?php print pathToRoot(); ?>images/wca_logo.svg"/></a>
+          <a href="/"><span>World Cube Association</span></a></div>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse disabled">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown">Information <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About the WCA</a></li>
+                <li><a href="/delegates">WCA Delegates</a></li>
+                <li><a href="/organisations">National Organisations</a></li>
+                <li><a href="/contact">Contact Information</a></li>
+                <li><a href="/score-tools">Score Tools</a></li>
+                <li><a href="/logo">Logo</a></li>
+              </ul>
+            </li>
+            <li class="dropdown active">
+              <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown">Competitions <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/results/competitions.php">Competitions</a></li>
+                <li><a href="/results/events.php">Rankings</a></li>
+                <li><a href="/results/regions.php">Records</a></li>
+                <li><a href="/results/persons.php">Persons</a></li>
+                <li class="divider"></li>
+                <li><a href="/results/statistics.php">Statistics</a></li>
+                <li><a href="/results/media.php">Multimedia</a></li>
+                <li><a href="/results/misc.php">Miscellaneous</a></li>
+                <li><a href="/results/misc/export.html">Database Export</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown">Regulations <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/regulations/">Regulations</a></li>
+                <li><a href="/regulations/guidelines.html">Guidelines</a></li>
+                <li><a href="/regulations/scrambles/">Scrambles</a></li>
+                <li class="divider"></li>
+                <li><a href="/regulations/announcements/">Announcements</a></li>
+                <li><a href="/regulations/history/">History</a></li>
+                <li><a href="/regulations/translations/">Translations</a></li>
+              </ul>
+            </li>
+            <li><a href="/forum/" class="top-nav">Forum</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
 <?php if (!$standAlone) { ?>
 <div id="main">
 <div id="content">
@@ -95,7 +164,7 @@ print $styles->getHTMLAll();
     showErrors($installation_errors);
   }
 ?>
-
+<!-- TODO: Remove or reappropriate for Bootstrap.
 <div id="pageMenuFrame">
   <div id="pageMenu">
     <ul class="navigation">
@@ -106,5 +175,5 @@ print $styles->getHTMLAll();
 
 <div id='header'><a href='https://www.worldcubeassociation.org/'>World Cube Association<br />Official Results</a></div>
 <?php } ?>
-
+ -->
 <?php startTimer(); ?>

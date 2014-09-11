@@ -21,6 +21,7 @@ function establishDatabaseAccess () {
   $db_config = $config->get('database');
 
   #--- Connect to the database server.
+  # TODO: Upgrade
   mysql_connect( $db_config['host'], $db_config['user'], $db_config['pass'] )
     or showDatabaseError( "Unable to connect to the database." );
     
