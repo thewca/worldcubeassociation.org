@@ -70,3 +70,7 @@ div.navbar-collapse {
     font-variant: small-caps;
   }
 }
+
+.navbar-default .navbar-nav>.active>a {
+  background-color: #ccc;
+}
