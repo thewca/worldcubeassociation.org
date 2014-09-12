@@ -17,7 +17,7 @@ import pdf
 
 languages_file = "config/languages.json"
 upload_server_file = "config/upload_server.json"
-buildRootDir = "./build/"
+buildRootDir = "./build/regulations/"
 
 defaultLang = "default"
 
@@ -333,7 +333,7 @@ def upload(args):
 
 def server(args):
 
-  localURL = "http://localhost:8081/build/"
+  localURL = "http://localhost:8081/regulations/"
   if args.language in languages:
     localURL = localURL + "translations/" + args.language + "/"
   webbrowser.open(localURL)
@@ -342,7 +342,7 @@ def server(args):
   print "Press Ctrl-C to halt."
 
   # This seems to work better than trying to call it from Python.
-  subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"])
+  subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"], cwd="./build/")
 
 
 def setup_wca_documents(args):

@@ -23,71 +23,17 @@ def md2html(filename):
 
 class html():
 
-  header1 = """<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>"""
+  with open("files/html/templates/header1.html", "r") as f:
+    header1 = f.read()
+  with open("files/html/templates/header2.html", "r") as f:
+    header2 = f.read()
+  with open("files/html/templates/footer.html", "r") as f:
+    footer = f.read()
 
-  header2 = """</title>
-  <link href="style.css" rel="stylesheet"/>
-</head>
-<body>
-<div id="header">
-<center>
-  <ul>
-    <!--li><img src="wca_logo.svg" id="header_logo"></li-->
-    <li><a href="https://www.worldcubeassociation.org/">WCA Home</a></li>
-    <li><a href="./">Regulations</a></li>
-    <li><a href="./guidelines.html">Guidelines</a></li>
-    <li><a href="./scrambles/">Scrambles</a></li>
-    <li><a href="./history/">History</a></li>
-    <li><a href="https://www.worldcubeassociation.org/regulations/announcements/">Announcements</a></li>
-    <li><a href="./translations/">Translations</a></li>
-  </ul>
-</center>
-</div>
-<div id="content">"""
+  header2_subdirs = header2.replace("assets/", "../assets/")
+  header2_translations = header2
 
-  header2_subdirs = """</title>
-  <link href="../style.css" rel="stylesheet"/>
-</head>
-<body>
-<div id="header">
-<center>
-  <ul>
-    <!--li><img src="wca_logo.svg" id="header_logo"></li-->
-    <li><a href="https://www.worldcubeassociation.org/">WCA Home</a></li>
-    <li><a href="../">Regulations</a></li>
-    <li><a href="../guidelines.html">Guidelines</a></li>
-    <li><a href="../scrambles/">Scrambles</a></li>
-    <li><a href="../history/">History</a></li>
-    <li><a href="https://www.worldcubeassociation.org/regulations/announcements/">Announcements</a></li>
-    <li><a href="../translations/">Translations</a></li>
-  </ul>
-</center>
-</div>
-<div id="content">"""
-
-  header2_translations = """</title>
-  <link href="style.css" rel="stylesheet"/>
-</head>
-<body>
-<div id="header">
-<center>
-  <ul>
-    <!--li><img src="wca_logo.svg" id="header_logo"></li-->
-    <li><a href="https://www.worldcubeassociation.org/">WCA Home</a></li>
-    <li><a href="../../">English Regulations</a></li>
-    <li><a href="./">Regulations</a></li>
-    <li><a href="guidelines.html">Guidelines</a></li>
-  </ul>
-</center>
-</div>
-<div id="content">"""
-
-  footer = """</div>
-</body>
-</html>"""
+  footer_subdirs = footer.replace("assets/", "../assets/")
 
   def __init__(self, language, buildDir, pdfName, gitBranch, translation=False, verbose=False):
 
@@ -123,26 +69,35 @@ class html():
     with open(self.build_folder + "/guidelines.html", "w") as f:
       f.write(self.header1 + "WCA Guidelines" + header + guidelines_text + self.footer)
 
-    shutil.copy("files/html/style.css", self.build_folder + "/style.css")
-    shutil.copy("files/html/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
+    # shutil.copy("files/html/style.css", self.build_folder + "/style.css")
+    # shutil.copy("files/html/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
+
+    if not os.path.exists(self.build_folder + "/assets"):
+      os.mkdir(self.build_folder + "/assets")
+    shutil.copy("files/html/assets/style.css", self.build_folder + "/assets/style.css")
+    shutil.copy("files/html/assets/bootstrap.min.css", self.build_folder + "/assets/bootstrap.min.css")
+    shutil.copy("files/html/assets/jquery.minified.js", self.build_folder + "/assets/jquery.minified.js")
+    shutil.copy("files/html/assets/bootstrap.min.js", self.build_folder + "/assets/bootstrap.min.js")
+    shutil.copy("files/html/assets/navbar-static-top.css", self.build_folder + "/assets/navbar-static-top.css")
+    shutil.copy("files/html/assets/wca_logo.svg", self.build_folder + "/assets/wca_logo.svg")
 
     if not translation:
       self.pages()
 
-  def write_page(self, title, path, filename, header2, text):
+  def write_page(self, title, path, filename, header2, footer, text):
 
     if not os.path.isdir(path):
       os.makedirs(path)
 
     with open(path + "/" + filename, "w") as f:
-      f.write(self.header1 + title + header2 + text + self.footer)
+      f.write(self.header1 + title + header2 + text + footer)
 
   def pages(self):
 
-    self.write_page("WCA Regulations History", self.build_folder + "/history", "index.html", self.header2_subdirs, md2html("pages/history.md"))
-    self.write_page("WCA Scrambles", self.build_folder + "/scrambles", "index.html", self.header2_subdirs, md2html("pages/scrambles.md"))
-    self.write_page("WCA Translations", self.build_folder + "/translations", "index.html", self.header2_subdirs, md2html("pages/translations.md"))
-    self.write_page("WCA Regulations/Guidelines Process", self.build_folder, "process.html", self.header2, md2html("pages/process.md"))
+    self.write_page("WCA Regulations History", self.build_folder + "/history", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/history.md"))
+    self.write_page("WCA Scrambles", self.build_folder + "/scrambles", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/scrambles.md"))
+    self.write_page("WCA Translations", self.build_folder + "/translations", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/translations.md"))
+    self.write_page("WCA Regulations/Guidelines Process", self.build_folder, "process.html", self.header2, self.footer, md2html("pages/process.md"))
 
   #
   #
@@ -212,7 +167,7 @@ class html():
     regsURL = "./"
     guidesURL = "guidelines.html"
 
-    includeTitleLogo = True
+    includeTitleLogo = False
 
     ## Sanity checks
     numRegsArticles = [19]
@@ -317,6 +272,7 @@ class html():
     wcaTitleLogoSource = r'World Cube Association<br>'
     if includeTitleLogo:
         wcaTitleLogoSource = r'<center><img src="WCA_logo_with_text.svg" alt="World Cube Association" class="logo_with_text"></center>\n'
+    wcaTitleLogoSource = "" # Included in the header now.
 
     self.replaceRegs([1],
                      r'<h1[^>]*><wca-title>([^<]*)</h1>',
