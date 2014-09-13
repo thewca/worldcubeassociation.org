@@ -1,4 +1,4 @@
-<?
+<?php
 
 #--- Get the blindfold results since one year ago
 $sources = dbQuery( "

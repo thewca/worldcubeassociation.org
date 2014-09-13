@@ -1,4 +1,4 @@
-<?
+<?php
 
 #--- Get event ranks
 $ranksSingle  = getRecentRanks( 'best'    );

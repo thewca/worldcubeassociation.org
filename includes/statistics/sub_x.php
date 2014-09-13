@@ -1,4 +1,4 @@
-<?
+<?php
 
 for ( $s=9; $s>=5; $s-- ) {
   $temp[] = dbQuery("

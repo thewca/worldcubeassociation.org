@@ -1,4 +1,4 @@
-<?
+<?php
 
 $lists[] = array(
   "standard_deviation_3x3",

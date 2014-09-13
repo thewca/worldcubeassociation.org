@@ -1,4 +1,4 @@
-<?
+<?php
 
 $just3x3 = dbQuery("
   SELECT

@@ -1,4 +1,4 @@
-<?
+<?php
 
 add_333_consecutive_sub20();
 
