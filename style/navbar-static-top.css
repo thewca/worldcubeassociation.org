@@ -37,8 +37,6 @@ div.navbar-collapse {
 
 .navbar, .navbar .container {
   padding: 0;
-  margin: 0;
-  width: 100%;
 }
 
 .navbar-nav > li > a.top-nav:hover {

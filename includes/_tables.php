@@ -5,7 +5,7 @@ function tableBegin ( $class, $columns ) {
 #----------------------------------------------------------------------
   global $tableColumns;
 
-  echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' class='$class'>\n\n";
+  echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' class='$class table table-condensed'>\n\n";
   $tableColumns = $columns;
 }
 

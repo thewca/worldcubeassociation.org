@@ -38,7 +38,7 @@ function showCompetitionResults ($resultsTable = 'Results') {
         $winnerEvent = internalEventLink( $internalEventHref, $eventCellName );
 
       if( $chosenAllResults  &&  isset( $previousEventId ) ){
-        tableRowBlank();
+        // tableRowBlank();
         tableRowBlank();
       }
     }

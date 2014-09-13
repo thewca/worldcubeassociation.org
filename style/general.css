@@ -34,14 +34,12 @@ ul {
 }
 
 #content {
-  width: 90%;
   margin-left: auto;
   margin-right: auto;
   /*border: 1px solid #CCC;*/
   background: #FFF;
   padding: 2px;
   text-align: left;
-  max-width: 1000px;
 }
 
 #index-indent {
@@ -432,3 +430,14 @@ form.choices_form .form-element-wrapper #form-element-submit {
   padding: 0px 3px;
 }
 
+@media (min-width: 1550px) {
+  .container {
+    width: 1520px;
+  }
+}
+
+@media (min-width: 1870px) {
+  .container {
+    width: 1840px;
+  }
+}
