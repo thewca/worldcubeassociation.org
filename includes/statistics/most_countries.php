@@ -1,4 +1,4 @@
-<?
+<?php
 
 $persons = dbQuery("
   SELECT    personId, count(DISTINCT competition.countryId) numberOfCountries

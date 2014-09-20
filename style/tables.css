@@ -88,7 +88,6 @@ table.results th {
 .results td.R, .results th.R {
   text-align:  right;
   font-weight: bold;
-  padding: 0 0 0 7px;
 }
 
 .results td.R2, .results th.R2 {
@@ -121,4 +120,8 @@ table.prereg {
 
 .prereg input, .prereg select, .prereg textarea {
   background-color: #FF9;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+  border: none;
 }

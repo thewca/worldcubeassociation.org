@@ -1,4 +1,4 @@
-<?
+<?php
 
 $events = dbQuery("
   SELECT eventId, count(DISTINCT personId) numberOfPersons

@@ -1,4 +1,4 @@
-<?
+<?php
 
 add_blindfold_333_consecutive_successes();
 

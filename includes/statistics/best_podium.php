@@ -1,4 +1,4 @@
-<?
+<?php
 
 $lists[] = array(
   "podiums_3x3",

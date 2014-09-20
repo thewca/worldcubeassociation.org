@@ -1,4 +1,4 @@
-<?
+<?php
 
 $rows = dbQuery("
   SELECT

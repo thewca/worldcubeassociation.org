@@ -13,6 +13,7 @@ function showCompetitionInfos () {
   echo "<h1>$name</h1>\n";
 
   #--- Start the table.
+  echo "<div class='table-responsive'>\n";
   echo "<table width='100%' id='competitionDetails'><tr valign='top'>\n";
 
   #--- Left part.
@@ -38,7 +39,7 @@ function showCompetitionInfos () {
   echo "</table></td>";
 
   #--- End table.
-  echo "</tr></table>";
+  echo "</tr></table></div>";
 }
 
 #----------------------------------------------------------------------

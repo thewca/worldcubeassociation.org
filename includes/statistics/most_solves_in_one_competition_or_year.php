@@ -1,4 +1,4 @@
-<?
+<?php
 
 $solves = polishMostSolvesAttempts( "
   SELECT    personId,

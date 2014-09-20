@@ -1,4 +1,4 @@
-<?
+<?php
 #----------------------------------------------------------------------
 #
 #   This script specifies which lists shall be shown on the statistics

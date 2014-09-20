@@ -1,4 +1,4 @@
-<?
+<?php
 
 $person = dbQuery( "
   SELECT    personId, count(DISTINCT competitionId) numberOfCompetitions

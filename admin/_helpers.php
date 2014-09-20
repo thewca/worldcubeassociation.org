@@ -116,7 +116,7 @@ function computeCachedDatabase ( $cacheFile ) {
 
   #--- Compute and store the caches.
   $handle = fopen( $cacheFile, 'w' );
-  fwrite( $handle, "<?\n\n" );
+  fwrite( $handle, "<?php\n\n" );
   foreach( $caches as $name => $query )
     fwrite( $handle, computeCacheEntry( $name, $query ));
   fwrite( $handle, "?>\n" );

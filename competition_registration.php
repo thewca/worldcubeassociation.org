@@ -15,7 +15,7 @@ if( $standAlone ){
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/general.css" />
 <link rel="stylesheet" type="text/css" href="<?= pathToRoot() ?>style/tables.css" />
 </head>
-<body><?
+<body><?php
 
   #--- Get all competition infos.
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
@@ -34,7 +34,7 @@ if( $standAlone ){
   else {
     noticeBox( false, "Unknown competition ID \"$chosenCompetitionId\"" );
   }
-  ?></body></html><?
+  ?></body></html><?php
 }
 
 #----------------------------------------------------------------------
@@ -124,7 +124,7 @@ function showPreregForm () {
 
 ?><tr><td><b>Events</b><br /><br />Check the events you want to participate in.</td>
 <td>
-<?
+<?php
   
   $eventSpecs = readEventSpecs( $competition['eventSpecs'] );
   foreach( $eventSpecs as $eventId => $eventSpec ){

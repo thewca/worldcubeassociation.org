@@ -136,7 +136,7 @@ print $styles->getHTMLAll();
 
 <?php if (!$standAlone) { ?>
 <div id="main">
-<div id="content">
+<div id="content" class="container">
 <?php
   $sections = array(
     array( 'Home',         'home', '../'  ),

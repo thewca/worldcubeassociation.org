@@ -1,11 +1,11 @@
-<? showDatabaseStatistics();
+<?php showDatabaseStatistics();
    stopTimer( "whole page generation" ) ?>
 
-<? if( ! $standAlone ){ ?>
+<?php if( ! $standAlone ){ ?>
 </div>
 </div>
-<? } ?>
+<?php } ?>
 
 </body>
 </html>
-<? finishCache() ?>
+<?php finishCache() ?>

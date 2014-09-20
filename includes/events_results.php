@@ -1,4 +1,4 @@
-<?
+<?php
 
 #--- Compute $results = ( value, personId, personName, countryName, competitionId, competitioName, [value1-5] ).
 

@@ -1,4 +1,4 @@
-<?
+<?php
 
 #--- Known upper bounds for the top 100, can be lowered from time to time
  $singleBound =  991;

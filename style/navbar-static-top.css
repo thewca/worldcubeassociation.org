@@ -37,8 +37,6 @@ div.navbar-collapse {
 
 .navbar, .navbar .container {
   padding: 0;
-  margin: 0;
-  width: 100%;
 }
 
 .navbar-nav > li > a.top-nav:hover {
@@ -72,6 +70,13 @@ div.navbar-collapse {
     white-space: nowrap;
     font-size: 30px;
     font-variant: small-caps;
+  }
+}
+
+@media (max-width: 479px) {
+  .container>.navbar-header, .container-fluid>.navbar-header, .container>.navbar-collapse, .container-fluid>.navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 

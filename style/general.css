@@ -34,14 +34,12 @@ ul {
 }
 
 #content {
-  width: 90%;
   margin-left: auto;
   margin-right: auto;
   /*border: 1px solid #CCC;*/
   background: #FFF;
   padding: 2px;
   text-align: left;
-  max-width: 1000px;
 }
 
 #index-indent {
@@ -115,7 +113,7 @@ table td.body_outer   {
 
 .buttborder {
   border: 3.4px double #CCC;
-  margin: 1px;
+  margin: -6px 0 0;
   padding: 0;
 }
 
@@ -136,7 +134,7 @@ input::-moz-focus-inner {
   padding: 0 2px;
   margin: 0;
   line-height: 20px;
-  height: 20px;
+  height: 25px;
   font-size: 1em;
   
   /* background gradient */
@@ -154,7 +152,7 @@ input::-moz-focus-inner {
   padding: 0 2px;
   margin: 0;
   line-height: 20px;
-  height: 20px;
+  height: 25px;
   font-size: 1em;
   
   /* background gradient */
@@ -432,3 +430,6 @@ form.choices_form .form-element-wrapper #form-element-submit {
   padding: 0px 3px;
 }
 
+.table-responsive {
+  border: none;
+}
