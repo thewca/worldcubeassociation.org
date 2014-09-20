@@ -14,13 +14,9 @@ function displayChoicesWithMethod ( $method, $choices ) {
   if( wcaDebug() )
     $choices[] = "<input type='hidden' name='debug5926' value='1' />";
 
-  echo "<form method='$method'>\n";
-  echo "  <table cellpadding='0' cellspacing='0' id='choices'>\n";
-  echo "    <tr>\n\n";
+  echo "<form method='$method' class='form-inline'>\n";
   foreach( $choices as $choice )
-    echo "<td valign='bottom'><div class='space'>$choice</div></td>\n\n";
-  echo "    </tr>\n";
-  echo "  </table>\n";
+    echo "<div class='form-group'>$choice</div>\n\n";
   echo "</form>\n\n";
 }
 
@@ -29,7 +25,7 @@ function choiceButton ( $chosen, $id, $text ) {
 #----------------------------------------------------------------------
 
   $class = $chosen ? 'chosenButton' : 'butt';
-  return "<div class='buttborder'><input class='$class' type='submit' name='$id' value='$text' /> </div>";
+  return "<br class='hidden-xs'><div class='buttborder'><input class='$class' type='submit' name='$id' value='$text' /> </div>";
 }
 
 #----------------------------------------------------------------------
@@ -148,7 +144,7 @@ function regionChoice ( $competitions ) {
 function textFieldChoice ( $id, $caption, $content ) {
 #----------------------------------------------------------------------
 
-  return "$caption:<br /><input name='$id' type='text' value='$content' />";
+  return "<label for='$id'>$caption:<br /><input name='$id' type='text' value='$content' /></label>";
 }
 
 

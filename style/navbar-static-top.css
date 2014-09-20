@@ -73,6 +73,13 @@ div.navbar-collapse {
   }
 }
 
+@media (max-width: 479px) {
+  .container>.navbar-header, .container-fluid>.navbar-header, .container>.navbar-collapse, .container-fluid>.navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
 .navbar-default .navbar-nav>.active>a {
   background-color: #ccc;
 }
