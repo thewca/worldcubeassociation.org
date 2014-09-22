@@ -12,6 +12,7 @@ $standAlone = getBooleanParam( 'standAlone' );
 <head>
 <title>World Cube Association - Official Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="WCA Website Team" />
 <meta name="description" content="Official World Cube Association Competition Results" />
 <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
@@ -41,7 +42,7 @@ if(isset($mapsAPI) && $mapsAPI) {
 
 // TODO: Move to end of file for faster loading?
 $scripts->add('bootstrap.min.js');
-
+$scripts->add('bootstrap-hover-dropdown.min.js');
 /* Deal with styles here, for now */
 $styles = new WCAClasses\WCAStyles();
 $styles->add('bootstrap.min.css');
@@ -91,7 +92,7 @@ print $styles->getHTMLAll();
         <div class="navbar-collapse collapse disabled">
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown">Information <span class="caret"></span></a>
+              <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Information <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About the WCA</a></li>
@@ -103,7 +104,7 @@ print $styles->getHTMLAll();
               </ul>
             </li>
             <li class="dropdown active">
-              <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown">Competitions <span class="caret"></span></a>
+              <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="/results/competitions.php">Competitions</a></li>
                 <li><a href="/results/events.php">Rankings</a></li>
@@ -117,7 +118,7 @@ print $styles->getHTMLAll();
               </ul>
             </li>
             <li class="dropdown">
-              <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown">Regulations <span class="caret"></span></a>
+              <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Regulations <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="/regulations/">Regulations</a></li>
                 <li><a href="/regulations/guidelines.html">Guidelines</a></li>
