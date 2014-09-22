@@ -80,8 +80,10 @@ function infoMedium () {
   echo "</table>";
 
   displayChoices( array(
-    choiceButton( false, "refuse$mediumId", 'Erase' ),
-    choiceButton( false, "accept$mediumId", 'Accept' )
+    array(
+      choiceButton( false, "refuse$mediumId", 'Erase' ),
+      choiceButton( false, "accept$mediumId", 'Accept' ),
+    ),
   ));
 }
 

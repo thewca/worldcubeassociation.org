@@ -41,11 +41,13 @@ function offerChoices () {
     regionChoice( false ),
     eventChoice( false ),
     yearsChoice( true, false, true, false ),
-    choiceButton( $chosenMixed,    'mixed',    'Mixed' ),
-    choiceButton( $chosenSlim,     'slim',     'Slim' ),
-    choiceButton( $chosenSeparate, 'separate', 'Separate' ),
-    choiceButton( $chosenHistory,  'history',  'History' ),
-    choiceButton( $chosenMixHist,  'mixHist',  'Mixed History' )
+    array(
+      choiceButton( $chosenMixed,    'mixed',    'Mixed' ),
+      choiceButton( $chosenSlim,     'slim',     'Slim' ),
+      choiceButton( $chosenSeparate, 'separate', 'Separate' ),
+      choiceButton( $chosenHistory,  'history',  'History' ),
+      choiceButton( $chosenMixHist,  'mixHist',  'Mixed History' ),
+    )
   ));
 }
 

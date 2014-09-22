@@ -41,8 +41,10 @@ function offerChoices () {
 
   displayChoices( array(
     regionChoice( false ),
-    choiceButton( $chosenSingle,  'single', 'Single' ),
-    choiceButton( $chosenAverage, 'average', 'Average' )
+    array(
+      choiceButton( $chosenSingle,  'single', 'Single' ),
+      choiceButton( $chosenAverage, 'average', 'Average' )
+    ),
   ));
 }
 

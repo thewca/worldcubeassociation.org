@@ -51,11 +51,15 @@ function showChoices () {
 
   displayChoices( array(
     'Check rounds:<br />&nbsp;',
-    choiceButton( true, 'checkRecentRounds', ' recent ' ),
-    choiceButton( true, 'checkAllRounds', ' all ' ),
+    array(
+      choiceButton( true, 'checkRecentRounds', ' recent ' ),
+      choiceButton( true, 'checkAllRounds', ' all ' ),
+    ),
     'Check events:<br />&nbsp;',
-    choiceButton( true, 'checkRecentEvents', ' recent ' ),
-    choiceButton( true, 'checkAllEvents', ' all ' ),
+    array(
+      choiceButton( true, 'checkRecentEvents', ' recent ' ),
+      choiceButton( true, 'checkAllEvents', ' all ' ),
+    ),
   ));
 }
 

@@ -46,8 +46,10 @@ function offerChoices () {
     regionChoice( true ),
     yearsChoice( true, true, false, true ),
     textFieldChoice( 'pattern', 'Name, City or Venue', $chosenPatternHtml ),
-    choiceButton( $chosenList, 'list', 'List' ),
-    choiceButton( $chosenMap, 'map', 'Map' )
+    array(
+      choiceButton( $chosenList, 'list', 'List' ),
+      choiceButton( $chosenMap, 'map', 'Map' ),
+    )
   ));
 }
 

@@ -82,11 +82,13 @@ function offerChoicesResults () {
   global $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners;
 
   displayChoices( array(
-    choiceButton( $chosenWinners,    'winners',    'Winners' ),
-    choiceButton( $chosenTop3,       'top3',       'Top 3' ),
-    choiceButton( $chosenAllResults, 'allResults', 'All Results' ),
-    choiceButton( $chosenByPerson,   'byPerson',   'By Person' ),
-    "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+    array(
+      choiceButton( $chosenWinners,    'winners',    'Winners' ),
+      choiceButton( $chosenTop3,       'top3',       'Top 3' ),
+      choiceButton( $chosenAllResults, 'allResults', 'All Results' ),
+      choiceButton( $chosenByPerson,   'byPerson',   'By Person' ),
+      "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />",
+    ),
   ));
 }
 
@@ -98,14 +100,18 @@ function offerChoicesPrereg () {
 
   if( $competition['showPreregForm'] )
     displayChoices( array(
-      choiceButton( $chosenForm, 'form', 'Registration Form' ),
-      choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
-      "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+      array(
+        choiceButton( $chosenForm, 'form', 'Registration Form' ),
+        choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
+        "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />",
+      ),
     ));
   else
     displayChoices( array(
-      choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
-      "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />"
+      array(
+        choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
+        "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />",
+      ),
     ));
 
 }

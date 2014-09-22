@@ -47,8 +47,10 @@ function offerChoices () {
       array( '100 Results', '100 Results' ),
       array( '1000 Results', '1000 Results' ),
       ), $chosenShow ),
-    choiceButton( $chosenSingle,  'single', 'Single' ),
-    choiceButton( $chosenAverage, 'average', 'Average' )
+    array(
+      choiceButton( $chosenSingle,  'single', 'Single' ),
+      choiceButton( $chosenAverage, 'average', 'Average' )
+    ),
   ));
 }
 

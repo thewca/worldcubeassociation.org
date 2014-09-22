@@ -15,8 +15,12 @@ function displayChoicesWithMethod ( $method, $choices ) {
     $choices[] = "<input type='hidden' name='debug5926' value='1' />";
 
   echo "<form method='$method' class='form-inline'>\n";
-  foreach( $choices as $choice )
+  foreach( $choices as $choice ) {
+    if (is_array($choice)) {
+      $choice = implode("\n", $choice);
+    }
     echo "<div class='form-group'>$choice</div>\n\n";
+  }
   echo "</form>\n\n";
 }
 
@@ -25,7 +29,7 @@ function choiceButton ( $chosen, $id, $text ) {
 #----------------------------------------------------------------------
 
   $class = $chosen ? 'chosenButton' : 'butt';
-  return "<br class='hidden-xs'><div class='buttborder'><input class='$class' type='submit' name='$id' value='$text' /> </div>";
+  return "<label><br class='hidden-xs'><input class='$class' type='submit' name='$id' value='$text' /></label>";
 }
 
 #----------------------------------------------------------------------
