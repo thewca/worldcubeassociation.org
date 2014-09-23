@@ -7,6 +7,7 @@ namespace WCAClasses;
 
 class WCAScripts
 {
+    const VERSION = '201409231830';
     private $scripts;
 
     public function __construct()
@@ -35,6 +36,11 @@ class WCAScripts
 
     public function _getHTML($script)
     {
+        if (strpos($script, '?') !== false) {
+            $script .= '&v=' . self::VERSION;
+        } else {
+            $script .= '?v=' . self::VERSION;
+        }
         return '<script src="' . $script . '"></script>';
     }
 

@@ -8,6 +8,7 @@ namespace WCAClasses;
 
 class WCAStyles
 {
+    const VERSION = '201409231830';
     private $styles;
 
     public function __construct()
@@ -36,6 +37,11 @@ class WCAStyles
 
     public function _getHTML($style)
     {
+        if (strpos($style, '?') !== false) {
+            $style .= '&v=' . self::VERSION;
+        } else {
+            $style .= '?v=' . self::VERSION;
+        }
         return '<link rel="stylesheet" href="'.$style.'" type="text/css" />';
     }
 
