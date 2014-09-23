@@ -7,7 +7,7 @@ namespace WCAClasses;
 
 class WCAScripts
 {
-    const VERSION = '201409231830';
+    const VERSION = '201409231900';
     private $scripts;
 
     public function __construct()

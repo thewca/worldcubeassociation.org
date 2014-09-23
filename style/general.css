@@ -127,6 +127,10 @@ form.form-inline input {
   height: 24px;
 }
 
+form.form-inline .form-group {
+  margin-bottom: 2px;
+}
+
 .butt {
   color: #A40;
   font-family: Arial, Helvetica, sans-serif;
@@ -169,6 +173,15 @@ form.form-inline input {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
+}
+
+@media (max-width: 480px) {
+  form.form-inline label {
+    display: inline;
+  }
+  form.form-inline input[type="text"], form.form-inline select {
+    width: 100%;
+  }
 }
 
 .butt2 {

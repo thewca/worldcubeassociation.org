@@ -8,7 +8,7 @@ namespace WCAClasses;
 
 class WCAStyles
 {
-    const VERSION = '201409231830';
+    const VERSION = '201409231900';
     private $styles;
 
     public function __construct()
