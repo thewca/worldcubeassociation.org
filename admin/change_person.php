@@ -123,6 +123,7 @@ function offerChoices () {
 
   #--- Country
   $countries = dbQuery( "SELECT * FROM Countries" );
+  $fieldC = '';
   foreach( $countries as $country ){
     $cId   = $country['id'  ];
     $cName = $country['name'];
