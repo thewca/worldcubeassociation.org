@@ -122,7 +122,7 @@ table.prereg {
   background-color: #FF9;
 }
 
-.table-responsive table tr td, .table-responsive table tr th {
+.table-responsive table.nowrap tr td, .table-responsive table.nowrap tr th, .table-responsive table tr td.nowrap, .table-responsive table tr th.nowrap {
   white-space: nowrap;
 }
 

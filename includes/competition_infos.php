@@ -17,7 +17,7 @@ function showCompetitionInfos () {
   echo "<table width='100%' id='competitionDetails'><tr valign='top'>\n";
 
   #--- Left part.
-  echo "<td style='width:70%'><table>";
+  echo "<td style='width:70%'><table class='nowrap'>";
   $country = getCountry($countryId);
   showItem( 'key', "Date",         array( competitionDate( $competition ), $year ));
   showItem( 'key', "City",         array( $cityName, $country['name'] ));

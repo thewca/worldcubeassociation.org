@@ -50,12 +50,12 @@ function showChoices () {
 #----------------------------------------------------------------------
 
   displayChoices( array(
-    'Check rounds:<br />&nbsp;',
+    '<br />Check rounds:&nbsp;',
     array(
       choiceButton( true, 'checkRecentRounds', ' recent ' ),
       choiceButton( true, 'checkAllRounds', ' all ' ),
     ),
-    'Check events:<br />&nbsp;',
+    '<br />Check events:&nbsp;',
     array(
       choiceButton( true, 'checkRecentEvents', ' recent ' ),
       choiceButton( true, 'checkAllEvents', ' all ' ),
