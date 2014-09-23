@@ -61,7 +61,7 @@ function showChoices () {
     'Check',
     choice( 'which', '', array( array( 'recent', 'recent' ), array( 'all', 'all' )), $chosenWhich ),
     choice( 'what', '', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'duplicates', 'duplicates' )), $chosenWhat ),
-    choiceButton( true, 'go', 'Go' )
+    choiceButton( true, 'go', 'Go', false)
   ));
 }
 

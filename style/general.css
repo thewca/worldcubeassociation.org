@@ -127,8 +127,8 @@ form.form-inline input {
   height: 24px;
 }
 
-form.form-inline .form-group {
-  margin-bottom: 2px;
+label {
+  margin-bottom: 4px;
 }
 
 .butt {
@@ -176,9 +176,14 @@ form.form-inline .form-group {
 }
 
 @media (max-width: 480px) {
+  form.form-inline .form-group {
+    margin-bottom: 5px;
+  }
+
   form.form-inline label {
     display: inline;
   }
+
   form.form-inline input[type="text"], form.form-inline select {
     width: 100%;
   }

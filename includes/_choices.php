@@ -25,18 +25,19 @@ function displayChoicesWithMethod ( $method, $choices ) {
 }
 
 #----------------------------------------------------------------------
-function choiceButton ( $chosen, $id, $text ) {
+function choiceButton ( $chosen, $id, $text, $blankHead = true ) {
 #----------------------------------------------------------------------
 
   $class = $chosen ? 'chosenButton' : 'butt';
-  return "<label><br class='hidden-xs'><input class='$class' type='submit' name='$id' value='$text' /></label>";
+  $br = $blankHead ? "<br class='hidden-xs'>" : '';
+  return "<label>$br<input class='$class' type='submit' name='$id' value='$text' /></label>";
 }
 
 #----------------------------------------------------------------------
 function choice ( $id, $caption, $options, $chosenOption ) {
 #----------------------------------------------------------------------
-
-  $result = $caption ? "<label for='$id'>$caption:<br />" : '';
+  $result = "<label for='$id'>";
+  $result .= $caption ? "$caption:<br />" : '';
   $result .= "<select class='drop' id='$id' name='$id'>\n";
   $chosen = urlEncode( $chosenOption );
   foreach( $options as $option ){
@@ -46,8 +47,7 @@ function choice ( $id, $caption, $options, $chosenOption ) {
     $result .= "<option value='$nick'$selected>$text</option>\n";
   }
   $result .= "</select>";
-  if( $caption )
-    $result .= "</label>";
+  $result .= "</label>";
   return $result;
 }
 
