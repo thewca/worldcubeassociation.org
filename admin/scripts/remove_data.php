@@ -1,5 +1,6 @@
 <?php
 
+$currentSection = 'admin';
 include "../../includes/_framework.php";
 
 $compId = getNormalParam('c');

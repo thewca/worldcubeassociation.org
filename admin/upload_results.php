@@ -81,6 +81,10 @@ if($form->submitted()) {
     $form->invalidate("json", 'The file size is too big.');
   }
   $contents = file_get_contents($_FILES['json']['tmp_name']);
+  //check bom header
+  if (ord($contents{0}) == 239 && ord($contents{1}) == 187 && ord($contents{2}) == 191) {
+    $contents = substr($contents, 3);
+  }
   if(!($competition_data = json_decode($contents))) {
     $form->invalidate('json', 'Please upload a valid JSON file.');
   }
