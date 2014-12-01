@@ -33,7 +33,8 @@ if( $chosenExport ){
                               month, day, endMonth, endDay, eventSpecs,
                               wcaDelegate, organiser, venue, venueAddress,
                               venueDetails, website, cellName, latitude, longitude
-                       FROM Competitions',
+                       FROM Competitions
+                       WHERE showAtAll=1',
     'Scrambles'   => '*',
   ) );
 }

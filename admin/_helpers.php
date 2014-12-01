@@ -111,7 +111,7 @@ function computeCachedDatabase ( $cacheFile ) {
        ORDER BY country.name',
 
     'UsedYears' =>
-      'SELECT DISTINCT year FROM Competitions ORDER BY year DESC'
+      'SELECT DISTINCT year FROM Competitions WHERE showAtAll=1 ORDER BY year DESC'
   );
 
   #--- Compute and store the caches.
