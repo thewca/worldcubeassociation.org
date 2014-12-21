@@ -82,6 +82,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "Record" a result instead of "write down".
 - "Thus" instead of "thereby".
 - "Discretion" (of the delegate) instead of "consent".
+- "at the discretion of the Delegate/judge" instead of "at the Delegate's/judge's discretion"
 - "State" (of a puzzle) instead of "position".
 - "Allot" (a maximum number of attempts) instead of "give".
 - "Choose" instead of "decide".
