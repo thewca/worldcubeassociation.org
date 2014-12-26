@@ -104,17 +104,17 @@ print $styles->getHTMLAll();
               </ul>
             </li>
             <li class="dropdown active">
-              <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
+              <a href="<?php print pathToRoot(); ?>" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/results/competitions.php">Competitions</a></li>
-                <li><a href="/results/events.php">Rankings</a></li>
-                <li><a href="/results/regions.php">Records</a></li>
-                <li><a href="/results/persons.php">Persons</a></li>
+                <li><a href="<?php print pathToRoot(); ?>competitions.php">Competitions</a></li>
+                <li><a href="<?php print pathToRoot(); ?>events.php">Rankings</a></li>
+                <li><a href="<?php print pathToRoot(); ?>regions.php">Records</a></li>
+                <li><a href="<?php print pathToRoot(); ?>persons.php">Persons</a></li>
                 <li class="divider"></li>
-                <li><a href="/results/statistics.php">Statistics</a></li>
-                <li><a href="/results/media.php">Multimedia</a></li>
-                <li><a href="/results/misc.php">Miscellaneous</a></li>
-                <li><a href="/results/misc/export.html">Database Export</a></li>
+                <li><a href="<?php print pathToRoot(); ?>statistics.php">Statistics</a></li>
+                <li><a href="<?php print pathToRoot(); ?>media.php">Multimedia</a></li>
+                <li><a href="<?php print pathToRoot(); ?>misc.php">Miscellaneous</a></li>
+                <li><a href="<?php print pathToRoot(); ?>misc/export.html">Database Export</a></li>
               </ul>
             </li>
             <li class="dropdown">
