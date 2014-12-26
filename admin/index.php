@@ -84,6 +84,9 @@ function showPages () {
   showPage( 'add_local_names',
             "Add local names to persons." );
 
+  showPage( 'remove_picture',
+            "Remove profile photos." );
+
   echo "</dl>\n";
 }
 
