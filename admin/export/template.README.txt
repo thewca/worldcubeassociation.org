@@ -43,13 +43,20 @@ The export consists of these tables:
   RanksAverage   Best average result per competitor+event and ranks
   Rounds         The round types (first, final, etc)
   Formats        The round formats (best of 3, average of 5, etc)
-  Countries      Countries according to http://en.wikipedia.org/wiki/List_of_countries
+  Countries      Countries
   Continents     Continents
   Scrambles      Scrambles
 
-Most of the tables should be self-explanatory, but the result values of
-the Results table need some explanation:
+Most of the tables should be self-explanatory, but several things merit further
+explanation.
 
+Countries stored include those from the Wikipedia list of countries at
+http://en.wikipedia.org/wiki/List_of_countries, and may include some countries
+that no longer exist.  The ISO2 column should reflect ISO 3166-1 alpha-2
+country codes, for countries that have them.  Custom codes may used in some
+circumstances.
+
+Result values of the Results table can be interpreted as follows:
 - The result values are in fields value1-value5, best and average.
 - Value -1 means DNF
 - Value -2 means DNS
@@ -59,7 +66,7 @@ the Results table need some explanation:
     For example, 8653 means 1 minute and 26.53 seconds.
   - Format "number" means the value is a raw number, currently only used
     by "fewest moves" for number of moves.
-    - Note that fewest moves averages are stored as 100*average, rounded.
+    - Fewest moves averages are stored as 100 times the average, rounded.
   - Format "multi" is for old and new multi-blind, encoding not only the time
     but also the number of attempted and solved cubes. Writing the value in
     decimal it is interpreted ("decoded") using the following method:
