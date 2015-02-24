@@ -22,4 +22,15 @@ if($table == "Results") {
     );  
 }
 
-print "Removed.";
+if($table == "All") {
+  $deleted = $wcadb_conn->boundCommand(
+     "DELETE FROM Results WHERE competitionId=?",
+      array('s', &$compId)
+    );
+  $deleted = $wcadb_conn->boundCommand(
+     "DELETE FROM Scrambles WHERE competitionId=?",
+      array('s', &$compId)
+    );
+}
+
+print '<span style="color:#A00;"><strong>Removed.</strong></span>';

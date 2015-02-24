@@ -178,7 +178,12 @@ if(count( $checks_table ) > 0) {
   $good_cell_attr = 'class="good_cell"';
   $bad_cell_attr = 'class="bad_cell"';
   tableBegin('scramble_help', 4);
-  tableHeader(array('Event: ', 'Round', 'Fully Imported Results', 'Fully Imported Scrambles'), array());
+  tableHeader(array(
+      'Event: ',
+      'Round',
+      'Fully Imported Results',
+      'Fully Imported Scrambles'
+    ), array());
   foreach($checks_table as $round) {
     if($round['hasevent'] && $round['hasscr']) {
       $class = 'has_both';
@@ -218,7 +223,8 @@ if(count( $checks_table ) > 0) {
       );
   }
   tableEnd();
-  print "<br /><strong style='color: #900'>Please be careful removing data!  Data in the above table is live.</strong><br />";
+  print "<strong style='color: #900'>Please be careful removing data!  Data in the above table is live.</strong><br />";
+  print 'Remove all results and scrambles only, does not affect persons: <a class="remove_link" href="scripts/remove_data.php?t=All&c='.$compId.'&" target="_blank" title="Remove All">X ALL</a>';
 } else {
   print "No fully imported result or scramble data exists to compare.";
 }
