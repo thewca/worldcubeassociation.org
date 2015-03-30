@@ -113,7 +113,7 @@ function exportPublic ( $sources ) {
 
   #--- Start the SQL file
   $sqlFile = "WCA_export.sql";
-  #file_put_contents( $sqlFile, "--\n-- $basename\n-- Also read the README.txt\n--\n" );
+  file_put_contents( $sqlFile, "--\n-- $basename\n-- Also read the README.txt\n--\n" );
 
   #--- Walk the tables, create SQL file and TSV files
   foreach ( $sources as $tableName => $tableSource ) {
