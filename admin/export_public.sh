@@ -10,4 +10,4 @@ cd $SCRIPTPATH
 
 # The cgi script only will do an actual export if it sees the export url
 # paramter.
-REQUEST_URI="export=" ./export_public.cgi
+REQUEST_URI="export=" time ./export_public.cgi
