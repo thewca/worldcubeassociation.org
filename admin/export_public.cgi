@@ -98,7 +98,7 @@ function exportPublic ( $sources ) {
   #--- Get old and new serial number
   $oldSerial = file_get_contents( 'serial.txt' );
   $serial = $oldSerial + 1;
-  #file_put_contents( 'serial.txt', $serial );
+  file_put_contents( 'serial.txt', $serial );
 
   #--- Build the file basename
   $basename         = sprintf( 'WCA_export%03d_%s', $serial,    wcaDate( 'Ymd' ) );

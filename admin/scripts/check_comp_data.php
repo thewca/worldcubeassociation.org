@@ -235,7 +235,7 @@ print "</li></ol></li>";
 print "<li><p>Run Some More Scripts:</p>
          <ol type='a'>
            <li><a href='../statistics.php?update8392=1' target='_blank' class='link-external external'>update_statistics_page</a></li>
-           <li><a href='export_public.php' target='_blank' class='link-external external'>export_public</a></li>
+           <li>Optional: <a href='export_public.php' target='_blank' class='link-external external'>export_public</a> (This is done every Monday at ~4AM EST.)</li>
          </ol>
        </li>";
 
