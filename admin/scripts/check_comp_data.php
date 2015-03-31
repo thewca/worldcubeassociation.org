@@ -232,10 +232,11 @@ print "</li></ol></li>";
 
 
 // Final scripts...
-print "<li><p>Run Some More Scripts:</p>
+$optionalScriptsCronSchedule = `crontab -l | grep cronned_results_scripts.sh`;
+print "<li><p><strong>Optional</strong>: Run Some More Scripts (These are run on the following cron schedule: <code>$optionalScriptsCronSchedule</code>)</p>
          <ol type='a'>
            <li><a href='../statistics.php?update8392=1' target='_blank' class='link-external external'>update_statistics_page</a></li>
-           <li>Optional: <a href='export_public.php' target='_blank' class='link-external external'>export_public</a> (This is done every Monday at ~4AM EST.)</li>
+           <li><a href='export_public.php' target='_blank' class='link-external external'>export_public</a></li>
          </ol>
        </li>";
 

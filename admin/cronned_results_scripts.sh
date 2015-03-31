@@ -8,6 +8,9 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 
-# The cgi script only will do an actual export if it sees the export url
-# paramter.
+# The export_public cgi script only will do an actual export if it sees the
+# export url paramter.
 REQUEST_URI="export=" time ./export_public.cgi
+
+# Update statistics page
+(cd ..; rm generated/statistics.cache; time php statistics.php;)
