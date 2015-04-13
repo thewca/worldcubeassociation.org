@@ -24,6 +24,8 @@ $installation_errors = $config->validateInstall();
 // Create a global database connection object.
 global $wcadb_conn;
 $wcadb_conn = new WCAClasses\WCADBConn($config->get("database"));
+// secondary connection for scripts using PDO
+require_once '_pdo_db.php';
 
 // misc. display functions
 require '_ui.php';
