@@ -1,0 +1,3 @@
+[submodule "webroot/results"]
+	path = webroot/results
+	url = git@github.com:cubing/wca-website-php.git
