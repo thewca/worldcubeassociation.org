@@ -1,15 +1,24 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 import json
 import cgi, os
 
+https = os.environ.get('HTTPS') == "on"
+protocol = "https" if https else "http"
+domain_name = os.environ['SERVER_NAME']
+server_port = int(os.environ['SERVER_PORT'])
+if https and server_port == 443 or not https and server_port == 80:
+  server_port_str = ""
+else:
+  server_port_str = ":%s" % server_port
+root_url = "%s://%s%s" % ( protocol, domain_name, server_port_str )
 data = {
-  "/api/": {"info": "This API is not stable. There is only one guaranteed endpoint at the moment: https://www.worldcubeassociation.org/api/v0/scramble-program"},
+  "/api/": {"info": "This API is not stable. There is only one guaranteed endpoint at the moment: %s/api/v0/scramble-program" % root_url},
   "/api/v0/scramble-program": {
     "current": {
       "name": "TNoodle-WCA-0.9.0",
-      "information": "https://www.worldcubeassociation.org/regulations/scrambles/",
-      "download": "https://www.worldcubeassociation.org/regulations/scrambles/tnoodle/TNoodle-WCA-0.9.0.jar"
+      "information": "%s/regulations/scrambles/" % root_url,
+      "download": "%s/regulations/scrambles/tnoodle/TNoodle-WCA-0.9.0.jar" % root_url
     },
     "allowed": [
       "TNoodle-WCA-0.9.0"
@@ -22,7 +31,7 @@ data = {
       "TNoodle-WCA-0.8.0",   # 2014-01-13
       "TNoodle-WCA-0.8.1",   # 2014-01-14
       "TNoodle-WCA-0.8.2",   # 2014-01-28
-      "TNoodle-WCA-0.8.4",    # 2014-02-10
+      "TNoodle-WCA-0.8.4",   # 2014-02-10
       "TNoodle-WCA-0.9.0"    # 2015-03-30
     ]
   }

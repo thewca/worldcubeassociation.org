@@ -14,3 +14,9 @@ fi
 
 # Enable .htaccess (disabled by default)
 sudo sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+sudo a2enmod rewrite
+sudo a2enmod cgi
+
+# Must restart apache after enabling new modules
+sudo service apache2 restart
