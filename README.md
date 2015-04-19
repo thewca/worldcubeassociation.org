@@ -6,10 +6,17 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 ## Setup
 - Install [Vagrant](https://www.vagrantup.com/), which requires
   [VirtualBox](https://www.virtualbox.org/).
+- NOTE - This project currently uses git submodules, in order to pull in the
+  results code, you need to run `git submodule update`.
 
 ## Run
 - `vagrant up` - Once the VM finishes intializing, the website will be
   accessible at [http://localhost:8080](http://localhost:8080).
+- `vagrant ssh -c /vagrant/setup_db_interactive.sh` - For now, seeding the
+  database must be done manually. `/vagrant/setup_db_interactive.sh` will prompt
+  you for your https://www.worldcubeassociation.org/results/admin/ credentials.
+  The plan is for these exports to eventually be publically available, and this
+  manual step will not longer be required.
 
 ## TODO
 - There are 4 `*.template` files in the `webroot/results/` directory.
@@ -19,7 +26,4 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   - `webroot/results/dev/.htaccess.template` - Can the whole dev/ directory go?
   - `webroot/results/.htaccess.template` - This seems like it could get moved
     up a level.
-- Initializing and seeding the databases. I'd like to provide public database
-  exports (scrubbed of sensitive data, of course) and have `bootstrap.sh`
-  auto download and import these database exports.
 - Drupal, phpBB, and the WCA regulations are not yet in this repository.

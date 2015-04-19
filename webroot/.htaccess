@@ -1,3 +1,6 @@
+# Compress most output
+AddOutputFilterByType DEFLATE text/html text/plain text/xml
+
 # .htaccess from:
 # http://kahthong.com/2011/05/how-serve-drupal-sub-directory-web-root-0
 # Also change $base_url in sites/default/settings.php.
