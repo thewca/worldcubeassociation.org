@@ -1,5 +1,5 @@
 <?php
-// THIS FILE COMES FROM ./webroot/results/includes/_config.php.template
+// THIS FILE CAME FROM webroot/results/includes/_config.php.template
 // data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
 $config['drupal']['path'] = '/var/www/html/drupal';  // no trailing slash!

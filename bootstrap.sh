@@ -26,3 +26,4 @@ sudo service apache2 restart
 
 # Configuration files containing database credentials.
 sudo ln -fs /vagrant/config/results_config.php /vagrant/webroot/results/includes/_config.php
+sudo ln -fs /vagrant/config/results_admin_htaccess /vagrant/webroot/results/admin/.htaccess
