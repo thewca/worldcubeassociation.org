@@ -6,8 +6,10 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 ## Setup
 - Install [Vagrant](https://www.vagrantup.com/), which requires
   [VirtualBox](https://www.virtualbox.org/).
-- NOTE - This project currently uses git submodules, in order to pull in the
-  results code, you need to run `git submodule update`.
+- `git submodule update --init` - This project uses a git submodule to avoid
+  copying the results code from the
+  [cubing/wca-website-php](https://github.com/cubing/wca-website-php)
+  repository.
 
 ## Run
 - `vagrant up` - Once the VM finishes intializing, the website will be
