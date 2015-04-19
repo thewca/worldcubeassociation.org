@@ -21,11 +21,4 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   manual step will not longer be required.
 
 ## TODO
-- There are 4 `*.template` files in the `webroot/results/` directory.
-  - `webroot/results/admin/.htaccess.template` - This needs an absolute path
-    pointing to a .htpasswd file somewhere...
-  - `webroot/results/includes/_config.php.template` - ...
-  - `webroot/results/dev/.htaccess.template` - Can the whole dev/ directory go?
-  - `webroot/results/.htaccess.template` - This seems like it could get moved
-    up a level.
 - Drupal, phpBB, and the WCA regulations are not yet in this repository.
