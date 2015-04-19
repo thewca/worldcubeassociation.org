@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "./", "/vagrant", owner: 'www-data', group: 'vagrant'
 
   # The results scripts can be a bit of a hog.
-  config.vm.provider "virtualbox" do |v|
-      v.memory = 2048
+  config.vm.provider "virtualbox" do |vb|
+      vb.memory = 2048
   end
 end

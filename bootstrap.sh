@@ -25,5 +25,8 @@ sudo a2enmod headers
 sudo service apache2 restart
 
 # Configuration files containing database credentials.
-sudo ln -fs /vagrant/config/results_config.php /vagrant/webroot/results/includes/_config.php
-sudo ln -fs /vagrant/config/results_admin_htaccess /vagrant/webroot/results/admin/.htaccess
+# We copy instead of creating symlinks because VirtualBox
+# in Windows doesn't allow creating symlinks in shared folders.
+#  https://forums.virtualbox.org/viewtopic.php?f=6&t=54042
+sudo cp /vagrant/config/results_config.php /vagrant/webroot/results/includes/_config.php
+sudo cp /vagrant/config/results_admin_htaccess /vagrant/webroot/results/admin/.htaccess
