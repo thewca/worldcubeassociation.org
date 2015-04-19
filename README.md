@@ -14,8 +14,9 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 ## Run
 - `vagrant up` - Once the VM finishes intializing, the website will be
   accessible at [http://localhost:8080](http://localhost:8080).
-- `vagrant ssh -c /vagrant/setup_db_interactive.sh` - For now, seeding the
-  database must be done manually. `/vagrant/setup_db_interactive.sh` will prompt
+- `vagrant ssh -c 'bash -c /vagrant/setup_db_interactive.sh'` - For now,
+  seeding the database must be done manually.
+  `/vagrant/setup_db_interactive.sh` will prompt
   you for your https://www.worldcubeassociation.org/results/admin/ credentials.
   The plan is for these exports to eventually be publically available, and this
   manual step will not longer be required.
