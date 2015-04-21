@@ -22,4 +22,4 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   manual step will not longer be required.
 
 ## TODO
-- Drupal, phpBB, and the WCA regulations are not yet in this repository.
+- Drupal and phpBB are not yet in this repository.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-apt-get update
+sudo apt-get -y update
 
 # Installing mysql-server prompts for a password. Workaround from:
 #  http://stackoverflow.com/a/7740571
@@ -30,3 +30,14 @@ sudo service apache2 restart
 #  https://forums.virtualbox.org/viewtopic.php?f=6&t=54042
 sudo cp /vagrant/config/results_config.php /vagrant/webroot/results/includes/_config.php
 sudo cp /vagrant/config/results_admin_htaccess /vagrant/webroot/results/admin/.htaccess
+
+# Dependencies for wca-documents-extra. Some of this came from
+# https://github.com/cubing/wca-documents-extra/blob/master/.travis.yml, but has
+# been tweaked for Ubuntu 14.04
+sudo apt-get install -y git
+sudo apt-get install -y texlive-fonts-recommended zapfding
+sudo apt-get install --no-install-recommends -y pandoc fonts-unfonts-core fonts-arphic-uming
+sudo apt-get install --no-install-recommends -y texlive-lang-all texlive-xetex texlive-latex-recommended texlive-latex-extra lmodern
+
+# Build WCA regulations
+sudo /vagrant/wca-documents-extra/make.py --wca && sudo mv /vagrant/webroot/regulations /vagrant/webroot/regulations-old && sudo mv /vagrant/wca-documents-extra/build/regulations /vagrant/webroot/ && sudo rm -rf /vagrant/webroot/regulations-old

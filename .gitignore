@@ -1,2 +1,5 @@
+# Compiled regulations assets
+webroot/regulations/
+
 # Vagrant stuff
 .vagrant/
