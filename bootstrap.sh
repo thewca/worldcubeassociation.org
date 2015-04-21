@@ -35,9 +35,9 @@ sudo cp /vagrant/config/results_admin_htaccess /vagrant/webroot/results/admin/.h
 # https://github.com/cubing/wca-documents-extra/blob/master/.travis.yml, but has
 # been tweaked for Ubuntu 14.04
 sudo apt-get install -y git
-sudo apt-get install -y texlive-fonts-recommended zapfding
+sudo apt-get install -y texlive-fonts-recommended
 sudo apt-get install --no-install-recommends -y pandoc fonts-unfonts-core fonts-arphic-uming
 sudo apt-get install --no-install-recommends -y texlive-lang-all texlive-xetex texlive-latex-recommended texlive-latex-extra lmodern
 
 # Build WCA regulations
-sudo /vagrant/wca-documents-extra/make.py --wca && sudo mv /vagrant/webroot/regulations /vagrant/webroot/regulations-old && sudo mv /vagrant/wca-documents-extra/build/regulations /vagrant/webroot/ && sudo rm -rf /vagrant/webroot/regulations-old
+sudo /vagrant/wca-documents-extra/make.py --wca && if [ -a /vagrant/webroot/regulations ]; then sudo rm -rf /vagrant/webroot/regulations-todelete && sudo mv /vagrant/webroot/regulations /vagrant/webroot/regulations-todelete; fi && sudo mv /vagrant/wca-documents-extra/build/regulations /vagrant/webroot/ && sudo rm -rf /vagrant/webroot/regulations-todelete

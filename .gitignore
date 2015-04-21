@@ -1,5 +1,6 @@
 # Compiled regulations assets
 webroot/regulations/
+webroot/regulations-todelete/
 
 # Vagrant stuff
 .vagrant/
