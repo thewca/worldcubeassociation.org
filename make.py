@@ -42,6 +42,9 @@ def main():
     args.all = True
     args.pdf = True
 
+  if args.all:
+    args.data = True
+
   # Override previous PDF settings at the end
   if args.no_pdf:
     args.pdf = False
@@ -125,7 +128,14 @@ parser.add_argument(
   '--all', '-a',
   action='store_true',
   default=False,
-  help="Build all languages."
+  help="Build all languages and data (this includes --data)."
+)
+
+parser.add_argument(
+  '--data',
+  action='store_true',
+  default=False,
+  help="Build data."
 )
 
 parser.add_argument(
@@ -249,6 +259,7 @@ pool = {}
 def build(args):
   if args.all:
 
+    # Build languages
     print "Using %d workers." % args.num_workers
     f = functools.partial(buildTranslationPooled, args)
     if args.num_workers == 1:
@@ -264,6 +275,11 @@ def build(args):
 
   elif args.language in languages:
     buildTranslation(args, args.language)
+
+  if args.data:
+    subprocess.check_call([ "git", "checkout", "origin/data", "build" ])
+    # The call to git checkout placed files in our staging area. Discard them here.
+    subprocess.check_call([ "git", "reset", "HEAD", "build" ])
 
   print "Finished building."
 
