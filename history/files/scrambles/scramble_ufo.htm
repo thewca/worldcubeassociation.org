@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head><title>Rubik's Ufo scrambler</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+/* Javascript written by Jaap Scherphuis,  jaapsch a t yahoo d o t com */
+
+// Default settings
+var seqlen=20;
+var numScrambles=5;
+var colorString = "yobwrg";  //In dlburf order. May use any colours in colorList below
+
+// list of the colours
+var colorList=new Array(
+    "#80ff80",  //light green
+    "#80c0ff",  //light blue
+    "red",
+    "yellow",
+    "#ff8080",   // pink
+    "#e08000",   // brown
+    "silver",  // top layer
+    "gray"     // bottom layer
+);
+
+var seq=new Array();    // move sequences
+var posit = new Array();    // piece array
+
+function parse() {
+    var s="";
+    var urlquery=location.href.split("?")
+    if(urlquery.length>1){
+        var urlterms=urlquery[1].split("&")
+        for( var i=0; i<urlterms.length; i++){
+            var urllr=urlterms[i].split("=");
+            if       (urllr[0]=="len") {
+                if(urllr[1]-0 >= 1 ) seqlen=urllr[1]-0;
+            } else if(urllr[0]=="num"){
+                if(urllr[1]-0 >= 1 ) numScrambles=urllr[1]-0;
+            }
+        }
+    }
+}
+parse();
+
+function scramble(){
+    //set up bookkeeping
+    var lm = -1;
+    // for each cube scramble
+    for( n=0; n<numScrambles; n++){
+        // initialise this scramble
+        lm=-1;
+        seq[n]=new Array(); // moves generated so far
+
+        // while generated sequence not long enough
+        while( seq[n].length<seqlen ){
+
+            // choose a different move than previous one
+            var m;
+            do{
+                m=Math.floor(Math.random()*4); // U, C,B,A
+            }while( m==lm );
+
+            // choose random amount
+            var q= (m==0)? Math.floor(Math.random()*5)+1 : 1;
+
+            // store move
+            seq[n][seq[n].length]=q*4 + m;
+
+            lm = m;
+        }
+    }
+}
+
+function scramblestring(n){
+    var s="";
+    for(var i=0; i<seq[n].length; i++){
+        if( i!=0 ) s+=" ";
+        var q=seq[n][i]>>2;
+        var m=seq[n][i]&3;
+        s+="UCBA".charAt(m);
+        if(m==0) s+="012345".charAt(q);
+    }
+    return s;
+}
+
+function imagestring(nr){
+    var s="",i;
+
+    // initialise pieces
+    for( i=0; i<12; i++) posit[i]=i;
+
+    // do move sequence
+    for(i=0; i<seq[nr].length; i++){
+        var m=seq[nr][i]&3;
+        var q=seq[nr][i]>>2;
+        while(q>0){
+            domove(m);
+            q--;
+        }
+    }
+
+    // build string containing ufo position
+    d=0;
+    s="<table border=1 cellpadding=0 cellspacing=0><tr>";
+    for(i=0;i<12;i++){
+        if( i==6 ) s+="<\/tr><tr>";
+
+        var p = posit[i];
+        var body = 6;
+        var colleft = p;
+        var colright = p+1;
+        if( p>5 ){
+            body++;
+            p-=6;
+            colleft  = p+1;
+            colright = p;
+        }
+        if( colright>5 )colright-=6;
+        if( colleft >5 )colleft -=6;
+        if( ( p>=6 && i<6 ) || ( i>=6 && p<6 ) ){
+            var j=colleft; colleft = colright; colright = j;
+        }
+        s+="<td><table border=0 cellpadding=0 cellspacing=0><tr>";
+        s+="<td bgcolor="+colorList[colleft]+"><img src='images/blank.gif' width=8 height=20><\/td>";
+        s+="<td bgcolor="+colorList[body]+"><img src='images/blank.gif' width=20 height=20><\/td>";
+        s+="<td bgcolor="+colorList[colright]+"><img src='images/blank.gif' width=8 height=20><\/td>";
+        s+="<\/tr><\/table><\/td>";
+    }
+    s+="<\/tr><\/table>";
+    return(s);
+}
+
+function domove(m){
+    //do move m
+    var j;
+    if( m==0 ){
+        j=posit[0];
+        posit[0]=posit[1];
+        posit[1]=posit[2];
+        posit[2]=posit[3];
+        posit[3]=posit[4];
+        posit[4]=posit[5];
+        posit[5]=j;
+    }else if( m==1 ){
+        j=posit[2]; posit[2]=posit[10]; posit[10]=j;
+        j=posit[3]; posit[3]=posit[ 9]; posit[ 9]=j;
+        j=posit[4]; posit[4]=posit[ 8]; posit[ 8]=j;
+    }else if( m==2 ){
+        j=posit[3]; posit[3]=posit[11]; posit[11]=j;
+        j=posit[4]; posit[4]=posit[10]; posit[10]=j;
+        j=posit[5]; posit[5]=posit[ 9]; posit[ 9]=j;
+    }else if( m==3 ){
+        j=posit[4]; posit[4]=posit[ 6]; posit[ 6]=j;
+        j=posit[5]; posit[5]=posit[11]; posit[11]=j;
+        j=posit[0]; posit[0]=posit[10]; posit[10]=j;
+    }
+}
+
+function help(){
+    alert("Rubik's Ufo Scrambler\n\n"+
+        "Enter the number of scrambles you want, and the length of\n"+
+        "the scrambles. If you then press the Scramble button the\n"+
+        "page will reload and show the new scrambles. Every time you\n"+
+        "then reload the page or click the button, a new set of\n"+
+        "scrambles is generated.\n\n"+
+
+        "Scrambles:\n"+
+        "The scrambles will not contain any moves that cancel each\n"+
+        "other.\n\n"+
+
+        "Notation:\n"+
+        "Hold the puzzle so that the yellow part lies directly at\n"+
+        "the front, light grey on top and dark grey on the bottom.\n"+
+        "The move B means turn over the right hand side, splitting at\n"+
+        "the yellow seam. The move A means turn over the right hand\n"+
+        "side splitting at the pink seam at the front right. The move\n"+
+        "C means turn over the right hand side splitting at the red\n"+
+        "seam at the front left. The move U followed by a number between\n"+
+        "1 and 5 means turn the top layer clockwise that many steps.\n"+
+        "Note that the red-blue piece at the bottom left never moves.\n\n"+
+
+        "Printing:\n"+
+        "The Ufo layout might not print correctly on a colour\n"+
+        "printer. Make sure that your browser is set up to print\n"+
+        "background colours, which is an Internet Options/Advanced\n"+
+        "setting in Internet Explorer, or a setting in the Print\n"+
+        "dialog in Mozilla Firefox.\n\n"+
+
+        "Written by Jaap Scherphuis, Copyright 2006.");
+}
+
+function setForm(){
+    document.frm.len.value=seqlen;
+    document.frm.num.value=numScrambles;
+
+    document.frm.subbutton.focus();
+}
+
+//-->
+</script>
+
+</head>
+
+<body bgcolor="white" onload="setForm();">
+<!-- following code added by server. PLEASE REMOVE -->
+<!-- preceding code added by server. PLEASE REMOVE -->
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+document.writeln("\
+<form name=frm action=''>\
+<table border=1 cellpadding=0 cellspacing=0 width='100%'><tr>\
+<td colspan=3 bgcolor='#00c0c0'>\
+<table width='100%' cellpadding=2 cellspacing=0><tr>\
+<td bgcolor=white align=center width=117><img src='images/rubikufo.gif' width=283 height=53 alt=''><\/td>\
+<td><font face='Arial' size=3>Number of scrambles:<\/font><input name=num size=2 maxlength=2><\/td>\
+<td><font face='Arial' size=3>Scramble length:<\/font><input name=len size=2 maxlength=3><\/td>\
+<td><input type='submit' value='Scramble!' name=subbutton><\/td>\
+<td><font face='Arial' size=2><a href='javascript:help();'>Help!<\/a><\/font><\/td>\
+<\/tr><\/table><\/td><\/tr>\
+");
+
+scramble();
+for( var i=0; i<numScrambles; i++){
+    document.writeln("<tr><td><font face='Arial' size=3><b>"+(i+1)+".<\/b><\/font><\/td><td width=100%><font face='Arial' size=3><b>&nbsp;&nbsp;"+scramblestring(i)+"<\/b><\/font><\/td><td align=center>"+
+    "<table cellpadding=8 cellspacing=0 width='100%'><tr><td>"+imagestring(i)+"<\/td><\/tr><\/table><\/td><\/tr>");
+}
+document.writeln("<\/table><\/form>");
+
+//-->
+</script>
+
+</body></html>

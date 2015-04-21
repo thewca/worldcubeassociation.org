@@ -1,0 +1,413 @@
+body, div, p {
+  margin: 0px auto;
+  padding: 0px;
+}
+
+body {
+  font-family: Helvetica, Tahoma, Arial;
+
+  background-color: #EEE;
+  background-image: -webkit-repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -moz-repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -o-repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  max-width: 800px;
+}
+
+.scramble_set {
+  margin: 1em auto;
+
+  width: 640px;
+  /*
+  padding-bottom: 1em;
+  border-bottom: 10px solid #00c0c0;
+  */
+}
+
+/* Page break before any scramble set that follows another. */
+.scramble_set + .scramble_set {
+  page-break-before: always;  
+}
+
+.info_table {
+  padding: 8px;
+  background: #00c0c0;
+  border: 1px solid #00c0c0;
+  border-bottom: none;
+  border-radius: 1em 1em 0em 0em;
+
+  z-index: 1;
+}
+
+.footer_table {
+  width: 100%;
+  padding: 8px;
+  background: #00c0c0;
+  border: 1px solid #00c0c0;
+  border-top: none;
+  border-radius: 0em 0em 1em 1em;
+
+  z-index: 7;
+}
+
+.info_table {
+  font-weight: bold;
+  width: 100%;
+}
+
+.info_table thead td {  
+  font-size: 1.5em;
+  padding: 0px 12px;
+}
+
+.info_table td { text-align: center; }
+.info_table td:first-child { text-align: left; }
+.info_table td:last-child { text-align: right; }
+
+.footer_table td { text-align: center; }
+.footer_table td:first-child { text-align: left; }
+.footer_table td:last-child { text-align: right; }
+
+.scramble_table td { text-align: left;}
+.scramble_table td:first-child { text-align: center; font-size: 200%; }
+.scramble_table td:last-child { text-align: center; }
+
+.info_details {
+  line-height: 150%;
+}
+
+.scramble_table {
+  width: 100%;
+  font-weight: bold;
+  border-collapse: collapse;
+
+  z-index: 4;
+  background: #FFF;
+}
+
+.scramble_table td {
+  border: 1px solid #00c0c0;
+  padding: 4px 8px;
+  line-height: 150%;
+}
+
+.wca_logo {
+  width: 40px;
+  height: 40px;
+  margin: -5px;
+}
+
+.wca_logo_top {
+  width: 100px;
+  height: 100px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0px;
+}
+
+li {
+  padding: 0.2em;
+}
+
+#updates {
+  padding: 1em;
+  margin: 1em;
+  font-family: Helvetica;
+  border-radius: 1em;
+  background: #00C0C0;
+  display: none;
+  padding: 4px;
+}
+
+#updates.visible {
+  display: block;
+}
+
+#updates h2 {
+  margin: 0px 0px 4px;
+}
+
+#updates > ul {
+  clear: both;
+  font-family: monospace;
+  background: #FFF;
+  border-radius: 8px;
+  margin: 8px;
+  padding: 12px;
+}
+
+#updates > ul > li {
+  margin-left: 2em;
+}
+
+.interface, #about {
+  padding: 1em;
+  margin: 1em;
+  font-family: Helvetica;
+  border: 1px solid #00c0c0;
+  border-radius: 1em;
+  background: #00c0c0;
+}
+
+@media print  
+{
+    #updates, .interface, #about, .unsupported {
+        display: none !important;
+    }
+    body {
+      background: none;
+    }
+}
+
+#benchmarkButton {
+  font-size: 200%;
+  padding: 0.1em 1em;
+}
+
+#goButton {
+  font-size: 200%;
+  padding: 0.1em 1em;
+}
+
+#competitionName, #roundName {
+  font-size: 150%;
+  width: 20em;
+  text-align: center;
+}
+
+.scramble_table td.sorry {
+  padding: 2em;
+  font-size: 200%;
+  text-align: center;
+}
+
+/*
+ * Tweaks for individual scramblers.
+ */
+
+.scramble_table td.scramble_333 {
+  font-size: 150%;
+}
+
+.scramble_table td.scramble_222 {
+  font-size: 200%;
+}
+
+.scramble_table td.scramble_pyram {
+  font-size: 180%;
+}
+
+.scramble_table td.scramble_666 {
+  font-size: 120%;
+}
+
+.scramble_table td.scramble_777 {
+  font-size: 110%;
+}
+
+.scramble_table td.scramble_minx {
+  font-family: monospace;
+  font-size: 90%;
+}
+
+.scramble_table td.scramble_clock {
+  font-family: monospace;
+  padding: 4px 4px;
+}
+
+.scramble_table td.scramble_clock div.clock_inner {
+  display: block;
+  width: 3.5em;
+  padding: 0.2em;
+  font-weight: normal;
+  border-left: 1px solid #EEE;
+  border-right: 1px solid #EEE;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+
+.scramble_table td.scramble_clock div.clock_outer {
+  float: left;
+  width: 3.9em;
+}
+
+.scramble_table td.scramble_clock span.clock_pegs {
+  font-weight: bold;
+}
+
+.scramble_table td.scramble_clock span.peg_changed {
+  font-weight: bold;
+  /*text-decoration: underline;*/
+}
+
+.scramble_table td.scramble_clock span.clock_turns {
+  font-weight: bold;
+}
+
+.scramble_table .drawing {
+  /*width: 250px;*/
+}
+
+.unupported {
+  padding: 1em;
+  margin: 1em;
+  font-family: Helvetica;
+  border: 1px solid #00c0c0;
+  border-radius: 1em;
+  background: #F88;
+}
+
+h1 {
+  font-size: 200%;
+  color: #FFF;
+  font-variant: small-caps;
+  text-shadow: 2px 2px 5px #888;
+}
+
+#select_sets {
+  border-collapse: collapse;
+  background: #CCC;
+  box-shadow: 2px 2px 5px #888;
+
+  clear: both;
+  margin: 12px;
+}
+
+#select_sets td {
+  padding: 4px 8px;#000;
+}
+
+#select_sets td.event_name {
+  font-weight: bold;
+  text-align: right;
+}
+
+#select_sets tr {
+  border: 1px solid #888;
+}
+
+#select_sets td input {
+  font-size: 1em;
+}
+
+#select_sets td input.round_name {
+  width: 10em;
+}
+
+#select_sets td input.num_solves {
+  width: 3em;
+}
+
+#select_sets td select {
+  font-size: 1em;
+}
+
+#event_amounts {
+  border-collapse: collapse;
+  background: #CCC;
+  box-shadow: 2px 2px 5px #888;
+  margin: 12px;
+  font-size: 1.2em;
+}
+
+#event_amounts td {
+  padding: 0px;
+  margin: 0px;
+}
+
+#event_amounts tr {
+  padding: 0px;
+  margin: 0px;
+}
+
+.addRoundButton {
+  font-size: 100%;
+  width: 100%;
+  padding: 4px 4px;
+  margin: 0px;
+}
+
+#benchmark {
+  display: none;
+  width: 640px;
+  padding: 0px;
+  margin: 1em auto;
+}
+
+#benchmark_details {
+  clear: both;
+  font-family: monospace;
+  background: #FFF;
+  border-radius: 8px;
+  margin: 8px;
+  padding: 12px;
+  height: 10em;
+  width: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-shadow: inset 0px -2px 8px #000;
+}
+
+.loading_scramble {
+  
+  background-color: #FAA;
+  background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+
+  -webkit-animation: loading_scramble_frames 2s infinite linear;
+  -moz-animation: loading_scramble_frames 2s infinite linear;
+  animation: loading_scramble_frames 2s infinite linear;
+}
+
+@-webkit-keyframes loading_scramble_frames {
+  0% {background: #8DD;}
+  50% {background: #FFF;}
+  100% {background: #8DD;}
+}
+
+@-moz-keyframes loading_scramble_frames {
+  0% {background: #8DD;}
+  50% {background: #FFF;}
+  100% {background: #8DD;}
+}
+
+@keyframes loading_scramble_frames {
+  0% {background: #8DD;}
+  50% {background: #FFF;}
+  100% {background: #8DD;}
+}
+
+.loading_scrambler {
+  
+  background-color: #FAA;
+  background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+
+  -webkit-animation: loading_scrambler_frames 2s infinite linear;
+  -moz-animation: loading_scrambler_frames 2s infinite linear;
+  animation: loading_scrambler_frames 2s infinite linear;
+}
+
+@-webkit-keyframes loading_scrambler_frames {
+  0% {background: #D88;}
+  50% {background: #FFF;}
+  100% {background: #D88;}
+}
+
+@-moz-keyframes loading_scrambler_frames {
+  0% {background: #D88;}
+  50% {background: #FFF;}
+  100% {background: #D88;}
+}
+
+@keyframes loading_scrambler_frames {
+  0% {background: #D88;}
+  50% {background: #FFF;}
+  100% {background: #D88;}
+}

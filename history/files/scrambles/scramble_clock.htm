@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Rubik's Clock scramble</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+</head>
+<body bgcolor="white">
+<table width="100%">
+<tbody>
+<tr>
+
+ <script language="JavaScript1.1" type="text/javascript">
+<!--
+	// Javascript written by Jaap Scherphuis. (jaapsch a t yahoo d o t com)
+
+function prt(p){
+	if(p<10) document.write(" ");
+	document.write(p+" ");
+}
+function prtrndpin(){
+	prtpin(Math.floor(Math.random()*2));
+}
+function prtpin(p){
+	document.write(p==0?"U":"d");
+}
+
+function scramble(){
+	var posit = new Array (0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0);
+	var seq = new Array();
+	var i,j;
+	var moves = new Array();
+	moves[0]=new Array(1,1,1,1,1,1,0,0,0,  -1,0,-1,0,0,0,0,0,0);
+	moves[1]=new Array(0,1,1,0,1,1,0,1,1,  -1,0,0,0,0,0,-1,0,0);
+	moves[2]=new Array(0,0,0,1,1,1,1,1,1,  0,0,0,0,0,0,-1,0,-1);
+	moves[3]=new Array(1,1,0,1,1,0,1,1,0,  0,0,-1,0,0,0,0,0,-1);
+
+	moves[4]=new Array(0,0,0,0,0,0,1,0,1,  0,0,0,-1,-1,-1,-1,-1,-1);
+	moves[5]=new Array(1,0,0,0,0,0,1,0,0,  0,-1,-1,0,-1,-1,0,-1,-1);
+	moves[6]=new Array(1,0,1,0,0,0,0,0,0,  -1,-1,-1,-1,-1,-1,0,0,0);
+	moves[7]=new Array(0,0,1,0,0,0,0,0,1,  -1,-1,0,-1,-1,0,-1,-1,0);
+
+	moves[ 8]=new Array(0,1,1,1,1,1,1,1,1,  -1,0,0,0,0,0,-1,0,-1);
+	moves[ 9]=new Array(1,1,0,1,1,1,1,1,1,  0,0,-1,0,0,0,-1,0,-1);
+	moves[10]=new Array(1,1,1,1,1,1,1,1,0,  -1,0,-1,0,0,0,0,0,-1);
+	moves[11]=new Array(1,1,1,1,1,1,0,1,1,  -1,0,-1,0,0,0,-1,0,0);
+
+	moves[12]=new Array(1,1,1,1,1,1,1,1,1,  -1,0,-1,0,0,0,-1,0,-1);
+	moves[13]=new Array(1,0,1,0,0,0,1,0,1,  -1,-1,-1,-1,-1,-1,-1,-1,-1);
+
+	for( i=0; i<14; i++){
+		seq[i] = Math.floor(Math.random()*12)-5;
+	}
+
+	for( i=0; i<14; i++){
+		for( j=0; j<18; j++){
+			posit[j]+=seq[i]*moves[i][j];
+		}
+	}
+	for( j=0; j<18; j++){
+		posit[j]%=12;
+		while( posit[j]<=0 ) posit[j]+=12;
+	}
+
+	document.writeln("UU  u="+seq[0]);
+	document.writeln("dd  d="+seq[4]);
+	document.writeln("");
+	document.writeln("dU  u="+seq[1]);
+	document.writeln("dU  d="+seq[5]);
+	document.writeln("");
+	document.writeln("dd  u="+seq[2]);
+	document.writeln("UU  d="+seq[6]);
+	document.writeln("");
+	document.writeln("Ud  u="+seq[3]);
+	document.writeln("Ud  d="+seq[7]);
+	document.writeln("");
+	document.writeln("dU  u="+seq[8]);
+	document.writeln("UU");
+	document.writeln("");
+	document.writeln("Ud  u="+seq[9]);
+	document.writeln("UU");
+	document.writeln("");
+	document.writeln("UU  u="+seq[10]);
+	document.writeln("Ud");
+	document.writeln("");
+	document.writeln("UU  u="+seq[11]);
+	document.writeln("dU");
+	document.writeln("");
+	document.writeln("UU  u="+seq[12]);
+	document.writeln("UU");
+	document.writeln("");
+	document.writeln("dd  d="+seq[13]);
+	document.writeln("dd");
+	document.writeln("");
+	prtrndpin();prtrndpin();document.writeln("");
+	prtrndpin();prtrndpin();document.writeln("");
+	document.writeln("");
+	document.writeln("Result");
+	document.writeln("Front:");
+	for( i=0; i<9; i++){
+		prt(posit[i]);
+		if( (i%3)==2 ) document.writeln("");
+	}
+	document.writeln("Back:");
+	for( i=0; i<9; i++){
+		prt(posit[i+9]);
+		if( (i%3)==2 ) document.writeln("");
+	}
+}
+
+
+for(var n=0;n<5; n++){
+	document.write("<td><pre>");
+	scramble();
+	document.write("<\/pre><\/td>");
+}
+
+// -->
+</script>
+
+</tr>
+</tbody>
+</table>
+</body>
+</html>

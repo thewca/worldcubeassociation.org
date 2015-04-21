@@ -1,0 +1,62 @@
+<!doctype html>
+<html> 
+<head>
+
+<title>Mark 2: WCA-Style Puzzle Scrambler</title>
+
+<link href="inc/scramble.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="inc/raphael-min.js"></script>
+<script type="text/javascript" src="inc/mersennetwister.js"></script>
+
+<script type="text/javascript" src="inc/scramblers/scramble_sq1.js"></script>
+
+<script type="text/javascript" src="inc/scramble.js"></script>
+
+</head> 
+<body onload="scramble.initialize();">
+
+<div class="interface" id="benchmark">
+	<textarea id="benchmark_details">
+	</textarea>
+</div>
+
+<div id="updates">
+	<ul id="updates_general">
+	</ul>
+	<ul id="updates_specific">
+	</ul>
+</div>
+
+<div class="interface" id="select_events_interface">
+	<center>
+		<img src="inc/wca_logo.svg" class="wca_logo_top"><br>
+		<h1><!--WCA Official Puzzle Scrambler: <span class="mark2_title"-->Mark 2 (Square-1 Only)</span></h1><br>
+
+		<input id="competitionName" value="" placeholder="Competition Name" tabindex="2"/>
+
+	<table id="event_amounts">
+	</table>
+	<button onclick="scramble.go();" id="goButton" tabindex="1">Scramble!</button>
+	</center>
+</div>
+
+<div class="interface" id="select_sets_interface">
+	<h1>Adjust Individual Rounds:</h1>
+	<center>
+	<table id="select_sets">
+		<tbody id="events_tbody">
+		</tbody>
+	</table>
+	
+	</center>
+</div>
+
+<div id="scramble_sets">
+	
+	<!-- Scrambles will be inserted here using Javascript. -->
+
+</div>
+
+</body> 
+</html> 

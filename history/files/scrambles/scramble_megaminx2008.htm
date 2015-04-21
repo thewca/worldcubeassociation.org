@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head><title>Megaminx scrambler</title>
+
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+
+var linelen=10;
+var linenbr=7;
+var numcub=5;
+
+var seq=new Array();	// move sequences
+
+function parse() {
+	var urlquery=location.href.split("?")
+	if(urlquery.length>1){
+		var urlterms=urlquery[1].split("&")
+		for( var i=0; i<urlterms.length; i++){
+			var urllr=urlterms[i].split("=");
+			if(urllr[0]=="ll") {
+				if(urllr[1]-0 >= 1 ) linelen=urllr[1]-0;
+			} else if(urllr[0]=="ln"){
+				if(urllr[1]-0 >= 1 ) linenbr=urllr[1]-0;
+			} else if(urllr[0]=="num"){
+				if(urllr[1]-0 >= 1 ) numcub=urllr[1]-0;
+			}
+		}
+	}
+}
+parse();
+
+function scramble(){
+	var i,n;
+	for( n=0; n<numcub; n++){
+		seq[n]=new Array();
+		for(i=0; i<linenbr*linelen; i++){
+			seq[n][i]=Math.floor(Math.random()*2);
+				}
+	}
+}
+
+function scramblestring(n){
+	var s="<br>&nbsp;&nbsp;",i,j;
+	for(j=0; j<linenbr; j++){
+		for(i=0; i<linelen; i++){
+			if (i%2)
+			{
+				if (seq[n][j*linelen + i]) s+="D++ ";
+				else s+="D-- ";
+			}
+			else
+			{
+				if (seq[n][j*linelen + i]) s+="R++ ";
+				else s+="R-- ";
+			}
+		}
+		if (seq[n][(j+1)*linelen - 1]) s+="U<br>&nbsp;&nbsp;";
+		else s+="U'<br>&nbsp;&nbsp;";
+	}
+	return s;
+}
+
+
+//-->
+</script>
+</head>
+
+<body bgcolor="white">
+
+<form name="frm">
+<table border=1 cellpadding=0 cellspacing=0 width='100%'><tr>
+<td colspan=3 bgcolor='#00c0c0'>
+<table width='100%' cellpadding=2 cellspacing=0><tr>
+<td>Number of scrambles:<input name=num size=2 maxlength=2></td>
+<td>Line length:<input name=ll size=2 maxlength=3></td>
+<td>Line number:<input name=ln size=2 maxlength=3></td>
+<td><input type='submit' value='Scramble!' name=subbutton></td>
+</tr></table></td></tr>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+document.frm.ll.value=linelen;
+document.frm.ln.value=linenbr;
+document.frm.num.value=numcub;
+
+
+scramble();
+for( var i=0; i<numcub; i++){
+	document.writeln('<tr><td><b>'+(i+1)+'.</b></td><td width=100%><font face="courier"><b>'+scramblestring(i)+'</b></font></td></tr>');
+}
+
+
+//-->
+</script>
+</table></form>
+<br>
+Notation:<br>
+D means all layers below the U face together in one move.<br>
+R means all layers right from the L face together in one move.<br>
+++ means 2/5 move clockwise (144 degrees), -- means 2/5 move counterclockwise (-144 degrees).<br>
+U is the regular move of the U face, according to standard cube notation.<br>
+<br>
+Program by Clément Gallet, based on earlier work by Jaap Scherphuis. Idea by Stefan Pochmann.
+
+</body>
+</html>

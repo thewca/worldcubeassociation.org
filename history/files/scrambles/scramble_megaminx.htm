@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head><title>Megaminx scrambler</title>
+
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+/* Javascript written by Jaap Scherphuis,  jaapsch a t yahoo d o t com */
+var seqlen=30;
+var numcub=5;
+
+var seq=new Array();	// move sequences
+var posit = new Array();	// piece array
+/*
+       3 4
+      2 0 5
+        1
+      10 9
+     11 6 8
+        7
+*/
+
+var comm = new Array();
+comm[ 0] = new Array(1,0,0,0,0,0, 1, 1,1,1,1,1);
+comm[ 1] = new Array(0,1,0,1,1,0, 1, 1,1,0,0,1);
+comm[ 2] = new Array(0,0,1,0,1,1, 1, 1,1,1,0,0);
+comm[ 3] = new Array(0,0,0,1,0,1, 1, 0,1,1,1,0);
+comm[ 4] = new Array(0,0,0,0,1,0, 1, 0,0,1,1,1);
+comm[ 5] = new Array(0,0,0,0,0,1, 1, 1,0,0,1,1);
+comm[ 6] = new Array(0,0,0,0,0,0, 1, 0,0,0,0,0);
+comm[ 7] = new Array(0,0,0,0,0,0, 0, 1,0,1,1,0);
+comm[ 8] = new Array(0,0,0,0,0,0, 0, 0,1,0,1,1);
+comm[ 9] = new Array(0,0,0,0,0,0, 0, 0,0,1,0,1);
+comm[10] = new Array(0,0,0,0,0,0, 0, 0,0,0,1,0);
+comm[11] = new Array(0,0,0,0,0,0, 0, 0,0,0,0,1);
+
+
+function parse() {
+	var s="";
+	var urlquery=location.href.split("?")
+	if(urlquery.length>1){
+		var urlterms=urlquery[1].split("&")
+		for( var i=0; i<urlterms.length; i++){
+			var urllr=urlterms[i].split("=");
+			if(urllr[0]=="len") {
+				if(urllr[1]-0 >= 1 ) seqlen=urllr[1]-0;
+			} else if(urllr[0]=="num"){
+				if(urllr[1]-0 >= 1 ) numcub=urllr[1]-0;
+			}
+		}
+	}
+}
+parse();
+
+function scramble(){
+	var i,j,n,ls;
+	for( n=0; n<numcub; n++){
+		ls=-1;
+		seq[n]=new Array();
+
+		for(i=0; i<seqlen; i++){
+			do{
+				j=Math.floor(Math.random()*12);
+			}while( ls>=0 && comm[j][ls]!=0 );
+			ls=j;
+			k=Math.floor(Math.random()*4)+1;
+
+			seq[n][i+i]  =j;
+			seq[n][i+i+1]=k;
+		}
+	}
+}
+
+function scramblestring(n){
+	var s="",i;
+	for(i=0; i<seq[n].length; i+=2){
+		s+="ABCDEFabcdef".charAt(seq[n][i]);
+		if( seq[n][i+1]>1 ) s+=seq[n][i+1];
+		s+=" ";
+	}
+	return s;
+}
+
+
+//-->
+</script>
+</head>
+
+<body bgcolor="white">
+
+<form name="frm">
+<table border=1 cellpadding=0 cellspacing=0 width="100%"><tr>
+<td colspan=2 bgcolor='#00c0c0'>
+<table width="100%"><tr>
+<td bgcolor=white align=center><img src="dodeca.gif" width=117 height=122 alt=""></td>
+<td><font face="Arial" size=3>Number of scrambles:</font><input name=num size=4 maxlength=2></td>
+<td><font face="Arial" size=3>Scramble length:</font><input name=len size=4 maxlength=3></td>
+<td><input type="submit" value="Scramble!"></td>
+</tr></table></td></tr>
+
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+document.frm.len.value=seqlen;
+document.frm.num.value=numcub;
+
+scramble();
+for( var i=0; i<numcub; i++){
+	document.writeln("<tr><td><font face='Arial' size=3><b>&nbsp;&nbsp;"+scramblestring(i)+"<\/b><\/font><\/td></tr>");
+}
+
+//-->
+</script>
+
+</table></form>
+
+
+</body>
+</html>
