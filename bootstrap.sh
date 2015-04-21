@@ -40,4 +40,4 @@ sudo apt-get install --no-install-recommends -y pandoc fonts-unfonts-core fonts-
 sudo apt-get install --no-install-recommends -y texlive-lang-all texlive-xetex texlive-latex-recommended texlive-latex-extra lmodern
 
 # Build WCA regulations
-sudo /vagrant/wca-documents-extra/make.py --wca && if [ -a /vagrant/webroot/regulations ]; then sudo rm -rf /vagrant/webroot/regulations-todelete && sudo mv /vagrant/webroot/regulations /vagrant/webroot/regulations-todelete; fi && sudo mv /vagrant/wca-documents-extra/build/regulations /vagrant/webroot/ && sudo rm -rf /vagrant/webroot/regulations-todelete
+sudo /vagrant/wca-documents-extra/make.py --setup-wca-documents --wca && if [ -a /vagrant/webroot/regulations ]; then sudo rm -rf /vagrant/webroot/regulations-todelete && sudo mv /vagrant/webroot/regulations /vagrant/webroot/regulations-todelete; fi && sudo mv /vagrant/wca-documents-extra/build/regulations /vagrant/webroot/ && sudo rm -rf /vagrant/webroot/regulations-todelete
