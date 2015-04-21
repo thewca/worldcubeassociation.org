@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 import argparse
 import functools
@@ -9,6 +9,11 @@ import shutil
 import subprocess
 import sys
 import webbrowser
+
+# cd to the directory that this script is in, so it can be run
+# from other directories.
+entryPoint = os.path.split(os.path.abspath(__file__))[0]
+os.chdir(entryPoint)
 
 import html
 import pdf
