@@ -1,10 +1,6 @@
 # Compress most output
 AddOutputFilterByType DEFLATE text/html text/plain text/xml
 
-# .htaccess from:
-# http://kahthong.com/2011/05/how-serve-drupal-sub-directory-web-root-0
-# Also change $base_url in sites/default/settings.php.
-
 <IfModule mod_ssl.c>
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -26,12 +22,22 @@ RewriteRule . - [L]
 
 Options -Indexes
 Options +FollowSymLinks
+Options +ExecCGI
 RewriteEngine on
 
-# Serve Drupal 7 from sub directory in web root
-RewriteRule ^$ drupal/index.php [L]
-RewriteCond %{DOCUMENT_ROOT}/drupal%{REQUEST_URI} -f
-RewriteRule .* drupal/$0 [L]
+# Copied and modified from:
+#  http://adamish.com/blog/archives/775
+
+<IfModule mod_fastcgi.c>
+AddHandler fastcgi-script .fcgi
+</IfModule>
+<IfModule mod_fcgid.c>
+AddHandler fcgid-script .fcgi
+</IfModule>
+
+RewriteRule ^$ rails-dispatch.fcgi/$1 [QSA,L] 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* drupal/index.php?q=$0 [QSA]
+RewriteRule ^(.*)$ rails-dispatch.fcgi/$1 [QSA,L] 
+
+ErrorDocument 500 "Rails application failed to start properly"
