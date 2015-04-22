@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 import_db() {
     rm -rf /tmp/import_db
