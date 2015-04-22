@@ -1,5 +1,4 @@
 <?php
-
 $currentSection = 'index';
 require_once('includes/_header.php');
 ?>
@@ -39,7 +38,7 @@ require_once('includes/_header.php');
     <?php print externalLink('http://www.rubikscube.info/', 'Josef Jelinek'); ?>.<br />
   We would like to thank them for their great work for the cubing community.<br />
   <br />
-  If you have questions about the rankings or if you want to correct something, then please <a href="http://www.worldcubeassociation.org/contact">contact the appropriate party</a>.
+  If you have questions about the rankings or if you want to correct something, then please <a href="/contact">contact the appropriate party</a>.
 </p>
 
 <?php
