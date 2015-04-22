@@ -2,20 +2,37 @@
 $currentSection = 'admin';
 require_once "../../includes/_framework.php";
 
+class ErrorMsg {
+
+    var $msg;
+    var $show;
+
+    function __construct($aMsg,$aShow)
+    {
+        $this->msg = $aMsg;
+        $this->show = $aShow;
+    }
+}
+
 function error($msg,$show = 1)
 {
-    die('{"error": {"msg":"'.$msg.'", "show":'.$show.'} }');
+    $error = new ErrorMsg($msg,$show);
+    die('{"error": '.json_encode($error).' }');
 }
 
 // Sanitization
 
-function get_GET($key,$regexp)
+function get_GET($key,$regexp=null)
 {
     if (!paramExists($key)) {
         return null;
     } else {
         $GET = getRawParamsThisShouldBeAnException();
-        return preg_replace($regexp,'',$GET[$key]);
+        if ($regexp) {
+            return preg_replace($regexp,'',$GET[$key]);
+        } else {
+            return $GET[$key];
+        }
     }
 }
 
@@ -59,7 +76,20 @@ function getResultId()
     return get_GET('resultId','/[^0-9]/');
 }
 
+function getToken()
+{
+    return get_GET('token');
+}
+
 // script
+
+// prevent CSRF
+if(!isset($_SESSION)) {
+    session_start();
+}
+if (!paramExists('token') || !array_key_exists('anticsrf_key',$_SESSION) || getToken() != $_SESSION['anticsrf_key']) {
+    error('Invalid access attempt');
+}
 
 if (getFix()) { // fix data
 
@@ -115,8 +145,8 @@ if (getFix()) { // fix data
     if (!$competitionId) {
         $result = pdo_query('SELECT name FROM Persons WHERE id=?',array($personId));
         if (!count($result)) error('Person ID not found',0);
-        $competitorName = $result[0]['name'];
-        $return['competitorName'] = $competitorName;
+        $personName = $result[0]['name'];
+        $return['personName'] = $personName;
         //
         $result = pdo_query(
             'SELECT Competitions.id, Competitions.name FROM '.
@@ -169,7 +199,7 @@ if (getFix()) { // fix data
         'WHERE competitionId=? AND eventId=? AND personId=? AND roundId=?',
         array($defaultCompetition,$defaultEvent,$personId,$defaultRound)
     );
-    if (!count($result)) error('No results for this competition, competitor, event and round (!?)');
+    if (!count($result)) error('No results for this competition, person, event and round (!?)');
     $return['resultId'] = $result[0]['id'];
     $return['resultsFormat'] = $result[0]['format'];
     $return['roundFormat'] = $result[0]['formatId'];

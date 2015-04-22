@@ -101,3 +101,7 @@ ul.chosen-results li {
 .scramble_help tr td.bad_cell {
   background: #FAA;
 }
+
+.fix_results_person_name {
+  min-height: 16px;
+}
