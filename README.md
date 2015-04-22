@@ -20,6 +20,3 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   you for your https://www.worldcubeassociation.org/results/admin/ credentials.
   The plan is for these exports to eventually be publically available, and this
   manual step will not longer be required.
-
-## TODO
-- Drupal and phpBB are not yet in this repository.
