@@ -2,5 +2,10 @@
 webroot/regulations/
 webroot/regulations-todelete/
 
+# It appears that Dreamhost automatically creates these files for us. See:
+#  https://discussion.dreamhost.com/thread-127984.html
+webroot/favicon.gif
+webroot/favicon.ico
+
 # Vagrant stuff
 .vagrant/

@@ -6,9 +6,8 @@ AddOutputFilterByType DEFLATE text/html text/plain text/xml
 # Also change $base_url in sites/default/settings.php.
 
 <IfModule mod_ssl.c>
-SSLOptions +StrictRequire
-SSLRequireSSL
-ErrorDocument 403 https://www.worldcubeassociation.org
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 Header add Strict-Transport-Security "max-age=15768000; includeSubdomains"
 </IfModule>
 
