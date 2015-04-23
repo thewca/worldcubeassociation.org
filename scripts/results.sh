@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 MYSQL_PASSWORD=root
 PHP_IDLE_TIMEOUT_SECONDS=120

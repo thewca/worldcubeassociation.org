@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 install_deps() {
   # Dependencies for wca-documents-extra. Some of this came from

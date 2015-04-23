@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 install_deps() {
   # Enable repository for ruby and nodejs
