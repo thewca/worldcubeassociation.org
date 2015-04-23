@@ -2,8 +2,6 @@
 
 // data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
-$config['drupal']['path'] = '/path/to/your/drupal/install';  // no trailing slash!
-
 $config['database']['host'] = '...';
 $config['database']['user'] = '...';
 $config['database']['pass'] = '...';
