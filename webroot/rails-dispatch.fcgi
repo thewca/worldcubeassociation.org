@@ -1,9 +1,15 @@
-#!/home/cubing/ruby/bin/ruby
+#!/usr/bin/env ruby
 ENV['RAILS_ENV'] = 'development'
-ENV['HOME'] ||= `echo ~`.strip
-ENV['GEM_HOME'] = File.expand_path('~/.gems')
-ENV['GEM_PATH'] = File.expand_path('~/.gems')
+
+# On the WCA server, we compiled our own, latest version of ruby, and set
+# gems to be installed to /home/cubing/.gems.
+if File.directory?('/home/cubing/.gems')
+  ENV['HOME'] ||= "/home/cubing/.gems"
+  ENV['GEM_HOME'] = File.expand_path('~/.gems')
+  ENV['GEM_PATH'] = File.expand_path('~/.gems')
+end
 require 'fcgi' 
+
 require File.join(File.dirname(__FILE__), '../WcaOnRails/config/environment.rb')
 class Rack::PathInfoRewriter
   def initialize(app)

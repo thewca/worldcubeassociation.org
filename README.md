@@ -12,11 +12,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   repository.
 
 ## Run
+- `wget --user=USERNAME --password=PASSWORD https://www.worldcubeassociation.org/results/admin/dump/worldcubeassociation.org_alldbs.tar.gz` - Download full database export.
 - `vagrant up` - Once the VM finishes intializing, the website will be
   accessible at [http://localhost:8080](http://localhost:8080).
-- `vagrant ssh -c 'bash -c /vagrant/setup_db_interactive.sh'` - For now,
-  seeding the database must be done manually.
-  `/vagrant/setup_db_interactive.sh` will prompt
-  you for your https://www.worldcubeassociation.org/results/admin/ credentials.
-  The plan is for these exports to eventually be publicly available, and this
-  manual step will no longer be required.

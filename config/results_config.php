@@ -2,8 +2,6 @@
 // THIS FILE CAME FROM webroot/results/includes/_config.php.template
 // data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
-$config['drupal']['path'] = '/var/www/html/drupal';  // no trailing slash!
-
 $config['database']['host'] = 'localhost';
 $config['database']['user'] = 'root';
 $config['database']['pass'] = 'root';
@@ -35,5 +33,5 @@ if($config['mail']['pear']) {
 // pathToRoot and filesPath are determined by config class - just a placeholder here.  You can enter an explicit value if desired.  Include trailing slash.
 // pathToRoot is for web urls, etc.  May be different than filesystem paths.  Eg, "/results/".
 $config['pathToRoot'] = "/results/";
-// filesPath is absolute path for system files.  May be different that web urls.  Eg, "/var/www/results/".
-$config['filesPath'] = "/var/www/html/results/";
+// filesPath is absolute path for system files.  May be different than web urls.  Eg, "/var/www/results/".
+$config['filesPath'] = "/vagrant/webroot/results/";

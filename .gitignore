@@ -2,6 +2,9 @@
 webroot/regulations/
 webroot/regulations-todelete/
 
+# Database export
+worldcubeassociation.org_alldbs.tar.gz
+
 # It appears that Dreamhost automatically creates these files for us. See:
 #  https://discussion.dreamhost.com/thread-127984.html
 webroot/favicon.gif
