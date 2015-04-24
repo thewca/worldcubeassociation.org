@@ -108,12 +108,12 @@ var
     actualResults = {},
     MAX_SOLVE_COUNT = 5,
     SOLVE_FIELDS = [ 'value1', 'value2', 'value3', 'value4', 'value5', 'best', 'average', 'regionalSingleRecord', 'regionalAverageRecord' ],
-    ROUND_FORMAT_TO_ALLOWED_FIELDS = {
-        "1": [ 'value1', 'best', 'regionalSingleRecord' ],
-        "2": [ 'value1', 'value2', 'best', 'regionalSingleRecord' ],
-        "3": [ 'value1', 'value2', 'value3', 'best', 'regionalSingleRecord' ],
-        "a": [ 'value1', 'value2', 'value3', 'value4', 'value5', 'best', 'average', 'regionalSingleRecord', 'regionalAverageRecord' ],
-        "m": [ 'value1', 'value2', 'value3', 'best', 'average', 'regionalSingleRecord', 'regionalAverageRecord' ],
+    ROUND_FORMAT_TO_EDITABLE_FIELDS = {
+        "1": [ 'value1', 'regionalSingleRecord' ],
+        "2": [ 'value1', 'value2', 'regionalSingleRecord' ],
+        "3": [ 'value1', 'value2', 'value3', 'regionalSingleRecord' ],
+        "a": [ 'value1', 'value2', 'value3', 'value4', 'value5', 'regionalSingleRecord', 'regionalAverageRecord' ],
+        "m": [ 'value1', 'value2', 'value3', 'regionalSingleRecord', 'regionalAverageRecord' ],
     };
 
 
@@ -189,8 +189,8 @@ function extractResults(obj)
             $input.val(wcaResultToString(actualResults[field]));
         }
 
-        var allowedFields = ROUND_FORMAT_TO_ALLOWED_FIELDS[roundFormat];
-        if(allowedFields.indexOf(field) >= 0) {
+        var editableFields = ROUND_FORMAT_TO_EDITABLE_FIELDS[roundFormat];
+        if(editableFields.indexOf(field) >= 0) {
             var pattern = isRecordField ? patternRegionalRecords : patterns[resultsFormat];
             $input.attr({readonly: false, pattern: pattern}).prop('disabled', false).css('background-color', '#ff9');
         }
@@ -365,10 +365,10 @@ function wcaResultToString(result)
     }
 }
 
-function stringToWcaResult(result, isFmMean)
+function stringToWcaResult(result, isAverage)
 {
     result = result.trim().toUpperCase();
-    var pattern = new RegExp(isFmMean ? '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$' : patterns[resultsFormat]);
+    var pattern = new RegExp(isAverage && lastEventId == '333fm' ? '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$' : patterns[resultsFormat]);
     if (!pattern.test(result)) {
         result = '';
     }
@@ -539,7 +539,7 @@ function fixResults()
             value4: stringToWcaResult(resultsInputs.value4.val()),
             value5: stringToWcaResult(resultsInputs.value5.val()),
             best: stringToWcaResult(resultsInputs.best.val()),
-            average: stringToWcaResult(resultsInputs.average.val(), resultsFormat==FM_FORMAT),
+            average: stringToWcaResult(resultsInputs.average.val(), true),
             regionalSingleRecord: resultsInputs.regionalSingleRecord.val(),
             regionalAverageRecord: resultsInputs.regionalAverageRecord.val()
         }
