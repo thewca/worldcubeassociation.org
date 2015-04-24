@@ -141,13 +141,13 @@ if (getFix()) { // fix data
         $roundId = null;
     }
     $return = array();
-    //
+
     if (!$competitionId) {
         $result = pdo_query('SELECT name FROM Persons WHERE id=?',array($personId));
         if (!count($result)) error('Person ID not found',0);
         $personName = $result[0]['name'];
         $return['personName'] = $personName;
-        //
+
         $result = pdo_query(
             'SELECT Competitions.id, Competitions.name FROM '.
             '(SELECT DISTINCT competitionId FROM Results WHERE personId=?) AS t '.
@@ -161,7 +161,7 @@ if (getFix()) { // fix data
     } else {
         $defaultCompetition = $competitionId;
     }
-    //
+
     if (!$eventId) {
         $result = pdo_query(
             'SELECT Events.id, Events.name FROM '.
@@ -176,7 +176,7 @@ if (getFix()) { // fix data
     } else {
         $defaultEvent = $eventId;
     }
-    //
+
     if (!$roundId) {
         $result = pdo_query(
             'SELECT Rounds.id, Rounds.name FROM '.
@@ -191,7 +191,7 @@ if (getFix()) { // fix data
     } else {
         $defaultRound = $roundId;
     }
-    //
+
     $result = pdo_query(
         'SELECT Results.*, format, Formats.name AS roundFormatName FROM Results '.
         'JOIN Events ON Events.id=Results.eventId '.
@@ -205,16 +205,16 @@ if (getFix()) { // fix data
     $return['roundFormat'] = $result[0]['formatId'];
     $return['roundFormatName'] = $result[0]['roundFormatName'];
     $return['results'] = array(
-        $result[0]['value1'],
-        $result[0]['value2'],
-        $result[0]['value3'],
-        $result[0]['value4'],
-        $result[0]['value5'],
-        $result[0]['best'],
-        $result[0]['average'],
-        $result[0]['regionalSingleRecord'],
-        $result[0]['regionalAverageRecord']
+        'value1' => $result[0]['value1'],
+        'value2' => $result[0]['value2'],
+        'value3' => $result[0]['value3'],
+        'value4' => $result[0]['value4'],
+        'value5' => $result[0]['value5'],
+        'best' => $result[0]['best'],
+        'average' => $result[0]['average'],
+        'regionalSingleRecord' => $result[0]['regionalSingleRecord'],
+        'regionalAverageRecord' => $result[0]['regionalAverageRecord']
     );
-    //
+
     echo json_encode($return);
 }
