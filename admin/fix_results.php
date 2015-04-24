@@ -455,9 +455,13 @@ function checkResults()
         resultsInputs.average.parent().css('background-color', COLOR_NORMAL);
     } else {
         if (!worst) {
-            if (countDnfOrDns) {
+            if (countDnfOrDns > 0) {
                 best = WCA_DNF;
-                average = WCA_DNF;
+                if (roundFormat < FORMAT_AVERAGE) { // Best of X
+                    average = 0;
+                } else {
+                    average = WCA_DNF;
+                }
             } else {
                 best = 0;
                 average = 0;
@@ -468,7 +472,7 @@ function checkResults()
             } else if (countDnfOrDns > 1) {
                 average = WCA_DNF;
             } else if (roundFormat > FORMAT_AVERAGE) { // Mean of 3
-                if (countDnfOrDns) {
+                if (countDnfOrDns > 0) {
                     average = WCA_DNF;
                 } else if (lastEventId=='333fm') {
                     average = Math.round(sum*100/3);
@@ -476,7 +480,7 @@ function checkResults()
                     average = Math.round(sum/3);
                 }
             } else { // Average of 5
-                if (countDnfOrDns) {
+                if (countDnfOrDns > 0) {
                     average = Math.round((sum - best) / 3);
                 } else {
                     average = Math.round((sum - best - worst) / 3);
@@ -487,7 +491,7 @@ function checkResults()
         resultsInputs.average.parent().css('background-color', roundFormat < FORMAT_AVERAGE || average == actualResults.average ? COLOR_NORMAL : COLOR_CHANGE);
     }
     resultsInputs.best.val(wcaResultToString(best));
-    resultsInputs.average.val(wcaResultToString(roundFormat < FORMAT_AVERAGE ? 0 : average));
+    resultsInputs.average.val(wcaResultToString(average));
 
     var pattern = new RegExp(patternRegionalRecords);
     ['regionalSingleRecord', 'regionalAverageRecord'].forEach(function(field) {
