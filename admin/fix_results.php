@@ -43,8 +43,8 @@ if(!isset($_SESSION['anticsrf_key'])) {
                     <tr><td class="text-right"><label for="value3">value3</label></td><td><input id="value3" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value4">value4</label></td><td><input id="value4" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value5">value5</label></td><td><input id="value5" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
-                    <tr><td class="text-right"><label for="best">best</label></td><td><input id="best" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
-                    <tr><td class="text-right"><label for="average" id="labelAverage"></label></td><td><input id="average" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
+                    <tr><td class="text-right"><label for="best">best</label></td><td><input id="best" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
+                    <tr><td class="text-right"><label for="average" id="labelAverage"></label></td><td><input id="average" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
                     <tr><td class="text-right"><label for="regionalSingleRecord">regional single record</label></td><td><input id="regionalSingleRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
                     <tr><td class="text-right"><label for="regionalAverageRecord">regional average record</label></td><td><input id="regionalAverageRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
                 </table>
@@ -52,7 +52,7 @@ if(!isset($_SESSION['anticsrf_key'])) {
         </tr>
         <tr>
             <td></td>
-            <td style='text-align:center'><input type='button' id='saveBtn' value='save changes' onclick="fixResults();" disabled style='background-color:#9F3;font-weight:bold' /> </td>
+            <td style='text-align:center'><input type='button' id='saveBtn' value='save changes' onclick="fixResults();" disabled style='font-weight:bold' /> </td>
         </tr>
     </table>
 </form>
@@ -88,6 +88,8 @@ var
     COLOR_ERROR = '#f88',
     COLOR_NORMAL = '#eef',
     COLOR_CHANGE = '#9f3',
+    EDITABLE_FIELD_BG_COLOR = '#ff9',
+    DISABLED_FIELD_BG_COLOR = '#ccc',
 
     WCA_DNF = -1,
     WCA_DNS = -2,
@@ -120,7 +122,7 @@ var
 
 function clearResults()
 {
-    $('#resultsTable').find('input').val('').attr('readonly', true).prop('disabled', true).css('background-color', '#ccc')
+    $('#resultsTable').find('input').val('').attr('readonly', true).prop('disabled', true).css('background-color', DISABLED_FIELD_BG_COLOR)
         .parent().css('background-color', COLOR_NORMAL);
     $('input:button').css('background-color', COLOR_ERROR).prop('disabled', true);
     $('#samples').text('');
@@ -192,7 +194,7 @@ function extractResults(obj)
         var editableFields = ROUND_FORMAT_TO_EDITABLE_FIELDS[roundFormat];
         if(editableFields.indexOf(field) >= 0) {
             var pattern = isRecordField ? patternRegionalRecords : patterns[resultsFormat];
-            $input.attr({readonly: false, pattern: pattern}).prop('disabled', false).css('background-color', '#ff9');
+            $input.attr({readonly: false, pattern: pattern}).prop('disabled', false).css('background-color', EDITABLE_FIELD_BG_COLOR);
         }
     });
 }
