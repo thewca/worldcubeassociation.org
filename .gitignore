@@ -10,5 +10,9 @@ worldcubeassociation.org_alldbs.tar.gz
 webroot/favicon.gif
 webroot/favicon.ico
 
+# Production stuff we haven't pulled into git yet.
+webroot/drupal/
+webroot/forum/
+
 # Vagrant stuff
 .vagrant/
