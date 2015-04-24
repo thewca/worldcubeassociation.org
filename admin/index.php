@@ -35,7 +35,10 @@ function showPages () {
   showPage( 'change_person',
             'Fix or update a person\'s data.' );
 
-  $waiting = count(getWaitingPictureFiles('../upload/'));
+  showPage( 'fix_results',
+            'Fix individual results.' );
+
+    $waiting = count(getWaitingPictureFiles('../upload/'));
   $color = $waiting ? 'red' : 'green';
   showPage( 'persons_picture',
             "Validates pictures that have been submitted. <span style='color:$color'>[$waiting waiting]</span>");

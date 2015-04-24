@@ -2,20 +2,37 @@
 $currentSection = 'admin';
 require_once "../../includes/_framework.php";
 
+class ErrorMsg {
+
+    var $msg;
+    var $show;
+
+    function __construct($aMsg,$aShow)
+    {
+        $this->msg = $aMsg;
+        $this->show = $aShow;
+    }
+}
+
 function error($msg,$show = 1)
 {
-    die('{"error": {"msg":"'.$msg.'", "show":'.$show.'} }');
+    $error = new ErrorMsg($msg,$show);
+    die('{"error": '.json_encode($error).' }');
 }
 
 // Sanitization
 
-function get_GET($key,$regexp)
+function get_GET($key,$regexp=null)
 {
     if (!paramExists($key)) {
         return null;
     } else {
         $GET = getRawParamsThisShouldBeAnException();
-        return preg_replace($regexp,'',$GET[$key]);
+        if ($regexp) {
+            return preg_replace($regexp,'',$GET[$key]);
+        } else {
+            return $GET[$key];
+        }
     }
 }
 
@@ -59,7 +76,20 @@ function getResultId()
     return get_GET('resultId','/[^0-9]/');
 }
 
+function getToken()
+{
+    return get_GET('token');
+}
+
 // script
+
+// prevent CSRF
+if(!isset($_SESSION)) {
+    session_start();
+}
+if (!paramExists('token') || !array_key_exists('anticsrf_key',$_SESSION) || getToken() != $_SESSION['anticsrf_key']) {
+    error('Invalid access attempt');
+}
 
 if (getFix()) { // fix data
 
@@ -111,13 +141,13 @@ if (getFix()) { // fix data
         $roundId = null;
     }
     $return = array();
-    //
+
     if (!$competitionId) {
         $result = pdo_query('SELECT name FROM Persons WHERE id=?',array($personId));
         if (!count($result)) error('Person ID not found',0);
-        $competitorName = $result[0]['name'];
-        $return['competitorName'] = $competitorName;
-        //
+        $personName = $result[0]['name'];
+        $return['personName'] = $personName;
+
         $result = pdo_query(
             'SELECT Competitions.id, Competitions.name FROM '.
             '(SELECT DISTINCT competitionId FROM Results WHERE personId=?) AS t '.
@@ -131,7 +161,7 @@ if (getFix()) { // fix data
     } else {
         $defaultCompetition = $competitionId;
     }
-    //
+
     if (!$eventId) {
         $result = pdo_query(
             'SELECT Events.id, Events.name FROM '.
@@ -146,7 +176,7 @@ if (getFix()) { // fix data
     } else {
         $defaultEvent = $eventId;
     }
-    //
+
     if (!$roundId) {
         $result = pdo_query(
             'SELECT Rounds.id, Rounds.name FROM '.
@@ -161,7 +191,7 @@ if (getFix()) { // fix data
     } else {
         $defaultRound = $roundId;
     }
-    //
+
     $result = pdo_query(
         'SELECT Results.*, format, Formats.name AS roundFormatName FROM Results '.
         'JOIN Events ON Events.id=Results.eventId '.
@@ -169,22 +199,22 @@ if (getFix()) { // fix data
         'WHERE competitionId=? AND eventId=? AND personId=? AND roundId=?',
         array($defaultCompetition,$defaultEvent,$personId,$defaultRound)
     );
-    if (!count($result)) error('No results for this competition, competitor, event and round (!?)');
+    if (!count($result)) error('No results for this competition, person, event and round (!?)');
     $return['resultId'] = $result[0]['id'];
     $return['resultsFormat'] = $result[0]['format'];
     $return['roundFormat'] = $result[0]['formatId'];
     $return['roundFormatName'] = $result[0]['roundFormatName'];
     $return['results'] = array(
-        $result[0]['value1'],
-        $result[0]['value2'],
-        $result[0]['value3'],
-        $result[0]['value4'],
-        $result[0]['value5'],
-        $result[0]['best'],
-        $result[0]['average'],
-        $result[0]['regionalSingleRecord'],
-        $result[0]['regionalAverageRecord']
+        'value1' => $result[0]['value1'],
+        'value2' => $result[0]['value2'],
+        'value3' => $result[0]['value3'],
+        'value4' => $result[0]['value4'],
+        'value5' => $result[0]['value5'],
+        'best' => $result[0]['best'],
+        'average' => $result[0]['average'],
+        'regionalSingleRecord' => $result[0]['regionalSingleRecord'],
+        'regionalAverageRecord' => $result[0]['regionalAverageRecord']
     );
-    //
+
     echo json_encode($return);
 }

@@ -3,14 +3,19 @@
 $jQuery = 1;
 $currentSection = 'admin';
 require('../includes/_header.php');
+
+// set session key if not set already
+if(!isset($_SESSION['anticsrf_key'])) {
+    $_SESSION['anticsrf_key'] = sha1(microtime());
+}
 ?>
 <form>
     <table class="prereg">
         <tr>
             <td><label for="personId">Person Id</label></td>
             <td>
-                <input type="text" id="personId" required autofocus autocomplete="off" placeholder="Enter Person ID..." pattern="(19|20)\d{2}([a-z]|[A-Z]){4}\d{2}" style="text-transform: uppercase;" onkeyup="personIdChange(this.value);" />
-                <div id="competitorName">&nbsp;</div>
+                <input type="text" id="personId" required autofocus autocomplete="off" placeholder="Enter Person ID..." pattern="(19|20)\d{2}([a-z]|[A-Z]){4}\d{2}" style="text-transform: uppercase;" oninput="personIdChange(this.value);" />
+                <div id="personName" class="fix_results_person_name"></div>
             </td>
         </tr>
         <tr>
@@ -34,16 +39,16 @@ require('../includes/_header.php');
                     <tr><td class="text-right"><label for="value3">value3</label></td><td><input id="value3" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value4">value4</label></td><td><input id="value4" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value5">value5</label></td><td><input id="value5" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
-                    <tr><td class="text-right"><label for="value6">best</label></td><td><input id="value6" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
-                    <tr><td class="text-right"><label for="value7" id="labelAverage"></label></td><td><input id="value7" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
-                    <tr><td class="text-right"><label for="value8">regional single record</label></td><td><input id="value8" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
-                    <tr><td class="text-right"><label for="value9">regional average record</label></td><td><input id="value9" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
+                    <tr><td class="text-right"><label for="best">best</label></td><td><input id="best" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
+                    <tr><td class="text-right"><label for="average" id="labelAverage"></label></td><td><input id="average" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
+                    <tr><td class="text-right"><label for="regionalSingleRecord">regional single record</label></td><td><input id="regionalSingleRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
+                    <tr><td class="text-right"><label for="regionalAverageRecord">regional average record</label></td><td><input id="regionalAverageRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
                 </table>
             </td>
         </tr>
         <tr>
             <td></td>
-            <td style='text-align:center'><input type='button' id='saveBtn' value='save changes' onclick="fixResults();" disabled style='background-color:#9F3;font-weight:bold' /> </td>
+            <td style='text-align:center'><input type='button' id='saveBtn' value='save changes' onclick="fixResults();" disabled style='font-weight:bold' /> </td>
         </tr>
     </table>
 </form>
@@ -68,35 +73,56 @@ var
     resultId,
 
     resultsFormat,
-    TIME_FORMAT = 0,
-    FM_FORMAT = 1,
-    MULTI_FORMAT = 2,
+    TIME_FORMAT = 'time',
+    FM_FORMAT = 'number',
+    MULTI_FORMAT = 'multi',
 
     roundFormat,
     FORMAT_AVERAGE = 'a',
-    FORMAT_MEAN = 'm';
+    FORMAT_MEAN = 'm',
 
-    patterns = [
-        '^(|DNF|DNS|(60|[1-5][0-9]|[1-9]):[0-5][0-9]\\.[0-9]{2}|[1-5]?[0-9]\\.[0-9]{2})$',
-        '^(|DNF|DNS|(80|[1-7][0-9]))$',
-        '^(|DNF|DNS|([1-9][0-9]|[2-9])\\/([1-9][0-9]|[2-9])\\s(60|[1-5][0-9]|[1-9]):[0-5][0-9])$'
-    ],
+    COLOR_ERROR = '#f88',
+    COLOR_NORMAL = '#eef',
+    COLOR_CHANGE = '#9f3',
+    EDITABLE_FIELD_BG_COLOR = '#ff9',
+    DISABLED_FIELD_BG_COLOR = '#ccc',
+
+    WCA_DNF = -1,
+    WCA_DNS = -2,
+
+    patterns = {
+        time: '^(|DNF|DNS|(60|[1-5][0-9]|[1-9]):[0-5][0-9]\\.[0-9]{2}|[1-5]?[0-9]\\.[0-9]{2})$',
+        number: '^(|DNF|DNS|(80|[1-7][0-9]))$',
+        multi: '^(|DNF|DNS|([1-9][0-9]|[2-9])\\/([1-9][0-9]|[2-9])\\s(60|[1-5][0-9]|[1-9]):[0-5][0-9])$'
+    },
     patternRegionalRecords = '^(|WR|AfR|AsR|OcR|ER|NAR|SAR|NR)$',
-    validFormatSamples = [
-        '1:23.45<br>1.23<br>0.89<br>DNF<br>DNS',
-        '35<br>DNF<br>DNS',
-        '2/3 9:34<br>10/12 59:87<br>DNF<br>DNS'
-    ],
+    validFormatSamples = {
+        time: '1:23.45<br>1.23<br>0.89<br>DNF<br>DNS',
+        number: '35<br>DNF<br>DNS',
+        multi: '2/3 9:34<br>10/12 59:87<br>DNF<br>DNS'
+    },
 
-    actualResults = [];
+    resultsInputs = {},
+    actualResults = {},
+    MAX_SOLVE_COUNT = 5,
+    SOLVE_FIELDS = [ 'value1', 'value2', 'value3', 'value4', 'value5', 'best', 'average', 'regionalSingleRecord', 'regionalAverageRecord' ],
+    ROUND_FORMAT_TO_EDITABLE_FIELDS = {
+        "1": [ 'value1', 'regionalSingleRecord' ],
+        "2": [ 'value1', 'value2', 'regionalSingleRecord' ],
+        "3": [ 'value1', 'value2', 'value3', 'regionalSingleRecord' ],
+        "a": [ 'value1', 'value2', 'value3', 'value4', 'value5', 'regionalSingleRecord', 'regionalAverageRecord' ],
+        "m": [ 'value1', 'value2', 'value3', 'regionalSingleRecord', 'regionalAverageRecord' ],
+    };
+
+
 
 function clearResults()
 {
-    $('#resultsTable').find('input').val('').attr('readonly',true).prop('disabled',true).css('background-color','#ccc')
-        .parent().css('background-color','#eef');
-    $('input:button').css('background-color','#f88').prop('disabled',true);
-    $('#samples').html('');
-    $('#roundFormat').html('');
+    $('#resultsTable').find('input').val('').attr('readonly', true).prop('disabled', true).css('background-color', DISABLED_FIELD_BG_COLOR)
+        .parent().css('background-color', COLOR_NORMAL);
+    $('input:button').css('background-color', COLOR_ERROR).prop('disabled', true);
+    $('#samples').text('');
+    $('#roundFormat').text('');
 }
 
 function clearRounds()
@@ -122,7 +148,7 @@ function clearCompetitions()
 
 function clearPerson()
 {
-    $('#competitorName').html('&nbsp;');
+    $('#personName').text('');
     lastPersonId = null;
     clearCompetitions();
 }
@@ -149,47 +175,47 @@ function extractResults(obj)
 {
     resultId = obj.resultId;
     setResultsFormat(obj.resultsFormat);
-    setRoundFormat(obj.roundFormat,obj.roundFormatName);
-    var input;
-    var topResults = 5;
-    for (var i=1;i<=9;i++) {
-        actualResults[i-1] = obj.results[i-1];
-        if (i < 8) {
-            input = $('#value'+i).val(decodeResult(obj.results[i-1]));
+    setRoundFormat(obj.roundFormat, obj.roundFormatName);
+
+    actualResults = obj.results;
+    SOLVE_FIELDS.forEach(function(field) {
+        var isRecordField = field === "regionalSingleRecord" || field === "regionalAverageRecord";
+        var $input = resultsInputs[field];
+        if(isRecordField) {
+            $input.val(actualResults[field]);
         } else {
-            input = $('#value'+i).val(obj.results[i-1]);
+            $input.val(wcaResultToString(actualResults[field]));
         }
 
-        if (roundFormat < FORMAT_AVERAGE) {
-            topResults = parseInt(roundFormat,10);
-        } else if (roundFormat == FORMAT_MEAN) {
-            topResults = 3;
+        var editableFields = ROUND_FORMAT_TO_EDITABLE_FIELDS[roundFormat];
+        if(editableFields.indexOf(field) >= 0) {
+            var pattern = isRecordField ? patternRegionalRecords : patterns[resultsFormat];
+            $input.attr({readonly: false, pattern: pattern}).prop('disabled', false).css('background-color', EDITABLE_FIELD_BG_COLOR);
         }
-        if (i<=topResults) {
-            $(input).attr({readonly: false, pattern: patterns[resultsFormat]}).prop('disabled',false).css('background-color','#ff9');
-        } else if (i>7) {
-            $(input).attr({readonly: false, pattern: patternRegionalRecords}).prop('disabled',false).css('background-color','#ff9');
-        }
-    }
+    });
 }
 
-function personIdChange(v)
+function personIdChange(newPersonId)
 {
-    v = v.toUpperCase();
-    if (v != lastPersonId) {
+    newPersonId = newPersonId.toUpperCase();
+    if (newPersonId != lastPersonId) {
         clearPerson();
-        lastPersonId = v;
-        if (/^(19|20)\d{2}([A-Z]){4}\d{2}$/.test(v)) {
-            $.ajax('scripts/fixresults_ajax.php?personId='+v).done(function(data) {
+        lastPersonId = newPersonId;
+        if (/^(19|20)\d{2}([A-Z]){4}\d{2}$/.test(newPersonId)) {
+            $.get('scripts/fixresults_ajax.php', {
+                token: '<?=$_SESSION['anticsrf_key']?>',
+                personId: newPersonId
+            }
+            ).done(function(data) {
                 var obj = $.parseJSON(data);
                 if (obj.error) {
                     if (obj.error.show) {
                         alert(obj.error.msg);
                     } else {
-                        $('#competitorName').html('*** not found ***');
+                        $('#personName').text('*** not found ***');
                     }
                 } else {
-                    $('#competitorName').html(obj.competitorName);
+                    $('#personName').text(obj.personName);
                     var selectCompetitions = $('#competitions');
                     lastCompetitionId = obj.competitions[0].id;
                     for(var i=0;i<obj.competitions.length;i++) {
@@ -204,12 +230,18 @@ function personIdChange(v)
     }
 }
 
-function competitionIdChange(v)
+function competitionIdChange(newCompetitionId)
 {
-    if (v != lastCompetitionId) {
+    if (newCompetitionId != lastCompetitionId) {
         clearEvents();
-        lastCompetitionId = v;
-        $.ajax('scripts/fixresults_ajax.php?personId='+$('#personId').val().toUpperCase()+'&competitionId='+v).done(function(data) {
+        lastCompetitionId = newCompetitionId;
+        $.get('scripts/fixresults_ajax.php',
+            {
+                token: '<?=$_SESSION['anticsrf_key']?>',
+                personId: lastPersonId,
+                competitionId: newCompetitionId
+            }
+        ).done(function(data) {
             var obj = $.parseJSON(data);
             if (obj.error) {
                 alert(obj.error.msg);
@@ -222,12 +254,19 @@ function competitionIdChange(v)
     }
 }
 
-function eventIdChange(v)
+function eventIdChange(newEventId)
 {
-    if (v != lastEventId) {
+    if (newEventId != lastEventId) {
         clearRounds();
-        lastEventId = v;
-        $.ajax('scripts/fixresults_ajax.php?personId='+$('#personId').val().toUpperCase()+'&competitionId='+$('#competitions').val()+'&eventId='+v).done(function(data) {
+        lastEventId = newEventId;
+        $.get('scripts/fixresults_ajax.php',
+            {
+                token: '<?=$_SESSION['anticsrf_key']?>',
+                personId: lastPersonId,
+                competitionId: lastCompetitionId,
+                eventId: newEventId
+            }
+        ).done(function(data) {
             var obj = $.parseJSON(data);
             if (obj.error) {
                 alert(obj.error.msg);
@@ -239,13 +278,20 @@ function eventIdChange(v)
     }
 }
 
-function roundIdChange(v)
+function roundIdChange(newRoundId)
 {
-    if (v != lastRoundId) {
+    if (newRoundId != lastRoundId) {
         clearResults();
-        lastRoundId = v;
-        $.ajax('scripts/fixresults_ajax.php?personId='+$('#personId').val().toUpperCase()+'&competitionId='+$('#competitions').val()+
-                '&eventId='+$('#events').val()+'&roundId='+v).done(function(data) {
+        lastRoundId = newRoundId;
+        $.get('scripts/fixresults_ajax.php',
+            {
+                token: '<?=$_SESSION['anticsrf_key']?>',
+                personId: lastPersonId,
+                competitionId: lastCompetitionId,
+                eventId: lastEventId,
+                roundId: newRoundId
+            }
+        ).done(function(data) {
             var obj = $.parseJSON(data);
             if (obj.error) {
                 alert(obj.error.msg);
@@ -258,30 +304,26 @@ function roundIdChange(v)
 
 function setResultsFormat(formatStr)
 {
-    if (formatStr=='time') {
-        resultsFormat = TIME_FORMAT;
-    } else if (formatStr=='number') {
-        resultsFormat = FM_FORMAT;
-    } else {
-        resultsFormat = MULTI_FORMAT;
-    }
+    resultsFormat = formatStr;
     $('#samples').html('<p>Valid format samples:<div style="color:#510000;">'+validFormatSamples[resultsFormat]+'</div></p>');
 }
 
-function setRoundFormat(formatChr,formatName)
+function setRoundFormat(formatChr, formatName)
 {
-    roundFormat = $('#events').val()=='333bf' && formatChr=='3' ? FORMAT_MEAN : formatChr;
+    /* 333bf is actually a best of 3, but it's better to think of it as a mean of 3,
+       since it does contain an average and we are only looking at a single result */
+    roundFormat = lastEventId=='333bf' && formatChr=='3' ? FORMAT_MEAN : formatChr;
     $('#roundFormat').html('<p>Round format:<div style="color:#510000;">'+formatName+'</div></p>');
-    $('#labelAverage').html(roundFormat < FORMAT_AVERAGE ? '' : (roundFormat == FORMAT_MEAN ? 'mean' : 'average'));
+    $('#labelAverage').text(roundFormat < FORMAT_AVERAGE ? '' : (roundFormat == FORMAT_MEAN ? 'mean' : 'average'));
 }
 
-function decodeResult(result)
+function wcaResultToString(result)
 {
     if (result==0) {
         return '';
-    } else if (result==-1) {
+    } else if (result==WCA_DNF) {
         return 'DNF';
-    } else if (result==-2) {
+    } else if (result==WCA_DNS) {
         return 'DNS';
     } else {
         switch (resultsFormat) {
@@ -299,11 +341,9 @@ function decodeResult(result)
                 } else {
                     return ss+'.'+hhStr;
                 }
-                break;
             case FM_FORMAT:
                 return result+'';
-                break;
-            default: // MULTI_FORMAT
+            case MULTI_FORMAT:
                 var MM = result % 100;
                 result = Math.floor(result / 100);
                 var TTTTT = result % 100000;
@@ -317,103 +357,109 @@ function decodeResult(result)
                 if (ssStr.length < 2) ssStr = '0'+ssStr;
                 var mm = Math.floor(TTTTT / 60);
                 return solved+'/'+attempted+' '+mm+':'+ssStr;
+            default:
+                throw new Error('Unsupported results format!');
         }
     }
 }
 
-function encodeResult(result)
+function stringToWcaResult(result, isAverage)
 {
     result = result.trim().toUpperCase();
-    pattern = new RegExp(patterns[resultsFormat]);
+    var pattern = new RegExp(isAverage && lastEventId == '333fm' ? '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$' : patterns[resultsFormat]);
     if (!pattern.test(result)) {
         result = '';
     }
     if (result=='') {
         return 0;
     } else if (result=='DNF') {
-        return -1;
+        return WCA_DNF;
     } else if (result=='DNS') {
-        return -2;
+        return WCA_DNS;
     } else {
         switch (resultsFormat) {
             case TIME_FORMAT:
                 var len = result.length;
                 if (len > 5) {
-                    var hh = parseInt(result.substr(len-2),10);
-                    var ss = parseInt(result.substr(len-5,2),10);
-                    var mm = parseInt(result.substr(0,len-6),10);
+                    var hh = parseInt(result.substr(len-2), 10);
+                    var ss = parseInt(result.substr(len-5, 2), 10);
+                    var mm = parseInt(result.substr(0, len-6), 10);
                     return ((mm*60)+ss)*100+hh;
                 } else {
-                    var hh = parseInt(result.substr(len-2),10);
-                    var ss = parseInt(result.substr(0,len-3),10);
+                    var hh = parseInt(result.substr(len-2), 10);
+                    var ss = parseInt(result.substr(0, len-3), 10);
                     return ss*100+hh;
                 }
-                break;
             case FM_FORMAT:
-                return parseInt(result,10);
-                break;
-            default: // MULTI_FORMAT
-                var p1 = result.indexOf('/');
-                var p2 = result.indexOf(' ');
-                var solved = parseInt(result.substr(0,p1),10);
-                var attempted = parseInt(result.substr(p1+1,p2-p1-1),10);
+                return parseInt(result, 10);
+            case MULTI_FORMAT:
+                var slashPosition = result.indexOf('/');
+                var blankPosition = result.indexOf(' ');
+                var solved = parseInt(result.substr(0, slashPosition), 10);
+                var attempted = parseInt(result.substr(slashPosition+1, blankPosition-slashPosition-1), 10);
                 if (solved > attempted) return 0;
-                var ss = parseInt(result.substr(result.length-2),10);
-                var mm = parseInt(result.substr(p2+1,result.length-p2-4),10);
+                var ss = parseInt(result.substr(result.length-2), 10);
+                var mm = parseInt(result.substr(blankPosition+1, result.length-blankPosition-4), 10);
                 return ((99-solved*2+attempted)*100000 + mm*60+ss)*100 + (attempted-solved);
+            default:
+                throw new Error('Unsupported results format!');
         }
     }
 }
 
 function blurResult(element)
 {
-    element.value = decodeResult(encodeResult(element.value));
+    element.value = wcaResultToString(stringToWcaResult(element.value));
 }
 
 function checkResults()
 {
     var results = [];
-    var result, input;
+    var result;
     var errors = false;
     var changes = false;
     var sum = 0;
-    var best = 9999999999;
+    var best = Infinity;
     var worst = 0;
-    var dnfs = 0;
+    var countDnfOrDns = 0;
     var average;
-    for (var i=1;i<=5;i++) {
-        input = $('#value'+i);
-        result = encodeResult(input.val());
+    for (var i = 1; i <= MAX_SOLVE_COUNT; i++) {
+        var field = "value" + i;
+        result = stringToWcaResult(resultsInputs[field].val());
         if (result > 0) {
             sum += result;
             if (result < best) best = result;
             if (result > worst) worst = result;
         } else if (result < 0) {
-            dnfs++;
+            countDnfOrDns++;
         }
-        if (!result && $(input).val()) {
-            $(input).parent().css('background-color','#f88');
+        if (!result && resultsInputs[field].val()) {
+            resultsInputs[field].parent().css('background-color', COLOR_ERROR);
             errors = true;
         } else {
-            if (result == actualResults[i-1]) {
-                $(input).parent().css('background-color','#eef');
+            if (result == actualResults[field]) {
+                resultsInputs[field].parent().css('background-color', COLOR_NORMAL);
             } else {
                 changes = true;
-                $(input).parent().css('background-color','#9f3');
+                resultsInputs[field].parent().css('background-color', COLOR_CHANGE);
             }
         }
-        results[i-1] = result;
+        results[field] = result;
     }
     if (errors) {
         best = 0;
         average = 0;
-        $('#value6').parent().css('background-color','#eef');
-        $('#value7').parent().css('background-color','#eef');
+        resultsInputs.best.parent().css('background-color', COLOR_NORMAL);
+        resultsInputs.average.parent().css('background-color', COLOR_NORMAL);
     } else {
         if (!worst) {
-            if (dnfs) {
-                best = -1;
-                average = -1;
+            if (countDnfOrDns > 0) {
+                best = WCA_DNF;
+                if (roundFormat < FORMAT_AVERAGE) { // Best of X
+                    average = 0;
+                } else {
+                    average = WCA_DNF;
+                }
             } else {
                 best = 0;
                 average = 0;
@@ -421,78 +467,85 @@ function checkResults()
         } else {
             if (roundFormat < FORMAT_AVERAGE) { // Best of X
                 average = 0;
-            } else if (dnfs > 1) {
-                average = -1;
+            } else if (countDnfOrDns > 1) {
+                average = WCA_DNF;
             } else if (roundFormat > FORMAT_AVERAGE) { // Mean of 3
-                if (dnfs) {
-                    average = -1;
-                } else if ($('#events').val()=='333fm') {
+                if (countDnfOrDns > 0) {
+                    average = WCA_DNF;
+                } else if (lastEventId=='333fm') {
                     average = Math.round(sum*100/3);
                 } else {
                     average = Math.round(sum/3);
                 }
             } else { // Average of 5
-                if (dnfs) {
+                if (countDnfOrDns > 0) {
                     average = Math.round((sum - best) / 3);
                 } else {
                     average = Math.round((sum - best - worst) / 3);
                 }
             }
         }
-        $('#value6').parent().css('background-color',best == actualResults[5] ? '#eef' : '#9f3');
-        $('#value7').parent().css('background-color',roundFormat < FORMAT_AVERAGE || average == actualResults[6] ? '#eef' : '#9f3');
+        resultsInputs.best.parent().css('background-color', best == actualResults.best ? COLOR_NORMAL : COLOR_CHANGE);
+        resultsInputs.average.parent().css('background-color', roundFormat < FORMAT_AVERAGE || average == actualResults.average ? COLOR_NORMAL : COLOR_CHANGE);
     }
-    $('#value6').val(decodeResult(best));
-    $('#value7').val(decodeResult(roundFormat < FORMAT_AVERAGE ? 0 : average));
-    //
-    var pattern, b;
-    pattern = new RegExp(patternRegionalRecords);
-    for (i=8;i<10;i++) {
-        input = $('#value'+i);
-        b = pattern.test($(input).val());
-        if (!b) {
+    resultsInputs.best.val(wcaResultToString(best));
+    resultsInputs.average.val(wcaResultToString(average));
+
+    var pattern = new RegExp(patternRegionalRecords);
+    ['regionalSingleRecord', 'regionalAverageRecord'].forEach(function(field) {
+        if (!pattern.test(resultsInputs[field].val())) {
             errors = true;
-            $(input).parent().css('background-color','#f88');
+            resultsInputs[field].parent().css('background-color', COLOR_ERROR);
         } else {
-            if ($(input).val() == actualResults[i-1]) {
-                $(input).parent().css('background-color','#eef');
+            if (resultsInputs[field].val() == actualResults[field]) {
+                resultsInputs[field].parent().css('background-color', COLOR_NORMAL);
             } else {
                 changes = true;
-                $(input).parent().css('background-color','#9f3');
+                resultsInputs[field].parent().css('background-color', COLOR_CHANGE);
             }
         }
-    }
-    //
+
+    });
+
     if (!errors) {
-        var p1 = 0;
-        while (p1 < 5 && results[p1]) p1++;
-        var p2 = 4;
-        while (p2 >= 0 && !results[p2]) p2--;
-        if (!p1 || p1 <= p2) errors = true;
+        // check that there are no gaps in the results
+        var firstBlank = 0;
+        while (firstBlank < MAX_SOLVE_COUNT && results['value' + (firstBlank+1)]) {
+            firstBlank++;
+        }
+        var lastBlank = MAX_SOLVE_COUNT - 1;
+        while (lastBlank >= 0 && !results['value' + (lastBlank+1)]) {
+            lastBlank--;
+        }
+        errors = ( firstBlank == 0 || firstBlank <= lastBlank );
     }
-    //
-    b = !errors && changes;
-    $('input:button').css('background-color',b?'#9f3':'#f88').prop('disabled',!b);
+
+    var submitEnabled = !errors && changes;
+    $('input:button').css('background-color', submitEnabled?COLOR_CHANGE:COLOR_ERROR).prop('disabled', !submitEnabled);
 }
 
 function fixResults()
 {
-    var url = 'scripts/fixresults_ajax.php?fix=1&resultId='+resultId+'&personId='+$('#personId').val().toUpperCase()+'&competitionId='+$('#competitions').val()+
-        '&eventId='+$('#events').val()+'&roundId='+$('#rounds').val();
-    for (var i=1;i<6;i++) {
-        url += '&value'+i+'='+encodeResult($('#value'+i).val());
-    }
-    url += '&best='+encodeResult($('#value6').val());
-    if (resultsFormat==FM_FORMAT) { // trick for FM mean
-        patterns[FM_FORMAT] = '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$';
-    }
-    url += '&average='+encodeResult($('#value7').val());
-    if (resultsFormat==FM_FORMAT) {
-        patterns[FM_FORMAT] = '^(|DNF|DNS|(80|[1-7][0-9]))$';
-    }
-    url += '&regionalSingleRecord='+$('#value8').val();
-    url += '&regionalAverageRecord='+$('#value9').val();
-    $.ajax(url).done(function(data) {
+    $.get('scripts/fixresults_ajax.php',
+        {
+            token: '<?=$_SESSION['anticsrf_key']?>',
+            fix: 1,
+            resultId: resultId,
+            personId: lastPersonId,
+            competitionId: lastCompetitionId,
+            eventId: lastEventId,
+            roundId: lastRoundId,
+            value1: stringToWcaResult(resultsInputs.value1.val()),
+            value2: stringToWcaResult(resultsInputs.value2.val()),
+            value3: stringToWcaResult(resultsInputs.value3.val()),
+            value4: stringToWcaResult(resultsInputs.value4.val()),
+            value5: stringToWcaResult(resultsInputs.value5.val()),
+            best: stringToWcaResult(resultsInputs.best.val()),
+            average: stringToWcaResult(resultsInputs.average.val(), true),
+            regionalSingleRecord: resultsInputs.regionalSingleRecord.val(),
+            regionalAverageRecord: resultsInputs.regionalAverageRecord.val()
+        }
+    ).done(function(data) {
         var obj = $.parseJSON(data);
         if (obj.error) {
             alert(obj.error.msg);
@@ -508,6 +561,9 @@ function fixResults()
 }
 
 $(document).ready(function () {
+    SOLVE_FIELDS.forEach(function(field) {
+        resultsInputs[field] = $('#' + field);
+    });
     clearResults();
 });
 
