@@ -1,10 +1,10 @@
-#!/usr/bin/env ruby
+#!/home/cubing/ruby/bin/ruby
 ENV['RAILS_ENV'] = 'development'
 
 # On the WCA server, we compiled our own, latest version of ruby, and set
 # gems to be installed to /home/cubing/.gems.
 if File.directory?('/home/cubing/.gems')
-  ENV['HOME'] ||= "/home/cubing/.gems"
+  ENV['HOME'] ||= "/home/cubing/"
   ENV['GEM_HOME'] = File.expand_path('~/.gems')
   ENV['GEM_PATH'] = File.expand_path('~/.gems')
 end
