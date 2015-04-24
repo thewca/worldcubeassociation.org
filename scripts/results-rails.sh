@@ -20,6 +20,11 @@ install_deps() {
 
   # Restart apache to recognize new ruby.
   sudo service apache2 restart
+
+  # Dirty hack to make our environment look like dreamhost's.
+  # See webroot/rails-dispatch.fcgi.
+  sudo mkdir -p /home/cubing/ruby/bin/
+  sudo ln -s `which ruby` /home/cubing/ruby/bin/ruby
 }
 
 rebuild() {
