@@ -404,7 +404,7 @@ function stringToWcaResult(result, isAverage)
                 var mm = parseInt(result.substr(blankPosition+1, result.length-blankPosition-4), 10);
                 return ((99-solved*2+attempted)*100000 + mm*60+ss)*100 + (attempted-solved);
             default:
-                throw 'Unsupported results format!';
+                throw new Error('Unsupported results format!');
         }
     }
 }
