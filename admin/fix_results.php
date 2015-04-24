@@ -4,10 +4,6 @@ $jQuery = 1;
 $currentSection = 'admin';
 require('../includes/_header.php');
 
-// start session if needed
-if(!isset($_SESSION)) {
-    session_start();
-}
 // set session key if not set already
 if(!isset($_SESSION['anticsrf_key'])) {
     $_SESSION['anticsrf_key'] = sha1(microtime());
