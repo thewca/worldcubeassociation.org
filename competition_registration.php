@@ -392,7 +392,7 @@ function savePreregForm () {
     $mail_config = $config->get('mail');
 
     // only send mails on the real website
-    if(preg_match( '/^worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
+    if(preg_match( '/^www.worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
       if($mail_config['pear']) {
         // send smtp mail
         $headers = array ('From' => $mail_config['from'],

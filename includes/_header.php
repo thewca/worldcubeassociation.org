@@ -1,6 +1,6 @@
 <?php
 // session information needs to be created before <html> tag is output.  Thus this php code should come at the beginning of the file.
-if ( ! preg_match( '/^worldcubeassociation.org$/i', $_SERVER["SERVER_NAME"] ) ) {
+if ( ! preg_match( '/^www.worldcubeassociation.org$/i', $_SERVER["SERVER_NAME"] ) ) {
   // if not on WCA server, in development environment - show errors.
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
@@ -156,7 +156,7 @@ print $styles->getHTMLAll();
     $sections[] = array('Admin', 'admin', 'admin/');
   }
 
-  if (!preg_match( '/^worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
+  if (!preg_match( '/^www.worldcubeassociation.org$/', $_SERVER["SERVER_NAME"])) {
     noticeBox3( 0, "Note: This is only a copy of the WCA results system used for testing stuff. The official WCA results are at:<br /><a href='https://www.worldcubeassociation.org/results/'>https://www.worldcubeassociation.org/results/</a>" );
   }
 
