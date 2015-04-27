@@ -62,8 +62,8 @@ EOF
 
   # Installing mysql-server prompts for a password. Workaround from:
   #  http://stackoverflow.com/a/7740571
-  sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_PASSWORD"
-  sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD"
+  sudo echo "mysql-server mysql-server/root_password password $MYSQL_PASSWORD" | debconf-set-selections
+  sudo echo "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD" | debconf-set-selections
   sudo apt-get install -y mysql-server
 
   # Configuration files containing database credentials.

@@ -35,12 +35,9 @@ AddHandler fastcgi-script .fcgi
 AddHandler fcgid-script .fcgi
 </IfModule>
 
-#<<<RewriteRule ^$ rails-dispatch.fcgi/$1 [QSA,L] 
-#<<<RewriteCond %{REQUEST_FILENAME} !-f
-#<<<RewriteCond %{REQUEST_FILENAME} !-d
-#<<<RewriteRule ^(.*)$ rails-dispatch.fcgi/$1 [QSA,L] 
-
-#<<<ErrorDocument 500 "Rails application failed to start properly"
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(assets/.*|about|delegates|organisations|contact|score-tools|logo|wca-workbook-assistant|wca-workbook-assistant-versions)$ rails-dispatch.fcgi/$1 [QSA,L] 
 
 # Copied and modified from:
 #  http://kahthong.com/2011/05/how-serve-drupal-sub-directory-web-root-0

@@ -1,12 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WcaOnRails</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= favicon_link_tag 'wca.ico' %>
+  <title><%= full_title("World Cube Association", yield(:title)) %></title>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+  <!-- Static navbar -->
+  <div class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a href="/"><%= image_tag "wca_logo.svg" %></a>
+        <a href="/"><span>World Cube Association</span></a></div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse disabled">
+        <ul class="nav navbar-nav">
+          <li class="dropdown <%= params[:controller] == 'static_pages' ? 'active' : '' %>">
+            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Information <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About the WCA</a></li>
+              <li><a href="/delegates">WCA Delegates</a></li>
+              <li><a href="/organisations">National Organisations</a></li>
+              <li><a href="/contact">Contact Information</a></li>
+              <li><a href="/score-tools">Score Tools</a></li>
+              <li><a href="/logo">Logo</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/competitions.php">Competitions</a></li>
+              <li><a href="/events.php">Rankings</a></li>
+              <li><a href="/regions.php">Records</a></li>
+              <li><a href="/persons.php">Persons</a></li>
+              <li class="divider"></li>
+              <li><a href="/statistics.php">Statistics</a></li>
+              <li><a href="/media.php">Multimedia</a></li>
+              <li><a href="/misc.php">Miscellaneous</a></li>
+              <li><a href="/misc/export.html">Database Export</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Regulations <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/regulations/">Regulations</a></li>
+              <li><a href="/regulations/guidelines.html">Guidelines</a></li>
+              <li><a href="/regulations/scrambles/">Scrambles</a></li>
+              <li class="divider"></li>
+              <li><a href="/regulations/announcements/">Announcements</a></li>
+              <li><a href="/regulations/history/">History</a></li>
+              <li><a href="/regulations/translations/">Translations</a></li>
+            </ul>
+          </li>
+          <li><a href="/forum/" class="top-nav">Forum</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
 
 <%= yield %>
 

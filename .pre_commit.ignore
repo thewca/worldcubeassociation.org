@@ -1,0 +1,4 @@
+wca-documents-extra/**
+webroot/**
+WcaOnRails/vendor/**
+WcaOnRails/tmp/**

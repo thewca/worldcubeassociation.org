@@ -13,4 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require bootstrap-sprockets
+//= require bootstrap-hover-dropdown
 //= require_tree .
+
+// Reinitialize any plugins when turbolinks changes the page.
+$(document).on("page:change", function() {
+  $('.dropdown-toggle').dropdownHover();
+});
