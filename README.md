@@ -3,6 +3,12 @@ worldcubeassociation.org
 
 This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
 
+NOTE: Currently, serving of static files doesn't work on Windows because it relies
+upon symlinks to get apache to serve content outside of the DocumentRoot. There
+are some things we could try to get this working on Windows, please comment
+on this [issue](https://github.com/cubing/worldcubeassociation.org/issues/11) if
+you're interested in helping out.
+
 ## Setup
 - Install [Vagrant](https://www.vagrantup.com/), which requires
   [VirtualBox](https://www.virtualbox.org/).
