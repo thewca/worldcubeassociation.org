@@ -4,6 +4,7 @@ set -ex
 
 MYSQL_PASSWORD=root
 PHP_IDLE_TIMEOUT_SECONDS=120
+PHP_MEMORY_LIMIT_MEGABYTES=512
 
 install_deps() {
   # Enable multiverse (for libapache2-mod-fastcgi)
@@ -28,6 +29,7 @@ install_deps() {
   # Fix up some permissions issues due to running as vagrant instead of www-data.
   sudo chown -R vagrant:vagrant /var/lib/apache2/fastcgi
   sudo chown -R vagrant:vagrant /usr/lib/cgi-bin/
+  sudo sed -i 's/memory_limit = .*/memory_limit = ${PHP_MEMORY_LIMIT_MEGABYTES}M/g' /etc/php5/fpm/php.ini
 
   # Enable fastcgi. See:
   #  https://www.digitalocean.com/community/questions/apache-2-4-with-php5-fpm?answer=12056
@@ -91,8 +93,14 @@ import_db() {
 }
 
 rebuild() {
-  echo "Computing auxiliary data..."
+  echo "Compute auxiliary data..."
   time curl 'http://localhost/results/admin/compute_auxiliary_data.php?doit=+Do+it+now+'
+
+  echo "Update missing averages..."
+  time curl 'http://localhost/results/misc/missing_averages/update7205.php'
+
+  echo "Update Evolution of Records..."
+  time curl 'http://localhost/results/misc/evolution/update7205.php'
 }
 
 cd "$(dirname "$0")"/..
