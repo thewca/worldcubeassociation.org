@@ -96,7 +96,7 @@ function initialize() {
   var searchBox = new google.maps.places.SearchBox(input);
 
   var image = {
-    url: "http://soliton.case.edu/wca/results/wca-website/images/violet-dotp.png",
+    url: "/results/images/violet-dotp.png",
     size: new google.maps.Size(20, 34),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(10, 34),
