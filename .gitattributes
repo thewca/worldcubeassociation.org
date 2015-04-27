@@ -1,3 +1,3 @@
 # We can't let git convert the newlines in our bash scripts to CRLF, otherwise
 # our Linux vm will be confused.
-* text eol=lf
+/*.sh text eol=lf
