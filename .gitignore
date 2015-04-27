@@ -1,6 +1,10 @@
 admin/.htaccess
 admin/.htpasswd
 admin/export/serial.txt
+admin/export/WCA_export*sql.zip
+
+admin/dump/*
+admin/phpMyAdmin
 
 cache/*.cache
 
