@@ -25,6 +25,9 @@ install_deps() {
   # See webroot/rails-dispatch.fcgi.
   sudo mkdir -p /home/cubing/ruby/bin/
   sudo ln -s `which ruby` /home/cubing/ruby/bin/ruby
+
+  # Create a dead simple production environment
+  cp config/wca_envvars.rb.template config/wca_envvars.rb
 }
 
 rebuild() {

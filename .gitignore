@@ -14,5 +14,8 @@ webroot/favicon.ico
 webroot/drupal/
 webroot/forum/
 
+# Production secrets
+config/wca_envvars.rb
+
 # Vagrant stuff
 .vagrant/
