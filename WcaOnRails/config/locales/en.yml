@@ -20,4 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  recaptcha:
+    errors:
+      verification_failed: "Are you a robot?"
+      recaptcha_unreachable: "Error communicating with recaptcha servers."

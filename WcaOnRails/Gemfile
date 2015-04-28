@@ -17,6 +17,7 @@ gem 'bootstrap-sass'
 gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
+gem "recaptcha", :require => "recaptcha/rails"
 
 group :development, :test do
   gem 'byebug'

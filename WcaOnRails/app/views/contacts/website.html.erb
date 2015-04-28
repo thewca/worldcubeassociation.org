@@ -14,6 +14,7 @@
     <%= f.input :name, required: true %>
     <%= f.input :your_email, required: true %>
     <%= f.input :message, as: :text, required: true %>
+    <%= recaptcha_tags %>
     <div>
       </br>
       <%= f.button :submit, 'Send message', class: "btn btn-primary" %>

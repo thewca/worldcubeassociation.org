@@ -113,6 +113,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    recaptcha (0.4.0)
     ref (1.0.5)
     sass (3.4.13)
     sass-rails (5.0.3)
@@ -169,6 +170,7 @@ DEPENDENCIES
   mail_form
   pre-commit
   rails (= 4.2.1)
+  recaptcha
   sass-rails
   sdoc
   simple_form
