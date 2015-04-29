@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -ex
-
 install_deps() {
   # Dependencies for wca-documents-extra. Some of this came from
   # https://github.com/cubing/wca-documents-extra/blob/master/.travis.yml, but has

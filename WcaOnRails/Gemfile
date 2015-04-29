@@ -18,6 +18,14 @@ gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
 gem "recaptcha", :require => "recaptcha/rails"
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
+gem 'local_time'
+
+# Drupal defines some table columns that conflict with ActiveRecord.
+# This gem lets us ignore those columns. Eventually we'll migrate this
+# problem away.
+gem 'ignorable'
 
 group :development, :test do
   gem 'byebug'
@@ -28,7 +36,5 @@ group :development, :test do
 end
 
 group :production do
-  # Use sqlite in production for now. We'll switch to mysql once we need to interact
-  # with the database.
-  # gem 'sqlite3'
+  gem 'mysql2'
 end

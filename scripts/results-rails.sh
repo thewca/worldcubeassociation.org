@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -ex
-
 install_deps() {
   # Enable repository for ruby and nodejs
   #  https://gorails.com/setup/ubuntu/14.04
@@ -13,7 +11,7 @@ install_deps() {
   #  https://gorails.com/setup/ubuntu/14.04
   sudo apt-get install -y ruby2.2 ruby2.2-dev
   sudo apt-get install -y nodejs
-  sudo apt-get install -y libghc-zlib-dev libfcgi-dev libsqlite3-dev g++
+  sudo apt-get install -y libghc-zlib-dev libfcgi-dev libsqlite3-dev g++ libmysqlclient-dev
   sudo gem install bundler --no-document
   sudo gem install rails -v 4.2.1 --no-document
   sudo gem install fcgi --no-document

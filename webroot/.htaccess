@@ -35,6 +35,7 @@ AddHandler fastcgi-script .fcgi
 AddHandler fcgid-script .fcgi
 </IfModule>
 
+RewriteRule ^$ rails-dispatch.fcgi/$1 [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(assets/.*|files/*|about|delegates|organisations|contact(/.*)?|score-tools|logo|wca-workbook-assistant|wca-workbook-assistant-versions)$ rails-dispatch.fcgi/$1 [QSA,L]

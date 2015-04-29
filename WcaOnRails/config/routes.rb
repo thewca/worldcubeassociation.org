@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  root 'static_pages#home'
+  root 'feed#home'
+
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'
   get 'organisations' => 'static_pages#organisations'

@@ -7,7 +7,7 @@ listcontains() {
 }
 
 # Validate command line arguments
-allowed_commands="install_deps rebuild"
+allowed_commands="install_deps rebuild import_db"
 print_usage_and_exit() {
   echo -n "Usage : $0 "
   for command in $allowed_commands; do
@@ -27,6 +27,8 @@ for command in "$@"; do
 done
 
 # Comands have been validated, so execute them!
+# Show commands before running them.
+set -ex
 for command in "$@"; do
   $command
 done
