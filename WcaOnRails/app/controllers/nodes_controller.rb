@@ -1,6 +1,11 @@
 class NodesController < ApplicationController
-  def home
+  def index
     @nodes = Node.where(promote: true).order(sticky: :desc, created: :desc).paginate(page: params[:page])
+  end
+
+  def rss
+    @nodes = Node.where(promote: true).order(created: :desc).paginate(page: params[:page])
+    render :layout => false
   end
 
   def show
