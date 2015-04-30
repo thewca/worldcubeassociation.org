@@ -20,3 +20,6 @@ you're interested in helping out.
 ## Run
 - `vagrant up` - Once the VM finishes intializing (which can take some time), the website will be
   accessible at [http://localhost:8080](http://localhost:8080).
+
+## Deploy
+- `ssh cubing@worldcubeassociation.org '(cd ~/dev.worldcubeassociation.org/WcaOnRails && bundle install && rake assets:precompile && killall /home/cubing/ruby/bin/ruby)'`
