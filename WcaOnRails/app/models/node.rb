@@ -7,4 +7,9 @@ class Node < ActiveRecord::Base
 
   has_one :field_data_body, -> { where(entity_type: "node") }, primary_key: "nid", foreign_key: "entity_id"
   has_one :author, class_name: "User", primary_key: "uid", foreign_key: "uid"
+
+  def alias
+    urlAlias = UrlAlias.find_by source: "node/#{nid}"
+    urlAlias ? urlAlias.alias.split("/")[1] : nil
+  end
 end

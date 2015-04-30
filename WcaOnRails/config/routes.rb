@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  root 'feed#home'
+  root 'nodes#home'
+  # TODO - once we're ready to move away from the drupal schema, refactor this
+  # using https://github.com/norman/friendly_id.
+  get 'posts/:post_alias' => 'nodes#show', as: 'node'
 
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'

@@ -1,0 +1,17 @@
+<div class="panel <%= node.sticky? ? "panel-primary" : "panel-default" %>">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <% if @node %>
+        <%= node.title %>
+      <% else %>
+        <%= link_to node.title, node_path(node.alias) %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div>
+      <em>Submitted by <%= node.author.name %> on <%= local_time(Time.at(node.created)) %></em>
+    </div>
+    <%= node.field_data_body.body_value.html_safe %>
+  </div>
+</div>

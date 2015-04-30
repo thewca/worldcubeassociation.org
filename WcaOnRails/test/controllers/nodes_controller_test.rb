@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FeedControllerTest < ActionController::TestCase
+class NodeControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end
