@@ -22,4 +22,4 @@ you're interested in helping out.
   accessible at [http://localhost:8080](http://localhost:8080).
 
 ## Deploy
-- `ssh cubing@worldcubeassociation.org '(cd ~/dev.worldcubeassociation.org/WcaOnRails && bundle install && rake assets:precompile && killall /home/cubing/ruby/bin/ruby)'`
+- `ssh cubing@worldcubeassociation.org '(cd ~/dev.worldcubeassociation.org/WcaOnRails && bundle install && rake assets:precompile && killall /home/cubing/ruby/bin/ruby)' && curl -k https://dev.worldcubeassociation.org/`
