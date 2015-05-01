@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150501004846) do
 
   create_table "access", primary_key: "aid", force: :cascade do |t|
     t.string  "mask",   limit: 255, default: "", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "language", limit: 12,  default: "", null: false
   end
 
-  add_index "advanced_help_index", ["language"], name: "language", using: :btree
+  add_index "advanced_help_index", ["language"], name: "advanced_help_index_language", using: :btree
 
   create_table "authmap", primary_key: "aid", force: :cascade do |t|
     t.integer "uid",      limit: 4,   default: 0,  null: false
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "block", ["theme", "module", "delta"], name: "tmd", unique: true, using: :btree
-  add_index "block", ["theme", "status", "region", "weight", "module"], name: "list", using: :btree
+  add_index "block", ["theme", "status", "region", "weight", "module"], name: "block_list", using: :btree
 
   create_table "block_custom", primary_key: "bid", force: :cascade do |t|
     t.text   "body",   limit: 4294967295
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "type",   limit: 32, null: false
   end
 
-  add_index "block_node_type", ["type"], name: "type", using: :btree
+  add_index "block_node_type", ["type"], name: "block_node_type_type", using: :btree
 
   create_table "block_role", id: false, force: :cascade do |t|
     t.string  "module", limit: 64, default: "", null: false
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "rid",    limit: 4,  default: 0,  null: false
   end
 
-  add_index "block_role", ["rid"], name: "rid", using: :btree
+  add_index "block_role", ["rid"], name: "block_role_rid", using: :btree
 
   create_table "blocked_ips", primary_key: "iid", force: :cascade do |t|
     t.string "ip", limit: 40, default: "", null: false
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache", ["expire"], name: "expire", using: :btree
+  add_index "cache", ["expire"], name: "cache_expire", using: :btree
 
   create_table "cache_admin_menu", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_admin_menu", ["expire"], name: "expire", using: :btree
+  add_index "cache_admin_menu", ["expire"], name: "cache_admin_menu_expire", using: :btree
 
   create_table "cache_block", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_block", ["expire"], name: "expire", using: :btree
+  add_index "cache_block", ["expire"], name: "cache_block_expire", using: :btree
 
   create_table "cache_bootstrap", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_bootstrap", ["expire"], name: "expire", using: :btree
+  add_index "cache_bootstrap", ["expire"], name: "cache_bootstrap_expire", using: :btree
 
   create_table "cache_field", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_field", ["expire"], name: "expire", using: :btree
+  add_index "cache_field", ["expire"], name: "cache_field_expire", using: :btree
 
   create_table "cache_filter", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -149,7 +149,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_filter", ["expire"], name: "expire", using: :btree
+  add_index "cache_filter", ["expire"], name: "cache_filter_expire", using: :btree
 
   create_table "cache_form", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_form", ["expire"], name: "expire", using: :btree
+  add_index "cache_form", ["expire"], name: "cache_form_expire", using: :btree
 
   create_table "cache_image", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_image", ["expire"], name: "expire", using: :btree
+  add_index "cache_image", ["expire"], name: "cache_image_expire", using: :btree
 
   create_table "cache_menu", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_menu", ["expire"], name: "expire", using: :btree
+  add_index "cache_menu", ["expire"], name: "cache_menu_expire", using: :btree
 
   create_table "cache_page", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_page", ["expire"], name: "expire", using: :btree
+  add_index "cache_page", ["expire"], name: "cache_page_expire", using: :btree
 
   create_table "cache_path", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_path", ["expire"], name: "expire", using: :btree
+  add_index "cache_path", ["expire"], name: "cache_path_expire", using: :btree
 
   create_table "cache_rules", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_rules", ["expire"], name: "expire", using: :btree
+  add_index "cache_rules", ["expire"], name: "cache_rules_expire", using: :btree
 
   create_table "cache_token", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_token", ["expire"], name: "expire", using: :btree
+  add_index "cache_token", ["expire"], name: "cache_token_expire", using: :btree
 
   create_table "cache_update", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -221,7 +221,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_update", ["expire"], name: "expire", using: :btree
+  add_index "cache_update", ["expire"], name: "cache_update_expire", using: :btree
 
   create_table "cache_views", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_views", ["expire"], name: "expire", using: :btree
+  add_index "cache_views", ["expire"], name: "cache_views_expire", using: :btree
 
   create_table "cache_views_data", primary_key: "cid", force: :cascade do |t|
     t.binary  "data",       limit: 4294967295
@@ -239,7 +239,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "serialized", limit: 2,          default: 1, null: false
   end
 
-  add_index "cache_views_data", ["expire"], name: "expire", using: :btree
+  add_index "cache_views_data", ["expire"], name: "cache_views_data_expire", using: :btree
 
   create_table "captcha_points", primary_key: "form_id", force: :cascade do |t|
     t.string "module",       limit: 64
@@ -274,7 +274,7 @@ ActiveRecord::Schema.define(version: 0) do
   add_index "countries_country", ["continent"], name: "continent", using: :btree
   add_index "countries_country", ["enabled"], name: "enabled", using: :btree
   add_index "countries_country", ["iso2"], name: "iso2", unique: true, using: :btree
-  add_index "countries_country", ["name"], name: "name", unique: true, using: :btree
+  add_index "countries_country", ["name"], name: "countries_country_name", unique: true, using: :btree
 
   create_table "countries_data", primary_key: "iso2", force: :cascade do |t|
     t.string "module", limit: 255,        default: "system", null: false
@@ -306,7 +306,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "d6_upgrade_filter", ["format", "module", "delta"], name: "fmd", unique: true, using: :btree
-  add_index "d6_upgrade_filter", ["format", "weight", "module", "delta"], name: "list", using: :btree
+  add_index "d6_upgrade_filter", ["format", "weight", "module", "delta"], name: "d6_upgrade_filter_list", using: :btree
 
   create_table "date_format_locale", id: false, force: :cascade do |t|
     t.string "format",   limit: 100, null: false
@@ -345,13 +345,13 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "field_config", ["active"], name: "active", using: :btree
-  add_index "field_config", ["deleted"], name: "deleted", using: :btree
+  add_index "field_config", ["deleted"], name: "field_config_deleted", using: :btree
   add_index "field_config", ["field_name"], name: "field_name", using: :btree
-  add_index "field_config", ["module"], name: "module", using: :btree
+  add_index "field_config", ["module"], name: "field_config_module", using: :btree
   add_index "field_config", ["storage_active"], name: "storage_active", using: :btree
   add_index "field_config", ["storage_module"], name: "storage_module", using: :btree
   add_index "field_config", ["storage_type"], name: "storage_type", using: :btree
-  add_index "field_config", ["type"], name: "type", using: :btree
+  add_index "field_config", ["type"], name: "field_config_type", using: :btree
 
   create_table "field_config_instance", force: :cascade do |t|
     t.integer "field_id",    limit: 4,                       null: false
@@ -362,8 +362,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "deleted",     limit: 1,          default: 0,  null: false
   end
 
-  add_index "field_config_instance", ["deleted"], name: "deleted", using: :btree
-  add_index "field_config_instance", ["field_name", "entity_type", "bundle"], name: "field_name_bundle", using: :btree
+  add_index "field_config_instance", ["deleted"], name: "field_config_instance_deleted", using: :btree
+  add_index "field_config_instance", ["field_name", "entity_type", "bundle"], name: "field_config_instance_bundle", using: :btree
 
   create_table "field_data_body", id: false, force: :cascade do |t|
     t.string  "entity_type",  limit: 128,        default: "", null: false
@@ -378,13 +378,13 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "body_format",  limit: 255
   end
 
-  add_index "field_data_body", ["body_format"], name: "body_format", using: :btree
-  add_index "field_data_body", ["bundle"], name: "bundle", using: :btree
-  add_index "field_data_body", ["deleted"], name: "deleted", using: :btree
-  add_index "field_data_body", ["entity_id"], name: "entity_id", using: :btree
-  add_index "field_data_body", ["entity_type"], name: "entity_type", using: :btree
-  add_index "field_data_body", ["language"], name: "language", using: :btree
-  add_index "field_data_body", ["revision_id"], name: "revision_id", using: :btree
+  add_index "field_data_body", ["body_format"], name: "field_data_body_body_format", using: :btree
+  add_index "field_data_body", ["bundle"], name: "field_data_body_bundle", using: :btree
+  add_index "field_data_body", ["deleted"], name: "field_data_body_deleted", using: :btree
+  add_index "field_data_body", ["entity_id"], name: "field_data_body_entity_id", using: :btree
+  add_index "field_data_body", ["entity_type"], name: "field_data_body_entity_type", using: :btree
+  add_index "field_data_body", ["language"], name: "field_data_body_language", using: :btree
+  add_index "field_data_body", ["revision_id"], name: "field_data_body_revision_id", using: :btree
 
   create_table "field_revision_body", id: false, force: :cascade do |t|
     t.string  "entity_type",  limit: 128,        default: "", null: false
@@ -399,13 +399,13 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "body_format",  limit: 255
   end
 
-  add_index "field_revision_body", ["body_format"], name: "body_format", using: :btree
-  add_index "field_revision_body", ["bundle"], name: "bundle", using: :btree
-  add_index "field_revision_body", ["deleted"], name: "deleted", using: :btree
-  add_index "field_revision_body", ["entity_id"], name: "entity_id", using: :btree
-  add_index "field_revision_body", ["entity_type"], name: "entity_type", using: :btree
-  add_index "field_revision_body", ["language"], name: "language", using: :btree
-  add_index "field_revision_body", ["revision_id"], name: "revision_id", using: :btree
+  add_index "field_revision_body", ["body_format"], name: "field_revision_body_body_format", using: :btree
+  add_index "field_revision_body", ["bundle"], name: "field_revision_body_bundle", using: :btree
+  add_index "field_revision_body", ["deleted"], name: "field_revision_body_deleted", using: :btree
+  add_index "field_revision_body", ["entity_id"], name: "field_revision_body_entity_id", using: :btree
+  add_index "field_revision_body", ["entity_type"], name: "field_revision_body_entity_type", using: :btree
+  add_index "field_revision_body", ["language"], name: "field_revision_body_language", using: :btree
+  add_index "field_revision_body", ["revision_id"], name: "field_revision_body_revision_id", using: :btree
 
   create_table "file_managed", primary_key: "fid", force: :cascade do |t|
     t.integer "uid",       limit: 4,   default: 0,  null: false
@@ -417,9 +417,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "timestamp", limit: 4,   default: 0,  null: false
   end
 
-  add_index "file_managed", ["status"], name: "status", using: :btree
-  add_index "file_managed", ["timestamp"], name: "timestamp", using: :btree
-  add_index "file_managed", ["uid"], name: "uid", using: :btree
+  add_index "file_managed", ["status"], name: "file_managed_status", using: :btree
+  add_index "file_managed", ["timestamp"], name: "file_managed_timestamp", using: :btree
+  add_index "file_managed", ["uid"], name: "file_managed_uid", using: :btree
   add_index "file_managed", ["uri"], name: "uri", unique: true, using: :btree
 
   create_table "file_usage", id: false, force: :cascade do |t|
@@ -444,9 +444,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "timestamp", limit: 4,   default: 0,  null: false
   end
 
-  add_index "files", ["status"], name: "status", using: :btree
-  add_index "files", ["timestamp"], name: "timestamp", using: :btree
-  add_index "files", ["uid"], name: "uid", using: :btree
+  add_index "files", ["status"], name: "files_status", using: :btree
+  add_index "files", ["timestamp"], name: "files_timestamp", using: :btree
+  add_index "files", ["uid"], name: "files_uid", using: :btree
 
   create_table "filter", id: false, force: :cascade do |t|
     t.string  "format",   limit: 255,                     null: false
@@ -457,7 +457,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.binary  "settings", limit: 4294967295
   end
 
-  add_index "filter", ["weight", "module", "name"], name: "list", using: :btree
+  add_index "filter", ["weight", "module", "name"], name: "filter_list", using: :btree
 
   create_table "filter_format", primary_key: "format", force: :cascade do |t|
     t.string  "name",   limit: 255, default: "", null: false
@@ -466,7 +466,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "weight", limit: 4,   default: 0,  null: false
   end
 
-  add_index "filter_format", ["name"], name: "name", unique: true, using: :btree
+  add_index "filter_format", ["name"], name: "filter_format_name", unique: true, using: :btree
   add_index "filter_format", ["status", "weight"], name: "status_weight", using: :btree
 
   create_table "flood", primary_key: "fid", force: :cascade do |t|
@@ -485,7 +485,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "timestamp", limit: 4, default: 0, null: false
   end
 
-  add_index "history", ["nid"], name: "nid", using: :btree
+  add_index "history", ["nid"], name: "history_nid", using: :btree
 
   create_table "image_effects", primary_key: "ieid", force: :cascade do |t|
     t.integer "isid",   limit: 4,          default: 0, null: false
@@ -502,7 +502,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "label", limit: 255, default: "", null: false
   end
 
-  add_index "image_styles", ["name"], name: "name", unique: true, using: :btree
+  add_index "image_styles", ["name"], name: "image_styles_name", unique: true, using: :btree
 
   create_table "menu_custom", primary_key: "menu_name", force: :cascade do |t|
     t.string "title",       limit: 255,   default: "", null: false
@@ -588,15 +588,15 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_index "node", ["changed"], name: "node_changed", using: :btree
   add_index "node", ["created"], name: "node_created", using: :btree
-  add_index "node", ["language"], name: "language", using: :btree
+  add_index "node", ["language"], name: "node_language", using: :btree
   add_index "node", ["promote", "status", "sticky", "created"], name: "node_frontpage", using: :btree
   add_index "node", ["status", "type", "nid"], name: "node_status_type", using: :btree
   add_index "node", ["title", "type"], name: "node_title_type", length: {"title"=>nil, "type"=>4}, using: :btree
   add_index "node", ["tnid"], name: "tnid", using: :btree
   add_index "node", ["translate"], name: "translate", using: :btree
-  add_index "node", ["type"], name: "node_type", length: {"type"=>4}, using: :btree
-  add_index "node", ["uid"], name: "uid", using: :btree
-  add_index "node", ["vid"], name: "vid", unique: true, using: :btree
+  add_index "node", ["type"], name: "node_node_type", using: :btree
+  add_index "node", ["uid"], name: "{:using=>\"node_uid\"}", using: :btree
+  add_index "node", ["vid"], name: "node_vid", unique: true, using: :btree
 
   create_table "node_access", id: false, force: :cascade do |t|
     t.integer "nid",          limit: 4,   default: 0,  null: false
@@ -619,8 +619,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "sticky",    limit: 4,          default: 0,  null: false
   end
 
-  add_index "node_revision", ["nid"], name: "nid", using: :btree
-  add_index "node_revision", ["uid"], name: "uid", using: :btree
+  add_index "node_revision", ["nid"], name: "node_revision_nid", using: :btree
+  add_index "node_revision", ["uid"], name: "node_revision_uid", using: :btree
 
   create_table "node_type", primary_key: "type", force: :cascade do |t|
     t.string  "name",        limit: 255,      default: "", null: false
@@ -644,7 +644,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "created", limit: 4,          default: 0,  null: false
   end
 
-  add_index "queue", ["expire"], name: "expire", using: :btree
+  add_index "queue", ["expire"], name: "queue_expire", using: :btree
   add_index "queue", ["name", "created"], name: "name_created", using: :btree
 
   create_table "rdf_mapping", id: false, force: :cascade do |t|
@@ -673,7 +673,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "role", ["name", "weight"], name: "name_weight", using: :btree
-  add_index "role", ["name"], name: "name", unique: true, using: :btree
+  add_index "role", ["name"], name: "role_name", unique: true, using: :btree
 
   create_table "role_permission", id: false, force: :cascade do |t|
     t.integer "rid",        limit: 4,                null: false
@@ -697,7 +697,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "owner",          limit: 255,        default: "rules",     null: false
   end
 
-  add_index "rules_config", ["name"], name: "name", unique: true, using: :btree
+  add_index "rules_config", ["name"], name: "rules_config_name", unique: true, using: :btree
   add_index "rules_config", ["plugin"], name: "plugin", using: :btree
 
   create_table "rules_dependencies", id: false, force: :cascade do |t|
@@ -705,7 +705,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string  "module", limit: 255, null: false
   end
 
-  add_index "rules_dependencies", ["module"], name: "module", using: :btree
+  add_index "rules_dependencies", ["module"], name: "rules_dependencies_module", using: :btree
 
   create_table "rules_scheduler", primary_key: "tid", force: :cascade do |t|
     t.string  "config",     limit: 64,    default: "", null: false
@@ -750,7 +750,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text    "caption", limit: 4294967295
   end
 
-  add_index "search_node_links", ["nid"], name: "nid", using: :btree
+  add_index "search_node_links", ["nid"], name: "search_node_links_nid", using: :btree
 
   create_table "search_total", primary_key: "word", force: :cascade do |t|
     t.float "count", limit: 24
@@ -761,7 +761,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.float  "expire", limit: 53,  default: 0.0, null: false
   end
 
-  add_index "semaphore", ["expire"], name: "expire", using: :btree
+  add_index "semaphore", ["expire"], name: "semaphore_expire", using: :btree
   add_index "semaphore", ["value"], name: "value", using: :btree
 
   create_table "sequences", primary_key: "value", force: :cascade do |t|
@@ -778,8 +778,8 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "sessions", ["ssid"], name: "ssid", using: :btree
-  add_index "sessions", ["timestamp"], name: "timestamp", using: :btree
-  add_index "sessions", ["uid"], name: "uid", using: :btree
+  add_index "sessions", ["timestamp"], name: "sessions_timestamp", using: :btree
+  add_index "sessions", ["uid"], name: "sessions_uid", using: :btree
 
   create_table "system", primary_key: "filename", force: :cascade do |t|
     t.string  "name",           limit: 255,   default: "", null: false
@@ -824,7 +824,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "language", limit: 12,  default: "", null: false
   end
 
-  add_index "url_alias", ["alias", "language", "pid"], name: "alias_language_pid", using: :btree
+  add_index "url_alias", ["alias", "language", "pid"], name: "url_alias_language", using: :btree
   add_index "url_alias", ["source", "language", "pid"], name: "source_language_pid", using: :btree
 
   create_table "users", primary_key: "uid", force: :cascade do |t|
@@ -845,10 +845,10 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "picture",          limit: 4,          default: 0,  null: false
   end
 
-  add_index "users", ["access"], name: "access", using: :btree
+  add_index "users", ["access"], name: "users_access", using: :btree
   add_index "users", ["created"], name: "created", using: :btree
   add_index "users", ["mail"], name: "mail", using: :btree
-  add_index "users", ["name"], name: "name", unique: true, using: :btree
+  add_index "users", ["name"], name: "users_name", unique: true, using: :btree
   add_index "users", ["picture"], name: "picture", using: :btree
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -856,7 +856,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "rid", limit: 4, default: 0, null: false
   end
 
-  add_index "users_roles", ["rid"], name: "rid", using: :btree
+  add_index "users_roles", ["rid"], name: "users_roles_rid", using: :btree
 
   create_table "variable", primary_key: "name", force: :cascade do |t|
     t.binary "value", limit: 4294967295, null: false
@@ -871,7 +871,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text    "display_options", limit: 4294967295
   end
 
-  add_index "views_display", ["vid", "position"], name: "vid", using: :btree
+  add_index "views_display", ["vid", "position"], name: "views_display_vid", using: :btree
 
   create_table "views_view", primary_key: "vid", force: :cascade do |t|
     t.string  "name",        limit: 128, default: "", null: false
@@ -882,7 +882,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "core",        limit: 4,   default: 0
   end
 
-  add_index "views_view", ["name"], name: "name", unique: true, using: :btree
+  add_index "views_view", ["name"], name: "views_view_name", unique: true, using: :btree
 
   create_table "watchdog", primary_key: "wid", force: :cascade do |t|
     t.integer "uid",       limit: 4,          default: 0,  null: false
@@ -898,8 +898,8 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "watchdog", ["severity"], name: "severity", using: :btree
-  add_index "watchdog", ["type"], name: "type", using: :btree
-  add_index "watchdog", ["uid"], name: "uid", using: :btree
+  add_index "watchdog", ["type"], name: "watchdog_type", using: :btree
+  add_index "watchdog", ["uid"], name: "watchdog_uid", using: :btree
 
   create_table "webform", primary_key: "nid", force: :cascade do |t|
     t.text    "confirmation",          limit: 65535,                            null: false
@@ -966,7 +966,7 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_index "webform_submissions", ["nid", "sid"], name: "nid_sid", using: :btree
   add_index "webform_submissions", ["nid", "uid", "sid"], name: "nid_uid_sid", using: :btree
-  add_index "webform_submissions", ["sid", "nid"], name: "sid_nid", unique: true, using: :btree
+  add_index "webform_submissions", ["sid", "nid"], name: "webform_submissions_sid_nid", unique: true, using: :btree
 
   create_table "webform_submitted_data", id: false, force: :cascade do |t|
     t.integer "nid",  limit: 4,        default: 0,   null: false
@@ -977,8 +977,8 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "webform_submitted_data", ["data"], name: "data", length: {"data"=>64}, using: :btree
-  add_index "webform_submitted_data", ["nid"], name: "nid", using: :btree
-  add_index "webform_submitted_data", ["sid", "nid"], name: "sid_nid", using: :btree
+  add_index "webform_submitted_data", ["nid"], name: "webform_submitted_data_nid", using: :btree
+  add_index "webform_submitted_data", ["sid", "nid"], name: "webform_submitted_data_sid_nid", using: :btree
 
   create_table "wysiwyg", primary_key: "format", force: :cascade do |t|
     t.string "editor",   limit: 128,   default: "", null: false
@@ -992,6 +992,6 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_index "wysiwyg_user", ["format"], name: "format", using: :btree
-  add_index "wysiwyg_user", ["uid"], name: "uid", using: :btree
+  add_index "wysiwyg_user", ["uid"], name: "wysiwyg_user_uid", using: :btree
 
 end

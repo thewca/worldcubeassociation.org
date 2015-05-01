@@ -28,11 +28,23 @@ gem 'local_time'
 gem 'ignorable'
 
 group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'faker'
+
   gem 'byebug'
   gem 'sqlite3'
   gem 'web-console'
   gem 'spring'
+end
+
+group :development do
   gem 'pre-commit'
+end
+
+group :test do
+  gem 'guard-rspec'
+  gem 'launchy'
 end
 
 group :production do
