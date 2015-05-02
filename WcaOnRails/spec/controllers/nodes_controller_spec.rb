@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe NodesController do
   before do
-    # TODO - there *must* be a better way of doing this stuff using FactoryGirl
-    @node = FactoryGirl.create(:node, created: 2.hours.ago.to_i)
-    FactoryGirl.create(:field_data_body, body_value: @node.title.parameterize, entity_id: @node.nid)
+    fdb = FactoryGirl.create :field_data_body
+    @node = fdb.node
     FactoryGirl.create(:url_alias, alias: "posts/#{@node.title.parameterize}", source: "node/#{@node.nid}")
 
-    @sticky_node = FactoryGirl.create(:node, sticky: true, created: 3.hours.ago.to_i)
-    FactoryGirl.create(:field_data_body, body_value: @sticky_node.title.parameterize, entity_id: @sticky_node.nid)
+    fdb = FactoryGirl.create :field_data_body
+    @sticky_node = fdb.node
+    @sticky_node.update!(sticky: true)
     FactoryGirl.create(:url_alias, alias: "posts/#{@sticky_node.title.parameterize}", source: "node/#{@sticky_node.nid}")
   end
 
