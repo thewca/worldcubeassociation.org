@@ -1,0 +1,5 @@
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+<% if Rails.application.config.live_site? %>
+User-agent: *
+Disallow: /
+<% end %>

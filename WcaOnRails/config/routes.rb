@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'posts/:post_alias' => 'nodes#show', as: 'node'
   get 'rss' => 'nodes#rss'
 
+  get 'robots' => 'static_pages#robots'
+
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'
   get 'organisations' => 'static_pages#organisations'

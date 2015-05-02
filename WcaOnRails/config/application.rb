@@ -35,5 +35,8 @@ module WcaOnRails
     end
 
     config.site_name = "World Cube Association"
+    def config.live_site?
+      not ENV["WCA_LIVE_SITE"].blank?
+    end
   end
 end

@@ -23,4 +23,8 @@ class StaticPagesController < ApplicationController
 
   def wca_workbook_assistant_versions
   end
+
+  def robots
+    respond_to :txt
+  end
 end

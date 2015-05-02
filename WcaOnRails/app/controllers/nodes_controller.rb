@@ -5,7 +5,7 @@ class NodesController < ApplicationController
 
   def rss
     @nodes = Node.where(promote: true).order(created: :desc).paginate(page: params[:page])
-    render :layout => false
+    respond_to :xml
   end
 
   def show

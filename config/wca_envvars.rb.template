@@ -1,3 +1,4 @@
+ENV['WCA_LIVE_SITE'] = ''
 ENV['DATABASE_URL'] = 'mysql2://root:root@localhost/cubing_cms'
 # TODO - production mode needs a *secret* SECRET_KEY_BASE, be sure to generate
 # a new one by running "rake secret"
