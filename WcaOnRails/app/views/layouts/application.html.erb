@@ -8,7 +8,12 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url) %>
-  <%= analytics_init if Rails.env.production? %>
+  <% if Rails.env.production? %>
+    <%= analytics_init  %>
+    <script>
+      ga('set', 'anonymizeIp', true);
+    </script>
+  <% end %>
 </head>
 <body>
 
