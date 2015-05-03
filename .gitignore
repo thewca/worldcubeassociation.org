@@ -2,6 +2,7 @@ admin/.htaccess
 admin/.htpasswd
 admin/export/serial.txt
 admin/export/WCA_export*sql.zip
+admin/export/WCA_export*tsv.zip
 
 admin/dump/*
 admin/phpMyAdmin
