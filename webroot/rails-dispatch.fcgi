@@ -1,6 +1,5 @@
 #!/home/cubing/ruby/bin/ruby
 ENV['RAILS_ENV'] = 'production'
-ENV['RAILS_ENV'] = 'development'#<<<
 
 require '../config/wca_envvars'
 
