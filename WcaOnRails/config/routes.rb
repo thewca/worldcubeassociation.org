@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  devise_for :devise_users, :path => 'users'
+  devise_scope :devise_user do
+    resource :registration,
+      only: [:new, :create, :edit, :update]
+  end
+
   root 'nodes#index'
   # TODO - once we're ready to move away from the drupal schema, refactor this
   # using https://github.com/norman/friendly_id.

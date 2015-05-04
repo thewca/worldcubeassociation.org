@@ -33,7 +33,7 @@
       </div>
       <div class="navbar-collapse collapse disabled">
         <ul class="nav navbar-nav">
-          <li class="dropdown <%= params[:controller] == 'static_pages' ? 'active' : '' %>">
+          <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'nodes' ? 'active' : '' %>">
             <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Information <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/">Home</a></li>
@@ -46,7 +46,7 @@
             </ul>
           </li>
           <li class="dropdown">
-            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
+            <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/results/competitions.php">Competitions</a></li>
               <li><a href="/results/events.php">Rankings</a></li>
@@ -72,6 +72,29 @@
             </ul>
           </li>
           <li><a href="/forum/" class="top-nav">Forum</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+              <% if current_devise_user %>
+                <%= current_devise_user.email %>
+              <% else %>
+                Sign in
+              <% end %>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <% if devise_user_signed_in? %>
+                  <li><%= link_to "Edit account", edit_devise_user_registration_path %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to('Sign out', destroy_devise_user_session_path, :method => :delete) %></li>
+                <% else %>
+                  <li><%= link_to('Sign in', new_devise_user_session_path, class: "top-nav") %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to t('.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_devise_user_confirmation_path %></li>
+                <% end %>
+            </ul>
+          </li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

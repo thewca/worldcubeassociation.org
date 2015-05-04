@@ -22,6 +22,8 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'local_time'
 gem 'google-analytics-rails'
+gem 'devise'
+gem 'devise-bootstrap-views'
 
 # Drupal defines some table columns that conflict with ActiveRecord.
 # This gem lets us ignore those columns. Eventually we'll migrate this
