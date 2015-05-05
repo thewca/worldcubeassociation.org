@@ -84,9 +84,6 @@ function getToken()
 // script
 
 // prevent CSRF
-if(!isset($_SESSION)) {
-    session_start();
-}
 if (!paramExists('token') || !array_key_exists('anticsrf_key',$_SESSION) || getToken() != $_SESSION['anticsrf_key']) {
     error('Invalid access attempt');
 }
