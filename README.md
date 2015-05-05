@@ -32,5 +32,5 @@ and create new test applications.
 > curl http://localhost:3000/oauth/token -X POST -F grant_type=password -F username=wca@worldcubeassociation.org -F password=wca`
 {"access_token":"1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc","token_type":"bearer","expires_in":7200,"created_at":1430788134}
 > curl -H "Authorization: Bearer 1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc" http://localhost:3000/api/v0/me
-{"success":true,"you":{"id":1,"email":"wca@worldcubeassociation.org","created_at":"2015-05-05T00:57:11.788Z","updated_at":"2015-05-05T00:57:12.072Z"}}
+{"me":{"id":1,"email":"wca@worldcubeassociation.org","created_at":"2015-05-05T00:57:11.788Z","updated_at":"2015-05-05T00:57:12.072Z"}}
 ```
