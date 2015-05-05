@@ -11,7 +11,7 @@ showDescription();
 showChoices();
 
 if( $chosenCheck ) {
-  getPersonsFromResults();
+  getPersons();
   getBirthdates();
   showUnfinishedPersons();
 }
@@ -55,19 +55,30 @@ function showChoices () {
 }
 
 #----------------------------------------------------------------------
-function getPersonsFromResults () {
+function getPersons () {
 #----------------------------------------------------------------------
-  global $personsFromResults;
+  global $personsFromPersons, $personsFromResultsWithoutId;
 
   $persons = dbQueryHandle("
-    SELECT personId id, personName name, result.countryId, min(year) firstYear
-    FROM Results result, Competitions competition
-    WHERE competition.id = competitionId
-    GROUP BY BINARY personId, BINARY personName, BINARY result.countryId
+    SELECT id, name, countryId
+    FROM Persons
+    ORDER BY name
   ");
   while( $row = mysql_fetch_row( $persons ))
-    $personsFromResults[] = $row;
+    $personsFromPersons[] = $row;
   mysql_free_result( $persons );
+
+  $persons = dbQueryHandle("
+    SELECT DISTINCT personName, Results.countryId, year
+    FROM Results
+    JOIN Competitions ON Competitions.id=Results.competitionId
+    WHERE personId=''
+    ORDER BY personName
+  ");
+    while( $row = mysql_fetch_row( $persons ))
+      $personsFromResultsWithoutId[] = $row;
+    mysql_free_result( $persons );
+
 }
 
 #----------------------------------------------------------------------
@@ -93,12 +104,12 @@ function getBirthdates () {
 #----------------------------------------------------------------------
 function showUnfinishedPersons () {
 #----------------------------------------------------------------------
-  global $personsFromResults, $birthdates;
+  global $personsFromPersons, $personsFromResultsWithoutId, $birthdates;
 
   #--- Pre-compute the candidate tuples: (id, name, countryId, romanName, romanNameSimilarityPlaceHolder, countryIdSimilarityPlaceHolder)
   $candidates = array();
-  foreach( $personsFromResults as $person ){
-    list( $id, $name, $countryId, $firstYear ) = $person;
+  foreach( $personsFromPersons as $person ){
+    list( $id, $name, $countryId ) = $person;
     $candidates[] = array( $id, $name, $countryId, extractRomanName($name), 0, 0 );
   }
 
@@ -110,13 +121,9 @@ function showUnfinishedPersons () {
 
   #--- Walk over all persons from the Results table.
   $caseNr = 0;
-  foreach( $personsFromResults as $person ){
-    list( $id, $name, $countryId, $firstYear ) = $person;
+  foreach( $personsFromResultsWithoutId as $person ){
+    list( $name, $countryId, $firstYear ) = $person;
     
-    #--- If the person is finished, skip it.
-    if( $id )
-      continue;
-
     #--- Try to compute the semi-id.
     $quarterId = removeUglyAccentsAndStuff( extractRomanName( $name ));
     $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
