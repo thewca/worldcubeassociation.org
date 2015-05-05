@@ -34,6 +34,7 @@ module WcaOnRails
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
 
+    config.default_from_address = "no-reply@worldcubeassociation.org"
     config.site_name = "World Cube Association"
     def config.live_site?
       not ENV["WCA_LIVE_SITE"].blank?

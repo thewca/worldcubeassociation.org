@@ -24,6 +24,7 @@ gem 'local_time'
 gem 'google-analytics-rails'
 gem 'devise'
 gem 'devise-bootstrap-views'
+gem 'doorkeeper'
 
 # Drupal defines some table columns that conflict with ActiveRecord.
 # This gem lets us ignore those columns. Eventually we'll migrate this

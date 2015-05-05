@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :devise_users, :path => 'users'
   devise_scope :devise_user do
     resource :registration,
@@ -27,4 +28,11 @@ Rails.application.routes.draw do
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
+
+  namespace :api do
+    namespace :v0 do
+      get '/test' => "api#test"
+    end
+  end
+
 end
