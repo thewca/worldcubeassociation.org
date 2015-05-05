@@ -22,9 +22,11 @@ you're interested in helping out.
   accessible at [http://localhost:8080](http://localhost:8080).
 
 ## Deploy
-- `ssh cubing@worldcubeassociation.org '(cd ~/dev.worldcubeassociation.org/WcaOnRails && bundle install && rake assets:precompile && killall /home/cubing/ruby/bin/ruby)' && curl -k https://dev.worldcubeassociation.org/`
-- TODO - should actually be running assets:precompile in production mode... `../config/with_wca_envvars rake assets:precompile RAILS_ENV=production`
-- TODO - this is a mess...look into capistrano? http://robmclarty.com/blog/how-to-deploy-a-rails-4-app-with-git-and-capistrano
+- `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails` - The production server is running in the following loop, so killing it should make everything work:
+
+```bash
+~/worldcubeassociation.org/WcaOnRails$ while true; do git pull; git submodule foreach git pull origin master; ../config/with_wca_envvars bundle install && ../config/with_wca_envvars rake assets:clean assets:precompile && ../config/with_wca_envvars rails server -e production -p 2331 -b 0.0.0.0; sleep 5; done
+```
 
 ## API
 See http://localhost:3000/oauth/applications/ (WcaOnRails/db/seeds.rb) to view
