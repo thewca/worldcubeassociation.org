@@ -63,10 +63,9 @@ describe "oauth api" do
 
   def verify_access_token(access_token)
     integration_session.reset! # posting to oauth_token_path littered our state
-    get api_v0_test_path, nil, { "Authorization": "Bearer #{access_token}" }
+    get api_v0_me_path, nil, { "Authorization": "Bearer #{access_token}" }
     expect(response).to be_success
     json = JSON.parse(response.body)
-    expect(json['success']).to eq(true)
-    expect(json['you']['email']).to eq(user.email)
+    expect(json['me']['email']).to eq(user.email)
   end
 end

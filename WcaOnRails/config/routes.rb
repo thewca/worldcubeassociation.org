@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v0 do
-      get '/test' => "api#test"
+      get '/me' => "api#me"
     end
   end
 
