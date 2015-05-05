@@ -5,7 +5,7 @@
       <h4><%= t('.sign_up', :default => "Sign up") %></h4>
     </div>
     <div class="panel-body">
-      <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), html: { role: "form" }) do |f| %>
+      <%= form_for(resource, :as => resource_name, :url => devise_user_registration_path, html: { role: "form" }) do |f| %>
         <div class="form-group">
           <%= f.label :email %>
           <%= f.email_field :email, autofocus: true, class: "form-control" %>
