@@ -7,9 +7,6 @@ gem 'therubyracer'
 
 gem 'sdoc', group: :doc
 
-# fcgi can go once we're off of dreamhost.
-gem 'fcgi'
-
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder'

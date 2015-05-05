@@ -15,7 +15,7 @@ webroot/drupal/
 webroot/forum/
 
 # Production secrets
-config/wca_envvars.rb
+config/with_wca_envvars
 
 # Vagrant stuff
 .vagrant/

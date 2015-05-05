@@ -20,10 +20,10 @@ ActiveRecord::Schema.define(version: 20150504163657) do
   end
 
   create_table "actions", primary_key: "aid", force: :cascade do |t|
-    t.string "type",       limit: 32,  default: "",  null: false
-    t.string "callback",   limit: 255, default: "",  null: false
-    t.binary "parameters",                           null: false
-    t.string "label",      limit: 255, default: "0", null: false
+    t.string "type",       limit: 32,         default: "",  null: false
+    t.string "callback",   limit: 255,        default: "",  null: false
+    t.binary "parameters", limit: 4294967295,               null: false
+    t.string "label",      limit: 255,        default: "0", null: false
   end
 
   create_table "advanced_help_index", primary_key: "sid", force: :cascade do |t|
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string "language", limit: 12,  default: "", null: false
   end
 
-  add_index "advanced_help_index", ["language"], name: "advanced_help_index_language"
+  add_index "advanced_help_index", ["language"], name: "advanced_help_index_language", using: :btree
 
   create_table "authmap", primary_key: "aid", force: :cascade do |t|
     t.integer "uid",      limit: 4,   default: 0,  null: false
@@ -40,15 +40,15 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "module",   limit: 128, default: "", null: false
   end
 
-  add_index "authmap", ["authname"], name: "authname", unique: true
+  add_index "authmap", ["authname"], name: "authname", unique: true, using: :btree
 
   create_table "batch", primary_key: "bid", force: :cascade do |t|
-    t.string  "token",     limit: 64, default: "", null: false
-    t.integer "timestamp", limit: 4,  default: 0,  null: false
-    t.binary  "batch"
+    t.string  "token",     limit: 64,         default: "", null: false
+    t.integer "timestamp", limit: 4,          default: 0,  null: false
+    t.binary  "batch",     limit: 4294967295
   end
 
-  add_index "batch", ["token"], name: "token"
+  add_index "batch", ["token"], name: "token", using: :btree
 
   create_table "block", primary_key: "bid", force: :cascade do |t|
     t.string  "module",     limit: 64,    default: "",  null: false
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "cache",      limit: 1,     default: 1,   null: false
   end
 
-  add_index "block", ["theme", "module", "delta"], name: "tmd", unique: true
-  add_index "block", ["theme", "status", "region", "weight", "module"], name: "block_list"
+  add_index "block", ["theme", "module", "delta"], name: "tmd", unique: true, using: :btree
+  add_index "block", ["theme", "status", "region", "weight", "module"], name: "block_list", using: :btree
 
   create_table "block_custom", primary_key: "bid", force: :cascade do |t|
     t.text   "body",   limit: 4294967295
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string "format", limit: 255
   end
 
-  add_index "block_custom", ["info"], name: "info", unique: true
+  add_index "block_custom", ["info"], name: "info", unique: true, using: :btree
 
   create_table "block_node_type", id: false, force: :cascade do |t|
     t.string "module", limit: 64, null: false
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string "type",   limit: 32, null: false
   end
 
-  add_index "block_node_type", ["type"], name: "block_node_type_type"
+  add_index "block_node_type", ["type"], name: "block_node_type_type", using: :btree
 
   create_table "block_role", id: false, force: :cascade do |t|
     t.string  "module", limit: 64, default: "", null: false
@@ -89,157 +89,157 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "rid",    limit: 4,  default: 0,  null: false
   end
 
-  add_index "block_role", ["rid"], name: "block_role_rid"
+  add_index "block_role", ["rid"], name: "block_role_rid", using: :btree
 
   create_table "blocked_ips", primary_key: "iid", force: :cascade do |t|
     t.string "ip", limit: 40, default: "", null: false
   end
 
-  add_index "blocked_ips", ["ip"], name: "blocked_ip"
+  add_index "blocked_ips", ["ip"], name: "blocked_ip", using: :btree
 
   create_table "cache", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache", ["expire"], name: "cache_expire"
+  add_index "cache", ["expire"], name: "cache_expire", using: :btree
 
   create_table "cache_admin_menu", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_admin_menu", ["expire"], name: "cache_admin_menu_expire"
+  add_index "cache_admin_menu", ["expire"], name: "cache_admin_menu_expire", using: :btree
 
   create_table "cache_block", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_block", ["expire"], name: "cache_block_expire"
+  add_index "cache_block", ["expire"], name: "cache_block_expire", using: :btree
 
   create_table "cache_bootstrap", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_bootstrap", ["expire"], name: "cache_bootstrap_expire"
+  add_index "cache_bootstrap", ["expire"], name: "cache_bootstrap_expire", using: :btree
 
   create_table "cache_field", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_field", ["expire"], name: "cache_field_expire"
+  add_index "cache_field", ["expire"], name: "cache_field_expire", using: :btree
 
   create_table "cache_filter", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_filter", ["expire"], name: "cache_filter_expire"
+  add_index "cache_filter", ["expire"], name: "cache_filter_expire", using: :btree
 
   create_table "cache_form", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_form", ["expire"], name: "cache_form_expire"
+  add_index "cache_form", ["expire"], name: "cache_form_expire", using: :btree
 
   create_table "cache_image", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_image", ["expire"], name: "cache_image_expire"
+  add_index "cache_image", ["expire"], name: "cache_image_expire", using: :btree
 
   create_table "cache_menu", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_menu", ["expire"], name: "cache_menu_expire"
+  add_index "cache_menu", ["expire"], name: "cache_menu_expire", using: :btree
 
   create_table "cache_page", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_page", ["expire"], name: "cache_page_expire"
+  add_index "cache_page", ["expire"], name: "cache_page_expire", using: :btree
 
   create_table "cache_path", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_path", ["expire"], name: "cache_path_expire"
+  add_index "cache_path", ["expire"], name: "cache_path_expire", using: :btree
 
   create_table "cache_rules", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_rules", ["expire"], name: "cache_rules_expire"
+  add_index "cache_rules", ["expire"], name: "cache_rules_expire", using: :btree
 
   create_table "cache_token", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_token", ["expire"], name: "cache_token_expire"
+  add_index "cache_token", ["expire"], name: "cache_token_expire", using: :btree
 
   create_table "cache_update", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_update", ["expire"], name: "cache_update_expire"
+  add_index "cache_update", ["expire"], name: "cache_update_expire", using: :btree
 
   create_table "cache_views", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 0, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 0, null: false
   end
 
-  add_index "cache_views", ["expire"], name: "cache_views_expire"
+  add_index "cache_views", ["expire"], name: "cache_views_expire", using: :btree
 
   create_table "cache_views_data", primary_key: "cid", force: :cascade do |t|
-    t.binary  "data"
-    t.integer "expire",     limit: 4, default: 0, null: false
-    t.integer "created",    limit: 4, default: 0, null: false
-    t.integer "serialized", limit: 2, default: 1, null: false
+    t.binary  "data",       limit: 4294967295
+    t.integer "expire",     limit: 4,          default: 0, null: false
+    t.integer "created",    limit: 4,          default: 0, null: false
+    t.integer "serialized", limit: 2,          default: 1, null: false
   end
 
-  add_index "cache_views_data", ["expire"], name: "cache_views_data_expire"
+  add_index "cache_views_data", ["expire"], name: "cache_views_data_expire", using: :btree
 
   create_table "captcha_points", primary_key: "form_id", force: :cascade do |t|
     t.string "module",       limit: 64
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "attempts",   limit: 4,   default: 0,  null: false
   end
 
-  add_index "captcha_sessions", ["csid", "ip_address"], name: "csid_ip"
+  add_index "captcha_sessions", ["csid", "ip_address"], name: "csid_ip", using: :btree
 
   create_table "countries_country", primary_key: "cid", force: :cascade do |t|
     t.string  "iso2",          limit: 2,                   null: false
@@ -271,15 +271,15 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "language",      limit: 12,  default: "und", null: false
   end
 
-  add_index "countries_country", ["continent"], name: "continent"
-  add_index "countries_country", ["enabled"], name: "enabled"
-  add_index "countries_country", ["iso2"], name: "iso2", unique: true
-  add_index "countries_country", ["name"], name: "countries_country_name", unique: true
+  add_index "countries_country", ["continent"], name: "continent", using: :btree
+  add_index "countries_country", ["enabled"], name: "enabled", using: :btree
+  add_index "countries_country", ["iso2"], name: "iso2", unique: true, using: :btree
+  add_index "countries_country", ["name"], name: "countries_country_name", unique: true, using: :btree
 
   create_table "countries_data", primary_key: "iso2", force: :cascade do |t|
-    t.string "module", limit: 255, default: "system", null: false
-    t.string "name",   limit: 255, default: "system", null: false
-    t.binary "data"
+    t.string "module", limit: 255,        default: "system", null: false
+    t.string "name",   limit: 255,        default: "system", null: false
+    t.binary "data",   limit: 4294967295
   end
 
   create_table "ctools_css_cache", primary_key: "cid", force: :cascade do |t|
@@ -289,14 +289,14 @@ ActiveRecord::Schema.define(version: 20150504163657) do
   end
 
   create_table "ctools_object_cache", id: false, force: :cascade do |t|
-    t.string  "sid",     limit: 64,              null: false
-    t.string  "name",    limit: 128,             null: false
-    t.string  "obj",     limit: 128,             null: false
-    t.integer "updated", limit: 4,   default: 0, null: false
-    t.binary  "data"
+    t.string  "sid",     limit: 64,                     null: false
+    t.string  "name",    limit: 128,                    null: false
+    t.string  "obj",     limit: 128,                    null: false
+    t.integer "updated", limit: 4,          default: 0, null: false
+    t.binary  "data",    limit: 4294967295
   end
 
-  add_index "ctools_object_cache", ["updated"], name: "updated"
+  add_index "ctools_object_cache", ["updated"], name: "updated", using: :btree
 
   create_table "d6_upgrade_filter", primary_key: "fid", force: :cascade do |t|
     t.integer "format", limit: 4,  default: 0,  null: false
@@ -305,8 +305,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "weight", limit: 1,  default: 0,  null: false
   end
 
-  add_index "d6_upgrade_filter", ["format", "module", "delta"], name: "fmd", unique: true
-  add_index "d6_upgrade_filter", ["format", "weight", "module", "delta"], name: "d6_upgrade_filter_list"
+  add_index "d6_upgrade_filter", ["format", "module", "delta"], name: "fmd", unique: true, using: :btree
+  add_index "d6_upgrade_filter", ["format", "weight", "module", "delta"], name: "d6_upgrade_filter_list", using: :btree
 
   create_table "date_format_locale", id: false, force: :cascade do |t|
     t.string "format",   limit: 100, null: false
@@ -319,7 +319,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "locked", limit: 1,   default: 0, null: false
   end
 
-  add_index "date_format_type", ["title"], name: "title"
+  add_index "date_format_type", ["title"], name: "title", using: :btree
 
   create_table "date_formats", primary_key: "dfid", force: :cascade do |t|
     t.string  "format", limit: 100,             null: false
@@ -327,65 +327,65 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "locked", limit: 1,   default: 0, null: false
   end
 
-  add_index "date_formats", ["format", "type"], name: "formats", unique: true
+  add_index "date_formats", ["format", "type"], name: "formats", unique: true, using: :btree
 
   create_table "devise_users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "confirmation_token"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
+    t.string   "unconfirmed_email",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "devise_users", ["email"], name: "index_devise_users_on_email", unique: true
-  add_index "devise_users", ["reset_password_token"], name: "index_devise_users_on_reset_password_token", unique: true
+  add_index "devise_users", ["email"], name: "index_devise_users_on_email", unique: true, using: :btree
+  add_index "devise_users", ["reset_password_token"], name: "index_devise_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "field_config", force: :cascade do |t|
-    t.string  "field_name",     limit: 32,               null: false
-    t.string  "type",           limit: 128,              null: false
-    t.string  "module",         limit: 128, default: "", null: false
-    t.integer "active",         limit: 1,   default: 0,  null: false
-    t.string  "storage_type",   limit: 128,              null: false
-    t.string  "storage_module", limit: 128, default: "", null: false
-    t.integer "storage_active", limit: 1,   default: 0,  null: false
-    t.integer "locked",         limit: 1,   default: 0,  null: false
-    t.binary  "data",                                    null: false
-    t.integer "cardinality",    limit: 1,   default: 0,  null: false
-    t.integer "translatable",   limit: 1,   default: 0,  null: false
-    t.integer "deleted",        limit: 1,   default: 0,  null: false
+    t.string  "field_name",     limit: 32,                      null: false
+    t.string  "type",           limit: 128,                     null: false
+    t.string  "module",         limit: 128,        default: "", null: false
+    t.integer "active",         limit: 1,          default: 0,  null: false
+    t.string  "storage_type",   limit: 128,                     null: false
+    t.string  "storage_module", limit: 128,        default: "", null: false
+    t.integer "storage_active", limit: 1,          default: 0,  null: false
+    t.integer "locked",         limit: 1,          default: 0,  null: false
+    t.binary  "data",           limit: 4294967295,              null: false
+    t.integer "cardinality",    limit: 1,          default: 0,  null: false
+    t.integer "translatable",   limit: 1,          default: 0,  null: false
+    t.integer "deleted",        limit: 1,          default: 0,  null: false
   end
 
-  add_index "field_config", ["active"], name: "active"
-  add_index "field_config", ["deleted"], name: "field_config_deleted"
-  add_index "field_config", ["field_name"], name: "field_name"
-  add_index "field_config", ["module"], name: "field_config_module"
-  add_index "field_config", ["storage_active"], name: "storage_active"
-  add_index "field_config", ["storage_module"], name: "storage_module"
-  add_index "field_config", ["storage_type"], name: "storage_type"
-  add_index "field_config", ["type"], name: "field_config_type"
+  add_index "field_config", ["active"], name: "active", using: :btree
+  add_index "field_config", ["deleted"], name: "field_config_deleted", using: :btree
+  add_index "field_config", ["field_name"], name: "field_name", using: :btree
+  add_index "field_config", ["module"], name: "field_config_module", using: :btree
+  add_index "field_config", ["storage_active"], name: "storage_active", using: :btree
+  add_index "field_config", ["storage_module"], name: "storage_module", using: :btree
+  add_index "field_config", ["storage_type"], name: "storage_type", using: :btree
+  add_index "field_config", ["type"], name: "field_config_type", using: :btree
 
   create_table "field_config_instance", force: :cascade do |t|
-    t.integer "field_id",    limit: 4,                null: false
-    t.string  "field_name",  limit: 32,  default: "", null: false
-    t.string  "entity_type", limit: 32,  default: "", null: false
-    t.string  "bundle",      limit: 128, default: "", null: false
-    t.binary  "data",                                 null: false
-    t.integer "deleted",     limit: 1,   default: 0,  null: false
+    t.integer "field_id",    limit: 4,                       null: false
+    t.string  "field_name",  limit: 32,         default: "", null: false
+    t.string  "entity_type", limit: 32,         default: "", null: false
+    t.string  "bundle",      limit: 128,        default: "", null: false
+    t.binary  "data",        limit: 4294967295,              null: false
+    t.integer "deleted",     limit: 1,          default: 0,  null: false
   end
 
-  add_index "field_config_instance", ["deleted"], name: "field_config_instance_deleted"
-  add_index "field_config_instance", ["field_name", "entity_type", "bundle"], name: "field_config_instance_bundle"
+  add_index "field_config_instance", ["deleted"], name: "field_config_instance_deleted", using: :btree
+  add_index "field_config_instance", ["field_name", "entity_type", "bundle"], name: "field_config_instance_bundle", using: :btree
 
   create_table "field_data_body", id: false, force: :cascade do |t|
     t.string  "entity_type",  limit: 128,        default: "", null: false
@@ -400,13 +400,13 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "body_format",  limit: 255
   end
 
-  add_index "field_data_body", ["body_format"], name: "field_data_body_body_format"
-  add_index "field_data_body", ["bundle"], name: "field_data_body_bundle"
-  add_index "field_data_body", ["deleted"], name: "field_data_body_deleted"
-  add_index "field_data_body", ["entity_id"], name: "field_data_body_entity_id"
-  add_index "field_data_body", ["entity_type"], name: "field_data_body_entity_type"
-  add_index "field_data_body", ["language"], name: "field_data_body_language"
-  add_index "field_data_body", ["revision_id"], name: "field_data_body_revision_id"
+  add_index "field_data_body", ["body_format"], name: "field_data_body_body_format", using: :btree
+  add_index "field_data_body", ["bundle"], name: "field_data_body_bundle", using: :btree
+  add_index "field_data_body", ["deleted"], name: "field_data_body_deleted", using: :btree
+  add_index "field_data_body", ["entity_id"], name: "field_data_body_entity_id", using: :btree
+  add_index "field_data_body", ["entity_type"], name: "field_data_body_entity_type", using: :btree
+  add_index "field_data_body", ["language"], name: "field_data_body_language", using: :btree
+  add_index "field_data_body", ["revision_id"], name: "field_data_body_revision_id", using: :btree
 
   create_table "field_revision_body", id: false, force: :cascade do |t|
     t.string  "entity_type",  limit: 128,        default: "", null: false
@@ -421,13 +421,13 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "body_format",  limit: 255
   end
 
-  add_index "field_revision_body", ["body_format"], name: "field_revision_body_body_format"
-  add_index "field_revision_body", ["bundle"], name: "field_revision_body_bundle"
-  add_index "field_revision_body", ["deleted"], name: "field_revision_body_deleted"
-  add_index "field_revision_body", ["entity_id"], name: "field_revision_body_entity_id"
-  add_index "field_revision_body", ["entity_type"], name: "field_revision_body_entity_type"
-  add_index "field_revision_body", ["language"], name: "field_revision_body_language"
-  add_index "field_revision_body", ["revision_id"], name: "field_revision_body_revision_id"
+  add_index "field_revision_body", ["body_format"], name: "field_revision_body_body_format", using: :btree
+  add_index "field_revision_body", ["bundle"], name: "field_revision_body_bundle", using: :btree
+  add_index "field_revision_body", ["deleted"], name: "field_revision_body_deleted", using: :btree
+  add_index "field_revision_body", ["entity_id"], name: "field_revision_body_entity_id", using: :btree
+  add_index "field_revision_body", ["entity_type"], name: "field_revision_body_entity_type", using: :btree
+  add_index "field_revision_body", ["language"], name: "field_revision_body_language", using: :btree
+  add_index "field_revision_body", ["revision_id"], name: "field_revision_body_revision_id", using: :btree
 
   create_table "file_managed", primary_key: "fid", force: :cascade do |t|
     t.integer "uid",       limit: 4,   default: 0,  null: false
@@ -439,10 +439,10 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "timestamp", limit: 4,   default: 0,  null: false
   end
 
-  add_index "file_managed", ["status"], name: "file_managed_status"
-  add_index "file_managed", ["timestamp"], name: "file_managed_timestamp"
-  add_index "file_managed", ["uid"], name: "file_managed_uid"
-  add_index "file_managed", ["uri"], name: "uri", unique: true
+  add_index "file_managed", ["status"], name: "file_managed_status", using: :btree
+  add_index "file_managed", ["timestamp"], name: "file_managed_timestamp", using: :btree
+  add_index "file_managed", ["uid"], name: "file_managed_uid", using: :btree
+  add_index "file_managed", ["uri"], name: "uri", unique: true, using: :btree
 
   create_table "file_usage", id: false, force: :cascade do |t|
     t.integer "fid",    limit: 4,                null: false
@@ -452,9 +452,9 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "count",  limit: 4,   default: 0,  null: false
   end
 
-  add_index "file_usage", ["fid", "count"], name: "fid_count"
-  add_index "file_usage", ["fid", "module"], name: "fid_module"
-  add_index "file_usage", ["type", "id"], name: "type_id"
+  add_index "file_usage", ["fid", "count"], name: "fid_count", using: :btree
+  add_index "file_usage", ["fid", "module"], name: "fid_module", using: :btree
+  add_index "file_usage", ["type", "id"], name: "type_id", using: :btree
 
   create_table "files", primary_key: "fid", force: :cascade do |t|
     t.integer "uid",       limit: 4,   default: 0,  null: false
@@ -466,20 +466,20 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "timestamp", limit: 4,   default: 0,  null: false
   end
 
-  add_index "files", ["status"], name: "files_status"
-  add_index "files", ["timestamp"], name: "files_timestamp"
-  add_index "files", ["uid"], name: "files_uid"
+  add_index "files", ["status"], name: "files_status", using: :btree
+  add_index "files", ["timestamp"], name: "files_timestamp", using: :btree
+  add_index "files", ["uid"], name: "files_uid", using: :btree
 
   create_table "filter", id: false, force: :cascade do |t|
-    t.string  "format",   limit: 255,              null: false
-    t.string  "module",   limit: 64,  default: "", null: false
-    t.string  "name",     limit: 32,  default: "", null: false
-    t.integer "weight",   limit: 4,   default: 0,  null: false
-    t.integer "status",   limit: 4,   default: 0,  null: false
-    t.binary  "settings"
+    t.string  "format",   limit: 255,                     null: false
+    t.string  "module",   limit: 64,         default: "", null: false
+    t.string  "name",     limit: 32,         default: "", null: false
+    t.integer "weight",   limit: 4,          default: 0,  null: false
+    t.integer "status",   limit: 4,          default: 0,  null: false
+    t.binary  "settings", limit: 4294967295
   end
 
-  add_index "filter", ["weight", "module", "name"], name: "filter_list"
+  add_index "filter", ["weight", "module", "name"], name: "filter_list", using: :btree
 
   create_table "filter_format", primary_key: "format", force: :cascade do |t|
     t.string  "name",   limit: 255, default: "", null: false
@@ -488,8 +488,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "weight", limit: 4,   default: 0,  null: false
   end
 
-  add_index "filter_format", ["name"], name: "filter_format_name", unique: true
-  add_index "filter_format", ["status", "weight"], name: "status_weight"
+  add_index "filter_format", ["name"], name: "filter_format_name", unique: true, using: :btree
+  add_index "filter_format", ["status", "weight"], name: "status_weight", using: :btree
 
   create_table "flood", primary_key: "fid", force: :cascade do |t|
     t.string  "event",      limit: 64,  default: "", null: false
@@ -498,8 +498,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "expiration", limit: 4,   default: 0,  null: false
   end
 
-  add_index "flood", ["event", "identifier", "timestamp"], name: "allow"
-  add_index "flood", ["expiration"], name: "purge"
+  add_index "flood", ["event", "identifier", "timestamp"], name: "allow", using: :btree
+  add_index "flood", ["expiration"], name: "purge", using: :btree
 
   create_table "history", id: false, force: :cascade do |t|
     t.integer "uid",       limit: 4, default: 0, null: false
@@ -507,24 +507,24 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "timestamp", limit: 4, default: 0, null: false
   end
 
-  add_index "history", ["nid"], name: "history_nid"
+  add_index "history", ["nid"], name: "history_nid", using: :btree
 
   create_table "image_effects", primary_key: "ieid", force: :cascade do |t|
-    t.integer "isid",   limit: 4,   default: 0, null: false
-    t.integer "weight", limit: 4,   default: 0, null: false
-    t.string  "name",   limit: 255,             null: false
-    t.binary  "data",                           null: false
+    t.integer "isid",   limit: 4,          default: 0, null: false
+    t.integer "weight", limit: 4,          default: 0, null: false
+    t.string  "name",   limit: 255,                    null: false
+    t.binary  "data",   limit: 4294967295,             null: false
   end
 
-  add_index "image_effects", ["isid"], name: "isid"
-  add_index "image_effects", ["weight"], name: "weight"
+  add_index "image_effects", ["isid"], name: "isid", using: :btree
+  add_index "image_effects", ["weight"], name: "weight", using: :btree
 
   create_table "image_styles", primary_key: "isid", force: :cascade do |t|
     t.string "name",  limit: 255,              null: false
     t.string "label", limit: 255, default: "", null: false
   end
 
-  add_index "image_styles", ["name"], name: "image_styles_name", unique: true
+  add_index "image_styles", ["name"], name: "image_styles_name", unique: true, using: :btree
 
   create_table "menu_custom", primary_key: "menu_name", force: :cascade do |t|
     t.string "title",       limit: 255,   default: "", null: false
@@ -532,44 +532,44 @@ ActiveRecord::Schema.define(version: 20150504163657) do
   end
 
   create_table "menu_links", primary_key: "mlid", force: :cascade do |t|
-    t.string  "menu_name",    limit: 32,  default: "",       null: false
-    t.integer "plid",         limit: 4,   default: 0,        null: false
-    t.string  "link_path",    limit: 255, default: "",       null: false
-    t.string  "router_path",  limit: 255, default: "",       null: false
-    t.string  "link_title",   limit: 255, default: "",       null: false
-    t.binary  "options"
-    t.string  "module",       limit: 255, default: "system", null: false
-    t.integer "hidden",       limit: 2,   default: 0,        null: false
-    t.integer "external",     limit: 2,   default: 0,        null: false
-    t.integer "has_children", limit: 2,   default: 0,        null: false
-    t.integer "expanded",     limit: 2,   default: 0,        null: false
-    t.integer "weight",       limit: 4,   default: 0,        null: false
-    t.integer "depth",        limit: 2,   default: 0,        null: false
-    t.integer "customized",   limit: 2,   default: 0,        null: false
-    t.integer "p1",           limit: 4,   default: 0,        null: false
-    t.integer "p2",           limit: 4,   default: 0,        null: false
-    t.integer "p3",           limit: 4,   default: 0,        null: false
-    t.integer "p4",           limit: 4,   default: 0,        null: false
-    t.integer "p5",           limit: 4,   default: 0,        null: false
-    t.integer "p6",           limit: 4,   default: 0,        null: false
-    t.integer "p7",           limit: 4,   default: 0,        null: false
-    t.integer "p8",           limit: 4,   default: 0,        null: false
-    t.integer "p9",           limit: 4,   default: 0,        null: false
-    t.integer "updated",      limit: 2,   default: 0,        null: false
+    t.string  "menu_name",    limit: 32,    default: "",       null: false
+    t.integer "plid",         limit: 4,     default: 0,        null: false
+    t.string  "link_path",    limit: 255,   default: "",       null: false
+    t.string  "router_path",  limit: 255,   default: "",       null: false
+    t.string  "link_title",   limit: 255,   default: "",       null: false
+    t.binary  "options",      limit: 65535
+    t.string  "module",       limit: 255,   default: "system", null: false
+    t.integer "hidden",       limit: 2,     default: 0,        null: false
+    t.integer "external",     limit: 2,     default: 0,        null: false
+    t.integer "has_children", limit: 2,     default: 0,        null: false
+    t.integer "expanded",     limit: 2,     default: 0,        null: false
+    t.integer "weight",       limit: 4,     default: 0,        null: false
+    t.integer "depth",        limit: 2,     default: 0,        null: false
+    t.integer "customized",   limit: 2,     default: 0,        null: false
+    t.integer "p1",           limit: 4,     default: 0,        null: false
+    t.integer "p2",           limit: 4,     default: 0,        null: false
+    t.integer "p3",           limit: 4,     default: 0,        null: false
+    t.integer "p4",           limit: 4,     default: 0,        null: false
+    t.integer "p5",           limit: 4,     default: 0,        null: false
+    t.integer "p6",           limit: 4,     default: 0,        null: false
+    t.integer "p7",           limit: 4,     default: 0,        null: false
+    t.integer "p8",           limit: 4,     default: 0,        null: false
+    t.integer "p9",           limit: 4,     default: 0,        null: false
+    t.integer "updated",      limit: 2,     default: 0,        null: false
   end
 
-  add_index "menu_links", ["link_path", "menu_name"], name: "path_menu"
-  add_index "menu_links", ["menu_name", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"], name: "menu_parents"
-  add_index "menu_links", ["menu_name", "plid", "expanded", "has_children"], name: "menu_plid_expand_child"
-  add_index "menu_links", ["router_path"], name: "router_path"
+  add_index "menu_links", ["link_path", "menu_name"], name: "path_menu", length: {"link_path"=>128, "menu_name"=>nil}, using: :btree
+  add_index "menu_links", ["menu_name", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"], name: "menu_parents", using: :btree
+  add_index "menu_links", ["menu_name", "plid", "expanded", "has_children"], name: "menu_plid_expand_child", using: :btree
+  add_index "menu_links", ["router_path"], name: "router_path", length: {"router_path"=>128}, using: :btree
 
   create_table "menu_router", primary_key: "path", force: :cascade do |t|
-    t.binary  "load_functions",                                  null: false
-    t.binary  "to_arg_functions",                                null: false
+    t.binary  "load_functions",    limit: 65535,                 null: false
+    t.binary  "to_arg_functions",  limit: 65535,                 null: false
     t.string  "access_callback",   limit: 255,      default: "", null: false
-    t.binary  "access_arguments"
+    t.binary  "access_arguments",  limit: 65535
     t.string  "page_callback",     limit: 255,      default: "", null: false
-    t.binary  "page_arguments"
+    t.binary  "page_arguments",    limit: 65535
     t.integer "fit",               limit: 4,        default: 0,  null: false
     t.integer "number_parts",      limit: 2,        default: 0,  null: false
     t.string  "tab_parent",        limit: 255,      default: "", null: false
@@ -588,9 +588,9 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "theme_arguments",   limit: 255,      default: "", null: false
   end
 
-  add_index "menu_router", ["fit"], name: "fit"
-  add_index "menu_router", ["tab_parent", "weight", "title"], name: "tab_parent"
-  add_index "menu_router", ["tab_root", "weight", "title"], name: "tab_root_weight_title"
+  add_index "menu_router", ["fit"], name: "fit", using: :btree
+  add_index "menu_router", ["tab_parent", "weight", "title"], name: "tab_parent", length: {"tab_parent"=>64, "weight"=>nil, "title"=>nil}, using: :btree
+  add_index "menu_router", ["tab_root", "weight", "title"], name: "tab_root_weight_title", length: {"tab_root"=>64, "weight"=>nil, "title"=>nil}, using: :btree
 
   create_table "node", primary_key: "nid", force: :cascade do |t|
     t.integer "vid",       limit: 4
@@ -608,17 +608,17 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "translate", limit: 4,   default: 0,  null: false
   end
 
-  add_index "node", ["changed"], name: "node_changed"
-  add_index "node", ["created"], name: "node_created"
-  add_index "node", ["language"], name: "node_language"
-  add_index "node", ["promote", "status", "sticky", "created"], name: "node_frontpage"
-  add_index "node", ["status", "type", "nid"], name: "node_status_type"
-  add_index "node", ["title", "type"], name: "node_title_type"
-  add_index "node", ["tnid"], name: "tnid"
-  add_index "node", ["translate"], name: "translate"
-  add_index "node", ["type"], name: "node_node_type"
-  add_index "node", ["uid"], name: "{:using=>\"node_uid\"}"
-  add_index "node", ["vid"], name: "node_vid", unique: true
+  add_index "node", ["changed"], name: "node_changed", using: :btree
+  add_index "node", ["created"], name: "node_created", using: :btree
+  add_index "node", ["language"], name: "node_language", using: :btree
+  add_index "node", ["promote", "status", "sticky", "created"], name: "node_frontpage", using: :btree
+  add_index "node", ["status", "type", "nid"], name: "node_status_type", using: :btree
+  add_index "node", ["title", "type"], name: "node_title_type", length: {"title"=>nil, "type"=>4}, using: :btree
+  add_index "node", ["tnid"], name: "tnid", using: :btree
+  add_index "node", ["translate"], name: "translate", using: :btree
+  add_index "node", ["type"], name: "node_node_type", using: :btree
+  add_index "node", ["uid"], name: "node_uid", using: :btree
+  add_index "node", ["vid"], name: "node_vid", unique: true, using: :btree
 
   create_table "node_access", id: false, force: :cascade do |t|
     t.integer "nid",          limit: 4,   default: 0,  null: false
@@ -641,8 +641,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "sticky",    limit: 4,          default: 0,  null: false
   end
 
-  add_index "node_revision", ["nid"], name: "node_revision_nid"
-  add_index "node_revision", ["uid"], name: "node_revision_uid"
+  add_index "node_revision", ["nid"], name: "node_revision_nid", using: :btree
+  add_index "node_revision", ["uid"], name: "node_revision_uid", using: :btree
 
   create_table "node_type", primary_key: "type", force: :cascade do |t|
     t.string  "name",        limit: 255,      default: "", null: false
@@ -660,59 +660,59 @@ ActiveRecord::Schema.define(version: 20150504163657) do
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer  "resource_owner_id", null: false
-    t.integer  "application_id",    null: false
-    t.string   "token",             null: false
-    t.integer  "expires_in",        null: false
-    t.text     "redirect_uri",      null: false
-    t.datetime "created_at",        null: false
+    t.integer  "resource_owner_id", limit: 4,     null: false
+    t.integer  "application_id",    limit: 4,     null: false
+    t.string   "token",             limit: 255,   null: false
+    t.integer  "expires_in",        limit: 4,     null: false
+    t.text     "redirect_uri",      limit: 65535, null: false
+    t.datetime "created_at",                      null: false
     t.datetime "revoked_at"
-    t.string   "scopes"
+    t.string   "scopes",            limit: 255
   end
 
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
 
   create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer  "resource_owner_id"
-    t.integer  "application_id"
-    t.string   "token",             null: false
-    t.string   "refresh_token"
-    t.integer  "expires_in"
+    t.integer  "resource_owner_id", limit: 4
+    t.integer  "application_id",    limit: 4
+    t.string   "token",             limit: 255, null: false
+    t.string   "refresh_token",     limit: 255
+    t.integer  "expires_in",        limit: 4
     t.datetime "revoked_at"
-    t.datetime "created_at",        null: false
-    t.string   "scopes"
+    t.datetime "created_at",                    null: false
+    t.string   "scopes",            limit: 255
   end
 
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
-  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
 
   create_table "oauth_applications", force: :cascade do |t|
-    t.string   "name",                      null: false
-    t.string   "uid",                       null: false
-    t.string   "secret",                    null: false
-    t.text     "redirect_uri",              null: false
-    t.string   "scopes",       default: "", null: false
+    t.string   "name",         limit: 255,                null: false
+    t.string   "uid",          limit: 255,                null: false
+    t.string   "secret",       limit: 255,                null: false
+    t.text     "redirect_uri", limit: 65535,              null: false
+    t.string   "scopes",       limit: 255,   default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
   create_table "queue", primary_key: "item_id", force: :cascade do |t|
-    t.string  "name",    limit: 255, default: "", null: false
-    t.binary  "data"
-    t.integer "expire",  limit: 4,   default: 0,  null: false
-    t.integer "created", limit: 4,   default: 0,  null: false
+    t.string  "name",    limit: 255,        default: "", null: false
+    t.binary  "data",    limit: 4294967295
+    t.integer "expire",  limit: 4,          default: 0,  null: false
+    t.integer "created", limit: 4,          default: 0,  null: false
   end
 
-  add_index "queue", ["expire"], name: "queue_expire"
-  add_index "queue", ["name", "created"], name: "name_created"
+  add_index "queue", ["expire"], name: "queue_expire", using: :btree
+  add_index "queue", ["name", "created"], name: "name_created", using: :btree
 
   create_table "rdf_mapping", id: false, force: :cascade do |t|
-    t.string "type",    limit: 128, null: false
-    t.string "bundle",  limit: 128, null: false
-    t.binary "mapping"
+    t.string "type",    limit: 128,        null: false
+    t.string "bundle",  limit: 128,        null: false
+    t.binary "mapping", limit: 4294967295
   end
 
   create_table "registry", id: false, force: :cascade do |t|
@@ -723,7 +723,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "weight",   limit: 4,   default: 0,  null: false
   end
 
-  add_index "registry", ["type", "weight", "module"], name: "hook"
+  add_index "registry", ["type", "weight", "module"], name: "hook", using: :btree
 
   create_table "registry_file", primary_key: "filename", force: :cascade do |t|
     t.string "hash", limit: 64, null: false
@@ -734,8 +734,8 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "weight", limit: 4,  default: 0,  null: false
   end
 
-  add_index "role", ["name", "weight"], name: "name_weight"
-  add_index "role", ["name"], name: "role_name", unique: true
+  add_index "role", ["name", "weight"], name: "name_weight", using: :btree
+  add_index "role", ["name"], name: "role_name", unique: true, using: :btree
 
   create_table "role_permission", id: false, force: :cascade do |t|
     t.integer "rid",        limit: 4,                null: false
@@ -743,31 +743,31 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "module",     limit: 255, default: "", null: false
   end
 
-  add_index "role_permission", ["permission"], name: "permission"
+  add_index "role_permission", ["permission"], name: "permission", using: :btree
 
   create_table "rules_config", force: :cascade do |t|
-    t.string  "name",           limit: 64,                        null: false
-    t.string  "label",          limit: 255, default: "unlabeled", null: false
-    t.string  "plugin",         limit: 127,                       null: false
-    t.integer "active",         limit: 4,   default: 1,           null: false
-    t.integer "weight",         limit: 1,   default: 0,           null: false
-    t.integer "status",         limit: 1,   default: 1,           null: false
-    t.integer "dirty",          limit: 1,   default: 0,           null: false
+    t.string  "name",           limit: 64,                               null: false
+    t.string  "label",          limit: 255,        default: "unlabeled", null: false
+    t.string  "plugin",         limit: 127,                              null: false
+    t.integer "active",         limit: 4,          default: 1,           null: false
+    t.integer "weight",         limit: 1,          default: 0,           null: false
+    t.integer "status",         limit: 1,          default: 1,           null: false
+    t.integer "dirty",          limit: 1,          default: 0,           null: false
     t.string  "module",         limit: 255
-    t.integer "access_exposed", limit: 1,   default: 0,           null: false
-    t.binary  "data"
-    t.string  "owner",          limit: 255, default: "rules",     null: false
+    t.integer "access_exposed", limit: 1,          default: 0,           null: false
+    t.binary  "data",           limit: 4294967295
+    t.string  "owner",          limit: 255,        default: "rules",     null: false
   end
 
-  add_index "rules_config", ["name"], name: "rules_config_name", unique: true
-  add_index "rules_config", ["plugin"], name: "plugin"
+  add_index "rules_config", ["name"], name: "rules_config_name", unique: true, using: :btree
+  add_index "rules_config", ["plugin"], name: "plugin", using: :btree
 
   create_table "rules_dependencies", id: false, force: :cascade do |t|
     t.integer "id",     limit: 4,   null: false
     t.string  "module", limit: 255, null: false
   end
 
-  add_index "rules_dependencies", ["module"], name: "rules_dependencies_module"
+  add_index "rules_dependencies", ["module"], name: "rules_dependencies_module", using: :btree
 
   create_table "rules_scheduler", primary_key: "tid", force: :cascade do |t|
     t.string  "config",     limit: 64,    default: "", null: false
@@ -777,7 +777,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "handler",    limit: 255
   end
 
-  add_index "rules_scheduler", ["date"], name: "date"
+  add_index "rules_scheduler", ["date"], name: "date", using: :btree
 
   create_table "rules_tags", id: false, force: :cascade do |t|
     t.integer "id",  limit: 4,   null: false
@@ -803,7 +803,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.float   "score", limit: 24
   end
 
-  add_index "search_index", ["sid", "type"], name: "sid_type"
+  add_index "search_index", ["sid", "type"], name: "sid_type", using: :btree
 
   create_table "search_node_links", id: false, force: :cascade do |t|
     t.integer "sid",     limit: 4,          default: 0,  null: false
@@ -812,7 +812,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.text    "caption", limit: 4294967295
   end
 
-  add_index "search_node_links", ["nid"], name: "search_node_links_nid"
+  add_index "search_node_links", ["nid"], name: "search_node_links_nid", using: :btree
 
   create_table "search_total", primary_key: "word", force: :cascade do |t|
     t.float "count", limit: 24
@@ -823,62 +823,62 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.float  "expire", limit: 53,  default: 0.0, null: false
   end
 
-  add_index "semaphore", ["expire"], name: "semaphore_expire"
-  add_index "semaphore", ["value"], name: "value"
+  add_index "semaphore", ["expire"], name: "semaphore_expire", using: :btree
+  add_index "semaphore", ["value"], name: "value", using: :btree
 
   create_table "sequences", primary_key: "value", force: :cascade do |t|
   end
 
   create_table "sessions", id: false, force: :cascade do |t|
-    t.integer "uid",       limit: 4,   default: 0,  null: false
-    t.string  "sid",       limit: 128,              null: false
-    t.string  "hostname",  limit: 128, default: "", null: false
-    t.integer "timestamp", limit: 4,   default: 0,  null: false
-    t.integer "cache",     limit: 4,   default: 0,  null: false
-    t.binary  "session"
-    t.string  "ssid",      limit: 128, default: "", null: false
+    t.integer "uid",       limit: 4,          default: 0,  null: false
+    t.string  "sid",       limit: 128,                     null: false
+    t.string  "hostname",  limit: 128,        default: "", null: false
+    t.integer "timestamp", limit: 4,          default: 0,  null: false
+    t.integer "cache",     limit: 4,          default: 0,  null: false
+    t.binary  "session",   limit: 4294967295
+    t.string  "ssid",      limit: 128,        default: "", null: false
   end
 
-  add_index "sessions", ["ssid"], name: "ssid"
-  add_index "sessions", ["timestamp"], name: "sessions_timestamp"
-  add_index "sessions", ["uid"], name: "sessions_uid"
+  add_index "sessions", ["ssid"], name: "ssid", using: :btree
+  add_index "sessions", ["timestamp"], name: "sessions_timestamp", using: :btree
+  add_index "sessions", ["uid"], name: "sessions_uid", using: :btree
 
   create_table "system", primary_key: "filename", force: :cascade do |t|
-    t.string  "name",           limit: 255, default: "", null: false
-    t.string  "type",           limit: 12,  default: "", null: false
-    t.string  "owner",          limit: 255, default: "", null: false
-    t.integer "status",         limit: 4,   default: 0,  null: false
-    t.integer "bootstrap",      limit: 4,   default: 0,  null: false
-    t.integer "schema_version", limit: 2,   default: -1, null: false
-    t.integer "weight",         limit: 4,   default: 0,  null: false
-    t.binary  "info"
+    t.string  "name",           limit: 255,   default: "", null: false
+    t.string  "type",           limit: 12,    default: "", null: false
+    t.string  "owner",          limit: 255,   default: "", null: false
+    t.integer "status",         limit: 4,     default: 0,  null: false
+    t.integer "bootstrap",      limit: 4,     default: 0,  null: false
+    t.integer "schema_version", limit: 2,     default: -1, null: false
+    t.integer "weight",         limit: 4,     default: 0,  null: false
+    t.binary  "info",           limit: 65535
   end
 
-  add_index "system", ["status", "bootstrap", "type", "weight", "name"], name: "system_list"
-  add_index "system", ["type", "name"], name: "type_name"
+  add_index "system", ["status", "bootstrap", "type", "weight", "name"], name: "system_list", using: :btree
+  add_index "system", ["type", "name"], name: "type_name", using: :btree
 
   create_table "taxonomy_term_relation", primary_key: "trid", force: :cascade do |t|
     t.integer "tid1", limit: 4, default: 0, null: false
     t.integer "tid2", limit: 4, default: 0, null: false
   end
 
-  add_index "taxonomy_term_relation", ["tid1", "tid2"], name: "tid1_tid2", unique: true
-  add_index "taxonomy_term_relation", ["tid2"], name: "tid2"
+  add_index "taxonomy_term_relation", ["tid1", "tid2"], name: "tid1_tid2", unique: true, using: :btree
+  add_index "taxonomy_term_relation", ["tid2"], name: "tid2", using: :btree
 
   create_table "taxonomy_term_synonym", primary_key: "tsid", force: :cascade do |t|
     t.integer "tid",  limit: 4,   default: 0,  null: false
     t.string  "name", limit: 255, default: "", null: false
   end
 
-  add_index "taxonomy_term_synonym", ["name", "tid"], name: "name_tid"
-  add_index "taxonomy_term_synonym", ["tid"], name: "tid"
+  add_index "taxonomy_term_synonym", ["name", "tid"], name: "name_tid", using: :btree
+  add_index "taxonomy_term_synonym", ["tid"], name: "tid", using: :btree
 
   create_table "top_searches", primary_key: "qid", force: :cascade do |t|
     t.string  "q",       limit: 255, default: ""
     t.integer "counter", limit: 4,   default: 0
   end
 
-  add_index "top_searches", ["q"], name: "q", unique: true
+  add_index "top_searches", ["q"], name: "q", unique: true, using: :btree
 
   create_table "url_alias", primary_key: "pid", force: :cascade do |t|
     t.string "source",   limit: 255, default: "", null: false
@@ -886,42 +886,42 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string "language", limit: 12,  default: "", null: false
   end
 
-  add_index "url_alias", ["alias", "language", "pid"], name: "url_alias_language"
-  add_index "url_alias", ["source", "language", "pid"], name: "source_language_pid"
+  add_index "url_alias", ["alias", "language", "pid"], name: "alias_language_pid", using: :btree
+  add_index "url_alias", ["source", "language", "pid"], name: "source_language_pid", using: :btree
 
   create_table "users", primary_key: "uid", force: :cascade do |t|
-    t.string  "name",             limit: 60,  default: "", null: false
-    t.string  "pass",             limit: 128, default: "", null: false
-    t.string  "mail",             limit: 254, default: ""
-    t.string  "theme",            limit: 255, default: "", null: false
-    t.string  "signature",        limit: 255, default: "", null: false
-    t.integer "created",          limit: 4,   default: 0,  null: false
-    t.integer "access",           limit: 4,   default: 0,  null: false
-    t.integer "login",            limit: 4,   default: 0,  null: false
-    t.integer "status",           limit: 1,   default: 0,  null: false
+    t.string  "name",             limit: 60,         default: "", null: false
+    t.string  "pass",             limit: 128,        default: "", null: false
+    t.string  "mail",             limit: 254,        default: ""
+    t.string  "theme",            limit: 255,        default: "", null: false
+    t.string  "signature",        limit: 255,        default: "", null: false
+    t.integer "created",          limit: 4,          default: 0,  null: false
+    t.integer "access",           limit: 4,          default: 0,  null: false
+    t.integer "login",            limit: 4,          default: 0,  null: false
+    t.integer "status",           limit: 1,          default: 0,  null: false
     t.string  "timezone",         limit: 32
-    t.string  "language",         limit: 12,  default: "", null: false
-    t.string  "init",             limit: 254, default: ""
-    t.binary  "data"
+    t.string  "language",         limit: 12,         default: "", null: false
+    t.string  "init",             limit: 254,        default: ""
+    t.binary  "data",             limit: 4294967295
     t.string  "signature_format", limit: 255
-    t.integer "picture",          limit: 4,   default: 0,  null: false
+    t.integer "picture",          limit: 4,          default: 0,  null: false
   end
 
-  add_index "users", ["access"], name: "users_access"
-  add_index "users", ["created"], name: "created"
-  add_index "users", ["mail"], name: "mail"
-  add_index "users", ["name"], name: "users_name", unique: true
-  add_index "users", ["picture"], name: "picture"
+  add_index "users", ["access"], name: "users_access", using: :btree
+  add_index "users", ["created"], name: "created", using: :btree
+  add_index "users", ["mail"], name: "mail", using: :btree
+  add_index "users", ["name"], name: "users_name", unique: true, using: :btree
+  add_index "users", ["picture"], name: "picture", using: :btree
 
   create_table "users_roles", id: false, force: :cascade do |t|
     t.integer "uid", limit: 4, default: 0, null: false
     t.integer "rid", limit: 4, default: 0, null: false
   end
 
-  add_index "users_roles", ["rid"], name: "users_roles_rid"
+  add_index "users_roles", ["rid"], name: "users_roles_rid", using: :btree
 
   create_table "variable", primary_key: "name", force: :cascade do |t|
-    t.binary "value", null: false
+    t.binary "value", limit: 4294967295, null: false
   end
 
   create_table "views_display", id: false, force: :cascade do |t|
@@ -933,7 +933,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.text    "display_options", limit: 4294967295
   end
 
-  add_index "views_display", ["vid", "position"], name: "views_display_vid"
+  add_index "views_display", ["vid", "position"], name: "views_display_vid", using: :btree
 
   create_table "views_view", primary_key: "vid", force: :cascade do |t|
     t.string  "name",        limit: 128, default: "", null: false
@@ -944,13 +944,13 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "core",        limit: 4,   default: 0
   end
 
-  add_index "views_view", ["name"], name: "views_view_name", unique: true
+  add_index "views_view", ["name"], name: "views_view_name", unique: true, using: :btree
 
   create_table "watchdog", primary_key: "wid", force: :cascade do |t|
     t.integer "uid",       limit: 4,          default: 0,  null: false
     t.string  "type",      limit: 64,         default: "", null: false
     t.text    "message",   limit: 4294967295,              null: false
-    t.binary  "variables",                                 null: false
+    t.binary  "variables", limit: 4294967295,              null: false
     t.integer "severity",  limit: 1,          default: 0,  null: false
     t.string  "link",      limit: 255,        default: ""
     t.text    "location",  limit: 65535,                   null: false
@@ -959,9 +959,9 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "timestamp", limit: 4,          default: 0,  null: false
   end
 
-  add_index "watchdog", ["severity"], name: "severity"
-  add_index "watchdog", ["type"], name: "watchdog_type"
-  add_index "watchdog", ["uid"], name: "watchdog_uid"
+  add_index "watchdog", ["severity"], name: "severity", using: :btree
+  add_index "watchdog", ["type"], name: "watchdog_type", using: :btree
+  add_index "watchdog", ["uid"], name: "watchdog_uid", using: :btree
 
   create_table "webform", primary_key: "nid", force: :cascade do |t|
     t.text    "confirmation",          limit: 65535,                            null: false
@@ -1026,9 +1026,9 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.string  "remote_addr", limit: 128
   end
 
-  add_index "webform_submissions", ["nid", "sid"], name: "nid_sid"
-  add_index "webform_submissions", ["nid", "uid", "sid"], name: "nid_uid_sid"
-  add_index "webform_submissions", ["sid", "nid"], name: "webform_submissions_sid_nid", unique: true
+  add_index "webform_submissions", ["nid", "sid"], name: "nid_sid", using: :btree
+  add_index "webform_submissions", ["nid", "uid", "sid"], name: "nid_uid_sid", using: :btree
+  add_index "webform_submissions", ["sid", "nid"], name: "webform_submissions_sid_nid", unique: true, using: :btree
 
   create_table "webform_submitted_data", id: false, force: :cascade do |t|
     t.integer "nid",  limit: 4,        default: 0,   null: false
@@ -1038,9 +1038,9 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.text    "data", limit: 16777215,               null: false
   end
 
-  add_index "webform_submitted_data", ["data"], name: "data"
-  add_index "webform_submitted_data", ["nid"], name: "webform_submitted_data_nid"
-  add_index "webform_submitted_data", ["sid", "nid"], name: "webform_submitted_data_sid_nid"
+  add_index "webform_submitted_data", ["data"], name: "data", length: {"data"=>64}, using: :btree
+  add_index "webform_submitted_data", ["nid"], name: "webform_submitted_data_nid", using: :btree
+  add_index "webform_submitted_data", ["sid", "nid"], name: "webform_submitted_data_sid_nid", using: :btree
 
   create_table "wysiwyg", primary_key: "format", force: :cascade do |t|
     t.string "editor",   limit: 128,   default: "", null: false
@@ -1053,7 +1053,7 @@ ActiveRecord::Schema.define(version: 20150504163657) do
     t.integer "status", limit: 1,   default: 0, null: false
   end
 
-  add_index "wysiwyg_user", ["format"], name: "format"
-  add_index "wysiwyg_user", ["uid"], name: "wysiwyg_user_uid"
+  add_index "wysiwyg_user", ["format"], name: "format", using: :btree
+  add_index "wysiwyg_user", ["uid"], name: "wysiwyg_user_uid", using: :btree
 
 end
