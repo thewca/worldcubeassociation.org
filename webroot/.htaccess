@@ -38,7 +38,7 @@ AddHandler fcgid-script .fcgi
 RewriteRule ^$ rails-dispatch.fcgi/$1 [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(robots.txt|oauth/.*|assets/.*|files/.*|posts/.*|rss.*|about|delegates|organisations|contact(/.*)?|score-tools|logo|wca-workbook-assistant|wca-workbook-assistant-versions)$ rails-dispatch.fcgi/$1 [QSA,L]
+RewriteRule ^(robots.txt|oauth/.*|users/.*|registration/.*|api/.*|assets/.*|files/.*|posts/.*|rss.*|about|delegates|organisations|contact(/.*)?|score-tools|logo|wca-workbook-assistant|wca-workbook-assistant-versions)$ rails-dispatch.fcgi/$1 [QSA,L]
 
 # Copied and modified from:
 #  http://kahthong.com/2011/05/how-serve-drupal-sub-directory-web-root-0
