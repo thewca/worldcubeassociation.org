@@ -1,8 +1,3 @@
-#--- Force SSL
-SSLOptions +StrictRequire
-SSLRequireSSL
-ErrorDocument 403 https://yourdomain:yoursslport/results/admin/
-
 #--- Require valid user
 AuthType Basic
 AuthName "Only access to WCA admins!"

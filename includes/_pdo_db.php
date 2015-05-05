@@ -29,6 +29,15 @@ try
 {
     $db_config = $config->get('database');
     $sql_dsn = "mysql:host=".$db_config['host'].";dbname=". $db_config['name'];
+
+    // Ok, this is fun. We have some code in admin/competitions_manage.php that
+    // dynamically requires _framework.php, who includes us (_pdo_db.php). Code
+    // run in a PHP require() inherits the scope of the calling function.
+    // pdo_query relies upon $DBH existing in the global scope, so we explicitly
+    // declare $DBH to be global here. Thanks to this SO answer for putting
+    // us on the right track:
+    //  http://stackoverflow.com/a/4074833
+    global $DBH;
     $DBH = new PDO($sql_dsn, $db_config['user'], $db_config['pass']);
 }
 catch(Exception $e)

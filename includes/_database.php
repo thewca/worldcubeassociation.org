@@ -267,7 +267,7 @@ function showDatabaseError ( $message ) {
   die( $_SERVER['SERVER_NAME'] == 'localhost'  ||  wcaDebug()
        ? "<p>$message<br />\n(" . mysql_error() . ")</p>\n"
        : "<p>Problem with the database, sorry. If this persists for several minutes, " .
-         "please tell us at <a href='mailto:wca-website@googlegroups.com'>wca-website@googlegroups.com</a></p>" );
+         "please tell us at <a href='mailto:contact@worldcubeassociation.org'>contact@worldcubeassociation.org</a></p>" );
 }
 
 #----------------------------------------------------------------------
