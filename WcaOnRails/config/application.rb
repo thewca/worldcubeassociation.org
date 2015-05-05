@@ -37,7 +37,7 @@ module WcaOnRails
     config.default_from_address = "no-reply@worldcubeassociation.org"
     config.site_name = "World Cube Association"
     def config.live_site?
-      not ENV["WCA_LIVE_SITE"].blank?
+      !ENV["WCA_LIVE_SITE"].blank?
     end
   end
 end

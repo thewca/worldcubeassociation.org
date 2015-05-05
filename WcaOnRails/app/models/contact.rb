@@ -11,13 +11,13 @@ class Contact < MailForm::Base
   attribute :subject, :validate => true
 
   def valid_from_email?
-    if not ValidateEmail.valid?(your_email)
+    if !ValidateEmail.valid?(your_email)
       self.errors.add(:your_email, "invalid")
     end
   end
 
   def valid_to_email?
-    if not ValidateEmail.valid?(to_email)
+    if !ValidateEmail.valid?(to_email)
       self.errors.add(:to_email, "invalid")
     end
   end

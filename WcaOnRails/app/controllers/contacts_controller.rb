@@ -24,10 +24,10 @@ class ContactsController < ApplicationController
   end
 
   private def maybe_send_email(success_url: nil, fail_view: nil)
-    if not @contact.valid?
+    if !@contact.valid?
       flash.now[:danger] = "Invalid fields, please correct errors below."
       render fail_view
-    elsif not verify_recaptcha
+    elsif !verify_recaptcha
       # Convert flash to a flash.now, since we're about to render, not redirect.
       flash.now[:recaptcha_error] = flash[:recaptcha_error]
       render fail_view
