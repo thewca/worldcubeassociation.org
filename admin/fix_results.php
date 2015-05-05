@@ -39,13 +39,8 @@ if(!isset($_SESSION['anticsrf_key'])) {
                     <tr><td class="text-right"><label for="value3">value3</label></td><td><input id="value3" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value4">value4</label></td><td><input id="value4" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
                     <tr><td class="text-right"><label for="value5">value5</label></td><td><input id="value5" type="text" autocomplete="off" onblur="blurResult(this);" onkeyup="checkResults();" style="text-transform: uppercase;" /></td></tr>
-<<<<<<< HEAD
-                    <tr><td class="text-right"><label for="best">best</label></td><td><input id="best" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
-                    <tr><td class="text-right"><label for="average" id="labelAverage"></label></td><td><input id="average" type="text" style="text-transform: uppercase;background-color: #cccccc" readonly disabled /></td></tr>
-=======
                     <tr><td class="text-right"><label for="best">best</label></td><td><input id="best" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
                     <tr><td class="text-right"><label for="average" id="labelAverage"></label></td><td><input id="average" type="text" style="text-transform: uppercase" readonly disabled /></td></tr>
->>>>>>> upstream/master
                     <tr><td class="text-right"><label for="regionalSingleRecord">regional single record</label></td><td><input id="regionalSingleRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
                     <tr><td class="text-right"><label for="regionalAverageRecord">regional average record</label></td><td><input id="regionalAverageRecord" type="text" autocomplete="off" onkeyup="checkResults();" /></td></tr>
                 </table>
@@ -89,41 +84,6 @@ var
     COLOR_ERROR = '#f88',
     COLOR_NORMAL = '#eef',
     COLOR_CHANGE = '#9f3',
-<<<<<<< HEAD
-
-    WCA_DNF = -1,
-    WCA_DNS = -2,
-
-    patterns = {
-        time: '^(|DNF|DNS|(60|[1-5][0-9]|[1-9]):[0-5][0-9]\\.[0-9]{2}|[1-5]?[0-9]\\.[0-9]{2})$',
-        number: '^(|DNF|DNS|(80|[1-7][0-9]))$',
-        multi: '^(|DNF|DNS|([1-9][0-9]|[2-9])\\/([1-9][0-9]|[2-9])\\s(60|[1-5][0-9]|[1-9]):[0-5][0-9])$'
-    },
-    patternRegionalRecords = '^(|WR|AfR|AsR|OcR|ER|NAR|SAR|NR)$',
-    validFormatSamples = {
-        time: '1:23.45<br>1.23<br>0.89<br>DNF<br>DNS',
-        number: '35<br>DNF<br>DNS',
-        multi: '2/3 9:34<br>10/12 59:87<br>DNF<br>DNS'
-    },
-
-    resultsInputs = [],
-    actualResults = [],
-    VALUE_1 = 0,
-    VALUE_2 = 1,
-    VALUE_3 = 2,
-    VALUE_4 = 3,
-    VALUE_5 = 4,
-    VALUE_BEST = 5,
-    VALUE_AVERAGE = 6,
-    VALUE_REGIONAL_SINGLE_RECORD = 7,
-    VALUE_REGIONAL_AVERAGE_RECORD = 8;
-
-function clearResults()
-{
-    $('#resultsTable').find('input').val('').attr('readonly',true).prop('disabled',true).css('background-color','#ccc')
-        .parent().css('background-color',COLOR_NORMAL);
-    $('input:button').css('background-color',COLOR_ERROR).prop('disabled',true);
-=======
     EDITABLE_FIELD_BG_COLOR = '#ff9',
     DISABLED_FIELD_BG_COLOR = '#ccc',
 
@@ -161,7 +121,6 @@ function clearResults()
     $('#resultsTable').find('input').val('').attr('readonly', true).prop('disabled', true).css('background-color', DISABLED_FIELD_BG_COLOR)
         .parent().css('background-color', COLOR_NORMAL);
     $('input:button').css('background-color', COLOR_ERROR).prop('disabled', true);
->>>>>>> upstream/master
     $('#samples').text('');
     $('#roundFormat').text('');
 }
@@ -216,29 +175,6 @@ function extractResults(obj)
 {
     resultId = obj.resultId;
     setResultsFormat(obj.resultsFormat);
-<<<<<<< HEAD
-    setRoundFormat(obj.roundFormat,obj.roundFormatName);
-    var input;
-    var topResults = 5;
-    if (roundFormat < FORMAT_AVERAGE) {
-        topResults = parseInt(roundFormat,10);
-    } else if (roundFormat == FORMAT_MEAN) {
-        topResults = 3;
-    }
-    for (var i=0;i<=VALUE_REGIONAL_AVERAGE_RECORD;i++) {
-        actualResults[i] = obj.results[i];
-        if (i <= VALUE_AVERAGE) {
-            input = resultsInputs[i].val(wcaResultToString(obj.results[i]));
-        } else {
-            input = resultsInputs[i].val(obj.results[i]);
-        }
-        if (i<topResults) {
-            $(input).attr({readonly: false, pattern: patterns[resultsFormat]}).prop('disabled',false).css('background-color','#ff9');
-        } else if (i>6) {
-            $(input).attr({readonly: false, pattern: patternRegionalRecords}).prop('disabled',false).css('background-color','#ff9');
-        }
-    }
-=======
     setRoundFormat(obj.roundFormat, obj.roundFormatName);
 
     actualResults = obj.results;
@@ -257,7 +193,6 @@ function extractResults(obj)
             $input.attr({readonly: false, pattern: pattern}).prop('disabled', false).css('background-color', EDITABLE_FIELD_BG_COLOR);
         }
     });
->>>>>>> upstream/master
 }
 
 function personIdChange(newPersonId)
@@ -423,26 +358,15 @@ function wcaResultToString(result)
                 var mm = Math.floor(TTTTT / 60);
                 return solved+'/'+attempted+' '+mm+':'+ssStr;
             default:
-<<<<<<< HEAD
-                throw 'Unsupported results format!';
-=======
                 throw new Error('Unsupported results format!');
->>>>>>> upstream/master
         }
     }
 }
 
-<<<<<<< HEAD
-function stringToWcaResult(result, isFmMean = false)
-{
-    result = result.trim().toUpperCase();
-    pattern = new RegExp(isFmMean ? '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$' : patterns[resultsFormat]);
-=======
 function stringToWcaResult(result, isAverage)
 {
     result = result.trim().toUpperCase();
     var pattern = new RegExp(isAverage && lastEventId == '333fm' ? '^(|DNF|DNS|(80|[1-7][0-9])(00|33|67))$' : patterns[resultsFormat]);
->>>>>>> upstream/master
     if (!pattern.test(result)) {
         result = '';
     }
@@ -467,20 +391,6 @@ function stringToWcaResult(result, isAverage)
                     return ss*100+hh;
                 }
             case FM_FORMAT:
-<<<<<<< HEAD
-                return parseInt(result,10);
-            case MULTI_FORMAT:
-                var slashPosition = result.indexOf('/');
-                var blankPosition = result.indexOf(' ');
-                var solved = parseInt(result.substr(0,slashPosition),10);
-                var attempted = parseInt(result.substr(slashPosition+1,blankPosition-slashPosition-1),10);
-                if (solved > attempted) return 0;
-                var ss = parseInt(result.substr(result.length-2),10);
-                var mm = parseInt(result.substr(blankPosition+1,result.length-blankPosition-4),10);
-                return ((99-solved*2+attempted)*100000 + mm*60+ss)*100 + (attempted-solved);
-            default:
-                throw 'Unsupported results format!';
-=======
                 return parseInt(result, 10);
             case MULTI_FORMAT:
                 var slashPosition = result.indexOf('/');
@@ -493,7 +403,6 @@ function stringToWcaResult(result, isAverage)
                 return ((99-solved*2+attempted)*100000 + mm*60+ss)*100 + (attempted-solved);
             default:
                 throw new Error('Unsupported results format!');
->>>>>>> upstream/master
         }
     }
 }
@@ -514,14 +423,9 @@ function checkResults()
     var worst = 0;
     var countDnfOrDns = 0;
     var average;
-<<<<<<< HEAD
-    for (var i=0;i<=VALUE_5;i++) {
-        result = stringToWcaResult(resultsInputs[i].val());
-=======
     for (var i = 1; i <= MAX_SOLVE_COUNT; i++) {
         var field = "value" + i;
         result = stringToWcaResult(resultsInputs[field].val());
->>>>>>> upstream/master
         if (result > 0) {
             sum += result;
             if (result < best) best = result;
@@ -529,20 +433,6 @@ function checkResults()
         } else if (result < 0) {
             countDnfOrDns++;
         }
-<<<<<<< HEAD
-        if (!result && resultsInputs[i].val()) {
-            resultsInputs[i].parent().css('background-color',COLOR_ERROR);
-            errors = true;
-        } else {
-            if (result == actualResults[i]) {
-                resultsInputs[i].parent().css('background-color',COLOR_NORMAL);
-            } else {
-                changes = true;
-                resultsInputs[i].parent().css('background-color',COLOR_CHANGE);
-            }
-        }
-        results[i] = result;
-=======
         if (!result && resultsInputs[field].val()) {
             resultsInputs[field].parent().css('background-color', COLOR_ERROR);
             errors = true;
@@ -555,20 +445,10 @@ function checkResults()
             }
         }
         results[field] = result;
->>>>>>> upstream/master
     }
     if (errors) {
         best = 0;
         average = 0;
-<<<<<<< HEAD
-        resultsInputs[VALUE_BEST].parent().css('background-color',COLOR_NORMAL);
-        resultsInputs[VALUE_AVERAGE].parent().css('background-color',COLOR_NORMAL);
-    } else {
-        if (!worst) {
-            if (countDnfOrDns) {
-                best = WCA_DNF;
-                average = WCA_DNF;
-=======
         resultsInputs.best.parent().css('background-color', COLOR_NORMAL);
         resultsInputs.average.parent().css('background-color', COLOR_NORMAL);
     } else {
@@ -580,7 +460,6 @@ function checkResults()
                 } else {
                     average = WCA_DNF;
                 }
->>>>>>> upstream/master
             } else {
                 best = 0;
                 average = 0;
@@ -591,11 +470,7 @@ function checkResults()
             } else if (countDnfOrDns > 1) {
                 average = WCA_DNF;
             } else if (roundFormat > FORMAT_AVERAGE) { // Mean of 3
-<<<<<<< HEAD
-                if (countDnfOrDns) {
-=======
                 if (countDnfOrDns > 0) {
->>>>>>> upstream/master
                     average = WCA_DNF;
                 } else if (lastEventId=='333fm') {
                     average = Math.round(sum*100/3);
@@ -603,52 +478,13 @@ function checkResults()
                     average = Math.round(sum/3);
                 }
             } else { // Average of 5
-<<<<<<< HEAD
-                if (countDnfOrDns) {
-=======
                 if (countDnfOrDns > 0) {
->>>>>>> upstream/master
                     average = Math.round((sum - best) / 3);
                 } else {
                     average = Math.round((sum - best - worst) / 3);
                 }
             }
         }
-<<<<<<< HEAD
-        resultsInputs[VALUE_BEST].parent().css('background-color',best == actualResults[VALUE_BEST] ? COLOR_NORMAL : COLOR_CHANGE);
-        resultsInputs[VALUE_AVERAGE].parent().css('background-color',roundFormat < FORMAT_AVERAGE || average == actualResults[VALUE_AVERAGE] ? COLOR_NORMAL : COLOR_CHANGE);
-    }
-    resultsInputs[VALUE_BEST].val(wcaResultToString(best));
-    resultsInputs[VALUE_AVERAGE].val(wcaResultToString(roundFormat < FORMAT_AVERAGE ? 0 : average));
-
-    var pattern;
-    pattern = new RegExp(patternRegionalRecords);
-    for (i=VALUE_REGIONAL_SINGLE_RECORD;i<=VALUE_REGIONAL_AVERAGE_RECORD;i++) {
-        if (!pattern.test(resultsInputs[i].val())) {
-            errors = true;
-            resultsInputs[i].parent().css('background-color',COLOR_ERROR);
-        } else {
-            if (resultsInputs[i].val() == actualResults[i]) {
-                resultsInputs[i].parent().css('background-color',COLOR_NORMAL);
-            } else {
-                changes = true;
-                resultsInputs[i].parent().css('background-color',COLOR_CHANGE);
-            }
-        }
-    }
-
-    if (!errors) {
-        // check that there are not gaps in the results
-        var firstBlank = VALUE_1;
-        while (firstBlank <= VALUE_5 && results[firstBlank]) firstBlank++;
-        var lastBlank = VALUE_5;
-        while (lastBlank >= VALUE_1 && !results[lastBlank]) lastBlank--;
-        if (!firstBlank || firstBlank <= lastBlank) errors = true;
-    }
-
-    var submitEnabled = !errors && changes;
-    $('input:button').css('background-color',submitEnabled?COLOR_CHANGE:COLOR_ERROR).prop('disabled',!submitEnabled);
-=======
         resultsInputs.best.parent().css('background-color', best == actualResults.best ? COLOR_NORMAL : COLOR_CHANGE);
         resultsInputs.average.parent().css('background-color', roundFormat < FORMAT_AVERAGE || average == actualResults.average ? COLOR_NORMAL : COLOR_CHANGE);
     }
@@ -686,7 +522,6 @@ function checkResults()
 
     var submitEnabled = !errors && changes;
     $('input:button').css('background-color', submitEnabled?COLOR_CHANGE:COLOR_ERROR).prop('disabled', !submitEnabled);
->>>>>>> upstream/master
 }
 
 function fixResults()
@@ -700,17 +535,6 @@ function fixResults()
             competitionId: lastCompetitionId,
             eventId: lastEventId,
             roundId: lastRoundId,
-<<<<<<< HEAD
-            value1: stringToWcaResult(resultsInputs[VALUE_1].val()),
-            value2: stringToWcaResult(resultsInputs[VALUE_2].val()),
-            value3: stringToWcaResult(resultsInputs[VALUE_3].val()),
-            value4: stringToWcaResult(resultsInputs[VALUE_4].val()),
-            value5: stringToWcaResult(resultsInputs[VALUE_5].val()),
-            best: stringToWcaResult(resultsInputs[VALUE_BEST].val()),
-            average: stringToWcaResult(resultsInputs[VALUE_AVERAGE].val(), resultsFormat==FM_FORMAT),
-            regionalSingleRecord: resultsInputs[VALUE_REGIONAL_SINGLE_RECORD].val(),
-            regionalAverageRecord: resultsInputs[VALUE_REGIONAL_AVERAGE_RECORD].val()
-=======
             value1: stringToWcaResult(resultsInputs.value1.val()),
             value2: stringToWcaResult(resultsInputs.value2.val()),
             value3: stringToWcaResult(resultsInputs.value3.val()),
@@ -720,7 +544,6 @@ function fixResults()
             average: stringToWcaResult(resultsInputs.average.val(), true),
             regionalSingleRecord: resultsInputs.regionalSingleRecord.val(),
             regionalAverageRecord: resultsInputs.regionalAverageRecord.val()
->>>>>>> upstream/master
         }
     ).done(function(data) {
         var obj = $.parseJSON(data);
@@ -738,21 +561,9 @@ function fixResults()
 }
 
 $(document).ready(function () {
-<<<<<<< HEAD
-
-    for (var i=1;i<=5;i++) {
-        resultsInputs.push($('#value'+i));
-    }
-    resultsInputs.push($('#best'));
-    resultsInputs.push($('#average'));
-    resultsInputs.push($('#regionalSingleRecord'));
-    resultsInputs.push($('#regionalAverageRecord'));
-
-=======
     SOLVE_FIELDS.forEach(function(field) {
         resultsInputs[field] = $('#' + field);
     });
->>>>>>> upstream/master
     clearResults();
 });
 

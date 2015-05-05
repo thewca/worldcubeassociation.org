@@ -84,12 +84,9 @@ function getToken()
 // script
 
 // prevent CSRF
-<<<<<<< HEAD
-=======
 if(!isset($_SESSION)) {
     session_start();
 }
->>>>>>> upstream/master
 if (!paramExists('token') || !array_key_exists('anticsrf_key',$_SESSION) || getToken() != $_SESSION['anticsrf_key']) {
     error('Invalid access attempt');
 }
@@ -150,11 +147,7 @@ if (getFix()) { // fix data
         if (!count($result)) error('Person ID not found',0);
         $personName = $result[0]['name'];
         $return['personName'] = $personName;
-<<<<<<< HEAD
-        //
-=======
 
->>>>>>> upstream/master
         $result = pdo_query(
             'SELECT Competitions.id, Competitions.name FROM '.
             '(SELECT DISTINCT competitionId FROM Results WHERE personId=?) AS t '.
