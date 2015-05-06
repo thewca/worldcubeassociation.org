@@ -135,7 +135,11 @@ function showUnfinishedPersons () {
     $quarterId = removeUglyAccentsAndStuff( extractRomanName( $name ));
     $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
     $quarterId = strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
-    if ( strlen( $quarterId ) < 4 ) {
+    if ( strlen ( $quarterId ) == 0 ) {
+      // if the name comes empty, invent a quarterId
+      $quarterId = 'XXXX';
+    } else if ( strlen( $quarterId ) < 4 ) {
+      // make sure the quarterId is 4-letter long
       while ( strlen( $quarterId ) < 4 ) {
         $quarterId .= $quarterId;
       }
