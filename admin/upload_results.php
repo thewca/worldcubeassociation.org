@@ -121,6 +121,7 @@ if($form->submitted()) {
     // store JSON in db
 
     // store person data in InboxPersons first
+    $round_errors = array();
     $persons = array();
     foreach($competition_data->persons as $person) {
       $id = property_exists($person, 'id') ? ($person->id) : false;
@@ -144,7 +145,6 @@ if($form->submitted()) {
     }
 
     // store results & scrambles in inbox tables
-    $round_errors = array();
     foreach ($competition_data->events as $event) {
       $eventId = property_exists($event, 'eventId') ? ($event->eventId) : false;
 

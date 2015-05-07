@@ -59,15 +59,7 @@ function getPersons () {
 #----------------------------------------------------------------------
   global $personsFromPersons, $personsFromResultsWithoutId;
 
-  $persons = dbQueryHandle("
-    SELECT id, name, countryId
-    FROM Persons
-    ORDER BY name
-  ");
-  while( $row = mysql_fetch_row( $persons ))
-    $personsFromPersons[] = $row;
-  mysql_free_result( $persons );
-
+  $personsFromResultsWithoutId = [];
   $persons = dbQueryHandle("
     SELECT DISTINCT personName, Results.countryId, year
     FROM Results
@@ -75,30 +67,45 @@ function getPersons () {
     WHERE personId=''
     ORDER BY personName
   ");
+  while( $row = mysql_fetch_row( $persons ))
+    $personsFromResultsWithoutId[] = $row;
+  mysql_free_result( $persons );
+
+  $personsFromPersons = [];
+  if (count( $personsFromResultsWithoutId )) {
+    $persons = dbQueryHandle("
+      SELECT id, name, countryId
+      FROM Persons
+      ORDER BY name
+    ");
     while( $row = mysql_fetch_row( $persons ))
-      $personsFromResultsWithoutId[] = $row;
+      $personsFromPersons[] = $row;
     mysql_free_result( $persons );
+  }
 
 }
 
 #----------------------------------------------------------------------
 function getBirthdates () {
 #----------------------------------------------------------------------
-  global $birthdates;
+  global $birthdates, $personsFromResultsWithoutId;
 
-  $persons = dbQuery("
-    SELECT  id, month, day, year
-    FROM    Persons
-  ");
-  foreach( $persons as $person ){
-    extract( $person );
-    $birthdates[$id] = ($month || $day || $year)
-                       ? ($month ? sprintf("%02d",$month) : '??'  ) . '/' .
-                         ($day   ? sprintf("%02d",$day  ) : '??'  ) . '/' .
-                         ($year  ? sprintf("%02d",$year ) : '????')
-                       : 'unknown';
+  $birthdates = [];
+  if (count( $personsFromResultsWithoutId )) {
+    $persons = dbQuery("
+      SELECT  id, month, day, year
+      FROM    Persons
+    ");
+    foreach( $persons as $person ){
+      extract( $person );
+      $birthdates[$id] = ($month || $day || $year)
+                         ? ($month ? sprintf("%02d",$month) : '??'  ) . '/' .
+                           ($day   ? sprintf("%02d",$day  ) : '??'  ) . '/' .
+                           ($year  ? sprintf("%02d",$year ) : '????')
+                         : 'unknown';
+    }
+    $birthdates[''] = 'unknown';
   }
-  $birthdates[''] = 'unknown';
 }
 
 #----------------------------------------------------------------------
@@ -127,7 +134,18 @@ function showUnfinishedPersons () {
     #--- Try to compute the semi-id.
     $quarterId = removeUglyAccentsAndStuff( extractRomanName( $name ));
     $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
-    $semiId = $firstYear . strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
+    $quarterId = strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
+    if ( strlen ( $quarterId ) == 0 ) {
+      // if the name comes empty, invent a quarterId
+      $quarterId = 'XXXX';
+    } else if ( strlen( $quarterId ) < 4 ) {
+      // make sure the quarterId is 4-letter long
+      while ( strlen( $quarterId ) < 4 ) {
+        $quarterId .= $quarterId;
+      }
+      $quarterId = substr( $quarterId, 0, 4 );
+    }
+    $semiId = $firstYear . $quarterId;
 
     #--- Html-ify name and country.
     $nameHtml = htmlEscape( $name );
