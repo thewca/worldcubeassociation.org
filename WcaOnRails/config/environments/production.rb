@@ -60,27 +60,23 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
-  root_url = URI.parse(ENV["ROOT_URL"])
+  root_url = URI.parse(ENVied.ROOT_URL)
   config.action_mailer.default_url_options = {
     protocol: root_url.scheme,
     host: root_url.host,
     port: root_url.port
   }
-  if !ENV["MANDRILL_USERNAME"].blank? || !ENV["MANDRILL_PASSWORD"].blank?
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.smtp_settings = {
-      :address => "smtp.mandrillapp.com",
-      :port => 587,
-      :enable_starttls_auto => true,
-      :user_name => ENV["MANDRILL_USERNAME"],
-      :password => ENV["MANDRILL_PASSWORD"],
-      :authentication => 'login',
-      :domain => root_url.host
-    }
-  else
-    config.action_mailer.raise_delivery_errors = false
-  end
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.mandrillapp.com",
+    :port => 587,
+    :enable_starttls_auto => true,
+    :user_name => ENVied.MANDRILL_USERNAME,
+    :password => ENVied.MANDRILL_PASSWORD,
+    :authentication => 'login',
+    :domain => root_url.host
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

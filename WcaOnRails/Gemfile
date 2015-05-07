@@ -6,6 +6,8 @@ gem 'uglifier'
 gem 'therubyracer'
 
 gem 'sdoc', group: :doc
+gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'envied'
 
 gem 'jquery-rails'
 gem 'turbolinks'

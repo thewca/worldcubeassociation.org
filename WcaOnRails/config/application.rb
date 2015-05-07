@@ -5,6 +5,7 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+ENVied.require(*ENV['ENVIED_GROUPS'] || Rails.groups)
 
 module WcaOnRails
   class Application < Rails::Application
@@ -36,8 +37,5 @@ module WcaOnRails
 
     config.default_from_address = "no-reply@worldcubeassociation.org"
     config.site_name = "World Cube Association"
-    def config.live_site?
-      !ENV["WCA_LIVE_SITE"].blank?
-    end
   end
 end

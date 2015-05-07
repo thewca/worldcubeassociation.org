@@ -8,7 +8,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url) %>
-  <% if Rails.application.config.live_site? %>
+  <% if ENVied.WCA_LIVE_SITE %>
     <%= analytics_init  %>
     <script>
       ga('set', 'anonymizeIp', true);

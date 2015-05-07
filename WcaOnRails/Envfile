@@ -1,0 +1,28 @@
+enable_defaults! { ENV['RACK_ENV'] != 'production' }
+
+group :production do
+  # SECRET_KEY_BASE should be an actual secret, generate a new one by running
+  # "rake secret".
+  variable :SECRET_KEY_BASE
+  variable :DATABASE_URL
+  variable :MANDRILL_USERNAME
+  variable :MANDRILL_PASSWORD
+end
+
+# Set WCA_LIVE_SITE to enable Google Analytics
+# and allow all on robots.txt.
+variable :WCA_LIVE_SITE, :boolean, default: false
+
+# ROOT_URL is used when generating emails.
+# Trick to discover the port we're set to run on from
+# http://stackoverflow.com/a/13839447. However, Rails::Server isn't always
+# defined (during rake tasks, for instance).
+if defined? Rails::Server
+  default_root_url = "http://localhost:#{Rails::Server.new.options[:Port]}"
+else
+  default_root_url = ""
+end
+variable :ROOT_URL, :string, default: default_root_url
+
+variable :RECAPTCHA_PUBLIC_KEY, :string, default: ''
+variable :RECAPTCHA_PRIVATE_KEY, :string, default: ''
