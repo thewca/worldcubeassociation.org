@@ -113,6 +113,13 @@ var
         "a": [ 'value1', 'value2', 'value3', 'value4', 'value5', 'regionalSingleRecord', 'regionalAverageRecord' ],
         "m": [ 'value1', 'value2', 'value3', 'regionalSingleRecord', 'regionalAverageRecord' ],
     };
+    ROUND_FORMAT_TO_NUMBER_OF_ATTEMPTS = {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "a": 5,
+        "m": 3
+    }
 
 
 
@@ -180,6 +187,9 @@ function extractResults(obj)
     actualResults = obj.results;
     SOLVE_FIELDS.forEach(function(field) {
         var isRecordField = field === "regionalSingleRecord" || field === "regionalAverageRecord";
+        if (isRecordField && actualResults[field]===null) { // some records comes as null
+            actualResults[field] = '';
+        }
         var $input = resultsInputs[field];
         if(isRecordField) {
             $input.val(actualResults[field]);
@@ -422,8 +432,9 @@ function checkResults()
     var best = Infinity;
     var worst = 0;
     var countDnfOrDns = 0;
+    var countBlanks = 0;
     var average;
-    for (var i = 1; i <= MAX_SOLVE_COUNT; i++) {
+    for (var i = 1; i <= ROUND_FORMAT_TO_NUMBER_OF_ATTEMPTS[roundFormat]; i++) {
         var field = "value" + i;
         result = stringToWcaResult(resultsInputs[field].val());
         if (result > 0) {
@@ -432,6 +443,8 @@ function checkResults()
             if (result > worst) worst = result;
         } else if (result < 0) {
             countDnfOrDns++;
+        } else {
+            countBlanks++;
         }
         if (!result && resultsInputs[field].val()) {
             resultsInputs[field].parent().css('background-color', COLOR_ERROR);
@@ -458,14 +471,14 @@ function checkResults()
                 if (roundFormat < FORMAT_AVERAGE) { // Best of X
                     average = 0;
                 } else {
-                    average = WCA_DNF;
+                    average = countBlanks ? 0 : WCA_DNF;
                 }
             } else {
                 best = 0;
                 average = 0;
             }
         } else {
-            if (roundFormat < FORMAT_AVERAGE) { // Best of X
+            if (roundFormat < FORMAT_AVERAGE || countBlanks) { // Best of X or there are blanks
                 average = 0;
             } else if (countDnfOrDns > 1) {
                 average = WCA_DNF;
