@@ -21,3 +21,6 @@ public/assets/**
 
 # Environment configuration
 .env*
+
+# Unicorn pid
+pids/

@@ -26,6 +26,9 @@ gem 'devise-bootstrap-views'
 gem 'doorkeeper'
 gem 'newrelic_rpm'
 
+gem 'system'
+gem 'unicorn'
+
 # Drupal defines some table columns that conflict with ActiveRecord.
 # This gem lets us ignore those columns. Eventually we'll migrate this
 # problem away.
