@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+# sleep as a hack to wait for vagrant to mount the /vagrant directory, which is
+# needed for our screen session
+sudo su <%= @username %> -c 'sleep 10; ~/startall'&
+
+exit 0

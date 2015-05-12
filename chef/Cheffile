@@ -1,0 +1,8 @@
+site "https://supermarket.getchef.com/api/v1"
+
+cookbook 'apt'
+cookbook 'sudo'
+cookbook 'mysql'
+cookbook 'nodejs'
+cookbook 'brightbox-ruby'
+cookbook 'ssh_known_hosts'
