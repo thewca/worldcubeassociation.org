@@ -241,7 +241,7 @@ def checkoutWCADocs(branchName):
 
 # Build!
 
-# We want the pool to be accessible to the workers, so that they can cut off in cast of a keyboard interrupt.
+# We want the pool to be accessible to the workers, so that they can cut off in case of a keyboard interrupt.
 # However, this is impossible to do by passing around/currying the pool, so we're making it a "global" variable.
 pool = {}
 
@@ -250,9 +250,15 @@ def build(args):
   if args.all:
 
     print "Using %d workers." % args.num_workers
-    pool = multiprocessing.Pool(processes=args.num_workers)
     f = functools.partial(buildTranslationPooled, args)
-    pool.map(f, languages)
+    if args.num_workers == 1:
+      # multiprocessing destroys our backtraces, so don't use it for 1 worker. This makes
+      # it possible to debug.
+      for language in languages:
+        f(language)
+    else:
+      pool = multiprocessing.Pool(processes=args.num_workers)
+      pool.map(f, languages)
 
   elif not args.language:
     buildToDirectory(args, "dev")
