@@ -133,6 +133,9 @@ service 'nginx' do
 end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
+  variables({
+    username: username,
+  })
   notifies :reload, "service[nginx]", :delayed
 end
 template "/etc/nginx/nginx.conf" do
@@ -258,7 +261,7 @@ template "/home/#{username}/startall" do
 end
 # We "sudo su ..." because simply specifying "user ..." doesn't invoke a login shell,
 # which makes for a very screwy screen (we're logged in as username, but HOME
-# is /home/root, for instance)
+# is /home/root, for instance).
 execute "sudo su #{username} -c '~/startall'" do
   user username
   not_if "screen -S wca -Q select", user: username

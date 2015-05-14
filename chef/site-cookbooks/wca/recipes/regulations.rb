@@ -26,7 +26,7 @@ else
   repo_root = "/home/#{username}/worldcubeassociation.org"
 end
 
-execute "#{repo_root}/scripts/regulations.sh rebuild" do
+execute "#{repo_root}/scripts/regulations.sh rebuild_regs" do
   user username
   not_if "ls #{repo_root}/webroot/regulations"
 end

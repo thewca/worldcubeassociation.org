@@ -33,7 +33,8 @@ Vagrant.configure(2) do |config|
     provider.token = ENV['DIGITAL_OCEAN_API_KEY']
     provider.image = 'ubuntu-14-04-x64'
     provider.region = 'sfo1'
-    provider.size = '512mb'
+    # chef + wca-documents-extra/make.py requires more than 1GB of memory.
+    provider.size = '2gb'
     provider.setup = false
   end
 
