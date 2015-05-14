@@ -1,0 +1,49 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+events {
+  worker_connections 768;
+}
+
+http {
+  ##
+  # Basic Settings
+  ##
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  types_hash_max_size 2048;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  ##
+  # Logging Settings
+  ##
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
+  ##
+  # Gzip Settings
+  ##
+  gzip on;
+  gzip_disable "msie6";
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 2;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+  ##
+  # Optimizations from https://www.digitalocean.com/community/tutorials/how-to-optimize-nginx-configuration
+  ##
+  client_body_timeout 12;
+  client_header_timeout 12;
+  keepalive_timeout 15;
+  send_timeout 10;
+
+
+  include /etc/nginx/conf.d/*.conf;
+}

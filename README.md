@@ -20,17 +20,27 @@ you're interested in helping out.
 - `vagrant up dev` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:8080](http://localhost:8080).
 
-## Deploy
+## Provision New VM
+- Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
+  keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
+- `(cd secrets; scp cubing@worldcubeassociation.org:~/worldcubeassociation.org/secrets/my_secret_key my_secret_key; wget --user=<USERNAME> --password=<PASSWORD> https://www.worldcubeassociation.org/results/admin/dump/worldcubeassociation.org_alldbs.tar.gz)` - Download secrets/my_secret_key and secrets/worldcubeassociation.org_alldbs.tar.gz (you'll need access to the admin section of the WCA website for this to work).
 - `time DIGITAL_OCEAN_API_KEY=<API_KEY> vagrant up staging|production --provider=digital_ocean`
+# TODO - scripts to run at startup:
+#  echo "Compute auxiliary data..."
+#  time curl 'http://localhost/results/admin/compute_auxiliary_data.php?doit=+Do+it+now+'
+#
+#  echo "Update missing averages..."
+#  time curl 'http://localhost/results/misc/missing_averages/update7205.php'
+#
+#  echo "Update Evolution of Records..."
+#  time curl 'http://localhost/results/misc/evolution/update7205.php'
+
+
+## Deploy
+- TODO
 - `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails`
 
-## API
-See http://localhost:3000/oauth/applications/ (WcaOnRails/db/seeds.rb) to view
-and create new test applications.
-
-```bash
-> curl http://localhost:3000/oauth/token -X POST -F grant_type=password -F username=wca@worldcubeassociation.org -F password=wca`
-{"access_token":"1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc","token_type":"bearer","expires_in":7200,"created_at":1430788134}
-> curl -H "Authorization: Bearer 1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc" http://localhost:3000/api/v0/me
-{"me":{"id":1,"email":"wca@worldcubeassociation.org","created_at":"2015-05-05T00:57:11.788Z","updated_at":"2015-05-05T00:57:12.072Z"}}
-```
+## Secrets
+- Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/all.json`.
+  - Show secrets: `knife data bag show secrets all -c /tmp/vagrant-chef/solo.rb --secret-file /secrets/my_secret_key`
+  - Edit secrets: `knife data bag edit secrets all -c /tmp/vagrant-chef/solo.rb --secret-file /secrets/my_secret_key`

@@ -1,16 +1,58 @@
 upstream app {
   # Path to Unicorn SOCK file
-  server unix:/tmp/unicorn-<%= @rails_env %>.wca.sock fail_timeout=0;
+  server unix:/tmp/unicorn.wca.sock fail_timeout=0;
 }
 
 server {
   listen 80;
-  server_name localhost staging.worldcubeassociation.org;
+  server_name localhost <%= { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "dev" => "" }[node.chef_environment] %>
 
+  # Deny access to .htaccess files.
+  location ~ /\.ht {
+    deny all;
+  }
+
+  #### Legacy PHP code
+  location /results {
+    alias <%= @repo_root %>/webroot/results;
+    index index.php index.html;
+
+    include fcgi.conf;
+
+    location ^~ /results/admin {
+      auth_basic "WCA Results Team Members Only";
+      auth_basic_user_file /secrets/results_admins.htpasswd;
+      include fcgi.conf;
+    }
+
+    location ^~ /results/includes {
+      deny all;
+    }
+
+    location ^~ /results/generated {
+      deny all;
+    }
+  }
+
+  #### Regulations
+  location /regulations {
+    index index.html;
+    alias <%= @repo_root %>/webroot/regulations;
+  }
+
+  #### New rails sytem
   # From http://unicorn.bogomips.org/examples/nginx.conf
   # path for static files
   root <%= @rails_root %>/public;
 
+<% if @rails_env != "development" %>
+  # http://vladigleba.com/blog/2014/03/27/deploying-rails-apps-part-4-configuring-nginx/
+  location ^~ /assets/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+<% end %>
   # Prefer to serve static files directly from nginx to avoid unnecessary
   # data copies from the application server.
   try_files $uri/index.html $uri.html $uri @app;

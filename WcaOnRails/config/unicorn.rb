@@ -20,9 +20,9 @@ else
   require 'system'
   worker_processes (System::CPU.count * 1.5).ceil
 end
-listen "/tmp/unicorn-#{rack_env}.wca.sock"
 
-pid "#{dir}/pids/unicorn-#{rack_env}.pid"
+listen "/tmp/unicorn.wca.sock"
+pid "#{dir}/pids/unicorn.pid"
 
 timeout 30
 

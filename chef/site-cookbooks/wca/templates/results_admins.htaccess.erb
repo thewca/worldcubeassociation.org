@@ -1,0 +1,6 @@
+#--- Require valid user
+ErrorDocument 401 "WCA Results Team Members Only!"
+AuthType Basic
+AuthUserFile /secrets/results_admins.htpasswd
+AuthName "My Private Area"
+require valid-user

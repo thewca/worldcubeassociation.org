@@ -1,26 +1,23 @@
 require 'shellwords'
+require 'securerandom'
 
 include_recipe "wca::base"
 include_recipe "nodejs"
 
-# Need dicitonary for password generation
-package('wamerican').run_action(:install)
+secrets = data_bag_item("secrets", "all")
 
 vagrant_user = node['etc']['passwd']['vagrant']
 cubing_user = node['etc']['passwd']['cubing']
 if vagrant_user
   username = "vagrant"
-  rails_root = "/vagrant/WcaOnRails"
+  repo_root = "/vagrant"
 else
   username = "cubing"
   repo_root = "/home/#{username}/worldcubeassociation.org"
-  rails_root = "#{repo_root}/WcaOnRails"
 
   if !node['etc']['passwd']['cubing']
     # Create cubing user if one does not already exist
-    words = File.readlines("/usr/share/dict/words")
-    xkcd_style_pw = words.sample(4).map(&:strip).join('-')
-    cmd = ["openssl", "passwd", "-1", xkcd_style_pw].shelljoin
+    cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
     hashed_pw = `#{cmd}`.strip
     user username do
       supports :manage_home => true
@@ -34,7 +31,7 @@ else
     ruby_block 'last' do
       block do
         puts "#"*80
-        puts "# Created user #{username} with password #{xkcd_style_pw}"
+        puts "# Created user #{username} with password #{secrets['cubing_password']}"
         puts "#"*80
       end
     end
@@ -75,12 +72,15 @@ else
     action :nothing
   end
 end
+rails_root = "#{repo_root}/WcaOnRails"
 
 
 #### Mysql
 mysql_service 'default' do
   version '5.5'
-  initial_root_password 'root'
+  initial_root_password secrets['mysql_password']
+  # Force default socket to make rails happy
+  socket "/var/run/mysqld/mysqld.sock"
   action [:create, :start]
 end
 mysql_config 'default' do
@@ -88,12 +88,16 @@ mysql_config 'default' do
   notifies :restart, 'mysql_service[default]'
   action :create
 end
-template "/home/#{username}/.my.cnf" do
+template "/etc/my.cnf" do
   source "my.cnf.erb"
   mode 0644
-  owner username
-  group username
+  owner 'root'
+  group 'root'
+  variables({
+    secrets: secrets
+  })
 end
+execute "#{repo_root}/scripts/db.sh import /secrets/worldcubeassociation.org_alldbs.tar.gz"
 
 
 #### Ruby and Rails
@@ -127,9 +131,18 @@ package "nginx"
 service 'nginx' do
   action [:enable, :start]
 end
-file "/etc/nginx/sites-enabled/default" do
-  action :delete
-  manage_symlink_source true
+template "/etc/nginx/fcgi.conf" do
+  source "fcgi.conf.erb"
+  notifies :reload, "service[nginx]", :delayed
+end
+template "/etc/nginx/nginx.conf" do
+  source "nginx.conf.erb"
+  mode 0644
+  owner 'root'
+  group 'root'
+  variables({
+    username: username,
+  })
   notifies :reload, "service[nginx]", :delayed
 end
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
@@ -138,7 +151,9 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   owner 'root'
   group 'root'
   variables({
+    username: username,
     rails_root: rails_root,
+    repo_root: repo_root,
     rails_env: rails_env,
   })
   notifies :reload, "service[nginx]", :delayed
@@ -151,9 +166,76 @@ end
 execute "nginx -s reload"
 
 
+#### Rails secrets
+template "#{rails_root}/.env.production" do
+  source "env.production"
+  mode 0644
+  owner username
+  group username
+  variables({
+    secrets: secrets,
+  })
+end
+
+#### Legacy PHP results system
+PHP_MEMORY_LIMIT = '512M'
+PHP_IDLE_TIMEOUT_SECONDS = 120
+include_recipe 'php-fpm::install'
+php_fpm_pool "www" do
+  listen "/var/run/php5-fpm.#{username}.sock"
+  user username
+  group username
+  process_manager "dynamic"
+  max_requests 5000
+  php_options 'php_admin_flag[log_errors]' => 'on', 'php_admin_value[memory_limit]' => PHP_MEMORY_LIMIT
+end
+execute "sudo sed -i 's/memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep 'memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php5/fpm/php.ini"
+end
+execute "sudo sed -i 's/max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep 'max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php5/fpm/php.ini"
+end
+# Install mysqli for php. See:
+#  http://stackoverflow.com/a/22525205
+package "php5-mysqlnd"
+template "#{repo_root}/webroot/results/includes/_config.php" do
+  source "results_config.php.erb"
+  mode 0644
+  owner username
+  group username
+  variables({
+    secrets: secrets,
+  })
+end
+template "#{repo_root}/webroot/results/admin/.htaccess" do
+  source "results_admins.htaccess.erb"
+  mode 0644
+  owner username
+  group username
+  variables({
+    secrets: secrets,
+  })
+end
+template "/secrets/results_admins.htpasswd" do
+  source "results_admins.htpasswd.erb"
+  mode 0644
+  owner username
+  group username
+  variables({
+    secrets: secrets,
+  })
+end
+
+
 #### Screen
 template "/home/#{username}/.bash_profile" do
   source "bash_profile.erb"
+  mode 0644
+  owner username
+  group username
+end
+template "/home/#{username}/.bashrc" do
+  source "bashrc.erb"
   mode 0644
   owner username
   group username

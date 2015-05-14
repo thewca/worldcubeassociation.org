@@ -17,7 +17,8 @@
   "run_list": [
     "recipe[apt]",
     "recipe[sudo]",
-    "recipe[wca]"
+    "recipe[wca]",
+    "recipe[wca::regulations]"
   ],
   "env_run_lists": {
   }

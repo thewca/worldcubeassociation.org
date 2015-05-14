@@ -1,0 +1,11 @@
+# .bashrc
+
+export VISUAL=vim
+export EDITOR=vim
+
+green=$(tput setaf 2)
+reset=$(tput sgr0)
+MY_BODY="\[$green$bold\]\w\[$reset\] @\h"
+END=">"
+
+export PS1="${MY_BODY}${END} "

@@ -27,7 +27,7 @@ Vagrant.configure(2) do |config|
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
     # The /vagrant directory is only useful for development, and can grow quite large,
-    # so it's not fun to rsync it when provisioning.
+    # so it's not worth rsyncing it when provisioning.
     override.vm.synced_folder '.', '/vagrant', disabled: true
 
     provider.token = ENV['DIGITAL_OCEAN_API_KEY']
@@ -36,20 +36,6 @@ Vagrant.configure(2) do |config|
     provider.size = '512mb'
     provider.setup = false
   end
-
-# TODO:
-# (vagrant push)
-# - ssh agent forwarding needs to be set up
-# (secrets)
-# - initialize db
-# - .env.production file needs to be created somehow
-# - https!
-  #onfig.vm.provision "results", type: "shell" do |s|
-    #s.inline = "/vagrant/scripts/results.sh install_deps rebuild"
-  #end
-  #config.vm.provision "regulations", type: "shell" do |s|
-    #s.inline = "/vagrant/scripts/regulations.sh install_deps rebuild"
-  #end
 
   environments = %w(dev staging production)
   config.librarian_chef.cheffile_dir = "chef"
@@ -61,6 +47,8 @@ Vagrant.configure(2) do |config|
         chef.roles_path = "chef/roles"
         chef.nodes_path = "chef/nodes"
         chef.environments_path = "chef/environments"
+        chef.data_bags_path = "chef/data_bags"
+        chef.encrypted_data_bag_secret_key_path = "secrets/my_secret_key"
 
         chef.add_role "wca"
         chef.environment = environment
@@ -72,6 +60,8 @@ Vagrant.configure(2) do |config|
   config.trigger.before [:reload, :up, :provision], stdout: true do
     environments.each do |environment|
       synced_folder = ".vagrant/machines/#{environment}/virtualbox/synced_folders"
+      # Workaround for https://github.com/emyl/vagrant-triggers/issues/44
+      Dir.chdir '..' while !File.exist?('Vagrantfile')
       if File.exist?(synced_folder)
         info "Deleting folder #{synced_folder}..."
         begin
