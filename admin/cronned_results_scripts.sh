@@ -10,7 +10,7 @@ cd $SCRIPTPATH
 
 # The export_public cgi script only will do an actual export if it sees the
 # export url paramter.
-REQUEST_URI="export=" time ./export_public.cgi
+time REQUEST_URI="export=" ./export_public.cgi
 
 # Update statistics page
 (cd ..; rm generated/statistics.cache; time php statistics.php;)
