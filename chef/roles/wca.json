@@ -18,7 +18,8 @@
     "recipe[apt]",
     "recipe[sudo]",
     "recipe[wca]",
-    "recipe[wca::regulations]"
+    "recipe[wca::regulations]",
+    "recipe[wca::email]"
   ],
   "env_run_lists": {
   }

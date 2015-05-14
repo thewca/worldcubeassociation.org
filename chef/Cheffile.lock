@@ -12,6 +12,7 @@ SITE
     build-essential (2.2.3)
     chef-sugar (3.1.0)
     chef_handler (1.1.6)
+    exim4-light (0.1.3)
     homebrew (1.12.0)
       build-essential (>= 2.1.2)
     mysql (6.0.22)
@@ -46,6 +47,7 @@ SITE
 DEPENDENCIES
   apt (>= 0)
   brightbox-ruby (>= 0)
+  exim4-light (>= 0)
   mysql (>= 0)
   nodejs (>= 0)
   openssl (>= 0)

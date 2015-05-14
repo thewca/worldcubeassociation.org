@@ -42,7 +42,11 @@ Vagrant.configure(2) do |config|
   config.librarian_chef.cheffile_dir = "chef"
   environments.each do |environment|
     config.vm.define environment, autostart: false do |sub_config|
-      sub_config.vm.hostname = "wca-#{environment}"
+      sub_config.vm.hostname = {
+        "dev" => "wca-dev",
+        "staging" => "staging.worldcubeassociation.org",
+        "production" => "worldcubeassociation.org"
+      }[environment]
       sub_config.vm.provision "chef_zero" do |chef|
         chef.cookbooks_path = ["chef/cookbooks", "chef/site-cookbooks"]
         chef.roles_path = "chef/roles"
