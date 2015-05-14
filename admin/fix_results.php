@@ -112,14 +112,14 @@ var
         "3": [ 'value1', 'value2', 'value3', 'regionalSingleRecord' ],
         "a": [ 'value1', 'value2', 'value3', 'value4', 'value5', 'regionalSingleRecord', 'regionalAverageRecord' ],
         "m": [ 'value1', 'value2', 'value3', 'regionalSingleRecord', 'regionalAverageRecord' ],
-    };
+    },
     ROUND_FORMAT_TO_NUMBER_OF_ATTEMPTS = {
         "1": 1,
         "2": 2,
         "3": 3,
         "a": 5,
         "m": 3
-    }
+    };
 
 
 
