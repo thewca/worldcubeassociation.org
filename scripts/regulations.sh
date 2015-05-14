@@ -7,7 +7,10 @@ pull_latest() {
 
 rebuild_regs() {
   # Build WCA regulations
-  wca-documents-extra/make.py --verbose --setup-wca-documents --wca
+  # Use only one core because we get better backtraces without multiprocessing,
+  # and because we might be on production server and should not eat up all
+  # cores just building the regulations.
+  wca-documents-extra/make.py --num-workers 1 --setup-wca-documents --wca
   if [ -a webroot/regulations ]; then
     rm -rf webroot/regulations-todelete
     mv webroot/regulations webroot/regulations-todelete;
