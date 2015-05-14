@@ -1,9 +1,13 @@
 <?php
 // session information needs to be created before <html> tag is output.  Thus this php code should come at the beginning of the file.
-if ( ! preg_match( '/^www.worldcubeassociation.org$/i', $_SERVER["SERVER_NAME"] ) ) {
-  // if not on WCA server, in development environment - show errors.
+require_once '_parameters.php';
+if ( wcaDebug() ) {
+  // Show errors in debug mode.
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
+} else {
+  error_reporting(0);
+  ini_set("display_errors", 0);
 }
 require_once( '_framework.php' );
 $standAlone = getBooleanParam( 'standAlone' );

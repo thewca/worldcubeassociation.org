@@ -35,7 +35,7 @@ require '_session.php';
 
 // current results system functionality
 require '_timer.php';
-require '_parameters.php';
+require_once '_parameters.php';
 require '_database.php';
 require '_choices.php';
 require '_tables.php';
