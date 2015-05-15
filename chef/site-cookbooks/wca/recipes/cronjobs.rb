@@ -2,15 +2,8 @@ username, repo_root = UsernameHelper.get_username_and_repo_root(node)
 
 admin_email = "admin@worldcubeassociation.org"
 
-# For some reason, "php -B ... -F ..." tries to read from stdin, so we close stdin.
-execute "(cd #{repo_root}/webroot/results/admin/; time SERVER_NAME=wca REQUEST_URI='doit=live' php compute_auxiliary_data.php;)" do
-  user username
-end
-
-cmd = "#{repo_root}/scripts/db.sh dump /secrets/worldcubeassociation.org_alldbs.tar.gz"
-execute cmd do
-  user username
-end
+init_php_commands = []
+init_php_commands << "#{repo_root}/scripts/db.sh dump /secrets/worldcubeassociation.org_alldbs.tar.gz"
 cron "db backup" do
   minute '0'
   hour '0'
@@ -18,13 +11,10 @@ cron "db backup" do
 
   mailto admin_email
   user username
-  command cmd
+  command init_php_commands.last
 end
 
-cmd = "#{repo_root}/scripts/cronned_results_scripts.sh"
-execute cmd do
-  user username
-end
+init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
 cron "cronned results scripts" do
   minute '0'
   hour '4'
@@ -32,13 +22,10 @@ cron "cronned results scripts" do
 
   mailto admin_email
   user username
-  command cmd
+  command init_php_commands.last
 end
 
-cmd = "(cd #{repo_root}/webroot/results/misc/missing_averages; time php update7205.php)"
-execute cmd do
-  user username
-end
+init_php_commands << "(cd #{repo_root}/webroot/results/misc/missing_averages; time php update7205.php)"
 cron "Update Missing Averages" do
   minute '0'
   hour '0'
@@ -46,13 +33,10 @@ cron "Update Missing Averages" do
 
   mailto admin_email
   user username
-  command cmd
+  command init_php_commands.last
 end
 
-cmd = "(cd #{repo_root}/webroot/results/misc/evolution; time php update7205.php)"
-execute cmd do
-  user username
-end
+init_php_commands << "(cd #{repo_root}/webroot/results/misc/evolution; time php update7205.php)"
 cron "Update Evolution of Records" do
   minute '0'
   hour '0'
@@ -60,5 +44,21 @@ cron "Update Evolution of Records" do
 
   mailto admin_email
   user username
-  command cmd
+  command init_php_commands.last
+end
+
+init_php_commands << "(cd #{repo_root}/webroot/results/admin/; time SERVER_NAME=wca REQUEST_URI='doit=live' php compute_auxiliary_data.php;)"
+
+# Run init-php-results on our first provisioning, but not on subsequent provisions.
+lockfile = '/tmp/php-results-initialized'
+init_php_commands.each do |cmd|
+  bash cmd do
+    code cmd
+    user username
+    not_if { ::File.exists?(lockfile) }
+  end
+end
+
+file lockfile do
+  action :create_if_missing
 end
