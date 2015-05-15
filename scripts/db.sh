@@ -27,7 +27,7 @@ fi
 
 db_names="cubing_cms cubing_results cubing_phpbb"
 db_filenames=""
-rm -rf /tmp/wca_db
+sudo rm -rf /tmp/wca_db
 mkdir -p /tmp/wca_db
 if [ "$COMMAND" == "dump" ]; then
   for db_name in $db_names; do
