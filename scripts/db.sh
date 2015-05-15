@@ -31,7 +31,7 @@ mkdir -p /tmp/wca_db
 if [ "$COMMAND" == "dump" ]; then
   for db_name in $db_names; do
     echo "Backing up $table..."
-    time mysqldump "$@" $db_name > /tmp/wca_db/$table.sql
+    time mysqldump "$@" $db_name > /tmp/wca_db/$db_name.sql
   done
 
   echo "Producing $TAR_FILENAME..."
