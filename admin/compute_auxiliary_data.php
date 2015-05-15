@@ -46,7 +46,12 @@ function analyzeChoices () {
 #----------------------------------------------------------------------
   global $chosenDoIt;
 
-  $chosenDoIt = getNormalParam( 'doit' );
+  // When running as a CGI script, getNormalParam doesn't seem to work.
+  // This is a quick and dirty workaround that looks directly at the
+  // relevant CGI environment variable.
+  //$chosenDoIt = getNormalParam( 'doit' );
+  $requestUri = $_SERVER['REQUEST_URI'];
+  $chosenDoIt = strrpos($requestUri, "doit=") !== FALSE;
 }
 
 #----------------------------------------------------------------------

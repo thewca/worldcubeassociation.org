@@ -28,22 +28,22 @@ $wcadb_conn = new WCAClasses\WCADBConn($config->get("database"));
 require_once '_pdo_db.php';
 
 // misc. display functions
-require '_ui.php';
+require_once '_ui.php';
 
 // session functionality
-require '_session.php';
+require_once '_session.php';
 
 // current results system functionality
-require '_timer.php';
+require_once '_timer.php';
 require_once '_parameters.php';
-require '_database.php';
-require '_choices.php';
-require '_tables.php';
-require '_links.php';
-require '_values.php';
-require '_cache.php';
-require '_map.php';
-require '_navigation.php';
+require_once '_database.php';
+require_once '_choices.php';
+require_once '_tables.php';
+require_once '_links.php';
+require_once '_values.php';
+require_once '_cache.php';
+require_once '_map.php';
+require_once '_navigation.php';
 
 
 
