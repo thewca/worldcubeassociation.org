@@ -42,11 +42,6 @@ Vagrant.configure(2) do |config|
   config.librarian_chef.cheffile_dir = "chef"
   environments.each do |environment|
     config.vm.define environment, autostart: false do |sub_config|
-      sub_config.vm.hostname = {
-        "dev" => "wca-dev",
-        "staging" => "staging.worldcubeassociation.org",
-        "production" => "worldcubeassociation.org"
-      }[environment]
       sub_config.vm.provision "chef_zero" do |chef|
         chef.cookbooks_path = ["chef/cookbooks", "chef/site-cookbooks"]
         chef.roles_path = "chef/roles"
@@ -55,6 +50,7 @@ Vagrant.configure(2) do |config|
         chef.data_bags_path = "chef/data_bags"
         chef.encrypted_data_bag_secret_key_path = "secrets/my_secret_key"
 
+        chef.node_name = environment
         chef.add_role "wca"
         chef.environment = environment
       end

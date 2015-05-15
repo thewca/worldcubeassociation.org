@@ -9,6 +9,10 @@
         "users": ["vagrant", "cubing"],
         "passwordless": "true"
       }
+    },
+    "set_fqdn": "*.worldcubeassociation.org",
+    "hostname_cookbook": {
+      "hostsfile_ip": "127.0.1.1"
     }
   },
   "override_attributes": {
@@ -17,6 +21,7 @@
   "run_list": [
     "recipe[apt]",
     "recipe[sudo]",
+    "recipe[hostname]",
     "recipe[wca]",
     "recipe[wca::regulations]",
     "recipe[wca::email]"
