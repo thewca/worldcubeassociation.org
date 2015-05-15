@@ -176,6 +176,7 @@ end
 #### Legacy PHP results system
 PHP_MEMORY_LIMIT = '512M'
 PHP_IDLE_TIMEOUT_SECONDS = 120
+package 'php5-cli'
 include_recipe 'php-fpm::install'
 php_fpm_pool "www" do
   listen "/var/run/php5-fpm.#{username}.sock"

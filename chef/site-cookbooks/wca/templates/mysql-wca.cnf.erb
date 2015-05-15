@@ -1,2 +1,5 @@
 [mysqld]
 skip-networking
+
+# compute_auxiliary_data.php needs more than the default 1M
+max_allowed_packet = 16M
