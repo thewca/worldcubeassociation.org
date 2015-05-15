@@ -26,16 +26,18 @@ if [[ "$TAR_FILENAME" != *.tar.gz ]]; then
 fi
 
 db_names="cubing_cms cubing_results cubing_phpbb"
+db_filenames=""
 rm -rf /tmp/wca_db
 mkdir -p /tmp/wca_db
 if [ "$COMMAND" == "dump" ]; then
   for db_name in $db_names; do
-    echo "Backing up $table..."
+    echo "Backing up $db_name"
     time mysqldump "$@" $db_name > /tmp/wca_db/$db_name.sql
+    db_filenames="$db_filenames $db_name.sql"
   done
 
   echo "Producing $TAR_FILENAME..."
-  time tar -C /tmp/wca_db -zcvf "$TAR_FILENAME" $db_names
+  time tar -C /tmp/wca_db -zcvf "$TAR_FILENAME" $db_filenames
 elif [ "$COMMAND" == "import" ]; then
   for db_name in $db_names; do
     if [ "$(mysql -N -s "$@" -e "SHOW DATABASES LIKE '$db_name';")" != "" ]; then
