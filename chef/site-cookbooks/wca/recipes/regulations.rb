@@ -1,3 +1,5 @@
+username, repo_root = UsernameHelper.get_username_and_repo_root(node)
+
 #### Regulations dependencies
 # Dependencies for wca-documents-extra. Some of this came from
 # https://github.com/cubing/wca-documents-extra/blob/master/.travis.yml, but has
@@ -15,16 +17,6 @@ package "texlive-xetex"
 package "texlive-latex-recommended"
 package "texlive-latex-extra"
 package "lmodern"
-
-# copied from default.rb
-vagrant_user = node['etc']['passwd']['vagrant']
-if vagrant_user
-  username = "vagrant"
-  repo_root = "/vagrant"
-else
-  username = "cubing"
-  repo_root = "/home/#{username}/worldcubeassociation.org"
-end
 
 execute "#{repo_root}/scripts/regulations.sh rebuild_regs" do
   user username

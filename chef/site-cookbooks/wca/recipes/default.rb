@@ -6,15 +6,8 @@ include_recipe "nodejs"
 
 secrets = data_bag_item("secrets", "all")
 
-vagrant_user = node['etc']['passwd']['vagrant']
-cubing_user = node['etc']['passwd']['cubing']
-if vagrant_user
-  username = "vagrant"
-  repo_root = "/vagrant"
-else
-  username = "cubing"
-  repo_root = "/home/#{username}/worldcubeassociation.org"
-
+username, repo_root = UsernameHelper.get_username_and_repo_root(node)
+if username == "cubing"
   if !node['etc']['passwd']['cubing']
     # Create cubing user if one does not already exist
     cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin

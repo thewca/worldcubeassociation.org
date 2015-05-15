@@ -24,7 +24,8 @@
     "recipe[hostname]",
     "recipe[wca]",
     "recipe[wca::regulations]",
-    "recipe[wca::email]"
+    "recipe[wca::email]",
+    "recipe[wca::cronjobs]"
   ],
   "env_run_lists": {
   }
