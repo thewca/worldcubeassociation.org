@@ -120,16 +120,40 @@ rails_env = chef_env_to_rails_env[node.chef_environment]
 
 
 #### Nginx
-package "nginx"
-service 'nginx' do
-  action [:enable, :start]
+# Unfortunately, we have to compile nginx from source to get the auth request module
+# See: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1323387
+
+# Nginx dependencies copied from http://www.rackspace.com/knowledge_center/article/ubuntu-and-debian-installing-nginx-from-source
+package 'libc6'
+package 'libpcre3'
+package 'libssl0.9.8'
+package 'zlib1g'
+package 'lsb-base'
+# http://stackoverflow.com/a/14046228
+package 'libpcre3-dev'
+# http://serverfault.com/a/416573
+package 'libssl-dev'
+
+bash "build nginx" do
+  code <<-EOH
+    set -e # exit on error
+    cd /tmp
+    wget http://nginx.org/download/nginx-1.8.0.tar.gz
+    tar xvf nginx-1.8.0.tar.gz
+    cd nginx-1.8.0
+    ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
+    make
+    sudo make install
+    EOH
+
+  # Don't build nginx if we've already built it.
+  not_if { ::File.exists?('/usr/local/sbin/nginx') }
 end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
   variables({
     username: username,
   })
-  notifies :reload, "service[nginx]", :delayed
 end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
@@ -139,7 +163,10 @@ template "/etc/nginx/nginx.conf" do
   variables({
     username: username,
   })
-  notifies :reload, "service[nginx]", :delayed
+end
+directory "/etc/nginx/conf.d" do
+  owner 'root'
+  group 'root'
 end
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
@@ -152,14 +179,9 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
     repo_root: repo_root,
     rails_env: rails_env,
   })
-  notifies :reload, "service[nginx]", :delayed
 end
-# The notifies we set up before do seem to work. I see stuff like this:
-#  ==> default: [2015-05-10T21:54:13+00:00] INFO: file[/etc/nginx/sites-enabled/default] sending reload action to service[nginx] (delayed)
-#  ==> default: [2015-05-10T21:54:13+00:00] INFO: service[nginx] reloaded
-# However, the reload doesn't seem to actually have an effect!
-# Hack around that here.
-execute "nginx -s reload"
+# Reload nginx if it's already running, otherwise start it up!
+execute "nginx -s reload || nginx"
 
 
 #### Rails secrets
