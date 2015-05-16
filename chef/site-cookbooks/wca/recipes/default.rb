@@ -226,24 +226,6 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
     secrets: secrets,
   })
 end
-template "#{repo_root}/webroot/results/admin/.htaccess" do
-  source "results_admins.htaccess.erb"
-  mode 0644
-  owner username
-  group username
-  variables({
-    secrets: secrets,
-  })
-end
-template "/secrets/results_admins.htpasswd" do
-  source "results_admins.htpasswd.erb"
-  mode 0644
-  owner username
-  group username
-  variables({
-    secrets: secrets,
-  })
-end
 
 
 #### Screen

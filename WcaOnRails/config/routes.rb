@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v0 do
       get '/me' => "api#me"
+      get '/auth/results' => "api#auth_results"
     end
   end
 

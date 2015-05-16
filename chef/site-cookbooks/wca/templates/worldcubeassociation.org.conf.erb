@@ -1,6 +1,12 @@
 upstream app {
   # Path to Unicorn SOCK file
+<% if @rails_env == "development" %>
+  server localhost:3000;
+  # Backup in case we try to run in production mode on a dev server
+  server unix:/tmp/unicorn.wca.sock fail_timeout=0 backup;
+<% else %>
   server unix:/tmp/unicorn.wca.sock fail_timeout=0;
+<% end %>
 }
 
 server {
@@ -12,6 +18,14 @@ server {
     deny all;
   }
 
+  # Redirect 401 to log in page
+  # Unfortunately, I don't think there's any way to redirect back after the
+  # user logs in.
+  error_page 401 = @error401;
+    location @error401 {
+    return 302 /users/sign_in;
+  }
+
   #### Legacy PHP code
   location /results {
     alias <%= @repo_root %>/webroot/results;
@@ -20,8 +34,10 @@ server {
     include fcgi.conf;
 
     location ^~ /results/admin {
-      auth_basic "WCA Results Team Members Only";
-      auth_basic_user_file /secrets/results_admins.htpasswd;
+      # Delegate to rails to determine if the client is authorized to administer
+      # results. This is kind of painful, as it results in an extra request for every
+      # single request, but this way we can avoid editing the existing PHP code.
+      auth_request /api/v0/auth/results;
       include fcgi.conf;
     }
 

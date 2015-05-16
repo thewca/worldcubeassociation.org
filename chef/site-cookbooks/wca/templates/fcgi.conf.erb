@@ -4,5 +4,8 @@ location ~ \.php$ {
   fastcgi_split_path_info ^(.+\.php)(/.+)$;
   fastcgi_pass unix:/var/run/php5-fpm.<%= @username %>.sock;
   fastcgi_index index.php;
+
+  # See https://blog.martinfjordvald.com/2013/04/nginx-config-history-fastcgi_params-versus-fastcgi-conf/
+  fastcgi_param SCRIPT_FILENAME $request_filename;
   include fastcgi_params;
 }
