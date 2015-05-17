@@ -8,9 +8,9 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 
-# The export_public cgi script only will do an actual export if it sees the
+# The export_public script only will do an actual export if it sees the
 # export url paramter.
-time (cd ../webroot/results/admin/; REQUEST_URI="export=" ./export_public.cgi)
+time (cd ../webroot/results/admin/; REQUEST_URI="export=" ./export_public.php)
 
 # Update statistics page
 (cd ../webroot/results/; rm generated/statistics.cache; time php statistics.php;)

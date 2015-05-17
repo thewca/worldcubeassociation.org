@@ -38,7 +38,11 @@ server {
       # results. This is kind of painful, as it results in an extra request for every
       # single request, but this way we can avoid editing the existing PHP code.
       auth_request /api/v0/auth/results;
+
       include fcgi.conf;
+      # Some of our administration scripts take entirely too long to run. Bump
+      # the timeout to 10 minutes.
+      fastcgi_read_timeout 10m;
     }
 
     location ^~ /results/includes {
