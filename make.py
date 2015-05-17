@@ -254,8 +254,7 @@ def build(args):
     if args.num_workers == 1:
       # multiprocessing destroys our backtraces, so don't use it for 1 worker. This makes
       # it possible to debug.
-      for language in languages:
-        f(language)
+      map(f, languages)
     else:
       pool = multiprocessing.Pool(processes=args.num_workers)
       pool.map(f, languages)
