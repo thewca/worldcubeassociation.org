@@ -11,9 +11,6 @@ if [ $# -gt 0 ]; then
 fi
 
 # Download secrets from production site.
+# TODO - eventually we'll need to look at /secrets on the production server
 echo "Downloading secrets..."
 rsync -a --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ secrets
-
-# Download uploaded user images from production site.
-echo "Downloading user images..."
-rsync -a --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/webroot/results/upload/ webroot/results/upload
