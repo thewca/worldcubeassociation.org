@@ -23,7 +23,10 @@ you're interested in helping out.
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
   keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
-- `(cd secrets; scp cubing@worldcubeassociation.org:~/worldcubeassociation.org/secrets/my_secret_key my_secret_key; wget --user=<USERNAME> --password=<PASSWORD> https://www.worldcubeassociation.org/results/admin/dump/worldcubeassociation.org_alldbs.tar.gz)` - Download secrets/my_secret_key and secrets/worldcubeassociation.org_alldbs.tar.gz (you'll need access to the admin section of the WCA website for this to work).
+- `scripts/download_secrets.sh` - Download database export and other secrets
+  required to provision a new server. You'll need ssh access to
+  worldcubeassociation.org as user `cubing`. Contact
+  software-admins@worldcubeassociation.org if you need access.
 - `time DIGITAL_OCEAN_API_KEY=<API_KEY> vagrant up staging|production --provider=digital_ocean`
 
 ## Deploy
