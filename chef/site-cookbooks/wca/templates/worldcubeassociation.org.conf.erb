@@ -13,8 +13,8 @@ server {
   listen 80;
   server_name <%= { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "dev" => "" }[node.chef_environment] %> localhost;
 
-  # Deny access to .htaccess files.
-  location ~ /\.ht {
+  # Deny access to dotfiles and dotfolders.
+  location ~ /\. {
     deny all;
   }
 
