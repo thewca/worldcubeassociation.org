@@ -37,10 +37,14 @@ else
 
   # Check out codebase =)
   if ! command -v git &> /dev/null; then
+    # Install the latest git so we can make use of GIT_SSH_COMMAND
+    #  http://linuxg.net/how-to-install-git-2-3-0-on-ubuntu-15-04-ubuntu-14-10-ubuntu-14-04-ubuntu-12-04-and-derivative-systems/
+    add-apt-repository -y ppa:git-core/ppa
+    apt-get update -y
     apt-get install -y git
   fi
   if ! test -d $repo_dir; then
-    git clone --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
+    GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git clone --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
     chown -R cubing:cubing $repo_dir
   fi
 fi
