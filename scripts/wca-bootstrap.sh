@@ -69,6 +69,7 @@ fi
   /opt/chef/embedded/bin/ruby /opt/chef/embedded/lib/ruby/gems/2.1.0/gems/librarian-chef-0.0.4/bin/librarian-chef install
 )
 
+mkdir -p /etc/chef
 cat > /etc/chef/solo.rb <<EOL
 node_name "$environment"
 environment "$environment"
