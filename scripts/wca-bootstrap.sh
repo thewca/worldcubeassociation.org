@@ -11,7 +11,13 @@ if [ $# -gt 1 ]; then
 fi
 
 environment=$1
-if [ "$environment" != "development" ] && [ "$environment" != "staging" ] && [ "$environment" != "production" ]; then
+if [ "$environment" == "development" ]; then
+  git_branch=master
+elif [ "$environment" == "staging" ]; then
+  git_branch=master
+elif [ "$environment" == "production" ]; then
+  git_branch=production
+else
   echo "Unrecognized environment: $environment"
   print_usage_and_exit
 fi
@@ -42,9 +48,17 @@ else
     apt-get update -y
     apt-get install -y git
   fi
+  export GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no'
   if ! [ -d $repo_dir ]; then
-    GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git clone --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
+    # Unfortunately, running git clone as cubing breaks ssh agent forwarding.
+    # Instead, let root user do the git checkout, and then chown appropriately.
+    git clone -b $git_branch --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
     chown -R cubing:cubing $repo_dir
+  else
+    (
+      cd $repo_dir
+      git pull --recurse-submodules && git submodule update
+    )
   fi
 fi
 
