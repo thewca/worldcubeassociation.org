@@ -23,10 +23,6 @@ you're interested in helping out.
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
   keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
-- `scripts/download_secrets.sh` - Download database export and other secrets
-  required to provision a new server. You'll need ssh access to
-  worldcubeassociation.org as user `cubing`. Contact
-  software-admins@worldcubeassociation.org if you need access.
 - `time DIGITAL_OCEAN_API_KEY=<API_KEY> vagrant up staging|production --provider=digital_ocean`
 
 ## Deploy
@@ -35,5 +31,5 @@ you're interested in helping out.
 
 ## Secrets
 - Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/all.json`.
-  - Show secrets: `knife data bag show secrets all -c /tmp/vagrant-chef/solo.rb --secret-file /secrets/my_secret_key`
-  - Edit secrets: `knife data bag edit secrets all -c /tmp/vagrant-chef/solo.rb --secret-file /secrets/my_secret_key`
+  - Show secrets: `knife data bag show secrets all -c /tmp/vagrant-chef/solo.rb --secret-file secrets/my_secret_key`
+  - Edit secrets: `knife data bag edit secrets all -c /tmp/vagrant-chef/solo.rb --secret-file secrets/my_secret_key`

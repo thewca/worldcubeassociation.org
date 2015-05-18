@@ -1,18 +1,18 @@
 upstream app {
-  # Path to Unicorn SOCK file
 <% if @rails_env == "development" %>
   server localhost:3000;
   # Backup in case we try to run in production mode on a dev server
   server unix:/tmp/unicorn.wca.sock fail_timeout=0 backup;
 <% else %>
+  # Path to Unicorn SOCK file
   server unix:/tmp/unicorn.wca.sock fail_timeout=0;
 <% end %>
 }
 
-<% @server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "dev" => "" }[node.chef_environment] %>
+<% @server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment] %>
 
 # In non development mode, redirect all HTTP traffic to HTTPS
-<% if node.chef_environment != "dev" %>
+<% if node.chef_environment != "development" %>
 server {
   listen 80;
   server_name <%= @server_name %> localhost;
@@ -24,14 +24,14 @@ server {
 server {
   server_name <%= @server_name %> localhost;
 
-<% if node.chef_environment != "dev" %>
+<% if node.chef_environment != "development" %>
   listen 443;
 
   ssl on;
 
   # From https://sslmate.com/help/getting_started
-  ssl_certificate_key /secrets/<%= @server_name %>.key;
-  ssl_certificate /secrets/<%= @server_name %>.chained.crt;
+  ssl_certificate_key <%= @repo_root %>/secrets/<%= @server_name %>.key;
+  ssl_certificate <%= @repo_root %>/secrets/<%= @server_name %>.chained.crt;
 
   # Recommended security settings from https://wiki.mozilla.org/Security/Server_Side_TLS
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

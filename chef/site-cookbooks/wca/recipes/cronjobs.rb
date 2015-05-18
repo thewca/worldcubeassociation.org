@@ -3,8 +3,8 @@ username, repo_root = UsernameHelper.get_username_and_repo_root(node)
 admin_email = "admin@worldcubeassociation.org"
 
 init_php_commands = []
-init_php_commands << "#{repo_root}/scripts/db.sh dump /secrets/worldcubeassociation.org_alldbs.tar.gz"
-if node.chef_environment != "dev"
+init_php_commands << "#{repo_root}/scripts/db.sh dump #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
+if node.chef_environment != "development"
   cron "db backup" do
     minute '0'
     hour '0'
@@ -17,7 +17,7 @@ if node.chef_environment != "dev"
 end
 
 init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
-if node.chef_environment != "dev"
+if node.chef_environment != "development"
   cron "cronned results scripts" do
     minute '0'
     hour '4'
@@ -30,7 +30,7 @@ if node.chef_environment != "dev"
 end
 
 init_php_commands << "(cd #{repo_root}/webroot/results/misc/missing_averages; time php update7205.php)"
-if node.chef_environment != "dev"
+if node.chef_environment != "development"
   cron "Update Missing Averages" do
     minute '0'
     hour '0'
@@ -43,7 +43,7 @@ if node.chef_environment != "dev"
 end
 
 init_php_commands << "(cd #{repo_root}/webroot/results/misc/evolution; time php update7205.php)"
-if node.chef_environment != "dev"
+if node.chef_environment != "development"
   cron "Update Evolution of Records" do
     minute '0'
     hour '0'

@@ -38,7 +38,7 @@ if username == "cubing"
 
   ssh_known_hosts_entry 'github.com'
   chef_env_to_branch = {
-    "dev" => "master",
+    "development" => "master",
     "staging" => "master",
     "production" => "production",
   }
@@ -90,8 +90,7 @@ template "/etc/my.cnf" do
     secrets: secrets
   })
 end
-execute "#{repo_root}/scripts/db.sh import /secrets/worldcubeassociation.org_alldbs.tar.gz"
-
+execute "#{repo_root}/scripts/db.sh import #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
 
 #### Ruby and Rails
 # Install native dependencies for gems
@@ -101,18 +100,12 @@ package 'g++'
 package 'libmysqlclient-dev'
 
 node.default['brightbox-ruby']['version'] = "2.2"
-# As a workaround for https://github.com/bundler/bundler/issues/3641, don't
-# install the latest version of bundler, install 1.9.6 instead.
-node.default['brightbox-ruby']['gems'] = [ 'rake', 'rubygems-bundler' ]
 include_recipe "brightbox-ruby"
-gem_package "bundler" do
-  version "1.9.6"
-end
 gem_package "rails" do
   version "4.2.1"
 end
 chef_env_to_rails_env = {
-  "dev" => "development",
+  "development" => "development",
   "staging" => "production",
   "production" => "production",
 }
@@ -154,6 +147,7 @@ template "/etc/nginx/fcgi.conf" do
   variables({
     username: username,
   })
+  notifies :run, 'execute[reload-nginx]', :delayed
 end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
@@ -163,6 +157,7 @@ template "/etc/nginx/nginx.conf" do
   variables({
     username: username,
   })
+  notifies :run, 'execute[reload-nginx]', :delayed
 end
 directory "/etc/nginx/conf.d" do
   owner 'root'
@@ -179,9 +174,16 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
     repo_root: repo_root,
     rails_env: rails_env,
   })
+  notifies :run, 'execute[reload-nginx]', :delayed
 end
-# Reload nginx if it's already running, otherwise start it up!
-execute "nginx -s reload || nginx"
+# Start nginx if it's not already running.
+execute "nginx" do
+  not_if "ps -efw | grep nginx.*master"
+end
+execute "reload-nginx" do
+  command "nginx -s reload || nginx"
+  action :nothing
+end
 
 
 #### Rails secrets
