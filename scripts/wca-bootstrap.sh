@@ -23,15 +23,14 @@ fi
 
 set -e
 
-if test -d /vagrant; then
+if [ -d /vagrant ]; then
   repo_dir=/vagrant
 else
   repo_dir=/home/cubing/worldcubeassociation.org
 
   # Create cubing user if does not exist.
   if ! id -u cubing &>/dev/null; then
-    useradd cubing
-    mkdir -p /home/cubing
+    useradd -m -s /bin/bash cubing
     chown cubing:cubing /home/cubing
   fi
 
@@ -43,7 +42,7 @@ else
     apt-get update -y
     apt-get install -y git
   fi
-  if ! test -d $repo_dir; then
+  if ! [ -d $repo_dir ]; then
     GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git clone --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
     chown -R cubing:cubing $repo_dir
   fi
@@ -57,8 +56,8 @@ if [ "$environment" != "development" ]; then
   rsync -a -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_dir/secrets
 fi
 
-# Install chef client and berks
-if ! command -v berks &> /dev/null; then
+# Install chef client
+if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 12.3.0 &> /dev/null; then
   curl -Ls https://www.opscode.com/chef/install.sh | bash -s -- -v 12.3.0-1
   /opt/chef/embedded/bin/gem install librarian-chef
 fi

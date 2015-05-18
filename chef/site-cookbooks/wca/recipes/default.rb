@@ -8,32 +8,37 @@ secrets = data_bag_item("secrets", "all")
 
 username, repo_root = UsernameHelper.get_username_and_repo_root(node)
 if username == "cubing"
-  if !node['etc']['passwd']['cubing']
-    # Create cubing user if one does not already exist
-    cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
-    hashed_pw = `#{cmd}`.strip
-    user username do
-      supports :manage_home => true
-      home "/home/#{username}"
-      shell '/bin/bash'
-      password hashed_pw
+  user_lockfile = '/tmp/cubing-user-initialized'
+  user username do
+    supports :manage_home => true
+    home "/home/#{username}"
+    shell '/bin/bash'
+    password do
+      cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
+      `#{cmd}`.strip
     end
+    not_if { ::File.exists?(user_lockfile) }
+  end
 
-    # Trick to run code immediately and last copied from:
-    #  https://gist.github.com/nvwls/7672039
-    ruby_block 'last' do
-      block do
-        puts "#"*80
-        puts "# Created user #{username} with password #{secrets['cubing_password']}"
-        puts "#"*80
-      end
+  # Trick to run code immediately and last copied from:
+  #  https://gist.github.com/nvwls/7672039
+  ruby_block 'last' do
+    block do
+      puts "#"*80
+      puts "# Created user #{username} with password #{secrets['cubing_password']}"
+      puts "#"*80
     end
-    ruby_block 'notify' do
-      block do
-        true
-      end
-      notifies :run, 'ruby_block[last]', :delayed
+  end
+  ruby_block 'notify' do
+    block do
+      true
     end
+    notifies :run, 'ruby_block[last]', :delayed
+    not_if { ::File.exists?(user_lockfile) }
+  end
+
+  file user_lockfile do
+    action :create_if_missing
   end
 
   ssh_known_hosts_entry 'github.com'
