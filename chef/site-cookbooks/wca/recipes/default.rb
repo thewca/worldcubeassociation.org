@@ -28,6 +28,7 @@ if username == "cubing"
       puts "# Created user #{username} with password #{secrets['cubing_password']}"
       puts "#"*80
     end
+    not_if { ::File.exists?(user_lockfile) }
   end
   ruby_block 'notify' do
     block do
