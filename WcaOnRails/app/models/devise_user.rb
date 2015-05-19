@@ -4,6 +4,6 @@ class DeviseUser < ActiveRecord::Base
          :confirmable
 
   def results_team_member?
-    return true # TODO
+    return false # TODO
   end
 end
