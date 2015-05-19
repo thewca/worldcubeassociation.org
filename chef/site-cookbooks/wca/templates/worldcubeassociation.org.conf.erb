@@ -87,6 +87,24 @@ server {
     }
   }
 
+  #### phpBB forum
+  location /forum {
+    alias <%= @repo_root %>/webroot/forum;
+    index index.php index.html;
+
+    # From http://nginxlibrary.com/phpbb-configuration/
+    location ~ /(config\.php|common\.php|cache|files|images/avatars/upload|includes|store) {
+      deny all;
+      return 403;
+    }
+
+    location ~* \.(gif|jpe?g|png|css)$ {
+      expires 30d;
+    }
+
+    include fcgi.conf;
+  }
+
   #### Regulations
   location /regulations {
     index index.html;

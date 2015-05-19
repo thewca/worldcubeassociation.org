@@ -31,5 +31,5 @@ you're interested in helping out.
 
 ## Secrets
 - Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/all.json`.
-  - Show secrets: `knife data bag show secrets all -c /tmp/vagrant-chef/solo.rb --secret-file secrets/my_secret_key`
-  - Edit secrets: `knife data bag edit secrets all -c /tmp/vagrant-chef/solo.rb --secret-file secrets/my_secret_key`
+  - Show secrets: `knife data bag show secrets all -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`
+  - Edit secrets: `knife data bag edit secrets all -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`
