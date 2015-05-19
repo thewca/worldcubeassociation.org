@@ -59,6 +59,13 @@ server {
     return 302 /users/sign_in;
   }
 
+  location /api/v0/auth/results {
+    proxy_pass http://app;
+    proxy_pass_request_body off;
+    proxy_set_header Content-Length "";
+    proxy_set_header X-Original-URI $request_uri;
+  }
+
   #### Legacy PHP code
   location /results {
     alias <%= @repo_root %>/webroot/results;
@@ -76,6 +83,15 @@ server {
       # Some of our administration scripts take entirely too long to run. Bump
       # the timeout to 10 minutes.
       fastcgi_read_timeout 10m;
+    }
+
+    # As recommended by http://docs.phpmyadmin.net/en/latest/setup.html#using-setup-script,
+    # prevent access to /libraries and /setup/lib.
+    location ^~ /results/admin/phpMyAdmin/libraries {
+      deny all;
+    }
+    location ^~ /results/admin/phpMyAdmin/setup/lib {
+      deny all;
     }
 
     location ^~ /results/includes {
@@ -135,7 +151,7 @@ server {
 
     # enable this if you forward HTTPS traffic to unicorn,
     # this helps Rack set the proper URL scheme for doing redirects:
-    # proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Proto $scheme;
 
     # pass the Host: header from the client right along so redirects
     # can be set properly within the Rack application
