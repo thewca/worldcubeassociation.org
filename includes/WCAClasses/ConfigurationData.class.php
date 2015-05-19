@@ -77,11 +77,6 @@ class ConfigurationData
         $pathToRoot = $this->data["pathToRoot"];
         $errors = Array();
 
-        // check for .htaccess protection of admin section
-        if (!file_exists($filesPath . 'admin/.htaccess')) {
-            $errors[] = ".htaccess protection of admin section missing!";
-        }
-
         if (!file_exists($filesPath . 'generated/cachedDatabase.php')) {
             $errors[] = "Missing cachedDatabase.php file! Go <a href='{$pathToRoot}admin/compute_auxiliary_data.php'>here</a> to generate this file.";
         }
