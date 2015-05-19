@@ -49,17 +49,17 @@ else
     apt-get install -y git
   fi
   export GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no'
+  # Unfortunately, running git as cubing breaks ssh agent forwarding.
+  # Instead, let root user do the git-ing, and then chown appropriately.
   if ! [ -d $repo_dir ]; then
-    # Unfortunately, running git clone as cubing breaks ssh agent forwarding.
-    # Instead, let root user do the git checkout, and then chown appropriately.
     git clone -b $git_branch --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_dir
-    chown -R cubing:cubing $repo_dir
   else
     (
       cd $repo_dir
       git pull --recurse-submodules && git submodule update
     )
   fi
+  chown -R cubing:cubing $repo_dir
 fi
 
 if [ "$environment" != "development" ]; then
