@@ -98,6 +98,7 @@ template "/etc/my.cnf" do
 end
 execute "#{repo_root}/scripts/db.sh import #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
 
+
 #### Ruby and Rails
 # Install native dependencies for gems
 package 'libghc-zlib-dev'
@@ -222,6 +223,10 @@ end
 execute "sudo sed -i 's/max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php5/fpm/php.ini" do
   not_if "grep 'max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php5/fpm/php.ini"
 end
+# Install pear mail
+# http://www.markstechstuff.com/2009/04/installing-pear-mail-for-php-on-ubuntu.html
+package "php-pear"
+execute "pear install mail Net_SMTP Auth_SASL mail_mime"
 # Install mysqli for php. See:
 #  http://stackoverflow.com/a/22525205
 package "php5-mysqlnd"

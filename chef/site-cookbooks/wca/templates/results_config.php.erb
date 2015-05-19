@@ -29,7 +29,7 @@ if(class_exists('Mail')) {
 
 if($config['mail']['pear']) {
   $config['mail']['from'] = 'no-reply@worldcubeassociation.org';
-  $config['mail']['host'] = 'ssl://smtp.mandrillapp.com';
+  $config['mail']['host'] = 'smtp.mandrillapp.com';
   $config['mail']['port'] = '587';
   $config['mail']['user'] = '<%= @secrets['MANDRILL_USERNAME'] %>';
   $config['mail']['pass'] = '<%= @secrets['MANDRILL_PASSWORD'] %>';
