@@ -20,7 +20,6 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'local_time'
-gem 'google-analytics-rails'
 gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'

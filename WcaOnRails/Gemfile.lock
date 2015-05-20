@@ -101,7 +101,6 @@ GEM
     formatador (0.2.5)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    google-analytics-rails (0.0.6)
     guard (2.12.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -300,7 +299,6 @@ DEPENDENCIES
   envied
   factory_girl_rails
   faker
-  google-analytics-rails
   guard-rspec
   ignorable
   jbuilder
