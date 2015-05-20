@@ -1,5 +1,5 @@
 class Api::V0::ApiController < ApplicationController
-  before_action :doorkeeper_authorize!, except: [:auth_results, :scramble_program]
+  before_action :doorkeeper_authorize!, only: [:me]
 
   def me
     render json: { me: current_resource_owner }
@@ -38,6 +38,9 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-0.9.0"    # 2015-03-30
       ]
     }
+  end
+
+  def help
   end
 
   private def current_resource_owner

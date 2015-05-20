@@ -26,23 +26,13 @@ Rails.application.routes.draw do
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
 
-  # TODO - add api page
-  ## API
-  # See http://localhost:3000/oauth/applications/ (WcaOnRails/db/seeds.rb) to view
-  # and create new test applications.
-
-  # ```bash
-  # > curl http://localhost:3000/oauth/token -X POST -F grant_type=password -F username=wca@worldcubeassociation.org -F password=wca`
-  # {"access_token":"1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc","token_type":"bearer","expires_in":7200,"created_at":1430788134}
-  # > curl -H "Authorization: Bearer 1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc" http://localhost:3000/api/v0/me
-  # {"me":{"id":1,"email":"wca@worldcubeassociation.org","created_at":"2015-05-05T00:57:11.788Z","updated_at":"2015-05-05T00:57:12.072Z"}}
-  # ```
   namespace :api do
+    get '/', to: redirect('/api/v0')
     namespace :v0 do
+      get '/' => "api#help"
       get '/me' => "api#me"
       get '/auth/results' => "api#auth_results"
       get '/scramble-program' => "api#scramble_program"
     end
   end
-
 end
