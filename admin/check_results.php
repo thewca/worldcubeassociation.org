@@ -21,8 +21,8 @@ switch ( $chosenWhat ){
   case 'ranks':
     checkRelatively();
     break;
-  case 'duplicates':
-    checkDuplicates();
+  case 'similar':
+    checkSimilarResults();
     break;
 }
 
@@ -36,7 +36,7 @@ function showDescription () {
 
   echo "<p style='width:45em'>Then, once they're correct individually, check ranks. This compares results with others in the same round to check each competitor's place. Differences between calculated and stored places can be agreed to and then executed on the bottom of the page.\n";
 
-  echo "<p style='width:45em'>You can also print duplicate results that happened during a competition. It might reveal errors in score taking, although some duplicates can be due to chance.</p>\n";
+  echo "<p style='width:45em'>You can also print similar results that happened during a competition. It might reveal errors in score taking, although some similar results can be due to chance.</p>\n";
 
   echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
 
@@ -60,7 +60,7 @@ function showChoices () {
   displayChoices( array(
     'Check',
     choice( 'which', '', array( array( 'recent', 'recent' ), array( 'all', 'all' )), $chosenWhich ),
-    choice( 'what', '', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'duplicates', 'duplicates' )), $chosenWhat ),
+    choice( 'what', '', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'similar', 'similar results' )), $chosenWhat ),
     choiceButton( true, 'go', 'Go', false)
   ));
 }
@@ -292,44 +292,62 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
 }
 
 #----------------------------------------------------------------------
-function checkDuplicates () {
+function checkSimilarResults () {
 #----------------------------------------------------------------------
   global $dateCondition, $chosenWhich;
 
-  echo "<hr /><p>Checking <b>" . $chosenWhich . " duplicate results</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b>" . $chosenWhich . " similar results</b>... (wait for the result message box at the end)</p>\n";
 
-  #--- Get all duplicate results (except old-new multiblind)
-  $rows = dbQuery("
-    SELECT competitionId, value1, value2, value3, value4, value5, whoWhere FROM
-      (SELECT competitionId, value1, value2, value3, value4, value5, count(*) ctr,
-              group_concat(concat_ws('|',eventId,roundId,personName,personId) SEPARATOR  '||') whoWhere
-       FROM Results, Competitions competition
-       WHERE eventId<>'333mbo'
-         AND competition.id = competitionId
-             $dateCondition
-       GROUP BY competitionId, value1, value2, value3, value4, value5) tmp
-    WHERE ctr>1 AND (value1>0)+(value2>0)+(value3>0)+(value4>0)+(value5>0) >= 2
-    ORDER BY greatest(value1, value2, value3, value4, value5) DESC
-
-  ");
+  #--- Get all similar results (except old-new multiblind)
+  $rows = pdo_query( "
+      SELECT
+          Results.competitionId AS competitionId,
+          Results.personId AS personIdA, Results.personName AS personNameA, Results.eventId AS eventIdA, Results.roundId AS roundIdA,
+          h.personId AS personIdB, h.personName AS personNameB, h.eventId AS eventIdB, h.roundId AS roundIdB,
+          Results.value1 AS value1A, Results.value2 AS value2A, Results.value3 AS value3A, Results.value4 AS value4A, Results.value5 AS value5A,
+          h.value1 AS value1B, h.value2 AS value2B, h.value3 AS value3B, h.value4 AS value4B, h.value5 AS value5B
+      FROM Results
+      JOIN (
+          SELECT competitionId, eventId, roundId, personId, personName, value1, value2, value3, value4, value5
+          FROM Results ".
+          ($dateCondition ? "JOIN Competitions ON Competitions.id = competitionId " : "").
+         "WHERE best > 0 ".
+              ($dateCondition ? $dateCondition : "").
+            " AND value3 <> 0
+              AND eventId <> '333mbo'
+      ) h ON Results.competitionId = h.competitionId
+          AND Results.eventId <> '333mbo'
+          AND Results.personId < h.personId
+          AND (
+              (Results.value1 = h.value1 AND h.value1 > 0) +
+              (Results.value2 = h.value2 AND h.value2 > 0) +
+              (Results.value3 = h.value3 AND h.value3 > 0) +
+              (Results.value4 = h.value4 AND h.value4 > 0) +
+              (Results.value5 = h.value5 AND h.value5 > 0) > 2
+              )
+  " );
 
   tableBegin( 'results', 4 );
   foreach( $rows as $row ){
-    extract( $row );
-    $competition = getCompetition ( $competitionId );
+    $competition = getCompetition ( $row['competitionId'] );
     $competitionName = $competition['cellName'];
-    $whos = explode( '||', $whoWhere);
-    tableCaption( false, competitionLink ( $competitionId, $competitionName ) );
+    tableCaption( false, competitionLink ( $row['competitionId'], $competitionName ) );
     tableHeader( explode( '|', "Person|Event|Round|Result Details" ),
                  array( 3 => 'class="f"' ));
-    foreach( $whos as $who ){
-      list( $eventId, $roundId, $personName, $personId ) = explode( '|', $who );
+    foreach( array('A','B') as $letter ){
+      $otherLetter = chr( 65+66-ord($letter) );
+      $resultStr = '';
+      for ( $i = 1; $i <= 5; $i++ ) {
+          $value = $row['value'.$i.$letter];
+          if ( !$value ) break;
+          $resultStr .= "<span class='label label-".( $value == $row['value'.$i.$otherLetter] ? "danger" : "success" )."'>".formatValue( $value, valueFormat( $row['eventId'.$letter] ) ) . "</span> ";
+      }
       tableRow(
         array(
-          personLink( $personId, $personName ),
-          eventCellName( $eventId ),
-          roundCellName( $roundId ),
-          formatAverageSources( true, $row, valueFormat( $eventId ))
+          personLink( $row['personId'.$letter], $row['personName'.$letter] ),
+          eventCellName( $row['eventId'.$letter] ),
+          roundCellName( $row['roundId'.$letter] ),
+          $resultStr
         )
       );
     }
@@ -340,8 +358,8 @@ function checkDuplicates () {
   $date = wcaDate();
   noticeBox2(
     count( $rows ) == 0,
-    "No duplicate results where found.<br />$date",
-    "Duplicate results where found.<br />$date"
+    "No similar results where found.<br />$date",
+    "Similar results where found.<br />$date"
   );
 }
 
