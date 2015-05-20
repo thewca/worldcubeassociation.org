@@ -134,7 +134,7 @@ function debugParameter( $type, $name, $value ) {
 function wcaDebug () {
 #----------------------------------------------------------------------
 
-  return getRawParamThisShouldBeAnException( 'debug5926' );
+  return php_sapi_name() == "cli" || getRawParamThisShouldBeAnException( 'debug5926' );
 }
 
 #----------------------------------------------------------------------
