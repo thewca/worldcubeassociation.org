@@ -13,10 +13,15 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 ## Run
 - `vagrant up` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:8080](http://localhost:8080).
+  - Unfortunately, spinning up a development environment requires a database
+    dump. We intend to remove that requirement in the future, but until then,
+    please contact software-admins@worldcubeassociation.org if you need access.
 
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
   keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
+  You also need an SSH key set up for cubing@worldcubeassociation.org in order
+  to rsync secrets.
 - `ssh -A root@staging.worldcubeassociation.org 'curl -Ls https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh | bash -s -- staging/production'`
 
 ## Deploy
@@ -24,6 +29,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails`
 
 ## Secrets
-- Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/all.json`.
-  - Show secrets: `knife data bag show secrets all -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`
-  - Edit secrets: `knife data bag edit secrets all -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`
+- Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/production.json`.
+  - Show secrets: `knife data bag show secrets production -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`
+  - Edit secrets: `knife data bag edit secrets production -c /etc/chef/solo.rb --secret-file secrets/my_secret_key`

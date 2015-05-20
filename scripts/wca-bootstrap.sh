@@ -62,13 +62,14 @@ else
   chown -R cubing:cubing $repo_dir
 fi
 
-if [ "$environment" != "development" ]; then
+# TODO - for now, spinning up a development VM requires a database dump.
+#if [ "$environment" != "development" ]; then
   # Download database export and other secrets that are required to provision a new server.
   # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
   # software-admins@worldcubeassociation.org if you need access.
   echo "Downloading secrets from worldcubeassociation.org..."
   rsync -a -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_dir/secrets
-fi
+#fi
 
 # Install chef client
 if ! command -v chef-solo &> /dev/null || ! chef-solo --version | grep 12.3.0 &> /dev/null; then

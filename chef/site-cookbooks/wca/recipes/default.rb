@@ -4,9 +4,8 @@ require 'securerandom'
 include_recipe "wca::base"
 include_recipe "nodejs"
 
-secrets = data_bag_item("secrets", "all")
-
-username, repo_root = UsernameHelper.get_username_and_repo_root(node)
+secrets = WcaHelper.get_secrets(self)
+username, repo_root = WcaHelper.get_username_and_repo_root(self)
 if username == "cubing"
   user_lockfile = '/tmp/cubing-user-initialized'
   user username do
@@ -96,7 +95,8 @@ template "/etc/my.cnf" do
     secrets: secrets
   })
 end
-execute "#{repo_root}/scripts/db.sh import #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
+db_dump_filename = "#{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
+execute "#{repo_root}/scripts/db.sh import #{db_dump_filename}"
 
 
 #### Ruby and Rails

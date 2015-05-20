@@ -1,4 +1,4 @@
-username, repo_root = UsernameHelper.get_username_and_repo_root(node)
+username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 admin_email = "admin@worldcubeassociation.org"
 

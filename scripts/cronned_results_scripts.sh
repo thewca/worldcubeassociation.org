@@ -10,7 +10,7 @@ cd $SCRIPTPATH
 
 # The export_public script only will do an actual export if it sees the
 # export url paramter.
-time (cd ../webroot/results/admin/; REQUEST_URI="export=" ./export_public.php)
+time (cd ../webroot/results/admin/; REQUEST_URI="export=" php export_public.php)
 
 # Update statistics page
-(cd ../webroot/results/; rm generated/statistics.cache; time php statistics.php;)
+time (cd ../webroot/results/; rm -f generated/statistics.cache; php statistics.php)
