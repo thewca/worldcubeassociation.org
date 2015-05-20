@@ -88,6 +88,14 @@
             <ul class="dropdown-menu" role="menu">
                 <% if devise_user_signed_in? %>
                   <li><%= link_to "Edit account", edit_devise_user_registration_path %></li>
+                  <% if current_devise_user.has_role? :admin %>
+                    <li class="divider"></li>
+                    <li role="presentation" class="dropdown-header">
+                      Admin
+                    </li>
+                    <li><%= link_to "Manage users", devise_users_path %></li>
+                  <% end %>
+
                   <li class="divider"></li>
                   <li><%= link_to('Sign out', destroy_devise_user_session_path, :method => :delete) %></li>
                 <% else %>
