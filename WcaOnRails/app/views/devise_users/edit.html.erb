@@ -1,0 +1,19 @@
+<% provide(:title, @user.email) %>
+
+<div class="container">
+  <%= link_to "<< All users", devise_users_path %>
+
+  <h1><%= yield(:title) %></h1>
+
+  <%= simple_form_for @user, html: { class: 'form-horizontal' } do |f| %>
+    <% Role.all.order(:name).each do |role| %>
+      <div class="checkbox">
+        <label>
+          <%= hidden_field_tag(role.name, 0) %>
+          <%= check_box_tag(role.name, 1, @user.has_role?(role.name)) %> <%= role.name.humanize %>
+        </label>
+      </div>
+    <% end %>
+    <%= f.submit 'Save', class: "btn btn-primary" %>
+  <% end %>
+</div>

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   use_doorkeeper
   # TODO - disable deleting of user accounts
   devise_for :devise_users, path: 'users'
+  resources :devise_users, path: "users", only: [:index, :edit, :update]
 
   root 'nodes#index'
   # TODO - once we're ready to move away from the drupal schema, refactor this
