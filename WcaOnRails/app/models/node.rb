@@ -10,6 +10,12 @@ class Node < ActiveRecord::Base
 
   def alias
     urlAlias = UrlAlias.find_by source: "node/#{nid}"
-    urlAlias ? urlAlias.alias.split("/")[1] : nil
+    if !urlAlias
+      nil
+    elsif urlAlias.alias.start_with? 'posts/'
+      urlAlias.alias.split("/")[1]
+    else
+      urlAlias.alias
+    end
   end
 end
