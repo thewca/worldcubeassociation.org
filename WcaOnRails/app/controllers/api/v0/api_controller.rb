@@ -7,10 +7,10 @@ class Api::V0::ApiController < ApplicationController
 
   def auth_results
     if !current_devise_user
-      return render status: :unauthorized, text: "Please log in"
+      return render status: :unauthorized, json: { error: "Please log in" }
     end
     if !current_devise_user.results_team_member?
-      return render status: :forbidden, text: "Must be on the results team"
+      return render status: :forbidden, json: { error: "Must be on the results team" }
     end
 
     render json: { sucess: true }

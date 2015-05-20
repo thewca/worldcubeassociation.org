@@ -204,6 +204,7 @@ GEM
     ref (1.0.5)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rolify (4.0.0)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -312,6 +313,7 @@ DEPENDENCIES
   pre-commit
   rails (= 4.2.1)
   recaptcha
+  rolify
   rspec-rails
   sass-rails
   sdoc

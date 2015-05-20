@@ -1,9 +1,10 @@
 class DeviseUser < ActiveRecord::Base
+  rolify
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
 
   def results_team_member?
-    return true # TODO
+    has_role :results_team
   end
 end
