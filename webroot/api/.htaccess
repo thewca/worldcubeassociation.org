@@ -1,6 +1,0 @@
-AddHandler cgi-script .cgi
-Options +ExecCGI
-
-RewriteEngine On
-RewriteRule ^index.cgi/(.*)$ - [S=1]
-RewriteRule ^(.*)$ /api/index.cgi/$1

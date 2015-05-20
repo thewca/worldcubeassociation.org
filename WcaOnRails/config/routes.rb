@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     namespace :v0 do
       get '/me' => "api#me"
       get '/auth/results' => "api#auth_results"
+      get '/scramble-program' => "api#scramble_program"
     end
   end
 
