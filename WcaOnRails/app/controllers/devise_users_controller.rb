@@ -8,7 +8,7 @@ class DeviseUsersController < ApplicationController
   end
 
   def index
-    @users = DeviseUser.order(email: :asc).paginate(page: params[:page])
+    @users = DeviseUser.order(name: :asc).paginate(page: params[:page])
   end
 
   def edit
