@@ -29,6 +29,16 @@ fi
 
 set -e
 
+# Install deps required to bootstrap
+apt-get update -y
+if ! command -v curl &> /dev/null; then
+  # OVH's Ubuntu 14.04 doesn't have curl
+  apt-get install -y curl
+fi
+if ! command -v git &> /dev/null; then
+  apt-get install -y git
+fi
+
 if [ -d /vagrant ]; then
   repo_dir=/vagrant
 else
@@ -41,9 +51,6 @@ else
   fi
 
   # Check out codebase =)
-  if ! command -v git &> /dev/null; then
-    apt-get install -y git
-  fi
   export GIT_SSH=/tmp/ssh-no-hostkeychecking.sh
   if ! command -v $GIT_SSH &> /dev/null; then
     cat > $GIT_SSH <<EOL

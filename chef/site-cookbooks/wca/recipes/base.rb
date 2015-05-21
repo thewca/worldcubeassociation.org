@@ -1,4 +1,6 @@
 package 'git'
+package 'vim'
 package 'zip'
-package 'tree'
+package 'curl'
 package 'tmux'
+package 'tree'
