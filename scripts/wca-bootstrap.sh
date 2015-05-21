@@ -42,13 +42,16 @@ else
 
   # Check out codebase =)
   if ! command -v git &> /dev/null; then
-    # Install the latest git so we can make use of GIT_SSH_COMMAND
-    #  http://linuxg.net/how-to-install-git-2-3-0-on-ubuntu-15-04-ubuntu-14-10-ubuntu-14-04-ubuntu-12-04-and-derivative-systems/
-    add-apt-repository -y ppa:git-core/ppa
-    apt-get update -y
     apt-get install -y git
   fi
-  export GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no'
+  export GIT_SSH=/tmp/ssh-no-hostkeychecking.sh
+  if ! command -v $GIT_SSH &> /dev/null; then
+    cat > $GIT_SSH <<EOL
+#!/usr/bin/env bash
+exec /usr/bin/ssh -o StrictHostKeyChecking=no "\$@"
+EOL
+    chmod +x /tmp/ssh-no-hostkeychecking.sh
+  fi
   # Unfortunately, running git as cubing breaks ssh agent forwarding.
   # Instead, let root user do the git-ing, and then chown appropriately.
   if ! [ -d $repo_dir ]; then
