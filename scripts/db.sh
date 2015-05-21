@@ -32,7 +32,7 @@ mkdir -p /tmp/wca_db
 if [ "$COMMAND" == "dump" ]; then
   for db_name in $db_names; do
     echo "Backing up $db_name"
-    time mysqldump "$@" $db_name > /tmp/wca_db/$db_name.sql
+    time mysqldump "$@" $db_name -r /tmp/wca_db/$db_name.sql
     db_filenames="$db_filenames $db_name.sql"
   done
 
@@ -52,7 +52,7 @@ elif [ "$COMMAND" == "import" ]; then
   for sql_file in /tmp/wca_db/*.sql; do
     table_name=`basename $sql_file .sql`
     echo "Importing $table_name table..."
-    echo "CREATE DATABASE IF NOT EXISTS $table_name;" | mysql "$@"
-    mysql "$@" $table_name < $sql_file
+    mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $table_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
+    mysql "$@" $table_name -e "SOURCE $sql_file"
   done
 fi

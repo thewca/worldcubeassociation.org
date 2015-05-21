@@ -1,8 +1,9 @@
 FactoryGirl.define do
-  factory :devise_user do
-    email "jin@champloo.com"
-    password "12345678"
-    password_confirmation { "12345678" }
+  factory :devise_user, aliases: [:author] do
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
+    password "foo"
+    password_confirmation { "foo" }
     after(:create) { |user| user.confirm! }
   end
 end

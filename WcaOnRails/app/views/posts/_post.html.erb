@@ -1,0 +1,21 @@
+<div class="panel <%= post.sticky? ? "panel-info" : "panel-default" %>">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <% if @post # TODO - less hacky way of doing this? %>
+        <%= post.title %>
+      <% else %>
+        <%= link_to post.title, post_path(post.slug) %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div>
+      <% if post.author %>
+      <em>Submitted by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
+      <% else %>
+        NO AUTHOR??
+      <% end %>
+    </div>
+    <%= post.body.html_safe %>
+  </div>
+</div>
