@@ -1,8 +1,20 @@
 Rails.application.routes.draw do
   use_doorkeeper
-  # TODO - disable deleting of user accounts
-  devise_for :users, path: 'users'
-  resources :users, path: "users", only: [:index, :edit, :update]
+
+  # Prevent account deletion.
+  #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
+  devise_for :users, skip: :registrations
+  devise_scope :user do
+    resource :registration,
+      only: [:new, :create, :edit, :update],
+      path: 'users',
+      path_names: { new: 'sign_up' },
+      controller: 'devise/registrations',
+      as: :user_registration do
+        get :cancel
+      end
+  end
+  resources :users, only: [:index, :edit, :update]
 
   root 'posts#index'
   resources :posts
