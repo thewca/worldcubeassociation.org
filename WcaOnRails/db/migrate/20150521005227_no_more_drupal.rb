@@ -52,22 +52,24 @@ class NoMoreDrupal < ActiveRecord::Migration
     end
     add_index :posts, :slug, unique: true
 
-
-    User.all.each do |user|
-      if user.mail && !DeviseUser.find_by_email(user.mail)
-        user = DeviseUser.create!(name: user.name,
-                                  email: user.mail,
-                                  created_at: Time.at(user.created),
-                                  confirmed_at: Time.now)
-      end
-    end
-
     Node.where(promote: true).each do |node|
-      Post.create!(title: node.title,
-                   body: node.field_data_body.body_value,
-                   author: DeviseUser.find_by_email(node.author.mail),
-                   slug: node.alias,
-                   sticky: node.sticky)
+      drupal_user = node.author
+      devise_user = DeviseUser.find_by_email(drupal_user.mail)
+      if !devise_user
+        devise_user = DeviseUser.create!(
+          name: drupal_user.name,
+          email: drupal_user.mail,
+          created_at: Time.at(drupal_user.created),
+          confirmed_at: Time.now,
+        )
+      end
+      Post.create!(
+        title: node.title,
+        body: node.field_data_body.body_value,
+        author: devise_user,
+        slug: node.alias,
+        sticky: node.sticky,
+      )
     end
 
     drop_table :users
