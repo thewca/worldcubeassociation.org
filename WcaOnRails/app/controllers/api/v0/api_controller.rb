@@ -9,7 +9,7 @@ class Api::V0::ApiController < ApplicationController
     if !current_devise_user
       return render status: :unauthorized, json: { error: "Please log in" }
     end
-    if !current_devise_user.results_team_member?
+    if !current_devise_user.results_team?
       return render status: :forbidden, json: { error: "Must be on the results team" }
     end
 
