@@ -88,12 +88,20 @@
             <ul class="dropdown-menu" role="menu">
                 <% if devise_user_signed_in? %>
                   <li><%= link_to "Edit account", edit_devise_user_registration_path %></li>
-                  <% if current_devise_user.has_role? :admin %>
+                  <% if current_devise_user.admin? %>
                     <li class="divider"></li>
                     <li role="presentation" class="dropdown-header">
                       Admin
                     </li>
                     <li><%= link_to "Manage users", devise_users_path %></li>
+                  <% end %>
+
+                  <% if current_devise_user.results_team? %>
+                    <li class="divider"></li>
+                    <li role="presentation" class="dropdown-header">
+                      Results team
+                    </li>
+                    <li><%= link_to "New post", "#" %></li>
                   <% end %>
 
                   <li class="divider"></li>

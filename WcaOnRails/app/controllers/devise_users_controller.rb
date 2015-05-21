@@ -3,6 +3,10 @@ class DeviseUsersController < ApplicationController
   before_action :authenticate_devise_user!
   before_action :admin_only
 
+  def self.WCA_ROLES
+    [:admin, :results_team]
+  end
+
   def index
     @users = DeviseUser.order(email: :asc).paginate(page: params[:page])
   end
@@ -13,28 +17,25 @@ class DeviseUsersController < ApplicationController
 
   def update
     @user = DeviseUser.find(params[:id])
-    # Don't allow users to edit themselves.
-    if @user == current_devise_user
-      flash[:danger] = "Cannot edit yourself"
+    new_admin = ActiveRecord::Type::Boolean.new.type_cast_from_user(user_params[:admin])
+    if @user == current_devise_user && !new_admin
+      flash[:danger] = "You cannot resign from your role as admin! Find another admin to fire you."
+      render :edit
+    elsif @user.update_attributes(user_params)
+      flash[:success] = "User updated"
+      redirect_to edit_devise_user_url @user
     else
-      user_roles.each do |role, value|
-        if value == "1"
-          @user.add_role role
-        else
-          @user.remove_role role
-        end
-      end
-      flash[:success] = "Roles updated"
+      flash[:danger] = "Error updating user"
+      render :edit
     end
-    redirect_to edit_devise_user_url @user
   end
 
-  private def user_roles
-    params.permit(*Role.all.map(&:name))
+  private def user_params
+    params.require(:devise_user).permit(*DeviseUsersController.WCA_ROLES)
   end
 
   private def admin_only
-    unless current_devise_user && current_devise_user.has_role?(:admin)
+    unless current_devise_user && current_devise_user.admin?
       flash[:danger] = "Admins only"
       redirect_to root_url
     end

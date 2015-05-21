@@ -24,7 +24,6 @@ gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'
 gem 'newrelic_rpm'
-gem "rolify"
 
 gem 'system'
 gem 'unicorn'
