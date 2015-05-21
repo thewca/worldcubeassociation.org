@@ -6,7 +6,7 @@
       <% else %>
         <%= link_to post.title, post_path(post.slug) %>
       <% end %>
-      <% if devise_user_signed_in? && current_devise_user.results_team? %>
+      <% if user_signed_in? && current_user.results_team? %>
         <span class="pull-right">
           <%= link_to edit_post_path(post.slug) do %>
             <span class="glyphicon glyphicon-pencil"></span>

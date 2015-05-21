@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   use_doorkeeper
   # TODO - disable deleting of user accounts
-  devise_for :devise_users, path: 'users'
-  resources :devise_users, path: "users", only: [:index, :edit, :update]
+  devise_for :users, path: 'users'
+  resources :users, path: "users", only: [:index, :edit, :update]
 
   root 'posts#index'
   resources :posts

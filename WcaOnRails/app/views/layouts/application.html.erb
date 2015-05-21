@@ -78,25 +78,25 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-              <% if current_devise_user %>
-                <%= current_devise_user.email %>
+              <% if current_user %>
+                <%= current_user.email %>
               <% else %>
                 Sign in
               <% end %>
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-              <% if devise_user_signed_in? %>
-                <li><%= link_to "Edit account", edit_devise_user_registration_path %></li>
-                <% if current_devise_user.admin? %>
+              <% if user_signed_in? %>
+                <li><%= link_to "Edit account", edit_user_registration_path %></li>
+                <% if current_user.admin? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Admin
                   </li>
-                  <li><%= link_to "Manage users", devise_users_path %></li>
+                  <li><%= link_to "Manage users", users_path %></li>
                 <% end %>
 
-                <% if current_devise_user.results_team? %>
+                <% if current_user.results_team? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Results team
@@ -105,11 +105,11 @@
                 <% end %>
 
                 <li class="divider"></li>
-                <li><%= link_to('Sign out', destroy_devise_user_session_path, :method => :delete) %></li>
+                <li><%= link_to('Sign out', destroy_user_session_path, :method => :delete) %></li>
               <% else %>
-                <li><%= link_to('Sign in', new_devise_user_session_path, class: "top-nav") %></li>
+                <li><%= link_to('Sign in', new_user_session_path, class: "top-nav") %></li>
                 <li class="divider"></li>
-                <li><%= link_to t('.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_devise_user_confirmation_path %></li>
+                <li><%= link_to t('.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_user_confirmation_path %></li>
               <% end %>
             </ul>
           </li>

@@ -1,12 +1,12 @@
 <% provide(:title, @user.name) %>
 
 <div class="container">
-  <%= link_to "<< All users", devise_users_path %>
+  <%= link_to "<< All users", users_path %>
 
   <h1><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
 
   <%= simple_form_for @user, html: { class: 'form-horizontal' } do |f| %>
-    <% DeviseUsersController.WCA_ROLES.each do |role| %>
+    <% UsersController.WCA_ROLES.each do |role| %>
       <%= f.input role %>
     <% end %>
     <%= f.submit 'Save', class: "btn btn-primary" %>

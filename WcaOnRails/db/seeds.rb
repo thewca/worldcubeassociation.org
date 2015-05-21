@@ -6,7 +6,7 @@ when "production"
   # Do nothing for production
 when "development"
   users = (1...10).map do |i|
-    DeviseUser.create!(
+    User.create!(
       name: Faker::Name.name,
       email: Faker::Internet.email,
       password: "wca",
@@ -26,32 +26,32 @@ when "development"
     )
   end
 
-  deviseUser = DeviseUser.create!(
+  user = User.create!(
     email: "wca@worldcubeassociation.org",
     name: "Mr. Wca",
     password: "wca",
     password_confirmation: "wca",
     admin: true,
   )
-  deviseUser.confirm!
+  user.confirm!
 
-  deviseUser = DeviseUser.create!(
+  user = User.create!(
     email: "results_team_1@worldcubeassociation.org",
     name: "Mr. Croup",
     password: "wca",
     password_confirmation: "wca",
     results_team: true,
   )
-  deviseUser.confirm!
+  user.confirm!
 
-  deviseUser = DeviseUser.create!(
+  user = User.create!(
     email: "results_team_2@worldcubeassociation.org",
     name: "Mr. Vandemar",
     password: "wca",
     password_confirmation: "wca",
     results_team: true,
   )
-  deviseUser.confirm!
+  user.confirm!
 
   OauthApplication.create!(name: "test app",
                           uid: "9ad911ea379bd6f49c4f923644dbea3f44aeab5625a25f468210026a862b0c3d",

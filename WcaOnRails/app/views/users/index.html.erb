@@ -6,7 +6,7 @@
   <ul>
     <% @users.each do |user| %>
       <li>
-        <%= link_to "#{user.name} (#{user.email})", edit_devise_user_path(user) %>
+        <%= link_to "#{user.name} (#{user.email})", edit_user_path(user) %>
       </li>
     <% end %>
   </ul>

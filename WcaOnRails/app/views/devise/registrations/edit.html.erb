@@ -5,7 +5,7 @@
       <h4><%= t('.title', :resource => resource_class.model_name.human , :default => 'Edit #{resource_name.to_s.humanize}') %></h4>
     </div>
     <div class="panel-body">
-      <%= form_for(resource, :as => resource_name, :url => edit_devise_user_registration_path, :html => { :method => :put }) do |f| %>
+      <%= form_for(resource, :as => resource_name, :url => edit_user_registration_path, :html => { :method => :put }) do |f| %>
       <div class="form-group">
         <%= f.label :email %>
         <%= f.email_field :email, autofocus: true, class: "form-control" %>

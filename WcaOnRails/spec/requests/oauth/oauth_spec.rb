@@ -3,7 +3,7 @@ require "rails_helper"
 describe "oauth api" do
   include Capybara::DSL
 
-  let(:user) { FactoryGirl.create :devise_user }
+  let(:user) { FactoryGirl.create :user }
 
   it 'can authenticate with grant_type password' do
     post oauth_token_path, grant_type: "password", username: user.email, password: user.password
@@ -22,8 +22,8 @@ describe "oauth api" do
 
     # Pretend we're the user:
     #  1. Log in
-    fill_in "devise_user_email", with: user.email
-    fill_in "devise_user_password", with: user.password
+    fill_in "user_email", with: user.email
+    fill_in "user_password", with: user.password
     click_button "Sign in"
     #  2. Authorize the application
     click_button "Authorize"
@@ -49,8 +49,8 @@ describe "oauth api" do
 
     # Pretend we're the user:
     #  1. Log in
-    fill_in "devise_user_email", with: user.email
-    fill_in "devise_user_password", with: user.password
+    fill_in "user_email", with: user.email
+    fill_in "user_password", with: user.password
     click_button "Sign in"
     #  2. Authorize the application
     click_button "Authorize"

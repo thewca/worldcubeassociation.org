@@ -6,10 +6,10 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    if !current_devise_user
+    if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
     end
-    if !current_devise_user.results_team?
+    if !current_user.results_team?
       return render status: :forbidden, json: { error: "Must be on the results team" }
     end
 
@@ -44,6 +44,6 @@ class Api::V0::ApiController < ApplicationController
   end
 
   private def current_resource_owner
-    DeviseUser.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
 end

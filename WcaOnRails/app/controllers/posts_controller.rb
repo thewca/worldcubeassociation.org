@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_devise_user!, except: [:index, :rss, :show]
+  before_action :authenticate_user!, except: [:index, :rss, :show]
   before_action :results_team_only, except: [:index, :rss, :show]
   before_action :fetch_post, only: [:show, :edit, :update, :destroy]
 
@@ -21,7 +21,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.author = current_devise_user
+    @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
       redirect_to post_path(@post.slug)
@@ -52,7 +52,7 @@ class PostsController < ApplicationController
   end
 
   private def results_team_only
-    unless current_devise_user && current_devise_user.results_team?
+    unless current_user && current_user.results_team?
       flash[:danger] = "Results team members only"
       redirect_to root_url
     end

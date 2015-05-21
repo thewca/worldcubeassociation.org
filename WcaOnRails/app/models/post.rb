@@ -1,5 +1,5 @@
 class Post < ActiveRecord::Base
-  belongs_to :author, class_name: "DeviseUser"
+  belongs_to :author, class_name: "User"
   before_validation :compute_slug
 
   validates :title, presence: true, uniqueness: true

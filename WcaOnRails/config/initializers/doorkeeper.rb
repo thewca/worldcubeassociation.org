@@ -6,7 +6,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_devise_user || warden.authenticate!(:scope => :devise_user)
+    current_user || warden.authenticate!(:scope => :user)
     # Put your resource owner authentication logic here.
     # Example implementation:
     #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
@@ -15,7 +15,7 @@ Doorkeeper.configure do
   # Copied from
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
   resource_owner_from_credentials do |routes|
-    u = DeviseUser.find_for_database_authentication(:email => params[:username])
+    u = User.find_for_database_authentication(:email => params[:username])
     u if u && u.valid_password?(params[:password])
   end
 
