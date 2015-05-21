@@ -22,8 +22,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
   You also need an SSH key set up for cubing@worldcubeassociation.org in order
   to rsync secrets.
-- `ssh -A root@staging.worldcubeassociation.org 'curl -Ls https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh | bash -s -- staging/production'`
-- `ssh -A root@staging.worldcubeassociation.org 'bash <(wget --no-check-certificate -O - https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh) staging/production'
+- `time ssh -A root@staging.worldcubeassociation.org 'bash <(wget --no-check-certificate -O - https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh) staging/production'
 
 ## Deploy
 - TODO

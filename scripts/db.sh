@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 print_usage_and_exit() {
-  echo "Usage: $0 [dump|import] filename [args_for_mysql]"
+  echo "Usage: $0 [dump|import|drop_and_import] filename [args_for_mysql]"
   echo "For example: $0 --user=USER --password=PASS --host=HOST"
   exit
 }
@@ -11,8 +11,8 @@ fi
 
 COMMAND=$1
 shift
-if [ "$COMMAND" != "dump" ] && [ "$COMMAND" != "import" ]; then
-  echo "Unrecognized command: $COMMAND. Must be one of dump, import."
+if [ "$COMMAND" != "dump" ] && [ "$COMMAND" != "import" ] && [ "$COMMAND" != "drop_and_import" ]; then
+  echo "Unrecognized command: $COMMAND. Must be one of dump, import, drop_and_import."
   exit 1
 fi
 
@@ -38,12 +38,17 @@ if [ "$COMMAND" == "dump" ]; then
 
   echo "Producing $TAR_FILENAME..."
   time tar -C /tmp/wca_db -zcvf "$TAR_FILENAME" $db_filenames
-elif [ "$COMMAND" == "import" ]; then
+elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
   for db_name in $db_names; do
     if [ "$(mysql -N -s "$@" -e "SHOW DATABASES LIKE '$db_name';")" != "" ]; then
-      echo "Found an existing database: $db_name."
-      echo "If you really want to reimport this database, delete the existing one first."
-      exit 0 # don't error out, we're called by chef!
+      if [ "$COMMAND" == "drop_and_import" ]; then
+        echo "Dropping existing database: $db_name."
+        mysql "$@" -e "DROP DATABASE $db_name;"
+      else
+        echo "Found an existing database: $db_name."
+        echo "If you really want to reimport this database, rerun with drop_and_import."
+        exit 0 # don't error out, we're called by chef!
+      fi
     fi
   done
 
