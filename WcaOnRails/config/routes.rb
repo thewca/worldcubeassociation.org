@@ -5,9 +5,7 @@ Rails.application.routes.draw do
   resources :devise_users, path: "users", only: [:index, :edit, :update]
 
   root 'posts#index'
-  # TODO - once we're ready to move away from the drupal schema, refactor this
-  # using https://github.com/norman/friendly_id.
-  get 'posts/:slug' => 'posts#show', as: 'post'
+  resources :posts
   get 'rss' => 'posts#rss'
 
   get 'robots' => 'static_pages#robots'

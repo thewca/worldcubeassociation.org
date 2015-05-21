@@ -1,0 +1,18 @@
+<% provide(:title, 'Edit post') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= simple_form_for @post, html: { class: 'form-horizontal' } do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.input :title %>
+    <%= f.input :body %>
+    <%= f.input :sticky %>
+    <%= f.button :submit %>
+
+    <%= link_to post_path(@post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) }, class: "btn btn-danger" do %>
+      <span class="glyphicon glyphicon-trash"></span> Delete post
+    <% end %>
+  <% end %>
+</div>

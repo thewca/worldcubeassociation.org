@@ -26,22 +26,31 @@ when "development"
     )
   end
 
-  deviseUser = DeviseUser.create!(email: "wca@worldcubeassociation.org",
-                                 password: "wca",
-                                 password_confirmation: "wca",
-                                 admin: true)
+  deviseUser = DeviseUser.create!(
+    email: "wca@worldcubeassociation.org",
+    name: "Mr. Wca",
+    password: "wca",
+    password_confirmation: "wca",
+    admin: true,
+  )
   deviseUser.confirm!
 
-  deviseUser = DeviseUser.create!(email: "results_team_1@worldcubeassociation.org",
-                                 password: "wca",
-                                 password_confirmation: "wca",
-                                 results_team: true)
+  deviseUser = DeviseUser.create!(
+    email: "results_team_1@worldcubeassociation.org",
+    name: "Mr. Croup",
+    password: "wca",
+    password_confirmation: "wca",
+    results_team: true,
+  )
   deviseUser.confirm!
 
-  deviseUser = DeviseUser.create!(email: "results_team_2@worldcubeassociation.org",
-                                 password: "wca",
-                                 password_confirmation: "wca",
-                                 results_team: true)
+  deviseUser = DeviseUser.create!(
+    email: "results_team_2@worldcubeassociation.org",
+    name: "Mr. Vandemar",
+    password: "wca",
+    password_confirmation: "wca",
+    results_team: true,
+  )
   deviseUser.confirm!
 
   OauthApplication.create!(name: "test app",

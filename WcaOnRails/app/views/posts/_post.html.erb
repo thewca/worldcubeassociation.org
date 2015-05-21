@@ -6,15 +6,21 @@
       <% else %>
         <%= link_to post.title, post_path(post.slug) %>
       <% end %>
+      <% if current_devise_user.results_team? %>
+        <span class="pull-right">
+          <%= link_to edit_post_path(post.slug) do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+          <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) } do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </span>
+      <% end %>
     </h3>
   </div>
   <div class="panel-body">
     <div>
-      <% if post.author %>
       <em>Submitted by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
-      <% else %>
-        NO AUTHOR??
-      <% end %>
     </div>
     <%= post.body.html_safe %>
   </div>
