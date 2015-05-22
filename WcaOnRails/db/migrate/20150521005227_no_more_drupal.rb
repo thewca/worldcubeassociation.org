@@ -69,6 +69,8 @@ class NoMoreDrupal < ActiveRecord::Migration
         author: devise_user,
         slug: node.alias,
         sticky: node.sticky,
+        created_at: Time.at(node.created),
+        updated_at: Time.at(node.created), # rails won't let us access the changed column, so just reuse created
       )
     end
 
