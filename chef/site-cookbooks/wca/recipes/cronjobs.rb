@@ -29,33 +29,7 @@ if node.chef_environment != "development"
   end
 end
 
-init_php_commands << "(cd #{repo_root}/webroot/results/misc/missing_averages; time php update7205.php)"
-if node.chef_environment != "development"
-  cron "Update Missing Averages" do
-    minute '0'
-    hour '0'
-    weekday '*'
-
-    mailto admin_email
-    user username
-    command init_php_commands.last
-  end
-end
-
-init_php_commands << "(cd #{repo_root}/webroot/results/misc/evolution; time php update7205.php)"
-if node.chef_environment != "development"
-  cron "Update Evolution of Records" do
-    minute '0'
-    hour '0'
-    weekday '*'
-
-    mailto admin_email
-    user username
-    command init_php_commands.last
-  end
-end
-
-init_php_commands << "(cd #{repo_root}/webroot/results/admin/; time SERVER_NAME=wca REQUEST_URI='doit=live' php compute_auxiliary_data.php;)"
+init_php_commands << "(cd #{repo_root}/webroot/results/admin/; time SERVER_NAME=wca REQUEST_URI='doit=live' php compute_auxiliary_data.php)"
 
 # Run init-php-results on our first provisioning, but not on subsequent provisions.
 lockfile = '/tmp/php-results-initialized'
