@@ -27,7 +27,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-set -e
+set -ex
 
 # Install deps required to bootstrap
 apt-get update -y
