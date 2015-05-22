@@ -13,7 +13,8 @@
     "set_fqdn": "*.worldcubeassociation.org",
     "hostname_cookbook": {
       "hostsfile_ip": "127.0.1.1"
-    }
+    },
+    "tz": "UTC"
   },
   "override_attributes": {
   },
@@ -22,6 +23,8 @@
     "recipe[apt]",
     "recipe[sudo]",
     "recipe[hostname]",
+    "recipe[timezone_lwrp]",
+    "recipe[wca::base]",
     "recipe[wca]",
     "recipe[wca::forum]",
     "recipe[wca::phpMyAdmin]",

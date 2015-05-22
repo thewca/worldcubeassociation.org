@@ -39,6 +39,7 @@ SITE
     ssh_known_hosts (2.0.0)
       partial_search (>= 0.0.0)
     sudo (2.7.1)
+    timezone_lwrp (0.1.6)
     windows (1.37.0)
       chef_handler (>= 0.0.0)
     yum (3.6.0)
@@ -58,3 +59,4 @@ DEPENDENCIES
   php-fpm (>= 0)
   ssh_known_hosts (>= 0)
   sudo (>= 0)
+  timezone_lwrp (>= 0)
