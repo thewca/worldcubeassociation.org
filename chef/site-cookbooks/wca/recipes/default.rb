@@ -170,6 +170,10 @@ directory "/etc/nginx/conf.d" do
   owner 'root'
   group 'root'
 end
+
+server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
+# Use HTTPS in non development mode
+https = node.chef_environment != "development"
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644
@@ -180,6 +184,23 @@ template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
     rails_root: rails_root,
     repo_root: repo_root,
     rails_env: rails_env,
+    https: https,
+    server_name: server_name,
+  })
+  notifies :run, 'execute[reload-nginx]', :delayed
+end
+template "/etc/nginx/wca_https.conf" do
+  source "wca_https.conf.erb"
+  mode 0644
+  owner 'root'
+  group 'root'
+  variables({
+    username: username,
+    rails_root: rails_root,
+    repo_root: repo_root,
+    rails_env: rails_env,
+    https: https,
+    server_name: server_name,
   })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
