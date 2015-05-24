@@ -235,7 +235,10 @@ php_fpm_pool "www" do
   user username
   group username
   process_manager "dynamic"
-  max_requests 5000
+  max_children 9
+  min_spare_servers 2
+  max_spare_servers 4
+  max_requests 200
   php_options 'php_admin_flag[log_errors]' => 'on', 'php_admin_value[memory_limit]' => PHP_MEMORY_LIMIT
 end
 execute "sudo sed -i 's/memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php5/fpm/php.ini" do
