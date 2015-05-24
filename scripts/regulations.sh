@@ -29,7 +29,7 @@ rebuild_rails() {
 
     # Attempt to restart unicorn gracefully as per
     #  http://unicorn.bogomips.org/SIGNALS.html
-    pid=$(<"WcaOnRails/pids/unicorn.pid")
+    pid=$(<"pids/unicorn.pid")
     kill -SIGUSR2 $pid
     sleep 5
     kill -SIGQUIT $pid
