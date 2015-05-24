@@ -1,7 +1,7 @@
 <% provide(:title, @user.name) %>
 
 <div class="container">
-  <%= link_to "<< All users", users_path %>
+  <%= link_to '<< All users', :back %>
 
   <h1><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
 

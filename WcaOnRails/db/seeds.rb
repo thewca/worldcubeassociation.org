@@ -5,7 +5,7 @@ case Rails.env
 when "production"
   # Do nothing for production
 when "development"
-  users = (1...10).map do |i|
+  users = (1...30).map do |i|
     User.create!(
       name: Faker::Name.name,
       email: Faker::Internet.email,
