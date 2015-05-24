@@ -25,8 +25,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `time ssh -A root@staging.worldcubeassociation.org 'bash <(wget --no-check-certificate -O - https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh) staging/production'`
 
 ## Deploy
-- TODO - see rebuild_rails in `scripts/regulations.sh`
-- `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails`
+- `ssh cubing@worldcubeassociation.org worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_rails rebuild_regs`
 
 ## Secrets
 - Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/production.json`.

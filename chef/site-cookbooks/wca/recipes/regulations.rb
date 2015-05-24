@@ -18,7 +18,7 @@ package "texlive-latex-recommended"
 package "texlive-latex-extra"
 package "lmodern"
 
-execute "#{repo_root}/scripts/regulations.sh rebuild_regs" do
+execute "#{repo_root}/scripts/deploy.sh rebuild_regs" do
   user username
   not_if "ls #{repo_root}/webroot/regulations"
 end
