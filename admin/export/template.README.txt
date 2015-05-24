@@ -2,7 +2,7 @@ Export of the World Cube Association results database
 
 Date:     [longDate]
 Remarks:  none
-Contact:  Ron van Bruchem Netherlands rbruchem@worldcubeassociation.org
+Contact:  WCA Results Team results@worldcubeassociation.org
 Website:  http://www.worldcubeassociation.org/results
 
 Description:
