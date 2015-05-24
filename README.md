@@ -25,7 +25,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `time ssh -A root@staging.worldcubeassociation.org 'bash <(wget --no-check-certificate -O - https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh) staging/production'`
 
 ## Deploy
-- TODO
+- TODO - see rebuild_rails in `scripts/regulations.sh`
 - `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails`
 
 ## Secrets
