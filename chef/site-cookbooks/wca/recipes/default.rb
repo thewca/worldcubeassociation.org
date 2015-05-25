@@ -228,6 +228,8 @@ end
 #### Legacy PHP results system
 PHP_MEMORY_LIMIT = '512M'
 PHP_IDLE_TIMEOUT_SECONDS = 120
+PHP_POST_MAX_SIZE = '20M'
+PHP_MAX_INPUT_VARS = 5000
 package 'php5-cli'
 include_recipe 'php-fpm::install'
 php_fpm_pool "www" do
@@ -241,11 +243,17 @@ php_fpm_pool "www" do
   max_requests 200
   php_options 'php_admin_flag[log_errors]' => 'on', 'php_admin_value[memory_limit]' => PHP_MEMORY_LIMIT
 end
-execute "sudo sed -i 's/memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep 'memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep '^memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php5/fpm/php.ini"
 end
-execute "sudo sed -i 's/max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php5/fpm/php.ini" do
-  not_if "grep 'max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php5/fpm/php.ini"
+execute "sed -i -r 's/(; *)?max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep '^max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php5/fpm/php.ini"
+end
+execute "sed -i -r 's/(; *)?post_max_size = .*/post_max_size = #{PHP_POST_MAX_SIZE}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep '^post_max_size = #{PHP_POST_MAX_SIZE}' /etc/php5/fpm/php.ini"
+end
+execute "sed -i -r 's/(; *)?max_input_vars = .*/max_input_vars = #{PHP_MAX_INPUT_VARS}/g' /etc/php5/fpm/php.ini" do
+  not_if "grep '^max_input_vars = #{PHP_MAX_INPUT_VARS}' /etc/php5/fpm/php.ini"
 end
 # Install pear mail
 # http://www.markstechstuff.com/2009/04/installing-pear-mail-for-php-on-ubuntu.html
