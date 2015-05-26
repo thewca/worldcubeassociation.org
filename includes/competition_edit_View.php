@@ -333,8 +333,6 @@ function showAnnouncement() {
 
   echo "<hr /><h1>Announcements</h1>";
 
-  echo "<h4>Competition</h4>";
-
   $months = explode( " ", ". January February March April May June July August September October November December" );
   $date = $months[$data['month']] . ' ' . $data['day'];
   if( $data['endMonth'] != $data['month'] )
@@ -342,31 +340,31 @@ function showAnnouncement() {
   elseif( $data['endDay'] != $data['day'] )
     $date .= "-" . $data['endDay'];
 
-  $msg = "$data[name] on $date, $data[year] in $data[cityName], $data[countryId]\n\n";
+  $title = "$data[name] on $date, $data[year] in $data[cityName], $data[countryId]";
 
-  $msg .= "The <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a>";
+  $msg = "The <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a>";
   $msg .= " will take place on $date, $data[year] in $data[cityName], $data[countryId].";
   if( $data['website'] )
   {
   $websiteAddress = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2", $data['website'] );
     $msg .= " Check out the <a href=\"$websiteAddress\">$data[name] website</a> for more information and registration.";
   }
-  $msg = htmlEscape( $msg );
-  echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
+  echo "<h4>";
+  echo "Competition ";
+  echo linkToCreatePost($title, $msg);
+  echo "</h4>";
 
   
   $competitionResults = dbQuery(" SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' ");
 
   if( $competitionResults ){
-  
-    echo "<h4>Results</h4>";
 
     $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='f' OR roundId='c') ORDER BY pos LIMIT 3 " );
     if( $top ){ # If there was a 3x3x3 event.
   
-      $msg = $top[0]['personName'] . " wins $data[name]\n\n";
+      $title = $top[0]['personName'] . " wins $data[name]";
  
-      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."\">".$top[0]['personName']."</a> won the ";
+      $msg = "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."\">".$top[0]['personName']."</a> won the ";
       $msg .= "<a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> with an average of ";
       $msg .= formatValue( $top[0]['average'], 'time' );
       $msg .= " seconds. ";
@@ -383,8 +381,8 @@ function showAnnouncement() {
  
     else{
 
-      $msg = "Results of $data[name] posted\n\n";
-      $msg .= "Results of the <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> are now available.<br />\n";
+      $title = "Results of $data[name] posted";
+      $msg = "Results of the <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> are now available.<br />\n";
 
     }
 
@@ -435,10 +433,18 @@ function showAnnouncement() {
       }
     }
 
-    $msg = htmlEscape( $msg );
-    echo "<p><textarea cols='100' rows='6' readonly='readonly'>$msg</textarea></p>";
+
+    echo "<h4>";
+    echo "Results ";
+    echo linkToCreatePost($title, $msg);
+    echo "</h4>";
   }
   echo "<hr />\n";
+}
+
+function linkToCreatePost($title, $body) {
+  $query = http_build_query(array('post[title]' => $title, 'post[body]' => $body));
+  return "<a href='/posts/new?$query' target='_blank' class='link-external external'>Create post</a>";
 }
 
 
