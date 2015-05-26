@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521225109) do
+ActiveRecord::Schema.define(version: 20150526035517) do
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false
@@ -64,16 +64,6 @@ ActiveRecord::Schema.define(version: 20150521225109) do
   end
 
   add_index "posts", ["slug"], name: "index_posts_on_slug", unique: true
-
-  create_table "queue", primary_key: "item_id", force: :cascade do |t|
-    t.string  "name",    limit: 255, default: "", null: false
-    t.binary  "data"
-    t.integer "expire",  limit: 4,   default: 0,  null: false
-    t.integer "created", limit: 4,   default: 0,  null: false
-  end
-
-  add_index "queue", ["expire"], name: "queue_expire"
-  add_index "queue", ["name", "created"], name: "name_created"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
