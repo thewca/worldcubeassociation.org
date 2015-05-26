@@ -153,8 +153,7 @@ print "<li><p>Sanity Checks:</p>
          <ol type='a'>
            <li><a href='../c.php?i=".o($compId)."' target='_blank' class='link-external external'>View the Public competition page</a></li>
            <li>Post the <a href='../competition_edit.php?competitionId=".$compId."&amp;password=".$competition_data['adminPassword']."' target='_blank' class='link-external external'>results announcement</a>
-                in <a href='/node/add/story' target='_blank' class='link-external external'>Drupal</a>
-                [<a href='/user?destination=/node/add/story' target='_blank' class='link-external external'>log in</a>]</li>
+                </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
    "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundId FROM (
