@@ -25,7 +25,7 @@ if [[ "$TAR_FILENAME" != *.tar.gz ]]; then
   exit 1
 fi
 
-db_names="cubing_cms cubing_results cubing_phpbb"
+db_names="cubing cubing_phpbb"
 db_filenames=""
 sudo rm -rf /tmp/wca_db
 mkdir -p /tmp/wca_db
