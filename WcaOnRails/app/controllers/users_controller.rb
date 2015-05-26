@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    @from_page = params[:from_page]
   end
 
   def update
@@ -23,7 +24,7 @@ class UsersController < ApplicationController
       render :edit
     elsif @user.update_attributes(user_params)
       flash[:success] = "User updated"
-      redirect_to edit_user_url @user
+      redirect_to edit_user_url @user, from_page: params[:from_page]
     else
       flash[:danger] = "Error updating user"
       render :edit
