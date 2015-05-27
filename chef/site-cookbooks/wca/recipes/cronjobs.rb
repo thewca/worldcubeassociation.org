@@ -13,7 +13,11 @@ if node.chef_environment != "development"
 
     mailto admin_email
     user username
-    command init_php_commands.last
+    if node.chef_environment == "production"
+      command "#{init_php_commands.last} && #{repo_root}/scripts/backup.sh"
+    else
+      command init_php_commands.last
+    end
   end
 end
 

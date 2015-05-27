@@ -64,7 +64,11 @@ end
 
 # Create the local cache directory
 directory node['tarsnap']['cachedir'] do
-  owner "root"
+  if node['tarsnap']['cachedir_file_owner'] #JFLY
+    owner node['tarsnap']['cachedir_file_owner']
+  else #JFLY
+    owner "root"
+  end #JFLY
   mode 0700
   recursive true
   action :create
@@ -75,32 +79,40 @@ tarsnap_key node['fqdn'] do
   data_bag node['tarsnap']['data_bag']
   key_path node['tarsnap']['key_path']
   key_file node['tarsnap']['key_file']
+  #JFLY
+  if node['tarsnap']['key_file_owner']
+    owner node['tarsnap']['key_file_owner']
+  end
+  if node['tarsnap']['key_file_group']
+    group node['tarsnap']['key_file_group']
+  end
+  #JFLY
   action :create_if_missing
 end
 
 # Install feather
-remote_file File.join(node['tarsnap']['bin_path'], 'feather') do
-  source "https://github.com/danrue/feather/raw/master/feather"
-  owner 'root'
-  mode '0755'
-end
+#JFLY remote_file File.join(node['tarsnap']['bin_path'], 'feather') do
+  #JFLY source "https://github.com/danrue/feather/raw/master/feather"
+  #JFLY owner 'root'
+  #JFLY mode '0755'
+#JFLY end
 
-node['tarsnap']['packages'].each do |pkg|
-  package pkg do
-    action :install
-  end
-end
+#JFLY node['tarsnap']['packages'].each do |pkg|
+  #JFLY package pkg do
+    #JFLY action :install
+  #JFLY end
+#JFLY end
 
-template "#{node['tarsnap']['conf_dir']}/feather.yaml" do
-  source "feather.yaml.erb"
-  owner "root"
-  mode "0644"
-  action :create
-  variables(
-    :backups => unmash(node['tarsnap']['backups']),
-    :schedules => unmash(node['tarsnap']['schedules'])
-  )
-end
+#JFLY template "#{node['tarsnap']['conf_dir']}/feather.yaml" do
+  #JFLY source "feather.yaml.erb"
+  #JFLY owner "root"
+  #JFLY mode "0644"
+  #JFLY action :create
+  #JFLY variables(
+    #JFLY :backups => unmash(node['tarsnap']['backups']),
+    #JFLY :schedules => unmash(node['tarsnap']['schedules'])
+  #JFLY )
+#JFLY end
 
 template "#{node['tarsnap']['conf_dir']}/tarsnap.conf" do
   source "tarsnap.conf.erb"
@@ -109,13 +121,13 @@ template "#{node['tarsnap']['conf_dir']}/tarsnap.conf" do
   action :create
 end
 
-cron "feather" do
-  minute node['tarsnap']['cron']['minute']
-  hour node['tarsnap']['cron']['hour']
-  path "#{node['tarsnap']['bin_path']}:/usr/bin:/bin"
-  command "#{node['tarsnap']['bin_path']}/feather #{node['tarsnap']['conf_dir']}/feather.yaml"
-end
+#JFLY cron "feather" do
+  #JFLY minute node['tarsnap']['cron']['minute']
+  #JFLY hour node['tarsnap']['cron']['hour']
+  #JFLY path "#{node['tarsnap']['bin_path']}:/usr/bin:/bin"
+  #JFLY command "#{node['tarsnap']['bin_path']}/feather #{node['tarsnap']['conf_dir']}/feather.yaml"
+#JFLY end
 
-if node['tarsnap']['use_default_schedule']
-  include_recipe "tarsnap::default_schedule"
-end
+#JFLY if node['tarsnap']['use_default_schedule']
+  #JFLY include_recipe "tarsnap::default_schedule"
+#JFLY end
