@@ -1,6 +1,7 @@
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 if node.chef_environment == "production"
+  node.default['tarsnap']['key_name'] = "production_worldcubeassociation_org"
   node.default['tarsnap']['key_path'] = "/etc"
   node.default['tarsnap']['key_file_owner'] = username
   node.default['tarsnap']['key_file_group'] = username

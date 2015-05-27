@@ -75,7 +75,8 @@ directory node['tarsnap']['cachedir'] do
 end
 
 # Setup the local copy of the key
-tarsnap_key node['fqdn'] do
+#JFLY tarsnap_key node['fqdn'] do
+tarsnap_key node['tarsnap']['key_name'] do
   data_bag node['tarsnap']['data_bag']
   key_path node['tarsnap']['key_path']
   key_file node['tarsnap']['key_file']
