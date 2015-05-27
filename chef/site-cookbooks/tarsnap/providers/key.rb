@@ -43,8 +43,8 @@ action :create do
     # Register the node as pending
     node.set_unless['tarsnap_pending'] = true
     node.save unless Chef::Config[:solo]
-  rescue Chef::Exceptions::ValidationFailed => e
-    Chef::Log.warn("Unable to retrieve the tarsnap key from the data bag!!!")
+  #JFLY rescue Chef::Exceptions::ValidationFailed => e
+    #JFLY Chef::Log.warn("Unable to retrieve the tarsnap key from the data bag!!!")
   ensure
     new_resource.updated_by_last_action(true)
   end
