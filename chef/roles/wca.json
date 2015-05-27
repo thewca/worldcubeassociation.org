@@ -36,7 +36,8 @@
     "recipe[wca::phpMyAdmin]",
     "recipe[wca::regulations]",
     "recipe[wca::email]",
-    "recipe[wca::cronjobs]"
+    "recipe[wca::cronjobs]",
+    "recipe[wca::backup]"
   ],
   "env_run_lists": {
   }
