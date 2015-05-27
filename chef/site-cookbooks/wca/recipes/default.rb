@@ -8,14 +8,13 @@ secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 if username == "cubing"
   user_lockfile = '/tmp/cubing-user-initialized'
+  cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
+  hashed_pw = `#{cmd}`.strip
   user username do
     supports :manage_home => true
     home "/home/#{username}"
     shell '/bin/bash'
-    password do
-      cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
-      `#{cmd}`.strip
-    end
+    password hashed_pw
     not_if { ::File.exists?(user_lockfile) }
   end
 
