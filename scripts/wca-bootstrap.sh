@@ -78,7 +78,7 @@ fi
   # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
   # software-admins@worldcubeassociation.org if you need access.
   echo "Downloading secrets from worldcubeassociation.org..."
-  rsync -a -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_dir/secrets
+  rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_dir/secrets
 #fi
 
 # Install chef client

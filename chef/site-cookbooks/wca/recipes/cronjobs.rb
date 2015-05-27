@@ -3,7 +3,8 @@ username, repo_root = WcaHelper.get_username_and_repo_root(self)
 admin_email = "admin@worldcubeassociation.org"
 
 init_php_commands = []
-init_php_commands << "#{repo_root}/scripts/db.sh dump #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
+db_dump_folder = "#{repo_root}/secrets/wca_db"
+init_php_commands << "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
 if node.chef_environment != "development"
   cron "db backup" do
     minute '0'

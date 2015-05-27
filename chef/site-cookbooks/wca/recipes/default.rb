@@ -94,8 +94,8 @@ template "/etc/my.cnf" do
     secrets: secrets
   })
 end
-db_dump_filename = "#{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
-execute "#{repo_root}/scripts/db.sh import #{db_dump_filename}"
+db_dump_folder = "#{repo_root}/secrets/wca_db"
+execute "#{repo_root}/scripts/db.sh import #{db_dump_folder}"
 
 
 #### Ruby and Rails
