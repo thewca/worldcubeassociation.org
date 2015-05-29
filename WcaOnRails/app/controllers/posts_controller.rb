@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :rss, :show]
   before_action :results_team_only, except: [:index, :rss, :show]
-  before_action :fetch_post, only: [:show, :edit, :update, :destroy]
 
   def index
     @posts = Post.order(sticky: :desc, created_at: :desc).paginate(page: params[:page])
@@ -13,6 +12,7 @@ class PostsController < ApplicationController
   end
 
   def show
+    @post = find_post
   end
 
   def new
@@ -31,9 +31,11 @@ class PostsController < ApplicationController
   end
 
   def edit
+    @post = find_post
   end
 
   def update
+    @post = find_post
     if @post.update_attributes(post_params)
       redirect_to post_path(@post.slug)
     else
@@ -42,6 +44,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    @post = find_post
     @post.destroy
     flash[:success] = "Deleted post"
     redirect_to root_url
@@ -58,7 +61,7 @@ class PostsController < ApplicationController
     end
   end
 
-  private def fetch_post
-    @post = Post.where("id = ? OR slug = ?", params[:id], params[:id]).first
+  private def find_post
+    Post.where("id = ? OR slug = ?", params[:id], params[:id]).first
   end
 end
