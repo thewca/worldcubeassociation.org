@@ -1,10 +1,10 @@
 <div class="panel <%= post.sticky? ? "panel-info" : "panel-default" %>">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <% if @post # TODO - less hacky way of doing this? %>
-        <%= post.title %>
-      <% else %>
+      <% if render_permalink %>
         <%= link_to post.title, post_path(post.slug) %>
+      <% else %>
+        <%= post.title %>
       <% end %>
       <% if user_signed_in? && current_user.results_team? %>
         <span class="pull-right">
