@@ -20,6 +20,10 @@ if node.chef_environment != "development"
   end
 end
 
+html_format_envvars = {
+  "CONTENT_TYPE" => "text/html",
+  "CONTENT_TRANSFER_ENCODING" => "utf8",
+}
 init_php_commands = []
 init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
 if node.chef_environment != "development"
@@ -29,6 +33,7 @@ if node.chef_environment != "development"
     weekday '1,3,5'
 
     mailto admin_email
+    environment html_format_envvars
     user username
     command init_php_commands.last
   end
