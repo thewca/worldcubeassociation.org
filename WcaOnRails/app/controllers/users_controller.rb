@@ -8,11 +8,12 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.order(name: :asc).paginate(page: params[:page])
+    @users = User.order(name: :asc, email: :asc).paginate(page: params[:page])
   end
 
   def edit
     @user = User.find(params[:id])
+    @from_page = params[:from_page]
   end
 
   def update
@@ -23,7 +24,7 @@ class UsersController < ApplicationController
       render :edit
     elsif @user.update_attributes(user_params)
       flash[:success] = "User updated"
-      redirect_to edit_user_url @user
+      redirect_to edit_user_url @user, from_page: params[:from_page]
     else
       flash[:danger] = "Error updating user"
       render :edit

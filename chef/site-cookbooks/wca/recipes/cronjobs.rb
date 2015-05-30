@@ -2,8 +2,8 @@ username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 admin_email = "admin@worldcubeassociation.org"
 
-init_php_commands = []
-init_php_commands << "#{repo_root}/scripts/db.sh dump #{repo_root}/secrets/worldcubeassociation.org_alldbs.tar.gz"
+db_dump_folder = "#{repo_root}/secrets/wca_db"
+dump_command = "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
 if node.chef_environment != "development"
   cron "db backup" do
     minute '0'
@@ -12,10 +12,19 @@ if node.chef_environment != "development"
 
     mailto admin_email
     user username
-    command init_php_commands.last
+    if node.chef_environment == "production"
+      command "#{dump_command} && #{repo_root}/scripts/backup.sh"
+    else
+      command dump_command
+    end
   end
 end
 
+html_format_envvars = {
+  "CONTENT_TYPE" => "text/html",
+  "CONTENT_TRANSFER_ENCODING" => "utf8",
+}
+init_php_commands = []
 init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
 if node.chef_environment != "development"
   cron "cronned results scripts" do
@@ -24,6 +33,7 @@ if node.chef_environment != "development"
     weekday '1,3,5'
 
     mailto admin_email
+    environment html_format_envvars
     user username
     command init_php_commands.last
   end

@@ -2,3 +2,7 @@ div.pagination {
  display: block;
  text-align: center;
 }
+
+textarea[name="post[body]"] {
+  height: 400px;
+}

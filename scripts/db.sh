@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 print_usage_and_exit() {
-  echo "Usage: $0 [dump|import|drop_and_import] filename [args_for_mysql]"
-  echo "For example: $0 import mysql-dump-2015-03-15.tar.gz --user=USER --password=PASS --host=HOST"
+  echo "Usage: $0 [dump|import|drop_and_import] folder [args_for_mysql]"
+  echo "For example: $0 import ~/mysql-dump-2015-03-15/ --user=USER --password=PASS --host=HOST"
   exit
 }
 if [ $# -eq 0 ]; then
@@ -16,28 +16,17 @@ if [ "$COMMAND" != "dump" ] && [ "$COMMAND" != "import" ] && [ "$COMMAND" != "dr
   print_usage_and_exit
 fi
 
-TAR_FILENAME=$1
+FOLDER=$1
 shift
-# Check if $TAR_FILENAME ends in .tar.gz. Trick from
-#  https://viewsby.wordpress.com/2013/09/06/bash-string-ends-with/
-if [[ "$TAR_FILENAME" != *.tar.gz ]]; then
-  echo "Invalid filename: $TAR_FILENAME Must end in .tar.gz"
-  exit 1
-fi
 
-db_names="cubing_cms cubing_results cubing_phpbb"
-db_filenames=""
-sudo rm -rf /tmp/wca_db
-mkdir -p /tmp/wca_db
+db_names="cubing cubing_phpbb"
 if [ "$COMMAND" == "dump" ]; then
+  sudo rm -rf $FOLDER
+  mkdir -p $FOLDER
   for db_name in $db_names; do
-    echo "Backing up $db_name"
-    time mysqldump "$@" $db_name -r /tmp/wca_db/$db_name.sql
-    db_filenames="$db_filenames $db_name.sql"
+    echo "Backing up table $db_name to $FOLDER/$db_name.sql"
+    time mysqldump "$@" $db_name -r $FOLDER/$db_name.sql
   done
-
-  echo "Producing $TAR_FILENAME..."
-  time tar -C /tmp/wca_db -zcvf "$TAR_FILENAME" $db_filenames
 elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
   for db_name in $db_names; do
     if [ "$(mysql -N -s "$@" -e "SHOW DATABASES LIKE '$db_name';")" != "" ]; then
@@ -52,9 +41,8 @@ elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
     fi
   done
 
-  # Extract full export into .sql files and import them.
-  tar xf $TAR_FILENAME -C /tmp/wca_db
-  for sql_file in /tmp/wca_db/*.sql; do
+  # Import .sql files in $FOLDER
+  for sql_file in $FOLDER/*.sql; do
     table_name=`basename $sql_file .sql`
     echo "Importing $table_name table..."
     mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $table_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"

@@ -22,11 +22,10 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
   You also need an SSH key set up for cubing@worldcubeassociation.org in order
   to rsync secrets.
-- `time ssh -A root@staging.worldcubeassociation.org 'bash <(wget --no-check-certificate -O - https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh) staging/production'
+- `time ssh -A user@example.com 'sudo wget https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh staging/production'`
 
 ## Deploy
-- TODO
-- `ssh staging.worldcubeassociation.org pkill -U gjcomps -f rails`
+- `ssh -A cubing@worldcubeassociation.org worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_rails rebuild_regs`
 
 ## Secrets
 - Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/production.json`.

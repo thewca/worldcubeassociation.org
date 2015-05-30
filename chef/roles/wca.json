@@ -10,6 +10,11 @@
         "passwordless": "true"
       }
     },
+    "openssh": {
+      "server": {
+        "password_authentication": "yes"
+      }
+    },
     "set_fqdn": "*.worldcubeassociation.org",
     "hostname_cookbook": {
       "hostsfile_ip": "127.0.1.1"
@@ -23,6 +28,7 @@
     "recipe[apt]",
     "recipe[sudo]",
     "recipe[hostname]",
+    "recipe[openssh]",
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
     "recipe[wca]",
@@ -30,7 +36,8 @@
     "recipe[wca::phpMyAdmin]",
     "recipe[wca::regulations]",
     "recipe[wca::email]",
-    "recipe[wca::cronjobs]"
+    "recipe[wca::cronjobs]",
+    "recipe[wca::backup]"
   ],
   "env_run_lists": {
   }

@@ -2,3 +2,4 @@ wca-documents-extra/**
 webroot/**
 WcaOnRails/vendor/**
 WcaOnRails/tmp/**
+chef/site-cookbooks/tarsnap/**
