@@ -2,7 +2,7 @@
 
 print_usage_and_exit() {
   echo "Usage: $0 [dump|import|drop_and_import] filename [args_for_mysql]"
-  echo "For example: $0 import mysql-dump-2015-03-15.sql --user=USER --password=PASS --host=HOST"
+  echo "For example: $0 import mysql-dump-2015-03-15.tar.gz --user=USER --password=PASS --host=HOST"
   exit
 }
 if [ $# -eq 0 ]; then
@@ -14,7 +14,6 @@ shift
 if [ "$COMMAND" != "dump" ] && [ "$COMMAND" != "import" ] && [ "$COMMAND" != "drop_and_import" ]; then
   echo "Unrecognized command: $COMMAND."
   print_usage_and_exit
-  exit 1
 fi
 
 TAR_FILENAME=$1
