@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 print_usage_and_exit() {
-  echo "Usage: $0 [environment]"
-  echo "Bootstrap a WCA server."
-  echo "environment must be one of development, staging, production."
+  echo "Usage: $0 <environment>"
+  echo "Bootstraps a WCA server."
+  echo "<environment> must be one of development, staging, production."
   exit 1
 }
 if [ $# -gt 1 ]; then

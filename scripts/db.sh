@@ -2,7 +2,7 @@
 
 print_usage_and_exit() {
   echo "Usage: $0 [dump|import|drop_and_import] folder [args_for_mysql]"
-  echo "For example: $0 --user=USER --password=PASS --host=HOST"
+  echo "For example: $0 import ~/mysql-dump-2015-03-15/ --user=USER --password=PASS --host=HOST"
   exit
 }
 if [ $# -eq 0 ]; then
@@ -12,8 +12,8 @@ fi
 COMMAND=$1
 shift
 if [ "$COMMAND" != "dump" ] && [ "$COMMAND" != "import" ] && [ "$COMMAND" != "drop_and_import" ]; then
-  echo "Unrecognized command: $COMMAND. Must be one of dump, import, drop_and_import."
-  exit 1
+  echo "Unrecognized command: $COMMAND."
+  print_usage_and_exit
 fi
 
 FOLDER=$1
