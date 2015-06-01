@@ -12,8 +12,7 @@ class User < ActiveRecord::Base
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate") }, class_name: "User"
   validate :senior_delegate_must_be_senior_delegate
-  validate :delegate_must_have_senior_delegate
-  validate :board_and_senior_delegates_must_not_have_senior_delegate
+  validate :senior_delegate_presence
 
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
@@ -21,25 +20,24 @@ class User < ActiveRecord::Base
     end
   end
 
-  def delegate_must_have_senior_delegate
-    if !senior_delegate
-      if delegate?
-        errors.add(:senior_delegate, "must be present for a WCA delegate")
-      elsif candidate_delegate?
-        errors.add(:senior_delegate, "must be present for a WCA candidate delegate")
-      end
+  def senior_delegate_presence
+    senior_delegate_required = User.delegate_status_requires_senior_delegate(delegate_status)
+    if !senior_delegate && senior_delegate_required
+      errors.add(:senior_delegate, "must be present")
+    end
+    if senior_delegate && !senior_delegate_required
+      errors.add(:senior_delegate, "must not be present")
     end
   end
 
-  def board_and_senior_delegates_must_not_have_senior_delegate
-    if senior_delegate
-      if !delegate_status
-        errors.add(:senior_delegate, "must not be present for a non delegate")
-      elsif board_member?
-        errors.add(:senior_delegate, "must not be present for a board member")
-      elsif senior_delegate?
-        errors.add(:senior_delegate, "must not be present for a senior delegate")
-      end
-    end
+  def self.delegate_status_requires_senior_delegate(delegate_status)
+    {
+      nil => false,
+      "" => false,
+      "candidate_delegate" => true,
+      "delegate" => true,
+      "senior_delegate" => false,
+      "board_member" => false,
+    }.fetch(delegate_status)
   end
 end

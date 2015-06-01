@@ -1,3 +1,22 @@
 $(document).on("page:change", function() {
-  // TODO - hide/show senior delegate select
+  if(document.body.dataset.railsControllerName !== "users") {
+    return;
+  }
+
+  // Hide/show senior delegate select based on what the user's role is.
+  var $delegateStatus = $('select[name="user[delegate_status]"]');
+  $delegateStatus.on("change", function(e) {
+    var delegateStatus = this.value;
+    var seniorDelegateRequired = {
+      "": false,
+      candidate_delegate: true,
+      delegate: true,
+      senior_delegate: false,
+      board_member: false,
+    }[delegateStatus];
+
+    var $seniorDelegateSelect = $('.form-group.user_senior_delegate');
+    $seniorDelegateSelect.toggle(seniorDelegateRequired);
+  });
+  $delegateStatus.trigger("change");
 });
