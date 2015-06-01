@@ -12,6 +12,7 @@
     <% end %>
     <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize } %>
     <%= f.association :senior_delegate %>
+    <%= f.input :region %>
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>

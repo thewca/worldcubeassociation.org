@@ -17,6 +17,9 @@ $(document).on("page:change", function() {
 
     var $seniorDelegateSelect = $('.form-group.user_senior_delegate');
     $seniorDelegateSelect.toggle(seniorDelegateRequired);
+
+    var $userRegionInput = $('.form-group.user_region');
+    $userRegionInput.toggle(!!delegateStatus);
   });
   $delegateStatus.trigger("change");
 });

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150601061358) do
+ActiveRecord::Schema.define(version: 20150601224750) do
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150601061358) do
     t.string   "name",                   limit: 255
     t.string   "delegate_status"
     t.integer  "senior_delegate_id"
+    t.string   "region"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
