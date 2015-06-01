@@ -6,9 +6,12 @@
   <h1><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
 
   <%= simple_form_for @user, url: user_path(from_page: @from_page), html: { class: 'form-horizontal' } do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
     <% UsersController.WCA_ROLES.each do |role| %>
       <%= f.input role %>
     <% end %>
+    <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize } %>
+    <%= f.association :senior_delegate %>
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>

@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    params.require(:user).permit(*UsersController.WCA_ROLES)
+    params.require(:user).permit(*UsersController.WCA_ROLES, :delegate_status, :senior_delegate_id)
   end
 
   private def admin_only

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526035517) do
+ActiveRecord::Schema.define(version: 20150601061358) do
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false
@@ -85,9 +85,12 @@ ActiveRecord::Schema.define(version: 20150526035517) do
     t.boolean  "admin",                  limit: 1
     t.boolean  "results_team",           limit: 1
     t.string   "name",                   limit: 255
+    t.string   "delegate_status"
+    t.integer  "senior_delegate_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
 
 end
