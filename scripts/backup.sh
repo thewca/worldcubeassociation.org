@@ -11,4 +11,4 @@ if [ $# -gt 0 ]; then
   print_usage_and_exit
 fi
 
-tarsnap -c -f wca-backup-`date +"%Y%m%d_%H%M%S"` $SECRETS_FOLDER
+sudo tarsnap -c -f wca-backup-`date +"%Y%m%d_%H%M%S"` $SECRETS_FOLDER
