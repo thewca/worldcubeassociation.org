@@ -1,6 +1,7 @@
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 admin_email = "admin@worldcubeassociation.org"
+path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 
 db_dump_folder = "#{repo_root}/secrets/wca_db"
 dump_command = "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
@@ -10,6 +11,7 @@ if node.chef_environment != "development"
     hour '0'
     weekday '1'
 
+    path path
     mailto admin_email
     user username
     if node.chef_environment == "production"
@@ -20,10 +22,6 @@ if node.chef_environment != "development"
   end
 end
 
-html_format_envvars = {
-  "CONTENT_TYPE" => "text/html",
-  "CONTENT_TRANSFER_ENCODING" => "utf8",
-}
 init_php_commands = []
 init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
 if node.chef_environment != "development"
@@ -32,8 +30,8 @@ if node.chef_environment != "development"
     hour '4'
     weekday '1,3,5'
 
+    path path
     mailto admin_email
-    environment html_format_envvars
     user username
     command init_php_commands.last
   end
