@@ -32,7 +32,13 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    user_params = params.require(:user).permit(*UsersController.WCA_ROLES, :delegate_status, :senior_delegate_id, :region)
+    user_params = params.require(:user).permit(
+      *UsersController.WCA_ROLES,
+      :name,
+      :delegate_status,
+      :senior_delegate_id,
+      :region
+    )
     if !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end

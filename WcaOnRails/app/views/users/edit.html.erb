@@ -7,6 +7,7 @@
 
   <%= simple_form_for @user, url: user_path(from_page: @from_page), html: { class: 'form-horizontal' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+      <%= f.input :name %>
     <% UsersController.WCA_ROLES.each do |role| %>
       <%= f.input role %>
     <% end %>
