@@ -1,0 +1,10 @@
+<tr class="<%= delegate.delegate_status.dasherize %>">
+  <td>
+    <%= mail_to delegate.email, delegate.name %>
+    <%= link_to edit_user_path(delegate.id), class: "edit-user" do %>
+      <span class="glyphicon glyphicon-pencil"></span>
+    <% end %>
+  </td>
+  <td><%= delegate.delegate_status.titleize %></td>
+  <td><%= delegate.region %></td>
+</tr>

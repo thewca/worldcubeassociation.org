@@ -1,0 +1,21 @@
+tr.board-member {
+  font-weight: bold;
+}
+
+tr.senior-delegate {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+tr.candidate-delegate {
+  font-style: italic;
+}
+
+.edit-user {
+  visibility: hidden;
+}
+
+tr:hover .edit-user {
+  visibility: visible;
+}

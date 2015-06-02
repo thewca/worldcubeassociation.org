@@ -6,6 +6,11 @@ class StaticPagesController < ApplicationController
   def about
   end
 
+  def delegates
+    @board_members = User.where(delegate_status: "board_member")
+    @senior_delegates = User.where(delegate_status: "senior_delegate")
+  end
+
   def organisations
   end
 
