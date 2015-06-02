@@ -331,3 +331,6 @@ DEPENDENCIES
   web-console
   wice_grid
   will_paginate
+
+BUNDLED WITH
+   1.10.2
