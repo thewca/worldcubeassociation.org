@@ -31,6 +31,15 @@ class User < ActiveRecord::Base
   end
 
   def can_edit_users?
-    return admin? || board_member?
+    return admin? || board_member? || delegate_status != nil
+  end
+
+  def editable_other_user_fields
+    if admin? || board_member?
+      return Set.new(UsersController.WCA_ROLES + [
+        :name, :delegate_status, :senior_delegate_id, :region ])
+    elsif senior_delegate? || delegate? || candidate_delegate?
+      return Set.new([ :name ])
+    end
   end
 end

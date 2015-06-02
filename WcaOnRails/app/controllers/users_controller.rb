@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   # For now, only allow admins to view this, as we're showing email addresses here
   before_action :authenticate_user!
-  before_action :admin_or_board_only
+  before_action :can_edit_users_only
 
   def self.WCA_ROLES
     [:admin, :results_team]
@@ -36,20 +36,14 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    user_params = params.require(:user).permit(
-      *UsersController.WCA_ROLES,
-      :name,
-      :delegate_status,
-      :senior_delegate_id,
-      :region
-    )
-    if !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
+    user_params = params.require(:user).permit(*current_user.editable_other_user_fields)
+    if user_params.has_key?(user_params[:delegate_status]) && !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end
     user_params
   end
 
-  private def admin_or_board_only
+  private def can_edit_users_only
     unless current_user && current_user.can_edit_users?
       flash[:danger] = "You cannot edit users"
       redirect_to root_url

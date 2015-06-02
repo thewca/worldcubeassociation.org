@@ -7,13 +7,13 @@
 
   <%= simple_form_for @user, url: user_path(from_page: @from_page), html: { class: 'form-horizontal' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-      <%= f.input :name %>
+    <%= f.input :name, disabled: !current_user.editable_other_user_fields.include?(:name) %>
     <% UsersController.WCA_ROLES.each do |role| %>
-      <%= f.input role %>
+      <%= f.input role, disabled: !current_user.editable_other_user_fields.include?(role) %>
     <% end %>
-    <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize } %>
-    <%= f.association :senior_delegate %>
-    <%= f.input :region %>
+    <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !current_user.editable_other_user_fields.include?(:senior_delegate_id) %>
+    <%= f.association :senior_delegate, disabled: !current_user.editable_other_user_fields.include?(:senior_delegate_id) %>
+    <%= f.input :region, disabled: !current_user.editable_other_user_fields.include?(:region) %>
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>
