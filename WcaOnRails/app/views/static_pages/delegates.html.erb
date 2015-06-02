@@ -21,13 +21,13 @@
       </tr>
     </thead>
     <tbody>
-      <% @board_members.order(:region, :name).each do |board_member| %>
+      <% @board_members.order(:region, :delegate_status, :name).each do |board_member| %>
         <%= render "delegate_row", delegate: board_member %>
       <% end %>
     </tbody>
   </table>
 
-  <% @senior_delegates.order(:region, :name).each do |senior_delegate| %>
+  <% @senior_delegates.order(:region, :delegate_status, :name).each do |senior_delegate| %>
     <table class="table">
       <colgroup>
         <col class="col-md-4" />
@@ -43,7 +43,7 @@
       </thead>
       <tbody>
         <%= render "delegate_row", delegate: senior_delegate %>
-        <% senior_delegate.subordinate_delegates.order(:region, :name).each do |delegate| %>
+        <% senior_delegate.subordinate_delegates.order(:region, :delegate_status, :name).each do |delegate| %>
           <%= render "delegate_row", delegate: delegate %>
         <% end %>
       </tbody>
@@ -64,7 +64,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @delegates_without_senior_delegates.order(:region, :name).each do |delegate| %>
+      <% @delegates_without_senior_delegates.order(:region, :delegate_status, :name).each do |delegate| %>
         <%= render "delegate_row", delegate: delegate %>
       <% end %>
     </tbody>
