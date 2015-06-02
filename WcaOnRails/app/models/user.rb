@@ -9,6 +9,9 @@ class User < ActiveRecord::Base
     return 10
   end
 
+  # Virtual attribute for authenticating by WCA id or email.
+  attr_accessor :login
+
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
@@ -60,5 +63,14 @@ class User < ActiveRecord::Base
       fields << :wca_id
     end
     fields
+  end
+
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["email = :email OR wca_id = :wca_id", { email: login.downcase, wca_id: login.upcase }]).first
+    else
+      where(conditions.to_hash).first
+    end
   end
 end
