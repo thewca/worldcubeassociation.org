@@ -5,6 +5,11 @@
       <h4><%= t('.title', :resource => resource_class.model_name.human , :default => 'Edit #{resource_name.to_s.humanize}') %></h4>
     </div>
     <div class="panel-body">
+      <% if resource.wca_id.blank? %>
+        You do not have a WCA id assigned yet. Contact your local <%= link_to "WCA delegate", delegates_path %> to get yours assigned.
+      <% else %>
+        Your WCA id is <code><%= link_to resource.wca_id, "/results/p.php?i=#{resource.wca_id}" %></code>.
+      <% end %>
       <%= form_for(resource, :as => resource_name, :url => user_registration_path, :html => { :method => :put }) do |f| %>
       <div class="form-group">
         <%= f.label :email %>

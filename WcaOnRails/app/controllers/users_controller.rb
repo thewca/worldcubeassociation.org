@@ -37,8 +37,11 @@ class UsersController < ApplicationController
 
   private def user_params
     user_params = params.require(:user).permit(*current_user.editable_other_user_fields)
-    if user_params.has_key?(user_params[:delegate_status]) && !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
+    if user_params.has_key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
+    end
+    if user_params.has_key?(:wca_id)
+      user_params[:wca_id] = user_params[:wca_id].upcase
     end
     user_params
   end

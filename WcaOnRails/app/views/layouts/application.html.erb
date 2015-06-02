@@ -88,10 +88,10 @@
             <ul class="dropdown-menu" role="menu">
               <% if user_signed_in? %>
                 <li><%= link_to "Edit account", edit_user_registration_path %></li>
-                <% if current_user.admin? %>
+                <% if current_user.can_edit_users? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
-                    Admin
+                    Administration
                   </li>
                   <li><%= link_to "Manage users", users_path %></li>
                 <% end %>

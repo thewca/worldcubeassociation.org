@@ -3,6 +3,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   validates :name, presence: true
+  validates :wca_id, format: { with: /\A(|\d{4}[A-Z]{4}\d{2})\z/ }
+  def self.WCA_ID_MAX_LENGTH
+    return 10
+  end
+
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
@@ -12,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
   validate :senior_delegate_must_be_senior_delegate
+  validate :senior_delegate_presence
 
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
@@ -19,7 +25,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.delegate_status_requires_senior_delegate(delegate_status)
+  def senior_delegate_presence
+    if !User.delegate_status_allows_senior_delegate(delegate_status) and senior_delegate
+      errors.add(:senior_delegate, "must not be present")
+    end
+  end
+
+  def self.delegate_status_allows_senior_delegate(delegate_status)
     {
       nil => false,
       "" => false,
@@ -35,11 +47,17 @@ class User < ActiveRecord::Base
   end
 
   def editable_other_user_fields
+    fields = Set.new
     if admin? || board_member?
-      return Set.new(UsersController.WCA_ROLES + [
-        :name, :delegate_status, :senior_delegate_id, :region ])
-    elsif senior_delegate? || delegate? || candidate_delegate?
-      return Set.new([ :name ])
+      fields += UsersController.WCA_ROLES
+      fields << :delegate_status
+      fields << :senior_delegate_id
+      fields << :region
     end
+    if admin? || !delegate_status.blank?
+      fields << :name
+      fields << :wca_id
+    end
+    fields
   end
 end

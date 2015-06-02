@@ -18,30 +18,6 @@ RSpec.describe User, type: :model do
     expect(user1).to be_valid
   end
 
-  it "requires senior delegate if delegate" do
-    delegate = FactoryGirl.create :user
-    delegate.delegate_status = "delegate"
-    senior_delegate = FactoryGirl.create :user
-    senior_delegate.senior_delegate!
-
-    expect(delegate).to be_invalid
-
-    delegate.senior_delegate = senior_delegate
-    expect(delegate).to be_valid
-  end
-
-  it "requires senior delegate if candidate delegate" do
-    candidate_delegate = FactoryGirl.create :user
-    candidate_delegate.delegate_status = "candidate_delegate"
-    senior_delegate = FactoryGirl.create :user
-    senior_delegate.senior_delegate!
-
-    expect(candidate_delegate).to be_invalid
-
-    candidate_delegate.senior_delegate = senior_delegate
-    expect(candidate_delegate).to be_valid
-  end
-
   it "does not allow senior delegate if senior delegate" do
     senior_delegate1 = FactoryGirl.create :user
     senior_delegate1.senior_delegate!
@@ -74,6 +50,20 @@ RSpec.describe User, type: :model do
 
     expect(user).to be_valid
     user.senior_delegate = senior_delegate
+    expect(user).to be_invalid
+  end
+
+  it "validates WCA id" do
+    user = FactoryGirl.build :user, wca_id: "2005FLEI01"
+    expect(user).to be_valid
+
+    user = FactoryGirl.build :user, wca_id: "2005FLE01"
+    expect(user).to be_invalid
+
+    user = FactoryGirl.build :user, wca_id: "200FLEI01"
+    expect(user).to be_invalid
+
+    user = FactoryGirl.build :user, wca_id: "200FLEI0"
     expect(user).to be_invalid
   end
 end

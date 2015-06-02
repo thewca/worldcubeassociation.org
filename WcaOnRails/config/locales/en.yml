@@ -24,3 +24,7 @@ en:
     errors:
       verification_failed: "Are you a robot?"
       recaptcha_unreachable: "Error communicating with recaptcha servers."
+  activerecord:
+    attributes:
+      user:
+        wca_id: "WCA id"
