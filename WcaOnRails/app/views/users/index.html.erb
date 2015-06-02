@@ -3,12 +3,32 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
+  <%= grid(@users_grid) do |g|
+
+    g.column name: "WCA id", attribute: "wca_id"
+    g.column name: "Name", attribute: "name"
+    g.column name: "Email", attribute: "email" do |user|
+      opts = {}
+      unless user.confirmed_at
+        opts[:class] = "unconfirmed-email"
+        opts[:title] = "Email not confirmed"
+      end
+      [ user.email, opts ]
+    end
+
+    g.column do |user|
+      link_to('Edit', edit_user_path(user))
+    end
+  end -%>
+
+<% if false %>
   <ul>
     <% @users.each do |user| %>
       <li>
-        <%= link_to "#{user.name} (#{user.email})", edit_user_path(user, from_page: params[:page]) %>
+        <%= link_to "#{user.name} (#{user.email})", edit_user_path(user) %>
       </li>
     <% end %>
   </ul>
   <%= will_paginate @users %>
+<% end %>
 </div>

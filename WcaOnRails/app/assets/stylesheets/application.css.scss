@@ -16,11 +16,14 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+@import "wice_grid";
+/* Courtesy of https://github.com/hisea/devise-bootstrap-views */
+@import "devise_bootstrap_views";
+
 /* New stuff */
 @import "posts";
 @import "delegates";
-/* Courtesy of https://github.com/hisea/devise-bootstrap-views */
-@import "devise_bootstrap_views";
+@import "users";
 
 /* Gross stuff copied over from the old site */
 @import "navbar-static-top";

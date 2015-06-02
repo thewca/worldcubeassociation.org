@@ -1,0 +1,10 @@
+.wice-grid {
+  tr.wg-filter-row input[type=text] {
+    // Overrride WiceGrid default width.
+    width: 100%;
+  }
+}
+
+td.unconfirmed-email {
+  font-style: italic;
+}

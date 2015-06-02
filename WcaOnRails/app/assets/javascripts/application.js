@@ -16,6 +16,7 @@
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require local_time
+//= require wice_grid
 //= require_tree .
 
 // Reinitialize any plugins when turbolinks changes the page.

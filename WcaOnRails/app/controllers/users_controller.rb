@@ -8,7 +8,10 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.order(name: :asc, email: :asc).paginate(page: params[:page])
+    @users_grid = initialize_grid(User, {
+      order: 'name',
+      order_direction: 'asc'
+    })
   end
 
   def edit
@@ -18,7 +21,6 @@ class UsersController < ApplicationController
       @user = User.find_by_wca_id!(params[:id])
       redirect_to edit_user_path(@user)
     end
-    @from_page = params[:from_page]
   end
 
   def update
@@ -33,7 +35,7 @@ class UsersController < ApplicationController
       render :edit
     elsif @user.update_attributes(user_params)
       flash[:success] = "User updated"
-      redirect_to edit_user_url @user, from_page: params[:from_page]
+      redirect_to edit_user_url @user
     else
       flash[:danger] = "Error updating user"
       render :edit
