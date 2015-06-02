@@ -21,12 +21,13 @@
   <p>
   The World Cube Association is led by the <b>WCA Board</b>, consisting of the following members:
   </p>
-  <ul><li>Ron van Bruchem (Netherlands) (co-founder)</li>
-  <li>Ilkyoo Choi (Korea)</li>
-  <li>Natán Riggenbach (Peru)</li>
-  <li>Olivér Perge (Hungary)</li>
-  <li>Pedro Santos Guimarães (Brazil)</li>
-  </ul><p>The following committees are responsible for the operational activities of the WCA:</p>
+  <ul>
+    <% @board_members.order(:name).each do |board_member| %>
+      <li><%= board_member.name %> - <%= board_member.region %></li>
+    <% end %>
+  </ul>
+
+  <p>The following committees are responsible for the operational activities of the WCA:</p>
   <ul><li><strong>WCA Disciplinary Committee (WDC)</strong>, led by Daniel Sheppard (United Kingdom)<br />
   This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions.</li>
   <li><strong>WCA Regulations Committee (WRC)</strong>, led by Kit Clement (USA)<br />

@@ -4,6 +4,7 @@ class StaticPagesController < ApplicationController
   end
 
   def about
+    @board_members = User.where(delegate_status: "board_member")
   end
 
   def delegates
