@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
     board_member: "board_member",
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate") }, class_name: "User"
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
   validate :senior_delegate_must_be_senior_delegate
 
   def senior_delegate_must_be_senior_delegate
