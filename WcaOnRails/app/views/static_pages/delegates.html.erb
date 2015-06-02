@@ -49,4 +49,24 @@
       </tbody>
     </table>
   <% end %>
+
+  <table class="table">
+    <colgroup>
+      <col class="col-md-4" />
+      <col class="col-md-4" />
+      <col class="col-md-4" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Region</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @delegates_without_senior_delegates.order(:region, :name).each do |delegate| %>
+        <%= render "delegate_row", delegate: delegate %>
+      <% end %>
+    </tbody>
+  </table>
 </div>

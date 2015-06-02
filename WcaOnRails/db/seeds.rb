@@ -75,6 +75,20 @@ when "development"
     end
   end
 
+  # Create some delegates without a senior delegate
+  5.times do
+    delegate = User.create!(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      password: "wca",
+      password_confirmation: "wca",
+      delegate_status: [ "delegate", "candidate_delegate" ].sample,
+      senior_delegate: nil,
+      region: Faker::Address.country,
+    )
+    delegate.confirm!
+  end
+
   # Create administrator
   admin = User.create!(
     email: "wca@worldcubeassociation.org",
