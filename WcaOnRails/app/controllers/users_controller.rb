@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   # For now, only allow admins to view this, as we're showing email addresses here
   before_action :authenticate_user!
-  before_action :admin_only
+  before_action :admin_or_board_only
 
   def self.WCA_ROLES
     [:admin, :results_team]
@@ -19,8 +19,12 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     new_admin = ActiveRecord::Type::Boolean.new.type_cast_from_user(user_params[:admin])
-    if @user == current_user && !new_admin
-      flash[:danger] = "You cannot resign from your role as admin! Find another admin to fire you."
+    new_board_member = user_params[:delegate_status] == "board_member"
+    if @user == current_user && @user.admin? && !new_admin && !new_board_member
+      flash[:danger] = "You cannot resign from your role as an admin! Find another admin to fire you."
+      render :edit
+    elsif @user == current_user && @user.board_member? && !new_admin && !new_board_member
+      flash[:danger] = "You cannot resign from your role as a board member! Find another board member to fire you."
       render :edit
     elsif @user.update_attributes(user_params)
       flash[:success] = "User updated"
@@ -45,9 +49,9 @@ class UsersController < ApplicationController
     user_params
   end
 
-  private def admin_only
-    unless current_user && current_user.admin?
-      flash[:danger] = "Admins only"
+  private def admin_or_board_only
+    unless current_user && current_user.can_edit_users?
+      flash[:danger] = "You cannot edit users"
       redirect_to root_url
     end
   end

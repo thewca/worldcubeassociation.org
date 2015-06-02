@@ -1,8 +1,10 @@
 <tr class="<%= delegate.delegate_status.dasherize %>">
   <td>
     <%= mail_to delegate.email, delegate.name %>
-    <%= link_to edit_user_path(delegate.id), class: "edit-user" do %>
-      <span class="glyphicon glyphicon-pencil"></span>
+    <% if current_user && current_user.can_edit_users? %>
+      <%= link_to edit_user_path(delegate.id), class: "edit-user" do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+      <% end %>
     <% end %>
   </td>
   <td><%= delegate.delegate_status.titleize %></td>

@@ -40,4 +40,8 @@ class User < ActiveRecord::Base
       "board_member" => false,
     }.fetch(delegate_status)
   end
+
+  def can_edit_users?
+    return admin? || board_member?
+  end
 end
