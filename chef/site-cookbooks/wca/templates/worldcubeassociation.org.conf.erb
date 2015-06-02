@@ -163,8 +163,10 @@ server {
 <% if @server_name.start_with? "www." %>
 # Redirect naked domain HTTPS traffic to HTTPS on www....
 server {
-  listen 443 ssl;
   server_name <%= @server_name.sub(/^www./, '') %>;
+
+  listen 443 ssl;
+  include wca_https.conf;
 
   return 301 https://www.$server_name$request_uri;
 }
@@ -174,8 +176,9 @@ server {
 <% if @server_name.start_with? "www." %>
 # Redirect naked domain HTTP traffic to HTTP(S) on www....
 server {
-  listen 80;
   server_name <%= @server_name.sub(/^www./, '') %>;
+
+  listen 80;
 
 <% if @https %>
   return 301 https://www.$server_name$request_uri;
