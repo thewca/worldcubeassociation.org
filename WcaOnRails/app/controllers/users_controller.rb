@@ -12,7 +12,12 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by_id(params[:id])
+    if !@user
+      # If no user exists with given id, try looking up by WCA id.
+      @user = User.find_by_wca_id!(params[:id])
+      redirect_to edit_user_path(@user)
+    end
     @from_page = params[:from_page]
   end
 

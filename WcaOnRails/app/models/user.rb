@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   validates :name, presence: true
-  validates :wca_id, format: { with: /\A(|\d{4}[A-Z]{4}\d{2})\z/ }
+  validates :wca_id, format: { with: /\A(|\d{4}[A-Z]{4}\d{2})\z/ },
+                     uniqueness: true, allow_nil: true
   def self.WCA_ID_MAX_LENGTH
     return 10
   end
