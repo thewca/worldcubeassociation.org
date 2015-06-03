@@ -22,6 +22,12 @@ rebuild_regs() {
 rebuild_rails() {
   (
     cd WcaOnRails
+
+    if [ "$(git rev-parse --abbrev-ref HEAD)" == "production" ]; then
+      export RAILS_ENV=production
+    else
+      export RAILS_ENV=development
+    fi
     bundle install --without none
     bundle exec rake assets:clean assets:precompile
 
