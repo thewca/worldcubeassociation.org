@@ -96,7 +96,7 @@
                   <li><%= link_to "Manage users", users_path %></li>
                 <% end %>
 
-                <% if current_user.results_team? %>
+                <% if current_user.can_admin_results? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Results team

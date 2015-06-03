@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
     return admin? || board_member? || delegate_status != nil
   end
 
+  def can_admin_results?
+    return admin? || board_member? || results_team?
+  end
+
   def editable_other_user_fields
     fields = Set.new
     if admin? || board_member?

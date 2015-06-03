@@ -9,8 +9,8 @@ class Api::V0::ApiController < ApplicationController
     if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
     end
-    if !current_user.results_team?
-      return render status: :forbidden, json: { error: "Must be on the results team" }
+    if !current_user.can_admin_results?
+      return render status: :forbidden, json: { error: "Cannot adminster results" }
     end
 
     render json: { sucess: true }
