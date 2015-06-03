@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :edit, :update]
 
+  resources :competitions, only: [:index, :edit, :update]
+
   root 'posts#index'
   resources :posts
   get 'rss' => 'posts#rss'

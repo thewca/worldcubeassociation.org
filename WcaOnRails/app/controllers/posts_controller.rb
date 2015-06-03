@@ -55,13 +55,6 @@ class PostsController < ApplicationController
     params.require(:post).permit(:title, :body, :sticky)
   end
 
-  private def can_admin_results_only
-    unless current_user && current_user.can_admin_results?
-      flash[:danger] = "You are not allowed to aministrate results"
-      redirect_to root_url
-    end
-  end
-
   private def find_post
     # We explicitly query for slug rather than using an OR, because mysql does
     # weird things when searching for an id using a string:

@@ -7,4 +7,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_in) << :login
     devise_parameter_sanitizer.for(:account_update) << :name
   end
+
+  private def can_admin_results_only
+    unless current_user && current_user.can_admin_results?
+      flash[:danger] = "You are not allowed to administer results"
+      redirect_to root_url
+    end
+  end
 end

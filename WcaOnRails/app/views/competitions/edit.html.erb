@@ -1,0 +1,56 @@
+<% provide(:title, @competition.name) %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <hr>
+  <h2>Announcements</h2>
+  <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
+  <p>
+    TODO - create competition post and results post
+  </p>
+
+  <hr>
+  <h2>General information</h2>
+  <%= simple_form_for @competition, html: { class: 'form-horizontal' } do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.input :isConfirmed %>
+    <%= f.input :showAtAll %>
+    <%= f.input :name %>
+    <%= f.input :cellName %>
+    <%= f.input :countryId, collection: Country.all.map(&:name) %>
+    <%= f.input :cityName %>
+    <%= f.input :venue %>
+    <%= f.input :venueAddress %>
+    <%= f.input :latitude %>
+    <%= f.input :longitude %>
+    <%= f.input :venueDetails %>
+    <%= f.input :year %>
+    <%= f.input :month %>
+    <%= f.input :day %>
+    <%= f.input :endMonth %>
+    <%= f.input :endDay %>
+    <%= f.input :information %>
+    <%= f.input :wcaDelegate %>
+    <%= f.input :organiser %>
+    <%= f.input :website %>
+
+    <%= f.input :eventSpecs %>
+
+    <%= f.submit 'Save', class: "btn btn-primary" %>
+  <% end %>
+
+  <hr>
+  <h2>Registration</h2>
+  <%= simple_form_for @competition, html: { class: 'form-horizontal' } do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.input :showPreregForm %>
+    <%= f.input :showPreregList %>
+    <%= f.submit 'Save', class: "btn btn-primary" %>
+  <% end %>
+  <p>
+    TODO - create competition post and results post
+  </p>
+</div>
