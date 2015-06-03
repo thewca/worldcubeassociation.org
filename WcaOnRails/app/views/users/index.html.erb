@@ -20,15 +20,4 @@
       link_to('Edit', edit_user_path(user))
     end
   end -%>
-
-<% if false %>
-  <ul>
-    <% @users.each do |user| %>
-      <li>
-        <%= link_to "#{user.name} (#{user.email})", edit_user_path(user) %>
-      </li>
-    <% end %>
-  </ul>
-  <%= will_paginate @users %>
-<% end %>
 </div>
