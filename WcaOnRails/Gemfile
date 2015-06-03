@@ -25,6 +25,7 @@ gem 'devise-bootstrap-views'
 gem 'doorkeeper'
 gem 'newrelic_rpm'
 gem 'wice_grid'
+gem 'strip_attributes'
 
 gem 'system'
 gem 'unicorn'

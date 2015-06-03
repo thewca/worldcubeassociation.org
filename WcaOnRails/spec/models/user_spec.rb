@@ -66,4 +66,13 @@ RSpec.describe User, type: :model do
     user = FactoryGirl.build :user, wca_id: "200FLEI0"
     expect(user).to be_invalid
   end
+
+  it "nullifies empty WCA ids" do
+    user = FactoryGirl.create :user, wca_id: ""
+    expect(user.wca_id).to be_nil
+
+    # Verify that we can create multiple users with empty wca_ids
+    user = FactoryGirl.create :user, wca_id: ""
+    expect(user.wca_id).to be_nil
+  end
 end

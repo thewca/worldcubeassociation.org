@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  strip_attributes
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
