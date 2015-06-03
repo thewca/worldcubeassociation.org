@@ -31,13 +31,6 @@ div.navbar-collapse {
   clear: both;
 }
 
-.navbar, .navbar .container {
-  padding: 0px;
-  margin-left: 0px;
-  margin-right: 0px;
-  width: 100%;
-}
-
 .navbar-nav > li > a.top-nav:hover {
   background: #f0f0f0;
 }
