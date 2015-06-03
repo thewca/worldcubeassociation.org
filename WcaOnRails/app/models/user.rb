@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  strip_attributes
+  strip_attributes only: [:wca_id]
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,

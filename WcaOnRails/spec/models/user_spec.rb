@@ -75,4 +75,8 @@ RSpec.describe User, type: :model do
     user = FactoryGirl.create :user, wca_id: ""
     expect(user.wca_id).to be_nil
   end
+
+  it "can modify user with empty password" do
+    FactoryGirl.create :user, encrypted_password: ""
+  end
 end
