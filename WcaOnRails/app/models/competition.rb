@@ -14,7 +14,14 @@ class Competition < ActiveRecord::Base
   validates :website, format: { with: pattern_text_with_links_re }
   attr_accessor :start_date, :end_date
   before_validation :unpack_dates
-  validate :valid_dates
+  validate :dates_must_be_valid
+  validate :events_must_be_valid
+
+  def events
+    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
+    # what these equal signs are about.
+    eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
+  end
 
   def start_date
     year == 0 || month == 0 || day == 0 ? "" : "%04i-%02i-%02i" % [ year, month, day ]
@@ -46,7 +53,7 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  private def valid_dates
+  private def dates_must_be_valid
     if self.year == 0 && self.month == 0 && self.day == 0 && @endYear == 0 && self.endMonth == 0 && self.endDay == 0
       # If the user left both dates empty, that's a-okay.
       return
@@ -72,6 +79,13 @@ class Competition < ActiveRecord::Base
 
     if @endYear != year
       errors.add(:end_date, "Competition dates cannot span multiple years.")
+    end
+  end
+
+  private def events_must_be_valid
+    invalid_events = events - Event.all_official - Event.all_deprecated
+    unless invalid_events.empty?
+      errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
   end
 end

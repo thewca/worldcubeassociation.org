@@ -10,7 +10,6 @@
     TODO - create competition post and results post
     TODO - registration
     TODO - handle location
-    TODO - eventspecs...
   </pre>
 
   <hr>
@@ -58,7 +57,36 @@
     <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe %>
     <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
-    <%= f.input :eventSpecs %>
+    <% event_groups = [
+      [
+        "Events",
+        true,
+        @competition.events.select(&:official?),
+        Event.all_official,
+      ],
+      [
+        "Events that are no longer official",
+        false, # Only show deprecated events if this competition has any.
+        @competition.events.select(&:deprecated?),
+        Event.all_deprecated,
+      ]
+    ] %>
+    <% event_groups.each do |label, always_show, selected_events, available_events| %>
+      <% if always_show || !selected_events.empty? %>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"><%= label %></label>
+          <div class="col-sm-9">
+            <% available_events.each do |event| %>
+              <div class="checkbox">
+                <label>
+                  <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %> <%= event.name %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
 
     <hr>
     <h2>Registration</h2>

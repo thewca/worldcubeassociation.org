@@ -70,4 +70,15 @@ RSpec.describe Competition, type: :model do
     expect(competition).to be_invalid
     expect(competition.end_date).to eq "1988-12-07"
   end
+
+  it "ignores equal signs in eventSpecs" do
+    # See https://github.com/cubing/worldcubeassociation.org/issues/95
+    competition = FactoryGirl.build :competition, eventSpecs: "   333=//sd    444   "
+    expect(competition.events.map(&:id)).to eq [ "333", "444" ]
+  end
+
+  it "validates event ids" do
+    competition = FactoryGirl.build :competition, eventSpecs: "333 333wtf"
+    expect(competition).to be_invalid
+  end
 end

@@ -37,7 +37,7 @@ class CompetitionsController < ApplicationController
   end
 
   private def competition_params
-    params.require(:competition).permit(
+    competition_params = params.require(:competition).permit(
       :isConfirmed,
       :showAtAll,
       :name,
@@ -55,9 +55,12 @@ class CompetitionsController < ApplicationController
       :wcaDelegate,
       :organiser,
       :website,
-      :eventSpecs,
       :showPreregForm,
       :showPreregList,
+      event_ids: Event.all.map { |event| event.id.to_sym },
     )
+    competition_params[:eventSpecs] = competition_params[:event_ids].select {|k, v| v == "1"}.keys.join " "
+    competition_params.delete(:event_ids)
+    competition_params
   end
 end
