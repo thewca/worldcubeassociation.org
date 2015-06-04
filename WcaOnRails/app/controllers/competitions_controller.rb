@@ -38,10 +38,29 @@ class CompetitionsController < ApplicationController
 
   private def competition_params
     params.require(:competition).permit(
-      :name,
-      :showAtAll,
       :isConfirmed,
+      :showAtAll,
+      :name,
+      :cellName,
       :countryId,
+      :cityName,
+      :venue,
+      :venueAddress,
+      :latitude,
+      :longitude,
+      :venueDetails,
+      :year,
+      :month,
+      :day,
+      :endMonth,
+      :endDay,
+      :information,
+      :wcaDelegate,
+      :organiser,
+      :website,
+      :eventSpecs,
+      :showPreregForm,
+      :showPreregList,
     )
   end
 end

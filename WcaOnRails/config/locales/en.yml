@@ -29,3 +29,11 @@ en:
       user:
         wca_id: "WCA id"
         login: "Email or WCA id"
+      competition:
+        cellName: "Competition nickname"
+        countryId: "Country"
+        cityName: "City name"
+        venueAddress: "Venue address"
+        venueDetails: "Venue details"
+        wcaDelegate: "WCA delegate(s)"
+        organiser: "Organiser(s)"
