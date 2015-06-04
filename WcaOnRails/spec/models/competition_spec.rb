@@ -2,8 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Competition, type: :model do
   it "defines a valid competition" do
-    competition = Competition.new
+    competition = FactoryGirl.build :competition
     expect(competition).to be_valid
+  end
+
+  it "requires that name end in a year" do
+    competition = FactoryGirl.build :competition, name: "Name without year"
+    expect(competition).to be_invalid
+  end
+
+  it "requires that cellName end in a year" do
+    competition = FactoryGirl.build :competition, cellName: "Name no year"
+    expect(competition).to be_invalid
   end
 
   it "populates year, month, day, endMonth, endDay" do
@@ -19,7 +29,7 @@ RSpec.describe Competition, type: :model do
   end
 
   it "requires that both dates are empty or both are valid" do
-    competition = Competition.new
+    competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-04"
     expect(competition).to be_invalid
 
@@ -28,21 +38,21 @@ RSpec.describe Competition, type: :model do
   end
 
   it "requires that the start is before the end" do
-    competition = Competition.new
+    competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-06"
     competition.end_date = "1987-12-05"
     expect(competition).to be_invalid
   end
 
   it "requires that competition starts and ends in the same year" do
-    competition = Competition.new
+    competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-06"
     competition.end_date = "1988-12-07"
     expect(competition).to be_invalid
   end
 
   it "knows the calendar" do
-    competition = Competition.new
+    competition = FactoryGirl.create :competition
     competition.start_date = "1987-0-04"
     competition.end_date = "1987-12-05"
     expect(competition).to be_invalid

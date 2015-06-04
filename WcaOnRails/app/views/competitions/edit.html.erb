@@ -8,10 +8,9 @@
   <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
   <pre>
     TODO - create competition post and results post
+    TODO - registration
     TODO - handle location
     TODO - eventspecs...
-    TODO - registration
-    TODO - php code does some verification, such as competition name ending in year
   </pre>
 
   <hr>
@@ -31,7 +30,7 @@
     <%= f.input :cellName %>
     <%= f.input :countryId, collection: Country.all.map(&:name) %>
     <%= f.input :cityName %>
-    <%= f.input :venue %>
+    <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
     <%= f.input :venueAddress %>
     <%= f.input :latitude %>
     <%= f.input :longitude %>
@@ -55,9 +54,9 @@
     </div>
 
     <%= f.input :information %>
-    <%= f.input :wcaDelegate %>
-    <%= f.input :organiser %>
-    <%= f.input :website %>
+    <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe %>
+    <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe %>
+    <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
     <%= f.input :eventSpecs %>
 

@@ -1,6 +1,17 @@
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
-  validates :name, length: { maximum: 50 }
+
+  ends_with_year_re = /\A.* (19|20)\d{2}\z/
+  pattern_link_re = /\[\{[^}]+}\{(https?:|mailto:)[^}]+}\]/
+  pattern_text_with_links_re = /\A[^{}]*(#{pattern_link_re.source}[^{}]*)*\z/
+  validates :name, length: { maximum: 50 },
+                   format: { with: ends_with_year_re }
+  validates :cellName, length: { maximum: 45 },
+                       format: { with: ends_with_year_re }
+  validates :venue, format: { with: pattern_text_with_links_re }
+  validates :wcaDelegate, format: { with: pattern_text_with_links_re }
+  validates :organiser, format: { with: pattern_text_with_links_re }
+  validates :website, format: { with: pattern_text_with_links_re }
   attr_accessor :start_date, :end_date
   before_validation :unpack_dates
   validate :valid_dates
