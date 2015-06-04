@@ -20,11 +20,13 @@
 /* Courtesy of https://github.com/hisea/devise-bootstrap-views */
 @import "devise_bootstrap_views";
 @import "bootstrap-datepicker3";
+@import "cubing-icons";
 
 /* New stuff */
 @import "posts";
 @import "delegates";
 @import "users";
+@import "competitions";
 
 /* Gross stuff copied over from the old site */
 @import "navbar-static-top";

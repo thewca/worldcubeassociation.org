@@ -13,7 +13,7 @@ after "development:users", "development:persons" do
     day: yesterday.day,
     endMonth: yesterday.month,
     endDay: yesterday.day,
-    eventSpecs: "333 333oh",
+    eventSpecs: "333 333oh magic",
     wcaDelegate: delegate.name,
     organiser: delegate.name,
     venue: "My backyard",

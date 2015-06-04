@@ -30,6 +30,7 @@ $(document).on("page:change", function() {
     todayBtn: true,
     todayHighlight: true
   });
+  $('[data-toggle="tooltip"]').tooltip();
 });
 
 // Hack to make jquery.are-you-sure work with Rails's turbo links, which does

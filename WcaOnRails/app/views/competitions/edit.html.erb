@@ -77,11 +77,12 @@
           <label class="col-sm-2 control-label"><%= label %></label>
           <div class="col-sm-9">
             <% available_events.each do |event| %>
-              <div class="checkbox">
+              <span class="event-checkbox">
                 <label>
-                  <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %> <%= event.name %>
+                  <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %>
+                  <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
                 </label>
-              </div>
+              </span>
             <% end %>
           </div>
         </div>
