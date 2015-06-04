@@ -11,14 +11,14 @@
     TODO - handle location
     TODO - eventspecs...
     TODO - registration
-    TODO - description+example text good
+    TODO - php code does some verification, such as competition name ending in year
 
     TODO - datepickers? http://eternicode.github.io/bootstrap-datepicker/?markup=range&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&clearBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox
   </pre>
 
   <hr>
   <h2>General information</h2>
-  <%= simple_form_for @competition, html: { class: 'form-horizontal' },   wrapper: :horizontal_form,
+  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure' },   wrapper: :horizontal_form,
   wrapper_mappings: {
     check_boxes: :horizontal_radio_and_checkboxes,
     radio_buttons: :horizontal_radio_and_checkboxes,

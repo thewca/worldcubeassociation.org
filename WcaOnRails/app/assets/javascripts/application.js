@@ -23,7 +23,7 @@
 // Reinitialize any plugins when turbolinks changes the page.
 $(document).on("page:change", function() {
   $('.dropdown-toggle').dropdownHover();
-  $('form').areYouSure();
+  $('form.are-you-sure').areYouSure();
 });
 
 // Hack to make jquery.are-you-sure work with Rails's turbo links, which does
