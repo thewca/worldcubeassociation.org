@@ -41,6 +41,8 @@ GEM
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-datepicker-rails (1.4.0)
+      railties (>= 3.0)
     bootstrap-sass (3.2.0.0)
       sass (~> 3.2)
     bootstrap-will_paginate (0.0.10)
@@ -299,6 +301,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-datepicker-rails
   bootstrap-sass
   bootstrap-will_paginate
   byebug

@@ -12,8 +12,6 @@
     TODO - eventspecs...
     TODO - registration
     TODO - php code does some verification, such as competition name ending in year
-
-    TODO - datepickers? http://eternicode.github.io/bootstrap-datepicker/?markup=range&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&clearBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox
   </pre>
 
   <hr>
@@ -38,11 +36,24 @@
     <%= f.input :latitude %>
     <%= f.input :longitude %>
     <%= f.input :venueDetails %>
-    <%= f.input :year %>
-    <%= f.input :month %>
-    <%= f.input :day %>
-    <%= f.input :endMonth %>
-    <%= f.input :endDay %>
+
+    <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
+      <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+        Dates
+      </label>
+      <div class="col-sm-9">
+        <div class="input-daterange input-group" id="datepicker">
+
+          <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
+          <%= f.error :start_date %>
+          <span class="input-group-addon">to</span>
+          <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
+        </div>
+        <span class="help-block"><%= f.error :start_date %></span>
+        <span class="help-block"><%= f.error :end_date %></span>
+      </div>
+    </div>
+
     <%= f.input :information %>
     <%= f.input :wcaDelegate %>
     <%= f.input :organiser %>

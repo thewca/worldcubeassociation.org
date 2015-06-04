@@ -18,12 +18,18 @@
 //= require local_time
 //= require wice_grid
 //= require jquery.are-you-sure
+//= require bootstrap-datepicker/core
 //= require_tree .
 
 // Reinitialize any plugins when turbolinks changes the page.
 $(document).on("page:change", function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
+  $('.input-daterange').datepicker({
+    format: "yyyy-mm-dd",
+    todayBtn: true,
+    todayHighlight: true
+  });
 });
 
 // Hack to make jquery.are-you-sure work with Rails's turbo links, which does
