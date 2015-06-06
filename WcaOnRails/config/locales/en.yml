@@ -37,3 +37,10 @@ en:
         venueDetails: "Venue details"
         wcaDelegate: "WCA delegate(s)"
         organiser: "Organiser(s)"
+        isConfirmed: "Confirm details"
+        showAtAll: "Visible"
+        showPreregForm: "Registration form"
+        showPreregList: "Show registered competitors"
+  competitions:
+    edit:
+      confirmation_message: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Be sure to send the Board a message so they make the competition public."

@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :edit, :update]
 
-  resources :competitions, only: [:index, :edit, :update]
+  resources :competitions, only: [:index, :edit, :update] do
+    member do
+      resources :registration, only: [:index, :update]
+    end
+  end
+  get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
 
   root 'posts#index'
   resources :posts

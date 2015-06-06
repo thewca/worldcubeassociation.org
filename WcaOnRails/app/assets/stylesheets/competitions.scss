@@ -28,3 +28,14 @@
     }
   }
 }
+
+$venue-map-wrapper-height: 400px;
+#venue-map-wrapper {
+  height: $venue-map-wrapper-height;
+  .map {
+    height: $venue-map-wrapper-height - 10px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+  }
+}

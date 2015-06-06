@@ -12,10 +12,41 @@ class Competition < ActiveRecord::Base
   validates :wcaDelegate, format: { with: pattern_text_with_links_re }
   validates :organiser, format: { with: pattern_text_with_links_re }
   validates :website, format: { with: pattern_text_with_links_re }
+
   attr_accessor :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
   validate :events_must_be_valid
+
+  alias_attribute :latitude_microdegrees, :latitude
+  alias_attribute :longitude_microdegrees, :longitude
+  attr_accessor :longitude_degrees, :latitude_degrees
+  before_validation :compute_coordinates
+
+  def longitude_degrees
+    longitude_microdegrees / 1e6
+  end
+
+  def longitude_degrees=(new_longitude_degrees)
+    @longitude_degrees = new_longitude_degrees.to_f
+  end
+
+  def latitude_degrees
+    latitude_microdegrees / 1e6
+  end
+
+  def latitude_degrees=(new_latitude_degrees)
+    @latitude_degrees = new_latitude_degrees.to_f
+  end
+
+  private def compute_coordinates
+    unless @latitude_degrees.nil?
+      self.latitude_microdegrees = @latitude_degrees * 1e6
+    end
+    unless @longitude_degrees.nil?
+      self.longitude_microdegrees = @longitude_degrees * 1e6
+    end
+  end
 
   def events
     # See https://github.com/cubing/worldcubeassociation.org/issues/95 for

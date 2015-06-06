@@ -7,6 +7,22 @@ module ControllerMacros
   end
 end
 
+module RequestMacros
+  def sign_in(user)
+  end
+
+  def login_admin
+    before :each do
+      user = FactoryGirl.create(:admin)
+      post_via_redirect new_user_session_path, {
+        'user[login]' => user.email,
+        'user[password]' => user.password,
+      }
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.extend ControllerMacros, :type => :controller
+  config.extend RequestMacros, :type => :request
 end

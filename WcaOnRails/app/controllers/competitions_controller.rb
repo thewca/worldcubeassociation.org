@@ -1,6 +1,8 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_admin_results_only
+  before_action :can_admin_results_only, except: [:edit]
+  # TODO - change so delegate can access their own comps as well
+  before_action :can_admin_results_only, only: [:edit]
 
   def index
     @competitions_grid = initialize_grid(Competition, {
@@ -22,6 +24,12 @@ class CompetitionsController < ApplicationController
     })
   end
 
+  def admin_edit
+    @competition = Competition.find(params[:id])
+    @admin_view = true
+    render 'edit'
+  end
+
   def edit
     @competition = Competition.find(params[:id])
   end
@@ -30,37 +38,60 @@ class CompetitionsController < ApplicationController
     @competition = Competition.find(params[:id])
     if @competition.update_attributes(competition_params)
       flash[:success] = "Successfully saved competition"
-      redirect_to edit_competition_path(@competition)
+      if params.has_key?(:admin_view)
+        redirect_to admin_edit_competition_path(@competition)
+      else
+        redirect_to edit_competition_path(@competition)
+      end
     else
       render 'edit'
     end
   end
 
   private def competition_params
-    competition_params = params.require(:competition).permit(
-      :isConfirmed,
-      :showAtAll,
-      :name,
-      :cellName,
-      :countryId,
-      :cityName,
-      :venue,
-      :venueAddress,
-      :latitude,
-      :longitude,
-      :venueDetails,
-      :start_date,
-      :end_date,
-      :information,
-      :wcaDelegate,
-      :organiser,
-      :website,
-      :showPreregForm,
-      :showPreregList,
-      event_ids: Event.all.map { |event| event.id.to_sym },
-    )
-    competition_params[:eventSpecs] = competition_params[:event_ids].select {|k, v| v == "1"}.keys.join " "
-    competition_params.delete(:event_ids)
+    permitted_competition_params = []
+    if @competition.isConfirmed? && !current_user.can_admin_results?
+      # If the competition is confirmed, non admins are not allowed to change anything.
+    else
+      permitted_competition_params += [
+        :name,
+        :cellName,
+        :countryId,
+        :cityName,
+        :venue,
+        :venueAddress,
+        :latitude_degrees,
+        :longitude_degrees,
+        :venueDetails,
+        :start_date,
+        :end_date,
+        :information,
+        :wcaDelegate,
+        :organiser,
+        :website,
+        :showPreregForm,
+        :showPreregList,
+        event_ids: Event.all.map { |event| event.id.to_sym },
+      ]
+      if current_user.can_admin_results?
+        permitted_competition_params += [
+          :isConfirmed,
+          :showAtAll
+        ]
+      end
+    end
+
+    competition_params = params.require(:competition).permit(*permitted_competition_params)
+    if competition_params.has_key?(:event_ids)
+      competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
+      competition_params.delete(:event_ids)
+    end
+    unless competition_params[:showPreregForm] == "1"
+      competition_params[:showPreregList] = "0"
+    end
+    if params[:commit] == "Confirm"
+      competition_params[:isConfirmed] = true
+    end
     competition_params
   end
 end

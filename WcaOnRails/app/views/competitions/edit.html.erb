@@ -3,18 +3,33 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <hr>
-  <h2>Announcements</h2>
-  <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="<%= @admin_view ? "" : "active" %>">
+      <%= link_to "Organizer view", edit_competition_path(@competition) %>
+    </li>
+    <% if current_user.can_admin_results? %>
+      <li role="presentation" class="<%= @admin_view ? "active" : "" %>">
+        <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <% if @admin_view %>
+    <h2>Announcements</h2>
+    <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
+    <hr>
+  <% end %>
   <pre>
     TODO - create competition post and results post
     TODO - registration
-    TODO - handle location
+
+    TODO - should we disable enter to save? i feel like it's actually more annoying than not, especially when it happens accidentally in the google maps fields
+    $("form.no-submit-on-enter").on("submit", function(e) {
+      e.preventDefault();
+    });
   </pre>
 
-  <hr>
-  <h2>General information</h2>
-  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure' },   wrapper: :horizontal_form,
+  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' },   wrapper: :horizontal_form,
   wrapper_mappings: {
     check_boxes: :horizontal_radio_and_checkboxes,
     radio_buttons: :horizontal_radio_and_checkboxes,
@@ -22,70 +37,143 @@
     boolean: :horizontal_boolean
   }  do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-
-    <%= f.input :isConfirmed %>
-    <%= f.input :showAtAll %>
-    <%= f.input :name %>
-    <%= f.input :cellName %>
-    <%= f.input :countryId, collection: Country.all.map(&:name) %>
-    <%= f.input :cityName %>
-    <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
-    <%= f.input :venueAddress %>
-    <%= f.input :latitude %>
-    <%= f.input :longitude %>
-    <%= f.input :venueDetails %>
-
-    <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
-      <label class="integer optional col-sm-2 control-label" for="datepicker-start">
-        Dates
-      </label>
-      <div class="col-sm-9">
-        <div class="input-daterange input-group" id="datepicker">
-
-          <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
-          <%= f.error :start_date %>
-          <span class="input-group-addon">to</span>
-          <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
+    <% if @admin_view %>
+      <%= hidden_field_tag :admin_view, "1" %>
+      <%= f.input :isConfirmed, label: "Locked", hint: "Organizers cannot edit a locked competition." %>
+      <%= f.input :showAtAll %>
+    <% else %>
+      <% if @competition.isConfirmed? && @competition.showAtAll? %>
+        <div class="alert alert-success">
+          This competition is publicly visible and locked for editing. If you need to make a change, contact the Board to unlock it.
         </div>
-        <span class="help-block"><%= f.error :start_date %></span>
-        <span class="help-block"><%= f.error :end_date %></span>
+      <% elsif @competition.isConfirmed? && !@competition.showAtAll? %>
+        <div class="alert alert-warning">
+          You've confirmed this competition, but it is not yet visible to the public. Contact the Board to make it visible.
+        </div>
+      <% elsif !@competition.isConfirmed? && @competition.showAtAll? %>
+        <div class="alert alert-danger">
+          This competition is publicly visible, any changes you make will show up to the public!
+        </div>
+      <% elsif !@competition.isConfirmed? && !@competition.showAtAll? %>
+        <div class="alert alert-warning">
+          This competition is not visible to the public. Fill in all the fields, click Confirm, and contact the Board to make it visible.
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @admin_view || !@competition.isConfirmed? %>
+      <h2>General information</h2>
+      <%= f.input :name %>
+      <%= f.input :cellName %>
+
+      <%= f.input :countryId, collection: Country.all.map(&:name) %>
+      <%= f.input :cityName %>
+      <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
+
+      <%= f.input :venueAddress %>
+      <div id="venue-map-wrapper">
+        <div class="map"></div>
       </div>
-    </div>
 
-    <%= f.input :information %>
-    <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe %>
-    <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe %>
-    <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
-
-    <% event_groups = [
-      [
-        "Events",
-        true,
-        @competition.events.select(&:official?),
-        Event.all_official,
-      ],
-      [
-        "Events that are no longer official",
-        false, # Only show deprecated events if this competition has any.
-        @competition.events.select(&:deprecated?),
-        Event.all_deprecated,
-      ]
-    ] %>
-    <% event_groups.each do |label, always_show, selected_events, available_events| %>
-      <% if always_show || !selected_events.empty? %>
-        <div class="form-group">
-          <label class="col-sm-2 control-label"><%= label %></label>
-          <div class="col-sm-9">
-            <% available_events.each do |event| %>
-              <span class="event-checkbox">
-                <label>
-                  <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %>
-                  <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                </label>
-              </span>
-            <% end %>
+      <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
+        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+          Coordinates
+        </label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <span class="input-group-addon">Latitude</span>
+            <input type="text" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
+            <span class="input-group-addon">Longitude</span>
+            <input type="text" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
           </div>
+          <span class="help-block"><%= f.error :latitude %></span>
+          <span class="help-block"><%= f.error :longitude %></span>
         </div>
+      </div>
+      <script>
+        function roundToMicrodegrees($el) {
+          // To prevent are you sure? from firing even when nothing has changed,
+          // explicitly round coordinates to an integer number of microdegrees.
+          var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
+          $el.val(rounded);
+        }
+        $('#venue-map-wrapper .map').locationpicker({
+          location: {
+            latitude: <%= @competition.latitude_degrees %>,
+            longitude: <%= @competition.longitude_degrees %>,
+          },
+          radius: 0,
+          scrollwheel: false,
+          inputBinding: {
+            latitudeInput: $('#competition_latitude'),
+            longitudeInput: $('#competition_longitude'),
+            locationNameInput: $('#competition_venueAddress')
+          },
+          enableAutocomplete: true,
+          oninitialized: function(component) {
+            roundToMicrodegrees($('#competition_latitude'));
+            roundToMicrodegrees($('#competition_longitude'));
+          },
+          onchanged: function(currentLocation, radius, isMarkerDropped) {
+            roundToMicrodegrees($('#competition_latitude'));
+            roundToMicrodegrees($('#competition_longitude'));
+          },
+        });
+      </script>
+
+      <%= f.input :venueDetails %>
+
+      <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
+        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+          Dates
+        </label>
+        <div class="col-sm-9">
+          <div class="input-daterange input-group" id="datepicker">
+
+            <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
+            <span class="input-group-addon">to</span>
+            <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
+          </div>
+          <span class="help-block"><%= f.error :start_date %></span>
+          <span class="help-block"><%= f.error :end_date %></span>
+        </div>
+      </div>
+
+      <%= f.input :information %>
+      <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe %>
+      <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe %>
+      <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
+
+      <% event_groups = [
+        [
+          "Events",
+          true,
+          @competition.events.select(&:official?),
+          Event.all_official,
+        ],
+        [
+          "Events that are no longer official",
+          false, # Only show deprecated events if this competition has any.
+          @competition.events.select(&:deprecated?),
+          Event.all_deprecated,
+        ]
+      ] %>
+      <% event_groups.each do |label, always_show, selected_events, available_events| %>
+        <% if always_show || !selected_events.empty? %>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= label %></label>
+            <div class="col-sm-9">
+              <% available_events.each do |event| %>
+                <span class="event-checkbox">
+                  <label>
+                    <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %>
+                    <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+                  </label>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -96,7 +184,10 @@
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <%= f.button :submit %>
+        <%= f.button :submit, class: "btn-primary" %>
+        <% unless @admin_view || @competition.isConfirmed? %>
+           <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
+        <% end %>
       </div>
     </div>
   <% end %>

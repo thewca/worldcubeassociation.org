@@ -19,6 +19,7 @@
 //= require wice_grid
 //= require jquery.are-you-sure
 //= require bootstrap-datepicker/core
+//= require locationpicker.jquery
 //= require_tree .
 
 // Reinitialize any plugins when turbolinks changes the page.

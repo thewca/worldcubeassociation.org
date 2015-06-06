@@ -81,4 +81,19 @@ RSpec.describe Competition, type: :model do
     competition = FactoryGirl.build :competition, eventSpecs: "333 333wtf"
     expect(competition).to be_invalid
   end
+
+  it "converts microdegrees to degrees" do
+    competition = FactoryGirl.build :competition, latitude: 40, longitude: 30
+    expect(competition.latitude_degrees).to eq 40/1e6
+    expect(competition.longitude_degrees).to eq 30/1e6
+  end
+
+  it "converts degrees to microdegrees when saving" do
+    competition = FactoryGirl.create :competition
+    competition.latitude_degrees = 3.5
+    competition.longitude_degrees = 4.6
+    competition.save!
+    expect(competition.latitude).to eq 3.5*1e6
+    expect(competition.longitude).to eq 4.6*1e6
+  end
 end

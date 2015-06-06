@@ -13,6 +13,7 @@ en:
     hints:
       competition:
         name: "The full name of the competition including the year at the end (e.g., European Rubik's Cube Championship 2006)."
+        showAtAll: "Make competition visible to the public."
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         venueDetails: "Details about the venue (e.g., On the first floor far in the back, follow the signs)."
