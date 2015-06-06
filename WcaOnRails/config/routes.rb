@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       only: [:new, :create, :edit, :update],
       path: 'users',
       path_names: { new: 'sign_up' },
-      controller: 'registrations',
+      controller: 'accounts/registrations',
       as: :user_registration do
         get :cancel
       end
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   resources :competitions, only: [:index, :edit, :update] do
     member do
-      resources :registration, only: [:index, :update]
+      resources :registrations, only: [:index, :update]
     end
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition

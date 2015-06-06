@@ -1,0 +1,47 @@
+<% provide(:title, "Registrations for #{@competition.name}") %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <ul class="nav nav-tabs">
+    <li role="presentation">
+      <%= link_to "Organizer view", edit_competition_path(@competition) %>
+    </li>
+    <% if current_user.can_admin_results? %>
+      <li role="presentation">
+        <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
+      </li>
+    <% end %>
+    <li role="presentation" class="active">
+      <%= link_to "Registration", registrations_path %>
+    </li>
+  </ul>
+
+  <pre>
+    TODO - copied from app/views/competitions/edit.html.erb, pull out into a shared layout %>
+    TODO - actually edit registrations!
+      - easy implementation might be to have rows of forms with ajax. can this be integrated into wicegrid?
+    TODO - email everyone...
+    TODO - export to excel and csv? wahhhhhhh
+  </pre>
+  <%= grid(@registrations_grid) do |g|
+    g.column name: "WCA id", attribute: "personId"
+    g.column name: "Name", attribute: "name"
+    g.column name: "Email", attribute: "email"
+
+    g.column name: "countryId", attribute: "countryId"
+    g.column name: "gender", attribute: "gender"
+    g.column name: "birthday", attribute: "birthYear" do |registration|
+      "#{registration.birthYear}-#{registration.birthMonth}-#{registration.birthDay}"
+    end
+    g.column name: "guests", attribute: "guests"
+    g.column name: "comments", attribute: "comments"
+    g.column name: "ip", attribute: "ip"
+    g.column name: "status", attribute: "status"
+    g.column name: "eventIds", attribute: "eventIds"
+
+    g.column do |registration|
+      link_to('Edit', edit_user_path(registration))
+    end
+  end -%>
+</div>

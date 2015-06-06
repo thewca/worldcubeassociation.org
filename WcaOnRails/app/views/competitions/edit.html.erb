@@ -12,13 +12,10 @@
         <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
       </li>
     <% end %>
+    <li role="presentation">
+      <%= link_to "Registration", registrations_path %>
+    </li>
   </ul>
-
-  <% if @admin_view %>
-    <h2>Announcements</h2>
-    <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
-    <hr>
-  <% end %>
   <pre>
     TODO - create competition post and results post
     TODO - registration
@@ -28,6 +25,12 @@
       e.preventDefault();
     });
   </pre>
+
+  <% if @admin_view %>
+    <h2>Announcements</h2>
+    <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
+    <hr>
+  <% end %>
 
   <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' },   wrapper: :horizontal_form,
   wrapper_mappings: {
