@@ -23,5 +23,13 @@ describe PostsController do
       get :show, id: post.slug
       expect(assigns(:post)).to eq post
     end
+
+    it "only matches exact ids" do
+      post1 = FactoryGirl.create(:post)
+      post2 = FactoryGirl.create(:post)
+      post2.update_attribute(:slug, "#{post1.id}-foo")
+      get :show, id: post2.slug
+      expect(assigns(:post)).to eq post2
+    end
   end
 end

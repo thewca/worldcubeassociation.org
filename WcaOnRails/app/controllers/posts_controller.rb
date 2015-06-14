@@ -37,6 +37,7 @@ class PostsController < ApplicationController
   def update
     @post = find_post
     if @post.update_attributes(post_params)
+      flash[:success] = "Updated post"
       redirect_to post_path(@post.slug)
     else
       render 'edit'
@@ -62,6 +63,15 @@ class PostsController < ApplicationController
   end
 
   private def find_post
-    Post.where("id = ? OR slug = ?", params[:id], params[:id]).first
+    # We explicitly query for slug rather than using an OR, because mysql does
+    # weird things when searching for an id using a string:
+    #  mysql> select id from posts where id="2014-foo";
+    #  +------+
+    #  | id   |
+    #  +------+
+    #  | 2014 |
+    #  +------+
+    #  1 row in set, 1 warning (0.00 sec)
+    post = Post.find_by_slug(params[:id]) || Post.find_by_id!(params[:id])
   end
 end
