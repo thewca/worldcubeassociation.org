@@ -12,7 +12,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 
 ## Run
 - `vagrant up` - Once the VM finishes initializing (which can take some time),
-  the website will be accessible at [http://localhost:8080](http://localhost:8080).
+  the website will be accessible at [http://localhost:2331](http://localhost:2331).
   - Unfortunately, spinning up a development environment requires a database
     dump. We intend to remove that requirement in the future, but until then,
     please contact software-admins@worldcubeassociation.org if you need access.
