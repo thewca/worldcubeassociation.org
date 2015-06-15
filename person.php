@@ -76,7 +76,7 @@ function showBody () {
   tableEnd();
 
   #--- Try the cache for the results
-  tryCache( 'person', $chosenPersonId );
+  # tryCache( 'person', $chosenPersonId );
 
   #--- Now the results.
   require( 'includes/person_personal_records_current.php' );

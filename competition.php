@@ -28,7 +28,7 @@ if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] +
                                $competition['day']) ){
 
   #--- Try the cache
-  tryCache( 'competition', $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners );
+  # tryCache( 'competition', $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners );
 
   #--- Show competition results...
   offerChoicesResults();
