@@ -21,27 +21,74 @@
     TODO - copied from app/views/competitions/edit.html.erb, pull out into a shared layout %>
     TODO - actually edit registrations!
       - easy implementation might be to have rows of forms with ajax. can this be integrated into wicegrid?
+      - ajax seems easy, but need to handle errors somehow...
     TODO - email everyone...
     TODO - export to excel and csv? wahhhhhhh
+    TODO - paginate/filter/sort... pure js? wicegrid doesn't seem like a great choice here
   </pre>
-  <%= grid(@registrations_grid) do |g|
-    g.column name: "WCA id", attribute: "personId"
-    g.column name: "Name", attribute: "name"
-    g.column name: "Email", attribute: "email"
 
-    g.column name: "countryId", attribute: "countryId"
-    g.column name: "gender", attribute: "gender"
-    g.column name: "birthday", attribute: "birthYear" do |registration|
-      "#{registration.birthYear}-#{registration.birthMonth}-#{registration.birthDay}"
-    end
-    g.column name: "guests", attribute: "guests"
-    g.column name: "comments", attribute: "comments"
-    g.column name: "ip", attribute: "ip"
-    g.column name: "status", attribute: "status"
-    g.column name: "eventIds", attribute: "eventIds"
-
-    g.column do |registration|
-      link_to('Edit', edit_user_path(registration))
-    end
-  end -%>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>WCA id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Country</th>
+        <th>Gender</th>
+        <th>Birthday</th>
+        <th>Guests</th>
+        <th>Comments</th>
+        <th>IP</th>
+        <th>Status</th>
+        <th>Events</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @competition.registrations.each do |registration| %>
+        <tr>
+          <%= form_for registration do |f| %>
+            <td>
+              <%= f.text_field :personId, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.text_field :name, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.email_field :email, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.text_field :countryId, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.text_field :gender, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.text_field :birthday, class: "form-control" %>
+            </td>
+            <td>
+              <%= registration.guests %>
+            </td>
+            <td>
+              <%= registration.comments %>
+            </td>
+            <td>
+              <%= registration.ip %>
+            </td>
+            <td>
+              <%# TODO %>
+              <%= f.text_field :status, class: "form-control" %>
+            </td>
+            <td>
+              <%# TODO %>
+              <%= f.text_field :eventIds, class: "form-control" %>
+            </td>
+            <td>
+              <%= f.submit "Save", class: "btn btn-default" %>
+            </td>
+          <% end %>
+        <tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

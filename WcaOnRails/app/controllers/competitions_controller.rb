@@ -1,7 +1,7 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :can_admin_results_only, except: [:edit]
-  # TODO - change so delegate can access their own comps as well
+  # TODO - change so organizers/delegates can access their own comps as well
   before_action :can_admin_results_only, only: [:edit]
 
   def index
