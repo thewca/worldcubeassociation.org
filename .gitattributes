@@ -1,9 +1,0 @@
-text=auto
-
-*.php text eol=lf
-*.txt text eol=lf
-*.css text eol=lf
-
-*.png binary
-*.ico binary
-*.gif binary
