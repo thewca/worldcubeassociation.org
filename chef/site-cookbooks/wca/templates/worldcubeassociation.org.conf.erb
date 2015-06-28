@@ -12,7 +12,7 @@ upstream app {
 server {
   server_name <%= @server_name %> localhost;
 
-<% if node.chef_environment != "development" %>
+<% if @https %>
   listen 443 ssl;
   include wca_https.conf;
 <% else %>

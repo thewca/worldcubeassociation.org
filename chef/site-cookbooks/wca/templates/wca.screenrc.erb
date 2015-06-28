@@ -5,9 +5,9 @@ defscrollback 50000
 chdir <%= @rails_root %>
 screen -t run
 <% if @rails_env == "development" %>
-stuff "RACK_ENV=development bundle install --without none; RACK_ENV=development bundle exec rails server\012"
+stuff "RACK_ENV=development DATABASE_URL=<%= @db_url %> bundle exec rails server\012"
 <% else %>
-stuff "RACK_ENV=production bundle install --without none; RACK_ENV=production bundle exec rake assets:clean assets:precompile; RACK_ENV=production bundle exec unicorn -D -c config/unicorn.rb\012"
+stuff "RACK_ENV=production bundle exec rake assets:clean assets:precompile; RACK_ENV=production bundle exec unicorn -D -c config/unicorn.rb\012"
 <% end %>
 
 screen -t dev

@@ -7,15 +7,13 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Install [Vagrant](https://www.vagrantup.com/), which requires
   [VirtualBox](https://www.virtualbox.org/).
 - `git clone https://github.com/cubing/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
-- `git submodule update --init --recursive` - Initialize submodules. (Note: you will need to have access to the [cubing/wca-website-php](https://github.com/cubing/wca-website-php) repo, and an [SSH key](https://help.github.com/articles/generating-ssh-keys/) set up for this.)
+- `git submodule update --init --recursive` - Initialize submodules.
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run
-- `vagrant up` - Once the VM finishes initializing (which can take some time),
+- `vagrant up noregs` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:2331](http://localhost:2331).
-  - Unfortunately, spinning up a development environment requires a database
-    dump. We intend to remove that requirement in the future, but until then,
-    please contact software-admins@worldcubeassociation.org if you need access.
+  - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
 
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH

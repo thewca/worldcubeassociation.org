@@ -4,6 +4,10 @@ require 'securerandom'
 include_recipe "wca::base"
 include_recipe "nodejs"
 
+unless node.chef_environment.include? "-noregs"
+  include_recipe "wca::regulations"
+end
+
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 if username == "cubing"
@@ -42,7 +46,6 @@ if username == "cubing"
 
   ssh_known_hosts_entry 'github.com'
   chef_env_to_branch = {
-    "development" => "master",
     "staging" => "master",
     "production" => "production",
   }
@@ -94,8 +97,6 @@ template "/etc/my.cnf" do
     secrets: secrets
   })
 end
-db_dump_folder = "#{repo_root}/secrets/wca_db"
-execute "#{repo_root}/scripts/db.sh import #{db_dump_folder}"
 
 
 #### Ruby and Rails
@@ -112,6 +113,7 @@ gem_package "rails" do
 end
 chef_env_to_rails_env = {
   "development" => "development",
+  "development-noregs" => "development",
   "staging" => "production",
   "production" => "production",
 }
@@ -170,9 +172,9 @@ directory "/etc/nginx/conf.d" do
   group 'root'
 end
 
-server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
+server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "", "development-noregs" => "" }[node.chef_environment]
 # Use HTTPS in non development mode
-https = node.chef_environment != "development"
+https = !node.chef_environment.start_with?("development")
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644
@@ -214,6 +216,7 @@ end
 
 
 #### Rails secrets
+db_url = "mysql2://root:#{secrets['mysql_password']}@localhost/cubing"
 template "#{rails_root}/.env.production" do
   source "env.production"
   mode 0644
@@ -221,6 +224,7 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
     secrets: secrets,
+    db_url: db_url,
   })
 end
 
@@ -271,6 +275,30 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
   })
 end
 
+#### Initialize rails gems/database
+execute "bundle install --without none" do
+  cwd rails_root
+  environment({
+    "RACK_ENV" => rails_env,
+  })
+end
+if node.chef_environment.start_with?("development")
+  db_setup_lockfile = '/tmp/rake-db-setup-run'
+  execute "bundle exec rake db:setup" do
+    cwd rails_root
+    environment({
+      "DATABASE_URL" => db_url,
+      "RACK_ENV" => rails_env,
+    })
+    not_if { ::File.exists?(db_setup_lockfile) }
+  end
+  file db_setup_lockfile do
+    action :create_if_missing
+  end
+else
+  db_dump_folder = "#{repo_root}/secrets/wca_db"
+  execute "#{repo_root}/scripts/db.sh import #{db_dump_folder}"
+end
 
 #### Screen
 template "/home/#{username}/.bash_profile" do
@@ -293,6 +321,8 @@ template "/home/#{username}/wca.screenrc" do
   variables({
     rails_root: rails_root,
     rails_env: rails_env,
+    db_url: db_url,
+    secrets: secrets,
   })
 end
 template "/home/#{username}/startall" do

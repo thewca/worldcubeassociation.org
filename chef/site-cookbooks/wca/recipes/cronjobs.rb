@@ -5,7 +5,7 @@ path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
 
 db_dump_folder = "#{repo_root}/secrets/wca_db"
 dump_command = "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
-if node.chef_environment != "development"
+unless node.chef_environment.start_with?("development")
   cron "db backup" do
     minute '0'
     hour '0'
@@ -28,7 +28,7 @@ html_format_envvars = {
 }
 init_php_commands = []
 init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
-if node.chef_environment != "development"
+unless node.chef_environment.start_with?("development")
   cron "cronned results scripts" do
     minute '0'
     hour '4'
