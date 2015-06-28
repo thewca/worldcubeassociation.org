@@ -1,3 +1,6 @@
 [submodule "wca-documents-extra"]
 	path = wca-documents-extra
 	url = git@github.com:cubing/wca-documents-extra.git
+[submodule "webroot/results/includes/thirdparty/PHPExcel"]
+	path = webroot/results/includes/thirdparty/PHPExcel
+	url = git://github.com/PHPOffice/PHPExcel.git
