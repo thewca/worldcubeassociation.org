@@ -11,10 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+module ActiveRecord
+  module ConnectionAdapters
+    class AbstractAdapter
+      class SchemaCreation # :nodoc:
+        private
+          def visit_ColumnDefinition(o)
+            sql_type = type_to_sql(o.type, o.limit, o.precision, o.scale)
+            column_sql = "#{quote_column_name(o.name)} #{sql_type}"
+            add_column_options!(column_sql, column_options(o)) unless o.primary_key?
+            #### Begin monkeypatch to get a string id PRIMARY KEY working in sqlite
+            if o.primary_key? && o.type == :string
+              column_sql << " PRIMARY KEY"
+            end
+            #### End monkeypatch
+            column_sql
+          end
+      end
+    end
+  end
+end
+
 ActiveRecord::Schema.define(version: 20150603015039) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
-    t.string  "id",                null: false
+    t.string  "id",                null: false,     primary_key: true
     t.string  "name",              limit: 50,       default: "",    null: false
     t.string  "cityName",          limit: 50,       default: "",    null: false
     t.string  "countryId",         limit: 50,       default: "",    null: false
@@ -84,21 +105,21 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   end
 
   create_table "Continents", id: false, force: :cascade do |t|
-    t.string  "id",         null: false
-    t.string  "name",       limit: 50, default: "", null: false
-    t.string  "recordName", limit: 3,  default: "", null: false
-    t.integer "latitude",   limit: 4,  default: 0,  null: false
-    t.integer "longitude",  limit: 4,  default: 0,  null: false
-    t.integer "zoom",       limit: 1,  default: 0,  null: false
+    t.string  "id",         null: false, primary_key: true
+    t.string  "name",       limit: 50,   default: "", null: false
+    t.string  "recordName", limit: 3,    default: "", null: false
+    t.integer "latitude",   limit: 4,    default: 0,  null: false
+    t.integer "longitude",  limit: 4,    default: 0,  null: false
+    t.integer "zoom",       limit: 1,    default: 0,  null: false
   end
 
   create_table "Countries", id: false, force: :cascade do |t|
-    t.string  "id",          null: false
-    t.string  "name",        limit: 50, default: "", null: false
-    t.string  "continentId", limit: 50, default: "", null: false
-    t.integer "latitude",    limit: 4,  default: 0,  null: false
-    t.integer "longitude",   limit: 4,  default: 0,  null: false
-    t.integer "zoom",        limit: 1,  default: 0,  null: false
+    t.string  "id",          null: false, primary_key: true
+    t.string  "name",        limit: 50,   default: "", null: false
+    t.string  "continentId", limit: 50,   default: "", null: false
+    t.integer "latitude",    limit: 4,    default: 0,  null: false
+    t.integer "longitude",   limit: 4,    default: 0,  null: false
+    t.integer "zoom",        limit: 1,    default: 0,  null: false
     t.string  "iso2",        limit: 2
   end
 
@@ -106,26 +127,26 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   add_index "Countries", ["iso2"], name: "iso2", unique: true
 
   create_table "Events", id: false, force: :cascade do |t|
-    t.string  "id",       null: false
-    t.string  "name",     limit: 54, default: "", null: false
-    t.integer "rank",     limit: 4,  default: 0,  null: false
-    t.string  "format",   limit: 10, default: "", null: false
-    t.string  "cellName", limit: 45, default: "", null: false
+    t.string  "id",       null: false, primary_key: true
+    t.string  "name",     limit: 54,   default: "", null: false
+    t.integer "rank",     limit: 4,    default: 0,  null: false
+    t.string  "format",   limit: 10,   default: "", null: false
+    t.string  "cellName", limit: 45,   default: "", null: false
   end
 
   create_table "Formats", id: false, force: :cascade do |t|
-    t.string  "id",  null: false
-    t.string "name", limit: 50, default: "", null: false
+    t.string  "id",  null: false, primary_key: true
+    t.string "name", limit: 50,   default: "", null: false
   end
 
   create_table "InboxPersons", id: false, force: :cascade do |t|
-    t.string "id",            limit: 10,              null: false
-    t.string "wcaId",         limit: 10, default: "", null: false
+    t.string "id",            limit: 10, primary_key: true,  null: false
+    t.string "wcaId",         limit: 10, default: "",        null: false
     t.string "name",          limit: 80
-    t.string "countryId",     limit: 2,  default: "", null: false
-    t.string "gender",        limit: 1,  default: "", null: false
-    t.date   "dob",                                   null: false
-    t.string "competitionId", limit: 32,              null: false
+    t.string "countryId",     limit: 2,  default: "",        null: false
+    t.string "gender",        limit: 1,  default: "",        null: false
+    t.date   "dob",                                          null: false
+    t.string "competitionId", limit: 32,                     null: false
   end
 
   add_index "InboxPersons", ["countryId"], name: "InboxPersons_fk_country"
@@ -133,7 +154,7 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   add_index "InboxPersons", ["wcaId"], name: "InboxPersons_id"
 
   create_table "InboxPersons_old", id: false, force: :cascade do |t|
-    t.string  "id",                limit: 10, default: "", null: false
+    t.string  "id",                limit: 10, default: "", null: false, primary_key: true
     t.integer "subId",             limit: 1,  default: 1,  null: false
     t.string  "name",              limit: 80
     t.string  "countryId",         limit: 50, default: "", null: false
@@ -201,7 +222,7 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   add_index "InboxResults_old", ["roundId"], name: "InboxResults_old_fk_round"
 
   create_table "Persons", id: false, force: :cascade do |t|
-    t.string  "id",        limit: 10, default: "", null: false
+    t.string  "id",        limit: 10, default: "", null: false, primary_key: true
     t.integer "subId",     limit: 1,  default: 1,  null: false
     t.string  "name",      limit: 80
     t.string  "countryId", limit: 50, default: "", null: false
@@ -288,15 +309,15 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   add_index "Results", ["roundId"], name: "Results_fk_round"
 
   create_table "ResultsStatus", id: false, force: :cascade do |t|
-    t.string "id",    limit: 50, default: "", null: false
+    t.string "id",    limit: 50, default: "", null: false, primary_key: true
     t.string "value", limit: 50, default: "", null: false
   end
 
   create_table "Rounds", id: false, force: :cascade do |t|
-    t.string  "id",       null: false
-    t.integer "rank",     limit: 4,  default: 0,  null: false
-    t.string  "name",     limit: 50, default: "", null: false
-    t.string  "cellName", limit: 45, default: "", null: false
+    t.string  "id",       null: false, primary_key: true
+    t.integer "rank",     limit: 4,    default: 0,  null: false
+    t.string  "name",     limit: 50,   default: "", null: false
+    t.string  "cellName", limit: 45,   default: "", null: false
   end
 
   create_table "Scrambles", primary_key: "scrambleId", force: :cascade do |t|

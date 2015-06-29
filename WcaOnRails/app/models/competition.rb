@@ -1,5 +1,6 @@
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
+
   has_many :registrations, foreign_key: "competitionId"
 
   ends_with_year_re = /\A.* (19|20)\d{2}\z/
