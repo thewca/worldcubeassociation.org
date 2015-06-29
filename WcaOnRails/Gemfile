@@ -8,6 +8,7 @@ gem 'therubyracer'
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'envied'
+gem 'seedbank'
 
 gem 'jquery-rails'
 gem 'turbolinks'

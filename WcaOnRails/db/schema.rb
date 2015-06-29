@@ -13,7 +13,8 @@
 
 ActiveRecord::Schema.define(version: 20150603015039) do
 
-  create_table "Competitions", force: :cascade do |t|
+  create_table "Competitions", id: false, force: :cascade do |t|
+    t.string  "id",                null: false
     t.string  "name",              limit: 50,       default: "",    null: false
     t.string  "cityName",          limit: 50,       default: "",    null: false
     t.string  "countryId",         limit: 50,       default: "",    null: false
@@ -82,7 +83,8 @@ ActiveRecord::Schema.define(version: 20150603015039) do
     t.integer "day",         limit: 2,  default: 0,  null: false
   end
 
-  create_table "Continents", force: :cascade do |t|
+  create_table "Continents", id: false, force: :cascade do |t|
+    t.string  "id",         null: false
     t.string  "name",       limit: 50, default: "", null: false
     t.string  "recordName", limit: 3,  default: "", null: false
     t.integer "latitude",   limit: 4,  default: 0,  null: false
@@ -90,7 +92,8 @@ ActiveRecord::Schema.define(version: 20150603015039) do
     t.integer "zoom",       limit: 1,  default: 0,  null: false
   end
 
-  create_table "Countries", force: :cascade do |t|
+  create_table "Countries", id: false, force: :cascade do |t|
+    t.string  "id",          null: false
     t.string  "name",        limit: 50, default: "", null: false
     t.string  "continentId", limit: 50, default: "", null: false
     t.integer "latitude",    limit: 4,  default: 0,  null: false
@@ -102,14 +105,16 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   add_index "Countries", ["continentId"], name: "fk_continents"
   add_index "Countries", ["iso2"], name: "iso2", unique: true
 
-  create_table "Events", force: :cascade do |t|
+  create_table "Events", id: false, force: :cascade do |t|
+    t.string  "id",       null: false
     t.string  "name",     limit: 54, default: "", null: false
     t.integer "rank",     limit: 4,  default: 0,  null: false
     t.string  "format",   limit: 10, default: "", null: false
     t.string  "cellName", limit: 45, default: "", null: false
   end
 
-  create_table "Formats", force: :cascade do |t|
+  create_table "Formats", id: false, force: :cascade do |t|
+    t.string  "id",  null: false
     t.string "name", limit: 50, default: "", null: false
   end
 
@@ -287,7 +292,8 @@ ActiveRecord::Schema.define(version: 20150603015039) do
     t.string "value", limit: 50, default: "", null: false
   end
 
-  create_table "Rounds", force: :cascade do |t|
+  create_table "Rounds", id: false, force: :cascade do |t|
+    t.string  "id",       null: false
     t.integer "rank",     limit: 4,  default: 0,  null: false
     t.string  "name",     limit: 50, default: "", null: false
     t.string  "cellName", limit: 45, default: "", null: false

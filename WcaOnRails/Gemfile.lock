@@ -237,6 +237,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    seedbank (0.3.0)
     shellany (0.0.1)
     simple_form (3.1.0)
       actionpack (~> 4.0)
@@ -321,6 +322,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails
   sdoc
+  seedbank
   simple_form
   spring
   sqlite3
