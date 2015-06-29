@@ -32,6 +32,12 @@ $(document).on("page:change", function() {
     todayHighlight: true
   });
   $('[data-toggle="tooltip"]').tooltip();
+
+  $("form.no-submit-on-enter").bind("keypress", function(e) {
+    if(e.which === 13) {
+      e.preventDefault();
+    }
+  });
 });
 
 // Hack to make jquery.are-you-sure work with Rails's turbo links, which does

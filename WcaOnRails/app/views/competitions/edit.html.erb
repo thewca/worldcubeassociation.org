@@ -19,11 +19,6 @@
   <pre>
     TODO - create competition post and results post (showAnnouncement() in webroot/results/includes/competition_edit_View.php
     TODO - registration
-
-    TODO - should we disable enter to save? i feel like it's actually more annoying than not, especially when it happens accidentally in the google maps fields
-    $("form.no-submit-on-enter").on("submit", function(e) {
-      e.preventDefault();
-    });
   </pre>
 
   <% if @admin_view %>
@@ -32,7 +27,7 @@
     <hr>
   <% end %>
 
-  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' },   wrapper: :horizontal_form,
+  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
   wrapper_mappings: {
     check_boxes: :horizontal_radio_and_checkboxes,
     radio_buttons: :horizontal_radio_and_checkboxes,
