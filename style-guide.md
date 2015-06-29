@@ -96,6 +96,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "All" (collective) instead of "every".
 - "Each" (individual).
 - "Any" (potential, i.e. in case of applicability).
+- "Submit" instead of "hand in" or "turn in".
 
 ### Notable Differences between the Regulations and Common Use
 
