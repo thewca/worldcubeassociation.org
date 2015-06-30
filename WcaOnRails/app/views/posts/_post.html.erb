@@ -20,7 +20,7 @@
   </div>
   <div class="panel-body">
     <div>
-      <em>Submitted by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
+      <em>Announced by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
     </div>
     <%= post.body.html_safe %>
   </div>
