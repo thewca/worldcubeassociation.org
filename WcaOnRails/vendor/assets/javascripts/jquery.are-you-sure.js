@@ -75,6 +75,10 @@
         if (undefined === origValue) {
           return false;
         }
+        if($field.data('ays-ignore-float-close')) {//JFLY
+          var delta = parseFloat(getValue($field)) - parseFloat(origValue);//JFLY
+          return delta > 1e-5;//JFLY
+        }//JFLY
         return (getValue($field) != origValue);
       };
 

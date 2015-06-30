@@ -54,6 +54,7 @@ wrapper_mappings: {
 
     <%= f.input :venueAddress %>
     <div id="venue-map-wrapper">
+      <input type="text" id="googleMapsLocationInput" class="form-control" data-ays-ignore="true">
       <div class="map"></div>
     </div>
 
@@ -64,9 +65,9 @@ wrapper_mappings: {
       <div class="col-sm-9">
         <div class="input-group">
           <span class="input-group-addon">Latitude</span>
-          <input type="text" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
+          <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
           <span class="input-group-addon">Longitude</span>
-          <input type="text" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
+          <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
         </div>
         <span class="help-block"><%= f.error :latitude %></span>
         <span class="help-block"><%= f.error :longitude %></span>
@@ -89,7 +90,7 @@ wrapper_mappings: {
         inputBinding: {
           latitudeInput: $('#competition_latitude'),
           longitudeInput: $('#competition_longitude'),
-          locationNameInput: $('#competition_venueAddress')
+          locationNameInput: $('#googleMapsLocationInput')
         },
         enableAutocomplete: true,
         oninitialized: function(component) {

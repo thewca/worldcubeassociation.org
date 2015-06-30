@@ -32,6 +32,14 @@
 $venue-map-wrapper-height: 400px;
 #venue-map-wrapper {
   height: $venue-map-wrapper-height;
+
+  #googleMapsLocationInput {
+    position: absolute;
+    z-index: 1;
+    width: 50%;
+    margin-top: 10px;
+  }
+
   .map {
     height: $venue-map-wrapper-height - 10px;
     position: absolute;
