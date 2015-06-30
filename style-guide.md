@@ -79,6 +79,7 @@ This document is meant to clarify some of the implicit conventions adopted in WC
 - "Score sheet" (two words) instead of "score card".
 - "Apply" (moves or scramble sequence) instead of "perform" or "do".
 - "Assign" (a penalty) instead of "apply".
+- "Grant" an extra attempt instead of "give" or "award".
 - "Record" a result instead of "write down".
 - "Thus" instead of "thereby".
 - "Discretion" (of the delegate) instead of "consent".
