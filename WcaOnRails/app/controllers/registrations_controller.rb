@@ -1,9 +1,4 @@
-class RegistrationsController < ApplicationController
-  # TODO - copied from CompetitionsController, pull into a superclass?
-  before_action :authenticate_user!
-  # TODO - change so organizers/delegates can access their own comps as well
-  before_action :can_admin_results_only
-
+class RegistrationsController < CompetitionsController
   def index
     @competition = Competition.find(params[:id])
   end
@@ -13,7 +8,7 @@ class RegistrationsController < ApplicationController
     if @registration.update_attributes(registration_params)
       redirect_to registrations_path @registration.competition
     else
-      # TODO - what to do on failure? #<<<
+      # TODO - what to do on failure?
       redirect_to registrations_path @registration.competition
     end
   end

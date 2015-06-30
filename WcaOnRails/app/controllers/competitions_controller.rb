@@ -1,8 +1,12 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_admin_results_only, except: [:edit]
-  # TODO - change so organizers/delegates can access their own comps as well
-  before_action :can_admin_results_only, only: [:edit]
+  before_action :is_competition_organizer
+  before_action :can_admin_results_only, only: [:admin_edit]
+
+  private def is_competition_organizer
+    # TODO - allow organizers to edit their own competition
+    return true || current_user.can_admin_results?
+  end
 
   def index
     @competitions_grid = initialize_grid(Competition, {
@@ -22,6 +26,7 @@ class CompetitionsController < ApplicationController
         end
       }
     })
+    render layout: "application"
   end
 
   def admin_edit
