@@ -12,7 +12,7 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).
 - [French (Français) - 2014](./french/)
     - By [Philippe Virouleau](https://www.worldcubeassociation.org/results/p.php?i=2008VIRO01).
-- [German (Deutsch) - 2014](./german/)
+- [German (Deutsch) - 2015-07-01](./german/)
     - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Laura Ohrndorf](https://www.worldcubeassociation.org/results/p.php?i=2009OHRN01), and [Gregor Billing](https://www.worldcubeassociation.org/results/p.php?i=2012BILL01).
 - [Hungarian (magyar) - 2014](./hungarian/)
     - By [Nikolett Placskó](https://www.worldcubeassociation.org/results/p.php?i=2008PLAC01) and [Perge Olivér](https://www.worldcubeassociation.org/results/p.php?i=2007PERG01).
