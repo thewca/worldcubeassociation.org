@@ -3,7 +3,7 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
 
-  ends_with_year_re = /\A.* (19|20)\d{2}\z/
+  ends_with_year_re = /\A.* \d{4}\z/
   pattern_link_re = /\[\{[^}]+}\{(https?:|mailto:)[^}]+}\]/
   pattern_text_with_links_re = /\A[^{}]*(#{pattern_link_re.source}[^{}]*)*\z/
   validates :name, length: { maximum: 50 },
