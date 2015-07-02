@@ -38,6 +38,7 @@ class html():
   def __init__(self, language, buildDir, pdfName, isTranslation=False, verbose=False):
 
     print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
+    sys.stdout.flush()
 
     self.language = language
     self.isTranslation = isTranslation

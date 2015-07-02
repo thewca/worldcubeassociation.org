@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 
 MAX_LANG_WIDTH = 20
 
@@ -55,6 +56,7 @@ class pdf():
   def __init__(self, language, buildDir, isTranslation, pdf_name, tex_encoding, tex_command, verbose=False):
 
     print "%s Generating  PDF in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
+    sys.stdout.flush()
 
     self.docs_folder = "translations/" + language if isTranslation else "wca-regulations"
     self.temp_folder = "temp/" + language
