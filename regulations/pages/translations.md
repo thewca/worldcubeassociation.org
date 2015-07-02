@@ -30,7 +30,7 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By António Gomes.
 - [Russian - 2014](./russian/)
     - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
-- [Spanish, American (Español Americano) - 2014](./spanish-american/)
+- [Spanish, American (Español Americano) - 2015-07-01](./spanish-american/)
     - By Daniela Maldonado Hernández.
 - [Spanish, European (Español de España) - 2013](./spanish-european/)
     - By [Carlos Méndez García-Barroso](http://worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](http://worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](http://worldcubeassociation.org/results/p.php?i=2009SANC01).
