@@ -35,7 +35,7 @@ class html():
 
   footer_subdirs = footer.replace("assets/", "../assets/")
 
-  def __init__(self, language, buildDir, pdfName, gitBranch, translation=False, verbose=False):
+  def __init__(self, language, buildDir, pdfName, gitBranch="no_branch", translation=False, verbose=False):
 
     print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
 

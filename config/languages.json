@@ -1,223 +1,155 @@
 {
   "default": {
-    "branch": "",
     "name": "English",
     "native": "English",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "pdflatex",
-    "tex_encoding": "default",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "default"
   },
   "english": {
-    "branch": "official",
     "name": "English",
     "native": "English",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "default",
-    "remote_url": "https://github.com/cubing/wca-documents.git",
-    "remote_name": "cubing",
-    "remote_branch": "official"
+    "tex_encoding": "default"
   },
   "chinese": {
-    "branch": "chinese",
     "name": "Chinese",
     "native": "Chinese",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "cjk",
-    "remote_url": "https://github.com/ChenShuang/wca-documents.git",
-    "remote_name": "repo-chinese",
-    "remote_branch": "translation-chinese"
+    "tex_encoding": "cjk"
   },
   "chinese-traditional": {
-    "branch": "chinese-traditional",
     "name": "Chinese, Traditional",
     "native": "Chinese, Traditional",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "cjk",
-    "remote_url": "https://github.com/davidguo124/wca-documents.git",
-    "remote_name": "repo-chinese-traditional",
-    "remote_branch": "official"
+    "tex_encoding": "cjk"
   },
   "french": {
-    "branch": "french",
     "name": "French",
     "native": "Français",
     "regulations": "Règlement",
     "guidelines": "Recommandations",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "https://github.com/viroulep/wca-documents.git",
-    "remote_name": "repo-french",
-    "remote_branch": "translation-french"
+    "tex_encoding": "utf8"
   },
   "german": {
-    "branch": "german",
     "name": "German",
     "native": "Deutsch",
     "regulations": "Regeln",
     "guidelines": "Richtlinien",
     "pdf": "wca-regeln-und-richtlinien",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "https://github.com/fw42/wca-documents-german.git",
-    "remote_name": "repo-german",
-    "remote_branch": "translation-german"
+    "tex_encoding": "utf8"
   },
   "hungarian": {
-    "branch": "hungarian",
     "name": "Hungarian",
     "native": "magyar",
     "regulations": "Szabályzat",
     "guidelines": "Útmutató",
     "pdf": "wca-szabalyzat-es-utmutato",
     "tex_command": "pdflatex",
-    "tex_encoding": "hungarian",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "hungarian"
   },
   "indonesian": {
-    "branch": "indonesian",
     "name": "Indonesian",
     "native": "Indonesian",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "default",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "default"
   },
   "italian": {
-    "branch": "italian",
     "name": "Italian",
     "native": "Italiano",
     "regulations": "Regolamento",
     "guidelines": "Linee Guida",
     "pdf": "regolamento-e-linee-guida-wca",
     "tex_command": "xelatex",
-    "tex_encoding": "default",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "default"
   },
   "japanese": {
-    "branch": "japanese",
     "name": "Japanese",
     "native": "Japanese",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "cjk",
-    "remote_url": "https://github.com/speedsolve/wca-documents-japanese.git",
-    "remote_name": "repo-japanese",
-    "remote_branch": "translation-japanese"
+    "tex_encoding": "cjk"
   },
   "korean": {
-    "branch": "korean",
     "name": "Korean",
     "native": "Korean",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "xelatex",
-    "tex_encoding": "korean",
-    "remote_url": "https://github.com/CubeHoon/wca-documents-korean.git",
-    "remote_name": "repo-korean",
-    "remote_branch": "translation-korean"
+    "tex_encoding": "korean"
   },
   "russian": {
-    "branch": "russian",
     "name": "Russian",
     "native": "Russian",
     "regulations": "Regulations",
     "guidelines": "Guidelines",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "pdflatex",
-    "tex_encoding": "russian",
-    "remote_url": "https://github.com/Claster/wca-documents.git",
-    "remote_name": "repo-russian",
-    "remote_branch": "official"
+    "tex_encoding": "russian"
   },
   "spanish-european": {
-    "branch": "spanish-european",
     "name": "Spanish (European)",
     "native": "Español de España",
     "regulations": "Reglamento",
     "guidelines": "Directrices",
     "pdf": "wca-reglamento-y-directrices",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "https://github.com/Luis-J-Ianez/wca-documents-spanish.git",
-    "remote_name": "repo-spanish",
-    "remote_branch": "translation-spanish"
+    "tex_encoding": "utf8"
   },
   "spanish-american": {
-    "branch": "spanish-american",
     "name": "Spanish (American)",
     "native": "Español Americano",
     "regulations": "Reglamento",
     "guidelines": "Directrices",
     "pdf": "wca-reglamento-y-directrices",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "utf8"
   },
   "belarusian": {
-    "branch": "belarusian",
     "name": "Belarusian",
     "native": "Беларуская мова",
     "regulations": "Палажэнні",
     "guidelines": "Дапаўненні да Палажэнняў",
     "pdf": "wca-regulations-and-guidelines",
     "tex_command": "pdflatex",
-    "tex_encoding": "russian",
-    "remote_url": "https://github.com/cubing/wca-documents.git",
-    "remote_name": "repo-belarusian",
-    "remote_branch": "translation-belarusian"
+    "tex_encoding": "russian"
   },
   "portuguese-european": {
-    "branch": "portuguese-european",
     "name": "Portuguese (European)",
     "native": "Português Europeu",
     "regulations": "Regulamentos",
     "guidelines": "Orientações",
     "pdf": "wca-regulamentos-e-orientacoes",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "https://github.com/cubizh/wca-documents.git",
-    "remote_name": "repo-portuguese-european",
-    "remote_branch": "master"
+    "tex_encoding": "utf8"
   },
   "portuguese-brazilian": {
-    "branch": "portuguese-brazilian",
     "name": "Portuguese (Brazilian)",
     "native": "Português do Brasil",
     "regulations": "Regulamentos",
     "guidelines": "Orientações",
     "pdf": "wca-regulamentos-e-orientacoes",
     "tex_command": "pdflatex",
-    "tex_encoding": "utf8",
-    "remote_url": "",
-    "remote_name": "",
-    "remote_branch": ""
+    "tex_encoding": "utf8"
   }
 }

@@ -1,3 +1,6 @@
 [submodule "wca-documents"]
 	path = wca-documents
 	url = https://github.com/cubing/wca-documents.git
+[submodule "translations"]
+	path = translations
+	url = https://github.com/cubing/wca-regulations-translations

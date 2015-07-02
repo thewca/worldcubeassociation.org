@@ -49,31 +49,20 @@ def main():
   if args.no_pdf:
     args.pdf = False
 
-  startingBranch = currentBranch()
+  if args.setup_wca_documents:
+    setup_wca_documents(args)
 
-  try:
+  if args.clean:
+    clean(args)
 
-    if args.setup_wca_documents:
-      setup_wca_documents(args)
+  if not args.do_not_build:
+    build(args)
 
-    if args.clean:
-      clean(args)
+  if args.upload:
+    upload(args)
 
-    if not args.do_not_build:
-      build(args)
-
-    if args.upload:
-      upload(args)
-
-    if args.server:
-      server(args)
-
-  finally:
-
-    if args.reset_to_official:
-      checkoutWCADocs("official")
-    else:
-      checkoutWCADocs(startingBranch)
+  if args.server:
+    server(args)
 
 
 # Language Data Setup
@@ -232,16 +221,6 @@ main_git_command = [
 ]
 
 
-def currentBranch():
-  output = subprocess.check_output(main_git_command + [
-    "rev-parse",
-    "--abbrev-ref",
-    "HEAD"
-  ])
-
-  return output.strip()
-
-
 def checkoutWCADocs(branchName):
     subprocess.check_call(main_git_command + [
       "checkout",
@@ -292,7 +271,7 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
 
   pdfName = languageData[lang]["pdf"]
 
-  html.html(lang, buildDir, pdfName + ".pdf", gitBranch=languageData[lang]["branch"], translation=translation, verbose=args.verbose)
+  html.html(lang, buildDir, pdfName + ".pdf", translation=translation, verbose=args.verbose)
 
   if args.pdf:
     pdf.pdf(
@@ -306,14 +285,11 @@ def buildToDirectory(args, directory, lang=defaultLang, translation=False):
     )
 
 
-def buildBranch(args, branchName, directory, lang=defaultLang, translation=False):
-  if branchName == "official":
-    checkoutWCADocs(branchName)
+def buildBranch(args, directory, lang=defaultLang, translation=False):
   buildToDirectory(args, directory, lang, translation)
 
 
 def buildTranslation(args, lang):
-    branchName = languageData[lang]["branch"]
     directory = "translations/" + lang + "/"
     translation = True
 
@@ -322,7 +298,7 @@ def buildTranslation(args, lang):
       directory = ""
       translation = False
 
-    buildBranch(args, branchName, directory, lang=lang, translation=translation)
+    buildBranch(args, directory, lang=lang, translation=translation)
 
 
 def buildTranslationPooled(args, lang):
