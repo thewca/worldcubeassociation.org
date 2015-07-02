@@ -7,7 +7,7 @@
     g.column name: "id", attribute: "id"
     g.column name: "Name", attribute: "name"
     g.column name: "Start Date", attribute: "year" do |competition|
-      "#{competition.year}-#{competition.month}-#{competition.day}"
+      "#{competition.start_date}"
     end
 
     g.column do |competition|
