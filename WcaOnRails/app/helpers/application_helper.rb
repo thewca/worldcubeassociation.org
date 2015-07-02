@@ -22,4 +22,8 @@ module ApplicationHelper
       recaptcha_error: "alert-danger"
     }[flash_type.to_sym] || flash_type.to_s
   end
+
+  def md(content)
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML.new).render(content).html_safe
+  end
 end

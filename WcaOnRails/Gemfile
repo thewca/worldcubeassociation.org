@@ -27,6 +27,10 @@ gem 'doorkeeper'
 gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
+gem 'redcarpet'
+
+# TODO remove me after all posts have been updated to markdown
+gem 'reverse_markdown'
 
 gem 'system'
 gem 'unicorn'
