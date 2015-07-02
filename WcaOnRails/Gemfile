@@ -27,6 +27,7 @@ gem 'doorkeeper'
 gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
+gem 'redcarpet'
 
 gem 'system'
 gem 'unicorn'

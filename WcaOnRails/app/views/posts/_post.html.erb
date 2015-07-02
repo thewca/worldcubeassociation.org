@@ -22,6 +22,6 @@
     <div>
       <em>Announced by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
     </div>
-    <%= post.body.html_safe %>
+    <%=md post.body %>
   </div>
 </div>
