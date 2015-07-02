@@ -1,0 +1,146 @@
+{
+  "english": {
+    "name": "English",
+    "native": "English",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "default"
+  },
+  "chinese": {
+    "name": "Chinese",
+    "native": "Chinese",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "cjk"
+  },
+  "chinese-traditional": {
+    "name": "Chinese, Traditional",
+    "native": "Chinese, Traditional",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "cjk"
+  },
+  "french": {
+    "name": "French",
+    "native": "Français",
+    "regulations": "Règlement",
+    "guidelines": "Recommandations",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
+  "german": {
+    "name": "German",
+    "native": "Deutsch",
+    "regulations": "Regeln",
+    "guidelines": "Richtlinien",
+    "pdf": "wca-regeln-und-richtlinien",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
+  "hungarian": {
+    "name": "Hungarian",
+    "native": "magyar",
+    "regulations": "Szabályzat",
+    "guidelines": "Útmutató",
+    "pdf": "wca-szabalyzat-es-utmutato",
+    "tex_command": "pdflatex",
+    "tex_encoding": "hungarian"
+  },
+  "indonesian": {
+    "name": "Indonesian",
+    "native": "Indonesian",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "default"
+  },
+  "italian": {
+    "name": "Italian",
+    "native": "Italiano",
+    "regulations": "Regolamento",
+    "guidelines": "Linee Guida",
+    "pdf": "regolamento-e-linee-guida-wca",
+    "tex_command": "xelatex",
+    "tex_encoding": "default"
+  },
+  "japanese": {
+    "name": "Japanese",
+    "native": "Japanese",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "cjk"
+  },
+  "korean": {
+    "name": "Korean",
+    "native": "Korean",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "xelatex",
+    "tex_encoding": "korean"
+  },
+  "russian": {
+    "name": "Russian",
+    "native": "Russian",
+    "regulations": "Regulations",
+    "guidelines": "Guidelines",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "pdflatex",
+    "tex_encoding": "russian"
+  },
+  "spanish-european": {
+    "name": "Spanish (European)",
+    "native": "Español de España",
+    "regulations": "Reglamento",
+    "guidelines": "Directrices",
+    "pdf": "wca-reglamento-y-directrices",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
+  "spanish-american": {
+    "name": "Spanish (American)",
+    "native": "Español Americano",
+    "regulations": "Reglamento",
+    "guidelines": "Directrices",
+    "pdf": "wca-reglamento-y-directrices",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
+  "belarusian": {
+    "name": "Belarusian",
+    "native": "Беларуская мова",
+    "regulations": "Палажэнні",
+    "guidelines": "Дапаўненні да Палажэнняў",
+    "pdf": "wca-regulations-and-guidelines",
+    "tex_command": "pdflatex",
+    "tex_encoding": "russian"
+  },
+  "portuguese-european": {
+    "name": "Portuguese (European)",
+    "native": "Português Europeu",
+    "regulations": "Regulamentos",
+    "guidelines": "Orientações",
+    "pdf": "wca-regulamentos-e-orientacoes",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
+  "portuguese-brazilian": {
+    "name": "Portuguese (Brazilian)",
+    "native": "Português do Brasil",
+    "regulations": "Regulamentos",
+    "guidelines": "Orientações",
+    "pdf": "wca-regulamentos-e-orientacoes",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  }
+}

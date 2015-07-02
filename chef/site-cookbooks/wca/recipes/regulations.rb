@@ -1,7 +1,7 @@
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 
 #### Regulations dependencies
-# Dependencies for wca-documents-extra. Some of this came from
+# Dependencies for regulations. Some of this came from
 # https://github.com/cubing/wca-documents-extra/blob/master/.travis.yml, but has
 # been tweaked for Ubuntu 14.04
 package "git"
