@@ -207,6 +207,8 @@ GEM
     ref (1.0.5)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    reverse_markdown (0.6.0)
+      nokogiri
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -321,6 +323,7 @@ DEPENDENCIES
   rails (= 4.2.1)
   recaptcha
   redcarpet
+  reverse_markdown
   rspec-rails
   sass-rails
   sdoc
