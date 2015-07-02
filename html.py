@@ -35,14 +35,14 @@ class html():
 
   footer_subdirs = footer.replace("assets/", "../assets/")
 
-  def __init__(self, language, buildDir, pdfName, gitBranch="no_branch", translation=False, verbose=False):
+  def __init__(self, language, buildDir, pdfName, isTranslation=False, verbose=False):
 
     print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
 
     self.language = language
-    self.docs_folder = "translations/" + language if translation else "wca-documents"
+    self.isTranslation = isTranslation
+    self.docs_folder = "translations/" + language if self.isTranslation else "wca-regulations"
     self.build_folder = buildDir
-    self.translation = translation
     self.pdf_name = pdfName
     self.verbose = verbose
 
@@ -55,14 +55,13 @@ class html():
 
     regulations_text, guidelines_text = self.process_html({
       "git_hash": version,
-      "git_branch": gitBranch,
       "regs_text": regulations_text,
       "guides_text": guidelines_text,
       "regs_url": "./",
       "guides_url": "guidelines.html"
     })
 
-    header = self.header2_translations if translation else self.header2
+    header = self.header2_translations if self.isTranslation else self.header2
 
     with open(self.build_folder + "/index.html", "w") as f:
       f.write(self.header1 + "WCA Regulations" + header + regulations_text + self.footer)
@@ -81,7 +80,7 @@ class html():
     shutil.copy("files/html/assets/navbar-static-top.css", self.build_folder + "/assets/navbar-static-top.css")
     shutil.copy("files/html/assets/wca_logo.svg", self.build_folder + "/assets/wca_logo.svg")
 
-    if not translation:
+    if not self.isTranslation:
       self.pages()
 
   def write_page(self, title, path, filename, header2, footer, text):
@@ -176,7 +175,6 @@ class html():
     # Arguments
 
     gitHash = args["git_hash"]
-    gitBranch = args["git_branch"]
 
     self.regsText = args["regs_text"]
     self.guidesText = args["guides_text"]
@@ -287,8 +285,11 @@ class html():
     # Version
     gitLink = r''
     if (gitHash != ""):
-        repo = "https://github.com/cubing/wca-documents-translations" if self.translation else "https://github.com/cubing/wca-documents"
-        gitLink = '[<code><a href="%s/tree/%s">%s</a>:<a href="%s/commits/%s">%s</a></code>]' % (repo, gitBranch, gitBranch, repo, gitBranch, gitHash)
+        repo = "https://github.com/cubing/wca-regulations-translations" if self.isTranslation else "https://github.com/cubing/wca-regulations"
+        gitBranch = "master" if self.isTranslation else "official"
+        gitPathSuffix = "/" + self.language if self.isTranslation else ""
+        gitIdentifier = "wca-regulations-translations" if self.isTranslation else "official"
+        gitLink = '[<code><a href="%s/tree/%s%s">%s</a>:<a href="%s/commits/%s">%s</a></code>]' % (repo, gitBranch, gitPathSuffix, gitIdentifier, repo, gitHash, gitHash)
 
     self.replaceBothWithSame([1], [1],
                              r'<p><version>([^<]*)</p>',

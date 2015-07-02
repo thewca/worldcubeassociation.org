@@ -1,13 +1,4 @@
 {
-  "default": {
-    "name": "English",
-    "native": "English",
-    "regulations": "Regulations",
-    "guidelines": "Guidelines",
-    "pdf": "wca-regulations-and-guidelines",
-    "tex_command": "pdflatex",
-    "tex_encoding": "default"
-  },
   "english": {
     "name": "English",
     "native": "English",

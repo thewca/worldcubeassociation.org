@@ -21,10 +21,9 @@ import pdf
 # Script constants
 
 languages_file = "config/languages.json"
-upload_server_file = "config/upload_server.json"
 buildRootDir = "./build/regulations/"
 
-defaultLang = "default"
+defaultLanguage = "english"
 
 # Main
 
@@ -32,10 +31,6 @@ defaultLang = "default"
 def main():
 
   args = parser.parse_args()
-
-  if args.release:
-    args.wca = True
-    args.upload = True
 
   if args.wca:
     args.clean = True
@@ -49,17 +44,11 @@ def main():
   if args.no_pdf:
     args.pdf = False
 
-  if args.setup_wca_documents:
-    setup_wca_documents(args)
-
   if args.clean:
     clean(args)
 
   if not args.do_not_build:
     build(args)
-
-  if args.upload:
-    upload(args)
 
   if args.server:
     server(args)
@@ -72,16 +61,7 @@ with open(languages_file, "r") as fileHandle:
   languageData = json.load(fileHandle)
 
 languages = languageData.keys()
-languages.remove(defaultLang)
 
-
-# Configuration
-
-try:
-  with open(upload_server_file, "r") as fileHandle:
-    upload_server = json.load(fileHandle)
-except IOError:
-    upload_server = {}  # Might not be needed.
 
 # Script Parameters
 
@@ -100,9 +80,8 @@ parser.add_argument(
 
 parser.add_argument(
   '--language', '-l',
-  default=None,
-  help="Check out the branch (of wca-documents) and " +
-    "build into the appropriate subdirectory for the given language.",
+  default=defaultLanguage,
+  help="Language to build.",
   choices=languages
 )
 
@@ -142,21 +121,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-  '--reset-to-official', '-o',
-  action='store_true',
-  default=False,
-  help="Reset wca-documents by checking out official at the end. " +
-    "Useful with -d in order to reset wca-documents-extra for commits."
-)
-
-parser.add_argument(
-  '--upload', '-u',
-  action='store_true',
-  default=False,
-  help="Upload to an SFTP server on completion, using rsync."
-)
-
-parser.add_argument(
   '--server', '-s',
   action='store_true',
   default=False,
@@ -170,19 +134,6 @@ parser.add_argument(
   help="Full WCA release build. Equivalent to -cap."
 )
 
-parser.add_argument(
-  '--release', '-r',
-  action='store_true',
-  default=False,
-  help="Equivalent to -wu"
-)
-
-parser.add_argument(
-  '--setup-wca-documents',
-  action='store_true',
-  default=False,
-  help="Set up remotes for wca-documents."
-)
 
 try:
   num_cores_available = multiprocessing.cpu_count()
@@ -212,22 +163,6 @@ def clean(args):
     shutil.rmtree(buildRootDir)
 
 
-# Git Operations
-
-main_git_command = [
-  "git",
-  "--git-dir=./wca-documents/.git",
-  "--work-tree=./wca-documents"
-]
-
-
-def checkoutWCADocs(branchName):
-    subprocess.check_call(main_git_command + [
-      "checkout",
-      branchName
-    ])
-
-
 # Build!
 
 # We want the pool to be accessible to the workers, so that they can cut off in case of a keyboard interrupt.
@@ -240,7 +175,7 @@ def build(args):
 
     # Build languages
     print "Using %d workers." % args.num_workers
-    f = functools.partial(buildTranslationPooled, args)
+    f = functools.partial(buildLanguagePooled, args)
     if args.num_workers == 1:
       # multiprocessing destroys our backtraces, so don't use it for 1 worker. This makes
       # it possible to debug.
@@ -249,11 +184,8 @@ def build(args):
       pool = multiprocessing.Pool(processes=args.num_workers)
       pool.map(f, languages)
 
-  elif not args.language:
-    buildToDirectory(args, "dev")
-
-  elif args.language in languages:
-    buildTranslation(args, args.language)
+  else:
+    buildLanguage(args, args.language)
 
   if args.data:
     subprocess.check_call([ "git", "checkout", "origin/data", "build" ])
@@ -263,47 +195,38 @@ def build(args):
   print "Finished building."
 
 
-def buildToDirectory(args, directory, lang=defaultLang, translation=False):
+def buildLanguage(args, language):
 
-  buildDir = buildRootDir + directory
+  if language == defaultLanguage:
+    buildDirectory = ""
+    isTranslation = False
+  else:
+    buildDirectory = "translations/" + language + "/"
+    isTranslation = True
+
+  buildDir = buildRootDir + buildDirectory
   if not os.path.exists(buildDir):
     os.makedirs(buildDir)
 
-  pdfName = languageData[lang]["pdf"]
+  pdfName = languageData[language]["pdf"]
 
-  html.html(lang, buildDir, pdfName + ".pdf", translation=translation, verbose=args.verbose)
+  html.html(language, buildDir, pdfName + ".pdf", isTranslation=isTranslation, verbose=args.verbose)
 
   if args.pdf:
     pdf.pdf(
-      lang,
+      language,
       buildDir,
-      translation,
+      isTranslation,
       pdfName,
-      languageData[lang]["tex_encoding"],
-      languageData[lang]["tex_command"],
+      languageData[language]["tex_encoding"],
+      languageData[language]["tex_command"],
       verbose=args.verbose
     )
 
 
-def buildBranch(args, directory, lang=defaultLang, translation=False):
-  buildToDirectory(args, directory, lang, translation)
-
-
-def buildTranslation(args, lang):
-    directory = "translations/" + lang + "/"
-    translation = True
-
-    if lang == "english":
-      branchName = "official"
-      directory = ""
-      translation = False
-
-    buildBranch(args, directory, lang=lang, translation=translation)
-
-
-def buildTranslationPooled(args, lang):
+def buildLanguagePooled(args, language):
   try:
-    buildTranslation(args, lang)
+    buildLanguage(args, language)
   except KeyboardInterrupt:
       pool.terminate()
       pool.wait()
@@ -311,32 +234,10 @@ def buildTranslationPooled(args, lang):
 
 # Non-Build Actions
 
-
-def upload(args):
-
-  if not os.path.exists(upload_server_file):
-    sys.stderr.write("Config file for server uploads does not exist.\n")
-    sys.stderr.write("Please create one at " + upload_server_file + " using the template.\n")
-    return
-
-  subprocess.check_call([
-    "rsync",
-    "-rl",  # recursive, copy symlinks
-    "-vz",  # verbose, compressed transfer
-    "-p",  # copy/set permissions
-    "--chmod=ug=rwx",  # permissions to use (group-writable)
-    "--exclude=.DS_Store",
-    buildRootDir,
-    upload_server["sftp_path"]
-  ])
-  print "Done uploading to SFTP server."
-  print "Visit " + upload_server["base_url"]
-
-
 def server(args):
 
   localURL = "http://localhost:8081/regulations/"
-  if args.language in languages:
+  if not args.language == defaultLanguage:
     localURL = localURL + "translations/" + args.language + "/"
   webbrowser.open(localURL)
 
@@ -345,45 +246,6 @@ def server(args):
 
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"], cwd="./build/")
-
-
-def setup_wca_documents(args):
-
-  subprocess.check_call([
-    "git",
-    "submodule",
-    "update",
-    "--init"
-  ])
-
-  for lang in languages:
-    if lang != "english":
-
-      git_command = [
-        "git",
-        "--git-dir=./translations/" + lang + "/.git",
-        "--work-tree=./translations/" + lang
-      ]
-
-      if languageData[lang]["remote_url"]:
-        subprocess.call(git_command + [
-          "remote",
-          "add",
-          languageData[lang]["remote_name"],
-          languageData[lang]["remote_url"]
-        ])
-
-      subprocess.call(git_command + [
-        "branch",
-        "--track",
-        languageData[lang]["branch"],
-        "origin" + "/" + languageData[lang]["branch"]
-      ])
-
-      subprocess.call(git_command + [
-        "checkout",
-        lang
-      ])
 
 
 # Make the script work standalone.

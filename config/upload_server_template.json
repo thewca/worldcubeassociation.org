@@ -1,5 +1,0 @@
-{
-  "comment": "Copy this file to upload_server.json, and change the username/path.",
-  "sftp_path": "username@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/regulations/",
-  "base_url": "https://www.worldcubeassociation.org/regulations/"
-}
