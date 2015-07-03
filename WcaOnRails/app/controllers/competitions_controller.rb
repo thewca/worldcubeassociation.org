@@ -5,7 +5,7 @@ class CompetitionsController < ApplicationController
 
   private def is_competition_organizer
     # TODO - allow organizers to edit their own competition
-    return true || current_user.can_admin_results?
+    return current_user.can_admin_results?
   end
 
   def index
