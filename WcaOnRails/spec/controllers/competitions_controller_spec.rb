@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CompetitionsController do
   login_admin
 
-  let(:competition) { FactoryGirl.create(:competition) }
+  let(:competition) { FactoryGirl.create(:competition, start_date: "2011-12-04", end_date: "2011-12-05") }
 
   it 'redirects organiser view to organiser view' do
     patch :update, id: competition, competition: { name: competition.name }
@@ -25,5 +25,89 @@ describe CompetitionsController do
     competition.update_attributes(showPreregForm: true, showPreregList: true)
     patch :update, id: competition, competition: { showPreregForm: false }
     expect(competition.reload.showPreregList).to eq false
+  end
+
+  it 'creates an announcement post' do
+    get :post_announcement, id: competition
+    post = assigns(:post)
+    expect(post.title).to match /#{competition.name} on /
+    expect(post.title).to match /December 4-5, 2015/
+    expect(post.title).to match /in #{competition.cityName}, #{competition.countryId}/
+  end
+
+  it "creates a results post" do
+    Result.create!(
+      pos: 1,
+      personId: "2006SHEU01",
+      personName: "Vincent Sheu",
+      countryId: "USA",
+      competitionId: competition.id,
+      eventId: "333fm",
+      roundId: "f",
+      formatId: "m",
+      value1: 25,
+      value2: 26,
+      value3: 27,
+      best: 25,
+      average: 26,
+      regionalSingleRecord: "WR",
+      regionalAverageRecord: "WR",
+    )
+    # Another Vincent Shue!
+    Result.create!(
+      pos: 1,
+      personId: "2006SHEU02",
+      personName: "Vincent Sheu",
+      countryId: "USA",
+      competitionId: competition.id,
+      eventId: "222",
+      roundId: "f",
+      formatId: "m",
+      value1: 1000,
+      value2: 2000,
+      value3: 3000,
+      best: 1000,
+      average: 2000,
+      regionalSingleRecord: "WR",
+      regionalAverageRecord: "",
+    )
+    Result.create!(
+      pos: 1,
+      personId: "2005FLEI01",
+      personName: "Jeremy Fleischman",
+      countryId: "USA",
+      competitionId: competition.id,
+      eventId: "333oh",
+      roundId: "f",
+      formatId: "m",
+      value1: 4000,
+      value2: 5000,
+      value3: 6000,
+      best: 4000,
+      average: 5000,
+      regionalSingleRecord: "NAR",
+      regionalAverageRecord: "WR",
+    )
+    Result.create!(
+      pos: 1,
+      personId: "2005FLEI01",
+      personName: "Jeremy Fleischman",
+      countryId: "USA",
+      competitionId: competition.id,
+      eventId: "333oh",
+      roundId: "1",
+      formatId: "m",
+      value1: 4100,
+      value2: 5100,
+      value3: 6100,
+      best: 4100,
+      average: 5100,
+      regionalSingleRecord: "NAR",
+      regionalAverageRecord: "",
+    )
+    get :post_results, id: competition
+    post = assigns(:post)
+    expect(post.body).to include "World records: Jeremy Fleischman 3x3 one-handed 5000 (average), Vincent Sheu (2006SHEU01) 3x3 fewest moves 25 (single), 3x3 fewest moves 26 (average), Vincent Sheu (2006SHEU02) 2x2 Cube 1000 (single)"
+    expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 4100 (single), 3x3 one-handed 4000 (single)"
   end
 end

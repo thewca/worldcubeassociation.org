@@ -18,6 +18,10 @@ class Event
     end
   end
 
+  def self.find(id)
+    @@all_events_by_id[id] or throw "Unrecognized event id"
+  end
+
   def self.find_by_id(id)
     @@all_events_by_id[id] || Event.new(id: id, name: "Invalid", cellName: "Invalid", rank: 0, valid: false)
   end

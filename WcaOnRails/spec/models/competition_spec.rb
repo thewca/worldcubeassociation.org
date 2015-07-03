@@ -96,4 +96,12 @@ RSpec.describe Competition, type: :model do
     expect(competition.latitude).to eq 3.5*1e6
     expect(competition.longitude).to eq 4.6*1e6
   end
+
+  it "parses website" do
+    url = "http://foo.com"
+    url_name = "foo comp website"
+    competition = FactoryGirl.create :competition, website: "[{#{url_name}}{#{url}}]"
+    expect(competition.website_url_name).to eq url_name
+    expect(competition.website_url).to eq url
+  end
 end

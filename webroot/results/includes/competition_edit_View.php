@@ -9,7 +9,6 @@ function showView () {
   startForm();
   if( $isAdmin ){
     showAdminOptions();
-    showAnnouncement();
   }
   if( $isAdmin || (! $isConfirmed )){
     showRegularFields();
@@ -324,129 +323,6 @@ function showResultsUpload () {
   echo "<hr /><h1>Results Upload</h1>";
   echo "<p><a href='admin/upload_results.php?competitionId=$chosenCompetitionId'>Upload results</a>.</p>";
 }
-
-
-#----------------------------------------------------------------------
-function showAnnouncement() {
-#----------------------------------------------------------------------
-  global $data, $chosenCompetitionId;
-
-  echo "<hr /><h1>Announcements</h1>";
-
-  $months = explode( " ", ". January February March April May June July August September October November December" );
-  $date = $months[$data['month']] . ' ' . $data['day'];
-  if( $data['endMonth'] != $data['month'] )
-    $date .= " - " . $months[$data['endMonth']] . ' ' . $data['endDay'];
-  elseif( $data['endDay'] != $data['day'] )
-    $date .= "-" . $data['endDay'];
-
-  $title = "$data[name] on $date, $data[year] in $data[cityName], $data[countryId]";
-
-  $msg = "The <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a>";
-  $msg .= " will take place on $date, $data[year] in $data[cityName], $data[countryId].";
-  if( $data['website'] )
-  {
-  $websiteAddress = preg_replace( '/\[{ ([^}]+) }{ ([^}]+) }]/x', "$2", $data['website'] );
-    $msg .= " Check out the <a href=\"$websiteAddress\">$data[name] website</a> for more information and registration.";
-  }
-  echo "<h4>";
-  echo "Competition ";
-  echo linkToCreatePost($title, $msg);
-  echo "</h4>";
-
-  
-  $competitionResults = dbQuery(" SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' ");
-
-  if( $competitionResults ){
-
-    $top = dbQuery( "SELECT * FROM Results WHERE competitionId='$chosenCompetitionId' AND eventId='333' AND (roundId='f' OR roundId='c') ORDER BY pos LIMIT 3 " );
-    if( $top ){ # If there was a 3x3x3 event.
-  
-      $title = $top[0]['personName'] . " wins $data[name]";
- 
-      $msg = "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[0]['personId']."\">".$top[0]['personName']."</a> won the ";
-      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> with an average of ";
-      $msg .= formatValue( $top[0]['average'], 'time' );
-      $msg .= " seconds. ";
-
-      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[1]['personId']."\">".$top[1]['personName']."</a> finished second (";
-      $msg .= formatValue( $top[1]['average'], 'time' );
-      $msg .= ") and ";
-
-      $msg .= "<a href=\"http://www.worldcubeassociation.org/results/p.php?i=".$top[2]['personId']."\">".$top[2]['personName']."</a> finished third (";
-      $msg .= formatValue( $top[2]['average'], 'time' );
-      $msg .= ").<br />\n";
-
-    }
- 
-    else{
-
-      $title = "Results of $data[name] posted";
-      $msg = "Results of the <a href=\"http://www.worldcubeassociation.org/results/c.php?i=$chosenCompetitionId\">$data[name]</a> are now available.<br />\n";
-
-    }
-
-    foreach( array( array( 'code' => 'WR',  'name' => 'World' ),
-                    array( 'code' => 'AfR', 'name' => 'African' ),
-                    array( 'code' => 'AsR', 'name' => 'Asian' ),
-                    array( 'code' => 'OcR', 'name' => 'Oceanian' ),
-                    array( 'code' => 'ER',  'name' => 'European' ),
-                    array( 'code' => 'NAR', 'name' => 'North American' ), 
-                    array( 'code' => 'SAR', 'name' => 'South American' )) as $xR ){
-
-      $competitionsRs = dbQuery(" SELECT personName, best, average, regionalSingleRecord, regionalAverageRecord, cellName, format
-                                  FROM Results results, Events events
-                                  WHERE results.competitionId='$chosenCompetitionId' AND
-                                  results.eventId = events.id AND
-                                  (regionalSingleRecord='$xR[code]' OR regionalAverageRecord='$xR[code]')
-                                  ORDER BY results.personName, events.rank");
-
-      if( $competitionsRs ){
-        $msg .= $xR['name'] . " records: ";
-        $previousName = "";
-        foreach( $competitionsRs as $competitionsR ){
-          extract( $competitionsR );
-
-          if( $regionalSingleRecord == $xR['code'] ){ 
-            if( ! $previousName )
-              $msg .= $personName . ' ' . $cellName . ' ' . formatValue( $best, $format ) . ' (single)';
-            else if( $previousName == $personName )
-              $msg .= ', ' . $cellName . ' ' . formatValue( $best, $format ) . ' (single)';
-            else{
-              $msg .= ', ' . $personName . ' ' . $cellName . ' ' . formatValue( $best, $format ) . ' (single)';
-            }
-            $previousName = $personName;
-          }
-
-          if( $regionalAverageRecord == $xR['code'] ){ 
-            if( ! $previousName )
-              $msg .= $personName . ' ' . $cellName . ' ' . formatValue( $average, $format ) . ' (average)';
-            else if( $previousName == $personName )
-              $msg .= ', ' . $cellName . ' ' . formatValue( $average, $format ) . ' (average)';
-            else{
-              $msg .= ', ' . $personName . ' ' . $cellName . ' ' . formatValue( $average, $format ) . ' (average)';
-            }
-            $previousName = $personName;
-          }
-        }
-      $msg .= ".<br />\n";
-      }
-    }
-
-
-    echo "<h4>";
-    echo "Results ";
-    echo linkToCreatePost($title, $msg);
-    echo "</h4>";
-  }
-  echo "<hr />\n";
-}
-
-function linkToCreatePost($title, $body) {
-  $query = http_build_query(array('post[title]' => $title, 'post[body]' => $body));
-  return "<a href='/posts/new?$query' target='_blank' class='link-external external'>Create post</a>";
-}
-
 
 #----------------------------------------------------------------------
 function endForm () {

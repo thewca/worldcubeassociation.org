@@ -19,24 +19,28 @@ after "development:users", "development:persons" do
     showAtAll: true,
   )
 
-  person = Person.all.sample
-  Result.create!(
-    pos: 1,
-    personId: person.id,
-    personName: person.name,
-    countryId: person.countryId,
-    competitionId: competition.id,
-    eventId: "333",
-    roundId: "f",
-    formatId: "a",
-    value1: 4242,
-    value2: 4242,
-    value3: 4242,
-    value4: 6000,
-    value5: 4000,
-    best: 4000,
-    average: 4242,
-  )
+  persons = Person.all.sample(3)
+  persons.each_with_index do |person, i|
+    Result.create!(
+      pos: i+1,
+      personId: person.id,
+      personName: person.name,
+      countryId: person.countryId,
+      competitionId: competition.id,
+      eventId: "333",
+      roundId: "f",
+      formatId: "a",
+      value1: 4242 + i*1000,
+      value2: 4242 + i*1000,
+      value3: 4242 + i*1000,
+      value4: 6000 + i*1000,
+      value5: 4000 + i*1000,
+      best: 4000 + i*1000,
+      average: 4242 + i*1000,
+      regionalSingleRecord: i == 0 ? "WR" : "",
+      regionalAverageRecord: i == 0 ? "WR" : "",
+    )
+  end
 
   day = 1000.years.since
   eventIds = ["333", "333oh", "magic"]
@@ -53,7 +57,7 @@ after "development:users", "development:persons" do
     wcaDelegate: delegate.name,
     organiser: delegate.name,
     venue: "My backyard",
-    website: "worldcubeassociation.org",
+    website: "[{wca}{http://worldcubeassociation.org}]",
     showAtAll: true,
   )
 

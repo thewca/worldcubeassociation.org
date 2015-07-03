@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     end
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+  get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement
+  get 'competitions/:id/post/results' => 'competitions#post_results', as: :competition_post_results
 
   root 'posts#index'
   resources :posts

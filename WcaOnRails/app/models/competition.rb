@@ -2,10 +2,12 @@ class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
 
   has_many :registrations, foreign_key: "competitionId"
+  has_many :results, foreign_key: "competitionId"
 
   ends_with_year_re = /\A.* \d{4}\z/
-  pattern_link_re = /\[\{[^}]+}\{(https?:|mailto:)[^}]+}\]/
-  pattern_text_with_links_re = /\A[^{}]*(#{pattern_link_re.source}[^{}]*)*\z/
+  # TODO - learn ruby...
+  @@pattern_link_re = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
+  pattern_text_with_links_re = /\A[^{}]*(#{@@pattern_link_re.source}[^{}]*)*\z/
   validates :name, length: { maximum: 50 },
                    format: { with: ends_with_year_re }
   validates :cellName, length: { maximum: 45 },
@@ -120,5 +122,15 @@ class Competition < ActiveRecord::Base
     unless invalid_events.empty?
       errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
+  end
+
+  def website_url_name
+    match = @@pattern_link_re.match website
+    match ? match[1] : nil
+  end
+
+  def website_url
+    match = @@pattern_link_re.match website
+    match ? match[2] : nil
   end
 end
