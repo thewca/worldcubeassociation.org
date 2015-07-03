@@ -34,10 +34,10 @@ class CompetitionsController < ApplicationController
     date_range_str = date_range(comp.start_date, comp.end_date)
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
-    body = "The <a href='#{root_url}results/c.php?i=#{comp.id}'>#{comp.name}</a>"
+    body = "The [#{comp.name}](#{root_url}results/c.php?i=#{comp.id})"
     body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
     unless comp.website.blank?
-      body += " Check out the <a href='#{comp.website_url}'>#{comp.name} website</a> for more information and registration.";
+      body += " Check out the [#{comp.name} website](#{comp.website_url}) for more information and registration.";
     end
     @post = Post.new(title: title, body: body)
     render 'posts/new', layout: "application"
@@ -53,20 +53,20 @@ class CompetitionsController < ApplicationController
     top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
     if top333.empty? # If there was no 3x3x3 event.
       title = "Results of #{comp.name} posted"
-      body = "Results of the <a href='http://www.worldcubeassociation.org/results/c.php?i=#{comp.id}'>#{comp.name}</a> are now available.<br />\n"
+      body = "Results of the [#{comp.name}](http://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
     elsif top333.length < 3
       render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe, layout: "application"
       return
     else
       title = "#{top333.first.personName} wins #{comp.name}"
 
-      body = "<a href='http://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId}'>#{top333.first.personName}</a>"
-      body += " won the <a href='http://www.worldcubeassociation.org/results/c.php?i=#{comp.id}'>#{comp.name}</a>"
+      body = "[#{top333.first.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
+      body += " won the [#{comp.name}](http://www.worldcubeassociation.org/results/c.php?i=#{comp.id})"
       body += " with an average of #{top333.first.to_s :average} seconds."
 
-      body += " <a href='http://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}'>#{top333.second.personName}</a> finished second (#{top333.second.to_s :average})"
+      body += " [#{top333.second.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
 
-      body += " and <a href='http://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}'>#{top333.third.personName}</a> finished third (#{top333.third.to_s :average}).<br />\n"
+      body += " and [#{top333.third.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
     end
 
     [
@@ -110,7 +110,7 @@ class CompetitionsController < ApplicationController
             "#{uniqueName} #{record_strs.join(", ")}"
           end
         end
-        body += "#{record_strs.join(", ")}.<br />\n"
+        body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
     @post = Post.new(title: title, body: body)
