@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Competition, type: :model do
+RSpec.describe Competition do
   it "defines a valid competition" do
     competition = FactoryGirl.build :competition
     expect(competition).to be_valid
