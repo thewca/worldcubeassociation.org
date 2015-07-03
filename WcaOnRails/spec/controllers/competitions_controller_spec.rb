@@ -31,7 +31,7 @@ describe CompetitionsController do
     get :post_announcement, id: competition
     post = assigns(:post)
     expect(post.title).to match /#{competition.name} on /
-    expect(post.title).to match /December 4-5, 2015/
+    expect(post.title).to match /December 4 - 5, 2011/
     expect(post.title).to match /in #{competition.cityName}, #{competition.countryId}/
   end
 

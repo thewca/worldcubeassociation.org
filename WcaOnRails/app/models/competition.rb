@@ -59,12 +59,12 @@ class Competition < ActiveRecord::Base
   end
 
   def start_date
-    year == 0 || month == 0 || day == 0 ? "" : "%04i-%02i-%02i" % [ year, month, day ]
+    year == 0 || month == 0 || day == 0 ? nil : Date.parse("%04i-%02i-%02i" % [ year, month, day ])
   end
 
   def end_date
     endYear = @endYear || year # gross hack to remember the years of a multiyear competition
-    endYear == 0 || endMonth == 0 || endDay == 0 ? "" : "%04i-%02i-%02i" % [ endYear, endMonth, endDay ]
+    endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.parse("%04i-%02i-%02i" % [ endYear, endMonth, endDay ])
   end
 
   def start_date=(new_start_date)

@@ -31,8 +31,7 @@ class CompetitionsController < ApplicationController
 
   def post_announcement
     comp = Competition.find(params[:id])
-    # TODO - format date range
-    date_range_str = "#{comp.start_date} - #{comp.end_date}"
+    date_range_str = date_range(comp.start_date, comp.end_date)
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
     body = "The <a href='#{root_url}results/c.php?i=#{comp.id}'>#{comp.name}</a>"

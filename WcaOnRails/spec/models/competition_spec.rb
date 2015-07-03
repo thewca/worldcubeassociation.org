@@ -68,7 +68,7 @@ RSpec.describe Competition do
     competition.end_date = "1988-12-07"
     competition.save
     expect(competition).to be_invalid
-    expect(competition.end_date).to eq "1988-12-07"
+    expect(competition.end_date).to eq Date.parse("1988-12-07")
   end
 
   it "ignores equal signs in eventSpecs" do

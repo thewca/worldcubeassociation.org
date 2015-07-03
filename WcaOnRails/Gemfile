@@ -28,6 +28,7 @@ gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
 gem 'bootstrap-datepicker-rails'
+gem 'time_will_tell'
 gem 'redcarpet'
 
 # TODO remove me after all posts have been updated to markdown

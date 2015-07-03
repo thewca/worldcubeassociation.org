@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include TimeWillTell::Helpers::DateRangeHelper
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -13,5 +14,11 @@ class ApplicationController < ActionController::Base
       flash[:danger] = "You are not allowed to administer results"
       redirect_to root_url
     end
+  end
+
+  def date_range(from_date, to_date, options={})
+    options[:separator] = '-'
+    options[:format] = :long
+    super(from_date, to_date, options)
   end
 end
