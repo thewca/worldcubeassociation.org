@@ -152,7 +152,7 @@ print "<li><p>Run some more scripts:</p>
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
            <li><a href='../c.php?i=".o($compId)."' target='_blank' class='link-external external'>View the Public competition page</a></li>
-           <li>Post the <a href='/competitions/".o($compId)."post/results' target='_blank' class='link-external external'>results announcement</a>
+           <li>Post the <a href='/competitions/".o($compId)."/post/results' target='_blank' class='link-external external'>results announcement</a>
                 </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
