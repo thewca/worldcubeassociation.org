@@ -1,10 +1,5 @@
 <% provide(:title, @competition.name) %>
 
-<pre>
-  TODO - create competition post and results post (showAnnouncement() in webroot/results/includes/competition_edit_View.php
-  TODO - registration
-</pre>
-
 <% if @admin_view %>
   <h2>Announcements</h2>
   <%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %>
