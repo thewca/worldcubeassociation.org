@@ -1,75 +1,78 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
 <pre>
-  TODO - actually edit registrations!
-    - easy implementation might be to have rows of forms with ajax. can this be integrated into wicegrid?
-    - ajax seems easy, but need to handle errors somehow...
-  TODO - email everyone...
-  TODO - export to excel and csv? wahhhhhhh
-  TODO - paginate/filter/sort... pure js? wicegrid doesn't seem like a great choice here
+  TODO - export to csv
 </pre>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>WCA id</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Country</th>
-      <th>Gender</th>
-      <th>Birthday</th>
-      <th>Guests</th>
-      <th>Comments</th>
-      <th>IP</th>
-      <th>Status</th>
-      <th>Events</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @competition.registrations.each do |registration| %>
+<%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
+  <table class="table registrations-table selectable-rows">
+    <thead>
       <tr>
-        <%= form_for registration do |f| %>
+        <th>WCA id</th>
+        <th>Name</th>
+        <th>Country</th>
+        <th>Birthday</th>
+        <th>Guests</th>
+        <th>Comments</th>
+        <% @competition.events.each do |event| %>
+          <th>
+            <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @competition.registrations.order(status: :desc).each do |registration| %>
+        <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
           <td>
-            <%= f.text_field :personId, class: "form-control" %>
+            <%= registration.personId %>
           </td>
           <td>
-            <%= f.text_field :name, class: "form-control" %>
+            <a href="mailto:<%= registration.email %>" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.email %>"><%= registration.name %></a>
           </td>
           <td>
-            <%= f.email_field :email, class: "form-control" %>
+            <%= registration.countryId %>
           </td>
           <td>
-            <%= f.text_field :countryId, class: "form-control" %>
+            <%= registration.birthday %>
           </td>
-          <td>
-            <%= f.text_field :gender, class: "form-control" %>
-          </td>
-          <td>
-            <%= f.text_field :birthday, class: "form-control" %>
-          </td>
-          <td>
+          <td class="guests" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
             <%= registration.guests %>
           </td>
-          <td>
+          <td class="comments" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
             <%= registration.comments %>
           </td>
-          <td>
-            <%= registration.ip %>
-          </td>
-          <td>
-            <%# TODO %>
-            <%= f.text_field :status, class: "form-control" %>
-          </td>
-          <td>
-            <%# TODO %>
-            <%= f.text_field :eventIds, class: "form-control" %>
-          </td>
-          <td>
-            <%= f.submit "Save", class: "btn btn-default" %>
-          </td>
-        <% end %>
-      <tr>
-    <% end %>
-  </tbody>
-</table>
+          <% @competition.events.each do |event| %>
+            <td>
+              <span class="event-checkbox">
+                <label>
+                  <%= check_box "competition[event_ids]", event.id, { checked: registration.events.include?(event), disabled: true } %>
+                  <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+                </label>
+              </span>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="btn-group" id="selected-registrations-actions" role="group">
+    <button type="submit" class="btn btn-success" name="registrations_action" value="accept-selected">
+      <span class="glyphicon glyphicon-ok"></span>
+      Approve
+    </button>
+    <button type="submit" class="btn btn-danger" name="registrations_action" value="reject-selected">
+      <span class="glyphicon glyphicon-remove"></span>
+      Reject
+    </button>
+    <a href="#" id="email-selected" target="_blank" class="btn btn-info">
+      <span class="glyphicon glyphicon-envelope"></span>
+      Email
+    </a>
+    <button type="submit" class="btn btn-danger" name="registrations_action" value="delete-selected">
+      <span class="glyphicon glyphicon-trash"></span>
+      Delete
+    </button>
+  </div>
+<% end %>

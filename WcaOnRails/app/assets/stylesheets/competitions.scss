@@ -12,13 +12,9 @@
 
 .event-checkbox {
   label {
-    cursor: pointer;
-  }
-  .cubing-icon {
-    font-size: 2em;
+    margin-bottom: 0px;
   }
   input[type=checkbox] {
-    cursor: pointer;
     display: none;
     & + span.cubing-icon {
       color: #ccc;
@@ -27,6 +23,10 @@
       color: black;
     }
   }
+}
+
+#edit-competition-form .event-checkbox .cubing-icon {
+  font-size: 2em;
 }
 
 $venue-map-wrapper-height: 400px;

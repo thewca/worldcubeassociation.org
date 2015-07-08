@@ -1,3 +1,15 @@
-// Place all the styles related to the registrations controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+table.registrations-table {
+  td {
+    white-space: nowrap;
+  }
+  td.comments, td.guests {
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  tr.registration-p {
+    color: grey;
+  }
+  tr.registration-a {
+  }
+}

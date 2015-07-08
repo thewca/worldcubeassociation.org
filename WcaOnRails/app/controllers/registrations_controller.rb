@@ -3,26 +3,26 @@ class RegistrationsController < CompetitionsController
     @competition = Competition.find(params[:id])
   end
 
-  def update
-    @registration = Registration.find(params[:id])
-    if @registration.update_attributes(registration_params)
-      redirect_to registrations_path @registration.competition
-    else
-      # TODO - what to do on failure?
-      redirect_to registrations_path @registration.competition
+  def update_all
+    @competition = Competition.find(params[:competition_id])
+    ids = []
+    registration_ids = params.select { |k| k.start_with?("registration-") }.map { |k, v| k.split('-')[1] }
+    registrations = registration_ids.map do |registration_id|
+      @competition.registrations.find_by_id!(registration_id)
     end
-  end
-
-  private def registration_params
-    params.require(:registration).permit(
-      :personId,
-      :name,
-      :email,
-      :countryId,
-      :gender,
-      :status,# TODO
-      :birthday,# TODO
-      :eventIds,# TODO
-    )
+    case params[:registrations_action]
+    when "accept-selected"
+      registrations.each { |registration| registration.update_attribute(:status, "a") }
+      flash[:success] = "Registrations approved!"
+    when "reject-selected"
+      registrations.each { |registration| registration.update_attribute(:status, "p") }
+      flash[:warning] = "Registrations rejected"
+    when "delete-selected"
+      registrations.each { |registration| registration.delete }
+      flash[:warning] = "Registrations deleted"
+    else
+      throw "Unrecognized action #{params[:registrations_action]}"
+    end
+    redirect_to registrations_path(@competition)
   end
 end

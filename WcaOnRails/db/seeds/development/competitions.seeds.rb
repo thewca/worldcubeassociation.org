@@ -64,18 +64,18 @@ after "development:users", "development:persons" do
   4.times do |i|
     Registration.create!(
       competition: future_competition,
-      name: "Bob #{i}",
-      personId: "1994BOBY01",
-      countryId: "USA",
+      name: Faker::Name.name,
+      personId: "1994BOBY0#{i}",
+      countryId: Faker::Address.country,
       gender: "m",
       birthYear: 1990,
       birthMonth: 6,
       birthDay: 4,
-      email: "bob@bob.com",
-      guests: "",
-      comments: "",
+      email: Faker::Internet.email,
+      guests: (1..10).map { Faker::Name.name }.join(" "),
+      comments: Faker::Lorem.paragraph,
       ip: "1.1.1.1",
-      status: "",
+      status: i % 2 == 0 ? "p" : "a",
       eventIds: eventIds.sample(i).join(" "),
     )
   end

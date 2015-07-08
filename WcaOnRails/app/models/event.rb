@@ -18,6 +18,10 @@ class Event
     end
   end
 
+  def to_partial_path
+    "event"
+  end
+
   def self.find(id)
     @@all_events_by_id[id] or throw "Unrecognized event id"
   end
