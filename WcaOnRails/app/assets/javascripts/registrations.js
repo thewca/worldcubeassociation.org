@@ -7,9 +7,9 @@ $(document).on("page:change", function() {
   function showHideActions(e) {
     var $checkboxes = $registrations_table.find(".select-row-checkbox:checked");
     if($checkboxes.length > 0) {
-      $('#selected-registrations-actions').show();
+      $('.selected-registrations-actions').show();
     } else {
-      $('#selected-registrations-actions').hide();
+      $('.selected-registrations-actions').hide();
     }
     var emails = $checkboxes.parents("tr").find("a[href^=mailto]").map(function() { return this.href.match(/^mailto:(.*)/)[1]; }).toArray();
     document.getElementById("email-selected").href = "mailto:" + emails.join(",");

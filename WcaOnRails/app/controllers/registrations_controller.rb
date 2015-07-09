@@ -1,6 +1,13 @@
 class RegistrationsController < CompetitionsController
   def index
     @competition = Competition.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{@competition.id}-registration.csv\""
+        headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
+      end
+    end
   end
 
   def update_all

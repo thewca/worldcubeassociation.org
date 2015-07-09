@@ -1,9 +1,5 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
-<pre>
-  TODO - export to csv
-</pre>
-
 <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
   <table class="table registrations-table selectable-rows">
     <thead>
@@ -57,20 +53,24 @@
     </tbody>
   </table>
 
-  <div class="btn-group" id="selected-registrations-actions" role="group">
-    <button type="submit" class="btn btn-success" name="registrations_action" value="accept-selected">
-      <span class="glyphicon glyphicon-ok"></span>
-      Approve
-    </button>
-    <button type="submit" class="btn btn-danger" name="registrations_action" value="reject-selected">
-      <span class="glyphicon glyphicon-remove"></span>
-      Reject
-    </button>
-    <a href="#" id="email-selected" target="_blank" class="btn btn-info">
+  <div class="btn-group" role="group">
+    <a href="<%= registrations_path(format: :csv) %>" class="btn btn-info">
+      <span class="glyphicon glyphicon-floppy-save"></span>
+      Export to CSV
+    </a>
+    <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
       <span class="glyphicon glyphicon-envelope"></span>
       Email
     </a>
-    <button type="submit" class="btn btn-danger" name="registrations_action" value="delete-selected">
+    <button type="submit" class="btn btn-success selected-registrations-actions" name="registrations_action" value="accept-selected">
+      <span class="glyphicon glyphicon-ok"></span>
+      Approve
+    </button>
+    <button type="submit" class="btn btn-warning selected-registrations-actions" name="registrations_action" value="reject-selected">
+      <span class="glyphicon glyphicon-remove"></span>
+      Reject
+    </button>
+    <button type="submit" class="btn btn-danger selected-registrations-actions" name="registrations_action" value="delete-selected">
       <span class="glyphicon glyphicon-trash"></span>
       Delete
     </button>
