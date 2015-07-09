@@ -12,4 +12,8 @@ table.registrations-table {
   }
   tr.registration-a {
   }
+
+  tr.registration-p + tr.registration-a {
+    border-top: 10px solid black;
+  }
 }
