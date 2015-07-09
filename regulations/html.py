@@ -193,15 +193,15 @@ class html():
     # \3: old anchor name [example: blindfoldedsolving]
     # \4: Article name, may be translated [example: Article B]
     # \5: Title [example: Blindfolded Solving]
-    articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:]*)\: ([^<]*)</h2>'
+    articleMatch = r'<h2[^>]*><article-([^>]*)><([^>]*)><([^>]*)> ([^\:<]*)((\: )|(&#65306;))([^<]*)</h2>'
 
     allRegsArticles = re.findall(articleMatch, self.regsText)
     allGuidesArticles = re.findall(articleMatch, self.guidesText)
 
     def makeTOC(articles):
         return "<ul id=\"table_of_contents\">\n" + "".join([
-            "<li>" + name + ": <a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n"
-            for (num, new, old, name, title)
+            "<li>" + name + colon + "<a href=\"#article-" + num + "-" + new + "\">" + title + "</a></li>\n"
+            for (num, new, old, name, colon, _generic, _jp, title)
             in articles
         ]) + "</ul>\n"
 
@@ -218,7 +218,7 @@ class html():
       # Encourage a new format with the article number *and* better anchor names.
     self.replaceBothWithSame(numRegsArticles, numGuidesArticles,
                              articleMatch,
-                             r'<span id="\1"></span><span id="\3"></span><h2 id="article-\1-\2"> <a href="#article-\1-\2">\4</a>: \5</h2>'
+                             r'<span id="\1"></span><span id="\3"></span><h2 id="article-\1-\2"> <a href="#article-\1-\2">\4</a>\5\8</h2>'
                              )
 
     # Numbering
