@@ -1,4 +1,5 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
+<% provide(:container_type, "container-fluid") %>
 
 <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
   <div id="registrations-actions" class="btn-group" role="group">

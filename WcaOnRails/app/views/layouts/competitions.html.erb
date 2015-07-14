@@ -1,4 +1,5 @@
-<div class="container">
+<% container_type = yield(:container_type) %>
+<div class="<%= container_type.blank? ? "container" : container_type %>">
   <h1><%= yield(:title) %></h1>
 
   <ul class="nav nav-tabs">
