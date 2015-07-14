@@ -16,4 +16,11 @@ table.registrations-table {
   tr.registration-p + tr.registration-a {
     border-top: 10px solid black;
   }
+
+  margin-bottom: 50px;
+}
+
+#registrations-actions {
+  position: fixed;
+  bottom: 5px;
 }
