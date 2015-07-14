@@ -15,6 +15,13 @@ describe CompetitionsController do
     expect(response).to redirect_to admin_edit_competition_path(competition)
   end
 
+  it 'renders admin view when failing to save admin view' do
+    patch :update, id: competition, competition: { name: "fooo" }, admin_view: true
+    expect(response).to render_template :edit
+    admin_view = assigns(:admin_view)
+    expect(admin_view).to be true
+  end
+
   it 'can confirm competition' do
     patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
     expect(response).to redirect_to edit_competition_path(competition)
