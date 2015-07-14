@@ -25,6 +25,12 @@
   }
 }
 
+.event-checkbox:not(.disabled) {
+  label {
+    cursor: pointer;
+  }
+}
+
 #edit-competition-form .event-checkbox .cubing-icon {
   font-size: 2em;
 }

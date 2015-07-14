@@ -63,7 +63,7 @@
           </td>
           <% @competition.events.each do |event| %>
             <td>
-              <span class="event-checkbox">
+              <span class="event-checkbox disabled">
                 <label>
                   <%= check_box "competition[event_ids]", event.id, { checked: registration.events.include?(event), disabled: true } %>
                   <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
