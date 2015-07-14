@@ -270,8 +270,6 @@ GEM
       railties (>= 3.2)
     timers (4.0.1)
       hitimes
-    turbolinks (2.5.3)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.1)
@@ -340,7 +338,6 @@ DEPENDENCIES
   system
   therubyracer
   time_will_tell
-  turbolinks
   uglifier
   unicorn
   valid_email

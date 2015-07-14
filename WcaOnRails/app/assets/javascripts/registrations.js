@@ -1,23 +1,30 @@
-$(document).on("page:change", function() {
+$(function() {
   if(document.body.dataset.railsControllerName !== "registrations") {
     return;
   }
 
-  var $registrations_table = $('table.registrations-table');
+  var $registrationsTable = $('table.registrations-table');
   function showHideActions(e) {
-    var $checkboxes = $registrations_table.find(".select-row-checkbox:checked");
-    $('.selected-registrations-actions').toggle($checkboxes.length > 0);
+    var $selectedRows = $registrationsTable.find("tr.selected-row");
+    $('.selected-registrations-actions').toggle($selectedRows.length > 0);
 
-    var $selectedApprovedRows = $checkboxes.parents("tr.registration-a");
+    var $selectedApprovedRows = $selectedRows.filter(".registration-a");
     $('.selected-approved-registrations-actions').toggle($selectedApprovedRows.length > 0);
 
-    var $selectedPendingRows = $checkboxes.parents("tr.registration-p");
+    var $selectedPendingRows = $selectedRows.filter(".registration-p");
     $('.selected-pending-registrations-actions').toggle($selectedPendingRows.length > 0);
 
-    var emails = $checkboxes.parents("tr").find("a[href^=mailto]").map(function() { return this.href.match(/^mailto:(.*)/)[1]; }).toArray();
+    var emails = $selectedRows.find("a[href^=mailto]").map(function() { return this.href.match(/^mailto:(.*)/)[1]; }).toArray();
     document.getElementById("email-selected").href = "mailto:" + emails.join(",");
   }
-  $registrations_table.on("change", ".select-row-checkbox", showHideActions);
+  $registrationsTable.on("change", ".select-row-checkbox", function() {
+    // Wait for selectable-rows code to run.
+    setTimeout(showHideActions, 0);
+  });
+  $registrationsTable.on("select-all-none-click", function() {
+    // Wait for selectable-rows code to run.
+    setTimeout(showHideActions, 0);
+  });
   showHideActions();
 
   $('button[value=delete-selected]').on("click", function(e) {

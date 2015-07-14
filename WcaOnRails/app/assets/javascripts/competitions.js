@@ -1,4 +1,4 @@
-$(document).on("page:change", function() {
+$(function() {
   if(document.body.dataset.railsControllerName !== "competitions") {
     return;
   }
