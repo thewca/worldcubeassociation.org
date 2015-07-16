@@ -19,6 +19,11 @@ class CompetitionsController < ApplicationController
     render layout: "application"
   end
 
+  def index
+    @competitions = competitions
+    render layout: "application"
+  end
+
   def create
     new_competition_params = params.require(:competition).permit(:id, :competition_id_to_clone)
     if new_competition_params[:competition_id_to_clone].blank?

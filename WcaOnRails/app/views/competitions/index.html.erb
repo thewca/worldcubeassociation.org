@@ -1,0 +1,17 @@
+<% provide(:title, 'Competitions') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= link_to "New competition", new_competition_path %>
+  <table class="table">
+    <% @competitions.each do |competition| %>
+      <tr>
+        <td><%= competition.id %></td>
+        <td><%= competition.name %></td>
+        <td><%= link_to "Edit", admin_edit_competition_path(competition) %></td>
+        <td><%= link_to "Results", "/results/competition.php?competitionId=#{competition.id}" %></td>
+      </li>
+    <% end %>
+  </table>
+</div>
