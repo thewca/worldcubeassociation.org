@@ -19,6 +19,8 @@
 //= require jquery.are-you-sure
 //= require bootstrap-datepicker/core
 //= require locationpicker.jquery
+//= require twitter/typeahead
+//= require underscore
 //= require_tree .
 
 $(function() {

@@ -8,6 +8,7 @@ class Competition < ActiveRecord::Base
   # TODO - learn ruby...
   @@pattern_link_re = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   pattern_text_with_links_re = /\A[^{}]*(#{@@pattern_link_re.source}[^{}]*)*\z/
+  validates :id, presence: true, uniqueness: true
   validates :name, length: { maximum: 50 },
                    format: { with: ends_with_year_re }
   validates :cellName, length: { maximum: 45 },
@@ -26,6 +27,13 @@ class Competition < ActiveRecord::Base
   alias_attribute :longitude_microdegrees, :longitude
   attr_accessor :longitude_degrees, :latitude_degrees
   before_validation :compute_coordinates
+
+  before_validation :cleanup_event_specs
+  def cleanup_event_specs
+    self.eventSpecs ||= ""
+  end
+
+  attr_accessor :competition_id_to_clone
 
   def longitude_degrees
     longitude_microdegrees / 1e6
@@ -76,10 +84,16 @@ class Competition < ActiveRecord::Base
   end
 
   private def unpack_dates
+    if @start_date.nil? && !start_date.blank?
+      @start_date = start_date.strftime("%F")
+    end
     if @start_date.blank?
       self.year = self.month = self.day = 0
     else
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
+    end
+    if @end_date.nil? && !end_date.blank?
+      @end_date = end_date.strftime("%F")
     end
     if @end_date.blank?
       @endYear = self.endMonth = self.endDay = 0

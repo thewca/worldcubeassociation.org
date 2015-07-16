@@ -17,6 +17,16 @@
       ga("set", "anonymizeIp", true);
     </script>
   <% end %>
+  <% if @competitions %>
+    <script>
+      // Set global variable for competitions-autocomplete.js
+      var competitions = <%= @competitions.to_json.html_safe %>;
+      var competitionById = {};
+      _.each(competitions, function(competition) {
+        competitionById[competition.id] = competition;
+      });
+    </script>
+  <% end %>
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 

@@ -1,32 +1,53 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :is_competition_organizer
-  before_action :can_admin_results_only, only: [:admin_edit]
+  before_action :is_competition_organizer, only: [:edit, :update]
+  before_action :can_admin_results_only, except: [:edit, :update]
 
   private def is_competition_organizer
     # TODO - allow organizers to edit their own competition
-    return current_user.can_admin_results?
+    return false
   end
 
-  def index
-    @competitions_grid = initialize_grid(Competition, {
-      order: 'year',
-      order_direction: 'desc',
-      custom_order: {
-        # Dirty hack to sort properly with our bizarre date schema.
-        # The right thing to do here is to migrate these into a single DATE field.
-        'Competitions.year' => lambda do |f|
-          order_direction = @competitions_grid.status[:order_direction]
-          order_str = "year #{order_direction}, month #{order_direction}, day"
-          # Make uninitialized years show up on top when sorting by most recent first.
-          if order_direction.to_sym == :desc
-            order_str = "year<>0, #{order_str}"
-          end
-          order_str
-        end
-      }
-    })
+  def competitions
+    @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day)
+  end
+
+  def new
+    @competitions = competitions
+    @competition = Competition.new
+
     render layout: "application"
+  end
+
+  def create
+    new_competition_params = params.require(:competition).permit(:id, :competition_id_to_clone)
+    if new_competition_params[:competition_id_to_clone].blank?
+      # Creating a blank competition.
+      @competition = Competition.new(new_competition_params)
+      # Dummy data to pass validation.
+      @competition.name = @competition.cellName = "Placeholder #{Time.now.year}"
+    else
+      # Cloning an existing competition!
+      competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
+      if competition_to_clone
+        @competition = Competition.new(competition_to_clone.as_json.merge(new_competition_params))
+      else
+        @competition = Competition.new(new_competition_params)
+        @competition.errors[:competition_id_to_clone] = "invalid"
+      end
+    end
+
+    if @competition.errors.size == 0 && @competition.save
+      if competition_to_clone
+        flash[:success] = "Successfully cloned #{competition_to_clone.id}!"
+      else
+        flash[:success] = "Successfully created new competition!"
+      end
+      redirect_to admin_edit_competition_path(@competition)
+    else
+      @competitions = competitions
+      render 'new', layout: "application"
+    end
   end
 
   def post_announcement

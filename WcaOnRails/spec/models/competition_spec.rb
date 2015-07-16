@@ -6,6 +6,13 @@ RSpec.describe Competition do
     expect(competition).to be_valid
   end
 
+  it "saves without losing data" do
+    competition = Competition.find(FactoryGirl.create :competition)
+    json_data = competition.as_json
+    competition.save
+    expect(competition.as_json).to eq json_data
+  end
+
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
     expect(competition).to be_invalid

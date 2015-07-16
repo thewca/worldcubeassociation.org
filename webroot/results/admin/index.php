@@ -29,8 +29,7 @@ function showPages () {
   showPage( 'upload_results',
             "Upload results for a competition." );
 
-  showPage( 'competitions_manage',
-            "Manage competitions." );
+  showPage( 'competitions_manage', "Manage competitions.", '/competitions' );
 
   showPage( 'change_person',
             'Fix or update a person\'s data.' );

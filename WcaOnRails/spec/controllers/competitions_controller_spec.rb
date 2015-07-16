@@ -34,6 +34,23 @@ describe CompetitionsController do
     expect(competition.reload.showPreregList).to eq false
   end
 
+  it 'creates a new competition' do
+    post :create, competition: { id: "Test2015" }
+    expect(response).to redirect_to admin_edit_competition_path("Test2015")
+    new_comp = assigns(:competition)
+    expect(new_comp.id).to eq "Test2015"
+  end
+
+  it 'clones a new competition' do
+    post :create, competition: { id: "Test2015", competition_id_to_clone: competition.id }
+    expect(response).to redirect_to admin_edit_competition_path("Test2015")
+    new_comp = assigns(:competition)
+    expect(new_comp.id).to eq "Test2015"
+
+    new_comp.id = competition.id
+    expect(new_comp).to eq competition
+  end
+
   it 'creates an announcement post' do
     get :post_announcement, id: competition
     post = assigns(:post)
