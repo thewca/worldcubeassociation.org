@@ -3,6 +3,10 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
+  has_many :competition_delegates
+  has_many :delegates, through: :competition_delegates
+  has_many :competition_organizers
+  has_many :organizers, through: :competition_organizers
 
   ends_with_year_re = /\A.* \d{4}\z/
   # TODO - learn ruby...

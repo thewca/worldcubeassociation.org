@@ -17,6 +17,8 @@ after "development:users", "development:persons" do
     venue: "My backyard",
     website: "worldcubeassociation.org",
     showAtAll: true,
+    delegates: [delegate],
+    organizers: User.all.sample(2),
   )
 
   persons = Person.all.sample(3)
@@ -59,6 +61,8 @@ after "development:users", "development:persons" do
     venue: "My backyard",
     website: "[{wca}{http://worldcubeassociation.org}]",
     showAtAll: true,
+    delegates: [delegate],
+    organizers: User.all.sample(2),
   )
 
   4.times do |i|

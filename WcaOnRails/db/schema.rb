@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150603015039) do
+ActiveRecord::Schema.define(version: 20150718020123) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -106,20 +106,20 @@ ActiveRecord::Schema.define(version: 20150603015039) do
 
   create_table "Continents", id: false, force: :cascade do |t|
     t.string  "id",         null: false, primary_key: true
-    t.string  "name",       limit: 50,   default: "", null: false
-    t.string  "recordName", limit: 3,    default: "", null: false
-    t.integer "latitude",   limit: 4,    default: 0,  null: false
-    t.integer "longitude",  limit: 4,    default: 0,  null: false
-    t.integer "zoom",       limit: 1,    default: 0,  null: false
+    t.string  "name",       limit: 50, default: "", null: false
+    t.string  "recordName", limit: 3,  default: "", null: false
+    t.integer "latitude",   limit: 4,  default: 0,  null: false
+    t.integer "longitude",  limit: 4,  default: 0,  null: false
+    t.integer "zoom",       limit: 1,  default: 0,  null: false
   end
 
   create_table "Countries", id: false, force: :cascade do |t|
     t.string  "id",          null: false, primary_key: true
-    t.string  "name",        limit: 50,   default: "", null: false
-    t.string  "continentId", limit: 50,   default: "", null: false
-    t.integer "latitude",    limit: 4,    default: 0,  null: false
-    t.integer "longitude",   limit: 4,    default: 0,  null: false
-    t.integer "zoom",        limit: 1,    default: 0,  null: false
+    t.string  "name",        limit: 50, default: "", null: false
+    t.string  "continentId", limit: 50, default: "", null: false
+    t.integer "latitude",    limit: 4,  default: 0,  null: false
+    t.integer "longitude",   limit: 4,  default: 0,  null: false
+    t.integer "zoom",        limit: 1,  default: 0,  null: false
     t.string  "iso2",        limit: 2
   end
 
@@ -128,25 +128,25 @@ ActiveRecord::Schema.define(version: 20150603015039) do
 
   create_table "Events", id: false, force: :cascade do |t|
     t.string  "id",       null: false, primary_key: true
-    t.string  "name",     limit: 54,   default: "", null: false
-    t.integer "rank",     limit: 4,    default: 0,  null: false
-    t.string  "format",   limit: 10,   default: "", null: false
-    t.string  "cellName", limit: 45,   default: "", null: false
+    t.string  "name",     limit: 54, default: "", null: false
+    t.integer "rank",     limit: 4,  default: 0,  null: false
+    t.string  "format",   limit: 10, default: "", null: false
+    t.string  "cellName", limit: 45, default: "", null: false
   end
 
   create_table "Formats", id: false, force: :cascade do |t|
     t.string  "id",  null: false, primary_key: true
-    t.string "name", limit: 50,   default: "", null: false
+    t.string "name", limit: 50, default: "", null: false
   end
 
   create_table "InboxPersons", id: false, force: :cascade do |t|
     t.string "id",            limit: 10, primary_key: true,  null: false
-    t.string "wcaId",         limit: 10, default: "",        null: false
+    t.string "wcaId",         limit: 10, default: "", null: false
     t.string "name",          limit: 80
-    t.string "countryId",     limit: 2,  default: "",        null: false
-    t.string "gender",        limit: 1,  default: "",        null: false
-    t.date   "dob",                                          null: false
-    t.string "competitionId", limit: 32,                     null: false
+    t.string "countryId",     limit: 2,  default: "", null: false
+    t.string "gender",        limit: 1,  default: "", null: false
+    t.date   "dob",                                   null: false
+    t.string "competitionId", limit: 32,              null: false
   end
 
   add_index "InboxPersons", ["countryId"], name: "InboxPersons_fk_country"
@@ -167,7 +167,6 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   end
 
   add_index "InboxPersons_old", ["countryId"], name: "InboxPersons_old_fk_country"
-  add_index "InboxPersons_old", ["id"], name: "InboxPersons_old_id"
   add_index "InboxPersons_old", ["name"], name: "InboxPersons_old_name"
 
   create_table "InboxResults", id: false, force: :cascade do |t|
@@ -234,7 +233,6 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   end
 
   add_index "Persons", ["countryId"], name: "Persons_fk_country"
-  add_index "Persons", ["id"], name: "Persons_id"
   add_index "Persons", ["name"], name: "Persons_name"
 
   create_table "Preregs", force: :cascade do |t|
@@ -315,9 +313,9 @@ ActiveRecord::Schema.define(version: 20150603015039) do
 
   create_table "Rounds", id: false, force: :cascade do |t|
     t.string  "id",       null: false, primary_key: true
-    t.integer "rank",     limit: 4,    default: 0,  null: false
-    t.string  "name",     limit: 50,   default: "", null: false
-    t.string  "cellName", limit: 45,   default: "", null: false
+    t.integer "rank",     limit: 4,  default: 0,  null: false
+    t.string  "name",     limit: 50, default: "", null: false
+    t.string  "cellName", limit: 45, default: "", null: false
   end
 
   create_table "Scrambles", primary_key: "scrambleId", force: :cascade do |t|
@@ -331,6 +329,28 @@ ActiveRecord::Schema.define(version: 20150603015039) do
   end
 
   add_index "Scrambles", ["competitionId", "eventId"], name: "competitionId"
+
+  create_table "competition_delegates", force: :cascade do |t|
+    t.string   "competition_id"
+    t.integer  "delegate_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "competition_delegates", ["competition_id", "delegate_id"], name: "index_competition_delegates_on_competition_id_and_delegate_id", unique: true
+  add_index "competition_delegates", ["competition_id"], name: "index_competition_delegates_on_competition_id"
+  add_index "competition_delegates", ["delegate_id"], name: "index_competition_delegates_on_delegate_id"
+
+  create_table "competition_organizers", force: :cascade do |t|
+    t.string  "competition_id"
+    t.integer  "organizer_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "competition_organizers", ["competition_id", "organizer_id"], name: "idx_competition_organizers_on_competition_id_and_organizer_id", unique: true
+  add_index "competition_organizers", ["competition_id"], name: "index_competition_organizers_on_competition_id"
+  add_index "competition_organizers", ["organizer_id"], name: "index_competition_organizers_on_organizer_id"
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false

@@ -1,18 +1,20 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :is_competition_organizer, only: [:edit, :update]
-  before_action :can_admin_results_only, except: [:edit, :update]
 
-  private def is_competition_organizer
-    # TODO - allow organizers to edit their own competition
-    return false
+  private def can_manage_competition_only
+    competition = Competition.find(params[:id])
+    unless current_user && current_user.can_manage_competition?(competition)
+      flash[:danger] = "You are not allowed to manage this competition"
+      redirect_to root_url
+    end
   end
 
-  def competitions
+  private def competitions
     @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day)
   end
 
   def new
+    can_admin_results_only
     @competitions = competitions
     @competition = Competition.new
 
@@ -20,11 +22,13 @@ class CompetitionsController < ApplicationController
   end
 
   def index
+    can_admin_results_only
     @competitions = competitions
     render layout: "application"
   end
 
   def create
+    can_admin_results_only
     new_competition_params = params.require(:competition).permit(:id, :competition_id_to_clone)
     if new_competition_params[:competition_id_to_clone].blank?
       # Creating a blank competition.
@@ -56,6 +60,7 @@ class CompetitionsController < ApplicationController
   end
 
   def post_announcement
+    can_admin_results_only
     comp = Competition.find(params[:id])
     if comp.start_date.nil? || comp.end_date.nil?
       date_range_str = "unscheduled"
@@ -74,6 +79,7 @@ class CompetitionsController < ApplicationController
   end
 
   def post_results
+    can_admin_results_only
     comp = Competition.find(params[:id])
     unless comp.results
       render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe, layout: "application"
@@ -148,16 +154,19 @@ class CompetitionsController < ApplicationController
   end
 
   def admin_edit
+    can_admin_results_only
     @competition = Competition.find(params[:id])
     @admin_view = true
     render 'edit'
   end
 
   def edit
+    can_manage_competition_only
     @competition = Competition.find(params[:id])
   end
 
   def update
+    can_manage_competition_only
     @competition = Competition.find(params[:id])
     @admin_view = params.has_key?(:admin_view)
     if @competition.update_attributes(competition_params)
