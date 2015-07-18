@@ -57,7 +57,11 @@ class CompetitionsController < ApplicationController
 
   def post_announcement
     comp = Competition.find(params[:id])
-    date_range_str = date_range(comp.start_date, comp.end_date)
+    if comp.start_date.nil? || comp.end_date.nil?
+      date_range_str = "unscheduled"
+    else
+      date_range_str = date_range(comp.start_date, comp.end_date)
+    end
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
     body = "The [#{comp.name}](#{root_url}results/c.php?i=#{comp.id})"

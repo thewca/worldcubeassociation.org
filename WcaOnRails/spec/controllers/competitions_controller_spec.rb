@@ -4,6 +4,7 @@ describe CompetitionsController do
   login_admin
 
   let(:competition) { FactoryGirl.create(:competition, start_date: "2011-12-04", end_date: "2011-12-05") }
+  let(:unscheduled_competition) { FactoryGirl.create(:competition, start_date: nil, end_date: nil) }
 
   it 'redirects organiser view to organiser view' do
     patch :update, id: competition, competition: { name: competition.name }
@@ -49,6 +50,12 @@ describe CompetitionsController do
 
     new_comp.id = competition.id
     expect(new_comp).to eq competition
+  end
+
+  it 'handles nil start date' do
+    get :post_announcement, id: unscheduled_competition
+    post = assigns(:post)
+    expect(post.title).to match /unscheduled/
   end
 
   it 'creates an announcement post' do
