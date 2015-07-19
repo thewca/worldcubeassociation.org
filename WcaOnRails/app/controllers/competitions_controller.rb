@@ -40,6 +40,8 @@ class CompetitionsController < ApplicationController
       competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
       if competition_to_clone
         @competition = Competition.new(competition_to_clone.as_json.merge(new_competition_params))
+        @competition.organizers = competition_to_clone.organizers
+        @competition.delegates = competition_to_clone.delegates
       else
         @competition = Competition.new(new_competition_params)
         @competition.errors[:competition_id_to_clone] = "invalid"

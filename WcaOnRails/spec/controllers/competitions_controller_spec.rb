@@ -43,13 +43,26 @@ describe CompetitionsController do
   end
 
   it 'clones a new competition' do
+    user1 = FactoryGirl.create(:user)
+    user2 = FactoryGirl.create(:user)
+    user3 = FactoryGirl.create(:user)
+    competition.delegates << user1
+    competition.organizers << user2
+    competition.organizers << user3
     post :create, competition: { id: "Test2015", competition_id_to_clone: competition.id }
     expect(response).to redirect_to admin_edit_competition_path("Test2015")
     new_comp = assigns(:competition)
     expect(new_comp.id).to eq "Test2015"
 
-    new_comp.id = competition.id
-    expect(new_comp).to eq competition
+    new_comp_json = new_comp.as_json
+    new_comp_json.delete("id")
+    competition_json = competition.as_json
+    competition_json.delete("id")
+    expect(new_comp_json).to eq competition_json
+
+    # Cloning a competition should clone its delegates and organizers.
+    expect(new_comp.delegates).to eq competition.delegates
+    expect(new_comp.organizers).to eq competition.organizers
   end
 
   it 'handles nil start date' do
