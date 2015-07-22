@@ -39,7 +39,28 @@ class Competition < ActiveRecord::Base
 
   attr_accessor :competition_id_to_clone
 
-  attr_accessor :delegateIds, :organizerIds
+  attr_accessor :delegate_ids, :organizer_ids
+  before_validation :unpack_delegate_organizer_ids
+  def unpack_delegate_organizer_ids
+    def users_to_emails_str(users)
+      users.sort_by(&:name).map { |user| "[{#{user.name}}{mailto:#{user.email}}]" }.join
+    end
+    if delegate_ids
+      self.delegates = delegate_ids.split(",").map { |id| User.find(id) }
+      self.wcaDelegate = users_to_emails_str(delegates)
+    end
+    if organizer_ids
+      self.organizers = organizer_ids.split(",").map { |id| User.find(id) }
+      self.organiser = users_to_emails_str(organizers)
+    end
+  end
+  validate :delegates_must_be_delegates
+  def delegates_must_be_delegates
+    non_delegates = delegates.select { |user| !user.delegate_status }
+    unless non_delegates.empty?
+      errors.add(:delegate_ids, "#{non_delegates.map(&:name)} #{'is'.pluralize(non_delegates.length)} not #{'delegate'.pluralize(non_delegates.length)}.")
+    end
+  end
 
   def longitude_degrees
     longitude_microdegrees / 1e6

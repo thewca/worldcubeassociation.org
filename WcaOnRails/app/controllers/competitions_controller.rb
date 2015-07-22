@@ -201,6 +201,8 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
+        :delegate_ids,
+        :organizer_ids,
         :wcaDelegate,
         :organiser,
         :website,

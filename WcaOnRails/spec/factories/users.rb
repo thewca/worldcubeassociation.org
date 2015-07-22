@@ -5,14 +5,15 @@ FactoryGirl.define do
     password "foo"
     password_confirmation { "foo" }
     after(:create) { |user| user.confirm! }
-  end
 
-  factory :admin, class: User do
-    name "Mr. Admin"
-    email "admin@worldcubeassociation.org"
-    password "foo"
-    password_confirmation { "foo" }
-    admin true
-    after(:create) { |user| user.confirm! }
+    factory :admin do
+      name "Mr. Admin"
+      email "admin@worldcubeassociation.org"
+      admin true
+    end
+
+    factory :delegate do
+      delegate_status "delegate"
+    end
   end
 end

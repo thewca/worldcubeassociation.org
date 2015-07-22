@@ -29,6 +29,15 @@ describe CompetitionsController do
     expect(competition.reload.isConfirmed?).to eq true
   end
 
+  it 'saves delegate_ids' do
+    delegate1 = FactoryGirl.create(:delegate)
+    delegate2 = FactoryGirl.create(:delegate)
+    delegates = [delegate1, delegate2]
+    delegate_ids = delegates.map(&:id).join(",")
+    patch :update, id: competition, competition: { delegate_ids: delegate_ids }
+    expect(competition.reload.delegates).to eq delegates
+  end
+
   it 'clears showPreregList if not showPreregForm' do
     competition.update_attributes(showPreregForm: true, showPreregList: true)
     patch :update, id: competition, competition: { showPreregForm: false }
@@ -43,7 +52,7 @@ describe CompetitionsController do
   end
 
   it 'clones a new competition' do
-    user1 = FactoryGirl.create(:user)
+    user1 = FactoryGirl.create(:delegate)
     user2 = FactoryGirl.create(:user)
     user3 = FactoryGirl.create(:user)
     competition.delegates << user1

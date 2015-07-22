@@ -7,7 +7,7 @@ RSpec.describe Competition do
   end
 
   it "saves without losing data" do
-    competition = Competition.find(FactoryGirl.create :competition)
+    competition = Competition.find((FactoryGirl.create :competition).id)
     json_data = competition.as_json
     competition.save
     expect(competition.as_json).to eq json_data
@@ -110,5 +110,34 @@ RSpec.describe Competition do
     competition = FactoryGirl.create :competition, website: "[{#{url_name}}{#{url}}]"
     expect(competition.website_url_name).to eq url_name
     expect(competition.website_url).to eq url
+  end
+
+  it "saves delegate_ids" do
+    delegate1 = FactoryGirl.create(:delegate, name: "Daniel", email: "daniel@d.com")
+    delegate2 = FactoryGirl.create(:delegate, name: "Chris", email: "chris@c.com")
+    delegates = [delegate1, delegate2]
+    delegate_ids = delegates.map(&:id).join(",")
+    competition = FactoryGirl.create :competition, delegate_ids: delegate_ids
+    expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
+    expect(competition.wcaDelegate).to eq "[{Chris}{mailto:chris@c.com}][{Daniel}{mailto:daniel@d.com}]"
+  end
+
+  it "saves organizer_ids" do
+    organizer1 = FactoryGirl.create(:user, name: "Bob", email: "bob@b.com")
+    organizer2 = FactoryGirl.create(:user, name: "Jane", email: "jane@j.com")
+    organizers = [organizer1, organizer2]
+    organizer_ids = organizers.map(&:id).join(",")
+    competition = FactoryGirl.create :competition, organizer_ids: organizer_ids
+    expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
+    expect(competition.organiser).to eq "[{Bob}{mailto:bob@b.com}][{Jane}{mailto:jane@j.com}]"
+  end
+
+  it "verifies delegates are delegates" do
+    delegate = FactoryGirl.create(:user)
+    delegates = [delegate]
+    delegate_ids = delegates.map(&:id).join(",")
+    competition = FactoryGirl.build :competition, delegate_ids: delegate_ids
+    expect(competition.save).to eq false
+    expect(competition.errors.messages).to have_key :delegate_ids
   end
 end

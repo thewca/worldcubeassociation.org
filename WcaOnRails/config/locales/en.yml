@@ -38,8 +38,8 @@ en:
 
         wcaDelegate: "WCA delegate(s)"
         organiser: "Organiser(s)"
-        delegateIds: "WCA delegate(s)"
-        organizerIds: "Organizers(s)"
+        delegate_ids: "WCA delegate(s)"
+        organizer_ids: "Organizers(s)"
 
         isConfirmed: "Confirm details"
         showAtAll: "Visible"

@@ -14,3 +14,8 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+# http://stackoverflow.com/a/1688587
+ActiveSupport::Inflector.inflections do |inflection|
+  inflection.irregular "is", "are"
+end
