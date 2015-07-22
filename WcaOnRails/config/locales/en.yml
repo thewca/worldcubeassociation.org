@@ -35,8 +35,12 @@ en:
         cityName: "City name"
         venueAddress: "Venue address"
         venueDetails: "Venue details"
+
         wcaDelegate: "WCA delegate(s)"
         organiser: "Organiser(s)"
+        delegateIds: "WCA delegate(s)"
+        organizerIds: "Organizers(s)"
+
         isConfirmed: "Confirm details"
         showAtAll: "Visible"
         showPreregForm: "Registration form"

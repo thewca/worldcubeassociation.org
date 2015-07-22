@@ -44,6 +44,21 @@ class Api::V0::ApiController < ApplicationController
   def help
   end
 
+  def users_delegates_search
+    users_search(delegate_only=true)
+  end
+
+  def users_search(delegate_only=false)
+    # TODO - limit?
+    query = params[:query]
+    users = User.where("name LIKE ?", "%" + query + "%")
+    if delegate_only
+      users = users.where.not(delegate_status: nil)
+    end
+    users = users.select([:id, :wca_id, :name, :delegate_status])
+    render json: { status: "ok", users: users }
+  end
+
   private def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end

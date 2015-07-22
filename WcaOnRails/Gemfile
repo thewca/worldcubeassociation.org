@@ -31,6 +31,7 @@ gem 'time_will_tell'
 gem 'redcarpet'
 gem 'twitter-typeahead-rails'
 gem 'underscore-rails'
+gem "selectize-rails"
 
 # TODO remove me after all posts have been updated to markdown
 gem 'reverse_markdown'

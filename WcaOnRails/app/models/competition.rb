@@ -39,6 +39,8 @@ class Competition < ActiveRecord::Base
 
   attr_accessor :competition_id_to_clone
 
+  attr_accessor :delegateIds, :organizerIds
+
   def longitude_degrees
     longitude_microdegrees / 1e6
   end

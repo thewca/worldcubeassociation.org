@@ -110,7 +110,6 @@ wrapper_mappings: {
       </label>
       <div class="col-sm-9">
         <div class="input-daterange input-group" id="datepicker">
-
           <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
           <span class="input-group-addon">to</span>
           <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
@@ -121,8 +120,13 @@ wrapper_mappings: {
     </div>
 
     <%= f.input :information %>
-    <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe %>
-    <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe %>
+
+    <%= f.input :delegateIds, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
+    <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe, readonly: true %>
+
+    <%= f.input :organizerIds, hint: "Competition organizers.", as: :user_ids %>
+    <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe, readonly: true %>
+
     <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
     <% event_groups = [

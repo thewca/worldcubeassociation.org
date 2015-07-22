@@ -1,13 +1,12 @@
 class UsersController < ApplicationController
-  # For now, only allow admins to view this, as we're showing email addresses here
-  before_action :authenticate_user!
-  before_action :can_edit_users_only
+  before_action :authenticate_user!, except: [:search]
 
   def self.WCA_ROLES
     [:admin, :results_team]
   end
 
   def index
+    can_edit_users_only
     @users_grid = initialize_grid(User, {
       order: 'name',
       order_direction: 'asc'
@@ -15,6 +14,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    can_edit_users_only
     @user = User.find_by_id(params[:id])
     if !@user
       # If no user exists with given id, try looking up by WCA id.
@@ -24,6 +24,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    can_edit_users_only
     @user = User.find(params[:id])
     new_admin = ActiveRecord::Type::Boolean.new.type_cast_from_user(user_params[:admin])
     new_board_member = user_params[:delegate_status] == "board_member"
