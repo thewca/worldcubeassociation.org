@@ -1,22 +1,19 @@
 module ControllerMacros
-  def login_admin
+  def sign_in
     before :each do
-      @request.env["devise.mapping"] = Devise.mappings[:admin]
-      sign_in FactoryGirl.create(:admin)
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in yield
     end
   end
 end
 
 module RequestMacros
-  def sign_in(user)
-  end
-
-  def login_admin
+  def sign_in
     before :each do
-      user = FactoryGirl.create(:admin)
+      user = yield
       post_via_redirect new_user_session_path, {
-        'user[login]' => user.email,
-        'user[password]' => user.password,
+        'user[login]' => user,
+        'user[password]' => user,
       }
     end
   end

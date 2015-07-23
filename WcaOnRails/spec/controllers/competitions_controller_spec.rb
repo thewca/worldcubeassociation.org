@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CompetitionsController do
-  login_admin
+  sign_in { FactoryGirl.create :admin }
 
   let(:competition) { FactoryGirl.create(:competition, start_date: "2011-12-04", end_date: "2011-12-05") }
   let(:unscheduled_competition) { FactoryGirl.create(:competition, start_date: nil, end_date: nil) }

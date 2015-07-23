@@ -1,4 +1,5 @@
 class RegistrationsController < CompetitionsController
+  skip_before_action :can_admin_results_only, only: [:index, :update_all]
   before_action :can_manage_competition_only, only: [:index, :update_all]
 
   def index

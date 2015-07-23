@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "competitions" do
-  login_admin
+  sign_in { FactoryGirl.create :admin }
 
   let(:competition) { FactoryGirl.create(:competition) }
 
