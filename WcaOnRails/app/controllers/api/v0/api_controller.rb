@@ -45,10 +45,10 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def users_delegates_search
-    users_search(delegate_only=true)
+    users_search(delegate_only: true)
   end
 
-  def users_search(delegate_only=false)
+  def users_search(delegate_only: false)
     # TODO - limit?
     query = params[:query]
     users = User.where("name LIKE ?", "%" + query + "%")
