@@ -2,9 +2,6 @@ class Event
   attr_accessor :id, :name, :rank, :format, :cellName, :valid
   alias_method :valid?, :valid
 
-
-  @@all_events = []
-  @@all_events_by_id = {}
   def initialize(attributes={})
     @id = attributes[:id]
     @name = attributes[:name]
@@ -12,10 +9,6 @@ class Event
     @format = attributes[:format]
     @cellName = attributes[:cellName]
     @valid = attributes[:valid]
-    if @valid
-      @@all_events << self
-      @@all_events_by_id[self.id] = self
-    end
   end
 
   def to_partial_path
@@ -23,15 +16,15 @@ class Event
   end
 
   def self.find(id)
-    @@all_events_by_id[id] or throw "Unrecognized event id"
+    ALL_EVENTS_BY_ID[id] or throw "Unrecognized event id"
   end
 
   def self.find_by_id(id)
-    @@all_events_by_id[id] || Event.new(id: id, name: "Invalid", cellName: "Invalid", rank: 0, valid: false)
+    ALL_EVENTS_BY_ID[id] || Event.new(id: id, name: "Invalid", cellName: "Invalid", rank: 0, valid: false)
   end
 
   def self.all
-    @@all_events
+    ALL_EVENTS
   end
 
   def official?
@@ -68,7 +61,7 @@ class Event
     id == o.id
   end
 
-  [
+  ALL_EVENTS = [
     {
       id: "333",
       name: "Rubik's Cube",
@@ -314,8 +307,7 @@ class Event
       format: "time",
       cellName: "Magic one-handed",
     }
-  ].each do |event_json|
-    event_json[:valid] = true
-    Event.new(event_json)
-  end
+  ].map { |e| Event.new(e.merge(valid: true)) }
+
+  ALL_EVENTS_BY_ID = Hash[ALL_EVENTS.map { |e| [e.id, e] }]
 end
