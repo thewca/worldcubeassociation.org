@@ -42,7 +42,6 @@ require_once '_tables.php';
 require_once '_links.php';
 require_once '_values.php';
 require_once '_cache.php';
-require_once '_map.php';
 require_once '_navigation.php';
 
 

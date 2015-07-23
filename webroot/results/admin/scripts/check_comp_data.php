@@ -16,7 +16,7 @@ $competition_data = $competition_data[0];
 print "<div class='notice'>
           Working with `".o($compId)."` Competition Data
           | <a href='../c.php?i=".o($compId)."'>Competition Results Page</a>
-          | <a href='../competition_edit.php?competitionId=".$compId."&amp;password=".$competition_data['adminPassword']."'>Competition Admin Page</a> <br />
+          | <a href='/competitions/$compId/edit/admin'>Competition Admin Page</a> <br />
         </div>";
 
 // Alert about any existing result/scramble data
