@@ -10,12 +10,12 @@ class CompetitionsController < ApplicationController
   end
 
   private def competitions
-    @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day)
+    Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day)
   end
 
   def new
     can_admin_results_only
-    @competitions = competitions
+    @js_competitions = @competitions = competitions
     @competition = Competition.new
 
     render layout: "application"
@@ -23,7 +23,7 @@ class CompetitionsController < ApplicationController
 
   def index
     can_admin_results_only
-    @competitions = competitions
+    @js_competitions = @competitions = competitions
     render layout: "application"
   end
 
@@ -56,7 +56,7 @@ class CompetitionsController < ApplicationController
       end
       redirect_to admin_edit_competition_path(@competition)
     else
-      @competitions = competitions
+      @js_competitions = @competitions = competitions
       render 'new', layout: "application"
     end
   end
@@ -159,6 +159,7 @@ class CompetitionsController < ApplicationController
     can_admin_results_only
     @competition = Competition.find(params[:id])
     @admin_view = true
+    @js_users = (@competition.delegates + @competition.organizers).uniq
     render 'edit'
   end
 
@@ -179,6 +180,7 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
+      @js_users = (@competition.delegates + @competition.organizers).uniq
       render 'edit'
     end
   end

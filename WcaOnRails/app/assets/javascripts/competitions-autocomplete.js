@@ -9,7 +9,7 @@ $(function() {
     var res = [startsRe, containsRe];
 
     // Copy and reverse to iterate from newest to oldest.
-    var competitionsCopy = competitions.slice().reverse();
+    var competitionsCopy = wca.competitions.slice().reverse();
 
     var matches = [];
     _.each(res, function(re) {

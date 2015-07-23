@@ -17,16 +17,22 @@
       ga("set", "anonymizeIp", true);
     </script>
   <% end %>
-  <% if @competitions %>
-    <script>
-      // Set global variable for competitions-autocomplete.js
-      var competitions = <%= @competitions.to_json.html_safe %>;
-      var competitionById = {};
-      _.each(competitions, function(competition) {
-        competitionById[competition.id] = competition;
+  <script>
+    // Some globals for use in our javascript codebase.
+    var wca = wca || {};
+    (function() {
+      wca.competitions = <%= (@js_competitions || []).to_json.html_safe %>;
+      wca.competitionById = {};
+      _.each(wca.competitions, function(competition) {
+        wca.competitionById[competition.id] = competition;
       });
-    </script>
-  <% end %>
+      wca.users = <%= (@js_users || []).to_json.html_safe %>;
+      wca.userById = {};
+      _.each(wca.users, function(user) {
+        wca.userById[user.id] = user;
+      });
+    })();
+  </script>
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 

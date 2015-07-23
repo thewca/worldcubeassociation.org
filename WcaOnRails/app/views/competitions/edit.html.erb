@@ -120,13 +120,8 @@ wrapper_mappings: {
     </div>
 
     <%= f.input :information %>
-
     <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
-    <%= f.input :wcaDelegate, hint: "List of WCA delegates attending the competition. For example:<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]<br>[{Gilles Roux}{mailto:grrroux@free.fr}]".html_safe, readonly: true %>
-
     <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
-    <%= f.input :organiser, hint: "List of the competition organizers. For example:<br>[{Euro2006 organisation team}{mailto:davidj@seventowns.com}]<br>[{Ron van Bruchem}{mailto:rbruchem@worldcubeassociation.org}]".html_safe, readonly: true %>
-
     <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
     <% event_groups = [
