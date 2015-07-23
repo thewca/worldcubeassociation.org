@@ -155,17 +155,22 @@ class CompetitionsController < ApplicationController
     render 'posts/new', layout: "application"
   end
 
+  private def render_edit
+    @js_users = (@competition.delegates + @competition.organizers).uniq
+    render 'edit'
+  end
+
   def admin_edit
     can_admin_results_only
     @competition = Competition.find(params[:id])
     @admin_view = true
-    @js_users = (@competition.delegates + @competition.organizers).uniq
-    render 'edit'
+    render_edit
   end
 
   def edit
     can_manage_competition_only
     @competition = Competition.find(params[:id])
+    render_edit
   end
 
   def update
@@ -180,8 +185,7 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      @js_users = (@competition.delegates + @competition.organizers).uniq
-      render 'edit'
+      render_edit
     end
   end
 
