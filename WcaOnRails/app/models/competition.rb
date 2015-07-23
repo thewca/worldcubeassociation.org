@@ -21,7 +21,7 @@ class Competition < ActiveRecord::Base
   validates :organiser, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
 
-  attr_accessor :start_date, :end_date
+  attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
   validate :events_must_be_valid
@@ -38,18 +38,12 @@ class Competition < ActiveRecord::Base
 
   attr_accessor :competition_id_to_clone
 
-  attr_accessor :delegate_ids, :organizer_ids
+  attr_writer :delegate_ids, :organizer_ids
   def delegate_ids
     @organizer_ids || delegates.map(&:id).join(",")
   end
-  def delegate_ids=(ids)
-    @delegate_ids = ids
-  end
   def organizer_ids
     @organizer_ids || organizers.map(&:id).join(",")
-  end
-  def organizer_ids=(ids)
-    @organizer_ids = ids
   end
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
@@ -111,14 +105,6 @@ class Competition < ActiveRecord::Base
   def end_date
     endYear = @endYear || year # gross hack to remember the years of a multiyear competition
     endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.parse("%04i-%02i-%02i" % [ endYear, endMonth, endDay ])
-  end
-
-  def start_date=(new_start_date)
-    @start_date = new_start_date
-  end
-
-  def end_date=(new_end_date)
-    @end_date = new_end_date
   end
 
   private def unpack_dates
