@@ -58,6 +58,14 @@ server {
       fastcgi_read_timeout 10m;
     }
 
+    location ^~ /results/statistics.php {
+      include fcgi.conf;
+      # /results/statistics.php?update8392=1 can take a while, and isn't covered
+      # by the 10m timeout in /results/admin above. See
+      # https://groups.google.com/d/msg/wca-software/qB1XYfpQCfs/QFyvx6_W_TwJ
+      fastcgi_read_timeout 10m;
+    }
+
     # As recommended by http://docs.phpmyadmin.net/en/latest/setup.html#using-setup-script,
     # prevent access to /libraries and /setup/lib.
     location ^~ /results/admin/phpMyAdmin/libraries {
