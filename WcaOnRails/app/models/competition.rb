@@ -8,19 +8,18 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers
   has_many :organizers, through: :competition_organizers
 
-  ends_with_year_re = /\A.* \d{4}\z/
-  # TODO - learn ruby...
-  @@pattern_link_re = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
-  pattern_text_with_links_re = /\A[^{}]*(#{@@pattern_link_re.source}[^{}]*)*\z/
+  ENDS_WITH_YEAR_RE = /\A.* \d{4}\z/
+  PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
+  PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   validates :id, presence: true, uniqueness: true
   validates :name, length: { maximum: 50 },
-                   format: { with: ends_with_year_re }
+                   format: { with: ENDS_WITH_YEAR_RE }
   validates :cellName, length: { maximum: 45 },
-                       format: { with: ends_with_year_re }
-  validates :venue, format: { with: pattern_text_with_links_re }
-  validates :wcaDelegate, format: { with: pattern_text_with_links_re }
-  validates :organiser, format: { with: pattern_text_with_links_re }
-  validates :website, format: { with: pattern_text_with_links_re }
+                       format: { with: ENDS_WITH_YEAR_RE }
+  validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
+  validates :wcaDelegate, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
+  validates :organiser, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
+  validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
 
   attr_accessor :start_date, :end_date
   before_validation :unpack_dates
@@ -178,12 +177,12 @@ class Competition < ActiveRecord::Base
   end
 
   def website_url_name
-    match = @@pattern_link_re.match website
+    match = PATTERN_LINK_RE.match website
     match ? match[1] : nil
   end
 
   def website_url
-    match = @@pattern_link_re.match website
+    match = PATTERN_LINK_RE.match website
     match ? match[2] : nil
   end
 end
