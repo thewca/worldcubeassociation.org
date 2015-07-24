@@ -1,6 +1,8 @@
 class Api::V0::ApiController < ApplicationController
   before_action :doorkeeper_authorize!, only: [:me]
 
+  DEFAULT_API_RESULT_LIMIT = 20
+
   def me
     render json: { me: current_resource_owner }
   end
@@ -49,13 +51,13 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def users_search(delegate_only: false)
-    # TODO - limit?
     query = params[:query]
     users = User.where("name LIKE ?", "%" + query + "%")
     if delegate_only
       users = users.where.not(delegate_status: nil)
     end
     users = users.select([:id, :wca_id, :name, :delegate_status])
+    users = users.limit(DEFAULT_API_RESULT_LIMIT)
     render json: { status: "ok", users: users }
   end
 
