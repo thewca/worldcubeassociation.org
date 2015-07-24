@@ -7,7 +7,7 @@ class Registration < ActiveRecord::Base
   belongs_to :competition, foreign_key: "competitionId"
 
   def events
-    eventIds.split.map { |e| Event.find_by_id(e) }.sort_by &:rank
+    (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
   end
 
   def accepted?
