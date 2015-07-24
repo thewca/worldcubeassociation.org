@@ -15,5 +15,9 @@ FactoryGirl.define do
     factory :delegate do
       delegate_status "delegate"
     end
+
+    factory :board_member do
+      delegate_status "board_member"
+    end
   end
 end

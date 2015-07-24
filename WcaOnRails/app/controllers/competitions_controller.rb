@@ -230,6 +230,7 @@ class CompetitionsController < ApplicationController
     if params[:commit] == "Confirm"
       competition_params[:isConfirmed] = true
     end
+    competition_params[:editing_user_id] = current_user.id
     competition_params
   end
 end

@@ -40,7 +40,7 @@ class Competition < ActiveRecord::Base
 
   attr_writer :delegate_ids, :organizer_ids
   def delegate_ids
-    @organizer_ids || delegates.map(&:id).join(",")
+    @delegate_ids|| delegates.map(&:id).join(",")
   end
   def organizer_ids
     @organizer_ids || organizers.map(&:id).join(",")
@@ -64,6 +64,18 @@ class Competition < ActiveRecord::Base
     non_delegates = delegates.select { |user| !user.delegate_status }
     unless non_delegates.empty?
       errors.add(:delegate_ids, "#{non_delegates.map(&:name).join(', ')} is (are) not delegate(s).")
+    end
+  end
+
+  attr_accessor :editing_user_id
+  validate :user_cannot_demote_themself
+  def user_cannot_demote_themself
+    if editing_user_id
+      editing_user = User.find(editing_user_id)
+      unless editing_user.can_manage_competition?(self)
+        errors.add(:delegate_ids, "You cannot demote yourself")
+        errors.add(:organizer_ids, "You cannot demote yourself")
+      end
     end
   end
 

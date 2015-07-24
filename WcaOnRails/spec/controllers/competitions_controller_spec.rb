@@ -163,4 +163,50 @@ describe CompetitionsController do
     expect(post.body).to include "World records: Jeremy Fleischman 3x3 one-handed 50.00 (average), Vincent Sheu (2006SHEU01) 3x3 fewest moves 25 (single), 3x3 fewest moves 26.00 (average), Vincent Sheu (2006SHEU02) 2x2 Cube 10.00 (single)"
     expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 41.00 (single), 3x3 one-handed 40.00 (single)"
   end
+
+  it "cannot demote oneself" do
+    delegate = FactoryGirl.create(:delegate)
+    other_organizer = FactoryGirl.create(:user)
+    delegates = [delegate]
+    organizers = [delegate, other_organizer]
+    patch :update, id: competition, competition: { delegate_ids: delegates.map(&:id).join(","), organizer_ids: organizers.map(&:id).join(",") }
+    expect(competition.reload.delegates).to eq delegates
+    expect(competition.reload.organizers).to eq organizers
+
+    sign_out :user
+    sign_in delegate
+    # Remove ourself as a delegate. This should be allowed, because we're
+    # still an organizer.
+    delegates.pop
+    patch :update, id: competition, competition: { delegate_ids: delegates.map(&:id).join(","), organizer_ids: organizers.map(&:id).join(",") }
+    expect(competition.reload.delegates).to eq []
+    expect(competition.reload.organizers).to eq organizers
+
+    # Attempt to remove ourself as an organizer. This should not be allowed, because
+    # we would not be allowed to access the page anymore.
+    patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: other_organizer.id.to_s }
+    invalid_competition = assigns(:competition)
+    expect(invalid_competition).to be_invalid
+    expect(invalid_competition.delegate_ids).to eq ""
+    expect(invalid_competition.organizer_ids).to eq other_organizer.id.to_s
+    expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
+    expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
+    expect(competition.reload.delegates).to eq delegates
+    expect(competition.reload.organizers).to eq organizers
+  end
+
+  it "board member can demote oneself" do
+    board_member = FactoryGirl.create(:board_member)
+    sign_out :user
+    sign_in board_member
+
+    competition.organizers << board_member
+    competition.save!
+
+    # Remove ourself as an organizer. This should be allowed, because we're
+    # still able to administer results.
+    patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: "" }
+    expect(competition.reload.delegates).to eq []
+    expect(competition.reload.organizers).to eq []
+  end
 end
