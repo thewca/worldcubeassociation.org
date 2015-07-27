@@ -145,6 +145,8 @@ bash "build nginx" do
     ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
     make
     sudo make install
+    # at the same time we generate the Diffie-Hellman parameters
+    openssl dhparam -out /etc/nginx/dh4096.pem -outform PEM -2 4096
     EOH
 
   # Don't build nginx if we've already built it.
