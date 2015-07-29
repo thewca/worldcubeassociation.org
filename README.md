@@ -12,6 +12,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `vagrant up noregs` - Start the VM and provision it.
   - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
 - The website should now be accessible at [http://localhost:2331](http://localhost:2331).
+
 ### Install the website on machine you've setup yourself
 - Setup a machine (ie Ubuntu Trusty) with SSH access
 - Make sure SSH Agent is running or start it with `eval "$(ssh-agent -s)"`
