@@ -13,16 +13,15 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
 - The website should now be accessible at [http://localhost:2331](http://localhost:2331).
 
-### Install the website on machine you've setup yourself
+### Install the website on a machine you've setup yourself
 - Setup a machine (ie Ubuntu Trusty) with SSH access
 - Make sure SSH Agent is running or start it with `eval "$(ssh-agent -s)"`
 - Load your GitHub key into the ssh agent by doing `ssh-add /path/to/key`. If you don't have an SSH key, check the [GitHub howto](https://help.github.com/articles/generating-ssh-keys/)
 - SSH into the machine, with agent-forwarding enabled : `ssh -A you@yourmachine`
-- Provison your machine with `time ssh -A user@yourmachine.com 'sudo wget https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E \
-bash /tmp/wca-bootstrap.sh [environment]'` [environment] must be one of 'development', 'development-noregs', 'staging', 'production'. This step will take a very long time (at least an hour)
-  - For the 'staging' and 'production' environment, you will need an SSH key set up or know the password for cubing@worldcubeassociation.org in order to rsync secrets.
-  - The bootstrapping part may fail while trying to install 'texlive-lang-all', in that case you can run `sudo apt-get install texlive-lang-all=2013.20140215-1` manually and continue the bootstrapping process with `sudo -E bash /tmp/wca-bootstrap.sh [environment]`.
-- The website should now being served on port 80 for 'development(-noregs)' environment and redirected to https (443) for 'staging' and 'production' environments.
+- Provison your machine with `sudo wget https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh [environment]` `[environment]` must be one of `development`, `development-noregs`, `staging`, `production`. This step will take a very long time (at least an hour)
+  - For the `staging` and `production` environment, you will need an SSH key set up or know the password for cubing@worldcubeassociation.org in order to rsync secrets.
+  - The bootstrapping part may fail while trying to install `texlive-lang-all`, in that case you can run `sudo apt-get install texlive-lang-all=2013.20140215-1` manually and then continue the bootstrapping process with `sudo -E bash /tmp/wca-bootstrap.sh [environment]`.
+- The website should now being served on port 80. The traffic will be redirected to https (443) for `staging` and `production` environments.
 
 ## Deploy (aka update local git repo and rebuild rails and regulations)
 - `ssh -A cubing@worldcubeassociation.org worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_rails rebuild_regs`
