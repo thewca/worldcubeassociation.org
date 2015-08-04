@@ -19,8 +19,20 @@ wrapper_mappings: {
   <%= render 'shared/error_messages', object: f.object %>
   <% if @admin_view %>
     <%= hidden_field_tag :admin_view, "1" %>
-    <%= f.input :isConfirmed, label: "Locked", hint: "Organizers cannot edit a locked competition." %>
-    <%= f.input :showAtAll %>
+    <div class="form-group">
+      <div class="col-sm-9 col-sm-offset-2">
+        <div class="checkbox">
+          <%= f.input_field :isConfirmed, inline_label: "Do not let organizers edit this competition." %>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-9 col-sm-offset-2">
+        <div class="checkbox">
+          <%= f.input_field :showAtAll, inline_label: "Make competition visible to the public." %>
+        </div>
+      </div>
+    </div>
   <% else %>
     <% if @competition.isConfirmed? && @competition.showAtAll? %>
       <div class="alert alert-success">
@@ -159,8 +171,20 @@ wrapper_mappings: {
 
   <hr>
   <h2>Registration</h2>
-  <%= f.input :showPreregForm %>
-  <%= f.input :showPreregList %>
+  <div class="form-group">
+    <div class="col-sm-9 col-sm-offset-2">
+      <div class="checkbox">
+        <%= f.input_field :showPreregForm, inline_label: "I would like to use the registration form on the WCA website." %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-9 col-sm-offset-2">
+      <div class="checkbox">
+        <%= f.input_field :showPreregList, inline_label: "Show registered competitors on the WCA website." %>
+      </div>
+    </div>
+  </div>
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
