@@ -5,6 +5,7 @@ describe CompetitionsController do
 
   let(:competition) { FactoryGirl.create(:competition, start_date: "2011-12-04", end_date: "2011-12-05") }
   let(:unscheduled_competition) { FactoryGirl.create(:competition, start_date: nil, end_date: nil) }
+  let(:competition_with_delegate) { FactoryGirl.create(:competition, delegates: [FactoryGirl.create(:delegate)]) }
 
   it 'redirects organiser view to organiser view' do
     patch :update, id: competition, competition: { name: competition.name }
@@ -36,12 +37,6 @@ describe CompetitionsController do
     delegate_ids = delegates.map(&:id).join(",")
     patch :update, id: competition, competition: { delegate_ids: delegate_ids }
     expect(competition.reload.delegates).to eq delegates
-  end
-
-  it 'clears showPreregList if not showPreregForm' do
-    competition.update_attributes(showPreregForm: true, showPreregList: true)
-    patch :update, id: competition, competition: { showPreregForm: false }
-    expect(competition.reload.showPreregList).to eq false
   end
 
   it 'creates a new competition' do
@@ -164,7 +159,7 @@ describe CompetitionsController do
     expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 41.00 (single), 3x3 one-handed 40.00 (single)"
   end
 
-  it "cannot demote oneself" do
+  it "organizer cannot demote oneself" do
     delegate = FactoryGirl.create(:delegate)
     other_organizer = FactoryGirl.create(:user)
     delegates = [delegate]
@@ -193,6 +188,15 @@ describe CompetitionsController do
     expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
     expect(competition.reload.delegates).to eq delegates
     expect(competition.reload.organizers).to eq organizers
+  end
+
+  it "organizer can enable and disable registration list of locked competition" do
+    sign_out :user
+    sign_in competition_with_delegate.delegates[0]
+
+    # Disable registration list
+    patch :update, id: competition_with_delegate, competition: { showPreregList: "1" }
+    expect(competition_with_delegate.reload.showPreregList).to eq true
   end
 
   it "board member can demote oneself" do
