@@ -29,8 +29,9 @@ function showPages () {
   showPage( 'upload_results',
             "Upload results for a competition." );
 
-  showPage( 'competitions_manage',
-            "Manage competitions." );
+  showPage( 'create_competition', "Create competition.", '/competitions/new' );
+
+  showPage( 'list_competitions', "List all competitions.", '/competitions' );
 
   showPage( 'change_person',
             'Fix or update a person\'s data.' );

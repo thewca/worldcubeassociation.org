@@ -7,15 +7,19 @@ RSpec.describe User, type: :model do
   end
 
   it "requires senior delegate be a senior delegate" do
-    user1 = FactoryGirl.create :user
-    user1.delegate_status = "delegate"
-    user2 = FactoryGirl.create :user
+    delegate = FactoryGirl.create :delegate
+    user = FactoryGirl.create :user
 
-    user1.senior_delegate = user2
-    expect(user1).to be_invalid
+    delegate.senior_delegate = user
+    expect(delegate).to be_invalid
 
-    user2.senior_delegate!
-    expect(user1).to be_valid
+    user.senior_delegate!
+    expect(delegate).to be_valid
+  end
+
+  it "does not give delegates results admin privileges" do
+    delegate = FactoryGirl.create :delegate
+    expect(delegate.can_admin_results?).to be false
   end
 
   it "does not allow senior delegate if senior delegate" do

@@ -16,7 +16,7 @@ $competition_data = $competition_data[0];
 print "<div class='notice'>
           Working with `".o($compId)."` Competition Data
           | <a href='../c.php?i=".o($compId)."'>Competition Results Page</a>
-          | <a href='../competition_edit.php?competitionId=".$compId."&amp;password=".$competition_data['adminPassword']."'>Competition Admin Page</a> <br />
+          | <a href='/competitions/$compId/edit/admin'>Competition Admin Page</a> <br />
         </div>";
 
 // Alert about any existing result/scramble data
@@ -152,7 +152,7 @@ print "<li><p>Run some more scripts:</p>
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
            <li><a href='../c.php?i=".o($compId)."' target='_blank' class='link-external external'>View the Public competition page</a></li>
-           <li>Post the <a href='../competition_edit.php?competitionId=".$compId."&amp;password=".$competition_data['adminPassword']."' target='_blank' class='link-external external'>results announcement</a>
+           <li>Post the <a href='/competitions/".o($compId)."/post/results' target='_blank' class='link-external external'>results announcement</a>
                 </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(

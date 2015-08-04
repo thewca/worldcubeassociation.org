@@ -12,14 +12,31 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require local_time
 //= require wice_grid
+//= require jquery.are-you-sure
+//= require bootstrap-datepicker/core
+//= require locationpicker.jquery
+//= require twitter/typeahead
+//= require underscore
+//= require selectize
 //= require_tree .
 
-// Reinitialize any plugins when turbolinks changes the page.
-$(document).on("page:change", function() {
+$(function() {
   $('.dropdown-toggle').dropdownHover();
+  $('form.are-you-sure').areYouSure();
+  $('.input-daterange').datepicker({
+    format: "yyyy-mm-dd",
+    todayBtn: true,
+    todayHighlight: true
+  });
+  $('[data-toggle="tooltip"]').tooltip();
+
+  $("form.no-submit-on-enter").bind("keypress", function(e) {
+    if(e.which === 13) {
+      e.preventDefault();
+    }
+  });
 });

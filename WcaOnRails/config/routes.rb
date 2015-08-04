@@ -9,12 +9,23 @@ Rails.application.routes.draw do
       only: [:new, :create, :edit, :update],
       path: 'users',
       path_names: { new: 'sign_up' },
-      controller: 'registrations',
+      controller: 'accounts/registrations',
       as: :user_registration do
         get :cancel
       end
   end
   resources :users, only: [:index, :edit, :update]
+
+  resources :competitions, only: [:index, :edit, :update, :new, :create] do
+    patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
+    member do
+      resources :registrations, only: [:index, :update] do
+      end
+    end
+  end
+  get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+  get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement
+  get 'competitions/:id/post/results' => 'competitions#post_results', as: :competition_post_results
 
   root 'posts#index'
   resources :posts
@@ -44,6 +55,8 @@ Rails.application.routes.draw do
       get '/me' => "api#me"
       get '/auth/results' => "api#auth_results"
       get '/scramble-program' => "api#scramble_program"
+      get '/users/search/:query' => 'api#users_search'
+      get '/users/delegates/search/:query' => 'api#users_delegates_search'
     end
   end
 end

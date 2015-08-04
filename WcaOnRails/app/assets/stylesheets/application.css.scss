@@ -19,11 +19,20 @@
 @import "wice_grid";
 /* Courtesy of https://github.com/hisea/devise-bootstrap-views */
 @import "devise_bootstrap_views";
+@import "bootstrap-datepicker3";
+@import "cubing-icons";
+@import "typeaheadjs";
+@import "selectize";
+@import "selectize.bootstrap3";
 
 /* New stuff */
 @import "posts";
 @import "delegates";
 @import "users";
+@import "competitions";
+@import "registrations";
+@import "selectable-rows";
+@import "users-autocomplete";
 
 /* Gross stuff copied over from the old site */
 @import "navbar-static-top";

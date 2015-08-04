@@ -11,7 +11,6 @@ gem 'envied'
 gem 'seedbank'
 
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'jbuilder'
 gem 'bootstrap-sass'
 gem 'mail_form'
@@ -27,7 +26,12 @@ gem 'doorkeeper'
 gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
+gem 'bootstrap-datepicker-rails'
+gem 'time_will_tell'
 gem 'redcarpet'
+gem 'twitter-typeahead-rails'
+gem 'underscore-rails'
+gem "selectize-rails"
 
 # TODO remove me after all posts have been updated to markdown
 gem 'reverse_markdown'

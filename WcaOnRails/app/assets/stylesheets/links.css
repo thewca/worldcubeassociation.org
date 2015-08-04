@@ -3,18 +3,15 @@
 a:link, a:visited, a:active {
   color: #F60;
   text-decoration: none;
-  font-weight: bold;
 }
 
 a:hover {
   color: #C30;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .whiteLink {
   color: #FFF;
-  font-weight: bold;
 }
 
 
@@ -87,11 +84,4 @@ a.email:link, a.email:visited, a.email:active {
 
 a.email:hover {
   color: #449;
-}
-
-/* ---------- emptyLink ---------- */
-
-.emptyLink {
-  font-weight: bold;
-  cursor: pointer;
 }

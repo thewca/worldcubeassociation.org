@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :rss, :show]
-  before_action :results_team_only, except: [:index, :rss, :show]
+  before_action :can_admin_results_only, except: [:index, :rss, :show]
 
   def index
     @posts = Post.order(sticky: :desc, created_at: :desc).paginate(page: params[:page])
@@ -53,13 +53,6 @@ class PostsController < ApplicationController
 
   private def post_params
     params.require(:post).permit(:title, :body, :sticky)
-  end
-
-  private def results_team_only
-    unless current_user && current_user.results_team?
-      flash[:danger] = "Results team members only"
-      redirect_to root_url
-    end
   end
 
   private def find_post

@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :delegated_competitions, through: :competition_delegates
+  has_many :organized_competitions, through: :competition_organizers
+
   strip_attributes only: [:wca_id]
 
   devise :database_authenticatable, :registerable,
@@ -50,6 +53,14 @@ class User < ActiveRecord::Base
 
   def can_edit_users?
     return admin? || board_member? || delegate_status != nil
+  end
+
+  def can_admin_results?
+    return admin? || board_member? || results_team?
+  end
+
+  def can_manage_competition?(competition)
+    return can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self)
   end
 
   def editable_other_user_fields

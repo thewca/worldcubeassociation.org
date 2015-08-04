@@ -4,8 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= favicon_link_tag 'wca.ico' %>
   <title><%= full_title(yield(:title)) %></title>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <script type="text/javascript" src='//maps.google.com/maps/api/js?libraries=places'></script>
   <%= csrf_meta_tags %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
   <% if ENVied.WCA_LIVE_SITE %>
@@ -16,6 +17,22 @@
       ga("set", "anonymizeIp", true);
     </script>
   <% end %>
+  <script>
+    // Some globals for use in our javascript codebase.
+    var wca = wca || {};
+    (function() {
+      wca.competitions = <%= (@js_competitions || []).to_json.html_safe %>;
+      wca.competitionById = {};
+      _.each(wca.competitions, function(competition) {
+        wca.competitionById[competition.id] = competition;
+      });
+      wca.users = <%= (@js_users || []).to_json.html_safe %>;
+      wca.userById = {};
+      _.each(wca.users, function(user) {
+        wca.userById[user.id] = user;
+      });
+    })();
+  </script>
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 
@@ -96,7 +113,7 @@
                   <li><%= link_to "Manage users", users_path %></li>
                 <% end %>
 
-                <% if current_user.results_team? %>
+                <% if current_user.can_admin_results? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Results team
@@ -120,7 +137,10 @@
 
   <div class="container">
     <% flash.each do |message_type, message| %>
-      <div class="alert <%= bootstrap_class_for message_type %>"><%= message %></div>
+      <div class="alert <%= bootstrap_class_for message_type %> alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <%= message %>
+      </div>
     <% end %>
   </div>
   <%= yield %>

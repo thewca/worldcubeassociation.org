@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
-  # For now, only allow admins to view this, as we're showing email addresses here
-  before_action :authenticate_user!
-  before_action :can_edit_users_only
+  before_action :authenticate_user!, except: [:search]
+  before_action :can_edit_users_only, only: [:index, :edit, :update]
 
   def self.WCA_ROLES
     [:admin, :results_team]
