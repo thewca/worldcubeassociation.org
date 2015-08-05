@@ -3,9 +3,26 @@ require 'rails_helper'
 describe CompetitionsController do
   sign_in { FactoryGirl.create :admin }
 
-  let(:competition) { FactoryGirl.create(:competition, start_date: "2011-12-04", end_date: "2011-12-05") }
+  let(:competition) {
+    FactoryGirl.create(
+      :competition,
+      start_date: "2011-12-04",
+      end_date: "2011-12-05",
+      showAtAll: true,
+    )
+  }
   let(:unscheduled_competition) { FactoryGirl.create(:competition, start_date: nil, end_date: nil) }
   let(:competition_with_delegate) { FactoryGirl.create(:competition, delegates: [FactoryGirl.create(:delegate)]) }
+  let(:locked_competition) {
+    FactoryGirl.create(
+      :competition,
+      start_date: "2011-12-04",
+      end_date: "2011-12-05",
+      showAtAll: true,
+      isConfirmed: true,
+      delegates: [FactoryGirl.create(:delegate)]
+    )
+  }
 
   it 'redirects organiser view to organiser view' do
     patch :update, id: competition, competition: { name: competition.name }
@@ -50,23 +67,23 @@ describe CompetitionsController do
     user1 = FactoryGirl.create(:delegate)
     user2 = FactoryGirl.create(:user)
     user3 = FactoryGirl.create(:user)
-    competition.delegates << user1
-    competition.organizers << user2
-    competition.organizers << user3
-    post :create, competition: { id: "Test2015", competition_id_to_clone: competition.id }
+    locked_competition.delegates << user1
+    locked_competition.organizers << user2
+    locked_competition.organizers << user3
+    post :create, competition: { id: "Test2015", competition_id_to_clone: locked_competition.id }
     expect(response).to redirect_to admin_edit_competition_path("Test2015")
     new_comp = assigns(:competition)
     expect(new_comp.id).to eq "Test2015"
 
     new_comp_json = new_comp.as_json
-    new_comp_json.delete("id")
-    competition_json = competition.as_json
-    competition_json.delete("id")
+    # When cloning a competition, we don't want to clone its showAtAll and isConfirmed
+    # attributes.
+    competition_json = locked_competition.as_json.merge("id" => "Test2015", "showAtAll" => false, "isConfirmed" => false)
     expect(new_comp_json).to eq competition_json
 
     # Cloning a competition should clone its delegates and organizers.
-    expect(new_comp.delegates).to eq competition.delegates
-    expect(new_comp.organizers).to eq competition.organizers
+    expect(new_comp.delegates.sort_by(&:id)).to eq locked_competition.delegates.sort_by(&:id)
+    expect(new_comp.organizers.sort_by(&:id)).to eq locked_competition.organizers.sort_by(&:id)
   end
 
   it 'handles nil start date' do
@@ -190,13 +207,13 @@ describe CompetitionsController do
     expect(competition.reload.organizers).to eq organizers
   end
 
-  it "organizer can enable and disable registration list of locked competition" do
+  it "delegate can enable and disable registration list of locked competition" do
     sign_out :user
-    sign_in competition_with_delegate.delegates[0]
+    sign_in locked_competition.delegates[0]
 
     # Disable registration list
-    patch :update, id: competition_with_delegate, competition: { showPreregList: "1" }
-    expect(competition_with_delegate.reload.showPreregList).to eq true
+    patch :update, id: locked_competition, competition: { showPreregList: "1" }
+    expect(locked_competition.reload.showPreregList).to eq true
   end
 
   it "board member can demote oneself" do

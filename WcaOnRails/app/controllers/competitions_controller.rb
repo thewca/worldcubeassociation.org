@@ -39,7 +39,8 @@ class CompetitionsController < ApplicationController
       # Cloning an existing competition!
       competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
       if competition_to_clone
-        @competition = Competition.new(competition_to_clone.as_json.merge(new_competition_params))
+        # Don't clone the showAtAll or isConfirmed bits.
+        @competition = Competition.new(competition_to_clone.as_json.merge(new_competition_params).merge(showAtAll: false, isConfirmed: false))
         @competition.organizers = competition_to_clone.organizers
         @competition.delegates = competition_to_clone.delegates
       else
