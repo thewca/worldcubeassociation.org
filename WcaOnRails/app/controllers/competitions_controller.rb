@@ -172,7 +172,12 @@ class CompetitionsController < ApplicationController
   def update
     @competition = Competition.find(params[:id])
     @admin_view = params.has_key?(:admin_view)
-    if @competition.update_attributes(competition_params)
+    if params[:commit] == "Delete" && current_user.can_admin_results?
+      # Only allow results admins to delete competitions.
+      @competition.destroy
+      flash[:success] = "Successfully deleted competition #{@competition.id}"
+      redirect_to competitions_path
+    elsif @competition.update_attributes(competition_params)
       flash[:success] = "Successfully saved competition"
       if @admin_view
         redirect_to admin_edit_competition_path(@competition)

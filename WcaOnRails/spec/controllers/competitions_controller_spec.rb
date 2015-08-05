@@ -213,4 +213,25 @@ describe CompetitionsController do
     expect(competition.reload.delegates).to eq []
     expect(competition.reload.organizers).to eq []
   end
+
+  it "board member can delete competition" do
+    board_member = FactoryGirl.create(:board_member)
+    sign_out :user
+    sign_in board_member
+
+    # Attempt to delete competition. This should not work, because we only allow
+    # results admins to delete competitions.
+    patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }, commit: "Delete"
+    expect(Competition.find_by_id(competition_with_delegate.id)).to be_nil
+  end
+
+  it "delegate cannot delete competition" do
+    sign_out :user
+    sign_in competition_with_delegate.delegates[0]
+
+    # Attempt to delete competition. This should not work, because we only allow
+    # results admins to delete competitions.
+    patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }, commit: "Delete"
+    expect(Competition.find(competition_with_delegate.id)).not_to be_nil
+  end
 end

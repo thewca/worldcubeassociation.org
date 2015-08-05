@@ -192,6 +192,11 @@ wrapper_mappings: {
       <% unless @admin_view || @competition.isConfirmed? %>
          <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
       <% end %>
+      <% if @admin_view %>
+         <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this competition? There is no going back." }) do %>
+           <i class="glyphicon glyphicon-trash"></i> Delete
+         <% end %>
+      <% end %>
     </div>
   </div>
 <% end %>
