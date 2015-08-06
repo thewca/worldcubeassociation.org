@@ -95,9 +95,8 @@ describe CompetitionsController do
   it 'creates an announcement post' do
     get :post_announcement, id: competition
     post = assigns(:post)
-    expect(post.title).to match /#{competition.name} on /
-    expect(post.title).to match /December 4 - 5, 2011/
-    expect(post.title).to match /in #{competition.cityName}, #{competition.countryId}/
+    expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
+    expect(post.body).to match /in #{competition.cityName}, #{competition.countryId}\./
   end
 
   it "creates a results post" do

@@ -72,7 +72,7 @@ class CompetitionsController < ApplicationController
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
     body = "The [#{comp.name}](#{root_url}results/c.php?i=#{comp.id})"
-    body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
+    body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
     unless comp.website.blank?
       body += " Check out the [#{comp.name} website](#{comp.website_url}) for more information and registration.";
     end
