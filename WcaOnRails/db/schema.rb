@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150718020123) do
+ActiveRecord::Schema.define(version: 20150806172310) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -54,12 +54,10 @@ ActiveRecord::Schema.define(version: 20150718020123) do
     t.string  "website",           limit: 200
     t.string  "cellName",          limit: 45,       default: "",    null: false
     t.boolean "showAtAll",         limit: 1,        default: false, null: false
-    t.string  "organiserPassword", limit: 45
     t.boolean "showPreregForm",    limit: 1,        default: false, null: false
     t.boolean "showPreregList",    limit: 1,        default: false, null: false
     t.integer "latitude",          limit: 4,        default: 0,     null: false
     t.integer "longitude",         limit: 4,        default: 0,     null: false
-    t.string  "adminPassword",     limit: 45,       default: "",    null: false
     t.boolean "isConfirmed",       limit: 1,        default: false, null: false
   end
 

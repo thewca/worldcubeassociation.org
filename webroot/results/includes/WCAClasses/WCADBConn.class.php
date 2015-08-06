@@ -17,31 +17,6 @@ namespace WCAClasses;
 class wcaDBConn extends DBConn
 {
 
-    public function getCompetitionPassword($id, $admin)
-    {
-
-        $id = $this->mysqlEscape($id);
-
-        if($admin)
-        {
-            $tmp = $this->dbQuery("SELECT adminPassword password FROM Competitions WHERE id='{$id}'");
-        }
-        else
-        {
-            $tmp = $this->dbQuery("SELECT organiserPassword password FROM Competitions WHERE id='{$id}'");
-        }
-        if(isset($tmp[0]))
-        {
-            $tmp = $tmp[0];
-        }
-        else
-        {
-            $this->showDatabaseError("Unable to retrieve competition password!");
-        }
-        
-        return $tmp->password;
-    }
-
     public function getCompetitionValue($id, $valueName)
     {
         $id = $this->mysqlEscape($id);

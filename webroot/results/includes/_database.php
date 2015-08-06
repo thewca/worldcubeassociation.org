@@ -215,17 +215,6 @@ function structureBy ( $results, $field ) {
 }
 
 #----------------------------------------------------------------------
-function getCompetitionPassword ( $id, $admin ) {
-#----------------------------------------------------------------------
-  if( $admin )
-    $tmp = dbQuery( "SELECT adminPassword password FROM Competitions WHERE id='$id'" );
-  else
-    $tmp = dbQuery( "SELECT organiserPassword password FROM Competitions WHERE id='$id'" );
-  $tmp = $tmp[0];
-  return $tmp['password'];
-}
-
-#----------------------------------------------------------------------
 function getCompetitionValue ( $competitionId, $valueSource ) {
 #----------------------------------------------------------------------
   $tmp = dbQuery( "SELECT $valueSource value FROM Competitions WHERE id='$competitionId'" );
