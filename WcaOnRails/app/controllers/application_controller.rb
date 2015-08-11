@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name << :email
     devise_parameter_sanitizer.for(:sign_in) << :login
-    devise_parameter_sanitizer.for(:account_update) << :name
+    devise_parameter_sanitizer.for(:account_update) << :name << :email
   end
 
   private def can_admin_results_only
