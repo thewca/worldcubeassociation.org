@@ -1,5 +1,13 @@
 <?php
 
+function joinUsers($users) {
+  return implode(array_map(function($user) {
+    $name = $user['name'];
+    $email = $user['email'];
+    return "[{{$name}}{mailto:$email}]";
+  }, $users));
+}
+
 #----------------------------------------------------------------------
 function showCompetitionInfos () {
 #----------------------------------------------------------------------
@@ -8,6 +16,12 @@ function showCompetitionInfos () {
   #--- Get the competition infos from the database.
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
+  # TODO - wait to do this until we've ported all old competitions.
+  $organizer = $organiser;
+  #$delegates = getCompetitionDelegates( $chosenCompetitionId );
+  #$wcaDelegate = joinUsers( $delegates );
+  #$organizers = getCompetitionOrganizers( $chosenCompetitionId );
+  #$organizer = joinUsers( $organizers );
 
   #--- Show the infos.
   echo "<h1>$name</h1>\n";
@@ -25,7 +39,7 @@ function showCompetitionInfos () {
   showItem( 'sub', "Address",      array( $venueAddress ));
   showItem( 'sub', "Details",      array( $venueDetails ));
   showItem( 'key', "Website",      array( $website ));
-  showItem( 'key', "Organiser",    array( $organiser ));
+  showItem( 'key', "Organizer",    array( $organizer ));
   showItem( 'key', "WCA Delegate", array( $wcaDelegate ));
   echo "</table></td>";
 

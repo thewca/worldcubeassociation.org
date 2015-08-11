@@ -76,7 +76,7 @@ function competitionChoice ( $required ) {
     $options[] = array( '', '' );
   }
 
-  $competitions_query = "SELECT id, name, countryId, wcaDelegate
+  $competitions_query = "SELECT id, name, countryId
                          FROM Competitions
                          ORDER BY (STR_TO_DATE(CONCAT(year,',',month,',',day),'%Y,%m,%d') BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND DATE_ADD(NOW(), INTERVAL 7 DAY)) DESC,
                             year DESC, month DESC, day DESC
@@ -88,9 +88,7 @@ function competitionChoice ( $required ) {
           $competition->id,
           ($competition->name) . " | "
             . ($competition->id) . " | "
-            . ($competition->countryId) . " | "
-            . strip_tags(processLinks($competition->wcaDelegate))
-
+            . ($competition->countryId)
         );
   return choice( 'competitionId', 'Competition', $options, '' );
 }

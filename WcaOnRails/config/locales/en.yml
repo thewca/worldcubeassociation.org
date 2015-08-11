@@ -36,8 +36,6 @@ en:
         venueAddress: "Venue address"
         venueDetails: "Venue details"
 
-        wcaDelegate: "WCA delegate(s)"
-        organiser: "Organiser(s)"
         delegate_ids: "WCA delegate(s)"
         organizer_ids: "Organizers(s)"
 

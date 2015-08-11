@@ -79,12 +79,6 @@ function showPages () {
 
   echo "</dl><hr /><dl>\n";
 
-  showPage( 'show_competition_details',
-            "Shows competition details somewhat like they're shown on the competitions page, but for all competitions on one page for easier checking." );
-
-  showPage( 'show_competition_infos',
-            "Shows competition infos really like they're shown on the competitions page, but for all competitions on one page for easier checking." );
-
   showPage( 'add_local_names',
             "Add local names to persons." );
 

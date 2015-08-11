@@ -119,7 +119,6 @@ RSpec.describe Competition do
     delegate_ids = delegates.map(&:id).join(",")
     competition = FactoryGirl.create :competition, delegate_ids: delegate_ids
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
-    expect(competition.wcaDelegate).to eq "[{Chris}{mailto:chris@c.com}][{Daniel}{mailto:daniel@d.com}]"
   end
 
   it "saves organizer_ids" do
@@ -129,7 +128,6 @@ RSpec.describe Competition do
     organizer_ids = organizers.map(&:id).join(",")
     competition = FactoryGirl.create :competition, organizer_ids: organizer_ids
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
-    expect(competition.organiser).to eq "[{Bob}{mailto:bob@b.com}][{Jane}{mailto:jane@j.com}]"
   end
 
   it "verifies delegates are delegates" do

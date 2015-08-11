@@ -24,7 +24,7 @@ describe CompetitionsController do
     )
   }
 
-  it 'redirects organiser view to organiser view' do
+  it 'redirects organizer view to organizer view' do
     patch :update, id: competition, competition: { name: competition.name }
     expect(response).to redirect_to edit_competition_path(competition)
   end

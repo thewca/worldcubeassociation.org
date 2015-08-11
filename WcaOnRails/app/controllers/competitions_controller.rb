@@ -213,8 +213,6 @@ class CompetitionsController < ApplicationController
         :information,
         :delegate_ids,
         :organizer_ids,
-        :wcaDelegate,
-        :organiser,
         :website,
         event_ids: Event.all.map { |event| event.id.to_sym },
       ]

@@ -12,6 +12,12 @@ upstream app {
 server {
   server_name <%= @server_name %> localhost;
 
+<% if @rails_env == "development" %>
+  # Using sendfile isn't reliable in VirtualBox. See:
+  #  http://wiki.nginx.org/Pitfalls#VirtualBox
+  sendfile off;
+<% end %>
+
 <% if @https %>
   listen 443 ssl;
   include wca_https.conf;
