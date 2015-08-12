@@ -22,7 +22,14 @@ server {
   listen 443 ssl;
   include wca_https.conf;
 <% else %>
-  listen 80;
+  <% if @rails_env == "development" %>
+    # In development, we're running behind Vagrant's proxy (host port 2331).
+    # If we run nginx on a different port (say 80), then when nginx sends redirects,
+    # they will be to port 80, which doesn't work from outside the vm.
+    listen 2331;
+  <% else %>
+    listen 80;
+  <% end %>
 <% end %>
 
   # Deny access to dotfiles and dotfolders.
