@@ -251,7 +251,7 @@ class html():
 
     # PDF
 
-    self.hyperLinkReplace([0, 1], [0], r'link:pdf', self.pdf_name, r'\1')  # TODO: Remove 0 once this is on the wca-documents official branch.
+    self.hyperLinkReplace([1], [0], r'link:pdf', self.pdf_name, r'\1')
 
     # Hyperlinks
 
