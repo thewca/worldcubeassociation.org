@@ -134,7 +134,11 @@ function debugParameter( $type, $name, $value ) {
 function wcaDebug () {
 #----------------------------------------------------------------------
 
-  return php_sapi_name() == "cli" || getRawParamThisShouldBeAnException( 'debug5926' );
+  // We can't turn on wcaDebug when run via the cli, because it neuters
+  // webroot/results/misc/evolution/update7205.php and
+  // webroot/results/misc/missing_averages/update7205.php.
+  //return php_sapi_name() == "cli" || getRawParamThisShouldBeAnException( 'debug5926' );
+  return getRawParamThisShouldBeAnException( 'debug5926' );
 }
 
 #----------------------------------------------------------------------
