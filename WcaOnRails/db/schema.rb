@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150806172310) do
+ActiveRecord::Schema.define(version: 20150812014543) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(version: 20150806172310) do
     t.integer "endMonth",          limit: 2,        default: 0,     null: false
     t.integer "endDay",            limit: 2,        default: 0,     null: false
     t.text    "eventSpecs",        limit: 65535,                    null: false
-    t.string  "wcaDelegate",       limit: 240,      default: "",    null: false
-    t.string  "organiser",         limit: 200,      default: "",    null: false
+    t.text    "wcaDelegate",       limit: 65535
+    t.text    "organiser",         limit: 65535
     t.string  "venue",             limit: 240,      default: "",    null: false
     t.string  "venueAddress",      limit: 120
     t.string  "venueDetails",      limit: 120
