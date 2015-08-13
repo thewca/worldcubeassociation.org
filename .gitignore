@@ -1,6 +1,6 @@
 # Compiled regulations assets
-webroot/regulations/
-webroot/regulations-todelete/
+WcaOnRails/app/views/regulations/
+WcaOnRails/app/views/regulations-todelete/
 
 # It appears that Dreamhost automatically creates these files for us. See:
 #  https://discussion.dreamhost.com/thread-127984.html

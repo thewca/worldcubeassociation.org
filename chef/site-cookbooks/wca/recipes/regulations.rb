@@ -20,5 +20,5 @@ package "lmodern"
 
 execute "#{repo_root}/scripts/deploy.sh rebuild_regs" do
   user username
-  not_if "ls #{repo_root}/webroot/regulations"
+  not_if "ls #{repo_root}/WcaOnRails/app/views/regulations"
 end

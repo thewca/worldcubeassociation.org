@@ -23,18 +23,6 @@ def md2html(filename):
 
 class html():
 
-  with open("files/html/templates/header1.html", "r") as f:
-    header1 = f.read()
-  with open("files/html/templates/header2.html", "r") as f:
-    header2 = f.read()
-  with open("files/html/templates/footer.html", "r") as f:
-    footer = f.read()
-
-  header2_subdirs = header2.replace("assets/", "../assets/")
-  header2_translations = header2
-
-  footer_subdirs = footer.replace("assets/", "../assets/")
-
   def __init__(self, language, buildDir, pdfName, isTranslation=False, verbose=False):
 
     print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
@@ -62,42 +50,29 @@ class html():
       "guides_url": "guidelines.html"
     })
 
-    header = self.header2_translations if self.isTranslation else self.header2
-
-    with open(self.build_folder + "/index.html", "w") as f:
-      f.write(self.header1 + "WCA Regulations" + header + regulations_text + self.footer)
-    with open(self.build_folder + "/guidelines.html", "w") as f:
-      f.write(self.header1 + "WCA Guidelines" + header + guidelines_text + self.footer)
-
-    # shutil.copy("files/html/style.css", self.build_folder + "/style.css")
-    # shutil.copy("files/html/WCA_logo_with_text.svg", self.build_folder + "/WCA_logo_with_text.svg")
-
-    if not os.path.exists(self.build_folder + "/assets"):
-      os.mkdir(self.build_folder + "/assets")
-    shutil.copy("files/html/assets/style.css", self.build_folder + "/assets/style.css")
-    shutil.copy("files/html/assets/bootstrap.min.css", self.build_folder + "/assets/bootstrap.min.css")
-    shutil.copy("files/html/assets/jquery.minified.js", self.build_folder + "/assets/jquery.minified.js")
-    shutil.copy("files/html/assets/bootstrap.min.js", self.build_folder + "/assets/bootstrap.min.js")
-    shutil.copy("files/html/assets/navbar-static-top.css", self.build_folder + "/assets/navbar-static-top.css")
-    shutil.copy("files/html/assets/wca_logo.svg", self.build_folder + "/assets/wca_logo.svg")
+    self.write_page("WCA Regulations", self.build_folder, "/index.html", regulations_text)
+    self.write_page("WCA Guidelines", self.build_folder, "/guidelines.html", guidelines_text)
 
     if not self.isTranslation:
       self.pages()
 
-  def write_page(self, title, path, filename, header2, footer, text):
+  def write_page(self, title, path, filename, text):
 
     if not os.path.isdir(path):
       os.makedirs(path)
 
     with open(path + "/" + filename, "w") as f:
-      f.write(self.header1 + title + header2 + text + footer)
+      f.write("<%% provide(:title, %s) %%>\n" % repr(title))
+      f.write('<div class="container">')
+      f.write(text)
+      f.write('</div>')
 
   def pages(self):
 
-    self.write_page("WCA Regulations History", self.build_folder + "/history", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/history.md"))
-    self.write_page("WCA Scrambles", self.build_folder + "/scrambles", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/scrambles.md"))
-    self.write_page("WCA Translations", self.build_folder + "/translations", "index.html", self.header2_subdirs, self.footer_subdirs, md2html("pages/translations.md"))
-    self.write_page("WCA Regulations/Guidelines Process", self.build_folder, "process.html", self.header2, self.footer, md2html("pages/process.md"))
+    self.write_page("WCA Regulations History", os.path.join(self.build_folder, "history"), "index.html", md2html("pages/history.md"))
+    self.write_page("WCA Scrambles", os.path.join(self.build_folder, "scrambles"), "index.html", md2html("pages/scrambles.md"))
+    self.write_page("WCA Translations", os.path.join(self.build_folder, "translations"), "index.html", md2html("pages/translations.md"))
+    self.write_page("WCA Regulations/Guidelines Process", self.build_folder, "process.html", md2html("pages/process.md"))
 
   #
   #
