@@ -32,7 +32,7 @@ if( $chosenExport ){
     'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
     'Competitions' => 'SELECT id, name, cityName, countryId, information, year,
                               month, day, endMonth, endDay, eventSpecs,
-                              venue, venueAddress,
+                              wcaDelegate, organiser, venue, venueAddress,
                               venueDetails, website, cellName, latitude, longitude
                        FROM Competitions
                        WHERE showAtAll=1',
