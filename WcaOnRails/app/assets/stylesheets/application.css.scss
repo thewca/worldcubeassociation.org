@@ -25,7 +25,8 @@
 @import "selectize";
 @import "selectize.bootstrap3";
 
-/* New stuff */
+@import "navbar-static-top";
+@import "links";
 @import "posts";
 @import "delegates";
 @import "users";
@@ -33,14 +34,3 @@
 @import "registrations";
 @import "selectable-rows";
 @import "users-autocomplete";
-@import "purr";
-
-/* Gross stuff copied over from the old site */
-@import "navbar-static-top";
-@import "general";
-@import "contact";
-@import "pageMenu";
-@import "tables";
-@import "links";
-@import "admin";
-@import "selectize.default";
