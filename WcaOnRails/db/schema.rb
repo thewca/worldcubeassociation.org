@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150812014543) do
+ActiveRecord::Schema.define(version: 20150819064257) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20150812014543) do
     t.integer "latitude",          limit: 4,        default: 0,     null: false
     t.integer "longitude",         limit: 4,        default: 0,     null: false
     t.boolean "isConfirmed",       limit: 1,        default: false, null: false
+    t.string  "contact",        limit: 255
   end
 
   add_index "Competitions", ["year", "month", "day"], name: "year_month_day"

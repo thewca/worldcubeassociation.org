@@ -1,10 +1,10 @@
 <?php
 
-function joinUsers($users) {
-  return implode(array_map(function($user) {
+function joinUsers($users, $includeEmail) {
+  return implode(", ", array_map(function($user) use ($includeEmail) {
     $name = $user['name'];
     $email = $user['email'];
-    return "[{{$name}}{mailto:$email}]";
+    return $includeEmail ? "[{{$name}}{mailto:$email}]" : $name;
   }, $users));
 }
 
@@ -17,11 +17,11 @@ function showCompetitionInfos () {
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
   # TODO - wait to do this until we've ported all old competitions.
-  $organizer = $organiser;
   #$delegates = getCompetitionDelegates( $chosenCompetitionId );
   #$wcaDelegate = joinUsers( $delegates );
-  #$organizers = getCompetitionOrganizers( $chosenCompetitionId );
-  #$organizer = joinUsers( $organizers );
+  $organizers = getCompetitionOrganizers( $chosenCompetitionId );
+  // Only show organizer emails if there is no contact info given.
+  $organizer = joinUsers( $organizers, !$contact );
 
   #--- Show the infos.
   echo "<h1>$name</h1>\n";
@@ -41,6 +41,7 @@ function showCompetitionInfos () {
   showItem( 'key', "Website",      array( $website ));
   showItem( 'key', "Organizer",    array( $organizer ));
   showItem( 'key', "WCA Delegate", array( $wcaDelegate ));
+  showItem( 'key', "Contact",      array( $contact ));
   echo "</table></td>";
 
   #--- Right part.

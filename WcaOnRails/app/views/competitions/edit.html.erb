@@ -134,6 +134,7 @@ wrapper_mappings: {
     <%= f.input :information %>
     <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
     <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
+    <%= f.input :contact %>
     <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
     <% event_groups = [
