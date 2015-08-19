@@ -11,8 +11,8 @@
         <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
       </li>
     <% end %>
-    <li role="presentation" class="<%= current_page?(registrations_path) ? "active" : "" %>">
-      <%= link_to "Registration", registrations_path %>
+    <li role="presentation" class="<%= current_page?(competition_registrations_path(@competition)) ? "active" : "" %>">
+      <%= link_to "Registration", competition_registrations_path(@competition) %>
     </li>
   </ul>
   <%= yield %>

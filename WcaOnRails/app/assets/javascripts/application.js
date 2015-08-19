@@ -22,6 +22,9 @@
 //= require twitter/typeahead
 //= require underscore
 //= require selectize
+//= require best_in_place
+//= require jquery.purr
+//= require best_in_place.purr
 //= require_tree .
 
 $(function() {
@@ -39,4 +42,5 @@ $(function() {
       e.preventDefault();
     }
   });
+  $(".best_in_place").best_in_place();
 });

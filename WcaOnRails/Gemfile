@@ -31,7 +31,9 @@ gem 'time_will_tell'
 gem 'redcarpet'
 gem 'twitter-typeahead-rails'
 gem 'underscore-rails'
-gem "selectize-rails"
+gem 'selectize-rails'
+gem 'high_voltage'
+gem 'best_in_place'
 
 gem 'system'
 gem 'unicorn'

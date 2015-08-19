@@ -18,9 +18,7 @@ Rails.application.routes.draw do
 
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
-    member do
-      resources :registrations, only: [:index, :update] do
-      end
+    resources :registrations, only: [:index, :update] do
     end
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
