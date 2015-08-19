@@ -22,7 +22,14 @@ server {
   listen 443 ssl;
   include wca_https.conf;
 <% else %>
-  listen 80;
+  <% if @rails_env == "development" %>
+    # In development, we're running behind Vagrant's proxy (host port 2331).
+    # If we run nginx on a different port (say 80), then when nginx sends redirects,
+    # they will be to port 80, which doesn't work from outside the vm.
+    listen 2331;
+  <% else %>
+    listen 80;
+  <% end %>
 <% end %>
 
   # Deny access to dotfiles and dotfolders.
@@ -109,9 +116,13 @@ server {
   }
 
   #### Regulations
-  location /regulations {
+  # This is kind of a mess: we're using rails to template most, but not all,
+  # of the regulations html. We also have static content such as pdfs and images
+  # that rails won't serve up for us. We have a carefully constructed regex here
+  # to only serve up files we don't want handled by rails.
+  location ~* /regulations(.*\.pdf|/history/.+|/scrambles/tnoodle/.*) {
     index index.html;
-    alias <%= @repo_root %>/webroot/regulations;
+    alias <%= @repo_root %>/WcaOnRails/app/views/regulations/$1;
   }
 
   #### New rails sytem
