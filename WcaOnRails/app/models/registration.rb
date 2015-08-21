@@ -1,7 +1,8 @@
 class Registration < ActiveRecord::Base
   self.table_name = "Preregs"
 
-  validates :status, inclusion: { in: ["p", "a"] }
+  enum status: { accepted: "a", pending: "p" }
+
   validate :events_must_be_offered
   validate :dates_must_be_valid
 
@@ -12,14 +13,6 @@ class Registration < ActiveRecord::Base
 
   def events
     (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
-  end
-
-  def accepted?
-    status == "a"
-  end
-
-  def pending?
-    status == "p"
   end
 
   attr_writer :birthday

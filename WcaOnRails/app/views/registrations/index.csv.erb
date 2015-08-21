@@ -2,7 +2,7 @@
 <%= CSV.generate_line(headers).html_safe -%>
 <% @competition.registrations.each do |registration| %>
 <%= CSV.generate_line([
-  registration.status,
+  Registration.statuses[registration.status],
   registration.name,
   registration.countryId,
   registration.personId,
