@@ -17,8 +17,6 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: 45 },
                        format: { with: ENDS_WITH_YEAR_RE }
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :wcaDelegate, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :organiser, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
 
   attr_writer :start_date, :end_date
@@ -52,11 +50,9 @@ class Competition < ActiveRecord::Base
     end
     if @delegate_ids
       self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
-      self.wcaDelegate = users_to_emails_str(delegates)
     end
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
-      self.organiser = users_to_emails_str(organizers)
     end
   end
   validate :delegates_must_be_delegates

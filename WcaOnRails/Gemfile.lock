@@ -255,7 +255,6 @@ GEM
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     slop (3.6.0)
-    spring (1.3.6)
     sprockets (3.0.2)
       rack (~> 1.0)
     sprockets-rails (2.2.4)
@@ -346,7 +345,6 @@ DEPENDENCIES
   seedbank
   selectize-rails
   simple_form
-  spring
   sqlite3
   strip_attributes
   system

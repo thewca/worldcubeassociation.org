@@ -16,9 +16,8 @@ function showCompetitionInfos () {
   #--- Get the competition infos from the database.
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
-  # TODO - wait to do this until we've ported all old competitions.
-  #$delegates = getCompetitionDelegates( $chosenCompetitionId );
-  #$wcaDelegate = joinUsers( $delegates );
+  $delegates = getCompetitionDelegates( $chosenCompetitionId );
+  $wcaDelegate = joinUsers( $delegates );
   $organizers = getCompetitionOrganizers( $chosenCompetitionId );
   // Only show organizer emails if there is no contact info given.
   $organizer = joinUsers( $organizers, !$contact );
