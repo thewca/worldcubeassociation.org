@@ -17,7 +17,7 @@ function showCompetitionInfos () {
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
   $delegates = getCompetitionDelegates( $chosenCompetitionId );
-  $wcaDelegate = joinUsers( $delegates );
+  $wcaDelegate = joinUsers( $delegates, true );
   $organizers = getCompetitionOrganizers( $chosenCompetitionId );
   // Only show organizer emails if there is no contact info given.
   $organizer = joinUsers( $organizers, !$contact );
