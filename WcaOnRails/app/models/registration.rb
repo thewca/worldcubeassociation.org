@@ -17,7 +17,7 @@ class Registration < ActiveRecord::Base
 
   attr_writer :birthday
   def birthday
-    birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.parse("%04i-%02i-%02i" % [ birthYear, birthMonth, birthDay ])
+    birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.new(birthYear, birthMonth, birthDay)
   end
 
   private def events_must_be_offered
