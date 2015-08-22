@@ -48,9 +48,7 @@ class Registration < ActiveRecord::Base
       return
     end
 
-    valid_dates = true
     unless !birthYear.nil? && !birthMonth.nil? && !birthDay.nil? && Date.valid_date?(birthYear, birthMonth, birthDay)
-      valid_dates = false
       errors.add(:birthday, "invalid")
     end
   end
