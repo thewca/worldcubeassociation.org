@@ -129,8 +129,6 @@ GEM
     high_voltage (2.4.0)
     hitimes (1.2.2)
     i18n (0.7.0)
-    ignorable (0.3.0)
-      activerecord (>= 3)
     jbuilder (2.2.13)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -335,7 +333,6 @@ DEPENDENCIES
   faker
   guard-rspec
   high_voltage
-  ignorable
   jbuilder
   jquery-rails
   launchy
@@ -346,6 +343,7 @@ DEPENDENCIES
   oga
   pre-commit
   rails (= 4.2.1)
+  rake
   recaptcha
   redcarpet
   rspec-rails
@@ -369,4 +367,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.10.5
+   1.10.6

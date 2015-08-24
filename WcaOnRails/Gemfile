@@ -23,7 +23,6 @@ gem 'local_time'
 gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'
-gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
 gem 'bootstrap-datepicker-rails'
@@ -34,14 +33,7 @@ gem 'underscore-rails'
 gem 'selectize-rails'
 gem 'high_voltage'
 gem 'best_in_place'
-
 gem 'system'
-gem 'unicorn'
-
-# Drupal defines some table columns that conflict with ActiveRecord.
-# This gem lets us ignore those columns. Eventually we'll migrate this
-# problem away.
-gem 'ignorable'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -58,6 +50,7 @@ group :development do
 end
 
 group :test do
+  gem 'rake' # As per http://docs.travis-ci.com/user/languages/ruby/
   gem 'guard-rspec'
   gem 'launchy'
   gem 'capybara'
@@ -65,5 +58,7 @@ group :test do
 end
 
 group :production do
+  gem 'unicorn'
   gem 'mysql2'
+  gem 'newrelic_rpm'
 end
