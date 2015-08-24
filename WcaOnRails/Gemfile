@@ -61,6 +61,7 @@ group :test do
   gem 'guard-rspec'
   gem 'launchy'
   gem 'capybara'
+  gem 'oga' # XML parsing library introduced for testing RSS feed
 end
 
 group :production do
