@@ -40,8 +40,8 @@ if( $chosenExport ){
                               Competitions.venue, Competitions.venueAddress,
                               Competitions.venueDetails, Competitions.website, Competitions.cellName, Competitions.latitude, Competitions.longitude
                               FROM Competitions
-                              JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id
-                              JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id
+                              LEFT JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id LEFT JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id
+                              LEFT JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id LEFT JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id
                               WHERE Competitions.showAtAll=1
                               GROUP BY competition_delegates.competition_id',
     'Scrambles'   => '*',
