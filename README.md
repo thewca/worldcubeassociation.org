@@ -1,4 +1,4 @@
-worldcubeassociation.org
+worldcubeassociation.org [![Build Status](https://travis-ci.org/cubing/worldcubeassociation.org.svg?branch=master)](https://travis-ci.org/cubing/worldcubeassociation.org)
 ========================
 
 This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).

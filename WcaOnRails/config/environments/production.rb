@@ -69,13 +69,13 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
-    :address => "smtp.mandrillapp.com",
-    :port => 587,
-    :enable_starttls_auto => true,
-    :user_name => ENVied.MANDRILL_USERNAME,
-    :password => ENVied.MANDRILL_PASSWORD,
-    :authentication => 'login',
-    :domain => root_url.host
+    address: "smtp.mandrillapp.com",
+    port: 587,
+    enable_starttls_auto: true,
+    user_name: ENVied.MANDRILL_USERNAME,
+    password: ENVied.MANDRILL_PASSWORD,
+    authentication: 'login',
+    domain: root_url.host
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

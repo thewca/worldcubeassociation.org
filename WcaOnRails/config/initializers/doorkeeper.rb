@@ -6,7 +6,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_user || warden.authenticate!(:scope => :user)
+    current_user || warden.authenticate!(scope: :user)
     # Put your resource owner authentication logic here.
     # Example implementation:
     #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
@@ -15,7 +15,7 @@ Doorkeeper.configure do
   # Copied from
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
   resource_owner_from_credentials do |routes|
-    u = User.find_for_database_authentication(:email => params[:username])
+    u = User.find_for_database_authentication(email: params[:username])
     u if u && u.valid_password?(params[:password])
   end
 
@@ -48,10 +48,10 @@ Doorkeeper.configure do
   # use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
-  # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
+  # Optional parameter confirmation: true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  # enable_application_owner :confirmation => false
+  # enable_application_owner confirmation: false
 
   # Define access token scopes for your provider
   # For more information go to

@@ -209,6 +209,7 @@ GEM
       activesupport (= 4.2.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (2.0.0)
     raindrops (0.13.0)
     rake (10.4.2)
     rb-fsevent (0.9.4)
@@ -251,6 +252,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    scss-lint (0.38.0)
+      rainbow (~> 2.0)
+      sass (~> 3.4.1)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -348,6 +352,7 @@ DEPENDENCIES
   redcarpet
   rspec-rails
   sass-rails
+  scss-lint
   sdoc
   seedbank
   selectize-rails

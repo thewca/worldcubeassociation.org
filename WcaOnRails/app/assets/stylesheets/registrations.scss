@@ -1,8 +1,11 @@
 table.registrations-table {
+  margin-bottom: 50px;
+
   td {
     white-space: nowrap;
   }
-  td.comments, td.guests {
+  td.comments,
+  td.guests {
     max-width: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -12,12 +15,6 @@ table.registrations-table {
   }
   tr.registration-a {
   }
-
-  tr.registration-p + tr.registration-a {
-    border-top: 10px solid black;
-  }
-
-  margin-bottom: 50px;
 }
 
 #registrations-actions {

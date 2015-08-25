@@ -8,13 +8,13 @@ class PagesController < ApplicationController
   end
 
   private def ensure_trailing_slash
-    desired_url = url_for(params.merge(:trailing_slash => true))
+    desired_url = url_for(params.merge(trailing_slash: true))
     # url_for doesn't always add a trailing slash (it won't add a slash to
     # a url like example.com/index.html, for instance).
     # Only attempt to redirect if the current url does not match the one
     # url_for would want.
     if trailing_slash?(request.env['REQUEST_URI']) != trailing_slash?(desired_url)
-      redirect_to desired_url, :status => 301
+      redirect_to desired_url, status: 301
     end
   end
 

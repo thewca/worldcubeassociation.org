@@ -57,7 +57,7 @@ class RegistrationsController < CompetitionsController
         end
         format.json { respond_with_bip(@registration) }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         format.json { respond_with_bip(@registration) }
       end
     end

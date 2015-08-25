@@ -3,3 +3,6 @@ rvm:
   - 2.2.3
 before_install: cd WcaOnRails/
 sudo: false
+script:
+  - rake
+  - pre-commit run git

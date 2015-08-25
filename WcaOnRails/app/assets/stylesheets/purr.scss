@@ -8,8 +8,8 @@
   right: 15px;
   padding: 20px;
   background-color: #000000;
-  color: #FFFFFF;
-  border: 2px solid #AAA;
+  color: #ffffff;
+  border: 2px solid #aaa;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   -o-border-radius: 10px;
@@ -19,6 +19,8 @@
   z-index: 1001; /* To cover our navbar-static-top */
 
   &:hover .close {
+    @extend .glyphicon;
+    @extend .glyphicon-remove;
     position: absolute;
     opacity: 1.0; /* fighting with bootstrap defaults */
     color: white;
@@ -27,7 +29,5 @@
     display: block;
     width: 25px;
     height: 25px;
-    @extend .glyphicon;
-    @extend .glyphicon-remove;
   }
 }
