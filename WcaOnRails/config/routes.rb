@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   devise_for :users, skip: :registrations
   devise_scope :user do
     resource :registration,
-      only: [:new, :create, :edit, :update],
+      only: [:new, :create],
       path: 'users',
       path_names: { new: 'sign_up' },
       controller: 'accounts/registrations',
@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       end
   end
   resources :users, only: [:index, :edit, :update]
+  get 'users/edit' => 'users#edit'
 
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all

@@ -39,11 +39,6 @@ function showPages () {
   showPage( 'fix_results',
             'Fix individual results.' );
 
-    $waiting = count(getWaitingPictureFiles('../upload/'));
-  $color = $waiting ? 'red' : 'green';
-  showPage( 'persons_picture',
-            "Validates pictures that have been submitted. <span style='color:$color'>[$waiting waiting]</span>");
-
   $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
   $color = $waiting ? 'red' : 'green';
   showPage( 'validate_media',
@@ -81,9 +76,6 @@ function showPages () {
 
   showPage( 'add_local_names',
             "Add local names to persons." );
-
-  showPage( 'remove_picture',
-            "Remove profile photos." );
 
   echo "</dl>\n";
 }

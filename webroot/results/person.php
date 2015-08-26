@@ -51,7 +51,7 @@ function showBody () {
   #--- Get and show the current incarnation.
   $currentPerson = array_shift( $persons );
   extract( $currentPerson );
-  echo "<h1><a href='person_set.php?personId=$chosenPersonId'>$personName</a></h1>";
+  echo "<h1>$personName</h1>";
 
   #--- Show previous incarnations if any.
   if( count( $persons )){
@@ -62,7 +62,7 @@ function showBody () {
   }
 
   #--- Show the picture if any.
-  $picture = getCurrentPictureFile('upload/', $chosenPersonId);
+  $picture = getCurrentPictureFile($chosenPersonId);
   if( $picture )
     echo "<center><img class='person' src='$picture' /></center>";
 

@@ -69,6 +69,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     coderay (1.1.0)
@@ -164,6 +169,7 @@ GEM
       activemodel (>= 3.2, < 5)
     method_source (0.8.2)
     mime-types (2.5)
+    mini_magick (4.2.7)
     mini_portile (0.6.2)
     minitest (5.6.1)
     multi_json (1.11.0)
@@ -334,6 +340,7 @@ DEPENDENCIES
   bootstrap-will_paginate
   byebug
   capybara
+  carrierwave
   devise
   devise-bootstrap-views
   doorkeeper
@@ -348,6 +355,7 @@ DEPENDENCIES
   launchy
   local_time
   mail_form
+  mini_magick
   mysql2
   newrelic_rpm
   oga

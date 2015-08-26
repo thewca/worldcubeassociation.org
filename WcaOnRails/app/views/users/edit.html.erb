@@ -1,18 +1,74 @@
 <% provide(:title, @user.name) %>
 
 <div class="container">
-  <h1><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
-
-  <%= simple_form_for @user, html: { class: 'form-horizontal' } do |f| %>
+  <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
+  <%= simple_form_for @user, html: { multipart: true } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <%= f.input :name, disabled: !current_user.editable_other_user_fields.include?(:name) %>
-    <%= f.input :wca_id, as: :wca_id, disabled: !current_user.editable_other_user_fields.include?(:wca_id) %>
-    <% UsersController.WCA_ROLES.each do |role| %>
-      <%= f.input role, disabled: !current_user.editable_other_user_fields.include?(role) %>
+    <% if @user.unconfirmed_email %>
+      <div class="alert alert-warning">
+        This account is pending confirmation of new email address <%= @user.unconfirmed_email %>
+      </div>
     <% end %>
-    <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !current_user.editable_other_user_fields.include?(:senior_delegate_id) %>
-    <%= f.association :senior_delegate, disabled: !current_user.editable_other_user_fields.include?(:senior_delegate_id) %>
-    <%= f.input :region, disabled: !current_user.editable_other_user_fields.include?(:region) %>
+    <% editable_fields = current_user.editable_fields_of_user(@user) %>
+
+    <% if @user.avatar? %>
+      <%= image_tag @user.avatar.url, class: "responsive center-block" %>
+      <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:avatar) %>
+    <% end %>
+
+    <%= f.input :avatar, as: :file, disabled: !editable_fields.include?(:avatar) %>
+    <%= f.hidden_field :avatar_cache %>
+
+    <%= f.input :name, disabled: !editable_fields.include?(:name) %>
+
+    <% if @user == current_user %>
+      <%= f.input :email, disabled: !editable_fields.include?(:email), hint: "Changing your email will require confirming the new email." %>
+      <div class="panel panel-default">
+        <% show_change_password = @user.errors.messages.has_key?(:password_confirmation) || @user.errors.messages.has_key?(:password) %>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a data-toggle="collapse" href="#collapse-change-password" class="<% unless show_change_password %>collapsed<% end %>">
+              <span>Change password</span>
+              <span class="collapse-indicator"></span>
+            </a>
+          </h3>
+        </div>
+
+        <div id="collapse-change-password" class="panel-collapse collapse <% if show_change_password %>in<% end %>">
+          <div class="panel-body">
+            <div class="form-group">
+              <%= f.label :password, "New password" %> <i>(<%= t('.leave_blank_if_you_don_t_want_to_change_it', :default => "leave blank if you don't want to change it") %>)</i><br />
+              <%= f.password_field :password, :autocomplete => "off", class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :password_confirmation, "Confirm new password" %><br />
+              <%= f.password_field :password_confirmation, class: "form-control"  %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        <% if @user.wca_id.blank? %>
+          You do not have a WCA id assigned yet.
+          <% unless editable_fields.include?(:wca_id) %>
+            Contact your local <%= link_to "WCA delegate", delegates_path %> to get yours assigned.
+          <% end %>
+        <% else %>
+          Your WCA id is <code><%= link_to @user.wca_id, "/results/p.php?i=#{@user.wca_id}" %></code>.
+        <% end %>
+      </p>
+    <% end %>
+
+    <% if current_user.can_edit_users? %>
+      <%= f.input :wca_id, as: :wca_id, disabled: !editable_fields.include?(:wca_id) %>
+      <% UsersController.WCA_ROLES.each do |role| %>
+        <%= f.input role, disabled: !editable_fields.include?(role) %>
+      <% end %>
+      <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !editable_fields.include?(:senior_delegate_id) %>
+      <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
+      <%= f.input :region, disabled: !editable_fields.include?(:region) %>
+    <% end %>
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>

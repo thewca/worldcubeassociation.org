@@ -33,6 +33,8 @@ gem 'underscore-rails'
 gem 'selectize-rails'
 gem 'high_voltage'
 gem 'best_in_place'
+gem 'carrierwave'
+gem 'mini_magick'
 gem 'system'
 
 group :development, :test do

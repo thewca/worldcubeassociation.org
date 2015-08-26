@@ -105,6 +105,7 @@ package 'libghc-zlib-dev'
 package 'libsqlite3-dev'
 package 'g++'
 package 'libmysqlclient-dev'
+package 'imagemagick'
 
 node.default['brightbox-ruby']['version'] = "2.2"
 include_recipe "brightbox-ruby"

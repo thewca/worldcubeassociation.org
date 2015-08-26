@@ -103,7 +103,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <% if user_signed_in? %>
-                <li><%= link_to "Edit account", edit_user_registration_path %></li>
+                <li><%= link_to "Edit account", users_edit_path %></li>
                 <% if current_user.can_edit_users? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">

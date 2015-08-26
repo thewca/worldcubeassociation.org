@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150821164902) do
+ActiveRecord::Schema.define(version: 20150826003626) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -339,7 +339,7 @@ ActiveRecord::Schema.define(version: 20150821164902) do
   add_index "competition_delegates", ["delegate_id"], name: "index_competition_delegates_on_delegate_id"
 
   create_table "competition_organizers", force: :cascade do |t|
-    t.string  "competition_id"
+    t.string   "competition_id"
     t.integer  "organizer_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
@@ -425,6 +425,7 @@ ActiveRecord::Schema.define(version: 20150821164902) do
     t.integer  "senior_delegate_id"
     t.string   "region"
     t.string   "wca_id"
+    t.string   "avatar",                 limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

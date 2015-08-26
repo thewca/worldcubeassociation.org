@@ -208,31 +208,23 @@ function genderText ($gender) {
   return '';
 }
 
-function getCurrentPictureFile ($upload_path, $personId) {
-  $files = glob($upload_path . "a$personId.*");
-  return $files ? $files[0] : FALSE;
-}
-function getWaitingPictureFile ($upload_path, $personId) {
-  $files = glob($upload_path . "p$personId.*");
-  return $files ? $files[0] : FALSE;
-}
-function getPreviousPictureFiles ($upload_path, $personId) {
-  return array_reverse(glob($upload_path . "a$personId*"));
-}
-function acceptNewPictureFile ($upload_path, $personId, $newFile) {
-  $currFile = getCurrentPictureFile($upload_path, $personId);
-  if($currFile){
-    $datetime = date('_Ymd_His.', filemtime($currFile));
-    $backupFile = $upload_path . "old/a$personId$datetime" . pathinfo($currFile, PATHINFO_EXTENSION);
-    rename($currFile, $backupFile);
+function getCurrentPictureFile ($personId) {
+  # This is a bit tricky. Under the new rails system, images are uploaded to
+  # /uploads/user/avatar/WCA_ID/TIMESTAMP.EXT, and the filename is stored in
+  # the users table in the avatar column. However, there are lots of people who
+  # have uploaded profile images who don't yet have WCA accounts. To deal with
+  # those people, we still need to hit the filesystem and check for them. If
+  # people want to remove their avatar, they'll have to sign up for an account
+  # and remove it through the edit profile page, which will set their avatar
+  # column to null.
+  $user = dbQuery( "SELECT wca_id, avatar FROM users WHERE wca_id='$personId'" )[ 0 ];
+  if($user) {
+    if(!$user['avatar']) {
+      return false;
+    }
+    return "/uploads/user/avatar/${personId}/${user['avatar']}";
   }
-  rename($upload_path . $newFile, $upload_path . 'a' . substr($newFile, 1));
-}
-function declineNewPictureFile ($upload_path, $personId, $newFile) {
-  $datetime = date('_Ymd_His.', filemtime($upload_path . $newFile));
-  $backupFile = $upload_path . "declined/p$personId$datetime" . pathinfo($upload_path . $newFile, PATHINFO_EXTENSION);
-  rename($upload_path . $newFile, $backupFile);
-}
-function getWaitingPictureFiles ($upload_path) {
-  return array_map('basename', glob($upload_path . 'p*'));
+  # Match only filenames that don't end in a b (to avoid 1234_thumb.png)
+  $files = glob("uploads/user/avatar/${personId}/*[!b].*");
+  return $files ? "/" . end($files) : FALSE;
 }
