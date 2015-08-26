@@ -1,7 +1,13 @@
 class Registration < ActiveRecord::Base
   self.table_name = "Preregs"
 
-  validates :status, inclusion: { in: ["p", "a"] }
+  enum status: { accepted: "a", pending: "p" }
+
+  validate :events_must_be_offered
+  validate :dates_must_be_valid
+
+  before_validation :unpack_dates
+  before_save :normalize_event_ids
 
   belongs_to :competition, foreign_key: "competitionId"
 
@@ -9,15 +15,11 @@ class Registration < ActiveRecord::Base
     (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
   end
 
-  def accepted?
-    status == "a"
+  attr_writer :birthday
+  def birthday
+    birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.new(birthYear, birthMonth, birthDay)
   end
 
-  def pending?
-    status == "p"
-  end
-
-  validate :events_must_be_offered
   private def events_must_be_offered
     invalid_events = events - competition.events
     unless invalid_events.empty?
@@ -25,17 +27,10 @@ class Registration < ActiveRecord::Base
     end
   end
 
-  before_save :normalize_event_ids
   private def normalize_event_ids
     self.eventIds = events.map(&:id).join(" ")
   end
 
-  attr_writer :birthday
-  def birthday
-    birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.parse("%04i-%02i-%02i" % [ birthYear, birthMonth, birthDay ])
-  end
-
-  before_validation :unpack_dates
   private def unpack_dates
     if @birthday.nil? && !birthday.blank?
       @birthday = birthday.strftime("%F")
@@ -47,16 +42,13 @@ class Registration < ActiveRecord::Base
     end
   end
 
-  validate :dates_must_be_valid
   private def dates_must_be_valid
     if self.birthYear == 0 && self.birthMonth == 0 && self.birthDay == 0
       # If the user left the date empty, that's a-okay.
       return
     end
 
-    valid_dates = true
     unless !birthYear.nil? && !birthMonth.nil? && !birthDay.nil? && Date.valid_date?(birthYear, birthMonth, birthDay)
-      valid_dates = false
       errors.add(:birthday, "invalid")
     end
   end
