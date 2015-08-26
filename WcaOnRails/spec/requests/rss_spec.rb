@@ -24,10 +24,10 @@ describe "rss" do
     end
 
     it "returns all descriptions converted to HTML and wrapped in CDATA" do
-      descriptions = xml_contents_at('rss/channel/item/description')
+      descriptions = xml_nodes_at('rss/channel/item/description')
 
-      expect(descriptions).to eq ["<![CDATA[<p><a href=\"http://google.de\">link</a></p>\n]]>",
-                                  "<![CDATA[<p>foo <strong>a</strong></p>\n]]>"]
+      expect(descriptions.map(&:to_xml)).to eq ["<description>\n<![CDATA[<p><a href=\"http://google.de\">link</a></p>\n]]>      </description>",
+                                                "<description>\n<![CDATA[<p>foo <strong>a</strong></p>\n]]>      </description>"]
     end
 
     it "returns all publication dates as rfc822" do
@@ -41,7 +41,11 @@ describe "rss" do
     Oga.parse_xml(last_response.body)
   end
 
+  def xml_nodes_at(xpath)
+    xml_response.xpath(xpath)
+  end
+
   def xml_contents_at(xpath)
-    xml_response.xpath(xpath).map(&:inner_text)
+    xml_nodes_at(xpath).map(&:text)
   end
 end
