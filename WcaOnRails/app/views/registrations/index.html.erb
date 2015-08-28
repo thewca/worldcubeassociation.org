@@ -2,8 +2,8 @@
 <% provide(:container_type, "container-fluid") %>
 
 <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
-  <% ["p", "a"].each do |status| %>
-    <% if "p" == status %>
+  <% [:pending, :accepted].each do |status| %>
+    <% if :pending == status %>
       <h2>Waiting list</h2>
     <% else %>
       <h2>Approved registrations</h2>
@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <% registrations = @competition.registrations.where(status: status) %>
+        <% registrations = @competition.registrations.send(status) %>
         <% registrations.order(id: :asc).each do |registration| %>
           <% bip_options = { url: competition_registration_path(@competition, registration), ok_button: "Save", ok_button_class: "btn btn-success", cancel_button: "Cancel", cancel_button_class: "btn btn-warning" } %>
           <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
@@ -37,7 +37,8 @@
               <%= best_in_place registration, :name, bip_options %>
             </td>
             <td>
-              <%= best_in_place registration, :email, bip_options.merge(display_with: lambda { |email| "<a href='mailto:#{email}' target='_blank'>#{email}</a> <span class='glyphicon glyphicon-pencil' id='#{registration.id}-email-editor'></span>".html_safe }, activator: "##{registration.id}-email-editor") %>
+              <span class='glyphicon glyphicon-pencil email-editor' data-registration-id='<%= registration.id %>'></span>
+              <%= best_in_place registration, :email, bip_options.merge(display_with: lambda { |email| "<a href='mailto:#{email}' target='_blank'>#{email}</a>".html_safe }, activator: ".email-editor[data-registration-id=#{registration.id}]") %>
             </td>
             <td>
               <%= best_in_place registration, :countryId, bip_options %>
