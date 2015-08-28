@@ -9,12 +9,14 @@ RSpec.describe RegistrationsController do
     expect(response.status).to eq 200
   end
 
-  it 'can set events' do
+  it 'can set name, email, events' do
     sign_in FactoryGirl.create(:admin)
     competition = FactoryGirl.create(:competition, eventSpecs: "222 333")
     registration = FactoryGirl.create(:pending_registration, competitionId: competition.id)
-    patch :update, competition_id: competition.id, id: registration.id, registration: { eventIds: "222 333" }
+    patch :update, competition_id: competition.id, id: registration.id, registration: { name: "test name", eventIds: "222 333", email: "foo@bar.com" }
+    expect(registration.reload.name).to eq "test name"
     expect(registration.reload.eventIds).to eq "333 222"
+    expect(registration.reload.email).to eq "foo@bar.com"
   end
 
   it 'cannot set events that are not offered' do

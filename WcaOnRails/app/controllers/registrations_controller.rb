@@ -66,6 +66,7 @@ class RegistrationsController < CompetitionsController
   private def registration_params
     params.require(:registration).permit(
       :personId,
+      :email,
       :name,
       :country,
       :birthday,
