@@ -61,20 +61,19 @@ function eventChoice ( $required ) {
     $options[] = array( '', '' );
   }
 
-   foreach( getAllEvents() as $event )
+  foreach( getAllEvents() as $event ) {
     $options[] = array( $event['id'], $event['cellName'] );
+  }
   return choice( 'eventId', 'Event', $options, $chosenEventId );
 }
 
 #----------------------------------------------------------------------
-function competitionChoice ( $required ) {
+function competitionChoice () {
 #----------------------------------------------------------------------
-  global $wcadb_conn;
+  global $wcadb_conn, $chosenCompetitionId;
 
-  if( ! $required ){
-    $options[] = array( '', 'All' );
-    $options[] = array( '', '' );
-  }
+  $options[] = array( '', 'All' );
+  $options[] = array( '', '' );
 
   $competitions_query = "SELECT id, name, countryId
                          FROM Competitions
@@ -90,7 +89,7 @@ function competitionChoice ( $required ) {
             . ($competition->id) . " | "
             . ($competition->countryId)
         );
-  return choice( 'competitionId', 'Competition', $options, '' );
+  return choice( 'competitionId', 'Competition', $options, $chosenCompetitionId );
 }
 
 #----------------------------------------------------------------------

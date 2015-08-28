@@ -50,7 +50,7 @@ function showChoices () {
 
   displayChoices( array(
     eventChoice( false ),
-    competitionChoice( false ),
+    competitionChoice(),
     choiceButton( true, 'show', 'Show' )
   ));
 }
