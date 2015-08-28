@@ -33,13 +33,13 @@ class RegistrationsController < CompetitionsController
     case params[:registrations_action]
     when "accept-selected"
       registrations.each { |registration| registration.update_attribute(:status, "a") }
-      flash[:success] = "Registrations approved!"
+      flash[:success] = "#{"Registration".pluralize(registrations.length)} approved!"
     when "reject-selected"
       registrations.each { |registration| registration.update_attribute(:status, "p") }
-      flash[:warning] = "Registrations rejected"
+      flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
     when "delete-selected"
       registrations.each { |registration| registration.delete }
-      flash[:warning] = "Registrations deleted"
+      flash[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     else
       throw "Unrecognized action #{params[:registrations_action]}"
     end
