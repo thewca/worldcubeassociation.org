@@ -10,13 +10,10 @@ adminHeadline( 'Check rounds/events' );
 showDescription();
 showChoices();
 
-if ( $chosenCheckRecentRounds or $chosenCheckRecentEvents)
-  $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
-
-if( $chosenCheckRecentRounds || $chosenCheckAllRounds )
+if( $chosenShow ) {
   checkRounds();
-if( $chosenCheckRecentEvents || $chosenCheckAllEvents )
   checkEvents();
+}
 
 require( '../includes/_footer.php' );
 
@@ -28,47 +25,36 @@ function showDescription () {
 
   echo "<p style='width:45em'>Check for events, to see if events registered for a competition are the same as events actually happened in the competition.\n";
 
-  echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
-
   echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenCheckRecentRounds, $chosenCheckAllRounds;
-  global $chosenCheckRecentEvents, $chosenCheckAllEvents;
+  global $chosenCompetitionId, $chosenShow, $competitionCondition, $competitionDescription;
 
-  $chosenCheckRecentRounds       = getBooleanParam( 'checkRecentRounds' );
-  $chosenCheckAllRounds          = getBooleanParam( 'checkAllRounds' );
-  $chosenCheckRecentEvents       = getBooleanParam( 'checkRecentEvents' );
-  $chosenCheckAllEvents          = getBooleanParam( 'checkAllEvents' );
+  $chosenCompetitionId  = getNormalParam( 'competitionId' );
+  $chosenShow           = getBooleanParam( 'show' );
+
+  $competitionCondition = competitionCondition();
+  $competitionDescription = $chosenCompetitionId ? $chosenCompetitionId : "all competitions";
 }
 
 #----------------------------------------------------------------------
 function showChoices () {
 #----------------------------------------------------------------------
-
   displayChoices( array(
-    '<br />Check rounds:&nbsp;',
-    array(
-      choiceButton( true, 'checkRecentRounds', ' recent ' ),
-      choiceButton( true, 'checkAllRounds', ' all ' ),
-    ),
-    '<br />Check events:&nbsp;',
-    array(
-      choiceButton( true, 'checkRecentEvents', ' recent ' ),
-      choiceButton( true, 'checkAllEvents', ' all ' ),
-    ),
+    competitionChoice(),
+    choiceButton( true, 'show', 'Show' )
   ));
 }
 
 #----------------------------------------------------------------------
 function checkRounds () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenCheckAllRounds;
+  global $competitionCondition, $competitionDescription;
 
-  echo "<hr /><p>Checking <b>" . ($chosenCheckAllRounds ? 'all' : 'recent') . " rounds</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b> rounds for $competitionDescription</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get the number of competitors per round
   $roundRows = dbQuery("
@@ -76,7 +62,7 @@ function checkRounds () {
              CASE result.formatId WHEN '2' THEN BIT_AND( IF( result.value2,1,0)) WHEN '3' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'm' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'a' THEN BIT_AND( IF( result.value5 <> 0,1,0)) ELSE 1 END isNotCombined
     FROM     Results result, Competitions competition, Rounds round
     WHERE    competition.id = competitionId
-      $dateCondition
+      $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
       AND    result.roundId <> 'b'
       AND    result.roundId = round.id
@@ -89,7 +75,7 @@ function checkRounds () {
     SELECT   count(distinct result.personId) nbPersons, competitionId, eventId
     FROM     Results result, Competitions competition
     WHERE    competition.id = competitionId
-      $dateCondition
+      $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
       AND    result.roundId <> 'b'
     GROUP BY competitionId, eventId
@@ -542,13 +528,17 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
 #----------------------------------------------------------------------
 function checkEvents () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenCheckAllEvents;
+  global $competitionCondition, $competitionDescription;
 
-  echo "<hr /><p>Checking <b>" . ($chosenCheckAllEvents ? 'all' : 'recent') . " events</b>... (wait for the result message box at the end)</p>\n";
+  echo "<hr /><p>Checking <b> events for $competitionDescription</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get events from Results and Competitions
-  $eventsResults = dbQuery( "SELECT r.competitionId, r.eventId FROM Results r, Competitions c WHERE c.id = r.competitionId AND r.eventId != '333mbo' $dateCondition GROUP BY r.competitionId, r.eventId" );
-  $eventsCompetition = dbQuery( "SELECT id, eventSpecs FROM Competitions WHERE 1 $dateCondition" );
+  $eventsResults = dbQuery( "SELECT r.competitionId, r.eventId, c.eventSpecs FROM Results r, Competitions c WHERE c.id = r.competitionId AND r.eventId != '333mbo' $competitionCondition GROUP BY r.competitionId, r.eventId" );
+
+  # Grossness to handle the fact that the competition id in the Competitions table
+  # is the "id" column, not the "competitionId" column.
+  $competitionConditionForCompetitionsTable = str_replace("competitionId", "id", $competitionCondition);
+  $eventsCompetition = dbQuery( "SELECT id, eventSpecs FROM Competitions WHERE 1 $competitionConditionForCompetitionsTable" );
 
   #--- Group events by competitions.
   foreach( $eventsResults as $eventResults ){

@@ -142,7 +142,7 @@ print "</li>";
 // more scripts...
 print "<li><p>Run some more scripts:</p>
          <ol type='a'>
-           <li><a href='check_rounds.php' target='_blank' class='link-external external'>check_rounds</a></li>
+           <li><a href='check_rounds.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_rounds</a></li>
            <li><a href='check_regional_record_markers.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
            <li><a href='compute_auxiliary_data.php?doit=+Do+it+now+' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
          </ol>
