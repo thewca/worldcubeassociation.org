@@ -47,6 +47,10 @@ GEM
     best_in_place (3.0.3)
       actionpack (>= 3.2)
       railties (>= 3.2)
+    better_errors (2.1.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bootstrap-datepicker-rails (1.4.0)
@@ -323,6 +327,8 @@ PLATFORMS
 
 DEPENDENCIES
   best_in_place
+  better_errors
+  binding_of_caller
   bootstrap-datepicker-rails
   bootstrap-sass
   bootstrap-will_paginate
