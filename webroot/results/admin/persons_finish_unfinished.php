@@ -32,7 +32,7 @@ function showDescription () {
   echo "  <li><p>Skip it if you're not sure yet.</p></li>\n";
   echo "</ul>\n\n";
 
-  echo "<p><span style='color:#F00;font-weight:bold'>Note:</span> For time reasons I don't show more than 20 unfinished persons at once, so you might have to repeat checking and fixing a few times until there are no unfinished persons left.</p>\n";
+  echo "<p><span style='color:#F00;font-weight:bold'>Note:</span>I don't show more than 20 unfinished persons at once, so you might have to repeat checking and fixing a few times until there are no unfinished persons left.</p>\n";
   
   echo "<hr />\n";
 }
