@@ -13,15 +13,22 @@ showChoices();
 
 if( $chosenShow ) {
   switch ( $chosenWhat ){
+    case '': # Run them all!
     case 'individual':
       checkIndividually();
-      break;
+      if($chosenWhat != '') {
+        break;
+      }
     case 'ranks':
       checkRelatively();
-      break;
+      if($chosenWhat != '') {
+        break;
+      }
     case 'similar':
       checkSimilarResults();
-      break;
+      if($chosenWhat != '') {
+        break;
+      }
   }
 }
 
@@ -47,7 +54,7 @@ function analyzeChoices () {
 
   $chosenEventId        = getNormalParam( 'eventId' );
   $chosenCompetitionId  = getNormalParam( 'competitionId' );
-  $chosenWhat           = getNormalParamDefault( 'what', 'individual' );
+  $chosenWhat           = getNormalParam( 'what' );
   $chosenShow           = getBooleanParam( 'show' );
 
   $chosenWhich          = "";
@@ -63,7 +70,7 @@ function showChoices () {
   displayChoices( array(
     eventChoice( false ),
     competitionChoice(),
-    choice( 'what', 'What', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'similar', 'similar results' )), $chosenWhat ),
+    choice( 'what', 'What', array( array( '', 'All' ), array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'similar', 'similar results' )), $chosenWhat ),
     choiceButton( true, 'show', 'Show' )
   ));
 }
