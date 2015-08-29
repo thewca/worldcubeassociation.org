@@ -106,7 +106,7 @@ print "</li>";
 // Scripts should be run next...
 print "<li><p>Run a couple scripts:</p>
          <ol type='a'>
-           <li><a href='check_results.php?competitionId=Dayton2015&show=Show' target='_blank' class='link-external external'>check_results</a></li>
+           <li><a href='check_results.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_results</a></li>
            <li><a href='persons_check_finished.php?check=+Check+now+' target='_blank' class='link-external external'>persons_check_finished</a></li>
            <li><a href='persons_finish_unfinished.php?check=+Check+now+' target='_blank' class='link-external external'>persons_finish_unfinished</a></li>
          </ol>
