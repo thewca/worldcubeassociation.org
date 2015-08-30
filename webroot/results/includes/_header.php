@@ -128,7 +128,6 @@ print $styles->getHTMLAll();
                 <li><a href="/regulations/guidelines.html">Guidelines</a></li>
                 <li><a href="/regulations/scrambles/">Scrambles</a></li>
                 <li class="divider"></li>
-                <li><a href="/regulations/announcements/">Announcements</a></li>
                 <li><a href="/regulations/history/">History</a></li>
                 <li><a href="/regulations/translations/">Translations</a></li>
               </ul>

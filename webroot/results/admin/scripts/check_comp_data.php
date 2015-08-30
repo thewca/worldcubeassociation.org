@@ -4,6 +4,7 @@ $currentSection = 'admin';
 include "../../includes/_framework.php";
 
 $compId = getNormalParam('competitionId');
+$compIdUrl = getNormalParam('competitionId');
 
 // Load competition data from the database and check ID
 $competition_data = $wcadb_conn->boundQuery( "SELECT * FROM Competitions WHERE id=?", array('s', &$compId));
@@ -14,8 +15,8 @@ if( count( $competition_data ) != 1 ){
 $competition_data = $competition_data[0];
 
 print "<div class='notice'>
-          Working with `".o($compId)."` Competition Data
-          | <a href='../c.php?i=".o($compId)."'>Competition Results Page</a>
+          Working with `$compIdUrl` Competition Data
+          | <a href='../c.php?i=$compIdUrl'>Competition Results Page</a>
           | <a href='/competitions/$compId/edit/admin'>Competition Admin Page</a> <br />
         </div>";
 
@@ -27,7 +28,7 @@ $competition_has_inbox_persons = $wcadb_conn->boundQuery( "SELECT * FROM InboxPe
 
 if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
   noticeBox3(1, 'This competition is in the process of having result data uploaded.
-                 <a href="scripts/remove_imported_data.php?c='.o($compId).'" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
+                 <a href="scripts/remove_imported_data.php?c=$compIdUrl" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
 }
 
 // if there is no data at all, nothing has been uploaded, so let's not display anything:
@@ -64,7 +65,7 @@ $results_view = $wcadb_conn->boundQuery(
   array('ss', &$compId, &$compId)
   );
 if(count( $results_view ) > 0) {
-  print "<p><a href='scripts/import_results.php?c=".o($compId)."' class='link-external external call_and_refresh' target='_blank'>Finish importing results:</a></p>";
+  print "<p><a href='scripts/import_results.php?c=$compIdUrl' class='link-external external call_and_refresh' target='_blank'>Finish importing results:</a></p>";
   print "<div class='contain-overflow'>";
   tableBegin('results', 5);
   $lastround = "";
@@ -105,9 +106,9 @@ print "</li>";
 // Scripts should be run next...
 print "<li><p>Run a couple scripts:</p>
          <ol type='a'>
-           <li><a href='check_results.php' target='_blank' class='link-external external'>check_results</a></li>
-           <li><a href='persons_check_finished.php' target='_blank' class='link-external external'>persons_check_finished</a></li>
-           <li><a href='persons_finish_unfinished.php' target='_blank' class='link-external external'>persons_finish_unfinished</a></li>
+           <li><a href='check_results.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_results</a></li>
+           <li><a href='persons_check_finished.php?check=+Check+now+' target='_blank' class='link-external external'>persons_check_finished</a></li>
+           <li><a href='persons_finish_unfinished.php?check=+Check+now+' target='_blank' class='link-external external'>persons_finish_unfinished</a></li>
          </ol>
        </li>";
 
@@ -120,7 +121,7 @@ $persons_view = $wcadb_conn->boundQuery(
   );
 if(count( $persons_view ) > 0) {
   if(count( $results_view ) <= 0) {
-    print "<p><a href='scripts/import_persons.php?c=".o($compId)."' class='link-external external call_and_refresh' target='_blank'>Finish importing persons...</a></p>";
+    print "<p><a href='scripts/import_persons.php?c=$compIdUrl' class='link-external external call_and_refresh' target='_blank'>Finish importing persons...</a></p>";
   } else {
     print "<p>You must finish importing results data before importing person data.</p>";
   }
@@ -141,9 +142,9 @@ print "</li>";
 // more scripts...
 print "<li><p>Run some more scripts:</p>
          <ol type='a'>
-           <li><a href='check_rounds.php' target='_blank' class='link-external external'>check_rounds</a></li>
-           <li><a href='check_regional_record_markers.php?competitionId=".o($compId)."' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
-           <li><a href='compute_auxiliary_data.php' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
+           <li><a href='check_rounds.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_rounds</a></li>
+           <li><a href='check_regional_record_markers.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
+           <li><a href='compute_auxiliary_data.php?doit=+Do+it+now+' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
          </ol>
        </li>";
 
@@ -151,8 +152,8 @@ print "<li><p>Run some more scripts:</p>
 // table to check existence of results vs scrambles
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
-           <li><a href='../c.php?i=".o($compId)."' target='_blank' class='link-external external'>View the Public competition page</a></li>
-           <li>Post the <a href='/competitions/".o($compId)."/post/results' target='_blank' class='link-external external'>results announcement</a>
+           <li><a href='../c.php?i=$compIdUrl' target='_blank' class='link-external external'>View the Public competition page</a></li>
+           <li>Post the <a href='/competitions/$compIdUrl/post/results' target='_blank' class='link-external external'>results announcement</a>
                 </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
@@ -194,7 +195,7 @@ if(count( $checks_table ) > 0) {
       // link to remove scrambles for this round
       // should protect this if we keep using the php system
       // jQuery attempts to load this
-      $has_scrambles = 'Y&nbsp;&nbsp;&nbsp;(<a class="remove_link" href="scripts/remove_data.php?t=Scrambles&c='.$compId.'&amp;e='.$round['eventId'].'&amp;r='.$round['roundId'].'&" target="_blank" title="Remove Scrambles">X</a>)';
+      $has_scrambles = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Scrambles&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundId']}' target='_blank' title='Remove Scrambles'>X</a>)";
     } else {
       $has_scrambles = 'N';
     }
@@ -203,7 +204,7 @@ if(count( $checks_table ) > 0) {
       // link to remove results for this round
       // should protect this if we keep using the php system
       // jQuery attempts to load this
-      $has_results = 'Y&nbsp;&nbsp;&nbsp;(<a class="remove_link" href="scripts/remove_data.php?t=Results&c='.$compId.'&amp;e='.$round['eventId'].'&amp;r='.$round['roundId'].'&" target="_blank" title="Remove Results">X</a>)';
+      $has_results = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Results&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundId']}' target='_blank' title='Remove Results'>X</a>)";
     } else {
       $has_results = 'N';
     }
@@ -223,7 +224,7 @@ if(count( $checks_table ) > 0) {
   }
   tableEnd();
   print "<strong style='color: #900'>Please be careful removing data!  Data in the above table is live.</strong><br />";
-  print 'Remove all results and scrambles only, does not affect persons: <a class="remove_link" href="scripts/remove_data.php?t=All&c='.$compId.'&" target="_blank" title="Remove All">X ALL</a>';
+  print "Remove all results and scrambles only, does not affect persons: <a class='remove_link' href='scripts/remove_data.php?t=All&c=$compIdUrl' target='_blank' title='Remove All'>X ALL</a>";
 } else {
   print "No fully imported result or scramble data exists to compare.";
 }
