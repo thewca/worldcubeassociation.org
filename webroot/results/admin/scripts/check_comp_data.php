@@ -27,8 +27,8 @@ $competition_has_inbox_results = $wcadb_conn->boundQuery( "SELECT * FROM InboxRe
 $competition_has_inbox_persons = $wcadb_conn->boundQuery( "SELECT * FROM InboxPersons WHERE competitionId=? LIMIT 1", array('s', &$compId));
 
 if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
-  noticeBox3(1, 'This competition is in the process of having result data uploaded.
-                 <a href="scripts/remove_imported_data.php?c=$compIdUrl" class="call_and_refresh">Clear the temporary Results/Person data below...</a>');
+  noticeBox3(1, "This competition is in the process of having result data uploaded.
+                 <a href='scripts/remove_imported_data.php?c=$compIdUrl' class='call_and_refresh'>Clear the temporary Results/Person data below...</a>");
 }
 
 // if there is no data at all, nothing has been uploaded, so let's not display anything:
