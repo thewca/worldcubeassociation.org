@@ -62,6 +62,16 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def post_post(post)
+    @post = post
+    if @post.save
+      flash[:success] = "Created new post"
+      redirect_to post_path(@post.slug)
+    else
+      render 'posts/new', layout: "application"
+    end
+  end
+
   def post_announcement
     comp = Competition.find(params[:id])
     if comp.start_date.nil? || comp.end_date.nil?
@@ -76,8 +86,8 @@ class CompetitionsController < ApplicationController
     unless comp.website.blank?
       body += " Check out the [#{comp.name} website](#{comp.website_url}) for more information and registration.";
     end
-    @post = Post.new(title: title, body: body)
-    render 'posts/new', layout: "application"
+    @post = Post.new(title: title, body: body, author: current_user)
+    post_post(@post)
   end
 
   def post_results
@@ -150,8 +160,8 @@ class CompetitionsController < ApplicationController
         body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
-    @post = Post.new(title: title, body: body)
-    render 'posts/new', layout: "application"
+    post = Post.new(title: title, body: body, author: current_user)
+    post_post(post)
   end
 
   private def render_edit

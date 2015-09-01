@@ -3,8 +3,12 @@
 <% if @admin_view %>
   <h2>Announcements</h2>
   <ul>
-    <li><%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
-    <li><%= link_to "Post competition announcement.", competition_post_announcement_path %></li>
+    <li><%= link_to "Upload results", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
+    <li>
+      <%= button_to competition_post_announcement_path, class: 'btn', form: { target: "_blank" }, method: :get do %>
+        Post competition announcement
+      <% end %>
+    </li>
   </ul>
   <hr>
 <% end %>
