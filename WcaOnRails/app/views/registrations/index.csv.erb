@@ -1,7 +1,7 @@
 <% headers = ["Status", "Name", "Country", "WCA ID", "Birth Date", "Gender" ] + @competition.events.map(&:id) + [ "Email", "Guests", "IP" ] %>
 <%= CSV.generate_line(headers).html_safe -%>
 <% @competition.registrations.each do |registration| %>
-<%= CSV.generate_line(([
+<%= CSV.generate_line([
   Registration.statuses[registration.status],
   registration.name,
   registration.countryId,
@@ -12,7 +12,5 @@
   registration.email,
   registration.guests,
   registration.ip,
-  # Workaround the fact that cubecomps doesn't handle newlines inside
-  # fields by replacing all newlines with spaces.
-]).map { |f| f.is_a?(String) ? f.gsub(/[\r\n]/, " ") : f }).html_safe -%>
+]).html_safe -%>
 <% end %>
