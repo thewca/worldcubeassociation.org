@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
-    if !avatar.blank? && wca_id.blank?
+    if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
       errors.add(:avatar, "requires a WCA id to be assigned")
     end
   end

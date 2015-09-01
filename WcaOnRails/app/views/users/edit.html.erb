@@ -12,6 +12,7 @@
     <% if @user.pending_avatar? %>
       <div class="alert alert-warning">
         This account is pending confirmation of new avatar.
+        <%= link_to image_tag(@user.pending_avatar.url(:thumb)), @user.pending_avatar.url, target: "_blank" %>
         <% if current_user.can_admin_results? %>
           <%= link_to "Manage pending avatars", users_avatars_path %>
         <% end %>
@@ -25,7 +26,7 @@
     <% end %>
 
     <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
-    <%= f.hidden_field :avatar_cache %>
+    <%= f.hidden_field :pending_avatar_cache %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
 

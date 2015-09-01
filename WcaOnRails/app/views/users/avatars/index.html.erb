@@ -7,7 +7,7 @@
     <% @users.each do |user| %>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title"><%= link_to user.name, "/results/p.php?i=#{user.wca_id}" %></h3>
+          <h3 class="panel-title"><%= link_to "#{user.name} (#{user.wca_id})", "/results/p.php?i=#{user.wca_id}" %></h3>
         </div>
         <div class="panel-body">
           <div class="row">
@@ -31,45 +31,49 @@
             </div>
 
             <div class="col-sm-6">
-              <div id="carousel-<%= user.id %>-old-avatars" class="carousel slide old-avatars" data-ride="carousel" data-interval="false">
-                <!-- Indicators -->
-                <% carousel_avatars = user.old_avatar_filenames.reverse.map { |filename| filename_to_url(filename) } %>
-                <% if user.avatar? %>
-                  <% carousel_avatars.unshift(user.avatar.url) %>
-                <% end %>
-                <ol class="carousel-indicators">
-                  <% (0...carousel_avatars.length).each do |i| %>
-                    <li data-target="#carousel-<%= user.id %>-old-avatars" data-slide-to="<%= i %>" class="<%= i == 0 ? "active" : "" %>"></li>
-                  <% end %>
-                </ol>
+              <% carousel_avatars = user.old_avatar_filenames.reverse.map { |filename| filename_to_url(filename) } %>
+              <% if user.avatar? %>
+                <% carousel_avatars.unshift(user.avatar.url) %>
+              <% end %>
+              <% if carousel_avatars.empty? %>
+                <h3>This user has no previous pictures.</h3>
+              <% else %>
+                <div id="carousel-<%= user.id %>-old-avatars" class="carousel slide old-avatars" data-ride="carousel" data-interval="false">
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                    <% (0...carousel_avatars.length).each do |i| %>
+                      <li data-target="#carousel-<%= user.id %>-old-avatars" data-slide-to="<%= i %>" class="<%= i == 0 ? "active" : "" %>"></li>
+                    <% end %>
+                  </ol>
 
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-                  <% carousel_avatars.each_with_index do |url, i| %>
-                    <div class="item <%= i == 0 ? "active" : "" %>">
-                      <%= image_tag(url) %>
-                      <div class="carousel-caption">
-                        <% if user.avatar? && i == 0 %>
-                          Current profile picture for
-                        <% else %>
-                          Old profile picture for
-                        <% end %>
-                        <%= user.name %>
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner" role="listbox">
+                    <% carousel_avatars.each_with_index do |url, i| %>
+                      <div class="item <%= i == 0 ? "active" : "" %>">
+                        <%= image_tag(url) %>
+                        <div class="carousel-caption">
+                          <% if user.avatar? && i == 0 %>
+                            Current profile picture for
+                          <% else %>
+                            Old profile picture for
+                          <% end %>
+                          <%= user.name %>
+                        </div>
                       </div>
-                    </div>
-                  <% end %>
-                </div>
+                    <% end %>
+                  </div>
 
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-<%= user.id %>-old-avatars" role="button" data-slide="prev">
-                  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#carousel-<%= user.id %>-old-avatars" role="button" data-slide="next">
-                  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
+                  <!-- Controls -->
+                  <a class="left carousel-control" href="#carousel-<%= user.id %>-old-avatars" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="right carousel-control" href="#carousel-<%= user.id %>-old-avatars" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -77,7 +81,7 @@
     <% end %>
 
     <% if @users.length > 0 %>
-      <%= submit_tag "Submit", class: "btn btn-default" %>
+      <%= submit_tag "Submit", class: "btn btn-primary" %>
     <% else %>
       <p>No new pictures have been submitted.</p>
     <% end %>
