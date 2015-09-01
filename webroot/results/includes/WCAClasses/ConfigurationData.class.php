@@ -81,7 +81,7 @@ class ConfigurationData
             $errors[] = "Missing cachedDatabase.php file! Go <a href='{$pathToRoot}admin/compute_auxiliary_data.php'>here</a> to generate this file.";
         }
         
-        $writable_paths = Array("upload", "generated", "generated/cache");
+        $writable_paths = Array("uploads", "generated", "generated/cache");
         foreach($writable_paths as $path) {
             $fullpath = $filesPath . $path;
             if (!is_writable($fullpath) || !file_exists($fullpath)) {

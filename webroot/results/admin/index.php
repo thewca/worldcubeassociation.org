@@ -39,7 +39,13 @@ function showPages () {
   showPage( 'fix_results',
             'Fix individual results.' );
 
-  $waiting = count(dbQuery("SELECT * FROM CompetitionsMedia WHERE status='pending'"));
+  $waiting = dbValue("SELECT COUNT(*) FROM users WHERE pending_avatar IS NOT NULL");
+  $color = $waiting ? 'red' : 'green';
+  showPage( 'persons_picture',
+    "Validates pictures that have been submitted. <span style='color:$color'>[$waiting waiting]</span>",
+    "/users/avatars");
+
+  $waiting = dbValue("SELECT COUNT(*) FROM CompetitionsMedia WHERE status='pending'");
   $color = $waiting ? 'red' : 'green';
   showPage( 'validate_media',
             "Validates media that have been submitted. <span style='color:$color'>[$waiting waiting]</span>" );
