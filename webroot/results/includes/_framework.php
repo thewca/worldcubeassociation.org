@@ -224,7 +224,7 @@ function getCurrentPictureFile ($personId) {
     }
     return "/uploads/user/avatar/${personId}/${user['avatar']}";
   }
-  # Match only filenames that don't end in a b (to avoid 1234_thumb.png)
-  $files = glob("uploads/user/avatar/${personId}/*[!b].*");
+  # Match only filenames that end in a number (to avoid 1234_thumb.png)
+  $files = glob("uploads/user/avatar/${personId}/*[0-9].{jpg,jpeg,gif,png}");
   return $files ? "/" . end($files) : FALSE;
 }

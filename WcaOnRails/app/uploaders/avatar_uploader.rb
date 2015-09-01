@@ -7,14 +7,18 @@ class AvatarUploader < CarrierWave::Uploader::Base
   storage :file
   # storage :fog
 
+  configure do |config|
+    config.remove_previously_stored_files_after_update = false
+  end
+
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    # NOTE that are storing avatars by wca_id. There are two consequences of this:
+    # NOTE that we are storing avatars by wca_id. There are two consequences of this:
     #  - A user have a wca_id to have an avatar (see validations in user.rb).
     #  - Changing the wca_id for a user is complicated, and not something we
     #    are bothering to handle very well.
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.wca_id}"
+    "uploads/#{model.class.to_s.underscore}/avatar/#{model.wca_id}"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -41,7 +45,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # From https://github.com/carrierwaveuploader/carrierwave/wiki/How-to:-Use-a-timestamp-in-file-names
   def filename
-    @name ||= "#{timestamp}.#{model.avatar.file.extension}" if original_filename
+    @name ||= "#{timestamp}.#{model.send(mounted_as).file.extension}" if original_filename
   end
 
   def timestamp

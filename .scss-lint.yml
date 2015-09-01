@@ -29,3 +29,5 @@ linters:
     style: include_zero
   PropertySortOrder:
     enabled: false
+  SelectorDepth:
+    enabled: false

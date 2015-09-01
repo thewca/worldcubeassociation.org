@@ -30,12 +30,38 @@ class User < ActiveRecord::Base
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
 
-  mount_uploader :avatar, AvatarUploader
-  skip_callback :save, :after, :remove_previously_stored_avatar
-  validates :avatar,
+  AVATAR_PARAMETERS = {
     file_size: {
       maximum: 2.megabytes.to_i
     }
+  }
+
+  mount_uploader :pending_avatar, AvatarUploader
+  validates :avatar, AVATAR_PARAMETERS
+
+  mount_uploader :avatar, AvatarUploader
+  validates :avatar, AVATAR_PARAMETERS
+
+  def old_avatar_filenames
+    avatar_uploader = AvatarUploader.new(self)
+    store_dir = "public/#{avatar_uploader.store_dir}"
+    filenames = Dir.glob("#{store_dir}/*[0-9].{#{avatar_uploader.extension_white_list.join(",")}}").sort
+    filenames = filenames.select do |f|
+      (!pending_avatar.path || !File.identical?(pending_avatar.path, f)) && (!avatar.path || !File.identical?(avatar.path, f))
+    end
+  end
+
+  before_save :stash_rejected_avatar
+  def stash_rejected_avatar
+    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_pending_avatar) && pending_avatar_was
+      avatar_uploader = AvatarUploader.new(self)
+      store_dir = "public/#{avatar_uploader.store_dir}"
+      filename = "#{store_dir}/#{pending_avatar_was}"
+      rejected_filename = "#{store_dir}/rejected/#{pending_avatar_was}"
+      FileUtils.mkdir_p Pathname.new(rejected_filename).parent.to_path
+      FileUtils.mv filename, rejected_filename
+    end
+  end
 
   validate :senior_delegate_must_be_senior_delegate
   def senior_delegate_must_be_senior_delegate
@@ -94,21 +120,24 @@ class User < ActiveRecord::Base
     fields = Set.new
     if user == self
       fields << :name
-      fields << :avatar << :avatar_cache << :remove_avatar
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
+      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
+      fields << :remove_avatar
     end
     if admin? || board_member?
       fields += UsersController.WCA_ROLES
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
+      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar << :avatar_cache << :remove_avatar
     end
     if admin? || !delegate_status.blank?
       fields << :name
       fields << :wca_id
+      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar << :avatar_cache << :remove_avatar
     end
     fields

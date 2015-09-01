@@ -32,7 +32,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::Schema.define(version: 20150826003626) do
+ActiveRecord::Schema.define(version: 20150831195312) do
 
   create_table "Competitions", id: false, force: :cascade do |t|
     t.string  "id",                null: false,     primary_key: true
@@ -426,6 +426,7 @@ ActiveRecord::Schema.define(version: 20150826003626) do
     t.string   "region"
     t.string   "wca_id"
     t.string   "avatar",                 limit: 255
+    t.string   "pending_avatar",         limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

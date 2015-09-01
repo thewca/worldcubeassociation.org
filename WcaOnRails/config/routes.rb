@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :edit, :update]
   get 'users/edit' => 'users#edit'
+  namespace :users do
+    resources :avatars, only: [:index]
+  end
+  post 'users/avatars' => 'users/avatars#update_all'
 
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all

@@ -6,17 +6,25 @@
     <%= render 'shared/error_messages', object: f.object %>
     <% if @user.unconfirmed_email %>
       <div class="alert alert-warning">
-        This account is pending confirmation of new email address <%= @user.unconfirmed_email %>
+        This account is pending confirmation of new email address <%= @user.unconfirmed_email %>.
+      </div>
+    <% end %>
+    <% if @user.pending_avatar? %>
+      <div class="alert alert-warning">
+        This account is pending confirmation of new avatar.
+        <% if current_user.can_admin_results? %>
+          <%= link_to "Manage pending avatars", users_avatars_path %>
+        <% end %>
       </div>
     <% end %>
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
     <% if @user.avatar? %>
       <%= image_tag @user.avatar.url, class: "responsive center-block" %>
-      <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:avatar) %>
+      <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
     <% end %>
 
-    <%= f.input :avatar, as: :file, disabled: !editable_fields.include?(:avatar) %>
+    <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
     <%= f.hidden_field :avatar_cache %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
