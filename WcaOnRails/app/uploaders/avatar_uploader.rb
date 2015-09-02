@@ -21,6 +21,12 @@ class AvatarUploader < CarrierWave::Uploader::Base
     "uploads/#{model.class.to_s.underscore}/avatar/#{model.wca_id}"
   end
 
+  # Yup...
+  attr_writer :override_column_value
+  def identifier
+    @override_column_value || super
+  end
+
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:

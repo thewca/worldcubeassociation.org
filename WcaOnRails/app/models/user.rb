@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
          :confirmable
   validates :name, presence: true
   validates :wca_id, format: { with: /\A(|\d{4}[A-Z]{4}\d{2})\z/ },
-                     uniqueness: true, allow_nil: true
+                     allow_nil: true
   def self.WCA_ID_MAX_LENGTH
     return 10
   end
@@ -29,6 +29,32 @@ class User < ActiveRecord::Base
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
+
+  validate :wca_id_is_unique_or_for_dummy_account
+  def wca_id_is_unique_or_for_dummy_account
+    if wca_id && !wca_id_was
+      user = User.find_by_wca_id(wca_id)
+      # If there is a non dummy user with this WCA id, fail validation.
+      if user && user.encrypted_password.present?
+        errors.add(:wca_id, "must be unique")
+      end
+    end
+  end
+
+  # To handle profile pictures that predate our user account system, we created
+  # a bunch of dummy accounts (accounts with no password). When someone finally
+  # claims their WCA id, we want to delete the dummy account and copy over their
+  # avatar.
+  before_save :remove_dummy_account_when_wca_id_assigned
+  def remove_dummy_account_when_wca_id_assigned
+    if wca_id && !wca_id_was
+      dummy_account = User.where(wca_id: wca_id, encrypted_password: "").first
+      if dummy_account
+        _mounter(:avatar).uploader.override_column_value = dummy_account.read_attribute :avatar
+        dummy_account.destroy!
+      end
+    end
+  end
 
   AVATAR_PARAMETERS = {
     file_size: {

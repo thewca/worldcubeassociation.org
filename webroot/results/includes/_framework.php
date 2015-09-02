@@ -209,22 +209,13 @@ function genderText ($gender) {
 }
 
 function getCurrentPictureFile ($personId) {
-  # This is a bit tricky. Under the new rails system, images are uploaded to
+  # Under the new rails system, images are uploaded to
   # /uploads/user/avatar/WCA_ID/TIMESTAMP.EXT, and the filename is stored in
-  # the users table in the avatar column. However, there are lots of people who
-  # have uploaded profile images who don't yet have WCA accounts. To deal with
-  # those people, we still need to hit the filesystem and check for them. If
-  # people want to remove their avatar, they'll have to sign up for an account
-  # and remove it through the edit profile page, which will set their avatar
-  # column to null.
-  $user = dbQuery( "SELECT wca_id, avatar FROM users WHERE wca_id='$personId'" )[ 0 ];
-  if($user) {
-    if(!$user['avatar']) {
-      return false;
-    }
+  # the users table in the avatar column.
+  $user = dbQuery( "SELECT avatar FROM users WHERE wca_id='$personId'" )[ 0 ];
+  if(!$user || !$user['avatar']) {
+    return false;
+  } else {
     return "/uploads/user/avatar/${personId}/${user['avatar']}";
   }
-  # Match only filenames that end in a number (to avoid 1234_thumb.png)
-  $files = glob("uploads/user/avatar/${personId}/*[0-9].*");
-  return $files ? "/" . end($files) : FALSE;
 }

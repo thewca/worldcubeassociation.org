@@ -80,7 +80,33 @@ RSpec.describe User, type: :model do
     expect(user.wca_id).to be_nil
   end
 
-  it "can modify user with empty password" do
+  it "can create user with empty password" do
     FactoryGirl.create :user, encrypted_password: ""
+  end
+
+  it "removes dummy accounts when WCA id is assigned" do
+    dummy_user = FactoryGirl.create :user, wca_id: "2005FLEI01", encrypted_password: ""
+    expect(dummy_user).to be_valid
+    dummy_user.update_column(:avatar, "foo.jpg")
+    expect(dummy_user.read_attribute(:avatar)).to eq "foo.jpg"
+
+    user = FactoryGirl.create :user
+    expect(user).to be_valid
+    user.wca_id = "2005FLEI01"
+    user.save!
+
+    # Check that the dummy account was deleted, and we inherited its avatar.
+    expect(User.find_by_id(dummy_user.id)).to be_nil
+    expect(user.reload.read_attribute :avatar).to eq "foo.jpg"
+  end
+
+  it "does not allow duplicate WCA ids" do
+    user = FactoryGirl.create :user, wca_id: "2005FLEI01"
+    expect(user).to be_valid
+
+    user = FactoryGirl.create :user
+    expect(user).to be_valid
+    user.wca_id = "2005FLEI01"
+    expect(user).not_to be_valid
   end
 end

@@ -52,7 +52,8 @@ class Api::V0::ApiController < ApplicationController
 
   def users_search(delegate_only: false)
     query = params[:query]
-    users = User.where("name LIKE ?", "%" + query + "%")
+    users = User.where.not(encrypted_password: nil) # Ignore all dummy accounts
+    users = users.where("name LIKE ?", "%" + query + "%")
     if delegate_only
       users = users.where.not(delegate_status: nil)
     end
