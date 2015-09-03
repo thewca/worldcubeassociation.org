@@ -13,7 +13,7 @@ class CompetitionsController < ApplicationController
   end
 
   private def competitions
-    Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day)
+    Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day).reverse_order
   end
 
   def new
