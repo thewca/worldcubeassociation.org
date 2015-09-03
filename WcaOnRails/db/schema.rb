@@ -393,7 +393,7 @@ ActiveRecord::Schema.define(version: 20150831195312) do
     t.string   "title",      limit: 255,   default: "", null: false
     t.text     "body",       limit: 65535,              null: false
     t.string   "slug",       limit: 255,   default: "", null: false
-    t.boolean  "sticky",     limit: 1
+    t.boolean  "sticky",     limit: 1,                  null: false
     t.integer  "author_id",  limit: 4
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
