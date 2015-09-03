@@ -8,7 +8,7 @@
   The WCA acknowledges the following members as delegates for official WCA competitions:</p>
 
   <% delegate_sort_order = { region: :asc, delegate_status: :desc, name: :asc } %>
-  <table class="table" id="delegates-table">
+  <table class="table delegates-table">
     <colgroup>
       <col class="col-md-4" />
       <col class="col-md-4" />
@@ -29,7 +29,7 @@
   </table>
 
   <% @senior_delegates.order(delegate_sort_order).each do |senior_delegate| %>
-    <table class="table">
+    <table class="table delegates-table">
       <colgroup>
         <col class="col-md-4" />
         <col class="col-md-4" />
@@ -51,7 +51,7 @@
     </table>
   <% end %>
 
-  <table class="table">
+  <table class="table delegates-table">
     <colgroup>
       <col class="col-md-4" />
       <col class="col-md-4" />
