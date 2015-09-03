@@ -36,6 +36,7 @@ $(function() {
     todayHighlight: true
   });
   $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="popover"]').popover();
 
   $("form.no-submit-on-enter").bind("keypress", function(e) {
     if(e.which === 13) {
