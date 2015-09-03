@@ -12,7 +12,7 @@
     <% if @user.pending_avatar? %>
       <div class="alert alert-warning">
         This account is pending confirmation of new avatar.
-        <%= link_to image_tag(@user.pending_avatar.url(:thumb)), @user.pending_avatar.url, target: "_blank" %>
+        <%= link_to image_tag(@user.pending_avatar.url(:thumb)), @user.pending_avatar.url, target: "_blank", class: "hide-new-window-icon" %>
         <% if current_user.can_admin_results? %>
           <%= link_to "Manage pending avatars", users_avatars_path %>
         <% end %>
