@@ -4,7 +4,9 @@
       <% if delegate.avatar? %>
         <div class="avatar-circle" style="background-image: url('<%= delegate.avatar.url(:thumb) %>')"
              data-trigger="hover" data-toggle="popover" title="" data-html="true" data-content="<img src='<%= delegate.avatar.url %>'></img>"
-      ></div>
+        ></div>
+      <% else %>
+        <div class="avatar-circle"></div>
       <% end %>
       <%= delegate.name %>
     <% end %>
