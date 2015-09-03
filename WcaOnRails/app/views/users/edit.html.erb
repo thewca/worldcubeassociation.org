@@ -18,6 +18,15 @@
         <% end %>
       </div>
     <% end %>
+    <% if @user.dummy_account? %>
+      <div class="alert alert-warning">
+        This account is a dummy account. It serves as a placeholder because the competitor
+        uploaded a profile picture before the website supported WCA accounts. This
+        acount will be automatically deleted when another user is assigned WCA
+        id <%= @user.wca_id %>.
+        See <%= link_to "this commit", "https://github.com/cubing/worldcubeassociation.org/commit/32624f95b2c9e68967f8680ffa3ed7aefccd5319", target: "_blank" %> for more details.
+      </div>
+    <% end %>
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
     <% if @user.avatar? %>

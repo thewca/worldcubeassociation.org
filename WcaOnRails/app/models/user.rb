@@ -35,10 +35,14 @@ class User < ActiveRecord::Base
     if wca_id && !wca_id_was
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA id, fail validation.
-      if user && user.encrypted_password.present?
+      if user && !user.dummy_account?
         errors.add(:wca_id, "must be unique")
       end
     end
+  end
+
+  def dummy_account?
+    wca_id.present? && encrypted_password.blank?
   end
 
   # To handle profile pictures that predate our user account system, we created
