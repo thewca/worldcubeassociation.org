@@ -31,6 +31,7 @@
     <% end %>
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
+    <% if @user.wca_id.present? %>
       <div class="row">
         <% if @user.avatar? %>
           <div class="col-sm-6">
@@ -50,6 +51,7 @@
           <%= f.hidden_field :pending_avatar_cache %>
         </div>
       </div>
+    <% end %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
 
