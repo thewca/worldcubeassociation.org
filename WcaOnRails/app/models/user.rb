@@ -70,6 +70,7 @@ class User < ActiveRecord::Base
   validates :avatar, AVATAR_PARAMETERS
 
   mount_uploader :avatar, AvatarUploader
+  crop_uploaded :avatar
   validates :avatar, AVATAR_PARAMETERS
 
   def old_avatar_filenames
@@ -154,6 +155,7 @@ class User < ActiveRecord::Base
       fields << :password << :password_confirmation
       fields << :email
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
+      fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :remove_avatar
     end
     if admin? || board_member?
@@ -161,13 +163,12 @@ class User < ActiveRecord::Base
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
-      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
-      fields << :avatar << :avatar_cache << :remove_avatar
     end
     if admin? || !delegate_status.blank?
       fields << :name
       fields << :wca_id
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
+      fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :avatar << :avatar_cache << :remove_avatar
     end
     fields

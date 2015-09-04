@@ -38,6 +38,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # Create different versions of your uploaded files:
   process resize_to_fit: [800, 800]
   version :thumb do
+    process crop: :avatar
     process resize_to_fit: [100, 100]
   end
 
@@ -50,8 +51,19 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # From https://github.com/carrierwaveuploader/carrierwave/wiki/How-to:-Use-a-timestamp-in-file-names
+  # Also important: https://github.com/carrierwaveuploader/carrierwave/wiki/How-to%3A-Create-random-and-unique-filenames-for-all-versioned-files#note
   def filename
-    @name ||= "#{timestamp}.#{model.send(mounted_as).file.extension}" if original_filename
+    if original_filename
+      # This is pretty gross. We only want to reuse the existing filename if
+      # a new avatar isn't being uploaded, we look at the *_change attribute to
+      # determine if that happened.
+      if model && model.read_attribute(mounted_as).present? && !model.send(:"#{mounted_as}_change")
+        model.read_attribute(mounted_as)
+      else
+        # new filename
+        @name ||= "#{timestamp}.#{model.send(mounted_as).file.extension}" if original_filename
+      end
+    end
   end
 
   def timestamp

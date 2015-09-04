@@ -34,6 +34,7 @@ gem 'selectize-rails'
 gem 'high_voltage'
 gem 'best_in_place'
 gem 'carrierwave'
+gem 'carrierwave-crop'
 gem 'mini_magick'
 gem 'system'
 

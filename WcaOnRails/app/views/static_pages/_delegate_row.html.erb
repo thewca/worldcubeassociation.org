@@ -1,13 +1,7 @@
 <tr class="<%= delegate.delegate_status.dasherize %>">
   <td>
     <%= link_to "results/p.php?i=#{delegate.wca_id}" do %>
-      <% if delegate.avatar? %>
-        <div class="avatar-circle" style="background-image: url('<%= delegate.avatar.url(:thumb) %>')"
-             data-trigger="hover" data-toggle="popover" title="" data-html="true" data-content="<img src='<%= delegate.avatar.url %>'></img>"
-        ></div>
-      <% else %>
-        <div class="avatar-circle"></div>
-      <% end %>
+      <%= render "shared/user_avatar", user: delegate %>
       <%= delegate.name %>
     <% end %>
     <%= mail_to delegate.email, target: "_blank", class: "delegate-actions hide-new-window-icon" do %>

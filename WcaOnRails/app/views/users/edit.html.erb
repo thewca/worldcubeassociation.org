@@ -11,8 +11,8 @@
     <% end %>
     <% if @user.pending_avatar? %>
       <div class="alert alert-warning">
-        This account is pending confirmation of new avatar.
-        <%= link_to image_tag(@user.pending_avatar.url(:thumb)), @user.pending_avatar.url, target: "_blank", class: "hide-new-window-icon" %>
+        This account is pending confirmation of a new avatar.
+        <%= render "shared/user_avatar", user: @user, show_pending: true %>
         <% if current_user.can_admin_results? %>
           <%= link_to "Manage pending avatars", users_avatars_path %>
         <% end %>
@@ -30,12 +30,24 @@
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
     <% if @user.avatar? %>
-      <%= image_tag @user.avatar.url, class: "responsive center-block" %>
-      <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-    <% end %>
+      <div class="row">
+        <div class="col-sm-6">
+          <%= f.cropbox :avatar %>
+        </div>
+        <div class="col-sm-6">
+          <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
+          <p>Your site thumbnail:</p>
+          <img src="<%= @user.avatar.url(:thumb) %>"
+               id="avatar_thumbnail"
+               data-trigger="hover" data-toggle="popover" title="" data-content="Click to select new thumbnail"
+          >
+          <%= f.previewbox :avatar %>
 
-    <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
-    <%= f.hidden_field :pending_avatar_cache %>
+          <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), label: "Upload new avatar", hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
+          <%= f.hidden_field :pending_avatar_cache %>
+        </div>
+      </div>
+    <% end %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
 
