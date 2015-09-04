@@ -63,6 +63,15 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  # Workaround for PHP code that requires these tables to be clean.
+  # Once we're in all railsland, this can go, and we can add a script
+  # that checks our database sanity instead.
+  after_save :remove_non_existent_organizers_and_delegates
+  def remove_non_existent_organizers_and_delegates
+    CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
+    CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
+  end
+
   attr_accessor :editing_user_id
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself

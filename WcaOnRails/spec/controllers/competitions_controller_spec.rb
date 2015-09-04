@@ -250,4 +250,16 @@ describe CompetitionsController do
     patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }, commit: "Delete"
     expect(Competition.find(competition_with_delegate.id)).not_to be_nil
   end
+
+  it "saving removes nonexistent delegates" do
+    invalid_competition_delegate = CompetitionDelegate.create!(competition_id: competition_with_delegate.id, delegate_id: 2000000)
+    patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }
+    expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
+  end
+
+  it "saving removes nonexistent organizers" do
+    invalid_competition_organizer = CompetitionOrganizer.create!(competition_id: competition.id, organizer_id: 2000000)
+    patch :update, id: competition, competition: { name: competition.name }
+    expect(CompetitionDelegate.find_by_id(invalid_competition_organizer.id)).to be_nil
+  end
 end
