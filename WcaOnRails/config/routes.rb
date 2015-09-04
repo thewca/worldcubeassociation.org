@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :edit, :update]
   get 'users/edit' => 'users#edit'
+  get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
+  get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
   namespace :users do
     resources :avatars, only: [:index]
   end

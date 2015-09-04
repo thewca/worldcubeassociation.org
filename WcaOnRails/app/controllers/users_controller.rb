@@ -25,13 +25,26 @@ class UsersController < ApplicationController
     can_edit_user_only(@user)
   end
 
+  def edit_avatar_thumbnail
+    @user = user_to_edit
+    can_edit_user_only(@user)
+  end
+
+  def edit_pending_avatar_thumbnail
+    @user = user_to_edit
+    @pending_avatar = true
+    can_edit_user_only(@user)
+    render :edit_avatar_thumbnail
+  end
+
   def update
     @user = user_to_edit
     @user.current_user = current_user
     can_edit_user_only(@user)
 
     old_confirmation_sent_at = @user.confirmation_sent_at || 0
-    if current_user == @user ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
+    dangerous_change = current_user == @user && (user_params.has_key?(:password) || user_params.has_key?(:password_confirmation) || user_params.has_key?(:email))
+    if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
         sign_in @user, bypass: true

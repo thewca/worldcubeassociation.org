@@ -17,7 +17,12 @@ module Users
           when "approve"
             # Bypass the .avatar and .pending_avatar helpers that carrierwave creates
             # and write directly to the database.
-            user.update_columns(avatar: user.read_attribute(:pending_avatar), pending_avatar: nil)
+            user.update_columns(
+              avatar: user.read_attribute(:pending_avatar),
+              avatar_crop_x: user.pending_avatar_crop_x, avatar_crop_y: user.pending_avatar_crop_y, avatar_crop_w: user.pending_avatar_crop_w, avatar_crop_h: user.pending_avatar_crop_h,
+              pending_avatar: nil,
+              pending_avatar_crop_x: nil, pending_avatar_crop_y: nil, pending_avatar_crop_w: nil, pending_avatar_crop_h: nil,
+            )
           when "reject"
             user.remove_pending_avatar = true
             user.save!

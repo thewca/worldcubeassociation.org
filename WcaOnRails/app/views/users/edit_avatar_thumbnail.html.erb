@@ -1,0 +1,21 @@
+<% pending_avatar = defined? @pending_avatar %>
+<% avatar_sym = pending_avatar ? :pending_avatar : :avatar %>
+<% provide(:title, (pending_avatar ? "Pending " : "") + "Avatar Thumbnail | #{@user.name}") %>
+
+<div class="container">
+  <%= simple_form_for @user, html: { class: 'are-you-sure' } do |f| %>
+    <div class="row">
+      <div class="col-sm-6">
+        <%= f.cropbox avatar_sym %>
+      </div>
+      <div class="col-sm-6">
+        <h2>Current thumbnail:</h2>
+        <%= image_tag @user.send(avatar_sym).url(:thumb) %>
+        <h2>New thumbnail:</h2>
+        <%= f.previewbox avatar_sym %>
+
+        <br><%= f.submit 'Save', class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>

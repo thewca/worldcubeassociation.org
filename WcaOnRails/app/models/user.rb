@@ -66,11 +66,16 @@ class User < ActiveRecord::Base
     }
   }
 
-  mount_uploader :pending_avatar, AvatarUploader
-  validates :avatar, AVATAR_PARAMETERS
+  mount_uploader :pending_avatar, PendingAvatarUploader
+  # Call recreate_pending_avatar_versions directly instead of crop_uploaded
+  # because we want to store the crop fields in the database.
+  after_update :recreate_pending_avatar_versions
+  validates :pending_avatar, AVATAR_PARAMETERS
 
   mount_uploader :avatar, AvatarUploader
-  crop_uploaded :avatar
+  # Call recreate_avatar_versions directly instead of crop_uploaded
+  # because we want to store the crop fields in the database.
+  after_update :recreate_avatar_versions
   validates :avatar, AVATAR_PARAMETERS
 
   def old_avatar_filenames
@@ -156,6 +161,7 @@ class User < ActiveRecord::Base
       fields << :email
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
+      fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
       fields << :remove_avatar
     end
     if admin? || board_member?
@@ -169,6 +175,7 @@ class User < ActiveRecord::Base
       fields << :wca_id
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
+      fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
       fields << :avatar << :avatar_cache << :remove_avatar
     end
     fields

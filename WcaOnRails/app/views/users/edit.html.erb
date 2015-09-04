@@ -2,7 +2,7 @@
 
 <div class="container">
   <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
-  <%= simple_form_for @user, html: { multipart: true } do |f| %>
+  <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <% if @user.unconfirmed_email %>
       <div class="alert alert-warning">
@@ -12,7 +12,9 @@
     <% if @user.pending_avatar? %>
       <div class="alert alert-warning">
         This account is pending confirmation of a new avatar.
-        <%= render "shared/user_avatar", user: @user, show_pending: true %>
+        <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
+          <%= render "shared/user_avatar", user: @user, show_pending: true, title: "Click to edit thumbnail", break_cache: true %>
+        <% end %>
         <% if current_user.can_admin_results? %>
           <%= link_to "Manage pending avatars", users_avatars_path %>
         <% end %>
@@ -29,25 +31,25 @@
     <% end %>
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
-    <% if @user.avatar? %>
       <div class="row">
+        <% if @user.avatar? %>
+          <div class="col-sm-6">
+            <%= image_tag @user.avatar.url, class: "img-responsive" %>
+          </div>
+        <% end %>
         <div class="col-sm-6">
-          <%= f.cropbox :avatar %>
-        </div>
-        <div class="col-sm-6">
-          <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-          <p>Your site thumbnail:</p>
-          <img src="<%= @user.avatar.url(:thumb) %>"
-               id="avatar_thumbnail"
-               data-trigger="hover" data-toggle="popover" title="" data-content="Click to select new thumbnail"
-          >
-          <%= f.previewbox :avatar %>
+          <% if @user.avatar? %>
+            <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
+            <p>Your account thumbnail:</p>
+            <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
+              <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
+            <% end %>
+          <% end %>
 
           <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), label: "Upload new avatar", hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
           <%= f.hidden_field :pending_avatar_cache %>
         </div>
       </div>
-    <% end %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
 
