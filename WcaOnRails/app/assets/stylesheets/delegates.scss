@@ -21,12 +21,15 @@ tr.candidate-delegate {
 
 .avatar-circle {
   display: inline-block;
-  border-radius: 50%;
   background-size: cover;
   width: 50px;
   height: 50px;
 
   vertical-align: middle;
+}
+.avatar-circle-lg {
+  width: 100px;
+  height: 100px;
 }
 
 .popover-content img {

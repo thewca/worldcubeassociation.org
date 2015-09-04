@@ -5,12 +5,12 @@
 <div class="container">
   <%= simple_form_for @user, html: { class: 'are-you-sure' } do |f| %>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-md-6">
         <%= f.cropbox avatar_sym %>
       </div>
-      <div class="col-sm-6">
+      <div class="col-md-6">
         <h2>Current thumbnail:</h2>
-        <%= image_tag @user.send(avatar_sym).url(:thumb) %>
+        <%= render "shared/user_avatar", user: @user, show_pending: pending_avatar, break_cache: true, avatar_class: "avatar-circle-lg"  %>
         <h2>New thumbnail:</h2>
         <%= f.previewbox avatar_sym %>
 
