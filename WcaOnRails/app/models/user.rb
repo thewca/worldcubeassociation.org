@@ -99,6 +99,22 @@ class User < ActiveRecord::Base
     end
   end
 
+  before_validation :maybe_clear_crop_coordinates
+  def maybe_clear_crop_coordinates
+    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_avatar)
+      self.avatar_crop_x = nil
+      self.avatar_crop_y = nil
+      self.avatar_crop_w = nil
+      self.avatar_crop_h = nil
+    end
+    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_pending_avatar)
+      self.pending_avatar_crop_x = nil
+      self.pending_avatar_crop_y = nil
+      self.pending_avatar_crop_w = nil
+      self.pending_avatar_crop_h = nil
+    end
+  end
+
   validate :senior_delegate_must_be_senior_delegate
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
@@ -188,5 +204,16 @@ class User < ActiveRecord::Base
     else
       where(conditions.to_hash).first
     end
+  end
+
+  def approve_pending_avatar!
+    # Bypass the .avatar and .pending_avatar helpers that carrierwave creates
+    # and write directly to the database.
+    self.update_columns(
+      avatar: self.read_attribute(:pending_avatar),
+      avatar_crop_x: self.pending_avatar_crop_x, avatar_crop_y: self.pending_avatar_crop_y, avatar_crop_w: self.pending_avatar_crop_w, avatar_crop_h: self.pending_avatar_crop_h,
+      pending_avatar: nil,
+      pending_avatar_crop_x: nil, pending_avatar_crop_y: nil, pending_avatar_crop_w: nil, pending_avatar_crop_h: nil,
+    )
   end
 end
