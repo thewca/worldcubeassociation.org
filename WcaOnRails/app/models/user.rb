@@ -67,15 +67,11 @@ class User < ActiveRecord::Base
   }
 
   mount_uploader :pending_avatar, PendingAvatarUploader
-  # Call recreate_pending_avatar_versions directly instead of crop_uploaded
-  # because we want to store the crop fields in the database.
-  after_update :recreate_pending_avatar_versions
+  crop_uploaded :pending_avatar
   validates :pending_avatar, AVATAR_PARAMETERS
 
   mount_uploader :avatar, AvatarUploader
-  # Call recreate_avatar_versions directly instead of crop_uploaded
-  # because we want to store the crop fields in the database.
-  after_update :recreate_avatar_versions
+  crop_uploaded :avatar
   validates :avatar, AVATAR_PARAMETERS
 
   def old_avatar_filenames
@@ -99,19 +95,32 @@ class User < ActiveRecord::Base
     end
   end
 
+  before_validation :maybe_save_crop_coordinates
+  def maybe_save_crop_coordinates
+    self.saved_avatar_crop_x = avatar_crop_x if avatar_crop_x
+    self.saved_avatar_crop_y = avatar_crop_y if avatar_crop_y
+    self.saved_avatar_crop_w = avatar_crop_w if avatar_crop_w
+    self.saved_avatar_crop_h = avatar_crop_h if avatar_crop_h
+
+    self.saved_pending_avatar_crop_x = pending_avatar_crop_x if pending_avatar_crop_x
+    self.saved_pending_avatar_crop_y = pending_avatar_crop_y if pending_avatar_crop_y
+    self.saved_pending_avatar_crop_w = pending_avatar_crop_w if pending_avatar_crop_w
+    self.saved_pending_avatar_crop_h = pending_avatar_crop_h if pending_avatar_crop_h
+  end
+
   before_validation :maybe_clear_crop_coordinates
   def maybe_clear_crop_coordinates
     if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_avatar)
-      self.avatar_crop_x = nil
-      self.avatar_crop_y = nil
-      self.avatar_crop_w = nil
-      self.avatar_crop_h = nil
+      self.saved_avatar_crop_x = nil
+      self.saved_avatar_crop_y = nil
+      self.saved_avatar_crop_w = nil
+      self.saved_avatar_crop_h = nil
     end
     if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_pending_avatar)
-      self.pending_avatar_crop_x = nil
-      self.pending_avatar_crop_y = nil
-      self.pending_avatar_crop_w = nil
-      self.pending_avatar_crop_h = nil
+      self.saved_pending_avatar_crop_x = nil
+      self.saved_pending_avatar_crop_y = nil
+      self.saved_pending_avatar_crop_w = nil
+      self.saved_pending_avatar_crop_h = nil
     end
   end
 
@@ -211,9 +220,9 @@ class User < ActiveRecord::Base
     # and write directly to the database.
     self.update_columns(
       avatar: self.read_attribute(:pending_avatar),
-      avatar_crop_x: self.pending_avatar_crop_x, avatar_crop_y: self.pending_avatar_crop_y, avatar_crop_w: self.pending_avatar_crop_w, avatar_crop_h: self.pending_avatar_crop_h,
+      saved_avatar_crop_x: self.saved_pending_avatar_crop_x, saved_avatar_crop_y: self.saved_pending_avatar_crop_y, saved_avatar_crop_w: self.saved_pending_avatar_crop_w, saved_avatar_crop_h: self.saved_pending_avatar_crop_h,
       pending_avatar: nil,
-      pending_avatar_crop_x: nil, pending_avatar_crop_y: nil, pending_avatar_crop_w: nil, pending_avatar_crop_h: nil,
+      saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil,
     )
   end
 end
