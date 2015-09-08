@@ -5,10 +5,24 @@ var CarrierWaveCropper = (function() {
     this.update = this.update.bind(this);
     this.idPrefix = idPrefix;
 
+    var $cropboxData = $('#cropbox-data');
+    var initialSelect = [
+      $cropboxData.data('crop-x'),
+      $cropboxData.data('crop-y'),
+      $cropboxData.data('crop-w'),
+      $cropboxData.data('crop-h'),
+    ];
+    // Convert from [x, y, w, h] to [x1, y1, x2, y2]
+    initialSelect[2] += initialSelect[0];
+    initialSelect[3] += initialSelect[1];
+    if(!initialSelect[0] || !initialSelect[1] || !initialSelect[2] || !initialSelect[3]) {
+      initialSelect = [0, 0, 200, 200];
+    }
+
     $('#'+ this.idPrefix + '_cropbox').Jcrop({
       aspectRatio: 1,
       boxWidth: 400, boxHeight: 400,
-      setSelect: [0, 0, 200, 200],
+      setSelect: initialSelect,
       onSelect: this.update,
       onChange: this.update,
     });
