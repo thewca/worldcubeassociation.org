@@ -62,7 +62,7 @@ wrapper_mappings: {
     <%= f.input :name %>
     <%= f.input :cellName %>
 
-    <%= f.input :countryId, collection: Country.all.map(&:name) %>
+    <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
     <%= f.input :cityName %>
     <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
 
