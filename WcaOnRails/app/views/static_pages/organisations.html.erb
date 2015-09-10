@@ -4,49 +4,143 @@
   <h1><%= yield(:title) %></h1>
 
   <p>The WCA acknowledges the following national organisations:</p>
-  <table border="1"><tr><th>Country</th>
-  <th>National organisation</th>
-  </tr><tr><td>Australia</td>
-  <td><a href="http://www.speedcubing.com.au" target="_blank">Speedcubing Australia</a></td>
-  </tr><tr><td>Canada</td>
-  <td><a href="http://www.canadiancubing.com" target="_blank">Canadian Cubing</a></td>
-  </tr><tr><td>China</td>
-  <td><a href="http://cubingchina.com/" target="_blank">Cubing China</a></td>
-  </tr><tr><td>Denmark</td>
-  <td><a href="http://speedcubing.dk" target="_blank">Dansk Speedcubing Forening</a></td>
-  </tr><tr><td>Estonia</td>
-  <td><a href="http://www.estonianopen.eu/eng/kontakt.php" target="_blank">Eesti Kuubik</a></td>
-  </tr><tr><td>France</td>
-  <td><a href="http://www.speedcubingfrance.org/" target="_blank">Association Française de Speedcubing</a></td>
-  </tr><tr><td>Hong Kong</td>
-  <td><a href="http://hkrcu.net" target="_blank">Hong Kong Rubik's Cube Union</a></td>
-  </tr><tr><td>Indonesia</td>
-  <td><a href="http://nsa.or.id/" target="_blank">Nusantara Speedcubing Association</a></td>
-  </tr><tr><td>Italy</td>
-  <td><a href="http://www.cubingitaly.org/" target="_blank">Cubing Italy</a></td>
-  </tr><tr><td>Japan</td>
-  <td><a href="http://jrca.cc/main.html" target="_blank">Japan Rubik's Cube Association</a></td>
-  </tr><tr><td>Korea</td>
-  <td><a href="http://kccu.co.kr/xe/" target="_blank">Korea Cube Culture United</a></td>
-  </tr><tr><td>New Zealand</td>
-  <td><a href="http://www.speedcubing.nz" target="_blank">Speedcubing New Zealand</a></td>
-  </tr><tr><td>Philippines</td>
-  <td><a href="http://www.philippinecubersassociation.org" target="_blank">Philippine Cubers Association</a></td>
-  </tr><tr><td>Poland</td>
-  <td><a href="http://www.kostkarubika.org" target="_blank">Polish Speedcubing Federation</a></td>
-  </tr><tr><td>Russia</td>
-  <td><a href="http://www.speedcubing.ru" target="_blank">Speedcubing.ru</a></td>
-  </tr><tr><td>Spain</td>
-  <td><a href="http://www.asociacionrubik.es" target="_blank">Asociación Española del cubo de Rubik</a></td>
-  </tr><tr><td>Slovenia</td>
-  <td><a href="http://www.rubik.si/" target="_blank">Rubik klub Slovenija</a></td>
-  </tr><tr><td>Sweden</td>
-  <td><a href="http://www.svekub.se" target="_blank">SveKub</a></td>
-  </tr><tr><td>Ukraine</td>
-  <td><a href="http://cubing.com.ua/" target="_blank">Cubing Ukraine</a></td>
-  </tr><tr><td>United Kingdom</td>
-  <td><a href="http://ukca.org/" target="_blank">UK Cube Association</a></td>
-  </tr><tr><td>United States</td>
-  <td><a href="http://www.cubingusa.com/" target="_blank">Cubing USA</a></td>
-  </tr></table>
+
+  <% organizations_info = [
+       {
+         country: "Australia",
+         name: "Speedcubing Australia",
+         url: "http://www.speedcubing.com.au",
+       },
+       {
+         country: "Canada",
+         name: "Canadian Cubing",
+         url: "http://www.canadiancubing.com",
+       },
+       {
+         country: "China",
+         name: "Cubing China",
+         url: "http://cubingchina.com",
+         logo: "cubing_china.png",
+       },
+       {
+         country: "Denmark",
+         name: "Dansk Speedcubing Forening",
+         url: "http://speedcubing.dk",
+       },
+       {
+         country: "Estonia",
+         name: "Eesti Kuubik",
+         url: "http://www.estonianopen.eu/eng/kontakt.php",
+         logo: "estonian_open.png",
+       },
+       {
+         country: "France",
+         name: "Association Française de Speedcubing",
+         url: "http://www.speedcubingfrance.org",
+         logo: "france.svg",
+       },
+       {
+         country: "Hong Kong",
+         name: "Hong Kong Rubik's Cube Union",
+         url: "http://hkrcu.net",
+       },
+       {
+         country: "Indonesia",
+         name: "Nusantara Speedcubing Association",
+         url: "http://nsa.or.id",
+       },
+       {
+         country: "Italy",
+         name: "Cubing Italy",
+         url: "http://www.cubingitaly.org",
+         logo: "cubing_italy.png",
+       },
+       {
+         country: "Japan",
+         name: "Japan Rubik's Cube Association",
+         url: "http://jrca.cc/main.html",
+         logo: "jrca.jpg",
+       },
+       {
+         country: "Korea",
+         name: "Korea Cube Culture United",
+         url: "http://kccu.co.kr/xe/",
+         logo: "korea.png",
+       },
+       {
+         country: "New Zealand",
+         name: "Speedcubing New Zealand",
+         url: "http://www.speedcubing.nz",
+       },
+       {
+         country: "Philippines",
+         name: "Philippine Cube Association",
+         url: "http://www.philippinecubersassociation.org",
+         logo: "philippines.jpg",
+       },
+       {
+         country: "Poland",
+         name: "Polish Speedcubing Federation",
+         url: "http://www.kostkarubika.org",
+       },
+       {
+         country: "Russia",
+         name: "Speedcubing.ru",
+         url: "http://www.speedcubing.ru",
+       },
+       {
+         country: "Spain",
+         name: "Asociación Española del cubo de Rubik",
+         url: "http://www.asociacionrubik.es",
+         logo: "spain.png",
+       },
+       {
+         country: "Slovenia",
+         name: "Rubik klub Slovenija",
+         url: "http://www.rubik.si",
+         logo: "slovenia.png",
+       },
+       {
+         country: "Sweden",
+         name: "SveKub",
+         url: "http://www.svekub.se",
+       },
+       {
+         country: "Ukraine",
+         name: "Cubing Ukraine",
+         url: "http://cubing.com.ua",
+         logo: "ukraine.png",
+       },
+       {
+         country: "United Kingdom",
+         name: "UK Cube Association",
+         url: "http://ukca.org",
+       },
+       {
+         country: "United States",
+         name: "Cubing USA",
+         url: "http://www.cubingusa.com",
+         logo: "cubing_usa.jpg",
+       },
+  ] %>
+
+  <div class="organizations-list">
+    <% organizations_info.each do |organization_info| %>
+      <div class="organization-box">
+        <%= link_to organization_info[:url], target: "_blank", class: "hide-new-window-icon" do %>
+          <% if organization_info[:logo] %>
+            <%= image_tag "organizations/#{organization_info[:logo]}" %>
+          <% end %>
+          <div class="organization-info <% if organization_info[:logo] %>hide-until-hover<% end %>">
+            <div class="country">
+              <%= organization_info[:country] %>
+            </div>
+            <div class="name">
+              <%= organization_info[:name] %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
