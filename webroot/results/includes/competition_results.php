@@ -140,9 +140,9 @@ function getCompetitionResults ($resultsTable) {
   #--- Some filter conditions depending on the view (winners, top3, all).
   $viewCondition = "";
   if( $chosenTop3 )
-    $viewCondition = "AND roundId in ('f', 'c') AND pos <= 3";
+    $viewCondition = "AND roundId in ('f', 'c') AND pos <= 3 AND best > 0";
   if( $chosenWinners )
-    $viewCondition = "AND roundId in ('f', 'c') AND pos <= 1";
+    $viewCondition = "AND roundId in ('f', 'c') AND pos <= 1 AND best > 0";
 
   if( $chosenByPerson )
     $order = "personName, event.rank, round.rank DESC";
