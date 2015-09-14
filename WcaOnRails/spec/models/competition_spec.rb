@@ -129,13 +129,4 @@ RSpec.describe Competition do
     competition = FactoryGirl.create :competition, organizer_ids: organizer_ids
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
-
-  it "verifies delegates are delegates" do
-    delegate = FactoryGirl.create(:user)
-    delegates = [delegate]
-    delegate_ids = delegates.map(&:id).join(",")
-    competition = FactoryGirl.build :competition, delegate_ids: delegate_ids
-    expect(competition.save).to eq false
-    expect(competition.errors.messages).to have_key :delegate_ids
-  end
 end
