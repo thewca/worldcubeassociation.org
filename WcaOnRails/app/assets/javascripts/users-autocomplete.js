@@ -1,9 +1,15 @@
 $(function() {
   $('input.select-user').each(function() {
-    var delegate_only = $(this).hasClass("select-user-delegate");
+    var that = this;
+    var delegate_only = $(that).hasClass("select-user-delegate");
     var users = _.filter(wca.users, function(user) {
       if(delegate_only) {
-        return !!user.delegate_status;
+        // It's ok to allow a non delegate if they were previously
+        // selected as the delegate for the competition (this will
+        // certainly happen for old competitions, where the delegate has
+        // retired).
+        var currentDelegateIds = that.value.split(",").map(function(i) { return parseInt(i); });
+        return !!user.delegate_status || _.include(currentDelegateIds, user.id);
       } else {
         return true;
       }

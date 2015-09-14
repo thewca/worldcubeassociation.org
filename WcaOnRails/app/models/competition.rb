@@ -56,13 +56,6 @@ class Competition < ActiveRecord::Base
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
   end
-  validate :delegates_must_be_delegates
-  def delegates_must_be_delegates
-    non_delegates = delegates.select { |user| !user.delegate_status }
-    unless non_delegates.empty?
-      errors.add(:delegate_ids, "#{non_delegates.map(&:name).join(', ')} is (are) not delegate(s).")
-    end
-  end
 
   # Workaround for PHP code that requires these tables to be clean.
   # Once we're in all railsland, this can go, and we can add a script
