@@ -156,8 +156,10 @@ function showUnfinishedPersons () {
     tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountry$caseNr' value='$nameHtml|$countryIdHtml' />" );
     
     #--- Show the person.
+    # Note that we set this input to checked, but if there's a better match
+    # lower on, then it will take precendence.
     tableRowStyled( 'font-weight:bold', array(
-      "<input type='radio' name='action$caseNr' value='new' />",
+      "<input type='radio' name='action$caseNr' value='new' checked='checked' />",
       visualize( $name ),
       visualize( $countryId ),
       peekLink( $name, $countryId ),
