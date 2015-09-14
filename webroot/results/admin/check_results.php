@@ -8,6 +8,11 @@ require( '../includes/_header.php' );
 require( '../includes/_check.php' );
 analyzeChoices();
 adminHeadline( 'Check results' );
+
+$scripts = new WCAClasses\WCAScripts();
+$scripts->add('check_results_help.js');
+print $scripts->getHTMLAll();
+
 showDescription();
 showChoices();
 
@@ -171,11 +176,16 @@ function checkRelatively () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
         showCompetitionResults( $competitionId, $eventId, $roundId );
         $shownRound = $round;
+
+        #--- Show a check all and a check none button.
+        printf( "<button class='js-check-all' data-round='$round'>Check all</button>" );
+        printf( "<button class='js-check-none' data-round='$round'>Check none</button>" );
+        printf( "<br>" );
       }
 
       #--- Show each difference, with a checkbox to agree
       $change = sprintf('%+d', $calcedPos-$storedPos);
-      $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' />";
+      $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' data-round='$round' />";
       printf( "$checkbox Place $storedPos should be place $calcedPos (change by $change) --- $personName<br />" );
       $wrongs++;
     }
