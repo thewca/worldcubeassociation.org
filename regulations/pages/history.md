@@ -3,13 +3,13 @@
 ## Older Versions of the Regulations
 
 Until 2011, the Regulations were maintained by Ron van Bruchem and the WCA Board. Since then, the [WCA Regulations Committee](https://www.worldcubeassociation.org/contact/wrc) is in charge of them.  
-For the 2013 release, the Regulations were split into two documents: the Regulations and the Guidelines.  
-Starting with 2013, updates (with lists of changes changes) will be announced on the [WRC Announcements page](https://www.worldcubeassociation.org/regulations/announcements/).
+For the 2013 release, the Regulations were split into two documents: the Regulations and the Guidelines.
 
 Here are all past and current versions of the Regulations.
 
-- [2014-04-03](./official/2014-04-03/) ([Changes](https://github.com/cubing/wca-documents/compare/official-2014-01-01...official-2014-04-03#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/posts/2014-04-03))
-    - [2014-01-01](./official/2014-01-01/) ([Changes](https://github.com/cubing/wca-documents/compare/diff-base-2013...official-2014-01-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/posts/2014-01-01))
+- [2015-07-01](https://www.worldcubeassociation.org/regulations/) ([Changes](https://github.com/cubing/wca-regulations/compare/official-2014-04-03...official-2015-07-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/posts/wca-regulations-july-2015))
+- [2014-04-03](./official/2014-04-03/) ([Changes](https://github.com/cubing/wca-documents/compare/official-2014-01-01...official-2014-04-03#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/posts/regulations-and-guidelines-april-3-2014))
+    - [2014-01-01](./official/2014-01-01/) ([Changes](https://github.com/cubing/wca-documents/compare/diff-base-2013...official-2014-01-01#files_bucket), [Summarized Changes](https://www.worldcubeassociation.org/posts/wca-regulations-and-guidelines-2014))
 - [2013-05-21](./official/2013-05-21/) ([Changes](https://github.com/cubing/wca-documents/compare/official-2013-05-10...official-2013-05-21#files_bucket))
     - [2013-05-10](./official/2013-05-10/) ([Changes](https://github.com/cubing/wca-documents/compare/official-2013-01-01...official-2013-05-10#files_bucket))
     - [2013-01-01](./official/2013-01-01/)
