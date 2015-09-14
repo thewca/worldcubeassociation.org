@@ -11,7 +11,8 @@ class Competition < ActiveRecord::Base
   ENDS_WITH_YEAR_RE = /\A.* \d{4}\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
-  validates :id, presence: true, uniqueness: true, length: { maximum: 32 }
+  validates :id, presence: true, uniqueness: true, length: { maximum: 32 },
+                 format: { with: /\A[a-zA-Z0-9]+\Z/ }
   validates :name, length: { maximum: 50 },
                    format: { with: ENDS_WITH_YEAR_RE }
   validates :cellName, length: { maximum: 45 },
