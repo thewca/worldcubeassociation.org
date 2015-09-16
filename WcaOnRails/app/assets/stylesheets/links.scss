@@ -16,10 +16,17 @@ a:hover {
  * Solution thanks to
  * https://github.com/twbs/bootstrap/issues/14854#issuecomment-60221141
  */
-a[target=_blank]:not(.hide-new-window-icon):after,
-form[target=_blank] button[type=submit]:after {
-  font-family: 'Glyphicons Halflings';
-  content: "\e164"; /* glyphicon-new-window */
-  display: inline-block; /* prevent underlining */
-  margin-left: 0.3em;
+a[target=_blank]:not(.hide-new-window-icon),
+form[target=_blank] button[type=submit] {
+  &:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e164"; /* glyphicon-new-window */
+    display: inline-block; /* prevent underlining */
+    margin-left: 0.3em;
+  }
+  &.btn:after {
+    // For some reason, the external link icon takes up more space than it
+    // should when inside of a button. Hack around that here.
+    font-size: 13px;
+  }
 }
