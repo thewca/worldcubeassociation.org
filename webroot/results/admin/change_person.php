@@ -45,21 +45,40 @@ function saveChoices () {
       return;
     }
     $person = array_shift( $persons );
+    $recordsMayHaveChanged = false;
 
     // do not allow country to be 'fixed' (affects records).
-    if($person['countryId'] != $chosenCountryId) {
-      noticeBox(false, "Cannot fix country - might affect records.");
-      return;
+    $oldCountryId = $person['countryId'];
+    if($oldCountryId != $chosenCountryId) {
+      $hasBeenACitizenOfThisCountryAlready = count( dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND countryId='$chosenCountryId'" ) ) > 0;
+      if( $hasBeenACitizenOfThisCountryAlready ) {
+        // If someone represented country A, and now represents country B, it's
+        // easy to tell which solves are which (results have a countryId).
+        // Fixing their country (B) to a new country C is easy to undo, just change
+        // all Bs to As. However, if someone accidentally fixes their country from B
+        // to A, then we cannot go back, as all their results are now for
+        // country A.
+        noticeBox(false, "Cannot change the country of someone to a country they have already represented in the past.");
+        return;
+      } else {
+        dbCommand( "UPDATE Results SET countryId='$chosenCountryId' WHERE personId='$chosenId' AND countryId='$oldCountryId'" );
+        $recordsMayHaveChanged = true;
+      }
     }
 
     $oldPersonName = $person['name'];
-    if( $oldPersonName != $chosenName )
+    if( $oldPersonName != $chosenName ) {
       dbCommand( "UPDATE Results SET personName='$chosenName' WHERE personId='$chosenId' AND personName='$oldPersonName'" );
+    }
 
     #--- Change the Persons table
     dbCommand( "UPDATE Persons SET name='$chosenName', countryId='$chosenCountryId', gender='$chosenGender', year='$chosenYear', month='$chosenMonth', day='$chosenDay' WHERE id='$chosenId' AND subId='1'" );
 
-    noticeBox( true, "Successfully fixed $chosenNameHtml($chosenId).");
+    $msg = "Successfully fixed $chosenNameHtml($chosenId).";
+    if( $recordsMayHaveChanged ) {
+      $msg .= " The change you made may have affected records, be sure to run <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.";
+    }
+    noticeBox( true, $msg );
 
   }
 
