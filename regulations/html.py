@@ -221,7 +221,7 @@ class html():
     ## Explanation labels
     self.replaceGuides(self.ANY,
                        r'<label>' + matchLabel1Slot,
-                       r'<span class="example \1 label">\1</span>'
+                       r'<span class="example \1 label label-default">\1</span>'
                        )
 
     # PDF
