@@ -1,7 +1,11 @@
 language: ruby
 rvm:
   - 2.2.3
-before_install: cd WcaOnRails/
+before_install:
+  - cd WcaOnRails/
+  - cp config/database.yml.travis config/database.yml
+before_script:
+  - bundle exec rake db:create
 sudo: false
 script:
   - rake
