@@ -175,6 +175,17 @@ function offerChoices () {
   #--- Submit
   echo "<tr><td>&nbsp;</td><td style='text-align:center'>";
   echo "<input type='submit' id='update' name='update' value='Update' style='background-color:#9F3;font-weight:bold' /> ";
+?>
+  <script>
+    (function() {
+      $('#update').click(function(e) {
+        if(!confirm("Are you sure that you want to \"update\", not \"fix\", the competitor's data? (see information above)")) {
+          e.preventDefault();
+        }
+      });
+    })();
+  </script>
+<?php
   echo "<input type='submit' id='fix' name='fix' value='Fix' style='background-color:#9F3;font-weight:bold' /> ";
   echo "</td></tr></table></form>";
 
