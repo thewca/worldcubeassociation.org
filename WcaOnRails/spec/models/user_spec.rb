@@ -88,9 +88,9 @@ RSpec.describe User, type: :model do
     dummy_user = FactoryGirl.create :user, wca_id: "2005FLEI01", encrypted_password: ""
     expect(dummy_user).to be_valid
     dummy_user.update_column(:avatar, "foo.jpg")
-    expect(dummy_user.read_attribute(:avatar)).to eq "foo.jpg"
+    expect(dummy_user.reload.read_attribute(:avatar)).to eq "foo.jpg"
 
-    user = FactoryGirl.create :user
+    user = FactoryGirl.create :user, wca_id: "2004FLEI01"
     expect(user).to be_valid
     user.wca_id = "2005FLEI01"
     user.save!

@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   # avatar.
   before_save :remove_dummy_account_when_wca_id_assigned
   def remove_dummy_account_when_wca_id_assigned
-    if wca_id && !wca_id_was
+    if wca_id_change
       dummy_account = User.where(wca_id: wca_id, encrypted_password: "").first
       if dummy_account
         _mounter(:avatar).uploader.override_column_value = dummy_account.read_attribute :avatar
