@@ -5,6 +5,12 @@ module ControllerMacros
       sign_in yield
     end
   end
+
+  def sign_out
+    before :each do
+      sign_out :user
+    end
+  end
 end
 
 module RequestMacros
