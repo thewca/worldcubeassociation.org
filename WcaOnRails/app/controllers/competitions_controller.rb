@@ -1,6 +1,7 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_admin_results_only, only: [:new, :index, :create, :post_announcement, :post_results, :admin_edit]
+  before_action :can_admin_results_only, only: [:index, :post_announcement, :post_results, :admin_edit]
+  before_action :can_create_competition_only, only: [:new, :create]
   before_action :can_manage_competition_only, only: [:edit, :update]
 
   private def can_manage_competition_only
@@ -8,6 +9,13 @@ class CompetitionsController < ApplicationController
     competition = Competition.find(params[:competition_id] || params[:id])
     unless current_user && current_user.can_manage_competition?(competition)
       flash[:danger] = "You are not allowed to manage this competition"
+      redirect_to root_url
+    end
+  end
+
+  private def can_create_competition_only
+    unless current_user && current_user.can_create_competition?
+      flash[:danger] = "You are not allowed to create competitions"
       redirect_to root_url
     end
   end
