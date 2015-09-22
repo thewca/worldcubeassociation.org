@@ -34,7 +34,7 @@ class CompetitionsController < ApplicationController
       # Creating a blank competition.
       @competition = Competition.new(new_competition_params)
       # Dummy data to pass validation.
-      @competition.name = @competition.cellName = "Placeholder #{Time.now.year}"
+      @competition.name = @competition.cellName = @competition.id.gsub(/([A-Z]|[0-9]+)/, ' \0').strip
     else
       # Cloning an existing competition!
       competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
