@@ -19,13 +19,10 @@ class CompetitionsController < ApplicationController
   def new
     @js_competitions = @competitions = competitions
     @competition = Competition.new
-
-    render layout: "application"
   end
 
   def index
     @js_competitions = @competitions = competitions
-    render layout: "application"
   end
 
   def create
@@ -44,7 +41,7 @@ class CompetitionsController < ApplicationController
       redirect_to edit_competition_path(@competition)
     else
       @js_competitions = @competitions = competitions
-      render 'new', layout: "application"
+      render 'new'
     end
   end
 
@@ -54,7 +51,7 @@ class CompetitionsController < ApplicationController
       flash[:success] = "Created new post"
       redirect_to post_path(@post.slug)
     else
-      render 'posts/new', layout: "application"
+      render 'posts/new'
     end
   end
 
@@ -79,7 +76,7 @@ class CompetitionsController < ApplicationController
   def post_results
     comp = Competition.find(params[:id])
     unless comp.results
-      render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe, layout: "application"
+      render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
       return
     end
 
@@ -88,7 +85,7 @@ class CompetitionsController < ApplicationController
       title = "Results of #{comp.name} posted"
       body = "Results of the [#{comp.name}](http://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
     elsif top333.length < 3
-      render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe, layout: "application"
+      render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
       return
     else
       title = "#{top333.first.personName} wins #{comp.name}"

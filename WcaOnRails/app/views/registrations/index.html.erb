@@ -1,113 +1,115 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
-<% provide(:container_type, "container-fluid") %>
+<div class="container-fluid">
+  <%= render partial: 'competitions/nav' %>
 
-<%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
-  <% [:pending, :accepted].each do |status| %>
-    <% if :pending == status %>
-      <h2>Waiting list</h2>
-    <% else %>
-      <h2>Approved registrations</h2>
-    <% end %>
-    <div class="table-responsive">
-      <table class="table registrations-table selectable-rows">
-        <thead>
-          <tr>
-            <th>WCA id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Country</th>
-            <th>Birthday</th>
-            <th>Guests</th>
-            <th>Comments</th>
-            <% @competition.events.each do |event| %>
-              <th>
-                <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-              </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% registrations = @competition.registrations.send(status) %>
-          <% registrations.order(id: :asc).each do |registration| %>
-            <% bip_options = { url: competition_registration_path(@competition, registration), ok_button: "Save", ok_button_class: "btn btn-success", cancel_button: "Cancel", cancel_button_class: "btn btn-warning" } %>
-            <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
-              <td>
-                <%= best_in_place registration, :personId, bip_options %>
-              </td>
-              <td>
-                <%= best_in_place registration, :name, bip_options %>
-              </td>
-              <td>
-                <span class='glyphicon glyphicon-pencil email-editor' data-registration-id='<%= registration.id %>'></span>
-                <%= best_in_place registration, :email, bip_options.merge(display_with: lambda { |email| "<a href='mailto:#{email}' target='_blank'>#{email}</a>".html_safe }, activator: ".email-editor[data-registration-id=#{registration.id}]") %>
-              </td>
-              <td>
-                <%= best_in_place registration, :countryId, bip_options %>
-              </td>
-              <td>
-                <%= best_in_place registration, :birthday, bip_options %>
-              </td>
-              <td class="guests" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
-                <%= registration.guests %>
-              </td>
-              <td class="comments" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
-                <%= registration.comments %>
-              </td>
+  <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
+    <% [:pending, :accepted].each do |status| %>
+      <% if :pending == status %>
+        <h2>Waiting list</h2>
+      <% else %>
+        <h2>Approved registrations</h2>
+      <% end %>
+      <div class="table-responsive">
+        <table class="table registrations-table selectable-rows">
+          <thead>
+            <tr>
+              <th>WCA id</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Country</th>
+              <th>Birthday</th>
+              <th>Guests</th>
+              <th>Comments</th>
               <% @competition.events.each do |event| %>
+                <th>
+                  <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+                </th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% registrations = @competition.registrations.send(status) %>
+            <% registrations.order(id: :asc).each do |registration| %>
+              <% bip_options = { url: competition_registration_path(@competition, registration), ok_button: "Save", ok_button_class: "btn btn-success", cancel_button: "Cancel", cancel_button_class: "btn btn-warning" } %>
+              <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
                 <td>
-                  <span class="event-checkbox">
-                    <label>
-                      <input type="checkbox" data-event-id="<%= event.id %>" data-registration-id="<%= registration.id %>" data-competition-id="<%= @competition.id %>" <%= registration.events.include?(event) ? "checked" : "" %>>
-                      <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                    </label>
-                  </span>
+                  <%= best_in_place registration, :personId, bip_options %>
+                </td>
+                <td>
+                  <%= best_in_place registration, :name, bip_options %>
+                </td>
+                <td>
+                  <span class='glyphicon glyphicon-pencil email-editor' data-registration-id='<%= registration.id %>'></span>
+                  <%= best_in_place registration, :email, bip_options.merge(display_with: lambda { |email| "<a href='mailto:#{email}' target='_blank'>#{email}</a>".html_safe }, activator: ".email-editor[data-registration-id=#{registration.id}]") %>
+                </td>
+                <td>
+                  <%= best_in_place registration, :countryId, bip_options %>
+                </td>
+                <td>
+                  <%= best_in_place registration, :birthday, bip_options %>
+                </td>
+                <td class="guests" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
+                  <%= registration.guests %>
+                </td>
+                <td class="comments" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
+                  <%= registration.comments %>
+                </td>
+                <% @competition.events.each do |event| %>
+                  <td>
+                    <span class="event-checkbox">
+                      <label>
+                        <input type="checkbox" data-event-id="<%= event.id %>" data-registration-id="<%= registration.id %>" data-competition-id="<%= @competition.id %>" <%= registration.events.include?(event) ? "checked" : "" %>>
+                        <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+                      </label>
+                    </span>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                <%= registrations.length %>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <% @competition.events.each do |event| %>
+                <td data-registration-count-event-id="<%= event.id %>">
+                  <%= registrations.to_a.count { |r| r.events.include?(event) } %>
                 </td>
               <% end %>
             </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>
-              <%= registrations.length %>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <% @competition.events.each do |event| %>
-              <td data-registration-count-event-id="<%= event.id %>">
-                <%= registrations.to_a.count { |r| r.events.include?(event) } %>
-              </td>
-            <% end %>
-          </tr>
-        </tfoot>
-      </table>
+          </tfoot>
+        </table>
+      </div>
+    <% end %>
+    <div id="registrations-actions" class="btn-group" role="group">
+      <a href="<%= competition_registrations_path(format: :csv) %>" class="btn btn-info">
+        <span class="glyphicon glyphicon-floppy-save"></span>
+        Export to CSV
+      </a>
+      <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
+        <span class="glyphicon glyphicon-envelope"></span>
+        Email
+      </a>
+      <button type="submit" class="btn btn-success selected-pending-registrations-actions" name="registrations_action" value="accept-selected">
+        <span class="glyphicon glyphicon-ok"></span>
+        Approve
+      </button>
+      <button type="submit" class="btn btn-warning selected-approved-registrations-actions" name="registrations_action" value="reject-selected">
+        <span class="glyphicon glyphicon-remove"></span>
+        Reject
+      </button>
+      <button type="submit" class="btn btn-danger selected-registrations-actions" name="registrations_action" value="delete-selected">
+        <span class="glyphicon glyphicon-trash"></span>
+        Delete
+      </button>
     </div>
   <% end %>
-  <div id="registrations-actions" class="btn-group" role="group">
-    <a href="<%= competition_registrations_path(format: :csv) %>" class="btn btn-info">
-      <span class="glyphicon glyphicon-floppy-save"></span>
-      Export to CSV
-    </a>
-    <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
-      <span class="glyphicon glyphicon-envelope"></span>
-      Email
-    </a>
-    <button type="submit" class="btn btn-success selected-pending-registrations-actions" name="registrations_action" value="accept-selected">
-      <span class="glyphicon glyphicon-ok"></span>
-      Approve
-    </button>
-    <button type="submit" class="btn btn-warning selected-approved-registrations-actions" name="registrations_action" value="reject-selected">
-      <span class="glyphicon glyphicon-remove"></span>
-      Reject
-    </button>
-    <button type="submit" class="btn btn-danger selected-registrations-actions" name="registrations_action" value="delete-selected">
-      <span class="glyphicon glyphicon-trash"></span>
-      Delete
-    </button>
-  </div>
-<% end %>
+</div>
