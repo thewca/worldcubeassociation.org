@@ -22,6 +22,10 @@ Rails.application.configure do
     port: root_url.port
   }
 
+  # Set up for mailcatcher (http://mailcatcher.me/)
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
