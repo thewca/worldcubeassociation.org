@@ -55,7 +55,7 @@ class CompetitionsController < ApplicationController
       else
         flash[:success] = "Successfully created new competition!"
       end
-      redirect_to admin_edit_competition_path(@competition)
+      redirect_to edit_competition_path(@competition)
     else
       @js_competitions = @competitions = competitions
       render 'new', layout: "application"
