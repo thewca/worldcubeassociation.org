@@ -2,9 +2,9 @@ class CompetitionsMailer < ApplicationMailer
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
-  #   en.competitions_mailer.notify_board_of_newly_confirmed_competition.subject
+  #   en.competitions_mailer.notify_board_of_confirmed_competition.subject
   #
-  def notify_board_of_newly_confirmed_competition(confirmer, competition)
+  def notify_board_of_confirmed_competition(confirmer, competition)
     @competition = competition
     mail(
       to: "board@worldcubeassociation.org",
