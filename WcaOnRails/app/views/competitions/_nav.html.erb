@@ -1,0 +1,15 @@
+<h1><%= yield(:title) %></h1>
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="<%= current_page?(edit_competition_path(@competition)) ? "active" : "" %>">
+    <%= link_to "Organizer view", edit_competition_path(@competition) %>
+  </li>
+  <% if current_user.can_admin_results? %>
+    <li role="presentation" class="<%= current_page?(admin_edit_competition_path(@competition)) ? "active" : "" %>">
+      <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
+    </li>
+  <% end %>
+  <li role="presentation" class="<%= current_page?(competition_registrations_path(@competition)) ? "active" : "" %>">
+    <%= link_to "Registration", competition_registrations_path(@competition) %>
+  </li>
+</ul>
