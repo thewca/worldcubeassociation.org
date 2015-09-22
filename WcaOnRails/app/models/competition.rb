@@ -7,9 +7,9 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
-  has_many :competition_delegates
+  has_many :competition_delegates, dependent: :delete_all
   has_many :delegates, through: :competition_delegates
-  has_many :competition_organizers
+  has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
 
   ENDS_WITH_YEAR_RE = /\A.* \d{4}\z/
