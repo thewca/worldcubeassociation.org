@@ -45,7 +45,7 @@ en:
         showPreregList: "Show registered competitors"
   competitions:
     edit:
-      confirmation_message: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Be sure to send the Board a message so they make the competition public."
+      confirmation_message: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified."
   errors:
     messages:
       wrong_size: "is the wrong size (should be %{file_size})"
