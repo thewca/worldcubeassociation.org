@@ -59,6 +59,7 @@ wrapper_mappings: {
 
   <% if @admin_view || !@competition.isConfirmed? %>
     <h2>General information</h2>
+    <%= f.input :id %>
     <%= f.input :name %>
     <%= f.input :cellName %>
 
