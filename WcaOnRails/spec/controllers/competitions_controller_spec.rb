@@ -126,7 +126,7 @@ describe CompetitionsController do
     locked_competition.organizers << user2
     locked_competition.organizers << user3
     post :create, competition: { id: "Test2015", competition_id_to_clone: locked_competition.id }
-    expect(response).to redirect_to admin_edit_competition_path("Test2015")
+    expect(response).to redirect_to edit_competition_path("Test2015")
     new_comp = assigns(:competition)
     expect(new_comp.id).to eq "Test2015"
 
