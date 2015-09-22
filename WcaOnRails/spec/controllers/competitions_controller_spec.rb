@@ -95,12 +95,12 @@ describe CompetitionsController do
 
     context 'when signed in as an admin' do
       it 'creates a new competition' do
-        post :create, competition: { id: "TestComp2015" }
-        expect(response).to redirect_to edit_competition_path("TestComp2015")
+        post :create, competition: { id: "FatBoyXPC2015" }
+        expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         new_comp = assigns(:competition)
-        expect(new_comp.id).to eq "TestComp2015"
-        expect(new_comp.name).to eq "Test Comp 2015"
-        expect(new_comp.cellName).to eq "Test Comp 2015"
+        expect(new_comp.id).to eq "FatBoyXPC2015"
+        expect(new_comp.name).to eq "Fat Boy XPC 2015"
+        expect(new_comp.cellName).to eq "Fat Boy XPC 2015"
       end
     end
 
