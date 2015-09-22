@@ -110,6 +110,7 @@ describe CompetitionsController do
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
+        expect(new_comp.delegates).to include subject.current_user
       end
     end
   end
