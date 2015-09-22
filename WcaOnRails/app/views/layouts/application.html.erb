@@ -112,12 +112,13 @@
                   <li><%= link_to "Manage users", users_path %></li>
                 <% end %>
 
-                <% if current_user.delegate_status.present? %>
+                <% if current_user.any_kind_of_delegate? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Delegate
                   </li>
                   <li><%= link_to "Panel", delegate_path %></li>
+                  <li><%= link_to "New competition", new_competition_path %></li>
                 <% end %>
 
                 <% if current_user.can_admin_results? %>
