@@ -212,6 +212,7 @@ class CompetitionsController < ApplicationController
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
+        :id,
         :name,
         :cellName,
         :countryId,

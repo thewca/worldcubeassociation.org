@@ -5,7 +5,7 @@
 
   <%= simple_form_for @competition, html: { class: 'form-horizontal new-competition' }  do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <%= f.input :id, required: true, hint: "No spaces permitted. Must be capitalized, and must end in a year." %>
+    <%= f.input :id, required: true %>
     <%= f.input :competition_id_to_clone, as: :competition_id %>
 
     <button type="submit" class="btn btn-success"></button>

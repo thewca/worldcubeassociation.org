@@ -10,8 +10,12 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    labels:
+      competition:
+        id: "ID"
     hints:
       competition:
+        id: "No spaces permitted. Must be capitalized, and must end in a year. (e.g., Euro2006)"
         name: "The full name of the competition including the year at the end (e.g., European Rubik's Cube Championship 2006)."
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
