@@ -48,6 +48,9 @@ class CompetitionsController < ApplicationController
         @competition.errors[:competition_id_to_clone] = "invalid"
       end
     end
+    if current_user.any_kind_of_delegate?
+      @competition.delegates << current_user
+    end
 
     if @competition.errors.size == 0 && @competition.save
       if competition_to_clone
