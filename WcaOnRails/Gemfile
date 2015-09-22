@@ -38,6 +38,8 @@ gem 'carrierwave-crop'
 gem 'mini_magick'
 gem 'system'
 gem 'mysql2'
+gem 'premailer-rails'
+gem 'nokogiri'
 
 group :development, :test do
   gem 'rspec-rails'
