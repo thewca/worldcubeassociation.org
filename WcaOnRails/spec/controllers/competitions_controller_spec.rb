@@ -56,11 +56,62 @@ describe CompetitionsController do
     expect(competition.reload.delegates).to eq delegates
   end
 
-  it 'creates a new competition' do
-    post :create, competition: { id: "Test2015" }
-    expect(response).to redirect_to admin_edit_competition_path("Test2015")
-    new_comp = assigns(:competition)
-    expect(new_comp.id).to eq "Test2015"
+  describe 'GET #new' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :new
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      it 'shows the competition creation form' do
+        get :new
+        expect(response).to render_template :new
+      end
+    end
+
+    context 'when signed in as an delegate' do
+      sign_in { FactoryGirl.create :delegate }
+
+      it 'shows the competition creation form' do
+        get :new
+        expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        post :create, competition: { id: "Test2015" }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      it 'creates a new competition' do
+        post :create, competition: { id: "Test2015" }
+        expect(response).to redirect_to edit_competition_path("Test2015")
+        new_comp = assigns(:competition)
+        expect(new_comp.id).to eq "Test2015"
+      end
+    end
+
+    context 'when signed in as an delegate' do
+      sign_in { FactoryGirl.create :delegate }
+
+      it 'creates a new competition' do
+        post :create, competition: { id: "Test2015" }
+        expect(response).to redirect_to edit_competition_path("Test2015")
+        new_comp = assigns(:competition)
+        expect(new_comp.id).to eq "Test2015"
+      end
+    end
   end
 
   it 'clones a new competition' do
