@@ -34,7 +34,7 @@ class CompetitionsController < ApplicationController
       # Creating a blank competition.
       @competition = Competition.new(new_competition_params)
       # Split competition id around CamelCaseStuff2015 -> Camel Case Stuff 2015
-      @competition.name = @competition.cellName = @competition.id.gsub(/([A-Z]|[0-9]+)/, ' \0').strip
+      @competition.name = @competition.cellName = @competition.id.gsub(/([A-Z]+|[0-9]+)/, ' \0').strip
     else
       # Cloning an existing competition!
       competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
