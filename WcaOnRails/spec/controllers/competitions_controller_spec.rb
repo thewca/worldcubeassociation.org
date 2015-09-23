@@ -142,6 +142,18 @@ describe CompetitionsController do
         patch :update, id: competition, competition: { name: competition.name }
         expect(CompetitionDelegate.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
+
+      it "changing the competition id also changes the competitionId of registrations, results, and scrambles" do
+        r1 = FactoryGirl.create(:result, competitionId: competition.id)
+        r2 = FactoryGirl.create(:result, competitionId: competition.id)
+        reg1 = FactoryGirl.create(:registration, competitionId: competition.id)
+        scramble1 = FactoryGirl.create(:scramble, competitionId: competition.id)
+        patch :update, id: competition, competition: { id: "NewID2015" }
+        expect(r1.reload.competitionId).to eq "NewID2015"
+        expect(r2.reload.competitionId).to eq "NewID2015"
+        expect(reg1.reload.competitionId).to eq "NewID2015"
+        expect(scramble1.reload.competitionId).to eq "NewID2015"
+      end
     end
 
     context 'when signed in as organizer' do
