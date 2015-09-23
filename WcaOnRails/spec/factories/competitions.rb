@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :competition do
-    name "Foo Comp 2015"
+    sequence(:name) { |n| "Foo Comp #{n} 2015" }
+
     cityName "San Francisco"
     countryId "USA"
     information "Information!"

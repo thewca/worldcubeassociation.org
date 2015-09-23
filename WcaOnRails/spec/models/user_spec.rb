@@ -194,4 +194,32 @@ RSpec.describe User, type: :model do
     expect(user.saved_pending_avatar_crop_w).to eq nil
     expect(user.saved_pending_avatar_crop_h).to eq nil
   end
+
+  describe "#delegated_competitions" do
+    let(:delegate) { FactoryGirl.create :delegate }
+    let(:other_delegate) { FactoryGirl.create :delegate }
+    let!(:confirmed_competition1) { FactoryGirl.create :competition, delegates: [delegate] }
+    let!(:confirmed_competition2) { FactoryGirl.create :competition, delegates: [delegate] }
+    let!(:unconfirmed_competition1) { FactoryGirl.create :competition, delegates: [delegate] }
+    let!(:unconfirmed_competition2) { FactoryGirl.create :competition, delegates: [delegate] }
+    let!(:other_delegate_unconfirmed_competition) { FactoryGirl.create :competition, delegates: [other_delegate] }
+
+    it "sees delegated competitions" do
+      expect(delegate.delegated_competitions).to eq [
+        confirmed_competition1,
+        confirmed_competition2,
+        unconfirmed_competition1,
+        unconfirmed_competition2,
+      ]
+    end
+  end
+
+  describe "#organized_competitions" do
+    let(:user) { FactoryGirl.create :user }
+    let(:competition) { FactoryGirl.create :competition, organizers: [user] }
+
+    it "sees organized competitions" do
+      expect(user.organized_competitions).to eq [competition]
+    end
+  end
 end

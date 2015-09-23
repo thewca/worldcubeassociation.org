@@ -1,8 +1,10 @@
 require "fileutils"
 
 class User < ActiveRecord::Base
-  has_many :delegated_competitions, through: :competition_delegates
-  has_many :organized_competitions, through: :competition_organizers
+  has_many :competition_delegates, foreign_key: "delegate_id"
+  has_many :delegated_competitions, through: :competition_delegates, source: "competition"
+  has_many :competition_organizers, foreign_key: "organizer_id"
+  has_many :organized_competitions, through: :competition_organizers, source: "competition"
 
   strip_attributes only: [:wca_id]
 
