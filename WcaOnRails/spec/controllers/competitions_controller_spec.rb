@@ -60,6 +60,7 @@ describe CompetitionsController do
       it 'creates a new competition' do
         post :create, competition: { name: "Test 2015" }
         expect(response).to redirect_to edit_competition_path("Test2015")
+        expect(flash[:success]).to eq "Successfully created new competition!"
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
         expect(new_comp.delegates).to include subject.current_user
@@ -77,6 +78,7 @@ describe CompetitionsController do
         competition.organizers << user3
         post :create, competition: { name: "Test 2015", competition_id_to_clone: competition.id }
         expect(response).to redirect_to edit_competition_path("Test2015")
+        expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
 
