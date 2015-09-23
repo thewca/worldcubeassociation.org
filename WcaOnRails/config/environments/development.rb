@@ -15,7 +15,12 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  root_url = URI.parse(ENVied.ROOT_URL)
+  config.action_mailer.default_url_options = {
+    protocol: root_url.scheme,
+    host: root_url.host,
+    port: root_url.port
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
