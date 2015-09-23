@@ -95,12 +95,12 @@ describe CompetitionsController do
 
     context 'when signed in as an admin' do
       it 'creates a new competition' do
-        post :create, competition: { id: "FatBoyXPC2015" }
+        post :create, competition: { name: "FatBoyXPC 2015" }
         expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "FatBoyXPC2015"
-        expect(new_comp.name).to eq "Fat Boy XPC 2015"
-        expect(new_comp.cellName).to eq "Fat Boy XPC 2015"
+        expect(new_comp.name).to eq "FatBoyXPC 2015"
+        expect(new_comp.cellName).to eq "FatBoyXPC 2015"
       end
     end
 
@@ -109,7 +109,7 @@ describe CompetitionsController do
 
       render_views
       it 'creates a new competition' do
-        post :create, competition: { id: "Test2015" }
+        post :create, competition: { name: "Test 2015" }
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
@@ -125,7 +125,7 @@ describe CompetitionsController do
     locked_competition.delegates << user1
     locked_competition.organizers << user2
     locked_competition.organizers << user3
-    post :create, competition: { id: "Test2015", competition_id_to_clone: locked_competition.id }
+    post :create, competition: { name: "Test 2015", competition_id_to_clone: locked_competition.id }
     expect(response).to redirect_to edit_competition_path("Test2015")
     new_comp = assigns(:competition)
     expect(new_comp.id).to eq "Test2015"
@@ -133,7 +133,7 @@ describe CompetitionsController do
     new_comp_json = new_comp.as_json
     # When cloning a competition, we don't want to clone its showAtAll and isConfirmed
     # attributes.
-    competition_json = locked_competition.as_json.merge("id" => "Test2015", "showAtAll" => false, "isConfirmed" => false)
+    competition_json = locked_competition.as_json.merge("id" => "Test2015", "name" => "Test 2015", "cellName" => "Test 2015", "showAtAll" => false, "isConfirmed" => false)
     expect(new_comp_json).to eq competition_json
 
     # Cloning a competition should clone its delegates and organizers.

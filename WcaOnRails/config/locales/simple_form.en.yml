@@ -15,7 +15,6 @@ en:
         id: "id"
     hints:
       competition:
-        id: "No spaces permitted. Must be capitalized, and must end in a year. (e.g., Euro2006)"
         competition_id_to_clone: "Optional. Can save you some typing if you're running a similar competition to a past competition."
         name: "The full name of the competition including the year at the end (e.g., European Rubik's Cube Championship 2006)."
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
