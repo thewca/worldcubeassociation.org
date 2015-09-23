@@ -30,29 +30,14 @@ class CompetitionsController < ApplicationController
 
   def create
     new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
-    if new_competition_params[:competition_id_to_clone].blank?
-      # Creating a blank competition.
-      @competition = Competition.new(new_competition_params)
-    else
-      # Cloning an existing competition!
-      competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
-      if competition_to_clone
-        # Don't clone showAtAll, isConfirmed, id, name, and cellName.
-        @competition = Competition.new(competition_to_clone.as_json.merge("showAtAll" => false, "isConfirmed" => false, "id" => nil, "name" => nil, "cellName" => nil).merge(new_competition_params))
-        @competition.organizers = competition_to_clone.organizers
-        @competition.delegates = competition_to_clone.delegates
-      else
-        @competition = Competition.new(new_competition_params)
-        @competition.errors[:competition_id_to_clone] = "invalid"
-      end
-    end
+    @competition = Competition.new(new_competition_params)
     if current_user.any_kind_of_delegate?
       @competition.delegates << current_user
     end
 
-    if @competition.errors.size == 0 && @competition.save
-      if competition_to_clone
-        flash[:success] = "Successfully cloned #{competition_to_clone.id}!"
+    if @competition.save
+      if @competition.competition_id_to_clone
+        flash[:success] = "Successfully cloned #{@competition.competition_id_to_clone}!"
       else
         flash[:success] = "Successfully created new competition!"
       end
