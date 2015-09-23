@@ -37,6 +37,7 @@ gem 'carrierwave'
 gem 'carrierwave-crop'
 gem 'mini_magick'
 gem 'system'
+gem 'mysql2'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -44,7 +45,6 @@ group :development, :test do
   gem 'faker'
 
   gem 'byebug'
-  gem 'sqlite3'
   gem 'web-console'
 end
 
@@ -65,6 +65,5 @@ end
 
 group :production do
   gem 'unicorn'
-  gem 'mysql2'
   gem 'newrelic_rpm'
 end
