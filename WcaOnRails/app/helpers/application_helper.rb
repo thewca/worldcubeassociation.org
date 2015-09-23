@@ -30,4 +30,21 @@ module ApplicationHelper
   def filename_to_url(filename)
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
+
+  def notifications_for_user(user)
+    notifications = []
+    user.delegated_competitions.where(isConfirmed: false).each do |unconfirmed_competition|
+      notifications << {
+        text: "#{unconfirmed_competition.name} is not confirmed",
+        url: edit_competition_path(unconfirmed_competition),
+      }
+    end
+    user.organized_competitions.where(isConfirmed: false).each do |unconfirmed_competition|
+      notifications << {
+        text: "#{unconfirmed_competition.name} is not confirmed",
+        url: edit_competition_path(unconfirmed_competition),
+      }
+    end
+    notifications
+  end
 end

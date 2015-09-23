@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   get 'delegate/crash-course' => 'delegates_panel#crash_course'
   get 'delegate/crash-course/edit' => 'delegates_panel#edit_crash_course'
   patch 'delegate/crash-course' => 'delegates_panel#update_crash_course'
+  resources :notifications, only: [:index]
 
   root 'posts#index'
   resources :posts
