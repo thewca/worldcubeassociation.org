@@ -68,7 +68,7 @@ class RegistrationsController < CompetitionsController
       :personId,
       :email,
       :name,
-      :country,
+      :countryId,
       :birthday,
       :guests,
       :comments,
