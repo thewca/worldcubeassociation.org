@@ -39,6 +39,33 @@ class Competition < ActiveRecord::Base
     self.eventSpecs ||= ""
   end
 
+  before_validation :create_id_and_cell_name
+  def create_id_and_cell_name
+    if id.blank?
+      # Generate competition id from name
+      self.id = case_preserving_parametrize(name, "")
+    end
+    if cellName.blank?
+      self.cellName = name
+    end
+  end
+  # A copy of http://apidock.com/rails/ActiveSupport/Inflector/parameterize that
+  # doesn't downcase everything at the end.
+  def case_preserving_parametrize(string, sep='-')
+    # replace accented chars with their ascii equivalents
+    parameterized_string = ActiveSupport::Inflector.transliterate(string)
+    # Turn unwanted chars into the separator
+    parameterized_string.gsub!(/[^a-z0-9\-_]+/i, sep)
+    unless sep.nil? || sep.empty?
+      re_sep = Regexp.escape(sep)
+      # No more than one of the separator in a row.
+      parameterized_string.gsub!(/#{re_sep}{2,}/, sep)
+      # Remove leading/trailing separator.
+      parameterized_string.gsub!(/^#{re_sep}|#{re_sep}$/i, '')
+    end
+    parameterized_string
+  end
+
   attr_accessor :competition_id_to_clone
 
   attr_writer :delegate_ids, :organizer_ids

@@ -29,18 +29,16 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    new_competition_params = params.require(:competition).permit(:id, :competition_id_to_clone)
+    new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
     if new_competition_params[:competition_id_to_clone].blank?
       # Creating a blank competition.
       @competition = Competition.new(new_competition_params)
-      # Split competition id around CamelCaseStuff2015 -> Camel Case Stuff 2015
-      @competition.name = @competition.cellName = @competition.id.gsub(/([A-Z]+|[0-9]+)/, ' \0').strip
     else
       # Cloning an existing competition!
       competition_to_clone = Competition.find_by_id(new_competition_params[:competition_id_to_clone])
       if competition_to_clone
-        # Don't clone the showAtAll or isConfirmed bits.
-        @competition = Competition.new(competition_to_clone.as_json.merge(new_competition_params).merge(showAtAll: false, isConfirmed: false))
+        # Don't clone showAtAll, isConfirmed, id, name, and cellName.
+        @competition = Competition.new(competition_to_clone.as_json.merge("showAtAll" => false, "isConfirmed" => false, "id" => nil, "name" => nil, "cellName" => nil).merge(new_competition_params))
         @competition.organizers = competition_to_clone.organizers
         @competition.delegates = competition_to_clone.delegates
       else
