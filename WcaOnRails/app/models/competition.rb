@@ -97,6 +97,19 @@ class Competition < ActiveRecord::Base
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
+  # This is kind of scary. Whenever a competition's id changes, We need to
+  # remember all the places in our database that refer to competition ids, and
+  # update them.. We can get rid of all this once we're done with
+  # https://github.com/cubing/worldcubeassociation.org/issues/91.
+  after_save :update_results_when_id_changes
+  def update_results_when_id_changes
+    if id_change
+      Result.where(competitionId: id_was).update_all(competitionId: id)
+      Registration.where(competitionId: id_was).update_all(competitionId: id)
+      Scramble.where(competitionId: id_was).update_all(competitionId: id)
+    end
+  end
+
   attr_accessor :editing_user_id
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
