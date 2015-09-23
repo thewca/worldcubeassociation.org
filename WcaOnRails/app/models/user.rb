@@ -207,7 +207,7 @@ class User < ActiveRecord::Base
       fields << :senior_delegate_id
       fields << :region
     end
-    if admin? || !delegate_status.blank?
+    if admin? || any_kind_of_delegate?
       fields << :name
       fields << :wca_id
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
