@@ -149,6 +149,30 @@ RSpec.describe Competition do
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
 
+  describe "when changing the id of a competition" do
+    let(:competition) { FactoryGirl.create(:competition) }
+
+    it "changes the competitionId of registrations" do
+      reg1 = FactoryGirl.create(:registration, competitionId: competition.id)
+      competition.update_attribute(:id, "NewID2015")
+      expect(reg1.reload.competitionId).to eq "NewID2015"
+    end
+
+    it "changes the competitionId of results" do
+      r1 = FactoryGirl.create(:result, competitionId: competition.id)
+      r2 = FactoryGirl.create(:result, competitionId: competition.id)
+      competition.update_attribute(:id, "NewID2015")
+      expect(r1.reload.competitionId).to eq "NewID2015"
+      expect(r2.reload.competitionId).to eq "NewID2015"
+    end
+
+    it "changes the competitionId of scrambles" do
+      scramble1 = FactoryGirl.create(:scramble, competitionId: competition.id)
+      competition.update_attribute(:id, "NewID2015")
+      expect(scramble1.reload.competitionId).to eq "NewID2015"
+    end
+  end
+
   describe "when deleting a competition" do
     it "clears delegates" do
       delegate1 = FactoryGirl.create(:delegate)

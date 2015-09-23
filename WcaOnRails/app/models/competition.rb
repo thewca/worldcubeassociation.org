@@ -99,7 +99,7 @@ class Competition < ActiveRecord::Base
 
   # This is kind of scary. Whenever a competition's id changes, We need to
   # remember all the places in our database that refer to competition ids, and
-  # update them.. We can get rid of all this once we're done with
+  # update them. We can get rid of all this once we're done with
   # https://github.com/cubing/worldcubeassociation.org/issues/91.
   after_save :update_results_when_id_changes
   def update_results_when_id_changes
