@@ -58,7 +58,7 @@ describe CompetitionsController do
       end
 
       it 'creates a new competition' do
-        post :create, competition: { name: "Test 2015" }
+        post :create, competition: { name: "Test 2015", competition_id_to_clone: "" }
         expect(response).to redirect_to edit_competition_path("Test2015")
         expect(flash[:success]).to eq "Successfully created new competition!"
         new_comp = assigns(:competition)

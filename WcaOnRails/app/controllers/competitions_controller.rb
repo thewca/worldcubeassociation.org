@@ -36,7 +36,7 @@ class CompetitionsController < ApplicationController
     end
 
     if @competition.save
-      if @competition.competition_id_to_clone
+      if @competition.competition_id_to_clone.present?
         flash[:success] = "Successfully cloned #{@competition.competition_id_to_clone}!"
       else
         flash[:success] = "Successfully created new competition!"
