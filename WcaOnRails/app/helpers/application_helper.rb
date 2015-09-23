@@ -45,6 +45,14 @@ module ApplicationHelper
         url: edit_competition_path(unconfirmed_competition),
       }
     end
+    if user.board_member?
+      Competition.where(isConfirmed: true, showAtAll: false).each do |competition|
+        notifications << {
+          text: "#{competition.name} is waiting to be announced",
+          url: admin_edit_competition_path(competition),
+        }
+      end
+    end
     notifications
   end
 end
