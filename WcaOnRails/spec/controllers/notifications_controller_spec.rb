@@ -29,5 +29,27 @@ RSpec.describe NotificationsController, type: :controller do
         ]
       end
     end
+
+    context "when signed in as a board member" do
+      let(:board_member) { FactoryGirl.create :board_member }
+      let!(:unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: false }
+      let!(:confirmed_competition) { FactoryGirl.create :competition, isConfirmed: true, showAtAll: false }
+      let!(:visible_confirmed_competition) { FactoryGirl.create :competition, isConfirmed: true, showAtAll: true }
+      let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: true }
+      before :each do
+        sign_in board_member
+      end
+
+      it "shows confirmed, but not visible competitions" do
+        get :index
+        notifications = assigns(:notifications)
+        expect(notifications).to eq [
+          {
+            text: "#{confirmed_competition.name} is waiting to be announced",
+            url: admin_edit_competition_path(confirmed_competition),
+          }
+        ]
+      end
+    end
   end
 end

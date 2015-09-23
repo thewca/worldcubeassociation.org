@@ -4,7 +4,7 @@
   <h1><%= yield(:title) %></h1>
 
   <div class="list-group">
-    <% unless notifications_for_user(current_user).each do |notification| %>
+    <% unless @notifications.each do |notification| %>
       <%= link_to notification[:text], notification[:url], class: "list-group-item" %>
     <% end.length > 0 %>
       You're all caught up.
