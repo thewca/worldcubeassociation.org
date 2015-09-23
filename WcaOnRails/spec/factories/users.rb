@@ -12,6 +12,10 @@ FactoryGirl.define do
       admin true
     end
 
+    factory :results_team do
+      results_team true
+    end
+
     factory :delegate do
       delegate_status "delegate"
     end
