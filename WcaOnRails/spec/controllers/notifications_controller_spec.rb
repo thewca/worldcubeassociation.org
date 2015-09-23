@@ -28,6 +28,22 @@ RSpec.describe NotificationsController, type: :controller do
           }
         ]
       end
+
+      it "doesn't duplicate competitions which we are both delegating and organizing" do
+        # Add ourselves as an organizer in addition to being a delegate
+        # for this competition.
+        unconfirmed_competition.organizers << delegate
+        unconfirmed_competition.save
+
+        get :index
+        notifications = assigns(:notifications)
+        expect(notifications).to eq [
+          {
+            text: "#{unconfirmed_competition.name} is not confirmed",
+            url: edit_competition_path(unconfirmed_competition),
+          }
+        ]
+      end
     end
 
     context "when signed in as a board member" do

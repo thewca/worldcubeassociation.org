@@ -33,13 +33,9 @@ module ApplicationHelper
 
   def notifications_for_user(user)
     notifications = []
-    user.delegated_competitions.where(isConfirmed: false).each do |unconfirmed_competition|
-      notifications << {
-        text: "#{unconfirmed_competition.name} is not confirmed",
-        url: edit_competition_path(unconfirmed_competition),
-      }
-    end
-    user.organized_competitions.where(isConfirmed: false).each do |unconfirmed_competition|
+    # Be careful to not show a competition twice if we're both organizing and delegating it.
+    unconfirmed_competitions = (user.delegated_competitions.where(isConfirmed: false) + user.organized_competitions.where(isConfirmed: false)).uniq &:id
+    unconfirmed_competitions.each do |unconfirmed_competition|
       notifications << {
         text: "#{unconfirmed_competition.name} is not confirmed",
         url: edit_competition_path(unconfirmed_competition),
