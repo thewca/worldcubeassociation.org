@@ -65,7 +65,7 @@ describe CompetitionsController do
         expect(new_comp.delegates).to include subject.current_user
       end
 
-      it 'clones a new competition' do
+      it 'clones a competition' do
         # First, lock the competition
         competition.update_attribute(:isConfirmed, true)
 
@@ -91,6 +91,13 @@ describe CompetitionsController do
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq (competition.delegates + [delegate]).sort_by(&:id)
+      end
+
+      it 'clones an invalid competition' do
+        post :create, competition: { name: "Test 2015", competition_id_to_clone: "invalidcompetitionid" }
+        expect(response).to render_template(:new)
+        invalid_competition = assigns(:competition)
+        expect(invalid_competition.errors.messages[:competition_id_to_clone]).to eq ["invalid"]
       end
     end
   end
