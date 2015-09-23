@@ -2,8 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Competition do
   it "defines a valid competition" do
-    competition = FactoryGirl.build :competition
+    competition = FactoryGirl.build :competition, name: "Foo Test 2015"
     expect(competition).to be_valid
+    expect(competition.id).to eq "FooTest2015"
+    expect(competition.name).to eq "Foo Test 2015"
+    expect(competition.cellName).to eq "Foo Test 2015"
   end
 
   it "saves without losing data" do
