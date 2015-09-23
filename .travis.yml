@@ -1,9 +1,10 @@
 language: ruby
 rvm:
   - 2.2.3
+env:
+  - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
 before_install:
   - cd WcaOnRails/
-  - cp config/database.yml.travis config/database.yml
 before_script:
   - bundle exec rake db:create
 sudo: false

@@ -1,9 +1,0 @@
-test:
-  adapter: mysql2
-  pool: 5
-  timeout: 5000
-  encoding: utf8
-  host: 127.0.0.1
-  port: 3306
-  username: root
-  database: wca_test
