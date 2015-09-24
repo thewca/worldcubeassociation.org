@@ -4,7 +4,6 @@
   <h1><%= yield(:title) %></h1>
 
   <%= simple_form_for @competition, html: { class: 'form-horizontal new-competition' }  do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
     <%= f.input :name, required: true %>
     <%= f.input :competition_id_to_clone, as: :competition_id %>
 

@@ -12,14 +12,16 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
 
-  ENDS_WITH_YEAR_RE = /\A.* \d{4}\z/
+  ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
-  validates :id, presence: true, uniqueness: true, length: { maximum: 32 },
+  MAX_ID_LENGTH = 32
+  validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }
   validates :name, length: { maximum: 50 },
                    format: { with: ENDS_WITH_YEAR_RE }
-  validates :cellName, length: { maximum: 45 },
+  MAX_CELL_NAME_LENGTH = 45
+  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: ENDS_WITH_YEAR_RE }
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
@@ -64,29 +66,22 @@ class Competition < ActiveRecord::Base
 
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
-    if id.blank?
-      # Generate competition id from name
-      self.id = case_preserving_parametrize(name, "")
+    m = ENDS_WITH_YEAR_RE.match(name)
+    if m
+      name_without_year = m[1]
+      year = m[2]
+      if id.blank?
+        # Generate competition id from name
+        # By replacing accented chars with their ascii equivalents, and then
+        # removing everything that isn't a digit or a character.
+        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
+        self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+      end
+      if cellName.blank?
+        year = " " + year
+        self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+      end
     end
-    if cellName.blank?
-      self.cellName = name
-    end
-  end
-  # A copy of http://apidock.com/rails/ActiveSupport/Inflector/parameterize that
-  # doesn't downcase everything at the end.
-  def case_preserving_parametrize(string, sep='-')
-    # replace accented chars with their ascii equivalents
-    parameterized_string = ActiveSupport::Inflector.transliterate(string)
-    # Turn unwanted chars into the separator
-    parameterized_string.gsub!(/[^a-z0-9\-_]+/i, sep)
-    unless sep.nil? || sep.empty?
-      re_sep = Regexp.escape(sep)
-      # No more than one of the separator in a row.
-      parameterized_string.gsub!(/#{re_sep}{2,}/, sep)
-      # Remove leading/trailing separator.
-      parameterized_string.gsub!(/^#{re_sep}|#{re_sep}$/i, '')
-    end
-    parameterized_string
   end
 
   attr_accessor :competition_id_to_clone
