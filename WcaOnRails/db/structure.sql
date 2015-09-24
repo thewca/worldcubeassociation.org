@@ -592,12 +592,12 @@ CREATE TABLE `posts` (
   `author_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `world_readable` tinyint(1) DEFAULT NULL,
+  `world_readable` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_posts_on_slug` (`slug`),
   KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
   KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -672,7 +672,7 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-23 21:47:38
+-- Dump completed on 2015-09-24  8:57:46
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -728,4 +728,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150908183742');
 INSERT INTO schema_migrations (version) VALUES ('20150924011143');
 
 INSERT INTO schema_migrations (version) VALUES ('20150924011919');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924155057');
 

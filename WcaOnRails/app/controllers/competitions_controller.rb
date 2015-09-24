@@ -86,7 +86,7 @@ class CompetitionsController < ApplicationController
     unless comp.website.blank?
       body += " Check out the [#{comp.name} website](#{comp.website_url}) for more information and registration.";
     end
-    @post = Post.new(title: title, body: body, author: current_user, sticky: false)
+    @post = Post.new(title: title, body: body, author: current_user, world_readable: true)
     post_post(@post)
   end
 
@@ -160,7 +160,7 @@ class CompetitionsController < ApplicationController
         body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
-    post = Post.new(title: title, body: body, author: current_user, sticky: false)
+    post = Post.new(title: title, body: body, author: current_user, world_readable: true)
     post_post(post)
   end
 
