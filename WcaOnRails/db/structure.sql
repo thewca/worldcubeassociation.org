@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.26, for osx10.10 (x86_64)
+-- MySQL dump 10.15  Distrib 10.0.21-MariaDB, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: wca_development
 -- ------------------------------------------------------
--- Server version	5.6.26
+-- Server version	10.0.21-MariaDB-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -588,13 +588,16 @@ CREATE TABLE `posts` (
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `body` text COLLATE utf8_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `sticky` tinyint(1) NOT NULL,
+  `sticky` tinyint(1) NOT NULL DEFAULT '0',
   `author_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `world_readable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_posts_on_slug` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `index_posts_on_slug` (`slug`),
+  KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
+  KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -657,7 +660,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -669,7 +672,7 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-20  3:31:25
+-- Dump completed on 2015-09-23 21:47:38
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -721,4 +724,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150903083847');
 INSERT INTO schema_migrations (version) VALUES ('20150904062512');
 
 INSERT INTO schema_migrations (version) VALUES ('20150908183742');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924011143');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924011919');
 

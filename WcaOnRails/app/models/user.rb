@@ -165,12 +165,24 @@ class User < ActiveRecord::Base
     end
   end
 
+  def any_kind_of_delegate?
+    delegate_status.present?
+  end
+
   def can_edit_users?
-    return admin? || board_member? || delegate_status != nil
+    return admin? || board_member? || any_kind_of_delegate?
   end
 
   def can_admin_results?
     return admin? || board_member? || results_team?
+  end
+
+  def can_access_delegate_only_areas?
+    return admin? || board_member? || any_kind_of_delegate?
+  end
+
+  def can_access_board_members_only_areas?
+    return admin? || board_member?
   end
 
   def can_manage_competition?(competition)
