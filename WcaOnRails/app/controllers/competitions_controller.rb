@@ -182,7 +182,7 @@ class CompetitionsController < ApplicationController
     elsif @competition.update_attributes(competition_params)
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_now
-        flash[:success] = "Successfully confirmed competition. Check your email, and wait for the Board to confirm it!"
+        flash[:success] = "Successfully confirmed competition. Check your email, and wait for the Board to announce it!"
       else
         flash[:success] = "Successfully saved competition"
       end
