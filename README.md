@@ -10,10 +10,14 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `git submodule update --init --recursive` - Initialize submodules.
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
 
-## Run
+## Run in Vagrant (easier and gets everything working)
 - `vagrant up noregs` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:2331](http://localhost:2331).
   - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
+
+## Run locally ruby (lightweight, but only run the rails portions of the site)
+- We don't support development with sqlite3, you'll need to set up MySQL.
+- [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
 
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
