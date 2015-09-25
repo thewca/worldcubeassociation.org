@@ -5,6 +5,8 @@ describe CompetitionsController do
 
   describe 'GET #new' do
     context 'when not signed in' do
+      sign_out
+
       it 'redirects to the sign in page' do
         get :new
         expect(response).to redirect_to new_user_session_path
@@ -23,26 +25,6 @@ describe CompetitionsController do
     context 'when signed in as an delegate' do
       sign_in { FactoryGirl.create :delegate }
 
-  describe 'GET #new' do
-    context 'when not signed in' do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        get :new
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as an admin' do
-      it 'shows the competition creation form' do
-        get :new
-        expect(response).to render_template :new
-      end
-    end
-
-    context 'when signed in as an delegate' do
-      sign_in { FactoryGirl.create :delegate }
-
       it 'shows the competition creation form' do
         get :new
         expect(response).to render_template :new
@@ -55,15 +37,17 @@ describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        post :create, competition: { id: "Test2015" }
+        post :create, competition: { name: "Test 2015" }
         expect(response).to redirect_to new_user_session_path
       end
     end
 
     context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
       it 'creates a new competition' do
-        post :create, competition: { id: "Test2015" }
-        expect(response).to redirect_to admin_edit_competition_path("Test2015")
+        post :create, competition: { name: "Test 2015" }
+        expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
       end
@@ -73,19 +57,18 @@ describe CompetitionsController do
       sign_in { FactoryGirl.create :delegate }
 
       it 'creates a new competition' do
-        post :create, competition: { id: "Test2015" }
-        expect(response).to redirect_to admin_edit_competition_path("Test2015")
+        post :create, competition: { name: "Test 2015" }
+        expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
       end
     end
->>>>>>> 1567f2f... Delegates can create a competition (fixes #162).
   end
 
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, competition: { id: "Test2015" }
+        post :create, competition: { name: "Test2015" }
         expect(response).to redirect_to new_user_session_path
       end
     end
