@@ -5,6 +5,7 @@ after "development:users" do
     title = Faker::Hacker.say_something_smart
     post = Post.create!(
       sticky: sticky,
+      world_readable: true,
       created_at: 2.hours.ago,
       title: title,
       slug: title.parameterize,
