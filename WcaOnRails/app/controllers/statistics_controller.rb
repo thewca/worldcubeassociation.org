@@ -1,4 +1,6 @@
 class StatisticsController < ApplicationController
+  layout "php_land"
+
   def index
     @persons = Result.select(:personId, "COUNT(DISTINCT competitionId) as numberOfCompetitions")
                      .group(:personId)
