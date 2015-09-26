@@ -21,7 +21,7 @@
         </tr>
 
         <% @persons.each do |p| %>
-          <tr>
+          <tr class="<%= cycle("", "e") %>">
             <td>
               <%= link_to p.name, person_path(p.id) %>
             </td>
