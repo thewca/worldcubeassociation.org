@@ -21,9 +21,13 @@ function analyzeChoices () {
   $chosenUpdate      = getBooleanParam( 'update'    );
   $chosenFix         = getBooleanParam( 'fix'       );
   $chosenId          = getNormalParam ( 'id'        );
-  $chosenName        = getMysqlParam  ( 'name'      );
+  // Gah, this is awful. We can't call getNormalParam because it refuses to
+  // return anything if the parameter has a quote in it. We don't want to call
+  // getMysqlParam, as we're using pdo_query throughout this file, and we don't
+  // want double escaping to occur.
+  $chosenName        = getRawParamThisShouldBeAnException( 'name' );
   $chosenNameHtml    = getHtmlParam   ( 'name'      );
-  $chosenCountryId   = getMysqlParam  ( 'countryId' );
+  $chosenCountryId   = getNormalParam ( 'countryId' );
   $chosenGender      = getNormalParam ( 'gender'    );
   $chosenDay         = getNormalParam ( 'day'       );
   $chosenMonth       = getNormalParam ( 'month'     );
@@ -39,7 +43,10 @@ function saveChoices () {
   if( $chosenFix ){
 
     #--- Change the Results table if the name has been changed.
-    $persons = dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND subId=1" );
+    $persons = pdo_query(
+      "SELECT * FROM Persons WHERE id=? AND subId=1",
+      array($chosenId)
+    );
     if( count( $persons ) == 0 ){
       noticeBox(false, 'Unknown WCA Id '.$chosenId);
       return;
@@ -50,7 +57,7 @@ function saveChoices () {
     // do not allow country to be 'fixed' (affects records).
     $oldCountryId = $person['countryId'];
     if($oldCountryId != $chosenCountryId) {
-      $hasBeenACitizenOfThisCountryAlready = count( dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND countryId='$chosenCountryId'" ) ) > 0;
+      $hasBeenACitizenOfThisCountryAlready = count( pdo_query( "SELECT * FROM Persons WHERE id=? AND countryId=?", array($chosenId, $chosenCountryId) ) ) > 0;
       if( $hasBeenACitizenOfThisCountryAlready ) {
         // If someone represented country A, and now represents country B, it's
         // easy to tell which solves are which (results have a countryId).
@@ -61,18 +68,28 @@ function saveChoices () {
         noticeBox(false, "Cannot change the country of someone to a country they have already represented in the past.");
         return;
       } else {
-        dbCommand( "UPDATE Results SET countryId='$chosenCountryId' WHERE personId='$chosenId' AND countryId='$oldCountryId'" );
+        pdo_query(
+          'UPDATE Results SET countryId=? WHERE personId=? AND countryId=?',
+          array($chosenCountryId, $chosenId, $oldCountryId)
+        );
         $recordsMayHaveChanged = true;
       }
     }
 
     $oldPersonName = $person['name'];
     if( $oldPersonName != $chosenName ) {
-      dbCommand( "UPDATE Results SET personName='$chosenName' WHERE personId='$chosenId' AND personName='$oldPersonName'" );
+      pdo_query(
+        "UPDATE Results SET personName=? WHERE personId=? AND personName=?",
+        array($chosenName, $chosenId, $oldPersonName)
+      );
     }
 
     #--- Change the Persons table
-    dbCommand( "UPDATE Persons SET name='$chosenName', countryId='$chosenCountryId', gender='$chosenGender', year='$chosenYear', month='$chosenMonth', day='$chosenDay' WHERE id='$chosenId' AND subId='1'" );
+    echo "changing name to $chosenName";//<<<
+    pdo_query(
+      "UPDATE Persons SET name=?, countryId=?, gender=?, year=?, month=?, day=? WHERE id=? AND subId='1'",
+      array($chosenName, $chosenCountryId, $chosenGender, $chosenYear, $chosenMonth, $chosenDay, $chosenId)
+    );
 
     $msg = "Successfully fixed $chosenNameHtml($chosenId).";
     if( $recordsMayHaveChanged ) {
@@ -84,7 +101,10 @@ function saveChoices () {
 
   if( $chosenUpdate ){
 
-    $persons = dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND subId=1" );
+    $persons = pdo_query(
+      "SELECT * FROM Persons WHERE id=? AND subId=1",
+      array($chosenId)
+    );
     if( count( $persons ) == 0 ){
       noticeBox(false, 'Unknown WCA Id '.$chosenId);
       return;
@@ -128,7 +148,10 @@ function offerChoices () {
     return;
   }
 
-  $persons = dbQuery( "SELECT * FROM Persons WHERE id='$chosenId' AND subId=1" );
+  $persons = pdo_query(
+    "SELECT * FROM Persons WHERE id=? AND subId=1",
+    array($chosenId)
+  );
   if( count( $persons ) == 0 ){
     noticeBox(false, 'Unknown WCA Id '.$chosenId);
     return;
@@ -141,7 +164,7 @@ function offerChoices () {
   textField( 'name', 'Name', $name, 50 );
 
   #--- Country
-  $countries = dbQuery( "SELECT * FROM Countries" );
+  $countries = pdo_query( "SELECT * FROM Countries" );
   $fieldC = '';
   foreach( $countries as $country ){
     $cId   = $country['id'  ];
@@ -194,5 +217,6 @@ function offerChoices () {
 #----------------------------------------------------------------------
 function textField ( $id, $label, $default, $size ) {
 #----------------------------------------------------------------------
-  echo "  <tr><td width='30%'><label for='$id'><b>$label</b></label></td><td><input id='$id' name='$id' type='text' value='$default' size='$size' /></td></tr>\n";
+  $default = htmlspecialchars($default);
+  echo "  <tr><td width='30%'><label for='$id'><b>$label</b></label></td><td><input id='$id' name='$id' type='text' value=\"$default\" size='$size' /></td></tr>\n";
 }
