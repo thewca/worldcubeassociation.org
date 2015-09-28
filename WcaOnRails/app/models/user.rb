@@ -206,9 +206,9 @@ class User < ActiveRecord::Base
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
-    end
-    if admin? || !delegate_status.blank?
       fields << :name
+    end
+    if admin? || any_kind_of_delegate?
       fields << :wca_id
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
