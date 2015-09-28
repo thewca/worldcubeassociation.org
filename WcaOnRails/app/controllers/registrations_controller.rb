@@ -13,6 +13,7 @@ class RegistrationsController < CompetitionsController
   end
 
   def index
+    @competition_registration_view = true
     @competition = Competition.find(params[:competition_id])
     respond_to do |format|
       format.html
@@ -24,6 +25,7 @@ class RegistrationsController < CompetitionsController
   end
 
   def update_all
+    @competition_registration_view = true
     @competition = Competition.find(params[:competition_id])
     ids = []
     registration_ids = params.select { |k| k.start_with?("registration-") }.map { |k, v| k.split('-')[1] }

@@ -195,6 +195,19 @@ class User < ActiveRecord::Base
     can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self)
   end
 
+  def get_cannot_delete_competition_reason(competition)
+    # Only allow results admins and competition delegates to delete competitions.
+    if !can_manage_competition?(competition)
+      "Cannot manage competition."
+    elsif competition.showAtAll
+      "Cannot delete a competition that is publicly visible."
+    elsif competition.isConfirmed && !self.can_admin_results?
+      "Cannot delete a confirmed competition."
+    else
+      nil
+    end
+  end
+
   def editable_fields_of_user(user)
     fields = Set.new
     if user == self

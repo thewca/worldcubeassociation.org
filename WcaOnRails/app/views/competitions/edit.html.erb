@@ -2,7 +2,7 @@
 <div class="container">
   <%= render partial: 'nav' %>
 
-  <% if @admin_view %>
+  <% if @competition_admin_view %>
     <h2>Announcements</h2>
     <ul>
       <li><%= link_to "Upload results", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
@@ -23,8 +23,8 @@
     boolean: :horizontal_boolean
   }  do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <% if @admin_view %>
-      <%= hidden_field_tag :admin_view, "1" %>
+    <% if @competition_admin_view %>
+      <%= hidden_field_tag :competition_admin_view, "1" %>
       <div class="form-group">
         <div class="col-sm-9 col-sm-offset-2">
           <div class="checkbox">
@@ -59,7 +59,7 @@
       <% end %>
     <% end %>
 
-    <% if @admin_view || !@competition.isConfirmed? %>
+    <% if @competition_admin_view || !@competition.isConfirmed? %>
       <h2>General information</h2>
       <%= f.input :id %>
       <%= f.input :name %>
@@ -197,13 +197,13 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.button :submit, class: "btn-primary" %>
-        <% unless @admin_view || @competition.isConfirmed? %>
+        <% unless @competition_admin_view || @competition.isConfirmed? %>
            <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
         <% end %>
-        <% if @admin_view %>
-           <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this competition? There is no going back." }) do %>
-             <i class="glyphicon glyphicon-trash"></i> Delete
-           <% end %>
+        <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
+          <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this competition? There is no going back." }) do %>
+            <i class="glyphicon glyphicon-trash"></i> Delete
+          <% end %>
         <% end %>
       </div>
     </div>

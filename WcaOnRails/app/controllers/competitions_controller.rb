@@ -162,23 +162,32 @@ class CompetitionsController < ApplicationController
 
   def admin_edit
     @competition = Competition.find(params[:id])
-    @admin_view = true
+    @competition_admin_view = true
+    @competition_organizer_view = false
     render_edit
   end
 
   def edit
     @competition = Competition.find(params[:id])
+    @competition_admin_view = false
+    @competition_organizer_view = true
     render_edit
   end
 
   def update
     @competition = Competition.find(params[:id])
-    @admin_view = params.has_key?(:admin_view)
-    if params[:commit] == "Delete" && current_user.can_admin_results?
-      # Only allow results admins to delete competitions.
-      @competition.destroy
-      flash[:success] = "Successfully deleted competition #{@competition.id}"
-      redirect_to competitions_path
+    @competition_admin_view = params.has_key?(:competition_admin_view)
+    @competition_organizer_view = !@competition_admin_view
+    if params[:commit] == "Delete"
+      cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
+      if cannot_delete_competition_reason
+        flash.now[:danger] = cannot_delete_competition_reason
+        render_edit
+      else
+        @competition.destroy
+        flash[:success] = "Successfully deleted competition #{@competition.id}"
+        redirect_to competitions_path
+      end
     elsif @competition.update_attributes(competition_params)
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_now
@@ -186,7 +195,7 @@ class CompetitionsController < ApplicationController
       else
         flash[:success] = "Successfully saved competition"
       end
-      if @admin_view
+      if @competition_admin_view
         redirect_to admin_edit_competition_path(@competition)
       else
         redirect_to edit_competition_path(@competition)

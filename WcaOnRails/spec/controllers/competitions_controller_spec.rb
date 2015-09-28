@@ -149,15 +149,15 @@ describe CompetitionsController do
       end
 
       it 'redirects admin view to admin view' do
-        patch :update, id: competition, competition: { name: competition.name }, admin_view: true
+        patch :update, id: competition, competition: { name: competition.name }, competition_admin_view: true
         expect(response).to redirect_to admin_edit_competition_path(competition)
       end
 
       it 'renders admin view when failing to save admin view' do
-        patch :update, id: competition, competition: { name: "fooo" }, admin_view: true
+        patch :update, id: competition, competition: { name: "fooo" }, competition_admin_view: true
         expect(response).to render_template :edit
-        admin_view = assigns(:admin_view)
-        expect(admin_view).to be true
+        competition_admin_view = assigns(:competition_admin_view)
+        expect(competition_admin_view).to be true
       end
 
       it 'can confirm competition' do
@@ -241,10 +241,17 @@ describe CompetitionsController do
         expect(competition.reload.organizers).to eq []
       end
 
-      it "board member can delete competition" do
-        # Attempt to delete competition. This should work.
+      it "board member can delete a non-visible competition" do
+        competition.update_attributes(showAtAll: false)
         patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
         expect(Competition.find_by_id(competition.id)).to be_nil
+      end
+
+      it "board member cannot delete a visible competition" do
+        competition.update_attributes(showAtAll: true)
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
+        expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
     end
 
@@ -255,11 +262,30 @@ describe CompetitionsController do
         sign_in delegate
       end
 
-      it "cannot delete competition" do
+      it "cannot delete not confirmed, but visible competition" do
+        competition.update_attributes(isConfirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
-        # results admins to delete competitions.
+        # deletion of (not confirmed and not visible) competitions.
         patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
-        expect(Competition.find(competition.id)).not_to be_nil
+        expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
+        expect(Competition.find_by_id(competition.id)).not_to be_nil
+      end
+
+      it "cannot delete confirmed competition" do
+        competition.update_attributes(isConfirmed: true, showAtAll: false)
+        # Attempt to delete competition. This should not work, because we only let
+        # delegates deleting unconfirmed competitions.
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        expect(flash[:danger]).to eq "Cannot delete a confirmed competition."
+        expect(Competition.find_by_id(competition.id)).not_to be_nil
+      end
+
+      it "can delete not confirmed and not visible competition" do
+        competition.update_attributes(isConfirmed: false, showAtAll: false)
+        # Attempt to delete competition. This should work, because we allow
+        # deletion of (not confirmed and not visible) competitions.
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        expect(Competition.find_by_id(competition.id)).to be_nil
       end
 
       it "can enable and disable registration list of locked competition" do
@@ -267,6 +293,21 @@ describe CompetitionsController do
         # Disable registration list
         patch :update, id: competition, competition: { showPreregList: "1" }
         expect(competition.reload.showPreregList).to eq true
+      end
+    end
+
+    context "when signed in as delegate for a different competition" do
+      let(:delegate) { FactoryGirl.create(:delegate) }
+      before :each do
+        sign_in delegate
+      end
+
+      it "cannot delete competition they are not delegating" do
+        competition.update_attributes(isConfirmed: false, showAtAll: false)
+        # Attempt to delete competition. This should not work, because we're
+        # not the delegate for this competition.
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
     end
   end
