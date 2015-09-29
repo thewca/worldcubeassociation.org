@@ -35,6 +35,22 @@ RSpec.describe Competition do
     expect(competition.endDay).to eq 7
   end
 
+  describe "validates date formats" do
+    it "start_date" do
+      competition = FactoryGirl.create :competition
+      competition.start_date = "1987-12-04f"
+      expect(competition).to be_invalid
+      expect(competition.errors.messages[:start_date]).to eq ["invalid"]
+    end
+
+    it "end_date" do
+      competition = FactoryGirl.create :competition
+      competition.end_date = "1987-12-04f"
+      expect(competition).to be_invalid
+      expect(competition.errors.messages[:end_date]).to eq ["invalid"]
+    end
+  end
+
   it "requires that both dates are empty or both are valid" do
     competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-04"

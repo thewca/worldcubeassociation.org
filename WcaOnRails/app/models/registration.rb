@@ -3,8 +3,8 @@ class Registration < ActiveRecord::Base
 
   enum status: { accepted: "a", pending: "p" }
 
+
   validate :events_must_be_offered
-  validate :dates_must_be_valid
 
   before_validation :unpack_dates
   before_save :normalize_event_ids
@@ -21,6 +21,10 @@ class Registration < ActiveRecord::Base
   end
 
   private def events_must_be_offered
+    if !competition
+      errors.add(:competitionId, "invalid")
+      return
+    end
     invalid_events = events - competition.events
     unless invalid_events.empty?
       errors.add(:eventIds, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
@@ -38,18 +42,15 @@ class Registration < ActiveRecord::Base
     if @birthday.blank?
       self.birthYear = self.birthMonth = self.birthDay = 0
     else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@birthday)
+        errors.add(:birthday, "invalid")
+        return
+      end
       self.birthYear, self.birthMonth, self.birthDay = @birthday.split("-").map(&:to_i)
-    end
-  end
-
-  private def dates_must_be_valid
-    if self.birthYear == 0 && self.birthMonth == 0 && self.birthDay == 0
-      # If the user left the date empty, that's a-okay.
-      return
-    end
-
-    unless !birthYear.nil? && !birthMonth.nil? && !birthDay.nil? && Date.valid_date?(birthYear, birthMonth, birthDay)
-      errors.add(:birthday, "invalid")
+      unless Date.valid_date? self.birthYear, self.birthMonth, self.birthDay
+        errors.add(:birthday, "invalid")
+        return
+      end
     end
   end
 end

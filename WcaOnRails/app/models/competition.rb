@@ -129,7 +129,15 @@ class Competition < ActiveRecord::Base
     if @start_date.blank?
       self.year = self.month = self.day = 0
     else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
+        errors.add(:start_date, "invalid")
+        return
+      end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
+      unless Date.valid_date? self.year, self.month, self.day
+        errors.add(:start_date, "invalid")
+        return
+      end
     end
     if @end_date.nil? && !end_date.blank?
       @end_date = end_date.strftime("%F")
@@ -137,7 +145,15 @@ class Competition < ActiveRecord::Base
     if @end_date.blank?
       @endYear = self.endMonth = self.endDay = 0
     else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
+        errors.add(:end_date, "invalid")
+        return
+      end
       @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
+      unless Date.valid_date? @endYear, self.endMonth, self.endDay
+        errors.add(:end_date, "invalid")
+        return
+      end
     end
   end
 
