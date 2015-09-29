@@ -32,7 +32,7 @@ function showDescription () {
   echo "  <li><p>Skip it if you're not sure yet.</p></li>\n";
   echo "</ul>\n\n";
 
-  echo "<p><span style='color:#F00;font-weight:bold'>Note:</span> For time reasons I don't show more than 20 unfinished persons at once, so you might have to repeat checking and fixing a few times until there are no unfinished persons left.</p>\n";
+  echo "<p><span style='color:#F00;font-weight:bold'>Note:</span>I don't show more than 20 unfinished persons at once, so you might have to repeat checking and fixing a few times until there are no unfinished persons left.</p>\n";
   
   echo "<hr />\n";
 }
@@ -156,8 +156,10 @@ function showUnfinishedPersons () {
     tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountry$caseNr' value='$nameHtml|$countryIdHtml' />" );
     
     #--- Show the person.
+    # Note that we set this input to checked, but if there's a better match
+    # lower on, then it will take precendence.
     tableRowStyled( 'font-weight:bold', array(
-      "<input type='radio' name='action$caseNr' value='new' />",
+      "<input type='radio' name='action$caseNr' value='new' checked='checked' />",
       visualize( $name ),
       visualize( $countryId ),
       peekLink( $name, $countryId ),

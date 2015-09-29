@@ -1,9 +1,19 @@
 class RegistrationsController < CompetitionsController
   skip_before_action :can_admin_results_only, only: [:index, :update_all]
-  before_action :can_manage_competition_only, only: [:index, :update_all]
+  before_action :can_manage_competition_only, only: [:index, :update_all, :update]
+
+  before_action :registration_matches_competition, only: [:update]
+  private def registration_matches_competition
+    competition = Competition.find(params[:competition_id])
+    registration = Registration.find(params[:id])
+    unless competition == registration.competition
+      flash[:danger] = "Given registration does not match competition"
+      redirect_to root_url
+    end
+  end
 
   def index
-    @competition = Competition.find(params[:id])
+    @competition = Competition.find(params[:competition_id])
     respond_to do |format|
       format.html
       format.csv do
@@ -23,16 +33,46 @@ class RegistrationsController < CompetitionsController
     case params[:registrations_action]
     when "accept-selected"
       registrations.each { |registration| registration.update_attribute(:status, "a") }
-      flash[:success] = "Registrations approved!"
+      flash[:success] = "#{"Registration".pluralize(registrations.length)} approved!"
     when "reject-selected"
       registrations.each { |registration| registration.update_attribute(:status, "p") }
-      flash[:warning] = "Registrations rejected"
+      flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
     when "delete-selected"
       registrations.each { |registration| registration.delete }
-      flash[:warning] = "Registrations deleted"
+      flash[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     else
       throw "Unrecognized action #{params[:registrations_action]}"
     end
-    redirect_to registrations_path(@competition)
+    redirect_to competition_registrations_path(@competition)
+  end
+
+  def update
+    @registration = Registration.find(params[:id])
+    respond_to do |format|
+      if @registration.update_attributes(registration_params)
+        format.html do
+          competition = Competition.find(params[:competition_id])
+          flash[:success] = "Registration successfully updated"
+          redirect_to competition_registrations_path(competition)
+        end
+        format.json { respond_with_bip(@registration) }
+      else
+        format.html { render action: "edit" }
+        format.json { respond_with_bip(@registration) }
+      end
+    end
+  end
+
+  private def registration_params
+    params.require(:registration).permit(
+      :personId,
+      :email,
+      :name,
+      :countryId,
+      :birthday,
+      :guests,
+      :comments,
+      :eventIds,
+    )
   end
 end

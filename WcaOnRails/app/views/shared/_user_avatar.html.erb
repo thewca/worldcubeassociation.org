@@ -1,0 +1,10 @@
+<% avatar_symbol = defined?(show_pending) && show_pending ? :pending_avatar : :avatar %>
+<% if user.send "#{avatar_symbol}?".to_sym %>
+  <% url = user.send(avatar_symbol).url(:thumb) + ( defined?(break_cache) ? "?#{Time.now.to_f}" : "" ) %>
+  <div class="avatar-circle <%= defined?(avatar_class) ? avatar_class : "" %>"
+       style="background-image: url('<%= url %>');"
+       data-trigger="hover" data-toggle="popover" title="<%= defined?(title) ? title : "" %>" data-html="true" data-content="<img src='<%= user.send(avatar_symbol).url %>'></img>"
+  ></div>
+<% else %>
+  <div class="avatar-circle"></div>
+<% end %>

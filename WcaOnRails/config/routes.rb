@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   devise_for :users, skip: :registrations
   devise_scope :user do
     resource :registration,
-      only: [:new, :create, :edit, :update],
+      only: [:new, :create],
       path: 'users',
       path_names: { new: 'sign_up' },
       controller: 'accounts/registrations',
@@ -15,17 +15,31 @@ Rails.application.routes.draw do
       end
   end
   resources :users, only: [:index, :edit, :update]
+  get 'users/edit' => 'users#edit'
+  get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
+  get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
+  namespace :users do
+    resources :avatars, only: [:index]
+  end
+  post 'users/avatars' => 'users/avatars#update_all'
 
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
-    member do
-      resources :registrations, only: [:index, :update] do
-      end
+    resources :registrations, only: [:index, :update] do
     end
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+
+  # TODO - these are vulnerable to CSRF. We should be able to change these to
+  # POSTs once check_comp_data.php has been ported to Rails.
+  # See https://github.com/cubing/worldcubeassociation.org/issues/161
   get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement
   get 'competitions/:id/post/results' => 'competitions#post_results', as: :competition_post_results
+
+  get 'delegate' => 'delegates_panel#index'
+  get 'delegate/crash-course' => 'delegates_panel#crash_course'
+  get 'delegate/crash-course/edit' => 'delegates_panel#edit_crash_course'
+  patch 'delegate/crash-course' => 'delegates_panel#update_crash_course'
 
   root 'posts#index'
   resources :posts
@@ -47,6 +61,9 @@ Rails.application.routes.draw do
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
+
+  get "/regulations" => 'pages#show', id: "index"
+  get "/regulations/*id" => 'pages#show'
 
   namespace :api do
     get '/', to: redirect('/api/v0')

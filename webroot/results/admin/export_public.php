@@ -30,12 +30,20 @@ if( $chosenExport ){
     'Countries'    => '*',
     'Continents'   => '*',
     'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
-    'Competitions' => 'SELECT id, name, cityName, countryId, information, year,
-                              month, day, endMonth, endDay, eventSpecs,
-                              wcaDelegate, organiser, venue, venueAddress,
-                              venueDetails, website, cellName, latitude, longitude
-                       FROM Competitions
-                       WHERE showAtAll=1',
+    # To maintain the database export format, we have to build up the
+    # wcaDelegate and organiser fields by joining with the users,
+    # competition_delegates, and competition_organizers tables.
+    'Competitions' => 'SELECT Competitions.id, Competitions.name, Competitions.cityName, Competitions.countryId, Competitions.information, Competitions.year,
+                              Competitions.month, Competitions.day, Competitions.endMonth, Competitions.endDay, Competitions.eventSpecs,
+                              GROUP_CONCAT(CONCAT("[{", users_delegates.name, "}{mailto:", users_delegates.email, "}]") SEPARATOR " ") as wcaDelegate,
+                              GROUP_CONCAT(CONCAT("[{", users_organizers.name, "}{mailto:", users_organizers.email, "}]") SEPARATOR " ") as organiser,
+                              Competitions.venue, Competitions.venueAddress,
+                              Competitions.venueDetails, Competitions.website, Competitions.cellName, Competitions.latitude, Competitions.longitude
+                              FROM Competitions
+                              LEFT JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id LEFT JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id
+                              LEFT JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id LEFT JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id
+                              WHERE Competitions.showAtAll=1
+                              GROUP BY competition_delegates.competition_id',
     'Scrambles'   => '*',
   ) );
 }

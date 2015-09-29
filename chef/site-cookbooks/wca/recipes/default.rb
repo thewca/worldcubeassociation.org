@@ -105,6 +105,7 @@ package 'libghc-zlib-dev'
 package 'libsqlite3-dev'
 package 'g++'
 package 'libmysqlclient-dev'
+package 'imagemagick'
 
 node.default['brightbox-ruby']['version'] = "2.2"
 include_recipe "brightbox-ruby"
@@ -159,6 +160,13 @@ template "/etc/nginx/fcgi.conf" do
   })
   notifies :run, 'execute[reload-nginx]', :delayed
 end
+template "/etc/init.d/nginx" do
+  source "nginx.erb"
+  mode 0755
+  owner 'root'
+  group 'root'
+  notifies :run, 'execute[update-rc]', :delayed
+end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
   mode 0644
@@ -212,7 +220,11 @@ execute "nginx" do
   not_if "ps -efw | grep nginx.*master"
 end
 execute "reload-nginx" do
-  command "nginx -s reload || nginx"
+  command "/etc/init.d/nginx reload || /etc/init.d/nginx start"
+  action :nothing
+end
+execute "update-rc" do
+  command "/usr/sbin/update-rc.d -f nginx defaults"
   action :nothing
 end
 

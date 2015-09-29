@@ -1,5 +1,13 @@
 <?php
 
+function joinUsers($users, $includeEmail) {
+  return implode(", ", array_map(function($user) use ($includeEmail) {
+    $name = $user['name'];
+    $email = $user['email'];
+    return $includeEmail ? "[{{$name}}{mailto:$email}]" : $name;
+  }, $users));
+}
+
 #----------------------------------------------------------------------
 function showCompetitionInfos () {
 #----------------------------------------------------------------------
@@ -8,6 +16,11 @@ function showCompetitionInfos () {
   #--- Get the competition infos from the database.
   $competition = getFullCompetitionInfos( $chosenCompetitionId );
   extract( $competition );
+  $delegates = getCompetitionDelegates( $chosenCompetitionId );
+  $wcaDelegate = joinUsers( $delegates, true );
+  $organizers = getCompetitionOrganizers( $chosenCompetitionId );
+  // Only show organizer emails if there is no contact info given.
+  $organizer = joinUsers( $organizers, !$contact );
 
   #--- Show the infos.
   echo "<h1>$name</h1>\n";
@@ -17,7 +30,7 @@ function showCompetitionInfos () {
   echo "<table width='100%' id='competitionDetails'><tr valign='top'>\n";
 
   #--- Left part.
-  echo "<td style='width:70%'><table class='nowrap'>";
+  echo "<td style='width:70%'><table>";
   $country = getCountry($countryId);
   showItem( 'key', "Date",         array( competitionDate( $competition ), $year ));
   showItem( 'key', "City",         array( $cityName, $country['name'] ));
@@ -25,8 +38,9 @@ function showCompetitionInfos () {
   showItem( 'sub', "Address",      array( $venueAddress ));
   showItem( 'sub', "Details",      array( $venueDetails ));
   showItem( 'key', "Website",      array( $website ));
-  showItem( 'key', "Organiser",    array( $organiser ));
+  showItem( 'key', "Organizer",    array( $organizer ));
   showItem( 'key', "WCA Delegate", array( $wcaDelegate ));
+  showItem( 'key', "Contact",      array( $contact ));
   echo "</table></td>";
 
   #--- Right part.

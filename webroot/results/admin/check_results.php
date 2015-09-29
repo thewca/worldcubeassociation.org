@@ -8,22 +8,33 @@ require( '../includes/_header.php' );
 require( '../includes/_check.php' );
 analyzeChoices();
 adminHeadline( 'Check results' );
+
+$scripts = new WCAClasses\WCAScripts();
+$scripts->add('check_results_help.js');
+print $scripts->getHTMLAll();
+
 showDescription();
 showChoices();
 
-if ( $chosenWhich == 'recent' )
-  $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
-
-switch ( $chosenWhat ){
-  case 'individual':
-    checkIndividually();
-    break;
-  case 'ranks':
-    checkRelatively();
-    break;
-  case 'similar':
-    checkSimilarResults();
-    break;
+if( $chosenShow ) {
+  switch ( $chosenWhat ){
+    case '': # Run them all!
+    case 'individual':
+      checkIndividually();
+      if($chosenWhat != '') {
+        break;
+      }
+    case 'ranks':
+      checkRelatively();
+      if($chosenWhat != '') {
+        break;
+      }
+    case 'similar':
+      checkSimilarResults();
+      if($chosenWhat != '') {
+        break;
+      }
+  }
 }
 
 require( '../includes/_footer.php' );
@@ -38,37 +49,41 @@ function showDescription () {
 
   echo "<p style='width:45em'>You can also print similar results that happened during a competition. It might reveal errors in score taking, although some similar results can be due to chance.</p>\n";
 
-  echo "<p style='width:45em'>Usually you should check only the recent results (past three months), it's faster and it hides exceptions that shall remain (once they're older than three months).</p>\n";
-
   echo "<hr />\n";
 }
 
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenWhich, $chosenWhat;
+  global $chosenEventId, $chosenCompetitionId, $chosenWhat, $chosenShow, $chosenWhich, $competitionCondition;
 
-  $chosenWhich = getNormalParamDefault( 'which', 'recent' );
-  $chosenWhat = getNormalParamDefault( 'what', 'individual' );
+  $chosenEventId        = getNormalParam( 'eventId' );
+  $chosenCompetitionId  = getNormalParam( 'competitionId' );
+  $chosenWhat           = getNormalParam( 'what' );
+  $chosenShow           = getBooleanParam( 'show' );
+
+  $chosenWhich          = "";
+  $chosenWhich .= $chosenEventId ? $chosenEventId : "all events";
+  $chosenWhich .= " in " . ($chosenCompetitionId ? $chosenCompetitionId : "all competitions");
+  $competitionCondition = eventCondition() . competitionCondition();
 }
 
 #----------------------------------------------------------------------
 function showChoices () {
 #----------------------------------------------------------------------
-  global $chosenWhich, $chosenWhat;
-
+  global $chosenWhat;
   displayChoices( array(
-    'Check',
-    choice( 'which', '', array( array( 'recent', 'recent' ), array( 'all', 'all' )), $chosenWhich ),
-    choice( 'what', '', array( array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'similar', 'similar results' )), $chosenWhat ),
-    choiceButton( true, 'go', 'Go', false)
+    eventChoice( false ),
+    competitionChoice(),
+    choice( 'what', 'What', array( array( '', 'All' ), array( 'individual', 'individual results' ), array( 'ranks', 'ranks' ), array( 'similar', 'similar results' )), $chosenWhat ),
+    choiceButton( true, 'show', 'Show' )
   ));
 }
 
 #----------------------------------------------------------------------
 function checkIndividually () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenWhich;
+  global $competitionCondition, $chosenWhich;
 
   echo "<hr /><p>Checking <b>" . $chosenWhich . " individual results</b>... (wait for the result message box at the end)</p>\n";
 
@@ -79,7 +94,7 @@ function checkIndividually () {
       value1, value2, value3, value4, value5, best, average
     FROM Results result, Competitions competition
     WHERE competition.id = competitionId
-      $dateCondition
+      $competitionCondition
     ORDER BY formatId, competitionId, eventId, roundId, result.id
   ")
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
@@ -119,7 +134,7 @@ function checkIndividually () {
 #----------------------------------------------------------------------
 function checkRelatively () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenWhich;
+  global $competitionCondition, $chosenWhich;
 
   echo "<hr /><p>Checking <b>" . $chosenWhich . " ranks</b>... (wait for the result message box at the end)</p>\n";
 
@@ -128,7 +143,7 @@ function checkRelatively () {
     SELECT   result.id, competitionId, eventId, roundId, formatId, average, best, pos, personName
     FROM     Results result, Competitions competition
     WHERE    competition.id = competitionId
-      $dateCondition
+      $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
     ORDER BY year desc, month desc, day desc, competitionId, eventId, roundId, IF(formatId IN ('a','m') AND average>0, average, 2147483647), if(best>0, best, 2147483647), pos
   ");
@@ -161,11 +176,16 @@ function checkRelatively () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
         showCompetitionResults( $competitionId, $eventId, $roundId );
         $shownRound = $round;
+
+        #--- Show a check all and a check none button.
+        printf( "<button class='js-check-all' data-round='$round'>Check all</button>" );
+        printf( "<button class='js-check-none' data-round='$round'>Check none</button>" );
+        printf( "<br>" );
       }
 
       #--- Show each difference, with a checkbox to agree
       $change = sprintf('%+d', $calcedPos-$storedPos);
-      $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' />";
+      $checkbox = "<input type='checkbox' name='setpos$resultId' value='$calcedPos' data-round='$round' />";
       printf( "$checkbox Place $storedPos should be place $calcedPos (change by $change) --- $personName<br />" );
       $wrongs++;
     }
@@ -294,7 +314,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
 #----------------------------------------------------------------------
 function checkSimilarResults () {
 #----------------------------------------------------------------------
-  global $dateCondition, $chosenWhich;
+  global $competitionCondition, $chosenWhich;
 
   echo "<hr /><p>Checking <b>" . $chosenWhich . " similar results</b>... (wait for the result message box at the end)</p>\n";
 
@@ -310,9 +330,9 @@ function checkSimilarResults () {
       JOIN (
           SELECT competitionId, eventId, roundId, personId, personName, value1, value2, value3, value4, value5
           FROM Results ".
-          ($dateCondition ? "JOIN Competitions ON Competitions.id = competitionId " : "").
+          ($competitionCondition ? "JOIN Competitions ON Competitions.id = competitionId " : "").
          "WHERE best > 0 ".
-              ($dateCondition ? $dateCondition : "").
+              ($competitionCondition ? $competitionCondition : "").
             " AND value3 <> 0
               AND eventId <> '333mbo'
       ) h ON Results.competitionId = h.competitionId
@@ -358,8 +378,8 @@ function checkSimilarResults () {
   $date = wcaDate();
   noticeBox2(
     count( $rows ) == 0,
-    "No similar results where found.<br />$date",
-    "Similar results where found.<br />$date"
+    "No similar results were found.<br />$date",
+    "Similar results were found.<br />$date"
   );
 }
 

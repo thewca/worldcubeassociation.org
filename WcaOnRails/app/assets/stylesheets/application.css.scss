@@ -24,22 +24,18 @@
 @import "typeaheadjs";
 @import "selectize";
 @import "selectize.bootstrap3";
+@import "jquery.jcrop";
+@import "purr";
 
-/* New stuff */
+@import "navbar-static-top";
+@import "links";
 @import "posts";
 @import "delegates";
+@import "organisations";
 @import "users";
 @import "competitions";
 @import "registrations";
 @import "selectable-rows";
 @import "users-autocomplete";
-
-/* Gross stuff copied over from the old site */
-@import "navbar-static-top";
-@import "general";
-@import "contact";
-@import "pageMenu";
-@import "tables";
-@import "links";
-@import "admin";
-@import "selectize.default";
+@import "collapsible-panels";
+@import "avatars";

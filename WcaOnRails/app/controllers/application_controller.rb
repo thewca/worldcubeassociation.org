@@ -6,7 +6,21 @@ class ApplicationController < ActionController::Base
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name << :email
     devise_parameter_sanitizer.for(:sign_in) << :login
-    devise_parameter_sanitizer.for(:account_update) << :name
+    devise_parameter_sanitizer.for(:account_update) << :name << :email
+  end
+
+  private def delegates_only
+    unless current_user && current_user.can_access_delegate_only_areas?
+      flash[:danger] = "You are not a delegate"
+      redirect_to root_url
+    end
+  end
+
+  private def board_members_only
+    unless current_user && current_user.can_access_board_members_only_areas?
+      flash[:danger] = "You are not a board member"
+      redirect_to root_url
+    end
   end
 
   private def can_admin_results_only

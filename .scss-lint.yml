@@ -1,0 +1,35 @@
+linters:
+  Comment:
+    enabled: false
+  StringQuotes:
+    enabled: false
+  EmptyLineBetweenBlocks:
+    enabled: false
+  QualifyingElement:
+    enabled: false
+  ColorVariable:
+    enabled: false
+  ColorKeyword:
+    enabled: false
+  IdSelector:
+    enabled: false
+  SelectorFormat:
+    enabled: false
+  EmptyRule:
+    enabled: false
+  HexLength:
+    enabled: false
+  UnnecessaryMantissa:
+    enabled: false
+  PlaceholderInExtend:
+    enabled: false
+  VendorPrefix:
+    enabled: false
+  LeadingZero:
+    style: include_zero
+  PropertySortOrder:
+    enabled: false
+  SelectorDepth:
+    enabled: false
+  NestingDepth:
+    enabled: false

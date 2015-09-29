@@ -1,5 +1,9 @@
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
+  # FIXME Tests fail with "Unknown primary key for table Competitions in model Competition."
+  #       when not setting the primary key explicitly. I have
+  #       no clue why... (th, 2015-09-19)
+  self.primary_key = "id"
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
@@ -11,14 +15,13 @@ class Competition < ActiveRecord::Base
   ENDS_WITH_YEAR_RE = /\A.* \d{4}\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
-  validates :id, presence: true, uniqueness: true
+  validates :id, presence: true, uniqueness: true, length: { maximum: 32 },
+                 format: { with: /\A[a-zA-Z0-9]+\Z/ }
   validates :name, length: { maximum: 50 },
                    format: { with: ENDS_WITH_YEAR_RE }
   validates :cellName, length: { maximum: 45 },
                        format: { with: ENDS_WITH_YEAR_RE }
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :wcaDelegate, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :organiser, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
 
   attr_writer :start_date, :end_date
@@ -52,19 +55,19 @@ class Competition < ActiveRecord::Base
     end
     if @delegate_ids
       self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
-      self.wcaDelegate = users_to_emails_str(delegates)
     end
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
-      self.organiser = users_to_emails_str(organizers)
     end
   end
-  validate :delegates_must_be_delegates
-  def delegates_must_be_delegates
-    non_delegates = delegates.select { |user| !user.delegate_status }
-    unless non_delegates.empty?
-      errors.add(:delegate_ids, "#{non_delegates.map(&:name).join(', ')} is (are) not delegate(s).")
-    end
+
+  # Workaround for PHP code that requires these tables to be clean.
+  # Once we're in all railsland, this can go, and we can add a script
+  # that checks our database sanity instead.
+  after_save :remove_non_existent_organizers_and_delegates
+  def remove_non_existent_organizers_and_delegates
+    CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
+    CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
   attr_accessor :editing_user_id
@@ -126,7 +129,15 @@ class Competition < ActiveRecord::Base
     if @start_date.blank?
       self.year = self.month = self.day = 0
     else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
+        errors.add(:start_date, "invalid")
+        return
+      end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
+      unless Date.valid_date? self.year, self.month, self.day
+        errors.add(:start_date, "invalid")
+        return
+      end
     end
     if @end_date.nil? && !end_date.blank?
       @end_date = end_date.strftime("%F")
@@ -134,7 +145,15 @@ class Competition < ActiveRecord::Base
     if @end_date.blank?
       @endYear = self.endMonth = self.endDay = 0
     else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
+        errors.add(:end_date, "invalid")
+        return
+      end
       @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
+      unless Date.valid_date? @endYear, self.endMonth, self.endDay
+        errors.add(:end_date, "invalid")
+        return
+      end
     end
   end
 

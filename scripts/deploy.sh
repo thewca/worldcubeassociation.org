@@ -8,15 +8,16 @@ pull_latest() {
 rebuild_regs() {
   # Build WCA regulations
   # Use only one core because we get better backtraces without multiprocessing,
-  # and because we might be on production server and should not eat up all
+  # and because we might be on the production server and should not eat up all
   # cores just building the regulations.
   regulations/make.py --num-workers 1 --wca
-  if [ -a webroot/regulations ]; then
-    rm -rf webroot/regulations-todelete
-    mv webroot/regulations webroot/regulations-todelete;
+  regs_folder=WcaOnRails/app/views/regulations
+  if [ -a $regs_folder ]; then
+    rm -rf $regs_folder-todelete
+    mv $regs_folder $regs_folder-todelete
   fi
-  mv regulations/build/regulations webroot/
-  rm -rf webroot/regulations-todelete
+  mv regulations/build/regulations $regs_folder
+  rm -rf $regs_folder-todelete
 }
 
 rebuild_rails() {

@@ -53,12 +53,9 @@ if(!isset($_SESSION['anticsrf_key'])) {
     </table>
 </form>
 
-<p>After fixing your results, you must run these scripts to ensure that the changes are sound. Just once after several fixes is fine:</p>
-<!-- todo: some links to useful scripts are placed here.  Check that the URLs are correct and add any of your election.  -->
+<p>After fixing your results, you must run these scripts to ensure that the changes are sound.</p>
 <ol>
-    <li><a href="check_results.php?which=recent&what=individual&go=Go" target="_blank">Check recent individual results</a></li>
-    <li><a href="check_results.php?which=recent&what=ranks&go=Go" target="_blank">Check recent ranks</a>.
-        (If the ranks change this will fix them and you'll be warned.)</li>
+    <li><a id="check-results" href="#" target="_blank">Check results</a></li>
     <li><a href="compute_auxiliary_data.php?doit=+Do+it+now+" target="_blank">Compute auxiliary data</a></li>
 </ol>
 
@@ -211,6 +208,7 @@ function personIdChange(newPersonId)
     if (newPersonId != lastPersonId) {
         clearPerson();
         lastPersonId = newPersonId;
+        somethingChanged();
         if (/^(19|20)\d{2}([A-Z]){4}\d{2}$/.test(newPersonId)) {
             $.get('scripts/fixresults_ajax.php', {
                 token: '<?=$_SESSION['anticsrf_key']?>',
@@ -235,6 +233,7 @@ function personIdChange(newPersonId)
                     extractRounds(obj);
                     extractResults(obj);
                 }
+                somethingChanged();
             });
         }
     }
@@ -245,6 +244,7 @@ function competitionIdChange(newCompetitionId)
     if (newCompetitionId != lastCompetitionId) {
         clearEvents();
         lastCompetitionId = newCompetitionId;
+        somethingChanged();
         $.get('scripts/fixresults_ajax.php',
             {
                 token: '<?=$_SESSION['anticsrf_key']?>',
@@ -260,6 +260,7 @@ function competitionIdChange(newCompetitionId)
                 extractRounds(obj);
                 extractResults(obj);
             }
+            somethingChanged();
         });
     }
 }
@@ -269,6 +270,7 @@ function eventIdChange(newEventId)
     if (newEventId != lastEventId) {
         clearRounds();
         lastEventId = newEventId;
+        somethingChanged();
         $.get('scripts/fixresults_ajax.php',
             {
                 token: '<?=$_SESSION['anticsrf_key']?>',
@@ -284,6 +286,7 @@ function eventIdChange(newEventId)
                 extractRounds(obj);
                 extractResults(obj);
             }
+            somethingChanged();
         });
     }
 }
@@ -293,6 +296,7 @@ function roundIdChange(newRoundId)
     if (newRoundId != lastRoundId) {
         clearResults();
         lastRoundId = newRoundId;
+        somethingChanged();
         $.get('scripts/fixresults_ajax.php',
             {
                 token: '<?=$_SESSION['anticsrf_key']?>',
@@ -308,8 +312,24 @@ function roundIdChange(newRoundId)
             } else {
                 extractResults(obj);
             }
+            somethingChanged();
         });
     }
+}
+
+function somethingChanged()
+{
+  if(!lastCompetitionId || !lastEventId) {
+    $('#check-results').hide();
+  } else {
+    $('#check-results').show();
+    var params = {
+      competitionId: lastCompetitionId,
+      eventId: lastEventId,
+      show: "Show",
+    };
+    $('#check-results').attr("href", "check_results.php?" + $.param(params));
+  }
 }
 
 function setResultsFormat(formatStr)
@@ -578,6 +598,7 @@ $(document).ready(function () {
         resultsInputs[field] = $('#' + field);
     });
     clearResults();
+    somethingChanged();
 });
 
 </script>

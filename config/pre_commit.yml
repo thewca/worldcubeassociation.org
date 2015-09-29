@@ -1,0 +1,12 @@
+---
+:warnings_remove: []
+:warnings_add: []
+:checks_add:
+- :jshint
+- :scss_lint
+- :ruby_symbol_hashrockets
+- :console_log
+- :debugger
+- :json
+:checks_remove:
+- :migration

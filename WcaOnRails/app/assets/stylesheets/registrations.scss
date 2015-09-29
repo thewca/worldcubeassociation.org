@@ -1,26 +1,38 @@
 table.registrations-table {
+  margin-bottom: 50px;
+
   td {
     white-space: nowrap;
   }
-  td.comments, td.guests {
+  td.comments,
+  td.guests {
     max-width: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  tr.registration-p {
+  tr.registration-pending {
     color: grey;
   }
-  tr.registration-a {
+  tr.registration-accepted {
   }
-
-  tr.registration-p + tr.registration-a {
-    border-top: 10px solid black;
-  }
-
-  margin-bottom: 50px;
 }
 
 #registrations-actions {
   position: fixed;
   bottom: 5px;
+}
+
+// Highlight best in place fields on hover, unless
+// they have an external activator specified.
+.best_in_place:not([data-bip-activator]):hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+// Emails have an external activator pencil icon.
+.email-editor:hover {
+  cursor: pointer;
+  + .best_in_place {
+    background-color: #eee;
+  }
 }

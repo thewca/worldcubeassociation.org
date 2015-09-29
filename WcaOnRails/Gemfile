@@ -23,7 +23,6 @@ gem 'local_time'
 gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'
-gem 'newrelic_rpm'
 gem 'wice_grid'
 gem 'strip_attributes'
 gem 'bootstrap-datepicker-rails'
@@ -31,18 +30,14 @@ gem 'time_will_tell'
 gem 'redcarpet'
 gem 'twitter-typeahead-rails'
 gem 'underscore-rails'
-gem "selectize-rails"
-
-# TODO remove me after all posts have been updated to markdown
-gem 'reverse_markdown'
-
+gem 'selectize-rails'
+gem 'high_voltage'
+gem 'best_in_place'
+gem 'carrierwave'
+gem 'carrierwave-crop'
+gem 'mini_magick'
 gem 'system'
-gem 'unicorn'
-
-# Drupal defines some table columns that conflict with ActiveRecord.
-# This gem lets us ignore those columns. Eventually we'll migrate this
-# problem away.
-gem 'ignorable'
+gem 'mysql2'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -50,21 +45,25 @@ group :development, :test do
   gem 'faker'
 
   gem 'byebug'
-  gem 'sqlite3'
   gem 'web-console'
-  gem 'spring'
 end
 
 group :development do
   gem 'pre-commit'
+  gem 'scss_lint', require: false
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
+  gem 'rake' # As per http://docs.travis-ci.com/user/languages/ruby/
   gem 'guard-rspec'
   gem 'launchy'
   gem 'capybara'
+  gem 'oga' # XML parsing library introduced for testing RSS feed
 end
 
 group :production do
-  gem 'mysql2'
+  gem 'unicorn'
+  gem 'newrelic_rpm'
 end

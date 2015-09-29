@@ -42,6 +42,7 @@ require_once '_tables.php';
 require_once '_links.php';
 require_once '_values.php';
 require_once '_cache.php';
+require_once '_map.php';
 require_once '_navigation.php';
 
 
@@ -207,31 +208,14 @@ function genderText ($gender) {
   return '';
 }
 
-function getCurrentPictureFile ($upload_path, $personId) {
-  $files = glob($upload_path . "a$personId.*");
-  return $files ? $files[0] : FALSE;
-}
-function getWaitingPictureFile ($upload_path, $personId) {
-  $files = glob($upload_path . "p$personId.*");
-  return $files ? $files[0] : FALSE;
-}
-function getPreviousPictureFiles ($upload_path, $personId) {
-  return array_reverse(glob($upload_path . "a$personId*"));
-}
-function acceptNewPictureFile ($upload_path, $personId, $newFile) {
-  $currFile = getCurrentPictureFile($upload_path, $personId);
-  if($currFile){
-    $datetime = date('_Ymd_His.', filemtime($currFile));
-    $backupFile = $upload_path . "old/a$personId$datetime" . pathinfo($currFile, PATHINFO_EXTENSION);
-    rename($currFile, $backupFile);
+function getCurrentPictureFile ($personId) {
+  # Under the new rails system, images are uploaded to
+  # /uploads/user/avatar/WCA_ID/TIMESTAMP.EXT, and the filename is stored in
+  # the users table in the avatar column.
+  $user = dbQuery( "SELECT avatar FROM users WHERE wca_id='$personId'" )[ 0 ];
+  if(!$user || !$user['avatar']) {
+    return false;
+  } else {
+    return "/uploads/user/avatar/${personId}/${user['avatar']}";
   }
-  rename($upload_path . $newFile, $upload_path . 'a' . substr($newFile, 1));
-}
-function declineNewPictureFile ($upload_path, $personId, $newFile) {
-  $datetime = date('_Ymd_His.', filemtime($upload_path . $newFile));
-  $backupFile = $upload_path . "declined/p$personId$datetime" . pathinfo($upload_path . $newFile, PATHINFO_EXTENSION);
-  rename($upload_path . $newFile, $backupFile);
-}
-function getWaitingPictureFiles ($upload_path) {
-  return array_map('basename', glob($upload_path . 'p*'));
 }

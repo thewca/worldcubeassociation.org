@@ -8,11 +8,13 @@
       <% end %>
       <% if user_signed_in? && current_user.can_admin_results? %>
         <span class="pull-right">
-          <%= link_to edit_post_path(post.slug) do %>
+          <%= link_to post.edit_path do %>
             <span class="glyphicon glyphicon-pencil"></span>
           <% end %>
-          <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) } do %>
-            <span class="glyphicon glyphicon-trash"></span>
+          <% if post.deletable %>
+            <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) } do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
           <% end %>
         </span>
       <% end %>
@@ -20,7 +22,9 @@
   </div>
   <div class="panel-body">
     <div>
-      <em>Announced by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
+      <% if post.author %>
+        <em>Announced by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
+      <% end %>
     </div>
     <%=md post.body %>
   </div>

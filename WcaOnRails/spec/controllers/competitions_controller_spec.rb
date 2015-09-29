@@ -24,7 +24,7 @@ describe CompetitionsController do
     )
   }
 
-  it 'redirects organiser view to organiser view' do
+  it 'redirects organizer view to organizer view' do
     patch :update, id: competition, competition: { name: competition.name }
     expect(response).to redirect_to edit_competition_path(competition)
   end
@@ -96,6 +96,7 @@ describe CompetitionsController do
     get :post_announcement, id: competition
     post = assigns(:post)
     expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
+    expect(post.world_readable).to be true
     expect(post.body).to match /in #{competition.cityName}, #{competition.countryId}\./
   end
 
@@ -171,6 +172,7 @@ describe CompetitionsController do
     )
     get :post_results, id: competition
     post = assigns(:post)
+    expect(post.world_readable).to be true
     expect(post.body).to include "World records: Jeremy Fleischman 3x3 one-handed 50.00 (average), Vincent Sheu (2006SHEU01) 3x3 fewest moves 25 (single), 3x3 fewest moves 26.00 (average), Vincent Sheu (2006SHEU02) 2x2 Cube 10.00 (single)"
     expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 41.00 (single), 3x3 one-handed 40.00 (single)"
   end
@@ -249,5 +251,17 @@ describe CompetitionsController do
     # results admins to delete competitions.
     patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }, commit: "Delete"
     expect(Competition.find(competition_with_delegate.id)).not_to be_nil
+  end
+
+  it "saving removes nonexistent delegates" do
+    invalid_competition_delegate = CompetitionDelegate.create!(competition_id: competition_with_delegate.id, delegate_id: 2000000)
+    patch :update, id: competition_with_delegate, competition: { name: competition_with_delegate.name }
+    expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
+  end
+
+  it "saving removes nonexistent organizers" do
+    invalid_competition_organizer = CompetitionOrganizer.create!(competition_id: competition.id, organizer_id: 2000000)
+    patch :update, id: competition, competition: { name: competition.name }
+    expect(CompetitionDelegate.find_by_id(invalid_competition_organizer.id)).to be_nil
   end
 end

@@ -3,11 +3,11 @@ class PostsController < ApplicationController
   before_action :can_admin_results_only, except: [:index, :rss, :show]
 
   def index
-    @posts = Post.order(sticky: :desc, created_at: :desc).paginate(page: params[:page])
+    @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).paginate(page: params[:page])
   end
 
   def rss
-    @posts = Post.order(created_at: :desc).paginate(page: params[:page])
+    @posts = Post.where(world_readable: true).order(created_at: :desc).paginate(page: params[:page])
     respond_to :xml
   end
 
@@ -20,7 +20,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = Post.new(post_params, world_readable: true)
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
@@ -51,8 +51,13 @@ class PostsController < ApplicationController
     redirect_to root_url
   end
 
+  private def editable_post_fields
+    [:title, :body, :sticky]
+  end
+  helper_method :editable_post_fields
+
   private def post_params
-    params.require(:post).permit(:title, :body, :sticky)
+    params.require(:post).permit(*editable_post_fields)
   end
 
   private def find_post
@@ -65,6 +70,7 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by_slug(params[:id]) || Post.find_by_id!(params[:id])
+    world_readable_posts = Post.where(world_readable: true)
+    world_readable_posts.find_by_slug(params[:id]) || world_readable_posts.find_by_id!(params[:id])
   end
 end

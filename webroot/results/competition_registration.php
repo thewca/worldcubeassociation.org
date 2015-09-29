@@ -91,7 +91,7 @@ function showPreregForm () {
 
   echo "<h1>Registration form</h1>";
 
-  echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organisers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organisers might not be able to offer enough room, food, etc.</p>";
+  echo "<p style='width:90%;margin:1em auto 1em auto;'>Please note that the purpose of the preregistration is not only to reserve you a spot in the competition, but also very importantly to give the organizers a good estimation of the number of people they have to expect. Please don't wait until the very last minute to preregister, otherwise the organizers might not be able to offer enough room, food, etc.</p>";
   
   echo "<p style='width:90%;margin:1em auto 1em auto;'>If you already have participated in an official competition, you can use the search function which will fill the information stored in the database. You can then fill the rest.</p>";
 
@@ -354,16 +354,14 @@ function savePreregForm () {
   
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
 
-
-  $organiserEmail = preg_replace( '/.*\[{ ([^}]+) }{ ([^}]+) }].*/x', "$2 ", $competition['organiser'] );
-  $organiserEmail = preg_replace( '/\\\\([\'\"])/', '$1', $organiserEmail );
-  if( preg_match( '/^mailto:([\S]+)/', $organiserEmail, $match )){
+  $organizers = getCompetitionOrganizers($competition['id']);
+  foreach($organizers as $organizer) {
+    $mailEmail = $organizer['email'];
 
     // load more competition data for a nicer email
     $result = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
     $competition_data = $result[0];
 
-    $mailEmail = $match[1];
 
     $mailBody = "A new competitor has registered for your competition - ".$competition['cellName']."! ";
     $mailBody .= "Their information is below.\n-------------------\n";
@@ -423,7 +421,7 @@ function savePreregForm () {
 
   }
 
-  noticeBox( true, "Registration complete.<br />Please note that all registrations must be approved by the organiser.<br/>Your registration will appear here within a few days." );
+  noticeBox( true, "Registration complete.<br />Please note that all registrations must be approved by the organizer.<br/>Your registration will appear here within a few days." );
   return true;
 }
 

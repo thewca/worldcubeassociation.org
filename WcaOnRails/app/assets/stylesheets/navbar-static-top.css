@@ -7,7 +7,7 @@ html, body {
 }
 
 div.navbar-brand {
-  padding: 0px;
+  padding: 0;
   padding-top: 16px;
   height: 110px;
   margin-bottom: -50px;
@@ -84,6 +84,6 @@ div.navbar-collapse {
 
 @media (min-width: 768px) {
   .navbar-nav.navbar-right:last-child {
-    margin-right: 0px;
+    margin-right: 0;
   }
 }

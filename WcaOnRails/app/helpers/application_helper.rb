@@ -26,4 +26,8 @@ module ApplicationHelper
   def md(content)
     Redcarpet::Markdown.new(Redcarpet::Render::HTML.new).render(content).html_safe
   end
+
+  def filename_to_url(filename)
+    "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
+  end
 end

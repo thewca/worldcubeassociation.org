@@ -22,6 +22,10 @@
 //= require twitter/typeahead
 //= require underscore
 //= require selectize
+//= require best_in_place
+//= require jquery.purr
+//= require best_in_place.purr
+//= require jquery.jcrop
 //= require_tree .
 
 $(function() {
@@ -33,10 +37,31 @@ $(function() {
     todayHighlight: true
   });
   $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="popover"]').popover();
+
+  // After a popup actually occurs, there may be some images that need to load.
+  // Here we add load listeners for those images and resize the popup once they've
+  // loaded. We have to be careful not to end up in an infinite loop (hence the
+  // ignoreInsert variable).
+  var ignoreInsert = false;
+  $('[data-toggle="popover"]').on('inserted.bs.popover', function(e) {
+    if(ignoreInsert) {
+      return;
+    }
+    var $popoverTrigger = $(e.currentTarget);
+    $('.popover img').on('load', function() {
+      ignoreInsert = true;
+      $popoverTrigger.on('inserted.bs.popover', function(e) {
+        ignoreInsert = false;
+      });
+      $popoverTrigger.popover('show');
+    });
+  });
 
   $("form.no-submit-on-enter").bind("keypress", function(e) {
     if(e.which === 13) {
       e.preventDefault();
     }
   });
+  $(".best_in_place").best_in_place();
 });

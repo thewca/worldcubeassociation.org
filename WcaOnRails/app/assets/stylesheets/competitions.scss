@@ -12,11 +12,11 @@
 
 .event-checkbox {
   label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   input[type=checkbox] {
     display: none;
-    & + span.cubing-icon {
+    + span.cubing-icon {
       color: #ccc;
     }
     &:checked + span.cubing-icon {
@@ -49,8 +49,8 @@ $venue-map-wrapper-height: 400px;
   .map {
     height: $venue-map-wrapper-height - 10px;
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
   }
 }
 

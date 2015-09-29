@@ -61,22 +61,21 @@ function eventChoice ( $required ) {
     $options[] = array( '', '' );
   }
 
-   foreach( getAllEvents() as $event )
+  foreach( getAllEvents() as $event ) {
     $options[] = array( $event['id'], $event['cellName'] );
+  }
   return choice( 'eventId', 'Event', $options, $chosenEventId );
 }
 
 #----------------------------------------------------------------------
-function competitionChoice ( $required ) {
+function competitionChoice () {
 #----------------------------------------------------------------------
-  global $wcadb_conn;
+  global $wcadb_conn, $chosenCompetitionId;
 
-  if( ! $required ){
-    $options[] = array( '', 'All' );
-    $options[] = array( '', '' );
-  }
+  $options[] = array( '', 'All' );
+  $options[] = array( '', '' );
 
-  $competitions_query = "SELECT id, name, countryId, wcaDelegate
+  $competitions_query = "SELECT id, name, countryId
                          FROM Competitions
                          ORDER BY (STR_TO_DATE(CONCAT(year,',',month,',',day),'%Y,%m,%d') BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND DATE_ADD(NOW(), INTERVAL 7 DAY)) DESC,
                             year DESC, month DESC, day DESC
@@ -88,11 +87,9 @@ function competitionChoice ( $required ) {
           $competition->id,
           ($competition->name) . " | "
             . ($competition->id) . " | "
-            . ($competition->countryId) . " | "
-            . strip_tags(processLinks($competition->wcaDelegate))
-
+            . ($competition->countryId)
         );
-  return choice( 'competitionId', 'Competition', $options, '' );
+  return choice( 'competitionId', 'Competition', $options, $chosenCompetitionId );
 }
 
 #----------------------------------------------------------------------

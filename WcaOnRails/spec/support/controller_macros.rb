@@ -20,6 +20,6 @@ module RequestMacros
 end
 
 RSpec.configure do |config|
-  config.extend ControllerMacros, :type => :controller
-  config.extend RequestMacros, :type => :request
+  config.extend ControllerMacros, type: :controller
+  config.extend RequestMacros, type: :request
 end

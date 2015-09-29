@@ -15,55 +15,6 @@ function databaseTableExists ( $tableName ) {
 }
 
 #----------------------------------------------------------------------
-function cloneNewCompetition ( $newCompetitionId, $oldCompetitionId ) {
-#----------------------------------------------------------------------
-
-  #--- Get data from the old competition.
-  $old = dbQuery(
-    "SELECT
-      name, cellName, countryId, cityName, information, website,
-      organiser, venue, venueAddress, venueDetails, eventSpecs,
-      wcaDelegate
-    FROM Competitions
-    WHERE id='$oldCompetitionId'"
-  );
-  $old = $old[0];
-
-  #--- Generate two passwords for the new competition.
-  $adminPassword = generateNewPassword( $newCompetitionId, 'foo' );
-  $organiserPassword = generateNewPassword( $newCompetitionId, 'bar' );
-
-  #--- First provide id and password ...
-  $keys = "id, adminPassword, organiserPassword";
-  $values = "'$newCompetitionId', '$adminPassword', '$organiserPassword'";
-
-  #--- ... then add the other data.
-  foreach( $old as $key => $value ){
-    if( ! preg_match( '/\d/', $key )){
-      $value = mysqlEscape( $value );
-      $keys .= ", $key";
-      $values .= ", '$value'";
-    }
-  }
-
-  #--- Insert the new competition into the database.
-  dbCommand( "INSERT INTO Competitions ( $keys ) VALUES ( $values )" );
-}
-
-#----------------------------------------------------------------------
-function createNewCompetition ( $id ) {
-#----------------------------------------------------------------------
-
-  $name = "NEW COMPETITION " . trim(preg_replace('/(\\d{4})/', ' $1 ', $id));
-  $adminPassword = generateNewPassword( $id, 'foo' );
-  $organiserPassword = generateNewPassword( $id, 'bar' );
-  dbCommand("
-    INSERT INTO Competitions ( id, name, cellName, adminPassword, organiserPassword )
-    VALUES ( '$id', '$name', '$name', '$adminPassword', '$organiserPassword' )
-  ");
-}   
-
-#----------------------------------------------------------------------
 function echoAndFlush ( $text ) {
 #----------------------------------------------------------------------
 

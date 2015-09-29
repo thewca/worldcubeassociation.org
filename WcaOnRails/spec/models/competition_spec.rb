@@ -35,6 +35,22 @@ RSpec.describe Competition do
     expect(competition.endDay).to eq 7
   end
 
+  describe "validates date formats" do
+    it "start_date" do
+      competition = FactoryGirl.create :competition
+      competition.start_date = "1987-12-04f"
+      expect(competition).to be_invalid
+      expect(competition.errors.messages[:start_date]).to eq ["invalid"]
+    end
+
+    it "end_date" do
+      competition = FactoryGirl.create :competition
+      competition.end_date = "1987-12-04f"
+      expect(competition).to be_invalid
+      expect(competition.errors.messages[:end_date]).to eq ["invalid"]
+    end
+  end
+
   it "requires that both dates are empty or both are valid" do
     competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-04"
@@ -119,7 +135,6 @@ RSpec.describe Competition do
     delegate_ids = delegates.map(&:id).join(",")
     competition = FactoryGirl.create :competition, delegate_ids: delegate_ids
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
-    expect(competition.wcaDelegate).to eq "[{Chris}{mailto:chris@c.com}][{Daniel}{mailto:daniel@d.com}]"
   end
 
   it "saves organizer_ids" do
@@ -129,15 +144,5 @@ RSpec.describe Competition do
     organizer_ids = organizers.map(&:id).join(",")
     competition = FactoryGirl.create :competition, organizer_ids: organizer_ids
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
-    expect(competition.organiser).to eq "[{Bob}{mailto:bob@b.com}][{Jane}{mailto:jane@j.com}]"
-  end
-
-  it "verifies delegates are delegates" do
-    delegate = FactoryGirl.create(:user)
-    delegates = [delegate]
-    delegate_ids = delegates.map(&:id).join(",")
-    competition = FactoryGirl.build :competition, delegate_ids: delegate_ids
-    expect(competition.save).to eq false
-    expect(competition.errors.messages).to have_key :delegate_ids
   end
 end

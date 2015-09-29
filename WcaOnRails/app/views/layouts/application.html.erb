@@ -85,7 +85,6 @@
               <li><a href="/regulations/guidelines.html">Guidelines</a></li>
               <li><a href="/regulations/scrambles/">Scrambles</a></li>
               <li class="divider"></li>
-              <li><a href="/regulations/announcements/">Announcements</a></li>
               <li><a href="/regulations/history/">History</a></li>
               <li><a href="/regulations/translations/">Translations</a></li>
             </ul>
@@ -104,7 +103,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <% if user_signed_in? %>
-                <li><%= link_to "Edit account", edit_user_registration_path %></li>
+                <li><%= link_to "Edit account", users_edit_path %></li>
                 <% if current_user.can_edit_users? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
@@ -113,11 +112,21 @@
                   <li><%= link_to "Manage users", users_path %></li>
                 <% end %>
 
+                <% if current_user.delegate_status.present? %>
+                  <li class="divider"></li>
+                  <li role="presentation" class="dropdown-header">
+                    Delegate
+                  </li>
+                  <li><%= link_to "Panel", delegate_path %></li>
+                <% end %>
+
                 <% if current_user.can_admin_results? %>
                   <li class="divider"></li>
                   <li role="presentation" class="dropdown-header">
                     Results team
                   </li>
+                  <li><%= link_to "Admin", "/results/admin/" %></li>
+                  <li><%= link_to "Competitions", competitions_path %></li>
                   <li><%= link_to "New post", new_post_path %></li>
                 <% end %>
 

@@ -215,17 +215,6 @@ function structureBy ( $results, $field ) {
 }
 
 #----------------------------------------------------------------------
-function getCompetitionPassword ( $id, $admin ) {
-#----------------------------------------------------------------------
-  if( $admin )
-    $tmp = dbQuery( "SELECT adminPassword password FROM Competitions WHERE id='$id'" );
-  else
-    $tmp = dbQuery( "SELECT organiserPassword password FROM Competitions WHERE id='$id'" );
-  $tmp = $tmp[0];
-  return $tmp['password'];
-}
-
-#----------------------------------------------------------------------
 function getCompetitionValue ( $competitionId, $valueSource ) {
 #----------------------------------------------------------------------
   $tmp = dbQuery( "SELECT $valueSource value FROM Competitions WHERE id='$competitionId'" );
@@ -243,6 +232,26 @@ function getFullCompetitionInfos ( $id ) {
   if( count( $results ) != 1 )
     return false;
   return $results[0];
+}
+
+#----------------------------------------------------------------------
+function getCompetitionOrganizers ( $id ) {
+#----------------------------------------------------------------------
+
+  #--- Return array of hashes with all organizers data.
+  $id = mysqlEscape( $id );
+  $results = dbQuery( "SELECT name, email FROM competition_organizers LEFT JOIN users ON users.id=competition_organizers.organizer_id WHERE competition_organizers.competition_id='$id' ORDER BY name" );
+  return $results;
+}
+
+#----------------------------------------------------------------------
+function getCompetitionDelegates ( $id ) {
+#----------------------------------------------------------------------
+
+  #--- Return array of hashes with all delegates data.
+  $id = mysqlEscape( $id );
+  $results = dbQuery( "SELECT name, email FROM competition_delegates LEFT JOIN users ON users.id=competition_delegates.delegate_id WHERE competition_delegates.competition_id='$id' ORDER BY name" );
+  return $results;
 }
 
 #----------------------------------------------------------------------

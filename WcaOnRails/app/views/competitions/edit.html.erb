@@ -3,8 +3,12 @@
 <% if @admin_view %>
   <h2>Announcements</h2>
   <ul>
-    <li><%= link_to "Upload results.", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
-    <li><%= link_to "Post competition announcement.", competition_post_announcement_path %></li>
+    <li><%= link_to "Upload results", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
+    <li>
+      <%= button_to competition_post_announcement_path, class: 'btn', form: { target: "_blank" }, method: :get do %>
+        Post competition announcement
+      <% end %>
+    </li>
   </ul>
   <hr>
 <% end %>
@@ -58,7 +62,7 @@ wrapper_mappings: {
     <%= f.input :name %>
     <%= f.input :cellName %>
 
-    <%= f.input :countryId, collection: Country.all.map(&:name) %>
+    <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
     <%= f.input :cityName %>
     <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
 
@@ -134,6 +138,7 @@ wrapper_mappings: {
     <%= f.input :information %>
     <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
     <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
+    <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public." %>
     <%= f.input :website, hint: "The website of the competition. For example:<br>[{Rubiks.com}{http://www.rubiks.com}]".html_safe %>
 
     <% event_groups = [

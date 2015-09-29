@@ -12,10 +12,40 @@ tr.candidate-delegate {
   font-style: italic;
 }
 
-.edit-user {
+.delegate-actions {
   visibility: hidden;
+  tr:hover & {
+    visibility: visible;
+  }
 }
 
-tr:hover .edit-user {
-  visibility: visible;
+.avatar-circle {
+  display: inline-block;
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+
+  vertical-align: middle;
+}
+.avatar-circle-lg {
+  width: 100px;
+  height: 100px;
+}
+
+.popover-content img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.delegates-table tbody tr td {
+  vertical-align: middle;
+}
+
+.jcrop-holder {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#avatar_thumbnail {
+  cursor: pointer;
 }

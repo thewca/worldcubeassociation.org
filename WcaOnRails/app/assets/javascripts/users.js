@@ -4,8 +4,7 @@ $(function() {
   }
 
   // Hide/show senior delegate select based on what the user's role is.
-  var $delegateStatus = $('select[name="user[delegate_status]"]');
-  $delegateStatus.on("change", function(e) {
+  $('select[name="user[delegate_status]"]').on("change", function(e) {
     var delegateStatus = this.value;
     var seniorDelegateRequired = {
       "": false,
@@ -20,6 +19,12 @@ $(function() {
 
     var $userRegionInput = $('.form-group.user_region');
     $userRegionInput.toggle(!!delegateStatus);
-  });
-  $delegateStatus.trigger("change");
+  }).trigger("change");
+
+  // Hide/show avatar picker based on if the user is trying to to remove
+  // the current avatar.
+  $('input#user_remove_avatar').on("change", function(e) {
+    var toDelete = e.currentTarget.checked;
+    $('.form-group.user_avatar').toggle(!toDelete);
+  }).trigger("change");
 });

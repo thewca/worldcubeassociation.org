@@ -2,5 +2,6 @@ regulations/**
 webroot/**
 WcaOnRails/vendor/**
 WcaOnRails/tmp/**
-chef/site-cookbooks/tarsnap/**
+WcaOnRails/db/structure.sql
+chef/**
 .gitmodules
