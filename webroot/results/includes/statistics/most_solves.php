@@ -2,7 +2,6 @@
 
 $solvesTotal = polishMostSolvesAttempts( "
   SELECT    personId,
-            competitionId whereId,
             count(value1>0 or null)+
             count(value2>0 or null)+
             count(value3>0 or null)+
