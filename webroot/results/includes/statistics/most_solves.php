@@ -1,6 +1,6 @@
 <?php
 
-$totalsolves = polishMostSolvesAttempts( "
+$solvesTotal = polishMostSolvesAttempts( "
   SELECT    personId,
             competitionId whereId,
             count(value1>0 or null)+
@@ -19,7 +19,7 @@ $totalsolves = polishMostSolvesAttempts( "
   LIMIT     50
 " );
 
-$solves = polishMostSolvesAttempts( "
+$solvesCompetition = polishMostSolvesAttempts( "
   SELECT    personId,
             competitionId whereId,
             count(value1>0 or null)+
@@ -38,7 +38,7 @@ $solves = polishMostSolvesAttempts( "
   LIMIT     50
 " );
 
-$attempts = polishMostSolvesAttempts( "
+$solvesYear = polishMostSolvesAttempts( "
   SELECT    personId,
             year whereId,
             count(value1>0 or null)+
@@ -75,7 +75,7 @@ $lists[] = array(
   "Most solves",
   "",
   "[P] Person [n] Solves [T] | [P] Person [n] Solves [C] Competition [T] | [P] Person [n] Solves [N] Year",
-  my_merge( $totalsolves, $solves, $attempts )
+  my_merge( $solvesTotal, $solvesCompetition, $solvesYear )
 );
 
 ?>
