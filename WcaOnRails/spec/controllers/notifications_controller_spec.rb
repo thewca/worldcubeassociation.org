@@ -56,14 +56,18 @@ RSpec.describe NotificationsController, type: :controller do
         sign_in board_member
       end
 
-      it "shows confirmed, but not visible competitions" do
+      it "shows confirmed, but not visible competitions, as well as unconfirmed, but visible competitions" do
         get :index
         notifications = assigns(:notifications)
         expect(notifications).to eq [
           {
             text: "#{confirmed_competition.name} is waiting to be announced",
             url: admin_edit_competition_path(confirmed_competition),
-          }
+          },
+          {
+            text: "#{visible_unconfirmed_competition.name} is visible, but unlocked",
+            url: admin_edit_competition_path(visible_unconfirmed_competition),
+          },
         ]
       end
     end
