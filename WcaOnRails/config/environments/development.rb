@@ -15,7 +15,11 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
-  root_url = URI.parse(ENVied.ROOT_URL)
+  root_url = ENVied.ROOT_URL
+  unless root_url.present?
+    root_url = "http://localhost:3000"
+  end
+  root_url = URI.parse(root_url)
   config.action_mailer.default_url_options = {
     protocol: root_url.scheme,
     host: root_url.host,

@@ -17,6 +17,29 @@ RSpec.describe User, type: :model do
     expect(delegate).to be_valid
   end
 
+  describe "team leaders" do
+    it "results team" do
+      user = FactoryGirl.build :user, results_team: false, results_team_leader: true
+      expect(user).not_to be_valid
+    end
+    it "wdc team" do
+      user = FactoryGirl.build :user, wdc_team: false, wdc_team_leader: true
+      expect(user).not_to be_valid
+    end
+    it "wrc team" do
+      user = FactoryGirl.build :user, wrc_team: false, wrc_team_leader: true
+      expect(user).not_to be_valid
+    end
+    it "wca website team" do
+      user = FactoryGirl.build :user, wca_website_team: false, wca_website_team_leader: true
+      expect(user).not_to be_valid
+    end
+    it "software admin team" do
+      user = FactoryGirl.build :user, software_admin_team: false, software_admin_team_leader: true
+      expect(user).not_to be_valid
+    end
+  end
+
   it "does not give delegates results admin privileges" do
     delegate = FactoryGirl.create :delegate
     expect(delegate.can_admin_results?).to be false

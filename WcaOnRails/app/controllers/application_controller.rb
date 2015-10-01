@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update) << :name << :email
   end
 
-  private def delegates_only
-    unless current_user && current_user.can_access_delegate_only_areas?
+  private def delegates_or_team_members_only
+    unless current_user && current_user.can_access_delegates_or_team_members_only_areas?
       flash[:danger] = "You are not a delegate"
       redirect_to root_url
     end
@@ -26,6 +26,13 @@ class ApplicationController < ActionController::Base
   private def can_admin_results_only
     unless current_user && current_user.can_admin_results?
       flash[:danger] = "You are not allowed to administer results"
+      redirect_to root_url
+    end
+  end
+
+  private def can_create_posts_only
+    unless current_user && current_user.can_create_posts?
+      flash[:danger] = "You are not allowed to create posts"
       redirect_to root_url
     end
   end

@@ -126,6 +126,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  validate :team_leaders_must_be_on_respective_teams
+  def team_leaders_must_be_on_respective_teams
+    UsersController.WCA_TEAMS.each do |team|
+      leader_team = :"#{team}_leader"
+      if send(leader_team) && !send(team)
+        errors.add(leader_team, "must be a #{team} to be a #{leader_team}")
+      end
+    end
+  end
+
   validate :senior_delegate_must_be_senior_delegate
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
@@ -153,10 +163,15 @@ class User < ActiveRecord::Base
 
   validate :not_illegally_demoting_oneself
   def not_illegally_demoting_oneself
-    if current_user == self && admin_was && !admin? && !board_member?
-      errors.add(:admin, "You cannot resign from your role as an admin! Find another admin to fire you.")
-    elsif current_user == self && delegate_status_was == "board_member" && !admin? && !board_member?
-      errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
+    about_to_lose_access = !wca_website_team? && !software_admin_team? && !board_member?
+    if current_user == self && about_to_lose_access
+      if wca_website_team_was
+        errors.add(:admin, "You cannot resign from your role as an website team member! Find another person to fire you.")
+      elsif software_admin_team_was
+        errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
+      elsif delegate_status_was == "board_member"
+        errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
+      end
     end
   end
 
@@ -165,6 +180,10 @@ class User < ActiveRecord::Base
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
       errors.add(:avatar, "requires a WCA id to be assigned")
     end
+  end
+
+  def admin?
+    wca_website_team? || software_admin_team?
   end
 
   def any_kind_of_delegate?
@@ -183,8 +202,12 @@ class User < ActiveRecord::Base
     can_admin_results? || any_kind_of_delegate?
   end
 
-  def can_access_delegate_only_areas?
-    return admin? || board_member? || any_kind_of_delegate?
+  def can_access_delegates_or_team_members_only_areas?
+    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team?
+  end
+
+  def can_create_posts?
+    admin? || board_member? || results_team? || wdc_team? || wrc_team?
   end
 
   def can_access_board_members_only_areas?
@@ -221,7 +244,8 @@ class User < ActiveRecord::Base
       fields << :remove_avatar
     end
     if admin? || board_member?
-      fields += UsersController.WCA_ROLES
+      fields += UsersController.WCA_TEAMS
+      fields += UsersController.WCA_TEAMS.map { |role| :"#{role}_leader" }
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region

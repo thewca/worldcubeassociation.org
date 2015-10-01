@@ -9,7 +9,7 @@ FactoryGirl.define do
     factory :admin do
       name "Mr. Admin"
       email "admin@worldcubeassociation.org"
-      admin true
+      wca_website_team true
     end
 
     factory :results_team do

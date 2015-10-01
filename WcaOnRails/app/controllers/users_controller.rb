@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search]
 
-  def self.WCA_ROLES
-    [:admin, :results_team]
+  def self.WCA_TEAMS
+    [:wca_website_team, :software_admin_team, :results_team, :wdc_team, :wrc_team]
   end
 
   def index

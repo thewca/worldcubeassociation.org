@@ -17,6 +17,7 @@ class StaticPagesController < ApplicationController
   end
 
   def contact
+    @board_members = User.where(delegate_status: "board_member")
   end
 
   def score_tools
