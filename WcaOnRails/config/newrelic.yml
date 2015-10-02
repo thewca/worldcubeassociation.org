@@ -39,7 +39,7 @@ common: &default_settings
 
     # To stop specific errors from reporting to RPM, set this property
     # to comma separated values.
-    ignore_errors: "ActiveRecord::RecordNotFound"
+    ignore_errors: "ActionController::RoutingError, ActiveRecord::RecordNotFound"
 
 
 # Environment-specific settings are in this section.
