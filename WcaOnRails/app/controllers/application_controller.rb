@@ -1,8 +1,16 @@
+require "newrelic_rpm"
+
 class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   protect_from_forgery with: :exception
-  before_action :configure_permitted_parameters, if: :devise_controller?
 
+  before_action :add_new_relic_headers
+  protected def add_new_relic_headers
+    ::NewRelic::Agent.add_custom_attributes({ user_id: current_user ? current_user.id : nil })
+    ::NewRelic::Agent.add_custom_attributes({ HTTP_REFERER: request.headers['HTTP_REFERER'] })
+  end
+
+  before_action :configure_permitted_parameters, if: :devise_controller?
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name << :email
     devise_parameter_sanitizer.for(:sign_in) << :login
