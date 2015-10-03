@@ -29,6 +29,12 @@ describe "statistics" do
         expect(page).to have_content "Peter"
         expect(page).to_not have_content "Bob"
         expect(page).to have_content "Sarah"
+        within "tr", text: "Peter" do
+          expect(page).to have_content "2"
+        end
+        within "tr", text: "Sarah" do
+          expect(page).to have_content "4"
+        end
       end
     end
   end

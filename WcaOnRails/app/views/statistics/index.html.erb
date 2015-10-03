@@ -1,44 +1,36 @@
-<div id="most_competitions">
-  <div class="table-responsive">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="results table table-condensed">
+<% @statistics.each do |statistic| %>
+  <div id="<%= statistic.id %>">
+    <div class="table-responsive">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="results table table-condensed">
 
-      <tbody><tr><td colspan="9">&nbsp;<a name="13">&nbsp;</a></td></tr>
+        <tbody><tr><td colspan="9">&nbsp;<a name="13">&nbsp;</a></td></tr>
 
-        <!-- Why is this part of the table? -->
-        <tr><td class="caption" colspan="9">Most Competitions  (<a title="[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country." style="color:#FC0" onclick="alert(&quot;[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country.&quot;)">info</a>)</td></tr>
+          <!-- Why is this part of the table? -->
+          <tr><td class="caption" colspan="9"><%= statistic.title %> (<a title="[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country." style="color:#FC0" onclick="alert(&quot;[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country.&quot;)">info</a>)</td></tr>
 
-        <!-- shouldn't this be in a thead? -->
-        <tr>
-          <th>Person</th>
-          <th class="R2">Competitions</th>
-          <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
-          <th>Event</th>
-          <th class="R2">Competitions</th>
-          <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
-          <th class="L">Country</th>
-          <th class="R2">Competitions</th>
-          <th class="f">&nbsp;</th>
-        </tr>
-
-        <% @persons.each do |p| %>
-          <tr class="<%= cycle("", "e") %>">
-            <td>
-              <%= link_to p.name, person_path(p.id) %>
-            </td>
-            <td class="R2"><%= p.count %></td>
-            <td class="L"> &nbsp; &nbsp; | &nbsp; &nbsp; </td>
-            <td>
-              <a class="e" href="/results/e.php?i=333">Rubik's Cube</a>
-            </td>
-            <td class="R2">1</td>
-            <td class="L"> &nbsp; &nbsp; | &nbsp; &nbsp; </td>
-            <td class="L">USA</td>
-            <td class="R2">1</td>
-            <td class="f">&nbsp;</td>
+          <!-- shouldn't this be in a thead? -->
+          <tr>
+            <th>Person</th>
+            <th class="R2">Competitions</th>
+            <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
+            <th>Event</th>
+            <th class="R2">Competitions</th>
+            <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
+            <th class="L">Country</th>
+            <th class="R2">Competitions</th>
+            <th class="f">&nbsp;</th>
           </tr>
-        <% end %>
 
-      </tbody>
-    </table>
+          <% statistic.rows.each do |p| %>
+            <tr class="<%= cycle("", "e") %>">
+              <% p.each do |r| %>
+                <%= r.render %>
+              <% end %>
+            </tr>
+          <% end %>
+
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+<% end %>
