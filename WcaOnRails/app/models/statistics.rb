@@ -4,6 +4,7 @@ module Statistics
     include PathHelper
 
     def render
+      name = self.name.split('(').first.strip
       "<td>#{link_to name, person_path(id), class: "p"}</td>".html_safe
     end
   end
