@@ -6,10 +6,10 @@ module Statistics
     def headers
       [ LeftTh.new('Person'),
         RightTh.new('Competitions'),
-        SpacerTd.new,
+        SpacerTh.new,
         LeftTh.new('Event'),
         RightTh.new('Competitions'),
-        SpacerTd.new,
+        SpacerTh.new,
         LeftTh.new('Country'),
         RightTh.new('Competitions'),
       ]

@@ -8,7 +8,7 @@ module Statistics
         RightTh.new('Gold'),
         RightTh.new('Silver'),
         RightTh.new('Bronze'),
-        SpacerTd.new,
+        SpacerTh.new,
         LeftTh.new('Person'),
         RightTh.new('Gold'),
         RightTh.new('Silver'),

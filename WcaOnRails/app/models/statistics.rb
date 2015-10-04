@@ -32,9 +32,15 @@ module Statistics
     end
   end
 
-  SpacerTd = Struct.new(:value) do
+  class SpacerTd
     def render
-      "<td class=\"L\"> &nbsp; &nbsp; | &nbsp; &nbsp; </td>".html_safe
+      '<td class="L"> &nbsp; &nbsp; | &nbsp; &nbsp; </td>'.html_safe
+    end
+  end
+
+  class EndSpacerTd
+    def render
+      '<td class="f">&nbsp;</td>'.html_safe
     end
   end
 
@@ -77,7 +83,7 @@ module Statistics
   def self.merge(*sub_tables)
     sub_tables.first.zip(*sub_tables[1..-1]).map do |args|
       empty = [EmptyTd.new] * 2
-      args.map { |e| e || empty }.inject([]) { |a, v| a + v + [SpacerTd.new] }[0...-1]
+      args.map { |e| e || empty }.inject([]) { |a, v| a + v + [SpacerTd.new] }[0...-1] + [EndSpacerTd.new]
     end
   end
 
