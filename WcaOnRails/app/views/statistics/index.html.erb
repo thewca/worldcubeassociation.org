@@ -1,3 +1,17 @@
+<h1>Fun Statistics</h1>
+
+<p style="padding-left:20px;padding-right:20px;font-weight:bold">
+  Here you see a selection of fun statistics, based on official WCA competition results.
+</p>
+
+<ul style="padding-left: 20px">
+  <% @statistics.each do |statistic| %>
+    <li style="padding-bottom: 5px">
+      <%= link_to statistic.name, "##{statistic.id}", style: "color:#33C;font-weight:normal" %>
+    </li>
+  <% end %>
+</ul>
+
 <% @statistics.each do |statistic| %>
   <div id="<%= statistic.id %>">
     <div class="table-responsive">
@@ -6,19 +20,17 @@
         <tbody><tr><td colspan="9">&nbsp;<a name="13">&nbsp;</a></td></tr>
 
           <!-- Why is this part of the table? -->
-          <tr><td class="caption" colspan="9"><%= statistic.title %> (<a title="[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country." style="color:#FC0" onclick="alert(&quot;[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country.&quot;)">info</a>)</td></tr>
+          <tr><td class="caption" colspan="9"><%= statistic.name %> (<a title="[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country." style="color:#FC0" onclick="alert(&quot;[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country.&quot;)">info</a>)</td></tr>
 
           <!-- shouldn't this be in a thead? -->
           <tr>
-            <th>Person</th>
-            <th class="R2">Competitions</th>
-            <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
-            <th>Event</th>
-            <th class="R2">Competitions</th>
-            <th class="L">&nbsp; &nbsp; | &nbsp; &nbsp;</th>
-            <th class="L">Country</th>
-            <th class="R2">Competitions</th>
-            <th class="f">&nbsp;</th>
+            <% statistic.headers.each do |header| %>
+              <% if header.respond_to?(:render) %>
+                <%= header.render %>
+              <% else %>
+                <th><%= header %></th>
+              <% end %>
+            <% end %>
           </tr>
 
           <% statistic.rows.each do |p| %>
