@@ -61,10 +61,7 @@ module Statistics
         [CountryTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-      persons.zip(events, countries).map do |args|
-        empty = [EmptyTd.new] * 2
-        args.map { |e| e || empty }.inject([]) { |a, v| a + v + [SpacerTd.new] }[0...-1]
-      end
+      Statistics::merge(persons, events, countries)
     end
   end
 end
