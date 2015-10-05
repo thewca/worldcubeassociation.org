@@ -1,6 +1,8 @@
 module Statistics
   class BestMedalCollection
     def name; 'Best "medal collection"'; end
+    def subtitle; "3x3x3 and overall"; end
+    def info; nil; end
     def id; 'medal_collection'; end
 
     def headers

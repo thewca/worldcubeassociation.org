@@ -1,6 +1,12 @@
 module Statistics
   class MostCompetitions
     def name; "Most Competitions"; end
+    def subtitle; nil; end
+    def info
+      "[Person] In how many competitions the person participated. " +
+      "[Event] In how many competitions the event was included. " +
+      "[Country] How many competitions took place in the country."
+    end
     def id; "most_competitions"; end
 
     def headers

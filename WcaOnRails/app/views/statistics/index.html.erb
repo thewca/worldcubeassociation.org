@@ -20,7 +20,16 @@
         <tbody><tr><td colspan="9">&nbsp;<a name="13">&nbsp;</a></td></tr>
 
           <!-- Why is this part of the table? -->
-          <tr><td class="caption" colspan="9"><%= statistic.name %> (<a title="[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country." style="color:#FC0" onclick="alert(&quot;[Person] In how many competitions the person participated. [Event] In how many competitions the event was included. [Country] How many competitions took place in the country.&quot;)">info</a>)</td></tr>
+          <tr>
+            <td class="caption" colspan="9">
+              <%= statistic.name %>
+              <% if statistic.info %>
+                (<a title="<%= statistic.info %>" style="color:#FC0" onclick='alert("<%=j statistic.info %>")'>info</a>)
+              <% elsif statistic.subtitle %>
+                <span style="color:#999">(<%= statistic.subtitle %>)</span>
+              <% end %>
+            </td>
+          </tr>
 
           <!-- shouldn't this be in a thead? -->
           <tr>
