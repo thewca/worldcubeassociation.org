@@ -91,6 +91,7 @@ module Statistics
   def self.all
     [
       Statistics::BestMedalCollection.new,
+      Statistics::Top100.new,
       Statistics::MostCompetitions.new,
     ]
   end
