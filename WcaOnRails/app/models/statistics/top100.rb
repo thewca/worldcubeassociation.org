@@ -18,15 +18,22 @@ module Statistics
     def rows
       q = -> (query) { ActiveRecord::Base.connection.execute(query) }
 
-      single_bound = 991;
+      top100 = q.(<<-SQL
+        SELECT   average
+        FROM     Results
+        WHERE    eventId='333' AND average>0
+        ORDER BY average
+        LIMIT    100
+      SQL
+      )
+      average_of_rank_100 = 0
+      top100.each { |r| average_of_rank_100 = r[0] }
 
       average_top100 = <<-SQL
       SELECT   personId,
                personName
       FROM     Results
-      WHERE    eventId='333' AND average>0
-      ORDER BY average
-      LIMIT 100
+      WHERE    eventId='333' AND average>0 AND average<=#{average_of_rank_100}
       SQL
       average_candidates = q.(<<-SQL
         SELECT   personId,
@@ -41,30 +48,45 @@ module Statistics
         [PersonTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-      singles = 1.upto(5).map do |i|
-        <<-SQL
-          SELECT   personId,
-                   personName,
-                   value#{i}
-          FROM     Results
-          WHERE    best<#{single_bound} AND best>0 AND value#{i}>0 AND eventId='333'
-          LIMIT    100
-          SQL
-      end.join("UNION ALL\n")
-      single_candidates = q.(<<-SQL
+
+      trips = []
+      q.(<<-SQL
         SELECT   personId,
                  personName,
-                 COUNT(personId) AS appearances
-        FROM     (#{singles}) AS singles
-        GROUP BY personId, personName
-        ORDER BY appearances DESC
-        LIMIT    10
+                 value1,
+                 value2,
+                 value3,
+                 value4,
+                 value5
+        FROM     Results
+        WHERE    best>0 AND eventId='333'
+        ORDER BY best
+        LIMIT    110
         SQL
-      ).map do |row|
-        [PersonTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
+      ).each do |row|
+        2.upto(6) do |i|
+          trips << [row[0], row[1], row[i]] if row[i] > 0
+        end
+      end
+      trips = trips.sort_by { |r| r[2] }
+      single_for_rank_100 = trips[[trips.size - 1, 100].min][2]
+      trips = trips.select { |r| r[2] <= single_for_rank_100 }
+      counts = count(trips)
+      counts = counts.to_a.map(&:flatten).sort_by { |r| -r[2] }
+      single_candidates = counts[0..9].map do |id, name, count|
+        [PersonTd.new(id, name), BoldNumberTd.new(count)]
       end
 
       Statistics::merge([single_candidates, average_candidates])
+    end
+
+    private
+    def count(trips)
+      counts = Hash.new { |h, k| h[k] = 0 }
+      trips.each do |r|
+        counts[[r[0], r[1]]] += 1
+      end
+      counts
     end
   end
 end
