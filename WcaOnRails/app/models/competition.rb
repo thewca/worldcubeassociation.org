@@ -41,8 +41,8 @@ class Competition < ActiveRecord::Base
         attributes["showAtAll"] = false
         attributes["isConfirmed"] = false
         assign_attributes(attributes)
-        self.organizers << competition_to_clone.organizers
-        self.delegates << competition_to_clone.delegates
+        self.organizers |= competition_to_clone.organizers
+        self.delegates |= competition_to_clone.delegates
       else
         errors.add(:competition_id_to_clone, "invalid")
       end

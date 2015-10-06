@@ -130,7 +130,24 @@ describe CompetitionsController do
         expect(new_comp.delegates.sort_by(&:id)).to eq (competition.delegates + [delegate]).sort_by(&:id)
       end
 
-      it 'clones an invalid competition' do
+      it 'clones a competition that they delegated' do
+        # First, make ourselves the delegate of the competition we're going to clone.
+        competition.delegates << delegate
+        competition.save!
+        post :create, competition: { name: "Test 2015", competition_id_to_clone: competition.id }
+        expect(response).to redirect_to edit_competition_path("Test2015")
+        expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
+        new_comp = assigns(:competition)
+        expect(new_comp.id).to eq "Test2015"
+
+        # Cloning a competition should clone its organizers.
+        expect(new_comp.organizers.sort_by(&:id)).to eq []
+        # When a delegate clones a competition, it should clone its organizers, and add
+        # the delegate doing the cloning.
+        expect(new_comp.delegates.sort_by(&:id)).to eq [delegate]
+      end
+
+      it 'clones an non existant competition' do
         post :create, competition: { name: "Test 2015", competition_id_to_clone: "invalidcompetitionid" }
         expect(response).to render_template(:new)
         invalid_competition = assigns(:competition)

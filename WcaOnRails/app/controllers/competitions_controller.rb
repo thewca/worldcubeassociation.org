@@ -37,7 +37,7 @@ class CompetitionsController < ApplicationController
     new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
     @competition = Competition.new(new_competition_params)
     if current_user.any_kind_of_delegate?
-      @competition.delegates << current_user
+      @competition.delegates |= [current_user]
     end
 
     if @competition.save
