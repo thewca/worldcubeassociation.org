@@ -39,12 +39,6 @@ module Statistics
     end
   end
 
-  class EndSpacerTd
-    def render
-      '<td class="f">&nbsp;</td>'.html_safe
-    end
-  end
-
   BoldNumberTd = Struct.new(:value) do
     def render
       "<td class=\"R2\">#{value}</td>".html_safe
@@ -81,11 +75,25 @@ module Statistics
     end
   end
 
-  def self.merge(*sub_tables)
-    sub_tables.first.zip(*sub_tables[1..-1]).map do |args|
-      empty = [EmptyTd.new] * 2
-      args.map { |e| e || empty }.inject([]) { |a, v| a + v + [SpacerTd.new] }[0...-1] + [EndSpacerTd.new]
+  def self.merge(sub_tables, spacer: SpacerTd.new, empty: EmptyTd.new)
+    return [] if sub_tables.all?(&:empty?)
+
+    row_count_of_longest_sub_table = sub_tables.map(&:length).max
+    # Calling first is safe since we know there's at least one
+    # non-empty sub_table.
+    column_count = sub_tables.max_by(&:length).first.length
+    result = []
+    0.upto(row_count_of_longest_sub_table - 1) do |i|
+      # for each table we grab the `i`th row and join it using `SpacerTd`
+      row_parts = []
+      sub_tables.each do |table|
+        current_row = table[i] || ([empty] * column_count)
+        row_parts << current_row + [spacer]
+      end
+      row_parts = row_parts.flatten[0...-1]
+      result << row_parts
     end
+    result
   end
 
   def self.all

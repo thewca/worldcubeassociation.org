@@ -64,7 +64,7 @@ module Statistics
         [PersonTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-      Statistics::merge(single_candidates, average_candidates)
+      Statistics::merge([single_candidates, average_candidates])
     end
   end
 end

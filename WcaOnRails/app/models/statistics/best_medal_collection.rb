@@ -63,7 +63,7 @@ module Statistics
         ]
       end
 
-      Statistics::merge(just_three, all)
+      Statistics::merge([just_three, all])
     end
   end
 end

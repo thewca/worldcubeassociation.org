@@ -61,7 +61,7 @@ module Statistics
         [CountryTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-      Statistics::merge(persons, events, countries)
+      Statistics::merge([persons, events, countries])
     end
   end
 end
