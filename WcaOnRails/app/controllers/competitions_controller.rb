@@ -186,7 +186,7 @@ class CompetitionsController < ApplicationController
       else
         @competition.destroy
         flash[:success] = "Successfully deleted competition #{@competition.id}"
-        redirect_to competitions_path
+        redirect_to root_url
       end
     elsif @competition.update_attributes(competition_params)
       if params[:commit] == "Confirm"

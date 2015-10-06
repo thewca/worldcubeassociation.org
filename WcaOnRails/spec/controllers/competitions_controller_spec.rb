@@ -286,6 +286,7 @@ describe CompetitionsController do
         # deletion of (not confirmed and not visible) competitions.
         patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
         expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(response).to redirect_to root_url
       end
 
       it "can enable and disable registration list of locked competition" do
