@@ -103,6 +103,14 @@ RSpec.describe User, type: :model do
     expect(user.wca_id).to be_nil
   end
 
+  it "verifies WCA id unique when changeing WCA id" do
+    user1 = FactoryGirl.create :user, wca_id: "2005FLEI01"
+    user2 = FactoryGirl.create :user, wca_id: "2006FLEI01"
+    user1.wca_id = user2.wca_id
+    expect(user1).to be_invalid
+    expect(user1.errors.messages[:wca_id]).to eq ["must be unique"]
+  end
+
   it "can create user with empty password" do
     FactoryGirl.create :user, encrypted_password: ""
   end

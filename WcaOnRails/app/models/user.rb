@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
-    if wca_id && !wca_id_was
+    if wca_id_change
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA id, fail validation.
       if user && !user.dummy_account?
