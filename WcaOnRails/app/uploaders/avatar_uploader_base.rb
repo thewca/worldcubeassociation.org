@@ -15,7 +15,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     # NOTE that we are storing avatars by wca_id. There are two consequences of this:
-    #  - A user have a wca_id to have an avatar (see validations in user.rb).
+    #  - A user must have a wca_id to have an avatar (see validations in user.rb).
     #  - Changing the wca_id for a user is complicated, and not something we
     #    are bothering to handle very well.
     "uploads/#{model.class.to_s.underscore}/avatar/#{model.wca_id}"

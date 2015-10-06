@@ -73,6 +73,9 @@ class User < ActiveRecord::Base
   validates :pending_avatar, AVATAR_PARAMETERS
 
   mount_uploader :avatar, AvatarUploader
+  # Don't delete avatar when this model is destroyed. User models should almost never be
+  # destroyed, except when we're deleting dummy accounts.
+  skip_callback :commit, :after, :remove_avatar!
   crop_uploaded :avatar
   validates :avatar, AVATAR_PARAMETERS
 

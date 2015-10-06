@@ -118,8 +118,15 @@ RSpec.describe User, type: :model do
   it "removes dummy accounts when WCA id is assigned" do
     dummy_user = FactoryGirl.create :user, wca_id: "2005FLEI01", encrypted_password: ""
     expect(dummy_user).to be_valid
-    dummy_user.update_column(:avatar, "foo.jpg")
-    expect(dummy_user.reload.read_attribute(:avatar)).to eq "foo.jpg"
+    dummy_user.update_attributes!(
+      avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
+      avatar_crop_x: 40,
+      avatar_crop_y: 40,
+      avatar_crop_w: 40,
+      avatar_crop_h: 40,
+    )
+    avatar = dummy_user.reload.read_attribute(:avatar)
+    expect(File).to exist("public/uploads/user/avatar/2005FLEI01/#{avatar}")
 
     user = FactoryGirl.create :user, wca_id: "2004FLEI01"
     expect(user).to be_valid
@@ -128,7 +135,8 @@ RSpec.describe User, type: :model do
 
     # Check that the dummy account was deleted, and we inherited its avatar.
     expect(User.find_by_id(dummy_user.id)).to be_nil
-    expect(user.reload.read_attribute :avatar).to eq "foo.jpg"
+    expect(user.reload.read_attribute :avatar).to eq avatar
+    expect(File).to exist("public/uploads/user/avatar/2005FLEI01/#{avatar}")
   end
 
   it "does not allow duplicate WCA ids" do
