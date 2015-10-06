@@ -143,9 +143,17 @@
                 });
             }
             if (inputBinding.locationNameInput && gmapContext.settings.enableAutocomplete) {
-                gmapContext.autocomplete = new google.maps.places.Autocomplete(inputBinding.locationNameInput.get(0));
-                google.maps.event.addListener(gmapContext.autocomplete, "place_changed", function() {
-                    var place = gmapContext.autocomplete.getPlace();
+                gmapContext.autocomplete = new google.maps.places.SearchBox(inputBinding.locationNameInput.get(0));
+                //JFLY See https://github.com/cubing/worldcubeassociation.org/issues/190.
+                //JFLYgoogle.maps.event.addListener(gmapContext.autocomplete, "place_changed", function() {
+                    //JFLYvar place = gmapContext.autocomplete.getPlace();
+                google.maps.event.addListener(gmapContext.autocomplete, "places_changed", function() {//<<<
+                    var place = gmapContext.autocomplete.getPlaces();//JFLY
+                    if (place.length == 0) {//JFLY
+                        return;//JFLY
+                    }//JFLY
+                    place = place[0];//JFLY
+
                     if (!place.geometry) {
                         gmapContext.settings.onlocationnotfound(place.name);
                         return;
