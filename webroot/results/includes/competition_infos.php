@@ -65,22 +65,6 @@ function showItem ( $class, $key, $values ) {
 }
 
 #----------------------------------------------------------------------
-function processLinkList ( $key, $values ) {
-#----------------------------------------------------------------------
-  preg_match_all( '/ \[ \{ ([^]]*) \} \{ ([^]]*) \} \] /x', $values, $matches, PREG_SET_ORDER );
-  if( ! $matches )
-    return '';
-  $result = "<span style='white-space:nowrap'><select id='$key' style='width:300px'>\n";
-  foreach( $matches as $match ){
-    list( $whole, $text, $url ) = $match;
-    $result .= "    <option value='$url'>$text</option>\n";
-  }
-  $result .= "</select>&nbsp;";
-  $result .= "<input type='button' value='Go' onclick='window.open( document.getElementById(\"$key\").value )' /></span>\n";
-  return $result;
-}
-
-#----------------------------------------------------------------------
 function showListItemNew ( $key, $encodedLinkList ) {
 #----------------------------------------------------------------------
   global $competitionResults;
