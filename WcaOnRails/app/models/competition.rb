@@ -24,7 +24,7 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: ENDS_WITH_YEAR_RE }
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :website, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
+  validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
   before_validation :clone_competition, on: [:create]
   def clone_competition
@@ -249,15 +249,5 @@ class Competition < ActiveRecord::Base
     unless invalid_events.empty?
       errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
-  end
-
-  def website_url_name
-    match = PATTERN_LINK_RE.match website
-    match ? match[1] : nil
-  end
-
-  def website_url
-    match = PATTERN_LINK_RE.match website
-    match ? match[2] : nil
   end
 end

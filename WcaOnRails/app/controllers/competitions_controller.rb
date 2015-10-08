@@ -75,7 +75,7 @@ class CompetitionsController < ApplicationController
     body = "The [#{comp.name}](#{root_url}results/c.php?i=#{comp.id})"
     body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
     unless comp.website.blank?
-      body += " Check out the [#{comp.name} website](#{comp.website_url}) for more information and registration.";
+      body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
     end
     @post = Post.new(title: title, body: body, author: current_user, world_readable: true)
     post_post(@post)

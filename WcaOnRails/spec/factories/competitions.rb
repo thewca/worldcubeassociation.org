@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     eventSpecs "333 333oh"
     venue "My backyard"
-    website "[{wca}{http://worldcubeassociation.org}]"
+    website "https://www.worldcubeassociation.org"
     showAtAll true
   end
 end

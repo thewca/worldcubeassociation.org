@@ -131,12 +131,21 @@ RSpec.describe Competition do
     expect(competition.longitude).to eq 4.6*1e6
   end
 
-  it "parses website" do
-    url = "http://foo.com"
-    url_name = "foo comp website"
-    competition = FactoryGirl.create :competition, website: "[{#{url_name}}{#{url}}]"
-    expect(competition.website_url_name).to eq url_name
-    expect(competition.website_url).to eq url
+  describe "validates website" do
+    it "likes http://foo.com" do
+      competition = FactoryGirl.build :competition, website: "http://foo.com"
+      expect(competition).to be_valid
+    end
+
+    it "dislikes [{foo}{http://foo.com}]" do
+      competition = FactoryGirl.build :competition, website: "[{foo}{http://foo.com}]"
+      expect(competition).not_to be_valid
+    end
+
+    it "dislikes htt://foo" do
+      competition = FactoryGirl.build :competition, website: "htt://foo"
+      expect(competition).not_to be_valid
+    end
   end
 
   it "saves delegate_ids" do
