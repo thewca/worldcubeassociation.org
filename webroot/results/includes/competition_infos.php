@@ -22,6 +22,8 @@ function showCompetitionInfos () {
   // Only show organizer emails if there is no contact info given.
   $organizer = joinUsers( $organizers, !$contact );
 
+  $website = externalLink($website, "$name website");
+
   #--- Show the infos.
   echo "<h1>$name</h1>\n";
 
@@ -37,7 +39,7 @@ function showCompetitionInfos () {
   showItem( 'key', "Venue",        array( $venue ));
   showItem( 'sub', "Address",      array( $venueAddress ));
   showItem( 'sub', "Details",      array( $venueDetails ));
-  showItem( 'key', "Website",      array( $website ));
+  showItem( 'key', "Website",      array( $website ), false );
   showItem( 'key', "Organizer",    array( $organizer ));
   showItem( 'key', "WCA Delegate", array( $wcaDelegate ));
   showItem( 'key', "Contact",      array( $contact ));
@@ -57,11 +59,15 @@ function showCompetitionInfos () {
 }
 
 #----------------------------------------------------------------------
-function showItem ( $class, $key, $values ) {
+function showItem ( $class, $key, $values, $doProcessLinks=true ) {
 #----------------------------------------------------------------------
-  $value = implode( ", ", array_filter( array_map( 'processLinks', $values ), 'strip_tags' ));
-  if( $value )
+  if( $doProcessLinks ) {
+    $values = array_map( 'processLinks', $values );
+  }
+  $value = implode( ", ", array_filter( $values, 'strip_tags' ));
+  if( $value ) {
     echo "  <tr> <td class='$class'>$key</td> <td>$value</td> </tr>\n";
+  }
 }
 
 #----------------------------------------------------------------------
