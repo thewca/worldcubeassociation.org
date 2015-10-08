@@ -43,12 +43,15 @@ $(function() {
         }
         var url;
         if(delegate_only) {
-          url = '/api/v0/users/delegates/search/' + encodeURIComponent(query);
+          url = '/api/v0/users/delegates/search';
         } else {
-          url = '/api/v0/users/search/' + encodeURIComponent(query);
+          url = '/api/v0/users/search';
         }
         $.ajax({
           url: url,
+          data: {
+            q: query,
+          },
           type: 'GET',
           error: function() {
             callback();

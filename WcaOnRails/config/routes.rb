@@ -73,8 +73,8 @@ Rails.application.routes.draw do
       get '/me' => "api#me"
       get '/auth/results' => "api#auth_results"
       get '/scramble-program' => "api#scramble_program"
-      get '/users/search/:query' => 'api#users_search'
-      get '/users/delegates/search/:query' => 'api#users_delegates_search'
+      get '/users/search' => 'api#users_search'
+      get '/users/delegates/search' => 'api#users_delegates_search'
     end
   end
 end

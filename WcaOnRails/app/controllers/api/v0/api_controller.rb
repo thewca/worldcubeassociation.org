@@ -51,7 +51,11 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def users_search(delegate_only: false)
-    query = params[:query]
+    query = params[:q]
+    unless query
+      render json: { error: "No query specified" }, status: 400
+      return
+    end
     users = User.where.not(encrypted_password: nil) # Ignore all dummy accounts
     users = users.where("name LIKE ?", "%" + query + "%")
     if delegate_only
