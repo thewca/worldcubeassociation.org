@@ -1,4 +1,4 @@
-class Api::V0::CompetitionsController < ApplicationController
+class Api::V0::CompetitionsController < Api::V0::ApiController
   def show
     competition = Competition.where(id: params[:id], showAtAll: true).first
     unless competition

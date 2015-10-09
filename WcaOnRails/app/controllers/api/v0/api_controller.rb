@@ -1,5 +1,14 @@
 class Api::V0::ApiController < ApplicationController
-  before_action :doorkeeper_authorize!, only: [:me]
+  before_filter :cors_set_access_control_headers
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    headers['Access-Control-Allow-Credentials'] = 'false'
+  end
+
+  before_filter :doorkeeper_authorize!, only: [:me]
 
   DEFAULT_API_RESULT_LIMIT = 20
 
@@ -15,7 +24,7 @@ class Api::V0::ApiController < ApplicationController
       return render status: :forbidden, json: { error: "Cannot adminster results" }
     end
 
-    render json: { sucess: true }
+    render json: { status: "ok" }
   end
 
   def scramble_program
@@ -53,7 +62,7 @@ class Api::V0::ApiController < ApplicationController
   def users_search(delegate_only: false)
     query = params[:q]
     unless query
-      render json: { error: "No query specified" }, status: 400
+      render status: :bad_request, json: { error: "No query specified" }
       return
     end
     users = User.where.not(encrypted_password: nil) # Ignore all dummy accounts
