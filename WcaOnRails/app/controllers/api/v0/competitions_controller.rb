@@ -1,6 +1,6 @@
 class Api::V0::CompetitionsController < ApplicationController
   def show
-    competition = Competition.find_by_id(params[:id])
+    competition = Competition.where(id: params[:id], showAtAll: true).first
     unless competition
       render json: { error: "Competition with id #{params[:id]} not found" }, status: 404
       return
