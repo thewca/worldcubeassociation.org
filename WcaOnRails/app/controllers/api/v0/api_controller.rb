@@ -13,7 +13,22 @@ class Api::V0::ApiController < ApplicationController
   DEFAULT_API_RESULT_LIMIT = 20
 
   def me
-    render json: { me: current_resource_owner }
+    me = {
+      id: current_resource_owner.id,
+      name: current_resource_owner.name,
+      email: current_resource_owner.email,
+      created_at: current_resource_owner.created_at,
+      updated_at: current_resource_owner.updated_at,
+    }
+    if current_resource_owner.avatar?
+      me[:avatar] = {
+        url: current_resource_owner.avatar.url,
+        thumb_url: current_resource_owner.avatar.url(:thumb),
+      }
+    else
+      me[:avatar] = nil
+    end
+    render json: { me: me }
   end
 
   def auth_results

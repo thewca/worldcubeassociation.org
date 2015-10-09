@@ -3,7 +3,12 @@ require "rails_helper"
 describe "oauth api" do
   include Capybara::DSL
 
-  let(:user) { FactoryGirl.create :user }
+  let(:user) {
+    FactoryGirl.create :user, {
+      wca_id: "2005FLEI01",
+      avatar: File.open(Rails.root.join("spec/support/logo.jpg"))
+    }
+  }
 
   it 'can authenticate with grant_type password' do
     post oauth_token_path, grant_type: "password", username: user.email, password: user.password
@@ -67,5 +72,8 @@ describe "oauth api" do
     expect(response).to be_success
     json = JSON.parse(response.body)
     expect(json['me']['email']).to eq(user.email)
+
+    # Verify that avatar url is a full url (starts with http(s))
+    expect(json['me']['avatar']['url']).to match /^https?/
   end
 end
