@@ -71,6 +71,9 @@ describe "oauth api" do
     get api_v0_me_path, nil, { "Authorization" => "Bearer #{access_token}" }
     expect(response).to be_success
     json = JSON.parse(response.body)
+    expect(json['me']['id']).to eq(user.id)
+    expect(json['me']['wca_id']).to eq(user.wca_id)
+    expect(json['me']['name']).to eq(user.name)
     expect(json['me']['email']).to eq(user.email)
 
     # Verify that avatar url is a full url (starts with http(s))

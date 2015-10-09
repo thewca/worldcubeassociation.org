@@ -15,6 +15,7 @@ class Api::V0::ApiController < ApplicationController
   def me
     me = {
       id: current_resource_owner.id,
+      wca_id: current_resource_owner.wca_id,
       name: current_resource_owner.name,
       email: current_resource_owner.email,
       created_at: current_resource_owner.created_at,
