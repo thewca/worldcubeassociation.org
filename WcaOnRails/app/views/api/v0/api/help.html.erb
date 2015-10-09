@@ -5,7 +5,11 @@
 
   <h2>OAuth</h2>
   <p>
-    See <%= link_to oauth_applications_path, oauth_applications_path %> to view and create new test applications.
+    See <%= link_to oauth_applications_path, oauth_applications_path %> to view
+    and create new test applications. Currently only site administrators can
+    configure OAuth applications. Please contact us at
+    <%= mail_to "admin@worldcubeassociation.org" %>, we'd
+    love to see more applications using WCA OAuth!
   </p>
 <pre><code>> curl <%= oauth_token_url %> -X POST -F grant_type=password -F username=wca_website_team -F password=wca
 {"access_token":"1d6c95446cab947224286b7bec4382d898c664c7a3cafb16d3d110a3044cf4dc","token_type":"bearer","expires_in":7200,"created_at":1430788134}

@@ -21,7 +21,12 @@ Doorkeeper.configure do
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   admin_authenticator do
-    redirect_to new_user_session_url unless current_user && current_user.admin?
+    if not current_user
+      redirect_to new_user_session_url
+    elsif not current_user.admin?
+      flash[:danger] = "You don't have permission to configure OAuth applications."
+      redirect_to api_v0_path
+    end
   end
 
   # Authorization Code expiration time (default 10 minutes).
