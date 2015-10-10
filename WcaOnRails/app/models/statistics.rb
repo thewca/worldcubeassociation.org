@@ -82,18 +82,15 @@ module Statistics
     # Calling first is safe since we know there's at least one
     # non-empty sub_table.
     column_count = sub_tables.max_by(&:length).first.length
-    result = []
-    0.upto(row_count_of_longest_sub_table - 1) do |i|
+    0.upto(row_count_of_longest_sub_table - 1).map do |i|
       # for each table we grab the `i`th row and join it using `SpacerTd`
       row_parts = []
       sub_tables.each do |table|
         current_row = table[i] || ([empty] * column_count)
         row_parts << current_row + [spacer]
       end
-      row_parts = row_parts.flatten[0...-1]
-      result << row_parts
+      row_parts.flatten[0...-1]
     end
-    result
   end
 
   def self.all
