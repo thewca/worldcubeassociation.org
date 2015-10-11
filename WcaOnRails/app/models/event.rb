@@ -43,6 +43,10 @@ class Event
     valid? && rank >= 1000
   end
 
+  def has_average_results?
+    !%w(333mbf 444bf 555bf).include?(@id)
+  end
+
   # See https://github.com/cubing/worldcubeassociation.org/issues/96
   # for where these ranks come from.
   def self.all_official

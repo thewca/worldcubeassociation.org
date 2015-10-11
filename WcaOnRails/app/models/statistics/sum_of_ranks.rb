@@ -2,21 +2,25 @@ require 'benchmark'
 
 module Statistics
   class SumOfRanks < AbstractStatistic
-    def initialize(q, event_ids, name:, just_single: false)
+    def initialize(q, event_ids, name:, subtitle:, id:, type: :all)
+      if !%i(average all single).include?(type)
+        raise ArgumentError.new("type must be either :all, :average or :single")
+      end
+
       super(q)
       @event_ids = event_ids
       @name = name
-      @just_single = just_single
+      @subtitle = subtitle
+      @id = id
+      @type = type
     end
 
-    attr_reader :name
-    def subtitle; "Single | Average"; end
+    attr_reader :name, :subtitle, :id
     def info; nil; end
-    def id; "sum_ranks_345"; end
 
     def headers
       event_headers = @event_ids.map { |e| RightTh.new(e) }
-      if @just_single
+      if @type != :all
         [ LeftTh.new('Person') ] +
           [ RightTh.new('Sum') ] +
           event_headers +
@@ -33,8 +37,10 @@ module Statistics
     end
 
     def rows
-      if @just_single
+      if @type == :single
         get_sum_table_for('Single')
+      elsif @type == :average
+        get_sum_table_for('Average')
       else
         Statistics.merge([get_sum_table_for('Single'), get_sum_table_for('Average')])
       end
