@@ -51,6 +51,12 @@ module Statistics
     end
   end
 
+  RedNumberTd = Struct.new(:value) do
+    def render
+      "<td class\"r\"><span style=\"color:#F00\">#{value}</span></td>".html_safe
+    end
+  end
+
   class SpacerTh
     def render
       "<th class=\"L\">&nbsp; &nbsp; | &nbsp; &nbsp;</th>".html_safe
@@ -96,6 +102,9 @@ module Statistics
   def self.all
     [
       Statistics::BestMedalCollection.new,
+      # TODO Are we fine with data - code coupling?
+      Statistics::SumOfRanks.new(['333', '444', '555'], name: "Sum of 3x3/4x4/5x5 ranks"),
+      Statistics::SumOfRanks.new(Event.all.select(&:official?).map(&:id), name: "Sum of single ranks", just_single: true),
       Statistics::Top100.new,
       Statistics::MostCompetitions.new,
     ]
