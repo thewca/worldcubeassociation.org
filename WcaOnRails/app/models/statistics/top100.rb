@@ -66,6 +66,7 @@ module Statistics
           trips << [row[0], row[1], row[i]] if row[i] > 0
         end
       end
+      return [] if trips.empty?
       trips = trips.sort_by { |r| r[2] }
       single_for_rank_100 = trips[[trips.size - 1, 100].min][2]
       trips = trips.select { |r| r[2] <= single_for_rank_100 }
