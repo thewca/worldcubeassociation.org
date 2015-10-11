@@ -18,6 +18,7 @@ module Statistics
         SpacerTh.new,
         LeftTh.new('Country'),
         RightTh.new('Competitions'),
+        EmptyTh.new('Competitions'),
       ]
     end
 

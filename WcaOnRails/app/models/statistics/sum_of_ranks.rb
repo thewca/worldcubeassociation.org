@@ -30,6 +30,7 @@ module Statistics
           [ RightTh.new('Sum') ] +
           event_headers +
           [ SpacerTh.new ] +
+          [ LeftTh.new('Person') ] +
           [ RightTh.new('Sum') ] +
           event_headers +
           [ EmptyTh.new ]

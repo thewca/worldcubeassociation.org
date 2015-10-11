@@ -71,7 +71,7 @@ module Statistics
 
   LeftTh = Struct.new(:value) do
     def render
-      "<th>#{value}</th>".html_safe
+      "<th class=\"L\">#{value}</th>".html_safe
     end
   end
 
@@ -109,12 +109,12 @@ module Statistics
                                  subtitle: "Single | Average",
                                  id: "sum_ranks_345"),
       Statistics::SumOfRanks.new(q, Event.all.select(&:official?).map(&:id),
-                                 name: "Sum of single ranks",
+                                 name: "Sum of all single ranks",
                                  subtitle: nil,
                                  id: "sum_ranks_single",
                                  type: :single),
       Statistics::SumOfRanks.new(q, Event.all.select(&:official?).select(&:has_average_results?).map(&:id),
-                                 name: "Sum of average ranks",
+                                 name: "Sum of all average ranks",
                                  subtitle: nil,
                                  id: "sum_ranks_single",
                                  type: :average),
