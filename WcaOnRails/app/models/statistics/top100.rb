@@ -1,5 +1,5 @@
 module Statistics
-  class Top100
+  class Top100 < AbstractStatistic
     def name; "Appearances in Rubik's Cube top 100 results"; end
     def subtitle; "Single | Average"; end
     def info; nil; end
@@ -16,9 +16,7 @@ module Statistics
     end
 
     def rows
-      q = -> (query) { ActiveRecord::Base.connection.execute(query) }
-
-      top100 = q.(<<-SQL
+      top100 = @q.(<<-SQL
         SELECT   average
         FROM     Results
         WHERE    eventId='333' AND average>0
@@ -35,7 +33,7 @@ module Statistics
       FROM     Results
       WHERE    eventId='333' AND average>0 AND average<=#{average_of_rank_100}
       SQL
-      average_candidates = q.(<<-SQL
+      average_candidates = @q.(<<-SQL
         SELECT   personId,
                  personName,
                  COUNT(personId) AS appearances
@@ -50,7 +48,7 @@ module Statistics
 
 
       trips = []
-      q.(<<-SQL
+      @q.(<<-SQL
         SELECT   personId,
                  personName,
                  value1,

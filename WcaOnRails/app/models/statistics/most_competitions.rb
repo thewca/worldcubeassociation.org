@@ -1,5 +1,5 @@
 module Statistics
-  class MostCompetitions
+  class MostCompetitions < AbstractStatistic
     def name; "Most Competitions"; end
     def subtitle; nil; end
     def info
@@ -22,8 +22,7 @@ module Statistics
     end
 
     def rows
-      q = -> (query) { ActiveRecord::Base.connection.execute(query) }
-      persons = q.(<<-SQL
+      persons = @q.(<<-SQL
         SELECT personId, name, COUNT(DISTINCT competitionId) as numberOfCompetitions
         FROM Results
         LEFT JOIN Persons ON Results.personId = Persons.id
@@ -35,7 +34,7 @@ module Statistics
         [PersonTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-      events = q.(<<-SQL
+      events = @q.(<<-SQL
         SELECT eventId, COUNT(DISTINCT competitionId) as numberOfCompetitions
         FROM Results
         GROUP BY eventId
@@ -47,7 +46,7 @@ module Statistics
         [EventTd.new(e.id, e.name), BoldNumberTd.new(row[1])]
       end
 
-      countries = q.(<<-SQL
+      countries = @q.(<<-SQL
         SELECT   countryId, Countries.name, COUNT(*) as numberOfCompetitions
         FROM     Competitions
         LEFT JOIN Countries ON Competitions.countryId = Countries.id

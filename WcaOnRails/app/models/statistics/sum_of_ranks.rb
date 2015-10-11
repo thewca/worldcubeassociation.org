@@ -1,8 +1,9 @@
 require 'benchmark'
 
 module Statistics
-  class SumOfRanks
-    def initialize(event_ids, name:, just_single: false)
+  class SumOfRanks < AbstractStatistic
+    def initialize(q, event_ids, name:, just_single: false)
+      super(q)
       @event_ids = event_ids
       @name = name
       @just_single = just_single
@@ -44,9 +45,8 @@ module Statistics
       event_id_filter = @event_ids.map do |id|
         "eventId='#{id}'"
       end.join(" OR ")
-      q = -> (query) { ActiveRecord::Base.connection.execute(query) }
       events_hash = Hash.new { |h, k| h[k] = {} }
-      q.(<<-SQL
+      @q.(<<-SQL
         SELECT   personId, name, eventId, worldRank
         FROM     Ranks#{type}
         JOIN     Persons ON Persons.id=Ranks#{type}.personId

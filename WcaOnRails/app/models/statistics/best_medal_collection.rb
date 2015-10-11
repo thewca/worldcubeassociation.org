@@ -1,5 +1,5 @@
 module Statistics
-  class BestMedalCollection
+  class BestMedalCollection < AbstractStatistic
     def name; 'Best "medal collection"'; end
     def subtitle; "3x3x3 and overall"; end
     def info; nil; end
@@ -20,8 +20,7 @@ module Statistics
     end
 
     def rows
-      q = -> (query) { ActiveRecord::Base.connection.execute(query) }
-      just_three = q.(<<-SQL
+      just_three = @q.(<<-SQL
         SELECT
           personId,
           personName,
@@ -42,7 +41,7 @@ module Statistics
         ]
       end
 
-      all = q.(<<-SQL
+      all = @q.(<<-SQL
         SELECT
           personId,
           personName,

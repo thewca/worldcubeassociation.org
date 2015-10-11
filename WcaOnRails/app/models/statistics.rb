@@ -100,13 +100,14 @@ module Statistics
   end
 
   def self.all
+    q = -> (query) { ActiveRecord::Base.connection.execute(query) }
     [
-      Statistics::BestMedalCollection.new,
+      Statistics::BestMedalCollection.new(q),
       # TODO Are we fine with data - code coupling?
-      Statistics::SumOfRanks.new(['333', '444', '555'], name: "Sum of 3x3/4x4/5x5 ranks"),
-      Statistics::SumOfRanks.new(Event.all.select(&:official?).map(&:id), name: "Sum of single ranks", just_single: true),
-      Statistics::Top100.new,
-      Statistics::MostCompetitions.new,
+      Statistics::SumOfRanks.new(q, ['333', '444', '555'], name: "Sum of 3x3/4x4/5x5 ranks"),
+      Statistics::SumOfRanks.new(q, Event.all.select(&:official?).map(&:id), name: "Sum of single ranks", just_single: true),
+      Statistics::Top100.new(q),
+      Statistics::MostCompetitions.new(q),
     ]
   end
 end
