@@ -1,3 +1,5 @@
+require_relative './statistics/blindfolded_3x3_success_streak'
+
 module Statistics
   PersonTd = Struct.new(:id, :name) do
     include ActionView::Helpers::FormHelper
@@ -51,6 +53,19 @@ module Statistics
     end
   end
 
+  TimeTd = Struct.new(:time) do
+    def render
+      minutes = (time / 6000).to_i
+      seconds = time.fdiv(100) - minutes * 60
+      format = if minutes > 0
+        "%d:%05.2f" % [minutes, seconds]
+      else
+        "%.2f" % seconds
+      end
+      "<td class=\"r\">#{format}</td>".html_safe
+    end
+  end
+
   RedNumberTd = Struct.new(:value) do
     def render
       "<td class\"r\"><span style=\"color:#F00\">#{value}</span></td>".html_safe
@@ -75,9 +90,33 @@ module Statistics
     end
   end
 
-  EmptyTh = Struct.new(:value) do
+  TrailingTh = Struct.new(:value) do
     def render
       '<th class="f">&nbsp;</th>'.html_safe
+    end
+  end
+
+  class EmptyTh
+    def render
+      '<th>&nbsp;</th>'.html_safe
+    end
+  end
+
+  class EmptyTd
+    def render
+      '<td>&nbsp;</td>'.html_safe
+    end
+  end
+
+  DateRangeTd = Struct.new(:date_range) do
+    def render
+      from_time = date_range.first.strftime("%b %Y")
+      end_time = if date_range.last.nil?
+          "<b>ongoing...</b>"
+        else
+          date_range.last.strftime("%b %Y")
+        end
+      "<td>#{from_time} - #{end_time}</td>".html_safe
     end
   end
 
@@ -119,6 +158,7 @@ module Statistics
                                  id: "sum_ranks_single",
                                  type: :average),
       Statistics::Top100.new(q),
+      Statistics::Blindfolded3x3SuccessStreak.new(q),
       Statistics::MostCompetitions.new(q),
     ]
   end

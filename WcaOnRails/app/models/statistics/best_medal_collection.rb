@@ -15,7 +15,7 @@ module Statistics
         RightTh.new('Gold'),
         RightTh.new('Silver'),
         RightTh.new('Bronze'),
-        EmptyTh.new,
+        TrailingTh.new,
       ]
     end
 

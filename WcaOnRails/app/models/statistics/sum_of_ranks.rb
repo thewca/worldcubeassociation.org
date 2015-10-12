@@ -24,7 +24,7 @@ module Statistics
         [ LeftTh.new('Person') ] +
           [ RightTh.new('Sum') ] +
           event_headers +
-          [ EmptyTh.new ]
+          [ TrailingTh.new ]
       else
         [ LeftTh.new('Person') ] +
           [ RightTh.new('Sum') ] +
@@ -33,7 +33,7 @@ module Statistics
           [ LeftTh.new('Person') ] +
           [ RightTh.new('Sum') ] +
           event_headers +
-          [ EmptyTh.new ]
+          [ TrailingTh.new ]
       end
     end
 

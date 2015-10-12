@@ -11,7 +11,7 @@ module Statistics
         SpacerTh.new,
         LeftTh.new('Person'),
         RightTh.new('Appearances'),
-        EmptyTh.new,
+        TrailingTh.new,
       ]
     end
 
