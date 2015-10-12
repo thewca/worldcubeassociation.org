@@ -213,4 +213,34 @@ RSpec.describe Competition do
       expect(CompetitionOrganizer.find_by_id(cd.id)).to be_nil
     end
   end
+
+  describe "when confirming" do
+    let(:competition) { FactoryGirl.build :competition }
+
+    it "works" do
+      competition.isConfirmed = true
+      expect(competition).to be_valid
+    end
+
+    [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
+      it "requires #{field}" do
+        competition.public_send "#{field}=", ""
+        competition.isConfirmed = true
+        expect(competition).not_to be_valid
+      end
+    end
+
+    it "must have at least one event" do
+      competition.eventSpecs = ""
+      competition.isConfirmed = true
+      expect(competition).not_to be_valid
+    end
+
+    it "requires both dates" do
+      competition.start_date = ""
+      competition.end_date = ""
+      competition.isConfirmed = true
+      expect(competition).not_to be_valid
+    end
+  end
 end

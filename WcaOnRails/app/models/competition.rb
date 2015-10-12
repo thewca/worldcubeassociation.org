@@ -26,6 +26,17 @@ class Competition < ActiveRecord::Base
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
+  # We have stricter validations for confirming a competition
+  [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
+    validates field, presence: true, if: :isConfirmed?
+  end
+  validate :must_have_at_least_one_event, if: :isConfirmed?
+  def must_have_at_least_one_event
+    if events.length == 0
+      errors.add(:eventSpecs, "Competition must have at least one event")
+    end
+  end
+
   before_validation :clone_competition, on: [:create]
   def clone_competition
     if competition_id_to_clone.present?
@@ -216,7 +227,7 @@ class Competition < ActiveRecord::Base
   end
 
   private def dates_must_be_valid
-    if self.year == 0 && self.month == 0 && self.day == 0 && @endYear == 0 && self.endMonth == 0 && self.endDay == 0
+    if !isConfirmed && self.year == 0 && self.month == 0 && self.day == 0 && @endYear == 0 && self.endMonth == 0 && self.endDay == 0
       # If the user left both dates empty, that's a-okay.
       return
     end

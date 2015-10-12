@@ -12,6 +12,7 @@ FactoryGirl.define do
 
     eventSpecs "333 333oh"
     venue "My backyard"
+    venueAddress "My backyard street"
     website "https://www.worldcubeassociation.org"
     showAtAll true
   end
