@@ -4,8 +4,7 @@ describe "oauth api" do
   include Capybara::DSL
 
   let(:user) {
-    FactoryGirl.create :user, {
-      wca_id: "2005FLEI01",
+    FactoryGirl.create :user_with_wca_id, {
       avatar: File.open(Rails.root.join("spec/support/logo.jpg"))
     }
   }

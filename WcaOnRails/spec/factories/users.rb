@@ -27,5 +27,9 @@ FactoryGirl.define do
     factory :board_member do
       delegate_status "board_member"
     end
+
+    factory :user_with_wca_id do
+      wca_id { FactoryGirl.create(:person).id }
+    end
   end
 end

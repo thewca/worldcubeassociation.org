@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
-    if wca_id_change
+    if wca_id_change && wca_id
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA id, fail validation.
       if user && !user.dummy_account?
@@ -43,16 +43,40 @@ class User < ActiveRecord::Base
     end
   end
 
+  validate :name_must_match_person_name
+  def name_must_match_person_name
+    if wca_id
+      person = Person.find_by_id(wca_id)
+      if person
+        if person.name != name
+          errors.add(:name, "name must be #{person.name}")
+        end
+      else
+        errors.add(:wca_id, "not found")
+      end
+    end
+  end
+
   def dummy_account?
     wca_id.present? && encrypted_password.blank?
+  end
+
+  before_validation :copy_name_from_persons
+  def copy_name_from_persons
+    if wca_id
+      person = Person.find_by_id(wca_id)
+      if person
+        self.name = person.name
+      end
+    end
   end
 
   # To handle profile pictures that predate our user account system, we created
   # a bunch of dummy accounts (accounts with no password). When someone finally
   # claims their WCA id, we want to delete the dummy account and copy over their
   # avatar.
-  before_save :remove_dummy_account_when_wca_id_assigned
-  def remove_dummy_account_when_wca_id_assigned
+  before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
+  def remove_dummy_account_and_copy_name_when_wca_id_changed
     if wca_id_change
       dummy_account = User.where(wca_id: wca_id, encrypted_password: "").first
       if dummy_account
@@ -237,14 +261,9 @@ class User < ActiveRecord::Base
   def editable_fields_of_user(user)
     fields = Set.new
     if user == self
-      fields << :name
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
-      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
-      fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
-      fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
-      fields << :remove_avatar
     end
     if admin? || board_member?
       fields += UsersController.WCA_TEAMS
@@ -252,14 +271,20 @@ class User < ActiveRecord::Base
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
-      fields << :name
     end
     if admin? || any_kind_of_delegate?
       fields << :wca_id
+      fields << :avatar << :avatar_cache
+    end
+    if user == self || admin? || any_kind_of_delegate?
+      # Only allow editing name if they don't have a WCA id.
+      unless user.wca_id
+        fields << :name
+      end
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
-      fields << :avatar << :avatar_cache << :remove_avatar
+      fields << :remove_avatar
     end
     fields
   end

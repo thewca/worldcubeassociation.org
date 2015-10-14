@@ -80,77 +80,95 @@ RSpec.describe User, type: :model do
     expect(user).to be_invalid
   end
 
-  it "validates WCA id" do
-    user = FactoryGirl.build :user, wca_id: "2005FLEI01"
-    expect(user).to be_valid
+  describe "WCA id" do
+    let(:person) { FactoryGirl.create :person, id: "2005FLEI01" }
+    let(:user) { FactoryGirl.create :user, wca_id: person.id, name: person.name }
 
-    user = FactoryGirl.build :user, wca_id: "2005FLE01"
-    expect(user).to be_invalid
+    it "validates WCA id" do
+      user = FactoryGirl.build :user, wca_id: "2005FLEI02"
+      expect(user).not_to be_valid
 
-    user = FactoryGirl.build :user, wca_id: "200FLEI01"
-    expect(user).to be_invalid
+      user = FactoryGirl.build :user, wca_id: "2005FLE01"
+      expect(user).to be_invalid
 
-    user = FactoryGirl.build :user, wca_id: "200FLEI0"
-    expect(user).to be_invalid
-  end
+      user = FactoryGirl.build :user, wca_id: "200FLEI01"
+      expect(user).to be_invalid
 
-  it "nullifies empty WCA ids" do
-    user = FactoryGirl.create :user, wca_id: ""
-    expect(user.wca_id).to be_nil
+      user = FactoryGirl.build :user, wca_id: "200FLEI0"
+      expect(user).to be_invalid
+    end
 
-    # Verify that we can create multiple users with empty wca_ids
-    user = FactoryGirl.create :user, wca_id: ""
-    expect(user.wca_id).to be_nil
-  end
+    it "requires that name match person name" do
+      user.name = "jfly"
+      user.save!
+      expect(user.name).to eq person.name
+    end
 
-  it "verifies WCA id unique when changeing WCA id" do
-    user1 = FactoryGirl.create :user, wca_id: "2005FLEI01"
-    user2 = FactoryGirl.create :user, wca_id: "2006FLEI01"
-    user1.wca_id = user2.wca_id
-    expect(user1).to be_invalid
-    expect(user1.errors.messages[:wca_id]).to eq ["must be unique"]
+    it "handles Person name changing" do
+      expect(user.name).to eq person.name
+      person.name = "New name"
+      person.save!
+      expect(user).to be_valid
+    end
+
+    it "nullifies empty WCA ids" do
+      # Verify that we can create multiple users with empty wca_ids
+      user2 = FactoryGirl.create :user, wca_id: ""
+      expect(user2.wca_id).to be_nil
+
+      user.wca_id = ""
+      user.save!
+      expect(user.wca_id).to be_nil
+    end
+
+    it "verifies WCA id unique when changing WCA id" do
+      person2 = FactoryGirl.create :person, id: "2006FLEI01"
+      user2 = FactoryGirl.create :user, wca_id: "2006FLEI01", name: person2.name
+      user.wca_id = user2.wca_id
+      expect(user).to be_invalid
+      expect(user.errors.messages[:wca_id]).to eq ["must be unique"]
+    end
+
+    it "removes dummy accounts and copies name when WCA id is assigned" do
+      person_for_dummy = FactoryGirl.create :person, id: "2004FLEI01"
+      dummy_user = FactoryGirl.create :user, wca_id: "2004FLEI01", name: person_for_dummy.name, encrypted_password: ""
+      expect(dummy_user).to be_valid
+      dummy_user.update_attributes!(
+        avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
+        avatar_crop_x: 40,
+        avatar_crop_y: 40,
+        avatar_crop_w: 40,
+        avatar_crop_h: 40,
+      )
+      avatar = dummy_user.reload.read_attribute(:avatar)
+      expect(File).to exist("public/uploads/user/avatar/2004FLEI01/#{avatar}")
+
+      # Assigning a WCA id to user should copy over the name from the Persons table.
+      user.wca_id = "2004FLEI01"
+      expect(user.name).to eq person.name
+      user.save!
+      expect(user.name).to eq person_for_dummy.name
+
+      # Check that the dummy account was deleted, and we inherited its avatar.
+      expect(User.find_by_id(dummy_user.id)).to be_nil
+      expect(user.reload.read_attribute :avatar).to eq avatar
+      expect(File).to exist("public/uploads/user/avatar/2004FLEI01/#{avatar}")
+    end
+
+    it "does not allow duplicate WCA ids" do
+      user2 = FactoryGirl.create :user
+      expect(user2).to be_valid
+      user2.wca_id = "2005FLEI01"
+      expect(user2).not_to be_valid
+    end
   end
 
   it "can create user with empty password" do
     FactoryGirl.create :user, encrypted_password: ""
   end
 
-  it "removes dummy accounts when WCA id is assigned" do
-    dummy_user = FactoryGirl.create :user, wca_id: "2005FLEI01", encrypted_password: ""
-    expect(dummy_user).to be_valid
-    dummy_user.update_attributes!(
-      avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-      avatar_crop_x: 40,
-      avatar_crop_y: 40,
-      avatar_crop_w: 40,
-      avatar_crop_h: 40,
-    )
-    avatar = dummy_user.reload.read_attribute(:avatar)
-    expect(File).to exist("public/uploads/user/avatar/2005FLEI01/#{avatar}")
-
-    user = FactoryGirl.create :user, wca_id: "2004FLEI01"
-    expect(user).to be_valid
-    user.wca_id = "2005FLEI01"
-    user.save!
-
-    # Check that the dummy account was deleted, and we inherited its avatar.
-    expect(User.find_by_id(dummy_user.id)).to be_nil
-    expect(user.reload.read_attribute :avatar).to eq avatar
-    expect(File).to exist("public/uploads/user/avatar/2005FLEI01/#{avatar}")
-  end
-
-  it "does not allow duplicate WCA ids" do
-    user = FactoryGirl.create :user, wca_id: "2005FLEI01"
-    expect(user).to be_valid
-
-    user = FactoryGirl.create :user
-    expect(user).to be_valid
-    user.wca_id = "2005FLEI01"
-    expect(user).not_to be_valid
-  end
-
   it "saves crop coordinates" do
-    user = FactoryGirl.create :user, wca_id: "2005FLEI01"
+    user = FactoryGirl.create :user_with_wca_id
 
     user.update_attributes!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
@@ -180,7 +198,7 @@ RSpec.describe User, type: :model do
   end
 
   it "clearing avatar clears cropping area" do
-    user = FactoryGirl.create :user, wca_id: "2005FLEI01"
+    user = FactoryGirl.create :user_with_wca_id
     user.update_attributes!(
       avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       avatar_crop_x: 40,
@@ -212,7 +230,7 @@ RSpec.describe User, type: :model do
   end
 
   it "approving pending avatar moves crop coordinates" do
-    user = FactoryGirl.create :user, wca_id: "2005FLEI01"
+    user = FactoryGirl.create :user_with_wca_id
     user.update_attributes!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       pending_avatar_crop_x: 40,
