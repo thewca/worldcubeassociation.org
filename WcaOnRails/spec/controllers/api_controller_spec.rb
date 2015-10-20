@@ -39,6 +39,26 @@ describe Api::V0::ApiController do
     end
   end
 
+  describe 'GET #show_user' do
+    it 'can query by id' do
+      user = FactoryGirl.create(:user, name: "Jeremy")
+      get :show_user, id_or_wca_id: user.id
+      expect(response.status).to eq 200
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["user"]["name"]).to eq "Jeremy"
+      expect(parsed_body["user"]["wca_id"]).to eq user.wca_id
+    end
+
+    it 'can query by wca id' do
+      user = FactoryGirl.create(:user_with_wca_id)
+      get :show_user, id_or_wca_id: user.wca_id
+      expect(response.status).to eq 200
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["user"]["name"]).to eq user.name
+      expect(parsed_body["user"]["wca_id"]).to eq user.wca_id
+    end
+  end
+
   describe 'GET #scramble_program' do
     it 'works' do
       get :scramble_program

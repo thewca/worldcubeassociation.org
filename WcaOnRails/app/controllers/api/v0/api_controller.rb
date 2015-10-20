@@ -74,6 +74,12 @@ class Api::V0::ApiController < ApplicationController
     render json: { status: "ok", users: users.map(&:to_json) }
   end
 
+  def show_user
+    id_or_wca_id = params[:id_or_wca_id]
+    user = User.where("id = ? OR wca_id = ?", id_or_wca_id, id_or_wca_id).first
+    render json: { status: "ok", user: user.to_json }
+  end
+
   private def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end

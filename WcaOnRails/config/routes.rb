@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       get '/scramble-program' => "api#scramble_program"
       get '/users/search' => 'api#users_search'
       get '/users/delegates/search' => 'api#users_delegates_search'
+      get '/users/:id_or_wca_id' => 'api#show_user'
       resources :competitions, only: [:show]
     end
   end
