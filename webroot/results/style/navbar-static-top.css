@@ -88,6 +88,6 @@ div.navbar-collapse {
   }
 }
 
-.navbar .fa-fw {
+.navbar .dropdown-menu .fa-fw {
   margin-right: 10px;
 }

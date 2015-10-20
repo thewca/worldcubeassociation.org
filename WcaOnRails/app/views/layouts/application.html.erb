@@ -53,33 +53,34 @@
       <div class="navbar-collapse collapse disabled">
         <ul class="nav navbar-nav">
           <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'posts' ? 'active' : '' %>">
-            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Information <span class="caret"></span></a>
+            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('info-circle', class: 'fa-fw') %> Information <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="/"><%= icon('home', class: 'fa-fw') %> Home</a></li>
-              <li><a href="/about"><%= icon('info-circle', class: 'fa-fw') %> About the WCA</a></li>
+              <li><a href="/about"><%= icon('file-text', class: 'fa-fw') %> About the WCA</a></li>
               <li><a href="/delegates"><%= icon('sitemap', class: 'fa-fw') %> WCA Delegates</a></li>
               <li><a href="/organisations"><%= icon('flag', class: 'fa-fw') %> National Organisations</a></li>
+              <li class="divider"></li>
               <li><a href="/contact"><%= icon('envelope', class: 'fa-fw') %> Contact Information</a></li>
+              <li><a href="/forum/" class="top-nav"><%= icon('comments', class: 'fa-fw') %> Forum</a></li>
+              <li class="divider"></li>
               <li><a href="/score-tools"><%= icon('wrench', class: 'fa-fw') %> Tools</a></li>
               <li><a href="/logo"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa-fw') %> Logo</a></li>
             </ul>
           </li>
+          <li><a href="/results/competitions.php" class="top-nav"><%= icon('globe', class: 'fa-fw') %> Competitions</a></li>
           <li class="dropdown">
-            <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
+            <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('list-ol', class: 'fa-fw') %> Results <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="/results/competitions.php"><%= icon('globe', class: 'fa-fw') %> Competitions</a></li>
               <li><a href="/results/events.php"><%= icon('signal', class: 'fa-fw') %> Rankings</a></li>
               <li><a href="/results/regions.php"><%= icon('trophy', class: 'fa-fw') %> Records</a></li>
               <li><a href="/results/persons.php"><%= icon('user', class: 'fa-fw') %> Persons</a></li>
               <li class="divider"></li>
               <li><a href="/results/statistics.php"><%= icon('area-chart', class: 'fa-fw') %> Statistics</a></li>
               <li><a href="/results/media.php"><%= icon('film', class: 'fa-fw') %> Multimedia</a></li>
-              <li><a href="/results/misc.php"><%= icon('ellipsis-h', class: 'fa-fw') %> Miscellaneous</a></li>
               <li><a href="/results/misc/export.html"><%= icon('download', class: 'fa-fw') %> Database Export</a></li>
             </ul>
           </li>
           <li class="dropdown">
-            <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Regulations <span class="caret"></span></a>
+            <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('book', class: 'fa-fw') %> Regulations <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/regulations/"><%= icon('book', class: 'fa-fw') %> Regulations</a></li>
               <li><a href="/regulations/guidelines.html"><%= icon('question-circle', class: 'fa-fw') %> Guidelines</a></li>
@@ -89,7 +90,6 @@
               <li><a href="/regulations/translations/"><%= icon('language', class: 'fa-fw') %> Translations</a></li>
             </ul>
           </li>
-          <li><a href="/forum/" class="top-nav">Forum</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">

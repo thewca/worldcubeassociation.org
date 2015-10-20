@@ -4,7 +4,6 @@
 #----------------------------------------------------------------------
 
 $currentSection = 'competitions';
-$currentSection = "persons";
 $mapsAPI = true;
 
 require( 'includes/_header.php' );
