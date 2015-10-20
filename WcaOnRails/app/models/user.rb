@@ -260,6 +260,9 @@ class User < ActiveRecord::Base
 
   def editable_fields_of_user(user)
     fields = Set.new
+    if user.dummy_account?
+      return fields
+    end
     if user == self
       fields << :current_password
       fields << :password << :password_confirmation
