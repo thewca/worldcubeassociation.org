@@ -13,23 +13,7 @@ class Api::V0::ApiController < ApplicationController
   DEFAULT_API_RESULT_LIMIT = 20
 
   def me
-    me = {
-      id: current_resource_owner.id,
-      wca_id: current_resource_owner.wca_id,
-      name: current_resource_owner.name,
-      email: current_resource_owner.email,
-      created_at: current_resource_owner.created_at,
-      updated_at: current_resource_owner.updated_at,
-    }
-    if current_resource_owner.avatar?
-      me[:avatar] = {
-        url: current_resource_owner.avatar.url,
-        thumb_url: current_resource_owner.avatar.url(:thumb),
-      }
-    else
-      me[:avatar] = nil
-    end
-    render json: { me: me }
+    render json: { me: current_resource_owner.to_json(include_private_info: true) }
   end
 
   def auth_results
@@ -86,9 +70,8 @@ class Api::V0::ApiController < ApplicationController
     if delegate_only
       users = users.where.not(delegate_status: nil)
     end
-    users = users.select([:id, :wca_id, :name, :delegate_status])
     users = users.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", users: users }
+    render json: { status: "ok", users: users.map(&:to_json) }
   end
 
   private def current_resource_owner

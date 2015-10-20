@@ -311,4 +311,29 @@ class User < ActiveRecord::Base
       saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil,
     )
   end
+
+  def to_json(options={})
+    options.reverse_update(include_private_info: false)
+
+    json = {
+      id: self.id,
+      wca_id: self.wca_id,
+      name: self.name,
+      created_at: self.created_at,
+      updated_at: self.updated_at,
+    }
+    if options[:include_private_info]
+      json[:email] = self.email
+    end
+    if self.avatar?
+      json[:avatar] = {
+        url: self.avatar.url,
+        thumb_url: self.avatar.url(:thumb),
+      }
+    else
+      json[:avatar] = nil
+    end
+
+    json
+  end
 end
