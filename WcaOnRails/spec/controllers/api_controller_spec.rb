@@ -39,10 +39,10 @@ describe Api::V0::ApiController do
     end
   end
 
-  describe 'GET #show_user' do
+  describe 'show_user_*' do
     it 'can query by id' do
       user = FactoryGirl.create(:user, name: "Jeremy")
-      get :show_user, id_or_wca_id: user.id
+      get :show_user_by_id, id: user.id
       expect(response.status).to eq 200
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["user"]["name"]).to eq "Jeremy"
@@ -51,11 +51,18 @@ describe Api::V0::ApiController do
 
     it 'can query by wca id' do
       user = FactoryGirl.create(:user_with_wca_id)
-      get :show_user, id_or_wca_id: user.wca_id
+      get :show_user_by_wca_id, wca_id: user.wca_id
       expect(response.status).to eq 200
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["user"]["name"]).to eq user.name
       expect(parsed_body["user"]["wca_id"]).to eq user.wca_id
+    end
+
+    it '404s nicely' do
+      get :show_user_by_wca_id, wca_id: "foo"
+      expect(response.status).to eq 404
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["user"]).to be nil
     end
   end
 

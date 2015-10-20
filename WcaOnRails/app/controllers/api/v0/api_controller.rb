@@ -13,7 +13,7 @@ class Api::V0::ApiController < ApplicationController
   DEFAULT_API_RESULT_LIMIT = 20
 
   def me
-    render json: { me: current_resource_owner.to_json(include_private_info: true) }
+    render json: { me: current_resource_owner.to_jsonable(include_private_info: true) }
   end
 
   def auth_results
@@ -71,13 +71,25 @@ class Api::V0::ApiController < ApplicationController
       users = users.where.not(delegate_status: nil)
     end
     users = users.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", users: users.map(&:to_json) }
+    render json: { status: "ok", users: users.map(&:to_jsonable) }
   end
 
-  def show_user
-    id_or_wca_id = params[:id_or_wca_id]
-    user = User.where("id = ? OR wca_id = ?", id_or_wca_id, id_or_wca_id).first
-    render json: { status: "ok", user: user.to_json }
+  def show_user(user)
+    if user
+      render status: :ok, json: { status: "ok", user: user.to_jsonable }
+    else
+      render status: :not_found, json: { status: "ok", user: nil }
+    end
+  end
+
+  def show_user_by_id
+    user = User.find_by_id(params[:id])
+    show_user(user)
+  end
+
+  def show_user_by_wca_id
+    user = User.find_by_wca_id(params[:wca_id])
+    show_user(user)
   end
 
   private def current_resource_owner

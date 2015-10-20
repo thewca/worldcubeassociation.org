@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   validates :name, presence: true
-  validates :wca_id, format: { with: /\A(|\d{4}[A-Z]{4}\d{2})\z/ },
+  WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
+  validates :wca_id, format: { with: WCA_ID_RE },
                      allow_nil: true
   def self.WCA_ID_MAX_LENGTH
     return 10
@@ -312,7 +313,7 @@ class User < ActiveRecord::Base
     )
   end
 
-  def to_json(options={})
+  def to_jsonable(options={})
     options.reverse_update(include_private_info: false)
 
     json = {
