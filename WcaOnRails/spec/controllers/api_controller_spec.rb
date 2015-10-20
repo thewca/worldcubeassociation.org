@@ -16,6 +16,15 @@ describe Api::V0::ApiController do
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["users"].select { |u| u["name"] == "Jeremy"}[0]).not_to be_nil
     end
+
+    it 'does not find dummy accounts' do
+      user = FactoryGirl.create(:user, name: "Jeremy")
+      user.update_column(:encrypted_password, "")
+      get :users_search, q: "erem"
+      expect(response.status).to eq 200
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["users"].length).to eq 0
+    end
   end
 
   describe 'GET #users_delegates_search' do
