@@ -7,7 +7,7 @@ html, body {
 }
 
 div.navbar-brand {
-  padding: 0px;
+  padding: 0;
   padding-top: 16px;
   height: 110px;
   margin-bottom: -50px;
@@ -31,10 +31,6 @@ div.navbar-collapse {
   clear: both;
 }
 
-.navbar, .navbar .container {
-  padding: 0;
-}
-
 .navbar-nav > li > a.top-nav:hover {
   background: #f0f0f0;
 }
@@ -52,8 +48,9 @@ div.navbar-collapse {
 
 @media (min-width: 480px) {
   .navbar-static-top .navbar-collapse {
-  border-top-left-radius: 8px;
+    border-top-left-radius: 8px;
     margin-left: 140px;
+    padding-left: 15px; /* make space for the border-top-left-radius */
   }
 
   .navbar-brand img {
@@ -83,4 +80,14 @@ div.navbar-collapse {
 
 .navbar a:link {
   font-weight: normal;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav.navbar-right:last-child {
+    margin-right: 0;
+  }
+}
+
+.navbar .fa-fw {
+  margin-right: 10px;
 }

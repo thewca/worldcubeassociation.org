@@ -65,6 +65,8 @@ if(isset($jQuery_chosen) && $jQuery_chosen) {
   $styles->add('selectize.default.css');
 }
 
+$styles->add('font-awesome.min.css');
+
 
 // print html
 print $scripts->getHTMLAll();
@@ -98,38 +100,38 @@ print $styles->getHTMLAll();
             <li class="dropdown">
               <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Information <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About the WCA</a></li>
-                <li><a href="/delegates">WCA Delegates</a></li>
-                <li><a href="/organisations">National Organisations</a></li>
-                <li><a href="/contact">Contact Information</a></li>
-                <li><a href="/score-tools">Score Tools</a></li>
-                <li><a href="/logo">Logo</a></li>
+                <li><a href="/"><i class="fa fa-home fa-fw"></i> Home</a></li>
+                <li><a href="/about"><i class="fa fa-info-circle fa-fw"></i> About the WCA</a></li>
+                <li><a href="/delegates"><i class="fa fa-sitemap fa-fw"></i> WCA Delegates</a></li>
+                <li><a href="/organisations"><i class="fa fa-flag fa-fw"></i> National Organisations</a></li>
+                <li><a href="/contact"><i class="fa fa-envelope fa-fw"></i> Contact Information</a></li>
+                <li><a href="/score-tools"><i class="fa fa-wrench fa-fw"></i> Tools</a></li>
+                <li><a href="/logo"><img width="16px" class="fa-fw" src="<?php print pathToRoot(); ?>images/wca_logo.svg" alt="WCA Logo" /> Logo</a></li>
               </ul>
             </li>
             <li class="dropdown active">
               <a href="<?php print pathToRoot(); ?>" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Results <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php print pathToRoot(); ?>competitions.php">Competitions</a></li>
-                <li><a href="<?php print pathToRoot(); ?>events.php">Rankings</a></li>
-                <li><a href="<?php print pathToRoot(); ?>regions.php">Records</a></li>
-                <li><a href="<?php print pathToRoot(); ?>persons.php">Persons</a></li>
+                <li><a href="<?php print pathToRoot(); ?>competitions.php"><i class="fa fa-globe fa-fw"></i> Competitions</a></li>
+                <li><a href="<?php print pathToRoot(); ?>events.php"><i class="fa fa-signal fa-fw"></i> Rankings</a></li>
+                <li><a href="<?php print pathToRoot(); ?>regions.php"><i class="fa fa-trophy fa-fw"></i> Records</a></li>
+                <li><a href="<?php print pathToRoot(); ?>persons.php"><i class="fa fa-user fa-fw"></i> Persons</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php print pathToRoot(); ?>statistics.php">Statistics</a></li>
-                <li><a href="<?php print pathToRoot(); ?>media.php">Multimedia</a></li>
-                <li><a href="<?php print pathToRoot(); ?>misc.php">Miscellaneous</a></li>
-                <li><a href="<?php print pathToRoot(); ?>misc/export.html">Database Export</a></li>
+                <li><a href="<?php print pathToRoot(); ?>statistics.php"><i class="fa fa-area-chart fa-fw"></i> Statistics</a></li>
+                <li><a href="<?php print pathToRoot(); ?>media.php"><i class="fa fa-film fa-fw"></i> Multimedia</a></li>
+                <li><a href="<?php print pathToRoot(); ?>misc.php"><i class="fa fa-ellipsis-h fa-fw"></i> Miscellaneous</a></li>
+                <li><a href="<?php print pathToRoot(); ?>misc/export.html"><i class="fa fa-download fa-fw"></i> Database Export</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">Regulations <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/regulations/">Regulations</a></li>
-                <li><a href="/regulations/guidelines.html">Guidelines</a></li>
-                <li><a href="/regulations/scrambles/">Scrambles</a></li>
+                <li><a href="/regulations/"><i class="fa fa-book fa-fw"></i> Regulations</a></li>
+                <li><a href="/regulations/guidelines.html"><i class="fa fa-question-circle fa-fw"></i> Guidelines</a></li>
+                <li><a href="/regulations/scrambles/"><i class="fa fa-random fa-fw"></i> Scrambles</a></li>
                 <li class="divider"></li>
-                <li><a href="/regulations/history/">History</a></li>
-                <li><a href="/regulations/translations/">Translations</a></li>
+                <li><a href="/regulations/history/"><i class="fa fa-history fa-fw"></i> History</a></li>
+                <li><a href="/regulations/translations/"><i class="fa fa-language fa-fw"></i> Translations</a></li>
               </ul>
             </li>
             <li><a href="/forum/" class="top-nav">Forum</a></li>
