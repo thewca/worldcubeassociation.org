@@ -87,3 +87,7 @@ div.navbar-collapse {
     margin-right: 0;
   }
 }
+
+.navbar .fa-fw {
+  margin-right: 10px;
+}

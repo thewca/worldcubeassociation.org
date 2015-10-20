@@ -40,6 +40,7 @@ gem 'system'
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
+gem 'font-awesome-sass'
 
 group :development, :test do
   gem 'rspec-rails'
