@@ -51,7 +51,7 @@ function showResults () {
   #--- Output the page header.
   echo "<h1>Fun Statistics</h1>\n\n<br>";
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>";
-  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>There are also three separate statistics pages: <a href='results/misc/evolution/'>Evolution of Records</a>, <a href='results/misc/sum_of_ranks/'>Sum of Ranks</a>, and <a href='results/misc/missing_averages/'>Missing Averages</a>.</p>";
+  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>There are also three separate statistics pages: <a href='misc/evolution/'>Evolution of Records</a>, <a href='misc/sum_of_ranks/'>Sum of Ranks</a>, and <a href='misc/missing_averages/'>Missing Averages</a>.</p>";
   echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
   #--- Get all the list definitions.
