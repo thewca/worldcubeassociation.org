@@ -1,4 +1,5 @@
 require File.expand_path('../boot', __FILE__)
+require File.expand_path('../../lib/fix_accept_header', __FILE__)
 
 require 'rails/all'
 
@@ -38,5 +39,7 @@ module WcaOnRails
 
     config.default_from_address = "no-reply@worldcubeassociation.org"
     config.site_name = "World Cube Association"
+
+    config.middleware.use FixAcceptHeader
   end
 end
