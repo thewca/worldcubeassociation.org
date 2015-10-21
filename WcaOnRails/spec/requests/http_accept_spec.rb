@@ -10,4 +10,9 @@ describe "HTTP_ACCEPT" do
     get root_url, nil, { "HTTP_ACCEPT" => "*/*;" }
     expect(response).to be_success
   end
+
+  it 'rss' do
+    get rss_url, nil, { "HTTP_ACCEPT" => "text/plain" }
+    expect(response).to be_success
+  end
 end

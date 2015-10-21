@@ -8,6 +8,9 @@ class PostsController < ApplicationController
 
   def rss
     @posts = Post.where(world_readable: true).order(created_at: :desc).paginate(page: params[:page])
+
+    # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
+    request.format = :xml
     respond_to :xml
   end
 
