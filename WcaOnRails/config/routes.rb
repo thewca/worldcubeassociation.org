@@ -63,8 +63,8 @@ Rails.application.routes.draw do
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
 
-  get "/regulations" => 'pages#show', id: "index"
-  get "/regulations/*id" => 'pages#show'
+  get "/regulations" => 'regulations#show', id: "index"
+  get "/regulations/*id" => 'regulations#show'
 
   namespace :api do
     get '/', to: redirect('/api/v0')

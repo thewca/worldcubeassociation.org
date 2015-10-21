@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class RegulationsController < ApplicationController
   include HighVoltage::StaticPage
 
   before_filter :ensure_trailing_slash

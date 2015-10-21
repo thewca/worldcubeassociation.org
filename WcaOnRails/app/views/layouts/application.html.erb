@@ -79,7 +79,7 @@
               <li><a href="/results/misc/export.html"><%= icon('download', class: 'fa-fw') %> Database Export</a></li>
             </ul>
           </li>
-          <li class="dropdown">
+          <li class="dropdown <%= params[:controller] == 'regulations' ? 'active' : '' %>">
             <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('book', class: 'fa-fw') %> Regulations <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/regulations/"><%= icon('book', class: 'fa-fw') %> Regulations</a></li>
