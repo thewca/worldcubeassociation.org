@@ -246,7 +246,7 @@ class CompetitionsController < ApplicationController
       competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
       competition_params.delete(:event_ids)
     end
-    if params[:commit] == "Confirm"
+    if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
       competition_params[:isConfirmed] = true
     end
     competition_params[:editing_user_id] = current_user.id

@@ -213,6 +213,12 @@ describe CompetitionsController do
         sign_in organizer
       end
 
+      it 'cannot confirm competition' do
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
+        expect(response.status).to redirect_to edit_competition_path(competition)
+        expect(competition.reload.isConfirmed?).to eq false
+      end
+
       it "who is also the delegate can remove oneself as delegate" do
         # First, make the organizer of the competition the delegate of the competition.
         competition.delegates << organizer
@@ -277,6 +283,12 @@ describe CompetitionsController do
       before :each do
         competition.delegates << delegate
         sign_in delegate
+      end
+
+      it 'can confirm competition' do
+        patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
+        expect(response).to redirect_to edit_competition_path(competition)
+        expect(competition.reload.isConfirmed?).to eq true
       end
 
       it "cannot delete not confirmed, but visible competition" do
