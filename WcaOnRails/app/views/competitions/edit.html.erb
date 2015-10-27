@@ -15,6 +15,7 @@
     <hr>
   <% end %>
 
+  <% is_actually_confirmed = Competition.find(@competition.id).isConfirmed? %>
   <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-competition-form' }, wrapper: :horizontal_form,
   wrapper_mappings: {
     check_boxes: :horizontal_radio_and_checkboxes,
@@ -40,26 +41,26 @@
         </div>
       </div>
     <% else %>
-      <% if @competition.isConfirmed? && @competition.showAtAll? %>
+      <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
           This competition is publicly visible and locked for editing. If you need to make a change, contact the Board to unlock it.
         </div>
-      <% elsif @competition.isConfirmed? && !@competition.showAtAll? %>
+      <% elsif is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
           You've confirmed this competition, but it is not yet visible to the public. Contact the Board to make it visible.
         </div>
-      <% elsif !@competition.isConfirmed? && @competition.showAtAll? %>
+      <% elsif !is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-danger">
           This competition is publicly visible, any changes you make will show up to the public!
         </div>
-      <% elsif !@competition.isConfirmed? && !@competition.showAtAll? %>
+      <% elsif !is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
           This competition is not visible to the public. Fill in all the fields and click Confirm when you're ready for the Board to approve it.
         </div>
       <% end %>
     <% end %>
 
-    <% if @competition_admin_view || !@competition.isConfirmed? %>
+    <% if @competition_admin_view || !is_actually_confirmed %>
       <h2>General information</h2>
       <%= f.input :id %>
       <%= f.input :name %>
@@ -197,7 +198,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.button :submit, class: "btn-primary" %>
-        <% unless @competition_admin_view || @competition.isConfirmed? %>
+        <% if !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
            <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
         <% end %>
         <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
