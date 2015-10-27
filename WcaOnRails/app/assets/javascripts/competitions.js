@@ -8,7 +8,7 @@ $(function() {
   if($competitionSelect.length > 0) {
     var competitionChanged = function() {
       var competitionId = $competitionSelect.val();
-      $('.new-competition button[type=submit]').text(competitionId ? "Clone competition" : "Create competition");
+      $('#create-competition').text(competitionId ? "Clone competition" : "Create competition");
     };
     competitionChanged();
 
