@@ -95,7 +95,7 @@ if($form->submitted()) {
       $json_comp_id = $competition_data->competitionId;
       $form_comp_id = $submitted_data['competitionId'];
       if($json_comp_id != $form_comp_id) {
-        $form->invalidate('competitionId', 'The competition ID `'.o($json_comp_id).'` does not match the the JSON file `'.o($form_comp_id).'`.');
+        $form->invalidate('competitionId', 'The competition ID `'.o($form_comp_id).'` does not match the the JSON file `'.o($json_comp_id).'`.');
       }
     } else {
       $form->invalidate('json', 'Please upload a JSON file containing a competition ID.');
