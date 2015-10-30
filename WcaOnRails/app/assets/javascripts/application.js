@@ -22,6 +22,7 @@
 //= require twitter/typeahead
 //= require underscore
 //= require selectize
+//= require selectize.do_not_clear_on_blur
 //= require best_in_place
 //= require jquery.purr
 //= require best_in_place.purr
