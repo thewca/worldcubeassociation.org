@@ -25,6 +25,15 @@ describe Api::V0::ApiController do
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["users"].length).to eq 0
     end
+
+    it 'does not find unconfirmed accounts' do
+      user = FactoryGirl.create(:user, name: "Jeremy")
+      user.update_column(:confirmed_at, nil)
+      get :users_search, q: "erem"
+      expect(response.status).to eq 200
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["users"].length).to eq 0
+    end
   end
 
   describe 'GET #users_delegates_search' do

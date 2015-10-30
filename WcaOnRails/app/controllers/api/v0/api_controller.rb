@@ -65,7 +65,12 @@ class Api::V0::ApiController < ApplicationController
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-    users = User.where.not(encrypted_password: '') # Ignore all dummy accounts
+
+    # Ignore dummy accounts
+    users = User.where.not(encrypted_password: '')
+    # Ignore unconfirmed accounts
+    users = users.where.not(confirmed_at: nil)
+
     users = users.where("name LIKE ?", "%" + query + "%")
     if delegate_only
       users = users.where.not(delegate_status: nil)
