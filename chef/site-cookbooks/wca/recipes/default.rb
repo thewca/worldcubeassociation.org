@@ -120,6 +120,8 @@ chef_env_to_rails_env = {
 }
 rails_env = chef_env_to_rails_env[node.chef_environment]
 
+# Use HTTPS in non development mode
+https = !node.chef_environment.start_with?("development")
 
 #### Nginx
 # Unfortunately, we have to compile nginx from source to get the auth request module
@@ -146,12 +148,19 @@ bash "build nginx" do
     ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
     make
     sudo make install
-    # at the same time we generate the Diffie-Hellman parameters
-    openssl dhparam -out /etc/nginx/dh4096.pem -outform PEM -2 4096
     EOH
 
   # Don't build nginx if we've already built it.
   not_if { ::File.exists?('/usr/local/sbin/nginx') }
+end
+bash "create Diffie-Hellman parameters" do
+  code <<-EOH
+    openssl dhparam -out /etc/nginx/dh4096.pem -outform PEM -2 4096
+    EOH
+
+  # Don't generate DH params unless we actually need https and
+  # the DH params have not already be generated.
+  not_if { !https || ::File.exists?('/etc/nginx/dh4096.pem') }
 end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
@@ -183,8 +192,6 @@ directory "/etc/nginx/conf.d" do
 end
 
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "", "development-noregs" => "" }[node.chef_environment]
-# Use HTTPS in non development mode
-https = !node.chef_environment.start_with?("development")
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644
