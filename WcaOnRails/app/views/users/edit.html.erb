@@ -4,6 +4,11 @@
   <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
   <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+    <% unless @user.confirmed_at %>
+      <div class="alert alert-warning">
+        This account's email address (<%= @user.email %>) is not confirmed.
+      </div>
+    <% end %>
     <% if @user.unconfirmed_email %>
       <div class="alert alert-warning">
         This account is pending confirmation of new email address <%= @user.unconfirmed_email %>.
