@@ -153,15 +153,6 @@ bash "build nginx" do
   # Don't build nginx if we've already built it.
   not_if { ::File.exists?('/usr/local/sbin/nginx') }
 end
-bash "create Diffie-Hellman parameters" do
-  code <<-EOH
-    openssl dhparam -out /etc/nginx/dh4096.pem -outform PEM -2 4096
-    EOH
-
-  # Don't generate DH params unless we actually need https and
-  # the DH params have not already be generated.
-  not_if { !https || ::File.exists?('/etc/nginx/dh4096.pem') }
-end
 template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
   variables({

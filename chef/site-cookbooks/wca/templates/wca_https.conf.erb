@@ -15,7 +15,7 @@ ssl_certificate <%= @repo_root %>/secrets/<%= @server_name %>.chained.crt;
 # Strong DH parameters
 # The DH file is generated using the above command (takes about 20 minutes)
 # root@wca# openssl dhparam -out dh4096.pem -outform PEM -2 4096
-ssl_dhparam /etc/nginx/dh4096.pem;
+ssl_dhparam <%= @repo_root %>/secrets/dh4096.pem;
 
 # Recommended security settings from https://wiki.mozilla.org/Security/Server_Side_TLS
 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
