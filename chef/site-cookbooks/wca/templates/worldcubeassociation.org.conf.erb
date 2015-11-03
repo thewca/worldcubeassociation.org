@@ -136,6 +136,9 @@ server {
     gzip_static on;
     expires max;
     add_header Cache-Control public;
+
+    # Fonts need the Access-Control-Allow-Origin header.
+    add_header Access-Control-Allow-Origin *;
   }
 <% end %>
   # Prefer to serve static files directly from nginx to avoid unnecessary
