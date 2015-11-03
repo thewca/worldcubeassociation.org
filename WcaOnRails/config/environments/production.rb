@@ -58,7 +58,8 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+  # Cloudfront! https://console.aws.amazon.com/cloudfront/home
+  config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
 
   root_url = URI.parse(ENVied.ROOT_URL)
   config.action_mailer.default_url_options = {
