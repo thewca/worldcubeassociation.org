@@ -111,7 +111,7 @@ function checkRounds () {
       $isThisRoundQuals = (( $roundId == '0' or $roundId == 'h' ));
 
       if (( $nbTotalPersons != $nbPersons ) and ( ! $isThisRoundQuals )) {
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
         if(( $i+1 ) < count( $roundRows )){ #--- Should be true.
@@ -127,7 +127,7 @@ function checkRounds () {
       }
 
       if (( $nbTotalPersons == $nbPersons ) and ( $isThisRoundQuals )) {
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
         if(( $i+1 ) < count( $roundRows )) #--- Is not always true.
@@ -151,7 +151,7 @@ function checkRounds () {
       # Article 9m, since April 9, 2008
       if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 9, 2008 ))
         if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
@@ -161,7 +161,7 @@ function checkRounds () {
       # Article 9m/n/o, since July 20, 2006 until April 8, 2008
       if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 9, 2008 )))
         if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
@@ -173,7 +173,7 @@ function checkRounds () {
       # Article 9p1, since April 14, 2010
       if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 14, 2010 ))
         if ( $nbQualPersons > ( 3*$prevNbPersons/4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}'>$competitionId - $eventId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
           echo "<p>From round $prevRoundCellName with $prevNbPersons competitors, $nbQualPersons were qualified to round $roundCellName which is more than 75%</p>";
           echo "<br /><hr />";
@@ -183,7 +183,7 @@ function checkRounds () {
       # Article 9p, since July 20, 2006 until April 13, 2010
       if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 14, 2010 )))
         if ( $nbQualPersons >= $prevNbPersons ) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}'>$competitionId - $eventId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
           echo "<p>From round $prevRoundCellName to round $roundCellName, at least one competitor must not proceed</p>";
           echo "<br /><hr />";
@@ -243,7 +243,7 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
 
     #--- Check for round "combined-ness"
     if(( ! $isNotCombined ) xor $listCombined[$roundId] ){
-      echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+      echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
       echo "<p>Round $roundCellName should ". ( $isNotCombined?"not ":"" ) . "be a combined round</p>";
       $roundId = $switchCombined[$roundId];
       $nbErrors += 1;
@@ -254,7 +254,7 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
       $normalRoundId = array_shift( $normalRoundIds[$nbRounds] );
       if(( $listCombined[$roundId]?$switchCombined[$roundId]:$roundId ) != $normalRoundId ){
         $roundId = $listCombined[$roundId]?$switchCombined[$normalRoundId]:$normalRoundId; 
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
         echo "<p>Round $roundCellName should be ". roundCellName( $roundId ) . "</p>";
         $nbErrors += 1;
       }

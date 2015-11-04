@@ -17,11 +17,11 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Hungarian (magyar) - 2015-07-01](./hungarian/)
     - By [Niki Placskó](https://www.worldcubeassociation.org/results/p.php?i=2008PLAC01) and [Perge Olivér](https://www.worldcubeassociation.org/results/p.php?i=2007PERG01).
 - [Korean - 2013](./korean/)
-    - By Park Si-Woo (박시우), Kim Ah-Young (김아영), [Chae Ji-Seok (채지석)](https://worldcubeassociation.org/results/p.php?i=2008JISE02), and [Yeom Seok-Hoon (염석훈)](https://worldcubeassociation.org/results/p.php?i=2007SEOK01).
+    - By Park Si-Woo (박시우), Kim Ah-Young (김아영), [Chae Ji-Seok (채지석)](https://www.worldcubeassociation.org/results/p.php?i=2008JISE02), and [Yeom Seok-Hoon (염석훈)](https://www.worldcubeassociation.org/results/p.php?i=2007SEOK01).
 - [Indonesian (Bahasa) - 2013](./indonesian/)
     - By Ardianto Satriawan, Cendy Cahyo Rahmat, Jonathan Irvin Gunawan, Muhammad Jihan Khalilurrahman, Nathan Azaria, Stephen Adhisaputra, Vincent Hartanto Utomo, and Yohanes Theda.
 - [Italian (Italiano) - 2013](./italian/)
-    - By [Lorenzo Vigani Poli](http://worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](http://worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](http://worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](http://worldcubeassociation.org/results/p.php?i=2009COLO03).
+    - By [Lorenzo Vigani Poli](https://www.worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](https://www.worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](https://www.worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](https://www.worldcubeassociation.org/results/p.php?i=2009COLO03).
 - [Japanese - 2015-07-01](./japanese/)
     - By [Kotaro Terada (寺田晃太朗)](https://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Akihiro Ishida (石田朗大)](https://www.worldcubeassociation.org/results/p.php?i=2009ISHI01), and [Kentaro Nishi (西賢太郎)](https://www.worldcubeassociation.org/results/p.php?i=2006NISH01), with contributions from [Yohei Suzuki (鈴木洋平)](https://www.worldcubeassociation.org/results/p.php?i=2006SUZU03), [Shuto Ueno (上野柊斗)](https://www.worldcubeassociation.org/results/p.php?i=2008UENO01), [Shun Sakurai (桜井駿)](https://www.worldcubeassociation.org/results/p.php?i=2010SAKU01), Shiori Sato (佐藤詩織), [Wataru Hashimura (端村航)](https://www.worldcubeassociation.org/results/p.php?i=2008HASH02), [Takafumi Haseda (長谷田貴史)](https://www.worldcubeassociation.org/results/p.php?i=2006HASE01), and [Ayano Maria Yoshida (吉田彩乃)](https://www.worldcubeassociation.org/results/p.php?i=2009YOSH01).
 - [Portuguese, Brazilian (Português do Brasil) - 2013](./portuguese-brazilian/)
@@ -29,11 +29,11 @@ Note: Even though these translations are provided on the WCA website, they are n
 - [Portuguese, European (Português Europeu) - 2015-07-01](./portuguese-european/)
     - By António Gomes.
 - [Russian - 2014](./russian/)
-    - By [Anton Rostovikov](http://worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](http://worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](http://worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](http://worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](http://worldcubeassociation.org/results/p.php?i=2011ANIS01)).
+    - By [Anton Rostovikov](https://www.worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](https://www.worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](https://www.worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](https://www.worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](https://www.worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 - [Spanish, American (Español Americano) - 2015-07-01](./spanish-american/)
     - By Daniela Maldonado Hernández.
 - [Spanish, European (Español de España) - 2013](./spanish-european/)
-    - By [Carlos Méndez García-Barroso](http://worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](http://worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](http://worldcubeassociation.org/results/p.php?i=2009SANC01).
+    - By [Carlos Méndez García-Barroso](https://www.worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](https://www.worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](https://www.worldcubeassociation.org/results/p.php?i=2009SANC01).
 
 
 ## Translating the Regulations
