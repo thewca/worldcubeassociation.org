@@ -61,10 +61,9 @@ exec /usr/bin/ssh -o StrictHostKeyChecking=no "\$@"
 EOL
     chmod +x /tmp/ssh-no-hostkeychecking.sh
   fi
-  # Unfortunately, running git as cubing breaks ssh agent forwarding.
-  # Instead, let root user do the git-ing, and then chown appropriately.
+  # Let the root user do the git-ing, and then chown appropriately.
   if ! [ -d $repo_root ]; then
-    git clone -b $git_branch --recursive git@github.com:cubing/worldcubeassociation.org.git $repo_root
+    git clone -b $git_branch --recursive https://github.com/cubing/worldcubeassociation.org.git $repo_root
   else
     (
       cd $repo_root

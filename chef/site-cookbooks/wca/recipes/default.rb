@@ -51,7 +51,7 @@ if username == "cubing"
   }
   branch = chef_env_to_branch[node.chef_environment]
   git repo_root do
-    repository "git@github.com:cubing/worldcubeassociation.org.git"
+    repository "https://github.com/cubing/worldcubeassociation.org.git"
     revision branch
     # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
     # for the reason for checkout_branch and "enable_checkout false"
@@ -60,16 +60,8 @@ if username == "cubing"
     action :sync
     enable_submodules true
 
-    # Unfortunately, setting the user and group breaks ssh agent forwarding.
-    # Instead, let root user do the git checkout, and then chown appropriately.
-    #user username
-    #group username
-    notifies :run, "execute[fix-permissions]", :immediately
-  end
-  execute "fix-permissions" do
-    command "chown -R #{username}:#{username} #{repo_root}"
-    user "root"
-    action :nothing
+    user username
+    group username
   end
 end
 rails_root = "#{repo_root}/WcaOnRails"
