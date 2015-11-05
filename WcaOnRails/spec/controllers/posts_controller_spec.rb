@@ -29,8 +29,15 @@ describe PostsController do
       it "only matches exact ids" do
         post2 = FactoryGirl.create(:post)
         post2.update_attribute(:slug, "#{post1.id}-foo")
+
+        post1 = FactoryGirl.create(:post)
+        post1.update_attribute(:slug, "#{post2.id}-foo")
+
         get :show, id: post2.slug
         expect(assigns(:post)).to eq post2
+
+        get :show, id: post1.slug
+        expect(assigns(:post)).to eq post1
       end
 
       it "cannot find not worldreadable posts" do
