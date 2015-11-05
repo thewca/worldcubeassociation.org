@@ -20,7 +20,7 @@ For all official `wca-documents` updates:
 - Post Announcement
     - Release only Monday/Tuesday if possible, Wednesday is okay. See [the first WRC announcement](https://www.worldcubeassociation.org/regulations/announcements/introducing-wrc-announcements). (Does not apply to the yearly change, which should go into effect Jan. 1.)
     - Make sure links are up to date, and the date the changes go into effect is listed.
-    - [WCA Homepage](https://worldcubeassociation.org/) Drupal
+    - [WCA Homepage](https://www.worldcubeassociation.org/) Drupal
         - Log into Drupal and go to Content > Create Content > WRC Announcement
         - Change the text format to "Full HTML" (there isn't a way to set this as default. :-( ).
         - Change the URL path setting. Look at past posts for the appropriate format.

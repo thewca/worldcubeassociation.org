@@ -13,7 +13,7 @@
 # To use the cache, a script calls the tryCache function, providing an
 # identification of what gets cached. Let's say we're viewing "By Person"
 # of the 2009 world championship:
-#   http://www.worldcubeassociation.org/results/competition.php?byPerson=By+Person&competitionId=WC2009
+#   https://www.worldcubeassociation.org/results/competition.php?byPerson=By+Person&competitionId=WC2009
 # Before showing competition results, competition.php calls this:
 #   tryCache( 'competition', $chosenCompetitionId, $chosenByPerson, $chosenAllResults, $chosenTop3, $chosenWinners );
 # Which becomes:

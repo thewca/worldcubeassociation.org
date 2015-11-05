@@ -173,7 +173,7 @@ function checkRelatively () {
       if ( $round != $shownRound ) {
         $wrongRounds++;
         $wrongComp[$competitionId] = true;
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='http://worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='https://www.worldcubeassociation.org/results/c.php?i=$competitionId&allResults=1#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
         showCompetitionResults( $competitionId, $eventId, $roundId );
         $shownRound = $round;
 

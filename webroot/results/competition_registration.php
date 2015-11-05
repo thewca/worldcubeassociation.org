@@ -381,7 +381,7 @@ function savePreregForm () {
     $mailBody .= "Ip : $ip\n";
     $mailBody .= "-------------------\n";
     $mailBody .= "You may edit this registration (and others) at:\n";
-    $mailBody .= "http://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations";
+    $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations";
 
     $mailSubject = $competition['cellName'] . " - New registration";
 

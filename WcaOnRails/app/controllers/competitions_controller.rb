@@ -91,20 +91,20 @@ class CompetitionsController < ApplicationController
     top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
     if top333.empty? # If there was no 3x3x3 event.
       title = "Results of #{comp.name} posted"
-      body = "Results of the [#{comp.name}](http://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
+      body = "Results of the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
     elsif top333.length < 3
       render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
       return
     else
       title = "#{top333.first.personName} wins #{comp.name}"
 
-      body = "[#{top333.first.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
-      body += " won the [#{comp.name}](http://www.worldcubeassociation.org/results/c.php?i=#{comp.id})"
+      body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
+      body += " won the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id})"
       body += " with an average of #{top333.first.to_s :average} seconds."
 
-      body += " [#{top333.second.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
+      body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
 
-      body += " and [#{top333.third.personName}](http://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
+      body += " and [#{top333.third.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
     end
 
     [

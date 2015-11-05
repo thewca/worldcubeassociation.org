@@ -34,7 +34,7 @@ require_once('includes/_header.php');
 <p>
   The WCA result pages are designed and built by
     <?php print externalLink('http://www.stefan-pochmann.info/', 'Stefan Pochmann'); ?>,
-    <?php print externalLink('http://www.worldcubeassociation.org/results/p.php?i=2004GALL02', 'Clément Gallet'); ?>, and
+    <?php print externalLink('https://www.worldcubeassociation.org/results/p.php?i=2004GALL02', 'Clément Gallet'); ?>, and
     <?php print externalLink('http://www.rubikscube.info/', 'Josef Jelinek'); ?>.<br />
   We would like to thank them for their great work for the cubing community.<br />
   <br />

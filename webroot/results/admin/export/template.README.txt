@@ -3,7 +3,7 @@ Export of the World Cube Association results database
 Date:     [longDate]
 Remarks:  none
 Contact:  WCA Results Team results@worldcubeassociation.org
-Website:  http://www.worldcubeassociation.org/results
+Website:  https://www.worldcubeassociation.org/results
 
 Description:
   This file contains public information on all official WCA competitions,
@@ -16,11 +16,11 @@ Goal:
 Allowed use: Information and parts of it may be published online,
 but only under the following conditions:
   - A clearly visible link to World Cube Association website is added
-    (http://www.worldcubeassociation.org) with the notification that
+    (https://www.worldcubeassociation.org) with the notification that
     World Cube Association is the source and owner of the information.
   - A clearly visible notification is added that the published information
     is not actual information.
-  - A clearly visible link to http://www.worldcubeassociation.org/results is
+  - A clearly visible link to https://www.worldcubeassociation.org/results is
     added with the notification that the actual information can be found via
     that link.
   - A clearly visible notification which date is taken for the source of the data.
