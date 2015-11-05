@@ -122,6 +122,37 @@
         });
       </script>
 
+
+      <% if @competition_admin_view %>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            Nearby competitions (within <%= Competition.NEARBY_DAYS_WARNING %> days and <%= Competition.NEARBY_DISTANCE_KM_WARNING %> km):
+          </label>
+          <div class="col-sm-9">
+
+            <table class="table">
+              <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Location</td>
+                <td>Distance</td>
+              </tr>
+              <% @competition.competitions_nearby[0, 10].each do |c| %>
+                <tr class="<%= @competition.kilometers_to(c) <= Competition.NEARBY_DISTANCE_KM_DANGER && (c.start_date - @competition.start_date).to_i < Competition.NEARBY_DAYS_DANGER ? "danger" : "" %>">
+                  <td><%= link_to c.name, admin_edit_competition_path(c.id), target: "_blank" %></td>                
+                  <% days_until = (c.start_date - @competition.start_date).to_i %>
+                  <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
+                    <%= days_until %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
+                  </td>
+                  <td><%= c.cityName %>, <%= c.countryId %></td>
+                  <td><%= @competition.kilometers_to(c).round(2) %> km</td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      <% end %>
+
       <%= f.input :venueDetails %>
 
       <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
