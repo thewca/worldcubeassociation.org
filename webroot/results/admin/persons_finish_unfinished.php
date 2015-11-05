@@ -128,6 +128,7 @@ function showUnfinishedPersons () {
 
   #--- Walk over all persons from the Results table.
   $caseNr = 0;
+  $availableSpots = array(); // array of semiIds in progress
   foreach( $personsFromResultsWithoutId as $person ){
     list( $name, $countryId, $firstYear ) = $person;
     
@@ -147,15 +148,29 @@ function showUnfinishedPersons () {
     while (!$cleared && $lettersToShift<=4) {
         $quarterId = substr($lastName,0,4-$lettersToShift) . substr($restOfName,0,$lettersToShift);
         $semiId = $firstYear . $quarterId;
-        $lastIdTaken = dbQuery("SELECT id FROM Persons WHERE id LIKE '".$semiId."__' ORDER BY id DESC LIMIT 1");
-        if (!count($lastIdTaken)) {
-            $cleared = true;
-        } else {
-            $counter = intval(substr($lastIdTaken[0]['id'],8,2),10);
-            if ($counter==99) {
-                $lettersToShift++;
-            } else {
+        // has the semiId been produced before from persons in progress?
+        if (array_key_exists($semiId,$availableSpots)) {
+            if ($availableSpots[$semiId]) {
+                $availableSpots[$semiId]--;
                 $cleared = true;
+            } else {
+                $lettersToShift++;
+            }
+        } else {
+            // else search the db
+            $lastIdTaken = dbQuery("SELECT id FROM Persons WHERE id LIKE '".$semiId."__' ORDER BY id DESC LIMIT 1");
+            if (!count($lastIdTaken)) {
+                $cleared = true;
+                $availableSpots[$semiId] = 98;
+            } else {
+                $counter = intval(substr($lastIdTaken[0]['id'],8,2),10);
+                if ($counter==99) {
+                    $availableSpots[$semiId] = 0;
+                    $lettersToShift++;
+                } else {
+                    $availableSpots[$semiId] = 98-$counter;
+                    $cleared = true;
+                }
             }
         }
     }
@@ -163,6 +178,7 @@ function showUnfinishedPersons () {
         // if we didn't clear a spot (almost impossible) we stick with the first combination
         $lettersToShift = max(0,4-strlen($lastName));
         $semiId = $firstYear . substr($lastName,0,4-$lettersToShift) . substr($restOfName,0,$lettersToShift);
+        $availableSpots[$semiId] = 0;
     }
 
     #--- Html-ify name and country.
