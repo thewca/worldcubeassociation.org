@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/jfly/carrierwave-crop.git
+  revision: 3a91399a45428631d61ff81ea988e17bcdd74e06
+  specs:
+    carrierwave-crop (0.1.2)
+      carrierwave (>= 0.8.0, < 0.11.0)
+      jquery-rails
+      rails (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -74,10 +83,6 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    carrierwave-crop (0.1.2)
-      carrierwave (>= 0.8.0, < 0.11.0)
-      jquery-rails
-      rails (>= 3.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     coderay (1.1.0)
@@ -357,7 +362,7 @@ DEPENDENCIES
   byebug
   capybara
   carrierwave
-  carrierwave-crop
+  carrierwave-crop!
   devise
   devise-bootstrap-views
   doorkeeper
