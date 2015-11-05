@@ -115,7 +115,7 @@ print $styles->getHTMLAll();
             <li <?php if ($currentSection == 'competitions') { ?>class="dropdown"<?php } else { ?>class="dropdown active"<?php } ?>>
               <a href="<?php print pathToRoot(); ?>" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-list-ol fa-fw"></i> Results <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="<?php print pathToRoot(); ?>events.php"><i class="fa fa-signal fa-fw"></i> Rankings</a></li>
+                <li><a href="<?php print pathToRoot(); ?>events.php"><i class="fa fa-signal fa-fw fa-rotate-90"></i> Rankings</a></li>
                 <li><a href="<?php print pathToRoot(); ?>regions.php"><i class="fa fa-trophy fa-fw"></i> Records</a></li>
                 <li><a href="<?php print pathToRoot(); ?>persons.php"><i class="fa fa-user fa-fw"></i> Persons</a></li>
                 <li class="divider"></li>
