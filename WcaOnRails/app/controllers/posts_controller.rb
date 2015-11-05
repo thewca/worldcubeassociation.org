@@ -23,7 +23,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params, world_readable: true)
+    @post = Post.new(post_params)
+    @post.world_readable = true
     @post.author = current_user
     if @post.save
       flash[:success] = "Created new post"
@@ -73,7 +74,10 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    world_readable_posts = Post.where(world_readable: true)
-    world_readable_posts.find_by_slug(params[:id]) || world_readable_posts.find_by_id!(params[:id])
+    post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
+    if !post || !post.world_readable
+      raise ActiveRecord::RecordNotFound.new("Couldn't find post")
+    end
+    post
   end
 end

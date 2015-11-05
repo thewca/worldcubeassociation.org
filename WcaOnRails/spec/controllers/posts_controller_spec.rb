@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe PostsController do
   let(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
+  let(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
   let(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
 
   context "not logged in" do
@@ -30,6 +31,10 @@ describe PostsController do
         post2.update_attribute(:slug, "#{post1.id}-foo")
         get :show, id: post2.slug
         expect(assigns(:post)).to eq post2
+      end
+
+      it "cannot find not worldreadable posts" do
+        expect {get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -64,6 +69,7 @@ describe PostsController do
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
+        expect(p.world_readable).to eq true
       end
     end
   end
