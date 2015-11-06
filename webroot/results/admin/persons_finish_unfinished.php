@@ -147,7 +147,7 @@ function showUnfinishedPersons () {
         $semiId = $firstYear . $quarterId;
         // update array of persons in progress
         if (!array_key_exists($semiId,$availableSpots)) {
-            $lastIdTaken = dbQuery("SELECT id FROM Persons WHERE id LIKE '".$semiId."__' ORDER BY id DESC LIMIT 1");
+            $lastIdTaken = dbQuery("SELECT id FROM Persons WHERE id LIKE '${semiId}__' ORDER BY id DESC LIMIT 1");
             if (!count($lastIdTaken)) {
                 $counter = 0;
             } else {
@@ -163,8 +163,13 @@ function showUnfinishedPersons () {
             $lettersToShift++;
         }
     }
+    /* The script has tried all the possibilities and none of them was valid.
+     * If we reach here with $cleared set to false (something that is not going to happen in centuries) then
+     * the person posting will receive an error in persons_finish_unfinished_ACTION.php and the software team
+     * of the future will have work to do.
+     */
     if (!$cleared) {
-        // if we didn't clear a spot (almost impossible) we stick with the first combination
+        // if we didn't clear a spot we stick with the first combination
         $lettersToShift = max(0,4-strlen($lastName));
         $semiId = $firstYear . substr($lastName,0,4-$lettersToShift) . substr($restOfName,0,$lettersToShift);
         $availableSpots[$semiId] = 0;
