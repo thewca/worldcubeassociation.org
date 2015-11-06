@@ -89,6 +89,8 @@ describe Api::V0::ApiController do
       it 'returns 401' do
         get :me
         expect(response.status).to eq 401
+        json = JSON.parse(response.body)
+        expect(json['error']).to eq("Not authorized")
       end
     end
 
@@ -174,7 +176,6 @@ describe Api::V0::ApiController do
         expect(json['me']['country_iso2']).to be_nil
         expect(json['me']['gender']).to be_nil
         expect(json['me']['dob']).to be_nil
-
       end
     end
   end

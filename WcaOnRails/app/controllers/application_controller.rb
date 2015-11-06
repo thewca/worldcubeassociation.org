@@ -12,6 +12,10 @@ class ApplicationController < ActionController::Base
     ::NewRelic::Agent.add_custom_attributes({ HTTP_USER_AGENT: request.user_agent })
   end
 
+  def doorkeeper_unauthorized_render_options(error: nil)
+    { json: { error: "Not authorized" } }
+  end
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name << :email
