@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  belongs_to :person, foreign_key: "wca_id"
 
   strip_attributes only: [:wca_id]
 
@@ -47,7 +48,6 @@ class User < ActiveRecord::Base
   validate :name_must_match_person_name
   def name_must_match_person_name
     if wca_id
-      person = Person.find_by_id(wca_id)
       if person
         if person.name != name
           errors.add(:name, "name must be #{person.name}")
@@ -64,11 +64,8 @@ class User < ActiveRecord::Base
 
   before_validation :copy_name_from_persons
   def copy_name_from_persons
-    if wca_id
-      person = Person.find_by_id(wca_id)
-      if person
-        self.name = person.name
-      end
+    if person
+      self.name = person.name
     end
   end
 
@@ -318,9 +315,7 @@ class User < ActiveRecord::Base
     )
   end
 
-  def to_jsonable(options={})
-    options.reverse_update(include_private_info: false)
-
+  def to_jsonable(include_private_info: false)
     json = {
       id: self.id,
       wca_id: self.wca_id,
@@ -328,8 +323,16 @@ class User < ActiveRecord::Base
       created_at: self.created_at,
       updated_at: self.updated_at,
     }
-    if options[:include_private_info]
+    if person
+      json[:gender] = person.gender
+      json[:country_iso2] = person.countryIso2
+    end
+
+    if include_private_info
       json[:email] = self.email
+      if person
+        json[:dob] = person.dob
+      end
     end
     if self.avatar?
       json[:avatar] = {

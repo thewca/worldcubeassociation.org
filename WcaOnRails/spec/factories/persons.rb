@@ -4,5 +4,6 @@ FactoryGirl.define do
       "2005FLEI%02i" % n
     end
     name { Faker::Name.name }
+    countryId { "USA" }
   end
 end
