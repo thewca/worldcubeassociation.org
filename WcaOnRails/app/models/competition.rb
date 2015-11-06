@@ -26,21 +26,13 @@ class Competition < ActiveRecord::Base
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
-  def self.NEARBY_DISTANCE_KM_WARNING
-    500
-  end
+  NEARBY_DISTANCE_KM_WARNING = 500
 
-  def self.NEARBY_DISTANCE_KM_DANGER
-    200
-  end
+  NEARBY_DISTANCE_KM_DANGER = 200
 
-  def self.NEARBY_DAYS_WARNING
-    90
-  end
+  NEARBY_DAYS_WARNING = 90
 
-  def self.NEARBY_DAYS_DANGER
-    30
-  end
+  NEARBY_DAYS_DANGER = 30
 
   # We have stricter validations for confirming a competition
   [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
@@ -176,7 +168,7 @@ class Competition < ActiveRecord::Base
   end
 
   def longitude_radians
-    longitude_degrees * Math::PI / 180
+    to_radians longitude_degrees
   end
 
   def latitude_degrees
@@ -188,7 +180,7 @@ class Competition < ActiveRecord::Base
   end
 
   def latitude_radians
-    latitude_degrees * Math::PI / 180
+    to_radians latitude_degrees
   end
 
   private def compute_coordinates
@@ -286,24 +278,32 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def competitions_nearby
+  def nearby_competitions
     Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, Competition.NEARBY_DAYS_WARNING, id)
-      .select { |c| kilometers_to(c) <= Competition.NEARBY_DISTANCE_KM_WARNING }
+      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, NEARBY_DAYS_WARNING, id)
+      .select { |c| kilometers_to(c) <= NEARBY_DISTANCE_KM_WARNING }
       .sort_by { |c| kilometers_to(c) }
+  end
+
+  private def to_radians(degrees)
+    degrees * Math::PI / 180
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
   def kilometers_to(c)
-    def to_radians(degrees)
-      degrees * Math::PI / 180
-    end
-
     6371 *
       Math::sqrt(
         ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 + 
         (c.latitude_radians - latitude_radians) ** 2
       )
+  end
+
+  def has_date?
+    start_date != nil
+  end
+
+  def has_location?
+    (latitude != 0 && longitude != 0)
   end
 
 end

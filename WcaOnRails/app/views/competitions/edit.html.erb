@@ -122,37 +122,6 @@
         });
       </script>
 
-
-      <% if @competition_admin_view %>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">
-            Nearby competitions (within <%= Competition.NEARBY_DAYS_WARNING %> days and <%= Competition.NEARBY_DISTANCE_KM_WARNING %> km):
-          </label>
-          <div class="col-sm-9">
-
-            <table class="table">
-              <tr>
-                <td>Name</td>
-                <td>Date</td>
-                <td>Location</td>
-                <td>Distance</td>
-              </tr>
-              <% @competition.competitions_nearby[0, 10].each do |c| %>
-                <tr class="<%= @competition.kilometers_to(c) <= Competition.NEARBY_DISTANCE_KM_DANGER && (c.start_date - @competition.start_date).to_i < Competition.NEARBY_DAYS_DANGER ? "danger" : "" %>">
-                  <td><%= link_to c.name, admin_edit_competition_path(c.id), target: "_blank" %></td>                
-                  <% days_until = (c.start_date - @competition.start_date).to_i %>
-                  <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
-                    <%= days_until %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
-                  </td>
-                  <td><%= c.cityName %>, <%= c.countryId %></td>
-                  <td><%= @competition.kilometers_to(c).round(2) %> km</td>
-                </tr>
-              <% end %>
-            </table>
-          </div>
-        </div>
-      <% end %>
-
       <%= f.input :venueDetails %>
 
       <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
@@ -169,6 +138,51 @@
           <span class="help-block"><%= f.error :end_date %></span>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          Nearby competitions (within <%= Competition::NEARBY_DAYS_WARNING %> days and <%= Competition::NEARBY_DISTANCE_KM_WARNING %> km):
+        </label>
+        <div class="col-sm-9">
+
+          <% if @competition.has_date? && @competition.has_location? %> 
+            <% nearby_competitions = @competition.nearby_competitions[0, 10] %>
+            <% if nearby_competitions.empty? %>
+              <div class="alert alert-success" role="alert">No nearby competitions!</div>
+            <% else %>
+              <table class="table">
+                <tr>
+                  <td>Name</td>
+                  <td>Delegate(s)</td>
+                  <td>Date</td>
+                  <td>Location</td>
+                  <td>Distance</td>
+                </tr>
+                <% nearby_competitions.each do |c| %>
+                  <tr class="<%= @competition.kilometers_to(c) <= Competition::NEARBY_DISTANCE_KM_DANGER && (c.start_date - @competition.start_date).to_i < Competition::NEARBY_DAYS_DANGER ? "danger" : "" %>">
+                    <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>                
+                    <% days_until = (c.start_date - @competition.start_date).to_i %>
+                    <td><%= c.delegates.map(&:name).to_sentence %></td>
+                    <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
+                      <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
+                    </td>
+                    <td><%= c.cityName %>, <%= c.countryId %></td>
+                    <td class="text-nowrap"><%= link_to "#{@competition.kilometers_to(c).round(2)} km", "https://www.google.com/maps/dir/#{c.latitude_degrees},#{c.longitude_degrees}/#{@competition.latitude_degrees},#{@competition.longitude_degrees}/", target: "_blank" %></td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
+          <% else %>
+            <% if !@competition.has_date? %>
+              <div class="alert alert-danger" role="alert">You have not assigned a date for this competition yet.</div>
+            <% end %>
+            <% if !@competition.has_location? %>
+              <div class="alert alert-danger" role="alert">You have not assigned a location for this competition yet.</div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
 
       <%= f.input :information %>
       <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
