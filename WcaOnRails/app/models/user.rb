@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   end
 
   def dummy_account?
-    wca_id.present? && encrypted_password.blank?
+    wca_id.present? && encrypted_password.blank? && email.downcase == "#{wca_id}@worldcubeassociation.org".downcase
   end
 
   before_validation :copy_name_from_persons

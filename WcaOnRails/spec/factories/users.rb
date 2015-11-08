@@ -31,5 +31,13 @@ FactoryGirl.define do
     factory :user_with_wca_id do
       wca_id { FactoryGirl.create(:person).id }
     end
+
+    factory :dummy_user do
+      wca_id { FactoryGirl.create(:person).id }
+      encrypted_password ""
+      after(:create) do |user|
+        user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
+      end
+    end
   end
 end

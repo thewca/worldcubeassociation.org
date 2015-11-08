@@ -6,6 +6,12 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "defines a dummy user" do
+    user = FactoryGirl.create :dummy_user
+    expect(user).to be_valid
+    expect(user.dummy_account?).to be true
+  end
+
   it "requires senior delegate be a senior delegate" do
     delegate = FactoryGirl.create :delegate
     user = FactoryGirl.create :user
@@ -81,8 +87,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "WCA id" do
-    let(:person) { FactoryGirl.create :person, id: "2005FLEI01" }
-    let(:user) { FactoryGirl.create :user, wca_id: person.id, name: person.name }
+    let(:user) { FactoryGirl.create :user_with_wca_id }
 
     it "validates WCA id" do
       user = FactoryGirl.build :user, wca_id: "2005FLEI02"
@@ -101,13 +106,13 @@ RSpec.describe User, type: :model do
     it "requires that name match person name" do
       user.name = "jfly"
       user.save!
-      expect(user.name).to eq person.name
+      expect(user.name).to eq user.person.name
     end
 
     it "handles Person name changing" do
-      expect(user.name).to eq person.name
-      person.name = "New name"
-      person.save!
+      expect(user.name).to eq user.person.name
+      user.person.name = "New name"
+      user.person.save!
       expect(user).to be_valid
     end
 
@@ -130,8 +135,8 @@ RSpec.describe User, type: :model do
     end
 
     it "removes dummy accounts and copies name when WCA id is assigned" do
-      person_for_dummy = FactoryGirl.create :person, id: "2004FLEI01"
-      dummy_user = FactoryGirl.create :user, wca_id: "2004FLEI01", name: person_for_dummy.name, encrypted_password: ""
+      dummy_user = FactoryGirl.create :dummy_user
+      person_for_dummy = dummy_user.person
       expect(dummy_user).to be_valid
       dummy_user.update_attributes!(
         avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
@@ -141,18 +146,18 @@ RSpec.describe User, type: :model do
         avatar_crop_h: 40,
       )
       avatar = dummy_user.reload.read_attribute(:avatar)
-      expect(File).to exist("public/uploads/user/avatar/2004FLEI01/#{avatar}")
+      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
 
       # Assigning a WCA id to user should copy over the name from the Persons table.
-      user.wca_id = "2004FLEI01"
-      expect(user.name).to eq person.name
+      expect(user.name).to eq user.person.name
+      user.wca_id = dummy_user.wca_id
       user.save!
       expect(user.name).to eq person_for_dummy.name
 
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
       expect(user.reload.read_attribute :avatar).to eq avatar
-      expect(File).to exist("public/uploads/user/avatar/2004FLEI01/#{avatar}")
+      expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
     end
 
     it "does not allow duplicate WCA ids" do
