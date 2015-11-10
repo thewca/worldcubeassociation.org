@@ -26,6 +26,14 @@ class Competition < ActiveRecord::Base
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
+  NEARBY_DISTANCE_KM_WARNING = 500
+
+  NEARBY_DISTANCE_KM_DANGER = 200
+
+  NEARBY_DAYS_WARNING = 90
+
+  NEARBY_DAYS_DANGER = 30
+
   # We have stricter validations for confirming a competition
   [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
     validates field, presence: true, if: :isConfirmed?
@@ -159,12 +167,20 @@ class Competition < ActiveRecord::Base
     @longitude_degrees = new_longitude_degrees.to_f
   end
 
+  def longitude_radians
+    to_radians longitude_degrees
+  end
+
   def latitude_degrees
     latitude_microdegrees / 1e6
   end
 
   def latitude_degrees=(new_latitude_degrees)
     @latitude_degrees = new_latitude_degrees.to_f
+  end
+
+  def latitude_radians
+    to_radians latitude_degrees
   end
 
   private def compute_coordinates
@@ -261,4 +277,33 @@ class Competition < ActiveRecord::Base
       errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
   end
+
+  def nearby_competitions
+    Competition.where(
+      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, NEARBY_DAYS_WARNING, id)
+      .select { |c| kilometers_to(c) <= NEARBY_DISTANCE_KM_WARNING }
+      .sort_by { |c| kilometers_to(c) }
+  end
+
+  private def to_radians(degrees)
+    degrees * Math::PI / 180
+  end
+
+  # Source http://www.movable-type.co.uk/scripts/latlong.html
+  def kilometers_to(c)
+    6371 *
+      Math::sqrt(
+        ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 + 
+        (c.latitude_radians - latitude_radians) ** 2
+      )
+  end
+
+  def has_date?
+    start_date != nil
+  end
+
+  def has_location?
+    (latitude != 0 && longitude != 0)
+  end
+
 end
