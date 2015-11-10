@@ -32,8 +32,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Anton Rostovikov](https://www.worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](https://www.worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](https://www.worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](https://www.worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](https://www.worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 - [Spanish, American (Español Americano) - 2015-07-01](./spanish-american/)
     - By Daniela Maldonado Hernández.
-- [Spanish, European (Español de España) - 2013](./spanish-european/)
-    - By [Carlos Méndez García-Barroso](https://www.worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](https://www.worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](https://www.worldcubeassociation.org/results/p.php?i=2009SANC01).
+- [Spanish, European (Español de España) - 2015-07-01](./spanish-european/)
+    - By [Luis J. Iáñez](https://www.worldcubeassociation.org/results/p.php?i=2009PARE02), [Carlos Méndez García-Barroso](https://www.worldcubeassociation.org/results/p.php?i=2010GARC02), [Raúl Morales](https://www.worldcubeassociation.org/results/p.php?i=2013MORA02), and [Federico Sánchez Motellón](https://www.worldcubeassociation.org/results/p.php?i=2009SANC01).
 
 
 ## Translating the Regulations
