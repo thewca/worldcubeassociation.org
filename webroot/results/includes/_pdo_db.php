@@ -28,7 +28,7 @@ function pdo_fetch_result(&$result)
 try
 {
     $db_config = $config->get('database');
-    $sql_dsn = "mysql:host=".$db_config['host'].";dbname=". $db_config['name'];
+    $sql_dsn = "mysql:host=".$db_config['host'].";port=".$db_config['port'].";dbname=". $db_config['name'];
 
     // Ok, this is fun. We have some code in admin/competitions_manage.php that
     // dynamically requires _framework.php, who includes us (_pdo_db.php). Code

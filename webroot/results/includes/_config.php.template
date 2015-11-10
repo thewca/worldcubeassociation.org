@@ -6,6 +6,7 @@ $config['database']['host'] = '...';
 $config['database']['user'] = '...';
 $config['database']['pass'] = '...';
 $config['database']['name'] = '...';
+$config['database']['port'] = '...';
 
 $config['recaptcha']['publickey'] = '...';
 $config['recaptcha']['privatekey'] = '...';

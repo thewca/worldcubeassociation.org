@@ -128,24 +128,52 @@ function showUnfinishedPersons () {
 
   #--- Walk over all persons from the Results table.
   $caseNr = 0;
+  $availableSpots = array(); // array of semiIds in progress
   foreach( $personsFromResultsWithoutId as $person ){
     list( $name, $countryId, $firstYear ) = $person;
     
     #--- Try to compute the semi-id.
-    $quarterId = removeUglyAccentsAndStuff( extractRomanName( $name ));
-    $quarterId = preg_replace( '/[^a-zA-Z ]/', '', $quarterId );
-    $quarterId = strtoupper( substr( preg_replace( '/(.*)\s(.*)/', '$2$1', $quarterId ), 0, 4 ));
-    if ( strlen ( $quarterId ) == 0 ) {
-      // if the name comes empty, invent a quarterId
-      $quarterId = 'XXXX';
-    } else if ( strlen( $quarterId ) < 4 ) {
-      // make sure the quarterId is 4-letter long
-      while ( strlen( $quarterId ) < 4 ) {
-        $quarterId .= $quarterId;
-      }
-      $quarterId = substr( $quarterId, 0, 4 );
+    $paddingLetter = 'U';
+    $neatName = strtoupper(preg_replace('/[^a-zA-Z ]/','',removeUglyAccentsAndStuff(extractRomanName($name))));
+    $nameParts = explode(' ',$neatName);
+    $lastName = $nameParts[count($nameParts)-1];
+    $restOfName = implode(array_slice($nameParts,0,count($nameParts)-1));
+    // follows a simple trick that prevents us from empty or too short restOfNames and provides the appropriate padding
+    $restOfName = str_pad($restOfName,4,$paddingLetter);
+    $lettersToShift = max(0,4-strlen($lastName));
+    $cleared = false;
+    while (!$cleared && $lettersToShift<=4) {
+        $quarterId = substr($lastName,0,4-$lettersToShift) . substr($restOfName,0,$lettersToShift);
+        $semiId = $firstYear . $quarterId;
+        // update array of persons in progress
+        if (!array_key_exists($semiId,$availableSpots)) {
+            $lastIdTaken = dbQuery("SELECT id FROM Persons WHERE id LIKE '${semiId}__' ORDER BY id DESC LIMIT 1");
+            if (!count($lastIdTaken)) {
+                $counter = 0;
+            } else {
+                $counter = intval(substr($lastIdTaken[0]['id'],8,2),10);
+            }
+            $availableSpots[$semiId] = 99-$counter;
+        }
+        // is there a spot available?
+        if ($availableSpots[$semiId]) {
+            $availableSpots[$semiId]--;
+            $cleared = true;
+        } else {
+            $lettersToShift++;
+        }
     }
-    $semiId = $firstYear . $quarterId;
+    /* The script has tried all the possibilities and none of them was valid.
+     * If we reach here with $cleared set to false (something that is not going to happen in centuries) then
+     * the person posting will receive an error in persons_finish_unfinished_ACTION.php and the software team
+     * of the future will have work to do.
+     */
+    if (!$cleared) {
+        // if we didn't clear a spot we stick with the first combination
+        $lettersToShift = max(0,4-strlen($lastName));
+        $semiId = $firstYear . substr($lastName,0,4-$lettersToShift) . substr($restOfName,0,$lettersToShift);
+        $availableSpots[$semiId] = 0;
+    }
 
     #--- Html-ify name and country.
     $nameHtml = htmlEscape( $name );
@@ -230,8 +258,8 @@ function showUnfinishedPersons () {
 function removeUglyAccentsAndStuff ( $ugly ) {
 #----------------------------------------------------------------------
 
-    $accent   = "ÀÁÂÃÄÅÆĂÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßŞȘşșŢȚţțàáâãäåæăçèéêëìíîïðñòóôõöøùúûýýþÿ";
-    $noaccent = "aaaaaaaaceeeeiiiidnoooooouuuuybsssssttttaaaaaaaaceeeeiiiidnoooooouuuyyby";
+    $accent   = "ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ";
+    $noaccent = "aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy";
 
     $nice = '';
     for( $i=0; $i<mb_strlen($ugly, 'UTF-8'); $i++ ){
