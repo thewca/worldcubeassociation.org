@@ -158,10 +158,10 @@
                   <td>Location</td>
                   <td>Distance</td>
                 </tr>
+                <% days_until = (c.start_date - @competition.start_date).to_i %>
                 <% nearby_competitions.each do |c| %>
-                  <tr class="<%= @competition.kilometers_to(c) <= Competition::NEARBY_DISTANCE_KM_DANGER && (c.start_date - @competition.start_date).to_i < Competition::NEARBY_DAYS_DANGER ? "danger" : "" %>">
-                    <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>                
-                    <% days_until = (c.start_date - @competition.start_date).to_i %>
+                  <tr class="<%= @competition.kilometers_to(c) <= Competition::NEARBY_DISTANCE_KM_DANGER && days_until.abs < Competition::NEARBY_DAYS_DANGER ? "danger" : "" %>">
+                    <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>
                     <td><%= c.delegates.map(&:name).to_sentence %></td>
                     <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
                       <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
