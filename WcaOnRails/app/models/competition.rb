@@ -306,4 +306,9 @@ class Competition < ActiveRecord::Base
     (latitude != 0 && longitude != 0)
   end
 
+  def dangerously_close_to?(c)
+    days_until = (c.start_date - self.start_date).to_i
+    self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
+  end
+
 end
