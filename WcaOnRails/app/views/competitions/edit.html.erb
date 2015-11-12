@@ -69,8 +69,9 @@
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>
       <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
-
+      <%= f.input :venueDetails %>
       <%= f.input :venueAddress %>
+
       <div id="venue-map-wrapper">
         <input type="text" id="googleMapsLocationInput" class="form-control" data-ays-ignore="true">
         <div class="map"></div>
@@ -92,6 +93,17 @@
         </div>
       </div>
       <script>
+        function refreshNearbyCompetitions() {
+          $("#nearby-competitions").addClass('loading');  
+          $.ajax({
+            url: '<%= nearby_competitions_path %>', 
+            data: $("#edit-competition-form").serialize(),
+            success: function(data) {
+              $('#nearby-competitions').html(data).removeClass('loading');
+            }
+          });
+        }
+
         function roundToMicrodegrees($el) {
           // To prevent are you sure? from firing even when nothing has changed,
           // explicitly round coordinates to an integer number of microdegrees.
@@ -115,14 +127,18 @@
             roundToMicrodegrees($('#competition_latitude'));
             roundToMicrodegrees($('#competition_longitude'));
           },
-          onchanged: function(currentLocation, radius, isMarkerDropped) {
-            roundToMicrodegrees($('#competition_latitude'));
-            roundToMicrodegrees($('#competition_longitude'));
+          onchanged: function(currentLocation, radius, isMarkerDropped) { 
+            setTimeout(function() {
+              // The locationpicker library calls 'onchanged' before actually updating the input fields.
+              // setTimeout lets us wait until the inputs have actually changed.
+              roundToMicrodegrees($('#competition_latitude'));
+              roundToMicrodegrees($('#competition_longitude'));
+              refreshNearbyCompetitions();
+            }, 0);
+            
           },
         });
       </script>
-
-      <%= f.input :venueDetails %>
 
       <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
         <label class="integer optional col-sm-2 control-label" for="datepicker-start">
@@ -139,47 +155,20 @@
         </div>
       </div>
 
+      <script>
+        $("#datepicker-start").on("changeDate", function(e) {
+          refreshNearbyCompetitions();
+        });
+      </script>
+      
       <div class="form-group">
         <label class="col-sm-2 control-label">
           Nearby competitions (within <%= Competition::NEARBY_DAYS_WARNING %> days and <%= Competition::NEARBY_DISTANCE_KM_WARNING %> km):
         </label>
         <div class="col-sm-9">
-
-          <% if @competition.has_date? && @competition.has_location? %> 
-            <% nearby_competitions = @competition.nearby_competitions[0, 10] %>
-            <% if nearby_competitions.empty? %>
-              <div class="alert alert-success" role="alert">No nearby competitions!</div>
-            <% else %>
-              <table class="table">
-                <tr>
-                  <td>Name</td>
-                  <td>Delegate(s)</td>
-                  <td>Date</td>
-                  <td>Location</td>
-                  <td>Distance</td>
-                </tr>
-                <% nearby_competitions.each do |c| %>
-                  <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "" %>">
-                    <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>
-                    <td><%= c.delegates.map(&:name).to_sentence %></td>
-                    <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
-                    <% days_until = (c.start_date - @competition.start_date).to_i %>  
-                    <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
-                    </td>
-                    <td><%= c.cityName %>, <%= c.countryId %></td>
-                    <td class="text-nowrap"><%= link_to "#{@competition.kilometers_to(c).round(2)} km", "https://www.google.com/maps/dir/#{c.latitude_degrees},#{c.longitude_degrees}/#{@competition.latitude_degrees},#{@competition.longitude_degrees}/", target: "_blank" %></td>
-                  </tr>
-                <% end %>
-              </table>
-            <% end %>
-          <% else %>
-            <% if !@competition.has_date? %>
-              <div class="alert alert-danger" role="alert">You have not assigned a date for this competition yet.</div>
-            <% end %>
-            <% if !@competition.has_location? %>
-              <div class="alert alert-danger" role="alert">You have not assigned a location for this competition yet.</div>
-            <% end %>
-          <% end %>
+          <div id="nearby-competitions">
+            <%= render "nearby_competitions" %>
+          </div>
         </div>
       </div>
 

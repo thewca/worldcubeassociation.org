@@ -174,6 +174,12 @@ class CompetitionsController < ApplicationController
     render_edit
   end
 
+  def nearby_competitions
+    @competition = Competition.new(competition_params)
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    render partial: 'nearby_competitions'
+  end
+
   def update
     @competition = Competition.find(params[:id])
     @competition_admin_view = params.has_key?(:competition_admin_view)
@@ -210,7 +216,7 @@ class CompetitionsController < ApplicationController
       :showPreregForm,
       :showPreregList,
     ]
-    if @competition.isConfirmed? && !current_user.can_admin_results?
+    if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
