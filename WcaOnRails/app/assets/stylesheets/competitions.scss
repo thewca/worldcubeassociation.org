@@ -69,15 +69,16 @@ $venue-map-wrapper-height: 400px;
 
 #nearby-competitions {
   position: relative;
-
-  &.loading::after {
-    content: ' ';
-    background-color: rgba(200, 200, 200, 0.6);
-    cursor: progress;
+  
+  .progress {
+    display: none;
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+    opacity: 0.55;
+  }
+
+  &.loading .progress {
+    display: inline;
   }
 }
