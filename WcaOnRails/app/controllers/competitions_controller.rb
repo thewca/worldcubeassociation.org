@@ -177,7 +177,7 @@ class CompetitionsController < ApplicationController
   def nearby_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    render :partial => 'nearby_competitions'
+    render partial: 'nearby_competitions'
   end
 
   def update
