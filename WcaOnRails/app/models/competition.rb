@@ -27,11 +27,8 @@ class Competition < ActiveRecord::Base
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
   NEARBY_DISTANCE_KM_WARNING = 500
-
   NEARBY_DISTANCE_KM_DANGER = 200
-
   NEARBY_DAYS_WARNING = 90
-
   NEARBY_DAYS_DANGER = 30
 
   # We have stricter validations for confirming a competition

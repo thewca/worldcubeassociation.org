@@ -94,53 +94,15 @@
       </div>
       <script>
         (function() {
-          wca.fetchNearbyCompetitions = function() {
-            $("#nearby-competitions").addClass('loading');
-            var obj = $("#edit-competition-form").serializeJSON();
-            $.ajax({
-              url: '<%= nearby_competitions_path %>',
-              data: {
-                'competition[id]': obj['competition[id]'],
-                'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
-                'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
-                'competition[start_date]': obj['competition[start_date]'],
-                'competition[end_date]': obj['competition[end_date]'],
-              },
-              success: function(data) {
-                $('#nearby-competitions').html(data);
-              }
-            });
-          };
-
-          wca._nearbyCompetitions = [];
-          wca.setNearbyCompetitions = function(nearbyCompetitions) {
-            // First, remove all markers
-            wca._nearbyCompetitions.forEach(function(c) {
-              c.marker.setMap(null);
-            });
-            // Now create all the new markers.
-            wca._nearbyCompetitions = nearbyCompetitions;
-            wca._nearbyCompetitions.forEach(function(c) {
-              c.marker = new google.maps.Marker({
-                map: $('.map').data('locationpicker').map,
-                position: {
-                  lat: c.latitude_degrees,
-                  lng: c.longitude_degrees,
-                },
-                title: c.name,
-              });
-            });
-
-            $("#nearby-competitions").removeClass('loading');
-          };
-
           function roundToMicrodegrees($el) {
             // To prevent are you sure? from firing even when nothing has changed,
             // explicitly round coordinates to an integer number of microdegrees.
             var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
             $el.val(rounded);
           }
-          $('#venue-map-wrapper .map').locationpicker({
+          var $map = $('#venue-map-wrapper .map');
+          $map.locationpicker({
+            zoom: 8,
             location: {
               latitude: <%= @competition.latitude_degrees %>,
               longitude: <%= @competition.longitude_degrees %>,
@@ -165,9 +127,77 @@
                 roundToMicrodegrees($('#competition_longitude'));
                 wca.fetchNearbyCompetitions();
               }, 0);
-
             },
           });
+          var locationpicker = $map.data('locationpicker');
+
+          wca.fetchNearbyCompetitions = function() {
+            $("#nearby-competitions").addClass('loading');
+            var obj = $("#edit-competition-form").serializeJSON();
+            $.ajax({
+              url: '<%= nearby_competitions_path %>',
+              data: {
+                'competition[id]': obj['competition[id]'],
+                'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
+                'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
+                'competition[start_date]': obj['competition[start_date]'],
+                'competition[end_date]': obj['competition[end_date]'],
+              },
+              success: function(data) {
+                $('#nearby-competitions').html(data);
+              }
+            });
+          };
+
+          wca._nearbyCompetitionById = {};
+          wca.setNearbyCompetitions = function(nearbyCompetitions) {
+            var desiredNearbyCompetitionById = _.indexBy(nearbyCompetitions, 'id');
+
+            var desiredIds = Object.keys(desiredNearbyCompetitionById);
+            var currentIds = Object.keys(wca._nearbyCompetitionById);
+            var idsToAdd = _.difference(desiredIds, currentIds);
+            var idsToRemove = _.difference(currentIds, desiredIds);
+
+            // First, remove all uneeded markers.
+            idsToRemove.forEach(function(id) {
+              wca._nearbyCompetitionById[id].marker.setMap(null);
+              delete wca._nearbyCompetitionById[id];
+            });
+
+            // Now create all the new markers.
+            idsToAdd.forEach(function(id) {
+              var c = desiredNearbyCompetitionById[id];
+              c.marker = new google.maps.Marker({
+                map: locationpicker.map,
+                position: {
+                  lat: c.latitude_degrees,
+                  lng: c.longitude_degrees,
+                },
+                title: c.name,
+              });
+              wca._nearbyCompetitionById[id] = c;
+            });
+
+            $("#nearby-competitions").removeClass('loading');
+          };
+
+          var dangerCircle = new google.maps.Circle({
+            map: locationpicker.map,
+            radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
+            strokeColor: '#d9534f', // @brand-danger
+            fillOpacity: 0.0,
+            clickable: false,
+          });
+          dangerCircle.bindTo('center', locationpicker.marker, 'position');
+          var warningCircle = new google.maps.Circle({
+            map: locationpicker.map,
+            radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
+            strokeColor: '#f0ad4e', // @brand-warning
+            fillOpacity: 0.0,
+            clickable: false,
+          });
+          warningCircle.bindTo('center', locationpicker.marker, 'position');
+
         })();
       </script>
 

@@ -45,6 +45,7 @@ gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
 gem 'font-awesome-sass'
+gem 'lodash-rails'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -173,6 +173,8 @@ GEM
       rb-inotify (>= 0.9)
     local_time (1.0.2)
       coffee-rails
+    lodash-rails (3.10.1)
+      railties (>= 3.1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
@@ -377,6 +379,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   local_time
+  lodash-rails
   mail_form
   mini_magick
   mysql2

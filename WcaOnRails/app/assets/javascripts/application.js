@@ -27,6 +27,7 @@
 //= require jquery.purr
 //= require best_in_place.purr
 //= require jquery.jcrop
+//= require lodash
 //= require_tree .
 
 // Dumping ground for... stuff
