@@ -93,58 +93,82 @@
         </div>
       </div>
       <script>
-        function refreshNearbyCompetitions() {
-          $("#nearby-competitions").addClass('loading');
-          var obj = $("#edit-competition-form").serializeJSON();
-          $.ajax({
-            url: '<%= nearby_competitions_path %>',
-            data: {
-              'competition[id]': obj.id,
-              'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
-              'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
-              'competition[start_date]': obj['competition[start_date]'],
-              'competition[end_date]': obj['competition[end_date]'],
-            },
-            success: function(data) {
-              $('#nearby-competitions').html(data).removeClass('loading');
-            }
-          });
-        }
+        (function() {
+          wca.fetchNearbyCompetitions = function() {
+            $("#nearby-competitions").addClass('loading');
+            var obj = $("#edit-competition-form").serializeJSON();
+            $.ajax({
+              url: '<%= nearby_competitions_path %>',
+              data: {
+                'competition[id]': obj['competition[id]'],
+                'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
+                'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
+                'competition[start_date]': obj['competition[start_date]'],
+                'competition[end_date]': obj['competition[end_date]'],
+              },
+              success: function(data) {
+                $('#nearby-competitions').html(data);
+              }
+            });
+          };
 
-        function roundToMicrodegrees($el) {
-          // To prevent are you sure? from firing even when nothing has changed,
-          // explicitly round coordinates to an integer number of microdegrees.
-          var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
-          $el.val(rounded);
-        }
-        $('#venue-map-wrapper .map').locationpicker({
-          location: {
-            latitude: <%= @competition.latitude_degrees %>,
-            longitude: <%= @competition.longitude_degrees %>,
-          },
-          radius: 0,
-          scrollwheel: false,
-          inputBinding: {
-            latitudeInput: $('#competition_latitude'),
-            longitudeInput: $('#competition_longitude'),
-            locationNameInput: $('#googleMapsLocationInput')
-          },
-          enableAutocomplete: true,
-          oninitialized: function(component) {
-            roundToMicrodegrees($('#competition_latitude'));
-            roundToMicrodegrees($('#competition_longitude'));
-          },
-          onchanged: function(currentLocation, radius, isMarkerDropped) {
-            setTimeout(function() {
-              // The locationpicker library calls 'onchanged' before actually updating the input fields.
-              // setTimeout lets us wait until the inputs have actually changed.
+          wca._nearbyCompetitions = [];
+          wca.setNearbyCompetitions = function(nearbyCompetitions) {
+            // First, remove all markers
+            wca._nearbyCompetitions.forEach(function(c) {
+              c.marker.setMap(null);
+            });
+            // Now create all the new markers.
+            wca._nearbyCompetitions = nearbyCompetitions;
+            wca._nearbyCompetitions.forEach(function(c) {
+              c.marker = new google.maps.Marker({
+                map: $('.map').data('locationpicker').map,
+                position: {
+                  lat: c.latitude_degrees,
+                  lng: c.longitude_degrees,
+                },
+                title: c.name,
+              });
+            });
+
+            $("#nearby-competitions").removeClass('loading');
+          };
+
+          function roundToMicrodegrees($el) {
+            // To prevent are you sure? from firing even when nothing has changed,
+            // explicitly round coordinates to an integer number of microdegrees.
+            var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
+            $el.val(rounded);
+          }
+          $('#venue-map-wrapper .map').locationpicker({
+            location: {
+              latitude: <%= @competition.latitude_degrees %>,
+              longitude: <%= @competition.longitude_degrees %>,
+            },
+            radius: 0,
+            scrollwheel: false,
+            inputBinding: {
+              latitudeInput: $('#competition_latitude'),
+              longitudeInput: $('#competition_longitude'),
+              locationNameInput: $('#googleMapsLocationInput')
+            },
+            enableAutocomplete: true,
+            oninitialized: function(component) {
               roundToMicrodegrees($('#competition_latitude'));
               roundToMicrodegrees($('#competition_longitude'));
-              refreshNearbyCompetitions();
-            }, 0);
+            },
+            onchanged: function(currentLocation, radius, isMarkerDropped) {
+              setTimeout(function() {
+                // The locationpicker library calls 'onchanged' before actually updating the input fields.
+                // setTimeout lets us wait until the inputs have actually changed.
+                roundToMicrodegrees($('#competition_latitude'));
+                roundToMicrodegrees($('#competition_longitude'));
+                wca.fetchNearbyCompetitions();
+              }, 0);
 
-          },
-        });
+            },
+          });
+        })();
       </script>
 
       <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
@@ -164,7 +188,7 @@
 
       <script>
         $("#datepicker-start").on("changeDate", function(e) {
-          refreshNearbyCompetitions();
+          wca.fetchNearbyCompetitions();
         });
       </script>
 

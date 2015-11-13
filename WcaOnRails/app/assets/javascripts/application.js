@@ -29,6 +29,9 @@
 //= require jquery.jcrop
 //= require_tree .
 
+// Dumping ground for... stuff
+window.wca = window.wca || {};
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
