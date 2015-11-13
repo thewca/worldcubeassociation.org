@@ -94,10 +94,17 @@
       </div>
       <script>
         function refreshNearbyCompetitions() {
-          $("#nearby-competitions").addClass('loading');  
+          $("#nearby-competitions").addClass('loading');
+          var obj = $("#edit-competition-form").serializeJSON();
           $.ajax({
-            url: '<%= nearby_competitions_path %>', 
-            data: $("#edit-competition-form").serialize(),
+            url: '<%= nearby_competitions_path %>',
+            data: {
+              'competition[id]': obj.id,
+              'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
+              'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
+              'competition[start_date]': obj['competition[start_date]'],
+              'competition[end_date]': obj['competition[end_date]'],
+            },
             success: function(data) {
               $('#nearby-competitions').html(data).removeClass('loading');
             }
@@ -127,7 +134,7 @@
             roundToMicrodegrees($('#competition_latitude'));
             roundToMicrodegrees($('#competition_longitude'));
           },
-          onchanged: function(currentLocation, radius, isMarkerDropped) { 
+          onchanged: function(currentLocation, radius, isMarkerDropped) {
             setTimeout(function() {
               // The locationpicker library calls 'onchanged' before actually updating the input fields.
               // setTimeout lets us wait until the inputs have actually changed.
@@ -135,7 +142,7 @@
               roundToMicrodegrees($('#competition_longitude'));
               refreshNearbyCompetitions();
             }, 0);
-            
+
           },
         });
       </script>
@@ -160,7 +167,7 @@
           refreshNearbyCompetitions();
         });
       </script>
-      
+
       <div class="form-group">
         <label class="col-sm-2 control-label">
           Nearby competitions (within <%= Competition::NEARBY_DAYS_WARNING %> days and <%= Competition::NEARBY_DISTANCE_KM_WARNING %> km):
