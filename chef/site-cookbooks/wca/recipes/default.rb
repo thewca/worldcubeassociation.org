@@ -112,6 +112,15 @@ chef_env_to_rails_env = {
 }
 rails_env = chef_env_to_rails_env[node.chef_environment]
 
+# Run mailcatcher in every environment except production.
+if rails_env != "production"
+  gem_package "mailcatcher"
+  execute "start mailcatcher" do
+    command "mailcatcher --http-ip=0.0.0.0"
+    not_if "pgrep -f [m]ailcatcher"
+  end
+end
+
 # Use HTTPS in non development mode
 https = !node.chef_environment.start_with?("development")
 
@@ -207,7 +216,7 @@ template "/etc/nginx/wca_https.conf" do
 end
 # Start nginx if it's not already running.
 execute "nginx" do
-  not_if "ps -efw | grep nginx.*master"
+  not_if "ps -efw | grep [n]ginx.*master"
 end
 execute "reload-nginx" do
   command "/etc/init.d/nginx reload || /etc/init.d/nginx start"
