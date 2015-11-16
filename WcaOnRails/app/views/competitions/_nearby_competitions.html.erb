@@ -1,0 +1,58 @@
+<div class="progress">
+  <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%">
+    <span class="sr-only">LOADING</span>
+  </div>
+</div>
+
+<% if @competition.has_date? && @competition.has_location? %> 
+  <% nearby_competitions = @competition.nearby_competitions[0, 10] %>
+  <% if nearby_competitions.empty? %>
+    <div class="alert alert-success" role="alert">No nearby competitions!</div>
+  <% else %>
+    <table class="table">
+      <tr>
+        <td>Name</td>
+        <td>Delegate(s)</td>
+        <td>Date</td>
+        <td>Location</td>
+        <td>Distance</td>
+      </tr>
+      <% nearby_competitions.each do |c| %>
+        <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
+          <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>
+          <td><%= c.delegates.map(&:name).to_sentence %></td>
+          <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
+          <% days_until = (c.start_date - @competition.start_date).to_i %>  
+          <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
+          </td>
+          <td><%= c.cityName %>, <%= c.countryId %></td>
+          <td class="text-nowrap text-right"><%= link_to "#{@competition.kilometers_to(c).round(2)} km", "https://www.google.com/maps/dir/#{c.latitude_degrees},#{c.longitude_degrees}/#{@competition.latitude_degrees},#{@competition.longitude_degrees}/", target: "_blank" %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+<% else %>
+  <% nearby_competitions = [] %>
+  <% if !@competition.has_date? %>
+    <div class="alert alert-danger" role="alert">You have not assigned a date for this competition yet.</div>
+  <% end %>
+  <% if !@competition.has_location? %>
+    <div class="alert alert-danger" role="alert">You have not assigned a location for this competition yet.</div>
+  <% end %>
+<% end %>
+
+<script>
+  (function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    wca.setNearbyCompetitions(<%= nearby_competitions.map do |c|
+        {
+          id: c.id,
+          name: c.name,
+          latitude_degrees: c.latitude_degrees,
+          longitude_degrees: c.longitude_degrees,
+          start_date: c.start_date,
+          end_date: c.end_date,
+        }
+      end.to_json.html_safe %>);
+  })();
+</script>

@@ -22,7 +22,7 @@ class DBConn
 
     public function __construct($config, $charset = "utf8")
     {
-        $this->conn = new \mysqli($config['host'], $config['user'], $config['pass'], $config['name']);
+        $this->conn = new \mysqli($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
         if($this->conn->connect_errno)
         {
             trigger_error("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error, E_USER_ERROR);

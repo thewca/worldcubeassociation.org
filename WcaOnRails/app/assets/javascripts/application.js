@@ -27,7 +27,11 @@
 //= require jquery.purr
 //= require best_in_place.purr
 //= require jquery.jcrop
+//= require lodash
 //= require_tree .
+
+// Dumping ground for... stuff
+window.wca = window.wca || {};
 
 $(function() {
   $('.dropdown-toggle').dropdownHover();
@@ -66,3 +70,14 @@ $(function() {
   });
   $(".best_in_place").best_in_place();
 });
+
+// http://stackoverflow.com/a/5603156
+(function($) {
+  $.fn.serializeJSON = function() {
+    var json = {};
+    $.map($(this).serializeArray(), function(n, i) {
+      json[n.name] = n.value;
+    });
+    return json;
+  };
+})(jQuery);
