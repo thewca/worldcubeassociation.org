@@ -18,15 +18,23 @@ a:hover {
  */
 a[target=_blank]:not(.hide-new-window-icon),
 form[target=_blank] button[type=submit] {
-  &:after {
+  &::after {
     font-family: 'Glyphicons Halflings';
     content: "\e164"; /* glyphicon-new-window */
     display: inline-block; /* prevent underlining */
     margin-left: 0.3em;
   }
-  &.btn:after {
+  &.btn::after {
     // For some reason, the external link icon takes up more space than it
     // should when inside of a button. Hack around that here.
     font-size: 13px;
+  }
+}
+
+:target {
+  background-color: yellow;
+  &::before {
+    content: ">";
+    margin-right: 0.3em;
   }
 }

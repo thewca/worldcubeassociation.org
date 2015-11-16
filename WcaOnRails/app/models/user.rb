@@ -291,6 +291,7 @@ class User < ActiveRecord::Base
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
       fields << :remove_avatar
+      fields << :opt_out_registration_emails
     end
     fields
   end

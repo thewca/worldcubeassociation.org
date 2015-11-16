@@ -357,6 +357,9 @@ function savePreregForm () {
   $organizers = getCompetitionOrganizers($competition['id']);
   foreach($organizers as $organizer) {
     $mailEmail = $organizer['email'];
+    if($organizer['opt_out_registration_emails']) {
+      continue;
+    }
 
     // load more competition data for a nicer email
     $result = dbQuery( "SELECT * FROM Competitions WHERE id='$chosenCompetitionId'" );
@@ -382,6 +385,9 @@ function savePreregForm () {
     $mailBody .= "-------------------\n";
     $mailBody .= "You may edit this registration (and others) at:\n";
     $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations";
+    $mailBody .= "-------------------\n";
+    $mailBody .= "You can opt out of receiving registration emails at:\n";
+    $mailBody .= "https://www.worldcubeassociation.org/users/edit#email-preferences";
 
     $mailSubject = $competition['cellName'] . " - New registration";
 
@@ -416,7 +422,7 @@ function savePreregForm () {
       }
     } else {
       // just print out message when testing
-      noticeBox3(0, "Mail not sent (test website): " . $mailBody);
+      noticeBox3(0, "Mail not sent to $mailEmail (test website): $mailBody");
     }
 
   }
