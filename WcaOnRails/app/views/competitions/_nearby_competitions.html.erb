@@ -5,7 +5,7 @@
 </div>
 
 <% if @competition.has_date? && @competition.has_location? %> 
-  <% nearby_competitions = @competition.nearby_competitions[0, 10] %>
+  <% nearby_competitions = @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10] %>
   <% if nearby_competitions.empty? %>
     <div class="alert alert-success" role="alert">No nearby competitions!</div>
   <% else %>
