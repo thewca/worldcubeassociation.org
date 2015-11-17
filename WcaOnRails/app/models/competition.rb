@@ -158,6 +158,59 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  attr_accessor :receive_registration_emails
+  def receive_registration_emails=(r)
+    @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
+  end
+
+  def receiving_registration_emails?(user_id)
+    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    if competition_delegate && competition_delegate.receive_registration_emails
+      return true
+    end
+    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    if competition_organizer && competition_organizer.receive_registration_emails
+      return true
+    end
+
+    return false
+  end
+
+  def can_receive_registration_emails?(user_id)
+    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
+    if competition_delegate
+      return true
+    end
+    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
+    if competition_organizer
+      return true
+    end
+
+    return false
+  end
+
+  validate :must_be_an_organizer_or_delegate_to_set_receive_registration_emails
+  def must_be_an_organizer_or_delegate_to_set_receive_registration_emails
+    if editing_user_id && !@receive_registration_emails.nil?
+      if !can_receive_registration_emails?(editing_user_id)
+        errors.add(:receive_registration_emails, "You cannot receive registration emails for this competition.")
+      end
+    end
+  end
+  after_save :update_receive_registration_emails
+  def update_receive_registration_emails
+    if editing_user_id && !@receive_registration_emails.nil?
+      competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
+      if competition_delegate
+        competition_delegate.update_attribute(:receive_registration_emails, @receive_registration_emails)
+      end
+      competition_organizer = competition_organizers.find_by_organizer_id(editing_user_id)
+      if competition_organizer
+        competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
+      end
+    end
+  end
+
   def longitude_degrees
     longitude_microdegrees / 1e6
   end
@@ -292,7 +345,7 @@ class Competition < ActiveRecord::Base
   def kilometers_to(c)
     6371 *
       Math::sqrt(
-        ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 + 
+        ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 +
         (c.latitude_radians - latitude_radians) ** 2
       )
   end

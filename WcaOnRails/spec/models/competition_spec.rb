@@ -18,7 +18,7 @@ RSpec.describe Competition do
   end
 
   it "saves without losing data" do
-    competition = Competition.find((FactoryGirl.create :competition).id)
+    competition = FactoryGirl.create :competition
     json_data = competition.as_json
     competition.save
     expect(competition.as_json).to eq json_data
@@ -241,6 +241,55 @@ RSpec.describe Competition do
       competition.end_date = ""
       competition.isConfirmed = true
       expect(competition).not_to be_valid
+    end
+  end
+
+  describe "receive_registration_emails" do
+    let(:competition) { FactoryGirl.create :competition }
+    let(:delegate) { FactoryGirl.create :delegate }
+
+    it "computes receive_registration_emails via OR" do
+      competition.editing_user_id = delegate.id
+      expect(competition.receive_registration_emails).to eq false
+
+      competition.delegates << delegate
+      expect(competition.receive_registration_emails).to eq true
+
+      cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
+      cd.update_column(:receive_registration_emails, false)
+      expect(competition.receive_registration_emails).to eq false
+
+      competition.organizers << delegate
+      expect(competition.receive_registration_emails).to eq true
+
+      co = competition.competition_organizers.find_by_organizer_id(delegate.id)
+      co.update_column(:receive_registration_emails, false)
+      expect(competition.receive_registration_emails).to eq false
+    end
+
+    it "setting receive_registration_emails" do
+      competition.delegates << delegate
+      competition.save!
+      cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
+      expect(cd.receive_registration_emails).to eq true
+
+      competition.receive_registration_emails = false
+      competition.editing_user_id = delegate.id
+      competition.save!
+      competition.receive_registration_emails = nil
+      expect(cd.reload.receive_registration_emails).to eq false
+
+      competition.organizers << delegate
+      competition.save!
+      co = competition.competition_organizers.find_by_organizer_id(delegate.id)
+      expect(co.receive_registration_emails).to eq true
+
+      competition.receive_registration_emails = false
+      competition.editing_user_id = delegate.id
+      competition.save!
+
+      expect(cd.reload.receive_registration_emails).to eq false
+      expect(co.reload.receive_registration_emails).to eq false
     end
   end
 end

@@ -215,6 +215,7 @@ class CompetitionsController < ApplicationController
   private def competition_params
     permitted_competition_params = [
       :showPreregForm,
+      :receive_registration_emails,
       :showPreregList,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?

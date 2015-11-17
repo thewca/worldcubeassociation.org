@@ -1,4 +1,3 @@
-
 $(function() {
   if(document.body.dataset.railsControllerName !== "competitions") {
     return;
@@ -14,5 +13,13 @@ $(function() {
 
     $competitionSelect.on("typeahead:select", competitionChanged);
     $competitionSelect.on("input", competitionChanged);
+  }
+
+  var $showPreregFormInput = $('input[name="competition[showPreregForm]"]');
+  if($showPreregFormInput.length > 0) {
+    var $receiveRegistraionEmailsInput = $('input[name="competition[receive_registration_emails]"]');
+    $showPreregFormInput.on("change", function() {
+      $receiveRegistraionEmailsInput.parents("div.checkbox").toggle(this.checked);
+    }).trigger("change");
   }
 });

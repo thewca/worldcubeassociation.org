@@ -355,9 +355,11 @@ function savePreregForm () {
   dbCommand( "INSERT INTO Preregs ($into) VALUES ($values)" );
 
   $organizers = getCompetitionOrganizers($competition['id']);
-  foreach($organizers as $organizer) {
-    $mailEmail = $organizer['email'];
-    if($organizer['opt_out_registration_emails']) {
+  $delegates = getCompetitionDelegates($competition['id']);
+  $allToNotify = array_merge($organizers, $delegates);
+  foreach($allToNotify as $toNotify) {
+    $mailEmail = $toNotify['email'];
+    if(!$toNotify['receive_registration_emails']) {
       continue;
     }
 
@@ -387,7 +389,7 @@ function savePreregForm () {
     $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations";
     $mailBody .= "-------------------\n";
     $mailBody .= "You can opt out of receiving registration emails at:\n";
-    $mailBody .= "https://www.worldcubeassociation.org/users/edit#email-preferences";
+    $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/edit#opt-out-registration-email";
 
     $mailSubject = $competition['cellName'] . " - New registration";
 

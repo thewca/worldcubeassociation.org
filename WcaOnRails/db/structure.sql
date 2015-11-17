@@ -284,7 +284,7 @@ CREATE TABLE `Preregs` (
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `eventIds` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80446 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80453 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -432,6 +432,7 @@ CREATE TABLE `competition_delegates` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `receive_registration_emails` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_competition_delegates_on_competition_id_and_delegate_id` (`competition_id`,`delegate_id`),
   KEY `index_competition_delegates_on_competition_id` (`competition_id`),
@@ -453,6 +454,7 @@ CREATE TABLE `competition_organizers` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '1',
+  `receive_registration_emails` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
@@ -703,4 +705,3 @@ INSERT INTO schema_migrations (version) VALUES ('20151117183214');
 INSERT INTO schema_migrations (version) VALUES ('20151119063335');
 
 INSERT INTO schema_migrations (version) VALUES ('20151119072940');
-

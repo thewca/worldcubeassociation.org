@@ -29,7 +29,6 @@ en:
       user:
         wca_id: "WCA id"
         login: "Email or WCA id"
-        opt_out_registration_emails: "Do not send me an email when someone registers for a competition I am organizing."
       competition:
         cellName: "Competition nickname"
         countryId: "Country"
