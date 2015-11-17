@@ -35,8 +35,8 @@ if( $chosenExport ){
     # competition_delegates, and competition_organizers tables.
     'Competitions' => 'SELECT Competitions.id, Competitions.name, Competitions.cityName, Competitions.countryId, Competitions.information, Competitions.year,
                               Competitions.month, Competitions.day, Competitions.endMonth, Competitions.endDay, Competitions.eventSpecs,
-                              GROUP_CONCAT(CONCAT("[{", users_delegates.name, "}{mailto:", users_delegates.email, "}]") SEPARATOR " ") as wcaDelegate,
-                              GROUP_CONCAT(CONCAT("[{", users_organizers.name, "}{mailto:", users_organizers.email, "}]") SEPARATOR " ") as organiser,
+                              GROUP_CONCAT(DISTINCT(CONCAT("[{", users_delegates.name, "}{mailto:", users_delegates.email, "}]")) SEPARATOR " ") as wcaDelegate,
+                              GROUP_CONCAT(DISTINCT(CONCAT("[{", users_organizers.name, "}{mailto:", users_organizers.email, "}]")) SEPARATOR " ") as organiser,
                               Competitions.venue, Competitions.venueAddress,
                               Competitions.venueDetails, Competitions.website, Competitions.cellName, Competitions.latitude, Competitions.longitude
                               FROM Competitions
