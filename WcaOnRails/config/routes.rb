@@ -18,10 +18,8 @@ Rails.application.routes.draw do
   get 'users/edit' => 'users#edit'
   get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
   get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
-  namespace :users do
-    resources :avatars, only: [:index]
-  end
-  post 'users/avatars' => 'users/avatars#update_all'
+  get 'admin/avatars' => 'admin/avatars#index'
+  post 'admin/avatars' => 'admin/avatars#update_all'
 
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all

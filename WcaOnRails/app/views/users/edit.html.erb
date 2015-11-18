@@ -21,7 +21,7 @@
           <%= render "shared/user_avatar", user: @user, show_pending: true, title: "Click to edit thumbnail", break_cache: true %>
         <% end %>
         <% if current_user.can_admin_results? %>
-          <%= link_to "Manage pending avatars", users_avatars_path %>
+          <%= link_to "Manage pending avatars", admin_avatars_path %>
         <% end %>
       </div>
     <% end %>

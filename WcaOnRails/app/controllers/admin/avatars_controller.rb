@@ -1,8 +1,5 @@
-module Users
-  class AvatarsController < ApplicationController
-    before_action :authenticate_user!
-    before_action :can_admin_results_only
-
+module Admin
+  class AvatarsController < AdminController
     def index
       @users = User.where.not(pending_avatar: nil)
     end
@@ -26,7 +23,7 @@ module Users
           end
         end
       end
-      redirect_to users_avatars_path
+      redirect_to admin_avatars_path
     end
   end
 end
