@@ -53,6 +53,10 @@ server {
   }
 
   #### Legacy PHP code
+  # /results/admin/ is now handled by Rails over at /admin/
+  location ~ /results/admin/? {
+    return 302 /admin/;
+  }
   location /results {
     alias <%= @repo_root %>/webroot/results;
     index index.php index.html;

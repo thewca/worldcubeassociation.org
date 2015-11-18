@@ -67,6 +67,8 @@ Rails.application.routes.draw do
   get "/regulations" => 'regulations#show', id: "index"
   get "/regulations/*id" => 'regulations#show'
 
+  get "/admin" => 'admin#index'
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

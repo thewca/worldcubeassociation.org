@@ -22,7 +22,7 @@ describe CompetitionsController do
       end
     end
 
-    context 'when signed in as an delegate' do
+    context 'when signed in as a delegate' do
       sign_in { FactoryGirl.create :delegate }
 
       it 'shows the competition creation form' do
@@ -53,7 +53,7 @@ describe CompetitionsController do
       end
     end
 
-    context 'when signed in as an delegate' do
+    context 'when signed in as a delegate' do
       sign_in { FactoryGirl.create :delegate }
 
       it 'creates a new competition' do
@@ -86,7 +86,7 @@ describe CompetitionsController do
       end
     end
 
-    context 'when signed in as an delegate' do
+    context 'when signed in as a delegate' do
       let(:delegate) { FactoryGirl.create :delegate }
       before :each do
         sign_in delegate

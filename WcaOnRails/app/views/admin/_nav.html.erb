@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-sm-4 col-md-3">
+    <div class="list-group">
+      <%= link_to "/results/admin/upload_results.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-upload"></i> Upload results
+      <% end %>
+      <%= link_to new_competition_path, class: "list-group-item" do %>
+        <i class="fa fa-fw fa-plus"></i> Create competition
+      <% end %>
+      <%= link_to competitions_path, class: "list-group-item" do %>
+        <i class="fa fa-fw fa-list"></i> List competitions
+      <% end %>
+      <%= link_to "/results/admin/change_person.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-user"></i> Edit person
+      <% end %>
+      <%= link_to "/results/admin/fix_results.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-pencil-square-o"></i> Fix results
+      <% end %>
+      <%= link_to users_avatars_path, class: "list-group-item" do %>
+        <i class="fa fa-fw fa-camera"></i> Approve pictures
+        <span class="pull-right label <%= @pending_avatars_count > 0 ? "label-danger" : "label-success" %>"><%= @pending_avatars_count %></span>
+      <% end %>
+      <%= link_to "/results/admin/validate_media.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-picture-o"></i> Approve media
+        <span class="pull-right label <%= @pending_media_count > 0 ? "label-danger" : "label-success" %>"><%= @pending_media_count %></span>
+      <% end %>
+
+      <%= link_to "/results/admin/check_results.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-check"></i> Check results
+      <% end %>
+      <%= link_to "/results/admin/persons_check_finished.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-user-plus"></i> Finish persons
+      <% end %>
+      <%= link_to "/results/admin/check_rounds.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-check"></i> Check rounds
+      <% end %>
+      <%= link_to "/results/admin/check_regional_record_markers.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-trophy"></i> Check records
+      <% end %>
+      <%= link_to "/results/admin/compute_auxiliary_data.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-cogs"></i> Compute auxiliary data
+      <% end %>
+      <%= link_to "/results/statistics.php?update8392=1", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-group"></i> Update statistics
+      <% end %>
+      <%= link_to "/results/admin/export_public.php", class: "list-group-item" do %>
+        <i class="fa fa-fw fa-cloud-upload"></i> Export public
+      <% end %>
+    </div>
+  </div>
+  <div class="col-sm-8 col-md-9">
+    <%= yield %>
+  </div>
+</div>
