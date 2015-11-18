@@ -55,26 +55,36 @@ class Api::V0::ApiController < ApplicationController
   def help
   end
 
-  def users_delegates_search
-    users_search(delegate_only: true)
-  end
-
-  def users_search(delegate_only: false)
+  def users_search
     query = params[:q]
     unless query
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
 
-    # Ignore dummy accounts
-    users = User.where.not(encrypted_password: '')
-    # Ignore unconfirmed accounts
-    users = users.where.not(confirmed_at: nil)
+    sql_query = "%#{query}%"
+    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:search_persons])
+      users = User
 
-    users = users.where("name LIKE ?", "%" + query + "%")
-    if delegate_only
-      users = users.where.not(delegate_status: nil)
+      if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:include_dummy_accounts])
+        # Ignore dummy accounts
+        users = users.where.not(encrypted_password: '')
+        # Ignore unconfirmed accounts
+        users = users.where.not(confirmed_at: nil)
+      end
+
+      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
+        users = users.where.not(delegate_status: nil)
+      end
+
+      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
+        users = users.where.not(wca_id: nil)
+      end
+      users = users.where("name LIKE ? OR wca_id LIKE ?", sql_query, sql_query)
+    else
+      users = Person.where("name LIKE ? OR id LIKE ?", sql_query, sql_query)
     end
+
     users = users.limit(DEFAULT_API_RESULT_LIMIT)
     render json: { status: "ok", users: users.map(&:to_jsonable) }
   end

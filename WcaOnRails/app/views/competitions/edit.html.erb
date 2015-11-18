@@ -235,7 +235,7 @@
 
 
       <%= f.input :information %>
-      <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, delegate: true %>
+      <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, only_delegates: true %>
       <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
       <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public." %>
       <%= f.input :website, hint: "The website of the competition. Must be a valid http(s) url.".html_safe %>

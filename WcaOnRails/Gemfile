@@ -48,6 +48,8 @@ gem 'font-awesome-sass'
 gem 'lodash-rails'
 
 group :development, :test do
+  gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'

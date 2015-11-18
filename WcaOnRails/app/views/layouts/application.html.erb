@@ -26,7 +26,7 @@
       _.each(wca.competitions, function(competition) {
         wca.competitionById[competition.id] = competition;
       });
-      wca.users = <%= (@js_users || []).to_json.html_safe %>;
+      wca.users = <%= (@js_users || []).map(&:to_jsonable).to_json.html_safe %>;
       wca.userById = {};
       _.each(wca.users, function(user) {
         wca.userById[user.id] = user;

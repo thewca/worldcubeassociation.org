@@ -163,7 +163,7 @@ RSpec.describe User, type: :model do
     it "does not allow duplicate WCA ids" do
       user2 = FactoryGirl.create :user
       expect(user2).to be_valid
-      user2.wca_id = "2005FLEI01"
+      user2.wca_id = user.wca_id
       expect(user2).not_to be_valid
     end
   end

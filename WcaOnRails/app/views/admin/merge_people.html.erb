@@ -1,0 +1,21 @@
+<% provide(:title, 'Merge people') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>
+      Please enter the WCA IDs you want to merge. Both profiles will be merged
+      into Person 1, and Person 2 will be deleted.
+    </p>
+
+    <%= simple_form_for @merge_people, url: admin_merge_people_path do |f| %>
+      <%= f.input :person1_wca_id, as: :user_ids, search_persons: true, only_one: true, label: "Person 1" %>
+      <%= f.input :person2_wca_id, as: :user_ids, search_persons: true, only_one: true, label: "Person 2" %>
+
+      <button type="submit" class="btn btn-success" data-confirm="Are you sure you want to merge Person 2 into Person 1? Person 2 will be deleted.">
+        <i class="fa fa-code-fork"></i> Merge
+      </button>
+    <% end %>
+  <% end %>
+</div>

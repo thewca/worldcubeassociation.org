@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe Api::V0::ApiController do
   describe 'GET #users_search' do
+    let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
+
     it 'requires query parameter' do
       get :users_search
       expect(response.status).to eq 400
@@ -10,7 +12,6 @@ describe Api::V0::ApiController do
     end
 
     it 'finds Jeremy' do
-      user = FactoryGirl.create(:user, name: "Jeremy")
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -18,7 +19,6 @@ describe Api::V0::ApiController do
     end
 
     it 'does not find dummy accounts' do
-      user = FactoryGirl.create(:user, name: "Jeremy")
       user.update_column(:encrypted_password, "")
       get :users_search, q: "erem"
       expect(response.status).to eq 200
@@ -26,21 +26,56 @@ describe Api::V0::ApiController do
       expect(json["users"].length).to eq 0
     end
 
+    it 'can find dummy accounts' do
+      user.update_column(:encrypted_password, "")
+      get :users_search, q: "erem", include_dummy_accounts: true
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["users"].length).to eq 1
+      expect(json["users"][0]["id"]).to eq user.id
+    end
+
+    it 'can find by wca_id' do
+      get :users_search, q: user.wca_id
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["users"].length).to eq 1
+      expect(json["users"][0]["id"]).to eq user.id
+    end
+
+    context 'Person without User' do
+      let!(:person) { FactoryGirl.create(:person, name: "Bob") }
+
+      it "can find by wca_id" do
+        get :users_search, q: person.id, search_persons: true
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json["users"].length).to eq 1
+        expect(json["users"][0]["id"]).to eq nil
+        expect(json["users"][0]["wca_id"]).to eq person.id
+      end
+
+      it "can find by name" do
+        get :users_search, q: "bo", search_persons: true
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json["users"].length).to eq 1
+        expect(json["users"][0]["id"]).to eq nil
+        expect(json["users"][0]["wca_id"]).to eq person.id
+      end
+    end
+
     it 'does not find unconfirmed accounts' do
-      user = FactoryGirl.create(:user, name: "Jeremy")
       user.update_column(:confirmed_at, nil)
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["users"].length).to eq 0
     end
-  end
 
-  describe 'GET #users_delegates_search' do
-    it 'only finds delegates' do
-      user = FactoryGirl.create(:user, name: "Jeremy")
+    it 'can only find delegates' do
       delegate = FactoryGirl.create(:delegate, name: "Jeremy")
-      get :users_delegates_search, q: "erem"
+      get :users_search, q: "erem", only_delegates: true
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["users"].length).to eq 1

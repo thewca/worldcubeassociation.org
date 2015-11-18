@@ -1,10 +1,14 @@
 FactoryGirl.define do
   factory :result do
-    pos 1
-    personId "2005FLEI01"
-    personName "Jeremy Fleischman"
-    countryId "USA"
+    transient do
+      person { FactoryGirl.create(:person) }
+    end
+
+    personId { person.wca_id }
+    personName { person.name }
+    countryId { person.countryId }
     competitionId "USNationals2010"
+    pos 1
     eventId "333oh"
     roundId "f"
     formatId "a"

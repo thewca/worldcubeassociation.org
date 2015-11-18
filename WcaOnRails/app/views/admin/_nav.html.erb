@@ -13,6 +13,9 @@
       <%= link_to "/results/admin/change_person.php", class: "list-group-item" do %>
         <i class="fa fa-fw fa-user"></i> Edit person
       <% end %>
+      <%= link_to admin_merge_people_path, class: "list-group-item" do %>
+        <i class="fa fa-fw fa-code-fork"></i> Merge people
+      <% end %>
       <%= link_to "/results/admin/fix_results.php", class: "list-group-item" do %>
         <i class="fa fa-fw fa-pencil-square-o"></i> Fix results
       <% end %>
@@ -29,7 +32,7 @@
         <i class="fa fa-fw fa-check"></i> Check results
       <% end %>
       <%= link_to "/results/admin/persons_check_finished.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-user-plus"></i> Finish persons
+        <i class="fa fa-fw fa-user-plus"></i> Finish people
       <% end %>
       <%= link_to "/results/admin/check_rounds.php", class: "list-group-item" do %>
         <i class="fa fa-fw fa-check"></i> Check rounds

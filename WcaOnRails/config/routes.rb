@@ -68,6 +68,8 @@ Rails.application.routes.draw do
   get "/regulations/*id" => 'regulations#show'
 
   get "/admin" => 'admin#index'
+  get "/admin/merge_people" => 'admin#merge_people'
+  post "/admin/merge_people" => 'admin#do_merge_people'
 
   namespace :api do
     get '/', to: redirect('/api/v0')
@@ -77,7 +79,6 @@ Rails.application.routes.draw do
       get '/auth/results' => "api#auth_results"
       get '/scramble-program' => "api#scramble_program"
       get '/users/search' => 'api#users_search'
-      get '/users/delegates/search' => 'api#users_delegates_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
       resources :competitions, only: [:show]

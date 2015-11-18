@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
+begin
+  spring_bin_path = File.expand_path('../spring', __FILE__)
+  load spring_bin_path
+rescue LoadError => e
+  raise unless e.message.end_with? spring_bin_path, 'spring/binstub'
+end
 require_relative '../config/boot'
 require 'rake'
 Rake.application.run
