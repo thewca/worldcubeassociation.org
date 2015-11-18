@@ -1,53 +1,30 @@
 <div class="row">
   <div class="col-sm-4 col-md-3">
     <div class="list-group">
-      <%= link_to "/results/admin/upload_results.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-upload"></i> Upload results
-      <% end %>
-      <%= link_to new_competition_path, class: "list-group-item" do %>
-        <i class="fa fa-fw fa-plus"></i> Create competition
-      <% end %>
-      <%= link_to competitions_path, class: "list-group-item" do %>
-        <i class="fa fa-fw fa-list"></i> List competitions
-      <% end %>
-      <%= link_to "/results/admin/change_person.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-user"></i> Edit person
-      <% end %>
-      <%= link_to admin_merge_people_path, class: "list-group-item" do %>
-        <i class="fa fa-fw fa-code-fork"></i> Merge people
-      <% end %>
-      <%= link_to "/results/admin/fix_results.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-pencil-square-o"></i> Fix results
-      <% end %>
-      <%= link_to users_avatars_path, class: "list-group-item" do %>
-        <i class="fa fa-fw fa-camera"></i> Approve pictures
-        <span class="pull-right label <%= @pending_avatars_count > 0 ? "label-danger" : "label-success" %>"><%= @pending_avatars_count %></span>
-      <% end %>
-      <%= link_to "/results/admin/validate_media.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-picture-o"></i> Approve media
-        <span class="pull-right label <%= @pending_media_count > 0 ? "label-danger" : "label-success" %>"><%= @pending_media_count %></span>
-      <% end %>
+      <% [
+        { text: "Upload results", path: "/results/admin/upload_results.php", fa_icon: "upload" },
+        { text: "Create competition", path: new_competition_path, fa_icon: "plus" },
+        { text: "List competitions", path: competitions_path, fa_icon: "list" },
+        { text: "Edit person", path: "/results/admin/change_person.php", fa_icon: "user" },
+        { text: "Merge people", path: admin_merge_people_path, fa_icon: "code-fork" },
+        { text: "Fix results", path: "/results/admin/fix_results.php", fa_icon: "pencil-square-o" },
+        { text: "Approve pictures", path: users_avatars_path, fa_icon: "camera", notification_count: @pending_avatars_count },
+        { text: "Approve media", path: "/results/admin/validate_media.php", fa_icon: "picture-o", notification_count: @pending_media_count },
 
-      <%= link_to "/results/admin/check_results.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-check"></i> Check results
-      <% end %>
-      <%= link_to "/results/admin/persons_check_finished.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-user-plus"></i> Finish people
-      <% end %>
-      <%= link_to "/results/admin/check_rounds.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-check"></i> Check rounds
-      <% end %>
-      <%= link_to "/results/admin/check_regional_record_markers.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-trophy"></i> Check records
-      <% end %>
-      <%= link_to "/results/admin/compute_auxiliary_data.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-cogs"></i> Compute auxiliary data
-      <% end %>
-      <%= link_to "/results/statistics.php?update8392=1", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-group"></i> Update statistics
-      <% end %>
-      <%= link_to "/results/admin/export_public.php", class: "list-group-item" do %>
-        <i class="fa fa-fw fa-cloud-upload"></i> Export public
+        { text: "Check results", path: "/results/admin/check_results.php", fa_icon: "check" },
+        { text: "Finish people", path: "/results/admin/persons_check_finished.php", fa_icon: "user-plus" },
+        { text: "Check rounds", path: "/results/admin/check_rounds.php", fa_icon: "check" },
+        { text: "Check records", path: "/results/admin/check_regional_record_markers.php", fa_icon: "trophy" },
+        { text: "Compute auxiliary data", path: "/results/admin/compute_auxiliary_data.php", fa_icon: "cogs" },
+        { text: "Update statistics", path: "/results/statistics.php?update8392=1", fa_icon: "group" },
+        { text: "Export public", path: "/results/admin/export_public.php", fa_icon: "cloud-upload" },
+      ].each do |nav_item| %>
+        <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
+          <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i> <%= nav_item[:text] %>
+          <% if nav_item[:notification_count] %>
+            <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>"><%= nav_item[:notification_count] %></span>
+          <% end %>
+        <% end %>
       <% end %>
     </div>
   </div>
