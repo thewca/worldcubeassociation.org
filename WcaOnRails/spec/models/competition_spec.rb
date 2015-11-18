@@ -248,23 +248,22 @@ RSpec.describe Competition do
     let(:competition) { FactoryGirl.create :competition }
     let(:delegate) { FactoryGirl.create :delegate }
 
-    it "computes receive_registration_emails via OR" do
-      competition.editing_user_id = delegate.id
-      expect(competition.receive_registration_emails).to eq false
+    it "computes receiving_registration_emails? via OR" do
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       competition.delegates << delegate
-      expect(competition.receive_registration_emails).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
 
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
       cd.update_column(:receive_registration_emails, false)
-      expect(competition.receive_registration_emails).to eq false
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
 
       competition.organizers << delegate
-      expect(competition.receive_registration_emails).to eq true
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq true
 
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
       co.update_column(:receive_registration_emails, false)
-      expect(competition.receive_registration_emails).to eq false
+      expect(competition.receiving_registration_emails?(delegate.id)).to eq false
     end
 
     it "setting receive_registration_emails" do
