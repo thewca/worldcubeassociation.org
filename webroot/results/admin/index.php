@@ -78,11 +78,6 @@ function showPages () {
   showPage( 'export_public',
             'Exports the database to the public.' );
 
-  echo "</dl><hr /><dl>\n";
-
-  showPage( 'add_local_names',
-            "Add local names to persons." );
-
   echo "</dl>\n";
 }
 
