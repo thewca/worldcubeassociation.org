@@ -137,10 +137,10 @@ server {
 <% if @rails_env != "development" %>
   # http://vladigleba.com/blog/2014/03/27/deploying-rails-apps-part-4-configuring-nginx/
   location ^~ /assets/ {
-    # From http://stackoverflow.com/a/5132440
+    # From http://stackoverflow.com/a/5132440 (with tweaks by jfly)
     gzip_static on;
     gzip_vary on;
-    gzip_types text/plain text/css application/json application/javascript application/x-javascript text/javascript text/xml application/xml application/rss+xml application/atom+xml application/rdf+xml;
+    gzip_types text/plain text/css application/json application/javascript application/x-javascript text/javascript text/xml application/xml application/rss+xml application/atom+xml application/rdf+xml image/svg+xml;
 
     expires max;
     add_header Cache-Control public;
