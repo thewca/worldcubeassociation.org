@@ -30,6 +30,8 @@ class Competition < ActiveRecord::Base
   NEARBY_DISTANCE_KM_DANGER = 200
   NEARBY_DAYS_WARNING = 90
   NEARBY_DAYS_DANGER = 30
+  NEARBY_DAYS_INFO = 365
+  NEARBY_INFO_COUNT = 8
 
   # We have stricter validations for confirming a competition
   [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
@@ -275,10 +277,10 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def nearby_competitions
+  def nearby_competitions(days, distance)
     Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, NEARBY_DAYS_WARNING, id)
-      .select { |c| kilometers_to(c) <= NEARBY_DISTANCE_KM_WARNING }
+      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
+      .select { |c| kilometers_to(c) <= distance }
       .sort_by { |c| kilometers_to(c) }
   end
 
