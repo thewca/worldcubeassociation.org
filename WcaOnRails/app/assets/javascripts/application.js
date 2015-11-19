@@ -45,20 +45,27 @@ $(function() {
   $('[data-toggle="popover"]').popover();
 
   // After a popup actually occurs, there may be some images that need to load.
-  // Here we add load listeners for those images and resize the popup once they've
-  // loaded. We have to be careful not to end up in an infinite loop (hence the
-  // ignoreInsert variable).
+  // Here we add load listeners for those images and resize the popup once they
+  // have loaded. We have to be careful not to end up in an infinite loop
+  // (hence the ignoreInsert variable).
   var ignoreInsert = false;
   $('[data-toggle="popover"]').on('inserted.bs.popover', function(e) {
-    if(ignoreInsert) {
+    var $popoverTrigger = $(e.currentTarget);
+    if($popoverTrigger.data('ignoreInsert')) {
+      $popoverTrigger.data('ignoreInsert', false);
       return;
     }
-    var $popoverTrigger = $(e.currentTarget);
-    $('.popover img').on('load', function() {
-      ignoreInsert = true;
-      $popoverTrigger.on('inserted.bs.popover', function(e) {
-        ignoreInsert = false;
-      });
+    $('.popover img').on('load.resizePopover', function() {
+      // While waiting for the image inside the popover to load,
+      // the popover may have been hidden. Only show (resize) it if
+      // it's currently visible.
+      // Trick to detect if popover is currently visible from:
+      //  http://stackoverflow.com/a/29923760
+      var popoverVisible = !!$popoverTrigger.attr('aria-describedby');
+      if(!popoverVisible) {
+        return;
+      }
+      $popoverTrigger.data('ignoreInsert', true);
       $popoverTrigger.popover('show');
     });
   });
