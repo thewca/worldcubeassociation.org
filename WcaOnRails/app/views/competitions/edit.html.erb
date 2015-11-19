@@ -296,7 +296,7 @@
     </div>
 
     <hr>
-    <%= f.input :remarks, hint: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable." %>
+    <%= f.input :remarks, disabled: is_actually_confirmed, hint: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable." %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
