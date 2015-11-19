@@ -137,6 +137,9 @@
             $.ajax({
               url: '<%= nearby_competitions_path %>',
               data: {
+                <% if @competition_admin_view %>
+                  'competition_admin_view': true,
+                <% end %>
                 'competition[id]': obj['competition[id]'],
                 'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
                 'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
@@ -222,30 +225,9 @@
         });
       </script>
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label">
-          Nearby competitions (within <%= Competition::NEARBY_DAYS_WARNING %> days and <%= Competition::NEARBY_DISTANCE_KM_WARNING %> km)
-        </label>
-        <div class="col-sm-9">
-          <div id="nearby-competitions">
-            <%= render "nearby_competitions" %>
-          </div>
-        </div>
+      <div id="nearby-competitions">
+        <%= render "nearby_competitions" %>
       </div>
-
-      <% if @competition_admin_view %>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">
-            Last <%= Competition::NEARBY_DAYS_INFO %> days
-          </label>
-          <div class="col-sm-9">
-            <% nearby_count = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_DANGER).count %>
-            <div class="<%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert alert-success" : "alert alert-danger" %>" role="alert">There were <%= nearby_count %> <%= "competition".pluralize(nearby_count) %> within <%= Competition::NEARBY_DISTANCE_KM_DANGER %>km and <%= Competition::NEARBY_DAYS_INFO %> days.
-            </div>
-          </div>
-        </div>
-      <% end %>
-
 
       <%= f.input :information %>
       <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, only_delegates: true %>

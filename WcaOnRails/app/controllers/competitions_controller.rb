@@ -177,12 +177,13 @@ class CompetitionsController < ApplicationController
   def nearby_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @competition_admin_view = params.has_key?(:competition_admin_view) && current_user.can_admin_results?
     render partial: 'nearby_competitions'
   end
 
   def update
     @competition = Competition.find(params[:id])
-    @competition_admin_view = params.has_key?(:competition_admin_view)
+    @competition_admin_view = params.has_key?(:competition_admin_view) && current_user.can_admin_results?
     @competition_organizer_view = !@competition_admin_view
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)

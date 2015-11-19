@@ -111,9 +111,6 @@
       <%= f.input :region, disabled: !editable_fields.include?(:region) %>
     <% end %>
 
-    <h2 id="email-preferences">Email preferences</h2>
-    <%= f.input :opt_out_registration_emails, disabled: !editable_fields.include?(:opt_out_registration_emails) %>
-
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>
