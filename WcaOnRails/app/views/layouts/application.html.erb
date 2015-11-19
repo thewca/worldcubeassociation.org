@@ -172,6 +172,18 @@
   </div>
   <%= yield %>
 
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted">
+        <%= link_to "Contact", contact_website_path %>
+        |
+        <a href="https://github.com/cubing/ccm" target="_blank" class="hide-new-window-icon">
+          <i class="fa fa-github"></i>
+        </a>
+      </p>
+    </div>
+  </footer>
+
   <% if ENVied.WCA_LIVE_SITE %>
     <script>
       // See http://blog.ruigomes.me/google-universal-analytics-tracking-with-rails-4/
