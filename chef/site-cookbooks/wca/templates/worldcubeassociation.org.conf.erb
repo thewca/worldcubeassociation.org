@@ -54,7 +54,7 @@ server {
 
   #### Legacy PHP code
   # /results/admin/ is now handled by Rails over at /admin/
-  location ~ /results/admin/? {
+  location ~ ^/results/admin/?$ {
     return 302 /admin/;
   }
   location /results {
