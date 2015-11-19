@@ -46,6 +46,7 @@ CREATE TABLE `Competitions` (
   `longitude` int(11) NOT NULL DEFAULT '0',
   `isConfirmed` tinyint(1) NOT NULL DEFAULT '0',
   `contact` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remarks` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -690,7 +691,7 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-17 21:22:39
+-- Dump completed on 2015-11-18 22:34:09
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -757,3 +758,4 @@ INSERT INTO schema_migrations (version) VALUES ('20151014220307');
 
 INSERT INTO schema_migrations (version) VALUES ('20151116195414');
 
+INSERT INTO schema_migrations (version) VALUES ('20151119063335');

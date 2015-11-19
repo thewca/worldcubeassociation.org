@@ -1,6 +1,7 @@
 class CompetitionsMailer < ApplicationMailer
   def notify_board_of_confirmed_competition(confirmer, competition)
     @competition = competition
+    @confirmer = confirmer
     mail(
       to: "board@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),

@@ -238,6 +238,7 @@ class CompetitionsController < ApplicationController
         :organizer_ids,
         :contact,
         :website,
+        :remarks,
         event_ids: Event.all.map { |event| event.id.to_sym },
       ]
       if current_user.can_admin_results?

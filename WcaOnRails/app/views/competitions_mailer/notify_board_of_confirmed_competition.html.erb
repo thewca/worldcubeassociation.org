@@ -1,5 +1,11 @@
 <h1><%= @competition.name %> is confirmed</h1>
 
+<% if @competition.remarks.present? %>
+  <p>
+    <%= @confirmer.name %> says: <%= @competition.remarks %>
+  </p>
+<% end %>
+
 <p>
   @Board: You can delete this competition or make it publicly visible <%= link_to "here", admin_edit_competition_url(@competition) %>.
   For a complete list of confirmed but unannounced competitions see your <%= link_to "notifications", notifications_url %>.

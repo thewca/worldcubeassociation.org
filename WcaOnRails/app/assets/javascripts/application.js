@@ -70,8 +70,21 @@ $(function() {
     });
   });
 
+  $("form").bind("keypress", function(e) {
+    // ctrl+enter should always submit a form.
+    if((e.which === 13 || e.which === 10) && e.ctrlKey) {
+      // Find the submit button for this form and click it.
+      // Note that we don't submit the form because that would bypass
+      // any click listeners on the submit button.
+      $(this).find('[type=submit]')[0].click();
+    }
+  });
   $("form.no-submit-on-enter").bind("keypress", function(e) {
-    if(e.which === 13) {
+    // We allow pressing enter inside textareas, because that only inserts
+    // a newline, it doesn't submit the form.
+    // Note that we let the keypress occur if ctrl is being held down, as
+    // we still want ctrl+enter to submit the form.
+    if(e.which === 13 && !e.ctrlKey && e.target.tagName !== "TEXTAREA") {
       e.preventDefault();
     }
   });
