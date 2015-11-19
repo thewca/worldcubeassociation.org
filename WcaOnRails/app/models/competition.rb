@@ -158,7 +158,7 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  attr_accessor :receive_registration_emails
+  attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
   end

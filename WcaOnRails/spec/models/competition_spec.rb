@@ -268,7 +268,6 @@ RSpec.describe Competition do
 
     it "setting receive_registration_emails" do
       competition.delegates << delegate
-      competition.save!
       cd = competition.competition_delegates.find_by_delegate_id(delegate.id)
       expect(cd.receive_registration_emails).to eq true
 
@@ -279,7 +278,6 @@ RSpec.describe Competition do
       expect(cd.reload.receive_registration_emails).to eq false
 
       competition.organizers << delegate
-      competition.save!
       co = competition.competition_organizers.find_by_organizer_id(delegate.id)
       expect(co.receive_registration_emails).to eq true
 
