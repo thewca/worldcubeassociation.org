@@ -18,38 +18,44 @@
   }
 }
 
-.selectize-control.loading::before {
-  content: ' ';
-  opacity: 0.4;
-  width: 16px;
-  height: 16px;
-  background-color: #333;
-
-  -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
-  animation: sk-rotateplane 1.2s infinite ease-in-out;
-
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  z-index: 2;
-  margin: -10px 0;
-}
-
-.wca-autocomplete-user {
-  .wca-id {
-    font-family: monospace;
+.wca-autocomplete.selectize-control {
+  &.single .selectize-input::after {
+    // Hide dropdown arrow, as it gets in the way of our loading icon.
+    display: none;
   }
-}
+  &.loading::before {
+    content: ' ';
+    opacity: 0.4;
+    width: 16px;
+    height: 16px;
+    background-color: #333;
 
-.wca-autocomplete-competition {
-  .name {
-    font-size: 1.5em;
-    display: block;
+    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    z-index: 2;
+    margin: -10px 0;
   }
-  .cityName {
+
+  .wca-autocomplete-user {
+    .wca-id {
+      font-family: monospace;
+    }
   }
-  .countryId {
-  }
-  .id {
+
+  .wca-autocomplete-competition {
+    .name {
+      font-size: 1.5em;
+      display: block;
+    }
+    .cityName {
+    }
+    .countryId {
+    }
+    .id {
+    }
   }
 }

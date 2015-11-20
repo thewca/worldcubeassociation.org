@@ -15,7 +15,7 @@ describe Api::V0::ApiController do
       get :competitions_search, q: "competition"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["competitions"].length).to eq 1
+      expect(json["result"].length).to eq 1
     end
   end
 
@@ -33,7 +33,7 @@ describe Api::V0::ApiController do
       get :posts_search, q: "post title"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["posts"].length).to eq 1
+      expect(json["result"].length).to eq 1
     end
 
     it "does not find non world readable post" do
@@ -41,7 +41,7 @@ describe Api::V0::ApiController do
       get :posts_search, q: "post title"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["posts"].length).to eq 0
+      expect(json["result"].length).to eq 0
     end
   end
 
@@ -59,7 +59,7 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].select { |u| u["name"] == "Jeremy"}[0]).not_to be_nil
+      expect(json["result"].select { |u| u["name"] == "Jeremy"}[0]).not_to be_nil
     end
 
     it 'does not find dummy accounts' do
@@ -67,7 +67,7 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].length).to eq 0
+      expect(json["result"].length).to eq 0
     end
 
     it 'can find dummy accounts' do
@@ -75,16 +75,16 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem", include_dummy_accounts: true
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].length).to eq 1
-      expect(json["users"][0]["id"]).to eq user.id
+      expect(json["result"].length).to eq 1
+      expect(json["result"][0]["id"]).to eq user.id
     end
 
     it 'can find by wca_id' do
       get :users_search, q: user.wca_id
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].length).to eq 1
-      expect(json["users"][0]["id"]).to eq user.id
+      expect(json["result"].length).to eq 1
+      expect(json["result"][0]["id"]).to eq user.id
     end
 
     context 'Person without User' do
@@ -94,18 +94,18 @@ describe Api::V0::ApiController do
         get :users_search, q: person.id, persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json["users"].length).to eq 1
-        expect(json["users"][0]["id"]).to eq nil
-        expect(json["users"][0]["wca_id"]).to eq person.id
+        expect(json["result"].length).to eq 1
+        expect(json["result"][0]["id"]).to eq nil
+        expect(json["result"][0]["wca_id"]).to eq person.id
       end
 
       it "can find by name" do
         get :users_search, q: "bo", persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
-        expect(json["users"].length).to eq 1
-        expect(json["users"][0]["id"]).to eq nil
-        expect(json["users"][0]["wca_id"]).to eq person.id
+        expect(json["result"].length).to eq 1
+        expect(json["result"][0]["id"]).to eq nil
+        expect(json["result"][0]["wca_id"]).to eq person.id
       end
     end
 
@@ -114,7 +114,7 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].length).to eq 0
+      expect(json["result"].length).to eq 0
     end
 
     it 'can only find delegates' do
@@ -122,8 +122,8 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem", only_delegates: true
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["users"].length).to eq 1
-      expect(json["users"][0]["id"]).to eq delegate.id
+      expect(json["result"].length).to eq 1
+      expect(json["result"][0]["id"]).to eq delegate.id
     end
   end
 

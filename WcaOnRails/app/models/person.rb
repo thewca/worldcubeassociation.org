@@ -19,6 +19,8 @@ class Person < ActiveRecord::Base
 
   def to_jsonable(include_private_info: false)
     json = {
+      class: self.class.to_s.downcase,
+
       id: nil,
       wca_id: self.id,
       name: self.name,

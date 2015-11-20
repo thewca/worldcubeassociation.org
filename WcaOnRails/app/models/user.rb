@@ -317,6 +317,8 @@ class User < ActiveRecord::Base
 
   def to_jsonable(include_private_info: false)
     json = {
+      class: self.class.to_s.downcase,
+
       id: self.id,
       wca_id: self.wca_id,
       name: self.name,

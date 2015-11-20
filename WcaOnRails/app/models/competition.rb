@@ -365,6 +365,8 @@ class Competition < ActiveRecord::Base
 
   def to_jsonable
     json = {
+      class: self.class.to_s.downcase,
+
       id: id,
       name: name,
       cellName: cellName,

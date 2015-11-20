@@ -66,7 +66,7 @@ class Api::V0::ApiController < ApplicationController
     posts = Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
 
     posts = posts.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", posts: posts.map(&:to_jsonable) }
+    render json: { status: "ok", result: posts.map(&:to_jsonable) }
   end
 
   def competitions_search
@@ -80,7 +80,7 @@ class Api::V0::ApiController < ApplicationController
     competitions = Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
 
     competitions = competitions.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", competitions: competitions.map(&:to_jsonable) }
+    render json: { status: "ok", result: competitions.map(&:to_jsonable) }
   end
 
   def users_search
@@ -114,7 +114,7 @@ class Api::V0::ApiController < ApplicationController
     end
 
     users = users.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", users: users.map(&:to_jsonable) }
+    render json: { status: "ok", result: users.map(&:to_jsonable) }
   end
 
   def show_user(user)

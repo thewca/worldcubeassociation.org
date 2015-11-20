@@ -39,6 +39,8 @@ class Post < ActiveRecord::Base
 
   def to_jsonable
     json = {
+      class: self.class.to_s.downcase,
+
       id: id,
       title: title,
       body: body,
