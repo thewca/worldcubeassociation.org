@@ -24,7 +24,6 @@ class AdminController < ApplicationController
     else
       flash.now[:danger] = "Error merging"
     end
-    @js_users = [ @merge_people.person1, @merge_people.person2 ].compact
     render 'merge_people'
   end
 end

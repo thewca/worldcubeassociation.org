@@ -76,6 +76,8 @@ Rails.application.routes.draw do
       get '/me' => "api#me"
       get '/auth/results' => "api#auth_results"
       get '/scramble-program' => "api#scramble_program"
+      get '/posts/search' => 'api#posts_search'
+      get '/competitions/search' => 'api#competitions_search'
       get '/users/search' => 'api#users_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'api#show_user_by_wca_id'

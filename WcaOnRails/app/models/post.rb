@@ -36,4 +36,16 @@ class Post < ActiveRecord::Base
       Rails.application.routes.url_helpers.post_path(self)
     end
   end
+
+  def to_jsonable
+    json = {
+      id: id,
+      title: title,
+      body: body,
+      slug: slug,
+      author: author ? author.to_jsonable : nil,
+    }
+
+    json
+  end
 end

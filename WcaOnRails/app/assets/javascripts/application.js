@@ -19,7 +19,6 @@
 //= require jquery.are-you-sure
 //= require bootstrap-datepicker/core
 //= require locationpicker.jquery
-//= require twitter/typeahead
 //= require underscore
 //= require selectize
 //= require selectize.do_not_clear_on_blur

@@ -1,6 +1,50 @@
 require 'rails_helper'
 
 describe Api::V0::ApiController do
+  describe 'GET #competitions_search' do
+    let!(:comp) { FactoryGirl.create(:competition, name: "Jfly's Competition 2015") }
+
+    it 'requires query parameter' do
+      get :competitions_search
+      expect(response.status).to eq 400
+      json = JSON.parse(response.body)
+      expect(json["error"]).to eq "No query specified"
+    end
+
+    it "finds competition" do
+      get :competitions_search, q: "competition"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["competitions"].length).to eq 1
+    end
+  end
+
+  describe 'GET #posts_search' do
+    let!(:post) { FactoryGirl.create(:post, title: "post title", body: "post body") }
+
+    it 'requires query parameter' do
+      get :posts_search
+      expect(response.status).to eq 400
+      json = JSON.parse(response.body)
+      expect(json["error"]).to eq "No query specified"
+    end
+
+    it "finds post" do
+      get :posts_search, q: "post title"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["posts"].length).to eq 1
+    end
+
+    it "does not find non world readable post" do
+      post.update_column(:world_readable, false)
+      get :posts_search, q: "post title"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["posts"].length).to eq 0
+    end
+  end
+
   describe 'GET #users_search' do
     let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
 
@@ -47,7 +91,7 @@ describe Api::V0::ApiController do
       let!(:person) { FactoryGirl.create(:person, name: "Bob") }
 
       it "can find by wca_id" do
-        get :users_search, q: person.id, search_persons: true
+        get :users_search, q: person.id, persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["users"].length).to eq 1
@@ -56,7 +100,7 @@ describe Api::V0::ApiController do
       end
 
       it "can find by name" do
-        get :users_search, q: "bo", search_persons: true
+        get :users_search, q: "bo", persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["users"].length).to eq 1

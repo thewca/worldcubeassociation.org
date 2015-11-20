@@ -55,15 +55,43 @@ class Api::V0::ApiController < ApplicationController
   def help
   end
 
+  def posts_search
+    query = params[:q]
+    unless query
+      render status: :bad_request, json: { error: "No query specified" }
+      return
+    end
+    sql_query = "%#{query}%"
+
+    posts = Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
+
+    posts = posts.limit(DEFAULT_API_RESULT_LIMIT)
+    render json: { status: "ok", posts: posts.map(&:to_jsonable) }
+  end
+
+  def competitions_search
+    query = params[:q]
+    unless query
+      render status: :bad_request, json: { error: "No query specified" }
+      return
+    end
+    sql_query = "%#{query}%"
+
+    competitions = Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+
+    competitions = competitions.limit(DEFAULT_API_RESULT_LIMIT)
+    render json: { status: "ok", competitions: competitions.map(&:to_jsonable) }
+  end
+
   def users_search
     query = params[:q]
     unless query
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-
     sql_query = "%#{query}%"
-    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:search_persons])
+
+    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
       users = User
 
       if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:include_dummy_accounts])
@@ -80,9 +108,9 @@ class Api::V0::ApiController < ApplicationController
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
         users = users.where.not(wca_id: nil)
       end
-      users = users.where("name LIKE ? OR wca_id LIKE ?", sql_query, sql_query)
+      users = users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query)
     else
-      users = Person.where("name LIKE ? OR id LIKE ?", sql_query, sql_query)
+      users = Person.where("name LIKE :sql_query OR id LIKE :sql_query", sql_query: sql_query)
     end
 
     users = users.limit(DEFAULT_API_RESULT_LIMIT)

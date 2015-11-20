@@ -363,4 +363,16 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def to_jsonable
+    json = {
+      id: id,
+      name: name,
+      cellName: cellName,
+      cityName: cityName,
+      countryId: countryId,
+      delegates: delegates.map(&:to_jsonable),
+      organizers: organizers.map(&:to_jsonable),
+    }
+    json
+  end
 end

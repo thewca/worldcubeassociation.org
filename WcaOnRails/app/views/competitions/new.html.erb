@@ -5,7 +5,7 @@
 
   <%= simple_form_for @competition, html: { class: 'form-horizontal new-competition' }  do |f| %>
     <%= f.input :name, required: true %>
-    <%= f.input :competition_id_to_clone, as: :competition_id %>
+    <%= f.input :competition_id_to_clone, as: :competition_id, only_one: true %>
 
     <button type="submit" id="create-competition" class="btn btn-success"></button>
   <% end %>

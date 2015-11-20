@@ -25,12 +25,12 @@ class CompetitionsController < ApplicationController
   end
 
   def new
-    @js_competitions = @competitions = competitions
+    @competitions = competitions
     @competition = Competition.new
   end
 
   def index
-    @js_competitions = @competitions = competitions
+    @competitions = competitions
   end
 
   def create
@@ -48,7 +48,7 @@ class CompetitionsController < ApplicationController
       end
       redirect_to edit_competition_path(@competition)
     else
-      @js_competitions = @competitions = competitions
+      @competitions = competitions
       render 'new'
     end
   end
@@ -156,7 +156,6 @@ class CompetitionsController < ApplicationController
   end
 
   private def render_edit
-    @js_users = (@competition.delegates + @competition.organizers).uniq
     render 'edit'
   end
 
