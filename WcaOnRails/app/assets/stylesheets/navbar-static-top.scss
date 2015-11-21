@@ -34,6 +34,14 @@ body {
     }
   }
 
+  $nav-avatar-thumbnail-size: 40px;
+  .avatar-thumbnail {
+    width: $nav-avatar-thumbnail-size;
+    height: $nav-avatar-thumbnail-size;
+    margin-top: -($nav-avatar-thumbnail-size - 20px) / 2;
+    margin-bottom: -($nav-avatar-thumbnail-size - 20px) / 2;
+  }
+
   .navbar-collapse {
     background: #ddd;
     margin: 0;

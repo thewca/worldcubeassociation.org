@@ -26,10 +26,11 @@ tr.candidate-delegate {
   height: 50px;
 
   vertical-align: middle;
-}
-.avatar-thumbnail-lg {
-  width: 100px;
-  height: 100px;
+
+  &.avatar-thumbnail-lg {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .popover-content img {

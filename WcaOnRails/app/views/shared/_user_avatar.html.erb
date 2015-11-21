@@ -3,8 +3,14 @@
   <% url = user.send(avatar_symbol).url(:thumb) + ( defined?(break_cache) ? "?#{Time.now.to_f}" : "" ) %>
   <div class="avatar-thumbnail <%= defined?(avatar_class) ? avatar_class : "" %>"
        style="background-image: url('<%= url %>');"
-       data-trigger="hover" data-toggle="popover" title="<%= defined?(title) ? title : "" %>" data-html="true" data-content="<img src='<%= user.send(avatar_symbol).url %>'></img>"
+       <% if !defined?(do_not_show_full_image_on_hover) %>
+         data-trigger="hover"
+         data-toggle="popover"
+         title="<%= defined?(title) ? title : "" %>"
+         data-html="true"
+         data-content="<img src='<%= user.send(avatar_symbol).url %>'></img>"
+       <% end %>
   ></div>
 <% else %>
-  <div class="avatar-thumbnail"></div>
+  <div class="avatar-thumbnail" style="background-image: url('<%= asset_path 'missing_avatar_thumb.png' %>');"></div>
 <% end %>
