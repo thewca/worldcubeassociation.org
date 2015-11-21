@@ -42,11 +42,7 @@ $(function() {
         user: function(user) {
           var $div = $('<div class="wca-autocomplete-user"><span class="avatar-thumbnail"></span> <span class="name"></span> <span class="wca-id"></span></div>');
           $div.find(".name").text(user.name);
-          if(user.avatar) {
-            $div.find(".avatar-thumbnail").css('background-image', 'url("' + user.avatar.thumb_url + '")');
-          } else {
-            $div.find(".avatar-thumbnail").addClass('avatar-thumbnail-noheight');
-          }
+          $div.find(".avatar-thumbnail").css('background-image', 'url("' + user.avatar.thumb_url + '")');
           if(user.wca_id) {
             $div.find(".wca-id").text(user.wca_id);
           } else {

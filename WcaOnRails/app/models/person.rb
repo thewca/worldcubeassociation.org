@@ -35,11 +35,9 @@ class Person < ActiveRecord::Base
       json[:dob] = person.dob
     end
 
-    if user
-      # If there's a user for this Person, merge in all their data,
-      # the Person's data takes priority, though.
-      json = user.to_jsonable.merge(json)
-    end
+    # If there's a user for this Person, merge in all their data,
+    # the Person's data takes priority, though.
+    json = (user || User.new).to_jsonable.merge(json)
 
     json
   end

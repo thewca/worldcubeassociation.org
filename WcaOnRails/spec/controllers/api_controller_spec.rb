@@ -97,6 +97,9 @@ describe Api::V0::ApiController do
         expect(json["result"].length).to eq 1
         expect(json["result"][0]["id"]).to eq person.id
         expect(json["result"][0]["wca_id"]).to eq person.id
+        expect(json['result'][0]['avatar']['url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['result'][0]['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['result'][0]['avatar']['is_default']).to eq true
       end
 
       it "can find by name" do
@@ -252,7 +255,9 @@ describe Api::V0::ApiController do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']).to be_nil
+        expect(json['me']['avatar']['url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['me']['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['me']['avatar']['is_default']).to eq true
 
         expect(json['me']['country_iso2']).to be_nil
         expect(json['me']['gender']).to be_nil
@@ -274,7 +279,9 @@ describe Api::V0::ApiController do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']).to be_nil
+        expect(json['me']['avatar']['url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['me']['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
+        expect(json['me']['avatar']['is_default']).to eq true
 
         expect(json['me']['country_iso2']).to be_nil
         expect(json['me']['gender']).to be_nil

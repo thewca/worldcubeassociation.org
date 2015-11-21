@@ -352,6 +352,11 @@ class User < ActiveRecord::Base
       name: self.name,
       created_at: self.created_at,
       updated_at: self.updated_at,
+      avatar: {
+        url: self.avatar.url,
+        thumb_url: self.avatar.url(:thumb),
+        is_default: !self.avatar?,
+      },
     }
     if person
       json[:gender] = person.gender
@@ -363,14 +368,6 @@ class User < ActiveRecord::Base
       if person
         json[:dob] = person.dob
       end
-    end
-    if self.avatar?
-      json[:avatar] = {
-        url: self.avatar.url,
-        thumb_url: self.avatar.url(:thumb),
-      }
-    else
-      json[:avatar] = nil
     end
 
     json
