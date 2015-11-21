@@ -86,12 +86,10 @@ $omni-search-open-width: 500px;
       /* make space for the border-top-left-radius */
       padding-left: 15px;
 
-      /* make space for the search box */
-      padding-right: $omni-search-closed-width + 15px;
-
       form.navbar-form[role="search"] {
         position: absolute;
         right: 0;
+        top: -60px;
 
         .wca-autocomplete-omni + .selectize-control .selectize-input {
           width: $omni-search-closed-width;
