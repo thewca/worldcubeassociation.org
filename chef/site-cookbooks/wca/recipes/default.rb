@@ -231,7 +231,7 @@ end
 #### Rails secrets
 db_url = "mysql2://root:#{secrets['mysql_password']}@localhost/cubing"
 template "#{rails_root}/.env.production" do
-  source "env.production"
+  source "env.production.erb"
   mode 0644
   owner username
   group username
