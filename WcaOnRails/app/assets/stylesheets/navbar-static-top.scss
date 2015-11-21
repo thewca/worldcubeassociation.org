@@ -98,7 +98,6 @@ $omni-search-open-width: 500px;
           transition: width 0.25s ease;
 
           &:focus,
-          &:hover,
           &.focus {
             width: $omni-search-open-width;
           }
