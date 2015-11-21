@@ -29,7 +29,11 @@ gem 'bootstrap-datepicker-rails'
 gem 'time_will_tell'
 gem 'redcarpet', '~> 3.3'
 gem 'underscore-rails'
-gem 'selectize-rails'
+
+# Pointing to jfly/carrierwave-crop which has a workaround for
+#  https://github.com/brianreavis/selectize.js/issues/953
+gem 'selectize-rails', git: "git://github.com/jfly/selectize-rails.git"
+
 gem 'high_voltage'
 gem 'best_in_place'
 gem 'carrierwave'
