@@ -18,9 +18,7 @@ class User < ActiveRecord::Base
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE },
                      allow_nil: true
-  def self.WCA_ID_MAX_LENGTH
-    return 10
-  end
+  WCA_ID_MAX_LENGTH = 10
 
   # Virtual attribute for authenticating by WCA id or email.
   attr_accessor :login

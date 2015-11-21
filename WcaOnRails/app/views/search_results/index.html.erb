@@ -30,6 +30,7 @@
           <% end %>
         </tbody>
       </table>
+      <%= will_paginate @competitions, param_name: 'competitions_page' %>
     <% end %>
 
     <% if !@persons.empty? %>
@@ -58,6 +59,7 @@
           <% end %>
         </tbody>
       </table>
+      <%= will_paginate @persons, param_name: 'persons_page' %>
     <% end %>
 
     <% if !@posts.empty? %>
@@ -72,6 +74,7 @@
           </blockquote>
         </div>
       <% end %>
+      <%= will_paginate @posts, param_name: 'posts_page' %>
     <% end %>
   <% end %>
 </div>
