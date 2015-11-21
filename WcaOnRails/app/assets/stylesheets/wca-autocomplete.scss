@@ -11,6 +11,10 @@
 }
 
 .wca-autocomplete.selectize-control {
+  .selectize-dropdown-content {
+    max-height: 400px;
+  }
+
   &.single .selectize-input::after {
     // Hide dropdown arrow, as it gets in the way of our search/loading icon.
     display: none;

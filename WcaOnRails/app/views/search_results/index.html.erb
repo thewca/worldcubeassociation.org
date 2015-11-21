@@ -34,10 +34,15 @@
 
     <% if !@persons.empty? %>
       <h2>People</h2>
-      <table class="table table-nonfluid">
+      <table class="table table-nonfluid table-vertical-align-middle">
         <tbody>
           <% @persons.each do |person| %>
             <tr>
+              <td>
+                <% if person.user %>
+                  <%= render "shared/user_avatar", user: person.user %>
+                <% end %>
+              </td>
               <td>
                 <span class="wca-id"><%= wca_highlight(person.wca_id, @omni_query) %></span>
               </td>

@@ -40,8 +40,13 @@ $(function() {
     var toHtml = function(item) {
       var toHtmlByClass = {
         user: function(user) {
-          var $div = $('<div class="wca-autocomplete-user"><span class="name"></span> <span class="wca-id"></span></div>');
+          var $div = $('<div class="wca-autocomplete-user"><span class="avatar-thumbnail"></span> <span class="name"></span> <span class="wca-id"></span></div>');
           $div.find(".name").text(user.name);
+          if(user.avatar) {
+            $div.find(".avatar-thumbnail").css('background-image', 'url("' + user.avatar.thumb_url + '")');
+          } else {
+            $div.find(".avatar-thumbnail").addClass('avatar-thumbnail-noheight');
+          }
           if(user.wca_id) {
             $div.find(".wca-id").text(user.wca_id);
           } else {
@@ -121,16 +126,16 @@ $(function() {
       },
       onChange: onChange,
       onFocus: function() {
-        var ANIMATION_DURATION = 250;
         // Upon receiving focus, we animate a resize of the input. If we get unlucky,
         // the dropdown will appear while the input is still tiny, and the dropdown
         // will remain tiny.
-        // To hack around this, we wait ANIMATION_DURATION for the animation to
+        // To work around this, we wait until the transition is done.
         // complete, and then reposition the dropdown.
+        // From http://blog.teamtreehouse.com/using-jquery-to-detect-when-css3-animations-and-transitions-end
         var that = this;
-        setTimeout(function() {
+        this.$control.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
           that.positionDropdown();
-        }, ANIMATION_DURATION);
+        });
       },
       score: function(search) {
         var score = this.getScoreFunction(search);

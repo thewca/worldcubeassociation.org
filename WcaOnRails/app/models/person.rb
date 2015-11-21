@@ -1,6 +1,7 @@
 class Person < ActiveRecord::Base
   self.table_name = "Persons"
   self.primary_key = "id"
+  has_one :user, foreign_key: "wca_id"
 
   alias_method :wca_id, :id
 
@@ -32,6 +33,12 @@ class Person < ActiveRecord::Base
 
     if include_private_info
       json[:dob] = person.dob
+    end
+
+    if user
+      # If there's a user for this Person, merge in all their data,
+      # the Person's data takes priority, though.
+      json = user.to_jsonable.merge(json)
     end
 
     json

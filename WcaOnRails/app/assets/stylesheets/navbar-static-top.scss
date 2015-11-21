@@ -35,7 +35,7 @@ body {
   }
 
   $nav-avatar-thumbnail-size: 40px;
-  .avatar-thumbnail {
+  a.top-nav > .avatar-thumbnail {
     width: $nav-avatar-thumbnail-size;
     height: $nav-avatar-thumbnail-size;
     margin-top: -($nav-avatar-thumbnail-size - 20px) / 2;
@@ -60,7 +60,7 @@ body {
 }
 
 $omni-search-closed-width: 50px;
-$omni-search-open-width: 300px;
+$omni-search-open-width: 500px;
 
 @media (min-width: 768px) {
   .navbar-static-top {
