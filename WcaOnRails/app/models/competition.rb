@@ -189,14 +189,6 @@ class Competition < ActiveRecord::Base
     return false
   end
 
-  validate :must_be_an_organizer_or_delegate_to_set_receive_registration_emails
-  def must_be_an_organizer_or_delegate_to_set_receive_registration_emails
-    if editing_user_id && !@receive_registration_emails.nil?
-      if !can_receive_registration_emails?(editing_user_id)
-        errors.add(:receive_registration_emails, "You cannot receive registration emails for this competition.")
-      end
-    end
-  end
   after_save :update_receive_registration_emails
   def update_receive_registration_emails
     if editing_user_id && !@receive_registration_emails.nil?

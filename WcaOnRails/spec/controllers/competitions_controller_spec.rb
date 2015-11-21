@@ -209,7 +209,7 @@ describe CompetitionsController do
       let(:organizer) { FactoryGirl.create(:delegate) }
       before :each do
         competition.organizers << organizer
-        competition.save
+        competition.save!
         sign_in organizer
       end
 
@@ -222,7 +222,7 @@ describe CompetitionsController do
       it "who is also the delegate can remove oneself as delegate" do
         # First, make the organizer of the competition the delegate of the competition.
         competition.delegates << organizer
-        competition.save
+        competition.save!
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
@@ -259,7 +259,7 @@ describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: "" }
+        patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
       end
