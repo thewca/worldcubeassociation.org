@@ -57,9 +57,11 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # Cloudfront! https://console.aws.amazon.com/cloudfront/home
-  config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
+  if ENVied.WCA_LIVE_SITE
+    # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+    # Cloudfront! https://console.aws.amazon.com/cloudfront/home
+    config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
+  end
 
   root_url = URI.parse(ENVied.ROOT_URL)
   config.action_mailer.default_url_options = {
