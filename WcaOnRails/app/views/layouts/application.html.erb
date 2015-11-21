@@ -52,7 +52,9 @@
       <div class="navbar-collapse collapse disabled">
         <ul class="nav navbar-nav">
           <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'posts' ? 'active' : '' %>">
-            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('info-circle', class: 'fa-fw') %> Information <span class="caret"></span></a>
+            <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+              <%= icon('info-circle', class: 'fa-fw') %> <span class="hidden-sm">Information</span> <span class="caret"></span>
+            </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/about"><%= icon('file-text', class: 'fa-fw') %> About the WCA</a></li>
               <li><a href="/delegates"><%= icon('sitemap', class: 'fa-fw') %> WCA Delegates</a></li>
@@ -67,7 +69,9 @@
           </li>
           <li><a href="/results/competitions.php" class="top-nav"><%= icon('globe', class: 'fa-fw') %> Competitions</a></li>
           <li class="dropdown">
-            <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('list-ol', class: 'fa-fw') %> Results <span class="caret"></span></a>
+            <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+              <%= icon('list-ol', class: 'fa-fw') %> Results <span class="caret"></span>
+            </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/results/events.php"><%= icon('signal', class: 'fa-fw fa-rotate-90') %> Rankings</a></li>
               <li><a href="/results/regions.php"><%= icon('trophy', class: 'fa-fw') %> Records</a></li>
@@ -79,7 +83,9 @@
             </ul>
           </li>
           <li class="dropdown <%= params[:controller] == 'regulations' ? 'active' : '' %>">
-            <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown"><%= icon('book', class: 'fa-fw') %> Regulations <span class="caret"></span></a>
+            <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+              <%= icon('book', class: 'fa-fw') %> <span class="hidden-sm">Regulations</span> <span class="caret"></span>
+            </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="/regulations/"><%= icon('book', class: 'fa-fw') %> Regulations</a></li>
               <li><a href="/regulations/guidelines.html"><%= icon('question-circle', class: 'fa-fw') %> Guidelines</a></li>
@@ -105,7 +111,7 @@
                   <span class="badge"><%= notification_count %></span>
                 <% end %>
               <% else %>
-                Sign in
+                <span class="hidden-sm">Sign in</span>
               <% end %>
               <span class="caret"></span>
             </a>

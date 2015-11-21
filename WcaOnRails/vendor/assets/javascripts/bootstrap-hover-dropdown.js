@@ -95,6 +95,13 @@
             });
 
             function openDropdown(event) {
+                if($('.navbar-toggle').is(":visible")) {
+                    // Don't do anything when the navbar is collapsed, as it makes
+                    // the navbar pretty unusable.
+                    // See: https://github.com/CWSpear/bootstrap-hover-dropdown/issues/136
+                    return;
+                }
+
                 // clear dropdown timeout here so it doesnt close before it should
                 window.clearTimeout(timeout);
                 // restart hover timer
