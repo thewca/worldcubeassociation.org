@@ -95,7 +95,7 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq nil
+        expect(json["result"][0]["id"]).to eq person.id
         expect(json["result"][0]["wca_id"]).to eq person.id
       end
 
@@ -104,7 +104,7 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq nil
+        expect(json["result"][0]["id"]).to eq person.id
         expect(json["result"][0]["wca_id"]).to eq person.id
       end
     end
@@ -146,7 +146,8 @@ describe Api::V0::ApiController do
       expect(json["result"].length).to eq 2
       expect(json["result"].select { |r| r["class"] == "competition" }.length).to eq 1
       expect(json["result"].select { |r| r["class"] == "post" }.length).to eq 0
-      expect(json["result"].select { |r| r["class"] == "user" }.length).to eq 1
+      expect(json["result"].select { |r| r["class"] == "user" }.length).to eq 0
+      expect(json["result"].select { |r| r["class"] == "person" }.length).to eq 1
     end
   end
 
