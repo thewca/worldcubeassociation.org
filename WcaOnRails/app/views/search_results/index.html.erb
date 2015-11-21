@@ -38,9 +38,7 @@
           <% @persons.each do |person| %>
             <tr>
               <td>
-                <% if person.user %>
-                  <%= render "shared/user_avatar", user: person.user %>
-                <% end %>
+                <%= render "shared/user_avatar", user: (person.user || User.new) %>
               </td>
               <td>
                 <span class="wca-id"><%= wca_highlight(person.wca_id, @omni_query) %></span>
