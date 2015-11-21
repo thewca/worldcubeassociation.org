@@ -46,6 +46,22 @@ body {
     background: #ddd;
     margin: 0;
     clear: both;
+
+    $omni-search-sm-width: 230px;
+    $omni-search-md-width: 450px;
+    $omni-search-lg-width: 500px;
+
+    form.navbar-form[role="search"] .wca-autocomplete-omni + .selectize-control .selectize-input {
+      @media (min-width: $screen-sm-min) {
+        width: $omni-search-sm-width;
+      }
+      @media (min-width: $screen-md-min) {
+        width: $omni-search-md-width;
+      }
+      @media (min-width: $screen-lg-min) {
+        width: $omni-search-lg-width;
+      }
+    }
   }
 
   .navbar-nav > li > a.top-nav:hover {
@@ -59,10 +75,7 @@ body {
   }
 }
 
-$omni-search-closed-width: 50px;
-$omni-search-open-width: 500px;
-
-@media (min-width: 768px) {
+@media (min-width: $screen-sm-min) {
   .navbar-static-top {
     .navbar-brand {
       img {
@@ -90,16 +103,6 @@ $omni-search-open-width: 500px;
         position: absolute;
         right: 0;
         top: -60px;
-
-        .wca-autocomplete-omni + .selectize-control .selectize-input {
-          width: $omni-search-closed-width;
-          transition: width 0.25s ease;
-
-          &:focus,
-          &.focus {
-            width: $omni-search-open-width;
-          }
-        }
       }
     }
 

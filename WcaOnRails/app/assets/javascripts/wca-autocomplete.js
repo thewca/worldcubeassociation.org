@@ -125,18 +125,6 @@ $(function() {
         },
       },
       onChange: onChange,
-      onFocus: function() {
-        // Upon receiving focus, we animate a resize of the input. If we get unlucky,
-        // the dropdown will appear while the input is still tiny, and the dropdown
-        // will remain tiny.
-        // To work around this, we wait until the transition is done.
-        // complete, and then reposition the dropdown.
-        // From http://blog.teamtreehouse.com/using-jquery-to-detect-when-css3-animations-and-transitions-end
-        var that = this;
-        this.$control.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
-          that.positionDropdown();
-        });
-      },
       score: function(search) {
         var score = this.getScoreFunction(search);
         return function(item) {
