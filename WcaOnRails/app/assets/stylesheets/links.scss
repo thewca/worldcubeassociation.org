@@ -31,6 +31,17 @@ form[target=_blank] button[type=submit] {
   }
 }
 
+.anchorable {
+  .glyphicon-link {
+    visibility: hidden;
+  }
+
+  &:hover .glyphicon-link,
+  &:target .glyphicon-link {
+    visibility: visible;
+  }
+}
+
 :target {
   background-color: yellow;
   &::before {

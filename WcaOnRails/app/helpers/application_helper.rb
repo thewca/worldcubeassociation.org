@@ -31,6 +31,11 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
+  def anchorable(pretty_text)
+    id = pretty_text.parameterize
+    "<span id='#{id}' class='anchorable'>#{pretty_text} <a href='##{id}'><span class='glyphicon glyphicon-link'></span></a></span>".html_safe
+  end
+
   WCA_EXCERPT_RADIUS = 50
 
   def wca_excerpt(html, phrase)

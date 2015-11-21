@@ -7,7 +7,7 @@
     <h3>Try searching for something!</h3>
   <% else %>
     <% if !@competitions.empty? %>
-      <h2>Competitions</h2>
+      <h2><%= anchorable "Competitions" %></h2>
       <table class="table table-nonfluid">
         <tbody>
           <% @competitions.each do |competition| %>
@@ -28,11 +28,11 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @competitions, param_name: 'competitions_page' %>
+      <%= will_paginate @competitions, param_name: 'competitions_page', params: { anchor: "competitions" } %>
     <% end %>
 
     <% if !@persons.empty? %>
-      <h2>People</h2>
+      <h2><%= anchorable "People" %></h2>
       <table class="table table-nonfluid table-vertical-align-middle">
         <tbody>
           <% @persons.each do |person| %>
@@ -57,11 +57,11 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @persons, param_name: 'persons_page' %>
+      <%= will_paginate @persons, param_name: 'people_page', params: { anchor: "people" } %>
     <% end %>
 
     <% if !@posts.empty? %>
-      <h2>Posts</h2>
+      <h2><%= anchorable "Posts" %></h2>
       <% @posts.each do |post| %>
         <div>
           <%= link_to post_path(post.slug) do %>
@@ -72,7 +72,7 @@
           </blockquote>
         </div>
       <% end %>
-      <%= will_paginate @posts, param_name: 'posts_page' %>
+      <%= will_paginate @posts, param_name: 'posts_page', params: { anchor: "posts" } %>
     <% end %>
 
     <% if @competitions.empty? %>
