@@ -4,8 +4,10 @@ $(function() {
 
     var only_one = $(that).hasClass("wca-autocomplete-only_one");
     var search = $(that).hasClass("wca-autocomplete-search");
+    var omni_search = $(that).hasClass("wca-autocomplete-search");
     var users_search = $(that).hasClass("wca-autocomplete-users_search");
     var competitions_search = $(that).hasClass("wca-autocomplete-competitions_search");
+    var posts_search = $(that).hasClass("wca-autocomplete-posts_search");
 
     var searchFields = [];
     searchFields = searchFields.concat([ 'wca_id', 'name' ]); // user search fields
@@ -14,9 +16,10 @@ $(function() {
 
     var url;
     var defaultSearchData = {};
-    var valueField = 'id';
-    if(users_search) {
-      url = '/api/v0/users/search';
+    if(omni_search) {
+      url = '/api/v0/search';
+    } else if(users_search) {
+      url = '/api/v0/search/users';
       var only_delegates = $(that).hasClass("wca-autocomplete-only_delegates");
       var persons_table = $(that).hasClass("wca-autocomplete-persons_table");
 
@@ -24,11 +27,12 @@ $(function() {
         defaultSearchData.only_delegates = true;
       }
       if(persons_table) {
-        valueField = 'wca_id';
         defaultSearchData.persons_table = true;
       }
     } else if(competitions_search) {
-      url = '/api/v0/competitions/search';
+      url = '/api/v0/search/competitions';
+    } else if(posts_search) {
+      url = '/api/v0/search/posts';
     } else {
       throw new Error("Unrecognized wca-autocomplete type");
     }
@@ -83,11 +87,11 @@ $(function() {
       create = function(input, callback) {
         var query = input;
         var object = {
+          id: query,
           query: query,
           'class': 'search',
           url: '/search?q=' + encodeURIComponent(query),
         };
-        object[valueField] = query;
         callback(object);
       };
       onChange = function(value) {
@@ -100,7 +104,7 @@ $(function() {
       plugins: ['restore_on_backspace', 'remove_button', 'do_not_clear_on_blur'],
       preload: true,
       maxItems: only_one ? 1 : null,
-      valueField: valueField,
+      valueField: 'id',
       searchField: searchFields,
       delimeter: ',',
       persist: false,

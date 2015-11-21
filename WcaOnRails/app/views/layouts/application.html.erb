@@ -20,7 +20,7 @@
   <% if @omni_query.present? %>
     <script>
       $(function() {
-        $('.wca-omni-search').each(function() {
+        $('.wca-autocomplete-omni').each(function() {
           var selectize = this.selectize;
           // We're only interested in touching the original input, *not* the duplicate
           // that selectize created. The original input has a selectize attribute.

@@ -363,6 +363,7 @@ class Competition < ActiveRecord::Base
   def to_jsonable
     json = {
       class: self.class.to_s.downcase,
+      url: "/results/c.php?i=#{id}",
 
       id: id,
       name: name,

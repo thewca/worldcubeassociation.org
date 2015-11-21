@@ -55,13 +55,13 @@ class Api::V0::ApiController < ApplicationController
   def help
   end
 
-  def search(model)
+  def search(*models)
     query = params[:q]
     unless query
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-    result = model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT)
+    result = models.map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }.flatten(1)
     render json: { status: "ok", result: result.map(&:to_jsonable) }
   end
 
@@ -75,6 +75,13 @@ class Api::V0::ApiController < ApplicationController
 
   def users_search
     search(User)
+  end
+
+  def omni_search
+    # We intentionally exclude Post, as our autocomplete ui isn't very useful with
+    # them yet.
+    params[:persons_table] = true
+    search(Competition, User)
   end
 
   def show_user(user)

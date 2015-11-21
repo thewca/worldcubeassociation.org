@@ -127,6 +127,29 @@ describe Api::V0::ApiController do
     end
   end
 
+  describe 'GET #omni_search' do
+    let!(:comp) { FactoryGirl.create(:competition, name: "jeremy Jfly's Competition 2015") }
+    let!(:post) { FactoryGirl.create(:post, title: "jeremy post title", body: "post body") }
+    let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
+
+    it 'requires query parameter' do
+      get :competitions_search
+      expect(response.status).to eq 400
+      json = JSON.parse(response.body)
+      expect(json["error"]).to eq "No query specified"
+    end
+
+    it "finds all the things!" do
+      get :omni_search, q: "jeremy"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["result"].length).to eq 2
+      expect(json["result"].select { |r| r["class"] == "competition" }.length).to eq 1
+      expect(json["result"].select { |r| r["class"] == "post" }.length).to eq 0
+      expect(json["result"].select { |r| r["class"] == "user" }.length).to eq 1
+    end
+  end
+
   describe 'show_user_*' do
     it 'can query by id' do
       user = FactoryGirl.create(:user, name: "Jeremy")

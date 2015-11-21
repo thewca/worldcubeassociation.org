@@ -49,7 +49,7 @@ module ApplicationHelper
   end
 
   def wca_omni_search
-    '<input type="text" class="form-control wca-omni-search wca-autocomplete wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table" />'.html_safe
+    '<input type="text" class="form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table" />'.html_safe
   end
 
   def notifications_for_user(user)

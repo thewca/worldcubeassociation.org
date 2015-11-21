@@ -85,7 +85,7 @@ $omni-search-open-width: 300px;
         position: absolute;
         right: 0;
 
-        .wca-omni-search + .selectize-control .selectize-input {
+        .wca-autocomplete-omni + .selectize-control .selectize-input {
           width: $omni-search-closed-width;
           transition: width 0.25s ease;
 
