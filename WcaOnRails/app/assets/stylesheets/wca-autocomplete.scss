@@ -63,3 +63,8 @@
     }
   }
 }
+
+.selectize-control.single .selectize-input,
+.selectize-control.single .selectize-input input {
+  cursor: text;
+}
