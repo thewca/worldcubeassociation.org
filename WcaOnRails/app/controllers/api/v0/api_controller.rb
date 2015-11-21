@@ -55,66 +55,26 @@ class Api::V0::ApiController < ApplicationController
   def help
   end
 
-  def posts_search
+  def search(model)
     query = params[:q]
     unless query
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-    sql_query = "%#{query}%"
+    result = model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT)
+    render json: { status: "ok", result: result.map(&:to_jsonable) }
+  end
 
-    posts = Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
-
-    posts = posts.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", result: posts.map(&:to_jsonable) }
+  def posts_search
+    search(Post)
   end
 
   def competitions_search
-    query = params[:q]
-    unless query
-      render status: :bad_request, json: { error: "No query specified" }
-      return
-    end
-    sql_query = "%#{query}%"
-
-    competitions = Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
-
-    competitions = competitions.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", result: competitions.map(&:to_jsonable) }
+    search(Competition)
   end
 
   def users_search
-    query = params[:q]
-    unless query
-      render status: :bad_request, json: { error: "No query specified" }
-      return
-    end
-    sql_query = "%#{query}%"
-
-    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
-      users = User
-
-      if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:include_dummy_accounts])
-        # Ignore dummy accounts
-        users = users.where.not(encrypted_password: '')
-        # Ignore unconfirmed accounts
-        users = users.where.not(confirmed_at: nil)
-      end
-
-      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
-        users = users.where.not(delegate_status: nil)
-      end
-
-      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
-        users = users.where.not(wca_id: nil)
-      end
-      users = users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query)
-    else
-      users = Person.where("name LIKE :sql_query OR id LIKE :sql_query", sql_query: sql_query)
-    end
-
-    users = users.limit(DEFAULT_API_RESULT_LIMIT)
-    render json: { status: "ok", result: users.map(&:to_jsonable) }
+    search(User)
   end
 
   def show_user(user)

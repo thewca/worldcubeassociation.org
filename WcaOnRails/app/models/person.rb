@@ -20,9 +20,10 @@ class Person < ActiveRecord::Base
   def to_jsonable(include_private_info: false)
     json = {
       class: self.class.to_s.downcase,
+      url: "/results/p.php?i=#{self.wca_id}",
 
       id: nil,
-      wca_id: self.id,
+      wca_id: self.wca_id,
       name: self.name,
 
       gender: self.gender,

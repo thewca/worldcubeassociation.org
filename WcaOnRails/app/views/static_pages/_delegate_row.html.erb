@@ -1,6 +1,6 @@
 <tr class="<%= delegate.delegate_status.dasherize %>">
   <td>
-    <%= link_to "results/p.php?i=#{delegate.wca_id}" do %>
+    <%= link_to "/results/p.php?i=#{delegate.wca_id}" do %>
       <%= render "shared/user_avatar", user: delegate %>
       <%= delegate.name %>
     <% end %>

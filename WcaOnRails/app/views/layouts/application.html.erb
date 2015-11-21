@@ -17,6 +17,21 @@
       ga("set", "anonymizeIp", true);
     </script>
   <% end %>
+  <% if @omni_query.present? %>
+    <script>
+      $(function() {
+        $('.wca-omni-search').each(function() {
+          var selectize = this.selectize;
+          // We're only interested in touching the original input, *not* the duplicate
+          // that selectize created. The original input has a selectize attribute.
+          if(selectize) {
+            selectize.$control_input.val(<%= @omni_query.to_json.html_safe %>);
+            selectize.$control_input.trigger("update");
+          }
+        });
+      });
+    </script>
+  <% end %>
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 
@@ -75,6 +90,11 @@
             </ul>
           </li>
         </ul>
+
+        <form class="navbar-form navbar-left" role="search">
+          <%= wca_omni_search %>
+        </form>
+
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">

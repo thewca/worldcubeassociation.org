@@ -37,6 +37,11 @@ class Post < ActiveRecord::Base
     end
   end
 
+  def self.search(query, params: {})
+    sql_query = "%#{query}%"
+    Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
+  end
+
   def to_jsonable
     json = {
       class: self.class.to_s.downcase,

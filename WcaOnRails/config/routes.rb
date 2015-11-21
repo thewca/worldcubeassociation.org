@@ -69,6 +69,8 @@ Rails.application.routes.draw do
   get "/admin/merge_people" => 'admin#merge_people'
   post "/admin/merge_people" => 'admin#do_merge_people'
 
+  get "/search" => 'search_results#index'
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

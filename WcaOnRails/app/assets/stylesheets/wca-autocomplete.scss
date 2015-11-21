@@ -1,48 +1,48 @@
-// From http://tobiasahlin.com/spinkit/
-@-webkit-keyframes sk-rotateplane {
-  0% { -webkit-transform: perspective(120px); }
-  50% { -webkit-transform: perspective(120px) rotateY(180deg); }
-  100% { -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg); }
-}
-
-@keyframes sk-rotateplane {
+@keyframes loading-pulse {
   0% {
-    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-  } 50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: scale(1);
+  } 25% {
+    transform: scale(2);
+  } 75% {
+    transform: scale(0.5);
   } 100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: scale(1);
   }
 }
 
 .wca-autocomplete.selectize-control {
   &.single .selectize-input::after {
-    // Hide dropdown arrow, as it gets in the way of our loading icon.
+    // Hide dropdown arrow, as it gets in the way of our search/loading icon.
     display: none;
   }
-  &.loading::before {
-    content: ' ';
+  &::before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e003"; /* glyphicon-search */
     opacity: 0.4;
-    width: 16px;
-    height: 16px;
-    background-color: #333;
+    color: #333;
 
-    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
-    animation: sk-rotateplane 1.2s infinite ease-in-out;
+    $size: 16px;
+    width: $size;
+    height: $size;
 
     position: absolute;
-    top: 50%;
+    top: $size / 2;
     right: 10px;
     z-index: 2;
-    margin: -10px 0;
+
+    // Ensure that when the loading class is removed, we still animate smoothly
+    // back to our start state.
+    transition: all 0.25s ease;
+
+    // Don't capture mouse events, this lets us grow the input on hover.
+    pointer-events: none;
+  }
+  &.loading::before {
+    animation: loading-pulse 1.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
   }
 
   .wca-autocomplete-user {
     .wca-id {
-      font-family: monospace;
     }
   }
 

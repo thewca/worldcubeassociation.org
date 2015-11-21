@@ -1,0 +1,72 @@
+<% provide(:title, @omni_query) %>
+
+<div class="container">
+  <%= wca_omni_search %>
+
+  <% if @omni_query.blank? %>
+    <h3>Try searching for something!</h3>
+  <% elsif @competitions.empty? && @persons.empty? && @posts.empty? %>
+    <h3>Nothing found =(</h3>
+  <% else %>
+    <% if !@competitions.empty? %>
+      <h2>Competitions</h2>
+      <table class="table table-nonfluid">
+        <tbody>
+          <% @competitions.each do |competition| %>
+            <tr>
+              <td>
+                <%= competition.start_date %>
+              </td>
+              <td>
+                <%= link_to "/results/c.php?i=#{competition.id}" do %>
+                  <%= wca_highlight(competition.name, @omni_query) %>
+                <% end %>
+              </td>
+              <td>
+                <%= wca_highlight(competition.countryId, @omni_query) %>,
+                <%= wca_highlight(competition.cityName, @omni_query) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <% if !@persons.empty? %>
+      <h2>People</h2>
+      <table class="table table-nonfluid">
+        <tbody>
+          <% @persons.each do |person| %>
+            <tr>
+              <td>
+                <span class="wca-id"><%= wca_highlight(person.wca_id, @omni_query) %></span>
+              </td>
+              <td>
+                <%= link_to "/results/p.php?i=#{person.wca_id}" do %>
+                  <%= wca_highlight(person.name, @omni_query) %>
+                <% end %>
+              </td>
+              <td>
+                <%= person.countryId %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <% if !@posts.empty? %>
+      <h2>Posts</h2>
+      <% @posts.each do |post| %>
+        <div>
+          <%= link_to post_path(post.slug) do %>
+            <h4><%= wca_highlight(post.title, @omni_query) %></h4>
+          <% end %>
+          <blockquote>
+            <%= wca_excerpt(md(post.body), @omni_query) %>
+          </blockquote>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

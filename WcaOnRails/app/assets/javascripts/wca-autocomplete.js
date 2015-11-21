@@ -1,11 +1,9 @@
-// Javascript code to enable selecitze and typahead.js on certain input.
-
-// selectize
 $(function() {
   $('.wca-autocomplete').each(function() {
     var that = this;
 
     var only_one = $(that).hasClass("wca-autocomplete-only_one");
+    var search = $(that).hasClass("wca-autocomplete-search");
     var users_search = $(that).hasClass("wca-autocomplete-users_search");
     var competitions_search = $(that).hasClass("wca-autocomplete-competitions_search");
 
@@ -62,6 +60,12 @@ $(function() {
           $div.find(".title").text(post.title);
           return $div[0].outerHTML;
         },
+
+        search: function(query) {
+          var $div = $('<div></div>');
+          $div.text(query.query);
+          return $div[0].outerHTML;
+        },
       };
       // Hack until we merge the Person and user tables.
       toHtmlByClass.person = toHtmlByClass.user;
@@ -73,6 +77,25 @@ $(function() {
       return func(item);
     };
 
+    var create = null;
+    var onChange = null;
+    if(search) {
+      create = function(input, callback) {
+        var query = input;
+        var object = {
+          query: query,
+          'class': 'search',
+          url: '/search?q=' + encodeURIComponent(query),
+        };
+        object[valueField] = query;
+        callback(object);
+      };
+      onChange = function(value) {
+        var selectedOption = this.options[value];
+        window.location.href = selectedOption.url;
+      };
+    }
+
     $(that).selectize({
       plugins: ['restore_on_backspace', 'remove_button', 'do_not_clear_on_blur'],
       preload: true,
@@ -80,9 +103,30 @@ $(function() {
       valueField: valueField,
       searchField: searchFields,
       delimeter: ',',
+      persist: false,
+      addPrecedence: true,
+      create: create,
       render: {
         option: toHtml,
         item: toHtml,
+        option_create: function(data, escape) {
+          var $div = $('<div class="create">Search for <strong class="data"></strong>&hellip;</div>');
+          $div.find(".data").text(data.input);
+          return $div[0].outerHTML;
+        },
+      },
+      onChange: onChange,
+      onFocus: function() {
+        var ANIMATION_DURATION = 250;
+        // Upon receiving focus, we animate a resize of the input. If we get unlucky,
+        // the dropdown will appear while the input is still tiny, and the dropdown
+        // will remain tiny.
+        // To hack around this, we wait ANIMATION_DURATION for the animation to
+        // complete, and then reposition the dropdown.
+        var that = this;
+        setTimeout(function() {
+          that.positionDropdown();
+        }, ANIMATION_DURATION);
       },
       score: function(search) {
         var score = this.getScoreFunction(search);

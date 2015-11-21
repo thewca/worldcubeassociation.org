@@ -147,7 +147,7 @@
                 //JFLY See https://github.com/cubing/worldcubeassociation.org/issues/190.
                 //JFLYgoogle.maps.event.addListener(gmapContext.autocomplete, "place_changed", function() {
                     //JFLYvar place = gmapContext.autocomplete.getPlace();
-                google.maps.event.addListener(gmapContext.autocomplete, "places_changed", function() {//<<<
+                google.maps.event.addListener(gmapContext.autocomplete, "places_changed", function() {//JFLY
                     var place = gmapContext.autocomplete.getPlaces();//JFLY
                     if (place.length == 0) {//JFLY
                         return;//JFLY

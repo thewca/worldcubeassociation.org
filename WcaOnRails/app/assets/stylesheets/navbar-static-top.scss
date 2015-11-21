@@ -1,0 +1,117 @@
+html,
+body {
+  font-size: 1em;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+
+  .navbar-nav > .active > a {
+    background-color: #ccc;
+  }
+
+  .dropdown-menu .fa-fw {
+    margin-right: 10px;
+  }
+
+  .navbar-brand {
+    padding: 0;
+    padding-top: 16px;
+    height: 110px;
+    margin-bottom: -50px;
+    margin-top: 10px;
+
+    span {
+      white-space: nowrap;
+      font-size: 0.9em;
+    }
+    img {
+      height: 50px;
+      vertical-align: top;
+      margin-top: -15px;
+      margin-left: 10px;
+      margin-right: 5px;
+    }
+  }
+
+  .navbar-collapse {
+    background: #ddd;
+    margin: 0;
+    clear: both;
+  }
+
+  .navbar-nav > li > a.top-nav:hover {
+    background: #f0f0f0;
+  }
+
+  .navbar-toggle {
+    margin: 10px;
+    margin-top: 20px;
+    margin-right: 20px;
+  }
+}
+
+$omni-search-closed-width: 50px;
+$omni-search-open-width: 300px;
+
+@media (min-width: 480px) {
+  .navbar-static-top {
+    .navbar-brand {
+      img {
+        height: 100px;
+        margin-top: -15px;
+        margin-left: 35px;
+        margin-right: 20px;
+      }
+      span {
+        white-space: nowrap;
+        font-size: 30px;
+        font-variant: small-caps;
+      }
+    }
+
+    .navbar-collapse {
+      position: relative;
+      border-top-left-radius: 8px;
+      margin-left: 140px;
+
+      /* make space for the border-top-left-radius */
+      padding-left: 15px;
+
+      /* make space for the search box */
+      padding-right: $omni-search-closed-width + 15px;
+
+      form.navbar-form[role="search"] {
+        position: absolute;
+        right: 0;
+
+        .wca-omni-search + .selectize-control .selectize-input {
+          width: $omni-search-closed-width;
+          transition: width 0.25s ease;
+
+          &:focus,
+          &:hover,
+          &.focus {
+            width: $omni-search-open-width;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 479px) {
+  .container>.navbar-header,
+  .container-fluid>.navbar-header,
+  .container>.navbar-collapse,
+  .container-fluid>.navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-nav.navbar-right:last-child {
+    margin-right: 0;
+  }
+}

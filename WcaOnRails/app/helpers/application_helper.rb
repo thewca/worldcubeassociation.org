@@ -31,6 +31,27 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
+  WCA_EXCERPT_RADIUS = 50
+
+  def wca_excerpt(html, phrase)
+    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
+    excerpted = excerpt(text, phrase, radius: WCA_EXCERPT_RADIUS)
+    # If nothing matches the given phrase, just return the beginning.
+    if excerpted.blank?
+      excerpted = truncate(text, length: WCA_EXCERPT_RADIUS)
+    end
+    wca_highlight(excerpted, phrase)
+  end
+
+  def wca_highlight(html, phrases)
+    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
+    highlight(text, phrases, highlighter: '<strong>\1</strong>')
+  end
+
+  def wca_omni_search
+    '<input type="text" class="form-control wca-omni-search wca-autocomplete wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table" />'.html_safe
+  end
+
   def notifications_for_user(user)
     notifications = []
     # Be careful to not show a competition twice if we're both organizing and delegating it.

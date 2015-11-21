@@ -315,6 +315,35 @@ class User < ActiveRecord::Base
     )
   end
 
+  def self.search(query, params: {})
+    sql_query = "%#{query}%"
+
+    users = nil
+    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
+      users = User
+
+      if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:include_dummy_accounts])
+        # Ignore dummy accounts
+        users = users.where.not(encrypted_password: '')
+        # Ignore unconfirmed accounts
+        users = users.where.not(confirmed_at: nil)
+      end
+
+      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
+        users = users.where.not(delegate_status: nil)
+      end
+
+      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
+        users = users.where.not(wca_id: nil)
+      end
+      users = users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query).order(:name)
+    else
+      users = Person.where("name LIKE :sql_query OR id LIKE :sql_query", sql_query: sql_query).order(:name)
+    end
+
+    users
+  end
+
   def to_jsonable(include_private_info: false)
     json = {
       class: self.class.to_s.downcase,
