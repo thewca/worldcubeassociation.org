@@ -54,7 +54,7 @@ module ApplicationHelper
   end
 
   def wca_omni_search
-    '<input type="text" placeholder="Search site" class="form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table" />'.html_safe
+    text_field_tag nil, @omni_query, placeholder: "Search site", class: "form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table"
   end
 
   def notifications_for_user(user)

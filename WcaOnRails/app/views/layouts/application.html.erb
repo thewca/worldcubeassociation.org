@@ -17,21 +17,6 @@
       ga("set", "anonymizeIp", true);
     </script>
   <% end %>
-  <% if @omni_query.present? %>
-    <script>
-      $(function() {
-        $('.wca-autocomplete-omni').each(function() {
-          var selectize = this.selectize;
-          // We're only interested in touching the original input, *not* the duplicate
-          // that selectize created. The original input has a selectize attribute.
-          if(selectize) {
-            selectize.$control_input.val(<%= @omni_query.to_json.html_safe %>);
-            selectize.$control_input.trigger("update");
-          }
-        });
-      });
-    </script>
-  <% end %>
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 

@@ -3,12 +3,12 @@ $(function() {
     var that = this;
 
     var only_one = $(that).hasClass("wca-autocomplete-only_one");
-    var search = $(that).hasClass("wca-autocomplete-search");
     var omni_search = $(that).hasClass("wca-autocomplete-search");
     var users_search = $(that).hasClass("wca-autocomplete-users_search");
     var competitions_search = $(that).hasClass("wca-autocomplete-competitions_search");
     var posts_search = $(that).hasClass("wca-autocomplete-posts_search");
 
+    var delimiter = ',';
     var searchFields = [];
     searchFields = searchFields.concat([ 'wca_id', 'name' ]); // user search fields
     searchFields = searchFields.concat([ 'id', 'name', 'cellName', 'cityName', 'countryId' ]); // competition search fields
@@ -84,30 +84,40 @@ $(function() {
 
     var create = null;
     var onChange = null;
-    if(search) {
+    if(omni_search) {
+      // We don't want to pass in a delimiter when we're building a search box, because
+      // that causes special behavior when copy pasting.
+      delimiter = null;
       create = function(input, callback) {
         var query = input;
         var object = {
           id: query,
-          query: query,
           'class': 'search',
+          query: query,
           url: '/search?q=' + encodeURIComponent(query),
         };
         callback(object);
       };
       onChange = function(value) {
         var selectedOption = this.options[value];
-        window.location.href = selectedOption.url;
+        if(selectedOption) {
+          window.location.href = selectedOption.url;
+        }
       };
     }
 
+    var $plaintextToSetAfterSelectize = null;
+    if(omni_search) {
+      plaintextToSetAfterSelectize = $(that).val();
+      $(that).val('');
+    }
     $(that).selectize({
       plugins: ['restore_on_backspace', 'remove_button', 'do_not_clear_on_blur'],
       preload: true,
       maxItems: only_one ? 1 : null,
       valueField: 'id',
       searchField: searchFields,
-      delimeter: ',',
+      delimiter: delimiter,
       persist: false,
       addPrecedence: true,
       create: create,
@@ -144,5 +154,9 @@ $(function() {
         });
       }
     });
+    if(plaintextToSetAfterSelectize) {
+      that.selectize.$control_input.val(plaintextToSetAfterSelectize);
+      that.selectize.$control_input.trigger("update");
+    }
   });
 });

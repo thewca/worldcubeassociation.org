@@ -11,6 +11,8 @@
 }
 
 .wca-autocomplete.selectize-control {
+  $search-icon-size: 16px;
+
   .selectize-dropdown-content {
     max-height: 400px;
   }
@@ -25,12 +27,11 @@
     opacity: 0.4;
     color: #333;
 
-    $size: 16px;
-    width: $size;
-    height: $size;
+    width: $search-icon-size;
+    height: $search-icon-size;
 
     position: absolute;
-    top: $size / 2;
+    top: $search-icon-size / 2;
     right: 10px;
     z-index: 2;
 
@@ -43,6 +44,10 @@
   }
   &.loading::before {
     animation: loading-pulse 1.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  }
+
+  .selectize-input {
+    padding-right: 12px + $search-icon-size;
   }
 
   .wca-autocomplete-user {
