@@ -49,19 +49,21 @@ if username == "cubing"
     "staging" => "master",
     "production" => "production",
   }
-  branch = chef_env_to_branch[node.chef_environment]
-  git repo_root do
-    repository "https://github.com/cubing/worldcubeassociation.org.git"
-    revision branch
-    # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
-    # for the reason for checkout_branch and "enable_checkout false"
-    checkout_branch branch
-    enable_checkout false
-    action :sync
-    enable_submodules true
+  if !Dir.exists? repo_root
+    branch = chef_env_to_branch[node.chef_environment]
+    git repo_root do
+      repository "https://github.com/cubing/worldcubeassociation.org.git"
+      revision branch
+      # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
+      # for the reason for checkout_branch and "enable_checkout false"
+      checkout_branch branch
+      enable_checkout false
+      action :sync
+      enable_submodules true
 
-    user username
-    group username
+      user username
+      group username
+    end
   end
 end
 rails_root = "#{repo_root}/WcaOnRails"
