@@ -22,6 +22,9 @@ SITE
     mysql (6.0.22)
       smf (>= 0.0.0)
       yum-mysql-community (>= 0.0.0)
+    newrelic-sysmond (2.0.0)
+      apt (>= 1.9.2)
+      yum (>= 3.0)
     nodejs (2.4.0)
       apt (>= 0.0.0)
       ark (>= 0.0.0)
@@ -57,6 +60,7 @@ DEPENDENCIES
   exim4-light (>= 0)
   hostname (>= 0)
   mysql (>= 0)
+  newrelic-sysmond (>= 0)
   nodejs (>= 0)
   openssh (>= 0)
   openssl (>= 0)
@@ -64,3 +68,4 @@ DEPENDENCIES
   ssh_known_hosts (>= 0)
   sudo (>= 0)
   timezone_lwrp (>= 0)
+
