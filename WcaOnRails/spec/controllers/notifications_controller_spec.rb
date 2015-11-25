@@ -49,8 +49,8 @@ RSpec.describe NotificationsController, type: :controller do
     context "when signed in as a board member" do
       let(:board_member) { FactoryGirl.create :board_member }
       let!(:unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: false }
-      let!(:confirmed_competition) { FactoryGirl.create :competition, isConfirmed: true, showAtAll: false }
-      let!(:visible_confirmed_competition) { FactoryGirl.create :competition, isConfirmed: true, showAtAll: true }
+      let!(:confirmed_competition) { FactoryGirl.create :confirmed_competition, showAtAll: false }
+      let!(:visible_confirmed_competition) { FactoryGirl.create :confirmed_competition, showAtAll: true }
       let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: true }
       before :each do
         sign_in board_member

@@ -40,13 +40,13 @@ class Competition < ActiveRecord::Base
   validate :must_have_at_least_one_event, if: :isConfirmed?
   def must_have_at_least_one_event
     if events.length == 0
-      errors.add(:eventSpecs, "Competition must have at least one event")
+      errors.add(:Events, "Competition must have at least one event")
     end
   end
   validate :must_have_at_least_one_delegate, if: :isConfirmed?
   def must_have_at_least_one_delegate
     if delegate_ids.length == 0
-      errors.add(:delegates, "Competition must have at least one WCA delegate")
+      errors.add(:delegate_ids, "Competition must have at least one WCA delegate")
     end
   end
 
