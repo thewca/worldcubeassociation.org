@@ -19,7 +19,7 @@ class AdminController < ApplicationController
     merge_params = params.require(:merge_people).permit(:person1_wca_id, :person2_wca_id)
     @merge_people = MergePeople.new(merge_params)
     if @merge_people.do_merge
-      flash.now[:success] = "Successfully merged #{@merge_people.person2_wca_id} into #{@merge_people.person2_wca_id}!"
+      flash.now[:success] = "Successfully merged #{@merge_people.person2_wca_id} into #{@merge_people.person1_wca_id}!"
       @merge_people = MergePeople.new
     else
       flash.now[:danger] = "Error merging"
