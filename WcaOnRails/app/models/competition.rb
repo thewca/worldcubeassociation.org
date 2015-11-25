@@ -28,6 +28,7 @@ class Competition < ActiveRecord::Base
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
+  NEARBY_DISTANCE_KM_INFO = 200
   NEARBY_DAYS_WARNING = 90
   NEARBY_DAYS_DANGER = 30
   NEARBY_DAYS_INFO = 365
@@ -40,7 +41,7 @@ class Competition < ActiveRecord::Base
   validate :must_have_at_least_one_event, if: :isConfirmed?
   def must_have_at_least_one_event
     if events.length == 0
-      errors.add(:Events, "Competition must have at least one event")
+      errors.add(:eventSpecs, "Competition must have at least one event")
     end
   end
   validate :must_have_at_least_one_delegate, if: :isConfirmed?
