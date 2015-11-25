@@ -386,7 +386,7 @@ function savePreregForm () {
     $mailBody .= "Ip : $ip\n";
     $mailBody .= "-------------------\n";
     $mailBody .= "You may edit this registration (and others) at:\n";
-    $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations";
+    $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/registrations\n";
     $mailBody .= "-------------------\n";
     $mailBody .= "You can opt out of receiving registration emails at:\n";
     $mailBody .= "https://www.worldcubeassociation.org/competitions/$chosenCompetitionId/edit#opt-out-registration-email";
