@@ -54,8 +54,35 @@
       Last <%= Competition::NEARBY_DAYS_INFO %> days
     </label>
     <div class="col-sm-9">
-      <% nearby_count = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_DANGER).count %>
-      <div class="<%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert alert-success" : "alert alert-danger" %>" role="alert"><%= nearby_count %> <%= "competition".pluralize(nearby_count) %> within <%= Competition::NEARBY_DISTANCE_KM_DANGER %>km and <%= Competition::NEARBY_DAYS_INFO %> days.
+      <% nearby_info = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_DANGER).sort_by { |i| i.start_date } %>
+      <% nearby_count = nearby_info.count %>
+      <div class="<%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert alert-success" : "alert alert-danger" %>" role="alert" style="cursor: pointer;" data-toggle="modal" data-target=".bs-example-modal-sm"><%= nearby_count %> <%= "competition".pluralize(nearby_count) %> within <%= Competition::NEARBY_DISTANCE_KM_DANGER %>km and <%= Competition::NEARBY_DAYS_INFO %> days.
+      </div>
+    </div>
+  </div>
+
+  <div id="" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-wide">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Within 365 days</h4>
+        </div>
+	      <table class="table">
+	        <tr>
+	          <th>Name</th>
+	          <th>Date</th>
+	          <th>Distance</th>
+	        </tr>
+	        <% nearby_info.each do |i| %>
+	          <tr>
+	            <td><%= i.id %></td>
+	            <td>
+	              <% days_until = (i.start_date - @competition.start_date).to_i %>
+	              <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %></td>
+	            <td><%= @competition.kilometers_to(i).round(2) %> km</td>
+	          </tr>
+	        <% end %>
+	      </table>
       </div>
     </div>
   </div>
@@ -64,6 +91,7 @@
 <script>
   (function() {
     $('[data-toggle="tooltip"]').tooltip();
+    $('#myModal').modal('show');
     wca.setNearbyCompetitions(<%= nearby_competitions.map do |c|
         {
           id: c.id,

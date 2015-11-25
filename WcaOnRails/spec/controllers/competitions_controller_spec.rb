@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CompetitionsController do
-  let(:competition) { FactoryGirl.create( :competition) }
+  let(:competition) { FactoryGirl.create( :competition_with_delegates) }
 
   describe 'GET #new' do
     context 'when not signed in' do
@@ -132,8 +132,7 @@ describe CompetitionsController do
 
       it 'clones a competition that they delegated' do
         # First, make ourselves the delegate of the competition we're going to clone.
-        competition.delegates << delegate
-        competition.save!
+        competition.delegates = [delegate]
         post :create, competition: { name: "Test 2015", competition_id_to_clone: competition.id }
         expect(response).to redirect_to edit_competition_path("Test2015")
         expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
@@ -234,14 +233,12 @@ describe CompetitionsController do
       it "organizer cannot demote oneself" do
         # Attempt to remove ourself as an organizer. This should not be allowed, because
         # we would not be allowed to access the page anymore.
-        patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: "" }
+        patch :update, id: competition, competition: { organizer_ids: "" }
         invalid_competition = assigns(:competition)
         expect(invalid_competition).to be_invalid
-        expect(invalid_competition.delegate_ids).to eq ""
         expect(invalid_competition.organizer_ids).to eq ""
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
-        expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq [organizer]
       end
     end

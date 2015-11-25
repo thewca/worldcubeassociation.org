@@ -15,5 +15,18 @@ FactoryGirl.define do
     venueAddress "My backyard street"
     website "https://www.worldcubeassociation.org"
     showAtAll true
+
+    factory :competition_with_delegates do
+      after(:create) do |comp|
+        comp.delegates << FactoryGirl.create(:delegate)
+      end
+
+      factory :confirmed_competition do
+        after(:create) do |c|
+          c.isConfirmed = true
+          c.save!
+        end
+      end
+    end
   end
 end
