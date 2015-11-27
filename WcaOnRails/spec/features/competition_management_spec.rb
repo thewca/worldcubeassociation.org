@@ -19,7 +19,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "User confirms a competition" do
-      competition = FactoryGirl.create(:competition)
+      competition = FactoryGirl.create(:competition_with_delegates)
       visit edit_competition_path(competition)
       click_button "Confirm"
 

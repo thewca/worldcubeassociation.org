@@ -215,7 +215,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming" do
-    let(:competition) { FactoryGirl.build :competition }
+    let(:competition) { FactoryGirl.create :competition_with_delegates }
 
     it "works" do
       competition.isConfirmed = true
