@@ -14,27 +14,7 @@
       <% if nearby_competitions.empty? %>
         <div class="alert alert-success" role="alert">No nearby competitions!</div>
       <% else %>
-        <table class="table">
-          <tr>
-            <td>Name</td>
-            <td>Delegate(s)</td>
-            <td>Date</td>
-            <td>Location</td>
-            <td>Distance</td>
-          </tr>
-          <% nearby_competitions.each do |c| %>
-            <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
-              <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>
-              <td><%= c.delegates.map(&:name).to_sentence %></td>
-              <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
-              <% days_until = (c.start_date - @competition.start_date).to_i %>
-              <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
-              </td>
-              <td><%= c.cityName %>, <%= c.countryId %></td>
-              <td class="text-nowrap text-right"><%= link_to "#{@competition.kilometers_to(c).round(2)} km", "https://www.google.com/maps/dir/#{c.latitude_degrees},#{c.longitude_degrees}/#{@competition.latitude_degrees},#{@competition.longitude_degrees}/", target: "_blank" %></td>
-            </tr>
-          <% end %>
-        </table>
+        <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions %>
       <% end %>
     <% else %>
       <% nearby_competitions = [] %>
@@ -57,33 +37,21 @@
       <% nearby_competitions_info = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_INFO).sort_by(&:start_date) %>
       <% nearby_count = nearby_competitions_info.count %>
       <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= nearby_count %> <%= "competition".pluralize(nearby_count) %> within <%= Competition::NEARBY_DISTANCE_KM_INFO %>km and <%= Competition::NEARBY_DAYS_INFO %> days.
-        <a id="show-modal" data-toggle="modal" data-target=".bs-example-modal-sm">Show</a>
+        <button type="button" class="btn" data-toggle="modal" data-target="#competitions-last-year-modal">Show</button>
       </div>
     </div>
   </div>
 
-  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="competitions-last-year-modal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-wide">
       <div class="modal-content">
         <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Within <%= Competition::NEARBY_DAYS_INFO %> days</h4>
         </div>
-        <table class="table">
-          <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Distance</th>
-          </tr>
-          <% nearby_competitions_info.each do |nearby_competition| %>
-            <tr>
-              <td><%= nearby_competition.id %></td>
-              <td>
-                <% days_until = (nearby_competition.start_date - @competition.start_date).to_i %>
-                <%= days_until.abs %> <%= "day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %></td>
-              <td><%= @competition.kilometers_to(nearby_competition).round(2) %> km</td>
-            </tr>
-          <% end %>
-        </table>
+        <div class="modal-body">
+          <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions_info %>
+        </div>
       </div>
     </div>
   </div>
