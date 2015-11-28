@@ -1,0 +1,318 @@
+<% provide(:title, @competition.name) %>
+<div class="container">
+  <%= render partial: 'nav' %>
+
+  <% if @competition_admin_view %>
+    <h2>Announcements</h2>
+    <ul>
+      <li><%= link_to "Upload results", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
+      <li>
+        <%= button_to competition_post_announcement_path, class: 'btn', form: { target: "_blank" }, method: :get do %>
+          Post competition announcement
+        <% end %>
+      </li>
+    </ul>
+    <hr>
+  <% end %>
+
+  <% is_actually_confirmed = Competition.find(@competition.id).isConfirmed? %>
+  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-competition-form' }, wrapper: :horizontal_form,
+  wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean
+  }  do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <% if @competition_admin_view %>
+      <%= hidden_field_tag :competition_admin_view, "1" %>
+      <div class="form-group">
+        <div class="col-sm-9 col-sm-offset-2">
+          <div class="checkbox">
+            <%= f.input_field :isConfirmed, inline_label: "Do not let organizers edit this competition." %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-9 col-sm-offset-2">
+          <div class="checkbox">
+            <%= f.input_field :showAtAll, inline_label: "Make competition visible to the public." %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <% if is_actually_confirmed && @competition.showAtAll? %>
+        <div class="alert alert-success">
+          This competition is publicly visible and locked for editing. If you need to make a change, contact the Board to unlock it.
+        </div>
+      <% elsif is_actually_confirmed && !@competition.showAtAll? %>
+        <div class="alert alert-warning">
+          You've confirmed this competition, but it is not yet visible to the public. Contact the Board to make it visible.
+        </div>
+      <% elsif !is_actually_confirmed && @competition.showAtAll? %>
+        <div class="alert alert-danger">
+          This competition is publicly visible, any changes you make will show up to the public!
+        </div>
+      <% elsif !is_actually_confirmed && !@competition.showAtAll? %>
+        <div class="alert alert-warning">
+          This competition is not visible to the public. Fill in all the fields and click Confirm when you're ready for the Board to approve it.
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @competition_admin_view || !is_actually_confirmed %>
+      <%= f.input :id %>
+      <%= f.input :name %>
+      <%= f.input :cellName %>
+
+      <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
+      <%= f.input :cityName %>
+      <%= f.input :venue, hint: "The venue where the competition takes place. For example:<br>[{Cité des Sciences et de l'Industrie}{http://www.cite-sciences.fr}]".html_safe %>
+      <%= f.input :venueDetails %>
+      <%= f.input :venueAddress %>
+
+      <div id="venue-map-wrapper">
+        <input type="text" id="googleMapsLocationInput" class="form-control" data-ays-ignore="true">
+        <div class="map"></div>
+      </div>
+
+      <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
+        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+          Coordinates
+        </label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <span class="input-group-addon">Latitude</span>
+            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
+            <span class="input-group-addon">Longitude</span>
+            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
+          </div>
+          <span class="help-block"><%= f.error :latitude %></span>
+          <span class="help-block"><%= f.error :longitude %></span>
+        </div>
+      </div>
+      <script>
+        (function() {
+          function roundToMicrodegrees($el) {
+            // To prevent are you sure? from firing even when nothing has changed,
+            // explicitly round coordinates to an integer number of microdegrees.
+            var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
+            $el.val(rounded);
+          }
+          var $map = $('#venue-map-wrapper .map');
+          $map.locationpicker({
+            zoom: 8,
+            location: {
+              latitude: <%= @competition.latitude_degrees %>,
+              longitude: <%= @competition.longitude_degrees %>,
+            },
+            radius: 0,
+            scrollwheel: false,
+            inputBinding: {
+              latitudeInput: $('#competition_latitude'),
+              longitudeInput: $('#competition_longitude'),
+              locationNameInput: $('#googleMapsLocationInput')
+            },
+            enableAutocomplete: true,
+            oninitialized: function(component) {
+              roundToMicrodegrees($('#competition_latitude'));
+              roundToMicrodegrees($('#competition_longitude'));
+            },
+            onchanged: function(currentLocation, radius, isMarkerDropped) {
+              setTimeout(function() {
+                // The locationpicker library calls 'onchanged' before actually updating the input fields.
+                // setTimeout lets us wait until the inputs have actually changed.
+                roundToMicrodegrees($('#competition_latitude'));
+                roundToMicrodegrees($('#competition_longitude'));
+                wca.fetchNearbyCompetitions();
+              }, 0);
+            },
+          });
+          var locationpicker = $map.data('locationpicker');
+
+          wca.fetchNearbyCompetitions = function() {
+            $("#nearby-competitions").addClass('loading');
+            var obj = $("#edit-competition-form").serializeJSON();
+            $.ajax({
+              url: '<%= nearby_competitions_path %>',
+              data: {
+                <% if @competition_admin_view %>
+                  'competition_admin_view': true,
+                <% end %>
+                'competition[id]': obj['competition[id]'],
+                'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
+                'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
+                'competition[start_date]': obj['competition[start_date]'],
+                'competition[end_date]': obj['competition[end_date]'],
+              },
+              success: function(data) {
+                $('#nearby-competitions').html(data);
+              }
+            });
+          };
+
+          wca._nearbyCompetitionById = {};
+          wca.setNearbyCompetitions = function(nearbyCompetitions) {
+            var desiredNearbyCompetitionById = _.indexBy(nearbyCompetitions, 'id');
+
+            var desiredIds = Object.keys(desiredNearbyCompetitionById);
+            var currentIds = Object.keys(wca._nearbyCompetitionById);
+            var idsToAdd = _.difference(desiredIds, currentIds);
+            var idsToRemove = _.difference(currentIds, desiredIds);
+
+            // First, remove all uneeded markers.
+            idsToRemove.forEach(function(id) {
+              wca._nearbyCompetitionById[id].marker.setMap(null);
+              delete wca._nearbyCompetitionById[id];
+            });
+
+            // Now create all the new markers.
+            idsToAdd.forEach(function(id) {
+              var c = desiredNearbyCompetitionById[id];
+              c.marker = new google.maps.Marker({
+                map: locationpicker.map,
+                position: {
+                  lat: c.latitude_degrees,
+                  lng: c.longitude_degrees,
+                },
+                title: c.name,
+              });
+              wca._nearbyCompetitionById[id] = c;
+            });
+
+            $("#nearby-competitions").removeClass('loading');
+          };
+
+          var dangerCircle = new google.maps.Circle({
+            map: locationpicker.map,
+            radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
+            strokeColor: '#d9534f', // @brand-danger
+            fillOpacity: 0.0,
+            clickable: false,
+          });
+          dangerCircle.bindTo('center', locationpicker.marker, 'position');
+          var warningCircle = new google.maps.Circle({
+            map: locationpicker.map,
+            radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
+            strokeColor: '#f0ad4e', // @brand-warning
+            fillOpacity: 0.0,
+            clickable: false,
+          });
+          warningCircle.bindTo('center', locationpicker.marker, 'position');
+
+        })();
+      </script>
+
+      <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
+        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+          Dates
+        </label>
+        <div class="col-sm-9">
+          <div class="input-daterange input-group" id="datepicker">
+            <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
+            <span class="input-group-addon">to</span>
+            <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
+          </div>
+          <span class="help-block"><%= f.error :start_date %></span>
+          <span class="help-block"><%= f.error :end_date %></span>
+        </div>
+      </div>
+
+      <script>
+        $("#datepicker-start").on("changeDate", function(e) {
+          wca.fetchNearbyCompetitions();
+        });
+      </script>
+
+      <div id="nearby-competitions">
+        <%= render "nearby_competitions" %>
+      </div>
+
+      <%= f.input :information %>
+      <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, only_delegates: true %>
+      <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
+      <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public." %>
+      <%= f.input :website, hint: "The website of the competition. Must be a valid http(s) url.".html_safe %>
+
+      <% event_groups = [
+        [
+          "Events",
+          true,
+          @competition.events.select(&:official?),
+          Event.all_official,
+        ],
+        [
+          "Events that are no longer official",
+          false, # Only show deprecated events if this competition has any.
+          @competition.events.select(&:deprecated?),
+          Event.all_deprecated,
+        ]
+      ] %>
+      <% event_groups.each do |label, always_show, selected_events, available_events| %>
+        <% if always_show || !selected_events.empty? %>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"><%= label %></label>
+            <div class="col-sm-9">
+              <% available_events.each do |event| %>
+                <span class="event-checkbox">
+                  <label>
+                    <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %>
+                    <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+                  </label>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <hr>
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="checkbox">
+          <%= f.input_field :showPreregForm, inline_label: "I would like to use the registration form on the WCA website." %>
+        </div>
+      </div>
+    </div>
+    <% if @competition.can_receive_registration_emails?(current_user.id) %>
+      <div class="form-group" id="opt-out-registration-email">
+        <div class="col-xs-11 col-xs-offset-1 col-sm-9 col-sm-offset-3">
+          <div class="checkbox">
+            <label>
+              <%= check_box("competition", "receive_registration_emails", { checked: @competition.receiving_registration_emails?(current_user.id) }) %>
+              Notify me by email when someone registers for this competition.
+            </label>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="checkbox">
+          <%= f.input_field :showPreregList, inline_label: "Show registered competitors on the WCA website." %>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <%= f.input :remarks, disabled: is_actually_confirmed, hint: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable." %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.button :submit, class: "btn-primary" %>
+
+        <% if !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
+           <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
+        <% end %>
+
+        <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
+          <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this competition? There is no going back." }) do %>
+            <i class="glyphicon glyphicon-trash"></i> Delete
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+  <% end %>
+</div>

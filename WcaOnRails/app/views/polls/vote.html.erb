@@ -1,0 +1,5 @@
+<% provide(:title, 'Vote in poll #' + @poll.id.to_s) %>
+
+<h3><%= @poll.question %></h3>
+
+<%= render 'voting_form' %>

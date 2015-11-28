@@ -35,6 +35,11 @@ Rails.application.routes.draw do
   get 'competitions/:id/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/:id/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
 
+  resources :polls, only: [:edit, :new, :vote, :create, :update]
+  get 'polls/:id/vote' => 'polls#vote', as: 'polls_vote'
+
+  resources :votes, only: [:create]
+
   # TODO - these are vulnerable to CSRF. We should be able to change these to
   # POSTs once check_comp_data.php has been ported to Rails.
   # See https://github.com/cubing/worldcubeassociation.org/issues/161
