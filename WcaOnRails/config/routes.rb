@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/:id/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
+  get 'competitions/:id/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
 
   # TODO - these are vulnerable to CSRF. We should be able to change these to
   # POSTs once check_comp_data.php has been ported to Rails.

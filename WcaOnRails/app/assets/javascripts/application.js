@@ -32,6 +32,17 @@
 // Dumping ground for... stuff
 window.wca = window.wca || {};
 
+wca._pendingAjaxById = {};
+wca.cancelPendingAjaxAndAjax = function(id, options) {
+  if(wca._pendingAjaxById[id]) {
+    wca._pendingAjaxById[id].abort();
+  }
+  wca._pendingAjaxById[id] = $.ajax(options).always(function() {
+    delete wca._pendingAjaxById[id];
+  });
+  return wca._pendingAjaxById[id];
+};
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();

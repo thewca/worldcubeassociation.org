@@ -77,7 +77,7 @@
       </div>
 
       <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
-        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
+        <label class="integer optional col-sm-2 control-label" for="competition_latitude">
           Coordinates
         </label>
         <div class="col-sm-9">
@@ -133,13 +133,13 @@
           wca.fetchNearbyCompetitions = function() {
             $("#nearby-competitions").addClass('loading');
             var obj = $("#edit-competition-form").serializeJSON();
-            $.ajax({
+
+            wca.cancelPendingAjaxAndAjax('render_nearby_competitions', {
               url: '<%= nearby_competitions_path %>',
               data: {
                 <% if @competition_admin_view %>
                   'competition_admin_view': true,
                 <% end %>
-                'competition[id]': obj['competition[id]'],
                 'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
                 'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
                 'competition[start_date]': obj['competition[start_date]'],
@@ -147,6 +147,17 @@
               },
               success: function(data) {
                 $('#nearby-competitions').html(data);
+              }
+            });
+            wca.cancelPendingAjaxAndAjax('render_time_until_competition', {
+              url: '<%= time_until_competition_path %>',
+              data: {
+                'competition[start_date]': obj['competition[start_date]'],
+                'competition[end_date]': obj['competition[end_date]'],
+              },
+              success: function(data) {
+                $('#time-until-competition').parents(".form-group").toggleClass('has-error', data.has_date_errors);
+                $('#time-until-competition').html(data.html);
               }
             });
           };
@@ -203,7 +214,7 @@
         })();
       </script>
 
-      <div class="form-group <%= !@competition.errors[:start_date].empty? || !@competition.errors[:end_date].empty? ? "has-error" : "" %>">
+      <div class="form-group <%= @competition.has_date_errors? ? "has-error" : "" %>">
         <label class="integer optional col-sm-2 control-label" for="datepicker-start">
           Dates
         </label>
@@ -215,11 +226,14 @@
           </div>
           <span class="help-block"><%= f.error :start_date %></span>
           <span class="help-block"><%= f.error :end_date %></span>
+          <span id="time-until-competition" class="help-block">
+            <%= render "time_until_competition" %>
+          </span>
         </div>
       </div>
 
       <script>
-        $("#datepicker-start").on("changeDate", function(e) {
+        $("#datepicker input").on("changeDate", function(e) {
           wca.fetchNearbyCompetitions();
         });
       </script>

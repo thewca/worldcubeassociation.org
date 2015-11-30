@@ -34,6 +34,9 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
 
+  # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
+  SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
+
   # We have stricter validations for confirming a competition
   [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
     validates field, presence: true, if: :isConfirmed?
@@ -354,7 +357,16 @@ class Competition < ActiveRecord::Base
   end
 
   def has_location?
-    (latitude != 0 && longitude != 0)
+    latitude != 0 && longitude != 0
+  end
+
+  def days_until
+    (start_date - Time.now.to_date).to_i
+  end
+
+  def has_date_errors?
+    valid?
+    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until < SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
   end
 
   def dangerously_close_to?(c)
