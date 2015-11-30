@@ -361,12 +361,12 @@ class Competition < ActiveRecord::Base
   end
 
   def days_until
-    (start_date - Time.now.to_date).to_i
+    start_date ? (start_date - Time.now.to_date).to_i : nil
   end
 
   def has_date_errors?
     valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until < SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
+    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
   end
 
   def dangerously_close_to?(c)

@@ -1,7 +1,9 @@
 <% days_until = @competition.days_until %>
-<% if days_until >= 0 %>
-  Competition is in <%= days_until %> <%= "day".pluralize(days_until) %>.
-<% else %>
-  <% days_until = days_until.abs %>
-  Competition was <%= days_until %> <%= "day".pluralize(days_until) %> ago.
+<% if !days_until.nil? %>
+  <% if days_until >= 0 %>
+    Competition is in <%= days_until %> <%= "day".pluralize(days_until) %>.
+  <% else %>
+    <% days_until = days_until.abs %>
+    Competition was <%= days_until %> <%= "day".pluralize(days_until) %> ago.
+  <% end %>
 <% end %>
