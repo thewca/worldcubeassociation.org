@@ -20,17 +20,12 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  private def competitions
-    Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day).reverse_order
-  end
-
   def new
-    @competitions = competitions
     @competition = Competition.new
   end
 
   def index
-    @competitions = competitions
+    @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day).reverse_order
   end
 
   def create
@@ -48,7 +43,9 @@ class CompetitionsController < ApplicationController
       end
       redirect_to edit_competition_path(@competition)
     else
-      @competitions = competitions
+      # Show id errors under name, since we don't actually show an
+      # id field to the user, so they wouldn't see any id errors.
+      @competition.errors[:name].concat(@competition.errors[:id])
       render 'new'
     end
   end

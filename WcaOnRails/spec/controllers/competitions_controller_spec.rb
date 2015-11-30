@@ -34,39 +34,6 @@ describe CompetitionsController do
 
   describe 'POST #create' do
     context 'when not signed in' do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        post :create, competition: { name: "Test 2015" }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
-
-      it 'creates a new competition' do
-        post :create, competition: { name: "Test 2015" }
-        expect(response).to redirect_to edit_competition_path("Test2015")
-        new_comp = assigns(:competition)
-        expect(new_comp.id).to eq "Test2015"
-      end
-    end
-
-    context 'when signed in as a delegate' do
-      sign_in { FactoryGirl.create :delegate }
-
-      it 'creates a new competition' do
-        post :create, competition: { name: "Test 2015" }
-        expect(response).to redirect_to edit_competition_path("Test2015")
-        new_comp = assigns(:competition)
-        expect(new_comp.id).to eq "Test2015"
-      end
-    end
-  end
-
-  describe 'POST #create' do
-    context 'when not signed in' do
       it 'redirects to the sign in page' do
         post :create, competition: { name: "Test2015" }
         expect(response).to redirect_to new_user_session_path
@@ -99,6 +66,14 @@ describe CompetitionsController do
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
         expect(new_comp.delegates).to include subject.current_user
+      end
+
+      it 'shows an error message under name when creating a competition with a duplicate id' do
+        competition = FactoryGirl.create :competition
+        post :create, competition: { name: competition.name, competition_id_to_clone: "" }
+        expect(response).to render_template(:new)
+        new_comp = assigns(:competition)
+        expect(new_comp.errors.messages[:name]).to eq ["has already been taken"]
       end
 
       it 'clones a competition' do
