@@ -12,7 +12,13 @@ class PollsController < ApplicationController
 
   def vote
     @poll = Poll.find(params[:id])
-    @vote = Vote.new
+    @options = @poll.options.select(:id)
+    vote = Vote.where("user_id = ? and option_id in (?)", current_user, @options)
+    begin
+      @vote = Vote.find(vote.select(:id))
+    rescue
+      @vote = Vote.new
+    end
   end
 
   def create
@@ -50,6 +56,6 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(:question, :multiple)
+    params.require(:poll).permit(:question, :multiple, :deadline)
   end
 end

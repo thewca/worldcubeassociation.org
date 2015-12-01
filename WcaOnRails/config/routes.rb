@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   resources :polls, only: [:edit, :new, :vote, :create, :update]
   get 'polls/:id/vote' => 'polls#vote', as: 'polls_vote'
 
-  resources :votes, only: [:create]
+  resources :votes, only: [:create, :edit]
 
   # TODO - these are vulnerable to CSRF. We should be able to change these to
   # POSTs once check_comp_data.php has been ported to Rails.

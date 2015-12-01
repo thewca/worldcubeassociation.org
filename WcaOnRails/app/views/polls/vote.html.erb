@@ -1,5 +1,25 @@
 <% provide(:title, 'Vote in poll #' + @poll.id.to_s) %>
 
-<h3><%= @poll.question %></h3>
+<div class="container">
 
-<%= render 'voting_form' %>
+	<h3><%= @poll.question %></h3>
+
+	<%= simple_form_for @vote do |f| %>
+		
+		<%= f.input :option_id, collection: @poll.options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+
+		Comment: 
+		<%= f.text_area :comment, rows: 3, required: false %>
+
+		<%#= f.button :submit, class: "btn-primary" %>
+    <button type="submit" id="create-poll" class="btn btn-success">
+      <% if @vote.option_id %>
+        Update vote
+      <% else %>
+        Vote
+      <% end %>
+    </button>
+
+	<% end %>
+
+</div>

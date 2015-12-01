@@ -5,7 +5,6 @@
 
   <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form do |f| %>
     <%= f.input :question, required: true %>
-    <%= f.input_field :multiple, inline_label: "Allow multiple answers by the same person." %>
 
     <button type="submit" id="create-poll" class="btn btn-success">Create poll</button>
   <% end %>
