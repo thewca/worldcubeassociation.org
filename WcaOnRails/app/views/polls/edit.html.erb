@@ -1,25 +1,32 @@
 <% provide(:title, 'Editing poll #' + @poll.id.to_s) %>
+
 <div class="container">
-  <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
-  wrapper_mappings: {
-    check_boxes: :horizontal_radio_and_checkboxes,
-    radio_buttons: :horizontal_radio_and_checkboxes,
-    file: :horizontal_file_input,
-    boolean: :horizontal_boolean
-  }  do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-    
-    <%= f.input :question %>
-    <%= f.input :multiple, label: "Allow multiple answers" %>
-    <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
 
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <%= f.button :submit, class: "btn-primary" %>
+  <h3><%= yield(:title) %></h3>
+
+  <div class="container">
+    <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
+    wrapper_mappings: {
+      check_boxes: :horizontal_radio_and_checkboxes,
+      radio_buttons: :horizontal_radio_and_checkboxes,
+      file: :horizontal_file_input,
+      boolean: :horizontal_boolean
+    }  do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.input :question %>
+      <%= f.input :multiple, label: "Allow multiple answers" %>
+      <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <%= f.button :submit, class: "btn-primary" %>
+        </div>
       </div>
-    </div>
 
-  <% end %>
+    <% end %>
+  </div>
+
 </div>
 
 <script>

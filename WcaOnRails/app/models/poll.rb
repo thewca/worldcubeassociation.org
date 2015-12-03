@@ -12,13 +12,4 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  #def multiple_is_yes_no
-  #  if multiple != 0 && multiple != 1
-  #    errors.add(:multiple, "invalid choice")
-  #  end 
-  #end
-
-  def options
-    PollOption.where("poll_id = ?", id)
-  end
 end

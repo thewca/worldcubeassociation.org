@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 
   resources :polls, only: [:edit, :new, :vote, :create, :update, :index]
   get 'polls/:id/vote' => 'polls#vote', as: 'polls_vote'
+  get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
   resources :votes, only: [:create, :update]
 

@@ -51,6 +51,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  private def can_create_poll_only
+    unless current_user && current_user.can_create_poll?
+      flash[:danger] = "You are not allowed to create polls"
+      redirect_to root_url
+    end
+  end
+
+  private def can_vote_in_poll_only
+    unless current_user && current_user.can_vote_in_poll?
+      flash[:danger] = "You are not allowed to vote in polls"
+      redirect_to root_url
+    end
+  end
+
   def date_range(from_date, to_date, options={})
     options[:separator] = '-'
     options[:format] = :long

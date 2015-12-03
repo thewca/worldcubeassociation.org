@@ -1,7 +1,7 @@
 class PollsController < ApplicationController
   before_action :authenticate_user!
   before_action :can_create_poll_only, only: [:new, :create, :update, :index, :vote]
-  before_action :can_vote_for_poll_only, only: [:index, :vote]
+  before_action :can_vote_in_poll_only, only: [:index, :vote]
 
   def index
     @polls = Poll.all
@@ -17,6 +17,10 @@ class PollsController < ApplicationController
     if @vote == nil
       @vote = Vote.new
     end
+  end
+
+  def results
+    @poll = Poll.find(params[:id])
   end
 
   def create

@@ -291,7 +291,7 @@ class User < ActiveRecord::Base
     admin? || board_member? || wrc_team?
   end
 
-  def can_vote_for_poll?
+  def can_vote_in_poll?
     admin? || board_member? || can_admin_results? || any_kind_of_delegate? || wrc_team?
   end
 
