@@ -2,24 +2,30 @@
 
 <div class="container">
 
-	<h3><%= @poll.question %></h3>
+  <% if @can_vote %>
+    <h3><%= @poll.question %></h3>
 
-	<%= simple_form_for @vote do |f| %>
-		
-		<%= f.input :option_id, collection: @poll.options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+      <%= simple_form_for @vote do |f| %>
 
-		Comment: 
-		<%= f.text_area :comment, rows: 3, required: false %>
+        <%= f.input :poll_option_id, collection: @poll.options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
 
-		<%#= f.button :submit, class: "btn-primary" %>
-    <button type="submit" id="create-poll" class="btn btn-success">
-      <% if @vote.option_id %>
-        Update vote
-      <% else %>
-        Vote
+        Comment: 
+        <%= f.text_area :comment, rows: 3, required: false %>
+
+        <%#= f.button :submit, class: "btn-primary" %>
+        <button type="submit" id="create-poll" class="btn btn-success">
+        <% if @vote.poll_option_id %>
+          Update vote
+        <% else %>
+          Vote
+        <% end %>
+        </button>
+
       <% end %>
-    </button>
-
-	<% end %>
+  <% else %>
+    <div class="alert alert-danger">
+      Sorry, you can't vote.
+    </div>
+  <% end %>
 
 </div>

@@ -1,4 +1,4 @@
-class Poll_option < ActiveRecord::Base
+class PollOption < ActiveRecord::Base
 
   belongs_to :poll
 

@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :votes, dependent: :destroy
+  has_many :poll_options, through: :votes
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -273,7 +275,7 @@ class User < ActiveRecord::Base
   end
 
   def can_access_board_members_only_areas?
-    return admin? || board_member?
+    admin? || board_member?
   end
 
   def can_manage_competition?(competition)
@@ -283,6 +285,14 @@ class User < ActiveRecord::Base
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
     can_admin_results? || competition.delegates.include?(self)
+  end
+
+  def can_create_poll?
+    admin? || board_member? || wrc_team?
+  end
+
+  def can_vote_for_poll?
+    admin? || board_member? || can_admin_results? || any_kind_of_delegate? || wrc_team?
   end
 
   def get_cannot_delete_competition_reason(competition)

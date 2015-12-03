@@ -1,6 +1,7 @@
 class Poll < ActiveRecord::Base
 
   has_many :poll_options, foreign_key: "poll_id"
+  has_many :votes, through: :poll_options
 
   validates :question, presence: true  
   validate :deadline_cannot_be_in_the_past#, :multiple_is_yes_no
@@ -18,6 +19,6 @@ class Poll < ActiveRecord::Base
   #end
 
   def options
-    Poll_option.where("poll_id = ?", id)
+    PollOption.where("poll_id = ?", id)
   end
 end

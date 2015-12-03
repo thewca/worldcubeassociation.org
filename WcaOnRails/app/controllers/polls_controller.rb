@@ -1,6 +1,7 @@
 class PollsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :rss, :show]
-  #before_action :can_create_poll_only, except: [:index, :rss, :show]
+  before_action :authenticate_user!
+  before_action :can_create_poll_only, only: [:new, :create, :update, :index, :vote]
+  before_action :can_vote_for_poll_only, only: [:index, :vote]
 
   def index
     @polls = Poll.all
@@ -12,11 +13,8 @@ class PollsController < ApplicationController
 
   def vote
     @poll = Poll.find(params[:id])
-    @options = @poll.options.select(:id)
-    vote = Vote.where("user_id = ? and option_id in (?)", current_user, @options)
-    begin
-      @vote = Vote.find(vote.select(:id))
-    rescue
+    @vote = @poll.votes.find_by user_id: current_user
+    if @vote == nil
       @vote = Vote.new
     end
   end
@@ -39,7 +37,7 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(poll_params)
       flash[:success] = "Updated poll"
-      redirect_to edit_poll_path(@poll)
+      redirect_to polls_vote(@poll)
     else
       render 'edit'
     end
