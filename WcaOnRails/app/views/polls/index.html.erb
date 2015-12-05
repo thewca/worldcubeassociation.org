@@ -1,0 +1,18 @@
+<% provide(:title, 'Polls') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <% if current_user.can_create_poll? %>
+    <%= link_to "New poll", new_poll_path %>
+  <% end %>
+  <table class="table" id="polls-list">
+    <% @polls.each do |poll| %>
+      <tr>
+        <td><%= poll.id %></td>
+        <td><%= poll.question %></td>
+        <td><%= link_to "Vote", polls_vote_path(poll) %></td>
+      </li>
+    <% end %>
+  </table>
+</div>

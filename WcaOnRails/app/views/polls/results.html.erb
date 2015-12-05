@@ -1,0 +1,28 @@
+<% provide(:title, 'Results for poll #' + @poll.id.to_s) %>
+
+<div class="container">
+  
+  <h3><%= @poll.question %></h3>
+
+  <table class="table" id="poll-results">
+    <% @poll.poll_options.each do |option| %>
+      <tr>
+        <td><%= option.description %></td>
+        <td><%= option.votes.count %></td>
+        <td><%= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>%</td>
+        <td class="bar">
+          <%#= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= (option.votes.count.to_f/@poll.votes.count*100).round(0) %>%;">
+            <%#= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
+            </div>
+          </div></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td class="total">Total</td>
+      <td class="total"><%= @poll.votes.count %></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
