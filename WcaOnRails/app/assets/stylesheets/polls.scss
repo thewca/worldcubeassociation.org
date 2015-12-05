@@ -1,0 +1,18 @@
+#poll-results {
+  width: auto;
+  td {
+    padding-left: 20px;
+  }
+  
+  td.total {
+    font-weight: bold;
+  }
+
+  td.bar {
+    width: 200px;
+  }
+}
+
+#polls-list {
+  width: auto;
+}
