@@ -19,7 +19,7 @@ table.registrations-table {
 
 #registrations-actions {
   position: fixed;
-  bottom: 5px;
+  bottom: calc(5px + #{$footer-height-em});
 }
 
 // Highlight best in place fields on hover, unless

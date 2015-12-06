@@ -3,7 +3,7 @@ This doesn't act like a truly sticky footer (it's not always onscreen),
 but when there is space for it, it is guaranteed to appear on the bottom
 of the window, rather than immediately after our content.
 -------------------------------------------------- */
-$footer-height: 2em;
+$footer-height-em: 2em;
 
 html {
   position: relative;
@@ -11,14 +11,14 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: $footer-height;
+  margin-bottom: $footer-height-em;
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: $footer-height;
+
+  height: $footer-height-em;
   background-color: #f5f5f5;
   .container .text-muted {
     margin: 5px;
