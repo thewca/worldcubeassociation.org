@@ -8,66 +8,12 @@
   The WCA acknowledges the following members as delegates for official WCA competitions:</p>
 
   <% delegate_sort_order = { region: :asc, delegate_status: :desc, name: :asc } %>
-  <table class="table delegates-table">
-    <colgroup>
-      <col class="col-md-4" />
-      <col class="col-md-4" />
-      <col class="col-md-4" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th>Region</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @board_members.order(delegate_sort_order).each do |board_member| %>
-        <%= render "delegate_row", delegate: board_member %>
-      <% end %>
-    </tbody>
-  </table>
+
+  <%= render partial: "delegates_in_region_table", locals: { delegates: @board_members.order(delegate_sort_order) } %>
 
   <% @senior_delegates.order(delegate_sort_order).each do |senior_delegate| %>
-    <table class="table delegates-table">
-      <colgroup>
-        <col class="col-md-4" />
-        <col class="col-md-4" />
-        <col class="col-md-4" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Region</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render "delegate_row", delegate: senior_delegate %>
-        <% senior_delegate.subordinate_delegates.order(delegate_sort_order).each do |delegate| %>
-          <%= render "delegate_row", delegate: delegate %>
-        <% end %>
-      </tbody>
-    </table>
+    <%= render partial: "delegates_in_region_table", locals: { delegates: [senior_delegate] + senior_delegate.subordinate_delegates.order(delegate_sort_order) } %>
   <% end %>
 
-  <table class="table delegates-table">
-    <colgroup>
-      <col class="col-md-4" />
-      <col class="col-md-4" />
-      <col class="col-md-4" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th>Region</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @delegates_without_senior_delegates.order(delegate_sort_order).each do |delegate| %>
-        <%= render "delegate_row", delegate: delegate %>
-      <% end %>
-    </tbody>
-  </table>
+  <%= render partial: "delegates_in_region_table", locals: { delegates: @delegates_without_senior_delegates.order(delegate_sort_order) } %>
 </div>

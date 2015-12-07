@@ -1,0 +1,21 @@
+<% if delegates.length > 0 %>
+  <table class="table delegates-table">
+    <colgroup>
+      <col class="col-md-4" />
+      <col class="col-md-4" />
+      <col class="col-md-4" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Region</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% delegates.each do |delegate| %>
+        <%= render "delegate_row", delegate: delegate %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
