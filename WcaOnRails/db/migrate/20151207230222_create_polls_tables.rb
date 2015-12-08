@@ -1,4 +1,4 @@
-Class CreatePollsTables < ActiveRecord::Migration
+class CreatePollsTables < ActiveRecord::Migration
   def change
     create_table "votes", force: :cascade do |t|
       t.integer "user_id",        limit: 4
