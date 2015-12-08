@@ -6,10 +6,16 @@ class Poll < ActiveRecord::Base
   validates :question, presence: true  
   validate :deadline_cannot_be_in_the_past#, :multiple_is_yes_no
 
+  accepts_nested_attributes_for :poll_options, reject_if: all_blank, allow_destroy: true
+
   def deadline_cannot_be_in_the_past
     if deadline.present? && deadline < Date.today
       errors.add(:deadline, "can't be in the past")
     end
   end
 
+
+  def poll_is_over?
+    deadline < Date.today
+  end
 end

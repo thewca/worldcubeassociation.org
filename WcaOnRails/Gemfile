@@ -87,3 +87,8 @@ group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
 end
+
+# Some gems for the polls system
+
+gem 'jquery-turbolinks'
+gem "cocoon"

@@ -41,7 +41,7 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(poll_params)
       flash[:success] = "Updated poll"
-      redirect_to polls_vote(@poll)
+      redirect_to polls_path
     else
       render 'edit'
     end
@@ -58,6 +58,6 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(:question, :multiple, :deadline)
+    params.require(:poll).permit(:question, :multiple, :deadline, poll_options_attributes: [:id, :description, :_destroy])
   end
 end

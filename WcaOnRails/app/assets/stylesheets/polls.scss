@@ -2,17 +2,22 @@
   width: auto;
   td {
     padding-left: 20px;
-  }
-  
-  td.total {
-    font-weight: bold;
-  }
 
-  td.bar {
-    width: 200px;
+    .total {
+      font-weight: bold;
+    }
+
+    .bar {
+      width: 200px;
+    }
   }
 }
 
 #polls-list {
   width: auto;
+}
+
+.nested-fields input {
+  width: 300px;
+  display: inline;
 }

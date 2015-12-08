@@ -288,11 +288,11 @@ class User < ActiveRecord::Base
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team?
+    admin? || board_member? || wrc_team? || wdc_team?
   end
 
   def can_vote_in_poll?
-    admin? || board_member? || can_admin_results? || any_kind_of_delegate? || wrc_team?
+    admin? || results_team? || any_kind_of_delegate? || wrc_team?
   end
 
   def get_cannot_delete_competition_reason(competition)

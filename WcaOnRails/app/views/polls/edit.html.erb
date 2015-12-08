@@ -18,9 +18,22 @@
       <%= f.input :multiple, label: "Allow multiple answers" %>
       <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
 
+      <div class="panel panel-default">
+        <div class="panel-heading">Options</div>
+        <div class="panel-body">
+          <%= f.fields_for :poll_options do |options_form| %>
+            <%= render 'poll_option_fields', f: options_form %>
+          <% end %>
+
+          <div class="links">
+            <%= link_to_add_association button_tag('Add option', type: "button", class: "btn btn-primary"), f, :poll_options %>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <%= f.button :submit, class: "btn-primary" %>
+          <%= f.button :submit, class: "btn-success" %>
         </div>
       </div>
 

@@ -12,6 +12,9 @@
         <td><%= poll.id %></td>
         <td><%= poll.question %></td>
         <td><%= link_to "Vote", polls_vote_path(poll) %></td>
+        <% if current_user.can_create_poll? %>
+          <td><%= link_to "Edit", edit_poll_path(poll) %></td>
+        <% end %>
       </li>
     <% end %>
   </table>

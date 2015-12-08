@@ -29,6 +29,8 @@
 //= require lodash
 //= require jquery.wca-autocomplete
 //= require_tree .
+//= require jquery.turbolinks
+//= require cocoon
 
 // Dumping ground for... stuff
 window.wca = window.wca || {};
