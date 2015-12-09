@@ -25,6 +25,8 @@ class PollsController < ApplicationController
 
   def create
     @poll = Poll.new(poll_params)
+    @poll.multiple = false
+    @poll.deadline = Date.today + 15
     if @poll.save
       flash[:success] = "Created new poll"
       redirect_to edit_poll_path(@poll)

@@ -1,6 +1,6 @@
 -- MySQL dump 10.16  Distrib 10.1.9-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: wca_development
+-- Host: localhost    Database: cubing
 -- ------------------------------------------------------
 -- Server version	10.1.9-MariaDB-log
 
@@ -528,6 +528,39 @@ CREATE TABLE `oauth_applications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `poll_options`
+--
+
+DROP TABLE IF EXISTS `poll_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `poll_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `poll_id` (`poll_id`) USING BTREE,
+  CONSTRAINT `poll_options_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `polls`
+--
+
+DROP TABLE IF EXISTS `polls`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `polls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
+  `multiple` tinyint(1) NOT NULL,
+  `deadline` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `posts`
 --
 
@@ -622,6 +655,25 @@ CREATE TABLE `users` (
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5767 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `votes`
+--
+
+DROP TABLE IF EXISTS `votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `votes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `poll_option_id` int(11) NOT NULL,
+  `comment` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `option_id` (`poll_option_id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `votes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -706,6 +758,8 @@ INSERT INTO schema_migrations (version) VALUES ('20151119063335');
 INSERT INTO schema_migrations (version) VALUES ('20151119072940');
 
 INSERT INTO schema_migrations (version) VALUES ('20151209003851');
+
+INSERT INTO schema_migrations (version) VALUES ('20151207230222');
 
 INSERT INTO schema_migrations (version) VALUES ('20151213232440');
 

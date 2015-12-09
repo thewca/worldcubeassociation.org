@@ -3,14 +3,16 @@
   td {
     padding-left: 20px;
 
-    .total {
+    &.total {
       font-weight: bold;
     }
 
-    .bar {
+    &.bar {
       width: 200px;
     }
   }
+
+
 }
 
 #polls-list {
@@ -20,4 +22,8 @@
 .nested-fields input {
   width: 300px;
   display: inline;
+}
+
+a.new-poll {
+  color: #090;
 }

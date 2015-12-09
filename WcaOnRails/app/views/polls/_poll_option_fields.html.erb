@@ -1,0 +1,6 @@
+<div class="nested-fields">
+  <!--div class="form-group"-->
+    <%= f.text_field :description, label: false, class: 'form-control', required: true %>
+  <!--/div-->
+  <%= link_to_remove_association button_tag('x', type: "button", class: "btn btn-danger"), f %>
+</div>  
