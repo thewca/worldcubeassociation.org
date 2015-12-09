@@ -21,10 +21,8 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
 
 ## Provision New VM
-- Provisioning relies upon SSH agent forwarding, so make sure you've set up SSH
-  keys for GitHub ([howto](https://help.github.com/articles/generating-ssh-keys/)).
-  You also need an SSH key set up for cubing@worldcubeassociation.org in order
-  to rsync secrets.
+- Provisioning relies upon SSH agent forwarding, so make sure you've set up an SSH
+  key for cubing@worldcubeassociation.org in order to rsync secrets.
 - `time ssh -A user@example.com 'sudo wget https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh staging/production'`
 
 ## Deploy
