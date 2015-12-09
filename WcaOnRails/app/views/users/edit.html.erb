@@ -89,18 +89,20 @@
 
       <p>
         <% if @user.wca_id.blank? %>
-          You do not have a WCA id assigned yet.
-          <% unless editable_fields.include?(:wca_id) %>
-            Contact your local <%= link_to "WCA delegate", delegates_path %> to get yours assigned.
-          <% end %>
+          You do not have a WCA id assigned yet. If you have competed before,
+          request to have your WCA id connected to your account
+          <%= link_to "here", profile_request_wca_id_path %>!
         <% else %>
-          Your WCA id is <code><%= link_to @user.wca_id, "/results/p.php?i=#{@user.wca_id}" %></code>.
+          Your WCA id is <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
         <% end %>
       </p>
     <% end %>
 
     <% if current_user.can_edit_users? %>
       <%= f.input :wca_id, as: :wca_id, disabled: !editable_fields.include?(:wca_id) %>
+      <% if @user.unconfirmed_wca_id.present? %>
+        <%= f.input :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id) %>
+      <% end %>
       <% UsersController.WCA_TEAMS.each do |role| %>
         <%= f.input role, disabled: !editable_fields.include?(role) %>
         <% leader_role = :"#{role}_leader" %>

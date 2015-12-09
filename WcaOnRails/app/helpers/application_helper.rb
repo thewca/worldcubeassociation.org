@@ -86,6 +86,30 @@ module ApplicationHelper
         }
       end
     end
+
+    if user.wca_id.blank?
+      if user.unconfirmed_wca_id? && user.delegate_to_handle_wca_id_request
+        # The user has already requested a WCA id, let them know we're on it.
+        notifications << {
+          text: "Waiting for #{user.delegate_to_handle_wca_id_request.name} to assign you WCA id #{user.unconfirmed_wca_id}",
+          url: profile_request_wca_id_path,
+        }
+      else
+        # Show users without WCA ids how to request a WCA id for their account.
+        notifications << {
+          text: "Connect your WCA id to your account!",
+          url: profile_request_wca_id_path,
+        }
+      end
+    end
+
+    user.users_requesting_wca_id.each do |user_requesting_wca_id|
+      notifications << {
+        text: "#{user_requesting_wca_id.email} has requested WCA id #{user_requesting_wca_id.unconfirmed_wca_id}",
+        url: edit_user_path(user_requesting_wca_id.id, anchor: "user_wca_id"),
+      }
+    end
+
     notifications
   end
 end

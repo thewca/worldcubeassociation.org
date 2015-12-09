@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   belongs_to :person, foreign_key: "wca_id"
+  belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
+  belongs_to :delegate_to_handle_wca_id_request, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_request", class_name: "User"
+  has_many :users_requesting_wca_id, foreign_key: "delegate_id_to_handle_wca_id_request", class_name: "User"
 
   strip_attributes only: [:wca_id]
 
@@ -16,8 +19,8 @@ class User < ActiveRecord::Base
          :confirmable
   validates :name, presence: true
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
-  validates :wca_id, format: { with: WCA_ID_RE },
-                     allow_nil: true
+  validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
+  validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
   # Virtual attribute for authenticating by WCA id or email.
@@ -53,6 +56,44 @@ class User < ActiveRecord::Base
       else
         errors.add(:wca_id, "not found")
       end
+    end
+  end
+
+  attr_accessor :requesting_wca_id
+  before_validation :maybe_clear_requested_wca_id
+  def maybe_clear_requested_wca_id
+    if !requesting_wca_id && unconfirmed_wca_id_was.present?
+      if wca_id == unconfirmed_wca_id_was
+        self.unconfirmed_wca_id = nil
+        self.delegate_to_handle_wca_id_request = nil
+      end
+    end
+  end
+
+  validate :request_wca_id_validations
+  def request_wca_id_validations
+    if unconfirmed_wca_id.present? && !delegate_id_to_handle_wca_id_request.present?
+      errors.add(:delegate_id_to_handle_wca_id_request, "required")
+    end
+
+    if !unconfirmed_wca_id.present? && delegate_id_to_handle_wca_id_request.present?
+      errors.add(:unconfirmed_wca_id, "required")
+    end
+
+    if unconfirmed_wca_id.present?
+      if !unconfirmed_person
+        errors.add(:unconfirmed_wca_id, "not found")
+      elsif unconfirmed_person.user
+        errors.add(:unconfirmed_wca_id, "already assigned to a different user")
+      end
+
+      if requesting_wca_id && person
+        errors.add(:unconfirmed_wca_id, "cannot request a WCA id because you already have WCA id #{wca_id}")
+      end
+    end
+
+    if delegate_id_to_handle_wca_id_request.present? && !delegate_to_handle_wca_id_request
+      errors.add(:delegate_id_to_handle_wca_id_request, "not found")
     end
   end
 
@@ -277,7 +318,7 @@ class User < ActiveRecord::Base
       fields << :region
     end
     if admin? || any_kind_of_delegate?
-      fields << :wca_id
+      fields << :wca_id << :unconfirmed_wca_id
       fields << :avatar << :avatar_cache
     end
     if user == self || admin? || any_kind_of_delegate?

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :person do
     sequence :id do |n|
-      "2005FLEI%02i" % n
+      "%04iFLEI%02i" % [2003 + (n / 100), n % 100]
     end
     subId 1
     name { Faker::Name.name }

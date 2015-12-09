@@ -50,22 +50,6 @@
     padding-right: 12px + $search-icon-size;
   }
 
-  .wca-autocomplete-user {
-    white-space: nowrap;
-
-    .avatar-thumbnail {
-      // Put thumbnail to the left of both name and wca-id.
-      float: left;
-      margin-right: 5px;
-    }
-    .name {
-    }
-    .wca-id {
-      // Put wca-id on a new line.
-      display: block;
-    }
-  }
-
   .wca-autocomplete-competition {
     .name {
       font-size: 1.5em;

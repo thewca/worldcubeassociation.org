@@ -25,6 +25,27 @@ class UsersController < ApplicationController
     can_edit_user_only(@user)
   end
 
+  def request_wca_id
+    @user = current_user
+  end
+
+  def do_request_wca_id
+    @user = current_user
+    @user.requesting_wca_id = true
+    if @user.update_attributes(user_request_wca_id_params)
+      flash[:success] = "Successfully requested WCA id #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_request.name} to approve it!"
+      redirect_to profile_request_wca_id_path
+    else
+      render :request_wca_id
+    end
+  end
+
+  def select_nearby_delegate
+    @user = current_user
+    @user.assign_attributes(user_request_wca_id_params)
+    render partial: 'select_nearby_delegate'
+  end
+
   def edit_avatar_thumbnail
     @user = user_to_edit
     can_edit_user_only(@user)
@@ -78,6 +99,13 @@ class UsersController < ApplicationController
     end
   end
 
+  private def can_edit_user_only(user)
+    unless current_user && (current_user.can_edit_users? || current_user == user)
+      flash[:danger] = "You cannot edit this user"
+      redirect_to root_url
+    end
+  end
+
   private def user_params
     user_params = params.require(:user).permit(*current_user.editable_fields_of_user(user_to_edit))
     if user_params.has_key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
@@ -89,10 +117,7 @@ class UsersController < ApplicationController
     user_params
   end
 
-  private def can_edit_user_only(user)
-    unless current_user && (current_user.can_edit_users? || current_user == user)
-      flash[:danger] = "You cannot edit this user"
-      redirect_to root_url
-    end
+  private def user_request_wca_id_params
+    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_request)
   end
 end

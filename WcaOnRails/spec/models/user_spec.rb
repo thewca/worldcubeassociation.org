@@ -284,4 +284,70 @@ RSpec.describe User, type: :model do
       expect(user.organized_competitions).to eq [competition]
     end
   end
+
+  describe "unconfirmed_wca_id" do
+    let(:person) { FactoryGirl.create :person }
+    let(:delegate) { FactoryGirl.create :delegate }
+    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_request: delegate.id }
+    let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
+
+    it "defines a valid user" do
+      expect(user).to be_valid
+    end
+
+    it "requires unconfirmed_wca_id" do
+      user.requesting_wca_id = true
+      user.unconfirmed_wca_id = nil
+      expect(user).to be_invalid
+    end
+
+    it "requires delegate_id_to_handle_wca_id_request" do
+      user.requesting_wca_id = true
+      user.delegate_id_to_handle_wca_id_request = nil
+      expect(user).to be_invalid
+    end
+
+    it "delegate_id_to_handle_wca_id_request must be a delegate" do
+      user.requesting_wca_id = true
+      user.delegate_id_to_handle_wca_id_request = user.id
+      expect(user).to be_invalid
+    end
+
+    it "must match a real wca id" do
+      user.requesting_wca_id = true
+      user.unconfirmed_wca_id = "1982AAAA01"
+      expect(user).to be_invalid
+
+      user.unconfirmed_wca_id = person.wca_id
+      expect(user).to be_valid
+    end
+
+    it "cannot match a wca id already assigned to a user" do
+      user.requesting_wca_id = true
+      user.unconfirmed_wca_id = user_with_wca_id.wca_id
+      expect(user).to be_invalid
+    end
+
+    it "can match a wca id already requested by a user" do
+      user.requesting_wca_id = true
+      user2 = FactoryGirl.create :user
+      user2.delegate_id_to_handle_wca_id_request = delegate.id
+
+      user2.unconfirmed_wca_id = person.wca_id
+      user.unconfirmed_wca_id = person.wca_id
+
+      expect(user2).to be_valid
+      expect(user).to be_valid
+    end
+
+    it "cannot have an unconfirmed_wca_id if you already have a wca_id" do
+      user_with_wca_id.requesting_wca_id = true
+      user_with_wca_id.unconfirmed_wca_id = person.id
+      user_with_wca_id.delegate_id_to_handle_wca_id_request = delegate.id
+      expect(user_with_wca_id).to be_invalid
+      expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [
+        "cannot request a WCA id because you already have WCA id #{user_with_wca_id.wca_id}",
+      ]
+    end
+  end
 end

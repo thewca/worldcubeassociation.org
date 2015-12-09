@@ -8,3 +8,14 @@
 td.unconfirmed-email {
   font-style: italic;
 }
+
+label.full-width {
+  width: 100%;
+}
+
+/* From http://stackoverflow.com/a/14762180/1739415 */
+input[type="radio"].center-vertically {
+  margin-top: -1px;
+  vertical-align: middle;
+  height: 100%;
+}

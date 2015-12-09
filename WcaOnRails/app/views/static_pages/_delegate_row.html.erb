@@ -1,9 +1,5 @@
 <tr class="<%= delegate.delegate_status.dasherize %>">
   <td>
-    <%= link_to "/results/p.php?i=#{delegate.wca_id}" do %>
-      <%= render "shared/user_avatar", user: delegate %>
-      <%= delegate.name %>
-    <% end %>
     <%= mail_to delegate.email, target: "_blank", class: "delegate-actions hide-new-window-icon" do %>
       <span class="glyphicon glyphicon-envelope"></span>
     <% end %>
@@ -11,6 +7,11 @@
       <%= link_to edit_user_path(delegate.id), class: "delegate-actions" do %>
         <span class="glyphicon glyphicon-pencil"></span>
       <% end %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to "/results/p.php?i=#{delegate.wca_id}" do %>
+      <%= render "shared/user", user: delegate %>
     <% end %>
   </td>
   <td><%= delegate.delegate_status.titleize %></td>

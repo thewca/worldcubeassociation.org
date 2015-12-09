@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/jfly/selectize-rails.git
-  revision: b77ece51920679fc7cc2e4a886e08150288654d3
+  revision: fe39d6e08934c0ebc602a166d88de3b22c3aaf49
   specs:
     selectize-rails (0.12.1)
 

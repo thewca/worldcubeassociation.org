@@ -10,3 +10,19 @@
 .table-vertical-align-middle tbody tr td {
   vertical-align: middle;
 }
+
+.wca-user {
+  white-space: nowrap;
+
+  .avatar-thumbnail {
+    // Put thumbnail to the left of both name and wca-id.
+    float: left;
+    margin-right: 5px;
+  }
+  .name {
+  }
+  .wca-id {
+    // Put wca-id on a new line.
+    display: block;
+  }
+}

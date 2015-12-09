@@ -44,6 +44,25 @@ RSpec.describe NotificationsController, type: :controller do
           }
         ]
       end
+
+      it "shows WCA id requests" do
+        person = FactoryGirl.create :person
+        user = FactoryGirl.create :user
+        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_request: delegate)
+
+        get :index
+        notifications = assigns(:notifications)
+        expect(notifications).to eq [
+          {
+            text: "#{unconfirmed_competition.name} is not confirmed",
+            url: edit_competition_path(unconfirmed_competition),
+          },
+          {
+            text: "#{user.email} has requested WCA id #{person.id}",
+            url: edit_user_path(user.id, anchor: "user_wca_id"),
+          },
+        ]
+      end
     end
 
     context "when signed in as a board member" do
@@ -69,6 +88,43 @@ RSpec.describe NotificationsController, type: :controller do
             url: admin_edit_competition_path(visible_unconfirmed_competition),
           },
         ]
+      end
+    end
+
+    context "when signed in as someone without a wca id" do
+      let(:user) { FactoryGirl.create :user }
+      before :each do
+        sign_in user
+      end
+
+      it "asks me to request my WCA id" do
+        get :index
+        notifications = assigns(:notifications)
+        expect(notifications).to eq [
+          {
+            text: "Connect your WCA id to your account!",
+            url: profile_request_wca_id_path,
+          }
+        ]
+      end
+
+      context "when already requested a wca id" do
+        it "tells me who is working on it" do
+          person = FactoryGirl.create :person
+          delegate = FactoryGirl.create :delegate
+          user.unconfirmed_wca_id = person.id
+          user.delegate_to_handle_wca_id_request = delegate
+          user.save!
+
+          get :index
+          notifications = assigns(:notifications)
+          expect(notifications).to eq [
+            {
+              text: "Waiting for #{delegate.name} to assign you WCA id #{person.id}",
+              url: profile_request_wca_id_path,
+            }
+          ]
+        end
       end
     end
   end

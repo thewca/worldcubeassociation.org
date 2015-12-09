@@ -27,6 +27,7 @@
 //= require best_in_place.purr
 //= require jquery.jcrop
 //= require lodash
+//= require jquery.wca-autocomplete
 //= require_tree .
 
 // Dumping ground for... stuff
@@ -53,6 +54,7 @@ $(function() {
   });
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
+  $('input.wca-autocomplete').wcaAutocomplete();
 
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they

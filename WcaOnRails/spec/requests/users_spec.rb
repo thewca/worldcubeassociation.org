@@ -25,7 +25,7 @@ describe "users" do
     # sign in
     post_via_redirect user_session_path, 'user[login]' => user.email, 'user[password]' => user.password
     expect(response).to be_success
-    get users_edit_path
+    get profile_edit_path
     expect(response).to be_success
 
     new_password = 'new_password'
@@ -34,12 +34,12 @@ describe "users" do
 
     # sign out
     delete destroy_user_session_path
-    get users_edit_path
+    get profile_edit_path
     expect(response).to redirect_to new_user_session_path
 
     # sign in with new password
     post_via_redirect user_session_path, 'user[login]' => user.email, 'user[password]' => new_password
-    get users_edit_path
+    get profile_edit_path
     expect(response).to be_success
   end
 end

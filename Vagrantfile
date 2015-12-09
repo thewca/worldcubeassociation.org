@@ -1,8 +1,7 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.network :forwarded_port, host: 2331, guest: 2331
-  # If you choose to run MailCatcher inside the VM (defaults to port 1080),
-  # you can access it via port 2332.
+  # Mailcatcher runs on port 1080 inside the VM.
   config.vm.network :forwarded_port, host: 2332, guest: 1080
   config.ssh.forward_agent = true
 

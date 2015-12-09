@@ -20,23 +20,22 @@ FactoryGirl.define do
       wrc_team true
     end
 
-    factory :delegate do
-      delegate_status "delegate"
-    end
-
-    factory :board_member do
-      delegate_status "board_member"
-    end
-
     factory :user_with_wca_id do
       wca_id { FactoryGirl.create(:person, name: name).id }
-    end
 
-    factory :dummy_user do
-      wca_id { FactoryGirl.create(:person, name: name).id }
-      encrypted_password ""
-      after(:create) do |user|
-        user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
+      factory :delegate do
+        delegate_status "delegate"
+      end
+
+      factory :board_member do
+        delegate_status "board_member"
+      end
+
+      factory :dummy_user do
+        encrypted_password ""
+        after(:create) do |user|
+          user.update_column(:email, "#{user.wca_id}@worldcubeassociation.org")
+        end
       end
     end
   end

@@ -1,0 +1,36 @@
+<% if !@user.unconfirmed_person %>
+  <p>
+    WCA id <%= @user.unconfirmed_wca_id %> does not exist.
+  </p>
+<% elsif @user.unconfirmed_person.user %>
+  <p>
+    WCA id <%= @user.unconfirmed_wca_id %> is already assigned to a different account.
+    If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
+  </p>
+<% else %>
+  <p>
+    In order to assign you your WCA id, we need a delegate to confirm your
+    identity. From the delegates below, select the one you think knows you best:
+  </p>
+
+  <div class="form-group radio_buttons optional">
+    <% @user.unconfirmed_person.likely_delegates.each do |delegate| %>
+      <span class="radio">
+        <label>
+          <%= radio_button_tag "user[delegate_id_to_handle_wca_id_request]", delegate.id, false, class: "radio_buttons center-vertically" %>
+          <%= render "shared/user", user: delegate %>
+        </label>
+      </span>
+    <% end %>
+
+    <span class="radio">
+      <!-- We don't want focusing the autocomplete to focus the radio button, so we
+           make sure it doesn't focus anything by setting the wrapping label to
+           focus nothing -->
+      <label class="full-width" for="nonexistant-id">
+        <input class="radio_buttons optional center-vertically" type="radio" value="" name="user[delegate_id_to_handle_wca_id_request]" />
+        <input id="nearby-delegate-search" class="optional form-control wca-autocomplete wca-autocomplete-users_search wca-autocomplete-only_delegates wca-autocomplete-only_one" />
+      </label>
+    </span>
+  </div>
+<% end %>
