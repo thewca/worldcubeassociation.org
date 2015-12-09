@@ -90,5 +90,4 @@ end
 
 # Some gems for the polls system
 
-gem 'jquery-turbolinks'
 gem "cocoon"

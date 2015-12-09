@@ -1,7 +1,7 @@
 <% provide(:title, 'Results for poll #' + @poll.id.to_s) %>
 
 <div class="container">
-  
+
   <h3><%= @poll.question %></h3>
 
   <% if @poll.poll_is_over? %>
@@ -12,10 +12,9 @@
           <td><%= option.votes.count %></td>
           <td><%= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>%</td>
           <td class="bar">
-            <%#= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
             <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="<%= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= (option.votes.count.to_f/@poll.votes.count*100).round(0) %>%;">
-              <%#= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
+              <% option_percentage = (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
+              <div class="progress-bar" role="progressbar" aria-valuenow="<%= option_percentage %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= option_percentage %>%;">
               </div>
             </div></td>
         </tr>
