@@ -8,7 +8,7 @@
   <% end %>
   <table class="table" id="polls-list">
     <% @polls.each do |poll| %>
-      <tr>
+      <tr class="<%= poll.user_already_voted?(current_user)? "success" : "warning" %>">
         <td><%= poll.id %></td>
         <td><%= poll.question %></td>
         <% if !poll.poll_is_over? %>

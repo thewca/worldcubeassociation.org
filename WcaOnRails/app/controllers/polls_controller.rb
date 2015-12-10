@@ -13,6 +13,7 @@ class PollsController < ApplicationController
 
   def vote
     @poll = Poll.find(params[:id])
+    @already_voted = @poll.user_already_voted? current_user
     @vote = @poll.votes.find_by user_id: current_user
     if @vote == nil
       @vote = Vote.new

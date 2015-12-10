@@ -8,6 +8,11 @@
 
   <h3><%= @poll.question %></h3>
 
+  <%# if @poll.user_already_voted? current_user %>
+  <% if @already_voted %>
+    <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
+  <% end %>
+
   <%= simple_form_for @vote do |f| %>
 
     <% if @poll.multiple %>
