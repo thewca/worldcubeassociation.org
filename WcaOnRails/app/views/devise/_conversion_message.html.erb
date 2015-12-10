@@ -1,0 +1,19 @@
+<% conversion_shown = false %>
+
+<% if user.login.present? %>
+  <% wca_id = user.login.upcase %>
+  <% person = Person.find_by_id(wca_id) %>
+  <% if person && !person.user %>
+    <div class="alert alert-info">
+      Hi, <%= person.name %>! It looks like you have not created a WCA website account yet.      Please create one
+      <%= link_to "here", new_user_registration_path %>. Afterwards, you
+      can request that it be connected to your WCA id
+      (<%= render "shared/wca_id", wca_id: wca_id %>).
+      <% conversion_shown = true %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if !conversion_shown %>
+  <%= yield %>
+<% end %>
