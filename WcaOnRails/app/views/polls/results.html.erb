@@ -4,10 +4,17 @@
 
   <h3><%= @poll.question %></h3>
 
+  <% @vote = @poll.votes.find_by user_id: current_user %>
+
   <% if @poll.poll_is_over? %>
     <table class="table" id="poll-results">
       <% @poll.poll_options.each do |option| %>
         <tr>
+          <td>
+            <% if @vote && @vote.poll_option_id == option.id %>
+              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have voted in this option"></span>
+            <% end %>
+          </td>
           <td><%= option.description %></td>
           <td><%= option.votes.count %></td>
           <td><%= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>%</td>
@@ -31,5 +38,5 @@
       Voting is not closed yet. Please come back on <%= @poll.deadline + 1 %> to see the results.
     </div>
   <% end %>
-  <%= link_to 'Back to Polls', polls_path %>
+  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 </div>

@@ -4,35 +4,38 @@
 
   <% if @poll.poll_is_over? %>
     <div class="alert alert-danger">Poll is closed</div>
+  <% elsif !@poll.confirmed %>
+    <div class="alert-alert-danger">Voting is not open</div>
   <% else %>
 
-  <h3><%= @poll.question %></h3>
+    <h3><%= @poll.question %></h3>
 
-  <%# if @poll.user_already_voted? current_user %>
-  <% if @already_voted %>
-    <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
-  <% end %>
-
-  <%= simple_form_for @vote do |f| %>
-
-    <% if @poll.multiple %>
-      <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
-    <% else %>
-      <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+    <% if @already_voted %>
+      <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
     <% end %>
 
-    <%= f.input :comment, required: false %>
+    <%= simple_form_for @vote do |f| %>
 
-    <button type="submit" class="btn btn-success">
-    <% if @vote.poll_option_id %>
-      Update vote
-    <% else %>
-      Vote
+      <% if @poll.multiple %>
+        <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+      <% else %>
+        <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+      <% end %>
+
+      <%= f.input :comment, required: false %>
+
+      <button type="submit" class="btn btn-success">
+      <% if @vote.poll_option_id %>
+        Update vote
+      <% else %>
+        Vote
+      <% end %>
+      </button>
+
     <% end %>
-    </button>
 
   <% end %>
-
-<% end %>
+  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 
 </div>
+

@@ -13,7 +13,7 @@ class PollsController < ApplicationController
 
   def vote
     @poll = Poll.find(params[:id])
-    @already_voted = @poll.user_already_voted? current_user
+    @already_voted = @poll.user_already_voted?(current_user)
     @vote = @poll.votes.find_by user_id: current_user
     if @vote == nil
       @vote = Vote.new
@@ -61,6 +61,9 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(:question, :multiple, :deadline, poll_options_attributes: [:id, :description, :_destroy])
+    params.require(:poll).permit(:question, :multiple, :deadline, :confirmed, poll_options_attributes: [:id, :description, :_destroy])
+    #if params[:commit] == "Confirm" && current_user.can_create_poll?
+    #  poll_params[:confirmed] = true
+    #end
   end
 end
