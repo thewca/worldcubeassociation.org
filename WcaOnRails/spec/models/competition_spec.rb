@@ -47,15 +47,19 @@ RSpec.describe Competition do
   end
 
   describe "validates date formats" do
+    let(:competition) do
+      c = FactoryGirl.create :competition
+      # Clear any instance variables the Competition may have from being created.
+      Competition.find(c.id)
+    end
+
     it "start_date" do
-      competition = FactoryGirl.create :competition
       competition.start_date = "1987-12-04f"
       expect(competition).to be_invalid
       expect(competition.errors.messages[:start_date]).to eq ["invalid"]
     end
 
     it "end_date" do
-      competition = FactoryGirl.create :competition
       competition.end_date = "1987-12-04f"
       expect(competition).to be_invalid
       expect(competition.errors.messages[:end_date]).to eq ["invalid"]
