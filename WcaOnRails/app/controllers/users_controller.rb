@@ -34,6 +34,7 @@ class UsersController < ApplicationController
     @user.requesting_wca_id = true
     if @user.update_attributes(user_request_wca_id_params)
       flash[:success] = "Successfully requested WCA id #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_request.name} to approve it!"
+      WcaIdRequestMailer.notify_delegate_of_wca_id_request(@user).deliver_now
       redirect_to profile_request_wca_id_path
     else
       render :request_wca_id

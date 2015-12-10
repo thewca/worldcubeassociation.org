@@ -1,3 +1,4 @@
 <span class="wca-id">
-  <%= link_to wca_id, "/results/p.php?i=#{wca_id}" -%>
+  <%# We use a full url because this can be rendered inside of emails %>
+  <%= link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}" -%>
 </span>

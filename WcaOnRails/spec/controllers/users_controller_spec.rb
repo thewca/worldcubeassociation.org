@@ -14,16 +14,19 @@ describe UsersController do
   end
 
   describe "request wca id" do
-    let(:person) { FactoryGirl.create(:person) }
-    let(:delegate) { FactoryGirl.create(:delegate) }
-    let(:user) { FactoryGirl.create(:user) }
+    let!(:person) { FactoryGirl.create(:person) }
+    let!(:delegate) { FactoryGirl.create(:delegate) }
+    let!(:user) { FactoryGirl.create(:user) }
 
     before :each do
       sign_in user
     end
 
     it "works" do
-      patch :do_request_wca_id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_request: delegate.id }
+      expect(WcaIdRequestMailer).to receive(:notify_delegate_of_wca_id_request).with(user).and_call_original
+      expect do
+        patch :do_request_wca_id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_request: delegate.id }
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
       expect(user.reload.unconfirmed_wca_id).to eq person.id
@@ -47,7 +50,7 @@ describe UsersController do
       patch :do_request_wca_id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_request: delegate.id }
       new_user = assigns(:user)
       expect(new_user).to be_invalid
-      expect(user.reload.unconfirmed_wca_id).to be nil
+      expect(user.reload.unconfirmed_wca_id).to be_nil
     end
   end
 
@@ -91,6 +94,14 @@ describe UsersController do
       user.reload
       expect(user.unconfirmed_wca_id).to eq person2.id
       expect(user.delegate_to_handle_wca_id_request).to eq delegate
+    end
+
+    it "can clear requested id" do
+      person2 = FactoryGirl.create :person
+      patch :update, id: user, user: { unconfirmed_wca_id: "" }
+      user.reload
+      expect(user.unconfirmed_wca_id).to be_nil
+      expect(user.delegate_to_handle_wca_id_request).to be_nil
     end
   end
 end

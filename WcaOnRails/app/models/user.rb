@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   before_validation :maybe_clear_requested_wca_id
   def maybe_clear_requested_wca_id
     if !requesting_wca_id && unconfirmed_wca_id_was.present?
-      if wca_id == unconfirmed_wca_id_was
+      if wca_id == unconfirmed_wca_id_was || unconfirmed_wca_id.blank?
         self.unconfirmed_wca_id = nil
         self.delegate_to_handle_wca_id_request = nil
       end

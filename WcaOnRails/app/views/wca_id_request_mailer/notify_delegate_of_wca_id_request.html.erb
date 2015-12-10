@@ -1,0 +1,9 @@
+<h1>
+  <%= @user_requesting_wca_id.name %> just requested WCA id
+  <%= render "shared/wca_id", wca_id: @user_requesting_wca_id.unconfirmed_wca_id %>
+</h1>
+
+<p>
+  @<%= @user_requesting_wca_id.delegate_to_handle_wca_id_request.name %>: You can approve or reject this request <%= link_to "here", edit_user_url(@user_requesting_wca_id.id, anchor: "user_wca_id") %>.
+  For a complete list of unconfirmed WCA id requests see your <%= link_to "notifications", notifications_url %>.
+</p>
