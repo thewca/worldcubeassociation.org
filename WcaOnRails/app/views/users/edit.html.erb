@@ -99,10 +99,29 @@
     <% end %>
 
     <% if current_user.can_edit_users? %>
-      <%= f.input :wca_id, as: :wca_id, disabled: !editable_fields.include?(:wca_id) %>
-      <% if @user.unconfirmed_wca_id.present? %>
-        <%= f.input :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id) %>
-      <% end %>
+      <div class="row" id="wca_id">
+        <div class="col-xs-6">
+          <% if @user.unconfirmed_wca_id.present? %>
+            <div class="form-group wca_id optional user_unconfirmed_wca_id">
+              <label class="wca_id optional control-label" for="user_unconfirmed_wca_id">
+                Unconfirmed WCA id
+              </label>
+              <div class="input-group">
+                <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" id="approve-wca-id">
+                    Approve
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-xs-6">
+          <%= f.input :wca_id, as: :wca_id, disabled: !editable_fields.include?(:wca_id) %>
+        </div>
+      </div>
+
       <% UsersController.WCA_TEAMS.each do |role| %>
         <%= f.input role, disabled: !editable_fields.include?(role) %>
         <% leader_role = :"#{role}_leader" %>

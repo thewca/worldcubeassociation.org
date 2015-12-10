@@ -27,4 +27,16 @@ $(function() {
     var toDelete = e.currentTarget.checked;
     $('.form-group.user_avatar').toggle(!toDelete);
   }).trigger("change");
+
+  var $approve_wca_id = $('#approve-wca-id');
+  var $unconfirmed_wca_id = $("#user_unconfirmed_wca_id");
+  $approve_wca_id.on("click", function(e) {
+    $("#user_wca_id").val($unconfirmed_wca_id.val());
+    $unconfirmed_wca_id.val('');
+    $unconfirmed_wca_id.trigger('input');
+  });
+  $unconfirmed_wca_id.on("input", function(e) {
+    $approve_wca_id.prop("disabled", !$unconfirmed_wca_id.val());
+  });
+  $unconfirmed_wca_id.trigger('input');
 });

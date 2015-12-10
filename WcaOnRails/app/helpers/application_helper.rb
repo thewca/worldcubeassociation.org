@@ -106,7 +106,7 @@ module ApplicationHelper
     user.users_requesting_wca_id.each do |user_requesting_wca_id|
       notifications << {
         text: "#{user_requesting_wca_id.email} has requested WCA id #{user_requesting_wca_id.unconfirmed_wca_id}",
-        url: edit_user_path(user_requesting_wca_id.id, anchor: "user_wca_id"),
+        url: edit_user_path(user_requesting_wca_id.id, anchor: "wca_id"),
       }
     end
 

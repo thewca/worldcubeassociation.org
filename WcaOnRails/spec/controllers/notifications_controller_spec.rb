@@ -59,7 +59,7 @@ RSpec.describe NotificationsController, type: :controller do
           },
           {
             text: "#{user.email} has requested WCA id #{person.id}",
-            url: edit_user_path(user.id, anchor: "user_wca_id"),
+            url: edit_user_path(user.id, anchor: "wca_id"),
           },
         ]
       end

@@ -44,8 +44,4 @@ form[target=_blank] button[type=submit] {
 
 :target {
   background-color: yellow;
-  &::before {
-    content: ">";
-    margin-right: 0.3em;
-  }
 }

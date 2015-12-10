@@ -14,7 +14,7 @@ RSpec.describe WcaIdRequestMailer, type: :mailer do
       expect(mail.reply_to).to eq([user_requesting_wca_id.email])
 
       expect(mail.subject).to eq("#{user_requesting_wca_id.email} just requested WCA id #{person.id}")
-      expect(mail.body.encoded).to match(edit_user_path(user_requesting_wca_id.id, anchor: "user_wca_id"))
+      expect(mail.body.encoded).to match(edit_user_path(user_requesting_wca_id.id, anchor: "wca_id"))
     end
   end
 end
