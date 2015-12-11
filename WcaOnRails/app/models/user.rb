@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
     if unconfirmed_wca_id.present?
       if !unconfirmed_person
         errors.add(:unconfirmed_wca_id, "not found")
-      elsif unconfirmed_person.user
+      elsif unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
         errors.add(:unconfirmed_wca_id, "already assigned to a different user")
       end
 

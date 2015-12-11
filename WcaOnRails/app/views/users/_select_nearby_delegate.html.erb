@@ -2,7 +2,7 @@
   <p>
     WCA id <%= @user.unconfirmed_wca_id %> does not exist.
   </p>
-<% elsif @user.unconfirmed_person.user %>
+<% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
     WCA id <%= @user.unconfirmed_wca_id %> is already assigned to a different account.
     If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.

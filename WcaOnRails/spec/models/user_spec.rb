@@ -313,7 +313,7 @@ RSpec.describe User, type: :model do
       expect(user).to be_invalid
     end
 
-    it "must match a real wca id" do
+    it "must request a real wca id" do
       user.requesting_wca_id = true
       user.unconfirmed_wca_id = "1982AAAA01"
       expect(user).to be_invalid
@@ -322,10 +322,18 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
 
-    it "cannot match a wca id already assigned to a user" do
+    it "cannot request a wca id already assigned to a real user" do
       user.requesting_wca_id = true
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
       expect(user).to be_invalid
+    end
+
+    it "can request a wca id already assigned to a dummy user" do
+      dummy_user = FactoryGirl.create :dummy_user
+
+      user.requesting_wca_id = true
+      user.unconfirmed_wca_id = dummy_user.wca_id
+      expect(user).to be_valid
     end
 
     it "can match a wca id already requested by a user" do
