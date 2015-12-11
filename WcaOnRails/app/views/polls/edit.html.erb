@@ -4,9 +4,10 @@
 
   <h3><%= yield(:title) %></h3>
 
-  <!--div class="container"-->
-  <% if false %>#@poll.confirmed %>
+  <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
+  <% if is_actually_confirmed %>
     <div class="alert alert-danger">This poll is open to voting. Editing is not allowed</div>
+    <%= link_to "Back to polls", polls_path, class: "polls-home" %>
   <% else %>
     <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
     wrapper_mappings: {
@@ -37,7 +38,7 @@
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <%= f.button :submit, class: "btn-primary" %>
-          <%= button_tag(type: 'submit', name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
+          <%= button_tag(type: "submit", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
             Confirm
           <% end %>
         </div>
@@ -46,8 +47,8 @@
     <% end %>
   </div>
 
-<%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
-  <!--/div-->
+  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
+
   <% end %>
 
 <script>

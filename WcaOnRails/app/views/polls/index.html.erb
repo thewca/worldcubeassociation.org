@@ -3,34 +3,45 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% if current_user.can_create_poll? %>
+  <% can_create = current_user.can_create_poll? %>
+  <% if can_create %>
     <%= link_to "New poll", new_poll_path, class: "new-poll" %>
   <% end %>
-  <table class="table" id="polls-list">
-    <% @polls.each do |poll| %>
-      <tr>
-        <td><%= poll.id %></td>
-        <td><%= poll.question %></td>
-        <td>
-          <% if poll.user_already_voted?(current_user) %>
-            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have already voted in this poll"></span>
-          <% end %>
-        </td>
-        <td>
-          <% if !poll.poll_is_over? %>
-            <% if poll.user_already_voted?(current_user) %>
-              <%= link_to "Edit vote", polls_vote_path(poll) %>
-            <% else %>
-              <%= link_to "Vote", polls_vote_path(poll) %>
-            <% end %>
-          <% else %>
-            <%= link_to "Results", polls_results_path(poll) %>
-          <% end %>
-        </td>
-        <% if current_user.can_create_poll? %>
-          <td><%= link_to "Edit", edit_poll_path(poll) %></td>
+
+  <% if @polls.empty? %>
+    <div class="alert alert-warning">There are currently no polls.</div>
+  <% else %>
+    <table class="table" id="polls-list">
+      <% @polls.each do |poll| %>
+        <% if can_create && !poll.confirmed %>
+          <% unconfirmed = true %>
+        <% else %>
+          <% unconfirmed = false %>
         <% end %>
-      </tr>
-    <% end %>
-  </table>
+        <tr class="<%= unconfirmed ? "danger" : "" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= unconfirmed ? "This poll is not confirmed" : "" %>">
+          <td><%= poll.id %></td>
+          <td><%= poll.question %></td>
+          <td>
+            <% if poll.user_already_voted?(current_user) %>
+              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have already voted in this poll"></span>
+            <% end %>
+          </td>
+          <td>
+            <% if !poll.poll_is_over? && poll.confirmed %>
+              <% if poll.user_already_voted?(current_user) %>
+                <%= link_to "Edit vote", polls_vote_path(poll) %>
+              <% else %>
+                <%= link_to "Vote", polls_vote_path(poll) %>
+              <% end %>
+            <% elsif poll.confirmed %>
+              <%= link_to "Results", polls_results_path(poll) %>
+            <% end %>
+          </td>
+          <% if current_user.can_create_poll? %>
+            <td><%= link_to "Edit", edit_poll_path(poll) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
 </div>

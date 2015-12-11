@@ -1,10 +1,14 @@
 class PollsController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_create_poll_only, only: [:new, :create, :update, :index, :vote]
-  before_action :can_vote_in_poll_only, only: [:index, :vote]
+  before_action :can_create_poll_only, only: [:new, :create, :update, :destroy]
+  before_action :can_vote_in_poll_only, only: [:index, :vote, :results]
 
   def index
-    @polls = Poll.all
+    if current_user.can_create_poll?
+      @polls = Poll.all
+    else
+      @polls = Poll.where(confirmed: true)
+    end
   end
 
   def new
@@ -28,6 +32,7 @@ class PollsController < ApplicationController
     @poll = Poll.new(poll_params)
     @poll.multiple = false
     @poll.deadline = Date.today + 15
+    @poll.confirmed = false
     if @poll.save
       flash[:success] = "Created new poll"
       redirect_to edit_poll_path(@poll)
@@ -43,7 +48,11 @@ class PollsController < ApplicationController
   def update
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(poll_params)
-      flash[:success] = "Updated poll"
+      if params[:commit] == "Confirm"
+        flash[:success] = "Poll confirmed and open to voting"
+      else
+        flash[:success] = "Updated poll"
+      end
       redirect_to polls_path
     else
       render 'edit'
@@ -61,9 +70,10 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(:question, :multiple, :deadline, :confirmed, poll_options_attributes: [:id, :description, :_destroy])
-    #if params[:commit] == "Confirm" && current_user.can_create_poll?
-    #  poll_params[:confirmed] = true
-    #end
+    poll_params = params.require(:poll).permit(:question, :multiple, :deadline, :confirmed, poll_options_attributes: [:id, :description, :_destroy])
+    if params[:commit] == "Confirm" && current_user.can_create_poll?
+      poll_params[:confirmed] = true
+    end
+    return poll_params
   end
 end

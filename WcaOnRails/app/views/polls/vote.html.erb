@@ -15,7 +15,7 @@
     <% end %>
 
     <%= simple_form_for @vote do |f| %>
-
+      <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
       <% if @poll.multiple %>
         <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
       <% else %>
