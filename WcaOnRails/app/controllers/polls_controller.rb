@@ -18,9 +18,17 @@ class PollsController < ApplicationController
   def vote
     @poll = Poll.find(params[:id])
     @already_voted = @poll.user_already_voted?(current_user)
-    @vote = @poll.votes.find_by user_id: current_user
-    if @vote == nil
+    if !@already_voted
       @vote = Vote.new
+    else
+      if @poll.multiple
+        @options = Vote.where(user_id: current_user).map { |i| i.poll_option_id}
+        @vote = Vote.new
+        #@vote[:user_id] = current_user
+        #@vote[poll_option_id] = options
+      else
+        @vote = @poll.votes.find_by_user_id current_user
+      end
     end
   end
 
@@ -50,10 +58,11 @@ class PollsController < ApplicationController
     if @poll.update_attributes(poll_params)
       if params[:commit] == "Confirm"
         flash[:success] = "Poll confirmed and open to voting"
+        redirect_to polls_path
       else
         flash[:success] = "Updated poll"
+        render 'edit'
       end
-      redirect_to polls_path
     else
       render 'edit'
     end

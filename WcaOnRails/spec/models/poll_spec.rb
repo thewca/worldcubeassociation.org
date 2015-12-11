@@ -6,7 +6,7 @@ describe Poll do
   end
 
   describe "confirming a poll" do
-  	it "can confirm a poll" do
+    it "can confirm a poll" do
       poll = FactoryGirl.create :poll
       FactoryGirl.create(:poll_option, poll_id: poll.id)
       FactoryGirl.create(:poll_option, poll_id: poll.id)
