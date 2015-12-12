@@ -288,7 +288,7 @@ RSpec.describe User, type: :model do
   describe "unconfirmed_wca_id" do
     let(:person) { FactoryGirl.create :person }
     let(:delegate) { FactoryGirl.create :delegate }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_request: delegate.id }
+    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
     let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
 
     it "defines a valid user" do
@@ -296,25 +296,25 @@ RSpec.describe User, type: :model do
     end
 
     it "requires unconfirmed_wca_id" do
-      user.requesting_wca_id = true
+      user.claiming_wca_id = true
       user.unconfirmed_wca_id = nil
       expect(user).to be_invalid
     end
 
-    it "requires delegate_id_to_handle_wca_id_request" do
-      user.requesting_wca_id = true
-      user.delegate_id_to_handle_wca_id_request = nil
+    it "requires delegate_id_to_handle_wca_id_claim" do
+      user.claiming_wca_id = true
+      user.delegate_id_to_handle_wca_id_claim = nil
       expect(user).to be_invalid
     end
 
-    it "delegate_id_to_handle_wca_id_request must be a delegate" do
-      user.requesting_wca_id = true
-      user.delegate_id_to_handle_wca_id_request = user.id
+    it "delegate_id_to_handle_wca_id_claim must be a delegate" do
+      user.claiming_wca_id = true
+      user.delegate_id_to_handle_wca_id_claim = user.id
       expect(user).to be_invalid
     end
 
-    it "must request a real wca id" do
-      user.requesting_wca_id = true
+    it "must claim a real wca id" do
+      user.claiming_wca_id = true
       user.unconfirmed_wca_id = "1982AAAA01"
       expect(user).to be_invalid
 
@@ -322,24 +322,24 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
 
-    it "cannot request a wca id already assigned to a real user" do
-      user.requesting_wca_id = true
+    it "cannot claim a wca id already assigned to a real user" do
+      user.claiming_wca_id = true
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
       expect(user).to be_invalid
     end
 
-    it "can request a wca id already assigned to a dummy user" do
+    it "can claim a wca id already assigned to a dummy user" do
       dummy_user = FactoryGirl.create :dummy_user
 
-      user.requesting_wca_id = true
+      user.claiming_wca_id = true
       user.unconfirmed_wca_id = dummy_user.wca_id
       expect(user).to be_valid
     end
 
-    it "can match a wca id already requested by a user" do
-      user.requesting_wca_id = true
+    it "can match a wca id already claimed by a user" do
+      user.claiming_wca_id = true
       user2 = FactoryGirl.create :user
-      user2.delegate_id_to_handle_wca_id_request = delegate.id
+      user2.delegate_id_to_handle_wca_id_claim = delegate.id
 
       user2.unconfirmed_wca_id = person.wca_id
       user.unconfirmed_wca_id = person.wca_id
@@ -349,12 +349,12 @@ RSpec.describe User, type: :model do
     end
 
     it "cannot have an unconfirmed_wca_id if you already have a wca_id" do
-      user_with_wca_id.requesting_wca_id = true
+      user_with_wca_id.claiming_wca_id = true
       user_with_wca_id.unconfirmed_wca_id = person.id
-      user_with_wca_id.delegate_id_to_handle_wca_id_request = delegate.id
+      user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
       expect(user_with_wca_id).to be_invalid
       expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [
-        "cannot request a WCA id because you already have WCA id #{user_with_wca_id.wca_id}",
+        "cannot claim a WCA id because you already have WCA id #{user_with_wca_id.wca_id}",
       ]
     end
   end

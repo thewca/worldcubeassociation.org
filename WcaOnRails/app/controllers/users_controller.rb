@@ -25,25 +25,25 @@ class UsersController < ApplicationController
     can_edit_user_only(@user)
   end
 
-  def request_wca_id
+  def claim_wca_id
     @user = current_user
   end
 
-  def do_request_wca_id
+  def do_claim_wca_id
     @user = current_user
-    @user.requesting_wca_id = true
-    if @user.update_attributes(user_request_wca_id_params)
-      flash[:success] = "Successfully requested WCA id #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_request.name} to approve it!"
-      WcaIdRequestMailer.notify_delegate_of_wca_id_request(@user).deliver_now
-      redirect_to profile_request_wca_id_path
+    @user.claiming_wca_id = true
+    if @user.update_attributes(user_claim_wca_id_params)
+      flash[:success] = "Successfully claimed WCA id #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
+      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
+      redirect_to profile_claim_wca_id_path
     else
-      render :request_wca_id
+      render :claim_wca_id
     end
   end
 
   def select_nearby_delegate
     @user = current_user
-    @user.assign_attributes(user_request_wca_id_params)
+    @user.assign_attributes(user_claim_wca_id_params)
     render partial: 'select_nearby_delegate'
   end
 
@@ -118,7 +118,7 @@ class UsersController < ApplicationController
     user_params
   end
 
-  private def user_request_wca_id_params
-    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_request)
+  private def user_claim_wca_id_params
+    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim)
   end
 end

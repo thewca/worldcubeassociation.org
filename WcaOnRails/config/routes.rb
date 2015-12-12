@@ -17,9 +17,9 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
 
-  get 'profile/request_wca_id' => 'users#request_wca_id'
-  patch 'profile/request_wca_id' => 'users#do_request_wca_id'
-  get 'profile/request_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
+  get 'profile/claim_wca_id' => 'users#claim_wca_id'
+  patch 'profile/claim_wca_id' => 'users#do_claim_wca_id'
+  get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
 
   get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
   get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit

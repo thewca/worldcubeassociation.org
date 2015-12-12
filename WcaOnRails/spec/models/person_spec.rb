@@ -1,22 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-  let!(:person) { FactoryGirl.create :person }
-  let!(:delegate) { FactoryGirl.create :delegate }
-  let!(:competition) { FactoryGirl.create :competition, delegates: [delegate] }
-  let!(:results1) { FactoryGirl.create :result, person: person, competitionId: competition.id }
-  let!(:results2) { FactoryGirl.create :result, person: person, competitionId: competition.id }
+  let!(:person) { FactoryGirl.create :person_who_has_competed_once }
 
   it "defines a valid person" do
     expect(person).to be_valid
-  end
-
-  it "finds results" do
-    expect(person.results.order(:id)).to eq [ results1, results2 ]
-  end
-
-  it "finds competitions" do
-    expect(person.competitions).to eq [ competition ]
   end
 
   context "likey_delegates" do
@@ -26,6 +14,8 @@ RSpec.describe Person, type: :model do
     end
 
     it "works" do
+      competition = person.competitions.first
+      delegate = competition.delegates.first
       expect(person.likely_delegates).to eq [delegate]
 
       competition2 = FactoryGirl.create :competition, delegates: [delegate]

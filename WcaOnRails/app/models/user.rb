@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
-  belongs_to :delegate_to_handle_wca_id_request, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_request", class_name: "User"
-  has_many :users_requesting_wca_id, foreign_key: "delegate_id_to_handle_wca_id_request", class_name: "User"
+  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
 
   strip_attributes only: [:wca_id]
 
@@ -59,24 +59,24 @@ class User < ActiveRecord::Base
     end
   end
 
-  attr_accessor :requesting_wca_id
-  before_validation :maybe_clear_requested_wca_id
-  def maybe_clear_requested_wca_id
-    if !requesting_wca_id && unconfirmed_wca_id_was.present?
+  attr_accessor :claiming_wca_id
+  before_validation :maybe_clear_claimed_wca_id
+  def maybe_clear_claimed_wca_id
+    if !claiming_wca_id && unconfirmed_wca_id_was.present?
       if wca_id == unconfirmed_wca_id_was || unconfirmed_wca_id.blank?
         self.unconfirmed_wca_id = nil
-        self.delegate_to_handle_wca_id_request = nil
+        self.delegate_to_handle_wca_id_claim = nil
       end
     end
   end
 
-  validate :request_wca_id_validations
-  def request_wca_id_validations
-    if unconfirmed_wca_id.present? && !delegate_id_to_handle_wca_id_request.present?
-      errors.add(:delegate_id_to_handle_wca_id_request, "required")
+  validate :claim_wca_id_validations
+  def claim_wca_id_validations
+    if unconfirmed_wca_id.present? && !delegate_id_to_handle_wca_id_claim.present?
+      errors.add(:delegate_id_to_handle_wca_id_claim, "required")
     end
 
-    if !unconfirmed_wca_id.present? && delegate_id_to_handle_wca_id_request.present?
+    if !unconfirmed_wca_id.present? && delegate_id_to_handle_wca_id_claim.present?
       errors.add(:unconfirmed_wca_id, "required")
     end
 
@@ -87,13 +87,13 @@ class User < ActiveRecord::Base
         errors.add(:unconfirmed_wca_id, "already assigned to a different user")
       end
 
-      if requesting_wca_id && person
-        errors.add(:unconfirmed_wca_id, "cannot request a WCA id because you already have WCA id #{wca_id}")
+      if claiming_wca_id && person
+        errors.add(:unconfirmed_wca_id, "cannot claim a WCA id because you already have WCA id #{wca_id}")
       end
     end
 
-    if delegate_id_to_handle_wca_id_request.present? && !delegate_to_handle_wca_id_request
-      errors.add(:delegate_id_to_handle_wca_id_request, "not found")
+    if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
+      errors.add(:delegate_id_to_handle_wca_id_claim, "not found")
     end
   end
 

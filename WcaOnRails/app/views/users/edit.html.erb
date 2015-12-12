@@ -91,7 +91,7 @@
         <% if @user.wca_id.blank? %>
           You do not have a WCA id assigned yet. If you have competed before,
           request to have your WCA id connected to your account
-          <%= link_to "here", profile_request_wca_id_path %>!
+          <%= link_to "here", profile_claim_wca_id_path %>!
         <% else %>
           Your WCA id is <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
         <% end %>

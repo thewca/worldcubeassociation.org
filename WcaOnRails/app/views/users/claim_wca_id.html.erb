@@ -1,4 +1,4 @@
-<% provide(:title, "Request WCA id") %>
+<% provide(:title, "Claim WCA id") %>
 
 <div class="container">
   <h1 class="text-center"><%= yield(:title) %></h1>
@@ -6,9 +6,9 @@
   <%= render 'shared/error_messages', object: @user %>
   <% if @user.person %>
     You already have WCA id <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
-  <% elsif @user.unconfirmed_person && @user.delegate_to_handle_wca_id_request %>
-    You've requested WCA id <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id -%>.
-    Contact <%= mail_to @user.delegate_to_handle_wca_id_request.email, @user.delegate_to_handle_wca_id_request.name, target: "_blank" %> if you have any questions.
+  <% elsif @user.unconfirmed_person && @user.delegate_to_handle_wca_id_claim %>
+    You've claimed WCA id <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id -%>.
+    Contact <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
   <% else %>
     <p>
       If you've competed before, you can request to have your WCA id connected
@@ -20,23 +20,23 @@
       competition are uploaded.
     </p>
 
-    <%= simple_form_for @user, url: profile_request_wca_id_path, html: { multipart: true } do |f| %>
+    <%= simple_form_for @user, url: profile_claim_wca_id_path, html: { multipart: true } do |f| %>
       <%= f.input :unconfirmed_wca_id, label: "WCA id", as: :user_ids, persons_table: true, only_one: true %>
       <div id="select-nearby-delegate-area"></div>
 
-      <%= f.button :submit, 'Request WCA id', id: "request-wca-id-button", disabled: true, class: "btn-primary" %>
+      <%= f.button :submit, 'Claim WCA id', id: "claim-wca-id-button", disabled: true, class: "btn-primary" %>
     <% end %>
 
     <script>
       $(function() {
         var $unconfirmed_wca_id = $("#user_unconfirmed_wca_id");
-        var $submitButton = $("#request-wca-id-button");
+        var $submitButton = $("#claim-wca-id-button");
         $unconfirmed_wca_id.wcaAutocomplete();
         var unconfirmed_wca_id_selectize = $unconfirmed_wca_id[0].selectize;
         var onUnconfirmedWcaId = function(unconfirmed_wca_id) {
           $submitButton.prop("disabled", true);
           wca.cancelPendingAjaxAndAjax('render_select_nearby_delegate', {
-            url: '<%= profile_request_wca_id_select_nearby_delegate_path %>',
+            url: '<%= profile_claim_wca_id_select_nearby_delegate_path %>',
             data: {
               'user[unconfirmed_wca_id]': unconfirmed_wca_id,
             },

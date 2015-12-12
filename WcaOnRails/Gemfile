@@ -56,6 +56,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'poltergeist'
+  gem 'capybara-screenshot'
 
   gem 'byebug'
   gem 'web-console'

@@ -45,10 +45,10 @@ RSpec.describe NotificationsController, type: :controller do
         ]
       end
 
-      it "shows WCA id requests" do
+      it "shows WCA id claims" do
         person = FactoryGirl.create :person
         user = FactoryGirl.create :user
-        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_request: delegate)
+        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
 
         get :index
         notifications = assigns(:notifications)
@@ -58,7 +58,7 @@ RSpec.describe NotificationsController, type: :controller do
             url: edit_competition_path(unconfirmed_competition),
           },
           {
-            text: "#{user.email} has requested WCA id #{person.id}",
+            text: "#{user.email} has claimed WCA id #{person.id}",
             url: edit_user_path(user.id, anchor: "wca_id"),
           },
         ]
@@ -103,17 +103,17 @@ RSpec.describe NotificationsController, type: :controller do
         expect(notifications).to eq [
           {
             text: "Connect your WCA id to your account!",
-            url: profile_request_wca_id_path,
+            url: profile_claim_wca_id_path,
           }
         ]
       end
 
-      context "when already requested a wca id" do
+      context "when already claimed a wca id" do
         it "tells me who is working on it" do
           person = FactoryGirl.create :person
           delegate = FactoryGirl.create :delegate
           user.unconfirmed_wca_id = person.id
-          user.delegate_to_handle_wca_id_request = delegate
+          user.delegate_to_handle_wca_id_claim = delegate
           user.save!
 
           get :index
@@ -121,7 +121,7 @@ RSpec.describe NotificationsController, type: :controller do
           expect(notifications).to eq [
             {
               text: "Waiting for #{delegate.name} to assign you WCA id #{person.id}",
-              url: profile_request_wca_id_path,
+              url: profile_claim_wca_id_path,
             }
           ]
         end

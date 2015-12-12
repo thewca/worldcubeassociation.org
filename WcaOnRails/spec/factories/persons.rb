@@ -12,8 +12,17 @@ FactoryGirl.define do
     day 4
 
     factory :person_with_multiple_sub_ids do
-      after(:create) do |user|
-        Person.create!(id: user.id, subId: user.subId + 1, countryId: "Israel")
+      after(:create) do |person|
+        Person.create!(id: person.id, subId: person.subId + 1, countryId: "Israel")
+      end
+    end
+
+    factory :person_who_has_competed_once do
+      after(:create) do |person|
+        competition = FactoryGirl.create :competition
+        competition =  FactoryGirl.create :competition_with_delegates
+        FactoryGirl.create :result, person: person, competitionId: competition.id
+        FactoryGirl.create :result, person: person, competitionId: competition.id
       end
     end
   end
