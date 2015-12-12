@@ -42,15 +42,15 @@
               <%= icon('info-circle', class: 'fa-fw') %> <span class="hidden-sm">Information</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="/about"><%= icon('file-text', class: 'fa-fw') %> About the WCA</a></li>
-              <li><a href="/delegates"><%= icon('sitemap', class: 'fa-fw') %> WCA Delegates</a></li>
-              <li><a href="/organisations"><%= icon('flag', class: 'fa-fw') %> National Organisations</a></li>
+              <li><a href="<%= about_path %>"><%= icon('file-text', class: 'fa-fw') %> About the WCA</a></li>
+              <li><a href="<%= delegates_path %>"><%= icon('sitemap', class: 'fa-fw') %> WCA Delegates</a></li>
+              <li><a href="<%= organisations_path %>"><%= icon('flag', class: 'fa-fw') %> National Organisations</a></li>
               <li class="divider"></li>
-              <li><a href="/contact"><%= icon('envelope', class: 'fa-fw') %> Contact Information</a></li>
+              <li><a href="<%= contact_path %>"><%= icon('envelope', class: 'fa-fw') %> Contact Information</a></li>
               <li><a href="/forum/" class="top-nav"><%= icon('comments', class: 'fa-fw') %> Forum</a></li>
               <li class="divider"></li>
-              <li><a href="/score-tools"><%= icon('wrench', class: 'fa-fw') %> Tools</a></li>
-              <li><a href="/logo"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa-fw') %> Logo</a></li>
+              <li><a href="<%= score_tools_path %>"><%= icon('wrench', class: 'fa-fw') %> Tools</a></li>
+              <li><a href="<%= logo_path %>"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa-fw') %> Logo</a></li>
             </ul>
           </li>
           <li><a href="/results/competitions.php" class="top-nav"><%= icon('globe', class: 'fa-fw') %> Competitions</a></li>
@@ -174,7 +174,7 @@
   <footer class="footer">
     <div class="container">
       <p class="text-muted">
-        <%= link_to "Contact", contact_website_path %>
+        <%= link_to "Contact", contact_path %>
         |
         <a href="https://github.com/cubing/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">
           <i class="fa fa-github"></i>
