@@ -8,11 +8,13 @@
     please take a look at our <%= link_to "frequently asked questions", faq_path %>!
   </div>
 
-  <h2><u>General Inquiries</u></h2>
-
   <p>
-    For general inquiries, you may register and post a message in the <a href="/forum">WCA Forum</a>, or e-mail the WCA Board at <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a>. For inquiries concerning a specific area or competition, please contact your local <%= link_to "WCA Delegate", delegates_path %>.
+    For website questions, comments, and suggestions, use this
+    <a href="/contact/website">contact form</a>. For inquiries concerning a
+    specific area or competition, please contact your local <%= link_to "WCA
+    Delegate", delegates_path %>.
   </p>
+
   <h2><u>Committees and Teams</u></h2>
 
   <p>
@@ -37,12 +39,6 @@
     <strong>WCA Regulations Committee</strong> - [<a href="/contact/wrc">Contact Form</a>]<br />
     (maintenance of the WCA Regulations)<br />
     <%= format_team_members(:wrc_team) %>
-  </p>
-
-  <p>
-    <strong>WCA Website Team</strong> - [<a href="/contact/website">Contact Form</a>]<br />
-    (website questions)<br />
-    <%= format_team_members(:wca_website_team) %>
   </p>
 
   <p>

@@ -589,7 +589,6 @@ CREATE TABLE `users` (
   `unconfirmed_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `wca_website_team` tinyint(1) DEFAULT NULL,
   `results_team` tinyint(1) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `delegate_status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -611,7 +610,6 @@ CREATE TABLE `users` (
   `wrc_team` tinyint(1) DEFAULT NULL,
   `wrc_team_leader` tinyint(1) DEFAULT NULL,
   `results_team_leader` tinyint(1) DEFAULT NULL,
-  `wca_website_team_leader` tinyint(1) DEFAULT NULL,
   `software_admin_team` tinyint(1) DEFAULT NULL,
   `software_admin_team_leader` tinyint(1) DEFAULT NULL,
   `unconfirmed_wca_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -634,7 +632,7 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-11 13:19:10
+-- Dump completed on 2015-12-13 15:26:11
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -708,4 +706,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151119063335');
 INSERT INTO schema_migrations (version) VALUES ('20151119072940');
 
 INSERT INTO schema_migrations (version) VALUES ('20151209003851');
+
+INSERT INTO schema_migrations (version) VALUES ('20151213232440');
 

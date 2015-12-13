@@ -1,14 +1,12 @@
-<% provide(:title, 'WCA Website Team Contact Form') %>
+<% provide(:title, 'WCA Website Contact Form') %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
   <p>
-    You can send the WCA Website Team a message using the contact form below.
-    Items with a star
-    (<span style="color: #FFAE00;">*</span>) are required. This form should be
-    used for website questions, comments, and suggestions only.
+    Use this form for website questions, comments, and suggestions only.
     <%= link_to "Other inquiries", contact_path %> should be sent to the
     appropriate party.
+    Items with a star (*) are required.
   </p>
 
   <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
