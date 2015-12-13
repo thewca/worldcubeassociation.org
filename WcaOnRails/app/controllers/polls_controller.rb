@@ -9,6 +9,13 @@ class PollsController < ApplicationController
     else
       @polls = Poll.where(confirmed: true)
     end
+    #@openPolls = @poll.select { |poll_is_over?| poll_is_over? == 'false' }
+    #@closedPolls = @polls.select { |poll_is_over?| poll_is_over? == 'true' }
+    @openPolls , @closedPolls = [], []
+    @polls.each do |poll|
+    @openPolls << poll if !poll.poll_is_over?
+    @closedPolls << poll if poll.poll_is_over?
+end
   end
 
   def new
@@ -22,10 +29,10 @@ class PollsController < ApplicationController
       @vote = Vote.new
     else
       if @poll.multiple
-        @options = Vote.where(user_id: current_user).map { |i| i.poll_option_id}
+        @votes = Vote.where(user_id: current_user)
+        @options = @votes.map { |i| i.poll_option_id}
         @vote = Vote.new
-        #@vote[:user_id] = current_user
-        #@vote[poll_option_id] = options
+        @vote[:comment] = @votes.first.comment
       else
         @vote = @poll.votes.find_by_user_id current_user
       end

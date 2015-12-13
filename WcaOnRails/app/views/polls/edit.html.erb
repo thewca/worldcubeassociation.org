@@ -6,9 +6,16 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <div class="alert alert-danger">This poll is open to voting. Editing is not allowed</div>
-    <%= link_to "Back to polls", polls_path, class: "polls-home" %>
-  <% else %>
+    <div class="alert alert-danger">This poll is open to voting. Editing question or options is not allowed.</div>
+    <script>
+    $(document).ready(function() {
+      $("#poll_question").prop("disabled", true);
+      $("#poll_multiple").prop("disabled", true);
+      $(".nested-fields").children().prop("disabled", true);
+    });
+    </script>
+  <% end %>
+
     <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
     wrapper_mappings: {
       check_boxes: :horizontal_radio_and_checkboxes,
@@ -44,10 +51,9 @@
         </div>
       </div>
     <% end %>
+  <%# end %>
 
   <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
-
-  <% end %>
 
 </div>
 
