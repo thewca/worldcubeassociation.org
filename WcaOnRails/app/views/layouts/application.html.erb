@@ -46,6 +46,7 @@
               <li><a href="<%= delegates_path %>"><%= icon('sitemap', class: 'fa-fw') %> WCA Delegates</a></li>
               <li><a href="<%= organisations_path %>"><%= icon('flag', class: 'fa-fw') %> National Organisations</a></li>
               <li class="divider"></li>
+              <li><a href="<%= faq_path %>"><%= icon('question-circle', class: 'fa-fw') %> Frequently Asked Questions</a></li>
               <li><a href="<%= contact_path %>"><%= icon('envelope', class: 'fa-fw') %> Contact Information</a></li>
               <li><a href="/forum/" class="top-nav"><%= icon('comments', class: 'fa-fw') %> Forum</a></li>
               <li class="divider"></li>
@@ -174,6 +175,8 @@
   <footer class="footer">
     <div class="container">
       <p class="text-muted">
+        <%= link_to "FAQ", faq_path %>
+        |
         <%= link_to "Contact", contact_path %>
         |
         <a href="https://github.com/cubing/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">

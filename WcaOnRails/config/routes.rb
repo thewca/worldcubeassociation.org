@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'delegates' => 'static_pages#delegates'
   get 'organisations' => 'static_pages#organisations'
   get 'contact' => 'static_pages#contact'
+  get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'

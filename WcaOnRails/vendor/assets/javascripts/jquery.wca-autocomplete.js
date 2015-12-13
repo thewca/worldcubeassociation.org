@@ -1,4 +1,4 @@
-$(function() {
+(function() {
   $.fn.wcaAutocomplete = function() {
     this.each(function() {
       var that = this;
@@ -170,4 +170,4 @@ $(function() {
 
     return this;
   };
-});
+})();

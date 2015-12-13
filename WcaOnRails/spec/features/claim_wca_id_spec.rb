@@ -19,8 +19,7 @@ RSpec.feature "Claim WCA id" do
       selectize_input.native.send_key(person.id)
 
       # Wait for selectize popup to appear.
-      expect(page).to have_css("div.user_unconfirmed_wca_id .selectize-control.loading")
-      expect(page).not_to have_css("div.user_unconfirmed_wca_id .selectize-control.loading")
+      expect(page).to have_selector("div.selectize-dropdown", visible: true)
 
       # Select item with selectize.
       page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)

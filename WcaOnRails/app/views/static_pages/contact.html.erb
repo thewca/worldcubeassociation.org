@@ -3,7 +3,13 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
+  <div class="alert alert-info" role="alert">
+    Before contacting any of the teams on this page,
+    please take a look at our <%= link_to "frequently asked questions", faq_path %>!
+  </div>
+
   <h2><u>General Inquiries</u></h2>
+
   <p>
     For general inquiries, you may register and post a message in the <a href="/forum">WCA Forum</a>, or e-mail the WCA Board at <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a>. For inquiries concerning a specific area or competition, please contact your local <%= link_to "WCA Delegate", delegates_path %>.
   </p>
