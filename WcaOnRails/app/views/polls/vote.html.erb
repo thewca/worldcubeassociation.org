@@ -17,9 +17,9 @@
     <%= simple_form_for @vote do |f| %>
       <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
       <% if @poll.multiple %>
-        <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id }, checked: lambda { |c| @options && c.id.in?(@options) } %>
+        <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id }, checked: lambda { |c| @options && c.id.in?(@options) } %>
       <% else %>
-        <%=md f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| c.description }, value_method: lambda { |c| c.id } %>
+        <%= f.input :poll_option_id, label: false, collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id } %>
       <% end %>
       <%= f.input :comment, required: false %>
 
