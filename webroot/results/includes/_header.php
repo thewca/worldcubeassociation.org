@@ -104,6 +104,7 @@ print $styles->getHTMLAll();
                 <li><a href="/delegates"><i class="fa fa-sitemap fa-fw"></i> WCA Delegates</a></li>
                 <li><a href="/organisations"><i class="fa fa-flag fa-fw"></i> National Organisations</a></li>
                 <li class="divider"></li>
+                <li><a href="/faq"><i class="fa fa-question-circle fa-fw"></i> Frequently Asked Questions</a></li>
                 <li><a href="/contact"><i class="fa fa-envelope fa-fw"></i> Contact Information</a></li>
                 <li><a href="/forum/" class="top-nav"><i class="fa fa-comments fa-fw"></i> Forum</a></li>
                 <li class="divider"></li>
