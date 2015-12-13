@@ -1,10 +1,10 @@
 <tr class="<%= delegate.delegate_status.dasherize %>">
   <td>
-    <%= mail_to delegate.email, target: "_blank", class: "delegate-actions hide-new-window-icon" do %>
+    <%= mail_to delegate.email, target: "_blank", class: "hide-new-window-icon" do %>
       <span class="glyphicon glyphicon-envelope"></span>
     <% end %>
     <% if current_user && current_user.can_edit_users? %>
-      <%= link_to edit_user_path(delegate.id), class: "delegate-actions" do %>
+      <%= link_to edit_user_path(delegate.id) do %>
         <span class="glyphicon glyphicon-pencil"></span>
       <% end %>
     <% end %>

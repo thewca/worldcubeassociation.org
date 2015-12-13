@@ -12,13 +12,6 @@ tr.candidate-delegate {
   font-style: italic;
 }
 
-.delegate-actions {
-  visibility: hidden;
-  tr:hover & {
-    visibility: visible;
-  }
-}
-
 .avatar-thumbnail {
   display: inline-block;
   background-size: cover;
