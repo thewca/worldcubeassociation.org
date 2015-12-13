@@ -45,7 +45,7 @@ RSpec.describe NotificationsController, type: :controller do
         ]
       end
 
-      it "shows WCA id claims" do
+      it "shows WCA ID claims" do
         person = FactoryGirl.create :person
         user = FactoryGirl.create :user
         user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
@@ -58,7 +58,7 @@ RSpec.describe NotificationsController, type: :controller do
             url: edit_competition_path(unconfirmed_competition),
           },
           {
-            text: "#{user.email} has claimed WCA id #{person.id}",
+            text: "#{user.email} has claimed WCA ID #{person.id}",
             url: edit_user_path(user.id, anchor: "wca_id"),
           },
         ]
@@ -97,12 +97,12 @@ RSpec.describe NotificationsController, type: :controller do
         sign_in user
       end
 
-      it "asks me to request my WCA id" do
+      it "asks me to request my WCA ID" do
         get :index
         notifications = assigns(:notifications)
         expect(notifications).to eq [
           {
-            text: "Connect your WCA id to your account!",
+            text: "Connect your WCA ID to your account!",
             url: profile_claim_wca_id_path,
           }
         ]
@@ -120,7 +120,7 @@ RSpec.describe NotificationsController, type: :controller do
           notifications = assigns(:notifications)
           expect(notifications).to eq [
             {
-              text: "Waiting for #{delegate.name} to assign you WCA id #{person.id}",
+              text: "Waiting for #{delegate.name} to assign you WCA ID #{person.id}",
               url: profile_claim_wca_id_path,
             }
           ]

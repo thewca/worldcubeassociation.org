@@ -7,7 +7,7 @@
     <div class="alert alert-info">
       Hi, <%= person.name %>! It looks like you have not created a WCA website account yet.      Please create one
       <%= link_to "here", new_user_registration_path %>. Afterwards, you
-      can request that it be connected to your WCA id
+      can request that it be connected to your WCA ID
       (<%= render "shared/wca_id", wca_id: wca_id %>).
       <% conversion_shown = true %>
     </div>

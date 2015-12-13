@@ -123,7 +123,7 @@ class CompetitionsController < ApplicationController
           results_by_personId.map do |personId, results|
             if results_by_personId.length > 1
               # Two or more people with the same name set records at this competition!
-              # Append their WCA ids to distinguish between them.
+              # Append their WCA IDs to distinguish between them.
               uniqueName = "#{personName} (#{personId})"
             else
               uniqueName = personName

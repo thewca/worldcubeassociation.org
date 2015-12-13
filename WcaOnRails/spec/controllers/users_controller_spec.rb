@@ -30,7 +30,7 @@ describe UsersController do
       new_user = assigns(:user)
       expect(new_user).to be_valid
       expect(user.reload.unconfirmed_wca_id).to eq person.id
-      expect(flash[:success]).to eq "Successfully claimed WCA id #{person.id}. Check your email, and wait for #{delegate.name} to approve it!"
+      expect(flash[:success]).to eq "Successfully claimed WCA ID #{person.id}. Check your email, and wait for #{delegate.name} to approve it!"
       expect(response).to redirect_to profile_claim_wca_id_path
     end
 

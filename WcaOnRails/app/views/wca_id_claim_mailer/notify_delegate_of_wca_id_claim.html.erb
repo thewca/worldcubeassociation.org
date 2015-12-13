@@ -1,9 +1,9 @@
 <h1>
-  <%= @user_claiming_wca_id.email %> just claimed WCA id
+  <%= @user_claiming_wca_id.email %> just claimed WCA ID
   <%= render "shared/wca_id", wca_id: @user_claiming_wca_id.unconfirmed_wca_id %>
 </h1>
 
 <p>
   @<%= @user_claiming_wca_id.delegate_to_handle_wca_id_claim.name %>: You can approve or reject this claim <%= link_to "here", edit_user_url(@user_claiming_wca_id.id, anchor: "wca_id") %>.
-  For a complete list of unconfirmed WCA id claims see your <%= link_to "notifications", notifications_url %>.
+  For a complete list of unconfirmed WCA ID claims see your <%= link_to "notifications", notifications_url %>.
 </p>

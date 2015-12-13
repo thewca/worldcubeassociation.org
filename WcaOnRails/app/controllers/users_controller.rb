@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     @user = current_user
     @user.claiming_wca_id = true
     if @user.update_attributes(user_claim_wca_id_params)
-      flash[:success] = "Successfully claimed WCA id #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
+      flash[:success] = "Successfully claimed WCA ID #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
       redirect_to profile_claim_wca_id_path
     else

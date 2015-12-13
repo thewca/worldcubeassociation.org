@@ -27,9 +27,9 @@ en:
   activerecord:
     attributes:
       user:
-        wca_id: "WCA id"
-        unconfirmed_wca_id: "Unconfirmed WCA id"
-        login: "Email or WCA id"
+        wca_id: "WCA ID"
+        unconfirmed_wca_id: "Unconfirmed WCA ID"
+        login: "Email or WCA ID"
       competition:
         cellName: "Competition nickname"
         countryId: "Country"

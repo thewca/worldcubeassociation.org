@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
-  # Virtual attribute for authenticating by WCA id or email.
+  # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
 
   enum delegate_status: {
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   def wca_id_is_unique_or_for_dummy_account
     if wca_id_change && wca_id
       user = User.find_by_wca_id(wca_id)
-      # If there is a non dummy user with this WCA id, fail validation.
+      # If there is a non dummy user with this WCA ID, fail validation.
       if user && !user.dummy_account?
         errors.add(:wca_id, "must be unique")
       end
@@ -88,7 +88,7 @@ class User < ActiveRecord::Base
       end
 
       if claiming_wca_id && person
-        errors.add(:unconfirmed_wca_id, "cannot claim a WCA id because you already have WCA id #{wca_id}")
+        errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
       end
     end
 
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
 
   # To handle profile pictures that predate our user account system, we created
   # a bunch of dummy accounts (accounts with no password). When someone finally
-  # claims their WCA id, we want to delete the dummy account and copy over their
+  # claims their WCA ID, we want to delete the dummy account and copy over their
   # avatar.
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
@@ -242,7 +242,7 @@ class User < ActiveRecord::Base
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
-      errors.add(:avatar, "requires a WCA id to be assigned")
+      errors.add(:avatar, "requires a WCA ID to be assigned")
     end
   end
 
@@ -322,7 +322,7 @@ class User < ActiveRecord::Base
       fields << :avatar << :avatar_cache
     end
     if user == self || admin? || any_kind_of_delegate?
-      # Only allow editing name if they don't have a WCA id.
+      # Only allow editing name if they don't have a WCA ID.
       unless user.wca_id
         fields << :name
       end

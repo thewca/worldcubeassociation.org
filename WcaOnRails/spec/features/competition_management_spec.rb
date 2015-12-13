@@ -5,7 +5,7 @@ RSpec.feature "Competition management" do
     let(:admin) { FactoryGirl.create :admin }
     before :each do
       visit "/users/sign_in"
-      fill_in "Email or WCA id", with: admin.email
+      fill_in "Email or WCA ID", with: admin.email
       fill_in "Password", with: admin.password
       click_button "Sign in"
     end

@@ -86,10 +86,10 @@ RSpec.describe User, type: :model do
     expect(user).to be_invalid
   end
 
-  describe "WCA id" do
+  describe "WCA ID" do
     let(:user) { FactoryGirl.create :user_with_wca_id }
 
-    it "validates WCA id" do
+    it "validates WCA ID" do
       user = FactoryGirl.build :user, wca_id: "2005FLEI02"
       expect(user).not_to be_valid
 
@@ -116,7 +116,7 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
 
-    it "nullifies empty WCA ids" do
+    it "nullifies empty WCA IDs" do
       # Verify that we can create multiple users with empty wca_ids
       user2 = FactoryGirl.create :user, wca_id: ""
       expect(user2.wca_id).to be_nil
@@ -126,7 +126,7 @@ RSpec.describe User, type: :model do
       expect(user.wca_id).to be_nil
     end
 
-    it "verifies WCA id unique when changing WCA id" do
+    it "verifies WCA ID unique when changing WCA ID" do
       person2 = FactoryGirl.create :person, id: "2006FLEI01"
       user2 = FactoryGirl.create :user, wca_id: "2006FLEI01", name: person2.name
       user.wca_id = user2.wca_id
@@ -134,7 +134,7 @@ RSpec.describe User, type: :model do
       expect(user.errors.messages[:wca_id]).to eq ["must be unique"]
     end
 
-    it "removes dummy accounts and copies name when WCA id is assigned" do
+    it "removes dummy accounts and copies name when WCA ID is assigned" do
       dummy_user = FactoryGirl.create :dummy_user
       person_for_dummy = dummy_user.person
       expect(dummy_user).to be_valid
@@ -148,7 +148,7 @@ RSpec.describe User, type: :model do
       avatar = dummy_user.reload.read_attribute(:avatar)
       expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
 
-      # Assigning a WCA id to user should copy over the name from the Persons table.
+      # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
       user.wca_id = dummy_user.wca_id
       user.save!
@@ -160,7 +160,7 @@ RSpec.describe User, type: :model do
       expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
     end
 
-    it "does not allow duplicate WCA ids" do
+    it "does not allow duplicate WCA IDs" do
       user2 = FactoryGirl.create :user
       expect(user2).to be_valid
       user2.wca_id = user.wca_id
@@ -354,7 +354,7 @@ RSpec.describe User, type: :model do
       user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
       expect(user_with_wca_id).to be_invalid
       expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [
-        "cannot claim a WCA id because you already have WCA id #{user_with_wca_id.wca_id}",
+        "cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}",
       ]
     end
   end

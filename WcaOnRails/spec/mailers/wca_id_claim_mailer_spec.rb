@@ -13,7 +13,7 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([user_claiming_wca_id.email])
 
-      expect(mail.subject).to eq("#{user_claiming_wca_id.email} just requested WCA id #{person.id}")
+      expect(mail.subject).to eq("#{user_claiming_wca_id.email} just requested WCA ID #{person.id}")
       expect(mail.body.encoded).to match(edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"))
     end
   end

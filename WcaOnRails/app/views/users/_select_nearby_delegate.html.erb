@@ -1,15 +1,15 @@
 <% if !@user.unconfirmed_person %>
   <p>
-    WCA id <%= @user.unconfirmed_wca_id %> does not exist.
+    WCA ID <%= @user.unconfirmed_wca_id %> does not exist.
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    WCA id <%= @user.unconfirmed_wca_id %> is already assigned to a different account.
+    WCA ID <%= @user.unconfirmed_wca_id %> is already assigned to a different account.
     If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
   </p>
 <% else %>
   <p>
-    In order to assign you your WCA id, we need a delegate to confirm your
+    In order to assign you your WCA ID, we need a delegate to confirm your
     identity. From the delegates below, select the one you think knows you best:
   </p>
 

@@ -89,11 +89,11 @@
 
       <p>
         <% if @user.wca_id.blank? %>
-          You do not have a WCA id assigned yet. If you have competed before,
-          request to have your WCA id connected to your account
+          You do not have a WCA ID assigned yet. If you have competed before,
+          request to have your WCA ID connected to your account
           <%= link_to "here", profile_claim_wca_id_path %>!
         <% else %>
-          Your WCA id is <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
+          Your WCA ID is <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
         <% end %>
       </p>
     <% end %>
@@ -104,7 +104,7 @@
           <% if @user.unconfirmed_wca_id.present? %>
             <div class="form-group wca_id optional user_unconfirmed_wca_id">
               <label class="wca_id optional control-label" for="user_unconfirmed_wca_id">
-                Unconfirmed WCA id
+                Unconfirmed WCA ID
               </label>
               <div class="input-group">
                 <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>

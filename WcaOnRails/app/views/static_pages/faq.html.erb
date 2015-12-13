@@ -10,9 +10,9 @@
       end
     %>
 
-    <%= add_answer "How do I obtain a WCA id and a WCA profile?" do %>
+    <%= add_answer "How do I obtain a WCA ID and a WCA profile?" do %>
       If you've never competed before, go to a <a href="/results/competitions.php">competition</a>!
-      A WCA id and WCA profile will be created for you when the results from your first
+      A WCA ID and WCA profile will be created for you when the results from your first
       competition are uploaded.
     <% end %>
 
@@ -46,7 +46,7 @@
 
     <%= add_answer "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?" do %>
       <p>
-        You are assigned a WCA id when you first participate in a WCA
+        You are assigned a WCA ID when you first participate in a WCA
         sanctioned competition. When the results from that competition are uploaded,
         your WCA profile will be created, with results from every competition you've
         been to.
@@ -65,22 +65,22 @@
       <p>
         First, you need to
         <a href="#how-do-i-connect-my-wca-account-with-my-wca-id">
-          create a WCA account and connect it to your WCA id.
+          create a WCA account and connect it to your WCA ID.
         </a>
       </p>
       <p>
-        After you have connected your WCA account and your WCA id, go to your
+        After you have connected your WCA account and your WCA ID, go to your
         <%= link_to "edit profile page", profile_edit_path %> to change your
         profile picture.
       </p>
     <% end %>
 
-    <%= add_answer "How do I connect my WCA account with my WCA id?" do %>
+    <%= add_answer "How do I connect my WCA account with my WCA ID?" do %>
       <% if current_user %>
-        You can claim your WCA id <%= link_to "here", profile_claim_wca_id_path %>.
+        You can claim your WCA ID <%= link_to "here", profile_claim_wca_id_path %>.
       <% else %>
         Create an account <%= link_to "here", new_user_registration_path %>. After you log in with
-        your new account, you will be asked to claim your WCA id.
+        your new account, you will be asked to claim your WCA ID.
       <% end %>
     <% end %>
   </div>

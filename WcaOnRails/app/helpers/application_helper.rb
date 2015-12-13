@@ -89,15 +89,15 @@ module ApplicationHelper
 
     if user.wca_id.blank?
       if user.unconfirmed_wca_id? && user.delegate_to_handle_wca_id_claim
-        # The user has already claimed a WCA id, let them know we're on it.
+        # The user has already claimed a WCA ID, let them know we're on it.
         notifications << {
-          text: "Waiting for #{user.delegate_to_handle_wca_id_claim.name} to assign you WCA id #{user.unconfirmed_wca_id}",
+          text: "Waiting for #{user.delegate_to_handle_wca_id_claim.name} to assign you WCA ID #{user.unconfirmed_wca_id}",
           url: profile_claim_wca_id_path,
         }
       else
-        # Show users without WCA ids how to claim a WCA id for their account.
+        # Show users without WCA IDs how to claim a WCA ID for their account.
         notifications << {
-          text: "Connect your WCA id to your account!",
+          text: "Connect your WCA ID to your account!",
           url: profile_claim_wca_id_path,
         }
       end
@@ -105,7 +105,7 @@ module ApplicationHelper
 
     user.users_claiming_wca_id.each do |user_claiming_wca_id|
       notifications << {
-        text: "#{user_claiming_wca_id.email} has claimed WCA id #{user_claiming_wca_id.unconfirmed_wca_id}",
+        text: "#{user_claiming_wca_id.email} has claimed WCA ID #{user_claiming_wca_id.unconfirmed_wca_id}",
         url: edit_user_path(user_claiming_wca_id.id, anchor: "wca_id"),
       }
     end
