@@ -25,18 +25,25 @@ end
   def vote
     @poll = Poll.find(params[:id])
     @already_voted = @poll.user_already_voted?(current_user)
-    if !@already_voted
-      @vote = Vote.new
+    if @already_voted
+      @vote = @poll.votes.find_by_user_id(current_user)
     else
-      if @poll.multiple
-        @votes = Vote.where(user_id: current_user)
-        @options = @votes.map { |i| i.poll_option_id}
-        @vote = Vote.new
-        @vote[:comment] = @votes.first.comment
-      else
-        @vote = @poll.votes.find_by_user_id current_user
-      end
+      @vote = Vote.new
     end
+    #@poll = Poll.find(params[:id])
+    #@already_voted = @poll.user_already_voted?(current_user)
+    #if !@already_voted
+    #  @vote = Vote.new
+    #else
+    #  if @poll.multiple
+    #    @votes = Vote.where(user_id: current_user)
+    #    @options = @votes.map { |i| i.poll_option_id}
+    #    @vote = Vote.new
+    #    @vote[:comment] = @votes.first.comment
+    #  else
+    #    @vote = @poll.votes.find_by_user_id current_user
+    #  end
+    #end
   end
 
   def results

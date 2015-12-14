@@ -284,7 +284,7 @@ CREATE TABLE `Preregs` (
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `eventIds` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80450 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80454 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,7 +365,7 @@ CREATE TABLE `Results` (
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`)
-) ENGINE=InnoDB AUTO_INCREMENT=852960 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=852963 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,7 +524,7 @@ CREATE TABLE `oauth_applications` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_oauth_applications_on_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -553,12 +553,13 @@ DROP TABLE IF EXISTS `polls`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `polls` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `question` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
+  `question` text COLLATE utf8_unicode_ci NOT NULL,
   `multiple` tinyint(1) NOT NULL,
   `deadline` date NOT NULL,
   `confirmed` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `comment` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -656,7 +657,22 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
-) ENGINE=InnoDB AUTO_INCREMENT=5767 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5817 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `vote_options`
+--
+
+DROP TABLE IF EXISTS `vote_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vote_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `vote_id` int(11) NOT NULL,
+  `poll_option_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -669,10 +685,9 @@ DROP TABLE IF EXISTS `votes`;
 CREATE TABLE `votes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `poll_option_id` int(11) NOT NULL,
   `comment` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `poll_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_votes_on_poll_option_id` (`poll_option_id`),
   KEY `index_votes_on_user_id` (`user_id`),
   CONSTRAINT `votes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -760,8 +775,10 @@ INSERT INTO schema_migrations (version) VALUES ('20151119063335');
 
 INSERT INTO schema_migrations (version) VALUES ('20151119072940');
 
+INSERT INTO schema_migrations (version) VALUES ('20151207230222');
+
 INSERT INTO schema_migrations (version) VALUES ('20151209003851');
 
-INSERT INTO schema_migrations (version) VALUES ('20151207230222');
+INSERT INTO schema_migrations (version) VALUES ('20151214000352');
 
 INSERT INTO schema_migrations (version) VALUES ('20151213232440');

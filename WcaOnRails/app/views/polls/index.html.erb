@@ -21,7 +21,6 @@
           <% unconfirmed = false %>
         <% end %>
         <tr class="<%= unconfirmed ? "danger" : "" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= unconfirmed ? "This poll is not confirmed" : "" %>">
-          <td><%#= poll.id %></td>
           <td><%=md poll.question %></td>
           <td>
             <% if poll.user_already_voted?(current_user) %>
