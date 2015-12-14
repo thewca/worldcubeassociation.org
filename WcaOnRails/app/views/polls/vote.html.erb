@@ -16,14 +16,16 @@
 
     <%= simple_form_for @vote do |f| %>
       <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <%= f.fields_for :vote_options do |options_form| %>
-            <%= f.input :vote_id, :as => :hidden, :input_html => { :value => @poll.id } %>
-            <%= render 'vote_option_fields', f: options_form %>
-          <% end %>
-        </div>
-      </div>
+
+      <%#= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: @poll.multiple ? :check_boxes : :radio_buttons, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id } %>
+
+      <% if @poll.multiple %>
+        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id }, checked: lambda { |c| @options && c.id.in?(@options) } %>
+      <% else %>
+        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id } %>
+      <% end %>
+
+
       <%= f.input :comment, required: false %>
 
       <button type="submit" class="btn btn-success">

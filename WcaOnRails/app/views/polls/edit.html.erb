@@ -6,7 +6,9 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <div class="alert alert-danger">This poll is open to voting. Editing question or options is not allowed.</div>
+    <div class="alert alert-danger">
+      This poll is open to voting. Editing question or options is not allowed.
+    </div>
     <script>
     $(document).ready(function() {
       $("#poll_question").prop("disabled", true);
@@ -16,43 +18,43 @@
     </script>
   <% end %>
 
-    <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
+  <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
     wrapper_mappings: {
       check_boxes: :horizontal_radio_and_checkboxes,
       radio_buttons: :horizontal_radio_and_checkboxes,
       file: :horizontal_file_input,
       boolean: :horizontal_boolean
     }  do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
+    <%= render 'shared/error_messages', object: f.object %>
 
-      <%= f.input :question %>
-      <%= f.input :multiple, label: "Allow multiple answers" %>
-      <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
+    <%= f.input :question %>
+    <%= f.input :multiple, label: "Allow multiple answers" %>
+    <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">Options</div>
-        <div class="panel-body">
-          <%= f.fields_for :poll_options do |options_form| %>
-            <%= render 'poll_option_fields', f: options_form %>
-          <% end %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Options
+      </div>
+      <div class="panel-body">
+        <%= f.fields_for :poll_options do |options_form| %>
+          <%= render 'poll_option_fields', f: options_form %>
+        <% end %>
 
-          <div class="links">
-            <%= link_to_add_association button_tag('Add option', type: "button", class: "btn btn-primary"), f, :poll_options %>
-          </div>
+        <div class="links">
+          <%= link_to_add_association button_tag('Add option', type: "button", class: "btn btn-primary"), f, :poll_options %>
         </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <%= f.button :submit, class: "btn-primary" %>
-          <%= button_tag(type: "submit", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
-            Confirm
-          <% end %>
-        </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.button :submit, class: "btn-primary" %>
+        <%= button_tag(type: "submit", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
+          Confirm
+        <% end %>
       </div>
-    <% end %>
-  <%# end %>
-
+    </div>
+  <% end %>
   <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 
 </div>
