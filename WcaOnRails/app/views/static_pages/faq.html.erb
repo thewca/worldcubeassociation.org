@@ -11,7 +11,7 @@
     end
   %>
   <% @answers_markup = capture do %>
-    <div class="list-group">
+    <ul id="faq-list" class="list-group">
 
       <%= add_answer "How do I obtain a WCA ID and a WCA profile?" do %>
         If you have never competed before, go to a <a href="/results/competitions.php">competition</a>!
@@ -90,7 +90,7 @@
           your new account, you will be asked to claim your WCA ID.
         <% end %>
       <% end %>
-    </div>
+    </ul>
   <% end %>
 
   <ul>

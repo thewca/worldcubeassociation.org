@@ -1,0 +1,11 @@
+#faq-list {
+  // Bold the FAQ questions.
+  .list-group-item-heading {
+    font-weight: bold;
+  }
+
+  // Indent the FAQ answers.
+  .list-group-item-text {
+    margin-left: 0.5em;
+  }
+}
