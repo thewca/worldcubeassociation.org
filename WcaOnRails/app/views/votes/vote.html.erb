@@ -17,20 +17,18 @@
     <%= simple_form_for @vote do |f| %>
       <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
 
-      <% if @poll.multiple %>
-        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :check_boxes, label_method: :description, value_method: :id %>
-      <% else %>
-        <%#= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :multiple_radio_buttons, label_method: :description, value_method: :id %>
-        <% @poll.poll_options.each do |option| %>
-          <span class="radio">
-            <label>
-              <input class="radio_buttons optional" name="vote[poll_option_ids][]" type="radio" value="<%= option.id %>" <%= option.in?(@vote.poll_options) ? "checked=checked" : "" %> />
-              <%= option.description %>
-            </label>
-          </span>
-        <% end %>
+      <% @poll.poll_options.each do |option| %>
+        <% type = @poll.multiple ? "checkbox" : "radio" %>
+        <span class="checkbox">
+          <label>
+            <%= tag("input", type: type,
+                    name: "vote[poll_option_ids][]",
+                    value: option.id,
+                    checked: option.in?(@vote.poll_options)) %>
+            <%= option.description %>
+          </label>
+        </span>
       <% end %>
-
 
       <%= f.input :comment, required: false %>
 

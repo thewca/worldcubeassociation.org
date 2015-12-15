@@ -20,11 +20,6 @@ class PollsController < ApplicationController
     @poll = Poll.new
   end
 
-  def vote
-    @poll = Poll.find(params[:id])
-    @vote = @poll.votes.find_by_user_id(current_user.id) || Vote.new
-  end
-
   def results
     @poll = Poll.find(params[:id])
   end

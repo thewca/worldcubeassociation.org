@@ -2,13 +2,18 @@ class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :can_vote_in_poll_only
 
+  def vote
+    @poll = Poll.find(params[:id])
+    @vote = @poll.votes.find_by_user_id(current_user.id) || Vote.new
+  end
+
   def create
     @vote = Vote.new(vote_params)
     if @vote.save
       flash[:success] = "Vote saved"
-      redirect_to polls_path
+      redirect_to polls_vote_path(@vote.poll.id)
     else
-      render 'polls/vote'
+      render 'vote'
     end
   end
 
@@ -17,15 +22,14 @@ class VotesController < ApplicationController
     @poll = @vote.poll
     if @vote.update_attributes(vote_params)
       flash[:success] = "Vote updated"
-      redirect_to polls_path
+      redirect_to polls_vote_path(@vote.poll.id)
     else
       flash[:danger] = "Could not upate your vote"
-      render "polls/vote"
+      render 'vote'
     end
   end
 
   def vote_params
-    #debugger
     vote_params = params.require(:vote).permit(:poll_id, :comment, poll_option_ids: [])
     vote_params[:user_id] = current_user.id
     return vote_params
