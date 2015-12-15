@@ -10,26 +10,32 @@
 
     <h3><%=md @poll.question %></h3>
 
-    <% if @already_voted %>
+    <% if !@vote.new_record? %>
       <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
     <% end %>
 
     <%= simple_form_for @vote do |f| %>
       <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
 
-      <%#= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: @poll.multiple ? :check_boxes : :radio_buttons, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id } %>
-
       <% if @poll.multiple %>
-        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :check_boxes, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id }, checked: lambda { |c| @options && c.id.in?(@options) } %>
+        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :check_boxes, label_method: :description, value_method: :id %>
       <% else %>
-        <%= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :radio_buttons, label_method: lambda { |c| md c.description }, value_method: lambda { |c| c.id } %>
+        <%#= f.association :poll_options, label: false, class: 'form-control', collection: @poll.poll_options, as: :multiple_radio_buttons, label_method: :description, value_method: :id %>
+        <% @poll.poll_options.each do |option| %>
+          <span class="radio">
+            <label>
+              <input class="radio_buttons optional" name="vote[poll_option_ids][]" type="radio" value="<%= option.id %>" <%= option.in?(@vote.poll_options) ? "checked=checked" : "" %> />
+              <%= option.description %>
+            </label>
+          </span>
+        <% end %>
       <% end %>
 
 
       <%= f.input :comment, required: false %>
 
       <button type="submit" class="btn btn-success">
-      <%= @already_voted ? "Update vote" : "Vote" %>
+      <%= !@vote.new_record? ? "Update vote" : "Vote" %>
       </button>
 
     <% end %>

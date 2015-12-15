@@ -23,7 +23,7 @@ describe PollsController do
       sign_in board_member
     end
 
-    describe "POST #create" do
+    describe "POSTS" do
       it "creates a poll" do
         post :create, poll: { question: "Hello?"}
         poll = assigns(:poll)
@@ -69,6 +69,22 @@ describe PollsController do
         expect(poll.confirmed?).to eq false
       end
 
+      it "can't edit a confirmed poll, except for deadline" do
+        poll = FactoryGirl.create(:confirmed_poll)
+        post :update, id: poll.id, poll: { multiple: true }
+        invalid_poll = assigns :poll
+        poll.reload
+        expect(poll.multiple).to eq false
+        expect(invalid_poll.errors[:deadline]).to eq ["you can only change the deadline"]
+      end
+
+      it "can change deadline of a confirmed poll" do
+        poll = FactoryGirl.create(:confirmed_poll)
+        new_deadline = Date.today - 1
+        post :update, id: poll.id, poll: { deadline: new_deadline }
+        poll.reload
+        expect(poll.deadline).to eq new_deadline
+      end
     end
   end
 end

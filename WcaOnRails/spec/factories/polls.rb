@@ -12,6 +12,10 @@ FactoryGirl.define do
         poll.confirmed = true
         poll.save!
       end
+
+      trait :multiple do
+        multiple true
+      end
     end
   end
 end

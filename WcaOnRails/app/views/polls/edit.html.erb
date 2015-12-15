@@ -28,6 +28,7 @@
     <%= render 'shared/error_messages', object: f.object %>
 
     <%= f.input :question %>
+    <%= f.input :comment, label: "Room for additional information" %>
     <%= f.input :multiple, label: "Allow multiple answers" %>
     <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
 

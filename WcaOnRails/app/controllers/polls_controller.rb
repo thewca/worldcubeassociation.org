@@ -9,13 +9,11 @@ class PollsController < ApplicationController
     else
       @polls = Poll.where(confirmed: true)
     end
-    #@openPolls = @poll.select { |poll_is_over?| poll_is_over? == 'false' }
-    #@closedPolls = @polls.select { |poll_is_over?| poll_is_over? == 'true' }
     @openPolls , @closedPolls = [], []
     @polls.each do |poll|
-    @openPolls << poll if !poll.poll_is_over?
-    @closedPolls << poll if poll.poll_is_over?
-end
+      @openPolls << poll if !poll.poll_is_over?
+      @closedPolls << poll if poll.poll_is_over?
+    end
   end
 
   def new
@@ -24,27 +22,7 @@ end
 
   def vote
     @poll = Poll.find(params[:id])
-    @already_voted = @poll.user_already_voted?(current_user)
-    @vote_options = VoteOption.new
-    if @already_voted
-      @vote = @poll.votes.find_by_user_id(current_user)
-    else
-      @vote = Vote.new
-    end
-    #@poll = Poll.find(params[:id])
-    #@already_voted = @poll.user_already_voted?(current_user)
-    #if !@already_voted
-    #  @vote = Vote.new
-    #else
-    #  if @poll.multiple
-    #    @votes = Vote.where(user_id: current_user)
-    #    @options = @votes.map { |i| i.poll_option_id}
-    #    @vote = Vote.new
-    #    @vote[:comment] = @votes.first.comment
-    #  else
-    #    @vote = @poll.votes.find_by_user_id current_user
-    #  end
-    #end
+    @vote = @poll.votes.find_by_user_id(current_user.id) || Vote.new
   end
 
   def results
@@ -94,8 +72,7 @@ end
   end
 
   def poll_params
-debugger
-    poll_params = params.require(:poll).permit(:question, :multiple, :deadline, :confirmed, poll_options_attributes: [:id, :description, :_destroy])
+    poll_params = params.require(:poll).permit(:question, :comment, :multiple, :deadline, :confirmed, poll_options_attributes: [:id, :description, :_destroy])
     if params[:commit] == "Confirm" && current_user.can_create_poll?
       poll_params[:confirmed] = true
     end
