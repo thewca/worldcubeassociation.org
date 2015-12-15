@@ -70,7 +70,7 @@ describe PollsController do
       end
 
       it "can't edit a confirmed poll, except for deadline" do
-        poll = FactoryGirl.create(:confirmed_poll)
+        poll = FactoryGirl.create(:poll, :confirmed)
         post :update, id: poll.id, poll: { multiple: true }
         invalid_poll = assigns :poll
         poll.reload
@@ -79,7 +79,7 @@ describe PollsController do
       end
 
       it "can change deadline of a confirmed poll" do
-        poll = FactoryGirl.create(:confirmed_poll)
+        poll = FactoryGirl.create(:poll, :confirmed)
         new_deadline = Date.today - 1
         post :update, id: poll.id, poll: { deadline: new_deadline }
         poll.reload

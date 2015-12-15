@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Vote do
-  let(:poll) { FactoryGirl.create(:confirmed_poll) }
+  let(:poll) { FactoryGirl.create(:poll, :confirmed) }
   let(:delegate) { FactoryGirl.create(:delegate) }
   let(:vote) { FactoryGirl.create(:vote, user: delegate, poll: poll, poll_options: [ poll.poll_options.first ]) }
 
@@ -23,8 +23,7 @@ describe Vote do
 
   it "can't vote for unconfirmed polls" do
     expect(vote).to be_valid
-    poll.confirmed = false
-    poll.save!
+    poll.update_column(:confirmed, false)
     expect(vote).to be_invalid
     expect(vote.errors[:poll_id]).to eq ["poll is not confirmed"]
   end
@@ -44,11 +43,11 @@ describe Vote do
   end
 
   it "can't vote with a non-existent poll_option_id" do
-    expect{ vote.poll_option_ids = ["hello"] }.to raise_error(ActiveRecord::RecordNotFound)
+    expect { vote.poll_option_ids = ["hello"] }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it "can't vote with poll_option_id for different poll" do
-    other_poll = FactoryGirl.create(:confirmed_poll)
+    other_poll = FactoryGirl.create(:poll, :confirmed)
     vote.poll_option_ids = [ other_poll.poll_options.first.id ]
     expect(vote).to be_invalid
     expect(vote.errors[:poll_options]).to eq ["One or more poll_options don't match the poll"]

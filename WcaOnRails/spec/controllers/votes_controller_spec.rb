@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe VotesController do
-  let(:poll) { FactoryGirl.create(:confirmed_poll) }
+  let(:poll) { FactoryGirl.create(:poll, :confirmed) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -38,7 +38,7 @@ describe VotesController do
       end
 
       it "creates and updates multiple votes" do
-        multiple_poll = FactoryGirl.create(:confirmed_poll, :multiple)
+        multiple_poll = FactoryGirl.create(:poll, :confirmed, :multiple)
 
         post :create, vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id}
         vote = Vote.find_by_user_id(delegate.id)
