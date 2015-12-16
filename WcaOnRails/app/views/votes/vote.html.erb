@@ -20,15 +20,15 @@
     <%= simple_form_for @vote do |f| %>
       <%= f.input :poll_id, :as => :hidden, :input_html => { :value => @poll.id } %>
 
+      <% type = @poll.multiple ? "checkbox" : "radio" %>
       <% @poll.poll_options.each do |option| %>
-        <% type = @poll.multiple ? "checkbox" : "radio" %>
         <span class="checkbox">
           <label>
             <%= tag("input", type: type,
                     name: "vote[poll_option_ids][]",
                     value: option.id,
                     checked: option.in?(@vote.poll_options)) %>
-            <%= option.description %>
+            <%=md option.description %>
           </label>
         </span>
       <% end %>
