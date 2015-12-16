@@ -4,12 +4,18 @@
 
   <% if @poll.poll_is_over? %>
     <div class="alert alert-danger">Poll is closed. Check out the <%= link_to "results", polls_results_path(@poll) %>.</div>
-  <% elsif !@poll.confirmed %>
-    <div class="alert alert-danger">Voting is not open</div>
-  <% else %>
-    <div class="alert alert-info">
-      Voting closes in <%= distance_of_time_in_words_to_now(@poll.deadline) %>, on <%= wca_local_time(@poll.deadline) %>.
-    </div>
+  <% elsif @poll.confirmed || current_user.can_create_poll? %>
+
+    <% if @poll.confirmed %>
+      <div class="alert alert-info">
+        Voting closes in <%= distance_of_time_in_words_to_now(@poll.deadline) %>, on <%= wca_local_time(@poll.deadline) %>.
+      </div>
+    <% else %>
+      <div class="alert alert-danger">
+        This is just a preview! You can confirm this poll <%= link_to "here", edit_poll_path %>
+      </div>
+    <% end %>
+
     <h3><%=md @poll.question %></h3>
     <h4><%=md @poll.comment %></h4>
 
@@ -33,14 +39,18 @@
         </span>
       <% end %>
 
-      <%= f.input :comment, required: false %>
+      <% if @poll.confirmed %>
+        <%= f.input :comment, required: false %>
 
-      <button type="submit" class="btn btn-success">
-        <%= !@vote.new_record? ? "Update vote" : "Vote" %>
-      </button>
+        <button type="submit" class="btn btn-success">
+          <%= !@vote.new_record? ? "Update vote" : "Vote" %>
+        </button>
+      <% end %>
 
     <% end %>
 
+  <% else %>
+    <div class="alert alert-danger">Voting is not open</div>
   <% end %>
   <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 </div>
