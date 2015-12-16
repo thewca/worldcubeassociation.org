@@ -30,13 +30,17 @@ $(function() {
 
   var $approve_wca_id = $('#approve-wca-id');
   var $unconfirmed_wca_id = $("#user_unconfirmed_wca_id");
+  var $unconfirmed_wca_id_profile_link = $("a#unconfirmed-wca-id-profile");
   $approve_wca_id.on("click", function(e) {
     $("#user_wca_id").val($unconfirmed_wca_id.val());
     $unconfirmed_wca_id.val('');
     $unconfirmed_wca_id.trigger('input');
   });
   $unconfirmed_wca_id.on("input", function(e) {
-    $approve_wca_id.prop("disabled", !$unconfirmed_wca_id.val());
+    var unconfirmed_wca_id = $unconfirmed_wca_id.val();
+    $approve_wca_id.prop("disabled", !unconfirmed_wca_id);
+    $unconfirmed_wca_id_profile_link.parent().toggle(!!unconfirmed_wca_id);
+    $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
 });
