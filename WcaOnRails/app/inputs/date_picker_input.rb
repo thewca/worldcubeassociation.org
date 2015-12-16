@@ -28,11 +28,11 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   end
 
   def display_pattern
-    I18n.t('datepicker.dformat', default: '%d/%m/%Y')
+    I18n.t('datepicker.dformat', default: '%Y/%m/%d')
   end
 
   def picker_pattern
-    I18n.t('datepicker.pformat', default: 'DD/MM/YYYY')
+    I18n.t('datepicker.pformat', default: 'YYYY-MM-DD')
   end
 
   def date_view_header_format

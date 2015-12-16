@@ -20,6 +20,10 @@
       $("#confirm").hide();
     });
     </script>
+  <% else %>
+    <div class="alert alert-info">
+      This poll is not open to voting. You can see a preview <%= link_to 'here', polls_vote_path, target: '_blank' %>. Click confirm when you're ready to enable voting!
+    </div>
   <% end %>
 
   <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
@@ -54,7 +58,6 @@
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.button :submit, class: "btn-primary" %>
         <% if !@poll.confirmed %>
-          <%= link_to button_tag('Preview', type: "button", class: "btn btn-info"), polls_preview_path %>
           <%= link_to button_tag('Delete', type: "button", class: "btn btn-danger"), @poll, method: :delete, data: { confirm: "Are you sure you want to delete this poll? There is no going back." } %>
         <% end %>
         <%= button_tag(type: "submit", id: "confirm", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>

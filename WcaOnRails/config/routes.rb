@@ -38,7 +38,6 @@ Rails.application.routes.draw do
   resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
-  get 'polls/:id/preview' => 'polls#preview', as: 'polls_preview'
 
   resources :votes, only: [:create, :update]
 

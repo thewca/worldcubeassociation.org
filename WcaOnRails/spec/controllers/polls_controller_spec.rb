@@ -97,6 +97,14 @@ describe PollsController do
         post :destroy, id: poll.id
         expect(Poll.find_by_id(poll.id)).not_to eq nil
       end
+
+      it "deadline defaults to now if you don't change it" do
+        poll = FactoryGirl.create(:poll)
+        post :update, id: poll.id, poll: { deadline: poll.deadline, poll_options_attributes: { "1" => {description: "Yes"}, "2" => {description: "No"} } }
+        new_poll = assigns :poll
+        poll.reload
+        expect(new_poll.deadline).to eq poll.deadline
+      end
     end
   end
 end

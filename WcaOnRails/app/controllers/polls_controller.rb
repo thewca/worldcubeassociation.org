@@ -26,6 +26,7 @@ class PollsController < ApplicationController
     @poll.multiple = false
     @poll.deadline = Date.today + 15
     @poll.confirmed = false
+    @poll.comment = ""
     if @poll.save
       flash[:success] = "Created new poll"
       redirect_to edit_poll_path(@poll)
@@ -43,6 +44,7 @@ class PollsController < ApplicationController
   end
 
   def update
+    #debugger
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(poll_params)
       if params[:commit] == "Confirm"
@@ -73,6 +75,8 @@ class PollsController < ApplicationController
     if params[:commit] == "Confirm" && current_user.can_create_poll?
       poll_params[:confirmed] = true
     end
+    debugger
+    poll_params[:deadline] = params[:poll][:deadline].to_s + ":00"
     return poll_params
   end
 end

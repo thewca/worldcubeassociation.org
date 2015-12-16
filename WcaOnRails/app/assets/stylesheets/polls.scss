@@ -29,6 +29,7 @@
   display: block;
 }
 
+/*This is necessary because the "md" (Markdown) generates a <p> element, and we want the option label to appear inline with the radio/check*/
 .checkbox p {
   display: inline;
 }
