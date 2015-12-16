@@ -50,6 +50,11 @@ gem 'nokogiri'
 gem 'font-awesome-sass'
 gem 'lodash-rails'
 
+gem "cocoon"
+
+gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+
 group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -87,7 +92,3 @@ group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
 end
-
-# Some gems for the polls system
-
-gem "cocoon"

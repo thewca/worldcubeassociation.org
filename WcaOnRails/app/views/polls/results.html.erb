@@ -1,8 +1,9 @@
-<% provide(:title, 'Results for poll #' + @poll.id.to_s) %>
+<% provide(:title, "Results for poll ##{@poll.id}") %>
 
 <div class="container">
 
-  <h3><%= @poll.question %></h3>
+  <h3><%=md @poll.question %></h3>
+  <h4><%=md @poll.comment %></h4>
 
   <% @vote = @poll.votes.find_by user_id: current_user %>
 
@@ -11,31 +12,36 @@
       <% @poll.poll_options.each do |option| %>
         <tr>
           <td>
-            <% if @vote && @vote.poll_option_id == option.id %>
-              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have voted in this option"></span>
+            <% if @vote && option.id.in?(@vote.poll_option_ids) %>
+              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You voted for this option"></span>
             <% end %>
           </td>
           <td><%= option.description %></td>
-          <td><%= option.votes.count %></td>
-          <td><%= (option.votes.count.to_f/@poll.votes.count*100).round(2) %>%</td>
+          <td><%= option.vote_options.count %></td>
+          <% option_percentage = (option.vote_options.count.to_f/@poll.votes.count*100).round(2) %>
+          <td><%= option_percentage %>%</td>
           <td class="bar">
             <div class="progress">
-              <% option_percentage = (option.votes.count.to_f/@poll.votes.count*100).round(2) %>
               <div class="progress-bar" role="progressbar" aria-valuenow="<%= option_percentage %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= option_percentage %>%;">
               </div>
             </div></td>
         </tr>
       <% end %>
       <tr>
+        <td></td>
         <td class="total">Total</td>
-        <td class="total"><%= @poll.votes.count %></td>
+        <td class="total"><%= @poll.poll_options.map(&:vote_options).flatten.length %></td>
         <td></td>
-        <td></td>
+        <td>
+          <% if @poll.multiple %>
+            (<%= @poll.votes.count %> people voted)
+          <% end %>
+        </td>
       </tr>
     </table>
   <% else %>
     <div class="alert alert-warning">
-      Voting is not closed yet. Please come back on <%= @poll.deadline + 1 %> to see the results.
+      Voting is not closed yet. Please come back on <%= wca_local_time(@poll.deadline) %>, in <%= distance_of_time_in_words_to_now(@poll.deadline) %> to see the results.
     </div>
   <% end %>
   <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>

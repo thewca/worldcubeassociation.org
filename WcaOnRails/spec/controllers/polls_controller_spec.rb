@@ -85,6 +85,18 @@ describe PollsController do
         poll.reload
         expect(poll.deadline).to eq new_deadline
       end
+
+      it "can delete an unconfirmed poll" do
+        poll = FactoryGirl.create(:poll)
+        post :destroy, id: poll.id
+        expect(Poll.find_by_id(poll.id)).to eq nil
+      end
+
+      it "can't delete a confirmed poll" do
+        poll = FactoryGirl.create(:poll, :confirmed)
+        post :destroy, id: poll.id
+        expect(Poll.find_by_id(poll.id)).not_to eq nil
+      end
     end
   end
 end

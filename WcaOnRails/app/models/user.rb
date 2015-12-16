@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes, dependent: :destroy
-  has_many :poll_options, through: :votes
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"

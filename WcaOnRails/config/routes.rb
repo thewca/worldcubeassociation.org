@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/:id/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
 
-  resources :polls, only: [:edit, :new, :vote, :create, :update, :index]
+  resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 

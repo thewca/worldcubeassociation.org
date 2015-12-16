@@ -28,8 +28,12 @@
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete
-//= require_tree .
 //= require cocoon
+//= require moment
+//= require bootstrap-datetimepicker
+//= require pickers
+//= require_tree .
+
 
 // Dumping ground for... stuff
 window.wca = window.wca || {};
@@ -48,6 +52,7 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
+  $("input.datetime_picker").datetimepicker();
   $('.input-daterange').datepicker({
     format: "yyyy-mm-dd",
     todayBtn: true,

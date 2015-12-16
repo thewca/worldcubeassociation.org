@@ -1,14 +1,17 @@
-<% provide(:title, 'Vote in poll #' + @poll.id.to_s) %>
+<% provide(:title, "Vote in poll ##{@poll.id}") %>
 
 <div class="container">
 
   <% if @poll.poll_is_over? %>
-    <div class="alert alert-danger">Poll is closed</div>
+    <div class="alert alert-danger">Poll is closed. Check out the <%= link_to "results", polls_results_path(@poll) %>.</div>
   <% elsif !@poll.confirmed %>
-    <div class="alert-alert-danger">Voting is not open</div>
+    <div class="alert alert-danger">Voting is not open</div>
   <% else %>
-
+    <div class="alert alert-info">
+      Voting closes in <%= distance_of_time_in_words_to_now(@poll.deadline) %>, on <%= wca_local_time(@poll.deadline) %>.
+    </div>
     <h3><%=md @poll.question %></h3>
+    <h4><%=md @poll.comment %></h4>
 
     <% if !@vote.new_record? %>
       <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
@@ -33,7 +36,7 @@
       <%= f.input :comment, required: false %>
 
       <button type="submit" class="btn btn-success">
-      <%= !@vote.new_record? ? "Update vote" : "Vote" %>
+        <%= !@vote.new_record? ? "Update vote" : "Vote" %>
       </button>
 
     <% end %>

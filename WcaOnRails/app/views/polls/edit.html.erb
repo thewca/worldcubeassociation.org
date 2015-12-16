@@ -1,4 +1,4 @@
-<% provide(:title, 'Editing poll #' + @poll.id.to_s) %>
+<% provide(:title, "Editing poll ##{@poll.id}") %>
 
 <div class="container">
 
@@ -6,19 +6,23 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <div class="alert alert-danger">
-      This poll is open to voting. Editing question or options is not allowed.
+    <div class="alert alert-info">
+      This poll is open to <%= link_to "voting", polls_vote_path(@poll) %>. Editing question or options is not allowed.
     </div>
     <script>
     $(document).ready(function() {
       $("#poll_question").prop("disabled", true);
-      $("#poll_multiple").prop("disabled", true);
+      //$("#poll_multiple").prop("readonly", true);
+      $("#poll_comment").prop("disabled", true);
       $(".nested-fields").children().prop("disabled", true);
+      $(".add_fields").hide();
+      $(".nested-fields").find('a').hide();
+      $("#confirm").hide();
     });
     </script>
   <% end %>
 
-  <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-poll-form' }, wrapper: :horizontal_form,
+  <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
     wrapper_mappings: {
       check_boxes: :horizontal_radio_and_checkboxes,
       radio_buttons: :horizontal_radio_and_checkboxes,
@@ -29,9 +33,8 @@
 
     <%= f.input :question %>
     <%= f.input :comment, label: "Room for additional information" %>
-    <%= f.input :multiple, label: "Allow multiple answers" %>
-    <%= f.input :deadline, :as => :string, :input_html => { :class => 'date_picker' } %>
-
+    <%= f.input :multiple, label: "Allow multiple answers", disabled: is_actually_confirmed %>
+    <%= f.input :deadline, as: :datetime_picker, hint: "Note: Deadline is in UTC time" %>
     <div class="panel panel-default">
       <div class="panel-heading">
         Options
@@ -50,7 +53,10 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.button :submit, class: "btn-primary" %>
-        <%= button_tag(type: "submit", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
+        <% if !@poll.confirmed %>
+          <%= link_to button_tag('Delete', type: "button", class: "btn btn-danger"), @poll, method: :delete, data: { confirm: "Are you sure you want to delete this poll? There is no going back." } %>
+        <% end %>
+        <%= button_tag(type: "submit", id: "confirm", name: "commit", value: "Confirm", class: "btn btn-success", data: { confirm: "Are you sure you want to confirm this poll? You will no longer be able to add, edit or delete options." }) do %>
           Confirm
         <% end %>
       </div>
@@ -59,10 +65,3 @@
   <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 
 </div>
-
-<script>
-$("input.date_picker").datepicker({
-  autoclose: true,
-  format: 'yyyy-mm-dd'
-});
-</script>

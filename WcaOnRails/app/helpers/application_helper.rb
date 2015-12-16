@@ -57,6 +57,10 @@ module ApplicationHelper
     text_field_tag nil, @omni_query, placeholder: "Search site", class: "form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table"
   end
 
+  def wca_local_time(time)
+    local_time(time, "%B %e, %Y %l:%M%P %Z")
+  end
+
   def notifications_for_user(user)
     notifications = []
     # Be careful to not show a competition twice if we're both organizing and delegating it.

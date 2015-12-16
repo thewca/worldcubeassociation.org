@@ -23,7 +23,7 @@
   <div class="panel-body">
     <div>
       <% if post.author %>
-        <em>Announced by <%= post.author.name %> on <%= local_time(post.created_at) %></em>
+        <em>Announced by <%= post.author.name %> on <%= wca_local_time(post.created_at) %></em>
       <% end %>
     </div>
     <%=md post.body %>

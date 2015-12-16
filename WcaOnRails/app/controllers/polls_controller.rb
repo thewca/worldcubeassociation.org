@@ -9,11 +9,8 @@ class PollsController < ApplicationController
     else
       @polls = Poll.where(confirmed: true)
     end
-    @openPolls , @closedPolls = [], []
-    @polls.each do |poll|
-      @openPolls << poll if !poll.poll_is_over?
-      @closedPolls << poll if poll.poll_is_over?
-    end
+    @open_polls = @polls.reject &:poll_is_over?
+    @closed_polls = @polls.select &:poll_is_over?
   end
 
   def new
@@ -46,23 +43,24 @@ class PollsController < ApplicationController
     if @poll.update_attributes(poll_params)
       if params[:commit] == "Confirm"
         flash[:success] = "Poll confirmed and open to voting"
-        redirect_to polls_path
       else
         flash[:success] = "Updated poll"
-        render 'edit'
       end
+      redirect_to edit_poll_path(@poll)
     else
-      render 'edit'
+      render :edit
     end
   end
 
   def destroy
     @poll = Poll.find(params[:id])
-    if @poll.destroy
+
+    if !@poll.confirmed && @poll.destroy
       flash[:success] = "Deleted poll"
-      redirect_to root_url
+      redirect_to polls_path
     else
       flash[:warning] = "Error deleting poll"
+      render :edit
     end
   end
 
