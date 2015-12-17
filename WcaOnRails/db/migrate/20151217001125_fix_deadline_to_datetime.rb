@@ -1,5 +1,6 @@
 class FixDeadlineToDatetime < ActiveRecord::Migration
   def change
-    change_column :polls, :deadline, :datetime
+    remove_column :polls, :deadline
+    add_column :polls, :deadline, :datetime
   end
 end

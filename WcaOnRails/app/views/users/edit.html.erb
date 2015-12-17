@@ -108,6 +108,11 @@
               </label>
               <div class="input-group">
                 <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
+                <span class="input-group-addon">
+                  <a href="#" id="unconfirmed-wca-id-profile" target="_blank">
+                    Profile
+                  </a>
+                </span>
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default" id="approve-wca-id">
                     Approve
