@@ -25,9 +25,7 @@ describe Poll do
       # Skipping validation because can't create poll with past deadline.
       poll = FactoryGirl.build(:poll, deadline: Date.new(2014, 02, 11))
       poll.save!(validate: false)
-      ENV["pedro"] = poll.id.to_s
       poll.comment = "Hey Jeremy"
-      debugger
       poll.save!(validate: false)
       poll.reload
       expect(poll.deadline).to eq Date.new(2014, 02, 11)
