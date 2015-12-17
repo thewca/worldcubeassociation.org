@@ -18,7 +18,7 @@
           </td>
           <td><%= option.description %></td>
           <td><%= option.vote_options.count %></td>
-          <% option_percentage = (option.vote_options.count.to_f/@poll.votes.count*100).round(2) %>
+          <% option_percentage = option.percentage %>
           <td><%= option_percentage %>%</td>
           <td class="bar">
             <div class="progress">
