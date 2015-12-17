@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
-  has_many :votes, dependent: :destroy
+  has_many :votes
+  has_many :registrations
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
@@ -315,6 +316,25 @@ class User < ActiveRecord::Base
     end
   end
 
+  def cannot_register_for_competition_reasons
+    reasons = []
+
+    if name.blank?
+      reasons << "Need a name"
+    end
+    if gender.blank?
+      reasons << "Need a gender"
+    end
+    if dob.blank?
+      reasons << "Need a birthdate"
+    end
+    if country_iso2.blank?
+      reasons << "Need a country"
+    end
+
+    reasons
+  end
+
   def editable_fields_of_user(user)
     fields = Set.new
     if user.dummy_account?
@@ -337,8 +357,10 @@ class User < ActiveRecord::Base
       fields << :avatar << :avatar_cache
     end
     if user == self || admin? || any_kind_of_delegate?
-      # Only allow editing name if they don't have a WCA ID.
-      unless user.wca_id
+      # Don't allow editing data if they have a WCA ID, or if they
+      # have already registered for a competition.
+      cannot_edit_data = user.wca_id || (user == self && user.registrations.count > 0)
+      if !cannot_edit_data
         fields << :name
         fields << :dob
         fields << :gender

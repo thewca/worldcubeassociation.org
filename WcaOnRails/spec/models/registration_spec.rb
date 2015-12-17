@@ -21,4 +21,22 @@ RSpec.describe Registration do
   it "requires user on create" do
     expect(FactoryGirl.build(:registration, user_id: nil)).to be_invalid
   end
+
+  it "requires country" do
+    user = FactoryGirl.create(:user, country_iso2: nil)
+    registration.user = user
+    expect(registration).to be_invalid
+  end
+
+  it "requires gender" do
+    user = FactoryGirl.create(:user, gender: nil)
+    registration.user = user
+    expect(registration).to be_invalid
+  end
+
+  it "requires dob" do
+    user = FactoryGirl.create(:user, dob: nil)
+    registration.user = user
+    expect(registration).to be_invalid
+  end
 end

@@ -24,8 +24,15 @@ class Registration < ActiveRecord::Base
     self.countryId = user.country_iso2
     self.gender = user.gender
     self.email = user.email # TODO - user_id would be way more useful here
-    self.personId = user.wca_id
+    self.personId = user.wca_id || '' # TODO - personId cannot be NULL
     # TODO - we don't need ip anymore now that we have users accounts
+  end
+
+  validate :user_can_register_for_competition
+  def user_can_register_for_competition
+    if user.cannot_register_for_competition_reasons.length > 0
+      errors.add(:user_id, "User must be able to register for competition")
+    end
   end
 
   validate :events_must_be_offered

@@ -6,22 +6,35 @@
     can create one <%= link_to "here", new_user_registration_path %>.
   <% else %>
     Hi, <%= current_user.name %>!
-    <% if @registration.new_record? %>
-      You can register for <%= @registration.competition.name %> below.
+    <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
+      <div class="alert alert-danger">
+        In order to register for this <%= @registration.competition.name %>,
+        you must fix the following problems with your
+        <%= link_to "profile", profile_edit_path %>:
+        <ul>
+          <% current_user.cannot_register_for_competition_reasons.each do |reason| %>
+            <li><%= reason %></li>
+          <% end %>
+        </ul>
+      </div>
     <% else %>
-      You have already registered for <%= @registration.competition.name %>.
-      You can see your registration information below.
-      <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
-      Contact the organizer if you wish to make a change.
-    <% end %>
-
-    <%= simple_form_for @registration, url: competition_registrations_path do |f| %>
-      <%= f.input :guests, disabled: !@registration.new_record? %>
-      <%= f.input :comments, disabled: !@registration.new_record? %>
-      <%= f.input :eventIds, disabled: !@registration.new_record? %>
-
       <% if @registration.new_record? %>
-        <%= f.submit "Register!", class: "btn btn-success" %>
+        You can register for <%= @registration.competition.name %> below.
+      <% else %>
+        You have already registered for <%= @registration.competition.name %>.
+        You can see your registration information below.
+        <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
+        Contact the organizer if you wish to make a change.
+      <% end %>
+
+      <%= simple_form_for @registration, url: competition_registrations_path do |f| %>
+        <%= f.input :eventIds, disabled: !@registration.new_record? %>
+        <%= f.input :guests, disabled: !@registration.new_record? %>
+        <%= f.input :comments, disabled: !@registration.new_record? %>
+
+        <% if @registration.new_record? %>
+          <%= f.submit "Register!", class: "btn btn-success" %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

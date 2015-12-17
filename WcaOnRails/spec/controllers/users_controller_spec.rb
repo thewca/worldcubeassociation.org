@@ -104,4 +104,32 @@ describe UsersController do
       expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
   end
+
+  describe "editing user data" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:delegate) { FactoryGirl.create(:delegate) }
+
+    it "user can change name" do
+      sign_in user
+      patch :update, id: user.id, user: { name: "Johnny 5" }
+      expect(user.reload.name).to eq "Johnny 5"
+    end
+
+    context "after registering for a competition" do
+      let!(:registration) { FactoryGirl.create(:registration, user: user) }
+
+      it "user cannot change name" do
+        sign_in user
+        old_name = user.name
+        patch :update, id: user.id, user: { name: "Johnny 5" }
+        expect(user.reload.name).to eq old_name
+      end
+
+      it "delegate can still change name" do
+        sign_in delegate
+        patch :update, id: user.id, user: { name: "Johnny 5" }
+        expect(user.reload.name).to eq "Johnny 5"
+      end
+    end
+  end
 end

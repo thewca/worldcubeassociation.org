@@ -108,6 +108,24 @@ RSpec.describe NotificationsController, type: :controller do
         ]
       end
 
+      it "asks me to complete my profile before registering for a competition" do
+        user.dob = nil
+        user.save!
+
+        get :index
+        notifications = assigns(:notifications)
+        expect(notifications).to eq [
+          {
+            text: "Connect your WCA ID to your account!",
+            url: profile_claim_wca_id_path,
+          },
+          {
+            text: "Your profile is incomplete. You will not be able to register for competitions until you complete it!",
+            url: profile_edit_path,
+          }
+        ]
+      end
+
       context "when already claimed a wca id" do
         it "tells me who is working on it" do
           person = FactoryGirl.create :person
