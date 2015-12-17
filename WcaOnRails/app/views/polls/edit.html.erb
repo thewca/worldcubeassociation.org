@@ -6,9 +6,15 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <div class="alert alert-info">
-      This poll is open to <%= link_to "voting", polls_vote_path(@poll) %>. Editing question or options is not allowed.
+    <% if @poll.poll_is_over? %>
+      <div class="alert alert-danger">
+        This poll is closed (deadline has passed). Check out the <%= link_to "results", polls_results_path(@poll) %>.
     </div>
+    <% else %>
+      <div class="alert alert-info">
+        This poll is open to <%= link_to "voting", polls_vote_path(@poll) %>. Editing question or options is not allowed.
+      </div>
+    <% end %>
     <script>
     $(document).ready(function() {
       $("#poll_question").prop("disabled", true);
