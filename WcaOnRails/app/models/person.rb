@@ -28,7 +28,7 @@ class Person < ActiveRecord::Base
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end
 
-  def countryIso2
+  def country_iso2
     c = Country.find(countryId)
     c ? c.iso2 : nil
   end
@@ -43,7 +43,7 @@ class Person < ActiveRecord::Base
       name: self.name,
 
       gender: self.gender,
-      country_iso2: self.countryIso2,
+      country_iso2: self.country_iso2,
     }
 
     if include_private_info

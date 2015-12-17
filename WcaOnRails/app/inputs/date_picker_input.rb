@@ -3,7 +3,10 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     set_html_options
     set_value_html_option
 
-    super(wrapper_options) # leave StringInput do the real rendering
+    template.content_tag :div, class: 'input-group date datetimepicker' do
+      input = super(wrapper_options) # leave StringInput do the real rendering
+      input_button + input
+    end
   end
 
   def input_html_classes
@@ -11,6 +14,14 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   end
 
   private
+
+  def input_button
+    template.content_tag :span, class: 'input-group-btn' do
+      template.content_tag :button, class: 'btn btn-default', type: 'button' do
+        template.content_tag :span, '', class: 'glyphicon glyphicon-calendar'
+      end
+    end
+  end
 
   def set_html_options
     input_html_options[:type] = 'text'

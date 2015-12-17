@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
 
-  strip_attributes only: [:wca_id]
+  strip_attributes only: [:wca_id, :country_iso2]
 
   attr_accessor :current_user
 
@@ -24,8 +24,13 @@ class User < ActiveRecord::Base
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
+  validates :country_iso2, inclusion: { in: Country.all.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
+
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
+
+  ALLOWABLE_GENDERS = [:m, :f, :o]
+  enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
 
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
@@ -102,10 +107,13 @@ class User < ActiveRecord::Base
     wca_id.present? && encrypted_password.blank? && email.downcase == "#{wca_id}@worldcubeassociation.org".downcase
   end
 
-  before_validation :copy_name_from_persons
-  def copy_name_from_persons
+  before_validation :copy_data_from_persons
+  def copy_data_from_persons
     if person
       self.name = person.name
+      self.dob = person.dob
+      self.gender = person.gender
+      self.country_iso2 = person.country_iso2
     end
   end
 
@@ -332,6 +340,9 @@ class User < ActiveRecord::Base
       # Only allow editing name if they don't have a WCA ID.
       unless user.wca_id
         fields << :name
+        fields << :dob
+        fields << :gender
+        fields << :country_iso2
       end
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
@@ -398,6 +409,8 @@ class User < ActiveRecord::Base
       id: self.id,
       wca_id: self.wca_id,
       name: self.name,
+      gender: self.gender,
+      country_iso2: self.country_iso2,
       created_at: self.created_at,
       updated_at: self.updated_at,
       avatar: {
@@ -406,16 +419,10 @@ class User < ActiveRecord::Base
         is_default: !self.avatar?,
       },
     }
-    if person
-      json[:gender] = person.gender
-      json[:country_iso2] = person.countryIso2
-    end
 
     if include_private_info
       json[:email] = self.email
-      if person
-        json[:dob] = person.dob
-      end
+      json[:dob] = self.dob
     end
 
     json

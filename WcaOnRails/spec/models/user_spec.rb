@@ -12,6 +12,14 @@ RSpec.describe User, type: :model do
     expect(user.dummy_account?).to be true
   end
 
+  it "allows empty country" do
+    user = FactoryGirl.build :user, country_iso2: ""
+    expect(user).to be_valid
+
+    user = FactoryGirl.build :user, country_iso2: nil
+    expect(user).to be_valid
+  end
+
   it "requires senior delegate be a senior delegate" do
     delegate = FactoryGirl.create :delegate
     user = FactoryGirl.create :user

@@ -1,0 +1,28 @@
+<% provide(:title, "Register for #{@registration.competition.name}") %>
+<div class="container">
+  <% if !current_user %>
+    <%= link_to "Log in", new_user_session_path %> to register for
+    <%= @registration.competition.name %>. If you do not yet have a WCA account, you
+    can create one <%= link_to "here", new_user_registration_path %>.
+  <% else %>
+    Hi, <%= current_user.name %>!
+    <% if @registration.new_record? %>
+      You can register for <%= @registration.competition.name %> below.
+    <% else %>
+      You have already registered for <%= @registration.competition.name %>.
+      You can see your registration information below.
+      <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
+      Contact the organizer if you wish to make a change.
+    <% end %>
+
+    <%= simple_form_for @registration, url: competition_registrations_path do |f| %>
+      <%= f.input :guests, disabled: !@registration.new_record? %>
+      <%= f.input :comments, disabled: !@registration.new_record? %>
+      <%= f.input :eventIds, disabled: !@registration.new_record? %>
+
+      <% if @registration.new_record? %>
+        <%= f.submit "Register!", class: "btn btn-success" %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

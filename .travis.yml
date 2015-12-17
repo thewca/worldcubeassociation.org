@@ -18,6 +18,5 @@ before_script:
   - bundle exec rake db:create
 sudo: false
 script:
-  - rake db:reset RAILS_ENV=test
   - rake
   - bundle exec pre-commit run git

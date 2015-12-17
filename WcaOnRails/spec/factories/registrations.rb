@@ -4,11 +4,12 @@ FactoryGirl.define do
     guests ""
     comments ""
     eventIds ""
-    factory :approved_registration do
+    birthday "2015-04-30"
+    competitionId { FactoryGirl.create(:competition).id }
+    user_id { FactoryGirl.create(:user, :wca_id).id }
+
+    trait :approved do
       status "a"
-    end
-    factory :pending_registration do
-      status "p"
     end
   end
 end

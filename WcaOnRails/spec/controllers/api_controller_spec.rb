@@ -259,9 +259,9 @@ describe Api::V0::ApiController do
         expect(json['me']['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['me']['avatar']['is_default']).to eq true
 
-        expect(json['me']['country_iso2']).to be_nil
-        expect(json['me']['gender']).to be_nil
-        expect(json['me']['dob']).to be_nil
+        expect(json['me']['country_iso2']).to eq "US"
+        expect(json['me']['gender']).to eq "m"
+        expect(json['me']['dob']).to eq user.dob.strftime("%F")
       end
     end
 
@@ -283,9 +283,9 @@ describe Api::V0::ApiController do
         expect(json['me']['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['me']['avatar']['is_default']).to eq true
 
-        expect(json['me']['country_iso2']).to be_nil
-        expect(json['me']['gender']).to be_nil
-        expect(json['me']['dob']).to be_nil
+        expect(json['me']['country_iso2']).to eq "US"
+        expect(json['me']['gender']).to eq "m"
+        expect(json['me']['dob']).to eq user.dob.strftime("%F")
       end
     end
   end

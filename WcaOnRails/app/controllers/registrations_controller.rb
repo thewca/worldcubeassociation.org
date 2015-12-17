@@ -1,6 +1,14 @@
-class RegistrationsController < CompetitionsController
-  skip_before_action :can_admin_results_only, only: [:index, :update_all]
+class RegistrationsController < ApplicationController
+  before_action :authenticate_user!, except: [:new, :create]
+
   before_action :can_manage_competition_only, only: [:index, :update_all, :update]
+  private def can_manage_competition_only
+    competition = Competition.find(params[:competition_id])
+    unless current_user && current_user.can_manage_competition?(competition)
+      flash[:danger] = "You are not allowed to manage this competition"
+      redirect_to root_url
+    end
+  end
 
   before_action :registration_matches_competition, only: [:update]
   private def registration_matches_competition
@@ -50,18 +58,32 @@ class RegistrationsController < CompetitionsController
 
   def update
     @registration = Registration.find(params[:id])
-    respond_to do |format|
-      if @registration.update_attributes(registration_params)
-        format.html do
-          competition = Competition.find(params[:competition_id])
-          flash[:success] = "Registration successfully updated"
-          redirect_to competition_registrations_path(competition)
-        end
-        format.json { respond_with_bip(@registration) }
-      else
-        format.html { render action: "edit" }
-        format.json { respond_with_bip(@registration) }
-      end
+    if @registration.update_attributes(registration_params)
+      respond_with_bip(@registration)
+    else
+      respond_with_bip(@registration)
+    end
+  end
+
+  def register
+    competition = Competition.find(params[:competition_id])
+    @registration = nil
+    if current_user
+      @registration = competition.registrations.where(user_id: current_user.id).first
+    end
+    if !@registration
+      @registration = competition.registrations.build(user_id: current_user.id)
+    end
+  end
+
+  def create
+    competition = Competition.find(params[:competition_id])
+    @registration = competition.registrations.build(registration_params.merge(user_id: current_user.id))
+    if @registration.save
+      flash[:success] = "Successfully registered!"
+      redirect_to competition_register_path
+    else
+      render :register
     end
   end
 

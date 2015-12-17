@@ -5,8 +5,7 @@ class CompetitionsController < ApplicationController
   before_action :can_manage_competition_only, only: [:edit, :update]
 
   private def can_manage_competition_only
-    # TODO - it would be nice if our routes used competition_id everywhere, instead of id
-    competition = Competition.find(params[:competition_id] || params[:id])
+    competition = Competition.find(params[:id])
     unless current_user && current_user.can_manage_competition?(competition)
       flash[:danger] = "You are not allowed to manage this competition"
       redirect_to root_url
