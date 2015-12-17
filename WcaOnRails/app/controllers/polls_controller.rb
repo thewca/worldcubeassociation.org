@@ -39,12 +39,7 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
   end
 
-  def preview
-    @poll = Poll.find(params[:id])
-  end
-
   def update
-    #debugger
     @poll = Poll.find(params[:id])
     if @poll.update_attributes(poll_params)
       if params[:commit] == "Confirm"
@@ -75,8 +70,6 @@ class PollsController < ApplicationController
     if params[:commit] == "Confirm" && current_user.can_create_poll?
       poll_params[:confirmed] = true
     end
-    debugger
-    poll_params[:deadline] = params[:poll][:deadline].to_s + ":00"
     return poll_params
   end
 end
