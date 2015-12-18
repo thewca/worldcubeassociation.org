@@ -29,9 +29,16 @@ class Registration < ActiveRecord::Base
   end
 
   validate :user_can_register_for_competition
-  def user_can_register_for_competition
-    if user.cannot_register_for_competition_reasons.length > 0
+  private def user_can_register_for_competition
+    if user && user.cannot_register_for_competition_reasons.length > 0
       errors.add(:user_id, "User must be able to register for competition")
+    end
+  end
+
+  validate :must_register_for_gte_one_event
+  private def must_register_for_gte_one_event
+    if events.length == 0
+      errors.add(:events, "must register for at least one event")
     end
   end
 
@@ -43,7 +50,7 @@ class Registration < ActiveRecord::Base
     end
     invalid_events = events - competition.events
     unless invalid_events.empty?
-      errors.add(:eventIds, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
+      errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
   end
 

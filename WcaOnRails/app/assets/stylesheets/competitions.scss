@@ -23,11 +23,11 @@
       color: black;
     }
   }
-}
 
-.event-checkbox:not(.disabled) {
-  label {
-    cursor: pointer;
+  &:not(.disabled) {
+    label {
+      cursor: pointer;
+    }
   }
 }
 

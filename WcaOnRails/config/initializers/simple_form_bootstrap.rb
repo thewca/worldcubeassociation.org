@@ -72,7 +72,7 @@ SimpleForm.setup do |config|
     b.use :placeholder
     b.use :maxlength
     b.use :readonly
-    b.use :label, class: 'col-sm-3 control-label'
+    b.use :label, class: 'col-sm-2 control-label'
 
     b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
       ba.use :input
@@ -97,7 +97,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :readonly
 
-    b.use :label, class: 'col-sm-3 control-label'
+    b.use :label, class: 'col-sm-2 control-label'
 
     b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
       ba.use :input

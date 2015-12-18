@@ -16,7 +16,7 @@ RSpec.describe RegistrationsController do
     # Change this registration to not have a user
     registration.update_column(:user_id, nil)
 
-    patch :update, competition_id: competition.id, id: registration.id, registration: { name: "test name", eventIds: "222 333", email: "foo@bar.com", countryId: "smerbia" }
+    patch :update, competition_id: competition.id, id: registration.id, registration: { name: "test name", event_ids: {"222" => "1", "333" => "1" }, email: "foo@bar.com", countryId: "smerbia" }
     expect(registration.reload.name).to eq "test name"
     expect(registration.reload.eventIds).to eq "333 222"
     expect(registration.reload.email).to eq "foo@bar.com"
@@ -27,9 +27,9 @@ RSpec.describe RegistrationsController do
     sign_in FactoryGirl.create(:admin)
     competition = FactoryGirl.create(:competition, eventSpecs: "333")
     registration = FactoryGirl.create(:registration, competitionId: competition.id)
-    patch :update, competition_id: competition.id, id: registration.id, registration: { eventIds: "222 333" }
+    patch :update, competition_id: competition.id, id: registration.id, registration: { event_ids: { "222" => "1", "333" => "1" } }
     registration = assigns(:registration)
-    expect(registration.errors.messages[:eventIds]).to eq ["invalid event ids: 222"]
+    expect(registration.errors.messages[:events]).to eq ["invalid event ids: 222"]
   end
 
   it 'cannot change registration of a different competition' do
@@ -41,8 +41,8 @@ RSpec.describe RegistrationsController do
     other_registration = FactoryGirl.create(:registration, competitionId: other_competition.id)
 
     sign_in organizer
-    patch :update, competition_id: competition.id, id: other_registration.id, registration: { eventIds: "333" }
-    expect(other_registration.reload.eventIds).to eq ""
+    patch :update, competition_id: competition.id, id: other_registration.id, registration: { event_ids: { "444" => "1" } }
+    expect(other_registration.reload.eventIds).to eq "333"
     expect(response).to redirect_to root_url
   end
 
@@ -55,7 +55,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can create registration" do
-      post :create, competition_id: competition.id, registration: { eventSpecs: "333", guests: "", comments: "" }
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "" }
       registration = Registration.find_by_personId(user.wca_id)
       expect(registration.competitionId).to eq competition.id
     end

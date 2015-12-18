@@ -39,12 +39,15 @@ $(function() {
       var competitionId = e.target.dataset.competitionId;
       var registrationId = e.target.dataset.registrationId;
       var checked = e.target.checked;
-      var eventIds = $(e.target).parents('tr').find('.event-checkbox input:checked').map(function() { return this.dataset.eventId; }).toArray().join(" ");
       var url = "/competitions/" + encodeURIComponent(competitionId) + "/registrations/" + encodeURIComponent(registrationId);
       var csrf_token = $('meta[name=csrf-token]').attr('content');
       var csrf_param = $('meta[name=csrf-param]').attr('content');
       var data = {};
-      data["registration[eventIds]"] = eventIds;
+
+      $(e.target).parents('tr').find('.event-checkbox input').each(function() {
+        data["registration[event_ids][" + this.dataset.eventId + "]"] = this.checked ? "1" : "0";
+      });
+
       data[csrf_param] = csrf_token;
       $.ajax({
         url: url,

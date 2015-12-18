@@ -88,7 +88,7 @@ class RegistrationsController < ApplicationController
   end
 
   private def registration_params
-    params.require(:registration).permit(
+    registration_params = params.require(:registration).permit(
       :personId,
       :email,
       :name,
@@ -96,7 +96,12 @@ class RegistrationsController < ApplicationController
       :birthday,
       :guests,
       :comments,
-      :eventIds,
+      event_ids: Event.all.map(&:id),
     )
+    if registration_params.has_key?(:event_ids)
+      registration_params[:eventIds] = registration_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
+      registration_params.delete(:event_ids)
+    end
+    registration_params
   end
 end

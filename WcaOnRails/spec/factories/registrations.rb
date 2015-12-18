@@ -3,7 +3,7 @@ FactoryGirl.define do
     name { Faker::Name.name }
     guests ""
     comments ""
-    eventIds ""
+    eventIds "333"
     birthday "2015-04-30"
     competitionId { FactoryGirl.create(:competition).id }
     user_id { FactoryGirl.create(:user, :wca_id).id }
