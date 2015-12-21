@@ -2,7 +2,7 @@ class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create]
 
   before_action :can_manage_competition_only, only: [:index, :update_all, :update]
-  private def can_manage_competition_only
+  private def can_manage_competition
     if params[:competition_id]
       competition = Competition.find(params[:competition_id])
     else
@@ -10,7 +10,10 @@ class RegistrationsController < ApplicationController
       competition = registration.competition
     end
 
-    if !current_user.can_manage_competition?(competition)
+    current_user.can_manage_competition?(competition)
+  end
+  private def can_manage_competition_only
+    if !can_manage_competition
       flash[:danger] = "You are not allowed to manage this competition"
       redirect_to root_url
     end
@@ -44,7 +47,7 @@ class RegistrationsController < ApplicationController
     case params[:registrations_action]
     when "accept-selected"
       registrations.each { |registration| registration.update_attribute(:status, "a") }
-      flash[:success] = "#{"Registration".pluralize(registrations.length)} approved!"
+      flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted!"
     when "reject-selected"
       registrations.each { |registration| registration.update_attribute(:status, "p") }
       flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
@@ -59,8 +62,15 @@ class RegistrationsController < ApplicationController
 
   def update
     @registration = Registration.find(params[:id])
+    was_accepted = @registration.accepted?
     if @registration.update_attributes(registration_params)
-      flash[:success] = "Updated registration"
+      if !was_accepted && @registration.accepted?
+        mailer = RegistrationsMailer.accepted_registration(@registration)
+        mailer.deliver_now
+        flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
+      else
+        flash[:success] = "Updated registration"
+      end
       redirect_to edit_registration_path(@registration)
     else
       flash[:danger] = "Could not update registration"
@@ -84,6 +94,8 @@ class RegistrationsController < ApplicationController
     @registration = competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
       flash[:success] = "Successfully registered!"
+      RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now
+      RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_now
       redirect_to competition_register_path
     else
       render :register
@@ -91,7 +103,7 @@ class RegistrationsController < ApplicationController
   end
 
   private def registration_params
-    registration_params = params.require(:registration).permit(
+    permitted_params = [
       :personId,
       :email,
       :name,
@@ -100,7 +112,12 @@ class RegistrationsController < ApplicationController
       :guests,
       :comments,
       event_ids: Event.all.map(&:id),
-    )
+    ]
+    if can_manage_competition
+      permitted_params << :status
+    end
+    registration_params = params.require(:registration).permit(*permitted_params)
+
     if registration_params.has_key?(:event_ids)
       registration_params[:eventIds] = registration_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
       registration_params.delete(:event_ids)

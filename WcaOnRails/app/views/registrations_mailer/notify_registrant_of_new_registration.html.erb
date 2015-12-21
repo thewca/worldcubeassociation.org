@@ -1,0 +1,10 @@
+<h1>
+  You just registered for <%= @registration.competition.name %>
+</h1>
+
+<p>
+  Your registration is currently pending approval by the organizers.
+  The waiting list currently has <%= @registration.competition.registrations.pending.count %> people on it.
+  You can check the status of your registration
+  <%= link_to "here", competition_register_url(@registration.competition) %>.
+</p>

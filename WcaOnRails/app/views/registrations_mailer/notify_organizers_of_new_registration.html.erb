@@ -1,0 +1,22 @@
+<h1>
+  <%= @registration.name %>
+  <% if @registration.user.wca_id %>
+    (<%= render "shared/wca_id", wca_id: @registration.user.wca_id %>)
+  <% end %>
+  just registered for <%= @registration.competition.name %>
+</h1>
+
+<p>
+  Guests: <%= @registration.guests %>
+  Comments: <%= @registration.comments %>
+</p>
+
+<p>
+  You can approve or delete this registration
+  <%= link_to "here", edit_registration_url(@registration) %>.
+</p>
+
+<p>
+  You can opt out of receiving registration emails
+  <%= link_to "here", edit_competition_url(@registration.competition), anchor: "opt-out-registration-email" %>.
+</p>
