@@ -10,12 +10,12 @@
         <h2>Approved registrations</h2>
       <% end %>
       <div class="table-responsive">
-        <table class="table registrations-table selectable-rows">
+        <table class="table table-nonfluid registrations-table selectable-rows">
           <thead>
             <tr>
+              <th></th>
               <th>WCA ID</th>
               <th>Name</th>
-              <th>Email</th>
               <th>Country</th>
               <th>Birthday</th>
               <th>Guests</th>
@@ -30,23 +30,26 @@
           <tbody>
             <% registrations = @competition.registrations.send(status) %>
             <% registrations.order(id: :asc).each do |registration| %>
-              <% bip_options = { url: competition_registration_path(@competition, registration), ok_button: "Save", ok_button_class: "btn btn-success", cancel_button: "Cancel", cancel_button_class: "btn btn-warning" } %>
               <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
                 <td>
-                  <%= best_in_place registration, :personId, bip_options %>
+                  <%= link_to edit_registration_path(registration.id) do %>
+                    Edit
+                  <% end %>
+                  <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+                    <span class="glyphicon glyphicon-envelope"></span>
+                  <% end %>
                 </td>
                 <td>
-                  <%= best_in_place registration, :name, bip_options %>
+                  <%= render "shared/wca_id", wca_id: registration.personId %>
                 </td>
                 <td>
-                  <span class='glyphicon glyphicon-pencil email-editor' data-registration-id='<%= registration.id %>'></span>
-                  <%= best_in_place registration, :email, bip_options.merge(display_with: lambda { |email| "<a href='mailto:#{email}' target='_blank'>#{email}</a>".html_safe }, activator: ".email-editor[data-registration-id=#{registration.id}]") %>
+                  <%= registration.name %>
                 </td>
                 <td>
-                  <%= best_in_place registration, :countryId, bip_options %>
+                  <%= registration.countryId %>
                 </td>
                 <td>
-                  <%= best_in_place registration, :birthday, bip_options %>
+                  <%= registration.birthday %>
                 </td>
                 <td class="guests" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
                   <%= registration.guests %>
@@ -56,9 +59,9 @@
                 </td>
                 <% @competition.events.each do |event| %>
                   <td>
-                    <span class="event-checkbox">
+                    <span class="event-checkbox disabled">
                       <label>
-                        <input type="checkbox" data-event-id="<%= event.id %>" data-registration-id="<%= registration.id %>" data-competition-id="<%= @competition.id %>" <%= registration.events.include?(event) ? "checked" : "" %>>
+                        <input type="checkbox" data-event-id="<%= event.id %>" data-registration-id="<%= registration.id %>" data-competition-id="<%= @competition.id %>" <%= registration.events.include?(event) ? "checked" : "" %> disabled="disabled">
                         <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
                       </label>
                     </span>
@@ -72,7 +75,6 @@
               <td>
                 <%= registrations.length %>
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

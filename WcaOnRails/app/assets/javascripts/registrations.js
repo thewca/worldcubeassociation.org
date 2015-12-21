@@ -33,43 +33,5 @@ $(function() {
         e.preventDefault();
       }
     });
-
-    $('.event-checkbox input[type=checkbox]').on('change', function(e) {
-      var eventId = e.target.dataset.eventId;
-      var competitionId = e.target.dataset.competitionId;
-      var registrationId = e.target.dataset.registrationId;
-      var checked = e.target.checked;
-      var url = "/competitions/" + encodeURIComponent(competitionId) + "/registrations/" + encodeURIComponent(registrationId);
-      var csrf_token = $('meta[name=csrf-token]').attr('content');
-      var csrf_param = $('meta[name=csrf-param]').attr('content');
-      var data = {};
-
-      $(e.target).parents('tr').find('.event-checkbox input').each(function() {
-        data["registration[event_ids][" + this.dataset.eventId + "]"] = this.checked ? "1" : "0";
-      });
-
-      data[csrf_param] = csrf_token;
-      $.ajax({
-        url: url,
-        method: "PUT",
-        data: data,
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader("Accept", "application/json");
-        }
-      }).fail(function(jqXHR, textStatus) {
-        alert("Request failed: " + textStatus);
-      }).always(function() {
-        // Update total number of people registered for each event here.
-        $('table.registrations-table').each(function() {
-          var $table = $(this);
-          var registrations = _.groupBy($table.find("tbody tr .event-checkbox input:checked").map(function() { return this.dataset.eventId; }));
-          $table.find('td[data-registration-count-event-id]').each(function() {
-            var $countTd = $(this);
-            var eventId = $countTd.data("registration-count-event-id");
-            $countTd.text((registrations[eventId] || []).length);
-          });
-        });
-      });
-    });
   }
 });

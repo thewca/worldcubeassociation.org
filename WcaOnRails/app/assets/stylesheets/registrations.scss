@@ -21,18 +21,3 @@ table.registrations-table {
   position: fixed;
   bottom: calc(5px + #{$footer-height-em});
 }
-
-// Highlight best in place fields on hover, unless
-// they have an external activator specified.
-.best_in_place:not([data-bip-activator]):hover {
-  cursor: pointer;
-  background-color: #eee;
-}
-
-// Emails have an external activator pencil icon.
-.email-editor:hover {
-  cursor: pointer;
-  + .best_in_place {
-    background-color: #eee;
-  }
-}

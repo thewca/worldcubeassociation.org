@@ -3,19 +3,15 @@ class RegistrationsController < ApplicationController
 
   before_action :can_manage_competition_only, only: [:index, :update_all, :update]
   private def can_manage_competition_only
-    competition = Competition.find(params[:competition_id])
-    unless current_user && current_user.can_manage_competition?(competition)
-      flash[:danger] = "You are not allowed to manage this competition"
-      redirect_to root_url
+    if params[:competition_id]
+      competition = Competition.find(params[:competition_id])
+    else
+      registration = Registration.find(params[:id])
+      competition = registration.competition
     end
-  end
 
-  before_action :registration_matches_competition, only: [:update]
-  private def registration_matches_competition
-    competition = Competition.find(params[:competition_id])
-    registration = Registration.find(params[:id])
-    unless competition == registration.competition
-      flash[:danger] = "Given registration does not match competition"
+    if !current_user.can_manage_competition?(competition)
+      flash[:danger] = "You are not allowed to manage this competition"
       redirect_to root_url
     end
   end
@@ -30,6 +26,11 @@ class RegistrationsController < ApplicationController
         headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
       end
     end
+  end
+
+  def edit
+    @registration = Registration.find(params[:id])
+    @competition = @registration.competition
   end
 
   def update_all
@@ -59,9 +60,11 @@ class RegistrationsController < ApplicationController
   def update
     @registration = Registration.find(params[:id])
     if @registration.update_attributes(registration_params)
-      respond_with_bip(@registration)
+      flash[:success] = "Updated registration"
+      redirect_to edit_registration_path(@registration)
     else
-      respond_with_bip(@registration)
+      flash[:danger] = "Could not update registration"
+      render :edit
     end
   end
 

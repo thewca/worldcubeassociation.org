@@ -1,0 +1,57 @@
+<% provide(:title, "#{@registration.name} for #{@competition.name}") %>
+<div class="container">
+  <%= render partial: 'competitions/nav' %>
+
+  <%= simple_form_for @registration, html: { class: 'form-horizontal are-you-sure' }, wrapper: :horizontal_form,
+    wrapper_mappings: {
+      check_boxes: :horizontal_radio_and_checkboxes,
+      radio_buttons: :horizontal_radio_and_checkboxes,
+      file: :horizontal_file_input,
+      boolean: :horizontal_boolean
+  }  do |f| %>
+    <% if @registration.user %>
+      <div class="alert alert-info">
+        This person registered with an account. You can edit their personal information
+        <%= link_to "here", edit_user_path(@registration.user) %>.
+      </div>
+
+      <%= @registration.name %>
+    <% else %>
+      <div class="alert alert-info">
+        This person did not register with an account. You can edit their personal
+        information below.
+      </div>
+
+      <%# We can remove this code once competitions only have registrations with accounts. See https://github.com/cubing/worldcubeassociation.org/issues/275 %>
+      <%= f.input :name %>
+      <%= f.input :birthday, as: :date_picker %>
+      <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>
+      <%= f.input :countryId, collection: Country.all, value_method: :id, label_method: :name %>
+    <% end %>
+
+    <div class="form-group <%= @registration.errors.has_key?(:events) ? "has-error" : "" %>">
+      <label class="col-sm-2 control-label">Events</label>
+      <div class="col-sm-9">
+        <% @registration.competition.events.each do |event| %>
+          <span class="event-checkbox">
+            <label>
+              <%= check_box "registration[event_ids]", event.id, { checked: @registration.events.include?(event) } %>
+              <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
+            </label>
+          </span>
+        <% end %>
+        <% if @registration.errors.has_key?(:events) %>
+          <span class="help-block">
+            <%= @registration.errors[:events].join(" ") %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.submit class: "btn btn-default" %>
+      </div>
+    </div>
+  <% end %>
+</div>

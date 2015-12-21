@@ -35,7 +35,6 @@ gem 'underscore-rails'
 gem 'selectize-rails', git: "git://github.com/jfly/selectize-rails.git"
 
 gem 'high_voltage'
-gem 'best_in_place'
 gem 'carrierwave'
 
 # Pointing to jfly/carrierwave-crop which has a workaround for

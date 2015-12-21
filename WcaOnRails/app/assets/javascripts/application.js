@@ -22,9 +22,7 @@
 //= require underscore
 //= require selectize
 //= require selectize.do_not_clear_on_blur
-//= require best_in_place
 //= require jquery.purr
-//= require best_in_place.purr
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete
@@ -107,7 +105,6 @@ $(function() {
       e.preventDefault();
     }
   });
-  $(".best_in_place").best_in_place();
 });
 
 // http://stackoverflow.com/a/5603156
