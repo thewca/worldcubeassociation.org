@@ -22,7 +22,6 @@
 //= require underscore
 //= require selectize
 //= require selectize.do_not_clear_on_blur
-//= require jquery.purr
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete

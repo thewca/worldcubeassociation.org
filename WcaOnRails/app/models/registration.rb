@@ -21,7 +21,10 @@ class Registration < ActiveRecord::Base
     return if !user
     self.name = user.name
     self.birthday = user.dob
-    self.countryId = Country.find_by_iso2(user.country_iso2).id
+    country = Country.find_by_iso2(user.country_iso2)
+    if country
+      self.countryId = Country.find_by_iso2(user.country_iso2).id
+    end
     self.gender = user.gender
     self.email = user.email # TODO - user_id would be way more useful here
     self.personId = user.wca_id || '' # TODO - personId cannot be NULL

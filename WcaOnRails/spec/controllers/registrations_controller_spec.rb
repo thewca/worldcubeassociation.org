@@ -41,7 +41,7 @@ RSpec.describe RegistrationsController do
     other_registration = FactoryGirl.create(:registration, competitionId: other_competition.id)
 
     sign_in organizer
-    patch :update, competition_id: competition.id, id: other_registration.id, registration: { event_ids: { "444" => "1" } }
+    patch :update, id: other_registration.id, registration: { event_ids: { "444" => "1" } }
     expect(other_registration.reload.eventIds).to eq "333"
     expect(response).to redirect_to root_url
   end
