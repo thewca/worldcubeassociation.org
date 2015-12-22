@@ -4,9 +4,9 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   let(:delegate1) { FactoryGirl.create :delegate }
   let(:delegate2) { FactoryGirl.create :delegate }
   let(:competition) { FactoryGirl.create(:competition, delegates: [delegate1, delegate2]) }
-  let(:registration) { FactoryGirl.create(:registration, competition: competition) }
 
   describe "notify_organizers_of_new_registration" do
+    let(:registration) { FactoryGirl.create(:registration, competition: competition) }
     let(:mail) { RegistrationsMailer.notify_organizers_of_new_registration(registration) }
 
     it "renders the headers" do
@@ -14,7 +14,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate2.receive_registration_emails = false
       competition_delegate2.save!
 
-      expect(mail.subject).to eq("#{registration.user.name} just registered for #{registration.competition.name}")
+      expect(mail.subject).to eq("#{registration.name} just registered for #{registration.competition.name}")
       expect(mail.to).to eq([delegate1.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
@@ -37,12 +37,13 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_registrant_of_new_registration" do
+    let(:registration) { FactoryGirl.create(:registration, competition: competition) }
     let!(:earlier_registration) { FactoryGirl.create(:registration, competition: competition) }
     let(:mail) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("You have registered for #{registration.competition.name}")
-      expect(mail.to).to eq([registration.user.email])
+      expect(mail.to).to eq([registration.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
@@ -54,10 +55,11 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "accepted_registration" do
     let(:mail) { RegistrationsMailer.accepted_registration(registration) }
+    let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been approved!")
-      expect(mail.to).to eq([registration.user.email])
+      expect(mail.to).to eq([registration.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 

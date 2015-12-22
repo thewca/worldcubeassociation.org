@@ -7,7 +7,7 @@ class RegistrationsMailer < ApplicationMailer
     if to.length > 0
       mail(
         to: to,
-        subject: "#{registration.user.name} just registered for #{registration.competition.name}"
+        subject: "#{registration.name} just registered for #{registration.competition.name}"
       )
     else
       nil
@@ -17,7 +17,7 @@ class RegistrationsMailer < ApplicationMailer
   def notify_registrant_of_new_registration(registration)
     @registration = registration
     mail(
-      to: registration.user.email,
+      to: registration.email,
       subject: "You have registered for #{registration.competition.name}",
     )
   end
@@ -25,7 +25,7 @@ class RegistrationsMailer < ApplicationMailer
   def accepted_registration(registration)
     @registration = registration
     mail(
-      to: registration.user.email,
+      to: registration.email,
       subject: "Your registration for #{registration.competition.name} has been approved!",
     )
   end
