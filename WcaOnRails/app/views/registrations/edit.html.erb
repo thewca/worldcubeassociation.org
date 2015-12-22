@@ -29,6 +29,8 @@
       <%= f.input :countryId, collection: Country.all, value_method: :id, label_method: :name %>
     <% end %>
 
+    <%= f.input :status, collection: Registration.statuses, selected: @registration.read_attribute(:status), include_blank: false %>
+
     <div class="form-group <%= @registration.errors.has_key?(:events) ? "has-error" : "" %>">
       <label class="col-sm-2 control-label">Events</label>
       <div class="col-sm-9">
