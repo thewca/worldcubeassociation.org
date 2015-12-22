@@ -10,6 +10,6 @@
     </li>
   <% end %>
   <li role="presentation" class="<%= @competition_registration_view ? "active" : "" %>">
-    <%= link_to "Registration", competition_registrations_path(@competition) %>
+    <%= link_to "Registration", competition_edit_registrations_path(@competition) %>
   </li>
 </ul>

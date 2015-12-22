@@ -98,21 +98,14 @@ function offerChoicesPrereg () {
   global $chosenCompetitionId, $chosenForm, $chosenList;
   global $competition;
 
-  if( $competition['showPreregForm'] )
-    displayChoices( array(
-      array(
-        choiceButton( $chosenForm, 'form', 'Registration Form' ),
-        choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
-        "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />",
-      ),
-    ));
-  else
-    displayChoices( array(
-      array(
-        choiceButton( $chosenList, 'list', 'List of Registered Competitiors' ),
-        "<input type='hidden' name='competitionId' value='$chosenCompetitionId' />",
-      ),
-    ));
+  echo "<div class='form-group'>";
+  if( $competition['showPreregForm'] ) {
+    echo "<a href='/competitions/$chosenCompetitionId/register' class='butt'>Registration Form</a>";
+  }
+  if( $competition['showPreregList'] ) {
+    echo "<a href='/competitions/$chosenCompetitionId/registrations' class='butt'>List of Registered Competitiors</a>";
+  }
+  echo "</div>";
 
 }
 ?>

@@ -1,7 +1,7 @@
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
+  before_action :authenticate_user!, except: [:new, :create, :index]
 
-  before_action :can_manage_competition_only, only: [:index, :update_all, :update]
+  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
   private def can_manage_competition
     if params[:competition_id]
       competition = Competition.find(params[:competition_id])
@@ -19,7 +19,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def index
+  def edit_registrations
     @competition_registration_view = true
     @competition = Competition.find(params[:competition_id])
     respond_to do |format|
@@ -29,6 +29,10 @@ class RegistrationsController < ApplicationController
         headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
       end
     end
+  end
+
+  def index
+    @competition = Competition.find(params[:competition_id])
   end
 
   def edit
@@ -60,7 +64,7 @@ class RegistrationsController < ApplicationController
     else
       throw "Unrecognized action #{params[:registrations_action]}"
     end
-    redirect_to competition_registrations_path(@competition)
+    redirect_to competition_edit_registrations_path(@competition)
   end
 
   def update

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "registrations/index.csv.erb" do
+describe "registrations/edit_registrations.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition
     competition.registrations.build(
