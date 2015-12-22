@@ -46,8 +46,11 @@ class RegistrationsController < ApplicationController
     end
     case params[:registrations_action]
     when "accept-selected"
-      registrations.each { |registration| registration.update_attribute(:status, "a") }
-      flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted!"
+      registrations.each do |registration|
+        registration.update_attribute(:status, "a")
+        RegistrationsMailer.accepted_registration(registration).deliver_now
+      end
+      flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
     when "reject-selected"
       registrations.each { |registration| registration.update_attribute(:status, "p") }
       flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"

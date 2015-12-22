@@ -51,6 +51,18 @@ RSpec.describe RegistrationsController do
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       expect(registration.reload.accepted?).to be true
     end
+
+    it "can approve multiple registrations" do
+      registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
+
+      expect(RegistrationsMailer).to receive(:accepted_registration).with(registration).and_call_original
+      expect(RegistrationsMailer).to receive(:accepted_registration).with(registration2).and_call_original
+      expect do
+        patch :update_all, competition_id: competition.id, registrations_action: "accept-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1"
+      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      expect(registration.reload.accepted?).to be true
+      expect(registration2.reload.accepted?).to be true
+    end
   end
 
   context "signed in as competitor" do
