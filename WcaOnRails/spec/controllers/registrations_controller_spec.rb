@@ -20,10 +20,11 @@ RSpec.describe RegistrationsController do
       registration.update_column(:user_id, nil)
 
       patch :update, id: registration.id, registration: { name: "test name", event_ids: {"222" => "1", "333" => "1" }, email: "foo@bar.com", countryId: "smerbia" }
-      expect(registration.reload.name).to eq "test name"
-      expect(registration.reload.eventIds).to eq "333 222"
-      expect(registration.reload.email).to eq "foo@bar.com"
-      expect(registration.reload.countryId).to eq "smerbia"
+      registration.reload
+      expect(registration.name).to eq "test name"
+      expect(registration.eventIds).to eq "333 222"
+      expect(registration.email).to eq "foo@bar.com"
+      expect(registration.countryId).to eq "smerbia"
     end
 
     it 'cannot set events that are not offered' do
@@ -68,13 +69,13 @@ RSpec.describe RegistrationsController do
         post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "" }
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
 
-      registration = Registration.find_by_personId(user.wca_id)
+      registration = Registration.find_by_user_id(user.id)
       expect(registration.competitionId).to eq competition.id
     end
 
     it "cannot create accepted registration" do
       post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "", status: Registration::statuses[:accepted] }
-      registration = Registration.find_by_personId(user.wca_id)
+      registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
   end

@@ -44,6 +44,11 @@
         </ul>
       </div>
     <% end %>
+    <% if current_user.cannot_edit_data_reason_html(@user) %>
+      <div class="alert alert-warning">
+        <%= current_user.cannot_edit_data_reason_html(@user) %>
+      </div>
+    <% end %>
 
     <% editable_fields = current_user.editable_fields_of_user(@user) %>
 

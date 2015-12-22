@@ -50,4 +50,9 @@ RSpec.describe Registration do
     registration.eventIds = "777"
     expect(registration).to be_invalid
   end
+
+  it "handles a changing user" do
+    registration.user.update_column(:name, "New Name")
+    expect(registration.name).to eq "New Name"
+  end
 end

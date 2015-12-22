@@ -11,24 +11,39 @@ class Registration < ActiveRecord::Base
     (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
   end
 
-  attr_writer :birthday
-  def birthday
-    birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.new(birthYear, birthMonth, birthDay)
+  def name
+    user ? user.name : read_attribute(:name)
   end
 
-  before_validation :copy_user_info
-  def copy_user_info
-    return if !user
-    self.name = user.name
-    self.birthday = user.dob
-    country = Country.find_by_iso2(user.country_iso2)
-    if country
-      self.countryId = Country.find_by_iso2(user.country_iso2).id
+  attr_writer :birthday
+  def birthday
+    if user
+      user.dob
+    else
+      birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.new(birthYear, birthMonth, birthDay)
     end
-    self.gender = user.gender
-    self.email = user.email # TODO - user_id would be way more useful here
-    self.personId = user.wca_id || '' # TODO - personId cannot be NULL
-    # TODO - we don't need ip anymore now that we have users accounts
+  end
+
+  def gender
+    user ? user.gender : read_attribute(:gender)
+  end
+
+  def countryId
+    if user
+      country = Country.find_by_iso2(user.country_iso2)
+      if country
+        return country.id
+      end
+    end
+    read_attribute(:countryId)
+  end
+
+  def email
+    user ? user.email : read_attribute(:email)
+  end
+
+  def personId
+    user ? user.wca_id : read_attribute(:personId)
   end
 
   validate :user_can_register_for_competition
