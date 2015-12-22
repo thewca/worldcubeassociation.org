@@ -40,7 +40,9 @@
                   <% end %>
                 </td>
                 <td>
-                  <%= render "shared/wca_id", wca_id: registration.personId %>
+                  <% if registration.personId %>
+                    <%= render "shared/wca_id", wca_id: registration.personId %>
+                  <% end %>
                 </td>
                 <td>
                   <%= registration.name %>
