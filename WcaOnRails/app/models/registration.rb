@@ -46,6 +46,12 @@ class Registration < ActiveRecord::Base
     user ? user.wca_id : read_attribute(:personId)
   end
 
+  def waiting_list_info
+    pending_registrations = competition.registrations.pending.order(:created_at)
+    index = pending_registrations.index(self)
+    OpenStruct.new(index: index, length: pending_registrations.length)
+  end
+
   validate :user_can_register_for_competition
   private def user_can_register_for_competition
     if user && user.cannot_register_for_competition_reasons.length > 0

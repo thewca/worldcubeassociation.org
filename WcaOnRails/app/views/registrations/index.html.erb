@@ -29,7 +29,7 @@
           </thead>
           <tbody>
             <% registrations = @competition.registrations.send(status) %>
-            <% registrations.order(id: :asc).each do |registration| %>
+            <% registrations.order(created_at: :asc, id: :asc).each do |registration| %>
               <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
                 <td>
                   <%= link_to edit_registration_path(registration.id) do %>

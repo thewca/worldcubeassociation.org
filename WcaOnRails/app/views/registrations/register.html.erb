@@ -20,18 +20,29 @@
         </ul>
       </div>
     <% else %>
-      <p>
+      <div>
         <% if @registration.new_record? %>
           You can register for <%= @registration.competition.name %> below.
         <% else %>
-          You have already registered for <%= @registration.competition.name %>.
+          You have registered for <%= @registration.competition.name %>.
           You can see your registration information below.
           <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
           Contact the organizer if you wish to make a change.
-        <% end %>
-      </p>
 
-      <%= simple_form_for @registration, url: competition_registrations_path, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
+          <% if @registration.pending? %>
+            <div class="alert alert-warning">
+              <% waiting_list_info = @registration.waiting_list_info %>
+              You are currently number <%= waiting_list_info.index + 1 %> of <%= waiting_list_info.length %> on the waiting list.
+            </div>
+          <% else %>
+            <div class="alert alert-success">
+              Your registration has been accepted!
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <%= simple_form_for @registration, url: competition_registrations_path(@registration.competition.id), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
         wrapper_mappings: {
           check_boxes: :horizontal_radio_and_checkboxes,
           radio_buttons: :horizontal_radio_and_checkboxes,
