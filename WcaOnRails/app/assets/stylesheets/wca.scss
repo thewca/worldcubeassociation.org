@@ -2,13 +2,23 @@
   font-family: monospace;
 }
 
-// From http://stackoverflow.com/a/10688485
-.table-nonfluid {
-  width: auto;
-}
+table.table {
+  // From http://stackoverflow.com/a/10688485
+  &.table-nonfluid {
+    width: auto;
+  }
 
-.table-vertical-align-middle tbody tr td {
-  vertical-align: middle;
+  &.floatThead thead th {
+    background-color: white;
+  }
+
+  &.table-vertical-align-middle tbody tr td {
+    vertical-align: middle;
+  }
+
+  tfoot {
+    font-weight: bold;
+  }
 }
 
 .wca-user {

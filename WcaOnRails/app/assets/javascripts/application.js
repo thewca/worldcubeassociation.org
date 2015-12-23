@@ -25,6 +25,7 @@
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete
+//= require jquery.floatThead-slim.js
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
@@ -59,6 +60,9 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
+  $('table.floatThead').floatThead({
+    zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
+  });
 
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they
