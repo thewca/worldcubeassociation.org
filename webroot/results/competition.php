@@ -42,15 +42,6 @@ if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] +
 else if( $competition['showPreregForm'] || $competition['showPreregList'] ){
   #--- Show the prereg form.
   offerChoicesPrereg();
-  require( 'competition_registration.php' );
-  if( $chosenList ){
-    if( $competition['showPreregList'] ) showPreregList();
-    else showPreregForm();
-  }
-  else {
-    if( $competition['showPreregForm'] ) showPreregForm();
-    else showPreregList();
-  }
 }
 
 require( 'includes/_footer.php' );
