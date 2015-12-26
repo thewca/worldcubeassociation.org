@@ -1,4 +1,4 @@
-.wca-id {
+.wca-id:not(th) {
   font-family: monospace;
 }
 
@@ -43,4 +43,69 @@ form .event-checkbox .cubing-icon {
 
 form .event-checkbox-sm .cubing-icon {
   font-size: 1em;
+}
+
+table.table-results {
+  thead tr th {
+    &.position {
+    }
+    &.name {
+    }
+    &.wca-id {
+    }
+    &.country {
+    }
+    &.average {
+      text-align: right;
+    }
+    &.world-rank-single {
+      text-align: right;
+    }
+    &.world-rank-average {
+      text-align: right;
+    }
+    &.world-rank {
+      text-align: right;
+    }
+    &.single {
+      text-align: right;
+    }
+  }
+  tbody tr td {
+    &.position {
+    }
+    &.name {
+    }
+    &.wca-id {
+      vertical-align: middle;
+    }
+    &.country {
+    }
+    &.average {
+      text-align: right;
+    }
+    &.world-rank-single {
+      text-align: right;
+    }
+    &.world-rank-average {
+      text-align: right;
+    }
+    &.single {
+      text-align: right;
+    }
+  }
+
+  &.table-results-sort-by-average {
+    .average,
+    .world-rank-average {
+      font-weight: bold;
+    }
+  }
+
+  &.table-results-sort-by-single {
+    .single,
+    .world-rank-single {
+      font-weight: bold;
+    }
+  }
 }

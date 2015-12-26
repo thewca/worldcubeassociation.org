@@ -91,4 +91,184 @@ RSpec.describe RegistrationsController do
       expect(registration.pending?).to be true
     end
   end
+
+  context "psych sheet when not signed in" do
+    let!(:competition) { FactoryGirl.create(:competition, eventSpecs: "333 444 333bf") }
+
+    it "redirects psych sheet to 333" do
+      get :psych_sheet, competition_id: competition.id
+      expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "333")
+    end
+
+    it "redirects psych sheet to highest ranked event if no 333" do
+      competition.eventSpecs = "222 444"
+      competition.save!
+
+      get :psych_sheet, competition_id: competition.id
+      expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "444")
+    end
+
+    it "does not show pending registrations" do
+      pending_registration = FactoryGirl.create(:registration, competition: competition)
+      RanksAverage.create!(
+        personId: pending_registration.personId,
+        eventId: "333",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      RanksSingle.create!(
+        personId: pending_registration.personId,
+        eventId: "333",
+        best: "2000",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:accepted?).all?).to be true
+    end
+
+    it "handles user without average" do
+      registration = FactoryGirl.create(:registration, :approved, competition: competition)
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:accepted?).all?).to be true
+    end
+
+    it "sorts 444 by average and handles ties" do
+      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      RanksAverage.create!(
+        personId: registration1.personId,
+        eventId: "444",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+      RanksSingle.create!(
+        personId: registration1.personId,
+        eventId: "444",
+        best: "2000",
+        worldRank: 20,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      RanksAverage.create!(
+        personId: registration2.personId,
+        eventId: "444",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+      RanksSingle.create!(
+        personId: registration2.personId,
+        eventId: "444",
+        best: "2000",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      registration3 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      RanksAverage.create!(
+        personId: registration3.personId,
+        eventId: "444",
+        best: "4242",
+        worldRank: 9,
+        continentRank: 9,
+        countryRank: 9,
+      )
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2, 2 ]
+    end
+
+    it "handles 1 registration" do
+      registration = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      RanksAverage.create!(
+        personId: registration.personId,
+        eventId: "444",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1 ]
+    end
+
+    it "sorts 333bf by single" do
+      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      RanksAverage.create!(
+        personId: registration1.personId,
+        eventId: "333bf",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+      RanksSingle.create!(
+        personId: registration1.personId,
+        eventId: "333bf",
+        best: "2000",
+        worldRank: 1,
+        continentRank: 1,
+        countryRank: 1,
+      )
+
+      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      RanksAverage.create!(
+        personId: registration2.personId,
+        eventId: "333bf",
+        best: "4242",
+        worldRank: 1,
+        continentRank: 1,
+        countryRank: 1,
+      )
+      RanksSingle.create!(
+        personId: registration2.personId,
+        eventId: "333bf",
+        best: "2000",
+        worldRank: 2,
+        continentRank: 2,
+        countryRank: 2,
+      )
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration1.id, registration2.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2 ]
+    end
+
+    it "handles 1 registration" do
+      registration = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      RanksAverage.create!(
+        personId: registration.personId,
+        eventId: "444",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1 ]
+    end
+  end
 end

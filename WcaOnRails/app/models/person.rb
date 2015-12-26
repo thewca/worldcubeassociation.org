@@ -4,6 +4,8 @@ class Person < ActiveRecord::Base
   has_one :user, foreign_key: "wca_id"
   has_many :results, foreign_key: "personId"
   has_many :competitions, -> { distinct }, through: :results
+  has_many :ranksAverage, foreign_key: "personId", class_name: "RanksAverage"
+  has_many :ranksSingle, foreign_key: "personId", class_name: "RanksSingle"
 
   alias_method :wca_id, :id
 
@@ -31,6 +33,27 @@ class Person < ActiveRecord::Base
   def country_iso2
     c = Country.find(countryId)
     c ? c.iso2 : nil
+  end
+
+  private def rank_for_event_type(event, type)
+    case type
+    when :single
+      ranksSingle.find_by_eventId(event.id)
+    when :average
+      ranksAverage.find_by_eventId(event.id)
+    else
+      raise "Unrecognized type #{type}"
+    end
+  end
+
+  def world_rank(event, type)
+    rank = rank_for_event_type(event, type)
+    rank ? rank.worldRank : Float::INFINITY
+  end
+
+  def best_solve(event, type)
+    rank = rank_for_event_type(event, type)
+    SolveTime.new(event.id, type, rank.best ? rank.best : 0)
   end
 
   def to_jsonable(include_private_info: false)

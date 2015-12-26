@@ -33,6 +33,14 @@ FactoryGirl.define do
       delegate_status "delegate"
     end
 
+    factory :candidate_delegate, traits: [:wca_id] do
+      delegate_status "delegate"
+    end
+
+    factory :senior_delegate, traits: [:wca_id] do
+      delegate_status "senior_delegate"
+    end
+
     factory :board_member, traits: [:wca_id] do
       delegate_status "board_member"
     end

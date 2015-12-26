@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   resources :competitions, only: [:index, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
     resources :registrations, only: [:index, :update, :create, :edit], shallow: true
+    get 'psych-sheet' => 'registrations#psych_sheet'
+    get 'psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
   end

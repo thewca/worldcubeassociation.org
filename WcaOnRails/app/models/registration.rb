@@ -15,6 +15,8 @@ class Registration < ActiveRecord::Base
     user ? user.name : read_attribute(:name)
   end
 
+  attr_accessor :psych_sheet_position
+
   attr_writer :birthday
   def birthday
     if user
@@ -44,6 +46,10 @@ class Registration < ActiveRecord::Base
 
   def personId
     user ? user.wca_id : read_attribute(:personId)
+  end
+
+  def person
+    Person.find(personId)
   end
 
   def waiting_list_info

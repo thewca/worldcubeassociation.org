@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index]
+  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event]
 
   before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
   private def can_manage_competition
@@ -28,6 +28,34 @@ class RegistrationsController < ApplicationController
         headers['Content-Disposition'] = "attachment; filename=\"#{@competition.id}-registration.csv\""
         headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
       end
+    end
+  end
+
+  def psych_sheet
+    @competition = Competition.find(params[:competition_id])
+    most_main_event = @competition.events.min_by { |e| e.rank }
+    redirect_to competition_psych_sheet_event_url(@competition.id, most_main_event.id)
+  end
+
+  def psych_sheet_event
+    @competition = Competition.find(params[:competition_id])
+    @event = Event.find(params[:event_id])
+
+    # TODO - pull registered events out into a join table
+    @registrations = @competition.registrations.accepted.all.select { |r|
+      r.person && r.events.include?(@event)
+    }.sort_by { |r|
+      [ r.person.world_rank(@event, @event.sort_by), r.person.world_rank(@event, @event.sort_by_second) ]
+    }
+
+    position = 0
+    @registrations.each_with_index do |registration, i|
+      prev_registration = i > 0 ? @registrations[i - 1] : nil
+      tied_previous = prev_registration && registration.person.world_rank(@event, @event.sort_by) == prev_registration.person.world_rank(@event, @event.sort_by)
+      if !tied_previous
+        position += 1
+      end
+      registration.psych_sheet_position = position
     end
   end
 

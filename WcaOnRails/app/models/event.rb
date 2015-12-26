@@ -1,5 +1,5 @@
 class Event
-  attr_accessor :id, :name, :rank, :format, :cellName, :valid
+  attr_accessor :id, :name, :rank, :format, :cellName, :sort_by, :valid
   alias_method :valid?, :valid
 
   def initialize(attributes={})
@@ -8,11 +8,23 @@ class Event
     @rank = attributes[:rank]
     @format = attributes[:format]
     @cellName = attributes[:cellName]
+    @sort_by = attributes[:sort_by]
     @valid = attributes[:valid]
   end
 
   def to_partial_path
     "event"
+  end
+
+  def sort_by_second
+    case @sort_by
+    when :average
+      :single
+    when :single
+      :average
+    else
+      raise "Unrecognized sort_by: #{@sort_by}"
+    end
   end
 
   def self.find(id)
@@ -68,6 +80,7 @@ class Event
       rank: 10,
       format: "time",
       cellName: "Rubik's Cube",
+      sort_by: :average,
     },
     {
       id: "444",
@@ -75,6 +88,7 @@ class Event
       rank: 20,
       format: "time",
       cellName: "4x4 Cube",
+      sort_by: :average,
     },
     {
       id: "555",
@@ -82,6 +96,7 @@ class Event
       rank: 30,
       format: "time",
       cellName: "5x5 Cube",
+      sort_by: :average,
     },
     {
       id: "222",
@@ -89,6 +104,7 @@ class Event
       rank: 40,
       format: "time",
       cellName: "2x2 Cube",
+      sort_by: :average,
     },
     {
       id: "333bf",
@@ -96,6 +112,7 @@ class Event
       rank: 50,
       format: "time",
       cellName: "3x3 blindfolded",
+      sort_by: :single,
     },
     {
       id: "333oh",
@@ -103,6 +120,7 @@ class Event
       rank: 60,
       format: "time",
       cellName: "3x3 one-handed",
+      sort_by: :average,
     },
     {
       id: "333fm",
@@ -110,6 +128,7 @@ class Event
       rank: 70,
       format: "number",
       cellName: "3x3 fewest moves",
+      sort_by: :average,
     },
     {
       id: "333ft",
@@ -117,6 +136,7 @@ class Event
       rank: 80,
       format: "time",
       cellName: "3x3 with feet",
+      sort_by: :average,
     },
     {
       id: "minx",
@@ -124,6 +144,7 @@ class Event
       rank: 110,
       format: "time",
       cellName: "Megaminx",
+      sort_by: :average,
     },
     {
       id: "pyram",
@@ -131,6 +152,7 @@ class Event
       rank: 120,
       format: "time",
       cellName: "Pyraminx",
+      sort_by: :average,
     },
     {
       id: "sq1",
@@ -138,6 +160,7 @@ class Event
       rank: 130,
       format: "time",
       cellName: "Square-1",
+      sort_by: :average,
     },
     {
       id: "clock",
@@ -145,6 +168,7 @@ class Event
       rank: 140,
       format: "time",
       cellName: "Rubik's Clock",
+      sort_by: :average,
     },
     {
       id: "skewb",
@@ -152,6 +176,7 @@ class Event
       rank: 150,
       format: "time",
       cellName: "Skewb",
+      sort_by: :average,
     },
     {
       id: "666",
@@ -159,6 +184,7 @@ class Event
       rank: 200,
       format: "time",
       cellName: "6x6 Cube",
+      sort_by: :average,
     },
     {
       id: "777",
@@ -166,6 +192,7 @@ class Event
       rank: 210,
       format: "time",
       cellName: "7x7 Cube",
+      sort_by: :average,
     },
     {
       id: "444bf",
@@ -173,6 +200,7 @@ class Event
       rank: 500,
       format: "time",
       cellName: "4x4 blindfolded",
+      sort_by: :single,
     },
     {
       id: "555bf",
@@ -180,6 +208,7 @@ class Event
       rank: 510,
       format: "time",
       cellName: "5x5 blindfolded",
+      sort_by: :single,
     },
     {
       id: "333mbf",
@@ -187,7 +216,9 @@ class Event
       rank: 520,
       format: "multi",
       cellName: "3x3 multi blind",
+      sort_by: :single,
     },
+
     {
       id: "magic",
       name: "Rubik's Magic",

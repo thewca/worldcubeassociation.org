@@ -12,37 +12,21 @@ end
 
 # Create board members
 8.times do
-  User.create!(random_user.merge({
-    delegate_status: "board_member",
-    region: Faker::Address.country,
-  })).confirm!
+  FactoryGirl.create(:board_member)
 end
 
 # Create senior delegates and their subordinate delegates
 5.times do
-  senior_delegate = User.create!(random_user.merge({
-    delegate_status: "senior_delegate",
-    region: Faker::Address.country,
-  }))
-  senior_delegate.confirm!
+  senior_delegate = FactoryGirl.create(:senior_delegate)
   rand(10).times do
-    delegate = User.create!(random_user.merge({
-      delegate_status: [ "delegate", "candidate_delegate" ].sample,
-      senior_delegate: senior_delegate,
-      region: Faker::Address.country,
-    }))
-    delegate.confirm!
+    delegate = FactoryGirl.create([ :delegate, :candidate_delegate ].sample,
+                                  senior_delegate: senior_delegate)
   end
 end
 
 # Create some delegates without a senior delegate
 5.times do
-  delegate = User.create!(random_user.merge({
-    delegate_status: [ "delegate", "candidate_delegate" ].sample,
-    senior_delegate: nil,
-    region: Faker::Address.country,
-  }))
-  delegate.confirm!
+  FactoryGirl.create([ :delegate, :candidate_delegate ].sample)
 end
 
 # Create members and leaders for every WCA team
