@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event]
+  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 
   before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
   private def can_manage_competition
@@ -119,13 +119,11 @@ class RegistrationsController < ApplicationController
   end
 
   def register
-    competition = Competition.find(params[:competition_id])
+    @competition = Competition.find(params[:competition_id])
     @registration = nil
     if current_user
-      @registration = competition.registrations.where(user_id: current_user.id).first
-    end
-    if !@registration
-      @registration = competition.registrations.build(user_id: current_user.id)
+      registrations = competition.registrations
+      @registration = registrations.find_by_user_id(current_user.id) || registrations.build(user_id: current_user.id)
     end
   end
 

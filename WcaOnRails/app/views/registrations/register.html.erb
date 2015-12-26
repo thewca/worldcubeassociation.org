@@ -1,8 +1,8 @@
-<% provide(:title, "Register for #{@registration.competition.name}") %>
+<% provide(:title, "Register for #{@competition.name}") %>
 <div class="container">
   <% if !current_user %>
     <%= link_to "Log in", new_user_session_path %> to register for
-    <%= @registration.competition.name %>. If you do not yet have a WCA account, you
+    <%= @competition.name %>. If you do not yet have a WCA account, you
     can create one <%= link_to "here", new_user_registration_path %>.
   <% else %>
     <p>
@@ -10,7 +10,7 @@
     </p>
     <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
       <div class="alert alert-danger">
-        In order to register for this <%= @registration.competition.name %>,
+        In order to register for this <%= @competition.name %>,
         you must fix the following problems with your
         <%= link_to "profile", profile_edit_path %>:
         <ul>
@@ -22,9 +22,9 @@
     <% else %>
       <div>
         <% if @registration.new_record? %>
-          You can register for <%= @registration.competition.name %> below.
+          You can register for <%= @competition.name %> below.
         <% else %>
-          You have registered for <%= @registration.competition.name %>.
+          You have registered for <%= @competition.name %>.
           You can see your registration information below.
           <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
           Contact the organizer if you wish to make a change.
@@ -42,7 +42,7 @@
         <% end %>
       </div>
 
-      <%= simple_form_for @registration, url: competition_registrations_path(@registration.competition.id), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
+      <%= simple_form_for @registration, url: competition_registrations_path(@competition.id), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
         wrapper_mappings: {
           check_boxes: :horizontal_radio_and_checkboxes,
           radio_buttons: :horizontal_radio_and_checkboxes,
@@ -52,7 +52,7 @@
         <div class="form-group <%= @registration.errors.has_key?(:events) ? "has-error" : "" %>">
           <label class="col-sm-2 control-label">Events</label>
           <div class="col-sm-9">
-            <% @registration.competition.events.each do |event| %>
+            <% @competition.events.each do |event| %>
               <span class="event-checkbox <%= !@registration.new_record? ? "disabled" : "" %>">
                 <label>
                   <%= check_box "registration[event_ids]", event.id, { checked: @registration.events.include?(event), disabled: !@registration.new_record? } %>

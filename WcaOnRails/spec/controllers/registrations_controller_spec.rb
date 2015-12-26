@@ -92,6 +92,33 @@ RSpec.describe RegistrationsController do
     end
   end
 
+  context "register" do
+    let(:competition) { FactoryGirl.create :competition }
+
+    it "works when not logged in" do
+      get :register, competition_id: competition.id
+      expect(assigns(:registration)).to eq nil
+    end
+
+    it "finds registration when logged in and not registered" do
+      registration = FactoryGirl.create(:registration, competition: competition)
+      sign_in registration.user
+
+      get :register, competition_id: competition.id
+      expect(assigns(:registration)).to eq registration
+    end
+
+    it "creates registration when logged in and not registered" do
+      user = FactoryGirl.create :user
+      sign_in user
+
+      get :register, competition_id: competition.id
+      registration = assigns(:registration)
+      expect(registration.new_record?).to eq true
+      expect(registration.user_id).to eq user.id
+    end
+  end
+
   context "psych sheet when not signed in" do
     let!(:competition) { FactoryGirl.create(:competition, eventSpecs: "333 444 333bf") }
 
