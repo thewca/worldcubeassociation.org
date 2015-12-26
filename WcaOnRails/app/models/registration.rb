@@ -49,7 +49,15 @@ class Registration < ActiveRecord::Base
   end
 
   def person
-    Person.find(personId)
+    Person.find_by_id(personId)
+  end
+
+  def world_rank(event, type)
+    person ? person.world_rank(event, type) : nil
+  end
+
+  def best_solve(event, type)
+    person ? person.best_solve(event, type) : SolveTime.new(event.id, type, 0)
   end
 
   def waiting_list_info

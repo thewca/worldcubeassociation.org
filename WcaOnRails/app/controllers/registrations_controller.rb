@@ -42,16 +42,21 @@ class RegistrationsController < ApplicationController
     @event = Event.find(params[:event_id])
 
     # TODO - pull registered events out into a join table
+    # https://github.com/cubing/worldcubeassociation.org/issues/275#issuecomment-167347053
     @registrations = @competition.registrations.accepted.all.select { |r|
-      r.person && r.events.include?(@event)
+      r.events.include?(@event)
     }.sort_by { |r|
-      [ r.person.world_rank(@event, @event.sort_by), r.person.world_rank(@event, @event.sort_by_second) ]
+      has_competed = !!r.world_rank(@event, @event.sort_by)
+      [ has_competed ? 0 : 1, r.world_rank(@event, @event.sort_by), r.world_rank(@event, @event.sort_by_second), r.name ]
     }
 
     position = 0
     @registrations.each_with_index do |registration, i|
       prev_registration = i > 0 ? @registrations[i - 1] : nil
-      tied_previous = prev_registration && registration.person.world_rank(@event, @event.sort_by) == prev_registration.person.world_rank(@event, @event.sort_by)
+      tied_previous = false
+      if prev_registration
+        tied_previous = registration.world_rank(@event, @event.sort_by) == prev_registration.world_rank(@event, @event.sort_by)
+      end
       if !tied_previous
         position += 1
       end

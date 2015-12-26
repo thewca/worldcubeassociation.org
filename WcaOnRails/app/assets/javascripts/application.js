@@ -60,8 +60,17 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
-  $('table.floatThead').floatThead({
+
+  var $tablesToFloatHeaders = $('table.floatThead');
+  $tablesToFloatHeaders.floatThead({
     zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
+  });
+  // Workaround for https://github.com/mkoryak/floatThead/issues/263
+  $tablesToFloatHeaders.each(function() {
+    var $table = $(this);
+    $table.closest('.table-responsive').scroll(function(e) {
+      $table.floatThead('reflow');
+    });
   });
 
   // After a popup actually occurs, there may be some images that need to load.

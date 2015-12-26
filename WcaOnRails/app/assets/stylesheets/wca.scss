@@ -45,8 +45,10 @@ form .event-checkbox-sm .cubing-icon {
   font-size: 1em;
 }
 
-table.table-results {
+table.wca-results {
   thead tr th {
+    white-space: nowrap;
+
     &.position {
     }
     &.name {
@@ -64,17 +66,21 @@ table.table-results {
     &.world-rank-average {
       text-align: right;
     }
-    &.world-rank {
-      text-align: right;
-    }
     &.single {
       text-align: right;
     }
   }
   tbody tr td {
+    &:last-child {
+      width: 100%;
+    }
     &.position {
+      &.tied-previous {
+        @extend .text-muted;
+      }
     }
     &.name {
+      white-space: nowrap;
     }
     &.wca-id {
       vertical-align: middle;
@@ -95,14 +101,14 @@ table.table-results {
     }
   }
 
-  &.table-results-sort-by-average {
+  &.wca-results-sort-by-average {
     .average,
     .world-rank-average {
       font-weight: bold;
     }
   }
 
-  &.table-results-sort-by-single {
+  &.wca-results-sort-by-single {
     .single,
     .world-rank-single {
       font-weight: bold;

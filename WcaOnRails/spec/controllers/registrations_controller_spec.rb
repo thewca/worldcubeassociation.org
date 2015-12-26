@@ -254,6 +254,39 @@ RSpec.describe RegistrationsController do
       expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2 ]
     end
 
+    it "shows first timers on bottom" do
+      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      RanksAverage.create!(
+        personId: registration1.personId,
+        eventId: "333bf",
+        best: "4242",
+        worldRank: 10,
+        continentRank: 10,
+        countryRank: 10,
+      )
+      RanksSingle.create!(
+        personId: registration1.personId,
+        eventId: "333bf",
+        best: "2000",
+        worldRank: 1,
+        continentRank: 1,
+        countryRank: 1,
+      )
+
+      # Someone who has never competed in a WCA competition
+      user2 = FactoryGirl.create(:user, name: "Zzyzx")
+      registration2 = FactoryGirl.create(:registration, :approved, user: user2, competition: competition, eventIds: "333bf")
+
+      # Someone who has never competed in 333bf
+      user3 = FactoryGirl.create(:user, :wca_id, name: "Aaron")
+      registration3 = FactoryGirl.create(:registration, :approved, user: user3, competition: competition, eventIds: "333bf")
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration1.id, registration3.id, registration2.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2, 2 ]
+    end
+
     it "handles 1 registration" do
       registration = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
       RanksAverage.create!(

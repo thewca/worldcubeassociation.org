@@ -48,12 +48,12 @@ class Person < ActiveRecord::Base
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : Float::INFINITY
+    rank ? rank.worldRank : nil
   end
 
   def best_solve(event, type)
     rank = rank_for_event_type(event, type)
-    SolveTime.new(event.id, type, rank.best ? rank.best : 0)
+    SolveTime.new(event.id, type, rank ? rank.best : 0)
   end
 
   def to_jsonable(include_private_info: false)
