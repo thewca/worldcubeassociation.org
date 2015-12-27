@@ -1,8 +1,6 @@
 <% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
 
-<div class="container">
-  <h1><%= yield(:title) %></h1>
-
+<%= render layout: "nav", locals: { fluid: true } do %>
   <div class="table-responsive">
     <table class="table table-hover table-striped table-condensed floatThead wca-results wca-results-sort-by-<%= @event.sort_by.to_s %>">
       <thead>
@@ -40,4 +38,4 @@
       </tbody>
     </table>
   </div>
-</div>
+<% end %>

@@ -9,6 +9,7 @@ RSpec.describe "registrations/register" do
 
     allow(view).to receive(:current_user) { registration2.user }
     assign(:registration, registration2)
+    assign(:competition, competition)
 
     render
     expect(rendered).to match /You are currently number 2 of 3 on the waiting list/

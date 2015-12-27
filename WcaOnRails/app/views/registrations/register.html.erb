@@ -1,5 +1,6 @@
 <% provide(:title, "Register for #{@competition.name}") %>
-<div class="container">
+
+<%= render layout: "nav" do %>
   <% if !current_user %>
     <%= link_to "Log in", new_user_session_path %> to register for
     <%= @competition.name %>. If you do not yet have a WCA account, you
@@ -81,4 +82,4 @@
       <% end %>
     <% end %>
   <% end %>
-</div>
+<% end %>

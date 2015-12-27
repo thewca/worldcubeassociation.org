@@ -1,15 +1,53 @@
-<h1><%= yield(:title) %></h1>
+<div class="<%= defined?(fluid) && fluid ? "container-fluid" : "container" %>">
+  <div class="row">
+    <div id="competition-nav">
+      <div class="list-group">
+        <% [
+          { text: "Info", path: "/results/c.php?i=#{@competition.id}", fa_icon: "info-circle" },
+          { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
+          { text: "Psych sheet", path: competition_psych_sheet_path(@competition), fa_icon: "users" },
+          # TODO - psych sheets
 
-<ul class="nav nav-tabs">
-  <li role="presentation" class="<%= @competition_organizer_view ? "active" : "" %>">
-    <%= link_to "Organizer view", edit_competition_path(@competition) %>
-  </li>
-  <% if current_user.can_admin_results? %>
-    <li role="presentation" class="<%= @competition_admin_view ? "active" : "" %>">
-      <%= link_to "Admin view", admin_edit_competition_path(@competition) %>
-    </li>
-  <% end %>
-  <li role="presentation" class="<%= @competition_registration_view ? "active" : "" %>">
-    <%= link_to "Registration", competition_edit_registrations_path(@competition) %>
-  </li>
-</ul>
+          # TODO - nest under edit
+          { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "upload" },
+          { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "upload" },
+          { text: "Registration", path: competition_edit_registrations_path(@competition), fa_icon: "sign-in" },
+        ].each do |nav_item| %>
+          <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
+            <% if nav_item[:fa_icon] %>
+              <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i>
+            <% end %>
+            <%= nav_item[:text] %>
+            <% if nav_item[:notification_count] %>
+              <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>"><%= nav_item[:notification_count] %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div id="competition-data">
+      <h1><%= @competition.name %></h1>
+      <hr />
+
+      <%= yield %>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var $nav = $('#competition-nav .list-group');
+    $nav.affix({
+      offset: {
+        top: function() {
+          var parentTop = $nav.parent().offset().top;
+          var affixTopSpacing = 20; // From .bs-affix in wca.scss
+          return parentTop - affixTopSpacing;
+        },
+        bottom: function () {
+          return (this.bottom = $('.footer').outerHeight(true));
+        },
+      },
+    });
+  })();
+</script>

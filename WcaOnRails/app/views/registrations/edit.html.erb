@@ -1,7 +1,6 @@
 <% provide(:title, "#{@registration.name} for #{@competition.name}") %>
-<div class="container">
-  <%= render partial: 'competitions/nav' %>
 
+<%= render layout: 'nav' do %>
   <%= simple_form_for @registration, html: { class: 'form-horizontal are-you-sure' }, wrapper: :horizontal_form,
     wrapper_mappings: {
       check_boxes: :horizontal_radio_and_checkboxes,
@@ -56,4 +55,5 @@
       </div>
     </div>
   <% end %>
-</div>
+
+<% end %>

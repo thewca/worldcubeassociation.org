@@ -1,6 +1,6 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
-<div class="container-fluid">
-  <%= render partial: 'competitions/nav' %>
+
+<%= render layout: 'nav', locals: { fluid: true } do %>
 
   <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
     <% [:pending, :accepted].each do |status| %>
@@ -10,7 +10,7 @@
         <h2>Approved registrations</h2>
       <% end %>
       <div class="table-responsive">
-        <table class="table table-nonfluid registrations-table selectable-rows">
+        <table class="table floatThead table-nonfluid registrations-table selectable-rows">
           <thead>
             <tr>
               <th></th>
@@ -83,6 +83,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <% @competition.events.each do |event| %>
                 <td data-registration-count-event-id="<%= event.id %>">
                   <%= registrations.to_a.count { |r| r.events.include?(event) } %>
@@ -116,4 +117,5 @@
       </button>
     </div>
   <% end %>
-</div>
+
+<% end %>

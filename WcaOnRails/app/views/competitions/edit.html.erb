@@ -1,6 +1,6 @@
 <% provide(:title, @competition.name) %>
-<div class="container">
-  <%= render partial: 'nav' %>
+
+<%= render layout: 'nav' do %>
 
   <% if @competition_admin_view %>
     <h2>Announcements</h2>
@@ -329,4 +329,5 @@
     </div>
 
   <% end %>
-</div>
+
+<% end %>

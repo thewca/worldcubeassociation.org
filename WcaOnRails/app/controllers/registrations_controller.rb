@@ -122,7 +122,7 @@ class RegistrationsController < ApplicationController
     @competition = Competition.find(params[:competition_id])
     @registration = nil
     if current_user
-      registrations = competition.registrations
+      registrations = @competition.registrations
       @registration = registrations.find_by_user_id(current_user.id) || registrations.build(user_id: current_user.id)
     end
   end

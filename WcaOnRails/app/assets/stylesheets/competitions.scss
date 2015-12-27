@@ -1,5 +1,30 @@
-// Workaround for https://github.com/cubing/icons/issues/8
+// Small enough to fit even at sm screen size
+$competition-nav-width: 200px;
+$competition-nav-padding: 50px;
 
+#competition-nav {
+  @extend .col-sm-4;
+  width: $competition-nav-width + $competition-nav-padding;
+
+  .list-group {
+    top: 20px;
+    width: $competition-nav-width;
+
+    // Disable affix on mobile
+    //  http://stackoverflow.com/a/17395219/1739415
+    @media (max-width: $screen-sm-min) {
+      position: static;
+      width: 100%;
+    }
+  }
+}
+
+#competition-data {
+  @extend .col-sm-8;
+  width: calc(100% - ($competition-nav-width + $competition-nav-padding));
+}
+
+// Workaround for https://github.com/cubing/icons/issues/8
 .cubing-icon.icon-mmagic::before {
   content: 'mmagic';
 }
