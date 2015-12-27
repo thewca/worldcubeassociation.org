@@ -1,8 +1,6 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
-<div class="container">
-  <h1><%= yield(:title) %></h1>
-
+<%= render layout: "nav" do %>
   <table class="table floatThead table-nonfluid table-striped table-condensed">
     <thead>
       <th>Name</th>
@@ -54,4 +52,4 @@
       </tr>
     </tfoot>
   </table>
-</div>
+<% end %>

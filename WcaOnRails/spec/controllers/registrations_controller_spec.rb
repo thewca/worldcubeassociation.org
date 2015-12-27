@@ -137,23 +137,8 @@ RSpec.describe RegistrationsController do
 
     it "does not show pending registrations" do
       pending_registration = FactoryGirl.create(:registration, competition: competition)
-      RanksAverage.create!(
-        personId: pending_registration.personId,
-        eventId: "333",
-        best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
-      )
-
-      RanksSingle.create!(
-        personId: pending_registration.personId,
-        eventId: "333",
-        best: "2000",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
-      )
+      FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "333", personId: pending_registration.personId
+      FactoryGirl.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.personId
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333"
       registrations = assigns(:registrations)
@@ -170,55 +155,38 @@ RSpec.describe RegistrationsController do
 
     it "sorts 444 by average and handles ties" do
       registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
-      RanksAverage.create!(
-        personId: registration1.personId,
-        eventId: "444",
-        best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
-      )
-      RanksSingle.create!(
-        personId: registration1.personId,
-        eventId: "444",
-        best: "2000",
-        worldRank: 20,
-        continentRank: 10,
-        countryRank: 10,
-      )
+      FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
+      FactoryGirl.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
 
       registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
-      RanksAverage.create!(
-        personId: registration2.personId,
-        eventId: "444",
-        best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
-      )
-      RanksSingle.create!(
-        personId: registration2.personId,
-        eventId: "444",
-        best: "2000",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
-      )
+      FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
+      FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
 
       registration3 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
-      RanksAverage.create!(
-        personId: registration3.personId,
-        eventId: "444",
-        best: "4242",
-        worldRank: 9,
-        continentRank: 9,
-        countryRank: 9,
-      )
+      FactoryGirl.create :ranks_average, rank: 9, best: 4242, eventId: "444", personId: registration3.personId
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id ]
       expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2, 2 ]
+    end
+
+    it "handles missing average" do
+      # Missing an average
+      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      FactoryGirl.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.personId
+
+      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
+      FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
+
+      # Never competed
+      registration3 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id, registration3.id ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, nil, nil ]
     end
 
     it "handles 1 registration" do
@@ -311,7 +279,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration1.id, registration3.id, registration2.id ]
-      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, 2, 2 ]
+      expect(registrations.map(&:psych_sheet_position)).to eq [ 1, nil, nil ]
     end
 
     it "handles 1 registration" do

@@ -47,7 +47,7 @@ class RegistrationsController < ApplicationController
       r.events.include?(@event)
     }.sort_by { |r|
       has_competed = !!r.world_rank(@event, @event.sort_by)
-      [ has_competed ? 0 : 1, r.world_rank(@event, @event.sort_by), r.world_rank(@event, @event.sort_by_second), r.name ]
+      [ has_competed ? 0 : 1, r.world_rank(@event, @event.sort_by) || Float::INFINITY, r.world_rank(@event, @event.sort_by_second) || Float::INFINITY, r.name ]
     }
 
     position = 0
@@ -60,7 +60,8 @@ class RegistrationsController < ApplicationController
       if !tied_previous
         position += 1
       end
-      registration.psych_sheet_position = position
+      has_competed = !!registration.world_rank(@event, @event.sort_by)
+      registration.psych_sheet_position = has_competed ? position : nil
     end
   end
 

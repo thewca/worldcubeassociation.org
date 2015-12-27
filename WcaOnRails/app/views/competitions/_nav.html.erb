@@ -2,17 +2,24 @@
   <div class="row">
     <div id="competition-nav">
       <div class="list-group">
-        <% [
-          { text: "Info", path: "/results/c.php?i=#{@competition.id}", fa_icon: "info-circle" },
-          { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
-          { text: "Psych sheet", path: competition_psych_sheet_path(@competition), fa_icon: "users" },
-          # TODO - psych sheets
+        <% (
+          [
+            { text: "Info", path: "/results/c.php?i=#{@competition.id}", fa_icon: "info-circle" },
+            { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
+            { text: "Competitors", path: competition_registrations_path(@competition), fa_icon: "users" },
+          ] +
+          @competition.events.map do |event|
+            { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), fa_icon: "users" }
+          end +
+          [
+            # TODO - psych sheets
 
-          # TODO - nest under edit
-          { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "upload" },
-          { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "upload" },
-          { text: "Registration", path: competition_edit_registrations_path(@competition), fa_icon: "sign-in" },
-        ].each do |nav_item| %>
+            # TODO - nest under edit
+            { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "upload" },
+            { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "upload" },
+            { text: "Registration", path: competition_edit_registrations_path(@competition), fa_icon: "sign-in" },
+          ]
+        ).each do |nav_item| %>
           <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
             <% if nav_item[:fa_icon] %>
               <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i>
