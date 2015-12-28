@@ -5,6 +5,7 @@ $competition-nav-padding: 50px;
 #competition-nav {
   @extend .col-sm-4;
   width: $competition-nav-width + $competition-nav-padding;
+  z-index: 1; /* Display on top of the competition map */
 
   .list-group {
     top: 20px;
@@ -21,7 +22,10 @@ $competition-nav-padding: 50px;
 
 #competition-data {
   @extend .col-sm-8;
-  width: calc(100% - ($competition-nav-width + $competition-nav-padding));
+  width: calc(100% - (#{$competition-nav-width} + #{$competition-nav-padding}));
+
+  /* Static so the map can escape and size itself relative to the full page */
+  position: static;
 }
 
 // Workaround for https://github.com/cubing/icons/issues/8
