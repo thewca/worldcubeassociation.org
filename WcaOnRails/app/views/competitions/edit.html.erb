@@ -317,7 +317,7 @@
         <%= f.button :submit, class: "btn-primary" %>
 
         <% if !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
-           <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: t(".confirmation_message") } %>
+           <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified." } %>
         <% end %>
 
         <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
