@@ -10,7 +10,7 @@
             { text: "Registration", path: competition_edit_registrations_path(@competition), fa_icon: "pencil", notification_count: @competition.registrations.pending.count },
           ] +
           @competition.events.map do |event|
-            { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), fa_icon: "users" }
+            { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id }
           end +
           [
             # TODO - psych sheets
@@ -23,7 +23,10 @@
         ).each do |nav_item| %>
           <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
             <% if nav_item[:fa_icon] %>
-              <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i>
+              <span class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></span>
+            <% end %>
+            <% if nav_item[:cubing_icon] %>
+              <span class="cubing-icon fa-fw icon-<%= nav_item[:cubing_icon] %>"></span>
             <% end %>
             <%= nav_item[:text] %>
             <% if nav_item[:notification_count] %>

@@ -35,6 +35,11 @@ $competition-nav-padding: 50px;
   content: '333mbo';
 }
 
+// Workaround for https://github.com/cubing/icons/issues/16
+.cubing-icon.fa-fw {
+  display: inline-block;
+}
+
 .event-checkbox {
   label {
     margin-bottom: 0;
