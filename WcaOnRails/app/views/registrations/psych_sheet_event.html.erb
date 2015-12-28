@@ -1,41 +1,22 @@
 <% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
 
 <%= render layout: "nav", locals: { fluid: true } do %>
-  <div class="table-responsive">
-    <table class="table table-hover table-striped table-condensed floatThead wca-results wca-results-sort-by-<%= @event.sort_by.to_s %>">
-      <thead>
-        <tr>
-          <th class="position">#</th>
-          <th class="name">Name</th>
-          <th class="wca-id">WCA ID</th>
-          <th class="country">Citizen of</th>
-          <th class="average">Best Average</th>
-          <th class="world-rank-average">WR</th>
-          <th class="single">Best Single</th>
-          <th class="world-rank-single">WR</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @registrations.each_with_index do |registration, i| %>
-          <tr>
-            <% prev_registration = i > 0 ? @registrations[i - 1] : nil %>
-            <td class="position <%= prev_registration && prev_registration.psych_sheet_position == registration.psych_sheet_position ? "tied-previous" : "" %>"><%= registration.psych_sheet_position %></td>
-            <td class="name"><%= registration.name %></td>
-            <td class="wca-id">
-              <%= render "shared/wca_id", wca_id: registration.personId %>
-            </td>
-            <td class="country"><%= registration.countryId %></td>
-
-            <td class="average"><%= registration.best_solve(@event, :average).clock_format %></td>
-            <td class="world-rank-average"><%= registration.world_rank(@event, :average) %></td>
-
-            <td class="single"><%= registration.best_solve(@event, :single).clock_format %></td>
-            <td class="world-rank-single"><%= registration.world_rank(@event, :single) %></td>
-            <td></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+  <%= wca_table_for @registrations, extra_table_class: "wca-results-sort-by-#{@event.sort_by.to_s}" do |table| %>
+    <%= table.column :position %>
+    <%= table.column :name %>
+    <%= table.column :wca_id %>
+    <%= table.column :countryId %>
+    <%= table.column :average do |registration| %>
+      <%= registration.best_solve(@event, :average).clock_format %>
+    <% end %>
+    <%= table.column :world_rank_average, header: "WR" do |registration| %>
+      <%= registration.world_rank(@event, :average) %>
+    <% end %>
+    <% table.column :single do |registration| %>
+      <%= registration.best_solve(@event, :single).clock_format %>
+    <% end %>
+    <% table.column :world_rank_single, header: "WR" do |registration| %>
+      <%= registration.world_rank(@event, :single) %>
+    <% end %>
+  <% end %>
 <% end %>

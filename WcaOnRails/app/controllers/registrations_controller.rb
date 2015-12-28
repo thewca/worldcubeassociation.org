@@ -53,15 +53,15 @@ class RegistrationsController < ApplicationController
     position = 0
     @registrations.each_with_index do |registration, i|
       prev_registration = i > 0 ? @registrations[i - 1] : nil
-      tied_previous = false
+      registration.tied_previous = false
       if prev_registration
-        tied_previous = registration.world_rank(@event, @event.sort_by) == prev_registration.world_rank(@event, @event.sort_by)
+        registration.tied_previous = registration.world_rank(@event, @event.sort_by) == prev_registration.world_rank(@event, @event.sort_by)
       end
-      if !tied_previous
+      if !registration.tied_previous
         position += 1
       end
       has_competed = !!registration.world_rank(@event, @event.sort_by)
-      registration.psych_sheet_position = has_competed ? position : nil
+      registration.position = has_competed ? position : nil
     end
   end
 

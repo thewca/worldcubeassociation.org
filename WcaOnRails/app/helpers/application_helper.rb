@@ -61,6 +61,74 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
+  def wca_table_for(records, options={}, &block)
+    table_for_options = {
+      table_html: {
+        class: "table wca-results floatThead table-striped table-condensed table-hover #{options[:extra_table_class]}"
+      },
+      header_column_html: {
+        class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
+      },
+      data_column_html: {
+        class: lambda do |record, column|
+          c = [column.name.to_s.gsub(/_/, '-')]
+          if column.name == :position && record.tied_previous
+            c << "tied-previous"
+          end
+          c
+        end
+      },
+    }
+
+    content_tag :div, class: "table-responsive" do
+      table_for records, table_for_options do |table|
+        table.define :wca_id do |registration|
+          if registration.personId
+            render "shared/wca_id", wca_id: registration.wca_id
+          end
+        end
+        table.define :wca_id_header do
+          "WCA ID"
+        end
+
+        table.define :position
+        table.define :position_header do
+          "#"
+        end
+
+        table.define :countryId_header do
+          "Citizen of"
+        end
+
+        Event.all_official.each do |event|
+          event_span = content_tag(:span, "",
+            title: event.name,
+            class: "cubing-icon icon-#{event.id}",
+            data: {
+              toggle: "tooltip",
+              placement: "bottom",
+              container: "body",
+            },
+          )
+          table.define event.id do |registration|
+            if registration.events.include?(event)
+              event_span
+            end
+          end
+          table.define "#{event.id}_header" do
+            event_span
+          end
+        end
+
+        block.call(table)
+
+        # Add an extra empty column at the end to take up all the extra
+        # horizontal space.
+        table.column data: ""
+      end
+    end
+  end
+
   def notifications_for_user(user)
     notifications = []
     # Be careful to not show a competition twice if we're both organizing and delegating it.

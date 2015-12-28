@@ -1,55 +1,40 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
-<%= render layout: "nav" do %>
-  <table class="table floatThead table-nonfluid table-striped table-condensed">
-    <thead>
-      <th>Name</th>
-      <th>WCA ID</th>
-      <th>Citizen of</th>
-      <% @competition.events.each do |event| %>
-        <th data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= event.name %>">
-          <span class="cubing-icon icon-<%= event.id %>"></span>
-        </th>
-      <% end %>
-      <th></th>
-    </thead>
-    <tbody>
-      <% registrations = @competition.registrations.accepted.order(:name) %>
-      <% registrations.each do |registration| %>
+<%= render layout: "nav", locals: { fluid: true } do %>
+
+  <% registrations = @competition.registrations.accepted.order(:name) %>
+  <%= wca_table_for registrations do |table| %>
+    <% table.column :name %>
+
+    <% table.column :wca_id %>
+
+    <% table.column :countryId %>
+
+    <% @competition.events.each do |event| %>
+      <% table.column event.id.to_s %>
+    <% end %>
+
+    <% table.column do |registration| %>
+      <%= registration.events.length %>
+    <% end %>
+
+    <% table.define :footer do %>
+      <tfoot>
         <tr>
-          <td><%= registration.name %></td>
-          <td>
-            <% if registration.personId %>
-              <%= render "shared/wca_id", wca_id: registration.personId %>
-            <% end %>
+          <td colspan="2">
+            <% with_wca_id, without_wca_id = registrations.partition { |r| r.personId.present? } %>
+            <%= without_wca_id.length %> <%= "first-timer".pluralize(without_wca_id.length) %> +
+            <%= with_wca_id.length %> <%= "returner".pluralize(with_wca_id.length) %> =
+            <%= registrations.length %> people
           </td>
-          <td><%= registration.countryId %></td>
+          <% country_count = registrations.map(&:countryId).uniq.length %>
+          <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
           <% @competition.events.each do |event| %>
-            <td>
-              <% if registration.events.include?(event) %>
-                <span class="cubing-icon icon-<%= event.id %>"></span>
-              <% end %>
-            </td>
+            <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
           <% end %>
-          <td><%= registration.events.length %></td>
+          <td></td>
         </tr>
-      <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="2">
-          <% with_wca_id, without_wca_id = registrations.partition { |r| r.personId.present? } %>
-          <%= without_wca_id.length %> <%= "first-timer".pluralize(without_wca_id.length) %> +
-          <%= with_wca_id.length %> <%= "returner".pluralize(with_wca_id.length) %> =
-          <%= registrations.length %> people
-        </td>
-        <% country_count = registrations.map(&:countryId).uniq.length %>
-        <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
-        <% @competition.events.each do |event| %>
-          <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
-        <% end %>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
+      </tfoot>
+    <% end %>
+  <% end %>
 <% end %>

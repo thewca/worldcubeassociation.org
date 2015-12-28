@@ -25,19 +25,21 @@ RSpec.describe "registrations/psych_sheet_event" do
       countryRank: 1,
     )
 
-    # Someone who has never competed before
+    # Someone who has never competed before.
     registrations << FactoryGirl.create(:registration, user: FactoryGirl.create(:user), competition: competition)
 
+    # Someone who has not competed in 333 before.
     registrations << FactoryGirl.create(:registration, competition: competition)
+    registrations.last.tied_previous = true
 
     assign(:competition, competition)
     assign(:event, event)
     assign(:registrations, registrations)
 
     render
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(1) .single", text: /\A20.00\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) .single", text: /\A\z/)
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(1) .single", text: /\A\s*20.00\s*\z/)
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\s*\z/)
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) .single", text: /\A\s*\z/)
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) td.position.tied-previous")
   end
 end

@@ -15,7 +15,8 @@ class Registration < ActiveRecord::Base
     user ? user.name : read_attribute(:name)
   end
 
-  attr_accessor :psych_sheet_position
+  attr_accessor :position
+  attr_accessor :tied_previous
 
   attr_writer :birthday
   def birthday
@@ -47,6 +48,7 @@ class Registration < ActiveRecord::Base
   def personId
     user ? user.wca_id : read_attribute(:personId)
   end
+  alias_method :wca_id, :personId
 
   def person
     Person.find_by_id(personId)
