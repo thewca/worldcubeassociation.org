@@ -1,40 +1,81 @@
 <div class="<%= defined?(fluid) && fluid ? "container-fluid" : "container" %>">
   <div class="row">
     <div id="competition-nav">
-      <div class="list-group">
-        <% (
-          [
-            { text: "Info", path: "/results/c.php?i=#{@competition.id}", fa_icon: "info-circle" },
-            { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
-            { text: "Competitors", path: competition_registrations_path(@competition), fa_icon: "users" },
-            { text: "Registration", path: competition_edit_registrations_path(@competition), fa_icon: "pencil", notification_count: @competition.registrations.pending.count },
-          ] +
-          @competition.events.map do |event|
-            { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id }
-          end +
-          [
-            # TODO - psych sheets
-            # TODO - puzzle icons
+      <% nav_items = process_nav_items([
+          {
+            text: "Info",
+            path: "/results/c.php?i=#{@competition.id}",
+            fa_icon: "info-circle",
+          },
+        ] + (
+          !current_user.can_manage_competition?(@competition) ? [] : [
+            {
+              text: "Edit",
+              path: edit_competition_path(@competition),
+              fa_icon: "lock",
+              children: [
+                # TODO - nest under edit
+                { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
+                { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" },
+                {
+                  text: "Registration",
+                  path: competition_edit_registrations_path(@competition),
+                  fa_icon: "list-ul",
+                  notification_count: @competition.registrations.pending.count,
+                },
+              ]
+            },
+        ]) + [
+          { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
+          {
+            text: "Competitors",
+            path: competition_registrations_path(@competition),
+            fa_icon: "users",
+            children: @competition.events.map do |event|
+              { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id }
+            end
+          },
+        ])
+      %>
 
-            # TODO - nest under edit
-            { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "pencil" },
-            { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "pencil" },
-          ]
-        ).each do |nav_item| %>
-          <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
-            <% if nav_item[:fa_icon] %>
-              <span class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></span>
-            <% end %>
-            <% if nav_item[:cubing_icon] %>
-              <span class="cubing-icon fa-fw icon-<%= nav_item[:cubing_icon] %>"></span>
-            <% end %>
-            <%= nav_item[:text] %>
-            <% if nav_item[:notification_count] %>
-              <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>"><%= nav_item[:notification_count] %></span>
-            <% end %>
+      <% blocks.define :nav_list do |nav_items| %>
+        <div class="list-group list-group-root">
+          <% nav_items.each do |nav_item| %>
+            <%= blocks.render :nav_list_item, nav_item %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% blocks.define :nav_icon do |nav_item| %>
+        <% if nav_item[:fa_icon] %>
+          <span class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></span>
+        <% end %>
+        <% if nav_item[:cubing_icon] %>
+          <span class="cubing-icon fa-fw icon-<%= nav_item[:cubing_icon] %>"></span>
+        <% end %>
+      <% end %>
+
+      <% blocks.define :nav_list_item do |nav_item| %>
+        <%= link_to nav_item[:path], class: "list-group-item" + (nav_item[:active] ? ' active' : '') do %>
+          <%= blocks.render :nav_icon, nav_item %>
+          <%= nav_item[:text] %>
+          <% if nav_item[:notification_count] %>
+            <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
+              <%= nav_item[:notification_count] %>
+            </span>
           <% end %>
         <% end %>
-      </div>
+        <% if nav_item[:active] && nav_item[:children] && nav_item[:children].length > 0 %>
+          <div class="list-group">
+            <% nav_item[:children].each do |child_nav_item| %>
+              <%= blocks.render :nav_list_item, child_nav_item %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <%= blocks.render :nav_list, nav_items %>
+
     </div>
     <div id="competition-data">
       <h1><%= @competition.name %></h1>
@@ -47,7 +88,7 @@
 
 <script>
   (function() {
-    var $nav = $('#competition-nav .list-group');
+    var $nav = $('#competition-nav > .list-group');
     $nav.affix({
       offset: {
         top: function() {

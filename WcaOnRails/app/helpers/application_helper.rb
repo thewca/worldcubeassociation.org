@@ -124,7 +124,7 @@ module ApplicationHelper
           "Citizen of"
         end
 
-        Event.all_official.each do |event|
+        (Event.all_official + Event.all_deprecated).each do |event|
           event_span = content_tag(:span, "",
             title: event.name,
             class: "cubing-icon icon-#{event.id}",
@@ -151,6 +151,15 @@ module ApplicationHelper
         table.column data: ""
       end
     end
+  end
+
+  def process_nav_items(nav_items)
+    nav_items.each do |nav_item|
+      nav_item[:children] = nav_item[:children] || []
+      process_nav_items(nav_item[:children])
+      nav_item[:active] = current_page?(nav_item[:path]) || nav_item[:children].any? { |i| i[:active] }
+    end
+    nav_items
   end
 
   def notifications_for_user(user)

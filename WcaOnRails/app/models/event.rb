@@ -225,6 +225,7 @@ class Event
       rank: 997,
       format: "time",
       cellName: "Rubik's Magic",
+      sort_by: :average,
     },
     {
       id: "mmagic",
@@ -232,6 +233,7 @@ class Event
       rank: 998,
       format: "time",
       cellName: "Master Magic",
+      sort_by: :average,
     },
     {
       id: "333mbo",
