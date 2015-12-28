@@ -1,23 +1,27 @@
 table.registrations-table {
-  margin-bottom: 50px;
+  margin-bottom: 50px; // Make space for the registration-actions
 
   td {
     white-space: nowrap;
+    &.comments,
+    &.guests {
+      max-width: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
-  td.comments,
-  td.guests {
-    max-width: 50px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  tr.registration-pending {
-    color: grey;
-  }
-  tr.registration-accepted {
+
+  tr {
+    &.registration-pending {
+      color: grey;
+    }
+    &.registration-accepted {
+    }
   }
 }
 
 #registrations-actions {
   position: fixed;
+  z-index: 1000; /* show over sticky table headers */
   bottom: calc(5px + #{$footer-height-em});
 }

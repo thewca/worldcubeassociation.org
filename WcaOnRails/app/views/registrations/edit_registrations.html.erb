@@ -9,91 +9,35 @@
       <% else %>
         <h2>Approved registrations</h2>
       <% end %>
-      <div class="table-responsive">
-        <table class="table floatThead table-nonfluid registrations-table selectable-rows">
-          <thead>
-            <tr>
-              <th></th>
-              <th>WCA ID</th>
-              <th>Name</th>
-              <th>Country</th>
-              <th>Birthday</th>
-              <th>Guests</th>
-              <th>Comments</th>
-              <% @competition.events.each do |event| %>
-                <th>
-                  <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                </th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <% registrations = @competition.registrations.send(status) %>
-            <% registrations.order(created_at: :asc, id: :asc).each do |registration| %>
-              <tr class="registration-<%= registration.status %>" id="registration-<%= registration.id %>">
-                <td>
-                  <%= link_to edit_registration_path(registration.id) do %>
-                    Edit
-                  <% end %>
-                  <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-                    <span class="glyphicon glyphicon-envelope"></span>
-                  <% end %>
-                </td>
-                <td>
-                  <% if registration.personId %>
-                    <%= render "shared/wca_id", wca_id: registration.personId %>
-                  <% end %>
-                </td>
-                <td>
-                  <%= registration.name %>
-                </td>
-                <td>
-                  <%= registration.countryId %>
-                </td>
-                <td>
-                  <%= registration.birthday %>
-                </td>
-                <td class="guests" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
-                  <%= registration.guests %>
-                </td>
-                <td class="comments" data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
-                  <%= registration.comments %>
-                </td>
-                <% @competition.events.each do |event| %>
-                  <td>
-                    <span class="event-checkbox event-checkbox-sm disabled">
-                      <label>
-                        <input type="checkbox" data-event-id="<%= event.id %>" data-registration-id="<%= registration.id %>" data-competition-id="<%= @competition.id %>" <%= registration.events.include?(event) ? "checked" : "" %> disabled="disabled">
-                        <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                      </label>
-                    </span>
-                  </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>
-                <%= registrations.length %>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <% @competition.events.each do |event| %>
-                <td data-registration-count-event-id="<%= event.id %>">
-                  <%= registrations.to_a.count { |r| r.events.include?(event) } %>
-                </td>
-              <% end %>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+      <% registrations = @competition.registrations.send(status).order(created_at: :asc, id: :asc) %>
+      <%= wca_selectable_table_for registrations, extra_table_class: "registrations-table" do |table| %>
+        <% table.column :data => "Edit", link_url: lambda { |registration| edit_registration_path(registration) } %>
+        <% table.column :data => "" do |registration| %>
+          <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+            <span class="glyphicon glyphicon-envelope"></span>
+          <% end %>
+        <% end %>
+
+        <% table.column :wca_id %>
+        <% table.column :name %>
+        <% table.column :countryId %>
+        <% table.column :birthday %>
+        <% table.column :guests do |registration| %>
+          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
+            <%= registration.guests %>
+          </span>
+        <% end %>
+        <% table.column :comments do |registration| %>
+          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
+            <%= registration.comments %>
+          </span>
+        <% end %>
+        <% @competition.events.each do |event| %>
+          <% table.column event.id.to_s %>
+        <% end %>
+      <% end %>
     <% end %>
+
     <div id="registrations-actions" class="btn-group" role="group">
       <a href="<%= competition_edit_registrations_path(format: :csv) %>" class="btn btn-info">
         <span class="glyphicon glyphicon-floppy-save"></span>

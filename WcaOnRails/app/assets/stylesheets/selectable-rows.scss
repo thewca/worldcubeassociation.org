@@ -17,7 +17,7 @@ table.selectable-rows {
     @extend .glyphicon;
     @extend .glyphicon-minus;
   }
-  .selected-row {
+  tbody tr.selected-row {
     @extend .bg-warning;
   }
 }

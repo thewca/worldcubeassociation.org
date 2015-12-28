@@ -61,6 +61,16 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
+  def wca_selectable_table_for(records, options={}, &block)
+    extra_table_class = options[:extra_table_class] + " selectable-rows"
+    wca_table_for(records, extra_table_class: extra_table_class) do |table|
+      table.column data: "", header: lambda { content_tag(:span) } do |record|
+        check_box_tag "#{record.class.name.downcase}-#{record.id}", "1", false, class: "select-row-checkbox"
+      end
+      block.call(table)
+    end
+  end
+
   def wca_table_for(records, options={}, &block)
     table_for_options = {
       table_html: {
@@ -68,6 +78,20 @@ module ApplicationHelper
       },
       header_column_html: {
         class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
+      },
+      data_row_html: {
+        class: lambda { |record|
+          c = []
+          if record.is_a?(Registration)
+            if record.pending?
+              c << "registration-pending"
+            end
+            if record.accepted?
+              c << "registration-accepted"
+            end
+          end
+          c
+        }
       },
       data_column_html: {
         class: lambda do |record, column|

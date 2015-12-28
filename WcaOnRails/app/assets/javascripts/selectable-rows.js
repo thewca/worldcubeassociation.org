@@ -1,20 +1,6 @@
 $(function() {
   $("table.selectable-rows").each(function() {
     var $table = $(this);
-    // All this mess is to handle the case where the user navigated backwards
-    // in their browser history.
-    if(!$table[0].dataset.selectableInitialized) {
-      $table[0].dataset.selectableInitialized = "1";
-      $(this).find("thead tr").prepend('<th><span></span></th>');
-      $(this).find("tbody tr").prepend('<td><input type="checkbox" class="select-row-checkbox"></input></td>');
-      $(this).find("tbody tr").each(function() {
-        var tr = this;
-        var $tr = $(tr);
-        var $checkbox = $tr.find(".select-row-checkbox");
-        $checkbox.prop('name', tr.id);
-        $checkbox.prop('value', '1');
-      });
-    }
     var $th = $table.find("thead th:first-child");
 
     var $checkboxes = $table.find(".select-row-checkbox");

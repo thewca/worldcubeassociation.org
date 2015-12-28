@@ -5,15 +5,11 @@
   <% registrations = @competition.registrations.accepted.order(:name) %>
   <%= wca_table_for registrations do |table| %>
     <% table.column :name %>
-
     <% table.column :wca_id %>
-
     <% table.column :countryId %>
-
     <% @competition.events.each do |event| %>
       <% table.column event.id.to_s %>
     <% end %>
-
     <% table.column do |registration| %>
       <%= registration.events.length %>
     <% end %>
