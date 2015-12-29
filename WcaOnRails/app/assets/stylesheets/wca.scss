@@ -58,7 +58,7 @@ table.wca-results {
     }
     &.wca-id {
     }
-    &.country {
+    &.countryId {
     }
     &.average {
       text-align: right;
@@ -88,7 +88,8 @@ table.wca-results {
     &.wca-id {
       vertical-align: middle;
     }
-    &.country {
+    &.countryId {
+      white-space: nowrap;
     }
     &.average {
       text-align: right;
