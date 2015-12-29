@@ -49,6 +49,9 @@ table.wca-results {
   thead tr th {
     white-space: nowrap;
 
+    &:last-child {
+      width: 100%;
+    }
     &.position {
     }
     &.name {
@@ -144,5 +147,4 @@ table.wca-results {
       padding-left: 45px;
     }
   }
-
 }
