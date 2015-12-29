@@ -156,8 +156,10 @@ module ApplicationHelper
   def process_nav_items(nav_items)
     nav_items.each do |nav_item|
       nav_item[:children] = nav_item[:children] || []
+      nav_item[:tiny_children] = nav_item[:tiny_children] || []
       process_nav_items(nav_item[:children])
-      nav_item[:active] = current_page?(nav_item[:path]) || nav_item[:children].any? { |i| i[:active] }
+      process_nav_items(nav_item[:tiny_children])
+      nav_item[:active] = current_page?(nav_item[:path]) || nav_item[:children].any? { |i| i[:active] } || nav_item[:tiny_children].any? { |i| i[:active] }
     end
     nav_items
   end

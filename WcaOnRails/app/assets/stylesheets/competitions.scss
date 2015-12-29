@@ -7,7 +7,7 @@ $competition-nav-padding: 50px;
   width: $competition-nav-width + $competition-nav-padding;
   z-index: 1; /* Display on top of the competition map */
 
-  .list-group {
+  > .list-group {
     top: 20px;
     width: $competition-nav-width;
 
@@ -16,6 +16,15 @@ $competition-nav-padding: 50px;
     @media (max-width: $screen-sm-min) {
       position: static;
       width: 100%;
+    }
+
+    @media (min-width: $screen-sm-min) {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .list-group-item a.active {
+      color: $list-group-active-bg;
     }
   }
 }

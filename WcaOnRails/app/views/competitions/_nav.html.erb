@@ -1,4 +1,4 @@
-<div class="<%= defined?(fluid) && fluid ? "container-fluid" : "container" %>">
+<div class="container">
   <div class="row">
     <div id="competition-nav">
       <% nav_items = process_nav_items([
@@ -31,8 +31,8 @@
             text: "Competitors",
             path: competition_registrations_path(@competition),
             fa_icon: "users",
-            children: @competition.events.map do |event|
-              { text: event.name, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id }
+            tiny_children: @competition.events.map do |event|
+              { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end
           },
         ])
@@ -65,12 +65,36 @@
             </span>
           <% end %>
         <% end %>
-        <% if nav_item[:active] && nav_item[:children] && nav_item[:children].length > 0 %>
-          <div class="list-group">
-            <% nav_item[:children].each do |child_nav_item| %>
-              <%= blocks.render :nav_list_item, child_nav_item %>
-            <% end %>
-          </div>
+
+        <% if nav_item[:active] %>
+
+          <% if nav_item[:tiny_children] && nav_item[:tiny_children].length > 0 %>
+            <div class="list-group">
+              <span class="list-group-item">
+                <% nav_item[:tiny_children].each do |child_nav_item| %>
+                  <%= link_to child_nav_item[:path],
+                              title: child_nav_item[:title],
+                              class: (child_nav_item[:active] ? " active" : ""),
+                              data: {
+                                toggle: "tooltip",
+                                placement: "top",
+                                container: "body",
+                              } do %>
+                    <%= blocks.render :nav_icon, child_nav_item %>
+                  <% end %>
+                <% end %>
+              </span>
+            </div>
+          <% end %>
+
+          <% if nav_item[:children] && nav_item[:children].length > 0 %>
+            <div class="list-group">
+              <% nav_item[:children].each do |child_nav_item| %>
+                <%= blocks.render :nav_list_item, child_nav_item %>
+              <% end %>
+            </div>
+          <% end %>
+
         <% end %>
       <% end %>
 
