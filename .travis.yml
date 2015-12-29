@@ -18,5 +18,6 @@ before_script:
   - bundle exec rake db:create
 sudo: false
 script:
-  - rake
+  - bin/rake db:migrate RAILS_ENV=test
+  - bundle exec rake
   - bundle exec pre-commit run git
