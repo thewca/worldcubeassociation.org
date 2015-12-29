@@ -1,6 +1,6 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
-<%= render layout: "nav", locals: { fluid: true } do %>
+<%= render layout: "nav" do %>
 
   <% registrations = @competition.registrations.accepted.order(:name) %>
   <%= wca_table_for registrations do |table| %>

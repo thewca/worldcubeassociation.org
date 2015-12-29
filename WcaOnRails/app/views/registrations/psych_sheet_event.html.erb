@@ -1,6 +1,6 @@
 <% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
 
-<%= render layout: "nav", locals: { fluid: true } do %>
+<%= render layout: "nav" do %>
   <%= wca_table_for @registrations, extra_table_class: "wca-results-sort-by-#{@event.sort_by.to_s}" do |table| %>
     <%= table.column :position %>
     <%= table.column :name %>

@@ -1,6 +1,6 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
-<%= render layout: 'nav', locals: { fluid: true } do %>
+<%= render layout: 'nav' do %>
 
   <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
     <% [:pending, :accepted].each do |status| %>

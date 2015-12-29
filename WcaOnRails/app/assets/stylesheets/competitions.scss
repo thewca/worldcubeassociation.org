@@ -4,23 +4,27 @@ $competition-nav-padding: 50px;
 
 #competition-nav {
   @extend .col-sm-4;
-  width: $competition-nav-width + $competition-nav-padding;
   z-index: 1; /* Display on top of the competition map */
+
+  // Take up full width in sm
+  @media (max-width: $screen-sm-min) {
+    width: 100%;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    width: $competition-nav-width + $competition-nav-padding;
+    > .list-group {
+      width: $competition-nav-width;
+    }
+  }
 
   > .list-group {
     top: 20px;
-    width: $competition-nav-width;
 
     // Disable affix on mobile
     //  http://stackoverflow.com/a/17395219/1739415
     @media (max-width: $screen-sm-min) {
       position: static;
-      width: 100%;
-    }
-
-    @media (min-width: $screen-sm-min) {
-      max-height: 500px;
-      overflow-y: auto;
     }
 
     .list-group-item a.active {
@@ -31,10 +35,18 @@ $competition-nav-padding: 50px;
 
 #competition-data {
   @extend .col-sm-8;
-  width: calc(100% - (#{$competition-nav-width} + #{$competition-nav-padding}));
-
   /* Static so the map can escape and size itself relative to the full page */
   position: static;
+
+  // Take up full width in sm
+  @media (max-width: $screen-sm-min) {
+    width: 100%;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    width: calc(100% - (#{$competition-nav-width} + #{$competition-nav-padding}));
+  }
+
 }
 
 // Workaround for https://github.com/cubing/icons/issues/8
