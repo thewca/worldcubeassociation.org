@@ -7,6 +7,7 @@ class AddDobGenderCountryToUsers < ActiveRecord::Migration
       change.up do
         User.where.not(wca_id: nil).find_each do |user|
           user.copy_data_from_persons
+          user.skip_confirmation_notification!
           user.save
         end
       end
