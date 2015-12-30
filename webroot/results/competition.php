@@ -39,7 +39,7 @@ if( wcaDate( 'Ymd' ) >= (10000*$competition['year'] +
     showCompetitionResults();
 }
 
-else if( $competition['showPreregForm'] || $competition['showPreregList'] ){
+else if( $competition['use_wca_registration'] ) {
   #--- Show the prereg form.
   offerChoicesPrereg();
 }
@@ -90,12 +90,8 @@ function offerChoicesPrereg () {
   global $competition;
 
   echo "<div class='form-group'>";
-  if( $competition['showPreregForm'] ) {
-    echo "<a href='/competitions/$chosenCompetitionId/register' class='butt'>Registration Form</a>";
-  }
-  if( $competition['showPreregList'] ) {
-    echo "<a href='/competitions/$chosenCompetitionId/registrations' class='butt'>List of Registered Competitiors</a>";
-  }
+  echo "<a href='/competitions/$chosenCompetitionId/register' class='butt'>Registration Form</a>";
+  echo "<a href='/competitions/$chosenCompetitionId/registrations' class='butt'>List of Registered Competitiors</a>";
   echo "</div>";
 
 }

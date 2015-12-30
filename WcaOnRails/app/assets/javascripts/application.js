@@ -50,7 +50,9 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
-  $('.datetimepicker').datetimepicker();
+  $('.datetimepicker').datetimepicker({
+    showTodayButton: true,
+  });
 
   $('.input-daterange').datepicker({
     format: "yyyy-mm-dd",

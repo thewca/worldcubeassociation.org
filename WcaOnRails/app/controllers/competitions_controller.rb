@@ -29,7 +29,9 @@ class CompetitionsController < ApplicationController
 
   def create
     new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
-    @competition = Competition.new(new_competition_params)
+    @competition = Competition.new(new_competition_params.merge(
+                                   registration_open: 1.week.from_now,
+                                   registration_close: 2.weeks.from_now))
     if current_user.any_kind_of_delegate?
       @competition.delegates |= [current_user]
     end
@@ -221,9 +223,10 @@ class CompetitionsController < ApplicationController
 
   private def competition_params
     permitted_competition_params = [
-      :showPreregForm,
+      :use_wca_registration,
       :receive_registration_emails,
-      :showPreregList,
+      :registration_open,
+      :registration_close,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.

@@ -223,6 +223,10 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  def registration_closed?
+    !use_wca_registration? || registration_close < Time.now
+  end
+
   def longitude_degrees
     longitude_microdegrees / 1e6
   end

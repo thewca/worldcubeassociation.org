@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe RegistrationsMailer, type: :mailer do
   let(:delegate1) { FactoryGirl.create :delegate }
   let(:delegate2) { FactoryGirl.create :delegate }
-  let(:competition) { FactoryGirl.create(:competition, delegates: [delegate1, delegate2]) }
+  let(:competition) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
 
   describe "notify_organizers_of_new_registration" do
     let(:registration) { FactoryGirl.create(:registration, competition: competition) }

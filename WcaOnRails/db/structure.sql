@@ -40,13 +40,14 @@ CREATE TABLE `Competitions` (
   `website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cellName` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
-  `showPreregForm` tinyint(1) NOT NULL DEFAULT '0',
-  `showPreregList` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` int(11) NOT NULL DEFAULT '0',
   `longitude` int(11) NOT NULL DEFAULT '0',
   `isConfirmed` tinyint(1) NOT NULL DEFAULT '0',
   `contact` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `remarks` text COLLATE utf8_unicode_ci,
+  `registration_open` datetime NOT NULL,
+  `registration_close` datetime NOT NULL,
+  `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -709,7 +710,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-21 17:32:32
+-- Dump completed on 2015-12-30 12:17:02
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -799,4 +800,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151217054555');
 INSERT INTO schema_migrations (version) VALUES ('20151217062612');
 
 INSERT INTO schema_migrations (version) VALUES ('20151222013017');
+
+INSERT INTO schema_migrations (version) VALUES ('20151230174411');
 

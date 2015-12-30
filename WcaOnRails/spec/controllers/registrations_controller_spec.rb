@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
     let(:organizer) { FactoryGirl.create(:user) }
-    let(:competition) { FactoryGirl.create(:competition, organizers: [organizer], eventSpecs: "222 333") }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], eventSpecs: "222 333") }
     let(:registration) { FactoryGirl.create(:registration, competitionId: competition.id) }
 
     before :each do
@@ -36,12 +36,13 @@ RSpec.describe RegistrationsController do
     end
 
     it 'cannot change registration of a different competition' do
-      other_competition = FactoryGirl.create(:competition)
+      other_competition = FactoryGirl.create(:competition, :registration_open)
       other_registration = FactoryGirl.create(:registration, competition: other_competition)
 
       patch :update, id: other_registration.id, registration: { status: :accepted }
       expect(other_registration.reload.eventIds).to eq "333"
-      expect(response).to redirect_to root_url
+      expect(response).to redirect_to competition_path(other_competition.id)
+      expect(flash[:danger]).to match "not allowed to manage this competition"
     end
 
     it "approves a pending registration" do
@@ -68,7 +69,7 @@ RSpec.describe RegistrationsController do
   context "signed in as competitor" do
     let!(:user) { FactoryGirl.create(:user, :wca_id) }
     let!(:delegate) { FactoryGirl.create(:delegate) }
-    let!(:competition) { FactoryGirl.create(:competition, delegates: [delegate]) }
+    let!(:competition) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate]) }
 
     before :each do
       sign_in user
@@ -90,10 +91,29 @@ RSpec.describe RegistrationsController do
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
+
+    it "cannot create registration after registration is closed" do
+      competition.registration_open = 2.weeks.ago
+      competition.registration_close = 1.week.ago
+      competition.save!
+
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "", status: Registration::statuses[:accepted] }
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
+    end
   end
 
   context "register" do
-    let(:competition) { FactoryGirl.create :competition }
+    let(:competition) { FactoryGirl.create :competition, :registration_open }
+
+    it "redirects to competition root if competition is not using WCA registration" do
+      competition.use_wca_registration = false
+      competition.save!
+
+      get :register, competition_id: competition.id
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to match "not using WCA registration"
+    end
 
     it "works when not logged in" do
       get :register, competition_id: competition.id
@@ -120,12 +140,30 @@ RSpec.describe RegistrationsController do
   end
 
   context "psych sheet when not signed in" do
-    let!(:competition) { FactoryGirl.create(:competition, eventSpecs: "333 444 333bf") }
+    let!(:competition) { FactoryGirl.create(:competition, :registration_open, eventSpecs: "333 444 333bf") }
 
     it "redirects psych sheet to 333" do
       get :psych_sheet, competition_id: competition.id
       expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "333")
     end
+
+    it "redirects to root if competition is not using WCA registration" do
+      competition.use_wca_registration = false
+      competition.save!
+
+      get :psych_sheet, competition_id: competition.id
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to match "not using WCA registration"
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to match "not using WCA registration"
+
+      get :index, competition_id: competition.id
+      expect(response).to redirect_to competition_path(competition)
+      expect(flash[:danger]).to match "not using WCA registration"
+    end
+
 
     it "redirects psych sheet to highest ranked event if no 333" do
       competition.eventSpecs = "222 444"

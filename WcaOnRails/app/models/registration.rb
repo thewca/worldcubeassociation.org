@@ -7,6 +7,15 @@ class Registration < ActiveRecord::Base
   belongs_to :user
   validates :user, presence: true, on: [:create]
 
+  validate :competition_must_use_wca_registration
+  private def competition_must_use_wca_registration
+    if !competition
+      errors.add(:competition, "Competition not found")
+    elsif !competition.use_wca_registration?
+      errors.add(:competition, "Competition registration is closed")
+    end
+  end
+
   def events
     (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
   end

@@ -22,6 +22,15 @@ FactoryGirl.define do
 
     trait :with_organizer do
       organizers { [ FactoryGirl.create(:user) ] }
+
+    use_wca_registration false
+    registration_open 2.weeks.ago.change(usec: 0)
+    registration_close 1.week.ago.change(usec: 0)
+
+    trait :registration_open do
+      use_wca_registration true
+      registration_open 2.weeks.ago.change(usec: 0)
+      registration_close 2.weeks.from_now.change(usec: 0)
     end
 
     factory :competition_with_delegates do

@@ -1,7 +1,11 @@
 FactoryGirl.define do
   factory :registration do
-    competitionId { FactoryGirl.create(:competition).id }
-    user_id { FactoryGirl.create(:user, :wca_id).id }
+    transient do
+      competition { FactoryGirl.create(:competition, :registration_open) }
+      user { FactoryGirl.create(:user, :wca_id) }
+    end
+    competitionId { competition.id }
+    user_id { user.id }
     eventIds "333"
     guests ""
     comments ""

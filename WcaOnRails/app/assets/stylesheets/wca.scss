@@ -149,3 +149,8 @@ table.wca-results {
     }
   }
 }
+
+// Workaround for funky style from bootstrap-datepicker-rails
+.input-group.date .input-group-addon {
+  cursor: initial;
+}

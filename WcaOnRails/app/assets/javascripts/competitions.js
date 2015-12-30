@@ -15,11 +15,11 @@ $(function() {
     $competitionSelect.on("input", competitionChanged);
   }
 
-  var $showPreregFormInput = $('input[name="competition[showPreregForm]"]');
-  if($showPreregFormInput.length > 0) {
-    var $receiveRegistraionEmailsInput = $('input[name="competition[receive_registration_emails]"]');
-    $showPreregFormInput.on("change", function() {
-      $receiveRegistraionEmailsInput.parents("div.checkbox").toggle(this.checked);
+  var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
+  if($useWcaRegistrationInput.length > 0) {
+    var $registrationOptionsAreas = $('.wca-registration-options');
+    $useWcaRegistrationInput.on("change", function() {
+      $registrationOptionsAreas.toggle(this.checked);
     }).trigger("change");
   }
 });

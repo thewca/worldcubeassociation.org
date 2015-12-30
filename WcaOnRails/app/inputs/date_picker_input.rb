@@ -5,7 +5,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
     template.content_tag :div, class: 'input-group date datetimepicker' do
       input = super(wrapper_options) # leave StringInput do the real rendering
-      input_button + input
+      input_button + input + utc_addon
     end
   end
 
@@ -21,6 +21,10 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
         template.content_tag :span, '', class: 'glyphicon glyphicon-calendar'
       end
     end
+  end
+
+  def utc_addon
+    template.content_tag :span, "UTC", class: "input-group-addon"
   end
 
   def set_html_options

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CompetitionsController do
-  let(:competition) { FactoryGirl.create( :competition_with_delegates) }
+  let(:competition) { FactoryGirl.create(:competition_with_delegates) }
 
   describe 'GET #new' do
     context 'when not signed in' do
@@ -305,11 +305,14 @@ describe CompetitionsController do
         expect(response).to redirect_to root_url
       end
 
-      it "can enable and disable registration list of locked competition" do
+      it "can change registration open/close of locked competition" do
         competition.update_attribute(:isConfirmed, true)
-        # Disable registration list
-        patch :update, id: competition, competition: { showPreregList: "1" }
-        expect(competition.reload.showPreregList).to eq true
+
+        new_open = 1.week.from_now.change(sec: 0)
+        new_close = 2.weeks.from_now.change(sec: 0)
+        patch :update, id: competition, competition: { registration_open: new_open, registration_close: new_close }
+        expect(competition.reload.registration_open).to eq new_open
+        expect(competition.reload.registration_close).to eq new_close
       end
     end
 

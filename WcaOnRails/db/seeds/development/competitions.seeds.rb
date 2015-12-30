@@ -22,6 +22,9 @@ after "development:users" do
       showAtAll: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
+      use_wca_registration: true,
+      registration_open: 2.weeks.ago,
+      registration_close: 1.week.ago,
     )
 
     users.each_with_index do |competitor, i|
@@ -68,7 +71,7 @@ after "development:users" do
     )
   end
 
-  day = 1000.years.since
+  day = 1000.years.from_now
   eventIds = ["333", "333oh", "magic"]
   future_competition = Competition.create!(
     id: "MyComp#{day.year}",
@@ -85,6 +88,9 @@ after "development:users" do
     showAtAll: true,
     delegates: [delegate],
     organizers: User.all.sample(2),
+    use_wca_registration: true,
+    registration_open: 1.week.ago,
+    registration_close: day - (1.week),
   )
 
   users.each_with_index do |user, i|

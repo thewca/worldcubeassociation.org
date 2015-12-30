@@ -1,23 +1,34 @@
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 
-  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
-  private def can_manage_competition
+  private def competition_from_params
     if params[:competition_id]
       competition = Competition.find(params[:competition_id])
     else
       registration = Registration.find(params[:id])
       competition = registration.competition
     end
+  end
 
-    current_user.can_manage_competition?(competition)
+  before_action :competition_must_be_using_wca_registration!
+  private def competition_must_be_using_wca_registration!
+    if !competition_from_params.use_wca_registration?
+      flash[:danger] = "This competition is not using WCA registration"
+      redirect_to competition_path(competition_from_params)
+    end
+  end
+
+  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
+  private def can_manage_competition
+    current_user.can_manage_competition?(competition_from_params)
   end
   private def can_manage_competition_only
     if !can_manage_competition
       flash[:danger] = "You are not allowed to manage this competition"
-      redirect_to root_url
+      redirect_to competition_path(competition_from_params)
     end
   end
+
 
   def edit_registrations
     @competition_registration_view = true
@@ -129,8 +140,13 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    competition = Competition.find(params[:competition_id])
-    @registration = competition.registrations.build(registration_params.merge(user_id: current_user.id))
+    @competition = Competition.find(params[:competition_id])
+    if @competition.registration_closed?
+      flash[:danger] = "You cannot register for this competition, registration is closed"
+      redirect_to competition_path(@competition)
+      return
+    end
+    @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
       flash[:success] = "Successfully registered!"
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now

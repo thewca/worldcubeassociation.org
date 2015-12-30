@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "registrations/psych_sheet_event" do
   it "works" do
-    competition = FactoryGirl.create(:competition)
+    competition = FactoryGirl.create(:competition, :registration_open)
     event = Event.find("333")
 
     registrations = []

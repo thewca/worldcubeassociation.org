@@ -13,6 +13,19 @@ RSpec.describe Registration do
     expect(registration.errors.messages[:competitionId]).to eq ["invalid"]
   end
 
+  it "requires a valid competitionId" do
+    registration.competitionId = "foobar"
+    expect(registration).not_to be_valid
+    expect(registration.errors.messages[:competitionId]).to eq ["invalid"]
+  end
+
+  it "cannot create a registration for a competition without wca registration" do
+    competition = FactoryGirl.create(:competition, use_wca_registration: false)
+    reg = FactoryGirl.build :registration, competition: competition
+    expect(reg).to be_invalid
+    expect(reg.errors.messages[:competition]).to eq ["Competition registration is closed"]
+  end
+
   it "allows no user on update" do
     registration.user_id = nil
     expect(registration).to be_valid
