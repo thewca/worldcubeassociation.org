@@ -1,5 +1,5 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show]
   before_action :can_admin_results_only, only: [:index, :post_announcement, :post_results, :admin_edit]
   before_action :can_create_competition_only, only: [:new, :create]
   before_action :can_manage_competition_only, only: [:edit, :update]
@@ -188,6 +188,11 @@ class CompetitionsController < ApplicationController
       has_date_errors: @competition.has_date_errors?,
       html: render_to_string(partial: 'time_until_competition'),
     }
+  end
+
+  def show
+    @competition = Competition.find(params[:id])
+    redirect_to "/results/c.php?i=#{@competition.id}"
   end
 
   def update

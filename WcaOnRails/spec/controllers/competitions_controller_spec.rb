@@ -3,6 +3,17 @@ require 'rails_helper'
 describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition_with_delegates) }
 
+  describe 'GET #show' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the old php page' do
+        get :show, id: competition.id
+        expect(response).to redirect_to "/results/c.php?i=#{competition.id}"
+      end
+    end
+  end
+
   describe 'GET #new' do
     context 'when not signed in' do
       sign_out
