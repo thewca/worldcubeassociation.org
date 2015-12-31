@@ -51,6 +51,13 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       expect(mail.body.encoded).to match("The waiting list currently has 2 people on it.")
       expect(mail.body.encoded).to match(competition_register_url(registration.competition))
     end
+
+    it "pluralizes correctly" do
+      earlier_registration.destroy!
+
+      expect(mail.body.encoded).to match("The waiting list currently has 1 person on it.")
+      expect(mail.body.encoded).to match(competition_register_url(registration.competition))
+    end
   end
 
   describe "accepted_registration" do
