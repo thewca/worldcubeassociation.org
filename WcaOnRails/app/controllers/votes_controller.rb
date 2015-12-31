@@ -13,7 +13,7 @@ class VotesController < ApplicationController
       flash[:success] = "Vote saved"
       redirect_to polls_vote_path(@vote.poll.id)
     else
-      render 'vote'
+      render :vote
     end
   end
 
@@ -24,8 +24,8 @@ class VotesController < ApplicationController
       flash[:success] = "Vote updated"
       redirect_to polls_vote_path(@vote.poll.id)
     else
-      flash[:danger] = "Could not upate your vote"
-      render 'vote'
+      flash.now[:danger] = "Could not upate your vote"
+      render :vote
     end
   end
 

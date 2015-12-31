@@ -125,7 +125,7 @@ class RegistrationsController < ApplicationController
       end
       redirect_to edit_registration_path(@registration)
     else
-      flash[:danger] = "Could not update registration"
+      flash.now[:danger] = "Could not update registration"
       render :edit
     end
   end
