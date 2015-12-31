@@ -20,19 +20,19 @@
 
   <% if !current_user %>
     <% if @competition.registration_past? %>
-      <%= link_to "Log in", new_user_session_path %> to check the status of
+      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to check the status of
       your registration. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path %>, but it
+      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>, but it
       is too late to register for this competition.
     <% elsif @competition.registration_not_yet_opened? %>
-      <%= link_to "Log in", new_user_session_path %> to check the status of
+      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to check the status of
       your registration. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path %>, but it
+      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>, but it
       registration is not yet open.
     <% else %>
-      <%= link_to "Log in", new_user_session_path %> to register for
+      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to register for
       <%= @competition.name %>. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path %>.
+      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>.
     <% end %>
   <% else %>
     <p>

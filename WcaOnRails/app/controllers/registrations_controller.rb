@@ -131,6 +131,11 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def register_require_sign_in
+    @competition = Competition.find(params[:competition_id])
+    redirect_to competition_register_path(@competition)
+  end
+
   def register
     @competition = Competition.find(params[:competition_id])
     @registration = nil

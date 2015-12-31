@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
+    get 'register-require-sign-in' => 'registrations#register_require_sign_in'
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/:id/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions

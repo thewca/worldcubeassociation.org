@@ -32,17 +32,19 @@ end
 # Create members and leaders for every WCA team
 UsersController.WCA_TEAMS.each do |team|
   leader_team = :"#{team}_leader"
-  leader = User.create!(random_user.merge(
+  leader = User.new(random_user.merge(
     team => true,
     leader_team => true,
     name: team.to_s,
   ))
-  leader.confirm!
+  leader.skip_confirmation!
+  leader.save!
   # The team name isn't a valid email, but it's so much easier to type.
   leader.update_column(:email, team.to_s)
 
   3.times do
-    user = User.create!(random_user.merge(team => true))
-    user.confirm!
+    user = User.new(random_user.merge(team => true))
+    user.skip_confirmation!
+    user.save!
   end
 end
