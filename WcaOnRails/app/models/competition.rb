@@ -223,8 +223,16 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def registration_closed?
-    !use_wca_registration? || registration_close < Time.now
+  def registration_opened?
+    use_wca_registration? && !registration_not_yet_opened? && !registration_past?
+  end
+
+  def registration_not_yet_opened?
+    registration_open && Time.now < registration_open
+  end
+
+  def registration_past?
+    registration_close && registration_close < Time.now
   end
 
   def longitude_degrees

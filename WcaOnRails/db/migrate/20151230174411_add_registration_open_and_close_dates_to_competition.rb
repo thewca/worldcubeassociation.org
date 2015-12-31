@@ -1,7 +1,7 @@
 class AddRegistrationOpenAndCloseDatesToCompetition < ActiveRecord::Migration
   def change
-    add_column :Competitions, :registration_open, :datetime, null: false
-    add_column :Competitions, :registration_close, :datetime, null: false
+    add_column :Competitions, :registration_open, :datetime
+    add_column :Competitions, :registration_close, :datetime
     add_column :Competitions, :use_wca_registration, :boolean, null: false, default: false
 
     reversible do |dir|

@@ -141,7 +141,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @competition = Competition.find(params[:competition_id])
-    if @competition.registration_closed?
+    if !@competition.registration_opened?
       flash[:danger] = "You cannot register for this competition, registration is closed"
       redirect_to competition_path(@competition)
       return

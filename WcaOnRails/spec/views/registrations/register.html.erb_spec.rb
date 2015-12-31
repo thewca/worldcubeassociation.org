@@ -15,12 +15,21 @@ RSpec.describe "registrations/register" do
     expect(rendered).to match /You are currently number 2 of 3 on the waiting list/
   end
 
-  it "shows message about registration being closed" do
+  it "shows message about registration being past" do
     competition = FactoryGirl.create(:competition, use_wca_registration: true, registration_open: 1.week.ago, registration_close: Time.now.yesterday)
 
     assign(:competition, competition)
 
     render
     expect(rendered).to match /Registration closed <strong>[^>]*<.strong> ago/
+  end
+
+  it "shows message about registration not yet being open" do
+    competition = FactoryGirl.create(:competition, use_wca_registration: true, registration_open: 1.week.from_now, registration_close: 2.weeks.from_now)
+
+    assign(:competition, competition)
+
+    render
+    expect(rendered).to match /Registration will open in <strong>[^>]*<.strong>/
   end
 end

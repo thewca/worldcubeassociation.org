@@ -1,10 +1,17 @@
 <% provide(:title, "Register for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
-  <% if @competition.registration_closed? %>
-    <div class="alert alert-danger">
-      Registration closed <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> ago on <%= wca_local_time(@competition.registration_close) %>.
-    </div>
+  <% if !@competition.registration_opened? %>
+    <% if @competition.registration_not_yet_opened? %>
+      <div class="alert alert-info">
+        Registration will open in <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> on <%= wca_local_time(@competition.registration_close) %>.
+      </div>
+    <% end %>
+    <% if @competition.registration_past? %>
+      <div class="alert alert-danger">
+        Registration closed <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> ago on <%= wca_local_time(@competition.registration_close) %>.
+      </div>
+    <% end %>
   <% else %>
     <div class="alert alert-info">
       Registration closes in <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> on <%= wca_local_time(@competition.registration_close) %>.
@@ -12,10 +19,16 @@
   <% end %>
 
   <% if !current_user %>
-    <% if @competition.registration_closed? %>
+    <% if @competition.registration_past? %>
       <%= link_to "Log in", new_user_session_path %> to check the status of
       your registration. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path %>, but it is too late to register for this competition.
+      can create one <%= link_to "here", new_user_registration_path %>, but it
+      is too late to register for this competition.
+    <% elsif @competition.registration_not_yet_opened? %>
+      <%= link_to "Log in", new_user_session_path %> to check the status of
+      your registration. If you do not yet have a WCA account, you
+      can create one <%= link_to "here", new_user_registration_path %>, but it
+      registration is not yet open.
     <% else %>
       <%= link_to "Log in", new_user_session_path %> to register for
       <%= @competition.name %>. If you do not yet have a WCA account, you
@@ -26,7 +39,7 @@
       Hi, <%= current_user.name %>!
     </p>
 
-    <% if @competition.registration_closed? %>
+    <% if @competition.registration_past? %>
       Unfortunately, registration for this competition is closed.
     <% else %>
 
