@@ -15,9 +15,8 @@ before_install:
 
   - cd WcaOnRails/
 before_script:
-  - bundle exec rake db:create
+  - bundle exec rake db:reset RAILS_ENV=test
 sudo: false
 script:
-  - bin/rake db:migrate RAILS_ENV=test
   - bundle exec rake
   - bundle exec pre-commit run git
