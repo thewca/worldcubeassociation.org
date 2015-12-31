@@ -85,8 +85,6 @@ GEM
       call_with_params (~> 0.0.2)
       hashie
       rails (>= 3.0.0)
-    bootstrap-datepicker-rails (1.4.0)
-      railties (>= 3.0)
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
@@ -400,7 +398,6 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
-  bootstrap-datepicker-rails
   bootstrap-sass
   bootstrap-will_paginate
   byebug

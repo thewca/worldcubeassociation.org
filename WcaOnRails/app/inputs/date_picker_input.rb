@@ -24,7 +24,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   end
 
   def utc_addon
-    template.content_tag :span, "UTC", class: "input-group-addon"
+    ""
   end
 
   def set_html_options

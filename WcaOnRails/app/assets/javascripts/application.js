@@ -17,7 +17,6 @@
 //= require local_time
 //= require wice_grid
 //= require jquery.are-you-sure
-//= require bootstrap-datepicker/core
 //= require locationpicker.jquery
 //= require underscore
 //= require selectize
@@ -50,15 +49,28 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
+
+  // Copied (and modified by jfly) from
+  //  https://github.com/zpaulovics/datetimepicker-rails
   $('.datetimepicker').datetimepicker({
     showTodayButton: true,
   });
+  $('.datetimerange').each(function() {
+    var $inputGroups = $(this).find('.input-group');
+    var $range1 = $inputGroups.eq(0);
+    var $range2 = $inputGroups.eq(1);
 
-  $('.input-daterange').datepicker({
-    format: "yyyy-mm-dd",
-    todayBtn: true,
-    todayHighlight: true
+    $range1.on("dp.change", function(e) {
+      var minDate = $range1.data("DateTimePicker").date() || false;
+      $range2.data("DateTimePicker").minDate(minDate);
+    }).trigger("dp.change");
+
+    $range2.on("dp.change", function(e) {
+      var maxDate = $range2.data("DateTimePicker").date() || false;
+      $range1.data("DateTimePicker").maxDate(maxDate);
+    }).trigger("dp.change");
   });
+
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();

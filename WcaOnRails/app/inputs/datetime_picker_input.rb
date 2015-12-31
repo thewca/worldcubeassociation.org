@@ -10,4 +10,8 @@ class DatetimePickerInput < DatePickerInput
     I18n.t('datepicker.pformat', default: 'YYYY-MM-DD') + ' ' +
         I18n.t('timepicker.pformat', default: 'HH:mm')
   end
+
+  def utc_addon
+    template.content_tag :span, "UTC", class: "input-group-addon"
+  end
 end

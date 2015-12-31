@@ -214,18 +214,12 @@
         })();
       </script>
 
-      <div class="form-group <%= @competition.has_date_errors? ? "has-error" : "" %>">
-        <label class="integer optional col-sm-2 control-label" for="datepicker-start">
-          Dates
-        </label>
-        <div class="col-sm-9">
-          <div class="input-daterange input-group" id="datepicker">
-            <input type="text" class="input-sm form-control" name="competition[start_date]" id="datepicker-start" placeholder="yyyy-mm-dd" value="<%= @competition.start_date %>" />
-            <span class="input-group-addon">to</span>
-            <input type="text" class="input-sm form-control" name="competition[end_date]" placeholder="yyyy-mm-dd" value="<%= @competition.end_date %>" />
+      <div class="form-group">
+         <div class="col-sm-offset-2 col-sm-9">
+          <div class="row datetimerange">
+            <%= f.input :start_date, as: :date_picker, wrapper: :ranged_datetime %>
+            <%= f.input :end_date, as: :date_picker, wrapper: :ranged_datetime %>
           </div>
-          <span class="help-block"><%= f.error :start_date %></span>
-          <span class="help-block"><%= f.error :end_date %></span>
           <span id="time-until-competition" class="help-block">
             <%= render "time_until_competition" %>
           </span>
@@ -303,8 +297,12 @@
           </div>
         </div>
       <% end %>
-      <%= f.input :registration_open, as: :datetime_picker %>
-      <%= f.input :registration_close, as: :datetime_picker %>
+      <div class="col-sm-offset-2 col-sm-9">
+        <div class="row datetimerange">
+          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+          <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
+        </div>
+      </div>
     </div>
 
     <hr>
