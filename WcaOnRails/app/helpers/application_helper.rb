@@ -163,7 +163,7 @@ module ApplicationHelper
       nav_item[:tiny_children] = nav_item[:tiny_children] || []
       process_nav_items(nav_item[:children])
       process_nav_items(nav_item[:tiny_children])
-      nav_item[:active] = current_page?(nav_item[:path]) || nav_item[:children].any? { |i| i[:active] } || nav_item[:tiny_children].any? { |i| i[:active] }
+      nav_item[:active] = (nav_item[:is_active] && nav_item[:is_active].call) || (nav_item[:path] && current_page?(nav_item[:path])) || nav_item[:children].any? { |i| i[:active] } || nav_item[:tiny_children].any? { |i| i[:active] }
     end
     nav_items
   end

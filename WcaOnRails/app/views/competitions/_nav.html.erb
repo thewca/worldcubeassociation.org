@@ -21,6 +21,12 @@
                     path: competition_edit_registrations_path(@competition),
                     fa_icon: "list-ul",
                     notification_count: @competition.registrations.pending.count,
+                    children: [{
+                      hidden: true,
+                      is_active: lambda do
+                        controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
+                      end,
+                    }],
                   },
                 ])
             },
@@ -60,43 +66,46 @@
       <% end %>
 
       <% blocks.define :nav_list_item do |nav_item| %>
-        <%= link_to nav_item[:path], class: "list-group-item" + (nav_item[:active] ? ' active' : '') do %>
-          <%= blocks.render :nav_icon, nav_item %>
-          <%= nav_item[:text] %>
-          <% if nav_item[:notification_count] %>
-            <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
-              <%= nav_item[:notification_count] %>
-            </span>
-          <% end %>
-        <% end %>
+        <% if !nav_item[:hidden] %>
 
-        <% if nav_item[:active] %>
-
-          <% if nav_item[:tiny_children] && nav_item[:tiny_children].length > 0 %>
-            <div class="list-group">
-              <span class="list-group-item">
-                <% nav_item[:tiny_children].each do |child_nav_item| %>
-                  <%= link_to child_nav_item[:path],
-                              title: child_nav_item[:title],
-                              class: (child_nav_item[:active] ? " active" : ""),
-                              data: {
-                                toggle: "tooltip",
-                                placement: "top",
-                                container: "body",
-                              } do %>
-                    <%= blocks.render :nav_icon, child_nav_item %>
-                  <% end %>
-                <% end %>
+          <%= link_to nav_item[:path], class: "list-group-item" + (nav_item[:active] ? ' active' : '') do %>
+            <%= blocks.render :nav_icon, nav_item %>
+            <%= nav_item[:text] %>
+            <% if nav_item[:notification_count] %>
+              <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
+                <%= nav_item[:notification_count] %>
               </span>
-            </div>
+            <% end %>
           <% end %>
 
-          <% if nav_item[:children] && nav_item[:children].length > 0 %>
-            <div class="list-group">
-              <% nav_item[:children].each do |child_nav_item| %>
-                <%= blocks.render :nav_list_item, child_nav_item %>
-              <% end %>
-            </div>
+          <% if nav_item[:active] %>
+
+            <% if nav_item[:tiny_children] && nav_item[:tiny_children].length > 0 %>
+              <div class="list-group">
+                <span class="list-group-item">
+                  <% nav_item[:tiny_children].each do |child_nav_item| %>
+                    <%= link_to child_nav_item[:path],
+                                title: child_nav_item[:title],
+                                class: (child_nav_item[:active] ? " active" : ""),
+                                data: {
+                                  toggle: "tooltip",
+                                  placement: "top",
+                                  container: "body",
+                                } do %>
+                      <%= blocks.render :nav_icon, child_nav_item %>
+                    <% end %>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+
+            <% if nav_item[:children] && nav_item[:children].length > 0 %>
+              <div class="list-group">
+                <% nav_item[:children].each do |child_nav_item| %>
+                  <%= blocks.render :nav_list_item, child_nav_item %>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
 
         <% end %>
