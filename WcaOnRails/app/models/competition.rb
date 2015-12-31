@@ -147,12 +147,17 @@ class Competition < ActiveRecord::Base
   # remember all the places in our database that refer to competition ids, and
   # update them. We can get rid of all this once we're done with
   # https://github.com/cubing/worldcubeassociation.org/issues/91.
+  # 2015-12-31: Added some stuff regarding competition_delegates and
+  # competition_organizers tables. We need to delete some lines there
+  # if we change the competition's id. -Pedro
   after_save :update_results_when_id_changes
   def update_results_when_id_changes
     if id_change
       Result.where(competitionId: id_was).update_all(competitionId: id)
       Registration.where(competitionId: id_was).update_all(competitionId: id)
       Scramble.where(competitionId: id_was).update_all(competitionId: id)
+      CompetitionDelegate.where(competition_id: id_was).destroy_all
+      CompetitionOrganizer.where(competition_id: id_was).destroy_all
     end
   end
 

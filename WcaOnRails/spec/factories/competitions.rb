@@ -16,6 +16,14 @@ FactoryGirl.define do
     website "https://www.worldcubeassociation.org"
     showAtAll true
 
+    trait :with_delegate do
+      delegates { [ FactoryGirl.create(:delegate) ] }
+    end
+
+    trait :with_organizer do
+      organizers { [ FactoryGirl.create(:user) ] }
+    end
+
     factory :competition_with_delegates do
       after(:create) do |comp|
         comp.delegates << FactoryGirl.create(:delegate)

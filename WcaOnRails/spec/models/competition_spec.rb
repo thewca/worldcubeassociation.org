@@ -192,6 +192,16 @@ RSpec.describe Competition do
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competitionId).to eq "NewID2015"
     end
+
+    it "updates the fields in competition_delegates and competition_organizers" do
+      comp = FactoryGirl.create(:competition, :with_delegate, :with_organizer)
+      old_comp_id = comp.id
+      comp.update_attribute(:id, "NewID2015")
+      cmp_del = CompetitionDelegate.find_by(competition_id: old_comp_id)
+      cmp_org = CompetitionOrganizer.find_by(competition_id: old_comp_id)
+      expect(cmp_del).to eq nil
+      expect(cmp_org).to eq nil
+    end
   end
 
   describe "when deleting a competition" do
