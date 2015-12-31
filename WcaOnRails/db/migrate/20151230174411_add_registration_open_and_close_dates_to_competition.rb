@@ -12,8 +12,9 @@ class AddRegistrationOpenAndCloseDatesToCompetition < ActiveRecord::Migration
         SQL
         execute <<-SQL
           UPDATE Competitions
-            SET registration_open=NOW()
-            SET registration_close=CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))
+            SET
+              registration_open=NOW(),
+              registration_close=CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))
             WHERE showPreregForm=1;
         SQL
         remove_column :Competitions, :showPreregForm
@@ -33,9 +34,9 @@ class AddRegistrationOpenAndCloseDatesToCompetition < ActiveRecord::Migration
             SET showPreregForm=1
             WHERE registration_open < NOW() AND NOW() < registration_close;
         SQL
-        add_column :Competitions, :registration_open
-        add_column :Competitions, :registration_close
-        add_column :Competitions, :use_wca_registration
+        remove_column :Competitions, :registration_open
+        remove_column :Competitions, :registration_close
+        remove_column :Competitions, :use_wca_registration
       end
     end
   end
