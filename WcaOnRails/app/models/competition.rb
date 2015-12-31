@@ -178,6 +178,21 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  validate :registration_must_close_after_it_opens
+  def registration_must_close_after_it_opens
+    if use_wca_registration?
+      if !registration_open
+        errors.add(:registration_open, "required")
+      end
+      if !registration_close
+        errors.add(:registration_close, "required")
+      end
+      if registration_open && registration_close && !(registration_open < registration_close)
+        errors.add(:registration_close, "registration close must be after registration open")
+      end
+    end
+  end
+
   attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)

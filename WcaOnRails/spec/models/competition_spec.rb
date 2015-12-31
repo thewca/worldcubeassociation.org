@@ -9,6 +9,24 @@ RSpec.describe Competition do
     expect(competition.cellName).to eq "Foo !Test- 2015"
   end
 
+  it "requires that registration_open be before registration_close" do
+    competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
+    expect(competition).to be_invalid
+    expect(competition.errors.messages[:registration_close]).to eq ["registration close must be after registration open"]
+  end
+
+  it "requires registration_open if use_wca_registration" do
+    competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: nil, registration_close: 2.weeks.ago, use_wca_registration: true
+    expect(competition).to be_invalid
+    expect(competition.errors.messages[:registration_open]).to eq ["required"]
+  end
+
+  it "requires registration_close if use_wca_registration" do
+    competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: nil, use_wca_registration: true
+    expect(competition).to be_invalid
+    expect(competition.errors.messages[:registration_close]).to eq ["required"]
+  end
+
   it "truncates name as necessary to produce id and cellName" do
     competition = FactoryGirl.build :competition, name: "Alexander and the Terrible, Horrible, No Good 2015"
     expect(competition).to be_valid
