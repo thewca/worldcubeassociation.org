@@ -1,17 +1,25 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :can_admin_results_only, only: [:index, :post_announcement, :post_results, :admin_edit]
-  before_action :can_create_competition_only, only: [:new, :create]
-  before_action :can_manage_competition_only, only: [:edit, :update]
 
-  private def can_manage_competition_only
+  private def competition_from_params
     competition = Competition.find(params[:id])
+    if !competition.user_can_view?(current_user)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    competition
+  end
+
+  before_action :can_manage_competition_only, only: [:edit, :update]
+  private def can_manage_competition_only
+    competition = competition_from_params
     unless current_user && current_user.can_manage_competition?(competition)
       flash[:danger] = "You are not allowed to manage this competition"
       redirect_to root_url
     end
   end
 
+  before_action :can_create_competition_only, only: [:new, :create]
   private def can_create_competition_only
     unless current_user && current_user.can_create_competition?
       flash[:danger] = "You are not allowed to create competitions"
@@ -187,7 +195,7 @@ class CompetitionsController < ApplicationController
   end
 
   def show
-    @competition = Competition.find(params[:id])
+    @competition = competition_from_params
     redirect_to "/results/c.php?i=#{@competition.id}"
   end
 

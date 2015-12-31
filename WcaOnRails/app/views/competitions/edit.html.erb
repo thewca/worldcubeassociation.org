@@ -43,11 +43,11 @@
     <% else %>
       <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
-          This competition is publicly visible and locked for editing. If you need to make a change, contact the Board to unlock it.
+          This competition is publicly visible and locked for editing. If you need to make a change, contact the <%= mail_to_wca_board %> to unlock it.
         </div>
       <% elsif is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          You've confirmed this competition, but it is not yet visible to the public. Contact the Board to make it visible.
+          You've confirmed this competition, but it is not yet visible to the public. Wait for the <%= mail_to_wca_board %> to make it visible.
         </div>
       <% elsif !is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-danger">
@@ -55,7 +55,7 @@
         </div>
       <% elsif !is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          This competition is not visible to the public. Fill in all the fields and click Confirm when you're ready for the Board to approve it.
+          Fill in all the fields and click Confirm when you're ready for the <%= mail_to_wca_board %> to approve this competition.
         </div>
       <% end %>
     <% end %>

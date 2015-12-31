@@ -154,6 +154,24 @@ RSpec.describe RegistrationsController do
     end
   end
 
+  context "competition not visible" do
+    let(:organizer) { FactoryGirl.create :user }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, eventSpecs: "333 444 333bf", showAtAll: false, organizers: [organizer]) }
+
+    it "404s when competition is not visible to public" do
+      expect {
+        get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      }.to raise_error(ActionController::RoutingError)
+    end
+
+    it "organizer can access psych sheet" do
+      sign_in organizer
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      expect(response.status).to eq 200
+    end
+  end
+
   context "psych sheet when not signed in" do
     let!(:competition) { FactoryGirl.create(:competition, :registration_open, eventSpecs: "333 444 333bf") }
 

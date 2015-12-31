@@ -11,6 +11,14 @@ describe CompetitionsController do
         get :show, id: competition.id
         expect(response).to redirect_to "/results/c.php?i=#{competition.id}"
       end
+
+      it '404s when competition is not visible' do
+        competition.update_column(:showAtAll, false)
+
+        expect {
+          get :show, id: competition.id
+        }.to raise_error(ActionController::RoutingError)
+      end
     end
   end
 
@@ -334,7 +342,7 @@ describe CompetitionsController do
       end
 
       it "cannot delete competition they are not delegating" do
-        competition.update_attributes(isConfirmed: false, showAtAll: false)
+        competition.update_attributes(isConfirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"

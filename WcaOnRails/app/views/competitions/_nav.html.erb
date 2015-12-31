@@ -109,6 +109,12 @@
       <h1><%= @competition.name %></h1>
       <hr />
 
+      <% if !@competition.showAtAll? %>
+        <div class="alert alert-warning">
+          <strong>Note:</strong> This competition is not visible to the public.
+        </div>
+      <% end %>
+
       <%= yield %>
     </div>
   </div>

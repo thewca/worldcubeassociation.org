@@ -411,6 +411,10 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def user_can_view?(user)
+    self.showAtAll || (user && user.can_manage_competition?(self))
+  end
+
   def self.search(query, params: {})
     sql_query = "%#{query}%"
     Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)

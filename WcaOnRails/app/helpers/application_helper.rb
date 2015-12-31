@@ -23,6 +23,10 @@ module ApplicationHelper
     }[flash_type.to_sym] || flash_type.to_s
   end
 
+  def mail_to_wca_board
+    mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
+  end
+
   def md(content)
     Redcarpet::Markdown.new(Redcarpet::Render::HTML.new).render(content).html_safe
   end

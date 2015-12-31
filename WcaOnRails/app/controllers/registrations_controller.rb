@@ -8,6 +8,10 @@ class RegistrationsController < ApplicationController
       registration = Registration.find(params[:id])
       competition = registration.competition
     end
+    if !competition.user_can_view?(current_user)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    competition
   end
 
   before_action :competition_must_be_using_wca_registration!
@@ -32,7 +36,7 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @competition_registration_view = true
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     respond_to do |format|
       format.html
       format.csv do
@@ -43,13 +47,13 @@ class RegistrationsController < ApplicationController
   end
 
   def psych_sheet
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     most_main_event = @competition.events.min_by { |e| e.rank }
     redirect_to competition_psych_sheet_event_url(@competition.id, most_main_event.id)
   end
 
   def psych_sheet_event
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     @event = Event.find(params[:event_id])
 
     # TODO - pull registered events out into a join table
@@ -77,7 +81,7 @@ class RegistrationsController < ApplicationController
   end
 
   def index
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     @registrations = @competition.registrations.accepted.sort_by &:name
   end
 
@@ -88,7 +92,7 @@ class RegistrationsController < ApplicationController
 
   def update_all
     @competition_registration_view = true
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     ids = []
     registration_ids = params.select { |k| k.start_with?("registration-") }.map { |k, v| k.split('-')[1] }
     registrations = registration_ids.map do |registration_id|
@@ -132,12 +136,12 @@ class RegistrationsController < ApplicationController
   end
 
   def register_require_sign_in
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     redirect_to competition_register_path(@competition)
   end
 
   def register
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     @registration = nil
     if current_user
       registrations = @competition.registrations
@@ -146,7 +150,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @competition = Competition.find(params[:competition_id])
+    @competition = competition_from_params
     if !@competition.registration_opened?
       flash[:danger] = "You cannot register for this competition, registration is closed"
       redirect_to competition_path(@competition)
