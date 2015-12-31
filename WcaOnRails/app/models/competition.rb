@@ -116,22 +116,30 @@ class Competition < ActiveRecord::Base
 
   attr_writer :delegate_ids, :organizer_ids
   def delegate_ids
-    @delegate_ids|| delegates.map(&:id).join(",")
+    @delegate_ids || delegates.map(&:id).join(",")
   end
   def organizer_ids
     @organizer_ids || organizers.map(&:id).join(",")
   end
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
-    def users_to_emails_str(users)
-      users.sort_by(&:name).map { |user| "[{#{user.name}}{mailto:#{user.email}}]" }.join
-    end
+    # This is a mess. When changing competition ids, the calls to delegates=
+    # and organizers= below will cause database writes with a new competition_id.
+    # We hack around this by pretending our id actually didn't change, and then
+    # we restore it at the end. This means we'll preseve our existing
+    # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
+    # We'll fix their competition_id below in update_foreign_keys_when_id_changes.
+    new_id = self.id
+    self.id = id_was
+
     if @delegate_ids
       self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
     end
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
+
+    self.id = new_id
   end
 
   # Workaround for PHP code that requires these tables to be clean.
@@ -147,12 +155,14 @@ class Competition < ActiveRecord::Base
   # remember all the places in our database that refer to competition ids, and
   # update them. We can get rid of all this once we're done with
   # https://github.com/cubing/worldcubeassociation.org/issues/91.
-  after_save :update_results_when_id_changes
-  def update_results_when_id_changes
+  after_save :update_foreign_keys_when_id_changes
+  def update_foreign_keys_when_id_changes
     if id_change
       Result.where(competitionId: id_was).update_all(competitionId: id)
       Registration.where(competitionId: id_was).update_all(competitionId: id)
       Scramble.where(competitionId: id_was).update_all(competitionId: id)
+      CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
+      CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
     end
   end
 

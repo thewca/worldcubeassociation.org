@@ -171,7 +171,7 @@ RSpec.describe Competition do
   end
 
   describe "when changing the id of a competition" do
-    let(:competition) { FactoryGirl.create(:competition) }
+    let(:competition) { FactoryGirl.create(:competition, :with_delegate, :with_organizer) }
 
     it "changes the competitionId of registrations" do
       reg1 = FactoryGirl.create(:registration, competitionId: competition.id)
@@ -191,6 +191,28 @@ RSpec.describe Competition do
       scramble1 = FactoryGirl.create(:scramble, competitionId: competition.id)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competitionId).to eq "NewID2015"
+    end
+
+    it "updates the competition_id of competition_delegates and competition_organizers" do
+      organizer = competition.organizers.first
+      delegate = competition.delegates.first
+
+      expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
+      expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
+
+      cd = CompetitionDelegate.find_by_delegate_id(delegate.id)
+      expect(cd).not_to eq nil
+      co = CompetitionOrganizer.find_by_organizer_id(organizer.id)
+      expect(co).not_to eq nil
+
+      c = Competition.find(competition.id)
+      c.id = "NewID2015"
+      c.save!
+
+      expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
+      expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
+      expect(CompetitionDelegate.find(cd.id).competition_id).to eq "NewID2015"
+      expect(CompetitionOrganizer.find(co.id).competition_id).to eq "NewID2015"
     end
   end
 

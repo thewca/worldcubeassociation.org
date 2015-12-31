@@ -167,15 +167,30 @@ describe CompetitionsController do
       end
 
       it "saving removes nonexistent delegates" do
-        invalid_competition_delegate = CompetitionDelegate.create!(competition_id: competition.id, delegate_id: 2000000)
+        invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: 2000000)
+        invalid_competition_delegate.save(validate: false)
         patch :update, id: competition, competition: { name: competition.name }
         expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
-        invalid_competition_organizer = CompetitionOrganizer.create!(competition_id: competition.id, organizer_id: 2000000)
+        invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: 2000000)
+        invalid_competition_organizer.save(validate: false)
         patch :update, id: competition, competition: { name: competition.name }
         expect(CompetitionDelegate.find_by_id(invalid_competition_organizer.id)).to be_nil
+      end
+
+      it "can change competition id" do
+        cds = competition.competition_delegates.to_a
+        cos = competition.competition_organizers.to_a
+
+        old_id = competition.id
+        patch :update, id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") }
+
+        expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
+        expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
+        expect(CompetitionDelegate.where(competition_id: "NewId2015").map(&:id).sort).to eq cds.map(&:id).sort
+        expect(CompetitionOrganizer.where(competition_id: "NewId2015").map(&:id).sort).to eq cos.map(&:id).sort
       end
     end
 
