@@ -57,12 +57,6 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  if ENVied.WCA_LIVE_SITE
-    # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-    # Cloudfront! https://console.aws.amazon.com/cloudfront/home
-    config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
-  end
-
   root_url = URI.parse(ENVied.ROOT_URL)
   config.action_mailer.default_url_options = {
     protocol: root_url.scheme,
@@ -71,15 +65,26 @@ Rails.application.configure do
   }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
-    port: 587,
-    enable_starttls_auto: true,
-    user_name: ENVied.MANDRILL_USERNAME,
-    password: ENVied.MANDRILL_PASSWORD,
-    authentication: 'login',
-    domain: root_url.host
-  }
+
+  if ENVied.WCA_LIVE_SITE
+    # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+    # Cloudfront! https://console.aws.amazon.com/cloudfront/home
+    config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
+
+    config.action_mailer.smtp_settings = {
+      address: "smtp.mandrillapp.com",
+      port: 587,
+      enable_starttls_auto: true,
+      user_name: ENVied.MANDRILL_USERNAME,
+      password: ENVied.MANDRILL_PASSWORD,
+      authentication: 'login',
+      domain: root_url.host
+    }
+  else
+    # When not on the live site, send emails to mailcatcher
+    config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+  end
+
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
