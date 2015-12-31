@@ -6,9 +6,9 @@ class RegistrationsPreview < ActionMailer::Preview
     Registrations.new_registration
   end
 
-  # Preview this email at http://localhost:3000/rails/mailers/registrations/accepted_registration
-  def accepted_registration
-    Registrations.accepted_registration
+  # Preview this email at http://localhost:3000/rails/mailers/registrations/notify_registrant_of_accepted_registration
+  def notify_registrant_of_accepted_registration
+    Registrations.notify_registrant_of_accepted_registration
   end
 
 end

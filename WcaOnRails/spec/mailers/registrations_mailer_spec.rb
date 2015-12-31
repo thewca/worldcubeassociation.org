@@ -61,7 +61,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "accepted_registration" do
-    let(:mail) { RegistrationsMailer.accepted_registration(registration) }
+    let(:mail) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
     let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
 
     it "renders the headers" do
@@ -71,7 +71,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Your registration for #{registration.competition.name} has been approved")
+      expect(mail.body.encoded).to match("Your .{1,200}registration.{1,200} for .{1,200}#{registration.competition.name}.{1,200} has been approved!")
     end
   end
 end

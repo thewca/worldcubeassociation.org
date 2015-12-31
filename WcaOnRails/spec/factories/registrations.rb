@@ -5,7 +5,7 @@ FactoryGirl.define do
       user { FactoryGirl.create(:user, :wca_id) }
     end
     competitionId { competition.id }
-    user_id { user.id }
+    user_id { user ? user.id : nil }
     eventIds "333"
     guests ""
     comments ""

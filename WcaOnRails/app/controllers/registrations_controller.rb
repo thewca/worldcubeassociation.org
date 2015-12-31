@@ -78,6 +78,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = Competition.find(params[:competition_id])
+    @registrations = @competition.registrations.accepted.sort_by &:name
   end
 
   def edit
@@ -97,7 +98,7 @@ class RegistrationsController < ApplicationController
     when "accept-selected"
       registrations.each do |registration|
         registration.update_attribute(:status, "a")
-        RegistrationsMailer.accepted_registration(registration).deliver_now
+        RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
       end
       flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
     when "reject-selected"
@@ -117,7 +118,7 @@ class RegistrationsController < ApplicationController
     was_accepted = @registration.accepted?
     if @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
-        mailer = RegistrationsMailer.accepted_registration(@registration)
+        mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_now
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else

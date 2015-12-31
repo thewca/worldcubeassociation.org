@@ -2,8 +2,7 @@
 
 <%= render layout: "nav" do %>
 
-  <% registrations = @competition.registrations.accepted.order(:name) %>
-  <%= wca_table_for registrations do |table| %>
+  <%= wca_table_for @registrations do |table| %>
     <% table.column :name %>
     <% table.column :wca_id %>
     <% table.column :countryId %>
@@ -18,15 +17,15 @@
       <tfoot>
         <tr>
           <td colspan="2">
-            <% with_wca_id, without_wca_id = registrations.partition { |r| r.personId.present? } %>
+            <% with_wca_id, without_wca_id = @registrations.partition { |r| r.personId.present? } %>
             <%= without_wca_id.length %> <%= "first-timer".pluralize(without_wca_id.length) %> +
             <%= with_wca_id.length %> <%= "returner".pluralize(with_wca_id.length) %> =
-            <%= registrations.length %> people
+            <%= @registrations.length %> people
           </td>
-          <% country_count = registrations.map(&:countryId).uniq.length %>
+          <% country_count = @registrations.map(&:countryId).uniq.length %>
           <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
           <% @competition.events.each do |event| %>
-            <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
+            <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
           <% end %>
           <td></td>
           <td></td>

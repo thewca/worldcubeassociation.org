@@ -4,7 +4,13 @@ RSpec.describe RegistrationsController do
   context "signed in as organizer" do
     let(:organizer) { FactoryGirl.create(:user) }
     let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], eventSpecs: "222 333") }
-    let(:registration) { FactoryGirl.create(:registration, competitionId: competition.id) }
+    let(:zzyzx_user) { FactoryGirl.create :user, name: "Zzyzx" }
+    let(:registration) { FactoryGirl.create(:registration, competitionId: competition.id, user: zzyzx_user) }
+    let(:registration_without_user) {
+      u = FactoryGirl.build(:registration, competitionId: competition.id, name: "Aaron", user: nil)
+      u.save!(validate: false)
+      u
+    }
 
     before :each do
       sign_in organizer
@@ -15,16 +21,25 @@ RSpec.describe RegistrationsController do
       expect(response.status).to eq 200
     end
 
-    it 'can set name, email, events, countryId for registrations without user' do
-      # Change this registration to not have a user
-      registration.update_column(:user_id, nil)
+    it 'sorts by name, even if name is unpopulated because they registered with a WCA account' do
+      # First approve registrations
+      registration.update_column(:status, "a")
+      registration_without_user.update_column(:status, "a")
 
-      patch :update, id: registration.id, registration: { name: "test name", event_ids: {"222" => "1", "333" => "1" }, email: "foo@bar.com", countryId: "smerbia" }
-      registration.reload
-      expect(registration.name).to eq "test name"
-      expect(registration.eventIds).to eq "333 222"
-      expect(registration.email).to eq "foo@bar.com"
-      expect(registration.countryId).to eq "smerbia"
+      get :index, competition_id: competition
+      registrations = assigns(:registrations)
+      expect(registrations.length).to eq 2
+      expect(registrations[0].name).to eq "Aaron"
+      expect(registrations[1].name).to eq "Zzyzx"
+    end
+
+    it 'can set name, email, events, countryId for registrations without user' do
+      patch :update, id: registration_without_user.id, registration: { name: "test name", event_ids: {"222" => "1", "333" => "1" }, email: "foo@bar.com", countryId: "smerbia" }
+      registration_without_user.reload
+      expect(registration_without_user.name).to eq "test name"
+      expect(registration_without_user.eventIds).to eq "333 222"
+      expect(registration_without_user.email).to eq "foo@bar.com"
+      expect(registration_without_user.countryId).to eq "smerbia"
     end
 
     it 'cannot set events that are not offered' do
@@ -46,7 +61,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "approves a pending registration" do
-      expect(RegistrationsMailer).to receive(:accepted_registration).with(registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
         patch :update, id: registration.id, registration: { status: Registration::statuses[:accepted] }
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
@@ -56,8 +71,8 @@ RSpec.describe RegistrationsController do
     it "can approve multiple registrations" do
       registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
 
-      expect(RegistrationsMailer).to receive(:accepted_registration).with(registration).and_call_original
-      expect(RegistrationsMailer).to receive(:accepted_registration).with(registration2).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration2).and_call_original
       expect do
         patch :update_all, competition_id: competition.id, registrations_action: "accept-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1"
       end.to change { ActionMailer::Base.deliveries.length }.by(2)

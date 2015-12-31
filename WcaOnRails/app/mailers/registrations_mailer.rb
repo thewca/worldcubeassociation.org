@@ -22,7 +22,7 @@ class RegistrationsMailer < ApplicationMailer
     )
   end
 
-  def accepted_registration(registration)
+  def notify_registrant_of_accepted_registration(registration)
     @registration = registration
     mail(
       to: registration.email,
