@@ -28,17 +28,18 @@
   </ul>
 
   <p>The following committees are responsible for the operational activities of the WCA:</p>
-  <ul><li><strong>WCA Disciplinary Committee (WDC)</strong>, led by Daniel Sheppard (United Kingdom)<br />
+  <ul>
+    <li><strong>WCA Disciplinary Committee (WDC)</strong>: <%= format_team_members(:wdc_team) %> <br />
   This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions.</li>
-  <li><strong>WCA Regulations Committee (WRC)</strong>, led by Kit Clement (USA)<br />
+    <li><strong>WCA Regulations Committee (WRC)</strong>: <%= format_team_members(:wrc_team) %> <br />
   This committee is responsible for managing the WCA Regulations.</li>
-  <li><strong>Results team</strong>, led by Sébastien Auroux (Germany)<br />
+    <li><strong>Results team</strong>: <%= format_team_members(:results_team) %> <br />
   This team is responsible for managing all competition results.</li>
-  <li><strong>WCA Website team</strong>, led by Jeremy Fleischman (USA)<br />
-  This team is responsible for managing the WCA website.</li>
-  <li><strong>WCA Software team</strong>, led by Jeremy Fleischman (USA)<br />
-  This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools).</li>
-  </ul><p>
+    <li><strong>WCA Software team</strong>: <%= format_team_members(:software_admin_team) %> <br />
+    This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools).</li>
+  </ul>
+
+  <p>
   <strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see <%= link_to "WCA Delegates", delegates_path %>). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates.
   </p>
 
