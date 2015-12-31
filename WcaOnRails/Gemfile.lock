@@ -398,6 +398,7 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
+  blocks
   bootstrap-sass
   bootstrap-will_paginate
   byebug

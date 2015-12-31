@@ -47,7 +47,7 @@ class CompetitionsController < ApplicationController
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
       @competition.errors[:name].concat(@competition.errors[:id])
-      render 'new'
+      render :new
     end
   end
 
@@ -153,22 +153,18 @@ class CompetitionsController < ApplicationController
     post_post(post)
   end
 
-  private def render_edit
-    render 'edit'
-  end
-
   def admin_edit
     @competition = Competition.find(params[:id])
     @competition_admin_view = true
     @competition_organizer_view = false
-    render_edit
+    render :edit
   end
 
   def edit
     @competition = Competition.find(params[:id])
     @competition_admin_view = false
     @competition_organizer_view = true
-    render_edit
+    render :edit
   end
 
   def nearby_competitions
@@ -203,7 +199,7 @@ class CompetitionsController < ApplicationController
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
       if cannot_delete_competition_reason
         flash.now[:danger] = cannot_delete_competition_reason
-        render_edit
+        render :edit
       else
         @competition.destroy
         flash[:success] = "Successfully deleted competition #{@competition.id}"
@@ -222,7 +218,7 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      render_edit
+      render :edit
     end
   end
 
