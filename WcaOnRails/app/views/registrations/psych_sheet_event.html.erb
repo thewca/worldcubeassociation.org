@@ -1,6 +1,9 @@
 <% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
+  <h2>
+    <span class="cubing-icon icon-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
+  </h2>
   <%= wca_table_for @registrations, extra_table_class: "wca-results-sort-by-#{@event.sort_by.to_s}" do |table| %>
     <%= table.column :position %>
     <%= table.column :name %>
