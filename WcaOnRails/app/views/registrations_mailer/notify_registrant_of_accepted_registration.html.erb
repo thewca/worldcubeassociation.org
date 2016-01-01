@@ -1,1 +1,3 @@
-<h1>Your <%= link_to "registration", competition_register_url(@registration.competition) %> for <%= link_to @registration.competition.name, competition_url(@registration.competition) %> has been approved!</h1>
+<p>Hi, <%= @registration.name %>!</p>
+
+<p>Your <%= link_to "registration", competition_register_url(@registration.competition) %> for <%= link_to @registration.competition.name, competition_url(@registration.competition) %> has been accepted!</p>

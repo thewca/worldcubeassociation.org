@@ -1,4 +1,4 @@
-<span class="wca-id">
-  <%# We use a full url because this can be rendered inside of emails %>
-  <%= link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}" -%>
-</span>
+<%= content_tag :span, class: "wca-id" do -%>
+<%# We use a full url because this can be rendered inside of emails -%>
+<%= link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}" -%>
+<% end %>

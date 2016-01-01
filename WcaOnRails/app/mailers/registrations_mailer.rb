@@ -26,7 +26,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     mail(
       to: registration.email,
-      subject: "Your registration for #{registration.competition.name} has been approved!",
+      subject: "Your registration for #{registration.competition.name} has been accepted!",
     )
   end
 end

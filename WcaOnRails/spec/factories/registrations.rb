@@ -10,8 +10,12 @@ FactoryGirl.define do
     guests ""
     comments ""
 
-    trait :approved do
+    trait :accepted do
       status "a"
+    end
+
+    trait :pending do
+      status "p"
     end
 
     factory :userless_registration do

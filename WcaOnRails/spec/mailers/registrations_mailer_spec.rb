@@ -65,13 +65,13 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been approved!")
+      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been accepted!")
       expect(mail.to).to eq([registration.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Your .{1,200}registration.{1,200} for .{1,200}#{registration.competition.name}.{1,200} has been approved!")
+      expect(mail.body.encoded).to match("Your .{1,200}registration.{1,200} for .{1,200}#{registration.competition.name}.{1,200} has been accepted!")
     end
   end
 end

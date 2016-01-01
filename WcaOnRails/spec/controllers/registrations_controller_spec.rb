@@ -217,7 +217,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles user without average" do
-      registration = FactoryGirl.create(:registration, :approved, competition: competition)
+      registration = FactoryGirl.create(:registration, :accepted, competition: competition)
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333"
       registrations = assigns(:registrations)
@@ -225,15 +225,15 @@ RSpec.describe RegistrationsController do
     end
 
     it "sorts 444 by average and handles ties" do
-      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
       FactoryGirl.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
 
-      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
 
-      registration3 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_average, rank: 9, best: 4242, eventId: "444", personId: registration3.personId
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
@@ -245,15 +245,15 @@ RSpec.describe RegistrationsController do
 
     it "handles missing average" do
       # Missing an average
-      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.personId
 
-      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
 
       # Never competed
-      registration3 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
@@ -262,7 +262,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles 1 registration" do
-      registration = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       RanksAverage.create!(
         personId: registration.personId,
         eventId: "444",
@@ -279,7 +279,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "sorts 333bf by single" do
-      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "333bf")
       RanksAverage.create!(
         personId: registration1.personId,
         eventId: "333bf",
@@ -297,7 +297,7 @@ RSpec.describe RegistrationsController do
         countryRank: 1,
       )
 
-      registration2 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "333bf")
       RanksAverage.create!(
         personId: registration2.personId,
         eventId: "333bf",
@@ -322,7 +322,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "shows first timers on bottom" do
-      registration1 = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "333bf")
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "333bf")
       RanksAverage.create!(
         personId: registration1.personId,
         eventId: "333bf",
@@ -342,11 +342,11 @@ RSpec.describe RegistrationsController do
 
       # Someone who has never competed in a WCA competition
       user2 = FactoryGirl.create(:user, name: "Zzyzx")
-      registration2 = FactoryGirl.create(:registration, :approved, user: user2, competition: competition, eventIds: "333bf")
+      registration2 = FactoryGirl.create(:registration, :accepted, user: user2, competition: competition, eventIds: "333bf")
 
       # Someone who has never competed in 333bf
       user3 = FactoryGirl.create(:user, :wca_id, name: "Aaron")
-      registration3 = FactoryGirl.create(:registration, :approved, user: user3, competition: competition, eventIds: "333bf")
+      registration3 = FactoryGirl.create(:registration, :accepted, user: user3, competition: competition, eventIds: "333bf")
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
@@ -355,7 +355,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles 1 registration" do
-      registration = FactoryGirl.create(:registration, :approved, competition: competition, eventIds: "444")
+      registration = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       RanksAverage.create!(
         personId: registration.personId,
         eventId: "444",
