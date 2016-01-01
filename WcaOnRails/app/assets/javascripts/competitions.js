@@ -5,14 +5,21 @@ $(function() {
 
   var $competitionSelect = $('#competition_competition_id_to_clone');
   if($competitionSelect.length > 0) {
+    var selectize = $competitionSelect[0].selectize;
+
     var competitionChanged = function() {
-      var competitionId = $competitionSelect.val();
-      $('#create-competition').text(competitionId ? "Clone competition" : "Create competition");
+      var competitionId = selectize.getValue();
+      var enteredCompetitionId = selectize.$control_input.val();
+      var $createCompetition = $('#create-competition');
+      $createCompetition.text((enteredCompetitionId || competitionId) ? "Clone competition" : "Create competition");
+      // If they entered something into the competition field, but have not
+      // actually selected a competition, then disable the clone competition button.
+      $createCompetition.prop("disabled", enteredCompetitionId && !competitionId);
     };
     competitionChanged();
 
-    $competitionSelect.on("typeahead:select", competitionChanged);
-    $competitionSelect.on("input", competitionChanged);
+    selectize.on("change", competitionChanged);
+    selectize.$control_input.on("input", competitionChanged);
   }
 
   var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
