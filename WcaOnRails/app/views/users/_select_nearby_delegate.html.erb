@@ -7,6 +7,12 @@
     WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> is already assigned to a different account.
     If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
   </p>
+<% elsif !@user.unconfirmed_person.dob %>
+  <p>
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> does
+    not have a birthdate assigned. Please contact the
+    <%= mail_to "results@worldcubeassociation.org", "Results team", target: "_blank" %> to fix this.
+  </p>
 <% else %>
   <p>
     In order to assign you your WCA ID, we need to confirm your identify. Please

@@ -293,6 +293,8 @@ RSpec.describe User, type: :model do
     let(:person) { FactoryGirl.create :person, year: 1990, month: 01, day: 02 }
     let(:delegate) { FactoryGirl.create :delegate }
     let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, claiming_wca_id: true, dob_verification: "1990-01-2" }
+
+    let(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
     let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
 
     it "defines a valid user" do
@@ -310,16 +312,11 @@ RSpec.describe User, type: :model do
       expect(user.errors.messages[:dob_verification]).to eq ['incorrect']
     end
 
-    it "does not require dob for people without dobs" do
-      person.year = 0
-      person.month = 0
-      person.day = 0
-      person.save!
-      expect(person.dob).to eq nil
-
-      user.unconfirmed_wca_id = person.id
+    it "does not allow claiming wca id Person without dob" do
+      user.unconfirmed_wca_id = person_without_dob.wca_id
       user.dob_verification = "1234-04-03"
-      expect(user).to be_valid
+      expect(user).to be_invalid
+      expect(user.errors.messages[:dob_verification]).to eq ["WCA ID does not have a birthdate. Contact the Results team to resolve this."]
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Claim WCA ID" do
   let!(:user) { FactoryGirl.create(:user) }
   let!(:person) { FactoryGirl.create(:person_who_has_competed_once, year: 1988, month: 02, day: 03) }
+  let!(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
 
   context 'when signed in as user without wca id', js: true do
     before :each do
@@ -20,11 +21,9 @@ RSpec.feature "Claim WCA ID" do
       expect(page.find("div.user_dob_verification", visible: false).visible?).to eq false
 
       selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
-      selectize_input.native.send_key(person.id)
-
+      selectize_input.native.send_key(person.wca_id)
       # Wait for selectize popup to appear.
       expect(page).to have_selector("div.selectize-dropdown", visible: true)
-
       # Select item with selectize.
       page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
 
@@ -45,6 +44,19 @@ RSpec.feature "Claim WCA ID" do
       user.reload
       expect(user.unconfirmed_wca_id).to eq person.id
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
+    end
+
+    it 'tells you to contact Results team if your WCA ID does not have a birthdate' do
+      visit "/profile/claim_wca_id"
+
+      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
+      selectize_input.native.send_key(person_without_dob.wca_id)
+      # Wait for selectize popup to appear.
+      expect(page).to have_selector("div.selectize-dropdown", visible: true)
+      # Select item with selectize.
+      page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
+
+      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact the Results team to fix this."
     end
   end
 end

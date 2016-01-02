@@ -102,8 +102,12 @@ class User < ActiveRecord::Base
         # Don't verify DOB for WCA IDs that have already been claimed. This protects
         # people from DOB guessing attacks.
         dob_verification_date = Date.safe_parse(dob_verification, nil)
-        if !already_assigned_to_user && unconfirmed_person && unconfirmed_person.dob && unconfirmed_person.dob != dob_verification_date
-          errors.add(:dob_verification, "incorrect")
+        if unconfirmed_person
+          if !unconfirmed_person.dob
+            errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
+          elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
+            errors.add(:dob_verification, "incorrect")
+          end
         end
         if person
           errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
