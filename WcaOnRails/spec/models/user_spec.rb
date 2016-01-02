@@ -290,9 +290,9 @@ RSpec.describe User, type: :model do
   end
 
   describe "unconfirmed_wca_id" do
-    let(:person) { FactoryGirl.create :person }
+    let(:person) { FactoryGirl.create :person, year: 1990, month: 01, day: 02 }
     let(:delegate) { FactoryGirl.create :delegate }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
+    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, claiming_wca_id: true, dob_verification: "1990-01-2" }
     let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
 
     it "defines a valid user" do
@@ -300,25 +300,52 @@ RSpec.describe User, type: :model do
     end
 
     it "requires unconfirmed_wca_id" do
-      user.claiming_wca_id = true
       user.unconfirmed_wca_id = nil
       expect(user).to be_invalid
     end
 
+    it "requires dob verification" do
+      user.dob_verification = nil
+      expect(user).to be_invalid
+      expect(user.errors.messages[:dob_verification]).to eq ['incorrect']
+    end
+
+    it "does not require dob for people without dobs" do
+      person.year = 0
+      person.month = 0
+      person.day = 0
+      person.save!
+      expect(person.dob).to eq nil
+
+      user.unconfirmed_wca_id = person.id
+      user.dob_verification = "1234-04-03"
+      expect(user).to be_valid
+    end
+
+    it "does not show a message about incorrect dob for people who have already claimed their wca id" do
+      user.unconfirmed_wca_id = user_with_wca_id.wca_id
+      expect(user).to be_invalid
+      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ["already assigned to a different user"]
+      expect(user.errors.messages[:dob_verification]).to eq nil
+    end
+
+    it "requires correct dob verification" do
+      user.dob_verification = '2016-01-02'
+      expect(user).to be_invalid
+      expect(user.errors.messages[:dob_verification]).to eq ['incorrect']
+    end
+
     it "requires delegate_id_to_handle_wca_id_claim" do
-      user.claiming_wca_id = true
       user.delegate_id_to_handle_wca_id_claim = nil
       expect(user).to be_invalid
     end
 
     it "delegate_id_to_handle_wca_id_claim must be a delegate" do
-      user.claiming_wca_id = true
       user.delegate_id_to_handle_wca_id_claim = user.id
       expect(user).to be_invalid
     end
 
     it "must claim a real wca id" do
-      user.claiming_wca_id = true
       user.unconfirmed_wca_id = "1982AAAA01"
       expect(user).to be_invalid
 
@@ -327,7 +354,6 @@ RSpec.describe User, type: :model do
     end
 
     it "cannot claim a wca id already assigned to a real user" do
-      user.claiming_wca_id = true
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
       expect(user).to be_invalid
     end
@@ -335,18 +361,19 @@ RSpec.describe User, type: :model do
     it "can claim a wca id already assigned to a dummy user" do
       dummy_user = FactoryGirl.create :dummy_user
 
-      user.claiming_wca_id = true
       user.unconfirmed_wca_id = dummy_user.wca_id
+      user.dob_verification = dummy_user.person.dob.strftime("%F")
       expect(user).to be_valid
     end
 
     it "can match a wca id already claimed by a user" do
-      user.claiming_wca_id = true
       user2 = FactoryGirl.create :user
       user2.delegate_id_to_handle_wca_id_claim = delegate.id
 
       user2.unconfirmed_wca_id = person.wca_id
+      user2.dob_verification = person.dob.strftime("%F")
       user.unconfirmed_wca_id = person.wca_id
+      user.dob_verification = person.dob.strftime("%F")
 
       expect(user2).to be_valid
       expect(user).to be_valid

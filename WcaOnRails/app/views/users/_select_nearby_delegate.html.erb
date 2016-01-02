@@ -1,16 +1,16 @@
 <% if !@user.unconfirmed_person %>
   <p>
-    WCA ID <%= @user.unconfirmed_wca_id %> does not exist.
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> does not exist.
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    WCA ID <%= @user.unconfirmed_wca_id %> is already assigned to a different account.
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> is already assigned to a different account.
     If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
   </p>
 <% else %>
   <p>
-    In order to assign you your WCA ID, we need a delegate to confirm your
-    identity. From the delegates below, select the one you think knows you best:
+    In order to assign you your WCA ID, we need to confirm your identify. Please
+    select the delegate you think knows you best and enter your birthdate.
   </p>
 
   <div class="form-group radio_buttons optional">
@@ -33,4 +33,10 @@
       </label>
     </span>
   </div>
+  <script>
+    (function() {
+      // Make dob verification field visible.
+      $("div.user_dob_verification").toggle(true);
+    })();
+  </script>
 <% end %>

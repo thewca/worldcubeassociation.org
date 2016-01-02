@@ -119,6 +119,6 @@ class UsersController < ApplicationController
   end
 
   private def user_claim_wca_id_params
-    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim)
+    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
   end
 end

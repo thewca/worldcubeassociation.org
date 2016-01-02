@@ -77,6 +77,9 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Virtual attribute for people claiming a WCA ID.
+  attr_accessor :dob_verification
+
   validate :claim_wca_id_validations
   def claim_wca_id_validations
     if unconfirmed_wca_id.present? && !delegate_id_to_handle_wca_id_claim.present?
@@ -88,14 +91,23 @@ class User < ActiveRecord::Base
     end
 
     if unconfirmed_wca_id.present?
+      already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
       if !unconfirmed_person
         errors.add(:unconfirmed_wca_id, "not found")
-      elsif unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
+      elsif already_assigned_to_user
         errors.add(:unconfirmed_wca_id, "already assigned to a different user")
       end
 
-      if claiming_wca_id && person
-        errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
+      if claiming_wca_id
+        # Don't verify DOB for WCA IDs that have already been claimed. This protects
+        # people from DOB guessing attacks.
+        dob_verification_date = Date.safe_parse(dob_verification, nil)
+        if !already_assigned_to_user && unconfirmed_person && unconfirmed_person.dob && unconfirmed_person.dob != dob_verification_date
+          errors.add(:dob_verification, "incorrect")
+        end
+        if person
+          errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
+        end
       end
     end
 
