@@ -15,7 +15,7 @@ class AddRegistrationOpenAndCloseDatesToCompetition < ActiveRecord::Migration
             SET
               registration_open=IF(NOW() < CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00')), NOW(), CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))) - INTERVAL 1 DAY,
               registration_close=CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))
-            WHERE showPreregForm=1;
+            WHERE use_wca_registration=1;
         SQL
         remove_column :Competitions, :showPreregForm
         remove_column :Competitions, :showPreregList
