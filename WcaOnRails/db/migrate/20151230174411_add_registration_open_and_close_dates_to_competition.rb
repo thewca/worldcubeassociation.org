@@ -13,7 +13,7 @@ class AddRegistrationOpenAndCloseDatesToCompetition < ActiveRecord::Migration
         execute <<-SQL
           UPDATE Competitions
             SET
-              registration_open=NOW(),
+              registration_open=IF(NOW() < CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00')), NOW(), CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))) - INTERVAL 1 DAY,
               registration_close=CONCAT(year,'-',LPAD(endMonth,2,'00'),'-',LPAD(endDay,2,'00'))
             WHERE showPreregForm=1;
         SQL
