@@ -17,18 +17,13 @@
       <tfoot>
         <tr>
           <td colspan="2">
-            <% with_wca_id, without_wca_id = @registrations.partition { |r| r.personId.present? } %>
-            <%= without_wca_id.length %> <%= "first-timer".pluralize(without_wca_id.length) %> +
-            <%= with_wca_id.length %> <%= "returner".pluralize(with_wca_id.length) %> =
-            <%= @registrations.length %> people
+            <%= render "registration_info_people", registrations: @registrations %>
           </td>
           <% country_count = @registrations.map(&:countryId).uniq.length %>
           <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
           <% @competition.events.each do |event| %>
             <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
           <% end %>
-          <td></td>
-          <td></td>
         </tr>
       </tfoot>
     <% end %>

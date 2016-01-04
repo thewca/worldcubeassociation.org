@@ -12,16 +12,15 @@
       <% registrations = @competition.registrations.send(status).order(created_at: :asc, id: :asc) %>
       <%= wca_selectable_table_for registrations, extra_table_class: "registrations-table" do |table| %>
         <% table.column :data => "Edit", link_url: lambda { |registration| edit_registration_path(registration) } %>
-        <% table.column :data => "" do |registration| %>
-          <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-            <span class="glyphicon glyphicon-envelope"></span>
-          <% end %>
-        <% end %>
 
         <% table.column :wca_id %>
         <% table.column :name %>
         <% table.column :countryId %>
         <% table.column :birthday %>
+        <% @competition.events.each do |event| %>
+          <% table.column event.id.to_s %>
+        <% end %>
+
         <% table.column :guests do |registration| %>
           <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
             <%= registration.guests %>
@@ -32,8 +31,27 @@
             <%= registration.comments %>
           </span>
         <% end %>
-        <% @competition.events.each do |event| %>
-          <% table.column event.id.to_s %>
+        <% table.column :data => "" do |registration| %>
+          <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+            <span class="glyphicon glyphicon-envelope"></span>
+          <% end %>
+        <% end %>
+
+        <% table.define :footer do %>
+          <tfoot>
+            <tr>
+              <td colspan="4">
+                <%= render "registration_info_people", registrations: registrations %>
+              </td>
+              <% country_count = registrations.map(&:countryId).uniq.length %>
+              <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+              <td></td>
+              <% @competition.events.each do |event| %>
+                <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
+              <% end %>
+              <td colspan="4"></td>
+            </tr>
+          </tfoot>
         <% end %>
       <% end %>
     <% end %>

@@ -1,0 +1,4 @@
+<% with_wca_id, without_wca_id = registrations.partition { |r| r.personId.present? } %>
+<%= without_wca_id.length %> <%= "first-timer".pluralize(without_wca_id.length) %> +
+<%= with_wca_id.length %> <%= "returner".pluralize(with_wca_id.length) %> =
+<%= registrations.length %> people
