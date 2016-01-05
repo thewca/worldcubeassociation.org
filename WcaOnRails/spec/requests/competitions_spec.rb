@@ -3,7 +3,7 @@ require "rails_helper"
 describe "competitions" do
   sign_in { FactoryGirl.create :admin }
 
-  let(:competition) { FactoryGirl.create(:competition_with_delegates) }
+  let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
 
   it 'can confirm competition' do
     patch_via_redirect competition_path(competition), {

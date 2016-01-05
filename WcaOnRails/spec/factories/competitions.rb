@@ -34,17 +34,9 @@ FactoryGirl.define do
       registration_close 2.weeks.from_now.change(usec: 0)
     end
 
-    factory :competition_with_delegates do
-      after(:create) do |comp|
-        comp.delegates << FactoryGirl.create(:delegate)
-      end
-
-      factory :confirmed_competition do
-        after(:create) do |c|
-          c.isConfirmed = true
-          c.save!
-        end
-      end
+    trait :confirmed do
+      with_delegate
+      isConfirmed true
     end
   end
 end

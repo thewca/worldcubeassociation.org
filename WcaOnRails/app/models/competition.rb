@@ -47,10 +47,22 @@ class Competition < ActiveRecord::Base
       errors.add(:eventSpecs, "Competition must have at least one event")
     end
   end
+
   validate :must_have_at_least_one_delegate, if: :isConfirmed?
   def must_have_at_least_one_delegate
     if delegate_ids.length == 0
       errors.add(:delegate_ids, "Competition must have at least one WCA delegate")
+    end
+  end
+
+  # Currently we don't have a history of who was a delegate and when. Hence we need this
+  # validation, so people cannot pass a non-delegate as a delegate (even for an old comp).
+  # See https://github.com/cubing/worldcubeassociation.org/issues/185#issuecomment-168402252
+  # Once that is done, we'll be able to change this validation to work on old competitions.
+  validate :delegates_must_be_delegates
+  def delegates_must_be_delegates
+    if !self.delegates.all?(&:any_kind_of_delegate?)
+      errors.add(:delegate_ids, " are not all delegates")
     end
   end
 

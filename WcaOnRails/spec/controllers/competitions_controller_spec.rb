@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe CompetitionsController do
-  let(:competition) { FactoryGirl.create(:competition_with_delegates) }
+  let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
 
   describe 'GET #show' do
     context 'when not signed in' do
@@ -219,6 +219,23 @@ describe CompetitionsController do
         competition.organizers << organizer
         competition.save!
         sign_in organizer
+      end
+
+      it 'cannot pass a non-delegate as delegate' do
+        delegate_ids_old = competition.delegate_ids
+        fake_delegate = FactoryGirl.create(:user)
+        post :update, id: competition, competition: { delegate_ids: fake_delegate.id }
+        invalid_competition = assigns(:competition)
+        expect(invalid_competition.errors.messages[:delegate_ids]).to eq [" are not all delegates"]
+        competition.reload
+        expect(competition.delegate_ids).to eq delegate_ids_old
+      end
+
+      it 'can change the delegate' do
+        new_delegate = FactoryGirl.create(:delegate)
+        post :update, id: competition, competition: { delegate_ids: new_delegate.id }
+        competition.reload
+        expect(competition.delegates).to eq [new_delegate]
       end
 
       it 'cannot confirm competition' do
