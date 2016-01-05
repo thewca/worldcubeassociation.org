@@ -1,10 +1,19 @@
+<% competition = @registration.competition %>
+
 <p>
-  You just registered for <%= @registration.competition.name %>
+  You just registered for <%= link_to competition.name, competition_url(competition) %>.
 </p>
 
 <p>
-  Your registration is currently pending approval by the organizers.
-  The waiting list currently has <%= @registration.competition.registrations.pending.count %> <%= "person".pluralize(@registration.competition.registrations.pending.count) %> on it.
-  You can check the status of your registration
-  <%= link_to "here", competition_register_url(@registration.competition) %>.
+  Your registration is on the waiting list, which currently has <%= competition.registrations.pending.count %> <%= "person".pluralize(competition.registrations.pending.count) %> on it.
+</p>
+
+<p>
+  You will be emailed when your registration is approved.
+  You can also check the status of your registration
+  <%= link_to "here", competition_register_url(competition) %>.
+</p>
+
+<p>
+  Regards, <%= competition.managers.map(&:name).sort.to_sentence %>.
 </p>

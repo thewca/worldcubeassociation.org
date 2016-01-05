@@ -16,6 +16,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
       expect(mail.subject).to eq("#{registration.name} just registered for #{registration.competition.name}")
       expect(mail.to).to eq([delegate1.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
@@ -44,34 +45,71 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("You have registered for #{registration.competition.name}")
       expect(mail.to).to eq([registration.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("The waiting list currently has 2 people on it.")
+      expect(mail.body.encoded).to match("Your registration is on the waiting list, which currently has 2 people on it.")
       expect(mail.body.encoded).to match(competition_register_url(registration.competition))
     end
 
     it "pluralizes correctly" do
       earlier_registration.destroy!
 
-      expect(mail.body.encoded).to match("The waiting list currently has 1 person on it.")
+      expect(mail.body.encoded).to match("which currently has 1 person on it.")
       expect(mail.body.encoded).to match(competition_register_url(registration.competition))
     end
   end
 
-  describe "accepted_registration" do
+  describe "notify_registrant_of_accepted_registration" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
     let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been accepted!")
+      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been accepted")
       expect(mail.to).to eq([registration.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Your .{1,200}registration.{1,200} for .{1,200}#{registration.competition.name}.{1,200} has been accepted!")
+      expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been accepted")
+    end
+  end
+
+  describe "notify_registrant_of_pending_registration" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_pending_registration(registration) }
+    let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("You have been moved to the waiting list for #{registration.competition.name}")
+      expect(mail.to).to eq([registration.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
+      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been moved to the waiting list")
+      expect(mail.body.encoded).to match("If you think this is an error, please reply to this email.")
+      expect(mail.body.encoded).to match("Regards, #{competition.managers.map(&:name).sort.to_sentence}\\.")
+    end
+  end
+
+  describe "notify_registrant_of_deleted_registration" do
+    let(:mail) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
+    let(:registration) { FactoryGirl.create(:userless_registration, competition: competition) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been deleted")
+      expect(mail.to).to eq([registration.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
+      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been deleted")
+      expect(mail.body.encoded).to match("Regards, #{competition.managers.map(&:name).sort.to_sentence}\\.")
     end
   end
 end

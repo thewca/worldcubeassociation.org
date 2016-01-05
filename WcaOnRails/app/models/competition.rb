@@ -198,6 +198,10 @@ class Competition < ActiveRecord::Base
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
   end
 
+  def managers
+    (organizers + delegates).uniq
+  end
+
   def receiving_registration_emails?(user_id)
     competition_delegate = competition_delegates.find_by_delegate_id(user_id)
     if competition_delegate && competition_delegate.receive_registration_emails

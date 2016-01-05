@@ -14,4 +14,14 @@ class RegistrationsMailerPreview < ActionMailer::Preview
     registration = Registration.accepted.where.not(user_id: nil).first
     RegistrationsMailer.notify_registrant_of_accepted_registration(registration)
   end
+
+  def notify_registrant_of_pending_registration
+    registration = Registration.pending.where.not(user_id: nil).first
+    RegistrationsMailer.notify_registrant_of_pending_registration(registration)
+  end
+
+  def notify_registrant_of_deleted_registration
+    registration = Registration.accepted.where.not(user_id: nil).first
+    RegistrationsMailer.notify_registrant_of_deleted_registration(registration)
+  end
 end

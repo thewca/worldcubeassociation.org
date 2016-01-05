@@ -1,0 +1,25 @@
+<% competition = @registration.competition %>
+
+<p>
+  Your registration for <%= link_to competition.name, competition_url(competition) %> has been deleted. Possible causes are:
+</p>
+
+<ul>
+  <li>
+    You did not submit all the required details
+  </li>
+  <li>
+    You asked for withdrawal
+  </li>
+  <li>
+    You registered twice or more times
+  </li>
+</ul>
+
+<p>
+  If you think this is an error, please reply to this email.
+</p>
+
+<p>
+  Regards, <%= competition.managers.map(&:name).sort.to_sentence %>.
+</p>

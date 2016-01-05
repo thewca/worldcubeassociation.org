@@ -22,7 +22,7 @@ RSpec.describe RegistrationsController do
     end
 
     it 'sorts by name, even if name is unpopulated because they registered with a WCA account' do
-      # First approve registrations
+      # First accept registrations
       registration.update_column(:status, "a")
       registration_without_user.update_column(:status, "a")
 
@@ -60,7 +60,7 @@ RSpec.describe RegistrationsController do
       expect(flash[:danger]).to match "not allowed to manage this competition"
     end
 
-    it "approves a pending registration" do
+    it "accepts a pending registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
         patch :update, id: registration.id, registration: { status: Registration::statuses[:accepted] }
@@ -68,16 +68,61 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.accepted?).to be true
     end
 
-    it "can approve multiple registrations" do
+    it "changes an accepted registration to pending" do
+      registration.accepted!
+
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
+      expect do
+        patch :update, id: registration.id, registration: { status: Registration::statuses[:pending] }
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      expect(registration.reload.pending?).to be true
+    end
+
+    it "can delete multiple registrations" do
       registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
+
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
+      expect do
+        patch :update_all, competition_id: competition.id, registrations_action: "delete-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1"
+      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      expect(Registration.find_by_id(registration.id)).to eq nil
+      expect(Registration.find_by_id(registration2.id)).to eq nil
+    end
+
+    it "can reject multiple registrations" do
+      registration.accepted!
+      registration2 = FactoryGirl.create(:registration, :accepted, competitionId: competition.id)
+      pending_registration = FactoryGirl.create(:registration, :pending, competitionId: competition.id)
+
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration2).and_call_original
+      # We shouldn't notify people who were already on the waiting list that they're
+      # still on the waiting list.
+      expect(RegistrationsMailer).not_to receive(:notify_registrant_of_pending_registration).with(pending_registration).and_call_original
+      expect do
+        patch :update_all, competition_id: competition.id, registrations_action: "reject-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1", "registration-#{pending_registration.id}": "1"
+      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      expect(registration.reload.pending?).to be true
+      expect(registration2.reload.pending?).to be true
+      expect(pending_registration.reload.pending?).to be true
+    end
+
+    it "can accept multiple registrations" do
+      registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
+      accepted_registration = FactoryGirl.create(:registration, :accepted, competitionId: competition.id)
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration2).and_call_original
+      # We shouldn't notify people who were already accepted that they're
+      # still accepted.
+      expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(accepted_registration).and_call_original
       expect do
-        patch :update_all, competition_id: competition.id, registrations_action: "accept-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1"
+        patch :update_all, competition_id: competition.id, registrations_action: "accept-selected", "registration-#{registration.id}": "1", "registration-#{registration2.id}": "1", "registration-#{accepted_registration.id}": "1"
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
+      expect(accepted_registration.reload.accepted?).to be true
     end
   end
 

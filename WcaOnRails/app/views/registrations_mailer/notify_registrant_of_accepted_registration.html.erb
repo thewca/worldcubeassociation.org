@@ -1,3 +1,14 @@
-<p>Hi, <%= @registration.name %>!</p>
+<% competition = @registration.competition %>
 
-<p>Your <%= link_to "registration", competition_register_url(@registration.competition) %> for <%= link_to @registration.competition.name, competition_url(@registration.competition) %> has been accepted!</p>
+<p>
+  Your registration for <%= link_to competition.name, competition_url(competition) %> has been accepted.
+  As always, you can check the status of your registration <%= link_to "here", competition_register_url(competition) %>.
+</p>
+
+<p>
+  We look forward to seeing you on <%= competition.start_date.to_formatted_s(:long) %>!
+</p>
+
+<p>
+  Regards, <%= competition.managers.map(&:name).sort.to_sentence %>.
+</p>

@@ -101,15 +101,25 @@ class RegistrationsController < ApplicationController
     case params[:registrations_action]
     when "accept-selected"
       registrations.each do |registration|
-        registration.update_attribute(:status, "a")
-        RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
+        if !registration.accepted?
+          registration.accepted!
+          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
+        end
       end
       flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
     when "reject-selected"
-      registrations.each { |registration| registration.update_attribute(:status, "p") }
+      registrations.each do |registration|
+        if !registration.pending?
+          registration.pending!
+          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_now
+        end
+      end
       flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
     when "delete-selected"
-      registrations.each { |registration| registration.delete }
+      registrations.each do |registration|
+        registration.destroy
+        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now
+      end
       flash[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     else
       throw "Unrecognized action #{params[:registrations_action]}"
@@ -123,6 +133,10 @@ class RegistrationsController < ApplicationController
     if @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
+        mailer.deliver_now
+        flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
+      elsif was_accepted && !@registration.accepted?
+        mailer = RegistrationsMailer.notify_registrant_of_pending_registration(@registration)
         mailer.deliver_now
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else
