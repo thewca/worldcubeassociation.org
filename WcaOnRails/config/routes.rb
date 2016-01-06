@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: [:index, :update, :create, :edit], shallow: true
+    resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'

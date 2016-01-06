@@ -22,7 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update]
+  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update, :destroy]
   private def can_manage_competition
     current_user.can_manage_competition?(competition_from_params)
   end
@@ -88,6 +88,15 @@ class RegistrationsController < ApplicationController
   def edit
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
+  end
+
+  def destroy
+    @registration = Registration.find(params[:id])
+    @registration.destroy
+    mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
+    mailer.deliver_now
+    flash[:success] = "Deleted registration and emailed #{mailer.to.join(" ")}"
+    redirect_to competition_edit_registrations_path(@registration.competition)
   end
 
   def update_all

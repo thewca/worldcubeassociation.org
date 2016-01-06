@@ -55,6 +55,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.submit class: "btn btn-default" %>
+        <%= button_to "Delete", registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?" } %>
       </div>
     </div>
   <% end %>

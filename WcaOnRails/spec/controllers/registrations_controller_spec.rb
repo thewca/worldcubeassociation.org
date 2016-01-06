@@ -78,6 +78,17 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.pending?).to be true
     end
 
+    it "can delete registration" do
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
+
+      expect do
+        delete :destroy, id: registration.id
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+
+      expect(flash[:success]).to eq "Deleted registration and emailed #{registration.email}"
+      expect(Registration.find_by_id(registration.id)).to eq nil
+    end
+
     it "can delete multiple registrations" do
       registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
 
@@ -144,6 +155,13 @@ RSpec.describe RegistrationsController do
 
       registration = Registration.find_by_user_id(user.id)
       expect(registration.competitionId).to eq competition.id
+    end
+
+    it "cannot delete registration" do
+      registration = FactoryGirl.create :registration, competitionId: competition.id
+      delete :destroy, id: registration.id
+      expect(response).to redirect_to competition_path(competition)
+      expect(Registration.find_by_id(registration.id)).to eq registration
     end
 
     it "cannot create accepted registration" do
