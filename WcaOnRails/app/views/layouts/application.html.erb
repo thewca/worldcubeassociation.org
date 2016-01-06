@@ -54,7 +54,15 @@
               <li><a href="<%= logo_path %>"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa-fw') %> Logo</a></li>
             </ul>
           </li>
-          <li><a href="/results/competitions.php" class="top-nav"><%= icon('globe', class: 'fa-fw') %> Competitions</a></li>
+          <li class="dropdown">
+            <a href="" class="dropdown-toggle top-nav">
+               <%= icon('cube', class: 'fa-fw') %> Competitions <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/results/competitions.php"><%= icon('globe', class: 'fa-fw') %> All</a></li>
+              <li><a href="<%= my_comps_path %>"><%= icon('feed', class: 'fa-fw') %> My Competitions</a></li>
+            </ul>
+          </li>
           <li class="dropdown">
             <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
               <%= icon('list-ol', class: 'fa-fw') %> Results <span class="caret"></span>

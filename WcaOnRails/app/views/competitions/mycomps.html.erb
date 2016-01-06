@@ -1,0 +1,24 @@
+<% provide(:title, 'My competitions') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Start date</th>
+      <th>Status</th>
+      <th>Visible</th>
+      <th></th>
+    </tr>
+    <% @competitions.each do |competition| %>
+      <tr class="<%= competition.showAtAll ? "success" : "warning" %>">
+        <td><%= competition.name %></td>
+        <td><%= competition.start_date %></td>
+        <td><%= competition.isConfirmed ? "Confirmed" : "Not confirmed" %></td>
+        <td><%= competition.showAtAll ? "Yes" : "No" %></td>
+        <td><%= link_to "Edit", edit_competition_path(competition) %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

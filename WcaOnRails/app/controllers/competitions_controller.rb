@@ -230,6 +230,10 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  def mycomps
+    @competitions = Competition.joins(:competition_delegates).where("competition_delegates.delegate_id = ?", current_user.id).order(:year, :month, :day)
+  end
+
   private def competition_params
     permitted_competition_params = [
       :use_wca_registration,
