@@ -1,15 +1,19 @@
 /* ---------- general ---------- */
 
-a:link,
-a:visited,
-a:active {
-  color: #f60;
+// Don't change the color of links styled to look like bootstrap buttons,
+// orange text on a red background isn't very nice.
+a:not(.btn) {
   text-decoration: none;
-}
 
-a:hover {
-  color: #c30;
-  text-decoration: none;
+  &:link,
+  &:visited,
+  &:active {
+    color: #f60;
+  }
+
+  &:hover {
+    color: #c30;
+  }
 }
 
 /*

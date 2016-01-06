@@ -28,8 +28,6 @@
       <%= f.input :countryId, collection: Country.all, value_method: :id, label_method: :name %>
     <% end %>
 
-    <%= f.input :status, collection: Registration.statuses, selected: @registration.read_attribute(:status), include_blank: false %>
-
     <div class="form-group <%= @registration.errors.has_key?(:events) ? "has-error" : "" %>">
       <label class="col-sm-2 control-label">Events</label>
       <div class="col-sm-9">
@@ -52,10 +50,12 @@
     <%= f.input :guests %>
     <%= f.input :comments %>
 
+    <%= f.input :status, as: :radio_buttons, collection: [:a, :p], checked: @registration.read_attribute(:status), include_blank: false %>
+
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.submit class: "btn btn-default" %>
-        <%= button_to "Delete", registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?" } %>
+        <%= link_to "Delete", registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?", toggle: "tooltip" }, title: "Delete registration. This will email #{@registration.name} at #{@registration.email}." %>
       </div>
     </div>
   <% end %>

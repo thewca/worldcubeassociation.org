@@ -12,7 +12,7 @@ en:
       default_message: "Please review the problems below:"
     labels:
       competition:
-        id: "id"
+        id: "ID"
     hints:
       competition:
         competition_id_to_clone: "Optional. Can save you some typing if you're running a similar competition to a past competition."
@@ -21,3 +21,8 @@ en:
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         venueDetails: "Details about the venue (e.g., On the first floor far in the back, follow the signs)."
         information: "Some information text about the competition (e.g., Euro 2006 is open to citizens of the European countries and Israel)."
+    options:
+      registration:
+        status:
+          a: "Accepted"
+          p: "Waiting list"
