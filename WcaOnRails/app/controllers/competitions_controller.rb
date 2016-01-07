@@ -231,7 +231,7 @@ class CompetitionsController < ApplicationController
   end
 
   def mycomps
-    @competitions = Competition.joins(:competition_delegates).where("competition_delegates.delegate_id = ?", current_user.id).order(:year, :month, :day)
+    @competitions = Competition.joins(:competition_delegates).where("competition_delegates.delegate_id = ?", current_user.id).order(:year, :month, :day).reject &:is_over?
   end
 
   private def competition_params
