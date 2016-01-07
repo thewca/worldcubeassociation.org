@@ -19,8 +19,7 @@ FactoryGirl.define do
 
     factory :person_who_has_competed_once do
       after(:create) do |person|
-        competition = FactoryGirl.create :competition
-        competition =  FactoryGirl.create(:competition, :with_delegate)
+        competition = FactoryGirl.create(:competition, :with_delegate)
         FactoryGirl.create :result, person: person, competitionId: competition.id
         FactoryGirl.create :result, person: person, competitionId: competition.id
       end

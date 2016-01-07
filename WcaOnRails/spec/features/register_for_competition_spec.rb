@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Registering for a competition" do
   let(:user) { FactoryGirl.create :user }
-  let(:delegate) { FactoryGirl.create :user }
+  let(:delegate) { FactoryGirl.create :delegate }
   let(:competition) { FactoryGirl.create :competition, :registration_open, delegates: [delegate] }
 
   context "signed in as user" do
