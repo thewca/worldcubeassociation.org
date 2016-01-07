@@ -27,7 +27,7 @@
         <% end %>
       <% end %>
       <tr class="<%= competition.isConfirmed ? "success" : "danger" %> <%= competition.showAtAll ? "visible" : "not-visible" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= message %>">
-        <td><%= competition.name %></td>
+        <td><%= link_to competition.name, "/results/c.php?i=" + competition.id %></td>
         <td><%= competition.cityName %>, <%= competition.countryId %></td>
         <td><%= competition.start_date %></td>
         <td>
@@ -47,7 +47,12 @@
           <% end %>
         </td>
         <td>
-          <% if competition.use_wca_registration %>
+          <% if current_user.in?(competition.organizers) || current_user.in?(competition.delegates) || current_user.can_admin_results? %>
+            <%= (link_to "Edit", edit_competition_path(competition)) %>
+          <% end %>
+        </td>
+        <td>
+          <% if competition.use_wca_registration && (current_user.in?(competition.organizers) || current_user.in?(competition.delegates)) %>
             <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
           <% end %>
         </td>
@@ -55,7 +60,9 @@
     <% end %>
   </table>
 
-  <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
+  <% if current_user.wca_id %>
+    <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
+  <% end %>
 </div>
 
 <script>
