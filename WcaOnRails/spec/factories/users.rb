@@ -5,8 +5,8 @@ FactoryGirl.define do
     country_iso2 "US"
     gender "m"
     dob Date.new(1980, 1, 1)
-    password "foo"
-    password_confirmation { "foo" }
+    password "wca"
+    password_confirmation { "wca" }
     before(:create) { |user| user.skip_confirmation! }
 
     factory :admin do
