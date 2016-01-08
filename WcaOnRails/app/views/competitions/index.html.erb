@@ -11,7 +11,7 @@
         <td><%= competition.name %></td>
         <td><%= link_to "Edit", admin_edit_competition_path(competition) %></td>
         <td><%= link_to "Results", "/results/competition.php?competitionId=#{competition.id}" %></td>
-      </li>
+      </tr>
     <% end %>
   </table>
 </div>
