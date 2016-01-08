@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
-  get 'competitions/mycomps' => 'competitions#mycomps', as: :my_comps
+  get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet

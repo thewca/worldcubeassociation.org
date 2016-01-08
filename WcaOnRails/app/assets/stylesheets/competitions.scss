@@ -126,6 +126,16 @@ $venue-map-wrapper-height: 400px;
   width: 800px;
 }
 
-.not-visible {
-  opacity: 0.5;
+tr.competition {
+  &.not-visible {
+    opacity: 0.5;
+  }
+
+  &.confirmed {
+    @extend .success;
+  }
+
+  &.not-confirmed {
+    @extend .danger;
+  }
 }

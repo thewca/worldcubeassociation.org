@@ -230,7 +230,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  def mycomps
+  def my_competitions
     @competitions = (current_user.delegated_competitions + current_user.organized_competitions + current_user.competitions_registered_for).reject(&:is_over?).uniq.sort_by(&:start_date)
   end
 

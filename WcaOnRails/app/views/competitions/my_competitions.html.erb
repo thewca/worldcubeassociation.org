@@ -26,8 +26,8 @@
           <% message = "This competition is not confirmed and not visible." %>
         <% end %>
       <% end %>
-      <tr class="<%= competition.isConfirmed ? "success" : "danger" %> <%= competition.showAtAll ? "visible" : "not-visible" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= message %>">
-        <td><%= link_to competition.name, "/results/c.php?i=" + competition.id %></td>
+      <tr class="competition <%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= message %>">
+        <td><%= link_to competition.name, competition_path(competition) %></td>
         <td><%= competition.cityName %>, <%= competition.countryId %></td>
         <td><%= competition.start_date %></td>
         <td>
@@ -54,9 +54,3 @@
     <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
   <% end %>
 </div>
-
-<script>
-  (function() {
-    $('[data-toggle="tooltip"]').tooltip();
-  })();
-</script>
