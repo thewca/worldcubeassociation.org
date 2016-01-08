@@ -231,10 +231,7 @@ class CompetitionsController < ApplicationController
   end
 
   def mycomps
-    admin = Competition.joins(:competition_delegates).where("competition_delegates.delegate_id = ?", current_user.id).reject &:is_over?
-    registered = Competition.joins(:registrations).where("user_id = ?", current_user.id).reject &:is_over?
-    #@competitions = Competition.from("(#{admin.to_sql} UNION #{registered.to_sql}) AS Competitions")
-    @competitions = (admin + registered).uniq.sort_by{ |c| [ c[:year], c[:month], c[:day] ] }
+    @competitions = (current_user.delegated_competitions + current_user.organized_competitions + current_user.competitions_registered_for).reject(&:is_over?).uniq.sort_by(&:start_date)
   end
 
   private def competition_params
