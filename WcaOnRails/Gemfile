@@ -80,6 +80,7 @@ group :test do
   gem 'launchy'
   gem 'capybara'
   gem 'oga' # XML parsing library introduced for testing RSS feed
+  gem 'database_cleaner'
 
   # Rails 4 apparently doesn't run after_commit handlers in tests. We need
   # to test carrierwave's file deletion code, which runs inside of an

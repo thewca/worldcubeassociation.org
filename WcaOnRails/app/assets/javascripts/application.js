@@ -144,3 +144,9 @@ $(function() {
     return json;
   };
 })(jQuery);
+
+// Polyfill for Math.trunc from
+//  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc#Polyfill
+Math.trunc = Math.trunc || function(x) {
+  return x < 0 ? Math.ceil(x) : Math.floor(x);
+};
