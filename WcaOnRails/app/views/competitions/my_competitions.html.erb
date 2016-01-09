@@ -5,7 +5,7 @@
 
   <% if @competitions.length < 1 %>
     <div class="alert alert-info" role="alert">
-      You currently have no competitions! Check out the <%= link_to "competitions list", "results/competitions.php" %>.
+      You currently have no competitions! Check out the <%= link_to "competitions list", "/results/competitions.php" %>.
     </div>
   <% else %>
     <%= wca_table_for @competitions, extra_table_class: "competitions-table", hover: false, striped: false do |table| %>
