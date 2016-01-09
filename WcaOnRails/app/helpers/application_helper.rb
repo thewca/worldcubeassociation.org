@@ -75,10 +75,17 @@ module ApplicationHelper
     end
   end
 
-  def wca_table_for(records, options={}, &block)
+  def wca_table_for(records, hover: true, striped: true, extra_table_class: "", &block)
+    table_classes = "table wca-results floatThead table-condensed #{extra_table_class}"
+    if hover
+      table_classes += " table-hover"
+    end
+    if striped
+      table_classes += " table-striped"
+    end
     table_for_options = {
       table_html: {
-        class: "table wca-results floatThead table-striped table-condensed table-hover #{options[:extra_table_class]}"
+        class: table_classes
       },
       header_column_html: {
         class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
@@ -93,6 +100,10 @@ module ApplicationHelper
             if record.accepted?
               c << "registration-accepted"
             end
+          end
+          if record.is_a?(Competition)
+            c << (record.isConfirmed ? "confirmed" : "not-confirmed")
+            c << (record.showAtAll ? "visible" : "not-visible")
           end
           c
         }
@@ -126,6 +137,20 @@ module ApplicationHelper
 
         table.define :countryId_header do
           "Citizen of"
+        end
+
+        table.define :delegates do |competition|
+          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name
+        end
+        table.define :delegates_header do
+          "Delegate(s)"
+        end
+
+        table.define :organizers do |competition|
+          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name
+        end
+        table.define :organizers_header do
+          "Organizer(s)"
         end
 
         (Event.all_official + Event.all_deprecated).each do |event|

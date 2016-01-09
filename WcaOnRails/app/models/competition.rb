@@ -435,6 +435,10 @@ class Competition < ActiveRecord::Base
     start_date < Date.today
   end
 
+  def country_name
+    Country.find(countryId).name
+  end
+
   def self.search(query, params: {})
     sql_query = "%#{query}%"
     Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)

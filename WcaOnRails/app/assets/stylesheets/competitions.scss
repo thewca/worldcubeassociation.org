@@ -126,16 +126,47 @@ $venue-map-wrapper-height: 400px;
   width: 800px;
 }
 
-tr.competition {
-  &.not-visible {
-    opacity: 0.5;
+.competitions-table {
+  font-size: 14px;
+
+  tr {
+    &.not-visible {
+      opacity: 0.5;
+    }
+
+    &.confirmed {
+      background-color: $state-success-bg;
+    }
+
+    &.not-confirmed {
+      background-color: $state-danger-bg;
+    }
+
+    &.future {
+      opacity: 0.6;
+    }
+
+    &.past {
+
+    }
   }
 
-  &.confirmed {
-    @extend .success;
+  td {
+    width: auto;
+    padding: 2px 5px 2px 5px;
+
+    &.location {
+      white-space: nowrap;
+    }
+
+    &.delegates,
+    &.organizers {
+      min-width: 150px;
+    }
   }
 
-  &.not-confirmed {
-    @extend .danger;
+  .btn-register {
+    font-size: 12px;
+    padding: 2px;
   }
 }
