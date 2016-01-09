@@ -445,6 +445,9 @@ class Competition < ActiveRecord::Base
   end
 
   def dangerously_close_to?(c)
+    if !c.start_date || !self.start_date
+      return false
+    end
     days_until = (c.start_date - self.start_date).to_i
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
@@ -462,11 +465,16 @@ class Competition < ActiveRecord::Base
   end
 
   def is_over?
-    end_date < Date.today
+    !!end_date && end_date < Date.today
   end
 
-  def country
-    Country.find(countryId)
+  def started?
+    !!start_date && start_date < Date.today
+  end
+
+  def country_name
+    country = Country.find_by_id(countryId)
+    country ? country.name : nil
   end
 
   def self.search(query, params: {})

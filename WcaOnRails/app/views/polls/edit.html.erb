@@ -6,7 +6,7 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <% if @poll.poll_is_over? %>
+    <% if @poll.over? %>
       <div class="alert alert-danger">
         This poll is closed (deadline has passed). Check out the <%= link_to "results", polls_results_path(@poll) %>.
     </div>

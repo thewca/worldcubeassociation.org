@@ -9,6 +9,15 @@ RSpec.describe Competition do
     expect(competition.cellName).to eq "Foo !Test- 2015"
   end
 
+  it "handles missing start/end_date" do
+    competition = FactoryGirl.build :competition, start_date: nil, end_date: nil
+    competition2 = FactoryGirl.build :competition, start_date: nil, end_date: nil
+    expect(competition.is_over?).to be false
+    expect(competition.started?).to be false
+    expect(competition.in_progress?).to be false
+    expect(competition.dangerously_close_to?(competition2)).to be false
+  end
+
   it "requires that registration_open be before registration_close" do
     competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
     expect(competition).to be_invalid
