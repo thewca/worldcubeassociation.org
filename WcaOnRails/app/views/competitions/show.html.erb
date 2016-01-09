@@ -1,0 +1,84 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <div class="row">
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Date</dt>
+        <dd><%= @competition.start_date.to_formatted_s(:long) %></dd>
+
+        <dt>City</dt>
+        <dd><%= @competition.cityName %>, <%= @competition.country.name %> </dd>
+
+        <dt>Venue</dt>
+        <dd><%=md @competition.venue %></dd>
+
+        <dt class="text-muted">Address</dt>
+        <dd><%= link_to_google_maps_place @competition.venueAddress, @competition.latitude_degrees, @competition.longitude_degrees %></dd>
+
+        <% if @competition.venueDetails.present? %>
+          <dt class="text-muted">Details</dt>
+          <dd><%=md @competition.venueDetails %></dd>
+        <% end %>
+
+        <dt>Website</dt>
+        <dd><%= link_to "#{@competition.name} website", @competition.website, target: "_blank" %></dd>
+
+        <dt><%= "Organizer".pluralize(@competition.organizers.length) %></dt>
+        <dd><%=md @competition.organizers.order(:name).map { |u|
+          # If the contact field is present, don't show organizers' emails.
+          if @competition.contact.present?
+            u.name
+          else
+            "[#{u.name}](mailto:#{u.email})"
+          end
+        }.to_sentence %></dd>
+
+        <dt><%= "WCA Delegate".pluralize(@competition.delegates.length) %></dt>
+        <dd><%=md @competition.delegates.order(:name).map { |u| "[#{u.name}](mailto:#{u.email})" }.to_sentence %></dd>
+
+        <% if @competition.contact.present? %>
+          <dt>Contact</dt>
+          <dd><%=md @competition.contact %></dd>
+        <% end %>
+      </dl>
+    </div>
+
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Information</dt>
+        <dd><%=md @competition.information %></dd>
+      </dl>
+
+      <% media = @competition.media.accepted %>
+      <% [:report, :article, :multimedia].each do |media_type| %>
+        <% media_of_type = media.send(media_type).order(timestampDecided: :desc) %>
+        <% if media_of_type.length > 0 %>
+
+          <div class="panel panel-default">
+
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse-<%= media_type.to_s %>" class="collapsed">
+                  <%= media_type.to_s.capitalize.pluralize(media_of_type.length) %>
+                  <span class="badge"><%= media_of_type.length %></span>
+                  <span class="collapse-indicator"></span>
+                </a>
+              </h4>
+            </div>
+
+            <div id="collapse-<%= media_type.to_s %>" class="panel-collapse collapse">
+              <ul class="list-group">
+                <% media_of_type.each do |medium| %>
+                  <%= link_to medium.text, medium.uri, class: "list-group-item", target: "_blank" %>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+<% end %>

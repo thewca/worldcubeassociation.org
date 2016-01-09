@@ -11,6 +11,7 @@ class Competition < ActiveRecord::Base
   has_many :delegates, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
+  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
 
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -173,6 +174,7 @@ class Competition < ActiveRecord::Base
       Result.where(competitionId: id_was).update_all(competitionId: id)
       Registration.where(competitionId: id_was).update_all(competitionId: id)
       Scramble.where(competitionId: id_was).update_all(competitionId: id)
+      CompetitionMedium.where(competitionId: id_was).update_all(competitionId: id)
       CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
       CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
     end
@@ -520,7 +522,7 @@ class Competition < ActiveRecord::Base
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: "/results/c.php?i=#{id}",
+      url: Rails.application.routes.url_helpers.competition_path(self),
 
       id: id,
       name: name,

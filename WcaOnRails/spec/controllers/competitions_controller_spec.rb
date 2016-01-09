@@ -83,7 +83,8 @@ describe CompetitionsController do
 
       it 'redirects to the old php page' do
         get :show, id: competition.id
-        expect(response).to redirect_to "/results/c.php?i=#{competition.id}"
+        expect(response.status).to eq 200
+        expect(assigns(:competition)).to eq competition
       end
 
       it '404s when competition is not visible' do

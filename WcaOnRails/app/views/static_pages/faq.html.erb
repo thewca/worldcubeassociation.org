@@ -35,7 +35,7 @@
             (function() {
               $('#competitions_search').wcaAutocomplete();
               $('#competitions_search')[0].selectize.on('change', function(competitionId) {
-                location.href = "/results/c.php?i=" + competitionId;
+                location.href = "/competitions/" + competitionId;
               });
             })();
           </script>
