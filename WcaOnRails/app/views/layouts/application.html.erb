@@ -61,6 +61,9 @@
             <ul class="dropdown-menu" role="menu">
               <li><a href="/results/competitions.php"><%= icon('globe', class: 'fa-fw') %> All</a></li>
               <li><a href="<%= my_comps_path %>"><%= icon('feed', class: 'fa-fw') %> My Competitions</a></li>
+              <% if current_user.any_kind_of_delegate? %>
+                <li><a href="<%= new_competition_path %>"><%= icon('plus', class: 'fa-fw') %> New Competition</a></li>
+              <% end %>
             </ul>
           </li>
           <li class="dropdown">
