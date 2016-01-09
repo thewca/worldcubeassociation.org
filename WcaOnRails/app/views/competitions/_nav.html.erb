@@ -4,7 +4,7 @@
       <% nav_items = [
           {
             text: "Info",
-            path: "/results/c.php?i=#{@competition.id}",
+            path: competition_path(@competition),
             fa_icon: "info-circle",
           },
         ] + (
@@ -115,7 +115,7 @@
 
     </div>
     <div id="competition-data">
-      <h1><%= @competition.name %></h1>
+      <h3><%= @competition.name %></h3>
       <hr />
 
       <% if !@competition.showAtAll? %>

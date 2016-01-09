@@ -23,13 +23,24 @@ module ApplicationHelper
     }[flash_type.to_sym] || flash_type.to_s
   end
 
+  def link_to_google_maps_place(text, latitude, longitude)
+    url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
+    link_to text, url, target: "_blank"
+  end
+
+  def link_to_google_maps_dir(text, start_latitude, start_longitude, end_latitude, end_longitude)
+    url = "https://www.google.com/maps/dir/#{start_latitude},#{start_longitude}/#{end_latitude},#{end_longitude}/"
+    link_to text, url, target: "_blank"
+  end
+
   def mail_to_wca_board
     mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
   end
 
   def md(content, target_blank: false)
     options = {
-      hard_wrap: true
+      escape_html: true,
+      hard_wrap: true,
     }
 
     if target_blank

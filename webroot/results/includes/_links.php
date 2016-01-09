@@ -7,7 +7,7 @@ function competitionLink ( $id, $name, $eventId=false, $roundId=false ) {
 function competitionLinkClassed ( $class, $id, $name, $eventId=false, $roundId=false ) {
   $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
   $inpageLink = $eventId ? ("&allResults=1#e$eventId" . ($roundId ? "_$roundId" : '')) : '';
-  return "<a class='$class' href='" . pathToRoot() . "c.php?i=$id$inpageLink'>$name</a>";
+  return "<a class='$class' href='/competitions/$id$inpageLink'>$name</a>";
 }
 
 function personLink ( $id, $name ) {
