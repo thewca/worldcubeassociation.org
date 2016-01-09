@@ -57,6 +57,7 @@ server {
   location ~ ^/results/admin/?$ {
     return 302 /admin/;
   }
+
   # Redirect competitions.php to /competitions
   location /results/competitions.php {
     set $rails_args "";
@@ -84,6 +85,17 @@ server {
     return 302 /competitions?$rails_args;
   }
 
+  # Redirect old competition results pages:
+  #  /results/c.php?i=IranSummerCube2013
+  #  /results/competition.php?competitionId=IranSummerCube2013
+  # to new Rails page:
+  #  /competitions/IranSummerCube2013
+  location /results/c.php {
+    return 302 /competitions/$arg_i;
+  }
+  location /results/competition.php {
+    return 302 /competitions/$arg_competitionId;
+  }
 
   location /results {
     alias <%= @repo_root %>/webroot/results;
@@ -92,7 +104,7 @@ server {
     include fcgi.conf;
 
     location ^~ /results/admin {
-      # Delegate to rails to determine if the client is authorized to administer
+      # Delegate to Rails to determine if the client is authorized to administer
       # results. This is kind of painful, as it results in an extra request for every
       # single request, but this way we can avoid editing the existing PHP code.
       auth_request /api/v0/auth/results;
@@ -148,16 +160,16 @@ server {
   }
 
   #### Regulations
-  # This is kind of a mess: we're using rails to template most, but not all,
+  # This is kind of a mess: we're using Rails to template most, but not all,
   # of the regulations html. We also have static content such as pdfs and images
-  # that rails won't serve up for us. We have a carefully constructed regex here
-  # to only serve up files we don't want handled by rails.
+  # that Rails won't serve up for us. We have a carefully constructed regex here
+  # to only serve up files we don't want handled by Rails.
   location ~* /regulations(.*\.pdf|/history/.+|/scrambles/tnoodle/.*) {
     index index.html;
     alias <%= @repo_root %>/WcaOnRails/app/views/regulations/$1;
   }
 
-  #### New rails sytem
+  #### New Rails sytem
   # From http://unicorn.bogomips.org/examples/nginx.conf
   # path for static files
   root <%= @rails_root %>/public;
