@@ -1,7 +1,6 @@
 class CompetitionsController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :can_admin_results_only, only: [:index, :post_announcement, :post_results, :admin_edit]
-  before_action :can_create_competition_only, only: [:new]
 
   private def competition_from_params
     competition = Competition.find(params[:id])
