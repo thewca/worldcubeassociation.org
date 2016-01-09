@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <% if @poll.poll_is_over? %>
+  <% if @poll.over? %>
     <div class="alert alert-danger">Poll is closed. Check out the <%= link_to "results", polls_results_path(@poll) %>.</div>
   <% elsif @poll.confirmed || current_user.can_create_poll? %>
 

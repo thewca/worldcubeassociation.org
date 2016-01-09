@@ -43,7 +43,7 @@ class Vote < ActiveRecord::Base
 
   validate :poll_must_still_be_open
   def poll_must_still_be_open
-    if poll && poll.poll_is_over?
+    if poll && poll.over?
       errors.add(:poll_id, "poll is closed")
     end
   end

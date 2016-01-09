@@ -33,7 +33,7 @@
           ]
         )
       %>
-      <% if @competition.use_wca_registration? %>
+      <% if @competition.use_wca_registration? && !@competition.results_uploaded? %>
         <% nav_items += [
           { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
           {
@@ -122,6 +122,18 @@
         <div class="alert alert-warning">
           <strong>Note:</strong> This competition is not visible to the public.
         </div>
+      <% end %>
+      <% if !@competition.results_uploaded? %>
+        <% if @competition.over? %>
+          <div class="alert alert-info">
+            <strong>Note:</strong> This competition is over, we are working to upload the results as soon as possible!
+          </div>
+        <% end %>
+        <% if @competition.ongoing? %>
+          <div class="alert alert-info">
+            <strong>Note:</strong> This competition is ongoing. Come back after <%= @competition.end_date.to_formatted_s(:long) %> to see the results!
+          </div>
+        <% end %>
       <% end %>
 
       <%= yield %>
