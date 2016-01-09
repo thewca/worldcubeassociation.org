@@ -68,6 +68,14 @@ describe CompetitionsController do
       end
     end
 
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+      it 'does not allow creation' do
+        post :create, competition: { name: "Test2015" }
+        expect(response).to redirect_to root_url
+      end
+    end
+
     context 'when signed in as an admin' do
       sign_in { FactoryGirl.create :admin }
 

@@ -52,8 +52,8 @@ module ApplicationHelper
     wca_highlight(excerpted, phrase)
   end
 
-  def wca_highlight(html, phrases, accept_special)
-    if !accept_special
+  def wca_highlight(html, phrases, do_not_transliterate: false)
+    if !do_not_transliterate
       text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
     else
       text = strip_tags(html)
@@ -144,14 +144,14 @@ module ApplicationHelper
         end
 
         table.define :delegates do |competition|
-          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, true
+          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
         table.define :delegates_header do
           "Delegate(s)"
         end
 
         table.define :organizers do |competition|
-          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, true
+          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
         table.define :organizers_header do
           "Organizer(s)"
