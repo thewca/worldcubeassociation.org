@@ -52,8 +52,12 @@ module ApplicationHelper
     wca_highlight(excerpted, phrase)
   end
 
-  def wca_highlight(html, phrases)
-    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
+  def wca_highlight(html, phrases, accept_special)
+    if !accept_special
+      text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
+    else
+      text = strip_tags(html)
+    end
     highlight(text, phrases, highlighter: '<strong>\1</strong>')
   end
 
@@ -140,14 +144,14 @@ module ApplicationHelper
         end
 
         table.define :delegates do |competition|
-          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name
+          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, true
         end
         table.define :delegates_header do
           "Delegate(s)"
         end
 
         table.define :organizers do |competition|
-          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name
+          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, true
         end
         table.define :organizers_header do
           "Organizer(s)"

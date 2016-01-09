@@ -49,6 +49,15 @@ describe CompetitionsController do
         expect(response).to render_template :new
       end
     end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'doesn\'t allow access' do
+        get :new
+        expect(response).to redirect_to root_url
+      end
+    end
   end
 
   describe 'POST #create' do
