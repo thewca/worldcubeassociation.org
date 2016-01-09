@@ -434,7 +434,7 @@ class Competition < ActiveRecord::Base
   end
 
   def is_over?
-    start_date < Date.today
+    end_date < Date.today
   end
 
   def country
