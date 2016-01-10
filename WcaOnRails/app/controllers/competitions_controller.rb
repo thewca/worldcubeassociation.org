@@ -35,6 +35,11 @@ class CompetitionsController < ApplicationController
     @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day).reverse_order
   end
 
+  def new_index
+    @competitions = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true", (Date.today - 90)).order(:year, :month, :day).reverse_order
+    #@competitions = Competition.all.order(:year, :month, :day).reverse_order
+  end
+
   def create
     new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
     @competition = Competition.new(new_competition_params.merge(

@@ -8,7 +8,7 @@
       You currently have no competitions! Check out the <%= link_to "competitions list", "/results/competitions.php" %>.
     </div>
   <% else %>
-    <%= wca_table_for @competitions, extra_table_class: "competitions-table", hover: false, striped: false do |table| %>
+    <%= wca_table_for @competitions, extra_table_class: "competitions-admin-table", hover: false, striped: false do |table| %>
       <% table.column :name %>
       <% table.column :location do |competition| %>
         <%= competition.cityName %>, <%= competition.country_name %>

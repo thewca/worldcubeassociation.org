@@ -1,0 +1,22 @@
+<% provide(:title, 'Competitions') %>
+
+<div class="container">
+  <h2><%= yield(:title) %></h2>
+
+  <%= wca_table_for @competitions, extra_table_class: "competitions-table" do |table| %>
+    <% table.column :year %>
+    <% table.column :date %>
+    <% table.column :name do |competition| %>
+      <%= link_to competition.name, competition_path(competition) %>
+    <% end %>
+    <% table.column :register do |competition| %>
+      <% if competition.use_wca_registration? && competition.registration_opened? && !competition.registration_past? %>
+        <%#= link_to button_tag("Register", class: "btn btn-primary btn-register"), competition_register_path(competition) %>
+        <%= link_to "Register", competition_register_path(competition), target: "_blank" %>
+      <% end %>
+    <% end %>
+    <% table.column :country_city %>
+    <% table.column :venue %>
+  <% end %>
+
+</div>

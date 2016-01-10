@@ -157,6 +157,24 @@ module ApplicationHelper
           "Organizer(s)"
         end
 
+        table.define :date do |competition|
+          date_range(competition.start_date, competition.end_date, separator: '-', show_year: false)
+        end
+        table.define :date_header do
+          "Date"
+        end
+
+        table.define :register_header do
+          ""
+        end
+
+        table.define :country_city do |competition|
+          wca_highlight competition.country_name + ", " + competition.cityName, competition.country_name
+        end
+        table.define :country_city_header do
+          "Country, City"
+        end
+
         (Event.all_official + Event.all_deprecated).each do |event|
           event_span = content_tag(:span, "",
             title: event.name,
