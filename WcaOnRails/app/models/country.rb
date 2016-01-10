@@ -1814,6 +1814,15 @@ class Country
       "iso2": "XE"
     },
     {
+      "id": "XS",
+      "name": "Multiple Countries (South America)",
+      "continentId": "_South America",
+      "latitude": 0,
+      "longitude": 0,
+      "zoom": 0,
+      "iso2": "XS"
+    },
+    {
       "id": "Yemen",
       "name": "Yemen",
       "continentId": "_Asia",
