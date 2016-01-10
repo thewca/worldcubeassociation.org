@@ -16,7 +16,7 @@ class Country
   end
 
   def self.find(id)
-    ALL_COUNTRIES_BY_ID[id] or throw "Unrecognized event id"
+    ALL_COUNTRIES_BY_ID[id] or throw "Unrecognized country id"
   end
 
   def self.find_by_id(id)
