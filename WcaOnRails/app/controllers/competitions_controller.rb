@@ -1,5 +1,5 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+  before_action :authenticate_user!, except: [:show, :new_index]
   before_action :can_admin_results_only, only: [:index, :post_announcement, :post_results, :admin_edit]
 
   private def competition_from_params
@@ -37,7 +37,6 @@ class CompetitionsController < ApplicationController
 
   def new_index
     @competitions = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true", (Date.today - 90)).order(:year, :month, :day).reverse_order
-    #@competitions = Competition.all.order(:year, :month, :day).reverse_order
   end
 
   def create

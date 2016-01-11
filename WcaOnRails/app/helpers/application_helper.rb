@@ -108,6 +108,7 @@ module ApplicationHelper
           if record.is_a?(Competition)
             c << (record.isConfirmed ? "confirmed" : "not-confirmed")
             c << (record.showAtAll ? "visible" : "not-visible")
+            c << (record.is_over? ? "past" : "future" )
           end
           c
         }
@@ -162,10 +163,6 @@ module ApplicationHelper
         end
         table.define :date_header do
           "Date"
-        end
-
-        table.define :register_header do
-          ""
         end
 
         table.define :country_city do |competition|

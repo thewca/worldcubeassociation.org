@@ -131,12 +131,11 @@ $venue-map-wrapper-height: 400px;
 
   tr {
 
-    &.future {
-      opacity: 0.6;
-    }
-
     &.past {
-
+      a:link,
+      a:visited {
+        color: #369;
+      }
     }
   }
 
@@ -182,14 +181,6 @@ $venue-map-wrapper-height: 400px;
 
     &.not-confirmed {
       background-color: $state-danger-bg;
-    }
-
-    &.future {
-      opacity: 0.6;
-    }
-
-    &.past {
-
     }
   }
 
