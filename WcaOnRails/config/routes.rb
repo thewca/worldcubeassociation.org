@@ -30,6 +30,10 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
+    get 'results/podiums' => 'competitions#show_podiums'
+    get 'results/all' => 'competitions#show_all_results'
+    get 'results/by_person' => 'competitions#show_results_by_person'
+
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event

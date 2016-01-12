@@ -342,4 +342,81 @@ RSpec.describe Competition do
       expect(co.reload.receive_registration_emails).to eq false
     end
   end
+
+  describe "results" do
+    let(:competition) { FactoryGirl.create :competition, eventSpecs: "333 222" }
+    let(:three_by_three) { Event.find "333" }
+    let(:two_by_two) { Event.find "222" }
+
+    let(:person_one) { FactoryGirl.create :person, name: "One" }
+    let(:person_two) { FactoryGirl.create :person, name: "Two" }
+    let(:person_three) { FactoryGirl.create :person, name: "Three" }
+    let(:person_four) { FactoryGirl.create :person, name: "Four" }
+
+    let!(:r_333_1_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 1, person: person_one }
+    let!(:r_333_1_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 2, person: person_two }
+    let!(:r_333_1_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 3, person: person_three }
+    let!(:r_333_1_fourth) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 4, person: person_four }
+
+    let!(:r_333_f_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 1, person: person_one }
+    let!(:r_333_f_second,) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
+    let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 3, person: person_three }
+
+    let!(:r_222_c_first) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
+
+    it "events_with_podium_results" do
+      expect(competition.events_with_podium_results).to eq [
+        [ three_by_three, [r_333_f_first, r_333_f_second, r_333_f_third] ],
+        [ two_by_two, [r_222_c_first] ],
+      ]
+    end
+
+    it "winning_results" do
+      expect(competition.winning_results).to eq [
+        r_333_f_first, r_222_c_first
+      ]
+    end
+
+    it "persons_with_results" do
+      expect(competition.persons_with_results).to eq [
+        [ person_four, [ r_333_1_fourth ] ],
+        [ person_one, [ r_333_f_first, r_333_1_first, r_222_c_first ] ],
+        [ person_three, [ r_333_f_third, r_333_1_third ] ],
+        [ person_two, [ r_333_f_second, r_333_1_second ] ],
+      ]
+      expect(competition.persons_with_results[1][1][1].muted).to eq true
+      expect(competition.persons_with_results[1][1][2].muted).to eq false
+
+      expect(competition.persons_with_results[2][1][1].muted).to eq true
+      expect(competition.persons_with_results[3][1][1].muted).to eq true
+    end
+
+    it "events_with_rounds_with_results" do
+      expect(competition.events_with_rounds_with_results).to eq [
+        [
+          three_by_three,
+          [
+            [
+              Round.find("1"),
+              [ r_333_1_first, r_333_1_second, r_333_1_third, r_333_1_fourth ]
+            ],
+            [
+              Round.find("f"),
+              [ r_333_f_first, r_333_f_second, r_333_f_third ]
+            ]
+          ]
+        ],
+
+        [
+          two_by_two,
+          [
+            [
+              Round.find("c"),
+              [ r_222_c_first ]
+            ],
+          ],
+        ],
+      ]
+    end
+  end
 end

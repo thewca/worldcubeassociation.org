@@ -440,6 +440,39 @@ class Competition < ActiveRecord::Base
     results.count > 0
   end
 
+  def events_with_podium_results
+    results.where(roundId: Round.final_rounds.map(&:id)).where("pos >= 1 AND pos <= 3").group_by(&:event).sort_by { |event, results| event.rank }
+  end
+
+  def winning_results
+    results.where(roundId: Round.final_rounds.map(&:id)).where("pos = 1").sort_by { |r| r.event.rank }
+  end
+
+  def persons_with_results
+    results.group_by(&:person).sort_by { |person, results| person.name }.map do |person, results|
+      results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
+
+      # Mute (soften) each result that wasn't the competitor's last for the event.
+      last_event = nil
+      results.each do |result|
+        result.muted = (result.event == last_event)
+        last_event = result.event
+      end
+
+      [ person, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
+    end
+  end
+
+  def events_with_rounds_with_results
+    results.group_by(&:event).sort_by { |event, results| event.rank }.map do |event, results|
+      rounds_with_results = results.group_by(&:round).sort_by { |format, results| format.rank }.map do |round, results|
+        [ round, results.sort_by(&:pos) ]
+      end
+
+      [ event, rounds_with_results ]
+    end
+  end
+
   def ongoing?
     started? && !over?
   end

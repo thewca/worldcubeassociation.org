@@ -54,8 +54,8 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text)
-    id = pretty_text.parameterize
+  def anchorable(pretty_text, id=nil)
+    id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'>#{pretty_text} <a href='##{id}'><span class='glyphicon glyphicon-link'></span></a></span>".html_safe
   end
 
@@ -129,7 +129,12 @@ module ApplicationHelper
         class: table_classes
       },
       header_column_html: {
-        class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
+        class: lambda { |column| column.name.to_s.gsub(/_/, '-') },
+        colspan: lambda do |column|
+          # Even for rounds with only 3 solves, we'll still create 5 <td>s.
+          # They'll be empty, so no one should notice them.
+          column.name == :solve1 ? 5 : 1
+        end,
       },
       data_row_html: {
         class: lambda { |record|
@@ -148,8 +153,20 @@ module ApplicationHelper
       data_column_html: {
         class: lambda do |record, column|
           c = [column.name.to_s.gsub(/_/, '-')]
-          if column.name == :position && record.tied_previous
+          if column.name == :pos && record.tied_previous
             c << "tied-previous"
+          end
+          if record.is_a?(Result)
+            result = record
+            if column.name == :"solve#{result.best_index + 1}"
+              c << "best"
+            end
+            if column.name == :"solve#{result.worst_index + 1}"
+              c << "worst"
+            end
+            if result.trimmed_indices.any? { |i| column.name == :"solve#{i + 1}" }
+              c << "trimmed"
+            end
           end
           c
         end
@@ -163,30 +180,43 @@ module ApplicationHelper
             render "shared/wca_id", wca_id: registration.wca_id
           end
         end
-        table.define :wca_id_header do
+        table.header :wca_id do
           "WCA ID"
         end
 
-        table.define :position
-        table.define :position_header do
+        table.define :pos
+        table.header :pos do
           "#"
         end
 
-        table.define :countryId_header do
+        table.define :name do |record|
+          if record.is_a?(Result)
+            result = record
+            if result.wca_id
+              link_to result.name, "/results/p.php?i=#{result.wca_id}"
+            else
+              result.name
+            end
+          else
+            record.name
+          end
+        end
+
+        table.header :countryId do
           "Citizen of"
         end
 
         table.define :delegates do |competition|
           wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
-        table.define :delegates_header do
+        table.header :delegates do
           "Delegate(s)"
         end
 
         table.define :organizers do |competition|
           wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
-        table.define :organizers_header do
+        table.header :organizers do
           "Organizer(s)"
         end
 
@@ -205,8 +235,41 @@ module ApplicationHelper
               event_span
             end
           end
-          table.define "#{event.id}_header" do
+          table.header event.id do
             event_span
+          end
+        end
+
+        # Workaround for https://github.com/hunterae/table-for/issues/9
+        table.define :data_column do |column, record, options|
+          content_tag :td, table.call_each_hash_value_with_params(options[:data_column_html], record, column) do
+            table.render column.name, record, column, column.options
+          end
+        end
+
+        (1..5).each do |i|
+          table.define :"solve#{i}" do |result|
+            solve = result.solves[i - 1]
+            solve ? solve.clock_format : ""
+          end
+        end
+        table.header :solve1 do
+          "Solves"
+        end
+        (2..5).each do |i|
+          table.header :"solve#{i}" do
+            ""
+          end
+        end
+
+        table.define :header_column do |column, options|
+          if column.name.to_s.start_with?("solve") && column.name != :solve1
+            # We want the solve1 <th> to take up all the space, so don't create
+            # <th>s for the other solves.
+          else
+            content_tag :th, table.header_column_html(column, options) do
+              table.render "#{column.name}_header", column, column.options
+            end
           end
         end
 

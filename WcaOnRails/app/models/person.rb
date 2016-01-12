@@ -56,10 +56,14 @@ class Person < ActiveRecord::Base
     SolveTime.new(event.id, type, rank ? rank.best : 0)
   end
 
+  def results_path
+    "/results/p.php?i=#{self.wca_id}"
+  end
+
   def to_jsonable(include_private_info: false)
     json = {
       class: self.class.to_s.downcase,
-      url: "/results/p.php?i=#{self.wca_id}",
+      url: results_path,
 
       id: self.id,
       wca_id: self.wca_id,

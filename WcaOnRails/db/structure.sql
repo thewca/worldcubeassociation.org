@@ -1,6 +1,6 @@
 -- MySQL dump 10.16  Distrib 10.1.10-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: wca_development
+-- Host: 127.0.0.1    Database: wca_test
 -- ------------------------------------------------------
 -- Server version	10.1.10-MariaDB-log
 
@@ -815,3 +815,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160128023834');
 INSERT INTO schema_migrations (version) VALUES ('20160223204831');
 
 INSERT INTO schema_migrations (version) VALUES ('20160224013453');
+
+INSERT INTO schema_migrations (version) VALUES ('20160109070723');

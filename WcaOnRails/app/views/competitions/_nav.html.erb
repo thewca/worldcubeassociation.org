@@ -1,38 +1,55 @@
 <div class="container-fluid">
   <div class="row">
     <div id="competition-nav">
-      <% nav_items = [
-          {
-            text: "Info",
-            path: competition_path(@competition),
-            fa_icon: "info-circle",
-          },
-        ] + (
-          (!current_user || !current_user.can_manage_competition?(@competition)) ? [] : [
+      <% nav_items = [] %>
+      <% if @competition.results_uploaded? %>
+        <% nav_items << {
+          text: "Results",
+          path: competition_path(@competition),
+          fa_icon: "trophy",
+          children: [
+            { text: "Podiums", path: competition_results_podiums_path(@competition), fa_icon: "cubes" },
             {
-              text: "Edit",
-              path: edit_competition_path(@competition),
-              fa_icon: "lock",
-              children: [
-                { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
-                { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
-                  {
-                    text: "Registration",
-                    path: competition_edit_registrations_path(@competition),
-                    fa_icon: "list-ul",
-                    notification_count: @competition.registrations.pending.count,
-                    children: [{
-                      hidden: true,
-                      is_active: lambda do
-                        controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
-                      end,
-                    }],
-                  },
-                ])
+              text: "All",
+              path: competition_results_all_path(@competition),
+              fa_icon: "list",
+              tiny_children: @competition.events.map do |event|
+                { text: event.id, path: competition_results_all_path(@competition, anchor: "e#{event.id}"), cubing_icon: event.id, title: event.name }
+              end
             },
-          ]
-        )
-      %>
+            { text: "By Person", path: competition_results_by_person_path(@competition), fa_icon: "user" },
+          ],
+        } %>
+      <% else %>
+        <% nav_items << {
+          text: "Info",
+          path: competition_path(@competition),
+          fa_icon: "info-circle",
+        } %>
+      <% end %>
+      <% if current_user && current_user.can_manage_competition?(@competition) %>
+        <% nav_items << {
+          text: "Edit",
+          path: edit_competition_path(@competition),
+          fa_icon: "lock",
+          children: [
+            { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
+            { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
+              {
+                text: "Registration",
+                path: competition_edit_registrations_path(@competition),
+                fa_icon: "list-ul",
+                notification_count: @competition.registrations.pending.count,
+                children: [{
+                  hidden: true,
+                  is_active: lambda do
+                    controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
+                  end,
+                }],
+              },
+            ])
+        } %>
+      <% end %>
       <% if @competition.use_wca_registration? && !@competition.results_uploaded? %>
         <% nav_items += [
           { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },

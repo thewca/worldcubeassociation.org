@@ -26,7 +26,7 @@ class Registration < ActiveRecord::Base
     user ? user.name : read_attribute(:name)
   end
 
-  attr_accessor :position
+  attr_accessor :pos
   attr_accessor :tied_previous
 
   attr_writer :birthday

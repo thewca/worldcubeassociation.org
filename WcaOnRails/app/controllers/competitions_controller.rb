@@ -1,9 +1,19 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:index, :post_announcement, :post_results, :admin_edit]
+  before_action :authenticate_user!, except: [
+    :show,
+    :show_podiums,
+    :show_all_results,
+    :show_results_by_person,
+  ]
+  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [
+    :index,
+    :post_announcement,
+    :post_results,
+    :admin_edit,
+  ]
 
   private def competition_from_params
-    competition = Competition.find(params[:id])
+    competition = Competition.find(params[:competition_id] || params[:id])
     if !competition.user_can_view?(current_user)
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -182,6 +192,18 @@ class CompetitionsController < ApplicationController
   end
 
   def show
+    @competition = competition_from_params
+  end
+
+  def show_podiums
+    @competition = competition_from_params
+  end
+
+  def show_all_results
+    @competition = competition_from_params
+  end
+
+  def show_results_by_person
     @competition = competition_from_params
   end
 
