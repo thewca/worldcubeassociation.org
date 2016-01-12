@@ -305,6 +305,18 @@ class Competition < ActiveRecord::Base
     eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
+  def has_event?(event_id)
+    event_id.in?(self.events.map{ |ev| ev.id })
+  end
+
+  def belongs_to_region?(region_or_country)
+    (self.countryId == region_or_country) || (Country.find(self.countryId).continentId == region_or_country)
+  end
+
+  def search(search_param)
+    (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
+  end
+
   def start_date
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end

@@ -13,35 +13,9 @@
         <td></td>
       </tr>
       <tr>
-        <td><%= select_tag(:event, options_for_select(@events)) %></td>
-        <td><%= select_tag(:region, options_for_select(@countries)) %></td>
-        <td>
-          <%= select_tag(
-            :years,
-            options_for_select(
-              [
-                ['Current', 'current'],
-                ['All', 'all'],
-                [],
-                ['2016','2016'],
-                ['2015','2015'],
-                ['2014','2014'],
-                ['2013','2013'],
-                ['2012','2012'],
-                ['2011','2011'],
-                ['2010','2010'],
-                ['2009','2009'],
-                ['2008','2008'],
-                ['2007','2007'],
-                ['2006','2006'],
-                ['2005','2005'],
-                ['2004','2004'],
-                ['2003','2003'],
-                ['1982','1982']
-              ]
-            )
-          ) %>
-        </td>
+        <td><%= select_tag(:event, options_for_select(@events, params[:event])) %></td>
+        <td><%= select_tag(:region, options_for_select(@regions, params[:region])) %></td>
+        <td><%= select_tag(:years, options_for_select(@years, params[:years])) %></td>
         <td><%= text_field_tag "search" %></td>
         <td><%= submit_tag "List" %></td>
       </tr>

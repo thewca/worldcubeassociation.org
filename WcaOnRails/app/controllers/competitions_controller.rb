@@ -36,10 +36,35 @@ class CompetitionsController < ApplicationController
   end
 
   def new_index
-    @countries = [ ["All","all"],["",""],["Africa","af"],["Asia","as"],["Europe","eu"],["North America","na"],["Oceania","oc"],["South America","sa"],["",""] ] + Country.all.map { |country| [country.name, country.id]}
-    @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id]}
-    @competitions = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true",
-                                     (Date.today - 90) ).order(:year, :month, :day).reverse_order
+    query = "CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true"
+    query_params = [(Date.today - 90)]
+
+    @regions = [ ["All","all"],["",""],["Africa","_Africa"],["Asia","_Asia"],["Europe","_Europe"],["North America","_North America"],["Oceania","_Oceania"],["South America","_South America"],["",""] ] + Country.all.map { |country| [country.name, country.id] }
+    @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
+    @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.select(:year).map(&:year).uniq.reverse!
+    @competitions = Competition.all.order(:year, :month, :day).reverse_order
+
+    # This need to be the first thing, otherwise @competitions will be an array instead of an object
+    # and the .where will not work
+    if params[:years]
+      if params[:years] == "current"
+        @competitions = @competitions.where(query, query_params)
+      elsif params[:years] != "all"
+        @competitions = @competitions.reject { |competition| competition.year.to_s != params[:years] }
+      end
+    end
+
+    if params[:event] && params[:event] != "all"
+      @competitions = @competitions.reject { |competition| !competition.has_event?(params[:event]) }
+    end
+
+    if params[:region] && params[:region] != "all"
+      @competitions = @competitions.reject { |competition| !competition.belongs_to_region?(params[:region]) }
+    end
+
+    if params[:search]
+      @competitions = @competitions.reject { |competition| !competition.search(params[:search]) }
+    end
   end
 
   def create

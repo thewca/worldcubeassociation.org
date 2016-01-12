@@ -140,30 +140,13 @@ $venue-map-wrapper-height: 400px;
   }
 
   td {
-
-    &.location {
-      white-space: nowrap;
-    }
+    padding: 2px 8px;
+    white-space: nowrap;
 
     &.delegates,
     &.organizers {
       min-width: 150px;
     }
-
-    &.date,
-    &.register {
-      white-space: nowrap;
-    }
-
-    &.country-city,
-    &.venue {
-      white-space: nowrap;
-    }
-  }
-
-  .btn-register {
-    font-size: 10px;
-    padding: 2px;
   }
 }
 
@@ -198,11 +181,6 @@ $venue-map-wrapper-height: 400px;
     &.date {
       white-space: nowrap;
     }
-  }
-
-  .btn-register {
-    font-size: 12px;
-    padding: 2px;
   }
 }
 
