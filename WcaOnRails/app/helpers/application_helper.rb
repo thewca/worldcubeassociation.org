@@ -58,8 +58,8 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text)
-    id = pretty_text.parameterize
+  def anchorable(pretty_text, id=nil)
+    id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'>#{pretty_text} <a href='##{id}'><span class='glyphicon glyphicon-link'></span></a></span>".html_safe
   end
 
@@ -104,6 +104,182 @@ module ApplicationHelper
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, class: table_classes, data: data do
         yield
+      end
+    end
+  end
+
+  def wca_selectable_table_for(records, options={}, &block)
+    extra_table_class = options[:extra_table_class] + " selectable-rows"
+    wca_table_for(records, extra_table_class: extra_table_class) do |table|
+      table.column data: "", header: lambda { content_tag(:span) } do |record|
+        check_box_tag "#{record.class.name.downcase}-#{record.id}", "1", false, class: "select-row-checkbox"
+      end
+      block.call(table)
+    end
+  end
+
+  def wca_table_for(records, hover: true, striped: true, extra_table_class: "", &block)
+    table_classes = "table wca-results floatThead table-condensed #{extra_table_class}"
+    if hover
+      table_classes += " table-hover"
+    end
+    if striped
+      table_classes += " table-striped"
+    end
+    table_for_options = {
+      table_html: {
+        class: table_classes
+      },
+      header_column_html: {
+        class: lambda { |column| column.name.to_s.gsub(/_/, '-') },
+        colspan: lambda do |column|
+          # Even for rounds with only 3 solves, we'll still create 5 <td>s.
+          # They'll be empty, so no one should notice them.
+          column.name == :solve1 ? 5 : 1
+        end,
+      },
+      data_row_html: {
+        class: lambda { |record|
+          c = []
+          if record.is_a?(Registration)
+            if record.pending?
+              c << "registration-pending"
+            end
+            if record.accepted?
+              c << "registration-accepted"
+            end
+          end
+          c
+        }
+      },
+      data_column_html: {
+        class: lambda do |record, column|
+          c = [column.name.to_s.gsub(/_/, '-')]
+          if column.name == :pos && record.tied_previous
+            c << "tied-previous"
+          end
+          if record.is_a?(Result)
+            result = record
+            if column.name == :"solve#{result.best_index + 1}"
+              c << "best"
+            end
+            if column.name == :"solve#{result.worst_index + 1}"
+              c << "worst"
+            end
+            if result.trimmed_indices.any? { |i| column.name == :"solve#{i + 1}" }
+              c << "trimmed"
+            end
+          end
+          c
+        end
+      },
+    }
+
+    content_tag :div, class: "table-responsive" do
+      table_for records, table_for_options do |table|
+        table.define :wca_id do |registration|
+          if registration.personId
+            render "shared/wca_id", wca_id: registration.wca_id
+          end
+        end
+        table.header :wca_id do
+          "WCA ID"
+        end
+
+        table.define :pos
+        table.header :pos do
+          "#"
+        end
+
+        table.define :name do |record|
+          if record.is_a?(Result)
+            result = record
+            if result.wca_id
+              link_to result.name, "/results/p.php?i=#{result.wca_id}"
+            else
+              result.name
+            end
+          else
+            record.name
+          end
+        end
+
+        table.header :countryId do
+          "Citizen of"
+        end
+
+        table.define :delegates do |competition|
+          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
+        end
+        table.header :delegates do
+          "Delegate(s)"
+        end
+
+        table.define :organizers do |competition|
+          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
+        end
+        table.header :organizers do
+          "Organizer(s)"
+        end
+
+        (Event.all_official + Event.all_deprecated).each do |event|
+          event_span = content_tag(:span, "",
+            title: event.name,
+            class: "cubing-icon icon-#{event.id}",
+            data: {
+              toggle: "tooltip",
+              placement: "bottom",
+              container: "body",
+            },
+          )
+          table.define event.id do |registration|
+            if registration.events.include?(event)
+              event_span
+            end
+          end
+          table.header event.id do
+            event_span
+          end
+        end
+
+        # Workaround for https://github.com/hunterae/table-for/issues/9
+        table.define :data_column do |column, record, options|
+          content_tag :td, table.call_each_hash_value_with_params(options[:data_column_html], record, column) do
+            table.render column.name, record, column, column.options
+          end
+        end
+
+        (1..5).each do |i|
+          table.define :"solve#{i}" do |result|
+            solve = result.solves[i - 1]
+            solve ? solve.clock_format : ""
+          end
+        end
+        table.header :solve1 do
+          "Solves"
+        end
+        (2..5).each do |i|
+          table.header :"solve#{i}" do
+            ""
+          end
+        end
+
+        table.define :header_column do |column, options|
+          if column.name.to_s.start_with?("solve") && column.name != :solve1
+            # We want the solve1 <th> to take up all the space, so don't create
+            # <th>s for the other solves.
+          else
+            content_tag :th, table.header_column_html(column, options) do
+              table.render "#{column.name}_header", column, column.options
+            end
+          end
+        end
+
+        block.call(table)
+
+        # Add an extra empty column at the end to take up all the extra
+        # horizontal space.
+        table.column data: ""
       end
     end
   end

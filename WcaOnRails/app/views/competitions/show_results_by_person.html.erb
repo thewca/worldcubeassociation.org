@@ -1,0 +1,13 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <%= render "competition_info", competition: @competition %>
+
+  <% @competition.persons_with_results.each do |person, results| %>
+    <h3>
+      <%= anchorable "#{person.name} #{person.countryId}", person.wca_id %>
+      <%= link_to "WCA profile", person.results_path %>
+    </h3>
+    <%= render "competition_results", results: results, hide_name: true, hide_country: true %>
+  <% end %>
+<% end %>

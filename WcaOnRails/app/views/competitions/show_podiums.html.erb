@@ -1,0 +1,13 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <%= render "competition_info", competition: @competition %>
+
+  <% @competition.events_with_podium_results.each do |event, podium_results| %>
+    <h3>
+      <%= anchorable event.name, "e#{event.id}" %>
+    </h3>
+
+    <%= render "competition_results", results: podium_results, hide_event: true, hide_round: true, wca_table_for_options: { striped: false } %>
+  <% end %>
+<% end %>

@@ -88,7 +88,8 @@ table.wca-results {
     &:last-child {
       width: 100%;
     }
-    &.position {
+    &.pos {
+      text-align: right;
     }
     &.name {
     }
@@ -108,15 +109,25 @@ table.wca-results {
     &.single {
       text-align: right;
     }
+    &.solve1 {
+      text-align: center;
+    }
   }
   tbody tr td {
     &:last-child {
       width: 100%;
     }
-    &.position {
+    &.eventId {
+      white-space: nowrap;
+    }
+    &.pos {
+      text-align: right;
       &.tied-previous {
         @extend .text-muted;
       }
+    }
+    &.round {
+      white-space: nowrap;
     }
     &.name {
       white-space: nowrap;
@@ -139,18 +150,33 @@ table.wca-results {
     &.single {
       text-align: right;
     }
+    &.solve1,
+    &.solve2,
+    &.solve3,
+    &.solve4,
+    &.solve5, {
+      text-align: right;
+      &.trimmed {
+        &::before {
+          content: '(';
+        }
+        &::after {
+          content: ')';
+        }
+      }
+    }
   }
 
-  &.wca-results-sort-by-average {
-    .average,
-    .world-rank-average {
+  tbody tr.sort-by-average td {
+    &.average,
+    &.world-rank-average {
       font-weight: bold;
     }
   }
 
-  &.wca-results-sort-by-single {
-    .single,
-    .world-rank-single {
+  tbody tr.sort-by-single td {
+    &.single,
+    &.world-rank-single {
       font-weight: bold;
     }
   }

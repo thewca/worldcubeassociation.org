@@ -1,5 +1,9 @@
 require 'rails_helper'
 
+def solve_time(centis)
+  SolveTime.new("333", :single, centis)
+end
+
 RSpec.describe Result do
   it "defines a valid result" do
     result = FactoryGirl.build :result
@@ -19,6 +23,38 @@ RSpec.describe Result do
   it "formats best hours" do
     result = FactoryGirl.build :result, best: 2*60*100*60 + 3*60*100 + 4242
     expect(result.to_s :best).to eq "2:03:42.42"
+  end
+
+  it "correctly computes best_index and worst_index" do
+    result = FactoryGirl.build :result, value1: 10, value2: 30, value3: 50, value4: 40, value5: 60
+    expect(result.best_index).to eq 0
+    expect(result.worst_index).to eq 4
+  end
+
+  describe "solves" do
+    it "only returns solves that happened in combined round" do
+      result = FactoryGirl.build :result, value1: 20, value2: 10, value3: 60, value4: SolveTime::SKIPPED_VALUE, value5: SolveTime::SKIPPED_VALUE, average: SolveTime::SKIPPED_VALUE, formatId: "a"
+      expect(result.solves).to eq [
+        solve_time(20), solve_time(10), solve_time(60)
+      ]
+    end
+  end
+
+  describe "trimmed_indices" do
+    it "trims best and worst for format: average" do
+      result = FactoryGirl.build :result, value1: 20, value2: 10, value3: 60, value4: 40, value5: 50, formatId: "a"
+      expect(result.trimmed_indices).to eq [ 1, 2 ]
+    end
+
+    it "does not trim anything for format: mean" do
+      result = FactoryGirl.build :result, value1: 20, value2: 10, value3: 60, value4: SolveTime::SKIPPED_VALUE, value5: SolveTime::SKIPPED_VALUE, average: 30, formatId: "m"
+      expect(result.trimmed_indices).to eq []
+    end
+
+    it "handles combined rounds" do
+      result = FactoryGirl.build :result, value1: 20, value2: 10, value3: 60, value4: SolveTime::SKIPPED_VALUE, value5: SolveTime::SKIPPED_VALUE, average: SolveTime::SKIPPED_VALUE, formatId: "a"
+      expect(result.trimmed_indices).to eq []
+    end
   end
 
   describe "333fm" do

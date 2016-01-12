@@ -1,0 +1,47 @@
+<% wca_table_for_options = defined?(wca_table_for_options) ? wca_table_for_options : {} %>
+<% wca_table_for_options ||= {} %>
+<%= wca_table_for results, wca_table_for_options do |table| %>
+  <% if !defined?(hide_event) || !hide_event %>
+    <% table.column :eventId do |result| %>
+      <% if !result.muted %>
+        <span class="cubing-icon icon-<%= result.event.id %>"></span>
+        <%= result.event.cellName %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if !defined?(hide_round) || !hide_round %>
+    <% table.column :round do |result| %>
+      <%= result.round.cellName %>
+    <% end %>
+    <% table.header :round do %>
+      Round
+    <% end %>
+  <% end %>
+
+  <% if !defined?(hide_pos) || !hide_pos %>
+    <% table.column :pos %>
+  <% end %>
+
+  <% if !defined?(hide_name) || !hide_name %>
+    <% table.column :name %>
+  <% end %>
+
+  <% table.column :single do |result| %>
+    <%= result.best_solve.clock_format %>
+  <% end %>
+  <% table.column :regionalSingleRecord, header: "" %>
+
+  <%= table.column :average do |result| %>
+    <%= result.average_solve.clock_format %>
+  <% end %>
+  <% table.column :regionalAverageRecord, header: "" %>
+
+  <% if !defined?(hide_country) || !hide_country %>
+    <% table.column :countryId %>
+  <% end %>
+
+  <% (1..5).each do |i| %>
+    <% table.column :"solve#{i}" %>
+  <% end %>
+<% end %>
