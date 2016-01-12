@@ -36,7 +36,10 @@ class CompetitionsController < ApplicationController
   end
 
   def new_index
-    @competitions = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true", (Date.today - 90)).order(:year, :month, :day).reverse_order
+    @countries = [ ["All","all"],["",""],["Africa","af"],["Asia","as"],["Europe","eu"],["North America","na"],["Oceania","oc"],["South America","sa"],["",""] ] + Country.all.map { |country| [country.name, country.id]}
+    @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id]}
+    @competitions = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true",
+                                     (Date.today - 90) ).order(:year, :month, :day).reverse_order
   end
 
   def create

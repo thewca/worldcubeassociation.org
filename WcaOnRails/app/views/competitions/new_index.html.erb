@@ -3,17 +3,62 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
+  <%= form_tag '/competitions/new_index', method: :get, class: "competition-select" do %>
+    <table>
+      <tr>
+        <td>Event</td>
+        <td>Region</td>
+        <td>Years</td>
+        <td>Name, City or Venue</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= select_tag(:event, options_for_select(@events)) %></td>
+        <td><%= select_tag(:region, options_for_select(@countries)) %></td>
+        <td>
+          <%= select_tag(
+            :years,
+            options_for_select(
+              [
+                ['Current', 'current'],
+                ['All', 'all'],
+                [],
+                ['2016','2016'],
+                ['2015','2015'],
+                ['2014','2014'],
+                ['2013','2013'],
+                ['2012','2012'],
+                ['2011','2011'],
+                ['2010','2010'],
+                ['2009','2009'],
+                ['2008','2008'],
+                ['2007','2007'],
+                ['2006','2006'],
+                ['2005','2005'],
+                ['2004','2004'],
+                ['2003','2003'],
+                ['1982','1982']
+              ]
+            )
+          ) %>
+        </td>
+        <td><%= text_field_tag "search" %></td>
+        <td><%= submit_tag "List" %></td>
+      </tr>
+    </table>
+  <% end %>
+
   <%= wca_table_for @competitions, extra_table_class: "competitions-table" do |table| %>
     <% total = @competitions.length %>
     <% table.column :year %>
     <% table.column :date %>
     <% table.column :name do |competition, column, column_options| %>
-      <% index = column_options[:records].index(competition) %>  
+      <% index = column_options[:records].index(competition) %>
       <% anchor_tag = index == (total/2 - 10) %>
       <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
     <% end %>
     <% table.column :country_city %>
-    <% table.column :venue %> 
-  <% end %>  
+    <% table.column :venue %>
+  <% end %>
 
 </div>
