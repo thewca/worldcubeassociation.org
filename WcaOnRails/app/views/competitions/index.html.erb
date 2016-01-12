@@ -31,6 +31,11 @@
       <% anchor_tag = index == (total/2 - 10) %>
       <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
     <% end %>
+    <% table.column :results do |competition| %>
+      <% if competition.results.length > 0 %>
+        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+      <% end %>
+    <% end %>
     <% table.column :country_city %>
     <% table.column :venue %>
   <% end %>
