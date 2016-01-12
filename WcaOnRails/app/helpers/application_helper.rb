@@ -193,9 +193,9 @@ module ApplicationHelper
           if record.is_a?(Result)
             result = record
             if result.wca_id
-              link_to result.name, "/results/p.php?i=#{result.wca_id}"
+              link_to result.personName, "/results/p.php?i=#{result.wca_id}"
             else
-              result.name
+              result.personName
             end
           else
             record.name
