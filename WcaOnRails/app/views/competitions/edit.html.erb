@@ -43,7 +43,7 @@
     <% else %>
       <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
-          This competition is publicly visible and locked for editing. If you need to make a change, contact the <%= mail_to_wca_board %> to unlock it.
+          This competition is publicly visible and locked for editing. If you need to make a change, contact the <%= mail_to_wca_board %>.
         </div>
       <% elsif is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
