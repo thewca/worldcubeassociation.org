@@ -3,7 +3,7 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= form_tag '/competitions/new_index', method: :get, class: "competition-select" do %>
+  <%= form_tag competitions_path(anchor: "today"), method: :get, class: "competition-select" do %>
     <table>
       <tr>
         <td>Event</td>
@@ -28,7 +28,7 @@
     <% table.column :date %>
     <% table.column :name do |competition, column, column_options| %>
       <% index = column_options[:records].index(competition) %>
-      <% anchor_tag = index == (total/2 - 10) %>
+      <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
       <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
     <% end %>
     <% table.column :results do |competition| %>

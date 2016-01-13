@@ -165,6 +165,10 @@ module ApplicationHelper
           "Date"
         end
 
+        table.define :results_header do
+          ""
+        end
+
         table.define :country_city do |competition|
           wca_highlight competition.country_name + ", " + competition.cityName, competition.country_name
         end
