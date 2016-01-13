@@ -17,7 +17,7 @@ class Round
   end
 
   def self.find(id)
-    @@all_by_id[id] or throw "Unrecognized round id"
+    @@all_by_id[id] or raise "Unrecognized round id"
   end
 
   def self.find_by_id(id)

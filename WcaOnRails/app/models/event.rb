@@ -28,7 +28,7 @@ class Event
   end
 
   def self.find(id)
-    ALL_EVENTS_BY_ID[id] or throw "Unrecognized event id"
+    ALL_EVENTS_BY_ID[id] or raise "Unrecognized event id"
   end
 
   def self.find_by_id(id)
