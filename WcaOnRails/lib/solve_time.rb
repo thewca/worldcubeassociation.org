@@ -9,7 +9,7 @@ class SolveTime
     wca_value = @wca_value
     # Special cases.
     if wca_value < -2
-      throw "Unrecognized wca_value: #{wca_value}"
+      raise "Unrecognized wca_value: #{wca_value}"
     elsif wca_value == -2
       return "DNS"
     elsif wca_value == -1

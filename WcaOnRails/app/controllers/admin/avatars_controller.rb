@@ -19,7 +19,7 @@ module Admin
           when "defer"
             # do nothing!
           else
-            throw "Unrecognized avatar action #{v}"
+            raise "Unrecognized avatar action #{v}"
           end
         end
       end

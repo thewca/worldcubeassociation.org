@@ -131,7 +131,7 @@ class RegistrationsController < ApplicationController
       end
       flash[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     else
-      throw "Unrecognized action #{params[:registrations_action]}"
+      raise "Unrecognized action #{params[:registrations_action]}"
     end
     redirect_to competition_edit_registrations_path(@competition)
   end

@@ -8,7 +8,7 @@ allowed_environments = {
 }
 rack_env = ENV['RACK_ENV']
 if !allowed_environments[rack_env]
-  throw "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
+  raise "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
 end
 if rack_env == "development"
   listen 3000
