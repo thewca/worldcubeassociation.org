@@ -58,8 +58,6 @@ table.table-greedy-last-column {
 
 table.wca-results {
   thead tr th {
-    white-space: nowrap;
-
     &.pos {
       text-align: right;
     }
@@ -87,7 +85,6 @@ table.wca-results {
   }
   tbody tr td {
     &.event {
-      white-space: nowrap;
     }
     &.pos {
       text-align: right;
@@ -96,16 +93,13 @@ table.wca-results {
       }
     }
     &.round {
-      white-space: nowrap;
     }
     &.name {
-      white-space: nowrap;
     }
     &.wca-id {
       vertical-align: middle;
     }
     &.country {
-      white-space: nowrap;
     }
     &.average {
       text-align: right;
