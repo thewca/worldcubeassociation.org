@@ -1,7 +1,0 @@
-<% provide(:title, @competition.name) %>
-
-<%= render layout: 'nav' do %>
-  <%= render "competition_info", competition: @competition %>
-
-  <%= render "competition_results", results: @competition.results, hide_pos: true %>
-<% end %>

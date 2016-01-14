@@ -54,7 +54,7 @@ class Result < ActiveRecord::Base
     else
       sorted_solves = sorted_solves_with_index
       trimmed_solves_with_index = sorted_solves[0...format.trim_fastest_n]
-      trimmed_solves_with_index += sorted_solves.reverse[0...format.trim_slowest_n]
+      trimmed_solves_with_index += sorted_solves[(sorted_solves.length - format.trim_slowest_n)...sorted_solves.length]
       trimmed_solves_with_index.map { |s, i| i }
     end
   end

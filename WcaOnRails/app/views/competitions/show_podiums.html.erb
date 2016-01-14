@@ -8,6 +8,6 @@
       <%= anchorable event.name, "e#{event.id}" %>
     </h3>
 
-    <%= render "competition_results", results: podium_results, hide_event: true, hide_round: true, wca_table_for_options: { striped: false } %>
+    <%= render "results_table", results: podium_results, hide_event: true, hide_round: true, wca_table_for_options: { striped: false } %>
   <% end %>
 <% end %>
