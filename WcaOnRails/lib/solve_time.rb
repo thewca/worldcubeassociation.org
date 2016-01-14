@@ -107,7 +107,12 @@ class SolveTime
       minutes = (time_centiseconds % 360000) / 6000
       seconds = (time_centiseconds % 6000) / 100
       centis = time_centiseconds % 100
-      ("%d:%02d:%02d.%02d" % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, '')
+
+      clock_format = ("%d:%02d:%02d.%02d" % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, '')
+      if clock_format.starts_with? "."
+        clock_format = "0" + clock_format
+      end
+      clock_format
     end
 
   end
