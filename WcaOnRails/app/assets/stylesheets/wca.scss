@@ -60,9 +60,6 @@ table.wca-results {
   thead tr th {
     white-space: nowrap;
 
-    &:last-child {
-      width: 100%;
-    }
     &.pos {
       text-align: right;
     }
@@ -70,7 +67,7 @@ table.wca-results {
     }
     &.wca-id {
     }
-    &.countryId {
+    &.country {
     }
     &.average {
       text-align: right;
@@ -84,15 +81,12 @@ table.wca-results {
     &.single {
       text-align: right;
     }
-    &.solve1 {
+    &.solves {
       text-align: center;
     }
   }
   tbody tr td {
-    &:last-child {
-      width: 100%;
-    }
-    &.eventId {
+    &.event {
       white-space: nowrap;
     }
     &.pos {
@@ -110,7 +104,7 @@ table.wca-results {
     &.wca-id {
       vertical-align: middle;
     }
-    &.countryId {
+    &.country {
       white-space: nowrap;
     }
     &.average {

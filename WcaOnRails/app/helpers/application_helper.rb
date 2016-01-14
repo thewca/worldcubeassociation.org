@@ -117,7 +117,7 @@ module ApplicationHelper
   end
 
   def wca_table_for(records, hover: true, striped: true, extra_table_class: "", &block)
-    table_classes = "table wca-results floatThead table-condensed #{extra_table_class}"
+    table_classes = "table wca-results floatThead table-greedy-last-column table-condensed #{extra_table_class}"
     if hover
       table_classes += " table-hover"
     end
@@ -156,18 +156,6 @@ module ApplicationHelper
           if column.name == :pos && record.tied_previous
             c << "tied-previous"
           end
-          if record.is_a?(Result)
-            result = record
-            if column.name == :"solve#{result.best_index + 1}"
-              c << "best"
-            end
-            if column.name == :"solve#{result.worst_index + 1}"
-              c << "worst"
-            end
-            if result.trimmed_indices.any? { |i| column.name == :"solve#{i + 1}" }
-              c << "trimmed"
-            end
-          end
           c
         end
       },
@@ -190,16 +178,7 @@ module ApplicationHelper
         end
 
         table.define :name do |record|
-          if record.is_a?(Result)
-            result = record
-            if result.wca_id
-              link_to result.personName, "/results/p.php?i=#{result.wca_id}"
-            else
-              result.personName
-            end
-          else
-            record.name
-          end
+          record.name
         end
 
         table.header :countryId do
@@ -276,7 +255,7 @@ module ApplicationHelper
         block.call(table)
 
         # Add an extra empty column at the end to take up all the extra
-        # horizontal space.
+        # horizontal space. See .table-greedy-last-column
         table.column data: ""
       end
     end

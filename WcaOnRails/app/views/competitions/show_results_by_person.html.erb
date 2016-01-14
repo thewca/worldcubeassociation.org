@@ -8,6 +8,6 @@
       <%= anchorable "#{person.name} #{person.countryId}", person.wca_id %>
       <%= link_to "WCA profile", person.results_path %>
     </h3>
-    <%= render "competition_results", results: results, hide_name: true, hide_country: true %>
+    <%= render "results_table", results: results, hide_name: true, hide_country: true %>
   <% end %>
 <% end %>
