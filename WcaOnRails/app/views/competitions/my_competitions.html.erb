@@ -8,29 +8,97 @@
       You currently have no competitions! Check out the <%= link_to "competitions list", "/results/competitions.php" %>.
     </div>
   <% else %>
-    <%= wca_table_for @competitions, extra_table_class: "competitions-table", hover: false, striped: false do |table| %>
-      <% table.column :name %>
-      <% table.column :location do |competition| %>
-        <%= competition.cityName %>, <%= competition.country_name %>
-      <% end %>
-      <% table.column :start_date %>
-      <% table.column :delegates %>
-      <% table.column :organizers %>
-      <% table.column do |competition| %>
-        <% if current_user.can_manage_competition?(competition) %>
-          <%= link_to "Edit", edit_competition_path(competition) %>
+    <table class="table competitions-table">
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Start date</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% @future_competitions.each do |competition| %>
+        <% if competition.isConfirmed %>
+          <% if competition.showAtAll %>
+            <% message = "This competition is confirmed and visible." %>
+          <% else %>
+            <% message = "This competition is confirmed but not visible." %>
+          <% end %>
+        <% else %>
+          <% if competition.showAtAll %>
+            <% message = "This competition is not confirmed but is visible." %>
+          <% else %>
+            <% message = "This competition is not confirmed and not visible." %>
+          <% end %>
         <% end %>
-      <% end %>
-      <% table.column do |competition| %>
-        <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
+        <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= message %>">
+          <td><%= link_to competition.name, competition_path(competition) %></td>
+          <td><%= competition.cityName %>, <%= competition.country_name %></td>
+          <td><%= competition.start_date %></td>
+          <td>
+          <% if current_user.can_manage_competition?(competition) %>
+            <%= link_to "Edit", edit_competition_path(competition) %>
+          <% end %>
+          </td>
+          <td>
+            <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
           <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
         <% end %>
+          </td>
+        </tr>
       <% end %>
-    <% end %>
+    </table>
+
+    <%= button_tag("Show past competitions", id: "show-hidden", class: "btn btn-primary") %>
   <% end %>
 
-  <% if current_user.wca_id %>
-    <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
-  <% end %>
+  <div id="past-competitions">
+    <h2>Past competitions</h2>
+    <table class="table competitions-table">
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Start date</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% @past_competitions.each do |competition| %>
+        <tr>
+          <td><%= link_to competition.name, competition_path(competition) %></td>
+          <td><%= competition.cityName %>, <%= competition.country_name %></td>
+          <td><%= competition.start_date %></td>
+          <td>
+          <% if current_user.can_manage_competition?(competition) %>
+            <%= link_to "Edit", edit_competition_path(competition) %>
+          <% end %>
+          </td>
+          <td>
+            <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
+          <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
+        <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <p>
+    <% if current_user.wca_id %>
+      <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
+    <% end %>
+  </p>
 
 </div>
+
+<script>
+  (function() {
+    $("#past-competitions").hide();
+
+    $("#show-hidden").click(function(e){
+      $("#past-competitions").toggle();
+      $(this).text(function(i, text){
+          return text === "Show past competitions" ? "Hide past competitions" : "Show past competitions";
+      })
+      $(this).toggleClass("btn-warning");
+    });
+  })();
+</script>
