@@ -43,7 +43,7 @@ class Result < ActiveRecord::Base
   end
 
   def missed_combined_round_cutoff?
-    solves.length < format.expected_solve_count
+    sorted_solves_with_index.length < format.expected_solve_count
   end
 
   def trimmed_indices
@@ -64,10 +64,7 @@ class Result < ActiveRecord::Base
   end
 
   def solves
-    solves = (1..format.expected_solve_count).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
-    while solves.last.skipped?
-      solves.pop
-    end
+    solves = (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
     solves
   end
 

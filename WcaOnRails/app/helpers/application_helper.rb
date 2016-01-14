@@ -221,39 +221,6 @@ module ApplicationHelper
           end
         end
 
-        # Workaround for https://github.com/hunterae/table-for/issues/9
-        table.define :data_column do |column, record, options|
-          content_tag :td, table.call_each_hash_value_with_params(options[:data_column_html], record, column) do
-            table.render column.name, record, column, column.options
-          end
-        end
-
-        (1..5).each do |i|
-          table.define :"solve#{i}" do |result|
-            solve = result.solves[i - 1]
-            solve ? solve.clock_format : ""
-          end
-        end
-        table.header :solve1 do
-          "Solves"
-        end
-        (2..5).each do |i|
-          table.header :"solve#{i}" do
-            ""
-          end
-        end
-
-        table.define :header_column do |column, options|
-          if column.name.to_s.start_with?("solve") && column.name != :solve1
-            # We want the solve1 <th> to take up all the space, so don't create
-            # <th>s for the other solves.
-          else
-            content_tag :th, table.header_column_html(column, options) do
-              table.render "#{column.name}_header", column, column.options
-            end
-          end
-        end
-
         block.call(table)
 
         # Add an extra empty column at the end to take up all the extra
