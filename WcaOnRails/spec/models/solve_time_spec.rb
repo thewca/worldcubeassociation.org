@@ -17,6 +17,16 @@ describe "SolveTime" do
     expect(solve_time(0).skipped?).to eq true
   end
 
+  describe "clock_format" do
+    it "prefixes with 0 for times less than 1 second" do
+      expect(solve_time(94).clock_format).to eq "0.94"
+    end
+
+    it "does not prefix with 0 for times between 1 and 10 seconds" do
+      expect(solve_time(500).clock_format).to eq "5.00"
+    end
+  end
+
   describe "ordering" do
     it "orders regular solves" do
       expect(solve_time(100) < solve_time(1000)).to eq true
