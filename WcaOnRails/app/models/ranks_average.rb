@@ -1,5 +1,3 @@
-require 'solve_time'
-
 class RanksAverage < ActiveRecord::Base
   self.table_name = "RanksAverage"
 

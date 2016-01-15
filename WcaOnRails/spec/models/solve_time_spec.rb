@@ -1,5 +1,3 @@
-require 'solve_time'
-
 def solve_time(centis)
   SolveTime.new('333', :single, centis)
 end
