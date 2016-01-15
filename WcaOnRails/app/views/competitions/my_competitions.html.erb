@@ -35,50 +35,56 @@
           <td><%= competition.cityName %>, <%= competition.country_name %></td>
           <td><%= competition.start_date %></td>
           <td>
-          <% if current_user.can_manage_competition?(competition) %>
-            <%= link_to "Edit", edit_competition_path(competition) %>
-          <% end %>
+            <% if current_user.can_manage_competition?(competition) %>
+              <%= link_to "Edit", edit_competition_path(competition) %>
+            <% end %>
           </td>
           <td>
             <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-          <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
-        <% end %>
+              <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
+            <% end %>
           </td>
         </tr>
       <% end %>
     </table>
 
-    <%= button_tag("Show past competitions", id: "show-hidden", class: "btn btn-primary") %>
+    <button id="show-hidden" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#past-competitions" aria-expanded="false" aria-controls="collapseExample">Show past competitions</button>
   <% end %>
 
-  <div id="past-competitions">
+  <div id="past-competitions" class="collapse">
     <h2>Past competitions</h2>
-    <table class="table competitions-table">
-      <tr>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Start date</th>
-        <th></th>
-        <th></th>
-      </tr>
-      <% @past_competitions.each do |competition| %>
+    <% if @past_competitions.length < 1 %>
+      <div class="alert alert-info" role="alert">
+        You have no past competitions.
+      </div>
+    <% else %>
+      <table class="table competitions-table">
         <tr>
-          <td><%= link_to competition.name, competition_path(competition) %></td>
-          <td><%= competition.cityName %>, <%= competition.country_name %></td>
-          <td><%= competition.start_date %></td>
-          <td>
-          <% if current_user.can_manage_competition?(competition) %>
-            <%= link_to "Edit", edit_competition_path(competition) %>
-          <% end %>
-          </td>
-          <td>
-            <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-          <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
-        <% end %>
-          </td>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Start date</th>
+          <th></th>
+          <th></th>
         </tr>
-      <% end %>
-    </table>
+        <% @past_competitions.each do |competition| %>
+          <tr>
+            <td><%= link_to competition.name, competition_path(competition) %></td>
+            <td><%= competition.cityName %>, <%= competition.country_name %></td>
+            <td><%= competition.start_date %></td>
+            <td>
+            <% if current_user.can_manage_competition?(competition) %>
+              <%= link_to "Edit", edit_competition_path(competition) %>
+            <% end %>
+            </td>
+            <td>
+              <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
+            <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
+          <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
   </div>
 
   <p>
@@ -91,12 +97,9 @@
 
 <script>
   (function() {
-    $("#past-competitions").hide();
-
     $("#show-hidden").click(function(e){
-      $("#past-competitions").toggle();
       $(this).text(function(i, text){
-          return text === "Show past competitions" ? "Hide past competitions" : "Show past competitions";
+        return text === "Show past competitions" ? "Hide past competitions" : "Show past competitions";
       })
       $(this).toggleClass("btn-warning");
     });
