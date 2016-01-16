@@ -1,95 +1,25 @@
 <% provide(:title, 'Upcoming competitions') %>
 
 <div class="container">
-  <h2><%= yield(:title) %></h2>
+  <h3><%= yield(:title) %></h3>
 
-  <% if @future_competitions.length < 1 %>
-    <div class="alert alert-info" role="alert">
-      You currently have no upcoming competitions! Check out the <%= link_to "competitions list", "/results/competitions.php" %>.
+  <%= render "my_competitions_table", competitions: @future_competitions, upcoming: true %>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <a data-toggle="collapse" href="#past-competitions2" class="collapsed">
+          <span>Past competitions</span>
+          <span class="collapse-indicator"></span>
+        </a>
+      </h3>
     </div>
-  <% else %>
-    <table class="table competitions-table floatThread">
-      <tr>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Start date</th>
-        <th></th>
-        <th></th>
-      </tr>
-      <% @future_competitions.each do |competition| %>
-        <% if competition.isConfirmed %>
-          <% if competition.showAtAll %>
-            <% message = "This competition is confirmed and visible." %>
-          <% else %>
-            <% message = "This competition is confirmed but not visible." %>
-          <% end %>
-        <% else %>
-          <% if competition.showAtAll %>
-            <% message = "This competition is not confirmed but is visible." %>
-          <% else %>
-            <% message = "This competition is not confirmed and not visible." %>
-          <% end %>
-        <% end %>
-        <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= message %>">
-          <td><%= link_to competition.name, competition_path(competition) %></td>
-          <td><%= competition.cityName %>, <%= competition.country_name %></td>
-          <td><%= competition.start_date %></td>
-          <td>
-            <% if current_user.can_manage_competition?(competition) %>
-              <%= link_to "Edit", edit_competition_path(competition) %>
-            <% end %>
-          </td>
-          <td>
-            <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-              <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#past-competitions" class="collapsed">
-            <span>Past competitions</span>
-            <span class="collapse-indicator"></span>
-          </a>
-        </h3>
-      </div>
-
-      <div id="past-competitions" class="panel-collapse collapse">
-        <div class="panel-body">
-          <% if @past_competitions.length < 1 %>
-            <div class="alert alert-info" role="alert">
-              You have no past competitions.
-            </div>
-          <% else %>
-            <table class="table competitions-table floatThread">
-              <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Start date</th>
-                <th></th>
-              </tr>
-              <% @past_competitions.each do |competition| %>
-                <tr>
-                  <td><%= link_to competition.name, competition_path(competition) %></td>
-                  <td><%= competition.cityName %>, <%= competition.country_name %></td>
-                  <td><%= competition.start_date %></td>
-                  <td>
-                    <% if competition.results.length > 0 %>
-                      <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </table>
-          <% end %>
-        </div>
+    <div id="past-competitions2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <%= render "my_competitions_table", competitions: @past_competitions, upcoming: false %>
       </div>
     </div>
+  </div>
 
   <p>
     <% if current_user.wca_id %>

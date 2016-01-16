@@ -127,8 +127,7 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competitions-table {
-  font-size: 14px;
-
+  
   tr {
     &.not-visible {
       opacity: 0.5;
@@ -141,30 +140,13 @@ $venue-map-wrapper-height: 400px;
     &.not-confirmed {
       background-color: $state-danger-bg;
     }
-
-    &.future {
-      opacity: 0.6;
-    }
-
-    &.past {
-
-    }
   }
 
   td {
-
-    &.location {
-      white-space: nowrap;
-    }
-
-    &.delegates,
-    &.organizers {
-      min-width: 150px;
-    }
+    white-space: nowrap;
   }
+}
 
-  .btn-register {
-    font-size: 12px;
-    padding: 2px;
-  }
+.big-column {
+  width: 100%;
 }
