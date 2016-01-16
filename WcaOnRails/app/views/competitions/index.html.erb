@@ -4,40 +4,56 @@
   <h2><%= yield(:title) %></h2>
 
   <%= form_tag competitions_path(anchor: "today"), method: :get, class: "competition-select" do %>
-    <table>
-      <tr>
-        <td>Event</td>
-        <td>Region</td>
-        <td>Years</td>
-        <td>Name, City or Venue</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><%= select_tag(:event, options_for_select(@events, params[:event])) %></td>
-        <td><%= select_tag(:region, options_for_select(@regions, params[:region])) %></td>
-        <td><%= select_tag(:years, options_for_select(@years, params[:years])) %></td>
-        <td><%= text_field_tag "search" %></td>
-        <td><%= submit_tag "List" %></td>
-      </tr>
-    </table>
+    <div class="form-group same-line">
+      Event: <%= select_tag(:event, options_for_select(@events, params[:event])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Region: <%= select_tag(:region, options_for_select(@regions, params[:region])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Years: <%= select_tag(:years, options_for_select(@years, params[:years])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Name, City or Venue: <%= text_field_tag "search" %></td>
+    </div>
+
+    <%= submit_tag "List" %>
   <% end %>
 
-  <%= wca_table_for @competitions, extra_table_class: "competitions-table" do |table| %>
-    <% total = @competitions.length %>
-    <% table.column :year %>
-    <% table.column :date %>
-    <% table.column :name do |competition, column, column_options| %>
-      <% index = column_options[:records].index(competition) %>
-      <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-      <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+Hello <%= @closest_index %>
+
+  <table class="table competitions-table table-striped table-hover">
+    <tr>
+      <th>Year</th>
+      <th>Date</th>
+      <th>Name</th>
+      <th></th>
+      <th>Country, City</th>
+      <th>Venue</th>
+      <th class="big-column"></th>
+    </tr>
+
+    <% @competitions.each_with_index do |competition, index| %>
+      <tr class="<%= competition.is_over? ? "past" : "future" %>">
+        <td><%= competition.year %></td>
+        <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+        <td>
+          <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+          <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+        </td>
+        <td>
+          <% if competition.results.length > 0 %>
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+          <% end %>
+        </td>
+        <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
+        <td><%= competition.venue %></td>
+        <td></td>
+      </tr>
     <% end %>
-    <% table.column :results do |competition| %>
-      <% if competition.results.length > 0 %>
-        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
-      <% end %>
-    <% end %>
-    <% table.column :country_city %>
-    <% table.column :venue %>
-  <% end %>
+  </table>
 
 </div>

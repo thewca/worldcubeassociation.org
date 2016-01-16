@@ -51,7 +51,7 @@ class CompetitionsController < ApplicationController
     end
 
     if params[:event] && params[:event] != "all"
-      @competitions = @competitions.reject { |competition| !competition.has_event?(params[:event]) }
+      @competitions = @competitions.reject { |competition| !competition.has_event?(Event.find(params[:event])) }
     end
 
     if params[:region] && params[:region] != "all"
@@ -61,7 +61,8 @@ class CompetitionsController < ApplicationController
     if params[:search]
       @competitions = @competitions.reject { |competition| !competition.search(params[:search]) }
     end
-    closest_competition = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) between ? and ?", (Date.today - 4), (Date.today + 4)).first
+    #closest_competition = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) between ? and ?", (Date.today - 4), (Date.today + 4)).first
+    closest_competition = Competition.all.sort_by { |competition| (competition.start_date - Date.today).abs }.first
     @closest_index = @competitions.index(closest_competition)
   end
 

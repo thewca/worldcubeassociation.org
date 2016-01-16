@@ -127,10 +127,8 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competitions-table {
-  font-size: 12px;
 
   tr {
-
     &.past {
       a:link,
       a:visited {
@@ -139,18 +137,16 @@ $venue-map-wrapper-height: 400px;
     }
   }
 
-  td {
-    white-space: nowrap;
+  .big-column {
+    width: 100%;
+  }
 
-    &.delegates,
-    &.organizers {
-      min-width: 150px;
-    }
+  td,th {
+    white-space: nowrap;
   }
 }
 
 .competitions-admin-table {
-  font-size: 14px;
 
   tr {
     &.not-visible {
@@ -188,4 +184,9 @@ $venue-map-wrapper-height: 400px;
   select {
     font-size: 12px;
   }
+}
+
+.same-line {
+  display: inline;
+  margin-right: 5px;
 }

@@ -305,12 +305,12 @@ class Competition < ActiveRecord::Base
     eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
-  def has_event?(event_id)
-    event_id.in?(self.events.map{ |ev| ev.id })
+  def has_event?(event)
+    event.id.in?(self.events.map(&:id))
   end
 
   def belongs_to_region?(region_or_country)
-    (self.countryId == region_or_country) || (Country.find(self.countryId).continentId == region_or_country)
+    (self.countryId == region_or_country) || (self.country.continentId == region_or_country)
   end
 
   def search(search_param)
@@ -447,8 +447,8 @@ class Competition < ActiveRecord::Base
     start_date < Date.today
   end
 
-  def country_name
-    Country.find(countryId).name
+  def country
+    Country.find(countryId)
   end
 
   def self.search(query, params: {})

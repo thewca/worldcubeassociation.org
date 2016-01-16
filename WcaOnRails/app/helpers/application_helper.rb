@@ -105,11 +105,6 @@ module ApplicationHelper
               c << "registration-accepted"
             end
           end
-          if record.is_a?(Competition)
-            c << (record.isConfirmed ? "confirmed" : "not-confirmed")
-            c << (record.showAtAll ? "visible" : "not-visible")
-            c << (record.is_over? ? "past" : "future" )
-          end
           c
         }
       },
@@ -142,38 +137,6 @@ module ApplicationHelper
 
         table.define :countryId_header do
           "Citizen of"
-        end
-
-        table.define :delegates do |competition|
-          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :delegates_header do
-          "Delegate(s)"
-        end
-
-        table.define :organizers do |competition|
-          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :organizers_header do
-          "Organizer(s)"
-        end
-
-        table.define :date do |competition|
-          date_range(competition.start_date, competition.end_date, separator: '-', show_year: false)
-        end
-        table.define :date_header do
-          "Date"
-        end
-
-        table.define :results_header do
-          ""
-        end
-
-        table.define :country_city do |competition|
-          wca_highlight competition.country_name + ", " + competition.cityName, competition.country_name
-        end
-        table.define :country_city_header do
-          "Country, City"
         end
 
         (Event.all_official + Event.all_deprecated).each do |event|

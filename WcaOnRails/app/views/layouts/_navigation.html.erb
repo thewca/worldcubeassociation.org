@@ -36,7 +36,7 @@
              <%= icon('cube', class: 'fa-fw') %> Competitions <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/results/competitions.php"><%= icon('globe', class: 'fa-fw') %> All</a></li>
+            <li><a href="<%= competitions_path %>#today"><%= icon('globe', class: 'fa-fw') %> All</a></li>
             <li><a href="<%= my_comps_path %>"><%= icon('list', class: 'fa-fw') %> My Competitions</a></li>
             <% if current_user && current_user.can_create_competition? %>
               <li><a href="<%= new_competition_path %>"><%= icon('plus', class: 'fa-fw') %> New Competition</a></li>
