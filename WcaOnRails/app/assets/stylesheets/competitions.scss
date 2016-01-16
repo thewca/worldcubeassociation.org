@@ -127,12 +127,20 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competitions-table {
+  font-size: 12px;
 
   tr {
     &.past {
       a:link,
       a:visited {
-        color: #369;
+        color: #139;
+      }
+    }
+
+    &.future {
+      a:link,
+      a:visited {
+        color: #173;
       }
     }
   }
@@ -141,7 +149,8 @@ $venue-map-wrapper-height: 400px;
     width: 100%;
   }
 
-  td,th {
+  td,
+  th {
     white-space: nowrap;
   }
 }
@@ -189,4 +198,8 @@ $venue-map-wrapper-height: 400px;
 .same-line {
   display: inline;
   margin-right: 5px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>th {
+  background-color: #ccc;
 }
