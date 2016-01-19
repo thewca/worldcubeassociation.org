@@ -60,14 +60,45 @@ server {
 
   # Redirect old competition results pages:
   #  /results/c.php?i=IranSummerCube2013
-  #  /results/competition.php?competitionId=IranSummerCube2013
+  # to:
+  #  /results/competition.php?i=IranSummerCube2013
   # to new Rails page:
   #  /competitions/IranSummerCube2013
   location /results/c.php {
-    return 302 /competitions/$arg_i;
+    return 302 /results/competition.php$is_args$args;
   }
   location /results/competition.php {
-    return 302 /competitions/$arg_competitionId;
+    # The competition id could be in the url parameter "competitionId" or "i".
+    if ($arg_competitionId = "") {
+      set $competitionId $arg_i;
+    }
+    if ($arg_competitionId != "") {
+      set $competitionId $arg_competitionId;
+    }
+
+    # Be liberal in how we accept spaces.
+    # Yes, that's competitiors, not competitors.
+    if ($arg_list = "List of Registered Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+    if ($arg_list = "List+of+Registered+Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+    if ($arg_list = "List%20of%20Registered%20Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+
+    if ($arg_form = "Registration Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+    if ($arg_form = "Registration+Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+    if ($arg_form = "Registration%20Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+
+    return 302 /competitions/$competitionId;
   }
 
   location /results {
