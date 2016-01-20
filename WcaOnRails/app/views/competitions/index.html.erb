@@ -72,64 +72,71 @@
 
 <script>
 $(function() {
-    var $today = document.getElementById("today");
-    if ($today)
-      $(document).scrollTop( $("#today").offset().top );
+  var $today = document.getElementById("today");
+  if ($today)
+    $(document).scrollTop( $("#today").offset().top );
 
-    var $map = $('#venue-map-wrapper .map');
-    $map.locationpicker({
+  function initMap() {
+    var $map = new google.maps.Map(document.getElementById('venue-map-wrapper'), {
       zoom: 2,
-      location: {
-        latitude: 0,
-        longitude: 0,
-      },
-      radius: 0,
-      scrollwheel: false,
-      oninitialized: function(currentLocation, radius, isMarkerDropped) {
-        wca.setCompetitions(<%= @competitions.map do |c|
-        {
-          id: c.id,
-          name: c.name,
-          latitude_degrees: c.latitude_degrees,
-          longitude_degrees: c.longitude_degrees,
-          start_date: c.start_date,
-          end_date: c.end_date,
-          year: c.year,
-          month: c.month,
-          day: c.day,
-          cityName: c.cityName,
-        }
-      end.to_json.html_safe %>);
-      },
+      center: {lat: 0, lng: 0},
+      scrollwheel: true
     });
-    var locationpicker = $map.data('locationpicker');
 
-    wca.setCompetitions = function(competitions) {
-      var desiredCompetitionById = _.indexBy(competitions, 'id');
+    wca.setCompetitions(<%= @competitions.map do |c|
+    {
+      id: c.id,
+      name: c.name,
+      latitude_degrees: c.latitude_degrees,
+      longitude_degrees: c.longitude_degrees,
+      start_date: c.start_date,
+      end_date: c.end_date,
+      year: c.year,
+      month: c.month,
+      day: c.day,
+      cityName: c.cityName,
+    }
+      end.to_json.html_safe %>, $map);
+  }
 
-      var desiredIds = Object.keys(desiredCompetitionById);
-      desiredIds.forEach(function(id) {
+  wca.setCompetitions = function(competitions, map) {
+    var desiredCompetitionById = _.indexBy(competitions, 'id');
+
+    var desiredIds = Object.keys(desiredCompetitionById);
+    desiredIds.forEach(function(id) {
       var c = desiredCompetitionById[id];
 
-      var contentString = "<a href='/competitions/" + c.id + "'>" + c.name + "</a><br />" + (new Date(c.year, c.month-1, c.day)).toLocaleFormat("%b %d, %Y") + " - " + c.cityName;
+      var compDate = new Date(c.year, c.month-1, c.day);
+
+      var contentString = "<a href='/competitions/" + c.id + "'>" + c.name + "</a><br />" + compDate.toLocaleFormat("%b %d, %Y") + " - " + c.cityName;
 
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
 
+      var today = new Date();
+
+      if (compDate < today)
+        iconImage = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+      else
+        iconImage = 'http://maps.google.com/mapfiles/ms/icons/red.png'
+
       c.marker = new google.maps.Marker({
-        map: locationpicker.map,
+        map: map,
         position: {
           lat: c.latitude_degrees,
           lng: c.longitude_degrees,
         },
         title: c.name,
+        icon: iconImage
       });
 
       c.marker.addListener('click', function() {
-        infowindow.open(locationpicker.map, c.marker);
+        infowindow.open(map, c.marker);
       });
     });
   };
+
+  initMap();
 });
 </script>
