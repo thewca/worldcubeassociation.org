@@ -61,7 +61,11 @@ class CompetitionsController < ApplicationController
     if params[:search]
       @competitions = @competitions.reject { |competition| !competition.search(params[:search]) }
     end
-    #closest_competition = Competition.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) between ? and ?", (Date.today - 4), (Date.today + 4)).first
+
+    if !params[:commit]
+      params[:commit] = "List"
+    end
+
     closest_competition = Competition.all.sort_by { |competition| (competition.start_date - Date.today).abs }.first
     @closest_index = @competitions.index(closest_competition)
   end
