@@ -31,6 +31,17 @@ RSpec.describe User, type: :model do
     expect(delegate).to be_valid
   end
 
+  it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
+    # Create someone without a password and without a WCA ID. This simulates the kind
+    # of accounts we originally created for all delegates without accounts.
+    delegate = FactoryGirl.create(:delegate, encrypted_password: "", wca_id: nil)
+
+    dummy_user = FactoryGirl.create :dummy_user
+    dummy_user.wca_id = nil
+    dummy_user.save!
+    expect(User.find(delegate.id)).to eq delegate
+  end
+
   describe "team leaders" do
     it "results team" do
       user = FactoryGirl.build :user, results_team: false, results_team_leader: true

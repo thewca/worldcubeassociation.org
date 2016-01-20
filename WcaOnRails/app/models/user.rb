@@ -141,11 +141,11 @@ class User < ActiveRecord::Base
   # avatar.
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
-    if wca_id_change
-      dummy_account = User.where(wca_id: wca_id, encrypted_password: "").first
-      if dummy_account
-        _mounter(:avatar).uploader.override_column_value = dummy_account.read_attribute :avatar
-        dummy_account.destroy!
+    if wca_id_change && wca_id.present?
+      dummy_user = User.where(wca_id: wca_id).select(&:dummy_account?).first
+      if dummy_user
+        _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
+        dummy_user.destroy!
       end
     end
   end
