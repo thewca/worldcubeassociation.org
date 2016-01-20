@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
   strip_attributes only: [:wca_id, :country_iso2]
 
@@ -452,7 +453,7 @@ class User < ActiveRecord::Base
     users
   end
 
-  def to_jsonable(include_private_info: false)
+  def to_jsonable(doorkeeper_token: nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",
@@ -471,9 +472,14 @@ class User < ActiveRecord::Base
       },
     }
 
-    if include_private_info
-      json[:email] = self.email
-      json[:dob] = self.dob
+    if doorkeeper_token
+      if doorkeeper_token.scopes.exists?("dob")
+        json[:dob] = self.dob
+      end
+
+      if doorkeeper_token.scopes.exists?("email")
+        json[:email] = self.email
+      end
     end
 
     json

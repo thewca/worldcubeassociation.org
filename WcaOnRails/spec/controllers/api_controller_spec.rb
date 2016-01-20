@@ -216,7 +216,8 @@ describe Api::V0::ApiController do
           wca_id: person.id,
         }
       end
-      let(:token) { double acceptable?: true, resource_owner_id: user.id }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
         allow(controller).to receive(:doorkeeper_token) {token}
       end
@@ -227,13 +228,44 @@ describe Api::V0::ApiController do
         json = JSON.parse(response.body)
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
-        expect(json['me']['email']).to eq(user.email)
+
         # Verify that avatar url is a full url (starts with http(s))
         expect(json['me']['avatar']['url']).to match /^https?/
 
         expect(json['me']['country_iso2']).to eq("US")
         expect(json['me']['gender']).to eq("m")
+
+        expect(json['me']['dob']).to eq(nil)
+        expect(json['me']['email']).to eq(nil)
+      end
+
+      it 'can request dob scope' do
+        scopes.add("dob")
+
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
         expect(json['me']['dob']).to eq("1987-12-04")
+        expect(json['me']['email']).to eq(nil)
+      end
+
+      it 'can request email scope' do
+        scopes.add("email")
+
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json['me']['email']).to eq(user.email)
+      end
+
+      it 'can request email and dob scope' do
+        scopes.add("dob", "email")
+
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json['me']['dob']).to eq("1987-12-04")
+        expect(json['me']['email']).to eq(user.email)
       end
     end
 
@@ -243,12 +275,15 @@ describe Api::V0::ApiController do
         u.update_column(:wca_id, "fooooo")
         u
       end
-      let(:token) { double acceptable?: true, resource_owner_id: user.id }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
         allow(controller).to receive(:doorkeeper_token) {token}
       end
 
       it 'works' do
+        scopes.add("dob", "email")
+
         get :me
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
@@ -267,12 +302,15 @@ describe Api::V0::ApiController do
 
     context 'signed in without wca id' do
       let(:user) { FactoryGirl.create :user }
-      let(:token) { double acceptable?: true, resource_owner_id: user.id }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
         allow(controller).to receive(:doorkeeper_token) {token}
       end
 
       it 'works' do
+        scopes.add("dob", "email")
+
         get :me
         expect(response.status).to eq 200
         json = JSON.parse(response.body)

@@ -23,9 +23,6 @@ Doorkeeper.configure do
   admin_authenticator do
     if not current_user
       redirect_to new_user_session_url
-    elsif not current_user.admin?
-      flash[:danger] = "You don't have permission to configure OAuth applications."
-      redirect_to api_v0_path
     end
   end
 
@@ -56,13 +53,13 @@ Doorkeeper.configure do
   # Optional parameter confirmation: true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  # enable_application_owner confirmation: false
+  enable_application_owner confirmation: false
 
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  # default_scopes  :public
-  # optional_scopes :write, :update
+  default_scopes  :public
+  optional_scopes :dob, :email
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

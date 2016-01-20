@@ -20,12 +20,17 @@
 </head>
 <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
 
-  <%= render 'layouts/navigation' %>
-  <%= render 'layouts/flash' %>
+  <% hide_wca_navbars = yield(:hide_wca_navbars).present? %>
+  <% if !hide_wca_navbars %>
+    <%= render 'layouts/navigation' %>
+  <% end %>
 
+  <%= render 'layouts/flash' %>
   <%= yield %>
 
-  <%= render 'layouts/footer' %>
+  <% if !hide_wca_navbars %>
+    <%= render 'layouts/footer' %>
+  <% end %>
 
   <% if ENVied.WCA_LIVE_SITE %>
     <script>

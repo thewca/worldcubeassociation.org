@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    controllers applications: 'oauth/applications'
+  end
 
   # Prevent account deletion.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account

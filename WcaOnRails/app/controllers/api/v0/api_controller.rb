@@ -13,7 +13,8 @@ class Api::V0::ApiController < ApplicationController
   DEFAULT_API_RESULT_LIMIT = 20
 
   def me
-    render json: { me: current_resource_owner.to_jsonable(include_private_info: true) }
+    current_resource_owner = User.find(doorkeeper_token.resource_owner_id)
+    render json: { me: current_resource_owner.to_jsonable(doorkeeper_token: doorkeeper_token) }
   end
 
   def auth_results
@@ -100,9 +101,5 @@ class Api::V0::ApiController < ApplicationController
   def show_user_by_wca_id
     user = User.find_by_wca_id(params[:wca_id])
     show_user(user)
-  end
-
-  private def current_resource_owner
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
 end

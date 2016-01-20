@@ -6,7 +6,7 @@ describe "oauth api" do
   let(:user) { FactoryGirl.create :user_with_wca_id }
 
   it 'can authenticate with grant_type password' do
-    post oauth_token_path, grant_type: "password", username: user.email, password: user.password
+    post oauth_token_path, grant_type: "password", username: user.email, password: user.password, scope: "public email"
     expect(response).to be_success
     json = JSON.parse(response.body)
     expect(json['error']).to eq(nil)
@@ -17,8 +17,12 @@ describe "oauth api" do
 
   it 'can authenticate with grant_type authorization' do
     oauth_app = FactoryGirl.create :oauth_application, redirect_uri: oauth_authorization_url
-    params = { client_id: oauth_app.uid, redirect_uri: oauth_app.redirect_uri, response_type: "code" }
-    visit oauth_authorization_path(params)
+    visit oauth_authorization_path(
+      client_id: oauth_app.uid,
+      redirect_uri: oauth_app.redirect_uri,
+      response_type: "code",
+      scope: "public email",
+    )
 
     # Pretend we're the user:
     #  1. Log in
@@ -44,8 +48,12 @@ describe "oauth api" do
 
   it 'can authenticate with response_type token (implicit authorizaion)' do
     oauth_app = FactoryGirl.create :oauth_application
-    params = { client_id: oauth_app.uid, redirect_uri: oauth_app.redirect_uri, response_type: "token" }
-    visit oauth_authorization_path(params)
+    visit oauth_authorization_path(
+      client_id: oauth_app.uid,
+      redirect_uri: oauth_app.redirect_uri,
+      response_type: "token",
+      scope: "public email",
+    )
 
     # Pretend we're the user:
     #  1. Log in
@@ -69,5 +77,7 @@ describe "oauth api" do
     # We just do a sanity check of the /me route here. There is a more
     # complete test in api_controller_spec.
     expect(json['me']['id']).to eq(user.id)
+    expect(json['me']['dob']).to eq(nil)
+    expect(json['me']['email']).to eq(user.email)
   end
 end

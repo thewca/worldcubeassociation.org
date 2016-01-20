@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.9-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.10-MariaDB, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: wca_development
 -- ------------------------------------------------------
--- Server version	10.1.9-MariaDB-log
+-- Server version	10.1.10-MariaDB-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -289,7 +289,7 @@ CREATE TABLE `Preregs` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80458 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80551 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,7 +310,7 @@ CREATE TABLE `RanksAverage` (
   PRIMARY KEY (`id`),
   KEY `fk_persons` (`personId`),
   KEY `fk_events` (`eventId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +331,7 @@ CREATE TABLE `RanksSingle` (
   PRIMARY KEY (`id`),
   KEY `fk_persons` (`personId`),
   KEY `fk_events` (`eventId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +370,7 @@ CREATE TABLE `Results` (
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`)
-) ENGINE=InnoDB AUTO_INCREMENT=852966 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=855477 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,7 +441,7 @@ CREATE TABLE `competition_delegates` (
   UNIQUE KEY `index_competition_delegates_on_competition_id_and_delegate_id` (`competition_id`,`delegate_id`),
   KEY `index_competition_delegates_on_competition_id` (`competition_id`),
   KEY `index_competition_delegates_on_delegate_id` (`delegate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4245 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4249 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -462,7 +462,7 @@ CREATE TABLE `competition_organizers` (
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
   KEY `index_competition_organizers_on_organizer_id` (`organizer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=280 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -527,9 +527,12 @@ CREATE TABLE `oauth_applications` (
   `scopes` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `owner_id` int(11) DEFAULT NULL,
+  `owner_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_oauth_applications_on_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `index_oauth_applications_on_uid` (`uid`),
+  KEY `index_oauth_applications_on_owner_id_and_owner_type` (`owner_id`,`owner_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -546,7 +549,7 @@ CREATE TABLE `poll_options` (
   PRIMARY KEY (`id`),
   KEY `poll_id` (`poll_id`) USING BTREE,
   CONSTRAINT `poll_options_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -566,7 +569,7 @@ CREATE TABLE `polls` (
   `updated_at` datetime NOT NULL,
   `comment` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,7 +593,7 @@ CREATE TABLE `posts` (
   UNIQUE KEY `index_posts_on_slug` (`slug`),
   KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
   KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=4966 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4986 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -665,7 +668,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
-) ENGINE=InnoDB AUTO_INCREMENT=5887 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6040 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -680,7 +683,7 @@ CREATE TABLE `vote_options` (
   `vote_id` int(11) NOT NULL,
   `poll_option_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -698,7 +701,7 @@ CREATE TABLE `votes` (
   PRIMARY KEY (`id`),
   KEY `index_votes_on_user_id` (`user_id`),
   CONSTRAINT `votes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -710,7 +713,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-01 12:51:50
+-- Dump completed on 2016-01-19 23:20:50
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -802,4 +805,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151217062612');
 INSERT INTO schema_migrations (version) VALUES ('20151222013017');
 
 INSERT INTO schema_migrations (version) VALUES ('20151230174411');
+
+INSERT INTO schema_migrations (version) VALUES ('20160120071503');
 
