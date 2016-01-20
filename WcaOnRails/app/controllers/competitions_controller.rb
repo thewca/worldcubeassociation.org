@@ -48,6 +48,8 @@ class CompetitionsController < ApplicationController
       elsif params[:years] != "all"
         @competitions = @competitions.reject { |competition| competition.year.to_s != params[:years] }
       end
+    else
+      @competitions = @competitions.where(query, query_params)
     end
 
     if params[:event] && params[:event] != "all"
