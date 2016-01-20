@@ -66,7 +66,7 @@ class CompetitionsController < ApplicationController
       params[:commit] = "List"
     end
 
-    closest_competition = Competition.all.sort_by { |competition| (competition.start_date - Date.today).abs }.first
+    closest_competition = Competition.where(showAtAll: true).sort_by { |competition| (competition.start_date - Date.today).abs }.first
     @closest_index = @competitions.index(closest_competition)
   end
 
