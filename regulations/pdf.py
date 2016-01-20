@@ -33,6 +33,9 @@ class pdf():
 
 \setcounter{secnumdepth}{-1}
 
+\providecommand{\\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 \\title{WCA Regulations and Guidelines}
 \\author{WCA Regulations Committee}
 \date{\\vspace{-1em}}
