@@ -7,10 +7,7 @@ RSpec.feature "Registering for a competition" do
 
   context "signed in as user" do
     before :each do
-      visit "/users/sign_in"
-      fill_in "Email or WCA ID", with: user.email
-      fill_in "Password", with: user.password
-      click_button "Sign in"
+      sign_in user
     end
 
     scenario "User registers for a competition" do
@@ -41,10 +38,7 @@ RSpec.feature "Registering for a competition" do
   context "signed in as delegate" do
     let(:registration) { FactoryGirl.create(:registration, user: user, competition: competition) }
     before :each do
-      visit "/users/sign_in"
-      fill_in "Email or WCA ID", with: delegate.email
-      fill_in "Password", with: delegate.password
-      click_button "Sign in"
+      sign_in delegate
     end
 
     scenario "updating registration" do

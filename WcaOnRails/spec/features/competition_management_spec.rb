@@ -4,10 +4,7 @@ RSpec.feature "Competition management" do
   context "when signed in as admin" do
     let(:admin) { FactoryGirl.create :admin }
     before :each do
-      visit "/users/sign_in"
-      fill_in "Email or WCA ID", with: admin.email
-      fill_in "Password", with: admin.password
-      click_button "Sign in"
+      sign_in admin
     end
 
     scenario "User creates a new competition" do
