@@ -20,8 +20,8 @@
       Name, City or Venue: <br /<br /><%= text_field_tag "search" %></td>
     </div>
 
-    <%= submit_tag "List" %>
-    <%= submit_tag "Map" %>
+    <%= submit_tag("List", class: "btn btn-primary") %>
+    <%= submit_tag("Map", class: "btn btn-warning") %>
   <% end %>
 
   <% if params[:commit] == "List" %>
