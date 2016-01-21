@@ -38,28 +38,27 @@
 
       <% @competitions.each_with_index do |competition, index| %>
         <% if index == (@closest_index-1) %>
-          <tr class="bg-primary">
+          <tr id="today-line">
             <td colspan="6" class="text-center">Today</td>
             <td></td>
           </tr>
-        <% else %>
-          <tr class="<%= competition.is_over? ? "past" : "future" %>">
-            <td><%= competition.year %></td>
-            <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
-            <td>
-              <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-              <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
-            </td>
-            <td>
-              <% if competition.results_uploaded? %>
-                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
-              <% end %>
-            </td>
-            <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
-            <td><%= competition.venue %></td>
-            <td></td>
-          </tr>
         <% end %>
+        <tr class="<%= competition.is_over? ? "past" : "future" %>">
+          <td><%= competition.year %></td>
+          <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+          <td>
+            <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+            <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+          </td>
+          <td>
+            <% if competition.results_uploaded? %>
+              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+            <% end %>
+          </td>
+          <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
+          <td><%= competition.venue %></td>
+          <td></td>
+        </tr>
       <% end %>
     </table>
   <% else %>

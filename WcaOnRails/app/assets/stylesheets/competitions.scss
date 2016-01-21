@@ -203,3 +203,7 @@ $venue-map-wrapper-height: 400px;
 .table-striped>tbody>tr:nth-child(odd)>th {
   background-color: #ccc;
 }
+
+#today-line {
+  @extend .bg-primary;
+}

@@ -68,8 +68,18 @@ class CompetitionsController < ApplicationController
       params[:commit] = "List"
     end
 
+    # A little explanation here: we search for the closest one, but it may be before or after today.
+    # If the competitions list is all in the past, we won't show the "today" line, because
+    # @closest_index will be 0 here, and no index will match -1 in the view.
+    # If we have both past and future competitions, we need to find out where to put the "today" line.
+    # For competitions in the future, we move the @closest_index up by one, to correctly position
+    # the "today" line.
     closest_competition = @competitions.sort_by { |competition| (competition.start_date - Date.today).abs }.first
-    @closest_index = @competitions.index(closest_competition)
+    if closest_competition.start_date < Date.today
+      @closest_index = @competitions.index(closest_competition)
+    else
+      @closest_index = @competitions.index(closest_competition) + 1
+    end
   end
 
   def create
