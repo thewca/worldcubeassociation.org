@@ -8,7 +8,7 @@ describe Middlewares::WardenUserLogger do
     let(:log_statements) { [] }
     subject { described_class.new(app, logger: logger) }
 
-    before do
+    before :each do
       # Make sure we pass the env hash unmodified to the next
       # middleware in the chain.
       expect(app).to receive(:call).with(env)
