@@ -95,6 +95,7 @@ $(function() {
       month: c.month,
       day: c.day,
       cityName: c.cityName,
+      marker_date: c.marker_date
     }
       end.to_json.html_safe %>, $map);
   }
@@ -103,12 +104,15 @@ $(function() {
     var desiredCompetitionById = _.indexBy(competitions, 'id');
 
     var desiredIds = Object.keys(desiredCompetitionById);
+
+    var markers = [];
+
     desiredIds.forEach(function(id) {
       var c = desiredCompetitionById[id];
 
       var compDate = new Date(c.year, c.month-1, c.day);
 
-      var contentString = "<a href='/competitions/" + c.id + "'>" + c.name + "</a><br />" + compDate.toLocaleFormat("%b %d, %Y") + " - " + c.cityName;
+      var contentString = "<a href='/competitions/" + c.id + "'>" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
 
       var infowindow = new google.maps.InfoWindow({
         content: contentString
@@ -134,6 +138,13 @@ $(function() {
       c.marker.addListener('click', function() {
         infowindow.open(map, c.marker);
       });
+
+      markers.push(c.marker);
+    });
+
+    var markerCluster = new MarkerClusterer(map, markers, {
+      maxZoom: 10,
+      clusterSize: 30
     });
   };
 

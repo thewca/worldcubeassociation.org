@@ -326,6 +326,10 @@ class Competition < ActiveRecord::Base
     endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.new(endYear, endMonth, endDay)
   end
 
+  def marker_date
+    start_date.strftime("%b %d, %Y")
+  end
+
   private def unpack_dates
     if @start_date.nil? && !start_date.blank?
       @start_date = start_date.strftime("%F")
