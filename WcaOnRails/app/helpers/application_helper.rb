@@ -27,8 +27,16 @@ module ApplicationHelper
     mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
   end
 
-  def md(content)
-    Redcarpet::Markdown.new(Redcarpet::Render::HTML.new).render(content).html_safe
+  def md(content, target_blank: false)
+    options = {
+      hard_wrap: true
+    }
+
+    if target_blank
+      options[:link_attributes] = { rel: 'nofollow', target: "_blank" }
+    end
+
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(options)).render(content).html_safe
   end
 
   def filename_to_url(filename)
