@@ -56,7 +56,7 @@
             <% end %>
           </td>
           <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
-          <td><%= competition.venue %></td>
+          <td><%=md competition.venue %></td>
           <td></td>
         </tr>
       <% end %>
