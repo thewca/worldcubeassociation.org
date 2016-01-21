@@ -69,8 +69,8 @@ class CompetitionsController < ApplicationController
     end
 
     # A little explanation here: we search for the closest one, but it may be before or after today.
-    # If the competitions list is all in the past, we won't show the "today" line, because
-    # @closest_index will be 0 here, and no index will match -1 in the view.
+    # If the competitions list is all in the past, @closest_index will be 0 and the "today" line
+    # will be the first of the table.
     # If we have both past and future competitions, we need to find out where to put the "today" line.
     # For competitions in the future, we move the @closest_index up by one, to correctly position
     # the "today" line.

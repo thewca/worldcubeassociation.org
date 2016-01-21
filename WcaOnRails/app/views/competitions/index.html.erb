@@ -37,7 +37,7 @@
       </tr>
 
       <% @competitions.each_with_index do |competition, index| %>
-        <% if index == (@closest_index-1) %>
+        <% if index == @closest_index %>
           <tr id="today-line">
             <td colspan="6" class="text-center">Today</td>
             <td></td>
