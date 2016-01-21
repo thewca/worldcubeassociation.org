@@ -33,7 +33,7 @@ module ApplicationHelper
     }
 
     if target_blank
-      options[:link_attributes] = { rel: 'nofollow', target: "_blank" }
+      options[:link_attributes] = { target: "_blank" }
     end
 
     Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(options)).render(content).html_safe
