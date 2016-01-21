@@ -439,6 +439,10 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def results_uploaded?
+    results.count > 0
+  end
+
   def user_can_view?(user)
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
