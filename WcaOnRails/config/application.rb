@@ -1,5 +1,6 @@
 require File.expand_path('../boot', __FILE__)
-require File.expand_path('../../lib/fix_accept_header', __FILE__)
+require_relative '../lib/fix_accept_header'
+require_relative '../lib/middlewares/warden_user_logger'
 
 require 'rails/all'
 
@@ -40,6 +41,7 @@ module WcaOnRails
     config.default_from_address = "no-reply@worldcubeassociation.org"
     config.site_name = "World Cube Association"
 
-    config.middleware.use FixAcceptHeader
+    config.middleware.use Middlewares::FixAcceptHeader
+    config.middleware.use Middlewares::WardenUserLogger, logger: -> (s) { Rails.logger.info(s) }
   end
 end
