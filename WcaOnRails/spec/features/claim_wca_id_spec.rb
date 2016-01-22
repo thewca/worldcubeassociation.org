@@ -7,10 +7,7 @@ RSpec.feature "Claim WCA ID" do
 
   context 'when signed in as user without wca id', js: true do
     before :each do
-      visit "/users/sign_in"
-      fill_in "Email or WCA ID", with: user.email
-      fill_in "Password", with: user.password
-      click_button "Sign in"
+      sign_in user
     end
 
     it 'can claim WCA ID' do

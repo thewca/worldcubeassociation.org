@@ -5,10 +5,7 @@ RSpec.feature "Create competition", js: true do
   let(:competition_to_clone) { FactoryGirl.create :competition }
 
   before :each do
-    visit "/users/sign_in"
-    fill_in "Email or WCA ID", with: delegate.email
-    fill_in "Password", with: delegate.password
-    click_button "Sign in"
+    sign_in delegate
   end
 
   it 'can create competition' do
