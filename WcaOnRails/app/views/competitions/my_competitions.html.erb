@@ -1,36 +1,30 @@
-<% provide(:title, 'Upcoming competitions') %>
+<% provide(:title, 'My competitions') %>
 
 <div class="container">
-  <h2><%= yield(:title) %></h2>
+  <h3><%= yield(:title) %></h3>
 
-  <% if @competitions.length < 1 %>
-    <div class="alert alert-info" role="alert">
-      You currently have no competitions! Check out the <%= link_to "competitions list", "/results/competitions.php" %>.
+  <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <a data-toggle="collapse" href="#past-competitions" class="collapsed">
+          <span>Past competitions</span>
+          <span class="collapse-indicator"></span>
+        </a>
+      </h3>
     </div>
-  <% else %>
-    <%= wca_table_for @competitions, extra_table_class: "competitions-table", hover: false, striped: false do |table| %>
-      <% table.column :name %>
-      <% table.column :location do |competition| %>
-        <%= competition.cityName %>, <%= competition.country_name %>
-      <% end %>
-      <% table.column :start_date %>
-      <% table.column :delegates %>
-      <% table.column :organizers %>
-      <% table.column do |competition| %>
-        <% if current_user.can_manage_competition?(competition) %>
-          <%= link_to "Edit", edit_competition_path(competition) %>
-        <% end %>
-      <% end %>
-      <% table.column do |competition| %>
-        <% if competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-          <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+    <div id="past-competitions" class="panel-collapse collapse">
+      <div class="panel-body">
+        <%= render "my_competitions_table", competitions: @past_competitions, past: true %>
+      </div>
+    </div>
+  </div>
 
-  <% if current_user.wca_id %>
-    <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
-  <% end %>
+  <p>
+    <% if current_user.wca_id %>
+      <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
+    <% end %>
+  </p>
 
 </div>

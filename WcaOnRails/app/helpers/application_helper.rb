@@ -113,10 +113,6 @@ module ApplicationHelper
               c << "registration-accepted"
             end
           end
-          if record.is_a?(Competition)
-            c << (record.isConfirmed ? "confirmed" : "not-confirmed")
-            c << (record.showAtAll ? "visible" : "not-visible")
-          end
           c
         }
       },
