@@ -3,82 +3,57 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-<%= form_tag competitions_path, method: :get, class: "competition-select" do %>
-  <table class="table competitions-table table-striped table-hover table-condensed floatThead">
-    <thead>
-      <tr>
-        <th colspan="7">
-          <div class="form-group same-line">
-            Event: <br /<br /><%= select_tag(:event, options_for_select(@events, params[:event])) %>
-          </div>
-
-          <div class="form-group same-line">
-            Region: <br /<br /><%= select_tag(:region, options_for_select(@regions, params[:region])) %>
-          </div>
-
-          <div class="form-group same-line">
-            Years: <br /<br /><%= select_tag(:years, options_for_select(@years, params[:years])) %>
-          </div>
-
-          <div class="form-group same-line">
-            Name, City or Venue: <br /<br /><%= text_field_tag "search" %></td>
-          </div>
-
-          <%= button_tag(type: 'submit', name: "commit", value: "List", class: "btn btn-default active") do %>
-            <i class="glyphicon glyphicon-list"></i> List
-          <% end %>
-          <%= button_tag(type: 'submit', name: "commit", value: "Map", class: "btn btn-default active") do %>
-            <i class="glyphicon glyphicon-map-marker"></i> Map
-          <% end %>
-        </th>
-      </tr>
-
-      <% if params[:commit] == "List" %>
-        <tr>
-          <th>Year</th>
-          <th>Date</th>
-          <th>Name</th>
-          <th></th>
-          <th>Country, City</th>
-          <th>Venue</th>
-          <th class="big-column"></th>
-        </tr>
-      <% end %>
-    </thead>
-
-    <tbody>
-      <% if params[:commit] == "List" %>
-        <% @competitions.each_with_index do |competition, index| %>
-          <% if index == @closest_index %>
-            <tr id="today-line">
-              <td colspan="6" class="text-center">Today</td>
+  <%= form_tag competitions_path, method: :get, class: "competition-select" do %>
+    <% if params[:commit] == "List" %>
+      <table class="table competitions-table table-striped table-hover table-condensed floatThead">
+        <thead>
+          <tr>
+            <th colspan="7">
+              <%= render 'index_form' %>
+            </th>
+          </tr>
+          <tr>
+            <th>Year</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th></th>
+            <th>Country, City</th>
+            <th>Venue</th>
+            <th class="big-column"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @competitions.each_with_index do |competition, index| %>
+            <% if index == @closest_index %>
+              <tr id="today-line">
+                <td colspan="6" class="text-center">Today</td>
+                <td></td>
+              </tr>
+            <% end %>
+            <tr class="<%= competition.is_over? ? "past" : "future" %>">
+              <td><%= competition.year %></td>
+              <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+              <td>
+                <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+                <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+              </td>
+              <td>
+                <%# results check... %>
+              </td>
+              <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
+              <td><%=md(competition.venue, target_blank: true) %></td>
               <td></td>
             </tr>
           <% end %>
-          <tr class="<%= competition.is_over? ? "past" : "future" %>">
-            <td><%= competition.year %></td>
-            <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
-            <td>
-              <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-              <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
-            </td>
-            <td>
-              
-            </td>
-            <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
-            <td><%=md(competition.venue, target_blank: true) %></td>
-            <td></td>
-          </tr>
-        <% end %>
-      <% else %>
-        <div id="venue-map-wrapper">
-          <div class="map"></div>
-        </div>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-
+        </tbody>
+      </table>
+    <% else %>
+      <%= render 'index_form' %>
+      <div id="map-wrapper">
+        <div class="map"></div>
+      </div>
+    <% end %>
+  <% end %>
 </div>
 
 <script>
@@ -88,7 +63,7 @@ $(function() {
     $(document).scrollTop( $("#today").offset().top );
 
   function initMap() {
-    var $map = new google.maps.Map(document.getElementById('venue-map-wrapper'), {
+    var $map = new google.maps.Map(document.getElementById('map-wrapper'), {
       zoom: 2,
       center: {lat: 0, lng: 0},
       scrollwheel: true
