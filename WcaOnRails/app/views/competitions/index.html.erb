@@ -20,46 +20,54 @@
       Name, City or Venue: <br /<br /><%= text_field_tag "search" %></td>
     </div>
 
-    <%= submit_tag("List", class: "btn btn-primary") %>
-    <%= submit_tag("Map", class: "btn btn-warning") %>
+    <%= button_tag(type: 'submit', name: "commit", value: "List", class: "btn btn-default active") do %>
+      <i class="glyphicon glyphicon-list"></i> List
+    <% end %>
+    <%= button_tag(type: 'submit', name: "commit", value: "Map", class: "btn btn-default active") do %>
+      <i class="glyphicon glyphicon-map-marker"></i> Map
+    <% end %>
   <% end %>
 
   <% if params[:commit] == "List" %>
-    <table class="table competitions-table table-striped table-hover">
-      <tr>
-        <th>Year</th>
-        <th>Date</th>
-        <th>Name</th>
-        <th></th>
-        <th>Country, City</th>
-        <th>Venue</th>
-        <th class="big-column"></th>
-      </tr>
+    <table class="table competitions-table table-striped table-hover table-condensed floatThead">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th></th>
+          <th>Country, City</th>
+          <th>Venue</th>
+          <th class="big-column"></th>
+        </tr>
+      </thead>
 
-      <% @competitions.each_with_index do |competition, index| %>
-        <% if index == @closest_index %>
-          <tr id="today-line">
-            <td colspan="6" class="text-center">Today</td>
+      <tbody>
+        <% @competitions.each_with_index do |competition, index| %>
+          <% if index == @closest_index %>
+            <tr id="today-line">
+              <td colspan="6" class="text-center">Today</td>
+              <td></td>
+            </tr>
+          <% end %>
+          <tr class="<%= competition.is_over? ? "past" : "future" %>">
+            <td><%= competition.year %></td>
+            <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+            <td>
+              <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+              <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+            </td>
+            <td>
+              <% if competition.results_uploaded? %>
+                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+              <% end %>
+            </td>
+            <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
+            <td><%=md(competition.venue, target_blank: true) %></td>
             <td></td>
           </tr>
         <% end %>
-        <tr class="<%= competition.is_over? ? "past" : "future" %>">
-          <td><%= competition.year %></td>
-          <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
-          <td>
-            <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-            <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
-          </td>
-          <td>
-            <% if competition.results_uploaded? %>
-              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
-            <% end %>
-          </td>
-          <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
-          <td><%=md competition.venue %></td>
-          <td></td>
-        </tr>
-      <% end %>
+      </tbody>
     </table>
   <% else %>
     <div id="venue-map-wrapper">
@@ -141,10 +149,10 @@ $(function() {
       markers.push(c.marker);
     });
 
-    var markerCluster = new MarkerClusterer(map, markers, {
+    /*var markerCluster = new MarkerClusterer(map, markers, {
       maxZoom: 10,
       clusterSize: 30
-    });
+    });*/
   };
 
   initMap();
