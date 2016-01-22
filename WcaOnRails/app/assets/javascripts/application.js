@@ -29,6 +29,7 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+//= require markerclusterer_compiled
 //= require_self
 //= require_tree .
 

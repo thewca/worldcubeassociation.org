@@ -305,6 +305,18 @@ class Competition < ActiveRecord::Base
     eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
+  def has_event?(event)
+    event.id.in?(self.events.map(&:id))
+  end
+
+  def belongs_to_region?(region_or_country)
+    (self.countryId == region_or_country) || (self.country.continentId == region_or_country)
+  end
+
+  def search(search_param)
+    (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
+  end
+
   def start_date
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end
@@ -312,6 +324,10 @@ class Competition < ActiveRecord::Base
   def end_date
     endYear = @endYear || year # gross hack to remember the years of a multiyear competition
     endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.new(endYear, endMonth, endDay)
+  end
+
+  def marker_date
+    start_date.strftime("%b %d, %Y")
   end
 
   private def unpack_dates
@@ -427,6 +443,10 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def results_uploaded?
+    results.count > 0
+  end
+
   def user_can_view?(user)
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
@@ -435,8 +455,8 @@ class Competition < ActiveRecord::Base
     start_date < Date.today
   end
 
-  def country_name
-    Country.find(countryId).name
+  def country
+    Country.find(countryId)
   end
 
   def self.search(query, params: {})

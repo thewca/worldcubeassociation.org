@@ -1,17 +1,152 @@
 <% provide(:title, 'Competitions') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
+  <h2><%= yield(:title) %></h2>
 
-  <%= link_to "New competition", new_competition_path %>
-  <table class="table">
-    <% @competitions.each do |competition| %>
+  <%= form_tag competitions_path, method: :get, class: "competition-select" do %>
+    <div class="form-group same-line">
+      Event: <br /<br /><%= select_tag(:event, options_for_select(@events, params[:event])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Region: <br /<br /><%= select_tag(:region, options_for_select(@regions, params[:region])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Years: <br /<br /><%= select_tag(:years, options_for_select(@years, params[:years])) %>
+    </div>
+
+    <div class="form-group same-line">
+      Name, City or Venue: <br /<br /><%= text_field_tag "search" %></td>
+    </div>
+
+    <%= submit_tag("List", class: "btn btn-primary") %>
+    <%= submit_tag("Map", class: "btn btn-warning") %>
+  <% end %>
+
+  <% if params[:commit] == "List" %>
+    <table class="table competitions-table table-striped table-hover">
       <tr>
-        <td><%= competition.id %></td>
-        <td><%= competition.name %></td>
-        <td><%= link_to "Edit", admin_edit_competition_path(competition) %></td>
-        <td><%= link_to "Results", "/results/competition.php?competitionId=#{competition.id}" %></td>
+        <th>Year</th>
+        <th>Date</th>
+        <th>Name</th>
+        <th></th>
+        <th>Country, City</th>
+        <th>Venue</th>
+        <th class="big-column"></th>
       </tr>
-    <% end %>
-  </table>
+
+      <% @competitions.each_with_index do |competition, index| %>
+        <% if index == @closest_index %>
+          <tr id="today-line">
+            <td colspan="6" class="text-center">Today</td>
+            <td></td>
+          </tr>
+        <% end %>
+        <tr class="<%= competition.is_over? ? "past" : "future" %>">
+          <td><%= competition.year %></td>
+          <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+          <td>
+            <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+            <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+          </td>
+          <td>
+            <% if competition.results_uploaded? %>
+              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+            <% end %>
+          </td>
+          <td><%= wca_highlight competition.country.name + ", " + competition.cityName, competition.country.name %></td>
+          <td><%=md competition.venue %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <div id="venue-map-wrapper">
+      <div class="map"></div>
+    </div>
+  <% end %>
+
 </div>
+
+<script>
+$(function() {
+  var $today = document.getElementById("today");
+  if ($today)
+    $(document).scrollTop( $("#today").offset().top );
+
+  function initMap() {
+    var $map = new google.maps.Map(document.getElementById('venue-map-wrapper'), {
+      zoom: 2,
+      center: {lat: 0, lng: 0},
+      scrollwheel: true
+    });
+
+    wca.setCompetitions(<%= @competitions.map do |c|
+    {
+      id: c.id,
+      name: c.name,
+      latitude_degrees: c.latitude_degrees,
+      longitude_degrees: c.longitude_degrees,
+      start_date: c.start_date,
+      end_date: c.end_date,
+      year: c.year,
+      month: c.month,
+      day: c.day,
+      cityName: c.cityName,
+      marker_date: c.marker_date
+    }
+      end.to_json.html_safe %>, $map);
+  }
+
+  wca.setCompetitions = function(competitions, map) {
+    var desiredCompetitionById = _.indexBy(competitions, 'id');
+
+    var desiredIds = Object.keys(desiredCompetitionById);
+
+    var markers = [];
+
+    desiredIds.forEach(function(id) {
+      var c = desiredCompetitionById[id];
+
+      var compDate = new Date(c.year, c.month-1, c.day);
+
+      var contentString = "<a href='/competitions/" + c.id + "'>" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      var today = new Date();
+
+      if (compDate < today)
+        iconImage = 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+      else
+        iconImage = 'http://maps.google.com/mapfiles/ms/icons/red.png'
+
+      c.marker = new google.maps.Marker({
+        map: map,
+        position: {
+          lat: c.latitude_degrees,
+          lng: c.longitude_degrees,
+        },
+        title: c.name,
+        icon: iconImage
+      });
+
+      c.marker.addListener('click', function() {
+        infowindow.open(map, c.marker);
+      });
+
+      markers.push(c.marker);
+    });
+
+    var markerCluster = new MarkerClusterer(map, markers, {
+      maxZoom: 10,
+      clusterSize: 30
+    });
+  };
+
+  initMap();
+});
+</script>
