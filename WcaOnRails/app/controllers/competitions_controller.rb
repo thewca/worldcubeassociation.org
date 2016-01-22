@@ -236,7 +236,7 @@ class CompetitionsController < ApplicationController
       @competitions += current_user.person.competitions
     end
     @competitions = @competitions.uniq.sort_by(&:start_date).reverse!
-    @future_competitions = @competitions.reject(&:is_over?)
+    @not_past_competitions = @competitions.reject(&:is_over?)
     @past_competitions = @competitions.select(&:is_over?)
   end
 

@@ -1,22 +1,22 @@
-<% provide(:title, 'Upcoming competitions') %>
+<% provide(:title, 'My competitions') %>
 
 <div class="container">
   <h3><%= yield(:title) %></h3>
 
-  <%= render "my_competitions_table", competitions: @future_competitions, upcoming: true %>
+  <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <a data-toggle="collapse" href="#past-competitions2" class="collapsed">
+        <a data-toggle="collapse" href="#past-competitions" class="collapsed">
           <span>Past competitions</span>
           <span class="collapse-indicator"></span>
         </a>
       </h3>
     </div>
-    <div id="past-competitions2" class="panel-collapse collapse">
+    <div id="past-competitions" class="panel-collapse collapse">
       <div class="panel-body">
-        <%= render "my_competitions_table", competitions: @past_competitions, upcoming: false %>
+        <%= render "my_competitions_table", competitions: @past_competitions, past: true %>
       </div>
     </div>
   </div>
