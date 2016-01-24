@@ -3,7 +3,7 @@
 <div class="container">
   <h3><%= yield(:title) %></h3>
 
-  <small>Only competitions which use the WCA registration system will be shown here</small>
+  <small>Only competitions which use the WCA registration system will be shown here.</small>
   <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
 
   <div class="panel panel-default">
