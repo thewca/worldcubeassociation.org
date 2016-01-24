@@ -42,7 +42,7 @@ class CompetitionsController < ApplicationController
 
     # This need to be the first thing, otherwise @competitions will be an array instead of an object
     # and the .where will not work
-    if params[:years]
+    if params[:years] && params[:years].in?(@years)
       if params[:years] == "current"
         @competitions = @competitions.where(query, query_params)
       elsif params[:years] != "all"
@@ -52,11 +52,11 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.where(query, query_params)
     end
 
-    if params[:event] && params[:event] != "all"
+    if params[:event] && params[:event] != "all" && params[:event].in?(@events)
       @competitions = @competitions.reject { |competition| !competition.has_event?(Event.find(params[:event])) }
     end
 
-    if params[:region] && params[:region] != "all"
+    if params[:region] && params[:region] != "all" && params[:region].in?(@regions)
       @competitions = @competitions.reject { |competition| !competition.belongs_to_region?(params[:region]) }
     end
 
