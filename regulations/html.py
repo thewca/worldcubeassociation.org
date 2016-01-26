@@ -211,7 +211,7 @@ class html():
     ## Numbering/links in the Guidelines for ones that don't correspond to a Regulation.
     self.replaceGuides(self.ANY,
                        regOrGuideLiMatch + r' \[SEPARATE\]' + matchLabel1Slot,
-                       regOrGuideLiReplace + r' <span class="SEPARATE \3 label">\3</span>'
+                       regOrGuideLiReplace + r' <span class="SEPARATE \3 label"><a id="#\1\2">\3</a></span>'
                        )
     ## Numbering/links in the Guidelines for ones that *do* correspond to a Regulation.
     self.replaceGuides(self.ANY,
