@@ -14,10 +14,11 @@
   Name, City or Venue: <br /<br /><%= text_field_tag "search" %></td>
 </div>
 
-<%= button_tag(type: 'submit', name: "commit", value: "List", class: "btn btn-default active") do %>
+<%= button_tag(type: 'submit', name: "commit", value: "List", class: "btn btn-info") do %>
   <i class="glyphicon glyphicon-list"></i> List
 <% end %>
-<%= button_tag(type: 'submit', name: "commit", value: "Map", class: "btn btn-default active") do %>
+&nbsp;
+<%= button_tag(type: 'submit', name: "commit", value: "Map", class: "btn btn-info") do %>
   <i class="glyphicon glyphicon-map-marker"></i> Map
 <% end %>
 

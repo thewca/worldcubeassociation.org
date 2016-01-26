@@ -314,7 +314,9 @@ class Competition < ActiveRecord::Base
   end
 
   def search(search_param)
-    (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
+    if search_param != nil
+      (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
+    end
   end
 
   def start_date

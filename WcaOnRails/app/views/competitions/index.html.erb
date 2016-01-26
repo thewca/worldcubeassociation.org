@@ -4,54 +4,59 @@
   <h2><%= yield(:title) %></h2>
 
   <%= form_tag competitions_path, method: :get, class: "competition-select" do %>
-    <% if params[:commit] == "List" %>
-      <table class="table competitions-table table-striped table-hover table-condensed floatThead">
-        <thead>
-          <tr>
-            <th colspan="7">
-              <%= render 'index_form' %>
-            </th>
-          </tr>
-          <tr>
-            <th>Year</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th></th>
-            <th>Country, City</th>
-            <th>Venue</th>
-            <th class="big-column"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @competitions.each_with_index do |competition, index| %>
-            <% if index == @closest_index %>
-              <tr id="today-line">
-                <td colspan="6" class="text-center">Today</td>
-                <td></td>
+    <% if @competitions.length < 1 %>
+      <%= render 'index_form' %>
+      <div class="alert alert-danger">No competitions found!</div>
+    <% else %>
+      <% if params[:commit] == "List" %>
+        <table class="table competitions-table table-striped table-hover table-condensed floatThead">
+          <thead>
+            <tr>
+              <th colspan="7">
+                <%= render 'index_form' %>
+              </th>
+            </tr>
+            <tr>
+              <th>Year</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th></th>
+              <th>Country, City</th>
+              <th>Venue</th>
+              <th class="big-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @competitions.each_with_index do |competition, index| %>
+              <% if index == @closest_index %>
+                <tr id="today-line">
+                  <td colspan="6" class="text-center">Today</td>
+                  <td></td>
+                </tr>
+              <% end %>
+              <tr class="<%= competition.is_over? ? "past" : "future" %>">
+                <td><%= competition.year %></td>
+                <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
+                <td>
+                  <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
+                  <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
+                </td>
+                <td>
+                  <%# results check... %>
+                </td>
+                <td><strong><%= competition.country.name %></strong>, <%= competition.cityName %></td>
+                <td><%=md(competition.venue, target_blank: true) %></td>
+                <td class="big-column"></td>
               </tr>
             <% end %>
-            <tr class="<%= competition.is_over? ? "past" : "future" %>">
-              <td><%= competition.year %></td>
-              <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
-              <td>
-                <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-                <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
-              </td>
-              <td>
-                <%# results check... %>
-              </td>
-              <td><strong><%= competition.country.name %></strong>, <%= competition.cityName %></td>
-              <td><%=md(competition.venue, target_blank: true) %></td>
-              <td class="big-column"></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <%= render 'index_form' %>
-      <div id="map-wrapper">
-        <div class="map"></div>
-      </div>
+          </tbody>
+        </table>
+      <% else %>
+        <%= render 'index_form' %>
+        <div id="map-wrapper">
+          <div class="map"></div>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 </div>

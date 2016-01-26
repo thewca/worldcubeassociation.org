@@ -42,7 +42,7 @@ class CompetitionsController < ApplicationController
 
     # This need to be the first thing, otherwise @competitions will be an array instead of an object
     # and the .where will not work
-    if params[:years] && params[:years].in?(@years)
+    if params[:years]
       if params[:years] == "current"
         @competitions = @competitions.where(query, query_params)
       elsif params[:years] != "all"
@@ -52,15 +52,15 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.where(query, query_params)
     end
 
-    if params[:event] && params[:event] != "all" && params[:event].in?(@events)
+    if params[:event] && params[:event] != "all"
       @competitions = @competitions.reject { |competition| !competition.has_event?(Event.find(params[:event])) }
     end
 
-    if params[:region] && params[:region] != "all" && params[:region].in?(@regions)
+    if params[:region] && params[:region] != "all"
       @competitions = @competitions.reject { |competition| !competition.belongs_to_region?(params[:region]) }
     end
 
-    if params[:search]
+    if params[:search] && params[:search] != ""
       @competitions = @competitions.reject { |competition| !competition.search(params[:search]) }
     end
 
@@ -74,11 +74,13 @@ class CompetitionsController < ApplicationController
     # If we have both past and future competitions, we need to find out where to put the "today" line.
     # For competitions in the future, we move the @closest_index up by one, to correctly position
     # the "today" line.
-    closest_competition = @competitions.sort_by { |competition| (competition.start_date - Date.today).abs }.first
-    if closest_competition.start_date < Date.today
-      @closest_index = @competitions.index(closest_competition)
-    else
-      @closest_index = @competitions.index(closest_competition) + 1
+    if @competitions.length > 0
+      closest_competition = @competitions.sort_by { |competition| (competition.start_date - Date.today).abs }.first
+      if closest_competition.start_date < Date.today
+        @closest_index = @competitions.index(closest_competition)
+      else
+        @closest_index = @competitions.index(closest_competition) + 1
+      end
     end
   end
 
