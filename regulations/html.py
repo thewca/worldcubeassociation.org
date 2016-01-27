@@ -1,13 +1,9 @@
 import os
 import shutil
 import subprocess
-
 import re
 import sys
 import traceback
-
-
-MAX_LANG_WIDTH = 20
 
 
 def md2html(filename):
@@ -23,24 +19,32 @@ def md2html(filename):
 
 class html():
 
-  def __init__(self, language, buildDir, pdfName, isTranslation=False, verbose=False):
+  def __init__(self, language, srcDir, buildDir, pdfName, isTranslation=False, verbose=False):
 
-    print "%s Generating HTML in %s" % (("[" + language + "]").ljust(MAX_LANG_WIDTH + 2), buildDir)
     sys.stdout.flush()
 
     self.language = language
     self.isTranslation = isTranslation
-    self.docs_folder = "translations/" + language if self.isTranslation else "wca-regulations"
     self.build_folder = buildDir
     self.pdf_name = pdfName
     self.verbose = verbose
 
-    regulations_text = md2html(self.docs_folder + "/wca-regulations.md")
-    guidelines_text = md2html(self.docs_folder + "/wca-guidelines.md")
+    # Build a regulations set
+    # Will be looked up while we process guidelines
+    self.regulations_set = set()
+    with open(srcDir + "/wca-regulations.md", "r") as regulations_fp:
+      for line in regulations_fp:
+        # Match any number of spaces followed by the reg_id
+        match_result = re.match(r"\s*\- (?P<reg_id>\w+)\)", line)
+        if match_result is not None:
+          self.regulations_set.add(match_result.group("reg_id"))
+
+    regulations_text = md2html(srcDir + "/wca-regulations.md")
+    guidelines_text = md2html(srcDir + "/wca-guidelines.md")
 
     version = subprocess.check_output([
       "git", "rev-parse", "--short", "HEAD"
-    ], cwd=self.docs_folder).strip()
+    ], cwd=srcDir).strip()
 
     regulations_text, guidelines_text = self.process_html({
       "git_hash": version,
@@ -208,15 +212,31 @@ class html():
                      regOrGuideLiMatch,
                      regOrGuideLiReplace
                      )
-    ## Numbering/links in the Guidelines for ones that don't correspond to a Regulation.
+
+    ## Replace any remaining 'SEPARATE' label in the Guidelines
+    # FIXME remove this when Guidelines are fixed and updated
     self.replaceGuides(self.ANY,
-                       regOrGuideLiMatch + r' \[SEPARATE\]' + matchLabel1Slot,
-                       regOrGuideLiReplace + r' <span class="SEPARATE \3 label"><a id="#\1\2">\3</a></span>'
+                       r'\[SEPARATE\]',
+                       ''
                        )
-    ## Numbering/links in the Guidelines for ones that *do* correspond to a Regulation.
+
+    # Local Callback for re.subn function
+    def checked_replace(re_obj):
+      replace_template = regOrGuideLiReplace
+      if re_obj.group(1) in self.regulations_set:
+        span_class = r' linked'
+        link = r'<a href="' + regsURL + r'#\1">\3</a>'
+      else:
+        span_class = ""
+        link = r'<a id="#\1\2">\3</a>'
+      replace_template += r' <span class="\3 label' + span_class + '">' + link + '</span>'
+      # Expand the correct template with matched values
+      return re_obj.expand(replace_template)
+
+    ## Numbering/links in the Guidelines, checking if they match a Regulation
     self.replaceGuides(self.ANY,
                        regOrGuideLiMatch + r' ' + matchLabel1Slot,
-                       regOrGuideLiReplace + r' <span class="\3 label linked"><a href="' + regsURL + r'#\1">\3</a></span>'
+                       checked_replace
                        )
     ## Explanation labels
     self.replaceGuides(self.ANY,
