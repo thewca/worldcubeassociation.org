@@ -319,6 +319,11 @@ function checkSimilarResults () {
   echo "<hr /><p>Checking <b>" . $chosenWhich . " similar results</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get all similar results (except old-new multiblind)
+  #    Note that we don't want to treat a particular result as looking
+  #    similar to itself, so we don't allow for results with matching ids.
+  #    Further more, if a result A is similar to a result B, we don't want to
+  #    return both (A, B) and (B, A) as matching pairs, it's sufficient to just
+  #    return (A, B), which is why we require Result.id < h.resultId.
   $rows = pdo_query( "
       SELECT
           Results.competitionId AS competitionId,
@@ -336,7 +341,7 @@ function checkSimilarResults () {
             " AND value3 <> 0
               AND eventId <> '333mbo'
       ) h ON Results.competitionId = h.competitionId
-          AND Results.id <> h.resultId
+          AND Results.id < h.resultId
           AND Results.eventId <> '333mbo'
           AND (
               (Results.value1 = h.value1 AND h.value1 > 0) +
