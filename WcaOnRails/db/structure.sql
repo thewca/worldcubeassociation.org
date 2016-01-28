@@ -655,8 +655,8 @@ CREATE TABLE `users` (
   `wrc_team` tinyint(1) DEFAULT NULL,
   `wrc_team_leader` tinyint(1) DEFAULT NULL,
   `results_team_leader` tinyint(1) DEFAULT NULL,
-  `software_admin_team` tinyint(1) DEFAULT NULL,
-  `software_admin_team_leader` tinyint(1) DEFAULT NULL,
+  `software_team` tinyint(1) DEFAULT NULL,
+  `software_team_leader` tinyint(1) DEFAULT NULL,
   `unconfirmed_wca_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `delegate_id_to_handle_wca_id_claim` int(11) DEFAULT NULL,
   `dob` date DEFAULT NULL,
@@ -713,7 +713,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-19 23:20:50
+-- Dump completed on 2016-01-27 18:41:22
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -807,4 +807,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151222013017');
 INSERT INTO schema_migrations (version) VALUES ('20151230174411');
 
 INSERT INTO schema_migrations (version) VALUES ('20160120071503');
+
+INSERT INTO schema_migrations (version) VALUES ('20160128023834');
 

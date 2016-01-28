@@ -255,9 +255,9 @@ class User < ActiveRecord::Base
 
   validate :not_illegally_demoting_oneself
   def not_illegally_demoting_oneself
-    about_to_lose_access = !software_admin_team? && !board_member?
+    about_to_lose_access = !software_team? && !board_member?
     if current_user == self && about_to_lose_access
-      if software_admin_team_was
+      if software_team_was
         errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
       elsif delegate_status_was == "board_member"
         errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
@@ -273,7 +273,7 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    software_admin_team?
+    software_team?
   end
 
   def any_kind_of_delegate?

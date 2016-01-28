@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
     end
     it "software admin team" do
-      user = FactoryGirl.build :user, software_admin_team: false, software_admin_team_leader: true
+      user = FactoryGirl.build :user, software_team: false, software_team_leader: true
       expect(user).not_to be_valid
     end
   end
