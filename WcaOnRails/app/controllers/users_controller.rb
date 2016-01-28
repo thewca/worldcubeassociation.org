@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = user_to_edit
-    can_edit_user_only(@user)
+    redirect_if_cannot_edit_user(@user)
   end
 
   def claim_wca_id
@@ -49,20 +49,20 @@ class UsersController < ApplicationController
 
   def edit_avatar_thumbnail
     @user = user_to_edit
-    can_edit_user_only(@user)
+    redirect_if_cannot_edit_user(@user)
   end
 
   def edit_pending_avatar_thumbnail
     @user = user_to_edit
     @pending_avatar = true
-    can_edit_user_only(@user)
+    redirect_if_cannot_edit_user(@user)
     render :edit_avatar_thumbnail
   end
 
   def update
     @user = user_to_edit
     @user.current_user = current_user
-    can_edit_user_only(@user)
+    redirect_if_cannot_edit_user(@user)
 
     old_confirmation_sent_at = @user.confirmation_sent_at || 0
     dangerous_change = current_user == @user && (user_params.has_key?(:password) || user_params.has_key?(:password_confirmation) || user_params.has_key?(:email))
@@ -100,7 +100,7 @@ class UsersController < ApplicationController
     end
   end
 
-  private def can_edit_user_only(user)
+  private def redirect_if_cannot_edit_user(user)
     unless current_user && (current_user.can_edit_users? || current_user == user)
       flash[:danger] = "You cannot edit this user"
       redirect_to root_url

@@ -288,11 +288,11 @@ class User < ActiveRecord::Base
     admin? || board_member? || results_team?
   end
 
-  def can_create_competition?
+  def can_create_competitions?
     can_admin_results? || any_kind_of_delegate?
   end
 
-  def can_access_delegates_or_team_members_only_areas?
+  def can_view_crash_course?
     admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team?
   end
 
@@ -300,8 +300,8 @@ class User < ActiveRecord::Base
     admin? || board_member? || results_team? || wdc_team? || wrc_team?
   end
 
-  def can_access_board_members_only_areas?
-    admin? || board_member?
+  def can_update_crash_course?
+    admin? || board_member? || results_team?
   end
 
   def can_manage_competition?(competition)

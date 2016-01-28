@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_admin_results_only
+  before_action -> { redirect_unless_user(:can_admin_results?) }
 
   before_action :compute_navbar_data
   def compute_navbar_data

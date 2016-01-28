@@ -56,8 +56,8 @@ RSpec.describe RegistrationsController do
 
       patch :update, id: other_registration.id, registration: { status: :accepted }
       expect(other_registration.reload.eventIds).to eq "333"
-      expect(response).to redirect_to competition_path(other_competition.id)
-      expect(flash[:danger]).to match "not allowed to manage this competition"
+      expect(response).to redirect_to root_url
+      expect(flash[:danger]).to match "not allowed to can_manage_competition?"
     end
 
     it "accepts a pending registration" do
@@ -160,7 +160,7 @@ RSpec.describe RegistrationsController do
     it "cannot delete registration" do
       registration = FactoryGirl.create :registration, competitionId: competition.id
       delete :destroy, id: registration.id
-      expect(response).to redirect_to competition_path(competition)
+      expect(response).to redirect_to root_url
       expect(Registration.find_by_id(registration.id)).to eq registration
     end
 

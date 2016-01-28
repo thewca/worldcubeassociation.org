@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :rss, :show]
-  before_action :can_create_posts_only, except: [:index, :rss, :show]
+  before_action -> { redirect_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
 
   def index
     @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).paginate(page: params[:page])

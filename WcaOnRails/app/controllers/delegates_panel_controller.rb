@@ -1,7 +1,7 @@
 class DelegatesPanelController < ApplicationController
   before_action :authenticate_user!
-  before_action :delegates_or_team_members_only
-  before_action :board_members_only, only: [:edit_crash_course, :update_crash_course]
+  before_action -> { redirect_unless_user(:can_view_crash_course?) }
+  before_action -> { redirect_unless_user(:can_update_crash_course?) }, only: [:edit_crash_course, :update_crash_course]
 
   def index
   end

@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
-  before_action :can_vote_in_poll_only
+  before_action -> { redirect_unless_user(:can_vote_in_poll?) }
 
   def vote
     @poll = Poll.find(params[:id])

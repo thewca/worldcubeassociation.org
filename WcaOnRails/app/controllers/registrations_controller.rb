@@ -22,17 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action :can_manage_competition_only, only: [:edit_registrations, :update_all, :update, :destroy]
-  private def can_manage_competition
-    current_user.can_manage_competition?(competition_from_params)
-  end
-  private def can_manage_competition_only
-    if !can_manage_competition
-      flash[:danger] = "You are not allowed to manage this competition"
-      redirect_to competition_path(competition_from_params)
-    end
-  end
-
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :update, :destroy]
 
   def edit_registrations
     @competition_registration_view = true
@@ -201,7 +191,7 @@ class RegistrationsController < ApplicationController
       :comments,
       event_ids: Event.all.map(&:id),
     ]
-    if can_manage_competition
+    if current_user.can_manage_competition?(competition_from_params)
       permitted_params << :status
     end
     registration_params = params.require(:registration).permit(*permitted_params)
