@@ -328,7 +328,7 @@ function checkSimilarResults () {
           h.value1 AS value1B, h.value2 AS value2B, h.value3 AS value3B, h.value4 AS value4B, h.value5 AS value5B
       FROM Results
       JOIN (
-          SELECT competitionId, eventId, roundId, personId, personName, value1, value2, value3, value4, value5
+          SELECT Results.id as resultId, competitionId, eventId, roundId, personId, personName, value1, value2, value3, value4, value5
           FROM Results ".
           ($competitionCondition ? "JOIN Competitions ON Competitions.id = competitionId " : "").
          "WHERE best > 0 ".
@@ -336,8 +336,8 @@ function checkSimilarResults () {
             " AND value3 <> 0
               AND eventId <> '333mbo'
       ) h ON Results.competitionId = h.competitionId
+          AND Results.id <> h.resultId
           AND Results.eventId <> '333mbo'
-          AND Results.personId < h.personId
           AND (
               (Results.value1 = h.value1 AND h.value1 > 0) +
               (Results.value2 = h.value2 AND h.value2 > 0) +
