@@ -105,6 +105,10 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
+#map-wrapper {
+  height: 600px;
+}
+
 #nearby-competitions {
   position: relative;
 
@@ -127,6 +131,39 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competitions-table {
+  font-size: 12px;
+
+  p {
+    margin: 0;
+  }
+
+  tr {
+    &.past {
+      a:link,
+      a:visited {
+        color: #139;
+      }
+    }
+
+    &.future {
+      a:link,
+      a:visited {
+        color: #e64503;
+      }
+    }
+  }
+
+  .big-column {
+    width: 100%;
+  }
+
+  td,
+  th {
+    white-space: nowrap;
+  }
+}
+
+.competitions-admin-table {
 
   tr.not-past {
     &.not-visible {
@@ -150,3 +187,31 @@ $venue-map-wrapper-height: 400px;
 .big-column {
   width: 100%;
 }
+
+.competition-select {
+  input,
+  select {
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  button {
+    padding: 2px 8px;
+    font-size: 14px;
+    width: 100px;
+  }
+}
+
+.same-line {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>th {
+  background-color: #ccc;
+}
+
+#today-line {
+  @extend .bg-primary;
+}
+
