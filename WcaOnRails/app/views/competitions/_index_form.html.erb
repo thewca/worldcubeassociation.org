@@ -3,7 +3,7 @@
 </div>
 
 <div class="form-group">
-  Region: <br /><%= select_tag(:region, options_for_select(@regions, params[:region])) %>
+  Region: <br /><%= select_tag(:region, grouped_options_for_select(@regions, params[:region])) %>
 </div>
 
 <div class="form-group">
