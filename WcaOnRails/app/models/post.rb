@@ -10,19 +10,20 @@ class Post < ActiveRecord::Base
     self.slug = title.parameterize
   end
 
+  CRASH_COURSE_POST_SLUG = "delegate-crash-course"
+
   def self.crash_course_post
-    slug = "delegate-crash-course"
-    post = ( Post.find_by_slug(slug) ||
-             Post.create!(slug: slug, title: "Delegate crash course", body: "Nothing here yet") )
+    post = ( Post.find_by_slug(CRASH_COURSE_POST_SLUG) ||
+             Post.create!(slug: CRASH_COURSE_POST_SLUG, title: "Delegate crash course", body: "Nothing here yet") )
     post
   end
 
   def deletable
-    self.id != Post.crash_course_post.id
+    !is_crash_course_post?
   end
 
   def edit_path
-    if self.id == Post.crash_course_post.id
+    if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_edit_path
     else
       Rails.application.routes.url_helpers.edit_post_path(slug)
@@ -30,7 +31,7 @@ class Post < ActiveRecord::Base
   end
 
   def update_path
-    if self.id == Post.crash_course_post.id
+    if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_path
     else
       Rails.application.routes.url_helpers.post_path(self)
@@ -54,5 +55,9 @@ class Post < ActiveRecord::Base
     }
 
     json
+  end
+
+  private def is_crash_course_post?
+    slug == CRASH_COURSE_POST_SLUG
   end
 end
