@@ -105,7 +105,7 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-#map-wrapper {
+#map {
   height: 600px;
 }
 
@@ -131,7 +131,6 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competitions-table {
-  font-size: 12px;
 
   p {
     margin: 0;
@@ -145,7 +144,7 @@ $venue-map-wrapper-height: 400px;
       }
     }
 
-    &.future {
+    &.not-past {
       a:link,
       a:visited {
         color: #e64503;
@@ -205,10 +204,6 @@ $venue-map-wrapper-height: 400px;
 .same-line {
   display: inline-block;
   margin-right: 5px;
-}
-
-.table-striped>tbody>tr:nth-child(odd)>th {
-  background-color: #ccc;
 }
 
 #today-line {

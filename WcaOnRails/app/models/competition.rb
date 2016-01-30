@@ -306,17 +306,15 @@ class Competition < ActiveRecord::Base
   end
 
   def has_event?(event)
-    event.id.in?(self.events.map(&:id))
+    self.events.include?(event)
   end
 
-  def belongs_to_region?(region_or_country)
-    (self.countryId == region_or_country) || (self.country.continentId == region_or_country)
+  def belongs_to_region?(region)
+    (self.countryId == region) || (self.country.continentId == region)
   end
 
-  def search(search_param)
-    if search_param != nil
-      (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
-    end
+  def contains?(search_param)
+    (name.include? search_param) || (cityName.include? search_param) || (venue.include? search_param)
   end
 
   def start_date
@@ -326,10 +324,6 @@ class Competition < ActiveRecord::Base
   def end_date
     endYear = @endYear || year # gross hack to remember the years of a multiyear competition
     endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.new(endYear, endMonth, endDay)
-  end
-
-  def marker_date
-    start_date.strftime("%b %d, %Y")
   end
 
   private def unpack_dates

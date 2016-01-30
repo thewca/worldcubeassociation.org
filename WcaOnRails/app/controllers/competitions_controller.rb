@@ -1,6 +1,7 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:index, :post_announcement, :post_results, :admin_edit]
+  PAST_COMPETITIONS_DAYS = 90
+  before_action :authenticate_user!, except: [:show, :index]
+  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:post_announcement, :post_results, :admin_edit]
 
   private def competition_from_params
     competition = Competition.find(params[:id])
@@ -19,9 +20,6 @@ class CompetitionsController < ApplicationController
   end
 
   def index
-    query = "CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? and showAtAll = true"
-    query_params = [(Date.today - 90)]
-
     @regions = [ ["All","all"],["",""],["Africa","_Africa"],["Asia","_Asia"],["Europe","_Europe"],["North America","_North America"],["Oceania","_Oceania"],["South America","_South America"],["",""] ] + Country.all.map { |country| [country.name, country.id] }
     @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
     @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.select(:year).map(&:year).uniq.reverse!
@@ -29,14 +27,14 @@ class CompetitionsController < ApplicationController
 
     # This need to be the first thing, otherwise @competitions will be an array instead of an object
     # and the .where will not work
-    if params[:years]
-      if params[:years] == "current"
-        @competitions = @competitions.where(query, query_params)
-      elsif params[:years] != "all"
-        @competitions = @competitions.reject { |competition| competition.year.to_s != params[:years] }
-      end
-    else
-      @competitions = @competitions.where(query, query_params)
+    if params[:years].blank?
+      params[:years] = "current"
+    end
+
+    if params[:years] == "current"
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?", (Date.today - PAST_COMPETITIONS_DAYS))
+    elsif params[:years] != "all"
+      @competitions = @competitions.reject { |competition| competition.year.to_s != params[:years] }
     end
 
     if params[:event] && params[:event] != "all"
@@ -47,28 +45,15 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.reject { |competition| !competition.belongs_to_region?(params[:region]) }
     end
 
-    if params[:search] && params[:search] != ""
-      @competitions = @competitions.reject { |competition| !competition.search(params[:search]) }
+    if params[:search].present?
+      @competitions = @competitions.reject { |competition| !competition.contains?(params[:search]) }
     end
 
-    if !params[:commit]
-      params[:commit] = "List"
+    if !params[:display].present?
+      params[:display] = "List"
     end
 
-    # A little explanation here: we search for the closest one, but it may be before or after today.
-    # If the competitions list is all in the past, @closest_index will be 0 and the "today" line
-    # will be the first of the table.
-    # If we have both past and future competitions, we need to find out where to put the "today" line.
-    # For competitions in the future, we move the @closest_index up by one, to correctly position
-    # the "today" line.
-    if @competitions.length > 0
-      closest_competition = @competitions.sort_by { |competition| (competition.start_date - Date.today).abs }.first
-      if closest_competition.start_date < Date.today
-        @closest_index = @competitions.index(closest_competition)
-      else
-        @closest_index = @competitions.index(closest_competition) + 1
-      end
-    end
+    @future_competitions, @past_competitions = @competitions.partition { |c| c.start_date > Date.today }
   end
 
   def create

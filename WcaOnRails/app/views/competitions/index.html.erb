@@ -3,12 +3,12 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= form_tag competitions_path, method: :get, class: "competition-select" do %>
-    <% if @competitions.length < 1 %>
+  <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
+    <% if @competitions.length == 0 %>
       <%= render 'index_form' %>
-      <div class="alert alert-danger">No competitions found!</div>
+      <div class="alert alert-warning">No competitions found!</div>
     <% else %>
-      <% if params[:commit] == "List" %>
+      <% if params[:display] == "List" %>
         <table class="table competitions-table table-striped table-hover table-condensed floatThead">
           <thead>
             <tr>
@@ -27,34 +27,17 @@
             </tr>
           </thead>
           <tbody>
-            <% @competitions.each_with_index do |competition, index| %>
-              <% if index == @closest_index %>
-                <tr id="today-line">
-                  <td colspan="6" class="text-center">Today</td>
-                  <td></td>
-                </tr>
-              <% end %>
-              <tr class="<%= competition.is_over? ? "past" : "future" %>">
-                <td><%= competition.year %></td>
-                <td><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></td>
-                <td>
-                  <% anchor_tag = @closest_index && (index == (@closest_index - 10)) %>
-                  <%= link_to competition.name, competition_path(competition), id: anchor_tag ? "today" : "" %>
-                </td>
-                <td>
-                  <%# results check... %>
-                </td>
-                <td><strong><%= competition.country.name %></strong>, <%= competition.cityName %></td>
-                <td><%=md(competition.venue, target_blank: true) %></td>
-                <td class="big-column"></td>
-              </tr>
-            <% end %>
+            <%= render 'index_table', competitions: @future_competitions %>
+            <tr id="today-line">
+              <td class="text-center"><a id="today"></a>Today</td>
+              <td colspan="6" ></td>
+            </tr>
+            <%= render 'index_table', competitions: @past_competitions %>
           </tbody>
         </table>
       <% else %>
         <%= render 'index_form' %>
-        <div id="map-wrapper">
-          <div class="map"></div>
+        <div id="map">
         </div>
       <% end %>
     <% end %>
@@ -64,11 +47,16 @@
 <script>
 $(function() {
   var $today = document.getElementById("today");
-  if ($today)
-    $(document).scrollTop( $("#today").offset().top );
+  if ($today) {
+    var elOffset = $("#today").offset().top;
+    var windowHeight = $(window).height();
+    var offset = elOffset - Math.max((windowHeight - $("#today").height()) / 2, 0);
+
+    $('html, body').animate({ scrollTop: offset}, 50);
+  }
 
   function initMap() {
-    var $map = new google.maps.Map(document.getElementById('map-wrapper'), {
+    var $map = new google.maps.Map(document.getElementById('map'), {
       zoom: 2,
       center: {lat: 0, lng: 0},
       scrollwheel: true
@@ -86,7 +74,7 @@ $(function() {
       month: c.month,
       day: c.day,
       cityName: c.cityName,
-      marker_date: c.marker_date
+      marker_date: c.start_date.to_formatted_s(:long)
     }
       end.to_json.html_safe %>, $map);
   }
