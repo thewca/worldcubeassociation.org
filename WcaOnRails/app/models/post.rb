@@ -19,11 +19,11 @@ class Post < ActiveRecord::Base
   end
 
   def deletable
-    self.slug != CRASH_COURSE_POST_SLUG
+    !is_crash_course_post?
   end
 
   def edit_path
-    if self.slug == CRASH_COURSE_POST_SLUG
+    if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_edit_path
     else
       Rails.application.routes.url_helpers.edit_post_path(slug)
@@ -31,7 +31,7 @@ class Post < ActiveRecord::Base
   end
 
   def update_path
-    if self.slug == CRASH_COURSE_POST_SLUG
+    if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_path
     else
       Rails.application.routes.url_helpers.post_path(self)
@@ -55,5 +55,9 @@ class Post < ActiveRecord::Base
     }
 
     json
+  end
+
+  private def is_crash_course_post?
+    slug == CRASH_COURSE_POST_SLUG
   end
 end
