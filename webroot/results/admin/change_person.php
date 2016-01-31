@@ -122,6 +122,15 @@ function saveChoices () {
 
     noticeBox( true, "Successfully updated $chosenNameHtml($chosenId).");
   }
+
+  $users = pdo_query(
+    "SELECT * FROM users WHERE wca_id=?",
+    array($person['id'])
+  );
+  if(count($users) > 0) {
+    $user = array_shift( $users );
+    noticeBox( true, "Don't forget to re-save the user <a href='/users/${user['id']}/edit'>here</a>! (simply clicking save on that page will copy over the data from the Persons table to the users table)" );
+  }
 }
 
 #----------------------------------------------------------------------
