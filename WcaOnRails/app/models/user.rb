@@ -68,6 +68,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  validate :dob_must_be_in_the_past
+  def dob_must_be_in_the_past
+    if dob && dob >= Date.today
+      errors.add(:dob, "must be in the past")
+    end
+  end
+
   attr_accessor :claiming_wca_id
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
