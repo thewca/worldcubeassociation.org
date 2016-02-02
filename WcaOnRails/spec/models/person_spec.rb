@@ -7,7 +7,7 @@ RSpec.describe Person, type: :model do
     expect(person).to be_valid
   end
 
-  context "likey_delegates" do
+  context "likely_delegates" do
     it "never competed" do
       person = FactoryGirl.create :person
       expect(person.likely_delegates).to eq []
