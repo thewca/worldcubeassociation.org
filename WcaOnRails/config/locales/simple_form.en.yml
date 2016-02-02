@@ -14,6 +14,8 @@ en:
       competition:
         id: "ID"
     hints:
+      defaults:
+        dob: "Enter your date of birth in the format YYYY-MM-DD"
       competition:
         competition_id_to_clone: "Optional. Can save you some typing if you're running a similar competition to a past competition."
         name: "The full name of the competition including the year at the end (e.g., European Rubik's Cube Championship 2006). Be sure to capitalize."

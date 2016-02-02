@@ -75,7 +75,7 @@
     <% end %>
 
     <%= f.input :name, disabled: !editable_fields.include?(:name) %>
-    <%= f.input :dob, as: :date_picker, disabled: !editable_fields.include?(:dob), hint: "Enter your date of birth in the format YYYY-MM-DD" %>
+    <%= f.input :dob, as: :date_picker, disabled: !editable_fields.include?(:dob) %>
     <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] }, disabled: !editable_fields.include?(:gender) %>
     <%= f.input :country_iso2, collection: Country.all.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name }, disabled: !editable_fields.include?(:country_iso2) %>
 
