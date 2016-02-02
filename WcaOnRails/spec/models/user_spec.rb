@@ -20,6 +20,26 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "doesn't allow demotion of a senior delegate with subordinate delegates" do
+    delegate = FactoryGirl.create :delegate
+    senior_delegate = FactoryGirl.create :senior_delegate
+
+    delegate.senior_delegate = senior_delegate
+    delegate.save!
+
+    senior_delegate.delegate_status = ""
+    expect(senior_delegate.save).to eq false
+    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote senior delegate with subordinate delegates"]
+  end
+
+  it "allows demotion of a senior delegate with no subordinate delegates" do
+    senior_delegate = FactoryGirl.create :senior_delegate
+
+    senior_delegate.delegate_status = ""
+    expect(senior_delegate.save).to eq true
+    expect(senior_delegate.reload.delegate_status).to eq nil
+  end
+
   it "requires senior delegate be a senior delegate" do
     delegate = FactoryGirl.create :delegate
     user = FactoryGirl.create :user
