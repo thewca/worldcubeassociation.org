@@ -24,7 +24,7 @@
       <%= f.input :unconfirmed_wca_id, label: "WCA ID", as: :user_ids, persons_table: true, only_one: true %>
       <div id="select-nearby-delegate-area"></div>
 
-      <%= f.input :dob_verification, label: "Birthdate", as: :date_picker %>
+      <%= f.input :dob_verification, label: "Birthdate", as: :date_picker, hint: "Enter your date of birth in the format YYYY-MM-DD" %>
 
       <%= f.button :submit, 'Claim WCA ID', id: "claim-wca-id-button", class: "btn-primary" %>
     <% end %>
