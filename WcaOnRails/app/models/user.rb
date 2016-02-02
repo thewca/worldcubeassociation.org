@@ -70,8 +70,8 @@ class User < ActiveRecord::Base
 
   validate :dob_must_be_in_the_past
   def dob_must_be_in_the_past
-    if dob >= Date.today
-      errors.add(:dob, "birth date must be in the past")
+    if dob && dob >= Date.today
+      errors.add(:dob, "must be in the past")
     end
   end
 
