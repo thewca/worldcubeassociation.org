@@ -75,6 +75,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  validate :cannot_demote_senior_delegate_with_subordinate_delegates
+  def cannot_demote_senior_delegate_with_subordinate_delegates
+    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && subordinate_delegates.length != 0
+      errors.add(:delegate_status, "cannot demote senior delegate with subordinate delegates")
+    end
+  end
+
   attr_accessor :claiming_wca_id
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
