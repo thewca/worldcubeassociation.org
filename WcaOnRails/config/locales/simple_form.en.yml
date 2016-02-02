@@ -11,6 +11,8 @@ en:
     error_notification:
       default_message: "Please review the problems below:"
     labels:
+      defaults:
+        event_ids: "Events"
       competition:
         id: "ID"
     hints:
