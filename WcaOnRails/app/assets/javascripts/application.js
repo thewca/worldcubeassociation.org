@@ -53,8 +53,8 @@ $(function() {
 
   // Copied (and modified by jfly) from
   //  https://github.com/zpaulovics/datetimepicker-rails
-  $('.datetimepicker').datetimepicker({
-    showTodayButton: true,
+  $('.date_picker.form-control').datetimepicker({
+    useStrict: true, keepInvalid: true, useCurrent: false
   });
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.input-group');

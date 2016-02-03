@@ -159,3 +159,13 @@
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>
+
+<script>
+$('.date_picker.form-control').on('dp.error', function(e){
+  $(this).parent().addClass('alert alert-danger');
+});
+
+$('.date_picker.form-control').on('dp.change', function(e){
+  $(this).parent().removeClass('alert alert-danger');
+});
+</script>
