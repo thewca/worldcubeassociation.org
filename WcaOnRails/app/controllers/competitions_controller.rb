@@ -21,7 +21,7 @@ class CompetitionsController < ApplicationController
 
   def index
     @regions = { '' => [["All","all"]],
-                 'Continent' => Continent.all.map{ |continent| [continent.name, continent.id] },
+                 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
                  'Country' => Country.all.map { |country| [country.name, country.id] } }
     @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
     @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.select(:year).map(&:year).uniq.reverse!
