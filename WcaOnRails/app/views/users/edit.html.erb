@@ -162,10 +162,14 @@
 
 <script>
 $('.date_picker.form-control').on('dp.error', function(e){
-  $(this).parent().addClass('alert alert-danger');
+  $(this).css('border-color', 'red');
+  $(this).siblings('p').addClass('alert alert-danger');
+  $(this).siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
 });
 
 $('.date_picker.form-control').on('dp.change', function(e){
-  $(this).parent().removeClass('alert alert-danger');
+  $(this).siblings('p').removeClass('alert alert-danger');
+  $(this).css('border-color', 'green');
 });
 </script>
+
