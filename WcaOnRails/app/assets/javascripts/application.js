@@ -57,7 +57,7 @@ $(function() {
     useStrict: true, keepInvalid: true, useCurrent: false
   });
   $('.datetimerange').each(function() {
-    var $inputGroups = $(this).find('.input-group');
+    var $inputGroups = $(this).find('.date_picker.form-control');
     var $range1 = $inputGroups.eq(0);
     var $range2 = $inputGroups.eq(1);
 
