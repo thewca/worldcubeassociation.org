@@ -440,7 +440,7 @@ class Competition < ActiveRecord::Base
   end
 
   def results_uploaded?
-    results.count > 0
+    Result.exists?(competitionId: self.id)
   end
 
   def user_can_view?(user)

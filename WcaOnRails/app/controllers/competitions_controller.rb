@@ -55,7 +55,7 @@ class CompetitionsController < ApplicationController
       params[:display] = "List"
     end
 
-    @past_competitions, @future_competitions = @competitions.partition { |c| c.is_over? }
+    @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
   end
 
   def create

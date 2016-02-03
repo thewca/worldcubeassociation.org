@@ -6,7 +6,7 @@
       <%= link_to competition.name, competition_path(competition) %>
     </td>
     <td>
-      <% if Result.exists?(competitionId: competition.id) %>
+      <% if competition.results_uploaded? %>
          <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
         <% end %>
     </td>
@@ -15,3 +15,4 @@
     <td class="big-column"></td>
   </tr>
 <% end %>
+
