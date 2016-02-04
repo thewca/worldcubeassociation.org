@@ -28,7 +28,6 @@
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
-//= require pickers
 //= require_self
 //= require_tree .
 
@@ -56,6 +55,11 @@ $(function() {
   $('.date_picker.form-control').datetimepicker({
     useStrict: true, keepInvalid: true, useCurrent: false
   });
+
+  $('.datetime_picker.form-control').datetimepicker({
+    useStrict: true, keepInvalid: true, useCurrent: false
+  });
+
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');
     var $range1 = $inputGroups.eq(0);
