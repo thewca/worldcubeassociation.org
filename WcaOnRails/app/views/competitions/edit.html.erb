@@ -256,21 +256,9 @@
           Event.all_deprecated,
         ]
       ] %>
-      <% event_groups.each do |label, always_show, selected_events, available_events| %>
+      <% event_groups.each do |label, always_show, selected_events, allowed_events| %>
         <% if always_show || !selected_events.empty? %>
-          <div class="form-group">
-            <label class="col-sm-2 control-label"><%= label %></label>
-            <div class="col-sm-9">
-              <% available_events.each do |event| %>
-                <span class="event-checkbox">
-                  <label>
-                    <%= check_box "competition[event_ids]", event.id, { checked: selected_events.include?(event) } %>
-                    <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                  </label>
-                </span>
-              <% end %>
-            </div>
-          </div>
+          <%= f.input :event_ids, as: :events_picker, allowed_events: allowed_events, selected_events: selected_events, label: label %>
         <% end %>
       <% end %>
     <% end %>

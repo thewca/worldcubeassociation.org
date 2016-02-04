@@ -82,24 +82,8 @@
             file: :horizontal_file_input,
             boolean: :horizontal_boolean
         }  do |f| %>
-          <div class="form-group <%= @registration.errors.has_key?(:events) ? "has-error" : "" %>">
-            <label class="col-sm-2 control-label">Events</label>
-            <div class="col-sm-9">
-              <% @competition.events.each do |event| %>
-                <span class="event-checkbox <%= !@registration.new_record? ? "disabled" : "" %>">
-                  <label>
-                    <%= check_box "registration[event_ids]", event.id, { checked: @registration.events.include?(event), disabled: !@registration.new_record? } %>
-                    <span class="cubing-icon icon-<%= event.id %>" data-toggle="tooltip" data-placement="top" title="<%= event.name %>"></span>
-                  </label>
-                </span>
-              <% end %>
-              <% if @registration.errors.has_key?(:events) %>
-                <span class="help-block">
-                  <%= @registration.errors[:events].join(" ") %>
-                </span>
-              <% end %>
-            </div>
-          </div>
+
+          <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !@registration.new_record? %>
 
           <%= f.input :guests, disabled: !@registration.new_record? %>
           <%= f.input :comments, disabled: !@registration.new_record? %>
