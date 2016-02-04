@@ -28,7 +28,6 @@
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
-//= require pickers
 //= require_self
 //= require_tree .
 
@@ -53,11 +52,23 @@ $(function() {
 
   // Copied (and modified by jfly) from
   //  https://github.com/zpaulovics/datetimepicker-rails
-  $('.datetimepicker').datetimepicker({
-    showTodayButton: true,
+  $('.date_picker.form-control, .datetime_picker.form-control').datetimepicker({
+    useStrict: true, keepInvalid: true, useCurrent: false
   });
+
+  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.error', function(e){
+    $(this).parent().siblings('p').addClass('alert alert-danger');
+    $(this).parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+    $(this).addClass('alert-danger');
+  });
+
+  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.change', function(e){
+    $(this).parent().siblings('p').removeClass('alert alert-danger');
+    $(this).removeClass('alert-danger');
+  });
+
   $('.datetimerange').each(function() {
-    var $inputGroups = $(this).find('.input-group');
+    var $inputGroups = $(this).find('.date_picker.form-control');
     var $range1 = $inputGroups.eq(0);
     var $range2 = $inputGroups.eq(1);
 

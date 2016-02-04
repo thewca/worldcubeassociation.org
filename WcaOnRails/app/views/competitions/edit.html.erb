@@ -287,7 +287,7 @@
       <% end %>
       <div class="col-sm-offset-2 col-sm-9">
         <div class="row datetimerange">
-          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
+          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, hint: "Note: Registration open and close are in UTC time" %>
           <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
         </div>
       </div>
