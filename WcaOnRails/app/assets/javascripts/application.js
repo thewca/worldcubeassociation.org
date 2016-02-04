@@ -48,6 +48,64 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
+// Adopted from http://stackoverflow.com/a/21778615
+$.fn.scrollToCenter = function(speed) {
+  speed = speed || 200;
+  var el = this;
+  var elOffset = el.offset().top;
+  var windowHeight = $(window).height();
+  var offset = elOffset - Math.max((windowHeight - el.height()) / 2, 0);
+
+  $('html, body').animate({ scrollTop: offset }, speed);
+};
+
+function initMap(competitions, mapElement) {
+  var $map = new google.maps.Map(document.getElementById(mapElement), {
+    zoom: 2,
+    center: {lat: 0, lng: 0},
+    scrollwheel: true
+  });
+
+  var markers = [];
+
+  competitions.forEach(function(c) {
+
+    var contentString = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    if (c.is_over) {
+      iconImage = 'http://maps.google.com/mapfiles/ms/icons/blue.png';
+    }
+    else {
+      iconImage = 'http://maps.google.com/mapfiles/ms/icons/red.png';
+    }
+
+    c.marker = new google.maps.Marker({
+      map: $map,
+      position: {
+        lat: c.latitude_degrees,
+        lng: c.longitude_degrees,
+      },
+      title: c.name,
+      icon: iconImage
+    });
+
+    c.marker.addListener('click', function() {
+      infowindow.open($map, c.marker);
+    });
+
+    markers.push(c.marker);
+  });
+
+  var markerCluster = new MarkerClusterer($map, markers, {
+    maxZoom: 10,
+    clusterSize: 30
+  });
+}
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
