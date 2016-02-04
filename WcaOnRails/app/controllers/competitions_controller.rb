@@ -20,11 +20,10 @@ class CompetitionsController < ApplicationController
   end
 
   def index
-    @regions = { '' => [["All","all"]],
-                 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
+    @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
                  'Country' => Country.all.map { |country| [country.name, country.id] } }
     @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
-    @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.select(:year).map(&:year).uniq.reverse!
+    @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.where(showAtAll: true).select(:year).map(&:year).uniq.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).reverse_order
 
     # This need to be the first thing, otherwise @competitions will be an array instead of an object
