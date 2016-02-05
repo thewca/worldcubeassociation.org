@@ -4,7 +4,7 @@ after "development:users" do
   users = User.where.not(wca_id: nil).sample(5)
 
   # Create some past competitions with results
-  3.times do |i|
+  500.times do |i|
     day = i.days.ago
     eventIds = ["333", "333oh", "magic"]
     competition = Competition.create!(
@@ -25,6 +25,8 @@ after "development:users" do
       use_wca_registration: true,
       registration_open: 2.weeks.ago,
       registration_close: 1.week.ago,
+      latitude_degrees: Random.new.rand(-90.0..90.0),
+      longitude_degrees: Random.new.rand(-180.0..180.0),
     )
 
     users.each_with_index do |competitor, i|
@@ -71,27 +73,53 @@ after "development:users" do
     )
   end
 
-  day = 1000.years.from_now
-  eventIds = ["333", "333oh", "magic"]
-  future_competition = Competition.create!(
-    id: "MyComp#{day.year}",
-    name: "My Best Comp #{day.year}",
-    cellName: "My Comp #{day.year}",
-    cityName: "San Francisco",
-    countryId: "USA",
-    information: "Information!",
-    start_date: day.strftime("%F"),
-    end_date: day.strftime("%F"),
-    eventSpecs: eventIds.join(" "),
-    venue: "My backyard",
-    website: "https://www.worldcubeassociation.org",
-    showAtAll: true,
-    delegates: [delegate],
-    organizers: User.all.sample(2),
-    use_wca_registration: true,
-    registration_open: 1.week.ago,
-    registration_close: day - (1.week),
-  )
+  day = Date.today
+    eventIds = ["333", "333oh", "magic"]
+    future_competition = Competition.create!(
+      id: "NewComp#{day.year}",
+      name: "New Comp #{day.year}",
+      cellName: "New Comp #{day.year}",
+      cityName: "Paris",
+      countryId: "France",
+      information: "Information!",
+      start_date: day.strftime("%F"),
+      end_date: day.strftime("%F"),
+      eventSpecs: eventIds.join(" "),
+      venue: "National Stadium",
+      website: "https://www.worldcubeassociation.org",
+      showAtAll: true,
+      delegates: [delegate],
+      organizers: User.all.sample(2),
+      use_wca_registration: true,
+      registration_open: 2.weeks.ago,
+      registration_close: day - (1.week),
+    )
+
+  500.times do |i|
+    day = (i+1).days.from_now
+    eventIds = ["333", "333oh", "333bf"]
+    competition = Competition.create!(
+      id: "MyComp#{i+1}#{day.year}",
+      name: "My #{i+1} Comp #{day.year}",
+      cellName: "My #{i+1} Comp #{day.year}",
+      cityName: "Beijing",
+      countryId: "China",
+      information: "Information!",
+      start_date: day.strftime("%F"),
+      end_date: day.strftime("%F"),
+      eventSpecs: eventIds.join(" "),
+      venue: "Bird's Nest National Stadium",
+      website: "https://www.worldcubeassociation.org",
+      showAtAll: true,
+      delegates: [delegate],
+      organizers: User.all.sample(2),
+      use_wca_registration: true,
+      registration_open: 1.week.ago,
+      registration_close: day - (1.week),
+      latitude_degrees: Random.new.rand(-90.0..90.0),
+      longitude_degrees: Random.new.rand(-180.0..180.0),
+    )
+  end
 
   users.each_with_index do |user, i|
     status = i % 4 == 0 ? "a" : "p"

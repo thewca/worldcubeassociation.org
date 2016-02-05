@@ -1,17 +1,66 @@
 <% provide(:title, 'Competitions') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
+  <h2><%= yield(:title) %></h2>
 
-  <%= link_to "New competition", new_competition_path %>
-  <table class="table">
-    <% @competitions.each do |competition| %>
-      <tr>
-        <td><%= competition.id %></td>
-        <td><%= competition.name %></td>
-        <td><%= link_to "Edit", admin_edit_competition_path(competition) %></td>
-        <td><%= link_to "Results", "/results/competition.php?competitionId=#{competition.id}" %></td>
-      </tr>
+  <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
+    <% if @competitions.length == 0 %>
+      <%= render 'index_form' %>
+      <div class="alert alert-warning">No competitions found!</div>
+    <% else %>
+      <% if params[:display] == "List" %>
+        <table class="table competitions-table table-striped table-hover table-condensed floatThead">
+          <thead>
+            <tr>
+              <th colspan="7">
+                <%= render 'index_form' %>
+              </th>
+            </tr>
+            <tr>
+              <th>Year</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Country, City</th>
+              <th>Venue</th>
+              <th class="big-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render 'index_table', competitions: @not_past_competitions %>
+            <tr id="today-line">
+              <td class="text-center"><a id="today"></a>Today</td>
+              <td colspan="6" ></td>
+            </tr>
+            <%= render 'index_table', competitions: @past_competitions %>
+          </tbody>
+        </table>
+      <% else %>
+        <%= render 'index_form' %>
+        <div id="map"></div>
+      <% end %>
     <% end %>
-  </table>
+  <% end %>
 </div>
+
+<script>
+$(function() {
+  <% if params[:display] == 'List' %>
+    $("#today").scrollToCenter();
+  <% else %>
+    var competitions = <%= @competitions.map do |c|
+    {
+      id: c.id,
+      name: c.name,
+      latitude_degrees: c.latitude_degrees,
+      longitude_degrees: c.longitude_degrees,
+      cityName: c.cityName,
+      marker_date: c.start_date.to_formatted_s(:long),
+      is_over: c.is_over?,
+      url: competition_path(c)
+    }
+    end.to_json.html_safe %>;
+
+    $("#map").competitionsMap(competitions);
+  <% end %>
+});
+</script>

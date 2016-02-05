@@ -147,20 +147,6 @@ module ApplicationHelper
           "Citizen of"
         end
 
-        table.define :delegates do |competition|
-          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :delegates_header do
-          "Delegate(s)"
-        end
-
-        table.define :organizers do |competition|
-          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :organizers_header do
-          "Organizer(s)"
-        end
-
         (Event.all_official + Event.all_deprecated).each do |event|
           event_span = content_tag(:span, "",
             title: event.name,
