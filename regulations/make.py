@@ -62,6 +62,7 @@ with open(languages_file, "r") as fileHandle:
 
 languages = languageData.keys()
 
+max_lang_width = len(max(languages, key=len))
 
 # Script Parameters
 
@@ -210,7 +211,10 @@ def buildLanguage(args, language):
 
   pdfName = languageData[language]["pdf"]
 
-  html.html(language, buildDir, pdfName + ".pdf", isTranslation=isTranslation, verbose=args.verbose)
+  srcDir = "translations/" + language if isTranslation else "wca-regulations"
+
+  print "%s Generating HTML in %s" % (("[" + language + "]").ljust(max_lang_width + 2), buildDir)
+  html.html(language, srcDir, buildDir, pdfName + ".pdf", isTranslation=isTranslation, verbose=args.verbose)
 
   if args.pdf:
     pdf.pdf(
