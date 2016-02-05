@@ -27,6 +27,7 @@ en:
   activerecord:
     attributes:
       user:
+        name: "Full name"
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
