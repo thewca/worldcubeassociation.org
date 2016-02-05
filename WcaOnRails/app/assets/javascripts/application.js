@@ -59,8 +59,8 @@ $.fn.scrollToCenter = function(speed) {
   $('html, body').animate({ scrollTop: offset }, speed);
 };
 
-function initMap(competitions, mapElement) {
-  var $map = new google.maps.Map(document.getElementById(mapElement), {
+$.fn.competitionsMap = function(competitions) {
+  var $map = new google.maps.Map(document.getElementById(this.attr('id')), {
     zoom: 2,
     center: {lat: 0, lng: 0},
     scrollwheel: true
@@ -78,8 +78,7 @@ function initMap(competitions, mapElement) {
 
     if (c.is_over) {
       iconImage = 'http://maps.google.com/mapfiles/ms/icons/blue.png';
-    }
-    else {
+    } else {
       iconImage = 'http://maps.google.com/mapfiles/ms/icons/red.png';
     }
 

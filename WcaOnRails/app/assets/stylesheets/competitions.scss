@@ -187,11 +187,12 @@ $venue-map-wrapper-height: 400px;
   width: 100%;
 }
 
-.competition-select {
+.competition-select.form-inline {
   input,
   select {
     font-size: 12px;
     font-weight: normal;
+    display: block;
   }
 
   button {

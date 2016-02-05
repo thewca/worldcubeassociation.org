@@ -47,7 +47,7 @@ $(function() {
   <% if params[:display] == 'List' %>
     $("#today").scrollToCenter();
   <% else %>
-    competitions = <%= @competitions.map do |c|
+    var competitions = <%= @competitions.map do |c|
     {
       id: c.id,
       name: c.name,
@@ -58,9 +58,9 @@ $(function() {
       is_over: c.is_over?,
       url: competition_path(c)
     }
-      end.to_json.html_safe %>;
+    end.to_json.html_safe %>;
 
-    initMap(competitions, 'map');
+    $("#map").competitionsMap(competitions);
   <% end %>
 });
 </script>
