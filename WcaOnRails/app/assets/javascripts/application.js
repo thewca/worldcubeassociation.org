@@ -51,7 +51,7 @@ $(function() {
   $('form.are-you-sure').areYouSure();
 
   // Copied (and modified by jfly) from
-  //  https://github.com/zpaulovics/datetimepicker-rails
+  // https://github.com/zpaulovics/datetimepicker-rails
   $('.date_picker.form-control, .datetime_picker.form-control').datetimepicker({
     useStrict: true, keepInvalid: true, useCurrent: false
   });
