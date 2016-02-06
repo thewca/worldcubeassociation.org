@@ -19,10 +19,13 @@
 </div>
 
 <div class="form-group">
+  <%= label_tag(' ') %>
   <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
     <i class="glyphicon glyphicon-list"></i> List
   <% end %>
-
+</div>
+<div class="form-group">
+  <%= label_tag(' ') %>
   <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-info") do %>
     <i class="glyphicon glyphicon-map-marker"></i> Map
   <% end %>
