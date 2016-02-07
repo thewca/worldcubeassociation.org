@@ -196,23 +196,12 @@ class Competition < ActiveRecord::Base
   end
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
-    # This is a mess. When changing competition ids, the calls to delegates=
-    # and organizers= below will cause database writes with a new competition_id.
-    # We hack around this by pretending our id actually didn't change, and then
-    # we restore it at the end. This means we'll preseve our existing
-    # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
-    # We'll fix their competition_id below in update_foreign_keys.
-    new_id = self.id
-    self.id = id_was
-
     if @delegate_ids
       self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
     end
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
-
-    self.id = new_id
   end
 
   # Workaround for PHP code that requires these tables to be clean.
