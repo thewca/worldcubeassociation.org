@@ -88,6 +88,7 @@ en:
         registration_open: "Registration open"
         registration_close: "Registration close"
         remarks: "Remarks"
+        friendly_id: "Public facing ID"
       registration:
         countryId: "Country"
   simple_form:

@@ -29,7 +29,7 @@
 
     <% if @competition_admin_view || !is_actually_confirmed %>
       <% if @competition.persisted? %>
-        <%= f.input :id %>
+        <%= f.input :friendly_id %>
       <% end %>
       <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
       <% if @competition.persisted? %>

@@ -111,9 +111,9 @@ class CompetitionsController < ApplicationController
       flash[:success] = "Successfully created new competition!"
       redirect_to edit_competition_path(@competition)
     else
-      # Show id errors under name, since we don't actually show an
-      # id field to the user, so they wouldn't see any id errors.
-      @competition.errors[:name].concat(@competition.errors[:id])
+      # Show friendly id errors under name, since we don't actually show an
+      # friendly id field to the user, so they wouldn't see any friendly id errors.
+      @competition.errors[:name].concat(@competition.errors[:friendly_id])
       render :new
     end
   end
@@ -324,7 +324,7 @@ class CompetitionsController < ApplicationController
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
-        :id,
+        :friendly_id,
         :name,
         :cellName,
         :countryId,
