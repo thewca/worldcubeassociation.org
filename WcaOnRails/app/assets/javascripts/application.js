@@ -46,6 +46,17 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
+$.fn.goodDate = function() {
+  this.parent().siblings('p').removeClass('alert alert-danger');
+  this.removeClass('alert-danger');
+};
+
+$.fn.badDate = function() {
+  this.parent().siblings('p').addClass('alert alert-danger');
+  this.parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+  this.addClass('alert-danger');
+};
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
@@ -56,15 +67,21 @@ $(function() {
     useStrict: true, keepInvalid: true, useCurrent: false
   });
 
-  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.error', function(e){
-    $(this).parent().siblings('p').addClass('alert alert-danger');
-    $(this).parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
-    $(this).addClass('alert-danger');
-  });
-
-  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.change', function(e){
-    $(this).parent().siblings('p').removeClass('alert alert-danger');
-    $(this).removeClass('alert-danger');
+  $('.date_picker.form-control').on('blur', function(){
+    var date = $(this).val();
+    if(date.match(/^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/)) {
+      var tokens = date.split('-');
+      var year = parseInt(tokens[0], 10);
+      var month = parseInt(tokens[1], 10);
+      var day = parseInt(tokens[2], 10);
+      if(day == 31 && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
+        $(this).badDate();
+          return;
+      }
+      $(this).goodDate();
+    } else {
+      $(this).badDate();
+    }
   });
 
   $('.datetimerange').each(function() {
