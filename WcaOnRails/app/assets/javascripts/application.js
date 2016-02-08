@@ -46,16 +46,16 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-$.fn.goodDate = function() {
-  this.parent().siblings('p').removeClass('alert alert-danger');
-  this.removeClass('alert-danger');
-};
+function goodDate(element) {
+  element.parent().siblings('p').removeClass('alert alert-danger');
+  element.removeClass('alert-danger');
+}
 
-$.fn.badDate = function() {
-  this.parent().siblings('p').addClass('alert alert-danger');
-  this.parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
-  this.addClass('alert-danger');
-};
+function badDate(element) {
+  element.parent().siblings('p').addClass('alert alert-danger');
+  element.parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+  element.addClass('alert-danger');
+}
 
 $(function() {
   $('.dropdown-toggle').dropdownHover();
@@ -68,19 +68,15 @@ $(function() {
   });
 
   $('.date_picker.form-control').on('blur', function(){
-    var date = $(this).val();
-    if(date.match(/^\d{4}-((0\d)|(1[012]))-(([012]\d)|3[01])$/)) {
-      var tokens = date.split('-');
-      var year = parseInt(tokens[0], 10);
-      var month = parseInt(tokens[1], 10);
-      var day = parseInt(tokens[2], 10);
-      if(day == 31 && (month == 2 || month == 4 || month == 6 || month == 9 || month == 11)) {
-        $(this).badDate();
-          return;
-      }
-      $(this).goodDate();
+    var $this = $(this);
+    var datetimepicker = $this.data("DateTimePicker");
+    var val = $this.val();
+    var valid = moment(val, datetimepicker.format(), true).isValid();
+
+    if(valid) {
+      goodDate($this);
     } else {
-      $(this).badDate();
+      badDate($this);
     }
   });
 
