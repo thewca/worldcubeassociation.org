@@ -57,6 +57,34 @@ server {
   location ~ ^/results/admin/?$ {
     return 302 /admin/;
   }
+  # Redirect competitions.php to /competitions
+  location /results/competitions.php {
+    set $rails_args "";
+
+    if ($arg_map != "") {
+      set $rails_args "${rails_args}&display=Map";
+    }
+
+    if ($arg_eventId != "") {
+      set $rails_args "${rails_args}&event=${arg_eventId}";
+    }
+
+    if ($arg_regionId != "") {
+      set $rails_args "${rails_args}&region=${arg_regionId}";
+    }
+
+    if ($arg_pattern != "") {
+      set $rails_args "${rails_args}&search=${arg_pattern}";
+    }
+
+    if ($arg_years != "") {
+      set $rails_args "${rails_args}&years=${arg_years}";
+    }
+
+    return 302 /competitions?$rails_args;
+  }
+
+
   location /results {
     alias <%= @repo_root %>/webroot/results;
     index index.php index.html;
