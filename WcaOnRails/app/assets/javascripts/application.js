@@ -94,7 +94,7 @@ $(function() {
       var minDate = $range1.data("DateTimePicker").date() || false;
       var currEndDate = $range2.data("DateTimePicker").date();
       $range2.data("DateTimePicker").minDate(minDate);
-      if (!currEndDate || currEndDate < minDate) {
+      if ((!currEndDate && minDate )|| currEndDate < minDate) {
         $range2.data("DateTimePicker").date(minDate);
       }
     }).trigger("dp.change");

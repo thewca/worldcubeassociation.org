@@ -19,16 +19,3 @@ input[type="radio"].center-vertically {
   vertical-align: middle;
   height: 100%;
 }
-
-.input-group.date.datetimepicker {
-  width: 100%;
-}
-
-.form-group {
-  .input-group {
-    input.date_picker {
-      border-radius: 4px;
-      width: 100%;
-    }
-  }
-}
