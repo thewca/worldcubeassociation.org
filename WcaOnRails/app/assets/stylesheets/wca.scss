@@ -154,3 +154,22 @@ table.wca-results {
 .input-group.date .input-group-addon {
   cursor: initial;
 }
+
+// We need this because input-group will only style its childs correctly
+// if there are at least two of them. Having an empty UTC addon looks
+// weird, and having the input not inside of an input-group div will
+// cause the picker to be aligned weirdly. The input needs to be inside
+// of something with position: relative. This can go away once we have a
+// newer version of the datepicker, which uses allowInputToggle.
+.input-group.date.datetimepicker {
+  width: 100%;
+}
+
+.form-group {
+  .input-group {
+    input.date_picker {
+      border-radius: 4px;
+      width: 100%;
+    }
+  }
+}

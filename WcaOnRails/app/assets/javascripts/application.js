@@ -91,11 +91,11 @@ $(function() {
     var $range2 = $inputGroups.eq(1);
 
     $range1.on("dp.change", function(e) {
-      var minDate = $range1.data("DateTimePicker").date() || false;
-      var currEndDate = $range2.data("DateTimePicker").date();
-      $range2.data("DateTimePicker").minDate(minDate);
-      if ((!currEndDate && minDate )|| currEndDate < minDate) {
-        $range2.data("DateTimePicker").date(minDate);
+      var startDate = $range1.data("DateTimePicker").date() || false;
+      var endDate = $range2.data("DateTimePicker").date();
+      $range2.data("DateTimePicker").minDate(startDate);
+      if (startDate && (!endDate || endDate < startDate)) {
+        $range2.data("DateTimePicker").date(startDate);
       }
     }).trigger("dp.change");
   });
