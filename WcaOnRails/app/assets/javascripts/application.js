@@ -28,6 +28,7 @@
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
+//= require jquery.tabbable
 //= require_self
 //= require_tree .
 
@@ -46,17 +47,6 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-function goodDate(element) {
-  element.parent().siblings('p').removeClass('alert alert-danger');
-  element.removeClass('alert-danger');
-}
-
-function badDate(element) {
-  element.parent().siblings('p').addClass('alert alert-danger');
-  element.parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
-  element.addClass('alert-danger');
-}
-
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
@@ -67,17 +57,32 @@ $(function() {
     useStrict: true, keepInvalid: true, useCurrent: false
   });
 
-  $('.date_picker.form-control').on('blur', function(){
+  // Using 'blur' here, because 'change' or 'dp.change' is not fired every time
+  // (see https://github.com/cubing/worldcubeassociation.org/issues/376#issuecomment-180547289).
+  // Also, 'input' gets too annoying, because it flashes at every stroke until you have
+  // a valid date typed.
+  $('.date_picker.form-control, .datetime_picker.form-control').on('blur', function() {
     var $this = $(this);
     var datetimepicker = $this.data("DateTimePicker");
     var val = $this.val();
-    var valid = moment(val, datetimepicker.format(), true).isValid();
+    var valid = val === "" || moment(val, datetimepicker.format(), true).isValid();
 
     if(valid) {
-      goodDate($this);
+      $this.parent().siblings('p').removeClass('alert alert-danger');
+      $this.removeClass('alert-danger');
     } else {
-      badDate($this);
+      $this.parent().siblings('p').addClass('alert alert-danger');
+      $this.parent().siblings('p').fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+      $this.addClass('alert-danger');
     }
+  });
+
+  // We use dp.hide to capture clicking on a date. We then tab to the next
+  // form item, so the picker is just one click away, in case the user made
+  // a mistake or wants to select a different date. This also triggers the
+  // 'blur' event, used above to validate the date.
+  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.hide', function() {
+    $.tabNext();
   });
 
   $('.datetimerange').each(function() {
@@ -87,12 +92,11 @@ $(function() {
 
     $range1.on("dp.change", function(e) {
       var minDate = $range1.data("DateTimePicker").date() || false;
+      var currEndDate = $range2.data("DateTimePicker").date();
       $range2.data("DateTimePicker").minDate(minDate);
-    }).trigger("dp.change");
-
-    $range2.on("dp.change", function(e) {
-      var maxDate = $range2.data("DateTimePicker").date() || false;
-      $range1.data("DateTimePicker").maxDate(maxDate);
+      if (!currEndDate || currEndDate < minDate) {
+        $range2.data("DateTimePicker").date(minDate);
+      }
     }).trigger("dp.change");
   });
 
