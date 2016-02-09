@@ -53,7 +53,8 @@ $(function() {
 
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
-  $('.date_picker.form-control, .datetime_picker.form-control').datetimepicker({
+  $datetimepicker = $('.date_picker.form-control, .datetime_picker.form-control');
+  $datetimepicker.datetimepicker({
     useStrict: true, keepInvalid: true, useCurrent: false
   });
 
@@ -61,7 +62,7 @@ $(function() {
   // (see https://github.com/cubing/worldcubeassociation.org/issues/376#issuecomment-180547289).
   // Also, 'input' gets too annoying, because it flashes at every stroke until you have
   // a valid date typed.
-  $('.date_picker.form-control, .datetime_picker.form-control').on('blur', function() {
+  $datetimepicker.on('blur', function() {
     var $this = $(this);
     var datetimepicker = $this.data("DateTimePicker");
     var val = $this.val();
@@ -81,7 +82,7 @@ $(function() {
   // form item, so the picker is just one click away, in case the user made
   // a mistake or wants to select a different date. This also triggers the
   // 'blur' event, used above to validate the date.
-  $('.date_picker.form-control, .datetime_picker.form-control').on('dp.hide', function() {
+  $datetimepicker.on('dp.hide', function() {
     $.tabNext();
   });
 
