@@ -31,7 +31,11 @@
             <%= registration.position %>
           </td>
           <td class="name"><%= registration.name %></td>
-          <td class="wca-id"><%= render "shared/wca_id", wca_id: registration.wca_id %></td>
+          <td class="wca-id">
+            <% if registration.wca_id.present? %>
+              <%= render "shared/wca_id", wca_id: registration.wca_id %>
+            <% end %>
+          </td>
           <td class="country"><%= registration.countryId %></td>
 
           <td class="average"><%= registration.best_solve(@event, :average).clock_format %></td>

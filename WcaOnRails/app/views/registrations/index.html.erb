@@ -28,7 +28,11 @@
       <% @registrations.each do |registration| %>
         <tr>
           <td class="name"><%= registration.name %></td>
-          <td class="wca-id"><%= render "shared/wca_id", wca_id: registration.wca_id %></td>
+          <td class="wca-id">
+            <% if registration.wca_id.present? %>
+              <%= render "shared/wca_id", wca_id: registration.wca_id %>
+            <% end %>
+          </td>
           <td class="country"><%= registration.countryId %></td>
 
           <% @competition.events.each do |event| %>
