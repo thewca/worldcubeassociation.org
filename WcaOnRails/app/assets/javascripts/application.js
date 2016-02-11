@@ -104,6 +104,20 @@ $.fn.competitionsMap = function(competitions) {
   });
 };
 
+function detect_mobile() {
+ if( navigator.userAgent.match(/Android/i)
+  || navigator.userAgent.match(/webOS/i)
+  || navigator.userAgent.match(/iPhone/i)
+  || navigator.userAgent.match(/iPad/i)
+  || navigator.userAgent.match(/iPod/i)
+  || navigator.userAgent.match(/BlackBerry/i)
+  || navigator.userAgent.match(/Windows Phone/i) ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
@@ -146,16 +160,18 @@ $(function() {
   $('input.wca-autocomplete').wcaAutocomplete();
 
   var $tablesToFloatHeaders = $('table.floatThead');
-  $tablesToFloatHeaders.floatThead({
-    zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
-  });
-  // Workaround for https://github.com/mkoryak/floatThead/issues/263
-  $tablesToFloatHeaders.each(function() {
-    var $table = $(this);
-    $table.closest('.table-responsive').scroll(function(e) {
-      $table.floatThead('reflow');
+  if (!detect_mobile()) {
+    $tablesToFloatHeaders.floatThead({
+      zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
     });
-  });
+    // Workaround for https://github.com/mkoryak/floatThead/issues/263
+    $tablesToFloatHeaders.each(function() {
+      var $table = $(this);
+      $table.closest('.table-responsive').scroll(function(e) {
+        $table.floatThead('reflow');
+      });
+    });
+  }
 
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they
