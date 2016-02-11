@@ -36,7 +36,9 @@
         </table>
       <% else %>
         <%= render 'index_form' %>
-        <div id="map"></div>
+        <div id="venue-map-wrapper">
+          <div id="map" class="map"></div>
+        </div>
       <% end %>
     <% end %>
   <% end %>
