@@ -1,31 +1,69 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
+  <%= wca_table do %>
+    <thead>
+      <tr>
+        <th class="name">Name</th>
+        <th class="wca-id">WCA ID</th>
+        <th class="country">Citizen of</th>
 
-  <%= wca_table_for @registrations do |table| %>
-    <% table.column :name %>
-    <% table.column :wca_id %>
-    <% table.column :countryId %>
-    <% @competition.events.each do |event| %>
-      <% table.column event.id.to_s %>
-    <% end %>
-    <% table.column do |registration| %>
-      <%= registration.events.length %>
-    <% end %>
+        <% @competition.events.each do |event| %>
+          <th class="<%= event.id %>">
+            <span title="<%= event.name %>"
+                  class="cubing-icon icon-<%= event.id %>"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body">
+            </span>
+          </th>
+        <% end %>
 
-    <% table.define :footer do %>
-      <tfoot>
+        <!-- Extra column for .table-greedy-last-column -->
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @registrations.each do |registration| %>
         <tr>
-          <td colspan="2">
-            <%= render "registration_info_people", registrations: @registrations %>
-          </td>
-          <% country_count = @registrations.map(&:countryId).uniq.length %>
-          <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+          <td class="name"><%= registration.name %></td>
+          <td class="wca-id"><%= render "shared/wca_id", wca_id: registration.wca_id %></td>
+          <td class="country"><%= registration.countryId %></td>
+
           <% @competition.events.each do |event| %>
-            <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
+            <td class="<%= event.id %>">
+              <% if registration.events.include?(event) %>
+                <span title="<%= event.name %>"
+                      class="cubing-icon icon-<%= event.id %>"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      data-container="body">
+                </span>
+              <% end %>
+            </td>
           <% end %>
+
+          <!-- Extra column for .table-greedy-last-column -->
+          <td></td>
         </tr>
-      </tfoot>
-    <% end %>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="2">
+          <%= render "registration_info_people", registrations: @registrations %>
+        </td>
+        <% country_count = @registrations.map(&:countryId).uniq.length %>
+        <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+        <% @competition.events.each do |event| %>
+          <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
+        <% end %>
+
+        <!-- Extra column for .table-greedy-last-column -->
+        <td></td>
+      </tr>
+    </tfoot>
   <% end %>
 <% end %>

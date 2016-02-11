@@ -45,6 +45,17 @@ form .event-checkbox-sm .cubing-icon {
   font-size: 1em;
 }
 
+table.table-greedy-last-column {
+  white-space: nowrap;
+
+  thead tr th:last-child {
+    width: 100%;
+  }
+  tbody tr td:last-child {
+    width: 100%;
+  }
+}
+
 table.wca-results {
   thead tr th {
     white-space: nowrap;
