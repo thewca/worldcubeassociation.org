@@ -4,22 +4,46 @@
   <h2>
     <span class="cubing-icon icon-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
   </h2>
-  <%= wca_table_for @registrations, extra_table_class: "wca-results-sort-by-#{@event.sort_by.to_s}" do |table| %>
-    <%= table.column :position %>
-    <%= table.column :name %>
-    <%= table.column :wca_id %>
-    <%= table.column :countryId %>
-    <%= table.column :average do |registration| %>
-      <%= registration.best_solve(@event, :average).clock_format %>
-    <% end %>
-    <%= table.column :world_rank_average, header: "WR" do |registration| %>
-      <%= registration.world_rank(@event, :average) %>
-    <% end %>
-    <% table.column :single do |registration| %>
-      <%= registration.best_solve(@event, :single).clock_format %>
-    <% end %>
-    <% table.column :world_rank_single, header: "WR" do |registration| %>
-      <%= registration.world_rank(@event, :single) %>
-    <% end %>
+
+  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@event.sort_by.to_s}" do %>
+    <thead>
+      <tr>
+        <th class="position">#</th>
+        <th class="name">Name</th>
+        <th class="wca-id">WCA ID</th>
+        <th class="country">Citizen of</th>
+
+        <th class="average">Average</th>
+        <th class="world-rank-average">WR</th>
+
+        <th class="single">Single</th>
+        <th class="world-rank-single">WR</th>
+
+        <!-- Extra column for .table-greedy-last-column -->
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @registrations.each do |registration| %>
+        <tr>
+          <td class="position <%= registration.tied_previous ? "tied-previous" : "" %>">
+            <%= registration.position %>
+          </td>
+          <td class="name"><%= registration.name %></td>
+          <td class="wca-id"><%= render "shared/wca_id", wca_id: registration.wca_id %></td>
+          <td class="country"><%= registration.countryId %></td>
+
+          <td class="average"><%= registration.best_solve(@event, :average).clock_format %></td>
+          <td class="world-rank-average"><%= registration.world_rank(@event, :average) %></td>
+
+          <td class="single"><%= registration.best_solve(@event, :single).clock_format %></td>
+          <td class="world-rank-single"><%= registration.world_rank(@event, :single) %></td>
+
+          <!-- Extra column for .table-greedy-last-column -->
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
   <% end %>
 <% end %>

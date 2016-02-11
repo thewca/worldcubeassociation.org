@@ -77,6 +77,24 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
+  # TODO - table-for turns out to be pretty slow, so we're rolling our own
+  # table helper. Eventually we should get rid of all uses of wca_table_for.
+  def wca_table(responsive: true, hover: true, striped: true, table_class: "", &block)
+    table_classes = "table wca-results floatThead table-condensed table-greedy-last-column #{table_class}"
+    if hover
+      table_classes += " table-hover"
+    end
+    if striped
+      table_classes += " table-striped"
+    end
+
+    content_tag :div, class: (responsive ? "table-responsive" : "") do
+      content_tag :table, class: table_classes do
+        block.call
+      end
+    end
+  end
+
   def wca_selectable_table_for(records, options={}, &block)
     extra_table_class = options[:extra_table_class] + " selectable-rows"
     wca_table_for(records, extra_table_class: extra_table_class) do |table|
