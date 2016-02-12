@@ -36,8 +36,10 @@
         </table>
       <% else %>
         <%= render 'index_form' %>
-        <div id="venue-map-wrapper">
-          <div id="map" class="map"></div>
+        <div class="row">
+          <div class="col-xs-12 col-md-12">
+            <div id="map"></div>
+          </div>
         </div>
       <% end %>
     <% end %>
@@ -64,5 +66,16 @@ $(function() {
 
     $("#map").competitionsMap(competitions);
   <% end %>
+
+  var nav = parseInt($(".navbar").outerHeight(true));
+  var head = parseInt($("h2").outerHeight(true));
+  var form = parseInt($(".form-group").outerHeight(true));
+  var foot = parseInt($(".footer").outerHeight(true));
+
+  var height = parseInt($(window).innerHeight());
+
+  var map = height - nav - head - form - foot;
+
+  $("#map").height( map );
 });
 </script>
