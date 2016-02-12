@@ -47,6 +47,23 @@
 </div>
 
 <script>
+function mapSize() {
+  var nav = parseInt($(".navbar").outerHeight(true));
+  var head = parseInt($("h2").outerHeight(true));
+  var form = parseInt($(".form-group").outerHeight(true));
+  var foot = parseInt($(".footer").outerHeight(true));
+
+  var height = parseInt($(window).innerHeight());
+
+  var map = height - nav - head - form - foot;
+
+  $("#map").height( map );
+}
+
+$(window).resize(function() {
+  mapSize();
+});
+
 $(function() {
   <% if params[:display] == 'List' %>
     $("#today").scrollToCenter();
@@ -67,15 +84,6 @@ $(function() {
     $("#map").competitionsMap(competitions);
   <% end %>
 
-  var nav = parseInt($(".navbar").outerHeight(true));
-  var head = parseInt($("h2").outerHeight(true));
-  var form = parseInt($(".form-group").outerHeight(true));
-  var foot = parseInt($(".footer").outerHeight(true));
-
-  var height = parseInt($(window).innerHeight());
-
-  var map = height - nav - head - form - foot;
-
-  $("#map").height( map );
+  mapSize();
 });
 </script>
