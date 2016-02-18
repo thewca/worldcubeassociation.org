@@ -1,0 +1,31 @@
+<% provide(:title, 'Teams') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <% can_edit = current_user.can_edit_users? %>
+  <% if can_edit %>
+    <%= link_to "New team", new_team_path %>
+  <% end %>
+
+  <% if @teams.empty? %>
+    <div class="alert alert-warning">There are currently no teams.</div>
+  <% else %>
+    <table class="table">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Leader</th>
+      </tr>
+      <% @teams.each do |team| %>
+        <tr>
+          <td><%= team.friendly_id %></td>
+          <td><%= team.name %></td>
+          <td><%= team.description %></td>
+          <td><%= team.leader %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>

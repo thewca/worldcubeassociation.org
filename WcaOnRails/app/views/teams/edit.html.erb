@@ -1,0 +1,29 @@
+<% provide(:title, "Editing team #{@team.friendly_id}") %>
+
+<div class="container">
+
+  <h3><%= yield(:title) %></h3>
+
+  <%= simple_form_for @team, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
+    wrapper_mappings: {
+      check_boxes: :horizontal_radio_and_checkboxes,
+      radio_buttons: :horizontal_radio_and_checkboxes,
+      file: :horizontal_file_input,
+      boolean: :horizontal_boolean
+    }  do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.input :friendly_id, label: "Friendly id" %>
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :leader %>
+    
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.button :submit, class: "btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+  <%= link_to 'Back to Teams', teams_path, class: "polls-home" %>
+
+</div>
