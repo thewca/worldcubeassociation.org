@@ -4,7 +4,7 @@ class CreateTeams < ActiveRecord::Migration
       t.string :friendly_id
       t.string :name
       t.text :description
-      t.integer :leader, :user_id
+      t.integer :leader_id
 
       t.timestamps null: false
     end
