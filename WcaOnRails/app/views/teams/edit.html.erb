@@ -16,8 +16,23 @@
     <%= f.input :friendly_id, label: "Friendly id" %>
     <%= f.input :name %>
     <%= f.input :description %>
-    <%= f.input :leader %>
-    
+    <%= f.input :leader_id %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Members
+      </div>
+      <div class="panel-body">
+        <%= f.fields_for :team_members do |members_form| %>
+          <%= render 'team_member_fields', f: members_form %>
+        <% end %>
+
+        <div class="links">
+          <%= link_to_add_association button_tag('Add member', type: "button", class: "btn btn-primary"), f, :team_members %>
+        </div>
+      </div>
+    </div>
+
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.button :submit, class: "btn-primary" %>

@@ -291,7 +291,7 @@ CREATE TABLE `Preregs` (
   `guests` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80556 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80561 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,7 +312,7 @@ CREATE TABLE `RanksAverage` (
   PRIMARY KEY (`id`),
   KEY `fk_persons` (`personId`),
   KEY `fk_events` (`eventId`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,7 +333,7 @@ CREATE TABLE `RanksSingle` (
   PRIMARY KEY (`id`),
   KEY `fk_persons` (`personId`),
   KEY `fk_events` (`eventId`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -372,7 +372,7 @@ CREATE TABLE `Results` (
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`)
-) ENGINE=InnoDB AUTO_INCREMENT=857977 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=857992 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -443,7 +443,7 @@ CREATE TABLE `competition_delegates` (
   UNIQUE KEY `index_competition_delegates_on_competition_id_and_delegate_id` (`competition_id`,`delegate_id`),
   KEY `index_competition_delegates_on_competition_id` (`competition_id`),
   KEY `index_competition_delegates_on_delegate_id` (`delegate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5251 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5255 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -464,7 +464,7 @@ CREATE TABLE `competition_organizers` (
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
   KEY `index_competition_organizers_on_organizer_id` (`organizer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2282 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2290 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -534,7 +534,7 @@ CREATE TABLE `oauth_applications` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_oauth_applications_on_uid` (`uid`),
   KEY `index_oauth_applications_on_owner_id_and_owner_type` (`owner_id`,`owner_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -571,7 +571,7 @@ CREATE TABLE `polls` (
   `updated_at` datetime NOT NULL,
   `comment` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -595,7 +595,7 @@ CREATE TABLE `posts` (
   UNIQUE KEY `index_posts_on_slug` (`slug`),
   KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
   KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=5006 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5026 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -608,6 +608,25 @@ DROP TABLE IF EXISTS `schema_migrations`;
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `team_members`
+--
+
+DROP TABLE IF EXISTS `team_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `team_members` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `team_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -627,7 +646,7 @@ CREATE TABLE `teams` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -689,7 +708,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
-) ENGINE=InnoDB AUTO_INCREMENT=6091 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6144 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -734,7 +753,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-18 16:43:31
+-- Dump completed on 2016-02-19  9:22:26
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -832,6 +851,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160120071503');
 INSERT INTO schema_migrations (version) VALUES ('20160128023834');
 
 INSERT INTO schema_migrations (version) VALUES ('20160218135313');
+
+INSERT INTO schema_migrations (version) VALUES ('20160218234447');
 
 INSERT INTO schema_migrations (version) VALUES ('20160223204831');
 

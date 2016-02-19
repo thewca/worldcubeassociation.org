@@ -1,0 +1,6 @@
+<div class="nested-fields">
+  <%= f.text_field :user_id, label: "User", class: 'form-control', required: true %>
+  <%= f.text_field :start_date, label: "Start date", class: 'form-control', as: :date_picker %>
+  <%= f.text_field :end_date, label: "End date", class: 'form-control', as: :date_picker %>
+  <%= link_to_remove_association button_tag('x', type: "button", class: "btn btn-danger"), f %>
+</div>

@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_one :team, foreign_key: "leader_id"
+  has_many :team_members, dependent: :destroy
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 

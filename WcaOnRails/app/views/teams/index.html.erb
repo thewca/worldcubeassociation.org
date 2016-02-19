@@ -17,6 +17,8 @@
         <th>Name</th>
         <th>Description</th>
         <th>Leader</th>
+        <th>Members</th>
+        <th></th>
       </tr>
       <% @teams.each do |team| %>
         <tr>
@@ -24,6 +26,12 @@
           <td><%= team.name %></td>
           <td><%= team.description %></td>
           <td><%= team.leader.name %></td>
+          <td>
+            <% team.team_members.each do |member |%>
+              <%= member.user.name %>,
+            <% end %>
+          </td>
+          <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>
       <% end %>
     </table>
