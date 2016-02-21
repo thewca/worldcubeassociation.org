@@ -108,6 +108,15 @@ describe UsersController do
   describe "editing user data" do
     let(:user) { FactoryGirl.create(:user) }
     let(:delegate) { FactoryGirl.create(:delegate) }
+    
+    it "user can change email" do
+      sign_in user
+      expect(user.confirmation_sent_at).to eq nil
+      patch :update, id: user.id, user: { email: "newEmail@newEmail.com", current_password: "wca" }
+      user.reload
+      expect(user.unconfirmed_email).to eq "newemail@newemail.com"
+      expect(user.confirmation_sent_at).not_to eq nil
+    end
 
     it "user can change name" do
       sign_in user

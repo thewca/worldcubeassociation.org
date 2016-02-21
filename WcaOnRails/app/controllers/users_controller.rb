@@ -64,14 +64,14 @@ class UsersController < ApplicationController
     @user.current_user = current_user
     redirect_if_cannot_edit_user(@user)
 
-    old_confirmation_sent_at = @user.confirmation_sent_at || 0
+    old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && (user_params.has_key?(:password) || user_params.has_key?(:password_confirmation) || user_params.has_key?(:email))
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
         sign_in @user, bypass: true
       end
-      if (@user.confirmation_sent_at || 0) > old_confirmation_sent_at
+      if @user.confirmation_sent_at != old_confirmation_sent_at
         flash[:success] = "Account updated, emailed #{@user.unconfirmed_email} to confirm your new email address."
       else
         flash[:success] = "Account updated"
