@@ -26,11 +26,7 @@
           <td><%= team.name %></td>
           <td><%= team.description %></td>
           <td><%= team.leader.name %></td>
-          <td>
-            <% team.team_members.each do |member |%>
-              <%= member.user.name %>,
-            <% end %>
-          </td>
+          <td><%= team.team_members.map{ |member| member.user.name }.to_sentence %></td>
           <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>
       <% end %>
