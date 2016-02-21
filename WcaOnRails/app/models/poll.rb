@@ -30,7 +30,7 @@ class Poll < ActiveRecord::Base
   end
 
   def poll_is_over?
-    deadline < Date.today
+    deadline < Time.now
   end
 
   def user_already_voted?(current_user)

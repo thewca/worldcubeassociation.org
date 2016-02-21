@@ -30,7 +30,7 @@ describe Vote do
 
   it "can't vote for closed polls" do
     expect(vote).to be_valid
-    poll.deadline = Date.today - 1
+    poll.deadline = Time.now - 1.minute
     poll.save!
     expect(vote).to be_invalid
     expect(vote.errors[:poll_id]).to eq ["poll is closed"]
