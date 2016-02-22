@@ -55,7 +55,6 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 
 	$address_list	= $request->variable('address_list', array('' => array(0 => '')));
 
-	$submit		= (isset($_POST['post'])) ? true : false;
 	$preview	= (isset($_POST['preview'])) ? true : false;
 	$save		= (isset($_POST['save'])) ? true : false;
 	$load		= (isset($_POST['load'])) ? true : false;
@@ -69,6 +68,7 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 
 	$refresh	= isset($_POST['add_file']) || isset($_POST['delete_file']) || $save || $load
 		|| $remove_u || $remove_g || $add_to || $add_bcc;
+	$submit = $request->is_set_post('post') && !$refresh && !$preview;
 
 	$action		= ($delete && !$preview && !$refresh && $submit) ? 'delete' : $action;
 	$select_single = ($config['allow_mass_pm'] && $auth->acl_get('u_masspm')) ? false : true;
@@ -89,6 +89,32 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 	// Since viewtopic.php language entries are used in several modes,
 	// we include the language file here
 	$user->add_lang('viewtopic');
+
+	/**
+	* Modify the default vars before composing a PM
+	*
+	* @event core.ucp_pm_compose_modify_data
+	* @var	int		msg_id					post_id in the page request
+	* @var	int		to_user_id				The id of whom the message is to
+	* @var	int		to_group_id				The id of the group the message is to
+	* @var	bool	submit					Whether the form has been submitted
+	* @var	bool	preview					Whether the user is previewing the PM or not
+	* @var	string	action					One of: post, reply, quote, forward, quotepost, edit, delete, smilies
+	* @var	bool	delete					Whether the user is deleting the PM
+	* @var	int		reply_to_all			Value of reply_to_all request variable.
+	* @since 3.1.4-RC1
+	*/
+	$vars = array(
+		'msg_id',
+		'to_user_id',
+		'to_group_id',
+		'submit',
+		'preview',
+		'action',
+		'delete',
+		'reply_to_all',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.ucp_pm_compose_modify_data', compact($vars)));
 
 	// Output PM_TO box if message composing
 	if ($action != 'edit')

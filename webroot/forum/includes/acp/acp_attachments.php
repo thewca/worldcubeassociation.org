@@ -106,7 +106,10 @@ class acp_attachments
 		{
 			case 'attach':
 
-				include_once($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+				if (!function_exists('get_supported_image_types'))
+				{
+					include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+				}
 
 				$sql = 'SELECT group_name, cat_id
 					FROM ' . EXTENSION_GROUPS_TABLE . '
@@ -153,7 +156,7 @@ class acp_attachments
 						'img_create_thumbnail'		=> array('lang' => 'CREATE_THUMBNAIL',		'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),
 						'img_max_thumb_width'		=> array('lang' => 'MAX_THUMB_WIDTH',		'validate' => 'int:0:999999999999999',	'type' => 'number:0:999999999999999', 'explain' => true, 'append' => ' ' . $user->lang['PIXEL']),
 						'img_min_thumb_filesize'	=> array('lang' => 'MIN_THUMB_FILESIZE',	'validate' => 'int:0:999999999999999',	'type' => 'number:0:999999999999999', 'explain' => true, 'append' => ' ' . $user->lang['BYTES']),
-						'img_imagick'				=> array('lang' => 'IMAGICK_PATH',			'validate' => 'path',	'type' => 'text:20:200', 'explain' => true, 'append' => '&nbsp;&nbsp;<span>[ <a href="' . $this->u_action . '&amp;action=imgmagick">' . $user->lang['SEARCH_IMAGICK'] . '</a> ]</span>'),
+						'img_imagick'				=> array('lang' => 'IMAGICK_PATH',			'validate' => 'absolute_path',	'type' => 'text:20:200', 'explain' => true, 'append' => '&nbsp;&nbsp;<span>[ <a href="' . $this->u_action . '&amp;action=imgmagick">' . $user->lang['SEARCH_IMAGICK'] . '</a> ]</span>'),
 						'img_max'					=> array('lang' => 'MAX_IMAGE_SIZE',		'validate' => 'int:0:9999',	'type' => 'dimension:0:9999', 'explain' => true, 'append' => ' ' . $user->lang['PIXEL']),
 						'img_link'					=> array('lang' => 'IMAGE_LINK_SIZE',		'validate' => 'int:0:9999',	'type' => 'dimension:0:9999', 'explain' => true, 'append' => ' ' . $user->lang['PIXEL']),
 					)

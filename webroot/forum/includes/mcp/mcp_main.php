@@ -226,6 +226,31 @@ class mcp_main
 			break;
 
 			default:
+				if ($quickmod)
+				{
+					switch ($action)
+					{
+						case 'lock':
+						case 'unlock':
+						case 'make_announce':
+						case 'make_sticky':
+						case 'make_global':
+						case 'make_normal':
+						case 'make_onindex':
+						case 'move':
+						case 'fork':
+						case 'delete_topic':
+							trigger_error('TOPIC_NOT_EXIST');
+						break;
+
+						case 'lock_post':
+						case 'unlock_post':
+						case 'delete_post':
+							trigger_error('POST_NOT_EXIST');
+						break;
+					}
+				}
+
 				trigger_error('NO_MODE', E_USER_ERROR);
 			break;
 		}
@@ -237,7 +262,7 @@ class mcp_main
 */
 function lock_unlock($action, $ids)
 {
-	global $auth, $user, $db, $phpEx, $phpbb_root_path, $request;
+	global $auth, $user, $db, $phpEx, $phpbb_root_path, $request, $phpbb_dispatcher;
 
 	if ($action == 'lock' || $action == 'unlock')
 	{
@@ -296,6 +321,22 @@ function lock_unlock($action, $ids)
 		{
 			add_log('mod', $row['forum_id'], $row['topic_id'], 'LOG_' . strtoupper($action), $row['topic_title']);
 		}
+
+		/**
+		 * Perform additional actions after locking/unlocking posts/topics
+		 *
+		 * @event core.mcp_lock_unlock_after
+		 * @var	string	action				Variable containing the action we perform on the posts/topics ('lock', 'unlock', 'lock_post' or 'unlock_post')
+		 * @var	array	ids					Array containing the post/topic IDs that have been locked/unlocked
+		 * @var	array	data				Array containing posts/topics data
+		 * @since 3.1.7-RC1
+		 */
+		$vars = array(
+			'action',
+			'ids',
+			'data',
+		);
+		extract($phpbb_dispatcher->trigger_event('core.mcp_lock_unlock_after', compact($vars)));
 
 		$success_msg = $l_prefix . ((sizeof($ids) == 1) ? '' : 'S') . '_' . (($action == 'lock' || $action == 'lock_post') ? 'LOCKED' : 'UNLOCKED') . '_SUCCESS';
 
@@ -1119,7 +1160,7 @@ function mcp_delete_post($post_ids, $is_soft = false, $soft_delete_reason = '', 
 function mcp_fork_topic($topic_ids)
 {
 	global $auth, $user, $db, $template, $config;
-	global $phpEx, $phpbb_root_path;
+	global $phpEx, $phpbb_root_path, $phpbb_dispatcher;
 
 	if (!phpbb_check_ids($topic_ids, TOPICS_TABLE, 'topic_id', array('m_')))
 	{
@@ -1197,7 +1238,7 @@ function mcp_fork_topic($topic_ids)
 				}
 
 				$error = false;
-				$search = new $search_type($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user);
+				$search = new $search_type($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
 				$search_mode = 'post';
 
 				if ($error)
@@ -1276,6 +1317,7 @@ function mcp_fork_topic($topic_ids)
 
 					$db->sql_query('INSERT INTO ' . POLL_OPTIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
 				}
+				$db->sql_freeresult($result);
 			}
 
 			$sql = 'SELECT *

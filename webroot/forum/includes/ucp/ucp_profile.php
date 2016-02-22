@@ -32,7 +32,7 @@ class ucp_profile
 	function main($id, $mode)
 	{
 		global $cache, $config, $db, $user, $auth, $template, $phpbb_root_path, $phpEx;
-		global $request, $phpbb_container;
+		global $request, $phpbb_container, $phpbb_dispatcher;
 
 		$user->add_lang('posting');
 
@@ -53,6 +53,17 @@ class ucp_profile
 					'cur_password'		=> $request->variable('cur_password', '', true),
 					'password_confirm'	=> $request->variable('password_confirm', '', true),
 				);
+
+				/**
+				* Modify user registration data on editing account settings in UCP
+				*
+				* @event core.ucp_profile_reg_details_data
+				* @var	array	data		Array with current or updated user registration data
+				* @var	bool	submit		Flag indicating if submit button has been pressed
+				* @since 3.1.4-RC1
+				*/
+				$vars = array('data', 'submit');
+				extract($phpbb_dispatcher->trigger_event('core.ucp_profile_reg_details_data', compact($vars)));
 
 				add_form_key('ucp_reg_details');
 
@@ -102,6 +113,18 @@ class ucp_profile
 					{
 						$error[] = 'FORM_INVALID';
 					}
+
+					/**
+					* Validate user data on editing registration data in UCP
+					*
+					* @event core.ucp_profile_reg_details_validate
+					* @var	array	data			Array with user profile data
+					* @var	bool	submit			Flag indicating if submit button has been pressed
+					* @var array	error			Array of any generated errors
+					* @since 3.1.4-RC1
+					*/
+					$vars = array('data', 'submit', 'error');
+					extract($phpbb_dispatcher->trigger_event('core.ucp_profile_reg_details_validate', compact($vars)));
 
 					if (!sizeof($error))
 					{
@@ -160,37 +183,12 @@ class ucp_profile
 
 							if ($config['require_activation'] == USER_ACTIVATION_ADMIN)
 							{
-								// Grab an array of user_id's with a_user permissions ... these users can activate a user
-								$admin_ary = $auth->acl_get_list(false, 'a_user', false);
-								$admin_ary = (!empty($admin_ary[0]['a_user'])) ? $admin_ary[0]['a_user'] : array();
-
-								// Also include founders
-								$where_sql = ' WHERE user_type = ' . USER_FOUNDER;
-
-								if (sizeof($admin_ary))
-								{
-									$where_sql .= ' OR ' . $db->sql_in_set('user_id', $admin_ary);
-								}
-
-								$sql = 'SELECT user_id, username, user_email, user_lang, user_jabber, user_notify_type
-									FROM ' . USERS_TABLE . ' ' .
-									$where_sql;
-								$result = $db->sql_query($sql);
-
-								while ($row = $db->sql_fetchrow($result))
-								{
-									$messenger->template('admin_activate', $row['user_lang']);
-									$messenger->set_addresses($row);
-
-									$messenger->assign_vars(array(
-										'USERNAME'			=> htmlspecialchars_decode($data['username']),
-										'U_USER_DETAILS'	=> "$server_url/memberlist.$phpEx?mode=viewprofile&u={$user->data['user_id']}",
-										'U_ACTIVATE'		=> "$server_url/ucp.$phpEx?mode=activate&u={$user->data['user_id']}&k=$user_actkey")
-									);
-
-									$messenger->send($row['user_notify_type']);
-								}
-								$db->sql_freeresult($result);
+								$notifications_manager = $phpbb_container->get('notification_manager');
+								$notifications_manager->add_notifications('notification.type.admin_activate_user', array(
+									'user_id'		=> $user->data['user_id'],
+									'user_actkey'	=> $user_actkey,
+									'user_regdate'	=> time(), // Notification time
+								));
 							}
 
 							user_active_flip('deactivate', $user->data['user_id'], INACTIVE_PROFILE);
@@ -199,6 +197,17 @@ class ucp_profile
 							$sql_ary['user_actkey'] = $user_actkey;
 							$sql_ary['user_newpasswd'] = '';
 						}
+
+						/**
+						* Modify user registration data before submitting it to the database
+						*
+						* @event core.ucp_profile_reg_details_sql_ary
+						* @var	array	data		Array with current or updated user registration data
+						* @var	array	sql_ary		Array with user registration data to submit to the database
+						* @since 3.1.4-RC1
+						*/
+						$vars = array('data', 'sql_ary');
+						extract($phpbb_dispatcher->trigger_event('core.ucp_profile_reg_details_sql_ary', compact($vars)));
 
 						if (sizeof($sql_ary))
 						{
@@ -285,6 +294,17 @@ class ucp_profile
 					$data['user_birthday'] = sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
 				}
 
+				/**
+				* Modify user data on editing profile in UCP
+				*
+				* @event core.ucp_profile_modify_profile_info
+				* @var	array	data		Array with user profile data
+				* @var	bool	submit		Flag indicating if submit button has been pressed
+				* @since 3.1.4-RC1
+				*/
+				$vars = array('data', 'submit');
+				extract($phpbb_dispatcher->trigger_event('core.ucp_profile_modify_profile_info', compact($vars)));
+
 				add_form_key('ucp_profile_info');
 
 				if ($submit)
@@ -320,6 +340,18 @@ class ucp_profile
 						$error[] = 'FORM_INVALID';
 					}
 
+					/**
+					* Validate user data on editing profile in UCP
+					*
+					* @event core.ucp_profile_validate_profile_info
+					* @var	array	data			Array with user profile data
+					* @var	bool	submit			Flag indicating if submit button has been pressed
+					* @var array	error			Array of any generated errors
+					* @since 3.1.4-RC1
+					*/
+					$vars = array('data', 'submit', 'error');
+					extract($phpbb_dispatcher->trigger_event('core.ucp_profile_validate_profile_info', compact($vars)));
+
 					if (!sizeof($error))
 					{
 						$data['notify'] = $user->data['user_notify_type'];
@@ -340,6 +372,18 @@ class ucp_profile
 						{
 							$sql_ary['user_birthday'] = $data['user_birthday'];
 						}
+
+						/**
+						* Modify profile data in UCP before submitting to the database
+						*
+						* @event core.ucp_profile_info_modify_sql_ary
+						* @var	array	cp_data		Array with the user custom profile fields data
+						* @var	array	data		Array with user profile data
+						* @var  array	sql_ary		user options data we update
+						* @since 3.1.4-RC1
+						*/
+						$vars = array('cp_data', 'data', 'sql_ary');
+						extract($phpbb_dispatcher->trigger_event('core.ucp_profile_info_modify_sql_ary', compact($vars)));
 
 						$sql = 'UPDATE ' . USERS_TABLE . '
 							SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '

@@ -588,7 +588,7 @@ $quickmod_array = array(
 	'topic_logs'			=> array('VIEW_TOPIC_LOGS', $auth->acl_get('m_', $forum_id)),
 );
 
-foreach($quickmod_array as $option => $qm_ary)
+foreach ($quickmod_array as $option => $qm_ary)
 {
 	if (!empty($qm_ary[1]))
 	{
@@ -804,6 +804,36 @@ if (!empty($topic_data['poll_start']))
 		($auth->acl_get('f_votechg', $forum_id) && $topic_data['poll_vote_change']))) ? true : false;
 	$s_display_results = (!$s_can_vote || ($s_can_vote && sizeof($cur_voted_id)) || $view == 'viewpoll') ? true : false;
 
+	/**
+	* Event to manipulate the poll data
+	*
+	* @event core.viewtopic_modify_poll_data
+	* @var	array	cur_voted_id				Array with options' IDs current user has voted for
+	* @var	int		forum_id					The topic's forum id
+	* @var	array	poll_info					Array with the poll information
+	* @var	bool	s_can_vote					Flag indicating if a user can vote
+	* @var	bool	s_display_results			Flag indicating if results or poll options should be displayed
+	* @var	int		topic_id					The id of the topic the user tries to access
+	* @var	array	topic_data					All the information from the topic and forum tables for this topic
+	* @var	string	viewtopic_url				URL to the topic page
+	* @var	array	vote_counts					Array with the vote counts for every poll option
+	* @var	array	voted_id					Array with updated options' IDs current user is voting for
+	* @since 3.1.5-RC1
+	*/
+	$vars = array(
+		'cur_voted_id',
+		'forum_id',
+		'poll_info',
+		's_can_vote',
+		's_display_results',
+		'topic_id',
+		'topic_data',
+		'viewtopic_url',
+		'vote_counts',
+		'voted_id',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.viewtopic_modify_poll_data', compact($vars)));
+
 	if ($update && $s_can_vote)
 	{
 
@@ -937,6 +967,7 @@ if (!empty($topic_data['poll_start']))
 
 	$topic_data['poll_title'] = generate_text_for_display($topic_data['poll_title'], $poll_info[0]['bbcode_uid'], $poll_info[0]['bbcode_bitfield'], $parse_flags, true);
 
+	$poll_template_data = $poll_options_template_data = array();
 	foreach ($poll_info as $poll_option)
 	{
 		$option_pct = ($poll_total > 0) ? $poll_option['poll_option_total'] / $poll_total : 0;
@@ -945,7 +976,7 @@ if (!empty($topic_data['poll_start']))
 		$option_pct_rel_txt = sprintf("%.1d%%", round($option_pct_rel * 100));
 		$option_most_votes = ($poll_option['poll_option_total'] > 0 && $poll_option['poll_option_total'] == $poll_most) ? true : false;
 
-		$template->assign_block_vars('poll_option', array(
+		$poll_options_template_data[] = array(
 			'POLL_OPTION_ID' 			=> $poll_option['poll_option_id'],
 			'POLL_OPTION_CAPTION' 		=> $poll_option['poll_option_text'],
 			'POLL_OPTION_RESULT' 		=> $poll_option['poll_option_total'],
@@ -955,12 +986,12 @@ if (!empty($topic_data['poll_start']))
 			'POLL_OPTION_WIDTH'     	=> round($option_pct * 250),
 			'POLL_OPTION_VOTED'			=> (in_array($poll_option['poll_option_id'], $cur_voted_id)) ? true : false,
 			'POLL_OPTION_MOST_VOTES'	=> $option_most_votes,
-		));
+		);
 	}
 
 	$poll_end = $topic_data['poll_length'] + $topic_data['poll_start'];
 
-	$template->assign_vars(array(
+	$poll_template_data = array(
 		'POLL_QUESTION'		=> $topic_data['poll_title'],
 		'TOTAL_VOTES' 		=> $poll_total,
 		'POLL_LEFT_CAP_IMG'	=> $user->img('poll_left'),
@@ -976,9 +1007,45 @@ if (!empty($topic_data['poll_start']))
 		'S_POLL_ACTION'		=> $viewtopic_url,
 
 		'U_VIEW_RESULTS'	=> $viewtopic_url . '&amp;view=viewpoll',
-	));
+	);
 
-	unset($poll_end, $poll_info, $voted_id);
+	/**
+	* Event to add/modify poll template data
+	*
+	* @event core.viewtopic_modify_poll_template_data
+	* @var	array	cur_voted_id					Array with options' IDs current user has voted for
+	* @var	int		poll_end						The poll end time
+	* @var	array	poll_info						Array with the poll information
+	* @var	array	poll_options_template_data		Array with the poll options template data
+	* @var	array	poll_template_data				Array with the common poll template data
+	* @var	int		poll_total						Total poll votes count
+	* @var	int		poll_most						Mostly voted option votes count
+	* @var	array	topic_data						All the information from the topic and forum tables for this topic
+	* @var	string	viewtopic_url					URL to the topic page
+	* @var	array	vote_counts						Array with the vote counts for every poll option
+	* @var	array	voted_id						Array with updated options' IDs current user is voting for
+	* @since 3.1.5-RC1
+	*/
+	$vars = array(
+		'cur_voted_id',
+		'poll_end',
+		'poll_info',
+		'poll_options_template_data',
+		'poll_template_data',
+		'poll_total',
+		'poll_most',
+		'topic_data',
+		'viewtopic_url',
+		'vote_counts',
+		'voted_id',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.viewtopic_modify_poll_template_data', compact($vars)));
+
+	$template->assign_block_vars_array('poll_option', $poll_options_template_data);
+
+	$template->assign_vars($poll_template_data);
+
+	unset($poll_end, $poll_info, $poll_options_template_data, $poll_template_data, $voted_id);
 }
 
 // If the user is trying to reach the second half of the topic, fetch it starting from the end
@@ -1015,7 +1082,6 @@ else
 // Container for user details, only process once
 $post_list = $user_cache = $id_cache = $attachments = $attach_list = $rowset = $update_count = $post_edit_list = $post_delete_list = array();
 $has_unapproved_attachments = $has_approved_attachments = $display_notice = false;
-$bbcode_bitfield = '';
 $i = $i_total = 0;
 
 // Go ahead and pull all data for this topic
@@ -1180,15 +1246,6 @@ while ($row = $db->sql_fetchrow($result))
 	extract($phpbb_dispatcher->trigger_event('core.viewtopic_post_rowset_data', compact($vars)));
 
 	$rowset[$row['post_id']] = $rowset_data;
-
-	// Define the global bbcode bitfield, will be used to load bbcodes
-	$bbcode_bitfield = $bbcode_bitfield | base64_decode($row['bbcode_bitfield']);
-
-	// Is a signature attached? Are we going to display it?
-	if ($row['enable_sig'] && $config['allow_sig'] && $user->optionget('viewsigs'))
-	{
-		$bbcode_bitfield = $bbcode_bitfield | base64_decode($row['user_sig_bbcode_bitfield']);
-	}
 
 	// Cache various user specific data ... so we don't have to recompute
 	// this each time the same user appears on this page
@@ -1461,12 +1518,6 @@ if (sizeof($attach_list))
 	{
 		$display_notice = true;
 	}
-}
-
-// Instantiate BBCode if need be
-if ($bbcode_bitfield !== '')
-{
-	$bbcode = new bbcode(base64_encode($bbcode_bitfield));
 }
 
 // Get the list of users who can receive private messages
@@ -1770,10 +1821,19 @@ for ($i = 0, $end = sizeof($post_list); $i < $end; ++$i)
 		($user->data['user_id'] == ANONYMOUS || $auth->acl_get('f_reply', $forum_id))
 	);
 
+	// Only display the quote button if the post is quotable.  Posts not approved are not quotable.
+	$quote_allowed = ($quote_allowed && $row['post_visibility'] == ITEM_APPROVED) ? true : false;
+
 	$delete_allowed = $force_delete_allowed || ($user->data['is_registered'] && (
 		($auth->acl_get('m_delete', $forum_id) || ($auth->acl_get('m_softdelete', $forum_id) && $row['post_visibility'] != ITEM_DELETED)) ||
 		(!$s_cannot_delete && !$s_cannot_delete_lastpost && !$s_cannot_delete_time && !$s_cannot_delete_locked)
 	));
+
+	$softdelete_allowed = ($auth->acl_get('m_softdelete', $forum_id) ||
+		($auth->acl_get('f_softdelete', $forum_id) && $user->data['user_id'] == $poster_id)) && ($row['post_visibility'] != ITEM_DELETED);
+
+	$permanent_delete_allowed = ($auth->acl_get('m_delete', $forum_id) ||
+		($auth->acl_get('f_delete', $forum_id) && $user->data['user_id'] == $poster_id));
 
 	// Can this user receive a Private Message?
 	$can_receive_pm = (
@@ -1837,7 +1897,7 @@ for ($i = 0, $end = sizeof($post_list); $i < $end; ++$i)
 		'U_EDIT'			=> ($edit_allowed) ? append_sid("{$phpbb_root_path}posting.$phpEx", "mode=edit&amp;f=$forum_id&amp;p={$row['post_id']}") : '',
 		'U_QUOTE'			=> ($quote_allowed) ? append_sid("{$phpbb_root_path}posting.$phpEx", "mode=quote&amp;f=$forum_id&amp;p={$row['post_id']}") : '',
 		'U_INFO'			=> ($auth->acl_get('m_info', $forum_id)) ? append_sid("{$phpbb_root_path}mcp.$phpEx", "i=main&amp;mode=post_details&amp;f=$forum_id&amp;p=" . $row['post_id'], true, $user->session_id) : '',
-		'U_DELETE'			=> ($delete_allowed) ? append_sid("{$phpbb_root_path}posting.$phpEx", "mode=delete&amp;f=$forum_id&amp;p={$row['post_id']}") : '',
+		'U_DELETE'			=> ($delete_allowed) ? append_sid("{$phpbb_root_path}posting.$phpEx", 'mode=' . (($softdelete_allowed) ? 'soft_delete' : 'delete') . "&amp;f=$forum_id&amp;p={$row['post_id']}") : '',
 
 		'U_SEARCH'		=> $user_cache[$poster_id]['search'],
 		'U_PM'			=> $u_pm,
@@ -1876,6 +1936,7 @@ for ($i = 0, $end = sizeof($post_list); $i < $end; ++$i)
 		'L_IGNORE_POST'		=> ($row['foe']) ? sprintf($user->lang['POST_BY_FOE'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
 		'S_POST_HIDDEN'		=> $row['hide_post'],
 		'L_POST_DISPLAY'	=> ($row['hide_post']) ? $user->lang('POST_DISPLAY', '<a class="display_post" data-post-id="' . $row['post_id'] . '" href="' . $viewtopic_url . "&amp;p={$row['post_id']}&amp;view=show#p{$row['post_id']}" . '">', '</a>') : '',
+		'S_DELETE_PERMANENT'	=> $permanent_delete_allowed,
 	);
 
 	$user_poster_data = $user_cache[$poster_id];

@@ -100,9 +100,9 @@ class db_text
 			$sql = 'UPDATE ' . $this->table . "
 				SET config_value = '" . $this->db->sql_escape($value) . "'
 				WHERE config_name = '" . $this->db->sql_escape($key) . "'";
-			$result = $this->db->sql_query($sql);
+			$this->db->sql_query($sql);
 
-			if (!$this->db->sql_affectedrows($result))
+			if (!$this->db->sql_affectedrows())
 			{
 				$sql = 'INSERT INTO ' . $this->table . ' ' . $this->db->sql_build_array('INSERT', array(
 					'config_name'	=> (string) $key,
@@ -154,6 +154,6 @@ class db_text
 		$sql = 'DELETE
 			FROM ' . $this->table . '
 			WHERE ' . $this->db->sql_in_set('config_name', $keys, false, true);
-		$result = $this->db->sql_query($sql);
+		$this->db->sql_query($sql);
 	}
 }

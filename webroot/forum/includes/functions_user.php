@@ -44,13 +44,13 @@ function user_get_id_name(&$user_id_ary, &$username_ary, $user_type = false)
 
 	$which_ary = ($user_id_ary) ? 'user_id_ary' : 'username_ary';
 
-	if ($$which_ary && !is_array($$which_ary))
+	if (${$which_ary} && !is_array(${$which_ary}))
 	{
-		$$which_ary = array($$which_ary);
+		${$which_ary} = array(${$which_ary});
 	}
 
-	$sql_in = ($which_ary == 'user_id_ary') ? array_map('intval', $$which_ary) : array_map('utf8_clean_string', $$which_ary);
-	unset($$which_ary);
+	$sql_in = ($which_ary == 'user_id_ary') ? array_map('intval', ${$which_ary}) : array_map('utf8_clean_string', ${$which_ary});
+	unset(${$which_ary});
 
 	$user_id_ary = $username_ary = array();
 
@@ -398,7 +398,7 @@ function user_add($user_row, $cp_data = false, $notifications_data = null)
  */
 function user_delete($mode, $user_ids, $retain_username = true)
 {
-	global $cache, $config, $db, $user, $phpbb_dispatcher;
+	global $cache, $config, $db, $user, $phpbb_dispatcher, $phpbb_container;
 	global $phpbb_root_path, $phpEx;
 
 	$db->sql_transaction('begin');
@@ -500,6 +500,9 @@ function user_delete($mode, $user_ids, $retain_username = true)
 
 	$num_users_delta = 0;
 
+	// Get auth provider collection in case accounts might need to be unlinked
+	$provider_collection = $phpbb_container->get('auth.provider_collection');
+
 	// Some things need to be done in the loop (if the query changes based
 	// on which user is currently being deleted)
 	$added_guest_posts = 0;
@@ -508,6 +511,38 @@ function user_delete($mode, $user_ids, $retain_username = true)
 		if ($user_row['user_avatar'] && $user_row['user_avatar_type'] == 'avatar.driver.upload')
 		{
 			avatar_delete('user', $user_row);
+		}
+
+		// Unlink accounts
+		foreach ($provider_collection as $provider_name => $auth_provider)
+		{
+			$provider_data = $auth_provider->get_auth_link_data($user_id);
+
+			if ($provider_data !== null)
+			{
+				$link_data = array(
+					'user_id' => $user_id,
+					'link_method' => 'user_delete',
+				);
+
+				// BLOCK_VARS might contain hidden fields necessary for unlinking accounts
+				if (isset($provider_data['BLOCK_VARS']) && is_array($provider_data['BLOCK_VARS']))
+				{
+					foreach ($provider_data['BLOCK_VARS'] as $provider_service)
+					{
+						if (!array_key_exists('HIDDEN_FIELDS', $provider_service))
+						{
+							$provider_service['HIDDEN_FIELDS'] = array();
+						}
+
+						$auth_provider->unlink_account(array_merge($link_data, $provider_service['HIDDEN_FIELDS']));
+					}
+				}
+				else
+				{
+					$auth_provider->unlink_account($link_data);
+				}
+			}
 		}
 
 		// Decrement number of users if this user is active
@@ -672,6 +707,9 @@ function user_delete($mode, $user_ids, $retain_username = true)
 	}
 	phpbb_delete_users_pms($user_ids);
 
+	$phpbb_notifications = $phpbb_container->get('notification_manager');
+	$phpbb_notifications->delete_notifications('notification.type.admin_activate_user', $user_ids);
+
 	$db->sql_transaction('commit');
 
 	/**
@@ -703,7 +741,7 @@ function user_delete($mode, $user_ids, $retain_username = true)
 */
 function user_active_flip($mode, $user_id_ary, $reason = INACTIVE_MANUAL)
 {
-	global $config, $db, $user, $auth;
+	global $config, $db, $user, $auth, $phpbb_dispatcher;
 
 	$deactivated = $activated = 0;
 	$sql_statements = array();
@@ -756,6 +794,21 @@ function user_active_flip($mode, $user_id_ary, $reason = INACTIVE_MANUAL)
 	}
 	$db->sql_freeresult($result);
 
+	/**
+	* Check or modify activated/deactivated users data before submitting it to the database
+	*
+	* @event core.user_active_flip_before
+	* @var	string	mode			User type changing mode, can be: flip|activate|deactivate
+	* @var	int		reason			Reason for changing user type, can be: INACTIVE_REGISTER|INACTIVE_PROFILE|INACTIVE_MANUAL|INACTIVE_REMIND
+	* @var	int		activated		The number of users to be activated
+	* @var	int		deactivated		The number of users to be deactivated
+	* @var	array	user_id_ary		Array with user ids to change user type
+	* @var	array	sql_statements	Array with users data to submit to the database, keys: user ids, values: arrays with user data
+	* @since 3.1.4-RC1
+	*/
+	$vars = array('mode', 'reason', 'activated', 'deactivated', 'user_id_ary', 'sql_statements');
+	extract($phpbb_dispatcher->trigger_event('core.user_active_flip_before', compact($vars)));
+
 	if (sizeof($sql_statements))
 	{
 		foreach ($sql_statements as $user_id => $sql_ary)
@@ -768,6 +821,21 @@ function user_active_flip($mode, $user_id_ary, $reason = INACTIVE_MANUAL)
 
 		$auth->acl_clear_prefetch(array_keys($sql_statements));
 	}
+
+	/**
+	* Perform additional actions after the users have been activated/deactivated
+	*
+	* @event core.user_active_flip_after
+	* @var	string	mode			User type changing mode, can be: flip|activate|deactivate
+	* @var	int		reason			Reason for changing user type, can be: INACTIVE_REGISTER|INACTIVE_PROFILE|INACTIVE_MANUAL|INACTIVE_REMIND
+	* @var	int		activated		The number of users to be activated
+	* @var	int		deactivated		The number of users to be deactivated
+	* @var	array	user_id_ary		Array with user ids to change user type
+	* @var	array	sql_statements	Array with users data to submit to the database, keys: user ids, values: arrays with user data
+	* @since 3.1.4-RC1
+	*/
+	$vars = array('mode', 'reason', 'activated', 'deactivated', 'user_id_ary', 'sql_statements');
+	extract($phpbb_dispatcher->trigger_event('core.user_active_flip_after', compact($vars)));
 
 	if ($deactivated)
 	{
@@ -1334,7 +1402,7 @@ function user_ipwhois($ip)
 	$match = array();
 
 	// Test for referrals from $whois_host to other whois databases, roll on rwhois
-	if (preg_match('#ReferralServer: whois://(.+)#im', $ipwhois, $match))
+	if (preg_match('#ReferralServer:[\x20]*whois://(.+)#im', $ipwhois, $match))
 	{
 		if (strpos($match[1], ':') !== false)
 		{
@@ -2630,7 +2698,7 @@ function group_delete($group_id, $group_name = false)
 */
 function group_user_add($group_id, $user_id_ary = false, $username_ary = false, $group_name = false, $default = false, $leader = 0, $pending = 0, $group_attributes = false)
 {
-	global $db, $auth, $phpbb_container;
+	global $db, $auth, $phpbb_container, $phpbb_dispatcher;
 
 	// We need both username and user_id info
 	$result = user_get_id_name($user_id_ary, $username_ary);
@@ -2706,6 +2774,26 @@ function group_user_add($group_id, $user_id_ary = false, $username_ary = false, 
 
 	// Clear permissions cache of relevant users
 	$auth->acl_clear_prefetch($user_id_ary);
+
+	/**
+	* Event after users are added to a group
+	*
+	* @event core.group_add_user_after
+	* @var	int	group_id		ID of the group to which users are added
+	* @var	string group_name		Name of the group
+	* @var	array	user_id_ary		IDs of the users which are added
+	* @var	array	username_ary	names of the users which are added
+	* @var	int		pending			Pending setting, 1 if user(s) added are pending
+	* @since 3.1.7-RC1
+	*/
+	$vars = array(
+		'group_id',
+		'group_name',
+		'user_id_ary',
+		'username_ary',
+		'pending',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.group_add_user_after', compact($vars)));
 
 	if (!$group_name)
 	{
@@ -2864,6 +2952,19 @@ function group_user_del($group_id, $user_id_ary = false, $username_ary = false, 
 
 	// Clear permissions cache of relevant users
 	$auth->acl_clear_prefetch($user_id_ary);
+
+	/**
+	* Event after users are removed from a group
+	*
+	* @event core.group_delete_user_after
+	* @var	int		group_id		ID of the group from which users are deleted
+	* @var	string	group_name		Name of the group
+	* @var	array	user_id_ary		IDs of the users which are removed
+	* @var	array	username_ary	names of the users which are removed
+	* @since 3.1.7-RC1
+	*/
+	$vars = array('group_id', 'group_name', 'user_id_ary', 'username_ary');
+	extract($phpbb_dispatcher->trigger_event('core.group_delete_user_after', compact($vars)));
 
 	if (!$group_name)
 	{

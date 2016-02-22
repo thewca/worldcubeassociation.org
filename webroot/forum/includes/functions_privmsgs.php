@@ -1415,9 +1415,9 @@ function rebuild_header($check_ary)
 		$_types = array('u', 'g');
 		foreach ($_types as $type)
 		{
-			if (sizeof($$type))
+			if (sizeof(${$type}))
 			{
-				foreach ($$type as $id)
+				foreach (${$type} as $id)
 				{
 					$address[$type][$id] = $check_type;
 				}
@@ -1594,7 +1594,7 @@ function get_folder_status($folder_id, $folder)
 		'percent'		=> ($user->data['message_limit']) ? (($user->data['message_limit'] > 0) ? floor(($folder['num_messages'] / $user->data['message_limit']) * 100) : 100) : 0,
 	);
 
-	$return['message']	= $user->lang('FOLDER_STATUS_MSG', $user->lang('MESSAGES_COUNT', (int) $return['max']), $return['cur'], $return['percent']);
+	$return['message']	= $user->lang('FOLDER_STATUS_MSG', $user->lang('MESSAGES_COUNT', (int) $return['max']), (int) $return['cur'], $return['percent']);
 
 	return $return;
 }
@@ -1957,7 +1957,7 @@ function submit_pm($mode, $subject, &$data, $put_in_outbox = true)
 */
 function message_history($msg_id, $user_id, $message_row, $folder, $in_post_mode = false)
 {
-	global $db, $user, $config, $template, $phpbb_root_path, $phpEx, $auth, $bbcode;
+	global $db, $user, $config, $template, $phpbb_root_path, $phpEx, $auth;
 
 	// Select all receipts and the author from the pm we currently view, to only display their pm-history
 	$sql = 'SELECT author_id, user_id
@@ -2009,7 +2009,6 @@ function message_history($msg_id, $user_id, $message_row, $folder, $in_post_mode
 	$title = $row['message_subject'];
 
 	$rowset = array();
-	$bbcode_bitfield = '';
 	$folder_url = append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm') . '&amp;folder=';
 
 	do
@@ -2025,7 +2024,6 @@ function message_history($msg_id, $user_id, $message_row, $folder, $in_post_mode
 		else
 		{
 			$rowset[$row['msg_id']] = $row;
-			$bbcode_bitfield = $bbcode_bitfield | base64_decode($row['bbcode_bitfield']);
 		}
 	}
 	while ($row = $db->sql_fetchrow($result));
@@ -2034,16 +2032,6 @@ function message_history($msg_id, $user_id, $message_row, $folder, $in_post_mode
 	if (sizeof($rowset) == 1 && !$in_post_mode)
 	{
 		return false;
-	}
-
-	// Instantiate BBCode class
-	if ((empty($bbcode) || $bbcode === false) && $bbcode_bitfield !== '')
-	{
-		if (!class_exists('bbcode'))
-		{
-			include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-		}
-		$bbcode = new bbcode(base64_encode($bbcode_bitfield));
 	}
 
 	$title = censor_text($title);

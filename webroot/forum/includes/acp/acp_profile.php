@@ -31,10 +31,17 @@ class acp_profile
 	{
 		global $config, $db, $user, $auth, $template, $cache;
 		global $phpbb_root_path, $phpbb_admin_path, $phpEx, $table_prefix;
-		global $request, $phpbb_container;
+		global $request, $phpbb_container, $phpbb_dispatcher;
 
-		include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		if (!function_exists('generate_smilies'))
+		{
+			include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+		}
+
+		if (!function_exists('user_get_id_name'))
+		{
+			include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		}
 
 		$user->add_lang(array('ucp', 'acp/profile'));
 		$this->tpl_name = 'acp_profile';
@@ -369,6 +376,32 @@ class acp_profile
 					'field_is_contact',
 				);
 
+				/**
+				* Event to add initialization for new profile field table fields
+				*
+				* @event core.acp_profile_create_edit_init
+				* @var	string	action			create|edit
+				* @var	int		step			Configuration step (1|2|3)
+				* @var	bool	submit			Form has been submitted
+				* @var	bool	save			Configuration should be saved
+				* @var	string	field_type		Type of the field we are dealing with
+				* @var	array	field_row		Array of data about the field
+				* @var	array	exclude			Array of excluded fields by step
+				* @var	array	visibility_ary	Array of fields that are visibility related
+				* @since 3.1.6-RC1
+				*/
+				$vars = array(
+					'action',
+					'step',
+					'submit',
+					'save',
+					'field_type',
+					'field_row',
+					'exclude',
+					'visibility_ary',
+				);
+				extract($phpbb_dispatcher->trigger_event('core.acp_profile_create_edit_init', compact($vars)));
+
 				$options = $profile_field->prepare_options_form($exclude, $visibility_ary);
 
 				$cp->vars['field_ident']		= ($action == 'create' && $step == 1) ? utf8_clean_string(request_var('field_ident', $field_row['field_ident'], true)) : request_var('field_ident', $field_row['field_ident']);
@@ -460,7 +493,7 @@ class acp_profile
 
 					if (!$cp->vars[$key] && $action == 'edit')
 					{
-						$cp->vars[$key] = $$key;
+						$cp->vars[$key] = ${$key};
 					}
 
 					$field_data = $cp->vars;
@@ -511,12 +544,13 @@ class acp_profile
 					}
 				}
 
-				$step = (isset($_REQUEST['next'])) ? $step + 1 : ((isset($_REQUEST['prev'])) ? $step - 1 : $step);
-
 				if (sizeof($error))
 				{
-					$step--;
 					$submit = false;
+				}
+				else
+				{
+					$step = (isset($_REQUEST['next'])) ? $step + 1 : ((isset($_REQUEST['prev'])) ? $step - 1 : $step);
 				}
 
 				// Build up the specific hidden fields
@@ -535,7 +569,7 @@ class acp_profile
 						$var = $profile_field->prepare_hidden_fields($step, $key, $action, $field_data);
 						if ($var !== null)
 						{
-							$_new_key_ary[$key] = $profile_field->prepare_hidden_fields($step, $key, $action, $field_data);
+							$_new_key_ary[$key] = $var;
 						}
 					}
 					$cp->vars = $field_data;
@@ -545,11 +579,7 @@ class acp_profile
 
 				if (!sizeof($error))
 				{
-					if ($step == 3 && (sizeof($this->lang_defs['iso']) == 1 || $save))
-					{
-						$this->save_profile_field($cp, $field_type, $action);
-					}
-					else if ($action == 'edit' && $save)
+					if (($step == 3 && (sizeof($this->lang_defs['iso']) == 1 || $save)) || ($action == 'edit' && $save))
 					{
 						$this->save_profile_field($cp, $field_type, $action);
 					}
@@ -643,6 +673,33 @@ class acp_profile
 
 					break;
 				}
+
+				$field_data = $cp->vars;
+				/**
+				* Event to add template variables for new profile field table fields
+				*
+				* @event core.acp_profile_create_edit_after
+				* @var	string	action			create|edit
+				* @var	int		step			Configuration step (1|2|3)
+				* @var	bool	submit			Form has been submitted
+				* @var	bool	save			Configuration should be saved
+				* @var	string	field_type		Type of the field we are dealing with
+				* @var	array	field_data		Array of data about the field
+				* @var	array	s_hidden_fields	Array of hidden fields in case this needs modification
+				* @var	array	options			Array of options specific to this step
+				* @since 3.1.6-RC1
+				*/
+				$vars = array(
+					'action',
+					'step',
+					'submit',
+					'save',
+					'field_type',
+					'field_data',
+					's_hidden_fields',
+					'options',
+				);
+				extract($phpbb_dispatcher->trigger_event('core.acp_profile_create_edit_after', compact($vars)));
 
 				$template->assign_vars(array(
 					'S_HIDDEN_FIELDS'	=> $s_hidden_fields)
@@ -810,7 +867,7 @@ class acp_profile
 	*/
 	function save_profile_field(&$cp, $field_type, $action = 'create')
 	{
-		global $db, $config, $user, $phpbb_container;
+		global $db, $config, $user, $phpbb_container, $phpbb_dispatcher;
 
 		$field_id = request_var('field_id', 0);
 
@@ -851,6 +908,25 @@ class acp_profile
 			'field_contact_desc'	=> $cp->vars['field_contact_desc'],
 			'field_contact_url'		=> $cp->vars['field_contact_url'],
 		);
+
+		$field_data = $cp->vars;
+		/**
+		* Event to modify profile field configuration data before saving to database
+		*
+		* @event core.acp_profile_create_edit_save_before
+		* @var	string	action			create|edit
+		* @var	string	field_type		Type of the field we are dealing with
+		* @var	array	field_data		Array of data about the field
+		* @var	array	profile_fields	Array of fields to be sent to the database
+		* @since 3.1.6-RC1
+		*/
+		$vars = array(
+			'action',
+			'field_type',
+			'field_data',
+			'profile_fields',
+		);
+		extract($phpbb_dispatcher->trigger_event('core.acp_profile_create_edit_save_before', compact($vars)));
 
 		if ($action == 'create')
 		{

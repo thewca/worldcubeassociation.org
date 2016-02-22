@@ -23,8 +23,10 @@ class local extends \phpbb\avatar\driver\driver
 	*/
 	public function get_data($row)
 	{
+		$root_path = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $this->path_helper->get_web_root_path();
+
 		return array(
-			'src' => $this->path_helper->get_web_root_path() . $this->config['avatar_gallery_path'] . '/' . $row['avatar'],
+			'src' => $root_path . $this->config['avatar_gallery_path'] . '/' . $row['avatar'],
 			'width' => $row['avatar_width'],
 			'height' => $row['avatar_height'],
 		);
@@ -82,11 +84,13 @@ class local extends \phpbb\avatar\driver\driver
 					'AVATAR_IMAGE'  => $this->phpbb_root_path . $this->config['avatar_gallery_path'] . '/' . $img['file'],
 					'AVATAR_NAME' 	=> $img['name'],
 					'AVATAR_FILE' 	=> $img['filename'],
+					'CHECKED'			=> $img['file'] === $row['avatar'],
 				));
 
 				$template->assign_block_vars('avatar_local_row.avatar_local_option', array(
 					'AVATAR_FILE' 		=> $img['filename'],
-					'S_OPTIONS_AVATAR'	=> $img['filename']
+					'S_OPTIONS_AVATAR'	=> $img['filename'],
+					'CHECKED'			=> $img['file'] === $row['avatar'],
 				));
 
 				$col_count = ($col_count + 1) % $table_cols;
@@ -180,7 +184,7 @@ class local extends \phpbb\avatar\driver\driver
 					}
 					$cat = ($path == $file_path) ? $user->lang['NO_AVATAR_CATEGORY'] : str_replace("$path/", '', $file_path);
 					$avatar_list[$cat][$image] = array(
-						'file'      => ($cat != $user->lang['NO_AVATAR_CATEGORY']) ? rawurlencode($cat) . '/' . rawurlencode($image) : rawurlencode($image),
+						'file'      => ($cat != $user->lang['NO_AVATAR_CATEGORY']) ? str_replace('%2F', '/', rawurlencode($cat)) . '/' . rawurlencode($image) : rawurlencode($image),
 						'filename'  => rawurlencode($image),
 						'name'      => ucfirst(str_replace('_', ' ', preg_replace('#^(.*)\..*$#', '\1', $image))),
 						'width'     => $dims[0],

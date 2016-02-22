@@ -250,6 +250,31 @@ else
 		$display_cat = ATTACHMENT_CATEGORY_NONE;
 	}
 
+	/**
+	* Event to modify data before sending file to browser
+	*
+	* @event core.download_file_send_to_browser_before
+	* @var	int		attach_id			The attachment ID
+	* @var	array	attachment			Array with attachment data
+	* @var	int		display_cat			Attachment category
+	* @var	int		download_mode		File extension specific download mode
+	* @var	array	extensions			Array with file extensions data
+	* @var	string	mode				Download mode
+	* @var	bool	thumbnail			Flag indicating if the file is a thumbnail
+	* @since 3.1.6-RC1
+	* @change 3.1.7-RC1	Fixing wrong name of a variable (replacing "extension" by "extensions")
+	*/
+	$vars = array(
+		'attach_id',
+		'attachment',
+		'display_cat',
+		'download_mode',
+		'extensions',
+		'mode',
+		'thumbnail',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.download_file_send_to_browser_before', compact($vars)));
+
 	if ($thumbnail)
 	{
 		$attachment['physical_filename'] = 'thumb_' . $attachment['physical_filename'];

@@ -44,6 +44,11 @@ class acp_users
 		$user_id	= request_var('u', 0);
 		$action		= request_var('action', '');
 
+		// Get referer to redirect user to the appropriate page after delete action
+		$redirect		= request_var('redirect', '');
+		$redirect_tag	= "redirect=$redirect";
+		$redirect_url	= append_sid("{$phpbb_admin_path}index.$phpEx", "i=$redirect");
+
 		$submit		= (isset($_POST['update']) && !isset($_POST['cancel'])) ? true : false;
 
 		$form_name = 'acp_users';
@@ -52,7 +57,10 @@ class acp_users
 		// Whois (special case)
 		if ($action == 'whois')
 		{
-			include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+			if (!function_exists('user_get_id_name'))
+			{
+				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+			}
 
 			$this->page_title = 'WHOIS';
 			$this->tpl_name = 'simple_body';
@@ -146,9 +154,9 @@ class acp_users
 		}
 
 		$template->assign_vars(array(
-			'U_BACK'			=> $this->u_action,
+			'U_BACK'			=> (empty($redirect)) ? $this->u_action : $redirect_url,
 			'U_MODE_SELECT'		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=$id&amp;u=$user_id"),
-			'U_ACTION'			=> $this->u_action . '&amp;u=' . $user_id,
+			'U_ACTION'			=> $this->u_action . '&amp;u=' . $user_id . ((empty($redirect)) ? '' : '&amp;' . $redirect_tag),
 			'S_FORM_OPTIONS'	=> $s_form_options,
 			'MANAGED_USERNAME'	=> $user_row['username'])
 		);
@@ -165,7 +173,10 @@ class acp_users
 		{
 			case 'overview':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				if (!function_exists('user_get_id_name'))
+				{
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
 
 				$user->add_lang('acp/ban');
 
@@ -221,19 +232,30 @@ class acp_users
 								user_delete($delete_type, $user_id, $user_row['username']);
 
 								add_log('admin', 'LOG_USER_DELETED', $user_row['username']);
-								trigger_error($user->lang['USER_DELETED'] . adm_back_link($this->u_action));
+								trigger_error($user->lang['USER_DELETED'] . adm_back_link(
+										(empty($redirect)) ? $this->u_action : $redirect_url
+									)
+								);
 							}
 							else
 							{
-								confirm_box(false, $user->lang['CONFIRM_OPERATION'], build_hidden_fields(array(
+								$delete_confirm_hidden_fields = array(
 									'u'				=> $user_id,
 									'i'				=> $id,
 									'mode'			=> $mode,
 									'action'		=> $action,
 									'update'		=> true,
 									'delete'		=> 1,
-									'delete_type'	=> $delete_type))
+									'delete_type'	=> $delete_type,
 								);
+
+								// Checks if the redirection page is specified
+								if (!empty($redirect))
+								{
+									$delete_confirm_hidden_fields['redirect'] = $redirect;
+								}
+
+								confirm_box(false, $user->lang['CONFIRM_OPERATION'], build_hidden_fields($delete_confirm_hidden_fields));
 							}
 						}
 						else
@@ -338,7 +360,10 @@ class acp_users
 
 							if ($config['email_enable'])
 							{
-								include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+								if (!class_exists('messenger'))
+								{
+									include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+								}
 
 								$server_url = generate_board_url();
 
@@ -421,7 +446,10 @@ class acp_users
 									$phpbb_notifications = $phpbb_container->get('notification_manager');
 									$phpbb_notifications->delete_notifications('notification.type.admin_activate_user', $user_row['user_id']);
 
-									include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+									if (!class_exists('messenger'))
+									{
+										include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+									}
 
 									$messenger = new messenger(false);
 
@@ -1345,7 +1373,10 @@ class acp_users
 
 			case 'profile':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				if (!function_exists('user_get_id_name'))
+				{
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
 
 				$cp = $phpbb_container->get('profilefields.manager');
 
@@ -1377,6 +1408,19 @@ class acp_users
 				$data['bday_year']		= request_var('bday_year', $data['bday_year']);
 				$data['user_birthday']	= sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
 
+				/**
+				* Modify user data on editing profile in ACP
+				*
+				* @event core.acp_users_modify_profile
+				* @var	array	data		Array with user profile data
+				* @var	bool	submit		Flag indicating if submit button has been pressed
+				* @var	int		user_id		The user id
+				* @var	array	user_row	Array with the full user data
+				* @since 3.1.4-RC1
+				*/
+				$vars = array('data', 'submit', 'user_id', 'user_row');
+				extract($phpbb_dispatcher->trigger_event('core.acp_users_modify_profile', compact($vars)));
+
 				if ($submit)
 				{
 					$error = validate_data($data, array(
@@ -1401,12 +1445,38 @@ class acp_users
 						$error[] = 'FORM_INVALID';
 					}
 
+					/**
+					* Validate profile data in ACP before submitting to the database
+					*
+					* @event core.acp_users_profile_validate
+					* @var	bool	submit		Flag indicating if submit button has been pressed
+					* @var	array	data		Array with user profile data
+					* @var	array	error		Array with the form errors
+					* @since 3.1.4-RC1
+					*/
+					$vars = array('submit', 'data', 'error');
+					extract($phpbb_dispatcher->trigger_event('core.acp_users_profile_validate', compact($vars)));
+
 					if (!sizeof($error))
 					{
 						$sql_ary = array(
 							'user_jabber'	=> $data['jabber'],
 							'user_birthday'	=> $data['user_birthday'],
 						);
+
+						/**
+						* Modify profile data in ACP before submitting to the database
+						*
+						* @event core.acp_users_profile_modify_sql_ary
+						* @var	array	cp_data		Array with the user custom profile fields data
+						* @var	array	data		Array with user profile data
+						* @var	int		user_id		The user id
+						* @var	array	user_row	Array with the full user data
+						* @var	array	sql_ary		Array with sql data
+						* @since 3.1.4-RC1
+						*/
+						$vars = array('cp_data', 'data', 'user_id', 'user_row', 'sql_ary');
+						extract($phpbb_dispatcher->trigger_event('core.acp_users_profile_modify_sql_ary', compact($vars)));
 
 						$sql = 'UPDATE ' . USERS_TABLE . '
 							SET ' . $db->sql_build_array('UPDATE', $sql_ary) . "
@@ -1465,7 +1535,10 @@ class acp_users
 
 			case 'prefs':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				if (!function_exists('user_get_id_name'))
+				{
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
 
 				$data = array(
 					'dateformat'		=> utf8_normalize_nfc(request_var('dateformat', $user_row['user_dateformat'], true)),
@@ -1735,8 +1808,6 @@ class acp_users
 
 			case 'avatar':
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-
 				$avatars_enabled = false;
 
 				if ($config['allow_avatar'])
@@ -1891,8 +1962,15 @@ class acp_users
 
 			case 'sig':
 
-				include_once($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
-				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				if (!function_exists('generate_smilies'))
+				{
+					include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+				}
+
+				if (!function_exists('display_custom_bbcodes'))
+				{
+					include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				}
 
 				$enable_bbcode	= ($config['allow_sig_bbcode']) ? (bool) $this->optionget($user_row, 'sig_bbcode') : false;
 				$enable_smilies	= ($config['allow_sig_smilies']) ? (bool) $this->optionget($user_row, 'sig_smilies') : false;
@@ -1903,7 +1981,10 @@ class acp_users
 
 				if ($submit || $preview)
 				{
-					include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+					if (!class_exists('messenger'))
+					{
+						include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+					}
 
 					$enable_bbcode	= ($config['allow_sig_bbcode']) ? ((request_var('disable_bbcode', false)) ? false : true) : false;
 					$enable_smilies	= ($config['allow_sig_smilies']) ? ((request_var('disable_smilies', false)) ? false : true) : false;
@@ -2144,7 +2225,10 @@ class acp_users
 
 			case 'groups':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				if (!function_exists('group_user_attributes'))
+				{
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
 
 				$user->add_lang(array('groups', 'acp/groups'));
 				$group_id = request_var('g', 0);
@@ -2360,7 +2444,10 @@ class acp_users
 
 			case 'perm':
 
-				include_once($phpbb_root_path . 'includes/acp/auth.' . $phpEx);
+				if (!class_exists('auth_admin'))
+				{
+					include($phpbb_root_path . 'includes/acp/auth.' . $phpEx);
+				}
 
 				$auth_admin = new auth_admin();
 
