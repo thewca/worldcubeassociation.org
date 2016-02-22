@@ -14,6 +14,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `vagrant up noregs` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:2331](http://localhost:2331).
   - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
+  - Note: There are some minor [issues with development on Windows](https://github.com/cubing/worldcubeassociation.org/issues/393).
 - All emails will be accessible at `http://localhost:2332`.
 
 ## Run locally ruby (lightweight, but only run the rails portions of the site)
