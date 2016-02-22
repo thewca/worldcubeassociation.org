@@ -156,7 +156,7 @@
                 'competition[end_date]': obj['competition[end_date]'],
               },
               success: function(data) {
-                $('#time-until-competition').parents(".form-group").toggleClass('has-error', data.has_date_errors);
+                $('#time-until-competition').closest(".form-group").toggleClass('has-error', data.has_date_errors);
                 $('#time-until-competition').html(data.html);
               }
             });

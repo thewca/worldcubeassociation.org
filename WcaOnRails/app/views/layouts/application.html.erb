@@ -31,12 +31,5 @@
   <% if !hide_wca_navbars %>
     <%= render 'layouts/footer' %>
   <% end %>
-
-  <% if ENVied.WCA_LIVE_SITE %>
-    <script>
-      // See http://blog.ruigomes.me/google-universal-analytics-tracking-with-rails-4/
-      ga('send', 'pageview', '<%= request.path %>');
-    </script>
-  <% end %>
 </body>
 </html>
