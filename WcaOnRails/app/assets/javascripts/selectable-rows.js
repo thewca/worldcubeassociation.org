@@ -4,7 +4,7 @@ $(function() {
     var $th = $table.find("thead th:first-child");
 
     var $checkboxes = $table.find(".select-row-checkbox");
-    var $trs = $checkboxes.parents("tr");
+    var $trs = $checkboxes.closest("tr");
     var selectedCount = $table.find(".select-row-checkbox:checked").length;
     function updateHeaderIcon() {
       $th.removeClass("all-selected none-selected some-selected");
@@ -21,7 +21,7 @@ $(function() {
     }
     updateHeaderIcon();
     $(this).on("change", "input.select-row-checkbox", function() {
-      var $tr = $(this).parents("tr");
+      var $tr = $(this).closest("tr");
       if(this.checked) {
         selectedCount++;
         $tr.addClass("selected-row");
