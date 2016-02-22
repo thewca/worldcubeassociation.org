@@ -96,6 +96,12 @@ class fulltext_sphinx
 	protected $dbtype;
 
 	/**
+	 * phpBB event dispatcher object
+	 * @var \phpbb\event\dispatcher_interface
+	 */
+	protected $phpbb_dispatcher;
+
+	/**
 	 * User object
 	 * @var \phpbb\user
 	 */
@@ -125,12 +131,14 @@ class fulltext_sphinx
 	 * @param \phpbb\config\config $config Config object
 	 * @param \phpbb\db\driver\driver_interface Database object
 	 * @param \phpbb\user $user User object
+	 * @param \phpbb\event\dispatcher_interface	$phpbb_dispatcher	Event dispatcher object
 	 */
-	public function __construct(&$error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user)
+	public function __construct(&$error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher)
 	{
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $phpEx;
 		$this->config = $config;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
 		$this->user = $user;
 		$this->db = $db;
 		$this->auth = $auth;
@@ -138,7 +146,7 @@ class fulltext_sphinx
 		// Initialize \phpbb\db\tools object
 		$this->db_tools = new \phpbb\db\tools($this->db);
 
-		if(!$this->config['fulltext_sphinx_id'])
+		if (!$this->config['fulltext_sphinx_id'])
 		{
 			set_config('fulltext_sphinx_id', unique_id());
 		}
@@ -350,6 +358,23 @@ class fulltext_sphinx
 
 		$non_unique = array('sql_query_pre' => true, 'sql_attr_uint' => true, 'sql_attr_timestamp' => true, 'sql_attr_str2ordinal' => true, 'sql_attr_bool' => true);
 		$delete = array('sql_group_column' => true, 'sql_date_column' => true, 'sql_str2ordinal_column' => true);
+
+		/**
+		* Allow adding/changing the Sphinx configuration data
+		*
+		* @event core.search_sphinx_modify_config_data
+		* @var	array	config_data	Array with the Sphinx configuration data
+		* @var	array	non_unique	Array with the Sphinx non-unique variables to delete
+		* @var	array	delete		Array with the Sphinx variables to delete
+		* @since 3.1.7-RC1
+		*/
+		$vars = array(
+			'config_data',
+			'non_unique',
+			'delete',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('core.search_sphinx_modify_config_data', compact($vars)));
+
 		foreach ($config_data as $section_name => $section_data)
 		{
 			$section = $config_object->get_section_by_name($section_name);
@@ -522,6 +547,41 @@ class fulltext_sphinx
 		{
 			$this->sphinx->SetFilter('topic_id', array($topic_id));
 		}
+
+		/**
+		* Allow modifying the Sphinx search options
+		*
+		* @event core.search_sphinx_keywords_modify_options
+		* @var	string	type				Searching type ('posts', 'topics')
+		* @var	string	fields				Searching fields ('titleonly', 'msgonly', 'firstpost', 'all')
+		* @var	string	terms				Searching terms ('all', 'any')
+		* @var	int		sort_days			Time, in days, of the oldest possible post to list
+		* @var	string	sort_key			The sort type used from the possible sort types
+		* @var	int		topic_id			Limit the search to this topic_id only
+		* @var	array	ex_fid_ary			Which forums not to search on
+		* @var	string	post_visibility		Post visibility data
+		* @var	array	author_ary			Array of user_id containing the users to filter the results to
+		* @var	string	author_name			The username to search on
+		* @var	object	sphinx				The Sphinx searchd client object
+		* @since 3.1.7-RC1
+		*/
+		$sphinx = $this->sphinx;
+		$vars = array(
+			'type',
+			'fields',
+			'terms',
+			'sort_days',
+			'sort_key',
+			'topic_id',
+			'ex_fid_ary',
+			'post_visibility',
+			'author_ary',
+			'author_name',
+			'sphinx',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('core.search_sphinx_keywords_modify_options', compact($vars)));
+		$this->sphinx = $sphinx;
+		unset($sphinx);
 
 		$search_query_prefix = '';
 

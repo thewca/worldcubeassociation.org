@@ -1,8 +1,10 @@
+<!-- EVENT attachment_file_before -->
 
 <!-- BEGIN _file -->
 	<!-- IF _file.S_DENIED -->
 	<p>[{_file.DENIED_MESSAGE}]</p>
 	<!-- ELSE -->
+		<!-- EVENT attachment_file_prepend -->
 
 		<!-- IF _file.S_THUMBNAIL -->
 		<dl class="thumbnail">
@@ -118,5 +120,7 @@
 			<a href="{_file.U_DOWNLOAD_LINK}">{_file.DOWNLOAD_NAME}</a> [ {_file.FILESIZE} {_file.SIZE_LANG} | {_file.L_DOWNLOAD_COUNT} ]</p>
 		<!-- ENDIF -->
 
+		<!-- EVENT attachment_file_append -->
 	<!-- ENDIF -->
 <!-- END _file -->
+<!-- EVENT attachment_file_after -->

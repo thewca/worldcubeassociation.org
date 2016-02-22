@@ -189,8 +189,15 @@ class acp_email
 				$db->sql_freeresult($result);
 
 				// Send the messages
-				include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				if (!class_exists('messenger'))
+				{
+					include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+				}
+
+				if (!function_exists('get_group_name'))
+				{
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
 				$messenger = new messenger($use_queue);
 
 				$errored = false;
@@ -314,7 +321,7 @@ class acp_email
 		$s_priority_options .= '<option value="' . MAIL_NORMAL_PRIORITY . '" selected="selected">' . $user->lang['MAIL_NORMAL_PRIORITY'] . '</option>';
 		$s_priority_options .= '<option value="' . MAIL_HIGH_PRIORITY . '">' . $user->lang['MAIL_HIGH_PRIORITY'] . '</option>';
 
-		$template->assign_vars(array(
+		$template_data = array(
 			'S_WARNING'				=> (sizeof($error)) ? true : false,
 			'WARNING_MSG'			=> (sizeof($error)) ? implode('<br />', $error) : '',
 			'U_ACTION'				=> $this->u_action,
@@ -323,8 +330,22 @@ class acp_email
 			'U_FIND_USERNAME'		=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=acp_email&amp;field=usernames'),
 			'SUBJECT'				=> $subject,
 			'MESSAGE'				=> $message,
-			'S_PRIORITY_OPTIONS'	=> $s_priority_options)
+			'S_PRIORITY_OPTIONS'	=> $s_priority_options,
 		);
 
+		/**
+		* Modify custom email template data before we display the form
+		*
+		* @event core.acp_email_display
+		* @var	array	template_data		Array with template data assigned to email template
+		* @var	array	exclude				Array with groups which are excluded from group selection
+		* @var	array	usernames			Usernames which will be displayed in form
+		*
+		* @since 3.1.4-RC1
+		*/
+		$vars = array('template_data', 'exclude', 'usernames');
+		extract($phpbb_dispatcher->trigger_event('core.acp_email_display', compact($vars)));
+
+		$template->assign_vars($template_data);
 	}
 }

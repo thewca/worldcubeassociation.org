@@ -135,7 +135,7 @@ class post extends \phpbb\notification\type\base
 		$sql = 'SELECT n.*
 			FROM ' . $this->notifications_table . ' n, ' . $this->notification_types_table . ' nt
 			WHERE n.notification_type_id = ' . (int) $this->notification_type_id . '
-				AND n.item_parent_id = ' . (int) self::get_item_parent_id($post) . '
+				AND n.item_parent_id = ' . (int) static::get_item_parent_id($post) . '
 				AND n.notification_read = 0
 				AND nt.notification_type_id = n.notification_type_id
 				AND nt.notification_type_enabled = 1';
@@ -165,7 +165,7 @@ class post extends \phpbb\notification\type\base
 	*/
 	public function get_avatar()
 	{
-		return $this->user_loader->get_avatar($this->get_data('poster_id'));
+		return $this->user_loader->get_avatar($this->get_data('poster_id'), false, true);
 	}
 
 	/**
@@ -357,6 +357,7 @@ class post extends \phpbb\notification\type\base
 		{
 			$tracking_data[$row['user_id']] = $row['mark_time'];
 		}
+		$this->db->sql_freeresult($result);
 
 		return $tracking_data;
 	}

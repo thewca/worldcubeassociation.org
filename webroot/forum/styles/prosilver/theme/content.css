@@ -259,7 +259,6 @@ dd.option {
 }
 
 .postbody h3 img {
-	/* Also see tweaks.css */
 	vertical-align: bottom;
 }
 
@@ -510,7 +509,6 @@ blockquote .codebox {
 }
 
 .codebox code {
-	/* Also see tweaks.css */
 	overflow: auto;
 	display: block;
 	height: auto;
@@ -674,7 +672,7 @@ fieldset.polls dd div {
 	text-align: right;
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
-	padding: 0 2px;
+	padding: 2px 2px 0 2px;
 	overflow: visible;
 	min-width: 8px;
 }
@@ -693,7 +691,6 @@ fieldset.polls dd div {
 /* Poster profile block
 ----------------------------------------*/
 .postprofile {
-	/* Also see tweaks.css */
 	margin: 5px 0 10px 0;
 	min-height: 80px;
 	border: 1px solid transparent;
@@ -844,4 +841,8 @@ table.fixed-width-table {
 .postbody .content::-webkit-scrollbar-thumb, #topicreview::-webkit-scrollbar-thumb, #post_details::-webkit-scrollbar-thumb, .codebox code::-webkit-scrollbar-thumb, .attachbox dd::-webkit-scrollbar-thumb, .attach-image::-webkit-scrollbar-thumb, .dropdown-extended ul::-webkit-scrollbar-thumb {
 	background: rgba(0, 0, 0, .3);
 	border-radius: 3px;
+}
+
+#memberlist tr.inactive, #team tr.inactive {
+	font-style: italic;
 }

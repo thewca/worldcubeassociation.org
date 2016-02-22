@@ -310,6 +310,7 @@ function posting_gen_topic_icons($mode, $icon_id)
 			{
 				$template->assign_block_vars('topic_icon', array(
 					'ICON_ID'		=> $id,
+					'ICON_NAME'		=> $data['img'],
 					'ICON_IMG'		=> $root_path . $config['icons_path'] . '/' . $data['img'],
 					'ICON_WIDTH'	=> $data['width'],
 					'ICON_HEIGHT'	=> $data['height'],
@@ -1036,8 +1037,8 @@ function load_drafts($topic_id = 0, $forum_id = 0, $id = 0, $pm_action = '', $ms
 */
 function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id = 0, $show_quote_button = true)
 {
-	global $user, $auth, $db, $template, $bbcode, $cache;
-	global $config, $phpbb_root_path, $phpEx, $phpbb_container;
+	global $user, $auth, $db, $template, $cache;
+	global $config, $phpbb_root_path, $phpEx, $phpbb_container, $phpbb_dispatcher;
 
 	$phpbb_content_visibility = $phpbb_container->get('content.visibility');
 	$sql_sort = ($mode == 'post_review') ? 'ASC' : 'DESC';
@@ -1094,13 +1095,11 @@ function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id
 	$sql = $db->sql_build_query('SELECT', $sql_ary);
 	$result = $db->sql_query($sql);
 
-	$bbcode_bitfield = '';
 	$rowset = array();
 	$has_attachments = false;
 	while ($row = $db->sql_fetchrow($result))
 	{
 		$rowset[$row['post_id']] = $row;
-		$bbcode_bitfield = $bbcode_bitfield | base64_decode($row['bbcode_bitfield']);
 
 		if ($row['post_attachment'])
 		{
@@ -1108,13 +1107,6 @@ function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id
 		}
 	}
 	$db->sql_freeresult($result);
-
-	// Instantiate BBCode class
-	if (!isset($bbcode) && $bbcode_bitfield !== '')
-	{
-		include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-		$bbcode = new bbcode(base64_encode($bbcode_bitfield));
-	}
 
 	// Grab extensions
 	$extensions = $attachments = array();
@@ -1176,7 +1168,7 @@ function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id
 		$post_anchor = ($mode == 'post_review') ? 'ppr' . $row['post_id'] : 'pr' . $row['post_id'];
 		$u_show_post = append_sid($phpbb_root_path . 'viewtopic.' . $phpEx, "f=$forum_id&amp;t=$topic_id&amp;p={$row['post_id']}&amp;view=show#p{$row['post_id']}");
 
-		$template->assign_block_vars($mode . '_row', array(
+		$post_row = array(
 			'POST_AUTHOR_FULL'		=> get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
 			'POST_AUTHOR_COLOUR'	=> get_username_string('colour', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
 			'POST_AUTHOR'			=> get_username_string('username', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
@@ -1195,8 +1187,36 @@ function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id
 			'POST_ID'			=> $row['post_id'],
 			'U_MINI_POST'		=> append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $row['post_id']) . '#p' . $row['post_id'],
 			'U_MCP_DETAILS'		=> ($auth->acl_get('m_info', $forum_id)) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=main&amp;mode=post_details&amp;f=' . $forum_id . '&amp;p=' . $row['post_id'], true, $user->session_id) : '',
-			'POSTER_QUOTE'		=> ($show_quote_button && $auth->acl_get('f_reply', $forum_id)) ? addslashes(get_username_string('username', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '')
+			'POSTER_QUOTE'		=> ($show_quote_button && $auth->acl_get('f_reply', $forum_id)) ? addslashes(get_username_string('username', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
 		);
+
+		$current_row_number = $i;
+
+		/**
+		* Event to modify the template data block for topic reviews
+		*
+		* @event core.topic_review_modify_row
+		* @var	string	mode				The review mode
+		* @var	int		topic_id			The topic that is being reviewed
+		* @var	int		forum_id			The topic's forum
+		* @var	int		cur_post_id			Post offset id
+		* @var	int		current_row_number	Number of the current row being iterated
+		* @var	array	post_row			Template block array of the current post
+		* @var	array	row					Array with original post and user data
+		* @since 3.1.4-RC1
+		*/
+		$vars = array(
+			'mode',
+			'topic_id',
+			'forum_id',
+			'cur_post_id',
+			'current_row_number',
+			'post_row',
+			'row',
+		);
+		extract($phpbb_dispatcher->trigger_event('core.topic_review_modify_row', compact($vars)));
+
+		$template->assign_block_vars($mode . '_row', $post_row);
 
 		// Display not already displayed Attachments for this post, we already parsed them. ;)
 		if (!empty($attachments[$row['post_id']]))
@@ -1523,7 +1543,14 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll, &$data, $u
 		return false;
 	}
 
-	$current_time = time();
+	if (!empty($data['post_time']))
+	{
+		$current_time = $data['post_time'];
+	}
+	else
+	{
+		$current_time = time();
+	}
 
 	if ($mode == 'post')
 	{
@@ -1719,6 +1746,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll, &$data, $u
 				'topic_type'				=> $topic_type,
 				'topic_time_limit'			=> ($topic_type == POST_STICKY || $topic_type == POST_ANNOUNCE) ? ($data['topic_time_limit'] * 86400) : 0,
 				'topic_attachment'			=> (!empty($data['attachment_data'])) ? 1 : 0,
+				'topic_status'				=> (isset($data['topic_status'])) ? $data['topic_status'] : ITEM_UNLOCKED,
 			);
 
 			if (isset($poll['poll_options']) && !empty($poll['poll_options']))
@@ -2190,7 +2218,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll, &$data, $u
 		}
 
 		$error = false;
-		$search = new $search_type($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user);
+		$search = new $search_type($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
 
 		if ($error)
 		{

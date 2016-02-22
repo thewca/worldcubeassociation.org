@@ -125,7 +125,7 @@ class plupload
 			// Need to modify some of the $_FILES values to reflect the new file
 			return array(
 				'tmp_name' => $file_path,
-				'name' => $this->request->variable('real_filename', ''),
+				'name' => $this->request->variable('real_filename', '', true),
 				'size' => filesize($file_path),
 				'type' => $this->mimetype_guesser->guess($file_path, $file_name),
 			);
@@ -267,8 +267,8 @@ class plupload
 		{
 			$resize = sprintf(
 				'resize: {width: %d, height: %d, quality: 100},',
-				(int) $this->config['img_max_height'],
-				(int) $this->config['img_max_width']
+				(int) $this->config['img_max_width'],
+				(int) $this->config['img_max_height']
 			);
 		}
 
@@ -326,7 +326,7 @@ class plupload
 
 		$tmp_file = $this->temporary_filepath($upload['tmp_name']);
 
-		if (!move_uploaded_file($upload['tmp_name'], $tmp_file))
+		if (!phpbb_is_writable($this->temporary_directory) || !move_uploaded_file($upload['tmp_name'], $tmp_file))
 		{
 			$this->emit_error(103, 'PLUPLOAD_ERR_MOVE_UPLOADED');
 		}

@@ -119,7 +119,7 @@ class topic extends \phpbb\notification\type\base
 	*/
 	public function get_avatar()
 	{
-		return $this->user_loader->get_avatar($this->get_data('poster_id'));
+		return $this->user_loader->get_avatar($this->get_data('poster_id'), false, true);
 	}
 
 	/**
@@ -257,6 +257,7 @@ class topic extends \phpbb\notification\type\base
 		{
 			$tracking_data[$row['user_id']] = $row['mark_time'];
 		}
+		$this->db->sql_freeresult($result);
 
 		return $tracking_data;
 	}

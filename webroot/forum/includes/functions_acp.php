@@ -164,6 +164,8 @@ function adm_page_footer($copyright_html = true)
 		return;
 	}
 
+	$user->update_session_infos();
+
 	phpbb_check_and_display_sql_report($request, $auth, $db);
 
 	$template->assign_vars(array(
@@ -245,8 +247,13 @@ function build_cfg_template($tpl_type, $key, &$new, $config_key, $vars)
 
 	switch ($tpl_type[0])
 	{
-		case 'text':
 		case 'password':
+			if ($new[$config_key] !== '')
+			{
+				// replace passwords with asterixes
+				$new[$config_key] = '********';
+			}
+		case 'text':
 		case 'url':
 		case 'email':
 		case 'color':
@@ -550,6 +557,9 @@ function validate_config_vars($config_vars, &$cfg_array, &$error)
 
 				$cfg_array[$config_name] = trim($destination);
 
+			// Absolute file path
+			case 'absolute_path':
+			case 'absolute_path_writable':
 			// Path being relative (still prefixed by phpbb_root_path), but with the ability to escape the root dir...
 			case 'path':
 			case 'wpath':
@@ -568,20 +578,22 @@ function validate_config_vars($config_vars, &$cfg_array, &$error)
 					break;
 				}
 
-				if (!file_exists($phpbb_root_path . $cfg_array[$config_name]))
+				$path = in_array($config_definition['validate'], array('wpath', 'path', 'rpath', 'rwpath')) ? $phpbb_root_path . $cfg_array[$config_name] : $cfg_array[$config_name];
+
+				if (!file_exists($path))
 				{
 					$error[] = sprintf($user->lang['DIRECTORY_DOES_NOT_EXIST'], $cfg_array[$config_name]);
 				}
 
-				if (file_exists($phpbb_root_path . $cfg_array[$config_name]) && !is_dir($phpbb_root_path . $cfg_array[$config_name]))
+				if (file_exists($path) && !is_dir($path))
 				{
 					$error[] = sprintf($user->lang['DIRECTORY_NOT_DIR'], $cfg_array[$config_name]);
 				}
 
 				// Check if the path is writable
-				if ($config_definition['validate'] == 'wpath' || $config_definition['validate'] == 'rwpath')
+				if ($config_definition['validate'] == 'wpath' || $config_definition['validate'] == 'rwpath' || $config_definition['validate'] === 'absolute_path_writable')
 				{
-					if (file_exists($phpbb_root_path . $cfg_array[$config_name]) && !phpbb_is_writable($phpbb_root_path . $cfg_array[$config_name]))
+					if (file_exists($path) && !phpbb_is_writable($path))
 					{
 						$error[] = sprintf($user->lang['DIRECTORY_NOT_WRITABLE'], $cfg_array[$config_name]);
 					}

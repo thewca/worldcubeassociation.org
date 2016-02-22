@@ -17,6 +17,10 @@
 	font-size: 100%;
 }
 
+abbr {
+	text-decoration: none;
+}
+
 body, div, p, th, td, li, dd {
 	font-size: x-small;
 	voice-family: "\"}\"";
@@ -854,6 +858,8 @@ table.zebra-table tbody tr:nth-child(even) {
 .row1b { background-color: #F6F6F6; }
 .row2a { background-color: #E7EEF4; }
 .row2b { background-color: #E3EBF2; }
+
+tr.row-highlight:hover td { background-color: #DBDFE2; }
 
 .spacer {
 	background-color: #DBDFE2;
