@@ -77,6 +77,14 @@ $(function() {
     }
   });
 
+  // We use dp.hide to capture clicking on a date. We then tab to the next
+  // form item, so the picker is just one click away, in case the user made
+  // a mistake or wants to select a different date. This also triggers the
+  // 'blur' event, used above to validate the date.
+  $datetimepicker.on('dp.hide', function() {
+    $('input:not(input[type=button], input[type=submit], input[type=reset]), select, textarea').eq(parseInt($('input:not(input[type=button], input[type=submit], input[type=reset]), select, textarea').index($(this)), 10) + 1).focus();
+  });
+
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');
     var $range1 = $inputGroups.eq(0);
