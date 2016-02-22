@@ -18,7 +18,6 @@
 //= require wice_grid
 //= require jquery.are-you-sure
 //= require locationpicker.jquery
-//= require underscore
 //= require selectize
 //= require selectize.do_not_clear_on_blur
 //= require jquery.jcrop

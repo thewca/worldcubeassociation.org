@@ -364,7 +364,6 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    underscore-rails (1.8.3)
     unicorn (4.9.0)
       kgio (~> 2.6)
       rack
@@ -455,7 +454,6 @@ DEPENDENCIES
   therubyracer
   time_will_tell
   uglifier
-  underscore-rails
   unicorn
   valid_email
   web-console
