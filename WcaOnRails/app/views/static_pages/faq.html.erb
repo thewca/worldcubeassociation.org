@@ -66,6 +66,13 @@
           other people pretending to be you.
         </p>
 
+        <p>
+          <% if current_user %>
+            You are already logged in with a WCA account.
+          <% else %>
+            You can create an account <%= link_to "here", new_user_registration_path %>.
+          <% end %>
+        </p>
       <% end %>
 
       <%= add_answer "How do I change my profile picture?" do %>
