@@ -19,8 +19,6 @@ namespace Symfony\Component\Console\Input;
  *     $input = new ArrayInput(array('name' => 'foo', '--bar' => 'foobar'));
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class ArrayInput extends Input
 {
@@ -31,8 +29,6 @@ class ArrayInput extends Input
      *
      * @param array           $parameters An array of parameters
      * @param InputDefinition $definition A InputDefinition instance
-     *
-     * @api
      */
     public function __construct(array $parameters, InputDefinition $definition = null)
     {
@@ -65,7 +61,7 @@ class ArrayInput extends Input
      *
      * @param string|array $values The values to look for in the raw parameters (can be an array)
      *
-     * @return bool    true if the value is contained in the raw parameters
+     * @return bool true if the value is contained in the raw parameters
      */
     public function hasParameterOption($values)
     {
@@ -100,8 +96,10 @@ class ArrayInput extends Input
         $values = (array) $values;
 
         foreach ($this->parameters as $k => $v) {
-            if (is_int($k) && in_array($v, $values)) {
-                return true;
+            if (is_int($k)) {
+                if (in_array($v, $values)) {
+                    return true;
+                }
             } elseif (in_array($k, $values)) {
                 return $v;
             }
@@ -111,7 +109,7 @@ class ArrayInput extends Input
     }
 
     /**
-     * Returns a stringified representation of the args passed to the command
+     * Returns a stringified representation of the args passed to the command.
      *
      * @return string
      */

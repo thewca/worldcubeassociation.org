@@ -30,14 +30,11 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 class XmlFileLoader extends FileLoader
 {
     /**
-     * Loads an XML file.
-     *
-     * @param mixed  $file The resource
-     * @param string $type The resource type
+     * {@inheritdoc}
      */
-    public function load($file, $type = null)
+    public function load($resource, $type = null)
     {
-        $path = $this->locator->locate($file);
+        $path = $this->locator->locate($resource);
 
         $xml = $this->parseFile($path);
         $xml->registerXPathNamespace('container', 'http://symfony.com/schema/dic/services');
@@ -51,7 +48,7 @@ class XmlFileLoader extends FileLoader
         $this->parseImports($xml, $path);
 
         // parameters
-        $this->parseParameters($xml, $path);
+        $this->parseParameters($xml);
 
         // extensions
         $this->loadFromExtensions($xml);
@@ -61,12 +58,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Returns true if this class supports the given resource.
-     *
-     * @param mixed  $resource A resource
-     * @param string $type     The resource type
-     *
-     * @return bool    true if this class supports the given resource, false otherwise
+     * {@inheritdoc}
      */
     public function supports($resource, $type = null)
     {
@@ -74,12 +66,11 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses parameters
+     * Parses parameters.
      *
      * @param SimpleXMLElement $xml
-     * @param string           $file
      */
-    private function parseParameters(SimpleXMLElement $xml, $file)
+    private function parseParameters(SimpleXMLElement $xml)
     {
         if (!$xml->parameters) {
             return;
@@ -89,7 +80,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses imports
+     * Parses imports.
      *
      * @param SimpleXMLElement $xml
      * @param string           $file
@@ -107,7 +98,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses multiple definitions
+     * Parses multiple definitions.
      *
      * @param SimpleXMLElement $xml
      * @param string           $file
@@ -124,7 +115,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses an individual Definition
+     * Parses an individual Definition.
      *
      * @param string           $id
      * @param SimpleXMLElement $service
@@ -223,7 +214,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Processes anonymous services
+     * Processes anonymous services.
      *
      * @param SimpleXMLElement $xml
      * @param string           $file

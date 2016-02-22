@@ -8,15 +8,26 @@
     "authors": [
         {
             "name": "Fabien Potencier",
-            "email": "fabien@symfony.com"
+            "email": "fabien@symfony.com",
+            "homepage": "http://fabien.potencier.org",
+            "role": "Lead Developer"
+        },
+        {
+            "name": "Twig Team",
+            "homepage": "http://twig.sensiolabs.org/contributors",
+            "role": "Contributors"
         },
         {
             "name": "Armin Ronacher",
-            "email": "armin.ronacher@active-4.com"
+            "email": "armin.ronacher@active-4.com",
+            "role": "Project Founder"
         }
     ],
+    "support": {
+        "forum": "https://groups.google.com/forum/#!forum/twig-users"
+    },
     "require": {
-        "php": ">=5.2.4"
+        "php": ">=5.2.7"
     },
     "autoload": {
         "psr-0" : {
@@ -25,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.13-dev"
+            "dev-master": "1.20-dev"
         }
     }
 }

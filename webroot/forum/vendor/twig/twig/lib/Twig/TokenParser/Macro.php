@@ -38,11 +38,11 @@ class Twig_TokenParser_Macro extends Twig_TokenParser
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
         $this->parser->pushLocalScope();
         $body = $this->parser->subparse(array($this, 'decideBlockEnd'), true);
-        if ($stream->test(Twig_Token::NAME_TYPE)) {
-            $value = $stream->next()->getValue();
+        if ($token = $stream->nextIf(Twig_Token::NAME_TYPE)) {
+            $value = $token->getValue();
 
             if ($value != $name) {
-                throw new Twig_Error_Syntax(sprintf("Expected endmacro for macro '$name' (but %s given)", $value), $stream->getCurrent()->getLine(), $stream->getFilename());
+                throw new Twig_Error_Syntax(sprintf('Expected endmacro for macro "%s" (but "%s" given)', $name, $value), $stream->getCurrent()->getLine(), $stream->getFilename());
             }
         }
         $this->parser->popLocalScope();

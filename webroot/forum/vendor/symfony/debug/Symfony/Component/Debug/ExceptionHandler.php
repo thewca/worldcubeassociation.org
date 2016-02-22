@@ -14,10 +14,6 @@ namespace Symfony\Component\Debug;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
 
-if (!defined('ENT_SUBSTITUTE')) {
-    define('ENT_SUBSTITUTE', 8);
-}
-
 /**
  * ExceptionHandler converts an exception to a Response object.
  *
@@ -43,7 +39,7 @@ class ExceptionHandler
     /**
      * Registers the exception handler.
      *
-     * @param bool    $debug
+     * @param bool $debug
      *
      * @return ExceptionHandler The registered exception handler
      */
@@ -65,8 +61,8 @@ class ExceptionHandler
      *
      * @param \Exception $exception An \Exception instance
      *
-     * @see sendPhpResponse
-     * @see createResponse
+     * @see sendPhpResponse()
+     * @see createResponse()
      */
     public function handle(\Exception $exception)
     {
@@ -96,6 +92,7 @@ class ExceptionHandler
             foreach ($exception->getHeaders() as $name => $value) {
                 header($name.': '.$value, false);
             }
+            header('Content-Type: text/html; charset='.$this->charset);
         }
 
         echo $this->decorate($this->getContent($exception), $this->getStylesheet($exception));
@@ -114,7 +111,7 @@ class ExceptionHandler
             $exception = FlattenException::create($exception);
         }
 
-        return new Response($this->decorate($this->getContent($exception), $this->getStylesheet($exception)), $exception->getStatusCode(), $exception->getHeaders());
+        return Response::create($this->decorate($this->getContent($exception), $this->getStylesheet($exception)), $exception->getStatusCode(), $exception->getHeaders())->setCharset($this->charset);
     }
 
     /**
@@ -135,6 +132,7 @@ class ExceptionHandler
         }
 
         $content = '';
+        $flags = PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES;
         if ($this->debug) {
             try {
                 $count = count($exception->getAllPrevious());
@@ -142,7 +140,7 @@ class ExceptionHandler
                 foreach ($exception->toArray() as $position => $e) {
                     $ind = $count - $position + 1;
                     $class = $this->abbrClass($e['class']);
-                    $message = nl2br($e['message']);
+                    $message = nl2br(htmlspecialchars($e['message'], $flags, $this->charset));
                     $content .= sprintf(<<<EOF
                         <div class="block_exception clear_fix">
                             <h2><span>%d/%d</span> %s: %s</h2>
@@ -159,10 +157,11 @@ EOF
                         }
                         if (isset($trace['file']) && isset($trace['line'])) {
                             if ($linkFormat = ini_get('xdebug.file_link_format')) {
-                                $link = str_replace(array('%f', '%l'), array($trace['file'], $trace['line']), $linkFormat);
-                                $content .= sprintf(' in <a href="%s" title="Go to source">%s line %s</a>', $link, $trace['file'], $trace['line']);
+                                $link = strtr($linkFormat, array('%f' => $trace['file'], '%l' => $trace['line']));
+                                $link = htmlspecialchars($link, $flags, $this->charset);
+                                $content .= sprintf(' in <a href="%s" title="Go to source">%s line %d</a>', $link, htmlspecialchars($trace['file'], $flags, $this->charset), $trace['line']);
                             } else {
-                                $content .= sprintf(' in %s line %s', $trace['file'], $trace['line']);
+                                $content .= sprintf(' in %s line %d', htmlspecialchars($trace['file'], $flags, $this->charset), $trace['line']);
                             }
                         }
                         $content .= "</li>\n";
@@ -173,7 +172,7 @@ EOF
             } catch (\Exception $e) {
                 // something nasty happened and we cannot throw an exception anymore
                 if ($this->debug) {
-                    $title = sprintf('Exception thrown when handling an exception (%s: %s)', get_class($exception), $exception->getMessage());
+                    $title = sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), htmlspecialchars($e->getMessage(), $flags, $this->charset));
                 } else {
                     $title = 'Whoops, looks like something went wrong.';
                 }
@@ -280,7 +279,7 @@ EOF;
     {
         $parts = explode('\\', $class);
 
-        return sprintf("<abbr title=\"%s\">%s</abbr>", $class, array_pop($parts));
+        return sprintf('<abbr title="%s">%s</abbr>', $class, array_pop($parts));
     }
 
     /**
@@ -292,14 +291,19 @@ EOF;
      */
     private function formatArgs(array $args)
     {
+        if (PHP_VERSION_ID >= 50400) {
+            $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+        } else {
+            $flags = ENT_QUOTES;
+        }
         $result = array();
         foreach ($args as $key => $item) {
             if ('object' === $item[0]) {
-                $formattedValue = sprintf("<em>object</em>(%s)", $this->abbrClass($item[1]));
+                $formattedValue = sprintf('<em>object</em>(%s)', $this->abbrClass($item[1]));
             } elseif ('array' === $item[0]) {
-                $formattedValue = sprintf("<em>array</em>(%s)", is_array($item[1]) ? $this->formatArgs($item[1]) : $item[1]);
-            } elseif ('string'  === $item[0]) {
-                $formattedValue = sprintf("'%s'", htmlspecialchars($item[1], ENT_QUOTES | ENT_SUBSTITUTE, $this->charset));
+                $formattedValue = sprintf('<em>array</em>(%s)', is_array($item[1]) ? $this->formatArgs($item[1]) : $item[1]);
+            } elseif ('string' === $item[0]) {
+                $formattedValue = sprintf("'%s'", htmlspecialchars($item[1], $flags, $this->charset));
             } elseif ('null' === $item[0]) {
                 $formattedValue = '<em>null</em>';
             } elseif ('boolean' === $item[0]) {
@@ -307,7 +311,7 @@ EOF;
             } elseif ('resource' === $item[0]) {
                 $formattedValue = '<em>resource</em>';
             } else {
-                $formattedValue = str_replace("\n", '', var_export(htmlspecialchars((string) $item[1], ENT_QUOTES | ENT_SUBSTITUTE, $this->charset), true));
+                $formattedValue = str_replace("\n", '', var_export(htmlspecialchars((string) $item[1], $flags, $this->charset), true));
             }
 
             $result[] = is_int($key) ? $formattedValue : sprintf("'%s' => %s", $key, $formattedValue);

@@ -49,7 +49,7 @@ class Twig_Parser implements Twig_ParserInterface
 
     public function getVarName()
     {
-        return sprintf('__internal_%s', hash('sha1', uniqid(mt_rand(), true), false));
+        return sprintf('__internal_%s', hash('sha256', uniqid(mt_rand(), true), false));
     }
 
     public function getFilename()
@@ -58,11 +58,7 @@ class Twig_Parser implements Twig_ParserInterface
     }
 
     /**
-     * Converts a token stream to a node tree.
-     *
-     * @param Twig_TokenStream $stream A token stream instance
-     *
-     * @return Twig_Node_Module A node tree
+     * {@inheritdoc}
      */
     public function parse(Twig_TokenStream $stream, $test = null, $dropNeedle = false)
     {
@@ -246,7 +242,7 @@ class Twig_Parser implements Twig_ParserInterface
         return $this->blocks[$name];
     }
 
-    public function setBlock($name, $value)
+    public function setBlock($name, Twig_Node_Block $value)
     {
         $this->blocks[$name] = new Twig_Node_Body(array($value), array(), $value->getLine());
     }
@@ -258,19 +254,28 @@ class Twig_Parser implements Twig_ParserInterface
 
     public function setMacro($name, Twig_Node_Macro $node)
     {
-        if (null === $this->reservedMacroNames) {
-            $this->reservedMacroNames = array();
-            $r = new ReflectionClass($this->env->getBaseTemplateClass());
-            foreach ($r->getMethods() as $method) {
-                $this->reservedMacroNames[] = $method->getName();
-            }
-        }
-
-        if (in_array($name, $this->reservedMacroNames)) {
+        if ($this->isReservedMacroName($name)) {
             throw new Twig_Error_Syntax(sprintf('"%s" cannot be used as a macro name as it is a reserved keyword', $name), $node->getLine(), $this->getFilename());
         }
 
         $this->macros[$name] = $node;
+    }
+
+    public function isReservedMacroName($name)
+    {
+        if (null === $this->reservedMacroNames) {
+            $this->reservedMacroNames = array();
+            $r = new ReflectionClass($this->env->getBaseTemplateClass());
+            foreach ($r->getMethods() as $method) {
+                $methodName = strtolower($method->getName());
+
+                if ('get' === substr($methodName, 0, 3) && isset($methodName[3])) {
+                    $this->reservedMacroNames[] = substr($methodName, 3);
+                }
+            }
+        }
+
+        return in_array(strtolower($name), $this->reservedMacroNames);
     }
 
     public function addTrait($trait)
@@ -384,7 +389,7 @@ class Twig_Parser implements Twig_ParserInterface
         }
 
         foreach ($node as $k => $n) {
-            if (null !== $n && null === $n = $this->filterBodyNodes($n)) {
+            if (null !== $n && null === $this->filterBodyNodes($n)) {
                 $node->removeNode($k);
             }
         }

@@ -42,7 +42,7 @@ class TimeDataCollector extends DataCollector
 
         $this->data = array(
             'start_time' => $startTime * 1000,
-            'events'     => array(),
+            'events' => array(),
         );
     }
 
@@ -105,7 +105,7 @@ class TimeDataCollector extends DataCollector
     /**
      * Gets the request time.
      *
-     * @return int     The time
+     * @return int The time
      */
     public function getStartTime()
     {

@@ -38,7 +38,7 @@ class PhpMatcherDumper extends MatcherDumper
     public function dump(array $options = array())
     {
         $options = array_replace(array(
-            'class'      => 'ProjectUrlMatcher',
+            'class' => 'ProjectUrlMatcher',
             'base_class' => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
         ), $options);
 
@@ -54,7 +54,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
 /**
- * {$options['class']}
+ * {$options['class']}.
  *
  * This class has been auto-generated
  * by the Symfony Routing Component.
@@ -78,7 +78,7 @@ EOF;
     /**
      * Generates the code for the match method implementing UrlMatcherInterface.
      *
-     * @param bool    $supportsRedirections Whether redirections are supported by the base class
+     * @param bool $supportsRedirections Whether redirections are supported by the base class
      *
      * @return string Match method as PHP code
      */
@@ -141,7 +141,7 @@ EOF;
     }
 
     /**
-     * Generates PHP code recursively to match a tree of routes
+     * Generates PHP code recursively to match a tree of routes.
      *
      * @param DumperPrefixCollection $collection           A DumperPrefixCollection instance
      * @param bool                   $supportsRedirections Whether redirections are supported by the base class
@@ -216,11 +216,11 @@ EOF;
                 $conditions[] = sprintf("rtrim(\$pathinfo, '/') === %s", var_export(rtrim(str_replace('\\', '', $m['url']), '/'), true));
                 $hasTrailingSlash = true;
             } else {
-                $conditions[] = sprintf("\$pathinfo === %s", var_export(str_replace('\\', '', $m['url']), true));
+                $conditions[] = sprintf('$pathinfo === %s', var_export(str_replace('\\', '', $m['url']), true));
             }
         } else {
             if ($compiledRoute->getStaticPrefix() && $compiledRoute->getStaticPrefix() !== $parentPrefix) {
-                $conditions[] = sprintf("0 === strpos(\$pathinfo, %s)", var_export($compiledRoute->getStaticPrefix(), true));
+                $conditions[] = sprintf('0 === strpos($pathinfo, %s)', var_export($compiledRoute->getStaticPrefix(), true));
             }
 
             $regex = $compiledRoute->getRegex();
@@ -228,7 +228,7 @@ EOF;
                 $regex = substr($regex, 0, $pos).'/?$'.substr($regex, $pos + 2);
                 $hasTrailingSlash = true;
             }
-            $conditions[] = sprintf("preg_match(%s, \$pathinfo, \$matches)", var_export($regex, true));
+            $conditions[] = sprintf('preg_match(%s, $pathinfo, $matches)', var_export($regex, true));
 
             $matches = true;
         }
@@ -305,8 +305,7 @@ EOF;
             }
             $vars[] = "array('_route' => '$name')";
 
-            $code .= sprintf("            return \$this->mergeDefaults(array_replace(%s), %s);\n"
-                , implode(', ', $vars), str_replace("\n", '', var_export($route->getDefaults(), true)));
+            $code .= sprintf("            return \$this->mergeDefaults(array_replace(%s), %s);\n", implode(', ', $vars), str_replace("\n", '', var_export($route->getDefaults(), true)));
         } elseif ($route->getDefaults()) {
             $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name)), true)));
         } else {

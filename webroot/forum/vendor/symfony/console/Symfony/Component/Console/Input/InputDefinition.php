@@ -11,11 +11,6 @@
 
 namespace Symfony\Component\Console\Input;
 
-if (!defined('JSON_UNESCAPED_UNICODE')) {
-    define('JSON_UNESCAPED_SLASHES', 64);
-    define('JSON_UNESCAPED_UNICODE', 256);
-}
-
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Descriptor\XmlDescriptor;
 
@@ -30,8 +25,6 @@ use Symfony\Component\Console\Descriptor\XmlDescriptor;
  *     ));
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class InputDefinition
 {
@@ -46,8 +39,6 @@ class InputDefinition
      * Constructor.
      *
      * @param array $definition An array of InputArgument and InputOption instance
-     *
-     * @api
      */
     public function __construct(array $definition = array())
     {
@@ -58,8 +49,6 @@ class InputDefinition
      * Sets the definition of the input.
      *
      * @param array $definition The definition array
-     *
-     * @api
      */
     public function setDefinition(array $definition)
     {
@@ -81,14 +70,12 @@ class InputDefinition
      * Sets the InputArgument objects.
      *
      * @param InputArgument[] $arguments An array of InputArgument objects
-     *
-     * @api
      */
     public function setArguments($arguments = array())
     {
-        $this->arguments          = array();
-        $this->requiredCount      = 0;
-        $this->hasOptional        = false;
+        $this->arguments = array();
+        $this->requiredCount = 0;
+        $this->hasOptional = false;
         $this->hasAnArrayArgument = false;
         $this->addArguments($arguments);
     }
@@ -97,8 +84,6 @@ class InputDefinition
      * Adds an array of InputArgument objects.
      *
      * @param InputArgument[] $arguments An array of InputArgument objects
-     *
-     * @api
      */
     public function addArguments($arguments = array())
     {
@@ -115,8 +100,6 @@ class InputDefinition
      * @param InputArgument $argument An InputArgument object
      *
      * @throws \LogicException When incorrect argument is given
-     *
-     * @api
      */
     public function addArgument(InputArgument $argument)
     {
@@ -148,13 +131,11 @@ class InputDefinition
     /**
      * Returns an InputArgument by name or by position.
      *
-     * @param string|int     $name The InputArgument name or position
+     * @param string|int $name The InputArgument name or position
      *
      * @return InputArgument An InputArgument object
      *
      * @throws \InvalidArgumentException When argument given doesn't exist
-     *
-     * @api
      */
     public function getArgument($name)
     {
@@ -170,11 +151,9 @@ class InputDefinition
     /**
      * Returns true if an InputArgument object exists by name or position.
      *
-     * @param string|int     $name The InputArgument name or position
+     * @param string|int $name The InputArgument name or position
      *
-     * @return bool    true if the InputArgument object exists, false otherwise
-     *
-     * @api
+     * @return bool true if the InputArgument object exists, false otherwise
      */
     public function hasArgument($name)
     {
@@ -187,8 +166,6 @@ class InputDefinition
      * Gets the array of InputArgument objects.
      *
      * @return InputArgument[] An array of InputArgument objects
-     *
-     * @api
      */
     public function getArguments()
     {
@@ -198,7 +175,7 @@ class InputDefinition
     /**
      * Returns the number of InputArguments.
      *
-     * @return int     The number of InputArguments
+     * @return int The number of InputArguments
      */
     public function getArgumentCount()
     {
@@ -208,7 +185,7 @@ class InputDefinition
     /**
      * Returns the number of required InputArguments.
      *
-     * @return int     The number of required InputArguments
+     * @return int The number of required InputArguments
      */
     public function getArgumentRequiredCount()
     {
@@ -234,8 +211,6 @@ class InputDefinition
      * Sets the InputOption objects.
      *
      * @param InputOption[] $options An array of InputOption objects
-     *
-     * @api
      */
     public function setOptions($options = array())
     {
@@ -248,8 +223,6 @@ class InputDefinition
      * Adds an array of InputOption objects.
      *
      * @param InputOption[] $options An array of InputOption objects
-     *
-     * @api
      */
     public function addOptions($options = array())
     {
@@ -264,8 +237,6 @@ class InputDefinition
      * @param InputOption $option An InputOption object
      *
      * @throws \LogicException When option given already exist
-     *
-     * @api
      */
     public function addOption(InputOption $option)
     {
@@ -297,8 +268,6 @@ class InputDefinition
      * @return InputOption A InputOption object
      *
      * @throws \InvalidArgumentException When option given doesn't exist
-     *
-     * @api
      */
     public function getOption($name)
     {
@@ -314,9 +283,7 @@ class InputDefinition
      *
      * @param string $name The InputOption name
      *
-     * @return bool    true if the InputOption object exists, false otherwise
-     *
-     * @api
+     * @return bool true if the InputOption object exists, false otherwise
      */
     public function hasOption($name)
     {
@@ -327,8 +294,6 @@ class InputDefinition
      * Gets the array of InputOption objects.
      *
      * @return InputOption[] An array of InputOption objects
-     *
-     * @api
      */
     public function getOptions()
     {
@@ -340,7 +305,7 @@ class InputDefinition
      *
      * @param string $name The InputOption shortcut
      *
-     * @return bool    true if the InputOption object exists, false otherwise
+     * @return bool true if the InputOption object exists, false otherwise
      */
     public function hasShortcut($name)
     {
@@ -433,7 +398,7 @@ class InputDefinition
     /**
      * Returns an XML representation of the InputDefinition.
      *
-     * @param bool    $asDom Whether to return a DOM or an XML string
+     * @param bool $asDom Whether to return a DOM or an XML string
      *
      * @return string|\DOMDocument An XML string representing the InputDefinition
      *

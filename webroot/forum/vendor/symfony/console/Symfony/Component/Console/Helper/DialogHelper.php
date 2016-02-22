@@ -32,11 +32,11 @@ class DialogHelper extends Helper
      * @param string|array    $question     The question to ask
      * @param array           $choices      List of choices to pick from
      * @param bool|string     $default      The default answer if the user enters nothing
-     * @param bool|int        $attempts Max number of times to ask before giving up (false by default, which means infinite)
+     * @param bool|int        $attempts     Max number of times to ask before giving up (false by default, which means infinite)
      * @param string          $errorMessage Message which will be shown if invalid value from choice list would be picked
      * @param bool            $multiselect  Select more than one value separated by comma
      *
-     * @return int|string|array     The selected value or values (the key of the choices array)
+     * @return int|string|array The selected value or values (the key of the choices array)
      *
      * @throws \InvalidArgumentException
      */
@@ -53,14 +53,14 @@ class DialogHelper extends Helper
 
         $result = $this->askAndValidate($output, '> ', function ($picked) use ($choices, $errorMessage, $multiselect) {
             // Collapse all spaces.
-            $selectedChoices = str_replace(" ", "", $picked);
+            $selectedChoices = str_replace(' ', '', $picked);
 
             if ($multiselect) {
                 // Check for a separated comma values
                 if (!preg_match('/^[a-zA-Z0-9_-]+(?:,[a-zA-Z0-9_-]+)*$/', $selectedChoices, $matches)) {
                     throw new \InvalidArgumentException(sprintf($errorMessage, $picked));
                 }
-                $selectedChoices = explode(",", $selectedChoices);
+                $selectedChoices = explode(',', $selectedChoices);
             } else {
                 $selectedChoices = array($picked);
             }
@@ -71,7 +71,7 @@ class DialogHelper extends Helper
                 if (empty($choices[$value])) {
                     throw new \InvalidArgumentException(sprintf($errorMessage, $value));
                 }
-                array_push($multiselectChoices, $value);
+                $multiselectChoices[] = $value;
             }
 
             if ($multiselect) {
@@ -131,7 +131,7 @@ class DialogHelper extends Helper
                 // Backspace Character
                 if ("\177" === $c) {
                     if (0 === $numMatches && 0 !== $i) {
-                        $i--;
+                        --$i;
                         // Move cursor backwards
                         $output->write("\033[1D");
                     }
@@ -184,7 +184,7 @@ class DialogHelper extends Helper
                 } else {
                     $output->write($c);
                     $ret .= $c;
-                    $i++;
+                    ++$i;
 
                     $numMatches = 0;
                     $ofs = 0;
@@ -226,7 +226,7 @@ class DialogHelper extends Helper
      * @param string|array    $question The question to ask
      * @param bool            $default  The default answer if the user enters nothing
      *
-     * @return bool    true if the user has confirmed, false otherwise
+     * @return bool true if the user has confirmed, false otherwise
      */
     public function askConfirmation(OutputInterface $output, $question, $default = true)
     {
@@ -243,19 +243,19 @@ class DialogHelper extends Helper
     }
 
     /**
-     * Asks a question to the user, the response is hidden
+     * Asks a question to the user, the response is hidden.
      *
      * @param OutputInterface $output   An Output instance
      * @param string|array    $question The question
      * @param bool            $fallback In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
-     * @return string         The answer
+     * @return string The answer
      *
      * @throws \RuntimeException In case the fallback is deactivated and the response can not be hidden
      */
     public function askHiddenResponse(OutputInterface $output, $question, $fallback = true)
     {
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if ('\\' === DIRECTORY_SEPARATOR) {
             $exe = __DIR__.'/../Resources/bin/hiddeninput.exe';
 
             // handle code running from a phar
@@ -354,11 +354,10 @@ class DialogHelper extends Helper
      * @param int|false       $attempts  Max number of times to ask before giving up (false by default, which means infinite)
      * @param bool            $fallback  In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
-     * @return string         The response
+     * @return string The response
      *
      * @throws \Exception        When any of the validators return an error
      * @throws \RuntimeException In case the fallback is deactivated and the response can not be hidden
-     *
      */
     public function askHiddenResponseAndValidate(OutputInterface $output, $question, $validator, $attempts = false, $fallback = true)
     {
@@ -384,9 +383,9 @@ class DialogHelper extends Helper
     }
 
     /**
-     * Returns the helper's input stream
+     * Returns the helper's input stream.
      *
-     * @return string
+     * @return resource|null The input stream or null if the default STDIN is used
      */
     public function getInputStream()
     {
@@ -402,9 +401,9 @@ class DialogHelper extends Helper
     }
 
     /**
-     * Return a valid Unix shell
+     * Return a valid Unix shell.
      *
-     * @return string|bool     The valid shell name, false in case no valid shell is found
+     * @return string|bool The valid shell name, false in case no valid shell is found
      */
     private function getShell()
     {
@@ -440,31 +439,31 @@ class DialogHelper extends Helper
     }
 
     /**
-     * Validate an attempt
+     * Validate an attempt.
      *
-     * @param callable         $interviewer  A callable that will ask for a question and return the result
-     * @param OutputInterface  $output       An Output instance
-     * @param callable         $validator    A PHP callback
-     * @param int|false        $attempts     Max number of times to ask before giving up ; false will ask infinitely
+     * @param callable        $interviewer A callable that will ask for a question and return the result
+     * @param OutputInterface $output      An Output instance
+     * @param callable        $validator   A PHP callback
+     * @param int|false       $attempts    Max number of times to ask before giving up ; false will ask infinitely
      *
-     * @return string   The validated response
+     * @return string The validated response
      *
      * @throws \Exception In case the max number of attempts has been reached and no valid response has been given
      */
     private function validateAttempts($interviewer, OutputInterface $output, $validator, $attempts)
     {
-        $error = null;
+        $e = null;
         while (false === $attempts || $attempts--) {
-            if (null !== $error) {
-                $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+            if (null !== $e) {
+                $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($e->getMessage(), 'error'));
             }
 
             try {
                 return call_user_func($validator, $interviewer());
-            } catch (\Exception $error) {
+            } catch (\Exception $e) {
             }
         }
 
-        throw $error;
+        throw $e;
     }
 }
