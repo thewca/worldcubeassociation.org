@@ -59,7 +59,7 @@ en:
       help:
         redirect_uri: 'Use one line per URI'
         native_redirect_uri: 'Use %{native_redirect_uri} for local tests'
-        scopes: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/jfly/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8" target="_blank">here</a> for a list of supported scopes.'
+        scopes: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/cubing/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8" target="_blank">here</a> for a list of supported scopes.'
       edit:
         title: 'Edit application'
       index:
