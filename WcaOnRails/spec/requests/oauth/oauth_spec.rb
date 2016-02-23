@@ -16,7 +16,9 @@ describe "oauth api" do
   end
 
   it 'can authenticate with grant_type authorization' do
-    oauth_app = FactoryGirl.create :oauth_application, redirect_uri: oauth_authorization_url
+    # Hack around the fact that we aren't allowed to use non HTTPS urls for redirect_uri.
+    oauth_app = FactoryGirl.build(:oauth_application, redirect_uri: oauth_authorization_url)
+    oauth_app.save!(validate: false)
     visit oauth_authorization_path(
       client_id: oauth_app.uid,
       redirect_uri: oauth_app.redirect_uri,
@@ -46,7 +48,7 @@ describe "oauth api" do
     verify_access_token access_token
   end
 
-  it 'can authenticate with response_type token (implicit authorizaion)' do
+  it 'can authenticate with response_type token (implicit authorization)' do
     oauth_app = FactoryGirl.create :oauth_application
     visit oauth_authorization_path(
       client_id: oauth_app.uid,
