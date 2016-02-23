@@ -43,9 +43,9 @@ RSpec.feature "Registering for a competition" do
 
     scenario "updating registration" do
       visit edit_registration_path(registration)
-      fill_in "Guests", with: "test guests!"
+      fill_in "Guests", with: 1
       click_button "Update Registration"
-      expect(registration.reload.guests).to eq "test guests!"
+      expect(registration.reload.guests).to eq 1
     end
 
     scenario "deleting registration" do

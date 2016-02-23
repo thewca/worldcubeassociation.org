@@ -13,11 +13,11 @@ describe "registrations/edit_registrations.csv.erb" do
       gender: "m",
       email: "bob@bob.com",
       eventIds: "333",
-      guests: "jane",
+      guests: 1,
     )
     assign(:competition, competition)
 
     render
-    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP\na,Bob,USA,\"\",1990-01-01,m,1,0,bob@bob.com,jane,\"\"\n"
+    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP\na,Bob,USA,\"\",1990-01-01,m,1,0,bob@bob.com,1,\"\"\n"
   end
 end

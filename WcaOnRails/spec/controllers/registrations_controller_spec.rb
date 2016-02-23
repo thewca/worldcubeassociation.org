@@ -150,7 +150,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
-        post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "" }
+        post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 1, comments: "" }
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
 
       registration = Registration.find_by_user_id(user.id)
@@ -165,7 +165,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot create accepted registration" do
-      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "", status: Registration::statuses[:accepted] }
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 0, comments: "", status: Registration::statuses[:accepted] }
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
@@ -175,7 +175,7 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: "", comments: "", status: Registration::statuses[:accepted] }
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 1, comments: "", status: Registration::statuses[:accepted] }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end

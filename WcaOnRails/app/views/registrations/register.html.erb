@@ -85,7 +85,10 @@
 
           <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !@registration.new_record? %>
 
-          <%= f.input :guests, disabled: !@registration.new_record? %>
+          <% if @competition.guests_enabled? %>
+            <%= f.input :guests, disabled: !@registration.new_record? %>
+          <% end %>
+
           <%= f.input :comments, disabled: !@registration.new_record? %>
 
           <div class="form-group">

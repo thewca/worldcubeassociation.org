@@ -7,7 +7,7 @@ FactoryGirl.define do
     competitionId { competition.id }
     user_id { user ? user.id : nil }
     eventIds "333"
-    guests ""
+    guests 10
     comments ""
 
     trait :accepted do

@@ -233,6 +233,7 @@ class CompetitionsController < ApplicationController
       :receive_registration_emails,
       :registration_open,
       :registration_close,
+      :guests_enabled,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.

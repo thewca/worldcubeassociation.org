@@ -21,10 +21,12 @@
           <% table.column event.id.to_s %>
         <% end %>
 
-        <% table.column :guests do |registration| %>
-          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
-            <%= registration.guests %>
-          </span>
+        <% if @competition.guests_enabled? %>
+          <% table.column :guests do |registration| %>
+            <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
+              <%= registration.guests %>
+            </span>
+          <% end %>
         <% end %>
         <% table.column :comments do |registration| %>
           <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
@@ -49,7 +51,12 @@
               <% @competition.events.each do |event| %>
                 <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
               <% end %>
-              <td colspan="4"></td>
+              <% if @competition.guests_enabled? %>
+                <td>
+                  <%= registrations.map { |r| r.guests }.reduce { |sum, guests| sum + guests } %>
+                </td>
+              <% end %>
+              <td colspan="3"></td>
             </tr>
           </tfoot>
         <% end %>
