@@ -1,4 +1,12 @@
 Doorkeeper.configure do
+  # NOTE: Keep this at the top of the file, so we can link directly to it
+  #       without line numbers changing.
+  # Define access token scopes for your provider
+  # For more information go to
+  # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
+  default_scopes  :public
+  optional_scopes :dob, :email
+
   # Change the ORM that doorkeeper will use.
   # Currently supported options are :active_record, :mongoid2, :mongoid3,
   # :mongoid4, :mongo_mapper
@@ -54,12 +62,6 @@ Doorkeeper.configure do
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
   enable_application_owner confirmation: false
-
-  # Define access token scopes for your provider
-  # For more information go to
-  # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  default_scopes  :public
-  optional_scopes :dob, :email
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

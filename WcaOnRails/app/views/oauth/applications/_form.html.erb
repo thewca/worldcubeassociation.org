@@ -33,7 +33,7 @@
       <%= f.text_field :scopes, class: 'form-control' %>
       <%= doorkeeper_errors_for application, :scopes %>
       <span class="help-block">
-        <%= t('doorkeeper.applications.help.scopes') %>
+        <%= raw t('doorkeeper.applications.help.scopes') %>
       </span>
     </div>
   <% end %>
