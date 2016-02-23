@@ -32,12 +32,16 @@ class Store implements StoreInterface
      * Constructor.
      *
      * @param string $root The path to the cache directory
+     *
+     * @throws \RuntimeException
      */
     public function __construct($root)
     {
         $this->root = $root;
         if (!is_dir($this->root)) {
-            mkdir($this->root, 0777, true);
+            if (false === @mkdir($this->root, 0777, true) && !is_dir($this->root)) {
+                throw new \RuntimeException(sprintf('Unable to create the store directory (%s).', $this->root));
+            }
         }
         $this->keyCache = new \SplObjectStorage();
         $this->locks = array();
@@ -69,12 +73,12 @@ class Store implements StoreInterface
      *
      * @param Request $request A Request instance
      *
-     * @return bool|string    true if the lock is acquired, the path to the current lock otherwise
+     * @return bool|string true if the lock is acquired, the path to the current lock otherwise
      */
     public function lock(Request $request)
     {
         $path = $this->getPath($this->getCacheKey($request).'.lck');
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
+        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
             return false;
         }
 
@@ -95,7 +99,7 @@ class Store implements StoreInterface
      *
      * @param Request $request A Request instance
      *
-     * @return bool    False if the lock file does not exist or cannot be unlocked, true otherwise
+     * @return bool False if the lock file does not exist or cannot be unlocked, true otherwise
      */
     public function unlock(Request $request)
     {
@@ -127,7 +131,7 @@ class Store implements StoreInterface
         // find a cached entry that matches the request.
         $match = null;
         foreach ($entries as $entry) {
-            if ($this->requestsMatch(isset($entry[1]['vary'][0]) ? $entry[1]['vary'][0] : '', $request->headers->all(), $entry[0])) {
+            if ($this->requestsMatch(isset($entry[1]['vary'][0]) ? implode(', ', $entry[1]['vary']) : '', $request->headers->all(), $entry[0])) {
                 $match = $entry;
 
                 break;
@@ -257,7 +261,7 @@ class Store implements StoreInterface
      * @param array  $env1 A Request HTTP header array
      * @param array  $env2 A Request HTTP header array
      *
-     * @return bool    true if the two environments match, false otherwise
+     * @return bool true if the two environments match, false otherwise
      */
     private function requestsMatch($vary, $env1, $env2)
     {
@@ -300,7 +304,7 @@ class Store implements StoreInterface
      *
      * @param string $url A URL
      *
-     * @return bool    true if the URL exists and has been purged, false otherwise
+     * @return bool true if the URL exists and has been purged, false otherwise
      */
     public function purge($url)
     {
@@ -338,7 +342,7 @@ class Store implements StoreInterface
     private function save($key, $data)
     {
         $path = $this->getPath($key);
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
+        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
             return false;
         }
 

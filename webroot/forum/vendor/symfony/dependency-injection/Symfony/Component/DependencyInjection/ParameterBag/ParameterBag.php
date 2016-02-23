@@ -19,8 +19,6 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
  * Holds parameters.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class ParameterBag implements ParameterBagInterface
 {
@@ -31,8 +29,6 @@ class ParameterBag implements ParameterBagInterface
      * Constructor.
      *
      * @param array $parameters An array of parameters
-     *
-     * @api
      */
     public function __construct(array $parameters = array())
     {
@@ -43,8 +39,6 @@ class ParameterBag implements ParameterBagInterface
 
     /**
      * Clears all parameters.
-     *
-     * @api
      */
     public function clear()
     {
@@ -55,8 +49,6 @@ class ParameterBag implements ParameterBagInterface
      * Adds parameters to the service container parameters.
      *
      * @param array $parameters An array of parameters
-     *
-     * @api
      */
     public function add(array $parameters)
     {
@@ -69,8 +61,6 @@ class ParameterBag implements ParameterBagInterface
      * Gets the service container parameters.
      *
      * @return array An array of parameters
-     *
-     * @api
      */
     public function all()
     {
@@ -82,11 +72,9 @@ class ParameterBag implements ParameterBagInterface
      *
      * @param string $name The parameter name
      *
-     * @return mixed  The parameter value
+     * @return mixed The parameter value
      *
      * @throws ParameterNotFoundException if the parameter is not defined
-     *
-     * @api
      */
     public function get($name)
     {
@@ -98,7 +86,7 @@ class ParameterBag implements ParameterBagInterface
             }
 
             $alternatives = array();
-            foreach (array_keys($this->parameters) as $key) {
+            foreach ($this->parameters as $key => $parameterValue) {
                 $lev = levenshtein($name, $key);
                 if ($lev <= strlen($name) / 3 || false !== strpos($key, $name)) {
                     $alternatives[] = $key;
@@ -116,8 +104,6 @@ class ParameterBag implements ParameterBagInterface
      *
      * @param string $name  The parameter name
      * @param mixed  $value The parameter value
-     *
-     * @api
      */
     public function set($name, $value)
     {
@@ -129,9 +115,7 @@ class ParameterBag implements ParameterBagInterface
      *
      * @param string $name The parameter name
      *
-     * @return bool    true if the parameter name is defined, false otherwise
-     *
-     * @api
+     * @return bool true if the parameter name is defined, false otherwise
      */
     public function has($name)
     {
@@ -142,8 +126,6 @@ class ParameterBag implements ParameterBagInterface
      * Removes a parameter.
      *
      * @param string $name The parameter name
-     *
-     * @api
      */
     public function remove($name)
     {
@@ -183,9 +165,9 @@ class ParameterBag implements ParameterBagInterface
      *
      * @return mixed The resolved value
      *
-     * @throws ParameterNotFoundException if a placeholder references a parameter that does not exist
+     * @throws ParameterNotFoundException          if a placeholder references a parameter that does not exist
      * @throws ParameterCircularReferenceException if a circular reference if detected
-     * @throws RuntimeException when a given parameter has a type problem.
+     * @throws RuntimeException                    when a given parameter has a type problem.
      */
     public function resolveValue($value, array $resolving = array())
     {
@@ -206,16 +188,16 @@ class ParameterBag implements ParameterBagInterface
     }
 
     /**
-     * Resolves parameters inside a string
+     * Resolves parameters inside a string.
      *
      * @param string $value     The string to resolve
      * @param array  $resolving An array of keys that are being resolved (used internally to detect circular references)
      *
      * @return string The resolved string
      *
-     * @throws ParameterNotFoundException if a placeholder references a parameter that does not exist
+     * @throws ParameterNotFoundException          if a placeholder references a parameter that does not exist
      * @throws ParameterCircularReferenceException if a circular reference if detected
-     * @throws RuntimeException when a given parameter has a type problem.
+     * @throws RuntimeException                    when a given parameter has a type problem.
      */
     public function resolveString($value, array $resolving = array())
     {

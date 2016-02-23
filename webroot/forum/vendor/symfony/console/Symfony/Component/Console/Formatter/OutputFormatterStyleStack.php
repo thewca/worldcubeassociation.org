@@ -62,7 +62,7 @@ class OutputFormatterStyleStack
      *
      * @return OutputFormatterStyleInterface
      *
-     * @throws \InvalidArgumentException  When style tags incorrectly nested
+     * @throws \InvalidArgumentException When style tags incorrectly nested
      */
     public function pop(OutputFormatterStyleInterface $style = null)
     {
@@ -96,7 +96,7 @@ class OutputFormatterStyleStack
             return $this->emptyStyle;
         }
 
-        return $this->styles[count($this->styles)-1];
+        return $this->styles[count($this->styles) - 1];
     }
 
     /**

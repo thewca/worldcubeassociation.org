@@ -15,37 +15,37 @@ namespace Symfony\Component\Console\Formatter;
  * Formatter style class for defining styles.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @api
  */
 class OutputFormatterStyle implements OutputFormatterStyleInterface
 {
     private static $availableForegroundColors = array(
-        'black'     => 30,
-        'red'       => 31,
-        'green'     => 32,
-        'yellow'    => 33,
-        'blue'      => 34,
-        'magenta'   => 35,
-        'cyan'      => 36,
-        'white'     => 37,
+        'black' => 30,
+        'red' => 31,
+        'green' => 32,
+        'yellow' => 33,
+        'blue' => 34,
+        'magenta' => 35,
+        'cyan' => 36,
+        'white' => 37,
+        'default' => 39,
     );
     private static $availableBackgroundColors = array(
-        'black'     => 40,
-        'red'       => 41,
-        'green'     => 42,
-        'yellow'    => 43,
-        'blue'      => 44,
-        'magenta'   => 45,
-        'cyan'      => 46,
-        'white'     => 47,
+        'black' => 40,
+        'red' => 41,
+        'green' => 42,
+        'yellow' => 43,
+        'blue' => 44,
+        'magenta' => 45,
+        'cyan' => 46,
+        'white' => 47,
+        'default' => 49,
     );
     private static $availableOptions = array(
-        'bold'          => 1,
-        'underscore'    => 4,
-        'blink'         => 5,
-        'reverse'       => 7,
-        'conceal'       => 8,
+        'bold' => 1,
+        'underscore' => 4,
+        'blink' => 5,
+        'reverse' => 7,
+        'conceal' => 8,
     );
 
     private $foreground;
@@ -58,8 +58,6 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string|null $foreground The style foreground color name
      * @param string|null $background The style background color name
      * @param array       $options    The style options
-     *
-     * @api
      */
     public function __construct($foreground = null, $background = null, array $options = array())
     {
@@ -80,8 +78,6 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string|null $color The color name
      *
      * @throws \InvalidArgumentException When the color name isn't defined
-     *
-     * @api
      */
     public function setForeground($color = null)
     {
@@ -108,8 +104,6 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string|null $color The color name
      *
      * @throws \InvalidArgumentException When the color name isn't defined
-     *
-     * @api
      */
     public function setBackground($color = null)
     {
@@ -136,8 +130,6 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string $option The option name
      *
      * @throws \InvalidArgumentException When the option name isn't defined
-     *
-     * @api
      */
     public function setOption($option)
     {
@@ -149,7 +141,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
             ));
         }
 
-        if (false === array_search(static::$availableOptions[$option], $this->options)) {
+        if (!in_array(static::$availableOptions[$option], $this->options)) {
             $this->options[] = static::$availableOptions[$option];
         }
     }
@@ -160,7 +152,6 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string $option The option name
      *
      * @throws \InvalidArgumentException When the option name isn't defined
-     *
      */
     public function unsetOption($option)
     {

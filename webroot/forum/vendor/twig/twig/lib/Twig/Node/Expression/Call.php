@@ -12,10 +12,8 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
 {
     protected function compileCallable(Twig_Compiler $compiler)
     {
-        $callable = $this->getAttribute('callable');
-
         $closingParenthesis = false;
-        if ($callable) {
+        if ($this->hasAttribute('callable') && $callable = $this->getAttribute('callable')) {
             if (is_string($callable)) {
                 $compiler->raw($callable);
             } elseif (is_array($callable) && $callable[0] instanceof Twig_ExtensionInterface) {
@@ -92,6 +90,9 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
 
     protected function getArguments($callable, $arguments)
     {
+        $callType = $this->getAttribute('type');
+        $callName = $this->getAttribute('name');
+
         $parameters = array();
         $named = false;
         foreach ($arguments as $name => $node) {
@@ -99,18 +100,25 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
                 $named = true;
                 $name = $this->normalizeName($name);
             } elseif ($named) {
-                throw new Twig_Error_Syntax(sprintf('Positional arguments cannot be used after named arguments for %s "%s".', $this->getAttribute('type'), $this->getAttribute('name')));
+                throw new Twig_Error_Syntax(sprintf('Positional arguments cannot be used after named arguments for %s "%s".', $callType, $callName));
             }
 
             $parameters[$name] = $node;
         }
 
-        if (!$named) {
+        $isVariadic = $this->hasAttribute('is_variadic') && $this->getAttribute('is_variadic');
+        if (!$named && !$isVariadic) {
             return $parameters;
         }
 
         if (!$callable) {
-            throw new LogicException(sprintf('Named arguments are not supported for %s "%s".', $this->getAttribute('type'), $this->getAttribute('name')));
+            if ($named) {
+                $message = sprintf('Named arguments are not supported for %s "%s".', $callType, $callName);
+            } else {
+                $message = sprintf('Arbitrary positional arguments are not supported for %s "%s".', $callType, $callName);
+            }
+
+            throw new LogicException($message);
         }
 
         // manage named arguments
@@ -119,6 +127,8 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
         } elseif (is_object($callable) && !$callable instanceof Closure) {
             $r = new ReflectionObject($callable);
             $r = $r->getMethod('__invoke');
+        } elseif (is_string($callable) && false !== strpos($callable, '::')) {
+            $r = new ReflectionMethod($callable);
         } else {
             $r = new ReflectionFunction($callable);
         }
@@ -138,34 +148,93 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
                 array_shift($definition);
             }
         }
+        if ($isVariadic) {
+            $argument = end($definition);
+            if ($argument && $argument->isArray() && $argument->isDefaultValueAvailable() && array() === $argument->getDefaultValue()) {
+                array_pop($definition);
+            } else {
+                $callableName = $r->name;
+                if ($r->getDeclaringClass()) {
+                    $callableName = $r->getDeclaringClass()->name.'::'.$callableName;
+                }
+
+                throw new LogicException(sprintf('The last parameter of "%s" for %s "%s" must be an array with default value, eg. "array $arg = array()".', $callableName, $callType, $callName));
+            }
+        }
 
         $arguments = array();
+        $names = array();
+        $missingArguments = array();
+        $optionalArguments = array();
         $pos = 0;
         foreach ($definition as $param) {
-            $name = $this->normalizeName($param->name);
+            $names[] = $name = $this->normalizeName($param->name);
 
             if (array_key_exists($name, $parameters)) {
                 if (array_key_exists($pos, $parameters)) {
-                    throw new Twig_Error_Syntax(sprintf('Argument "%s" is defined twice for %s "%s".', $name, $this->getAttribute('type'), $this->getAttribute('name')));
+                    throw new Twig_Error_Syntax(sprintf('Argument "%s" is defined twice for %s "%s".', $name, $callType, $callName));
                 }
 
+                if (!empty($missingArguments)) {
+                    throw new Twig_Error_Syntax(sprintf(
+                        'Argument "%s" could not be assigned for %s "%s(%s)" because it is mapped to an internal PHP function which cannot determine default value for optional argument%s "%s".',
+                        $name, $callType, $callName, implode(', ', $names), count($missingArguments) > 1 ? 's' : '', implode('", "', $missingArguments))
+                    );
+                }
+
+                $arguments = array_merge($arguments, $optionalArguments);
                 $arguments[] = $parameters[$name];
                 unset($parameters[$name]);
+                $optionalArguments = array();
             } elseif (array_key_exists($pos, $parameters)) {
+                $arguments = array_merge($arguments, $optionalArguments);
                 $arguments[] = $parameters[$pos];
                 unset($parameters[$pos]);
+                $optionalArguments = array();
                 ++$pos;
             } elseif ($param->isDefaultValueAvailable()) {
-                $arguments[] = new Twig_Node_Expression_Constant($param->getDefaultValue(), -1);
+                $optionalArguments[] = new Twig_Node_Expression_Constant($param->getDefaultValue(), -1);
             } elseif ($param->isOptional()) {
-                break;
+                if (empty($parameters)) {
+                    break;
+                } else {
+                    $missingArguments[] = $name;
+                }
             } else {
-                throw new Twig_Error_Syntax(sprintf('Value for argument "%s" is required for %s "%s".', $name, $this->getAttribute('type'), $this->getAttribute('name')));
+                throw new Twig_Error_Syntax(sprintf('Value for argument "%s" is required for %s "%s".', $name, $callType, $callName));
+            }
+        }
+
+        if ($isVariadic) {
+            $arbitraryArguments = new Twig_Node_Expression_Array(array(), -1);
+            foreach ($parameters as $key => $value) {
+                if (is_int($key)) {
+                    $arbitraryArguments->addElement($value);
+                } else {
+                    $arbitraryArguments->addElement($value, new Twig_Node_Expression_Constant($key, -1));
+                }
+                unset($parameters[$key]);
+            }
+
+            if ($arbitraryArguments->count()) {
+                $arguments = array_merge($arguments, $optionalArguments);
+                $arguments[] = $arbitraryArguments;
             }
         }
 
         if (!empty($parameters)) {
-            throw new Twig_Error_Syntax(sprintf('Unknown argument%s "%s" for %s "%s".', count($parameters) > 1 ? 's' : '' , implode('", "', array_keys($parameters)), $this->getAttribute('type'), $this->getAttribute('name')));
+            $unknownParameter = null;
+            foreach ($parameters as $parameter) {
+                if ($parameter instanceof Twig_Node) {
+                    $unknownParameter = $parameter;
+                    break;
+                }
+            }
+
+            throw new Twig_Error_Syntax(sprintf(
+                'Unknown argument%s "%s" for %s "%s(%s)".',
+                count($parameters) > 1 ? 's' : '', implode('", "', array_keys($parameters)), $callType, $callName, implode(', ', $names)
+            ), $unknownParameter ? $unknownParameter->getLine() : -1);
         }
 
         return $arguments;

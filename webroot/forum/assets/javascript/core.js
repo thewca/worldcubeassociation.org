@@ -1549,7 +1549,7 @@ phpbb.toggleSelectSettings = function(el) {
 * @returns function
 */
 phpbb.getFunctionByName = function (functionName) {
- 	var namespaces = functionName.split('.'),
+	var namespaces = functionName.split('.'),
 		func = namespaces.pop(),
 		context = window;
 

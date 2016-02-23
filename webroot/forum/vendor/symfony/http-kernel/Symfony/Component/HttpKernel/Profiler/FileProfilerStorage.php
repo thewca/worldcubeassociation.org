@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Symfony package.
  *
@@ -40,8 +41,8 @@ class FileProfilerStorage implements ProfilerStorageInterface
         }
         $this->folder = substr($dsn, 5);
 
-        if (!is_dir($this->folder)) {
-            mkdir($this->folder, 0777, true);
+        if (!is_dir($this->folder) && false === @mkdir($this->folder, 0777, true) && !is_dir($this->folder)) {
+            throw new \RuntimeException(sprintf('Unable to create the storage directory (%s).', $this->folder));
         }
     }
 
@@ -78,11 +79,11 @@ class FileProfilerStorage implements ProfilerStorageInterface
             }
 
             $result[$csvToken] = array(
-                'token'  => $csvToken,
-                'ip'     => $csvIp,
+                'token' => $csvToken,
+                'ip' => $csvIp,
                 'method' => $csvMethod,
-                'url'    => $csvUrl,
-                'time'   => $csvTime,
+                'url' => $csvUrl,
+                'time' => $csvTime,
                 'parent' => $csvParent,
             );
         }
@@ -124,6 +125,8 @@ class FileProfilerStorage implements ProfilerStorageInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
     public function write(Profile $profile)
     {
@@ -133,21 +136,21 @@ class FileProfilerStorage implements ProfilerStorageInterface
         if (!$profileIndexed) {
             // Create directory
             $dir = dirname($file);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0777, true);
+            if (!is_dir($dir) && false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Unable to create the storage directory (%s).', $dir));
             }
         }
 
         // Store profile
         $data = array(
-            'token'    => $profile->getToken(),
-            'parent'   => $profile->getParentToken(),
+            'token' => $profile->getToken(),
+            'parent' => $profile->getParentToken(),
             'children' => array_map(function ($p) { return $p->getToken(); }, $profile->getChildren()),
-            'data'     => $profile->getCollectors(),
-            'ip'       => $profile->getIp(),
-            'method'   => $profile->getMethod(),
-            'url'      => $profile->getUrl(),
-            'time'     => $profile->getTime(),
+            'data' => $profile->getCollectors(),
+            'ip' => $profile->getIp(),
+            'method' => $profile->getMethod(),
+            'url' => $profile->getUrl(),
+            'time' => $profile->getTime(),
         );
 
         if (false === file_put_contents($file, serialize($data))) {

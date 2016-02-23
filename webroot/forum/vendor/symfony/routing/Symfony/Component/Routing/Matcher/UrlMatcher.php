@@ -21,14 +21,12 @@ use Symfony\Component\Routing\Route;
  * UrlMatcher matches URL based on a set of routes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class UrlMatcher implements UrlMatcherInterface
 {
-    const REQUIREMENT_MATCH     = 0;
-    const REQUIREMENT_MISMATCH  = 1;
-    const ROUTE_MATCH           = 2;
+    const REQUIREMENT_MATCH = 0;
+    const REQUIREMENT_MISMATCH = 1;
+    const ROUTE_MATCH = 2;
 
     /**
      * @var RequestContext
@@ -50,8 +48,6 @@ class UrlMatcher implements UrlMatcherInterface
      *
      * @param RouteCollection $routes  A RouteCollection instance
      * @param RequestContext  $context The context
-     *
-     * @api
      */
     public function __construct(RouteCollection $routes, RequestContext $context)
     {

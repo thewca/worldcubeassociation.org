@@ -29,9 +29,9 @@ class Twig_TokenStream
      */
     public function __construct(array $tokens, $filename = null)
     {
-        $this->tokens     = $tokens;
-        $this->current    = 0;
-        $this->filename   = $filename;
+        $this->tokens = $tokens;
+        $this->current = 0;
+        $this->filename = $filename;
     }
 
     /**
@@ -64,6 +64,18 @@ class Twig_TokenStream
     }
 
     /**
+     * Tests a token, sets the pointer to the next one and returns it or throws a syntax error.
+     *
+     * @return Twig_Token|null The next token if the condition is true, null otherwise
+     */
+    public function nextIf($primary, $secondary = null)
+    {
+        if ($this->tokens[$this->current]->test($primary, $secondary)) {
+            return $this->next();
+        }
+    }
+
+    /**
      * Tests a token and returns it or throws a syntax error.
      *
      * @return Twig_Token
@@ -75,8 +87,8 @@ class Twig_TokenStream
             $line = $token->getLine();
             throw new Twig_Error_Syntax(sprintf('%sUnexpected token "%s" of value "%s" ("%s" expected%s)',
                 $message ? $message.'. ' : '',
-                Twig_Token::typeToEnglish($token->getType(), $line), $token->getValue(),
-                Twig_Token::typeToEnglish($type, $line), $value ? sprintf(' with value "%s"', $value) : ''),
+                Twig_Token::typeToEnglish($token->getType()), $token->getValue(),
+                Twig_Token::typeToEnglish($type), $value ? sprintf(' with value "%s"', $value) : ''),
                 $line,
                 $this->filename
             );
@@ -89,7 +101,7 @@ class Twig_TokenStream
     /**
      * Looks at the next token.
      *
-     * @param integer $number
+     * @param int $number
      *
      * @return Twig_Token
      */
@@ -103,7 +115,7 @@ class Twig_TokenStream
     }
 
     /**
-     * Tests the current token
+     * Tests the current token.
      *
      * @return bool
      */
@@ -113,7 +125,7 @@ class Twig_TokenStream
     }
 
     /**
-     * Checks if end of stream was reached
+     * Checks if end of stream was reached.
      *
      * @return bool
      */
@@ -123,7 +135,7 @@ class Twig_TokenStream
     }
 
     /**
-     * Gets the current token
+     * Gets the current token.
      *
      * @return Twig_Token
      */
@@ -133,7 +145,7 @@ class Twig_TokenStream
     }
 
     /**
-     * Gets the filename associated with this stream
+     * Gets the filename associated with this stream.
      *
      * @return string
      */

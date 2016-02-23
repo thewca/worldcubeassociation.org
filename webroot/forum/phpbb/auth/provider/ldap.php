@@ -289,7 +289,6 @@ class ldap extends \phpbb\auth\provider\base
 	/**
 	 * {@inheritdoc}
 	 */
-
 	public function acp()
 	{
 		// These are fields required in the config table

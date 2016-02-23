@@ -33,7 +33,7 @@ class Twig_Node_For extends Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Twig_Compiler $compiler)
     {
@@ -82,7 +82,7 @@ class Twig_Node_For extends Twig_Node
         $compiler
             ->write("foreach (\$context['_seq'] as ")
             ->subcompile($this->getNode('key_target'))
-            ->raw(" => ")
+            ->raw(' => ')
             ->subcompile($this->getNode('value_target'))
             ->raw(") {\n")
             ->indent()

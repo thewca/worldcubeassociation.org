@@ -36,19 +36,15 @@ class Twig_TokenParser_From extends Twig_TokenParser
             $name = $stream->expect(Twig_Token::NAME_TYPE)->getValue();
 
             $alias = $name;
-            if ($stream->test('as')) {
-                $stream->next();
-
+            if ($stream->nextIf('as')) {
                 $alias = $stream->expect(Twig_Token::NAME_TYPE)->getValue();
             }
 
             $targets[$name] = $alias;
 
-            if (!$stream->test(Twig_Token::PUNCTUATION_TYPE, ',')) {
+            if (!$stream->nextIf(Twig_Token::PUNCTUATION_TYPE, ',')) {
                 break;
             }
-
-            $stream->next();
         } while (true);
 
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
@@ -56,6 +52,10 @@ class Twig_TokenParser_From extends Twig_TokenParser
         $node = new Twig_Node_Import($macro, new Twig_Node_Expression_AssignName($this->parser->getVarName(), $token->getLine()), $token->getLine(), $this->getTag());
 
         foreach ($targets as $name => $alias) {
+            if ($this->parser->isReservedMacroName($name)) {
+                throw new Twig_Error_Syntax(sprintf('"%s" cannot be an imported macro as it is a reserved keyword', $name), $token->getLine(), $stream->getFilename());
+            }
+
             $this->parser->addImportedSymbol('function', $alias, 'get'.$name, $node->getNode('var'));
         }
 

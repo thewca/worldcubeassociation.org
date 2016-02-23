@@ -179,6 +179,7 @@ class asset
 			}
 			$path = implode('/', $paths);
 		}
+
 		$this->components['path'] = $path;
 	}
 

@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
  * Cache provides HTTP caching.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @api
  */
 class HttpCache implements HttpKernelInterface, TerminableInterface
 {
@@ -85,13 +83,13 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         register_shutdown_function(array($this->store, 'cleanup'));
 
         $this->options = array_merge(array(
-            'debug'                  => false,
-            'default_ttl'            => 0,
-            'private_headers'        => array('Authorization', 'Cookie'),
-            'allow_reload'           => false,
-            'allow_revalidate'       => false,
+            'debug' => false,
+            'default_ttl' => 0,
+            'private_headers' => array('Authorization', 'Cookie'),
+            'allow_reload' => false,
+            'allow_revalidate' => false,
             'stale_while_revalidate' => 2,
-            'stale_if_error'         => 60,
+            'stale_if_error' => 60,
         ), $options);
         $this->esi = $esi;
         $this->traces = array();
@@ -143,7 +141,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * Gets the Kernel instance
+     * Gets the Kernel instance.
      *
      * @return HttpKernelInterface An HttpKernelInterface instance
      */
@@ -153,7 +151,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * Gets the Esi instance
+     * Gets the Esi instance.
      *
      * @return Esi An Esi instance
      */
@@ -164,8 +162,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
@@ -194,7 +190,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
         $this->restoreResponseBody($request, $response);
 
-        $response->setDate(new \DateTime(null, new \DateTimeZone('UTC')));
+        $response->setDate(\DateTime::createFromFormat('U', time(), new \DateTimeZone('UTC')));
 
         if (HttpKernelInterface::MASTER_REQUEST === $type && $this->options['debug']) {
             $response->headers->set('X-Symfony-Cache', $this->getLog());
@@ -217,8 +213,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function terminate(Request $request, Response $response)
     {
@@ -367,7 +361,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // We keep the etags from the client to handle the case when the client
         // has a different private valid entry which is not cached here.
         $cachedEtags = $entry->getEtag() ? array($entry->getEtag()) : array();
-        $requestEtags = $request->getEtags();
+        $requestEtags = $request->getETags();
         if ($etags = array_unique(array_merge($cachedEtags, $requestEtags))) {
             $subRequest->headers->set('if_none_match', implode(', ', $etags));
         }
@@ -501,7 +495,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * @param Request  $request A Request instance
      * @param Response $entry   A Response instance
      *
-     * @return bool    true if the cache entry if fresh enough, false otherwise
+     * @return bool true if the cache entry if fresh enough, false otherwise
      */
     protected function isFreshEnough(Request $request, Response $entry)
     {
@@ -522,7 +516,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * @param Request  $request A Request instance
      * @param Response $entry   A Response instance
      *
-     * @return bool    true if the cache entry can be returned even if it is staled, false otherwise
+     * @return bool true if the cache entry can be returned even if it is staled, false otherwise
      */
     protected function lock(Request $request, Response $entry)
     {
@@ -654,7 +648,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      *
      * @param Request $request A Request instance
      *
-     * @return bool    true if the Request is private, false otherwise
+     * @return bool true if the Request is private, false otherwise
      */
     private function isPrivateRequest(Request $request)
     {

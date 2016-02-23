@@ -25,7 +25,7 @@ class Twig_Node_Expression_BlockReference extends Twig_Node_Expression
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Twig_Compiler $compiler)
     {
@@ -36,15 +36,15 @@ class Twig_Node_Expression_BlockReference extends Twig_Node_Expression
         if ($this->getAttribute('output')) {
             $compiler
                 ->addDebugInfo($this)
-                ->write("\$this->displayBlock(")
+                ->write('$this->displayBlock(')
                 ->subcompile($this->getNode('name'))
                 ->raw(", \$context, \$blocks);\n")
             ;
         } else {
             $compiler
-                ->raw("\$this->renderBlock(")
+                ->raw('$this->renderBlock(')
                 ->subcompile($this->getNode('name'))
-                ->raw(", \$context, \$blocks)")
+                ->raw(', $context, $blocks)')
             ;
         }
     }

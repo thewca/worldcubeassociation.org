@@ -12,14 +12,14 @@
 /**
  * Loads a template from a string.
  *
- * This loader should only be used for unit testing as it has many limitations
- * (for instance, the include or extends tag does not make any sense for a string
- * loader).
+ * This loader should NEVER be used. It only exists for Twig internal purposes.
  *
  * When using this loader with a cache mechanism, you should know that a new cache
  * key is generated each time a template content "changes" (the cache key being the
  * source code of the template). If you don't want to see your cache grows out of
  * control, you need to take care of clearing the old cache file by yourself.
+ *
+ * @deprecated since 1.18.1 (to be removed in 2.0)
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
