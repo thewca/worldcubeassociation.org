@@ -82,7 +82,11 @@ $(function() {
   // a mistake or wants to select a different date. This also triggers the
   // 'blur' event, used above to validate the date.
   $datetimepicker.on('dp.hide', function() {
-    $('input:not(input[type=button], input[type=submit], input[type=reset]), select, textarea').eq(parseInt($('input:not(input[type=button], input[type=submit], input[type=reset]), select, textarea').index($(this)), 10) + 1).focus();
+    // From http://stackoverflow.com/a/11666867
+    var $focusables = $(":focusable");
+    var currentIndex = $focusables.index(this);
+    var $next = $focusables.eq(currentIndex+1).length ? $focusables.eq(currentIndex+1) : $focusables.eq(0);
+    $next.focus();
   });
 
   $('.datetimerange').each(function() {
