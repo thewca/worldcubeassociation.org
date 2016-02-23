@@ -243,7 +243,7 @@ describe CompetitionsController do
         fake_delegate = FactoryGirl.create(:user)
         post :update, id: competition, competition: { delegate_ids: fake_delegate.id }
         invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq [" are not all delegates"]
+        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
         competition.reload
         expect(competition.delegate_ids).to eq delegate_ids_old
       end

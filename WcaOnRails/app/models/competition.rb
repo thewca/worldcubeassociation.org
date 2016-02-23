@@ -62,7 +62,7 @@ class Competition < ActiveRecord::Base
   validate :delegates_must_be_delegates
   def delegates_must_be_delegates
     if !self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:delegate_ids, " are not all delegates")
+      errors.add(:delegate_ids, "are not all delegates")
     end
   end
 
