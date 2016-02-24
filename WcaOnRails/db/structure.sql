@@ -48,6 +48,7 @@ CREATE TABLE `Competitions` (
   `registration_open` datetime DEFAULT NULL,
   `registration_close` datetime DEFAULT NULL,
   `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
+  `guests_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -279,7 +280,7 @@ CREATE TABLE `Preregs` (
   `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `email` varchar(80) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `guests` text COLLATE utf8_unicode_ci NOT NULL,
+  `guests_old` text COLLATE utf8_unicode_ci,
   `comments` text COLLATE utf8_unicode_ci NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'p',
@@ -287,6 +288,7 @@ CREATE TABLE `Preregs` (
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `guests` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=80551 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -809,4 +811,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151230174411');
 INSERT INTO schema_migrations (version) VALUES ('20160120071503');
 
 INSERT INTO schema_migrations (version) VALUES ('20160128023834');
+
+INSERT INTO schema_migrations (version) VALUES ('20160223204831');
 

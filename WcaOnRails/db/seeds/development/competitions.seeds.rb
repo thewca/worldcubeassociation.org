@@ -106,7 +106,7 @@ after "development:users" do
         birthMonth: 6,
         birthDay: 4,
         email: Faker::Internet.email,
-        guests: (1..10).map { Faker::Name.name }.join(" "),
+        guests: rand(10),
         comments: Faker::Lorem.paragraph,
         ip: "1.1.1.1",
         status: status,

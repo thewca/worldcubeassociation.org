@@ -68,4 +68,10 @@ RSpec.describe Registration do
     registration.user.update_column(:name, "New Name")
     expect(registration.name).to eq "New Name"
   end
+
+  it "requires quests >= 0" do
+    registration.guests = -5
+    expect(registration).to be_invalid
+    expect(registration.errors.messages[:guests]).to eq ["must be greater than or equal to 0"]
+  end
 end

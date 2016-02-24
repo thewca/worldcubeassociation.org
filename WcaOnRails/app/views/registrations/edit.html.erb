@@ -30,7 +30,10 @@
 
     <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events %>
 
-    <%= f.input :guests %>
+    <% if @competition.guests_enabled? %>
+      <%= f.input :guests %>
+    <% end %>
+
     <%= f.input :comments %>
 
     <%= f.input :status, as: :radio_buttons, collection: [:a, :p], checked: @registration.read_attribute(:status), include_blank: false %>

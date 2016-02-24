@@ -7,6 +7,8 @@ class Registration < ActiveRecord::Base
   belongs_to :user
   validates :user, presence: true, on: [:create]
 
+  validates_numericality_of :guests, greater_than_or_equal_to: 0
+
   validate :competition_must_use_wca_registration
   private def competition_must_use_wca_registration
     if !competition

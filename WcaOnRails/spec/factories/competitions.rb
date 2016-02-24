@@ -16,6 +16,8 @@ FactoryGirl.define do
     website "https://www.worldcubeassociation.org"
     showAtAll true
 
+    guests_enabled true
+
     trait :with_delegate do
       delegates { [ FactoryGirl.create(:delegate) ] }
     end
