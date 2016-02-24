@@ -21,12 +21,11 @@
           <% table.column event.id.to_s %>
         <% end %>
 
-        <% if @competition.guests_enabled? %>
-          <% table.column :guests do |registration| %>
-            <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
-              <%= registration.guests %>
-            </span>
-          <% end %>
+        <% table.column :guests do |registration| %>
+          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
+            <%= registration.guests %>
+            <%= registration.guests_old #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
+          </span>
         <% end %>
         <% table.column :comments do |registration| %>
           <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
@@ -51,11 +50,11 @@
               <% @competition.events.each do |event| %>
                 <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
               <% end %>
-              <% if @competition.guests_enabled? %>
-                <td>
+              <td>
+                <% if @competition.guests_enabled? %>
                   <%= registrations.map(&:guests).reduce { |sum, guests| sum + guests } %>
-                </td>
-              <% end %>
+                <% end %>
+              </td>
               <td colspan="3"></td>
             </tr>
           </tfoot>

@@ -10,7 +10,7 @@
   registration.gender,
 ] + @competition.events.map { |e| registration.events.include?(e) ? "1" : "0" } + [
   registration.email,
-  registration.guests,
+  "#{registration.guests} #{registration.guests_old}", #https://github.com/cubing/worldcubeassociation.org/issues/403
   registration.ip,
 ]).html_safe -%>
 <% end %>
