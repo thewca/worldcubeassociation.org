@@ -22,10 +22,10 @@
         <% end %>
 
         <% table.column :guests do |registration| %>
-          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
+          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %> <%= registration.guests_old %>">
             <%= registration.guests %>
             <% #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
-            <%= registration.guests_old  %>
+            <%= registration.guests_old %>
           </span>
         <% end %>
         <% table.column :comments do |registration| %>
