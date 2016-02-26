@@ -72,11 +72,11 @@ Rails.application.configure do
     config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
 
     config.action_mailer.smtp_settings = {
-      address: "smtp.mandrillapp.com",
+      address: "email-smtp.us-west-2.amazonaws.com",
       port: 587,
       enable_starttls_auto: true,
-      user_name: ENVied.MANDRILL_USERNAME,
-      password: ENVied.MANDRILL_PASSWORD,
+      user_name: ENVied.SMTP_USERNAME,
+      password: ENVied.SMTP_PASSWORD,
       authentication: 'login',
       domain: root_url.host
     }
