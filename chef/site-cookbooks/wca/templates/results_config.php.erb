@@ -30,10 +30,10 @@ if(class_exists('Mail')) {
 
 if($config['mail']['pear']) {
   $config['mail']['from'] = 'no-reply@worldcubeassociation.org';
-  $config['mail']['host'] = 'email-smtp.us-west-2.amazonaws.com';
+  $config['mail']['host'] = 'smtp.mandrillapp.com';
   $config['mail']['port'] = '587';
-  $config['mail']['user'] = '<%= @secrets['SMTP_USERNAME'] %>';
-  $config['mail']['pass'] = '<%= @secrets['SMTP_PASSWORD'] %>';
+  $config['mail']['user'] = '<%= @secrets['MANDRILL_USERNAME'] %>';
+  $config['mail']['pass'] = '<%= @secrets['MANDRILL_PASSWORD'] %>';
 } else {
   $config['mail']['from'] = 'no-reply@worldcubeassociation.org';
 }
