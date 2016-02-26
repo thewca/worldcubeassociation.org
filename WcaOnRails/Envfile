@@ -5,8 +5,8 @@ group :production do
   # "rake secret".
   variable :SECRET_KEY_BASE
   variable :DATABASE_URL
-  variable :MANDRILL_USERNAME
-  variable :MANDRILL_PASSWORD
+  variable :SMTP_USERNAME
+  variable :SMTP_PASSWORD
 end
 
 # Set WCA_LIVE_SITE to enable Google Analytics
