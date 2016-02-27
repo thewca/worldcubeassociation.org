@@ -22,7 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :update, :destroy]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :update]
 
   def edit_registrations
     @competition_registration_view = true
@@ -81,12 +81,26 @@ class RegistrationsController < ApplicationController
   end
 
   def destroy
-    @registration = Registration.find(params[:id])
-    @registration.destroy
-    mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
-    mailer.deliver_now
-    flash[:success] = "Deleted registration and emailed #{mailer.to.join(" ")}"
-    redirect_to competition_edit_registrations_path(@registration.competition)
+    if !current_user
+      return
+    end
+
+    @competition = competition_from_params
+    is_user = params.has_key?(:user_is_deleting_theirself) || false
+    if is_user
+      registrations = @competition.registrations
+      @registration = registrations.find_by_user_id(current_user.id)
+      @registration.destroy
+      flash[:success] = "registration deleted"
+      redirect_to competition_register_path(@competition)
+    elsif current_user.can_manage_competition?(@competition)
+      @registration = Registration.find(params[:id])
+      @registration.destroy
+      mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
+      mailer.deliver_now
+      flash[:success] = "Deleted registration and emailed #{mailer.to.join(" ")}"
+      redirect_to competition_edit_registrations_path(@registration.competition)
+    end
   end
 
   def update_all

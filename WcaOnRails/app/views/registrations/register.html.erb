@@ -82,7 +82,6 @@
             file: :horizontal_file_input,
             boolean: :horizontal_boolean
         }  do |f| %>
-
           <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !@registration.new_record? %>
 
           <% if @competition.guests_enabled? %>
@@ -95,6 +94,8 @@
             <div class="col-sm-offset-2 col-sm-10">
               <% if @registration.new_record? %>
                 <%= f.submit "Register!", class: "btn btn-success" %>
+              <% else %>
+                <%= link_to "Delete", registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to your registration?", toggle: "tooltip" }, title: "Delete registration." %>
               <% end %>
             </div>
           </div>
