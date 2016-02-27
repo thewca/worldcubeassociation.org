@@ -157,10 +157,11 @@ RSpec.describe RegistrationsController do
       expect(registration.competitionId).to eq competition.id
     end
 
-    it "cannot delete registration" do
+    it "can delete registration" do
       registration = FactoryGirl.create :registration, competitionId: competition.id
-      delete :destroy, id: registration.id
-      expect(response).to redirect_to root_url
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 1, comments: "" }
+      delete :destroy, id: registration.id, user_is_deleting_theirself: true
+      expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).to eq registration
     end
 

@@ -41,7 +41,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.submit class: "btn btn-default" %>
-        <%= link_to "Delete", registration_path(@registration, user_is_deleting_theirself: false), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?", toggle: "tooltip" }, title: "Delete registration. This will email #{@registration.name} at #{@registration.email}." %>
+        <%= link_to "Delete", registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?", toggle: "tooltip" }, title: "Delete registration. This will email #{@registration.name} at #{@registration.email}." %>
       </div>
     </div>
   <% end %>
