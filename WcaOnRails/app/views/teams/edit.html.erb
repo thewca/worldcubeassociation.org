@@ -22,8 +22,16 @@
         Members
       </div>
       <div class="panel-body">
-        <%= f.fields_for :team_members do |members_form| %>
-          <%= render 'team_member_fields', f: members_form %>
+        <%#= f.fields_for :team_members do |members_form| %>
+        <%= f.simple_fields_for :team_members do |t| %>
+          <%#= render 'team_member_fields', f: members_form %>
+          <%= t.input :user_id, class: 'form-control', required: true %>
+
+          <%= t.input :start_date, class: 'form-control date_picker' %>
+
+          <%= t.input :end_date, class: 'form-control date_picker' %>
+
+          <%= t.input :team_leader, class: 'form-control' %>
         <% end %>
 
         <div class="links">
