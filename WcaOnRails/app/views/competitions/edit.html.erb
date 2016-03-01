@@ -22,24 +22,13 @@
     radio_buttons: :horizontal_radio_and_checkboxes,
     file: :horizontal_file_input,
     boolean: :horizontal_boolean
-  }  do |f| %>
+  } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <% if @competition_admin_view %>
       <%= hidden_field_tag :competition_admin_view, "1" %>
-      <div class="form-group">
-        <div class="col-sm-9 col-sm-offset-2">
-          <div class="checkbox">
-            <%= f.input_field :isConfirmed, inline_label: "Do not let organizers edit this competition." %>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-9 col-sm-offset-2">
-          <div class="checkbox">
-            <%= f.input_field :showAtAll, inline_label: "Make competition visible to the public." %>
-          </div>
-        </div>
-      </div>
+
+      <%= f.input :isConfirmed %>
+      <%= f.input :showAtAll %>
     <% else %>
       <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
@@ -264,28 +253,19 @@
     <% end %>
 
     <hr>
-    <div class="form-group">
-      <div class="col-sm-10 col-sm-offset-2">
-        <div class="checkbox">
-          <%= f.input_field :use_wca_registration, inline_label: "I would like to use the WCA website for registration." %>
-        </div>
-      </div>
-    </div>
+    <%= f.input :use_wca_registration %>
 
     <div class="wca-registration-options">
-      <%= f.input :guests_enabled %>
+      <%# This is pretty annoying, see https://groups.google.com/d/msg/plataformatec-simpleform/aHAtI3pONJo/B_YDb9u1AgAJ %>
+      <%= f.input :guests_enabled, as: :radio_buttons, collection: [ [t('simple_form.options.competition.guests_enabled.true'), true], [t('simple_form.options.competition.guests_enabled.false'), false]] %>
+
       <% if @competition.can_receive_registration_emails?(current_user.id) %>
-        <div class="form-group">
-          <div class="col-sm-10 col-sm-offset-2">
-            <div class="checkbox" id="opt-out-registration-email">
-              <label>
-                <%= check_box("competition", "receive_registration_emails", { checked: @competition.receiving_registration_emails?(current_user.id) }) %>
-                Notify me by email when someone registers for this competition.
-              </label>
-            </div>
-          </div>
-        </div>
+        <%# Quick hack to fill receive_registration_emails with the correct
+            value for the current_user %>
+        <% @competition.receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
+        <%= f.input :receive_registration_emails, as: :boolean %>
       <% end %>
+
       <div class="col-sm-offset-2 col-sm-9">
         <div class="row datetimerange">
           <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, hint: "Note: Registration open and close are in UTC time" %>
