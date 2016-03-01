@@ -38,7 +38,7 @@ module WcaOnRails
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
 
-    config.default_from_address = "no-reply@worldcubeassociation.org"
+    config.default_from_address = "notifications@worldcubeassociation.org"
     config.site_name = "World Cube Association"
 
     config.middleware.use Middlewares::FixAcceptHeader
