@@ -157,11 +157,24 @@ RSpec.describe RegistrationsController do
       expect(registration.competitionId).to eq competition.id
     end
 
-    it "cannot delete registration" do
-      registration = FactoryGirl.create :registration, competitionId: competition.id
-      delete :destroy, id: registration.id
-      expect(response).to redirect_to root_url
-      expect(Registration.find_by_id(registration.id)).to eq registration
+    it "can delete registration" do
+      registration = FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
+
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
+      expect do
+        delete :destroy, id: registration.id, user_is_deleting_theirself: true
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+
+      expect(response).to redirect_to competition_path(competition) + '/register'
+      expect(Registration.find_by_id(registration.id)).to eq nil
+    end
+
+    it "cannnot delete other people's registrations" do
+      user_registration = FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
+      other_registration = FactoryGirl.create :registration, competitionId: competition.id
+      delete :destroy, id: other_registration.id, user_is_deleting_theirself: true
+      expect(response).to redirect_to competition_path(competition) + '/register'
+      expect(Registration.find_by_id(other_registration.id)).to eq other_registration
     end
 
     it "cannot create accepted registration" do

@@ -5,6 +5,11 @@ class RegistrationsMailerPreview < ActionMailer::Preview
     RegistrationsMailer.notify_organizers_of_new_registration(registration)
   end
 
+  def notify_organizers_of_deleted_registration
+    registration = Registration.pending.where.not(user_id: nil).first
+    RegistrationsMailer.notify_organizers_of_deleted_registration(registration)
+  end
+
   def notify_registrant_of_new_registration
     registration = Registration.pending.where.not(user_id: nil).first
     RegistrationsMailer.notify_registrant_of_new_registration(registration)

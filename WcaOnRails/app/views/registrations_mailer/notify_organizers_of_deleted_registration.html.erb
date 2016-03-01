@@ -3,20 +3,7 @@
   <% if @registration.user.wca_id %>
     (<%= render "shared/wca_id", wca_id: @registration.user.wca_id -%>)
   <% end %>
-  just registered for <%= @registration.competition.name %>.
-</p>
-
-<p>
-  Guests: <%= @registration.guests %>
-</p>
-
-<p>
-  Comments: <%= @registration.comments %>
-</p>
-
-<p>
-  You can approve or delete this registration
-  <%= link_to "here", edit_registration_url(@registration) %>.
+  just deleted their registration for <%= @registration.competition.name %>.
 </p>
 
 <p>
