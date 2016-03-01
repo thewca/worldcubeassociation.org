@@ -5,6 +5,7 @@ class CreateTeamMembers < ActiveRecord::Migration
       t.integer :user_id, null: false
       t.date :start_date, null: false
       t.date :end_date, default: nil
+      t.boolean :team_leader, default: false, null: false
 
       t.timestamps null: false
     end
