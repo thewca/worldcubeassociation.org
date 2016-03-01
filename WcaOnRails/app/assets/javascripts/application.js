@@ -77,17 +77,20 @@ $(function() {
     }
   });
 
+  // NOTE: This has been commented out until
+  // https://github.com/cubing/worldcubeassociation.org/issues/409 is resolved.
+  // --jfly
   // We use dp.hide to capture clicking on a date. We then tab to the next
   // form item, so the picker is just one click away, in case the user made
   // a mistake or wants to select a different date. This also triggers the
   // 'blur' event, used above to validate the date.
-  $datetimepicker.on('dp.hide', function() {
-    // From http://stackoverflow.com/a/11666867
-    var $focusables = $(":focusable");
-    var currentIndex = $focusables.index(this);
-    var $next = $focusables.eq(currentIndex+1).length ? $focusables.eq(currentIndex+1) : $focusables.eq(0);
-    $next.focus();
-  });
+  //$datetimepicker.on('dp.hide', function() {
+    //// From http://stackoverflow.com/a/11666867
+    //var $focusables = $(":focusable");
+    //var currentIndex = $focusables.index(this);
+    //var $next = $focusables.eq(currentIndex+1).length ? $focusables.eq(currentIndex+1) : $focusables.eq(0);
+    //$next.focus();
+  //});
 
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');
