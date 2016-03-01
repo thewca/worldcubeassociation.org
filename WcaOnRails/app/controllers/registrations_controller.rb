@@ -82,14 +82,18 @@ class RegistrationsController < ApplicationController
 
   def destroy
     @competition = competition_from_params
+    @registration = Registration.find(params[:id])
     if params.has_key?(:user_is_deleting_theirself)
-      registrations = @competition.registrations
-      @registration = registrations.find_by_user_id(current_user.id)
-      @registration.destroy!
-      flash[:success] = "registration deleted"
+      if @registration.user_id == current_user.id
+        @registration.destroy!
+        mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
+        mailer.deliver_now
+        flash[:success] = "Successfully deleted your registration for #{@competition.name}"
+      elsif 
+        flash[:danger] = "You cannot delete other people's Registrations."
+      end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
-      @registration = Registration.find(params[:id])
       @registration.destroy!
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
       mailer.deliver_now

@@ -1,0 +1,12 @@
+<p>
+  <%= @registration.name %>
+  <% if @registration.user.wca_id %>
+    (<%= render "shared/wca_id", wca_id: @registration.user.wca_id -%>)
+  <% end %>
+  just deleted their registration for <%= @registration.competition.name %>
+</p>
+
+<p>
+  You can opt out of receiving registration emails
+  <%= link_to "here", edit_competition_url(@registration.competition), anchor: "opt-out-registration-email" %>.
+</p>

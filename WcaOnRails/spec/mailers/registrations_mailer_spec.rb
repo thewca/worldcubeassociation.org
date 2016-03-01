@@ -37,6 +37,22 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
   end
 
+  describe "notify_organizers_of_deleted_registration" do
+    let(:registration) { FactoryGirl.create(:registration, competition: competition) }
+    let(:mail) { RegistrationsMailer.notify_organizers_of_deleted_registration(registration) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("#{registration.name} just deleted their registration for #{registration.competition.name}")
+      expect(mail.to).to eq([delegate1.email, delegate2.email])
+      expect(mail.reply_to).to eq(competition.managers.map(&:email))
+      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("just deleted their registration for #{registration.competition.name}")
+    end
+  end
+
   describe "notify_registrant_of_new_registration" do
     let(:registration) { FactoryGirl.create(:registration, competition: competition) }
     let!(:earlier_registration) { FactoryGirl.create(:registration, competition: competition) }
