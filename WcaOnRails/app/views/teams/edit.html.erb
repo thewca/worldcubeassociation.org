@@ -16,7 +16,6 @@
     <%= f.input :friendly_id, label: "Friendly id" %>
     <%= f.input :name %>
     <%= f.input :description %>
-    <%= f.input :leader_id, collection: @team.team_members.map { |member| member.user }, selected: @team.leader_id %>
 
     <div class="panel panel-default">
       <div class="panel-heading">
