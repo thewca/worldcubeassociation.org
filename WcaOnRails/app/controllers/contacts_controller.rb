@@ -1,16 +1,4 @@
 class ContactsController < ApplicationController
-  def wrc
-    @contact = Contact.new
-  end
-
-  def wrc_create
-    @contact = Contact.new(params[:contact])
-    @contact.request = request
-    @contact.to_email = "wrc@worldcubeassociation.org"
-    @contact.subject = "WRC Contact Form"
-    maybe_send_email success_url: contact_wrc_url, fail_view: :wrc
-  end
-
   def website
     @contact = Contact.new
   end
