@@ -1,17 +1,6 @@
 <div class="nested-fields">
-  <%= f.label :user_id %>
-  <%= f.text_field :user_id, class: 'form-control', required: true %>
-
-  <div class="input-group date datetime">
-    <%= f.label :start_date %>
-    <%= f.text_field :start_date, class: 'form-control date_picker' %>
-  </div>
-
-  <div class="input-group date datetime">
-    <%= f.label :end_date %>
-    <%= f.text_field :end_date, class: 'form-control date_picker' %>
-  </div>
-
-  <%= f.label :team_leader %>
-  <%= f.check_box :team_leader, {class: 'form-control'}, "1", "0" %>
+  <%= f.input :user_id, required: true %>
+  <%= f.input :start_date, as: :date_picker, required: true %>
+  <%= f.input :end_date, as: :date_picker %>
+  <%= f.input :team_leader %>
 </div>

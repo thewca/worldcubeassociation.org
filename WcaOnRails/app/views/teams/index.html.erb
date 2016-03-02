@@ -11,13 +11,14 @@
   <% if @teams.empty? %>
     <div class="alert alert-warning">There are currently no teams.</div>
   <% else %>
-    <table class="table">
+    <!--table class="table"-->
+    <%= wca_table do %>
       <tr>
-        <th>Id</th>
+        <th>ID</th>
         <th>Name</th>
         <th>Description</th>
-        <th>Leader</th>
         <th>Members</th>
+        <th>Leader(s)</th>
         <th></th>
       </tr>
       <% @teams.each do |team| %>
@@ -25,11 +26,16 @@
           <td><%= team.friendly_id %></td>
           <td><%= team.name %></td>
           <td><%= team.description %></td>
-          <td><%= team.leader.name %></td>
-          <td><%= team.team_members.map{ |member| member.user.name }.to_sentence %></td>
+          <td><%= team.team_members.map { |member| member.user.name }.to_sentence %></td>
+          <td>
+            <% team.team_members.each do |member| %>
+              <%= member.team_leader ? member.user.name : "" %>
+            <% end %>
+          </td>
           <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>
       <% end %>
-    </table>
+    <% end %>
+    <!--/table-->
   <% end %>
 </div>
