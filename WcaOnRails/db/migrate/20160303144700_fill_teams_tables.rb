@@ -17,23 +17,23 @@ class FillTeamsTables < ActiveRecord::Migration
     SQL
 
     execute <<-SQL
-      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, Date.today FROM teams,users WHERE teams.friendly_id = 'results' and users.results_team = '1'
+      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, NOW() FROM teams,users WHERE teams.friendly_id = 'results' and users.results_team = 1
     SQL
 
     execute <<-SQL
-      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, Date.today FROM teams,users WHERE teams.friendly_id = 'software' and users.software_team = '1'
+      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, NOW() FROM teams,users WHERE teams.friendly_id = 'software' and users.software_team = 1
     SQL
 
     execute <<-SQL
-      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, Date.today FROM teams,users WHERE teams.friendly_id = 'wdc' and users.wdc_team = '1'
+      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, NOW() FROM teams,users WHERE teams.friendly_id = 'wdc' and users.wdc_team = 1
     SQL
 
     execute <<-SQL
-      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, Date.today FROM teams,users WHERE teams.friendly_id = 'wrc' and users.wrc_team = '1'
+      INSERT INTO team_members (team_id, user_id, start_date) SELECT teams.id, users.id, NOW() FROM teams,users WHERE teams.friendly_id = 'wrc' and users.wrc_team = 1
     SQL
 
     execute <<-SQL
-      UPDATE team_members SET team_leader = '1' where user_id in (SELECT id from users where (wrc_team_leader = 1 OR wdc_team_leader = 1 OR results_team_leader = 1 or software_team_leader = '1'))
+      UPDATE team_members SET team_leader = 1 where user_id in (SELECT id from users where (wrc_team_leader = 1 OR wdc_team_leader = 1 OR results_team_leader = 1 or software_team_leader = 1))
     SQL
   end
 end
