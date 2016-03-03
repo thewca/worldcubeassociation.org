@@ -23,8 +23,8 @@
       </div>
       <div class="panel-body">
         <%= f.simple_fields_for :team_members do |t| %>
-          <div class="duplicate">
-            <%= t.input :user_id, required: true %>
+          <div class="form-inline">
+            <%= t.input :user_id, required: true, as: :user_ids, only_one: true %>
             <%= t.input :start_date, as: :date_picker, required: true %>
             <%= t.input :end_date, as: :date_picker %>
             <%= t.input :team_leader %>
@@ -32,8 +32,7 @@
         <% end %>
 
         <div class="links">
-          <%= link_to_add_association button_tag('Add member', type: "button", class: "btn btn-primary"), f, :team_members %>
-          <%#= button_tag('Add member', type: "button", class: "btn btn-primary new_member") %>
+          <%= link_to_add_association button_tag('Add member', type: "button", class: "btn btn-primary add"), f, :team_members %>
         </div>
       </div>
     </div>
@@ -49,41 +48,14 @@
 </div>
 
 <script>
-// From http://davidlesches.com/blog/rails-nested-forms-using-jquery-and-simpleform
-$(function() {
-  if($(".duplicate").length) {
-    nestedForm = $(".duplicate").last().clone();
-  }
-});
+$(".add").click(function() {
+  // activate datepicker and autocomplete on the new member
+  // currently not working...
+  $('input.wca-autocomplete').wcaAutocomplete();
 
-$(".new_member").click(function() {
-  lastNestedForm = $('.duplicate').last();
-  newNestedForm = $(nestedForm).clone();
-  formsOnPage = $('.duplicate').length;
-
-  $(newNestedForm).find('select, input').each(function() {
-    oldName = $(this).attr('name');
-    newName = oldName.replace(new RegExp(/\[[0-9]+\]/), "["+formsOnPage+"]");
-    $(this).attr('name', newName);
-    $(this).val('');
+  $datetimepicker = $('.date_picker.form-control, .datetime_picker.form-control');
+  $datetimepicker.datetimepicker({
+    useStrict: true, keepInvalid: true, useCurrent: false
   });
-
-  $(newNestedForm).insertAfter(lastNestedForm);
-
-  console.log(formsOnPage);
-
-  $hidden = $("input[name$='][id]']").last().clone();
-  $newId = $hidden.clone();
-  oldHiddenName = $newId.attr('name');
-  newHiddenName = oldHiddenName.replace(new RegExp(/\[[0-9]+\]/), "["+formsOnPage+"]");
-  $newId.attr('name', newHiddenName);
-  $newId.val((parseInt(formsOnPage)+1));
-  oldId = $newId.attr('id');
-  newId = oldId.replace(new RegExp(/_[0-9]+_/), "_"+formsOnPage+"_");
-  $newId.attr('id', newId);
-
-  $newId.insertBefore(".links");
-  console.log($hidden);
-  console.log($newId);
 });
 </script>

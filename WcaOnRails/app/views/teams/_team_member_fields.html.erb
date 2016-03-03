@@ -1,5 +1,5 @@
 <div class="nested-fields">
-  <%= f.input :user_id, required: true %>
+  <%= f.input :user_id, required: true, as: :user_ids, only_one: true %>
   <%= f.input :start_date, as: :date_picker, required: true %>
   <%= f.input :end_date, as: :date_picker %>
   <%= f.input :team_leader %>
