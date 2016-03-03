@@ -28,6 +28,10 @@ module ApplicationHelper
   end
 
   def md(content, target_blank: false)
+    if content.nil?
+      return ""
+    end
+
     options = {
       hard_wrap: true
     }
