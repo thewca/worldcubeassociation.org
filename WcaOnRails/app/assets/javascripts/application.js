@@ -27,7 +27,6 @@
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
-//= require jquery.tabbable
 //= require_self
 //= require_tree .
 
@@ -52,9 +51,12 @@ $(function() {
 
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
+  // We're using keepOpen: true here to allow the user to
+  // "change his mind" and select a different date without
+  // having to click outside and clicking on the input again.
   $datetimepicker = $('.date_picker.form-control, .datetime_picker.form-control');
   $datetimepicker.datetimepicker({
-    useStrict: true, keepInvalid: true, useCurrent: false
+    useStrict: true, keepInvalid: true, useCurrent: false, keepOpen: true
   });
 
   // Using 'blur' here, because 'change' or 'dp.change' is not fired every time
@@ -76,21 +78,6 @@ $(function() {
       $this.addClass('alert-danger');
     }
   });
-
-  // NOTE: This has been commented out until
-  // https://github.com/cubing/worldcubeassociation.org/issues/409 is resolved.
-  // --jfly
-  // We use dp.hide to capture clicking on a date. We then tab to the next
-  // form item, so the picker is just one click away, in case the user made
-  // a mistake or wants to select a different date. This also triggers the
-  // 'blur' event, used above to validate the date.
-  //$datetimepicker.on('dp.hide', function() {
-    //// From http://stackoverflow.com/a/11666867
-    //var $focusables = $(":focusable");
-    //var currentIndex = $focusables.index(this);
-    //var $next = $focusables.eq(currentIndex+1).length ? $focusables.eq(currentIndex+1) : $focusables.eq(0);
-    //$next.focus();
-  //});
 
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');
