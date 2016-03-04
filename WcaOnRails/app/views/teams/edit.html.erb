@@ -21,7 +21,7 @@
       <div class="panel-heading">
         Members
       </div>
-      <div class="panel-body">
+      <div class="panel-body form-inline">
         <%= f.simple_fields_for :team_members do |t| %>
           <div class="members">
             <%= t.input :user_id, required: true, as: :user_ids, only_one: true %>
