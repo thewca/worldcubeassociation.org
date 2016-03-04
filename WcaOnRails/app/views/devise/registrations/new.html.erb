@@ -8,8 +8,8 @@
       <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { role: "form" }) do |f| %>
         <%= f.input :email %>
         <%= f.input :name %>
-        <%= f.input :password %>
-        <%= f.input :password_confirmation %>
+        <%= f.input :password, required: true %>
+        <%= f.input :password_confirmation, required: true %>
 
         <%= f.submit t('.sign_up', :default => "Sign up"), class: "btn btn-primary" %>
       <% end %>
