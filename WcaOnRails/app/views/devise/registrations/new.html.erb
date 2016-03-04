@@ -5,9 +5,17 @@
       <h4><%= t('.sign_up', :default => "Sign up") %></h4>
     </div>
     <div class="panel-body">
-      <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { role: "form" }) do |f| %>
-        <%= f.input :email %>
+      <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { class: 'are-you-sure no-submit-on-enter' }) do |f| %>
+        <%= f.input :email, required: true %>
+
+        <%# Copied from app/views/users/edit.html.erb %>
         <%= f.input :name %>
+        <%= f.input :dob, as: :date_picker %>
+        <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>
+        <%= f.input :country_iso2, collection: Country.all.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name } %>
+
+        <hr>
+
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
 

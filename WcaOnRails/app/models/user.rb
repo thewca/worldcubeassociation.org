@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
-  validates :email, presence: true
   validates :name, presence: true
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true

@@ -31,7 +31,7 @@ en:
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
-        country_iso2: "Country"
+        country_iso2: "Citizenship"
         dob: "Birthdate"
       competition:
         isConfirmed: "Do not let organizers edit this competition"
