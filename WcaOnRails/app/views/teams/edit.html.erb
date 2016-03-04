@@ -23,7 +23,7 @@
       </div>
       <div class="panel-body">
         <%= f.simple_fields_for :team_members do |t| %>
-          <div class="form-inline">
+          <div class="members">
             <%= t.input :user_id, required: true, as: :user_ids, only_one: true %>
             <%= t.input :start_date, as: :date_picker, required: true %>
             <%= t.input :end_date, as: :date_picker %>
@@ -48,7 +48,8 @@
 </div>
 
 <script>
-$(".add").click(function() {
+//$(".add").click(function() {
+$(".panel-body").on('cocoon:after-insert', function() {
   // activate datepicker and autocomplete on the new member
   // currently not working...
   $('input.wca-autocomplete').wcaAutocomplete();

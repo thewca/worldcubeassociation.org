@@ -11,8 +11,7 @@
   <% if @teams.empty? %>
     <div class="alert alert-warning">There are currently no teams.</div>
   <% else %>
-    <!--table class="table"-->
-    <%= wca_table do %>
+    <table class="table">
       <tr>
         <th>ID</th>
         <th>Name</th>
@@ -35,7 +34,6 @@
           <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>
       <% end %>
-    <% end %>
-    <!--/table-->
+    </table>
   <% end %>
 </div>
