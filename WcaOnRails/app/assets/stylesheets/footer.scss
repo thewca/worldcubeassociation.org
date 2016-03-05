@@ -15,11 +15,16 @@ body {
 }
 .footer {
   position: absolute;
-  bottom: 0;
+  bottom: 1px;
   width: 100%;
 
   height: $footer-height-px;
   background-color: $navbar-default-bg;
+
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-color: $navbar-default-border;
+
   .container .text-muted {
     margin: 5px;
     text-align: center;
