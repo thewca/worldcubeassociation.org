@@ -1,0 +1,56 @@
+<%= f.input :unconfirmed_wca_id, label: "WCA ID", as: :user_ids, persons_table: true, only_one: true %>
+<div id="select-nearby-delegate-area"></div>
+
+<%= f.input :dob_verification, label: "Birthdate", as: :date_picker %>
+
+<script>
+  $(function() {
+    var $dobArea = $("div.user_dob_verification");
+    var $unconfirmed_wca_id = $("#user_unconfirmed_wca_id");
+    var $submitButton = $("#claim-wca-id-button");
+    $unconfirmed_wca_id.wcaAutocomplete();
+    var unconfirmed_wca_id_selectize = $unconfirmed_wca_id[0].selectize;
+
+    function clearExtraInfo() {
+      $submitButton.prop("disabled", true);
+      $dobArea.toggle(false);
+    }
+    clearExtraInfo();
+    var onUnconfirmedWcaId = function(unconfirmed_wca_id) {
+      clearExtraInfo();
+
+      wca.cancelPendingAjaxAndAjax('render_select_nearby_delegate', {
+        url: '<%= profile_claim_wca_id_select_nearby_delegate_path %>',
+        data: {
+          'user[unconfirmed_wca_id]': unconfirmed_wca_id,
+        },
+        success: function(data) {
+          $('#select-nearby-delegate-area').html(data);
+
+          var $delegateSearch = $('#nearby-delegate-search');
+          if($delegateSearch.length > 0) {
+            $delegateSearch.wcaAutocomplete();
+            var selectize = $delegateSearch[0].selectize;
+            var $radioInput = $delegateSearch.siblings('input');
+            selectize.on("focus", function(e) {
+              $radioInput.prop('checked', true);
+            });
+            selectize.on("change", function(value) {
+              $radioInput.val(value);
+              $submitButton.prop("disabled", false);
+            });
+          }
+        }
+      });
+    };
+    unconfirmed_wca_id_selectize.on("change", onUnconfirmedWcaId);
+    if(unconfirmed_wca_id_selectize.items.length > 0) {
+      onUnconfirmedWcaId(unconfirmed_wca_id_selectize.items[0]);
+    }
+
+    $("form.edit_user").on("change", 'input[type="radio"]', function(e) {
+      var selectedDelgateId = e.currentTarget.value;
+      $submitButton.prop("disabled", !selectedDelgateId);
+    });
+  });
+</script>

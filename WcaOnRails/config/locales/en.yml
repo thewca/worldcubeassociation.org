@@ -69,7 +69,7 @@ en:
         id: "ID"
     hints:
       defaults:
-        dob: "Enter your date of birth in the format YYYY-MM-DD"
+        dob: "Enter your date of birth in the format YYYY-MM-DD."
       user:
         name_html: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
       competition:

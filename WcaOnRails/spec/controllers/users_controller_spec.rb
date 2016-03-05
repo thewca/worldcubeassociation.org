@@ -25,7 +25,7 @@ describe UsersController do
     it "works" do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(user).and_call_original
       expect do
-        patch :do_claim_wca_id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") }
+        patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") }
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
@@ -37,9 +37,9 @@ describe UsersController do
     it "cannot claim wca id for another user" do
       other_user = FactoryGirl.create :user
 
-      patch :do_claim_wca_id, id: other_user.id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
-      new_user = assigns(:user)
-      expect(new_user.id).to eq user.id
+      old_unconfirmed_wca_id = other_user.unconfirmed_wca_id
+      patch :update, id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      expect(other_user.unconfirmed_wca_id).to eq old_unconfirmed_wca_id
     end
 
     it "cannot claim wca id if already has a wca id" do
@@ -47,7 +47,7 @@ describe UsersController do
       user.wca_id = other_person.id
       user.save!
 
-      patch :do_claim_wca_id, user: { unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
       new_user = assigns(:user)
       expect(new_user).to be_invalid
       expect(user.reload.unconfirmed_wca_id).to be_nil

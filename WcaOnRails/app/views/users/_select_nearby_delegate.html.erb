@@ -1,15 +1,15 @@
 <% if !@user.unconfirmed_person %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> does not exist.
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does not exist.
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> is already assigned to a different account.
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> is already assigned to a different account.
     If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %> does
+    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does
     not have a birthdate assigned. Please contact the
     <%= mail_to "results@worldcubeassociation.org", "Results team", target: "_blank" %> to fix this.
   </p>

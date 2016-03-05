@@ -7,20 +7,84 @@
     <div class="panel-body">
       <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { class: 'are-you-sure no-submit-on-enter' }) do |f| %>
         <%= f.input :email, required: true %>
-
-        <%# Copied from app/views/users/edit.html.erb %>
-        <%= f.input :name %>
-        <%= f.input :dob, as: :date_picker %>
-        <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>
-        <%= f.input :country_iso2, collection: Country.all.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name } %>
-
-        <hr>
-
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
 
-        <%= f.submit t('.sign_up', :default => "Sign up"), class: "btn btn-primary" %>
+
+        <ul class="nav nav-tabs nav-justified" id="have-you-competed-nav" role="tablist">
+          <li role="presentation">
+            <a href="#have-competed" aria-controls="have-competed" role="tab" data-toggle="tab">
+              I have competed in a WCA competition.
+            </a>
+          </li>
+          <li role="presentation">
+            <a href="#never-competed" aria-controls="never-competed" role="tab" data-toggle="tab">
+              I have never competed in a WCA competition.
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="unknown-competed">
+            Please let us know if you have competed in a WCA competition before.
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="have-competed">
+            <p>
+              Welcome back! To create your WCA website account, we need to know the
+              WCA ID under which you competed.
+            </p>
+
+            <%= render "users/claim_wca_id_selector", f: f %>
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="never-competed">
+            <p>
+              Welcome! Before you can compete in your first WCA competition, we need some
+              additional information for records keeping purposes. Please note that
+              your birthdate will never be released without your permission.
+            </p>
+
+            <%# Copied from app/views/users/edit.html.erb %>
+            <%= f.input :name %>
+            <%= f.input :dob, as: :date_picker %>
+            <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>
+            <%= f.input :country_iso2, collection: Country.all.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name } %>
+
+          </div>
+        </div>
+
+        <%= f.hidden_field :claiming_wca_id %>
+
+        <%= f.submit t('.sign_up', :default => "Sign up"), class: "btn btn-primary", disabled: true %>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  $(function() {
+    var $claiming_wca_id = $('#user_claiming_wca_id');
+    $('#have-you-competed-nav a').on('shown.bs.tab', function() {
+      // Leave the "Sign up" button disabled until the user tells us if they
+      // have competed before.
+      $('input[type="submit"]').attr('disabled', false);
+    });
+
+    var $haveCompetedLink = $('#have-you-competed-nav a[href="#have-competed"]');
+    if($claiming_wca_id.val() === "true") {
+      $haveCompetedLink.tab('show');
+    }
+    $haveCompetedLink.on('shown.bs.tab', function() {
+      $claiming_wca_id.val('true');
+    });
+
+    var $neverCompetedLink = $('#have-you-competed-nav a[href="#never-competed"]');
+    if($claiming_wca_id.val() === "false") {
+      $neverCompetedLink.tab('show');
+    }
+    $neverCompetedLink.on('shown.bs.tab', function() {
+      $claiming_wca_id.val('false');
+    });
+  });
+</script>
