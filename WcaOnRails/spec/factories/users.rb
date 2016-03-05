@@ -16,15 +16,24 @@ FactoryGirl.define do
     factory :admin do
       name "Mr. Admin"
       email "admin@worldcubeassociation.org"
-      software_team true
+      after(:create) do |user|
+        software_team = FactoryGirl.create(:team, friendly_id: 'software', name: 'Software Team', description: 'Does software')
+        FactoryGirl.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
+      end
     end
 
     factory :results_team do
-      results_team true
+      after(:create) do |user|
+        results_team = FactoryGirl.create(:team, friendly_id: 'results', name: 'Results Team', description: 'Posts results')
+        FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id)
+      end
     end
 
     factory :wrc_team do
-      wrc_team true
+      after(:create) do |user|
+        wrc_team = FactoryGirl.create(:team, friendly_id: 'wrc', name: 'WRC Team', description: 'Regulations')
+        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+      end
     end
 
     trait :wca_id do

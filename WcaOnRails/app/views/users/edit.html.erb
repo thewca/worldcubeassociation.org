@@ -146,11 +146,11 @@
         </div>
       </div>
 
-      <% UsersController.WCA_TEAMS.each do |role| %>
-        <%= f.input role, disabled: !editable_fields.include?(role) %>
-        <% leader_role = :"#{role}_leader" %>
-        <%= f.input leader_role, disabled: !editable_fields.include?(leader_role) %>
-      <% end %>
+      <%# UsersController.WCA_TEAMS.each do |role| %>
+        <%#= f.input role, disabled: !editable_fields.include?(role) %>
+        <%# leader_role = :"#{role}_leader" %>
+        <%#= f.input leader_role, disabled: !editable_fields.include?(leader_role) %>
+      <%# end %>
       <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !editable_fields.include?(:senior_delegate_id) %>
       <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
       <%= f.input :region, disabled: !editable_fields.include?(:region) %>

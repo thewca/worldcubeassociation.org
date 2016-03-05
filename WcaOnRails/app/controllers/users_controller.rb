@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
   def self.WCA_TEAMS
-    [:software_team, :results_team, :wdc_team, :wrc_team]
+    ['software', 'results', 'wdc', 'wrc']
   end
 
   def index

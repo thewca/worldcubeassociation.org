@@ -674,7 +674,6 @@ CREATE TABLE `users` (
   `unconfirmed_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `results_team` tinyint(1) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `delegate_status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `senior_delegate_id` int(11) DEFAULT NULL,
@@ -690,13 +689,6 @@ CREATE TABLE `users` (
   `saved_pending_avatar_crop_y` int(11) DEFAULT NULL,
   `saved_pending_avatar_crop_w` int(11) DEFAULT NULL,
   `saved_pending_avatar_crop_h` int(11) DEFAULT NULL,
-  `wdc_team` tinyint(1) DEFAULT NULL,
-  `wdc_team_leader` tinyint(1) DEFAULT NULL,
-  `wrc_team` tinyint(1) DEFAULT NULL,
-  `wrc_team_leader` tinyint(1) DEFAULT NULL,
-  `results_team_leader` tinyint(1) DEFAULT NULL,
-  `software_team` tinyint(1) DEFAULT NULL,
-  `software_team_leader` tinyint(1) DEFAULT NULL,
   `unconfirmed_wca_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `delegate_id_to_handle_wca_id_claim` int(11) DEFAULT NULL,
   `dob` date DEFAULT NULL,
@@ -859,3 +851,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160223204831');
 INSERT INTO schema_migrations (version) VALUES ('20160224013453');
 
 INSERT INTO schema_migrations (version) VALUES ('20160303144700');
+
+INSERT INTO schema_migrations (version) VALUES ('20160305170821');
+

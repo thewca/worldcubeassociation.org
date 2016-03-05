@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .members {
+  border-top: 1px solid #888;
+  padding-top: 2px;
+
   input.date_picker.form-control {
     width: 120px;
   }
@@ -10,7 +13,4 @@
   div.selectize-control {
     width: 280px;
   }
-
-  border-top: 1px solid #888;
-  padding-top: 2px;
 }

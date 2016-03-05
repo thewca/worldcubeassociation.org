@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
-  has_one :team, foreign_key: "leader_id"
+  has_many :teams, through: :team_members
   has_many :team_members, dependent: :destroy
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
@@ -236,9 +236,12 @@ class User < ActiveRecord::Base
   validate :team_leaders_must_be_on_respective_teams
   def team_leaders_must_be_on_respective_teams
     UsersController.WCA_TEAMS.each do |team|
-      leader_team = :"#{team}_leader"
-      if send(leader_team) && !send(team)
-        errors.add(leader_team, "must be a #{team} to be a #{leader_team}")
+  #    leader_team = :"#{team}_leader"
+  #    if send(leader_team) && !send(team)
+  #      errors.add(leader_team, "must be a #{team} to be a #{leader_team}")
+  #    end
+      if team_leader?(team) && !team_member?(team)
+        errors.add(leader_team, "must be a #{team} to be a #{team} leader")
       end
     end
   end
@@ -268,17 +271,17 @@ class User < ActiveRecord::Base
     }.fetch(delegate_status)
   end
 
-  validate :not_illegally_demoting_oneself
-  def not_illegally_demoting_oneself
-    about_to_lose_access = !software_team? && !board_member?
-    if current_user == self && about_to_lose_access
-      if software_team_was
-        errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
-      elsif delegate_status_was == "board_member"
-        errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
-      end
-    end
-  end
+  #validate :not_illegally_demoting_oneself
+  #def not_illegally_demoting_oneself
+  #  about_to_lose_access = !software_team? && !board_member?
+  #  if current_user == self && about_to_lose_access
+  #    if software_team_was
+  #      errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
+  #    elsif delegate_status_was == "board_member"
+  #      errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
+  #    end
+  #  end
+  #end
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
@@ -293,6 +296,30 @@ class User < ActiveRecord::Base
     if unconfirmed_wca_id
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
     end
+  end
+
+  def software_team?
+    team_member?('software') || false
+  end
+
+  def results_team?
+    team_member?('results') || false
+  end
+
+  def wrc_team?
+    team_member?('wrc') || false
+  end
+
+  def wdc_team?
+    team_member?('wdc') || false
+  end
+
+  def team_member?(team)
+    self.teams.find_by_friendly_id(team) #end date?
+  end
+
+  def team_leader?(team)
+    self.team_members.find_by_team_id( Team.find_by_friendly_id(team) ) && self.team_members.find_by_team_id( Team.find_by_friendly_id(team) ).team_leader
   end
 
   def admin?
