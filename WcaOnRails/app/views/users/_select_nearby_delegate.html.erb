@@ -1,6 +1,8 @@
 <% if !@user.unconfirmed_person %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does not exist.
+    <% if @user.unconfirmed_wca_id.present? %>
+      WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does not exist.
+    <% end %>
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
