@@ -4,14 +4,16 @@ but when there is space for it, it is guaranteed to appear on the bottom
 of the window, rather than immediately after our content.
 -------------------------------------------------- */
 $footer-height-px: 30px;
+$footer-body-spacing: 10px;
 
 html {
   position: relative;
   min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: $footer-height-px;
+  // Add some extra space so the body content does not
+  // jut right up against the footer.
+  margin-bottom: $footer-height-px + $footer-body-spacing;
 }
 .footer {
   position: absolute;

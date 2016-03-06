@@ -15,15 +15,21 @@
   </p>
 <% else %>
   <p>
-    In order to assign you your WCA ID, we need to confirm your identify. Please
-    select the delegate you think knows you best and enter your birthdate.
+    In order to assign you your WCA ID, we need a delegate to confirm your
+    identify. Please select the delegate you think knows you best and enter
+    your birthdate.
   </p>
 
   <div class="form-group radio_buttons optional">
+    <% found_delegate = false %>
     <% @user.unconfirmed_person.likely_delegates.each do |delegate| %>
       <span class="radio">
         <label>
-          <%= radio_button_tag "user[delegate_id_to_handle_wca_id_claim]", delegate.id, false, class: "radio_buttons center-vertically" %>
+          <% is_selected_delegate = @user.delegate_id_to_handle_wca_id_claim == delegate.id %>
+          <% if is_selected_delegate %>
+            <% found_delegate = true %>
+          <% end %>
+          <%= radio_button_tag "user[delegate_id_to_handle_wca_id_claim]", delegate.id, is_selected_delegate, class: "radio_buttons center-vertically", checked: is_selected_delegate %>
           <%= render "shared/user", user: delegate %>
         </label>
       </span>
@@ -34,8 +40,24 @@
            make sure it doesn't focus anything by setting the wrapping label to
            focus nothing -->
       <label class="full-width" for="nonexistant-id">
-        <input class="radio_buttons optional center-vertically" type="radio" value="" name="user[delegate_id_to_handle_wca_id_claim]" />
-        <input id="nearby-delegate-search" class="optional form-control wca-autocomplete wca-autocomplete-users_search wca-autocomplete-only_delegates wca-autocomplete-only_one" />
+        <% chose_extra_delegate = !found_delegate && @user.delegate_to_handle_wca_id_claim %>
+        <input class="radio_buttons optional center-vertically"
+               type="radio"
+               value="<%= chose_extra_delegate ? @user.delegate_to_handle_wca_id_claim.id : '' %>"
+               name="user[delegate_id_to_handle_wca_id_claim]" <%= chose_extra_delegate ? 'checked' : '' %> />
+
+        <% input_data = {} %>
+        <% value = "" %>
+        <% if chose_extra_delegate %>
+          <% delegate = @user.delegate_to_handle_wca_id_claim %>
+          <% input_data[:data] = [delegate.to_jsonable].to_json %>
+          <% value = @user.delegate_to_handle_wca_id_claim.id %>
+        <% end %>
+        <%= text_field_tag "", value,
+                           id: "nearby-delegate-search",
+                           class: "optional form-control wca-autocomplete wca-autocomplete-users_search wca-autocomplete-only_delegates wca-autocomplete-only_one",
+                           data: input_data %>
+
       </label>
     </span>
   </div>

@@ -404,7 +404,6 @@ class User < ActiveRecord::Base
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
-      fields += CLAIM_WCA_ID_PARAMS
     end
     if admin? || board_member?
       fields += UsersController.WCA_TEAMS
@@ -425,6 +424,7 @@ class User < ActiveRecord::Base
         fields << :gender
         fields << :country_iso2
       end
+      fields += CLAIM_WCA_ID_PARAMS
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h

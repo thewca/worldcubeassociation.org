@@ -4,11 +4,12 @@
   <h1 class="text-center"><%= yield(:title) %></h1>
 
   <%= render 'shared/error_messages', object: @user %>
-  <% if @user.person %>
-    You already have WCA ID <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
-  <% elsif @user.unconfirmed_person && @user.delegate_to_handle_wca_id_claim %>
-    You've claimed WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id -%>.
-    Contact <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
+  <% real_user = User.find(@user.id) %>
+  <% if real_user.person %>
+    You already have WCA ID <%= render "shared/wca_id", wca_id: real_user.wca_id -%>.
+  <% elsif real_user.unconfirmed_person && real_user.delegate_to_handle_wca_id_claim %>
+    You've claimed WCA ID <%= render "shared/wca_id", wca_id: real_user.unconfirmed_wca_id -%>.
+    Contact <%= mail_to real_user.delegate_to_handle_wca_id_claim.email, real_user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
   <% else %>
     <p>
       If you've competed before, you can request to have your WCA ID connected
