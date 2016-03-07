@@ -233,19 +233,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  validate :team_leaders_must_be_on_respective_teams
-  def team_leaders_must_be_on_respective_teams
-    UsersController.WCA_TEAMS.each do |team|
-  #    leader_team = :"#{team}_leader"
-  #    if send(leader_team) && !send(team)
-  #      errors.add(leader_team, "must be a #{team} to be a #{leader_team}")
-  #    end
-      if team_leader?(team) && !team_member?(team)
-        errors.add(leader_team, "must be a #{team} to be a #{team} leader")
-      end
-    end
-  end
-
   validate :senior_delegate_must_be_senior_delegate
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
@@ -299,27 +286,27 @@ class User < ActiveRecord::Base
   end
 
   def software_team?
-    team_member?('software') || false
+    team_member?('software')
   end
 
   def results_team?
-    team_member?('results') || false
+    team_member?('results')
   end
 
   def wrc_team?
-    team_member?('wrc') || false
+    team_member?('wrc')
   end
 
   def wdc_team?
-    team_member?('wdc') || false
+    team_member?('wdc')
   end
 
   def team_member?(team)
-    self.teams.find_by_friendly_id(team) #end date?
+    self.teams.find_by_friendly_id(team) || false #end date?
   end
 
   def team_leader?(team)
-    self.team_members.find_by_team_id( Team.find_by_friendly_id(team) ) && self.team_members.find_by_team_id( Team.find_by_friendly_id(team) ).team_leader
+    team_member?(team) && team_member(team).team_leader
   end
 
   def admin?
