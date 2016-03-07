@@ -256,8 +256,7 @@
     <%= f.input :use_wca_registration %>
 
     <div class="wca-registration-options">
-      <%# This is pretty annoying, see https://groups.google.com/d/msg/plataformatec-simpleform/aHAtI3pONJo/B_YDb9u1AgAJ %>
-      <%= f.input :guests_enabled, as: :radio_buttons, collection: [ [t('simple_form.options.competition.guests_enabled.true'), true], [t('simple_form.options.competition.guests_enabled.false'), false]] %>
+      <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
 
       <% if @competition.can_receive_registration_emails?(current_user.id) %>
         <%# Quick hack to fill receive_registration_emails with the correct
