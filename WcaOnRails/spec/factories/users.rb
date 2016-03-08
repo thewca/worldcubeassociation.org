@@ -7,7 +7,11 @@ FactoryGirl.define do
     dob Date.new(1980, 1, 1)
     password "wca"
     password_confirmation { "wca" }
+
     before(:create) { |user| user.skip_confirmation! }
+    trait :unconfirmed do
+      before(:create) { |user| user.confirmed_at = nil }
+    end
 
     factory :admin do
       name "Mr. Admin"

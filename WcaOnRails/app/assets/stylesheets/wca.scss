@@ -184,3 +184,16 @@ table.wca-results {
     }
   }
 }
+
+// Add a border to .tab-pane to line up nicely with corresponding .nav-tabs.
+// Note, we only want to do this on screensizes where the nav buttons have not
+// yet collapsed.
+.tab-pane {
+  margin-bottom: 10px;
+
+  @media (min-width: $screen-sm) {
+    border: 1px solid #{$nav-tabs-border-color};
+    border-top: 0;
+    padding: 10px;
+  }
+}

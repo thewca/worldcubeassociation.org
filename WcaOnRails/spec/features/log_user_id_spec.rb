@@ -1,38 +1,22 @@
 require "rails_helper"
 
-RSpec.feature "log user id" do
-  before :each do
-    allow(Rails.logger).to receive(:info).and_call_original
-  end
-
-  context "not logged in" do
-    before :each do
-      expect_logger_to_log("[User Id] Request was made by user id: <not logged in>")
-    end
-
-    it "logs the not logged in user" do
-      visit root_path
-    end
-  end
-
-  context "logged in" do
-    let(:admin) { FactoryGirl.create :admin }
+RSpec.feature "edit user" do
+  context "editing own profile" do
+    let(:admin) { FactoryGirl.create :admin, :wca_id }
 
     before :each do
       sign_in admin
-
-      expect_logger_to_log("[User Id] Request was made by user id: #{admin.id}")
     end
 
-    it "logs the current user" do
-      visit root_path
-    end
-  end
+    it "can clear wca id" do
+      visit profile_edit_path
+      fill_in "WCA ID", with: ""
+      click_button "Save"
 
-  def expect_logger_to_log(message)
-    expect(Rails.logger).to receive(:info).
-                            at_least(:once).
-                            with(message).
-                            and_call_original
+      fill_in "Current password", with: "wca"
+      click_button "Confirm"
+      expect(page.status_code).to eq 200
+      expect(admin.reload.wca_id).to eq nil
+    end
   end
 end

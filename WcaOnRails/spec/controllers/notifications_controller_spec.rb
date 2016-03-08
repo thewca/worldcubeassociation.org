@@ -45,10 +45,13 @@ RSpec.describe NotificationsController, type: :controller do
         ]
       end
 
-      it "shows WCA ID claims" do
+      it "shows WCA ID claims for confirmed accounts, but not for unconfirmed accounts" do
         person = FactoryGirl.create :person
         user = FactoryGirl.create :user
         user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
+
+        unconfirmed_user = FactoryGirl.create :user, :unconfirmed
+        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
 
         get :index
         notifications = assigns(:notifications)

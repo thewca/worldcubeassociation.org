@@ -4,11 +4,12 @@
   <h1 class="text-center"><%= yield(:title) %></h1>
 
   <%= render 'shared/error_messages', object: @user %>
-  <% if @user.person %>
-    You already have WCA ID <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
-  <% elsif @user.unconfirmed_person && @user.delegate_to_handle_wca_id_claim %>
-    You've claimed WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id -%>.
-    Contact <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
+  <% real_user = User.find(@user.id) %>
+  <% if real_user.person %>
+    You already have WCA ID <%= render "shared/wca_id", wca_id: real_user.wca_id -%>.
+  <% elsif real_user.unconfirmed_person && real_user.delegate_to_handle_wca_id_claim %>
+    You've claimed WCA ID <%= render "shared/wca_id", wca_id: real_user.unconfirmed_wca_id -%>.
+    Contact <%= mail_to real_user.delegate_to_handle_wca_id_claim.email, real_user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
   <% else %>
     <p>
       If you've competed before, you can request to have your WCA ID connected
@@ -20,65 +21,13 @@
       competition are uploaded.
     </p>
 
-    <%= simple_form_for @user, url: profile_claim_wca_id_path, html: { multipart: true } do |f| %>
-      <%= f.input :unconfirmed_wca_id, label: "WCA ID", as: :user_ids, persons_table: true, only_one: true %>
-      <div id="select-nearby-delegate-area"></div>
+    <%= simple_form_for @user do |f| %>
+      <% @user.claiming_wca_id = true %>
+      <%= f.hidden_field :claiming_wca_id %>
 
-      <%= f.input :dob_verification, label: "Birthdate", as: :date_picker %>
-
+      <%= render "claim_wca_id_selector", f: f %>
       <%= f.button :submit, 'Claim WCA ID', id: "claim-wca-id-button", class: "btn-primary" %>
+
     <% end %>
-
-    <script>
-      $(function() {
-        var $dobArea = $("div.user_dob_verification");
-        var $unconfirmed_wca_id = $("#user_unconfirmed_wca_id");
-        var $submitButton = $("#claim-wca-id-button");
-        $unconfirmed_wca_id.wcaAutocomplete();
-        var unconfirmed_wca_id_selectize = $unconfirmed_wca_id[0].selectize;
-
-        function clearExtraInfo() {
-          $submitButton.prop("disabled", true);
-          $dobArea.toggle(false);
-        }
-        clearExtraInfo();
-        var onUnconfirmedWcaId = function(unconfirmed_wca_id) {
-          clearExtraInfo();
-
-          wca.cancelPendingAjaxAndAjax('render_select_nearby_delegate', {
-            url: '<%= profile_claim_wca_id_select_nearby_delegate_path %>',
-            data: {
-              'user[unconfirmed_wca_id]': unconfirmed_wca_id,
-            },
-            success: function(data) {
-              $('#select-nearby-delegate-area').html(data);
-
-              var $delegateSearch = $('#nearby-delegate-search');
-              if($delegateSearch.length > 0) {
-                $delegateSearch.wcaAutocomplete();
-                var selectize = $delegateSearch[0].selectize;
-                var $radioInput = $delegateSearch.siblings('input');
-                selectize.on("focus", function(e) {
-                  $radioInput.prop('checked', true);
-                });
-                selectize.on("change", function(value) {
-                  $radioInput.val(value);
-                  $submitButton.prop("disabled", false);
-                });
-              }
-            }
-          });
-        };
-        unconfirmed_wca_id_selectize.on("change", onUnconfirmedWcaId);
-        if(unconfirmed_wca_id_selectize.items.length > 0) {
-          onUnconfirmedWcaId(unconfirmed_wca_id_selectize.items[0]);
-        }
-
-        $("form.edit_user").on("change", 'input[type="radio"]', function(e) {
-          var selectedDelgateId = e.currentTarget.value;
-          $submitButton.prop("disabled", !selectedDelgateId);
-        });
-      });
-    </script>
   <% end %>
 </div>

@@ -55,8 +55,25 @@ $(function() {
   // "change his mind" and select a different date without
   // having to click outside and clicking on the input again.
   $datetimepicker = $('.date_picker.form-control, .datetime_picker.form-control');
-  $datetimepicker.datetimepicker({
-    useStrict: true, keepInvalid: true, useCurrent: false, keepOpen: true
+  $datetimepicker.each(function() {
+    var $this = $(this);
+    var datetimepickerOptions = {
+      useStrict: true,
+      keepInvalid: true,
+      useCurrent: false,
+      keepOpen: true,
+      sideBySide: true,
+    };
+    if($this.attr("name") === "user[dob]") {
+      // Don't allow people to choose a birthdate in the future.
+      datetimepickerOptions.maxDate = new Date();
+    } else {
+      // Only show the today button if we're not using dealing with a birthdate,
+      // where the today button can't possibly work because today is after the maxDate
+      // for the datetimepicker.
+      datetimepickerOptions.showTodayButton = true;
+    }
+    $this.datetimepicker(datetimepickerOptions);
   });
 
   // Using 'blur' here, because 'change' or 'dp.change' is not fired every time

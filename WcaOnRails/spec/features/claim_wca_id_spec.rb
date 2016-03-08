@@ -34,8 +34,16 @@ RSpec.feature "Claim WCA ID" do
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
 
-      fill_in "Birthdate", with: "1988-02-03"
+      # First, intentionally fill in the incorrect birthdate,
+      # to test out our validations.
+      fill_in "Birthdate", with: "1900-01-01"
+      click_button "Claim WCA ID"
 
+      # Make sure we inform the user of the incorrect birthdate they just
+      # entered.
+      expect(page.find(".alert.alert-danger")).to have_content("Dob verification incorrect")
+      # Now enter the correct birthdate and submit the form!
+      fill_in "Birthdate", with: "1988-02-03"
       click_button "Claim WCA ID"
 
       user.reload

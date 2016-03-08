@@ -31,7 +31,7 @@ en:
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
-        country_iso2: "Country"
+        country_iso2: "Citizenship"
         dob: "Birthdate"
       competition:
         isConfirmed: "Do not let organizers edit this competition"
@@ -69,7 +69,9 @@ en:
         id: "ID"
     hints:
       defaults:
-        dob: "Enter your date of birth in the format YYYY-MM-DD"
+        dob: "Enter your date of birth in the format YYYY-MM-DD."
+      user:
+        name_html: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
       competition:
         competition_id_to_clone: "Optional. Can save you some typing if you're running a similar competition to a past competition."
         name: "The full name of the competition including the year at the end (e.g., European Rubik's Cube Championship 2006). Be sure to capitalize."

@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
 
+  # Virtual attribute for remembering what the user clicked on when
+  # signing up for an account.
+  attr_accessor :sign_up_panel_to_show
+
   ALLOWABLE_GENDERS = [:m, :f, :o]
   enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
 
@@ -57,14 +61,8 @@ class User < ActiveRecord::Base
 
   validate :name_must_match_person_name
   def name_must_match_person_name
-    if wca_id
-      if person
-        if person.name != name
-          errors.add(:name, "name must be #{person.name}")
-        end
-      else
-        errors.add(:wca_id, "not found")
-      end
+    if wca_id && !person
+      errors.add(:wca_id, "not found")
     end
   end
 
@@ -115,13 +113,13 @@ class User < ActiveRecord::Base
       end
 
       if claiming_wca_id
-        # Don't verify DOB for WCA IDs that have already been claimed. This protects
-        # people from DOB guessing attacks.
         dob_verification_date = Date.safe_parse(dob_verification, nil)
         if unconfirmed_person
           if !unconfirmed_person.dob
             errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
           elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
+            # Note that we don't verify DOB for WCA IDs that have already been
+            # claimed. This protects people from DOB guessing attacks.
             errors.add(:dob_verification, "incorrect")
           end
         end
@@ -142,11 +140,12 @@ class User < ActiveRecord::Base
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
-    if person
-      self.name = person.name
-      self.dob = person.dob
-      self.gender = person.gender
-      self.country_iso2 = person.country_iso2
+    p = person || unconfirmed_person
+    if p
+      self.name = p.name
+      self.dob = p.dob
+      self.gender = p.gender
+      self.country_iso2 = p.country_iso2
     end
   end
 
@@ -286,6 +285,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  # After the user confirms their account, if they claimed a WCA ID, now is the
+  # time to notify their delegate!
+  def after_confirmation
+    if unconfirmed_wca_id
+      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
+    end
+  end
+
   def admin?
     software_team?
   end
@@ -381,6 +388,13 @@ class User < ActiveRecord::Base
     return nil
   end
 
+  CLAIM_WCA_ID_PARAMS = [
+    :claiming_wca_id,
+    :unconfirmed_wca_id,
+    :delegate_id_to_handle_wca_id_claim,
+    :dob_verification,
+  ]
+
   def editable_fields_of_user(user)
     fields = Set.new
     if user.dummy_account?
@@ -410,6 +424,7 @@ class User < ActiveRecord::Base
         fields << :gender
         fields << :country_iso2
       end
+      fields += CLAIM_WCA_ID_PARAMS
       fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
       fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
       fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h

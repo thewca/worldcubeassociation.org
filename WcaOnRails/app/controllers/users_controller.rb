@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:search]
+  before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
   def self.WCA_TEAMS
     [:software_team, :results_team, :wdc_team, :wrc_team]
@@ -22,47 +22,36 @@ class UsersController < ApplicationController
 
   def edit
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user)
+    redirect_if_cannot_edit_user(@user) and return
   end
 
   def claim_wca_id
     @user = current_user
   end
 
-  def do_claim_wca_id
-    @user = current_user
-    @user.claiming_wca_id = true
-    if @user.update_attributes(user_claim_wca_id_params)
-      flash[:success] = "Successfully claimed WCA ID #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
-      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
-      redirect_to profile_claim_wca_id_path
-    else
-      render :claim_wca_id
-    end
-  end
-
   def select_nearby_delegate
-    @user = current_user
-    @user.assign_attributes(user_claim_wca_id_params)
+    @user = current_user || User.new
+    user_params = params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
+    @user.assign_attributes(user_params)
     render partial: 'select_nearby_delegate'
   end
 
   def edit_avatar_thumbnail
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user)
+    redirect_if_cannot_edit_user(@user) and return
   end
 
   def edit_pending_avatar_thumbnail
     @user = user_to_edit
     @pending_avatar = true
-    redirect_if_cannot_edit_user(@user)
+    redirect_if_cannot_edit_user(@user) and return
     render :edit_avatar_thumbnail
   end
 
   def update
     @user = user_to_edit
     @user.current_user = current_user
-    redirect_if_cannot_edit_user(@user)
+    redirect_if_cannot_edit_user(@user) and return
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && (user_params.has_key?(:password) || user_params.has_key?(:password_confirmation) || user_params.has_key?(:email))
@@ -76,7 +65,13 @@ class UsersController < ApplicationController
       else
         flash[:success] = "Account updated"
       end
-      redirect_to edit_user_url @user
+      if @user.claiming_wca_id
+        flash[:success] = "Successfully claimed WCA ID #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
+        WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
+        redirect_to profile_claim_wca_id_path
+      else
+        redirect_to edit_user_url(@user)
+      end
     else
       # update_with_password clears password and password_confirmation, but we
       # re-set them here so the :confirm_password view can work with its hidden
@@ -94,8 +89,12 @@ class UsersController < ApplicationController
           # errors in the form the user needs to deal with first.
           @user.errors.delete :current_password
         end
-        flash.now[:danger] = "Error updating user"
-        render :edit
+        if @user.claiming_wca_id
+          render :claim_wca_id
+        else
+          flash.now[:danger] = "Error updating user"
+          render :edit
+        end
       end
     end
   end
@@ -104,7 +103,9 @@ class UsersController < ApplicationController
     unless current_user && (current_user.can_edit_users? || current_user == user)
       flash[:danger] = "You cannot edit this user"
       redirect_to root_url
+      return true
     end
+    return false
   end
 
   private def user_params
@@ -116,9 +117,5 @@ class UsersController < ApplicationController
       user_params[:wca_id] = user_params[:wca_id].upcase
     end
     user_params
-  end
-
-  private def user_claim_wca_id_params
-    params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
   end
 end
