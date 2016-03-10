@@ -26,12 +26,15 @@
             </tr>
           </thead>
           <tbody>
-            <%= render 'index_table', competitions: @not_past_competitions %>
-            <tr id="today-line">
-              <td class="text-center"><a id="today"></a>Today</td>
-              <td colspan="6" ></td>
-            </tr>
-            <%= render 'index_table', competitions: @past_competitions %>
+            <div class="col-12">
+              <%= render 'index_table', competitions: @in_progress_competitions %>
+            </div>
+            <div class="col-6">
+              <%= render 'index_table', competitions: @upcoming_competitions %>
+            </div>
+            <div class="col-6">
+              <%= render 'index_table', competitions: @past_competitions %>
+            </div>
           </tbody>
         </table>
       <% else %>

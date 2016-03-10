@@ -55,6 +55,7 @@ class CompetitionsController < ApplicationController
     end
 
     @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
+    @in_progress_competitions, @upcoming_competitions = @not_past_competitions.partition(&:in_progress?)
   end
 
   def create

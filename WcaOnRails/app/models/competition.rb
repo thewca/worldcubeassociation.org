@@ -447,8 +447,12 @@ class Competition < ActiveRecord::Base
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
 
+  def in_progress?
+    start_date <= Date.today && end_date >= Date.today
+  end
+
   def is_over?
-    start_date < Date.today
+    end_date < Date.today
   end
 
   def country
