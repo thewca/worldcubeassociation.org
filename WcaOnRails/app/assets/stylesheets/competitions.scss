@@ -184,6 +184,11 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competition-select.form-inline {
+  z-index: 1;
+  background-color: #fff;
+  width: 100%;
+  padding: 5px;
+
   input,
   select {
     font-size: 12px;
@@ -208,4 +213,3 @@ $venue-map-wrapper-height: 400px;
 #today-line {
   @extend .bg-primary;
 }
-

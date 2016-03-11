@@ -3,42 +3,27 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
-    <% if @competitions.length == 0 %>
+  <div id="scroller-anchor"></div>
+  <div id="scroller">
+    <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
       <%= render 'index_form' %>
+    <% end %>
+  </div>
+    <% if @competitions.length == 0 %>
       <div class="alert alert-warning">No competitions found!</div>
     <% else %>
       <% if params[:display] == "List" %>
-        <table class="table competitions-table table-striped table-hover table-condensed floatThead">
-          <thead>
-            <tr>
-              <th colspan="7">
-                <%= render 'index_form' %>
-              </th>
-            </tr>
-            <tr>
-              <th>Year</th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Country, City</th>
-              <th>Venue</th>
-              <th class="big-column"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <div class="col-12">
-              <%= render 'index_table', competitions: @in_progress_competitions %>
-            </div>
-            <div class="col-6">
-              <%= render 'index_table', competitions: @upcoming_competitions %>
-            </div>
-            <div class="col-6">
-              <%= render 'index_table', competitions: @past_competitions %>
-            </div>
-          </tbody>
-        </table>
+        <div class="col-12" style="z-index: -1;">
+          <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
+        </div>
+
+        <div class="col-sm-6" style="z-index: -1;">
+          <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
+        </div>
+        <div class="col-sm-6" style="z-index: -1;">
+          <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
+        </div>
       <% else %>
-        <%= render 'index_form' %>
         <div class="row">
           <div class="col-xs-12 col-md-12">
             <div id="map"></div>
@@ -46,10 +31,32 @@
         </div>
       <% end %>
     <% end %>
-  <% end %>
 </div>
 
 <script>
+function moveScroller() {
+    var move = function() {
+        var st = $(window).scrollTop();
+        var ot = $("#scroller-anchor").offset().top;
+        var s = $("#scroller");
+        if(st > ot) {
+            s.css({
+                position: "fixed",
+                top: "0px"
+            });
+        } else {
+            if(st <= ot) {
+                s.css({
+                    position: "relative",
+                    top: ""
+                });
+            }
+        }
+    };
+    $(window).scroll(move);
+    move();
+}
+
 function mapSize() {
   var nav = parseInt($(".navbar").outerHeight(true));
   var head = parseInt($("h2").outerHeight(true));
@@ -68,9 +75,7 @@ $(window).resize(function() {
 });
 
 $(function() {
-  <% if params[:display] == 'List' %>
-    $("#today").scrollToCenter();
-  <% else %>
+  <% if params[:display] == 'Map' %>
     var competitions = <%= @competitions.map do |c|
         {
           id: c.id,
@@ -88,5 +93,7 @@ $(function() {
   <% end %>
 
   mapSize();
+
+  moveScroller();
 });
 </script>
