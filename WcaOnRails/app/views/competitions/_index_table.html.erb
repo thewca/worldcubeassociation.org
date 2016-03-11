@@ -10,8 +10,8 @@
           <td>
             <p>
               <%= link_to competition.name, competition_path(competition) %>
-              <br /><span style="font-size: smaller;"><strong><%= competition.country.name %></strong>, <%= competition.cityName %>
-              <br><%= competition.venue %></span>
+              <br /><strong><%= competition.country.name %></strong>, <%= competition.cityName %>
+              <br><%=md(competition.venue, target_blank: true) %>
             </p>
           </td>
         </tr>

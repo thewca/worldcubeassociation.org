@@ -47,17 +47,6 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-// Adopted from http://stackoverflow.com/a/21778615
-$.fn.scrollToCenter = function(speed) {
-  speed = speed || 200;
-  var el = this;
-  var elOffset = el.offset().top;
-  var windowHeight = $(window).height();
-  var offset = elOffset - Math.max((windowHeight - el.height()) / 2, 0);
-
-  $('html, body').animate({ scrollTop: offset }, speed);
-};
-
 $.fn.competitionsMap = function(competitions) {
   var $map = new google.maps.Map(document.getElementById(this.attr('id')), {
     zoom: 2,
