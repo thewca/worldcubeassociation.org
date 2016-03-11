@@ -13,15 +13,17 @@
       <div class="alert alert-warning">No competitions found!</div>
     <% else %>
       <% if params[:display] == "List" %>
-        <div class="col-12">
-          <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
-        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
+          </div>
 
-        <div class="col-sm-6">
-          <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
-        </div>
-        <div class="col-sm-6">
-          <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
+          <div class="col-md-6">
+            <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
+          </div>
+          <div class="col-md-6">
+            <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
+          </div>
         </div>
       <% else %>
         <div class="row">
