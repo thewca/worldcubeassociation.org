@@ -186,7 +186,7 @@ $venue-map-wrapper-height: 400px;
 .competition-select.form-inline {
   background-color: #fff;
   width: 100%;
-  padding: 5px;
+  padding-bottom: 10px;
 
   input,
   select {
@@ -217,9 +217,32 @@ $venue-map-wrapper-height: 400px;
   width: 100%;
 }
 
-.list-group {
-  p {
-    margin: 0px;
+.competition-list {
+  li:nth-child(odd) {
+    background-color: $table-bg-accent;
+  }
+
+  .badge {
+    font-size: 14px;
+    color: #000;
+    background-color: unset;
   }
 }
 
+.competition-info {
+  p {
+    margin: 0;
+  }
+
+  &.in-progress {
+    p {
+      display: inline;
+      margin-right: 15px;
+    }
+  }
+}
+
+.in-progress.badge {
+  float: left;
+  margin-right: 15px;
+}

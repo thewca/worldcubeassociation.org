@@ -13,7 +13,7 @@
       <div class="alert alert-warning">No competitions found!</div>
     <% else %>
       <% if params[:display] == "List" %>
-        <div class="row">
+        <div class="row competition-list">
           <div class="col-md-12">
             <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
           </div>
@@ -26,7 +26,7 @@
           </div>
         </div>
       <% else %>
-        <div class="row">
+        <div class="row competition-list">
           <div class="col-xs-12 col-md-12">
             <div id="map"></div>
           </div>
