@@ -1,27 +1,17 @@
-<table class="table competitions-table table-striped table-hover">
-  <tbody>
-    <tr>
-      <th colspan=2><%= title %></th>
-    </tr>
-    <% if competitions.length > 0 %>
-      <% competitions.each_with_index do |competition, index| %>
-        <tr class="<%= competition.is_over? ? "past" : "not-past" %>">
-          <td><span style="white-space: nowrap;"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %></span>, <%= competition.year %></td>
-          <td>
-            <p>
-              <%= link_to competition.name, competition_path(competition) %>
-              <br /><strong><%= competition.country.name %></strong>, <%= competition.cityName %>
-              <br><%=md(competition.venue, target_blank: true) %>
-            </p>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr class="alert alert-warning">
-        <td colspan=2>
-          No competitions found!
-        </td>
-      </tr>
+<ul class="list-group">
+  <li class="list-group-item"><%= title %></li>
+  <% if competitions.length > 0 %>
+    <% competitions.each_with_index do |competition, index| %>
+      <li class="list-group-item <%= competition.is_over? ? "past" : "not-past" %>">
+        <span class="badge"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %></span>
+        <p><%= link_to competition.name, competition_path(competition) %></p>
+        <p><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>
+        <p><%=md(competition.venue, target_blank: true) %></p>
+      </li>
     <% end %>
-  </tbody>
-</table>
+  <% else %>
+    <li class="list-group-item">
+      No competitions found!
+    </li>
+  <% end %>
+</ul>
