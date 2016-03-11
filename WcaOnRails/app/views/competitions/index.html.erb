@@ -5,23 +5,45 @@
 
   <div id="scroller-anchor"></div>
   <div id="scroller">
+    <ul>
+      <% if @in_progress_competitions.length > 0 %>
+        <li><a href="#current">Competitions in progress</a></li>
+      <% else %>
+        <li>There are no competitions today.</li>
+      <% end %>
+
+      <% if @upcoming_competitions.length > 0 %>
+        <li><a href="#upcoming">Upcoming competitions</a></li>
+      <% else %>
+        <li>There are no upcoming competitions selected.</li>
+      <% end %>
+
+      <% if @past_competitions.length > 0 %>
+        <li><a href="#past">Past competitions</a></li>
+      <% else %>
+        <li>There are no past competitions selected.</li>
+      <% end %>
+    </ul>
+
     <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
       <%= render 'index_form' %>
     <% end %>
   </div>
     <% if @competitions.length == 0 %>
-      <div class="alert alert-warning">No competitions found!</div>
+      <div class="alert alert-warning">No competitions found</div>
     <% else %>
       <% if params[:display] == "List" %>
         <div class="row competition-list">
-          <div class="col-md-12">
-            <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
+          <div class="col-md-12" id="current">
+            <% if @in_progress_competitions.length > 0 %>
+              <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
+              <% end %>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" id="upcoming">
             <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" id="past">
             <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
           </div>
         </div>
@@ -97,6 +119,8 @@ $(function() {
 
   mapSize();
 
-  moveScroller();
+  if (!detect_mobile()) {
+    moveScroller();
+  }
 });
 </script>
