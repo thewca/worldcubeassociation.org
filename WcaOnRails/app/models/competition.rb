@@ -310,11 +310,11 @@ class Competition < ActiveRecord::Base
   end
 
   def belongs_to_region?(region)
-    (self.countryId == region) || (self.country.continentId == region)
+    self.countryId == region || self.country.continentId == region
   end
 
   def contains?(search_param)
-    (name.downcase.include? search_param.downcase) || (cityName.downcase.include? search_param.downcase) || (venue.downcase.include? search_param.downcase)
+    name.downcase.include?(search_param.downcase) || cityName.downcase.include?(search_param.downcase) || venue.downcase.include?(search_param.downcase)
   end
 
   def start_date
@@ -448,7 +448,7 @@ class Competition < ActiveRecord::Base
   end
 
   def in_progress?
-    start_date <= Date.today && end_date >= Date.today
+    (start_date..end_date).cover? Date.today
   end
 
   def is_over?

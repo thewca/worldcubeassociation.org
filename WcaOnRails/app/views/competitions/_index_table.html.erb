@@ -2,7 +2,7 @@
   <li class="list-group-item"><strong><%= title %></strong></li>
   <% competitions.each_with_index do |competition, index| %>
     <li class="list-group-item <%= competition.is_over? ? "past" : "not-past" %>">
-      <span class="badge <%= title == 'Competitions in progress' ? "in-progress" : "" %>"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %></span>
+      <span class="date <%= title == 'Competitions in progress' ? "in-progress" : "" %>"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %></span>
       <span class="competition-info <%= title == 'Competitions in progress' ? "in-progress" : "" %>">
         <p><%= link_to competition.name, competition_path(competition) %></p>
         <p><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>

@@ -65,9 +65,9 @@ $.fn.competitionsMap = function(competitions) {
     });
 
     if (c.is_over) {
-      iconImage = 'http://maps.google.com/mapfiles/ms/icons/blue.png';
+      iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
     } else {
-      iconImage = 'http://maps.google.com/mapfiles/ms/icons/red.png';
+      iconImage = 'https://maps.google.com/mapfiles/ms/icons/red.png';
     }
 
     c.marker = new google.maps.Marker({

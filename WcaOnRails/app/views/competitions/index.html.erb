@@ -4,26 +4,28 @@
   <h2><%= yield(:title) %></h2>
 
   <div id="scroller-anchor"></div>
-  <div id="scroller">
-    <ul>
-      <% if @in_progress_competitions.length > 0 %>
-        <li><a href="#current">Competitions in progress</a></li>
-      <% else %>
-        <li>There are no competitions today.</li>
-      <% end %>
+  <div id="comp-query">
+    <% if params[:display] == "List" %>
+      <ul>
+        <% if @in_progress_competitions.length > 0 %>
+          <li><a href="#current">Competitions in progress</a></li>
+        <% else %>
+          <li>There are no competitions today.</li>
+        <% end %>
 
-      <% if @upcoming_competitions.length > 0 %>
-        <li><a href="#upcoming">Upcoming competitions</a></li>
-      <% else %>
-        <li>There are no upcoming competitions selected.</li>
-      <% end %>
+        <% if @upcoming_competitions.length > 0 %>
+          <li><a href="#upcoming">Upcoming competitions</a></li>
+        <% else %>
+          <li>There are no upcoming competitions selected.</li>
+        <% end %>
 
-      <% if @past_competitions.length > 0 %>
-        <li><a href="#past">Past competitions</a></li>
-      <% else %>
-        <li>There are no past competitions selected.</li>
-      <% end %>
-    </ul>
+        <% if @past_competitions.length > 0 %>
+          <li><a href="#past">Past competitions</a></li>
+        <% else %>
+          <li>There are no past competitions selected.</li>
+        <% end %>
+      </ul>
+    <% end %>
 
     <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
       <%= render 'index_form' %>
@@ -50,7 +52,7 @@
       <% else %>
         <div class="row competition-list">
           <div class="col-xs-12 col-md-12">
-            <div id="map"></div>
+            <div id="comps-map"></div>
           </div>
         </div>
       <% end %>
@@ -59,27 +61,28 @@
 
 <script>
 function moveScroller() {
-    var move = function() {
-        var st = $(window).scrollTop();
-        var ot = $("#scroller-anchor").offset().top;
-        var s = $("#scroller");
-        if(st > ot) {
-            s.css({
-                position: "fixed",
-                top: "0px",
-                "z-index": 10
-            });
-        } else {
-            if(st <= ot) {
-                s.css({
-                    position: "relative",
-                    top: ""
-                });
-            }
-        }
-    };
-    $(window).scroll(move);
-    move();
+  var move = function() {
+      var st = $(window).scrollTop();
+      var ot = $("#scroller-anchor").offset().top;
+      var s = $("#comp-query");
+      if(st > ot) {
+          s.css({
+              position: "fixed",
+              top: "0px",
+              "z-index": 10,
+              "background-color": "white"
+          });
+      } else {
+          if(st <= ot) {
+              s.css({
+                  position: "relative",
+                  top: ""
+              });
+          }
+      }
+  };
+  $(window).scroll(move);
+  move();
 }
 
 function mapSize() {
@@ -92,11 +95,13 @@ function mapSize() {
 
   var map = height - nav - head - form - foot;
 
-  $("#map").height( map );
+  $("#comps-map").height( map );
 }
 
 $(window).resize(function() {
-  mapSize();
+  <% if params[:display] == 'Map' %>
+    mapSize();
+  <% end %>
 });
 
 $(function() {
@@ -114,13 +119,16 @@ $(function() {
         }
       end.to_json.html_safe %>;
 
-    $("#map").competitionsMap(competitions);
+    $("#comps-map").competitionsMap(competitions);
+
+    mapSize();
   <% end %>
 
-  mapSize();
-
   if (!detect_mobile()) {
-    moveScroller();
+    //moveScroller();
+    $("#comp-query").affix({
+      offset: 15
+    });
   }
 });
 </script>

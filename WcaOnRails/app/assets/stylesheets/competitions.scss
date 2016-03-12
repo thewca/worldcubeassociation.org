@@ -126,38 +126,6 @@ $venue-map-wrapper-height: 400px;
   width: 800px;
 }
 
-.competitions-table {
-
-  p {
-    margin: 0;
-  }
-
-  tr {
-    &.past {
-      a:link,
-      a:visited {
-        color: #139;
-      }
-    }
-
-    &.not-past {
-      a:link,
-      a:visited {
-        color: #e64503;
-      }
-    }
-  }
-
-  .big-column {
-    width: 100%;
-  }
-
-  td,
-  th {
-    white-space: nowrap;
-  }
-}
-
 .competitions-admin-table {
 
   tr.not-past {
@@ -209,11 +177,7 @@ $venue-map-wrapper-height: 400px;
   margin-right: 5px;
 }
 
-#today-line {
-  @extend .bg-primary;
-}
-
-#scroller {
+#comp-query {
   width: 100%;
 }
 
@@ -222,10 +186,9 @@ $venue-map-wrapper-height: 400px;
     background-color: $table-bg-accent;
   }
 
-  .badge {
-    font-size: 14px;
-    color: #000;
-    background-color: unset;
+  .date {
+    float: right;
+    font-weight: bold;
   }
 }
 
@@ -234,6 +197,8 @@ $venue-map-wrapper-height: 400px;
     margin: 0;
   }
 
+  // For the on-going competitions, we use the full width of the parent, so it doesn't
+  // make sense to put the <p> on top of each other. Not sure how this will look on mobile.
   &.in-progress {
     p {
       display: inline;
@@ -242,7 +207,7 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-.in-progress.badge {
+.in-progress.date {
   float: left;
-  margin-right: 15px;
+  margin-right: 25px;
 }

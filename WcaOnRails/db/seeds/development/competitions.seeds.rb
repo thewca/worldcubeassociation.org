@@ -74,26 +74,26 @@ after "development:users" do
   end
 
   day = Date.today
-    eventIds = ["333", "333oh", "magic"]
-    future_competition = Competition.create!(
-      id: "NewComp#{day.year}",
-      name: "New Comp #{day.year}",
-      cellName: "New Comp #{day.year}",
-      cityName: "Paris",
-      countryId: "France",
-      information: "Information!",
-      start_date: day.strftime("%F"),
-      end_date: day.strftime("%F"),
-      eventSpecs: eventIds.join(" "),
-      venue: "National Stadium",
-      website: "https://www.worldcubeassociation.org",
-      showAtAll: true,
-      delegates: [delegate],
-      organizers: User.all.sample(2),
-      use_wca_registration: true,
-      registration_open: 2.weeks.ago,
-      registration_close: day - (1.week),
-    )
+  eventIds = ["333", "333oh", "magic"]
+  future_competition = Competition.create!(
+    id: "NewComp#{day.year}",
+    name: "New Comp #{day.year}",
+    cellName: "New Comp #{day.year}",
+    cityName: "Paris",
+    countryId: "France",
+    information: "Information!",
+    start_date: day.strftime("%F"),
+    end_date: day.strftime("%F"),
+    eventSpecs: eventIds.join(" "),
+    venue: "National Stadium",
+    website: "https://www.worldcubeassociation.org",
+    showAtAll: true,
+    delegates: [delegate],
+    organizers: User.all.sample(2),
+    use_wca_registration: true,
+    registration_open: 2.weeks.ago,
+    registration_close: day - (1.week),
+  )
 
   500.times do |i|
     day = (i+1).days.from_now

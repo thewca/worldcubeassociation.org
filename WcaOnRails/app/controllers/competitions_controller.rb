@@ -20,38 +20,48 @@ class CompetitionsController < ApplicationController
   end
 
   def index
+    # We use the ["",""] to separate the items. They are disabled in the view, so the
+    # user cannot select an empty param.
     @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
                  'Country' => Country.all.map { |country| [country.name, country.id] } }
     @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
     @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.where(showAtAll: true).map(&:year).uniq.sort.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).reverse_order
 
-    # This need to be the first thing, otherwise @competitions will be an array instead of an object
-    # and the .where will not work
+    # This needs to be the first thing, otherwise @competitions will be an array instead of an object
+    # and the .where will not work.
     if params[:years].blank?
       params[:years] = "current"
+    end
+
+    if params[:event].blank?
+      params[:event] = "all"
+    end
+
+    if params[:region].blank?
+      params[:region] = "all"
+    end
+
+    if params[:display].blank?
+      params[:display] = "List"
     end
 
     if params[:years] == "current"
       @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?", (Date.today - PAST_COMPETITIONS_DAYS))
     elsif params[:years] != "all"
-      @competitions = @competitions.reject { |competition| competition.year.to_s != params[:years] }
+      @competitions = @competitions.select { |competition| competition.year.to_s == params[:years] }
     end
 
     if params[:event] && params[:event] != "all"
-      @competitions = @competitions.reject { |competition| !competition.has_event?(Event.find(params[:event])) }
+      @competitions = @competitions.select { |competition| competition.has_event?(Event.find(params[:event])) }
     end
 
     if params[:region] && params[:region] != "all"
-      @competitions = @competitions.reject { |competition| !competition.belongs_to_region?(params[:region]) }
+      @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
     end
 
     if params[:search].present?
-      @competitions = @competitions.reject { |competition| !competition.contains?(params[:search]) }
-    end
-
-    if !params[:display].present?
-      params[:display] = "List"
+      @competitions = @competitions.select { |competition| competition.contains?(params[:search]) }
     end
 
     @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
