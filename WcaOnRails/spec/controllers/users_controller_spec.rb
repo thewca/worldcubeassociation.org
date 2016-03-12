@@ -108,7 +108,7 @@ describe UsersController do
   describe "editing user data" do
     let(:user) { FactoryGirl.create(:user) }
     let(:delegate) { FactoryGirl.create(:delegate) }
-    
+
     it "user can change email" do
       sign_in user
       expect(user.confirmation_sent_at).to eq nil

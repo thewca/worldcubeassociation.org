@@ -258,17 +258,17 @@ class User < ActiveRecord::Base
     }.fetch(delegate_status)
   end
 
-  #validate :not_illegally_demoting_oneself
-  #def not_illegally_demoting_oneself
-  #  about_to_lose_access = !software_team? && !board_member?
-  #  if current_user == self && about_to_lose_access
-  #    if software_team_was
-  #      errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
-  #    elsif delegate_status_was == "board_member"
-  #      errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
-  #    end
-  #  end
-  #end
+  validate :not_illegally_demoting_oneself
+  def not_illegally_demoting_oneself
+    about_to_lose_access = !software_team? && !board_member?
+    if current_user == self && about_to_lose_access
+      if self.was_team_member?('software')
+        errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
+      elsif delegate_status_was == "board_member"
+        errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
+      end
+    end
+  end
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
@@ -302,7 +302,21 @@ class User < ActiveRecord::Base
   end
 
   def team_member?(team)
-    self.teams.find_by_friendly_id(team) || false #end date?
+    member = self.team_members.find_by_team_id( self.teams.find_by_friendly_id(team) )
+    if member && (member.end_date == nil || member.end_date >= Date.today)
+      return member
+    else
+      return false
+    end
+  end
+
+  def was_team_member?(team)
+    member = self.team_members.find_by_team_id( self.teams.find_by_friendly_id(team) )
+    if member && member.end_date < Date.today
+      return true
+    else
+      return false
+    end
   end
 
   def team_leader?(team)
