@@ -286,19 +286,19 @@ class User < ActiveRecord::Base
   end
 
   def software_team?
-    team_member?('software')
+    team_member?('software') != false
   end
 
   def results_team?
-    team_member?('results')
+    team_member?('results') != false
   end
 
   def wrc_team?
-    team_member?('wrc')
+    team_member?('wrc') != false
   end
 
   def wdc_team?
-    team_member?('wdc')
+    team_member?('wdc') != false
   end
 
   def team_member?(team)
