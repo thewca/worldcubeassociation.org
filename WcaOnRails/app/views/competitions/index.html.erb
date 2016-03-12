@@ -4,7 +4,7 @@
   <h2><%= yield(:title) %></h2>
 
   <div id="scroller-anchor"></div>
-  <div id="comp-query">
+  <div id="comp-query" class="col-md-12">
     <% if params[:display] == "List" %>
       <ul>
         <% if @in_progress_competitions.length > 0 %>
@@ -62,24 +62,24 @@
 <script>
 function moveScroller() {
   var move = function() {
-      var st = $(window).scrollTop();
-      var ot = $("#scroller-anchor").offset().top;
-      var s = $("#comp-query");
-      if(st > ot) {
-          s.css({
-              position: "fixed",
-              top: "0px",
-              "z-index": 10,
-              "background-color": "white"
-          });
-      } else {
-          if(st <= ot) {
-              s.css({
-                  position: "relative",
-                  top: ""
-              });
-          }
-      }
+    var st = $(window).scrollTop();
+    var ot = $("#scroller-anchor").offset().top;
+    var s = $("#comp-query");
+    if(st > ot) {
+        s.css({
+            position: "fixed",
+            top: "0px",
+            "z-index": 10,
+            "background-color": "white"
+        });
+    } else {
+        if(st <= ot) {
+            s.css({
+                position: "relative",
+                top: ""
+            });
+        }
+    }
   };
   $(window).scroll(move);
   move();
@@ -97,12 +97,6 @@ function mapSize() {
 
   $("#comps-map").height( map );
 }
-
-$(window).resize(function() {
-  <% if params[:display] == 'Map' %>
-    mapSize();
-  <% end %>
-});
 
 $(function() {
   <% if params[:display] == 'Map' %>
@@ -122,13 +116,24 @@ $(function() {
     $("#comps-map").competitionsMap(competitions);
 
     mapSize();
+
+    $(window).resize(function() {
+      mapSize();
+    });
   <% end %>
 
-  if (!detect_mobile()) {
-    //moveScroller();
-    $("#comp-query").affix({
-      offset: 15
-    });
+  if (!isMobile()) {
+    moveScroller();
+  }
+});
+
+$(window).resize(function() {
+  if (!isMobile()) {
+    console.log('big');
+    moveScroller();
+  }
+  else {
+    console.log('small');
   }
 });
 </script>

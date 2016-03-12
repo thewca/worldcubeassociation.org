@@ -29,6 +29,7 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require markerclusterer
+//= require bootstrap-toolkit
 //= require_self
 //= require_tree .
 
@@ -93,8 +94,8 @@ $.fn.competitionsMap = function(competitions) {
   });
 };
 
-function detect_mobile() {
- if( navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) ) {
+function isMobile() {
+  if(ResponsiveBootstrapToolkit.is('<sm')) {
     return true;
   } else {
     return false;
@@ -143,7 +144,7 @@ $(function() {
   $('input.wca-autocomplete').wcaAutocomplete();
 
   var $tablesToFloatHeaders = $('table.floatThead');
-  if (!detect_mobile()) {
+  if (!isMobile()) {
     $tablesToFloatHeaders.floatThead({
       zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
     });
