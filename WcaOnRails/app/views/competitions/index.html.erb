@@ -7,54 +7,52 @@
     <% if params[:display] == "List" %>
       <ul id="lists-navigation">
 
-        <li class="same-line"><a href="#past" class="<%= @past_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @past_competitions.length > 0 ? 'Past competitions' : 'No past competitions selected' %>"></span></a></li>
+        <li class="same-line"><a href="#past" class="js-scroll-to <%= @past_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @past_competitions.length > 0 ? 'Past competitions' : 'No past competitions selected' %>"></span></a></li>
 
-        <li class="same-line"><a href="#current" class="<%= @in_progress_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-play" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @in_progress_competitions.length > 0 ? 'Competitions in progress' : 'No competitions in progress' %>"></span></a></li>
+        <li class="same-line"><a href="#current" class="js-scroll-to <%= @in_progress_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-time" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @in_progress_competitions.length > 0 ? 'Competitions in progress' : 'No competitions in progress' %>"></span></a></li>
 
-        <li class="same-line"><a href="#upcoming" class="<%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>"></span></a></li>
+        <li class="same-line"><a href="#upcoming" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>"></span></a></li>
 
-        <li class="same-line last-one"><a href="#form">Top</a></li>
+        <li class="same-line last-one"><a href="#comp-query-form" class="js-scroll-to">Top</a></li>
       </ul>
     <% end %>
   </div>
-    <%= form_tag competitions_path, method: :get, class: "competition-select form-inline", id: "comp-query-form" do %>
-      <%= render 'index_form' %>
-    <% end %>
 
-    <% if @competitions.length == 0 %>
-      <div class="alert alert-warning">No competitions found.</div>
-    <% else %>
-      <% if params[:display] == "List" %>
-        <div class="row competition-list">          
-          <% if @in_progress_competitions.length > 0 %>
-            <div class="col-md-12">  
-              <a class="anchor" id="current"></a>
-              <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
-            </div>
-          <% end %>
+  <%= form_tag competitions_path, method: :get, class: "competition-select form-inline", id: "comp-query-form" do %>
+    <%= render 'index_form' %>
+  <% end %>
 
-          <% if @upcoming_competitions.length > 0 %>
-            <div class="col-md-12">
-              <a class="anchor" id="upcoming"></a>
-              <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
-            </div>
-          <% end %>
-
-          <% if @past_competitions.length > 0 %>
-            <div class="col-md-12">
-              <a class="anchor" id="past"></a>
-              <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="row competition-list">
-          <div class="col-xs-12 col-md-12">
-            <div id="comps-map"></div>
+  <% if @competitions.length == 0 %>
+    <div class="alert alert-warning">No competitions found.</div>
+  <% else %>
+    <% if params[:display] == "List" %>
+      <div class="row competition-list">          
+        <% if @in_progress_competitions.length > 0 %>
+          <div class="col-md-12" id="current">  
+            <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
           </div>
+        <% end %>
+
+        <% if @upcoming_competitions.length > 0 %>
+          <div class="col-md-12" id="upcoming">
+            <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
+          </div>
+        <% end %>
+
+        <% if @past_competitions.length > 0 %>
+          <div class="col-md-12" id="past">
+            <%= render 'index_table', competitions: @past_competitions, title: "Past competitions (last 90 days)" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="row competition-list">
+        <div class="col-xs-12 col-md-12">
+          <div id="comps-map"></div>
         </div>
-      <% end %>
+      </div>
     <% end %>
+  <% end %>
 </div>
 
 <script>
@@ -80,6 +78,21 @@ function affixWidth() {
   var width = affixBase.width() - parseInt(affixBase.css('padding-left')) - parseInt(affixBase.css('padding-right'));
   $("#simple-nav").width(width);
 }
+
+// From http://stackoverflow.com/a/30966965
+$(".js-scroll-to").click(function(e) {
+  e.preventDefault();
+
+  // Little hack to activate the affix thing and
+  // move correctly to the anchor.
+  $("#simple-nav").removeClass('affix-top').addClass('affix');
+
+  var destination = $(this).attr('href');
+
+  $('html, body').animate({
+    scrollTop: $(destination).offset().top - 40
+  }, 0);
+});
 
 $(function() {
   <% if params[:display] == 'Map' %>

@@ -225,6 +225,7 @@ $venue-map-wrapper-height: 400px;
 .anchor {
   display: block;
   height: 40px;
+  margin-top: -40px;
   visibility: hidden;
 }
 
@@ -232,7 +233,6 @@ $venue-map-wrapper-height: 400px;
   p {
     display: inline;
     margin-right: 15px;
-    background-color: #def;
   }
 
   .date {
@@ -244,11 +244,9 @@ $venue-map-wrapper-height: 400px;
 .medium {
   p.first {
     display: inline;
-    background-color: #dfd;
   }
   p.second {
     display: inline;
     margin-left: 15px;
-    background-color: #dfd;
   }
 }
