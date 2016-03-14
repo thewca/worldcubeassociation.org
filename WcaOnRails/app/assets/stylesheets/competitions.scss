@@ -191,13 +191,20 @@ $venue-map-wrapper-height: 400px;
 #simple-nav {
   z-index: 10;
   background-color: #eee;
+  line-height: 40px;
 }
 
 #lists-navigation {
   margin: 0;
 
+  padding-left: 10px;
+
   .last-one {
     float: right;
+  }
+
+  a.disabled {
+    color: #555;
   }
 }
 
@@ -213,6 +220,13 @@ $venue-map-wrapper-height: 400px;
   p {
     margin: 0;
   }
+}
+
+.anchor {
+  display: block;
+  height: 100px;
+  margin-top: -100px;
+  visibility: hidden;
 }
 
 .wide {
