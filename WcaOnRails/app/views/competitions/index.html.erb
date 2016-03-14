@@ -27,22 +27,22 @@
       <% if params[:display] == "List" %>
         <div class="row competition-list">          
           <% if @in_progress_competitions.length > 0 %>
-            <span class="anchor" id="current">Current</span>
-            <div class="col-md-12" id="current">  
+            <div class="col-md-12">  
+              <a class="anchor" id="current"></a>
               <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
             </div>
           <% end %>
 
           <% if @upcoming_competitions.length > 0 %>
-            <span class="anchor" id="upcoming">Future</span>
             <div class="col-md-12">
+              <a class="anchor" id="upcoming"></a>
               <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
             </div>
           <% end %>
 
           <% if @past_competitions.length > 0 %>
-            <span class="anchor" id="past">Gone</span>
-            <div class="col-md-12" id="past">
+            <div class="col-md-12">
+              <a class="anchor" id="past"></a>
               <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
             </div>
           <% end %>
