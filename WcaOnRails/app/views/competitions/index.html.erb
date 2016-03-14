@@ -3,34 +3,35 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <div id="scroller-anchor"></div>
-  <div id="comp-query" class="col-md-12">
+  <div id="simple-nav" class="col-md-12">
     <% if params[:display] == "List" %>
-      <ul>
+      <ul id="lists-navigation">
         <% if @in_progress_competitions.length > 0 %>
-          <li><a href="#current">Competitions in progress</a></li>
+          <li class="same-line"><a href="#current">Competitions in progress</a></li>
         <% else %>
-          <li>There are no competitions today.</li>
+          <li class="same-line">There are no competitions today.</li>
         <% end %>
 
         <% if @upcoming_competitions.length > 0 %>
-          <li><a href="#upcoming">Upcoming competitions</a></li>
+          <li class="same-line"><a href="#upcoming"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
         <% else %>
-          <li>There are no upcoming competitions selected.</li>
+          <li class="same-line">There are no upcoming competitions selected.</li>
         <% end %>
 
         <% if @past_competitions.length > 0 %>
-          <li><a href="#past">Past competitions</a></li>
+          <li class="same-line"><a href="#past"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
         <% else %>
-          <li>There are no past competitions selected.</li>
+          <li class="same-line">There are no past competitions selected.</li>
         <% end %>
+
+        <li class="same-line last-one"><a href="#form">Top</a></li>
       </ul>
     <% end %>
-
-    <%= form_tag competitions_path, method: :get, class: "competition-select form-inline" do %>
+  </div>
+    <%= form_tag competitions_path, method: :get, class: "competition-select form-inline", id: "comp-query-form" do %>
       <%= render 'index_form' %>
     <% end %>
-  </div>
+
     <% if @competitions.length == 0 %>
       <div class="alert alert-warning">No competitions found</div>
     <% else %>
@@ -42,10 +43,10 @@
               <% end %>
           </div>
 
-          <div class="col-md-6" id="upcoming">
+          <div class="col-md-12" id="upcoming">
             <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
           </div>
-          <div class="col-md-6" id="past">
+          <div class="col-md-12" id="past">
             <%= render 'index_table', competitions: @past_competitions, title: "Past competitions" %>
           </div>
         </div>
@@ -60,31 +61,7 @@
 </div>
 
 <script>
-function moveScroller() {
-  var move = function() {
-    var st = $(window).scrollTop();
-    var ot = $("#scroller-anchor").offset().top;
-    var s = $("#comp-query");
-    if(st > ot) {
-        s.css({
-            position: "fixed",
-            top: "0px",
-            "z-index": 10,
-            "background-color": "white"
-        });
-    } else {
-        if(st <= ot) {
-            s.css({
-                position: "relative",
-                top: ""
-            });
-        }
-    }
-  };
-  $(window).scroll(move);
-  move();
-}
-
+// See https://github.com/cubing/worldcubeassociation.org/issues/356
 function mapSize() {
   var nav = parseInt($(".navbar").outerHeight(true));
   var head = parseInt($("h2").outerHeight(true));
@@ -123,17 +100,47 @@ $(function() {
   <% end %>
 
   if (!isMobile()) {
-    moveScroller();
+    // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
+    $("#simple-nav").affix({
+      offset: {
+        top: $("#simple-nav").offset().top
+      }
+    });
+  }
+
+  if (isBigScreen()) {
+    $('.col-md-12').addClass('wide');
+  }
+
+  if (isMediumScreen()) {
+    $('.col-md-12').addClass('medium');
   }
 });
 
+// We check for small screens and remove the affix functionality
 $(window).resize(function() {
-  if (!isMobile()) {
-    console.log('big');
-    moveScroller();
-  }
-  else {
-    console.log('small');
+  if (isBigScreen()) {
+    // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
+    $("#simple-nav").affix({
+      offset: {
+        top: $("#simple-nav").offset().top
+      }
+    });
+
+    $('.col-md-12').addClass('wide').removeClass('medium');
+  } else if (isMediumScreen()) {
+    $("#simple-nav").affix({
+      offset: {
+        top: $("#simple-nav").offset().top
+      }
+    });
+
+    $('.col-md-12').addClass('medium').removeClass('wide');
+  } else if (isMobile()) {
+    // From https://github.com/twbs/bootstrap/issues/5870
+    $(window).off('.affix');
+    $("#simple-nav").removeClass('affix affix-top affix-bottom').removeData("bs.affix");
+    $(".col-md-12").removeClass('wide').removeClass('medium');
   }
 });
 </script>

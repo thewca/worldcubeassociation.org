@@ -188,22 +188,54 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
+#simple-nav {
+  z-index: 10;
+  background-color: #eee;
+}
+
+#lists-navigation {
+  margin: 0;
+
+  .last-one {
+    float: right;
+  }
+}
+
+.affix {
+  top: 0;
+}
+
+#comp-query-form {
+  margin-bottom: 15px;
+}
+
 .competition-info {
   p {
     margin: 0;
   }
+}
 
-  // For the on-going competitions, we use the full width of the parent, so it doesn't
-  // make sense to put the <p> on top of each other. Not sure how this will look on mobile.
-  &.in-progress {
-    p {
-      display: inline;
-      margin-right: 15px;
-    }
+.wide {
+  p {
+    display: inline;
+    margin-right: 15px;
+    background-color: #def;
+  }
+
+  .date {
+    float: left;
+    margin-right: 25px;
   }
 }
 
-.in-progress.date {
-  float: left;
-  margin-right: 25px;
+.medium {
+  p.first {
+    display: inline;
+    background-color: #dfd;
+  }
+  p.second {
+    display: inline;
+    margin-left: 15px;
+    background-color: #dfd;
+  }
 }

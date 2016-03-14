@@ -95,11 +95,15 @@ $.fn.competitionsMap = function(competitions) {
 };
 
 function isMobile() {
-  if(ResponsiveBootstrapToolkit.is('<sm')) {
-    return true;
-  } else {
-    return false;
-  }
+  return ResponsiveBootstrapToolkit.is('<sm');
+}
+
+function isMediumScreen() {
+  return ResponsiveBootstrapToolkit.is('md') || ResponsiveBootstrapToolkit.is('sm');
+}
+
+function isBigScreen() {
+  return ResponsiveBootstrapToolkit.is('>md');
 }
 
 $(function() {
