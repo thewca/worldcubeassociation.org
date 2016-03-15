@@ -157,8 +157,8 @@ RSpec.describe RegistrationsController do
       expect(registration.competitionId).to eq competition.id
     end
 
-    it "can delete registration" do
-      registration = FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
+    it "can delete registration when on waitlist" do
+      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
 
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
       expect do
@@ -167,6 +167,19 @@ RSpec.describe RegistrationsController do
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).to eq nil
+      expect(flash[:success]).to eq "Successfully deleted your registration for #{competition.name}"
+    end
+
+    it "cannot delete registration when approved" do
+      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+
+      expect do
+        delete :destroy, id: registration.id, user_is_deleting_theirself: true
+      end.to change { ActionMailer::Base.deliveries.length }.by(0)
+
+      expect(response).to redirect_to competition_path(competition) + '/register'
+      expect(Registration.find_by_id(registration.id)).not_to eq nil
+      expect(flash[:danger]).to eq "You cannot delete your registration because it has been approved. Please contact the organizer to delete your registration."
     end
 
     it "cannnot delete other people's registrations" do

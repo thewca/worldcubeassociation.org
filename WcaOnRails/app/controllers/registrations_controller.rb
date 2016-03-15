@@ -84,13 +84,15 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @registration = Registration.find(params[:id])
     if params.has_key?(:user_is_deleting_theirself)
-      if @registration.user_id == current_user.id
+      if @registration.user_id != current_user.id
+        flash[:danger] = "You cannot delete other people's registrations."
+      elsif !@registration.pending?
+        flash[:danger] = "You cannot delete your registration because it has been approved. Please contact the organizer to delete your registration."
+      else
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
         flash[:success] = "Successfully deleted your registration for #{@competition.name}"
-      elsif 
-        flash[:danger] = "You cannot delete other people's Registrations."
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
