@@ -55,15 +55,14 @@ RSpec.describe RegistrationsController do
       other_registration = FactoryGirl.create(:registration, competition: other_competition)
 
       patch :update, id: other_registration.id, registration: { status: :accepted }
-      expect(other_registration.reload.eventIds).to eq "333"
-      expect(response).to redirect_to root_url
-      expect(flash[:danger]).to match "not allowed to can_manage_competition?"
+      expect(other_registration.reload.pending?).to eq true
+      expect(flash[:danger]).to eq "Could not update registration"
     end
 
     it "accepts a pending registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { status: Registration::statuses[:accepted] }
+        patch :update, id: registration.id, registration: { status: :accepted }
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       expect(registration.reload.accepted?).to be true
     end
@@ -73,9 +72,10 @@ RSpec.describe RegistrationsController do
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { status: Registration::statuses[:pending] }
+        patch :update, id: registration.id, registration: { status: :pending, updated_at: registration.updated_at }, from_admin_view: true
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       expect(registration.reload.pending?).to be true
+      expect(response).to redirect_to edit_registration_path(registration)
     end
 
     it "can delete registration" do
@@ -135,6 +135,27 @@ RSpec.describe RegistrationsController do
       expect(registration2.reload.accepted?).to be true
       expect(accepted_registration.reload.accepted?).to be true
     end
+
+    describe "with views" do
+      render_views
+      it "does not update registration that changed" do
+        registration = FactoryGirl.create(:registration, competitionId: competition.id)
+
+        registration.guests = 4
+        registration.save!
+
+        patch :update, id: registration.id, registration: { status: :accepted, updated_at: 1.day.ago }, from_admin_view: true
+        expect(registration.reload.accepted?).to be false
+        expect(response.status).to eq 200
+      end
+    end
+
+    it "can accept own registration" do
+      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: organizer.id
+
+      patch :update, id: registration.id, registration: { status: :accepted }
+      expect(registration.reload.accepted?).to eq true
+    end
   end
 
   context "signed in as competitor" do
@@ -179,7 +200,7 @@ RSpec.describe RegistrationsController do
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).not_to eq nil
-      expect(flash[:danger]).to eq "You cannot delete your registration because it has been approved. Please contact the organizer to delete your registration."
+      expect(flash[:danger]).to eq "You cannot delete your registration."
     end
 
     it "cannnot delete other people's registrations" do
@@ -201,10 +222,50 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 1, comments: "", status: Registration::statuses[:accepted] }
+      post :create, competition_id: competition.id, registration: { event_ids: { "333" => "1" }, guests: 1, comments: "", status: :accepted }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end
+
+    it "can edit registration when pending" do
+      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
+
+      patch :update, id: registration.id, registration: { comments: "new comment" }
+      expect(registration.reload.comments).to eq "new comment"
+      expect(flash[:success]).to eq "Updated registration"
+      expect(response).to redirect_to competition_register_path(competition)
+    end
+
+    it "cannot edit registration when approved" do
+      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+
+      patch :update, id: registration.id, registration: { comments: "new comment" }
+      expect(registration.reload.comments).to eq ""
+      expect(flash.now[:danger]).to eq "Could not update registration"
+    end
+
+    it "cannot access edit page" do
+      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      get :edit, id: registration.id
+      expect(response).to redirect_to root_path
+    end
+
+    it "cannot edit someone else's registration" do
+      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      other_user = FactoryGirl.create(:user, :wca_id)
+      other_registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: other_user.id
+
+      patch :update, id: other_registration.id, registration: { comments: "new comment" }
+      expect(other_registration.reload.comments).to eq ""
+    end
+
+    it "cannot accept own registration" do
+      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
+
+      patch :update, id: registration.id, registration: { status: :accepted }
+      expect(registration.reload.accepted?).to eq false
+    end
+
   end
 
   context "register" do

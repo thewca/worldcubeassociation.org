@@ -329,6 +329,10 @@ class User < ActiveRecord::Base
     can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self)
   end
 
+  def can_edit_registration?(registration)
+    can_manage_competition?(registration.competition) || (registration.pending? && registration.user_id == self.id)
+  end
+
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
     can_admin_results? || competition.delegates.include?(self)

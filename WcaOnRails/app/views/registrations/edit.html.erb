@@ -8,6 +8,9 @@
       file: :horizontal_file_input,
       boolean: :horizontal_boolean
   }  do |f| %>
+    <%= hidden_field_tag :from_admin_view, "1" %>
+    <%= f.hidden_field :updated_at %>
+
     <% if @registration.user %>
       <div class="alert alert-info">
         This person registered with an account. You can edit their personal information
