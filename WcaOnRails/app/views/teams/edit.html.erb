@@ -23,7 +23,7 @@
       </div>
       <div class="panel-body form-inline">
         <%= f.simple_fields_for :team_members do |t| %>
-          <div class="members">
+          <div class="members <%= t.object.end_date != nil && t.object.end_date < Date.today ? 'past-member' : ''%>">
             <%= t.input :user_id, required: true, as: :user_ids, only_one: true %>
             <%= t.input :start_date, as: :date_picker, required: true %>
             <%= t.input :end_date, as: :date_picker %>
