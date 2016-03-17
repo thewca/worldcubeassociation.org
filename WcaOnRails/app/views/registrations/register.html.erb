@@ -59,8 +59,10 @@
           <% else %>
             You have registered for <%= @competition.name %>.
             You can see your registration information below.
-            <%# TODO - see https://github.com/cubing/worldcubeassociation.org/issues/269 %>
-            Contact the organizer if you wish to make a change.
+            
+            <% if !current_user.can_edit_registration?(@registration) %>
+              Contact the organizer if you wish to make a change.
+            <% end %>
 
             <% if @registration.pending? %>
               <div class="alert alert-warning">
@@ -75,27 +77,28 @@
           <% end %>
         </div>
 
-        <%= simple_form_for @registration, url: competition_registrations_path(@competition.id), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
+        <%= simple_form_for @registration, url: @registration.new_record? ? competition_registrations_path(@competition) : registration_path(@registration), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
           wrapper_mappings: {
             check_boxes: :horizontal_radio_and_checkboxes,
             radio_buttons: :horizontal_radio_and_checkboxes,
             file: :horizontal_file_input,
             boolean: :horizontal_boolean
         }  do |f| %>
-          <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !@registration.new_record? %>
+          <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !current_user.can_edit_registration?(@registration) %>
 
           <% if @competition.guests_enabled? %>
-            <%= f.input :guests, disabled: !@registration.new_record? %>
+            <%= f.input :guests, disabled: !current_user.can_edit_registration?(@registration) %>
           <% end %>
 
-          <%= f.input :comments, disabled: !@registration.new_record? %>
+          <%= f.input :comments, disabled: !current_user.can_edit_registration?(@registration) %>
 
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
               <% if @registration.new_record? %>
                 <%= f.submit "Register!", class: "btn btn-success" %>
-              <% else %>
-                <%= link_to "Delete", registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to your registration?", toggle: "tooltip" }, title: "Delete registration." %>
+              <% elsif current_user.can_edit_registration?(@registration) %>
+                <%= f.submit "Update Registration", class: "btn btn-success" %>
+                <%= link_to "Delete", registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete your registration?", toggle: "tooltip" }, title: "Delete registration." %>
               <% end %>
             </div>
           </div>

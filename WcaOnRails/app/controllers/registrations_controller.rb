@@ -22,7 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :update]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :edit]
 
   def edit_registrations
     @competition_registration_view = true
@@ -84,13 +84,13 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @registration = Registration.find(params[:id])
     if params.has_key?(:user_is_deleting_theirself)
-      if @registration.user_id == current_user.id
+      if !current_user.can_edit_registration?(@registration)
+        flash[:danger] = "You cannot delete your registration."
+      else
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
         flash[:success] = "Successfully deleted your registration for #{@competition.name}"
-      elsif 
-        flash[:danger] = "You cannot delete other people's Registrations."
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
@@ -141,8 +141,14 @@ class RegistrationsController < ApplicationController
 
   def update
     @registration = Registration.find(params[:id])
-    was_accepted = @registration.accepted?
-    if @registration.update_attributes(registration_params)
+    @competition = @registration.competition
+    if params[:from_admin_view] && @registration.updated_at.to_datetime != params[:registration][:updated_at].to_datetime
+      flash.now[:danger] = "Did not update registration because competitor updated registration since the page was loaded."
+      render :edit
+      return
+    end
+    was_accepted = @registration.accepted? 
+    if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_now
@@ -154,7 +160,11 @@ class RegistrationsController < ApplicationController
       else
         flash[:success] = "Updated registration"
       end
-      redirect_to edit_registration_path(@registration)
+      if params[:from_admin_view]
+        redirect_to edit_registration_path(@registration)
+      else
+        redirect_to competition_register_path(@registration.competition)
+      end
     else
       flash.now[:danger] = "Could not update registration"
       render :edit
