@@ -1769,6 +1769,15 @@ class Country
       "iso2": "US"
     },
     {
+      "id": "Uzbekistan",
+      "name": "Uzbekistan",
+      "continentId": "_Asia",
+      "latitude": 0,
+      "longitude": 0,
+      "zoom": 0,
+      "iso2": "UZ"
+    },
+    {
       "id": "Vanuatu",
       "name": "Vanuatu",
       "continentId": "_Oceania",
