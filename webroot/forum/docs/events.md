@@ -1100,6 +1100,20 @@ navbar_header_quick_links_before
 * Since: 3.1.0-RC2
 * Purpose: Add links to the top of the quick-links drop-down menu in the header
 
+navbar_header_user_profile_append
+===
+* Locations:
+    + styles/prosilver/template/navbar_header.html
+* Since: 3.1.8-RC1
+* Purpose: Add links to the right of the user drop down area
+
+navbar_header_user_profile_prepend
+===
+* Locations:
+    + styles/prosilver/template/navbar_header.html
+* Since: 3.1.8-RC1
+* Purpose: Add links to the left of the notification area
+
 navbar_header_username_append
 ===
 * Locations:
@@ -2440,6 +2454,38 @@ viewtopic_body_post_subject_before
     + styles/subsilver2/template/viewtopic_body.html
 * Since: 3.1.7-RC1
 * Purpose: Add data before post icon and subject
+
+viewtopic_body_postrow_back2top_after
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+    + styles/subsilver2/template/viewtopic_body.html
+* Since: 3.1.8-RC1
+* Purpose: Add content to the post's bottom after the back to top link 
+
+viewtopic_body_postrow_back2top_append
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+    + styles/subsilver2/template/viewtopic_body.html
+* Since: 3.1.8-RC1
+* Purpose: Add content to the post's bottom directly after the back to top link 
+
+viewtopic_body_postrow_back2top_before
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+    + styles/subsilver2/template/viewtopic_body.html
+* Since: 3.1.8-RC1
+* Purpose: Add content to the post's bottom before the back to top link 
+
+viewtopic_body_postrow_back2top_prepend
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+    + styles/subsilver2/template/viewtopic_body.html
+* Since: 3.1.8-RC1
+* Purpose: Add content to the post's bottom directly before the back to top link 
 
 viewtopic_body_postrow_custom_fields_after
 ===

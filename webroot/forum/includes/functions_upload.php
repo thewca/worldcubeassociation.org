@@ -776,9 +776,18 @@ class fileupload
 
 		$url = parse_url($upload_url);
 
+		$default_port = 80;
+		$hostname = $url['host'];
+
+		if ($url['scheme'] == 'https')
+		{
+			$default_port = 443;
+			$hostname = 'tls://' . $url['host'];
+		}
+
 		$host = $url['host'];
 		$path = $url['path'];
-		$port = (!empty($url['port'])) ? (int) $url['port'] : 80;
+		$port = (!empty($url['port'])) ? (int) $url['port'] : $default_port;
 
 		$upload_ary['type'] = 'application/octet-stream';
 
@@ -818,7 +827,7 @@ class fileupload
 		$errno = 0;
 		$errstr = '';
 
-		if (!($fsock = @fsockopen($host, $port, $errno, $errstr)))
+		if (!($fsock = @fsockopen($hostname, $port, $errno, $errstr)))
 		{
 			$file = new fileerror($user->lang[$this->error_prefix . 'NOT_UPLOADED']);
 			return $file;
@@ -919,7 +928,7 @@ class fileupload
 			return $file;
 		}
 
-		$tmp_path = (!@ini_get('safe_mode') || strtolower(@ini_get('safe_mode')) == 'off') ? false : $phpbb_root_path . 'cache';
+		$tmp_path = (!@ini_get('safe_mode') || strtolower(@ini_get('safe_mode')) == 'off') ? sys_get_temp_dir() : $phpbb_root_path . 'cache';
 		$filename = tempnam($tmp_path, unique_id() . '-');
 
 		if (!($fp = @fopen($filename, 'wb')))

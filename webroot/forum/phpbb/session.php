@@ -1557,7 +1557,7 @@ class session
 
 	public function update_session_infos()
 	{
-		global $db, $request;
+		global $config, $db, $request;
 
 		// No need to update if it's a new session. Informations are already inserted by session_create()
 		if (isset($this->data['session_created']) && $this->data['session_created'])
@@ -1582,6 +1582,8 @@ class session
 			$this->update_session($sql_ary);
 
 			$db->sql_return_on_error(false);
+
+			$this->data = array_merge($this->data, $sql_ary);
 
 			if ($this->data['user_id'] != ANONYMOUS && !empty($config['new_member_post_limit']) && $this->data['user_new'] && $config['new_member_post_limit'] <= $this->data['user_posts'])
 			{
