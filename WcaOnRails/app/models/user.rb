@@ -312,7 +312,7 @@ class User < ActiveRecord::Base
 
   def was_team_member?(team)
     member = self.team_members.find_by_team_id( self.teams.find_by_friendly_id(team) )
-    if member && member.end_date < Date.today
+    if member && member.end_date != nil && member.end_date < Date.today
       return true
     else
       return false
