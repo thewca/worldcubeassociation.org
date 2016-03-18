@@ -41,6 +41,19 @@ module WcaOnRails
     config.default_from_address = "notifications@worldcubeassociation.org"
     config.site_name = "World Cube Association"
 
+    config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
+      allow do
+        origins '*'
+
+        resource '/api/*',
+          headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+          methods: [:get, :post, :delete, :put, :patch, :options, :head],
+          max_age: 0,
+          credentials: false
+      end
+    end
+
+
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: -> (s) { Rails.logger.info(s) }
   end

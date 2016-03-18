@@ -51,7 +51,7 @@ gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'table-for'
 gem 'blocks'
-
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   gem 'spring'
