@@ -91,7 +91,10 @@ describe TeamsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      let(:admin) { FactoryGirl.create :admin }
+      before :each do
+        sign_in admin 
+      end
 
       it 'can change name' do
         patch :update, id: team, team: { name: "Hello" }
@@ -131,6 +134,13 @@ describe TeamsController do
         patch :update, id: team, team: { team_members_attributes: {"0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
         other_team = assigns(:team)
         expect(other_team.team_members.first.user.was_team_member?(team.friendly_id)).to be true
+      end
+
+      it 'cannot demote oneself' do
+        admin_team = admin.teams.first
+        patch :update, id: admin_team.id, team: { team_members_attributes: {"0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } }
+        admin_team.reload
+        expect(admin_team.team_members.first.end_date).to eq nil
       end
     end
   end
