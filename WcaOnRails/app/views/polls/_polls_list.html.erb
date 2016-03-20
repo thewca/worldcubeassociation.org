@@ -8,7 +8,7 @@
         <% end %>
       </td>
       <td>
-        <% if poll.poll_is_over? %>
+        <% if poll.over? %>
           <%= link_to "Results", polls_results_path(poll) %>
         <% else %>
           <% if poll.user_already_voted?(current_user) %>

@@ -23,6 +23,16 @@ module ApplicationHelper
     }[flash_type.to_sym] || flash_type.to_s
   end
 
+  def link_to_google_maps_place(text, latitude, longitude)
+    url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
+    link_to text, url, target: "_blank"
+  end
+
+  def link_to_google_maps_dir(text, start_latitude, start_longitude, end_latitude, end_longitude)
+    url = "https://www.google.com/maps/dir/#{start_latitude},#{start_longitude}/#{end_latitude},#{end_longitude}/"
+    link_to text, url, target: "_blank"
+  end
+
   def mail_to_wca_board
     mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
   end
@@ -33,7 +43,8 @@ module ApplicationHelper
     end
 
     options = {
-      hard_wrap: true
+      escape_html: true,
+      hard_wrap: true,
     }
 
     if target_blank
@@ -47,8 +58,8 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text)
-    id = pretty_text.parameterize
+  def anchorable(pretty_text, id=nil)
+    id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'>#{pretty_text} <a href='##{id}'><span class='glyphicon glyphicon-link'></span></a></span>".html_safe
   end
 
@@ -110,7 +121,7 @@ module ApplicationHelper
   end
 
   def wca_table_for(records, hover: true, striped: true, extra_table_class: "", &block)
-    table_classes = "table wca-results floatThead table-condensed #{extra_table_class}"
+    table_classes = "table wca-results floatThead table-greedy-last-column table-condensed #{extra_table_class}"
     if hover
       table_classes += " table-hover"
     end
@@ -122,7 +133,12 @@ module ApplicationHelper
         class: table_classes
       },
       header_column_html: {
-        class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
+        class: lambda { |column| column.name.to_s.gsub(/_/, '-') },
+        colspan: lambda do |column|
+          # Even for rounds with only 3 solves, we'll still create 5 <td>s.
+          # They'll be empty, so no one should notice them.
+          column.name == :solve1 ? 5 : 1
+        end,
       },
       data_row_html: {
         class: lambda { |record|
@@ -141,7 +157,7 @@ module ApplicationHelper
       data_column_html: {
         class: lambda do |record, column|
           c = [column.name.to_s.gsub(/_/, '-')]
-          if column.name == :position && record.tied_previous
+          if column.name == :pos && record.tied_previous
             c << "tied-previous"
           end
           c
@@ -156,30 +172,34 @@ module ApplicationHelper
             render "shared/wca_id", wca_id: registration.wca_id
           end
         end
-        table.define :wca_id_header do
+        table.header :wca_id do
           "WCA ID"
         end
 
-        table.define :position
-        table.define :position_header do
+        table.define :pos
+        table.header :pos do
           "#"
         end
 
-        table.define :countryId_header do
+        table.define :name do |record|
+          record.name
+        end
+
+        table.header :countryId do
           "Citizen of"
         end
 
         table.define :delegates do |competition|
           wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
-        table.define :delegates_header do
+        table.header :delegates do
           "Delegate(s)"
         end
 
         table.define :organizers do |competition|
           wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
         end
-        table.define :organizers_header do
+        table.header :organizers do
           "Organizer(s)"
         end
 
@@ -198,7 +218,7 @@ module ApplicationHelper
               event_span
             end
           end
-          table.define "#{event.id}_header" do
+          table.header event.id do
             event_span
           end
         end
@@ -206,7 +226,7 @@ module ApplicationHelper
         block.call(table)
 
         # Add an extra empty column at the end to take up all the extra
-        # horizontal space.
+        # horizontal space. See .table-greedy-last-column
         table.column data: ""
       end
     end

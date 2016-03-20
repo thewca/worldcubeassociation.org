@@ -1,6 +1,7 @@
 class Round
-  attr_accessor :id, :rank, :name, :cellName, :valid
+  attr_accessor :id, :rank, :name, :cellName, :valid, :final
   alias_method :valid?, :valid
+  alias_method :final?, :final
 
   @@all = []
   @@all_by_id = {}
@@ -9,6 +10,7 @@ class Round
     @rank = attributes[:rank]
     @name = attributes[:name]
     @cellName = attributes[:cellName]
+    @final = attributes[:final]
     @valid = attributes[:valid]
     if @valid
       @@all << self
@@ -22,6 +24,10 @@ class Round
 
   def self.find_by_id(id)
     @@all_by_id[id] || Round.new(id: id, rank: 0, name: "Invalid", cellName: "Invalid", valid: false)
+  end
+
+  def self.final_rounds
+    @@all_by_id.values.select(&:final?)
   end
 
   def self.all
@@ -58,6 +64,7 @@ class Round
       rank: 39,
       name: 'B Final',
       cellName: 'B Final',
+      final: false, # B Finals don't determine the podium
     },
     {
       id: '2',
@@ -88,12 +95,14 @@ class Round
       rank: 90,
       name: 'Combined Final',
       cellName: 'Combined Final',
+      final: true,
     },
     {
       id: 'f',
       rank: 99,
       name: 'Final',
       cellName: 'Final',
+      final: true,
     },
   ].each do |round_json|
     round_json[:valid] = true

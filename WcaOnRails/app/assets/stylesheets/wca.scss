@@ -58,18 +58,14 @@ table.table-greedy-last-column {
 
 table.wca-results {
   thead tr th {
-    white-space: nowrap;
-
-    &:last-child {
-      width: 100%;
-    }
-    &.position {
+    &.pos {
+      text-align: right;
     }
     &.name {
     }
     &.wca-id {
     }
-    &.countryId {
+    &.country {
     }
     &.average {
       text-align: right;
@@ -83,24 +79,27 @@ table.wca-results {
     &.single {
       text-align: right;
     }
+    &.solves {
+      text-align: center;
+    }
   }
   tbody tr td {
-    &:last-child {
-      width: 100%;
+    &.event {
     }
-    &.position {
+    &.pos {
+      text-align: right;
       &.tied-previous {
         @extend .text-muted;
       }
     }
+    &.round {
+    }
     &.name {
-      white-space: nowrap;
     }
     &.wca-id {
       vertical-align: middle;
     }
-    &.countryId {
-      white-space: nowrap;
+    &.country {
     }
     &.average {
       text-align: right;
@@ -114,18 +113,33 @@ table.wca-results {
     &.single {
       text-align: right;
     }
+    &.solve1,
+    &.solve2,
+    &.solve3,
+    &.solve4,
+    &.solve5, {
+      text-align: right;
+      &.trimmed {
+        &::before {
+          content: '(';
+        }
+        &::after {
+          content: ')';
+        }
+      }
+    }
   }
 
-  &.wca-results-sort-by-average {
-    .average,
-    .world-rank-average {
+  tbody tr.sort-by-average td {
+    &.average,
+    &.world-rank-average {
       font-weight: bold;
     }
   }
 
-  &.wca-results-sort-by-single {
-    .single,
-    .world-rank-single {
+  tbody tr.sort-by-single td {
+    &.single,
+    &.world-rank-single {
       font-weight: bold;
     }
   }

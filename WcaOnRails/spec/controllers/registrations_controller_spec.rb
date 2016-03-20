@@ -389,7 +389,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id ]
-      expect(registrations.map(&:position)).to eq [ 1, 2, 2 ]
+      expect(registrations.map(&:pos)).to eq [ 1, 2, 2 ]
       expect(registrations.map(&:tied_previous)).to eq [ false, false, true ]
     end
 
@@ -408,7 +408,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id, registration3.id ]
-      expect(registrations.map(&:position)).to eq [ 1, nil, nil ]
+      expect(registrations.map(&:pos)).to eq [ 1, nil, nil ]
     end
 
     it "handles 1 registration" do
@@ -425,7 +425,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration.id ]
-      expect(registrations.map(&:position)).to eq [ 1 ]
+      expect(registrations.map(&:pos)).to eq [ 1 ]
     end
 
     it "sorts 333bf by single" do
@@ -468,7 +468,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration1.id, registration2.id ]
-      expect(registrations.map(&:position)).to eq [ 1, 2 ]
+      expect(registrations.map(&:pos)).to eq [ 1, 2 ]
     end
 
     it "shows first timers on bottom" do
@@ -501,7 +501,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration1.id, registration3.id, registration2.id ]
-      expect(registrations.map(&:position)).to eq [ 1, nil, nil ]
+      expect(registrations.map(&:pos)).to eq [ 1, nil, nil ]
     end
 
     it "handles 1 registration" do
@@ -518,7 +518,7 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration.id ]
-      expect(registrations.map(&:position)).to eq [ 1 ]
+      expect(registrations.map(&:pos)).to eq [ 1 ]
     end
   end
 end

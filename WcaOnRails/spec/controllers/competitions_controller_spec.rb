@@ -9,7 +9,8 @@ describe CompetitionsController do
 
       it 'redirects to the old php page' do
         get :show, id: competition.id
-        expect(response).to redirect_to "/results/c.php?i=#{competition.id}"
+        expect(response.status).to eq 200
+        expect(assigns(:competition)).to eq competition
       end
 
       it '404s when competition is not visible' do
@@ -203,17 +204,17 @@ describe CompetitionsController do
       end
 
       it "saving removes nonexistent delegates" do
-        invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: 2000000)
+        invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: -1)
         invalid_competition_delegate.save(validate: false)
         patch :update, id: competition, competition: { name: competition.name }
         expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
-        invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: 2000000)
+        invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: -1)
         invalid_competition_organizer.save(validate: false)
         patch :update, id: competition, competition: { name: competition.name }
-        expect(CompetitionDelegate.find_by_id(invalid_competition_organizer.id)).to be_nil
+        expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
 
       it "can change competition id" do

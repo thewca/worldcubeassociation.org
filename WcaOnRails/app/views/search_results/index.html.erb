@@ -16,7 +16,7 @@
                 <%= competition.start_date %>
               </td>
               <td>
-                <%= link_to "/results/c.php?i=#{competition.id}" do %>
+                <%= link_to competition_path(competition) do %>
                   <%= wca_highlight(competition.name, @omni_query) %>
                 <% end %>
               </td>

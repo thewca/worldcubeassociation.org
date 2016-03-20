@@ -11,6 +11,7 @@ class Competition < ActiveRecord::Base
   has_many :delegates, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
+  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
 
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -173,6 +174,7 @@ class Competition < ActiveRecord::Base
       Result.where(competitionId: id_was).update_all(competitionId: id)
       Registration.where(competitionId: id_was).update_all(competitionId: id)
       Scramble.where(competitionId: id_was).update_all(competitionId: id)
+      CompetitionMedium.where(competitionId: id_was).update_all(competitionId: id)
       CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
       CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
     end
@@ -423,6 +425,9 @@ class Competition < ActiveRecord::Base
   end
 
   def dangerously_close_to?(c)
+    if !c.start_date || !self.start_date
+      return false
+    end
     days_until = (c.start_date - self.start_date).to_i
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
@@ -431,12 +436,58 @@ class Competition < ActiveRecord::Base
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
 
-  def is_over?
-    start_date < Date.today
+  def results_uploaded?
+    results.count > 0
+  end
+
+  def events_with_podium_results
+    results.where(roundId: Round.final_rounds.map(&:id)).where("pos >= 1 AND pos <= 3").group_by(&:event).sort_by { |event, results| event.rank }
+  end
+
+  def winning_results
+    results.where(roundId: Round.final_rounds.map(&:id)).where("pos = 1").sort_by { |r| r.event.rank }
+  end
+
+  def persons_with_results
+    results.group_by(&:person).sort_by { |person, results| person.name }.map do |person, results|
+      results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
+
+      # Mute (soften) each result that wasn't the competitor's last for the event.
+      last_event = nil
+      results.each do |result|
+        result.muted = (result.event == last_event)
+        last_event = result.event
+      end
+
+      [ person, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
+    end
+  end
+
+  def events_with_rounds_with_results
+    results.group_by(&:event).sort_by { |event, results| event.rank }.map do |event, results|
+      rounds_with_results = results.group_by(&:round).sort_by { |format, results| format.rank }.map do |round, results|
+        [ round, results.sort_by(&:pos) ]
+      end
+
+      [ event, rounds_with_results ]
+    end
+  end
+
+  def ongoing?
+    started? && !over?
+  end
+
+  def started?
+    !!start_date && start_date < Date.today
+  end
+
+  def over?
+    !!end_date && end_date < Date.today
   end
 
   def country_name
-    Country.find(countryId).name
+    country = Country.find_by_id(countryId)
+    country ? country.name : nil
   end
 
   def self.search(query, params: {})
@@ -447,7 +498,7 @@ class Competition < ActiveRecord::Base
   def to_jsonable
     json = {
       class: self.class.to_s.downcase,
-      url: "/results/c.php?i=#{id}",
+      url: Rails.application.routes.url_helpers.competition_path(self),
 
       id: id,
       name: name,

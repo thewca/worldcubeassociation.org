@@ -29,7 +29,7 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def poll_is_over?
+  def over?
     deadline < Time.now
   end
 
