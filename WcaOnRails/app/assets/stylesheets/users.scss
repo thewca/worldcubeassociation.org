@@ -22,12 +22,11 @@ input[type="radio"].center-vertically {
 
 #have-you-competed-nav>li{
   background: #bdc3c7;
-  right: -5px;
-  width: 49.4%;
-  display: inline-block;
+  width: 49.5%;
+  float:left;
 }
 
 
 #have-you-competed-nav>li:first-child{
-right: 0px;
+float:right;
 }
