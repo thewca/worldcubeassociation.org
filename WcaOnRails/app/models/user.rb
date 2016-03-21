@@ -263,7 +263,7 @@ class User < ActiveRecord::Base
     about_to_lose_access = !software_team? && !board_member?
     if current_user == self && about_to_lose_access
       if self.was_team_member?('software')
-        errors.add(:admin, "You cannot resign from your role as a software admin team member! Find another person to fire you.")
+        errors.add(:admin, "You cannot resign from your role as a software team member! Find another person to fire you.")
       elsif delegate_status_was == "board_member"
         errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
       end
@@ -286,41 +286,46 @@ class User < ActiveRecord::Base
   end
 
   def software_team?
-    team_member?('software') != false
+    team_member?('software')
   end
 
   def results_team?
-    team_member?('results') != false
+    team_member?('results')
   end
 
   def wrc_team?
-    team_member?('wrc') != false
+    team_member?('wrc')
   end
 
   def wdc_team?
-    team_member?('wdc') != false
+    team_member?('wdc')
   end
 
   def team_member?(team)
-    member = self.team_members.find_by_team_id( self.teams.find_by_friendly_id(team) )
-    if member && (member.end_date == nil || member.end_date >= Date.today)
-      return member
-    else
-      return false
+    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|
+      if member.current_member?
+        return true
+      end
     end
+    return false
   end
 
   def was_team_member?(team)
-    member = self.team_members.find_by_team_id( self.teams.find_by_friendly_id(team) )
-    if member && member.end_date != nil && member.end_date < Date.today
-      return true
-    else
-      return false
+    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|  
+      if !member.current_member?
+        return true
+      end
     end
+    return false
   end
 
   def team_leader?(team)
-    team_member?(team) && team_member(team).team_leader
+    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|
+      if member.current_member? && member.team_leader
+        return true
+      end      
+    end
+    return false
   end
 
   def admin?
@@ -440,8 +445,8 @@ class User < ActiveRecord::Base
       fields << :email
     end
     if admin? || board_member?
-      fields += UsersController.WCA_TEAMS
-      fields += UsersController.WCA_TEAMS.map { |role| :"#{role}_leader" }
+      #fields += UsersController.WCA_TEAMS
+      #fields += UsersController.WCA_TEAMS.map { |role| :"#{role}_leader" }
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
