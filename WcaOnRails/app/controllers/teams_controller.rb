@@ -43,7 +43,7 @@ class TeamsController < ApplicationController
     team_params = params.require(:team).permit(:name, :description, :friendly_id, team_members_attributes: [:id, :team_id, :user_id, :start_date, :end_date, :team_leader, :_destroy])
     if team_params[:team_members_attributes]
       team_params[:team_members_attributes].each do |member|
-        member.second.merge!(:current_user => current_user.id)
+        member.second.merge!(current_user: current_user.id)
       end
     end
     return team_params
