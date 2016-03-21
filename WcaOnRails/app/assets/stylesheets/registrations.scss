@@ -25,3 +25,16 @@ table.registrations-table {
   z-index: 1000; /* show over sticky table headers */
   bottom: calc(5px + #{$footer-height-px});
 }
+
+#have-you-competed-nav>li:first-child {
+background: #bdc3c7;
+width: 49.4%;
+display: inline-block;
+}
+
+#have-you-competed-nav>li{
+background: #bdc3c7;
+right: -5px;
+width: 49.4%;
+display: inline-block;
+}
