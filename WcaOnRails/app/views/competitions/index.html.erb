@@ -83,15 +83,18 @@ function affixWidth() {
 $(".js-scroll-to").click(function(e) {
   e.preventDefault();
 
-  // Little hack to activate the affix thing and
-  // move correctly to the anchor.
-  $("#simple-nav").removeClass('affix-top').addClass('affix');
+  // Only apply the movement if there is a div to go to.
+  if(!$(this).hasClass('disabled')) {
+    // Little hack to activate the affix thing and
+    // move correctly to the anchor.
+    $("#simple-nav").removeClass('affix-top').addClass('affix');
 
-  var destination = $(this).attr('href');
+    var destination = $(this).attr('href');
 
-  $('html, body').animate({
-    scrollTop: $(destination).offset().top - 40
-  }, 0);
+    $('html, body').animate({
+      scrollTop: $(destination).offset().top - 40
+    }, 0);
+  }
 });
 
 $(function() {

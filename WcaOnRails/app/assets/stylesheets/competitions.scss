@@ -238,6 +238,16 @@ $venue-map-wrapper-height: 400px;
   .date {
     float: left;
     margin-right: 25px;
+    min-width: 130px;
+    text-align: right;
+  }
+
+  .first {
+    margin-left: 20px;
+  }
+
+  .second {
+    margin-left: 20px;
   }
 }
 
@@ -250,3 +260,4 @@ $venue-map-wrapper-height: 400px;
     margin-left: 15px;
   }
 }
+
