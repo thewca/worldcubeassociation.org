@@ -36,9 +36,6 @@ class TeamsController < ApplicationController
     end
   end
 
-  def destroy
-  end
-
   def team_params
     team_params = params.require(:team).permit(:name, :description, :friendly_id, team_members_attributes: [:id, :team_id, :user_id, :start_date, :end_date, :team_leader, :_destroy])
     if team_params[:team_members_attributes]
