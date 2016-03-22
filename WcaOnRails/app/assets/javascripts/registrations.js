@@ -3,7 +3,7 @@ $(function() {
     return;
   }
 
-  var $registrationsTable = $('table.registrations-table');
+  var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
   if($registrationsTable.length > 0) {
     var showHideActions = function(e) {
       var $selectedRows = $registrationsTable.find("tr.selected-row");

@@ -1,7 +1,10 @@
 $(function() {
-  $("table.selectable-rows").each(function() {
+  $("table.selectable-rows:not(.floatThead-table)").each(function() {
     var $table = $(this);
-    var $th = $table.find("thead th:first-child");
+    $table.floatThead();
+
+    var $rowGroups = $table.floatThead("getRowGroups");
+    var $th = $rowGroups.find("th:first-child");
 
     var $checkboxes = $table.find(".select-row-checkbox");
     var $trs = $checkboxes.closest("tr");
@@ -20,7 +23,7 @@ $(function() {
       }
     }
     updateHeaderIcon();
-    $(this).on("change", "input.select-row-checkbox", function() {
+    $table.on("change", "input.select-row-checkbox", function() {
       var $tr = $(this).closest("tr");
       if(this.checked) {
         selectedCount++;
