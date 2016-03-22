@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_edit_users?) }
+  before_action -> { redirect_unless_user(:can_edit_teams?) }
 
   def index
     @teams = Team.all

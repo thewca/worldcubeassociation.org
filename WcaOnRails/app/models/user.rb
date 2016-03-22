@@ -337,6 +337,12 @@ class User < ActiveRecord::Base
     admin? || board_member? || results_team?
   end
 
+  # Team leaders should be able to edit their team.
+  # See https://github.com/cubing/worldcubeassociation.org/issues/427
+  def can_edit_teams?
+    admin? || board_member? || results_team?
+  end
+
   def can_create_competitions?
     can_admin_results? || any_kind_of_delegate?
   end
