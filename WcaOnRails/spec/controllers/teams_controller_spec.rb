@@ -82,8 +82,8 @@ describe TeamsController do
 
       it 'creates a new team' do
         post :create, team: { name: "Team2016" }
-        new_team = assigns(:team)
-        expect(response).to redirect_to edit_team_path(new_team)        
+        new_team = Team.find_by_name("Team2016")
+        expect(response).to redirect_to edit_team_path(new_team)
         expect(new_team.name).to eq "Team2016"
       end
     end
@@ -99,41 +99,41 @@ describe TeamsController do
       it 'can change name' do
         patch :update, id: team, team: { name: "Hello" }
         expect(response).to redirect_to edit_team_path(team)
-        new_team = assigns(:team)
-        expect(new_team.name).to eq "Hello"
+        team.reload
+        expect(team.name).to eq "Hello"
       end
 
       it 'can change description' do
         patch :update, id: team, team: { description: "This team is the best!" }
         expect(response).to redirect_to edit_team_path(team)
-        new_team = assigns(:team)
-        expect(new_team.description).to eq "This team is the best!"
+        team.reload
+        expect(team.description).to eq "This team is the best!"
       end
 
       it 'can change friendly ID' do
         patch :update, id: team, team: { friendly_id: "bestteam" }
         expect(response).to redirect_to edit_team_path(team)
-        new_team = assigns(:team)
-        expect(new_team.friendly_id).to eq "bestteam"
+        team.reload
+        expect(team.friendly_id).to eq "bestteam"
       end
 
       it 'can add a member' do
         member = FactoryGirl.create :user
         patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, team_leader: false } } }
         expect(response).to redirect_to edit_team_path(team)
-        new_team = assigns(:team)
-        expect(new_team.team_members.first.user.id).to eq member.id
+        team.reload
+        expect(team.team_members.first.user.id).to eq member.id
       end
 
       it 'can deactivate a member' do
         other_member = FactoryGirl.create :user
         patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false} } }
         expect(response).to redirect_to edit_team_path(team)
-        new_team = assigns(:team)
-        new_member = new_team.team_members.first
+        team.reload
+        new_member = team.team_members.first
         patch :update, id: team, team: { team_members_attributes: {"0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
-        other_team = assigns(:team)
-        expect(other_team.team_members.first.user.was_team_member?(team.friendly_id)).to be true
+        team.reload
+        expect(team.team_members.first.user.was_team_member?(team.friendly_id)).to be true
       end
 
       it 'cannot demote oneself' do

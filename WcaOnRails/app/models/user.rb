@@ -260,11 +260,9 @@ class User < ActiveRecord::Base
 
   validate :not_illegally_demoting_oneself
   def not_illegally_demoting_oneself
-    about_to_lose_access = !software_team? && !board_member?
+    about_to_lose_access = !board_member?
     if current_user == self && about_to_lose_access
-      if self.was_team_member?('software')
-        errors.add(:admin, "You cannot resign from your role as a software team member! Find another person to fire you.")
-      elsif delegate_status_was == "board_member"
+      if delegate_status_was == "board_member"
         errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
       end
     end
@@ -302,12 +300,7 @@ class User < ActiveRecord::Base
   end
 
   def team_member?(team)
-    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|
-      if member.current_member?
-        return true
-      end
-    end
-    return false
+    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).any?(&:current_member?)
   end
 
   def was_team_member?(team)
@@ -445,8 +438,6 @@ class User < ActiveRecord::Base
       fields << :email
     end
     if admin? || board_member?
-      #fields += UsersController.WCA_TEAMS
-      #fields += UsersController.WCA_TEAMS.map { |role| :"#{role}_leader" }
       fields << :delegate_status
       fields << :senior_delegate_id
       fields << :region
