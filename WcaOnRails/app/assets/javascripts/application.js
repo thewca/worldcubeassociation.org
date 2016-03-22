@@ -77,7 +77,7 @@ wca.datetimepicker = function(){
   // (see https://github.com/cubing/worldcubeassociation.org/issues/376#issuecomment-180547289).
   // Also, 'input' gets too annoying, because it flashes at every stroke until you have
   // a valid date typed.
-  $datetimepicker.on('blur', function() {
+  $datetimepicker.off('blur.wcaDateValidation').on('blur.wcaDateValidation', function() {
     var $this = $(this);
     var datetimepicker = $this.data("DateTimePicker");
     var val = $this.val();

@@ -1,5 +1,5 @@
 .members {
-  border-top: 1px solid #888;
+  border-top: 1px solid $gray;
   padding-top: 2px;
 
   input.date_picker.form-control {
@@ -12,5 +12,5 @@
 }
 
 .past-member {
-  background-color: #fc0;
+  background-color: $past-member;
 }
