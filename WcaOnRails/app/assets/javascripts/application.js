@@ -45,10 +45,7 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-$(function() {
-  $('.dropdown-toggle').dropdownHover();
-  $('form.are-you-sure').areYouSure();
-
+wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
   // We're using keepOpen: true here to allow the user to
@@ -95,6 +92,13 @@ $(function() {
       $this.addClass('alert-danger');
     }
   });
+}
+
+$(function() {
+  $('.dropdown-toggle').dropdownHover();
+  $('form.are-you-sure').areYouSure();
+
+  wca.datetimepicker();
 
   $('.datetimerange').each(function() {
     var $inputGroups = $(this).find('.date_picker.form-control');

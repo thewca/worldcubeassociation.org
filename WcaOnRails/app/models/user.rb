@@ -303,22 +303,8 @@ class User < ActiveRecord::Base
     self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).any?(&:current_member?)
   end
 
-  def was_team_member?(team)
-    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|  
-      if !member.current_member?
-        return true
-      end
-    end
-    return false
-  end
-
   def team_leader?(team)
-    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).each do |member|
-      if member.current_member? && member.team_leader
-        return true
-      end      
-    end
-    return false
+    self.team_members.where(team_id: self.teams.find_by_friendly_id(team).id, team_leader: true).any?(&:current_member?)
   end
 
   def admin?

@@ -27,9 +27,7 @@
           <td><%= team.description %></td>
           <td><%= team.team_members.map { |member| member.user.name }.to_sentence %></td>
           <td>
-            <% team.team_members.each do |member| %>
-              <%= member.team_leader ? member.user.name : "" %>
-            <% end %>
+            <%= team.team_members.where(team_leader: true).map { |leader| leader.user.name }.sort.to_sentence %>
           </td>
           <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>

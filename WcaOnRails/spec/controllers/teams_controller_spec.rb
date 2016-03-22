@@ -133,7 +133,7 @@ describe TeamsController do
         new_member = team.team_members.first
         patch :update, id: team, team: { team_members_attributes: {"0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
         team.reload
-        expect(team.team_members.first.user.was_team_member?(team.friendly_id)).to be true
+        expect(team.team_members.first.current_member?).to be false
       end
 
       it 'cannot demote oneself' do
