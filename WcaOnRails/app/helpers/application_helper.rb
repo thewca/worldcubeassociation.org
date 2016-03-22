@@ -81,8 +81,6 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
-  # TODO - table-for turns out to be pretty slow, so we're rolling our own
-  # table helper. Eventually we should get rid of all uses of wca_table_for.
   def wca_table(responsive: true, hover: true, striped: true, table_class: "", &block)
     table_classes = "table wca-results floatThead table-condensed table-greedy-last-column #{table_class}"
     if hover
@@ -95,119 +93,6 @@ module ApplicationHelper
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, class: table_classes do
         block.call
-      end
-    end
-  end
-
-  def wca_selectable_table_for(records, options={}, &block)
-    extra_table_class = options[:extra_table_class] + " selectable-rows"
-    wca_table_for(records, extra_table_class: extra_table_class) do |table|
-      table.column data: "", header: lambda { content_tag(:span) } do |record|
-        check_box_tag "#{record.class.name.downcase}-#{record.id}", "1", false, class: "select-row-checkbox"
-      end
-      block.call(table)
-    end
-  end
-
-  def wca_table_for(records, hover: true, striped: true, extra_table_class: "", &block)
-    table_classes = "table wca-results floatThead table-condensed #{extra_table_class}"
-    if hover
-      table_classes += " table-hover"
-    end
-    if striped
-      table_classes += " table-striped"
-    end
-    table_for_options = {
-      table_html: {
-        class: table_classes
-      },
-      header_column_html: {
-        class: lambda { |column| column.name.to_s.gsub(/_/, '-') }
-      },
-      data_row_html: {
-        class: lambda { |record|
-          c = []
-          if record.is_a?(Registration)
-            if record.pending?
-              c << "registration-pending"
-            end
-            if record.accepted?
-              c << "registration-accepted"
-            end
-          end
-          c
-        }
-      },
-      data_column_html: {
-        class: lambda do |record, column|
-          c = [column.name.to_s.gsub(/_/, '-')]
-          if column.name == :position && record.tied_previous
-            c << "tied-previous"
-          end
-          c
-        end
-      },
-    }
-
-    content_tag :div, class: "table-responsive" do
-      table_for records, table_for_options do |table|
-        table.define :wca_id do |registration|
-          if registration.personId
-            render "shared/wca_id", wca_id: registration.wca_id
-          end
-        end
-        table.define :wca_id_header do
-          "WCA ID"
-        end
-
-        table.define :position
-        table.define :position_header do
-          "#"
-        end
-
-        table.define :countryId_header do
-          "Citizen of"
-        end
-
-        table.define :delegates do |competition|
-          wca_highlight competition.delegates.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :delegates_header do
-          "Delegate(s)"
-        end
-
-        table.define :organizers do |competition|
-          wca_highlight competition.organizers.map(&:name).to_sentence, current_user.name, do_not_transliterate: true
-        end
-        table.define :organizers_header do
-          "Organizer(s)"
-        end
-
-        (Event.all_official + Event.all_deprecated).each do |event|
-          event_span = content_tag(:span, "",
-            title: event.name,
-            class: "cubing-icon icon-#{event.id}",
-            data: {
-              toggle: "tooltip",
-              placement: "bottom",
-              container: "body",
-            },
-          )
-          table.define event.id do |registration|
-            if registration.events.include?(event)
-              event_span
-            end
-          end
-          table.define "#{event.id}_header" do
-            event_span
-          end
-        end
-
-        block.call(table)
-
-        # Add an extra empty column at the end to take up all the extra
-        # horizontal space.
-        table.column data: ""
       end
     end
   end

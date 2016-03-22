@@ -10,56 +10,112 @@
         <h2>Approved registrations</h2>
       <% end %>
       <% registrations = @competition.registrations.send(status).order(created_at: :asc, id: :asc) %>
-      <%= wca_selectable_table_for registrations, extra_table_class: "registrations-table" do |table| %>
-        <% table.column :data => "Edit", link_url: lambda { |registration| edit_registration_path(registration) } %>
-
-        <% table.column :wca_id %>
-        <% table.column :name %>
-        <% table.column :countryId %>
-        <% table.column :birthday %>
-        <% @competition.events.each do |event| %>
-          <% table.column event.id.to_s %>
-        <% end %>
-
-        <% table.column :guests do |registration| %>
-          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %> <%= registration.guests_old %>">
-            <%= registration.guests %>
-            <% #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
-            <%= registration.guests_old %>
-          </span>
-        <% end %>
-        <% table.column :comments do |registration| %>
-          <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
-            <%= registration.comments %>
-          </span>
-        <% end %>
-        <% table.column :data => "" do |registration| %>
-          <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-            <span class="glyphicon glyphicon-envelope"></span>
-          <% end %>
-        <% end %>
-
-        <% table.define :footer do %>
-          <tfoot>
-            <tr>
-              <td colspan="4">
-                <%= render "registration_info_people", registrations: registrations %>
-              </td>
-              <% country_count = registrations.map(&:countryId).uniq.length %>
-              <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
-              <td></td>
-              <% @competition.events.each do |event| %>
-                <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
-              <% end %>
+      <%= wca_table table_class: "registrations-table selectable-rows" do %>
+        <thead>
+          <tr>
+            <th><span></span></th>
+            <th></th>
+            <th class="wca-id">WCA ID</th>
+            <th class="name">Name</th>
+            <th class="countryId">Citizen of</th>
+            <th class="birthday">Birthday</th>
+            <% @competition.events.each do |event| %>
               <td>
-                <% if @competition.guests_enabled? %>
-                  <%= registrations.map(&:guests).reduce { |sum, guests| sum + guests } %>
+                <span title="<%= event.name %>"
+                      class="cubing-icon icon-<%= event.id %>"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      data-container="body">
+                </span>
+              </td>
+            <% end %>
+
+            <th class="guests">Guests</th>
+            <th class="comments">Comments</th>
+            <th></th>
+
+            <!-- Extra column for .table-greedy-last-column -->
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% registrations.each do |registration| %>
+            <tr class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
+              <td>
+                <span>
+                  <input type="checkbox" name="registration-<%= registration.id %>" value="1" class="select-row-checkbox" />
+                </span>
+              </td>
+
+              <td>
+                <%= link_to "Edit", edit_registration_path(registration) %>
+              </td>
+
+              <td class="wca-id">
+                <% if registration.wca_id %>
+                  <%= render "shared/wca_id", wca_id: registration.wca_id %>
                 <% end %>
               </td>
-              <td colspan="3"></td>
+
+              <td class="name"><%= registration.name %></td>
+              <td class="countryId"><%= registration.countryId %></td>
+              <td class="birthday"><%= registration.birthday %></td>
+              <% @competition.events.each do |event| %>
+                <td>
+                  <% if registration.events.include?(event) %>
+                    <span title="<%= event.name %>"
+                          class="cubing-icon icon-<%= event.id %>"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          data-container="body">
+                    </span>
+                  <% end %>
+                </td>
+              <% end %>
+              <td class="guests">
+                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %> <%= registration.guests_old %>">
+                  <%= registration.guests %>
+                  <% #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
+                  <%= registration.guests_old %>
+                </span>
+              </td>
+              <td class="comments">
+                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
+                  <%= registration.comments %>
+                </span>
+              </td>
+              <td>
+                <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+                  <span class="glyphicon glyphicon-envelope"></span>
+                <% end %>
+              </td>
+
+              <!-- Extra column for .table-greedy-last-column -->
+              <td></td>
             </tr>
-          </tfoot>
-        <% end %>
+          <% end %>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td colspan="4">
+              <%= render "registration_info_people", registrations: registrations %>
+            </td>
+            <% country_count = registrations.map(&:countryId).uniq.length %>
+            <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+            <td></td>
+            <% @competition.events.each do |event| %>
+              <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
+            <% end %>
+            <td>
+              <% if @competition.guests_enabled? %>
+                <%= registrations.map(&:guests).reduce { |sum, guests| sum + guests } %>
+              <% end %>
+            </td>
+            <td colspan="3"></td>
+          </tr>
+        </tfoot>
       <% end %>
     <% end %>
 
