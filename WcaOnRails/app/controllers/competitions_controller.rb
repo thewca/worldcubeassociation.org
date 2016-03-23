@@ -1,6 +1,7 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:index, :post_announcement, :post_results, :admin_edit]
+  PAST_COMPETITIONS_DAYS = 90
+  before_action :authenticate_user!, except: [:show, :index]
+  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:post_announcement, :post_results, :admin_edit]
 
   private def competition_from_params
     competition = Competition.find(params[:id])
@@ -19,7 +20,52 @@ class CompetitionsController < ApplicationController
   end
 
   def index
-    @competitions = Competition.all.select([:id, :name, :cityName, :countryId]).order(:year, :month, :day).reverse_order
+    # We use the ["",""] to separate the items. They are disabled in the view, so the
+    # user cannot select an empty param.
+    @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
+                 'Country' => Country.all.map { |country| [country.name, country.id] } }
+    @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
+    @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.where(showAtAll: true).map(&:year).uniq.sort.reverse!
+    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).reverse_order
+
+    # This needs to be the first thing, otherwise @competitions will be an array instead of an object
+    # and the .where will not work.
+    if params[:years].blank?
+      params[:years] = "current"
+    end
+
+    if params[:event].blank?
+      params[:event] = "all"
+    end
+
+    if params[:region].blank?
+      params[:region] = "all"
+    end
+
+    if params[:display].blank?
+      params[:display] = "List"
+    end
+
+    if params[:years] == "current"
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?", (Date.today - PAST_COMPETITIONS_DAYS))
+    elsif params[:years] != "all"
+      @competitions = @competitions.select { |competition| competition.year.to_s == params[:years] }
+    end
+
+    if params[:event] && params[:event] != "all"
+      @competitions = @competitions.select { |competition| competition.has_event?(Event.find(params[:event])) }
+    end
+
+    if params[:region] && params[:region] != "all"
+      @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
+    end
+
+    if params[:search].present?
+      @competitions = @competitions.select { |competition| competition.contains?(params[:search]) }
+    end
+
+    @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
+    @in_progress_competitions, @upcoming_competitions = @not_past_competitions.partition(&:in_progress?)
   end
 
   def create

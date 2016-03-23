@@ -27,6 +27,8 @@
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
+//= require markerclusterer
+//= require bootstrap-toolkit
 //= require_self
 //= require_tree .
 
@@ -44,6 +46,64 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   });
   return wca._pendingAjaxById[id];
 };
+
+$.fn.competitionsMap = function(competitions) {
+  var $map = new google.maps.Map(document.getElementById(this.attr('id')), {
+    zoom: 2,
+    center: {lat: 0, lng: 0},
+    scrollwheel: true
+  });
+
+  var markers = [];
+
+  competitions.forEach(function(c) {
+
+    var contentString = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    if (c.is_over) {
+      iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
+    } else {
+      iconImage = 'https://maps.google.com/mapfiles/ms/icons/red.png';
+    }
+
+    c.marker = new google.maps.Marker({
+      map: $map,
+      position: {
+        lat: c.latitude_degrees,
+        lng: c.longitude_degrees,
+      },
+      title: c.name,
+      icon: iconImage
+    });
+
+    c.marker.addListener('click', function() {
+      infowindow.open($map, c.marker);
+    });
+
+    markers.push(c.marker);
+  });
+
+  var markerCluster = new MarkerClusterer($map, markers, {
+    maxZoom: 10,
+    clusterSize: 30
+  });
+};
+
+function isMobile() {
+  return ResponsiveBootstrapToolkit.is('<sm');
+}
+
+function isMediumScreen() {
+  return ResponsiveBootstrapToolkit.is('md') || ResponsiveBootstrapToolkit.is('sm');
+}
+
+function isBigScreen() {
+  return ResponsiveBootstrapToolkit.is('>md');
+}
 
 $(function() {
   $('.dropdown-toggle').dropdownHover();
@@ -116,16 +176,18 @@ $(function() {
   $('input.wca-autocomplete').wcaAutocomplete();
 
   var $tablesToFloatHeaders = $('table.floatThead');
-  $tablesToFloatHeaders.floatThead({
-    zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
-  });
-  // Workaround for https://github.com/mkoryak/floatThead/issues/263
-  $tablesToFloatHeaders.each(function() {
-    var $table = $(this);
-    $table.closest('.table-responsive').scroll(function(e) {
-      $table.floatThead('reflow');
+  if (!isMobile()) {
+    $tablesToFloatHeaders.floatThead({
+      zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
     });
-  });
+    // Workaround for https://github.com/mkoryak/floatThead/issues/263
+    $tablesToFloatHeaders.each(function() {
+      var $table = $(this);
+      $table.closest('.table-responsive').scroll(function(e) {
+        $table.floatThead('reflow');
+      });
+    });
+  }
 
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they

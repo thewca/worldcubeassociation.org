@@ -126,7 +126,7 @@ $venue-map-wrapper-height: 400px;
   width: 800px;
 }
 
-.competitions-table {
+.competitions-admin-table {
 
   tr.not-past {
     &.not-visible {
@@ -150,3 +150,114 @@ $venue-map-wrapper-height: 400px;
 .big-column {
   width: 100%;
 }
+
+.competition-select.form-inline {
+  background-color: #fff;
+  width: 100%;
+  padding-bottom: 10px;
+
+  input,
+  select {
+    font-size: 12px;
+    font-weight: normal;
+    display: block;
+  }
+
+  button {
+    width: 100px;
+  }
+
+  .btn-group {
+    display: block;
+  }
+}
+
+.same-line {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.competition-list {
+  li:nth-child(odd) {
+    background-color: $table-bg-accent;
+  }
+
+  .date {
+    float: right;
+    font-weight: bold;
+  }
+}
+
+#simple-nav {
+  z-index: 10;
+  background-color: #eee;
+  line-height: 40px;
+}
+
+#lists-navigation {
+  margin: 0;
+
+  padding-left: 10px;
+
+  :last-child {
+    float: right;
+  }
+
+  a.disabled {
+    color: #555;
+  }
+}
+
+.affix {
+  top: 0;
+}
+
+#comp-query-form {
+  margin-bottom: 15px;
+}
+
+.competition-info {
+  p {
+    margin: 0;
+  }
+}
+
+.anchor {
+  display: block;
+  height: 40px;
+  margin-top: -40px;
+  visibility: hidden;
+}
+
+@media (min-width: 1170px) {
+  p {
+    display: inline;
+    margin-right: 15px;
+  }
+
+  .competition-list .date {
+    float: left;
+    margin-right: 25px;
+    min-width: 130px;
+    text-align: right;
+  }
+
+  .competition-list .competition-link {
+    margin-left: 20px;
+  }
+
+  .competition-list .location {
+    margin-left: 20px;
+  }
+}
+
+@media (min-width: 750px) {
+  p.competition-link {
+    display: inline;
+  }
+  p.location {
+    display: inline;
+    margin-left: 15px;
+  }
+}
+
