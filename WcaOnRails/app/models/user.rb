@@ -300,7 +300,7 @@ class User < ActiveRecord::Base
   end
 
   def team_member?(team)
-    self.team_members.where(team_id: ( self.teams.find_by_friendly_id(team) ) ).any?(&:current_member?)
+    self.team_members.where(team_id: self.teams.find_by_friendly_id(team)).any?(&:current_member?)
   end
 
   def team_leader?(team)

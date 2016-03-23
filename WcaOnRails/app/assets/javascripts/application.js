@@ -92,7 +92,7 @@ wca.datetimepicker = function(){
       $this.addClass('alert-danger');
     }
   });
-}
+};
 
 $(function() {
   $('.dropdown-toggle').dropdownHover();

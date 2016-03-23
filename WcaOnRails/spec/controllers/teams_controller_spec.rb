@@ -142,6 +142,13 @@ describe TeamsController do
         admin_team.reload
         expect(admin_team.team_members.first.end_date).to eq nil
       end
+
+      it 'cannot set start_date < end_date' do
+        member = FactoryGirl.create :user
+        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } }
+        invalid_team = assigns(:team)
+        expect(invalid_team).to be_invalid
+      end
     end
   end
 end

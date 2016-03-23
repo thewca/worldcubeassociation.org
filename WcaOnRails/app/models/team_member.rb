@@ -8,6 +8,13 @@ class TeamMember < ActiveRecord::Base
     end_date == nil || end_date > Date.today
   end
 
+  validate :start_date_must_be_earlier_than_end_date
+  def start_date_must_be_earlier_than_end_date
+    if end_date != nil && start_date >= end_date
+      errors.add(:start_date, " must be earlier than end_date.")
+    end
+  end
+
   validate :cannot_demote_leader
   def cannot_demote_leader
     if !current_member? && team_leader
