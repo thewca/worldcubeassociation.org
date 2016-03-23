@@ -191,7 +191,12 @@ $venue-map-wrapper-height: 400px;
 #simple-nav {
   z-index: 10;
   background-color: #eee;
-  line-height: 40px;
+  line-height: 39px;
+
+  &.affix {
+    top: 0;
+    border-bottom: 1px solid $gray-base;
+  }
 }
 
 #lists-navigation {
@@ -206,10 +211,6 @@ $venue-map-wrapper-height: 400px;
   a.disabled {
     color: #555;
   }
-}
-
-.affix {
-  top: 0;
 }
 
 #comp-query-form {
@@ -229,7 +230,7 @@ $venue-map-wrapper-height: 400px;
   visibility: hidden;
 }
 
-@media (min-width: 1170px) {
+@media (min-width: $screen-lg) {
   p {
     display: inline;
     margin-right: 15px;
@@ -251,7 +252,7 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-@media (min-width: 750px) {
+@media (min-width: $screen-sm) {
   p.competition-link {
     display: inline;
   }
