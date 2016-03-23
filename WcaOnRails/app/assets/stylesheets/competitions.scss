@@ -199,7 +199,7 @@ $venue-map-wrapper-height: 400px;
 
   padding-left: 10px;
 
-  .last-one {
+  :last-child {
     float: right;
   }
 
@@ -229,33 +229,33 @@ $venue-map-wrapper-height: 400px;
   visibility: hidden;
 }
 
-.wide {
+@media (min-width: 1170px) {
   p {
     display: inline;
     margin-right: 15px;
   }
 
-  .date {
+  .competition-list .date {
     float: left;
     margin-right: 25px;
     min-width: 130px;
     text-align: right;
   }
 
-  .first {
+  .competition-list .competition-link {
     margin-left: 20px;
   }
 
-  .second {
+  .competition-list .location {
     margin-left: 20px;
   }
 }
 
-.medium {
-  p.first {
+@media (min-width: 750px) {
+  p.competition-link {
     display: inline;
   }
-  p.second {
+  p.location {
     display: inline;
     margin-left: 15px;
   }

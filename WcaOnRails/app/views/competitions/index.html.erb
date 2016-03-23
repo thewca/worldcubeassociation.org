@@ -13,7 +13,7 @@
 
         <li class="same-line"><a href="#upcoming" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>"></span></a></li>
 
-        <li class="same-line last-one"><a href="#comp-query-form" class="js-scroll-to">Top</a></li>
+        <li class="same-line"><a href="#comp-query-form" class="js-scroll-to">Top</a></li>
       </ul>
     <% end %>
   </div>
@@ -41,7 +41,7 @@
 
         <% if @past_competitions.length > 0 %>
           <div class="col-md-12" id="past">
-            <%= render 'index_table', competitions: @past_competitions, title: "Past competitions (last 90 days)" %>
+            <%= render 'index_table', competitions: @past_competitions, title: "Past competitions (last #{CompetitionsController::PAST_COMPETITIONS_DAYS} days)" %>
           </div>
         <% end %>
       </div>
@@ -125,53 +125,18 @@ $(function() {
     $(this).removeAttr('href');
   });
 
-  if (!isMobile()) {
-    // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
-    $("#simple-nav").affix({
-      offset: {
-        top: $("#simple-nav").offset().top
-      }
-    });
-  }
-
-  if (isBigScreen()) {
-    $('.col-md-12').addClass('wide');
-  }
-
-  if (isMediumScreen()) {
-    $('.col-md-12').addClass('medium');
-  }
-
+  // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
+  $("#simple-nav").affix({
+    offset: {
+      top: $("#simple-nav").offset().top
+    }
+  });
+  
   // Keep the navigation bar width (see above)
   affixWidth();
 });
 
-// We check for small screens and remove the affix functionality
 $(window).resize(function() {
-  if (isBigScreen()) {
-    // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
-    $("#simple-nav").affix({
-      offset: {
-        top: $("#simple-nav").offset().top
-      }
-    });
-
-    $('.col-md-12').addClass('wide').removeClass('medium');
-  } else if (isMediumScreen()) {
-    $("#simple-nav").affix({
-      offset: {
-        top: $("#simple-nav").offset().top
-      }
-    });
-
-    $('.col-md-12').addClass('medium').removeClass('wide');
-  } else if (isMobile()) {
-    // From https://github.com/twbs/bootstrap/issues/5870
-    $(window).off('.affix');
-    $("#simple-nav").removeClass('affix affix-top affix-bottom').removeData("bs.affix");
-    $(".col-md-12").removeClass('wide').removeClass('medium');
-  }
-
   affixWidth();
 });
 
@@ -179,3 +144,4 @@ $(window).scroll(function() {
   affixWidth();
 });
 </script>
+
