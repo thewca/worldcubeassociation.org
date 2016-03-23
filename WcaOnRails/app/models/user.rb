@@ -299,12 +299,12 @@ class User < ActiveRecord::Base
     team_member?('wdc')
   end
 
-  def team_member?(team)
-    self.team_members.where(team_id: self.teams.find_by_friendly_id(team)).any?(&:current_member?)
+  def team_member?(team_friendly_id)
+    self.team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).any?(&:current_member?)
   end
 
-  def team_leader?(team)
-    self.team_members.where(team_id: self.teams.find_by_friendly_id(team).id, team_leader: true).any?(&:current_member?)
+  def team_leader?(team_friendly_id)
+    self.team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).any?(&:current_member?)
   end
 
   def admin?
