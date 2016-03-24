@@ -92,7 +92,7 @@ $(".js-scroll-to").click(function(e) {
     var destination = $(this).attr('href');
 
     $('html, body').animate({
-      scrollTop: $(destination).offset().top - 40
+      scrollTop: $(destination).offset().top - $("#simple-nav").height()
     }, 0);
   }
 });
