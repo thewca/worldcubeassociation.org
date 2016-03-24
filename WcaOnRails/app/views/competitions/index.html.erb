@@ -3,7 +3,7 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <div id="simple-nav" class="col-md-12">
+  <div id="comp-list-nav" class="col-md-12">
     <% if params[:display] == "List" %>
       <ul id="lists-navigation">
 
@@ -17,6 +17,8 @@
       </ul>
     <% end %>
   </div>
+
+  <div class="comp-list-nav-placeholder"></div>
 
   <%= form_tag competitions_path, method: :get, class: "competition-select form-inline", id: "comp-query-form" do %>
     <%= render 'index_form' %>
@@ -76,7 +78,7 @@ function affixWidth() {
   // and http://stackoverflow.com/a/24908611
   var affixBase = $(".container");
   var width = affixBase.width() - parseInt(affixBase.css('padding-left')) - parseInt(affixBase.css('padding-right'));
-  $("#simple-nav").width(width);
+  $("#comp-list-nav").width(width);
 }
 
 // From http://stackoverflow.com/a/30966965
@@ -87,12 +89,11 @@ $(".js-scroll-to").click(function(e) {
   if(!$(this).hasClass('disabled')) {
     // Little hack to activate the affix thing and
     // move correctly to the anchor.
-    $("#simple-nav").removeClass('affix-top').addClass('affix');
 
     var destination = $(this).attr('href');
 
     $('html, body').animate({
-      scrollTop: $(destination).offset().top - $("#simple-nav").height()
+      scrollTop: $(destination).offset().top - $("#comp-list-nav").height()
     }, 0);
   }
 });
@@ -126,9 +127,9 @@ $(function() {
   });
 
   // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
-  $("#simple-nav").affix({
+  $("#comp-list-nav").affix({
     offset: {
-      top: $("#simple-nav").offset().top
+      top: $("#comp-list-nav").offset().top
     }
   });
   

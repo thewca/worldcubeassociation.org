@@ -188,15 +188,28 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-#simple-nav {
+$comp-list-nav-height: 39px;
+#comp-list-nav {
   z-index: 10;
   background-color: #eee;
-  line-height: 39px;
+  line-height: $comp-list-nav-height;
 
   &.affix {
     top: 0;
     border-bottom: 1px solid $gray-base;
   }
+
+  .affix + .comp-list-nav-placeholder {
+    display: inherit;
+  }
+
+  + .comp-list-nav-placeholder {
+    display: none;
+  }
+}
+
+.comp-list-nav-placeholder {
+  height: $comp-list-nav-height;
 }
 
 #lists-navigation {
