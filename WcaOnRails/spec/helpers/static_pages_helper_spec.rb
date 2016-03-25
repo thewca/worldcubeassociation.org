@@ -6,10 +6,12 @@ describe StaticPagesHelper do
       team = FactoryGirl.create(:team)
       member = FactoryGirl.create(:user, name: "Jeremy")
       other_member = FactoryGirl.create(:user, name: "Pedro")
+      another_member = FactoryGirl.create(:user, name: "Aaron")
       team_member = FactoryGirl.create(:team_member, team_id: team.id, user_id: member.id, start_date: Date.today-1, team_leader: true)
       other_team_member = FactoryGirl.create(:team_member, team_id: team.id, user_id: other_member.id, start_date: Date.today-1)
+      another_team_member = FactoryGirl.create(:team_member, team_id: team.id, user_id: another_member.id, start_date: Date.today-1)
       string = helper.format_team_members(team.friendly_id)
-      expect(string).to eq "Jeremy (leader), Pedro"
+      expect(string).to eq "Jeremy (leader), Aaron, Pedro"
     end
   end
 end
