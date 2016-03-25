@@ -26,7 +26,8 @@ class Contact < MailForm::Base
     {
       subject: subject,
       to: [ your_email, to_email ],
-      from: %("#{name}" <#{your_email}>)
+      reply_to: your_email,
+      from: WcaOnRails::Application.config.default_from_address,
     }
   end
 end
