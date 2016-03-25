@@ -28,9 +28,9 @@
     <div class="alert alert-warning">No competitions found.</div>
   <% else %>
     <% if params[:display] == "List" %>
-      <div class="row competition-list">          
+      <div class="row competition-list">
         <% if @in_progress_competitions.length > 0 %>
-          <div class="col-md-12" id="current">  
+          <div class="col-md-12" id="current">
             <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
           </div>
         <% end %>
@@ -132,7 +132,7 @@ $(function() {
       top: $("#comp-list-nav").offset().top
     }
   });
-  
+
   // Keep the navigation bar width (see above)
   affixWidth();
 });

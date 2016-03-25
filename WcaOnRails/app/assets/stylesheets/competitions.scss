@@ -197,10 +197,10 @@ $comp-list-nav-height: 39px;
   &.affix {
     top: 0;
     border-bottom: 1px solid $gray-base;
-  }
 
-  .affix + .comp-list-nav-placeholder {
-    display: inherit;
+    + .comp-list-nav-placeholder {
+      display: inherit;
+    }
   }
 
   + .comp-list-nav-placeholder {
