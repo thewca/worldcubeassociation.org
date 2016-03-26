@@ -1,0 +1,32 @@
+<div class="form-group">
+  <%= label_tag(:event) %>
+  <%= select_tag(:event, options_for_select(@events, selected: params[:event], disabled: ""), class: "form-control") %>
+</div>
+
+<div class="form-group">
+  <%= label_tag(:region) %>
+  <%= select_tag(:region, content_tag(:option, "All", value: "all") + grouped_options_for_select(@regions, params[:region]), class: "form-control") %>
+</div>
+
+<div class="form-group">
+  <%= label_tag(:years) %>
+  <%= select_tag(:years, options_for_select(@years, selected: params[:years], disabled: ""), class: "form-control") %>
+</div>
+
+<div class="form-group">
+  <%= label_tag("Name, City or Venue") %>
+  <%= text_field_tag "search", params[:search], class: "form-control" %>
+</div>
+
+<div class="form-group">
+  <label>&nbsp;</label>
+  <div class="btn-group">
+    <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
+      <i class="glyphicon glyphicon-list"></i> List
+    <% end %>
+
+    <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-primary") do %>
+      <i class="glyphicon glyphicon-map-marker"></i> Map
+    <% end %>
+  </div>
+</div>

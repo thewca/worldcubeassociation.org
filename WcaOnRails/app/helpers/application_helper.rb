@@ -176,4 +176,10 @@ module ApplicationHelper
 
     notifications
   end
+
+  # This will be treated later on a migration (#407),
+  # so we can then remove this method here.
+  def processLinks_to_markdown(s)
+    s ? s.gsub(/\[ *{([^}]+)} *{([^}]+)} *\]/, '[\1](\2)') : nil
+  end
 end
