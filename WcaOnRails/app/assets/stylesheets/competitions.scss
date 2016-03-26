@@ -186,6 +186,44 @@ $venue-map-wrapper-height: 400px;
     float: right;
     font-weight: bold;
   }
+
+  @media (min-width: $screen-sm) {
+    p.competition-link {
+      display: inline-block;
+      margin-right: 20px;
+      /* As of 2016-03-25, this width fits about 93% of the competition names */
+      width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    p.location {
+      display: inline;
+      margin-left: 15px;
+    }
+  }
+
+  @media (min-width: $screen-lg) {
+    p {
+      display: inline;
+      margin-right: 15px;
+    }
+
+    .competition-list .date {
+      float: left;
+      margin-right: 25px;
+      min-width: 130px;
+      text-align: right;
+    }
+
+    .competition-list .competition-link {
+      margin-left: 20px;
+    }
+
+    .competition-list .location {
+      margin-left: 20px;
+    }
+  }
 }
 
 $comp-list-nav-height: 39px;
@@ -241,42 +279,4 @@ $comp-list-nav-height: 39px;
   height: 40px;
   margin-top: -40px;
   visibility: hidden;
-}
-
-@media (min-width: $screen-sm) {
-  p.competition-link {
-    display: inline-block;
-    margin-right: 20px;
-    /* As of 2016-03-25, this width fits about 93% of the competition names */
-    width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  p.location {
-    display: inline;
-    margin-left: 15px;
-  }
-}
-
-@media (min-width: $screen-lg) {
-  p {
-    display: inline;
-    margin-right: 15px;
-  }
-
-  .competition-list .date {
-    float: left;
-    margin-right: 25px;
-    min-width: 130px;
-    text-align: right;
-  }
-
-  .competition-list .competition-link {
-    margin-left: 20px;
-  }
-
-  .competition-list .location {
-    margin-left: 20px;
-  }
 }
