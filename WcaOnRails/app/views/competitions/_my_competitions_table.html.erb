@@ -35,7 +35,7 @@
       <tbody>
         <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %> <%= !past ? "not-past" : "past" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !past ? message : "" %>">
           <td><%= link_to competition.name, competition_path(competition) %></td>
-          <td><%= competition.cityName %>, <%= competition.country_name %></td>
+          <td><%= competition.cityName %>, <%= competition.country.name %></td>
           <td><%= date_range(competition.start_date, competition.end_date, separator: "-") %></td>
           <td>
             <% if !past && current_user.can_manage_competition?(competition) %>
