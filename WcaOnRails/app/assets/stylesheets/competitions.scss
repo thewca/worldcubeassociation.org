@@ -243,6 +243,22 @@ $comp-list-nav-height: 39px;
   visibility: hidden;
 }
 
+@media (min-width: $screen-sm) {
+  p.competition-link {
+    display: inline-block;
+    margin-right: 20px;
+    /* As of 2016-03-25, this width fits about 93% of the competition names */
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  p.location {
+    display: inline;
+    margin-left: 15px;
+  }
+}
+
 @media (min-width: $screen-lg) {
   p {
     display: inline;
@@ -264,14 +280,3 @@ $comp-list-nav-height: 39px;
     margin-left: 20px;
   }
 }
-
-@media (min-width: $screen-sm) {
-  p.competition-link {
-    display: inline;
-  }
-  p.location {
-    display: inline;
-    margin-left: 15px;
-  }
-}
-

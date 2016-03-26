@@ -97,14 +97,6 @@ function isMobile() {
   return ResponsiveBootstrapToolkit.is('<sm');
 }
 
-function isMediumScreen() {
-  return ResponsiveBootstrapToolkit.is('md') || ResponsiveBootstrapToolkit.is('sm');
-}
-
-function isBigScreen() {
-  return ResponsiveBootstrapToolkit.is('>md');
-}
-
 $(function() {
   $('.dropdown-toggle').dropdownHover();
   $('form.are-you-sure').areYouSure();
