@@ -305,6 +305,18 @@ class Competition < ActiveRecord::Base
     eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
+  def has_event?(event)
+    self.events.include?(event)
+  end
+
+  def belongs_to_region?(region)
+    self.countryId == region || self.country.continentId == region
+  end
+
+  def contains?(search_param)
+    name.downcase.include?(search_param.downcase) || cityName.downcase.include?(search_param.downcase) || venue.downcase.include?(search_param.downcase)
+  end
+
   def start_date
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end
@@ -427,16 +439,24 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
+  def results_uploaded?
+    Result.exists?(competitionId: self.id)
+  end
+
   def user_can_view?(user)
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
 
-  def is_over?
-    start_date < Date.today
+  def in_progress?
+    (start_date..end_date).cover? Date.today
   end
 
-  def country_name
-    Country.find(countryId).name
+  def is_over?
+    end_date < Date.today
+  end
+
+  def country
+    Country.find(countryId)
   end
 
   def self.search(query, params: {})
