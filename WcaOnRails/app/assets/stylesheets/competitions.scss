@@ -182,13 +182,18 @@ $venue-map-wrapper-height: 400px;
     background-color: $table-bg-accent;
   }
 
+  li {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
   .date {
     float: right;
     font-weight: bold;
   }
 
   @media (min-width: $screen-sm) {
-    p.competition-link {
+    .competition-link {
       display: inline-block;
       margin-right: 20px;
       /* As of 2016-03-25, this width fits about 93% of the competition names */
@@ -196,24 +201,30 @@ $venue-map-wrapper-height: 400px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      vertical-align: bottom;
     }
-    p.location {
+    .location {
       display: inline;
-      margin-left: 15px;
+      margin-left: 20px;
+    }
+
+    .venue-link {
+      display: inline;
     }
   }
 
   @media (min-width: $screen-lg) {
     p {
       display: inline;
-      margin-right: 15px;
+      margin-right: 20px;
     }
 
     .date {
-      float: left;
-      margin-right: 25px;
+      float: inherit;
+      margin-right: 20px;
       min-width: 130px;
       text-align: right;
+      display: inline-block;
     }
 
     .competition-link {
@@ -221,6 +232,11 @@ $venue-map-wrapper-height: 400px;
     }
 
     .location {
+      margin-left: 20px;
+    }
+
+    .venue-link {
+      display: inline-block;
       margin-left: 20px;
     }
   }
