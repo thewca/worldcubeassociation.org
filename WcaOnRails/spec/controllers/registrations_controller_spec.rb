@@ -386,11 +386,14 @@ RSpec.describe RegistrationsController do
       registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
       FactoryGirl.create :ranks_average, rank: 9, best: 4242, eventId: "444", personId: registration3.personId
 
+      registration4 = FactoryGirl.create(:registration, :accepted, competition: competition, eventIds: "444")
+      FactoryGirl.create :ranks_average, rank: 11, best: 4242, eventId: "444", personId: registration4.personId
+
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id ]
-      expect(registrations.map(&:position)).to eq [ 1, 2, 2 ]
-      expect(registrations.map(&:tied_previous)).to eq [ false, false, true ]
+      expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id, registration4.id ]
+      expect(registrations.map(&:position)).to eq [ 1, 2, 2, 4 ]
+      expect(registrations.map(&:tied_previous)).to eq [ false, false, true, false ]
     end
 
     it "handles missing average" do

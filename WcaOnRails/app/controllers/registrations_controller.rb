@@ -55,18 +55,19 @@ class RegistrationsController < ApplicationController
       [ has_competed ? 0 : 1, r.world_rank(@event, @event.sort_by) || Float::INFINITY, r.world_rank(@event, @event.sort_by_second) || Float::INFINITY, r.name ]
     }
 
-    position = 0
     @registrations.each_with_index do |registration, i|
       prev_registration = i > 0 ? @registrations[i - 1] : nil
       registration.tied_previous = false
       if prev_registration
         registration.tied_previous = registration.world_rank(@event, @event.sort_by) == prev_registration.world_rank(@event, @event.sort_by)
       end
-      if !registration.tied_previous
-        position += 1
+      if registration.tied_previous
+        registration.position = prev_registration.position
+      else
+        registration.position = i + 1
       end
       has_competed = !!registration.world_rank(@event, @event.sort_by)
-      registration.position = has_competed ? position : nil
+      registration.position = nil unless has_competed
     end
   end
 
