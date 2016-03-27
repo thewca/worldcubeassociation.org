@@ -4,6 +4,15 @@
   <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
   <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+
+    <% if @user.unconfirmed_wca_id.present? %>
+      <div class="alert alert-warning">
+        This account is waiting for
+        <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %>
+        to confirm their claimed WCA ID
+        <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %>.
+      </div>
+    <% end %>
     <% unless @user.confirmed_at %>
       <div class="alert alert-warning">
         This account's email address (<%= @user.email %>) is not confirmed.
