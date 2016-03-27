@@ -20,6 +20,11 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "can confirm a user who has never competed before" do
+    user = FactoryGirl.build :user, unconfirmed_wca_id: ""
+    user.confirm!
+  end
+
   it "doesn't allow demotion of a senior delegate with subordinate delegates" do
     delegate = FactoryGirl.create :delegate
     senior_delegate = FactoryGirl.create :senior_delegate

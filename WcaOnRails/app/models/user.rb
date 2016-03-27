@@ -278,7 +278,7 @@ class User < ActiveRecord::Base
   # After the user confirms their account, if they claimed a WCA ID, now is the
   # time to notify their delegate!
   def after_confirmation
-    if unconfirmed_wca_id
+    if unconfirmed_wca_id.present?
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
     end
   end
