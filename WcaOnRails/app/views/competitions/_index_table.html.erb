@@ -5,7 +5,16 @@
       <li class="list-group-item break"><%= competition.year %></li>
     <% end %>
     <li class="list-group-item <%= competition.is_over? ? "past" : "not-past" %>">
-      <span class="date"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %></span>
+      <span class="date">
+        <% if competition.is_over? %>
+          <%= icon('hourglass-end') %>
+        <% elsif competition.in_progress? %>
+          <%= icon('hourglass-half') %>
+        <% else %>
+          <%= icon('hourglass-start') %>
+        <% end %>
+        <%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %>
+      </span>
       <span class="competition-info">
         <p class="competition-link"><%= link_to competition.name, competition_path(competition) %></p>
         <p class="location"><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>

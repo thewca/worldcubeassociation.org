@@ -195,6 +195,10 @@ $venue-map-wrapper-height: 400px;
   .date {
     float: right;
     font-weight: bold;
+    i {
+      float: left;
+      margin-right: 10px;
+    }
   }
 
   @media (min-width: $screen-sm) {
