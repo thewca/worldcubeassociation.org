@@ -128,7 +128,7 @@ after "development:users" do
         competition: future_competition,
         name: Faker::Name.name,
         personId: user.wca_id,
-        countryId: Faker::Address.country,
+        countryId: Faker::Address.country.slice(0, 50), # Ensure that the length of an address won't cause database error.
         gender: "m",
         birthYear: 1990,
         birthMonth: 6,
