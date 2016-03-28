@@ -47,7 +47,8 @@ class CompetitionsController < ApplicationController
     end
 
     if params[:years] == "current"
-      @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?", (Date.today - PAST_COMPETITIONS_DAYS))
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ? AND year = ?",
+                                          (Date.today - PAST_COMPETITIONS_DAYS), Date.today.year)
     elsif params[:years] != "all"
       @competitions = @competitions.select { |competition| competition.year.to_s == params[:years] }
     end
