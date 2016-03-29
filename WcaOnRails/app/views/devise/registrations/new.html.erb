@@ -11,20 +11,18 @@
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
 
-        <div>
-          <ul class="nav nav-tabs nav-justified" id="have-you-competed-nav" role="tablist">
-            <li role="presentation">
-              <a href="#have-competed" aria-controls="have-competed" role="tab" data-toggle="tab">
-                I have competed in a WCA competition.
-              </a>
-            </li>
-            <li role="presentation">
-              <a href="#never-competed" aria-controls="never-competed" role="tab" data-toggle="tab">
-                I have never competed in a WCA competition.
-              </a>
-            </li>
-          </ul>
-        </div>
+        <ul class="nav nav-tabs nav-justified" id="have-you-competed-nav" role="tablist">
+          <li role="presentation">
+            <a href="#have-competed" aria-controls="have-competed" role="tab" data-toggle="tab">
+              I have competed in a WCA competition.
+            </a>
+          </li>
+          <li role="presentation">
+            <a href="#never-competed" aria-controls="never-competed" role="tab" data-toggle="tab">
+              I have never competed in a WCA competition.
+            </a>
+          </li>
+        </ul>
 
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="unknown-competed">
