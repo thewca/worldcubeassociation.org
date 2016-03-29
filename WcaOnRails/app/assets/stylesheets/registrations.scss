@@ -24,4 +24,4 @@ table.registrations-table {
   position: fixed;
   z-index: 1000; /* show over sticky table headers */
   bottom: calc(5px + #{$footer-height-px});
- }
+}
