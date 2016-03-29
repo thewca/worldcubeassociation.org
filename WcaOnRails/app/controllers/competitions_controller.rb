@@ -129,7 +129,7 @@ class CompetitionsController < ApplicationController
 
     top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
     if top333.empty? # If there was no 3x3x3 event.
-      title = "Results of #{comp.name} posted"
+      title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
       body = "Results of the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
     elsif top333.length < 3
       render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
