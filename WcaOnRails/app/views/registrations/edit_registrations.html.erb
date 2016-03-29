@@ -20,14 +20,14 @@
             <th class="countryId">Citizen of</th>
             <th class="birthday">Birthday</th>
             <% @competition.events.each do |event| %>
-              <td>
+              <th>
                 <span title="<%= event.name %>"
                       class="cubing-icon icon-<%= event.id %>"
                       data-toggle="tooltip"
                       data-placement="bottom"
                       data-container="body">
                 </span>
-              </td>
+              </th>
             <% end %>
 
             <th class="guests">Guests</th>

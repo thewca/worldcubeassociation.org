@@ -23,12 +23,11 @@
 //= require jquery.jcrop
 //= require lodash
 //= require jquery.wca-autocomplete
-//= require jquery.floatThead-slim.js
+//= require jquery.floatThead.js
 //= require cocoon
 //= require moment
 //= require bootstrap-datetimepicker
 //= require markerclusterer
-//= require bootstrap-toolkit
 //= require_self
 //= require_tree .
 
@@ -92,10 +91,6 @@ $.fn.competitionsMap = function(competitions) {
     clusterSize: 30
   });
 };
-
-function isMobile() {
-  return ResponsiveBootstrapToolkit.is('<sm');
-}
 
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
@@ -172,18 +167,12 @@ $(function() {
   $('input.wca-autocomplete').wcaAutocomplete();
 
   var $tablesToFloatHeaders = $('table.floatThead');
-  if (!isMobile()) {
-    $tablesToFloatHeaders.floatThead({
-      zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
-    });
-    // Workaround for https://github.com/mkoryak/floatThead/issues/263
-    $tablesToFloatHeaders.each(function() {
-      var $table = $(this);
-      $table.closest('.table-responsive').scroll(function(e) {
-        $table.floatThead('reflow');
-      });
-    });
-  }
+  $tablesToFloatHeaders.floatThead({
+    zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
+    responsiveContainer: function($table) {
+      return $table.closest(".table-responsive");
+    },
+  });
 
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they
