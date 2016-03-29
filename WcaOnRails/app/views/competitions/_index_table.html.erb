@@ -1,10 +1,28 @@
 <ul class="list-group">
   <li class="list-group-item"><strong><%= title %></strong></li>
   <% competitions.each_with_index do |competition, index| %>
+    <% if index > 0 && competition.year != competitions[index - 1].year %>
+      <li class="list-group-item break"><%= competition.year %></li>
+    <% end %>
     <li class="list-group-item <%= competition.is_over? ? "past" : "not-past" %>">
-      <span class="date"><%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %></span>
+      <span class="date">
+        <% if competition.is_over? %>
+          <%= icon('hourglass-end') %>
+        <% elsif competition.in_progress? %>
+          <%= icon('hourglass-half') %>
+        <% else %>
+          <%= icon('hourglass-start') %>
+        <% end %>
+        <%= date_range(competition.start_date, competition.end_date, separator: '-', show_year: false) %>, <%= competition.year %>
+      </span>
       <span class="competition-info">
-        <p class="competition-link"><%= link_to competition.name, competition_path(competition) %></p>
+        <p class="competition-link">
+          <!-- The 'unless' is necessary to remove a default flag. Can be removed after resolving https://github.com/cubing/worldcubeassociation.org/issues/447 -->
+          <% unless competition.country.name.match(/Multiple Countries/) %>
+            <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
+          <% end %>
+          <%= link_to competition.name, competition_path(competition) %>
+        </p>
         <p class="location"><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>
         <div class="venue-link">
           <%=md(processLinks_to_markdown(competition.venue), target_blank: true) %>

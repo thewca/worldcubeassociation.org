@@ -185,11 +185,26 @@ $venue-map-wrapper-height: 400px;
   li {
     padding: 5px 10px;
     font-size: 13px;
+
+    &.break {
+      text-align: center;
+      font-weight: bold;
+    }
   }
 
   .date {
     float: right;
     font-weight: bold;
+    i {
+      float: left;
+      margin-right: 10px;
+    }
+  }
+
+  .flag {
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
   }
 
   @media (min-width: $screen-sm) {

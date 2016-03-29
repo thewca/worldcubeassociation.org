@@ -43,7 +43,7 @@
 
         <% if @past_competitions.length > 0 %>
           <div class="col-md-12" id="past">
-            <%= render 'index_table', competitions: @past_competitions, title: "Past competitions (last #{CompetitionsController::PAST_COMPETITIONS_DAYS} days)" %>
+            <%= render 'index_table', competitions: @past_competitions, title: @past_comps_title %>
           </div>
         <% end %>
       </div>
