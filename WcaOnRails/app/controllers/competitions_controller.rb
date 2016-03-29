@@ -135,7 +135,7 @@ class CompetitionsController < ApplicationController
       render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
       return
     else
-      title = "#{top333.first.personName} wins #{comp.name}"
+      title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
       body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
       body += " won the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id})"
