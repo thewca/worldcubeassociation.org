@@ -3,6 +3,8 @@ after "development:users" do
 
   users = User.where.not(wca_id: nil).sample(5)
 
+  countries = ["USA", "United Kingdom", "Germany", "Poland", "Brazil", "France"]
+
   # Create some past competitions with results
   500.times do |i|
     day = i.days.ago
@@ -12,7 +14,7 @@ after "development:users" do
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
       cityName: "San Francisco",
-      countryId: "USA",
+      countryId: countries.sample,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -80,7 +82,7 @@ after "development:users" do
     name: "New Comp #{day.year}",
     cellName: "New Comp #{day.year}",
     cityName: "Paris",
-    countryId: "France",
+    countryId: countries.sample,
     information: "Information!",
     start_date: day.strftime("%F"),
     end_date: day.strftime("%F"),
@@ -96,17 +98,20 @@ after "development:users" do
   )
 
   500.times do |i|
-    day = (i+1).days.from_now
+    start_day = (i+1).days.from_now
+    end_day = start_day + (0..5).to_a.sample.days
+    end_day = start_day if start_day.year != end_day.year
+
     eventIds = ["333", "333oh", "333bf"]
     competition = Competition.create!(
-      id: "MyComp#{i+1}#{day.year}",
-      name: "My #{i+1} Comp #{day.year}",
-      cellName: "My #{i+1} Comp #{day.year}",
+      id: "MyComp#{i+1}#{start_day.year}",
+      name: "My #{i+1} Comp #{start_day.year}",
+      cellName: "My #{i+1} Comp #{start_day.year}",
       cityName: "Beijing",
-      countryId: "China",
+      countryId: countries.sample,
       information: "Information!",
-      start_date: day.strftime("%F"),
-      end_date: day.strftime("%F"),
+      start_date: start_day.strftime("%F"),
+      end_date:  end_day.strftime("%F"),
       eventSpecs: eventIds.join(" "),
       venue: "Bird's Nest National Stadium",
       website: "https://www.worldcubeassociation.org",
@@ -115,7 +120,7 @@ after "development:users" do
       organizers: User.all.sample(2),
       use_wca_registration: true,
       registration_open: 1.week.ago,
-      registration_close: day - (1.week),
+      registration_close: start_day - (1.week),
       latitude_degrees: Random.new.rand(-90.0..90.0),
       longitude_degrees: Random.new.rand(-180.0..180.0),
     )
