@@ -201,6 +201,12 @@ $venue-map-wrapper-height: 400px;
     }
   }
 
+  .flag {
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
+  }
+
   @media (min-width: $screen-sm) {
     .competition-link {
       display: inline-block;
