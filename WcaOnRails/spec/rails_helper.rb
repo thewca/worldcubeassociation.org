@@ -29,6 +29,14 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+# Override default stub to provide 'default_url_options'
+# See issue here : https://github.com/rspec/rspec-rails/issues/255
+class ActionView::TestCase::TestController
+  def default_url_options(options={})
+    { locale: nil }
+  end
+end
+
 Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
@@ -55,4 +63,10 @@ RSpec.configure do |config|
 
   # Make sign_in helper available in feature specs
   config.include SessionHelper, type: :feature
+
+  # Features doesn't seem to have the controller, so set it manually
+  config.before(:each, type: :feature) do
+    default_url_options[ :locale ] = nil
+  end
+
 end

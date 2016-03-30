@@ -2,5 +2,9 @@
 <%# We use a full url because this can be rendered inside of emails -%>
 <% options = {} %>
 <% options[:target] = target if defined?(target) %>
-<%= link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}", options -%>
+<%
+  # FIXME restore 'root_url' when results is on Rails.
+  # Using root_url outputs 'test.host/results/[...], which breaks the test.
+%>
+<%= link_to wca_id, "#{root_path(locale:nil)}results/p.php?i=#{wca_id}", options -%>
 <% end %>

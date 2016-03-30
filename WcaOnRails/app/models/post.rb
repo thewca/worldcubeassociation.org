@@ -41,7 +41,7 @@ class Post < ActiveRecord::Base
     if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_edit_path
     else
-      Rails.application.routes.url_helpers.edit_post_path(slug)
+      Rails.application.routes.url_helpers.edit_post_path(id: slug)
     end
   end
 
@@ -49,7 +49,7 @@ class Post < ActiveRecord::Base
     if is_crash_course_post?
       Rails.application.routes.url_helpers.delegate_crash_course_path
     else
-      Rails.application.routes.url_helpers.post_path(self)
+      Rails.application.routes.url_helpers.post_path(id: self)
     end
   end
 
