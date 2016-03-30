@@ -97,6 +97,7 @@ GEM
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
+    bootstrap-table-rails (1.10.1)
     bootstrap-will_paginate (0.0.10)
       will_paginate
     builder (3.2.2)
@@ -404,6 +405,7 @@ DEPENDENCIES
   binding_of_caller
   blocks
   bootstrap-sass
+  bootstrap-table-rails
   bootstrap-will_paginate
   byebug
   capybara

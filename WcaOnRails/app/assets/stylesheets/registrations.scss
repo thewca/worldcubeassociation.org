@@ -18,10 +18,30 @@ table.registrations-table {
     &.registration-accepted {
     }
   }
+
 }
 
 #registrations-actions {
   position: fixed;
   z-index: 1000; /* show over sticky table headers */
   bottom: calc(5px + #{$footer-height-px});
+}
+
+/* Styling bootstrap table sort */
+.fixed-table-loading {
+  display: none;
+}
+
+th {
+  &:focus { outline: none; }
+  .sortable {
+    &:hover { cursor: pointer; }
+    &:after {
+      font-family: FontAwesome;
+      content: '\f0dc';
+      margin-left: 5px;
+    }
+    &.asc:after { content: '\f0de'; color: #3f91eb; }
+    &.desc:after { content: '\f0dd'; color: #3f91eb; }
+  }
 }
