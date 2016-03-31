@@ -237,3 +237,16 @@ $(function() {
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 };
+
+
+// Setting up bootstrap-table
+
+// Default column options
+jQuery.extend(jQuery.fn.bootstrapTable.columnDefaults, {
+  order: 'desc' // Since column is marked as sorted desc, on the first click gets sorted asc
+});
+
+// Hide loading box
+$(function() {
+  $('table').bootstrapTable('hideLoading');
+});

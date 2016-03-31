@@ -73,7 +73,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.sort_by &:name
+    @registrations = @competition.registrations.accepted
   end
 
   def edit
@@ -148,7 +148,7 @@ class RegistrationsController < ApplicationController
       render :edit
       return
     end
-    was_accepted = @registration.accepted? 
+    was_accepted = @registration.accepted?
     if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)

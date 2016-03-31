@@ -1,12 +1,12 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
-  <%= wca_table data: { toggle: :table } do %>
+  <%= wca_table data: { toggle: "table", sort_name: "name" } do %>
     <thead>
       <tr>
-        <th class="name" data-sortable="true" data-order="desc">Name</th>
-        <th class="wca-id" data-sortable="true" data-order="desc">WCA ID</th>
-        <th class="country" data-sortable="true" data-order="desc">Citizen of</th>
+        <th class="name" data-sortable="true" data-field="name">Name</th>
+        <th class="wca-id" data-sortable="true">WCA ID</th>
+        <th class="country" data-sortable="true">Citizen of</th>
 
         <% @competition.events.each do |event| %>
           <th class="<%= event.id %>">
