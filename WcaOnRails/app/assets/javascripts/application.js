@@ -238,15 +238,20 @@ Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 };
 
-
 // Setting up bootstrap-table
-
-// Default column options
-jQuery.extend(jQuery.fn.bootstrapTable.columnDefaults, {
-  order: 'desc' // Since column is marked as sorted desc, on the first click gets sorted asc
-});
-
-// Hide loading box
 $(function() {
-  $('table').bootstrapTable('hideLoading');
+  // Hide loading box
+  $('table[data-toggle="table"]').bootstrapTable('hideLoading');
+  // Triggered when a sort arrow is clicked but before a table is sorted
+  $('table').on('sort.bs.table', function(e, name, order) {
+    // The table column that we are sorting by
+    var field = $('table').find('th[data-field="' + name + '"] .sortable');
+    // If it's not the field we are currently sorting by
+    if(!field.is('.asc, .desc')) {
+      // Change the sort order that's set in data-order ('asc' by default)
+      var options = $(this).bootstrapTable('getOptions');
+      options.sortOrder = options.columns[0].find(function(option) { return option.field == name; }).order;
+      // Now the table will be sorted using the order that we set
+    }
+  });
 });
