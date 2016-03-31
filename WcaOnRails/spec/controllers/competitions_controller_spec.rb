@@ -287,7 +287,7 @@ describe CompetitionsController do
         expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
 
-      it "can change competition id" do
+      it "can change friendly_id" do
         patch :update, id: competition.id, competition: { friendly_id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") }
 
         expect(competition.reload.friendly_id).to eq "NewId2015"
