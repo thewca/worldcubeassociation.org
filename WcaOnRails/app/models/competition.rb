@@ -675,7 +675,8 @@ class Competition < ActiveRecord::Base
 
     if query.present?
       sql_query = "%#{query}%"
-      competitions = competitions.where("friendly_id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+      competitions = competitions.where("friendly_id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query)
+        .order(year: :desc, month: :desc, day: :desc)
     end
 
     if params[:sort].present?

@@ -111,7 +111,7 @@ class CompetitionsController < ApplicationController
       flash[:success] = "Successfully created new competition!"
       redirect_to edit_competition_path(@competition)
     else
-      # Show friendly id errors under name, since we don't actually show an
+      # Show friendly id errors under name, since we don't actually show a
       # friendly id field to the user, so they wouldn't see any friendly id errors.
       @competition.errors[:name].concat(@competition.errors[:friendly_id])
       render :new
