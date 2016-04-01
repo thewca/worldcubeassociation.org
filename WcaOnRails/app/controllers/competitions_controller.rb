@@ -288,15 +288,15 @@ class CompetitionsController < ApplicationController
         render :edit
       else
         @competition.destroy
-        flash[:success] = "Successfully deleted competition #{@competition.id}"
+        flash[:success] = t('.delete_success', id:@competition.id)
         redirect_to root_url
       end
     elsif @competition.update_attributes(competition_params)
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_now
-        flash[:success] = "Successfully confirmed competition. Check your email, and wait for the Board to announce it!"
+        flash[:success] = t('.confirm_success')
       else
-        flash[:success] = "Successfully saved competition"
+        flash[:success] = t('.save_success')
       end
       if @competition_admin_view
         redirect_to admin_edit_competition_path(@competition)

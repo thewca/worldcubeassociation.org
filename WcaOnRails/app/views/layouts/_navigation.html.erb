@@ -86,7 +86,7 @@
                 <span class="badge"><%= notification_count %></span>
               <% end %>
             <% else %>
-              Sign in
+              <%= t '.sign_in' %>
             <% end %>
             <span class="caret"></span>
           </a>
@@ -97,13 +97,13 @@
               </li>
               <li>
                 <%= link_to notifications_path do %>
-                  Notifications
+                  <%= t '.notifications' %>
                   <% if notification_count > 0 %>
                     <span class="badge"><%= notification_count %></span>
                   <% end %>
                 <% end %>
               </li>
-              <li><%= link_to "Edit profile", profile_edit_path %></li>
+              <li><%= link_to t('.edit_profile'), profile_edit_path %></li>
               <% if current_user.can_edit_users? %>
                 <li class="divider"></li>
                 <li role="presentation" class="dropdown-header">
@@ -147,17 +147,17 @@
               <% end %>
 
               <li class="divider"></li>
-              <li><%= link_to "API", api_path %></li>
-              <li><%= link_to "Manage your applications", oauth_applications_path %></li>
-              <li><%= link_to "Manage authorized applications", oauth_authorized_applications_path %></li>
+              <li><%= link_to t('.api'), api_path %></li>
+              <li><%= link_to t('.manage_app'), oauth_applications_path %></li>
+              <li><%= link_to t('.manage_auth_app'), oauth_authorized_applications_path %></li>
 
               <li class="divider"></li>
-              <li><%= link_to('Sign out', destroy_user_session_path, :method => :delete) %></li>
+              <li><%= link_to(t('.sign_out'), destroy_user_session_path, :method => :delete) %></li>
             <% else %>
-              <li><%= link_to('Sign in', new_user_session_path, class: "top-nav") %></li>
+              <li><%= link_to(t('.sign_in'), new_user_session_path, class: "top-nav") %></li>
               <li class="divider"></li>
-              <li><%= link_to('Sign up', new_user_registration_path) %></li>
-              <li><%= link_to t('.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_user_confirmation_path %></li>
+              <li><%= link_to(t('.sign_up'), new_user_registration_path) %></li>
+              <li><%= link_to t('devise.shared.links.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_user_confirmation_path %></li>
             <% end %>
           </ul>
         </li>

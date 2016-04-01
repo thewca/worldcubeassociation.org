@@ -4,39 +4,39 @@
       <% nav_items = [] %>
       <% if @competition.user_can_view_results?(current_user) %>
         <% nav_items << {
-          text: "Results",
+          text: t('.menu.results'),
           path: competition_path(@competition),
           fa_icon: "trophy",
           children: [
-            { text: "Podiums", path: competition_results_podiums_path(@competition), fa_icon: "cubes" },
+            { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), fa_icon: "cubes" },
             {
-              text: "All",
+              text: t('.menu.all'),
               path: competition_results_all_path(@competition),
               fa_icon: "list",
               tiny_children: @competition.events.map do |event|
                 { text: event.id, path: competition_results_all_path(@competition, anchor: "e#{event.id}"), cubing_icon: event.id, title: event.name }
               end
             },
-            { text: "By Person", path: competition_results_by_person_path(@competition), fa_icon: "user" },
+            { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), fa_icon: "user" },
           ],
         } %>
       <% else %>
         <% nav_items << {
-          text: "Info",
+          text: t('.menu.info'),
           path: competition_path(@competition),
           fa_icon: "info-circle",
         } %>
       <% end %>
       <% if current_user && current_user.can_manage_competition?(@competition) %>
         <% nav_items << {
-          text: "Edit",
+          text: t('.menu.edit'),
           path: edit_competition_path(@competition),
           fa_icon: "lock",
           children: [
-            { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
-            { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
+            { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fa_icon: "lock" },
+            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
               {
-                text: "Registration",
+                text: t('.menu.registration'),
                 path: competition_edit_registrations_path(@competition),
                 fa_icon: "list-ul",
                 notification_count: @competition.registrations.pending.count,
@@ -52,9 +52,9 @@
       <% end %>
       <% if @competition.use_wca_registration? && !@competition.results_posted? %>
         <% nav_items += [
-          { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
+          { text: t('.menu.register'), path: competition_register_path(@competition), fa_icon: "sign-in" },
           {
-            text: "Competitors",
+            text: t('.menu.competitors'),
             path: competition_registrations_path(@competition),
             fa_icon: "users",
             tiny_children: @competition.events.map do |event|

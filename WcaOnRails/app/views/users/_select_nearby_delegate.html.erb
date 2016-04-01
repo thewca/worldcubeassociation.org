@@ -1,25 +1,20 @@
 <% if !@user.unconfirmed_person %>
   <p>
     <% if @user.unconfirmed_wca_id.present? %>
-      WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does not exist.
+      <%= t '.unknown_wca_id_html', link_id:render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank") %>
     <% end %>
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> is already assigned to a different account.
-    If you believe this was done in error, contact your local <%= link_to "delegate", delegates_path %>.
+    <%= t '.already_assigned_html', link_id:render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_delegate:link_to("delegate", delegates_path) %>
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-    WCA ID <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank" %> does
-    not have a birthdate assigned. Please contact the
-    <%= mail_to "results@worldcubeassociation.org", "Results team", target: "_blank" %> to fix this.
+  <%= t '.missing_dob_html', link_id:render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_result_team:mail_to("results@worldcubeassociation.org", "Results team", target: "_blank") %>
   </p>
 <% else %>
   <p>
-    In order to assign you your WCA ID, we need a delegate to confirm your
-    identify. Please select the delegate you think knows you best and enter
-    your birthdate.
+  <%= t '.select_delegate' %>
   </p>
 
   <div class="form-group radio_buttons optional">

@@ -1,9 +1,9 @@
 <% days_until = @competition.days_until %>
 <% if !days_until.nil? %>
   <% if days_until >= 0 %>
-    Competition is in <%= days_until %> <%= "day".pluralize(days_until) %>.
+    <%= t('.competition_in', n_days:t('datetime.distance_in_words.x_days', count:days_until)) %>
   <% else %>
     <% days_until = days_until.abs %>
-    Competition was <%= days_until %> <%= "day".pluralize(days_until) %> ago.
+    <%= t('.competition_was', n_days:t('datetime.distance_in_words.x_days', count:days_until)) %>
   <% end %>
 <% end %>

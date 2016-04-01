@@ -429,12 +429,17 @@ class User < ActiveRecord::Base
     # Don't allow editing data if they have a WCA ID, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
-    msg = "You cannot change your name, birthdate, gender, or country because %s. Contact your <a href='#{Rails.application.routes.url_helpers.delegates_path}'>delegate</a> if you need to change any of these."
     if user_to_edit.wca_id
-      return (msg % "you have a WCA ID assigned").html_safe
+      # Not using _html suffix as automatic html_safe is available only from
+      # the view helper
+      return I18n.t('users.edit.cannot_edit.msg',
+                    reason:I18n.t('users.edit.cannot_edit.reason.assigned'),
+                    delegate_url:Rails.application.routes.url_helpers.delegates_path).html_safe
     end
     if user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
-      return (msg % "you have registered for a competition").html_safe
+      return I18n.t('users.edit.cannot_edit.msg',
+                    reason:I18n.t('users.edit.cannot_edit.reason.registered'),
+                    delegate_url:Rails.application.routes.url_helpers.delegates_path).html_safe
     end
     return nil
   end

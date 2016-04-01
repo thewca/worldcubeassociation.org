@@ -1,24 +1,23 @@
-<% provide(:title, "Claim WCA ID") %>
+<% provide(:title, t('.title')) %>
 
 <div class="container">
   <h1 class="text-center"><%= yield(:title) %></h1>
-
   <%= render 'shared/error_messages', object: @user %>
   <% real_user = User.find(@user.id) %>
   <% if real_user.person %>
-    You already have WCA ID <%= render "shared/wca_id", wca_id: real_user.wca_id -%>.
+    <%= t '.already_have_html', wca_id:render("shared/wca_id", wca_id: real_user.wca_id) %>
   <% elsif real_user.unconfirmed_person && real_user.delegate_to_handle_wca_id_claim %>
-    You've claimed WCA ID <%= render "shared/wca_id", wca_id: real_user.unconfirmed_wca_id -%>.
-    Contact <%= mail_to real_user.delegate_to_handle_wca_id_claim.email, real_user.delegate_to_handle_wca_id_claim.name, target: "_blank" %> if you have any questions.
+    <%= t '.already_claimed_html',
+          wca_id:render("shared/wca_id", wca_id: real_user.unconfirmed_wca_id),
+          delegate:mail_to(real_user.delegate_to_handle_wca_id_claim.email,
+                           real_user.delegate_to_handle_wca_id_claim.name,
+                           target: "_blank") %>
   <% else %>
     <p>
-      If you've competed before, you can request to have your WCA ID connected
-      to your account.
+    <%= t '.info_competed_before' %>
     </p>
     <p>
-      If you've never competed before, go to a <a href="/results/competitions.php">competition</a>!
-      A WCA ID will be created for you when the results from your first
-      competition are uploaded.
+    <%= t '.info_never_competed_html', comp:link_to(t('.competition'), competitions_path) %>
     </p>
 
     <%= simple_form_for @user do |f| %>
@@ -26,7 +25,7 @@
       <%= f.hidden_field :claiming_wca_id %>
 
       <%= render "claim_wca_id_selector", f: f %>
-      <%= f.button :submit, 'Claim WCA ID', id: "claim-wca-id-button", class: "btn-primary" %>
+      <%= f.button :submit, t('.submit_value'), id: "claim-wca-id-button", class: "btn-primary" %>
 
     <% end %>
   <% end %>

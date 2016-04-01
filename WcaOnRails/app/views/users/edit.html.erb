@@ -10,38 +10,36 @@
     </div>
     <% if @user.unconfirmed_wca_id.present? %>
       <div class="alert alert-warning">
-        This user has claimed WCA ID
-        <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %>.
-        Their delegate
-        <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %>
-        will be notified of this request as soon as this account's email address
-        is confirmed.
+        <%= t '.pending_claim_mail_confirmation_html',
+              delegate: mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank"),
+              wca_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id)
+        %>
       </div>
     <% end %>
   <% else %>
     <% if @user.unconfirmed_wca_id.present? %>
       <div class="alert alert-warning">
-        This account is waiting for
-        <%= mail_to @user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank" %>
-        to confirm their claimed WCA ID
-        <%= render "shared/wca_id", wca_id: @user.unconfirmed_wca_id %>.
+        <%= t '.pending_claim_confirmation_html',
+              delegate: mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank"),
+              wca_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id)
+        %>
       </div>
     <% end %>
   <% end %>
 
   <% if @user.unconfirmed_email %>
     <div class="alert alert-warning">
-      This account is pending confirmation of new email address <%= @user.unconfirmed_email %>.
+      <%= t '.pending_mail_confirmation', email: @user.unconfirmed_email %>
     </div>
   <% end %>
   <% if @user.pending_avatar? %>
     <div class="alert alert-warning">
-      This account is pending confirmation of a new avatar.
+      <%= t '.pending_avatar_confirmation' %>
       <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
-        <%= render "shared/user_avatar", user: @user, show_pending: true, title: "Click to edit thumbnail", break_cache: true %>
+        <%= render "shared/user_avatar", user: @user, show_pending: true, title: t('.edit_thumbnail'), break_cache: true %>
       <% end %>
       <% if current_user.can_admin_results? %>
-        <%= link_to "Manage pending avatars", admin_avatars_path %>
+        <%= link_to t('.manage_pending'), admin_avatars_path %>
       <% end %>
     </div>
   <% end %>
@@ -56,7 +54,7 @@
   <% end %>
   <% if @user.cannot_register_for_competition_reasons.length > 0 %>
     <div class="alert alert-warning">
-      In order to register for competitions, you need to fix the following problems:
+      <%= t '.please_fix_profile' %>
       <ul>
         <% @user.cannot_register_for_competition_reasons.each do |reason| %>
           <li><%= reason %></li>
@@ -118,18 +116,18 @@
               <% if @user.unconfirmed_wca_id.present? %>
                 <div class="form-group wca_id optional user_unconfirmed_wca_id">
                   <label class="wca_id optional control-label" for="user_unconfirmed_wca_id">
-                    Unconfirmed WCA ID
+                    <%= t '.unconfirmed_wca_id' %>
                   </label>
                   <div class="input-group">
                     <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
                     <span class="input-group-addon">
                       <a href="#" id="unconfirmed-wca-id-profile" target="_blank">
-                        Profile
+                        <%= t '.profile' %>
                       </a>
                     </span>
                     <div class="input-group-btn">
                       <button type="button" class="btn btn-default" id="approve-wca-id">
-                        Approve
+                        <%= t '.approve' %>
                       </button>
                     </div>
                   </div>
@@ -143,11 +141,9 @@
         <% else %>
           <p>
             <% if @user.wca_id.blank? %>
-              You do not have a WCA ID assigned yet. If you have competed before,
-              request to have your WCA ID connected to your account
-              <%= link_to "here", profile_claim_wca_id_path %>!
+              <%= t '.have_no_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path) %>
             <% else %>
-              Your WCA ID is <%= render "shared/wca_id", wca_id: @user.wca_id -%>.
+              <%= t '.have_wca_id_html', link_id: render("shared/wca_id", wca_id: @user.wca_id) %>
             <% end %>
           </p>
         <% end %>
@@ -160,14 +156,14 @@
 
         <% unless @user.current_teams.empty? %>
           <div class="form-group">
-            <label>Member of</label>
+            <label><%= t '.member_of' %></label>
             <% @user.current_teams.each do |team| %>
               <%= link_to team.name, edit_team_path(team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
             <% end %>
           </div>
         <% end %>
 
-        <%= f.submit 'Save', class: "btn btn-primary" %>
+        <%= f.submit t('.save'), class: "btn btn-primary" %>
       <% end %>
     </div>
 
@@ -175,11 +171,11 @@
       <div class="tab-pane active" id="email">
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "email" %>
-          <%= f.input :email, disabled: !editable_fields.include?(:email), hint: "Changing your email will require confirming the new email." %>
+          <%= f.input :email, disabled: !editable_fields.include?(:email) %>
 
           <%= f.input :current_password %>
 
-          <%= f.submit 'Save', class: "btn btn-primary" %>
+          <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>
 
@@ -187,11 +183,11 @@
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "preferences" %>
 
-          <%= render "shared/associated_events_picker", form_builder: f, label: "Preferred events", disabled: !editable_fields.include?(:preferred_events),
+          <%= render "shared/associated_events_picker", form_builder: f, label: t('.preferred_events'), disabled: !editable_fields.include?(:preferred_events),
                                                         events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
-          <span class="help-block">Selecting your preferred events makes registration for competitions quicker.</span>
+            <span class="help-block"><%= t '.preferred_events_desc' %></span>
 
-          <%= f.submit 'Save', class: "btn btn-primary" %>
+          <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>
 
@@ -203,7 +199,7 @@
 
           <%= f.input :current_password %>
 
-          <%= f.submit 'Save', class: "btn btn-primary" %>
+          <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>
     <% end %>
