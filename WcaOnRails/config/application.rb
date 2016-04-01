@@ -58,7 +58,7 @@ module WcaOnRails
     end
 
     # Setup available locales
-    I18n.available_locales = [:en]
+    I18n.available_locales = [:en, :fr]
 
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: -> (s) { Rails.logger.info(s) }
