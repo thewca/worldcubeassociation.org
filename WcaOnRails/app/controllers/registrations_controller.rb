@@ -107,7 +107,7 @@ class RegistrationsController < ApplicationController
     @competition_registration_view = true
     @competition = competition_from_params
     ids = []
-    registration_ids = params.select { |k| k.start_with?("registration-") }.map { |k, v| k.split('-')[1] }
+    registration_ids = params[:selected_registrations].map { |r| r.split('-')[1] }
     registrations = registration_ids.map do |registration_id|
       @competition.registrations.find_by_id!(registration_id)
     end

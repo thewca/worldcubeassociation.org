@@ -242,6 +242,7 @@ Math.trunc = Math.trunc || function(x) {
 $(function() {
   // Hide loading box
   $('table[data-toggle="table"]').bootstrapTable('hideLoading');
+
   // Triggered when a sort arrow is clicked but before a table is sorted
   $('table').on('sort.bs.table', function(e, name, order) {
     // The table column that we are sorting by
@@ -253,5 +254,19 @@ $(function() {
       options.sortOrder = options.columns[0].find(function(option) { return option.field == name; }).order;
       // Now the table will be sorted using the order that we set
     }
+  });
+
+  // Set values of checkboxes in a table to corresponding rows ids
+  var initCheckboxesValues = function(table) {
+    var selectRowCeckbox = table.find('tr td input[type="checkbox"]');
+    selectRowCeckbox.each(function(index) {
+      $(this).val($(this).parents('tr').attr('id'));
+    });
+  };
+  initCheckboxesValues($('table[data-toggle="table"]'));
+  $('table').on('post-body.bs.table', function() {
+    initCheckboxesValues($(this));
+    // Re-apply tooltip on each table body change
+    $('[data-toggle="tooltip"]').tooltip();
   });
 });
