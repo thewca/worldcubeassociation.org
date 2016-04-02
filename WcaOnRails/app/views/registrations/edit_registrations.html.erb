@@ -10,16 +10,16 @@
         <h2>Approved registrations</h2>
       <% end %>
       <% registrations = @competition.registrations.send(status) %>
-      <%= wca_table table_class: "registrations-table", data: { toggle: "table", sort_name: "registration-date-#{status}"  , select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
+      <%= wca_table table_class: "registrations-table", data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
           <tr>
             <th data-checkbox="true"></th>
             <th></th>
-            <th class="wca-id" data-sortable="true" data-field="wca-id-<%= status %>">WCA ID</th>
-            <th class="name" data-sortable="true" data-field="name-<%= status %>">Name</th>
-            <th class="countryId" data-sortable="true" data-field="countryId-<%= status %>">Citizen of</th>
-            <th class="registration-date" data-sortable="true" data-field="registration-date-<%= status %>">Registrated</th>
-            <th class="birthday" data-sortable="true" data-field="birthday-<%= status %>">Birthday</th>
+            <th class="wca-id" data-sortable="true">WCA ID</th>
+            <th class="name" data-sortable="true">Name</th>
+            <th class="countryId" data-sortable="true">Citizen of</th>
+            <th class="registration-date" data-sortable="true" data-field="registration-date">Registered</th>
+            <th class="birthday" data-sortable="true">Birthday</th>
             <% @competition.events.each do |event| %>
               <th>
                 <span title="<%= event.name %>"

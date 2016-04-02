@@ -243,10 +243,14 @@ $(function() {
   // Hide loading box
   $('table[data-toggle="table"]').bootstrapTable('hideLoading');
 
+  // It's not necessary when bootstrap-table will be distributed with this merged:
+  // https://github.com/wenzhixin/bootstrap-table/pull/2145
+  // (and the appropriate gem will be updated)
+  // -------------------------------------------------------------------
   // Triggered when a sort arrow is clicked but before a table is sorted
   $('table').on('sort.bs.table', function(e, name, order) {
     // The table column that we are sorting by
-    var field = $('table').find('th[data-field="' + name + '"] .sortable');
+    var field = $(this).floatThead('getRowGroups').eq(0).find('th[data-field="' + name + '"] .sortable');
     // If it's not the field we are currently sorting by
     if(!field.is('.asc, .desc')) {
       // Change the sort order that's set in data-order ('asc' by default)
@@ -255,11 +259,21 @@ $(function() {
       // Now the table will be sorted using the order that we set
     }
   });
+  // -------------------------------------------------------------------
+
+  // It's not necessary when bootstrap-table will be distributed with this issue solved:
+  // https://github.com/wenzhixin/bootstrap-table/issues/2154
+  // (and the appropriate gem will be updated)
+  // -------------------------------------------------------------------
+  // Prevent bootstrap-table from selecting a row when a link is clicked
+  $('table[data-toggle="table"] td a').on('click', function(e) {
+    e.stopPropagation();
+  });
+  // -------------------------------------------------------------------
 
   // Set values of checkboxes in a table to corresponding rows ids
-  var initCheckboxesValues = function(table) {
-    var selectRowCeckbox = table.find('tr td input[type="checkbox"]');
-    selectRowCeckbox.each(function(index) {
+  var initCheckboxesValues = function($table) {
+    $table.find('tr td input[type="checkbox"]').each(function(index) {
       $(this).val($(this).parents('tr').attr('id'));
     });
   };
