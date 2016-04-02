@@ -28,7 +28,7 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @competitions, param_name: 'competitions_page', params: { anchor: "competitions" } %>
+      <%= paginate @competitions, param_name: :competitions_page, params: { anchor: "competitions" } %>
     <% end %>
 
     <% if !@persons.empty? %>
@@ -55,7 +55,7 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @persons, param_name: 'people_page', params: { anchor: "people" } %>
+      <%= paginate @persons, param_name: :people_page, params: { anchor: "people" } %>
     <% end %>
 
     <% if !@posts.empty? %>
@@ -70,7 +70,7 @@
           </blockquote>
         </div>
       <% end %>
-      <%= will_paginate @posts, param_name: 'posts_page', params: { anchor: "posts" } %>
+      <%= paginate @posts, param_name: :posts_page, params: { anchor: "posts" } %>
     <% end %>
 
     <% if @competitions.empty? %>

@@ -17,8 +17,7 @@ gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
 gem 'recaptcha', :require => 'recaptcha/rails'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
+gem 'kaminari'
 gem 'local_time'
 gem 'devise'
 gem 'devise-bootstrap-views'
@@ -52,6 +51,7 @@ gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
+gem 'api-pagination'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
