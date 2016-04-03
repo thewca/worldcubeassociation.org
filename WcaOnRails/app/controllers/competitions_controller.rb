@@ -24,7 +24,6 @@ class CompetitionsController < ApplicationController
     # user cannot select an empty param.
     @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
                  'Country' => Country.all.map { |country| [country.name, country.id] } }
-    @events = [ ["All", "all"], ["",""] ] + Event.all_official.map { |event| [event.name, event.id] }
     @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.where(showAtAll: true).map(&:year).uniq.sort.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).reverse_order
 
@@ -34,10 +33,6 @@ class CompetitionsController < ApplicationController
       params[:years] = "current"
     end
 
-    if params[:event].blank?
-      params[:event] = "all"
-    end
-
     if params[:region].blank?
       params[:region] = "all"
     end
@@ -45,6 +40,8 @@ class CompetitionsController < ApplicationController
     if params[:display].blank?
       params[:display] = "List"
     end
+
+    params[:event_ids] ||= []
 
     if params[:years] == "current"
       @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?",
@@ -57,16 +54,19 @@ class CompetitionsController < ApplicationController
       @past_comps_title = "Competitions from #{params[:years]}"
     end
 
-    if params[:event] && params[:event] != "all"
-      @competitions = @competitions.select { |competition| competition.has_event?(Event.find(params[:event])) }
-    end
-
     if params[:region] && params[:region] != "all"
       @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
     end
 
     if params[:search].present?
       @competitions = @competitions.select { |competition| competition.contains?(params[:search]) }
+    end
+
+    unless params[:event_ids].empty?
+      @competitions = @competitions.sort do |first, second|
+        (second.eventSpecs.split & params[:event_ids]).count <=> (first.eventSpecs.split & params[:event_ids]).count
+        # Note: If both competitions have the same count of matched events, they are still ordered by start date
+      end
     end
 
     @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)

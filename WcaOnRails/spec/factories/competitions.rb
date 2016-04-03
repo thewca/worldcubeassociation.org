@@ -6,9 +6,12 @@ FactoryGirl.define do
     countryId "USA"
     information "Information!"
 
-    day = 1.year.ago
-    start_date day.strftime("%F")
-    end_date day.strftime("%F")
+    transient do
+      starting_at 1.year.ago
+    end
+
+    start_date { starting_at.strftime("%F") }
+    end_date { starting_at.strftime("%F") }
 
     eventSpecs "333 333oh"
     venue "My backyard"

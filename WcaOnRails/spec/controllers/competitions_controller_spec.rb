@@ -3,6 +3,41 @@ require 'rails_helper'
 describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
 
+  describe 'GET #index' do
+    let!(:competition1) { FactoryGirl.create(:competition, starting_at: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
+    let!(:competition2) { FactoryGirl.create(:competition, starting_at: 2.week.from_now, eventSpecs: "333 444 skewb pyram clock") }
+    let!(:competition3) { FactoryGirl.create(:competition, starting_at: 3.week.from_now, eventSpecs: "222 skewb 666 sq1") }
+    let!(:competition4) { FactoryGirl.create(:competition, starting_at: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
+
+    describe "selecting events" do
+      context "when no event is selected" do
+        it "competitions are sorted by start date" do
+          get :index
+          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+        end
+      end
+
+      context "when events are selected" do
+        it "competitions are sorted by the count of matched events" do
+          get :index, event_ids: ["333", "444", "555"]
+          expect(assigns(:competitions)).to eq [competition1, competition2, competition4, competition3]
+        end
+
+        it "copetitions with the same count of matched events are still sorted by start date" do
+          get :index, event_ids: ["333", "pyram", "clock"]
+          expect(assigns(:competitions)).to eq [competition4, competition2, competition1, competition3]
+        end
+      end
+
+      context "when none of the competitions matches any of the selected events" do
+        it "competitions are sorted by start date" do
+          get :index, event_ids: ["minx", "333fm", "333oh"]
+          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+        end
+      end
+    end
+  end
+
   describe 'GET #show' do
     context 'when not signed in' do
       sign_out

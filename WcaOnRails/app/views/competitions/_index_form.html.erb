@@ -1,6 +1,19 @@
 <div class="form-group">
-  <%= label_tag(:event) %>
-  <%= select_tag(:event, options_for_select(@events, selected: params[:event], disabled: ""), class: "form-control") %>
+  <%= label_tag "events" do %>
+    Events
+    <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
+    <button type="button" id="select-all-events" class="btn btn-primary btn-xs">All</button>
+  <% end %>
+  <div id="events">
+    <% Event.all_official.each do |event| %>
+    <span class="event-checkbox">
+      <%= label_tag "checkbox-#{event.id}" do %>
+        <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
+        <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+      <% end %>
+    </span>
+    <% end %>
+  </div>
 </div>
 
 <div class="form-group">
