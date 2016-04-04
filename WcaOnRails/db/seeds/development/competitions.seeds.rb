@@ -3,8 +3,6 @@ after "development:users" do
 
   users = User.where.not(wca_id: nil).sample(5)
 
-  countries = ["USA", "United Kingdom", "Germany", "Poland", "Brazil", "France","China","Korea","Argentina","Denmark","Sweden","India","Belarus"]
-
   # Create some past competitions with results
   500.times do |i|
     day = i.days.ago
@@ -14,7 +12,7 @@ after "development:users" do
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
       cityName: Faker::Address.city,
-      countryId: countries.sample,
+      countryId: Country::ALL_COUNTRIES.map(&:id).sample,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -82,7 +80,7 @@ after "development:users" do
     name: "New Comp #{day.year}",
     cellName: "New Comp #{day.year}",
     cityName: "Paris",
-    countryId: countries.sample,
+    countryId: "France",
     information: "Information!",
     start_date: day.strftime("%F"),
     end_date: day.strftime("%F"),
@@ -108,7 +106,7 @@ after "development:users" do
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",
       cityName: Faker::Address.city,
-      countryId: countries.sample,
+      countryId: Country::ALL_COUNTRIES.map(&:id).sample,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date:  end_day.strftime("%F"),
