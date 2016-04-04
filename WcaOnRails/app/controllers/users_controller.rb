@@ -10,10 +10,29 @@ class UsersController < ApplicationController
       flash[:danger] = "You cannot edit users"
       redirect_to root_url
     end
-    @users_grid = initialize_grid(User, {
-      order: 'name',
-      order_direction: 'asc'
-    })
+    respond_to do |format|
+      format.html { }
+      format.json do
+        @users = User
+        if params[:search]
+          @users = @users.where("name LIKE :input OR wca_id LIKE :input OR email LIKE :input", { input: "%#{params[:search]}%" })
+        end
+        if params[:sort]
+          @users = @users.order(params[:sort] => params[:order])
+        end
+        render json: {
+          total: @users.count,
+          rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
+            {
+              wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
+              name: user.name,
+              email: user.email,
+              edit: view_context.link_to("Edit", edit_user_path(user))
+            }
+          end
+        }
+      end
+    end
   end
 
   private def user_to_edit
