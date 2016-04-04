@@ -63,10 +63,12 @@ class CompetitionsController < ApplicationController
     end
 
     unless params[:event_ids].empty?
-      @competitions = @competitions.sort do |first, second|
-        (second.eventSpecs.split & params[:event_ids]).count <=> (first.eventSpecs.split & params[:event_ids]).count
-        # Note: If both competitions have the same count of matched events, they are still ordered by start date
+      @competitions = @competitions.select do |competition|
+        (competition.eventSpecs.split & params[:event_ids]).any?
+      end.sort_by do |competition|
+        -(competition.eventSpecs.split & params[:event_ids]).count
       end
+      # Note: If both competitions have the same count of matched events, they are still ordered by start date
     end
 
     @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)

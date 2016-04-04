@@ -1,8 +1,8 @@
 <div class="form-group">
   <%= label_tag "events" do %>
     Events
-    <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
     <button type="button" id="select-all-events" class="btn btn-primary btn-xs">All</button>
+    <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
   <% end %>
   <div id="events">
     <% Event.all_official.each do |event| %>
