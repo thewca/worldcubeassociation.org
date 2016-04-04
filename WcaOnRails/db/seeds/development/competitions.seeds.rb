@@ -3,8 +3,6 @@ after "development:users" do
 
   users = User.where.not(wca_id: nil).sample(5)
 
-  countries = ["USA", "United Kingdom", "Germany", "Poland", "Brazil", "France"]
-
   # Create some past competitions with results
   500.times do |i|
     day = i.days.ago
@@ -13,13 +11,13 @@ after "development:users" do
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
-      cityName: "San Francisco",
-      countryId: countries.sample,
+      cityName: Faker::Address.city,
+      countryId: Country::ALL_COUNTRIES.sample.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       eventSpecs: eventIds.join(" "),
-      venue: "My backyard",
+      venue: Faker::Address.street_name,
       website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
@@ -82,7 +80,7 @@ after "development:users" do
     name: "New Comp #{day.year}",
     cellName: "New Comp #{day.year}",
     cityName: "Paris",
-    countryId: countries.sample,
+    countryId: "France",
     information: "Information!",
     start_date: day.strftime("%F"),
     end_date: day.strftime("%F"),
@@ -107,13 +105,13 @@ after "development:users" do
       id: "MyComp#{i+1}#{start_day.year}",
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",
-      cityName: "Beijing",
-      countryId: countries.sample,
+      cityName: Faker::Address.city,
+      countryId: Country::ALL_COUNTRIES.sample.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date:  end_day.strftime("%F"),
       eventSpecs: eventIds.join(" "),
-      venue: "Bird's Nest National Stadium",
+      venue: Faker::Address.street_name,
       website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
