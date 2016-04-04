@@ -284,3 +284,24 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
   });
 });
+
+// Helpers
+
+// Executes the given function on the specified page/pages.
+// The given string should have a format: '<controller>#<action>'.
+// The action name preceded by '#' is optional.
+// Could be followed by comma and another pair.
+// Example: 'users#show, users#edit, users#update, competitions'.
+function onPage(controllersWithActions, fun) {
+  controllersWithActions = controllersWithActions.replace(/\s/g, '');
+  controllersWithActions = controllersWithActions.split(',');
+  controllersWithActions = controllersWithActions.map(function(controllerWithAction) { return controllerWithAction.split('#'); });
+  $(function() {
+    if (controllersWithActions.some(function(controllerWithAction) {
+      return controllerWithAction[0] === document.body.dataset.railsControllerName &&
+            (controllerWithAction[1] ? document.body.dataset.railsControllerActionName === controllerWithAction[1] : true);
+    })) {
+      fun();
+    }
+  });
+}

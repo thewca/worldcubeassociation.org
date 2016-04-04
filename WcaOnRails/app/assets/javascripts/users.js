@@ -1,8 +1,4 @@
-$(function() {
-  if(document.body.dataset.railsControllerName !== "users") {
-    return;
-  }
-
+onPage('users', function() {
   // Hide/show senior delegate select based on what the user's role is.
   $('select[name="user[delegate_status]"]').on("change", function(e) {
     var delegateStatus = this.value;

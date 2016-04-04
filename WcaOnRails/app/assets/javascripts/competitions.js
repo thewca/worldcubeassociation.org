@@ -1,8 +1,4 @@
-$(function() {
-  if(document.body.dataset.railsControllerName !== "competitions") {
-    return;
-  }
-
+onPage('competitions', function() {
   var $competitionSelect = $('#competition_competition_id_to_clone');
   if($competitionSelect.length > 0) {
     var selectize = $competitionSelect[0].selectize;
