@@ -1,8 +1,4 @@
-$(function() {
-  if(document.body.dataset.railsControllerName !== "registrations") {
-    return;
-  }
-
+onPage('registrations', function() {
   var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
   if($registrationsTable.length > 0) {
     var showHideActions = function(e) {
