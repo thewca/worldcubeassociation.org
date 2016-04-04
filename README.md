@@ -16,6 +16,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
   - Note: There are some minor [issues with development on Windows](https://github.com/cubing/worldcubeassociation.org/issues/393).
 - All emails will be accessible at `http://localhost:2332`.
+- Please take a look at this [wiki page](https://github.com/cubing/worldcubeassociation.org/wiki/Misc.-important-commands-to-know) for more detailed informations about the application's internals.
 
 ## Run locally ruby (lightweight, but only run the rails portions of the site)
 - We don't support development with sqlite3, you'll need to set up MySQL.
