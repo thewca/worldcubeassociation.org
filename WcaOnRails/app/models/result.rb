@@ -58,12 +58,11 @@ class Result < ActiveRecord::Base
   end
 
   private def sorted_solves_with_index
-    solves.each_with_index.reject { |s, i| s.skipped? }.sort
+    @sorted_solves_with_index ||= solves.each_with_index.reject { |s, i| s.skipped? }.sort
   end
 
   def solves
-    solves = (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
-    solves
+    @solves ||= (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
   end
 
   def to_s(field)
