@@ -1,4 +1,12 @@
 class SolveTime
+  EMPTY_STRING = ''.freeze
+  CLOCK_FORMAT = "%d:%02d:%02d.%02d".freeze
+  DOT_STRING = ".".freeze
+  ZERO_STRING = "0".freeze
+  DNF_STRING = "DNF".freeze
+  DNS_STRING = "DNS".freeze
+  QUESTION_STRING = "?:??:??".freeze
+
   include Comparable
 
   attr_reader :wca_value
@@ -47,11 +55,11 @@ class SolveTime
 
   def clock_format
     if dns?
-      return "DNS"
+      return DNS_STRING
     elsif dnf?
-      return "DNF"
+      return DNF_STRING
     elsif skipped?
-      return ""
+      return EMPTY_STRING
     end
 
     if @event_id == '333fm'
@@ -88,9 +96,9 @@ class SolveTime
 
       # Build time string.
       if time == 99999
-        result = '?:??:??'
+        result = QUESTION_STRING
       else
-        result = ""
+        result = EMPTY_STRING
         while time >= 60
           result = ":%02d#{result}" % ( time % 60 )
           time = time / 60
@@ -108,9 +116,9 @@ class SolveTime
       seconds = (time_centiseconds % 6000) / 100
       centis = time_centiseconds % 100
 
-      clock_format = ("%d:%02d:%02d.%02d" % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, '')
-      if clock_format.starts_with? "."
-        clock_format = "0" + clock_format
+      clock_format = (CLOCK_FORMAT % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, EMPTY_STRING)
+      if clock_format.starts_with? DOT_STRING
+        clock_format = ZERO_STRING + clock_format
       end
       clock_format
     end
