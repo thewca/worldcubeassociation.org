@@ -81,7 +81,7 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, table_class: "", &block)
+  def wca_table(responsive: true, hover: true, striped: true, table_class: "", data: {}, &block)
     table_classes = "table wca-results floatThead table-condensed table-greedy-last-column #{table_class}"
     if hover
       table_classes += " table-hover"
@@ -91,7 +91,7 @@ module ApplicationHelper
     end
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
-      content_tag :table, class: table_classes do
+      content_tag :table, class: table_classes, data: data do
         block.call
       end
     end

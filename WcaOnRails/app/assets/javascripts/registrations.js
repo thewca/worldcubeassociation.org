@@ -6,7 +6,7 @@ $(function() {
   var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
   if($registrationsTable.length > 0) {
     var showHideActions = function(e) {
-      var $selectedRows = $registrationsTable.find("tr.selected-row");
+      var $selectedRows = $registrationsTable.find("tr.selected");
       $('.selected-registrations-actions').toggle($selectedRows.length > 0);
 
       var $selectedApprovedRows = $selectedRows.filter(".registration-accepted");
@@ -18,12 +18,8 @@ $(function() {
       var emails = $selectedRows.find("a[href^=mailto]").map(function() { return this.href.match(/^mailto:(.*)/)[1]; }).toArray();
       document.getElementById("email-selected").href = "mailto:" + emails.join(",");
     };
-    $registrationsTable.on("change", ".select-row-checkbox", function() {
-      // Wait for selectable-rows code to run.
-      setTimeout(showHideActions, 0);
-    });
-    $registrationsTable.on("select-all-none-click", function() {
-      // Wait for selectable-rows code to run.
+    $registrationsTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function() {
+      // Wait in order to let bootstrap-table script add a 'selected' class to the appropriate rows
       setTimeout(showHideActions, 0);
     });
     showHideActions();

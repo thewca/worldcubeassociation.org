@@ -9,16 +9,17 @@
       <% else %>
         <h2>Approved registrations</h2>
       <% end %>
-      <% registrations = @competition.registrations.send(status).order(created_at: :asc, id: :asc) %>
-      <%= wca_table table_class: "registrations-table selectable-rows" do %>
+      <% registrations = @competition.registrations.send(status) %>
+      <%= wca_table table_class: "registrations-table", data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
           <tr>
-            <th><span></span></th>
+            <th data-checkbox="true"></th>
             <th></th>
-            <th class="wca-id">WCA ID</th>
-            <th class="name">Name</th>
-            <th class="countryId">Citizen of</th>
-            <th class="birthday">Birthday</th>
+            <th class="wca-id" data-sortable="true">WCA ID</th>
+            <th class="name" data-sortable="true">Name</th>
+            <th class="countryId" data-sortable="true">Citizen of</th>
+            <th class="registration-date" data-sortable="true" data-field="registration-date">Registered</th>
+            <th class="birthday" data-sortable="true">Birthday</th>
             <% @competition.events.each do |event| %>
               <th>
                 <span title="<%= event.name %>"
@@ -41,12 +42,8 @@
 
         <tbody>
           <% registrations.each do |registration| %>
-            <tr class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
-              <td>
-                <span>
-                  <input type="checkbox" name="registration-<%= registration.id %>" value="1" class="select-row-checkbox" />
-                </span>
-              </td>
+            <tr id="registration-<%= registration.id %>" class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
+              <td></td>
 
               <td>
                 <%= link_to "Edit", edit_registration_path(registration) %>
@@ -60,6 +57,11 @@
 
               <td class="name"><%= registration.name %></td>
               <td class="countryId"><%= registration.countryId %></td>
+              <td>
+                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
+                  <%= registration.created_at.to_date %>
+                </span>
+              </td>
               <td class="birthday"><%= registration.birthday %></td>
               <% @competition.events.each do |event| %>
                 <td>

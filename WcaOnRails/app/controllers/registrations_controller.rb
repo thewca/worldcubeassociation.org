@@ -73,7 +73,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.sort_by &:name
+    @registrations = @competition.registrations.accepted
   end
 
   def edit
@@ -107,7 +107,7 @@ class RegistrationsController < ApplicationController
     @competition_registration_view = true
     @competition = competition_from_params
     ids = []
-    registration_ids = params.select { |k| k.start_with?("registration-") }.map { |k, v| k.split('-')[1] }
+    registration_ids = params[:selected_registrations].map { |r| r.split('-')[1] }
     registrations = registration_ids.map do |registration_id|
       @competition.registrations.find_by_id!(registration_id)
     end
@@ -148,7 +148,7 @@ class RegistrationsController < ApplicationController
       render :edit
       return
     end
-    was_accepted = @registration.accepted? 
+    was_accepted = @registration.accepted?
     if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
