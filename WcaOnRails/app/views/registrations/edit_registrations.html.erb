@@ -107,6 +107,7 @@
             <% country_count = registrations.map(&:countryId).uniq.length %>
             <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
             <td></td>
+            <td></td>
             <% @competition.events.each do |event| %>
               <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
             <% end %>
