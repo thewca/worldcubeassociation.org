@@ -43,4 +43,14 @@ $(function() {
     $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
+
+  // Change bootstrap-table pagination description
+  var $table = $('.bootstrap-table');
+  var options = $table.bootstrapTable('getOptions');
+  options.formatRecordsPerPage = function(pageNumber) {
+    return pageNumber + ' users per page';
+  };
+  options.formatShowingRows = function(pageFrom, pageTo, totalRows) {
+    return 'Showing ' + pageFrom + ' to ' + pageTo + ' of ' + totalRows + ' users ';
+  };
 });
