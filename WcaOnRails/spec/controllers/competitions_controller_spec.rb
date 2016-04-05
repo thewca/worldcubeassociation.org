@@ -4,10 +4,10 @@ describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
 
   describe 'GET #index' do
-    let!(:competition1) { FactoryGirl.create(:competition, starting_at: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
-    let!(:competition2) { FactoryGirl.create(:competition, starting_at: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
-    let!(:competition3) { FactoryGirl.create(:competition, starting_at: 3.week.from_now, eventSpecs: "222 skewb 666 pyram sq1") }
-    let!(:competition4) { FactoryGirl.create(:competition, starting_at: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
+    let!(:competition1) { FactoryGirl.create(:competition, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
+    let!(:competition2) { FactoryGirl.create(:competition, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
+    let!(:competition3) { FactoryGirl.create(:competition, starts: 3.week.from_now, eventSpecs: "222 skewb 666 pyram sq1") }
+    let!(:competition4) { FactoryGirl.create(:competition, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
 
     describe "selecting events" do
       context "when no event is selected" do
@@ -23,7 +23,7 @@ describe CompetitionsController do
           expect(assigns(:competitions)).to eq [competition1, competition2, competition4, competition3]
         end
 
-        it "copetitions with the same count of matched events are still sorted by start date" do
+        it "competitions with the same count of matched events are still sorted by start date" do
           get :index, event_ids: ["333", "pyram", "clock"]
           expect(assigns(:competitions)).to eq [competition4, competition2, competition3, competition1]
         end

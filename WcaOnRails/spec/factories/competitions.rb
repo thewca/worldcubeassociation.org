@@ -7,11 +7,12 @@ FactoryGirl.define do
     information "Information!"
 
     transient do
-      starting_at 1.year.ago
+      starts 1.year.ago
+      ends { starts }
     end
 
-    start_date { starting_at.strftime("%F") }
-    end_date { starting_at.strftime("%F") }
+    start_date { starts.strftime("%F") }
+    end_date { ends.strftime("%F") }
 
     eventSpecs "333 333oh"
     venue "My backyard"
