@@ -53,12 +53,14 @@
         <% end %>
 
         <% if !hide_pos %>
-          <% classes = [ "pos" ] %>
+          <% classes = "pos" %>
           <% previous_result = i > 0 ? results[i - 1] : nil %>
           <% if previous_result && previous_result.eventId == result.eventId && previous_result.roundId == result.roundId && previous_result.pos == result.pos %>
-            <% classes << "tied-previous" %>
+            <% classes << " tied-previous" %>
           <% end %>
-          <%= content_tag :td, result.pos, class: classes %>
+          <td class="<%= classes %>">
+            <%= result.pos %>
+          </td>
         <% end %>
 
         <% if !hide_name %>
@@ -83,12 +85,13 @@
         <% best_index = result.best_index %>
         <% worst_index = result.worst_index %>
         <% result.solves.each_with_index do |solve, i| %>
-          <% classes = [] %>
-          <% classes << "solve#{i + 1}" %>
-          <% classes << "trimmed" if trimmed_indices.include?(i) %>
-          <% classes << "best" if i == best_index %>
-          <% classes << "worst" if i == worst_index %>
-          <%= content_tag :td, solve.clock_format, class: classes %>
+          <% classes = "solve#{i + 1}" %>
+          <% classes << " trimmed" if trimmed_indices.include?(i) %>
+          <% classes << " best" if i == best_index %>
+          <% classes << " worst" if i == worst_index %>
+          <td class="<%= classes %>">
+            <%= solve.clock_format %>
+          </td>
         <% end %>
 
         <!-- Extra column for .table-greedy-last-column -->
