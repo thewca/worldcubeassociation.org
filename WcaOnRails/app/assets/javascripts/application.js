@@ -15,7 +15,6 @@
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require local_time
-//= require wice_grid
 //= require jquery.are-you-sure
 //= require locationpicker.jquery
 //= require selectize
@@ -240,8 +239,10 @@ Math.trunc = Math.trunc || function(x) {
 
 // Setting up bootstrap-table
 $(function() {
+  $('table[data-toggle="table"]').addClass('bootstrap-table');
+
   // Hide loading box
-  $('table[data-toggle="table"]').bootstrapTable('hideLoading');
+  $('.bootstrap-table').bootstrapTable('hideLoading');
 
   // It's not necessary when bootstrap-table will be distributed with this merged:
   // https://github.com/wenzhixin/bootstrap-table/pull/2145
@@ -266,7 +267,7 @@ $(function() {
   // (and the appropriate gem will be updated)
   // -------------------------------------------------------------------
   // Prevent bootstrap-table from selecting a row when a link is clicked
-  $('table[data-toggle="table"] td a').on('click', function(e) {
+  $('.bootstrap-table td a').on('click', function(e) {
     e.stopPropagation();
   });
   // -------------------------------------------------------------------
@@ -277,7 +278,7 @@ $(function() {
       $(this).val($(this).parents('tr').attr('id'));
     });
   };
-  initCheckboxesValues($('table[data-toggle="table"]'));
+  initCheckboxesValues($('.bootstrap-table'));
   $('table').on('post-body.bs.table', function() {
     initCheckboxesValues($(this));
     // Re-apply tooltip on each table body change

@@ -3,21 +3,19 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <%= grid(@users_grid) do |g|
+  <%= wca_table table_class: "users-table",
+                data: { toggle: "table", pagination: "true", side_pagination: "server", url: users_url,
+                        search: "true", sort_name: "name", undefined_text: "" } do %>
+    <thead>
+      <tr>
+        <th class="wca-id" data-field="wca_id" data-sortable="true">WCA ID</th>
+        <th class="name" data-field="name" data-sortable="true">Name</th>
+        <th class="email" data-field="email" data-sortable="true">Email</th>
+        <th class="edit" data-field="edit"></th>
 
-    g.column name: "WCA ID", attribute: "wca_id"
-    g.column name: "Name", attribute: "name"
-    g.column name: "Email", attribute: "email" do |user|
-      opts = {}
-      unless user.confirmed_at
-        opts[:class] = "unconfirmed-email"
-        opts[:title] = "Email not confirmed"
-      end
-      [ user.email, opts ]
-    end
-
-    g.column do |user|
-      link_to('Edit', edit_user_path(user))
-    end
-  end -%>
+        <!-- Extra column for .table-greedy-last-column -->
+        <th></th>
+      </tr>
+    </thead>
+  <% end %>
 </div>
