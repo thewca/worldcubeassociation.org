@@ -286,7 +286,7 @@ CREATE TABLE `Preregs` (
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'p',
   `eventIds` text COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   `guests` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -745,7 +745,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-19  9:22:26
+-- Dump completed on 2016-04-06 19:27:08
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -853,4 +853,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160224013453');
 INSERT INTO schema_migrations (version) VALUES ('20160303144700');
 
 INSERT INTO schema_migrations (version) VALUES ('20160305170821');
+
+INSERT INTO schema_migrations (version) VALUES ('20160406192349');
 
