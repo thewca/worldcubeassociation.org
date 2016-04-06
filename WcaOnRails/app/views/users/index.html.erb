@@ -3,14 +3,15 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <%= wca_table data: { toggle: "table", pagination: "true", side_pagination: "server", url: users_url,
+  <%= wca_table table_class: "users-table",
+                data: { toggle: "table", pagination: "true", side_pagination: "server", url: users_url,
                         search: "true", sort_name: "name", undefined_text: "" } do %>
     <thead>
       <tr>
-        <th class="wca-id" data-field="wca_id" data-sortable="true" data-width="15%">WCA ID</th>
-        <th class="name" data-field="name" data-sortable="true" data-width="40%">Name</th>
-        <th class="email" data-field="email" data-sortable="true" data-width="40%">Email</th>
-        <th class="edit" data-field="edit" data-width="5%"></th>
+        <th class="wca-id" data-field="wca_id" data-sortable="true">WCA ID</th>
+        <th class="name" data-field="name" data-sortable="true">Name</th>
+        <th class="email" data-field="email" data-sortable="true">Email</th>
+        <th class="edit" data-field="edit"></th>
 
         <!-- Extra column for .table-greedy-last-column -->
         <th></th>

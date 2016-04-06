@@ -48,9 +48,11 @@ $(function() {
   var $table = $('.bootstrap-table');
   var options = $table.bootstrapTable('getOptions');
   options.formatRecordsPerPage = function(pageNumber) {
+    // Space after the input box with per page count
     return pageNumber + ' users per page';
   };
   options.formatShowingRows = function(pageFrom, pageTo, totalRows) {
+    // Space before the input box with per page count
     return 'Showing ' + pageFrom + ' to ' + pageTo + ' of ' + totalRows + ' users ';
   };
 });

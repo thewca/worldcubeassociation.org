@@ -1,7 +1,15 @@
-.wice-grid {
-  tr.wg-filter-row input[type=text] {
-    // Overrride WiceGrid default width.
-    width: 100%;
+table.users-table {
+  .wca-id {
+    width: 15%;
+  }
+  .name {
+    width: 40%;
+  }
+  .email {
+    width: 40%;
+  }
+  .edit {
+    width: 5%;
   }
 }
 
