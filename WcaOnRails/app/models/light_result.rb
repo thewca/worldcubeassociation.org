@@ -1,4 +1,7 @@
 class LightResult
+  attr_accessor :muted
+
+  # TODO needs to be accessor?
   attr_accessor :value1,
     :value2,
     :value3,
@@ -33,6 +36,10 @@ class LightResult
     @regionalSingleRecord = r["regionalSingleRecord"]
     @regionalAverageRecord = r["regionalAverageRecord"]
     @countryId = r["countryId"]
+  end
+
+  def results_path
+    "/results/p.php?i=#{personId}"
   end
 
   def event
