@@ -3,10 +3,11 @@
 <%= render layout: 'nav' do %>
   <%= render "competition_info", competition: @competition %>
 
-  <% @competition.persons_with_results.each do |person, results| %>
+  <% @competition.persons_with_results.each do |personName, results| %>
     <h3>
-      <%= anchorable "#{person.name} #{person.countryId}", person.wca_id %>
-      <%= link_to "WCA profile", person.results_path %>
+      <% first_result = results.first %>
+      <%= anchorable "#{first_result.personName} #{first_result.countryId}", first_result.wca_id %>
+      <%= link_to "WCA profile", first_result.results_path %>
     </h3>
     <%= render "results_table", results: results, hide_name: true, hide_country: true %>
   <% end %>

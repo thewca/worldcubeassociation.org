@@ -12,6 +12,10 @@ class Result < ActiveRecord::Base
   attr_accessor :tied_previous
   attr_accessor :muted
 
+  def results_path
+    "/results/p.php?i=#{personId}"
+  end
+
   def event
     Event.find(eventId)
   end

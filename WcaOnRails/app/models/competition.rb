@@ -477,7 +477,7 @@ class Competition < ActiveRecord::Base
   end
 
   def persons_with_results
-    results.group_by(&:person).sort_by { |person, results| person.name }.map do |person, results|
+    results.group_by(&:personName).sort_by { |personName, results| personName }.map do |personName, results|
       results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
 
       # Mute (soften) each result that wasn't the competitor's last for the event.
@@ -487,7 +487,7 @@ class Competition < ActiveRecord::Base
         last_event = result.event
       end
 
-      [ person, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
+      [ personName, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
     end
   end
 
