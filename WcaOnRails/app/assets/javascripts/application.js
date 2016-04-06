@@ -15,7 +15,6 @@
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require local_time
-//= require wice_grid
 //= require jquery.are-you-sure
 //= require locationpicker.jquery
 //= require selectize
