@@ -62,7 +62,12 @@ class Result < ActiveRecord::Base
   end
 
   def solves
-    @solves ||= (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
+    @solves ||= [SolveTime.new(eventId, :single, value1),
+    SolveTime.new(eventId, :single, value2),
+    SolveTime.new(eventId, :single, value3),
+    SolveTime.new(eventId, :single, value4),
+    SolveTime.new(eventId, :single, value5)]
+    #@solves ||= (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
   end
 
   def to_s(field)
