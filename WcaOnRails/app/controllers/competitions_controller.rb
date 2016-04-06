@@ -43,6 +43,10 @@ class CompetitionsController < ApplicationController
 
     params[:event_ids] ||= []
 
+    if params[:event_ids].is_a?(Hash)
+      params[:event_ids] = params[:event_ids].values
+    end
+
     if params[:years] == "current"
       @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?",
                                           (Date.today - PAST_COMPETITIONS_DAYS))
