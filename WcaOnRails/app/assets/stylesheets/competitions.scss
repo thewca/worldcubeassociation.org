@@ -155,8 +155,10 @@ $venue-map-wrapper-height: 400px;
   background-color: #fff;
   width: 100%;
   padding-bottom: 10px;
+  position: relative;
+  top: 5px;
 
-  input,
+  input:not([type="checkbox"]),
   select {
     font-size: 12px;
     font-weight: normal;

@@ -25,4 +25,11 @@ onPage('competitions', function() {
       $registrationOptionsAreas.toggle(this.checked);
     }).trigger("change");
   }
+
+  $('#clear-all-events').on('click', function() {
+    $('#events input[type="checkbox"]').prop('checked', false);
+  });
+  $('#select-all-events').on('click', function() {
+    $('#events input[type="checkbox"]').prop('checked', true);
+  });
 });
