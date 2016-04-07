@@ -305,10 +305,10 @@ class Competition < ActiveRecord::Base
     eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
-  def matching_event_ids_count(event_ids)
+  def has_events_with_ids?(event_ids)
     # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
     # what these equal signs are about.
-    (eventSpecs.split.map { |e| e.split("=")[0] } & event_ids).count
+    (event_ids - eventSpecs.split.map { |e| e.split("=")[0] }).empty?
   end
 
   def has_event?(event)

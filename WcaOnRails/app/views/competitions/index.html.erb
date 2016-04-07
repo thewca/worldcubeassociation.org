@@ -24,8 +24,14 @@
     <%= render 'index_form' %>
   <% end %>
 
-  <% if @competitions.length == 0 %>
-    <div class="alert alert-warning">No competitions found.</div>
+  <% if @competitions.empty? %>
+    <div class="alert alert-warning">
+      <%= unless params[:event_ids].empty?
+        "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
+      else
+        "No competitions found."
+      end %>
+    </div>
   <% else %>
     <% if params[:display] == "List" %>
       <div class="row competition-list">
