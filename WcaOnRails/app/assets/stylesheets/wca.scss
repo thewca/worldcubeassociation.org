@@ -222,3 +222,10 @@ table.wca-results {
     padding: 10px;
   }
 }
+
+// Set olympic flags for competitions taking place in multiple countries.
+.f16.flag {
+  &.xe, &.xa, &.xs {
+    @extend .f16.flag._Olympic_Movement;
+  }
+}
