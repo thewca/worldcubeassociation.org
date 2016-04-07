@@ -469,15 +469,15 @@ class Competition < ActiveRecord::Base
   end
 
   def events_with_podium_results
-    results.where(roundId: Round.final_rounds.map(&:id)).where("pos >= 1 AND pos <= 3").group_by(&:event).sort_by { |event, results| event.rank }
+    light_results_from_relation(results.where(roundId: Round.final_rounds.map(&:id)).where("pos >= 1 AND pos <= 3")).group_by(&:event).sort_by { |event, results| event.rank }
   end
 
   def winning_results
-    results.where(roundId: Round.final_rounds.map(&:id)).where("pos = 1").sort_by { |r| r.event.rank }
+    light_results_from_relation(results.where(roundId: Round.final_rounds.map(&:id)).where("pos = 1")).sort_by { |r| r.event.rank }
   end
 
   def persons_with_results
-    light_results.group_by(&:personName).sort_by { |personName, results| personName }.map do |personName, results|
+    light_results_from_relation(results).group_by(&:personName).sort_by { |personName, results| personName }.map do |personName, results|
       results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
 
       # Mute (soften) each result that wasn't the competitor's last for the event.
@@ -492,8 +492,7 @@ class Competition < ActiveRecord::Base
   end
 
   def events_with_rounds_with_results
-    quoted_id = ActiveRecord::Base.connection.quote(id)
-    light_results.group_by(&:event).sort_by { |event, results| event.rank }.map do |event, results|
+    light_results_from_relation(results).group_by(&:event).sort_by { |event, results| event.rank }.map do |event, results|
       rounds_with_results = results.group_by(&:round).sort_by { |format, results| format.rank }.map do |round, results|
         [ round, results.sort_by(&:pos) ]
       end
@@ -502,8 +501,8 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  private def light_results
-    ActiveRecord::Base.connection.execute("SELECT value1, value2, value3, value4, value5, best, average, personName, eventId, formatId, roundId, pos, personId, regionalSingleRecord, regionalAverageRecord, countryId FROM Results WHERE competitionId = #{quoted_id}").each(as: :hash).map do |r|
+  private def light_results_from_relation(relation)
+    ActiveRecord::Base.connection.execute(relation.to_sql).each(as: :hash).map do |r|
       LightResult.new(r)
     end
   end

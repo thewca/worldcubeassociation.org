@@ -10,7 +10,6 @@ class Result < ActiveRecord::Base
   belongs_to :person, foreign_key: :personId
 
   attr_accessor :tied_previous
-  attr_accessor :muted
 
   def event
     Event.find(eventId)
