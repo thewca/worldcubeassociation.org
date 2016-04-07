@@ -67,15 +67,7 @@ class CompetitionsController < ApplicationController
     end
 
     unless params[:event_ids].empty?
-      @competitions = @competitions.map do |competition|
-        [competition, competition.matching_event_ids_count(params[:event_ids])]
-      end.select do |competition_and_matching_event_count|
-        competition_and_matching_event_count[1] > 0
-      end.sort_by! do |competition_and_matching_event_count|
-        -competition_and_matching_event_count[1]
-      end.map! do |competition_and_matching_event_count|
-        competition_and_matching_event_count[0]
-      end
+      @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
     end
 
     @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
