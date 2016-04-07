@@ -362,6 +362,7 @@ CREATE TABLE `Results` (
   `average` int(11) NOT NULL DEFAULT '0',
   `regionalSingleRecord` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `regionalAverageRecord` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `Results_fk_tournament` (`competitionId`),
   KEY `Results_fk_event` (`eventId`),
@@ -371,7 +372,8 @@ CREATE TABLE `Results` (
   KEY `Results_eventAndBest` (`eventId`,`best`),
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
-  KEY `Results_fk_competitor` (`personId`)
+  KEY `Results_fk_competitor` (`personId`),
+  KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=857992 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -745,7 +747,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-08  3:09:54
+-- Dump completed on 2016-04-08  3:31:14
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -859,4 +861,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160305170821');
 INSERT INTO schema_migrations (version) VALUES ('20160406192349');
 
 INSERT INTO schema_migrations (version) VALUES ('20160407005537');
+
+INSERT INTO schema_migrations (version) VALUES ('20160407210623');
 

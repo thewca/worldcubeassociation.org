@@ -56,6 +56,7 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  config.cache_store = :file_store, "tmp/cache/fragments"
 
   root_url = URI.parse(ENVied.ROOT_URL)
   config.action_mailer.default_url_options = {

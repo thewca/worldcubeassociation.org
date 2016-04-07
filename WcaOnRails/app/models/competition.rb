@@ -1,3 +1,5 @@
+require 'option'
+
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
   # FIXME Tests fail with "Unknown primary key for table Competitions in model Competition."
@@ -466,6 +468,14 @@ class Competition < ActiveRecord::Base
 
   def is_over?
     !!end_date && end_date < Date.today
+  end
+
+  def results_updated_at
+    Option.from_nilable(results.order('updated_at desc').pluck(:updated_at).first)
+  end
+
+  def result_cache_key(view)
+    [id, view, results_updated_at.map(&:iso8601).unwrap_or("")]
   end
 
   def events_with_podium_results
