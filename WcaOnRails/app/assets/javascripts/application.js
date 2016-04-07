@@ -28,6 +28,7 @@
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
+//= require jquery.autosize
 //= require_self
 //= require_tree .
 
@@ -284,6 +285,11 @@ $(function() {
     // Re-apply tooltip on each table body change
     $('[data-toggle="tooltip"]').tooltip();
   });
+});
+
+// Setting up autosize
+$(function() {
+  $('textarea').autosize();
 });
 
 // Helpers

@@ -247,3 +247,9 @@ table.wca-results {
     border: 1px solid red;
   }
 }
+
+// Textarea resizes dynamically, so changing its size manually is no longer necessary.
+textarea {
+  resize: none;
+}
+

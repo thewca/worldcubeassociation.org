@@ -27,7 +27,8 @@ gem 'strip_attributes'
 gem 'time_will_tell'
 gem 'redcarpet', '~> 3.3'
 gem 'world-flags', git: 'git://github.com/world-flags/world-flags.git'
-gem "bootstrap-table-rails"
+gem 'bootstrap-table-rails'
+gem 'autosize-rails'
 
 # Pointing to jfly/carrierwave-crop which has a workaround for
 #  https://github.com/brianreavis/selectize.js/issues/953
