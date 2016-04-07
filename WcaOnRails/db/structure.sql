@@ -287,7 +287,7 @@ CREATE TABLE `Preregs` (
   `eventIds` text COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL,
+  `updated_at` datetime NOT NULL,
   `guests` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
@@ -855,4 +855,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160303144700');
 INSERT INTO schema_migrations (version) VALUES ('20160305170821');
 
 INSERT INTO schema_migrations (version) VALUES ('20160406192349');
+
+INSERT INTO schema_migrations (version) VALUES ('20160407005537');
 
