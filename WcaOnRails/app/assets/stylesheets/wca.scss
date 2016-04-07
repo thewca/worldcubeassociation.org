@@ -222,3 +222,28 @@ table.wca-results {
     padding: 10px;
   }
 }
+
+
+// Set flag imitations for competitions taking place in multiple countries.
+.f16.flag {
+  &.xe,
+  &.xa,
+  &.xs {
+    background-image: none;
+    display: inline-block;
+    top: 1px;
+    width: 16px;
+    height: 12px;
+    background-color: white;
+    border-radius: 2px;
+  }
+  &.xe {
+    border: 1px solid $blue;
+  }
+  &.xa {
+    border: 1px solid yellow;
+  }
+  &.xs {
+    border: 1px solid red;
+  }
+}

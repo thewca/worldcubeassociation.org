@@ -19,10 +19,7 @@
       </span>
       <span class="competition-info">
         <p class="competition-link">
-          <!-- The 'unless' is necessary to remove a default flag. Can be removed after resolving https://github.com/cubing/worldcubeassociation.org/issues/447 -->
-          <% unless competition.country.name.match(/Multiple Countries/) %>
-            <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
-          <% end %>
+          <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
           <%= link_to competition.cellName, competition_path(competition) %>
         </p>
         <p class="location"><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>
