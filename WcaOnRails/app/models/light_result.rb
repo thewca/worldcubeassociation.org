@@ -1,8 +1,7 @@
 class LightResult
   attr_accessor :muted
 
-  # TODO needs to be accessor?
-  attr_accessor :value1,
+  attr_reader :value1,
     :value2,
     :value3,
     :value4,
@@ -88,7 +87,6 @@ def solves
                SolveTime.new(eventId, :single, value3),
                SolveTime.new(eventId, :single, value4),
                SolveTime.new(eventId, :single, value5)]
-  #@solves ||= (1..5).map { |i| SolveTime.new(eventId, :single, send(:"value#{i}")) }
 end
 
 def worst_index
