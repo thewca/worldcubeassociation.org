@@ -1,5 +1,7 @@
 language: ruby
-cache: bundler
+cache:
+  directories:
+    - vendor/bundle
 rvm:
   - 2.2.3
 env:
