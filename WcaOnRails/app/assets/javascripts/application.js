@@ -28,7 +28,7 @@
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
-//= require jquery.autosize
+//= require autosize
 //= require_self
 //= require_tree .
 
@@ -289,7 +289,7 @@ $(function() {
 
 // Setting up autosize
 $(function() {
-  $('textarea').autosize();
+  autosize($('textarea'));
 });
 
 // Helpers
