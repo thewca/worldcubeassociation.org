@@ -27,7 +27,7 @@ gem 'strip_attributes'
 gem 'time_will_tell'
 gem 'redcarpet', '~> 3.3'
 gem 'world-flags', git: 'git://github.com/world-flags/world-flags.git'
-gem "bootstrap-table-rails"
+gem 'bootstrap-table-rails'
 
 # Pointing to jfly/carrierwave-crop which has a workaround for
 #  https://github.com/brianreavis/selectize.js/issues/953
@@ -52,6 +52,10 @@ gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-autosize'
+end
 
 group :development, :test do
   gem 'spring'
