@@ -78,31 +78,31 @@ class LightResult
   end
 
   private def sorted_solves_with_index
-  @sorted_solves_with_index ||= solves.each_with_index.reject { |s, i| s.skipped? }.sort
-end
+    @sorted_solves_with_index ||= solves.each_with_index.reject { |s, i| s.skipped? }.sort
+  end
 
-def solves
-  @solves ||= [SolveTime.new(eventId, :single, value1),
-               SolveTime.new(eventId, :single, value2),
-               SolveTime.new(eventId, :single, value3),
-               SolveTime.new(eventId, :single, value4),
-               SolveTime.new(eventId, :single, value5)]
-end
+  def solves
+    @solves ||= [SolveTime.new(eventId, :single, value1),
+                 SolveTime.new(eventId, :single, value2),
+                 SolveTime.new(eventId, :single, value3),
+                 SolveTime.new(eventId, :single, value4),
+                 SolveTime.new(eventId, :single, value5)]
+  end
 
-def worst_index
-  sorted_solves_with_index.max[1]
-end
+  def worst_index
+    sorted_solves_with_index.max[1]
+  end
 
-def trimmed_indices
-  if missed_combined_round_cutoff?
-    # When you miss the cutoff for a combined round, you don't
-    # get an average, therefore none of the solves were trimmed.
-    []
-  else
-    sorted_solves = sorted_solves_with_index
-    trimmed_solves_with_index = sorted_solves[0...format.trim_fastest_n]
-    trimmed_solves_with_index += sorted_solves[(sorted_solves.length - format.trim_slowest_n)...sorted_solves.length]
-    trimmed_solves_with_index.map { |s, i| i }
+  def trimmed_indices
+    if missed_combined_round_cutoff?
+      # When you miss the cutoff for a combined round, you don't
+      # get an average, therefore none of the solves were trimmed.
+      []
+    else
+      sorted_solves = sorted_solves_with_index
+      trimmed_solves_with_index = sorted_solves[0...format.trim_fastest_n]
+      trimmed_solves_with_index += sorted_solves[(sorted_solves.length - format.trim_slowest_n)...sorted_solves.length]
+      trimmed_solves_with_index.map { |s, i| i }
+    end
   end
 end
-  end

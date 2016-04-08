@@ -377,18 +377,18 @@ RSpec.describe Competition do
       ]
     end
 
-    it "persons_with_results" do
-      expect(competition.persons_with_results).to eq [
+    it "person_names_with_results" do
+      expect(competition.person_names_with_results).to eq [
         [ person_four, [ r_333_1_fourth ] ],
         [ person_one, [ r_333_f_first, r_333_1_first, r_222_c_first ] ],
         [ person_three, [ r_333_f_third, r_333_1_third ] ],
         [ person_two, [ r_333_f_second, r_333_1_second ] ],
       ]
-      expect(competition.persons_with_results[1][1][1].muted).to eq true
-      expect(competition.persons_with_results[1][1][2].muted).to eq false
+      expect(competition.person_names_with_results[1][1][1].muted).to eq true
+      expect(competition.person_names_with_results[1][1][2].muted).to eq false
 
-      expect(competition.persons_with_results[2][1][1].muted).to eq true
-      expect(competition.persons_with_results[3][1][1].muted).to eq true
+      expect(competition.person_names_with_results[2][1][1].muted).to eq true
+      expect(competition.person_names_with_results[3][1][1].muted).to eq true
     end
 
     it "events_with_rounds_with_results" do

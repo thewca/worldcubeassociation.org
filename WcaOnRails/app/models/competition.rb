@@ -479,42 +479,58 @@ class Competition < ActiveRecord::Base
   end
 
   def events_with_podium_results
-    light_results_from_relation(results.where(roundId: Round.final_rounds.map(&:id)).where("pos >= 1 AND pos <= 3")).group_by(&:event).sort_by { |event, results| event.rank }
+    light_results_from_relation(
+      results
+        .where(roundId: Round.final_rounds.map(&:id))
+        .where("pos >= 1 AND pos <= 3")
+    ).group_by(&:event)
+      .sort_by { |event, results| event.rank }
   end
 
   def winning_results
-    light_results_from_relation(results.where(roundId: Round.final_rounds.map(&:id)).where("pos = 1")).sort_by { |r| r.event.rank }
+    light_results_from_relation(
+      results
+        .where(roundId: Round.final_rounds.map(&:id))
+        .where("pos = 1")
+    ).sort_by { |r| r.event.rank }
   end
 
-  def persons_with_results
-    light_results_from_relation(results).group_by(&:personName).sort_by { |personName, results| personName }.map do |personName, results|
-      results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
+  def person_names_with_results
+    light_results_from_relation(results)
+      .group_by(&:personName)
+      .sort_by { |personName, results| personName }
+      .map do |personName, results|
+        results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
 
-      # Mute (soften) each result that wasn't the competitor's last for the event.
-      last_event = nil
-      results.each do |result|
-        result.muted = (result.event == last_event)
-        last_event = result.event
+        # Mute (soften) each result that wasn't the competitor's last for the event.
+        last_event = nil
+        results.each do |result|
+          result.muted = (result.event == last_event)
+          last_event = result.event
+        end
+
+        [ personName, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
       end
-
-      [ personName, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
-    end
   end
 
   def events_with_rounds_with_results
-    light_results_from_relation(results).group_by(&:event).sort_by { |event, results| event.rank }.map do |event, results|
-      rounds_with_results = results.group_by(&:round).sort_by { |format, results| format.rank }.map do |round, results|
-        [ round, results.sort_by(&:pos) ]
-      end
+    light_results_from_relation(results)
+      .group_by(&:event)
+      .sort_by { |event, results| event.rank }
+      .map do |event, results|
+        rounds_with_results = results
+          .group_by(&:round)
+          .sort_by { |format, results| format.rank }
+          .map { |round, results| [ round, results.sort_by(&:pos) ] }
 
-      [ event, rounds_with_results ]
-    end
+        [ event, rounds_with_results ]
+      end
   end
 
   private def light_results_from_relation(relation)
-    ActiveRecord::Base.connection.execute(relation.to_sql).each(as: :hash).map do |r|
-      LightResult.new(r)
-    end
+    ActiveRecord::Base.connection
+      .execute(relation.to_sql)
+      .each(as: :hash).map(&LightResult.method(:new))
   end
 
   def started?
