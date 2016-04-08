@@ -94,4 +94,10 @@ class Api::V0::ApiController < ApplicationController
     user = User.find_by_wca_id(params[:wca_id])
     show_user(user)
   end
+
+  def competitions
+    competitions = Competition.where(showAtAll: true).order(year: :desc, month: :desc, day: :desc)
+
+    paginate json: competitions
+  end
 end

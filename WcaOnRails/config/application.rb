@@ -4,6 +4,8 @@ require_relative '../lib/middlewares/warden_user_logger'
 
 require 'rails/all'
 
+require_relative '../lib/monkeypatch_json_renderer_to_pretty_print'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
