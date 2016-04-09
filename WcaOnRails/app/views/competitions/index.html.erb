@@ -16,7 +16,7 @@
       end %>
     </div>
   <% else %>
-    <% if params[:display] == "List" %>
+    <% if params[:display] == "list" %>
       <div class="row competition-list">
         <% if @past_selected %>
           <div class="col-md-12" id="past">
@@ -62,7 +62,7 @@ function mapSize() {
 }
 
 $(function() {
-  <% if params[:display] == 'Map' %>
+  <% if params[:display] == 'map' %>
     var competitions = <%= @competitions.map do |c|
         {
           id: c.id,

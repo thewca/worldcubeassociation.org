@@ -153,8 +153,6 @@ $venue-map-wrapper-height: 400px;
 
 .competition-select.form-inline {
   width: 100%;
-  position: relative;
-  top: 5px;
 
   input:not([type="checkbox"]),
   select {
@@ -165,6 +163,11 @@ $venue-map-wrapper-height: 400px;
 
   button {
     width: 100px;
+  }
+
+  #state {
+    min-width: 220px;
+    width: 100%;
   }
 
   #submit-buttons {
@@ -289,8 +292,4 @@ $venue-map-wrapper-height: 400px;
   height: 40px;
   margin-top: -40px;
   visibility: hidden;
-}
-
-#state {
-  min-width: 220px;
 }

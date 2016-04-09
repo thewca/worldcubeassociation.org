@@ -24,7 +24,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
-    params[:display] ||= "List"
+    params[:display] ||= "list"
 
     if params[:event_ids].is_a?(Hash)
       params[:event_ids] = params[:event_ids].values
