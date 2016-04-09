@@ -181,6 +181,48 @@ describe Api::V0::ApiController do
     end
   end
 
+  describe 'GET #competitions' do
+    let!(:yesteryear_comp) { FactoryGirl.create(:competition, starts: 1.year.ago) }
+    let!(:yesterday_comp) { FactoryGirl.create(:competition, starts: 1.day.ago) }
+    let!(:today_comp) { FactoryGirl.create(:competition, starts: 0.days.ago) }
+    let!(:tomorrow_comp) { FactoryGirl.create(:competition, starts: 1.day.from_now) }
+
+    it 'sorts newest to oldest' do
+      get :competitions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 4
+      expect(json[0]["id"]).to eq tomorrow_comp.id
+      expect(json[1]["id"]).to eq today_comp.id
+      expect(json[2]["id"]).to eq yesterday_comp.id
+      expect(json[3]["id"]).to eq yesteryear_comp.id
+    end
+
+    it 'paginates' do
+      30.times do
+        FactoryGirl.create :competition
+      end
+
+      get :competitions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 25
+
+      # Parse HTTP Link header mess
+      link = response.headers["Link"]
+      links = link.split(/, */)
+      next_link = links[1]
+      url, rel = next_link.split(/; */)
+      url = url[1...-1]
+      expect(rel).to eq 'rel="next"'
+
+      get :competitions, Rack::Utils.parse_query(URI(url).query)
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq Competition.count - 25
+    end
+  end
+
   describe 'GET #scramble_program' do
     it 'works' do
       get :scramble_program
