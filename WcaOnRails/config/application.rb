@@ -50,6 +50,7 @@ module WcaOnRails
         resource '/api/*',
           headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
           methods: [:get, :post, :delete, :put, :patch, :options, :head],
+          expose: ['Total', 'Per-Page', 'Link'],
           max_age: 0,
           credentials: false
       end
