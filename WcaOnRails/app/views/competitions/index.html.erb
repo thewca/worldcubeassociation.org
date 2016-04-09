@@ -3,23 +3,6 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <div id="comp-list-nav" class="col-md-12">
-    <% if params[:display] == "List" %>
-      <ul id="lists-navigation">
-
-        <li class="same-line"><a href="#past" class="js-scroll-to <%= @past_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @past_competitions.length > 0 ? 'Past competitions' : 'No past competitions selected' %>"></span></a></li>
-
-        <li class="same-line"><a href="#current" class="js-scroll-to <%= @in_progress_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-time" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @in_progress_competitions.length > 0 ? 'Competitions in progress' : 'No competitions in progress' %>"></span></a></li>
-
-        <li class="same-line"><a href="#upcoming" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>"></span></a></li>
-
-        <li class="same-line"><a href="#comp-query-form" class="js-scroll-to">Top</a></li>
-      </ul>
-    <% end %>
-  </div>
-
-  <div class="comp-list-nav-placeholder"></div>
-
   <%= form_tag competitions_path, method: :get, class: "competition-select form-inline", id: "comp-query-form" do %>
     <%= render 'index_form' %>
   <% end %>
@@ -35,22 +18,22 @@
   <% else %>
     <% if params[:display] == "List" %>
       <div class="row competition-list">
-        <% if @in_progress_competitions.length > 0 %>
-          <div class="col-md-12" id="current">
-            <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
-          </div>
-        <% end %>
-
-        <% if @upcoming_competitions.length > 0 %>
-          <div class="col-md-12" id="upcoming">
-            <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
-          </div>
-        <% end %>
-
-        <% if @past_competitions.length > 0 %>
+        <% if @past_selected %>
           <div class="col-md-12" id="past">
-            <%= render 'index_table', competitions: @past_competitions, title: @past_comps_title %>
+            <%= render 'index_table', competitions: @competitions, title: "Past competitions from #{params[:year].downcase}" %>
           </div>
+        <% else %>
+          <% @in_progress_competitions, @upcoming_competitions = @competitions.partition(&:in_progress?) %>
+          <% unless @in_progress_competitions.empty? %>
+            <div class="col-md-12" id="current">
+              <%= render 'index_table', competitions: @in_progress_competitions, title: "Competitions in progress" %>
+            </div>
+          <% end %>
+          <% unless @upcoming_competitions.empty? %>
+            <div class="col-md-12" id="upcoming">
+              <%= render 'index_table', competitions: @upcoming_competitions, title: "Upcoming competitions" %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     <% else %>
@@ -77,32 +60,6 @@ function mapSize() {
 
   $("#comps-map").height( map );
 }
-
-function affixWidth() {
-  // From https://github.com/twbs/bootstrap/issues/6350#issuecomment-16069663
-  // also http://stackoverflow.com/a/20301984
-  // and http://stackoverflow.com/a/24908611
-  var affixBase = $(".container");
-  var width = affixBase.width() - parseInt(affixBase.css('padding-left')) - parseInt(affixBase.css('padding-right'));
-  $("#comp-list-nav").width(width);
-}
-
-// From http://stackoverflow.com/a/30966965
-$(".js-scroll-to").click(function(e) {
-  e.preventDefault();
-
-  // Only apply the movement if there is a div to go to.
-  if(!$(this).hasClass('disabled')) {
-    // Little hack to activate the affix thing and
-    // move correctly to the anchor.
-
-    var destination = $(this).attr('href');
-
-    $('html, body').animate({
-      scrollTop: $(destination).offset().top - $("#comp-list-nav").height()
-    }, 0);
-  }
-});
 
 $(function() {
   <% if params[:display] == 'Map' %>
@@ -131,24 +88,6 @@ $(function() {
   $(".disabled").each(function() {
     $(this).removeAttr('href');
   });
-
-  // From http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/
-  $("#comp-list-nav").affix({
-    offset: {
-      top: $("#comp-list-nav").offset().top
-    }
-  });
-
-  // Keep the navigation bar width (see above)
-  affixWidth();
-});
-
-$(window).resize(function() {
-  affixWidth();
-});
-
-$(window).scroll(function() {
-  affixWidth();
 });
 </script>
 
