@@ -13,25 +13,25 @@ describe CompetitionsController do
       context "when no event is selected" do
         it "competitions are sorted by start date" do
           get :index
-          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
       end
 
       context "when events are selected" do
         it "only competitions matching all of the selected events are shown" do
           get :index, event_ids: ["333", "pyram", "clock"]
-          expect(assigns(:competitions)).to eq [competition4, competition2]
+          expect(assigns(:competitions)).to eq [competition2, competition4]
         end
 
         it "competitions are still sorted by start date" do
           get :index, event_ids: ["333"]
-          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
 
         # See: https://github.com/cubing/worldcubeassociation.org/issues/472
         it "works when event_ids are passed as a hash instead of an array (facebook redirection)" do
           get :index, event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" }
-          expect(assigns(:competitions)).to eq [competition4, competition2]
+          expect(assigns(:competitions)).to eq [competition2, competition4]
         end
       end
     end
