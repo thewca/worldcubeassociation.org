@@ -47,7 +47,7 @@
 </div>
 
 <script>
-  $('#<%= params[:state] %>').button('toggle');
+  $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
 
   $('#present').on('click', function() {
     $('#past .caption').html('Past');

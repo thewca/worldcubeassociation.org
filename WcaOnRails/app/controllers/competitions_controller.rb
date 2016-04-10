@@ -26,6 +26,8 @@ class CompetitionsController < ApplicationController
     params[:year] ||= "all years"
     params[:display] ||= "list"
 
+    # Facebook adds indices to the params automatically when redirecting.
+    # See: https://github.com/cubing/worldcubeassociation.org/issues/472
     if params[:event_ids].is_a?(Hash)
       params[:event_ids] = params[:event_ids].values
     end
