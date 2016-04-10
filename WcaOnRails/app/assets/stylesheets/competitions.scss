@@ -152,9 +152,7 @@ $venue-map-wrapper-height: 400px;
 }
 
 .competition-select.form-inline {
-  background-color: #fff;
   width: 100%;
-  padding-bottom: 10px;
   position: relative;
   top: 5px;
 
@@ -169,8 +167,11 @@ $venue-map-wrapper-height: 400px;
     width: 100px;
   }
 
-  .btn-group {
+  #submit-buttons {
     display: block;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
   }
 }
 
@@ -298,7 +299,7 @@ $comp-list-nav-height: 39px;
 }
 
 #comp-query-form {
-  margin-bottom: 15px;
+  margin: 20px 0;
 }
 
 .competition-info {

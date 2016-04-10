@@ -31,15 +31,12 @@
   <%= text_field_tag "search", params[:search], class: "form-control" %>
 </div>
 
-<div class="form-group">
-  <label>&nbsp;</label>
-  <div class="btn-group">
-    <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
-      <i class="glyphicon glyphicon-list"></i> List
-    <% end %>
+<div id="submit-buttons" class="form-group">
+  <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
+    <i class="glyphicon glyphicon-list"></i> List
+  <% end %>
 
-    <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-primary") do %>
-      <i class="glyphicon glyphicon-map-marker"></i> Map
-    <% end %>
-  </div>
+  <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-primary") do %>
+    <i class="glyphicon glyphicon-map-marker"></i> Map
+  <% end %>
 </div>
