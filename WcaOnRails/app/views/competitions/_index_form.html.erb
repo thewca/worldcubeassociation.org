@@ -62,26 +62,12 @@
   });
 </script>
 
-<<<<<<< 606aa1f110adc0f4a68166a43fc8c63e0c65e2c8
-<div class="form-group">
-  <%= label_tag("Name, City or Venue") %>
-  <%= text_field_tag "search", params[:search], class: "form-control" %>
-</div>
-
-<div id="submit-buttons" class="form-group">
-  <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
-    <i class="glyphicon glyphicon-list"></i> List
-  <% end %>
-
-  <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-primary") do %>
-=======
 <div id="submit-buttons" class="form-group">
   <%= button_tag(type: 'submit', name: "display", value: "list", class: "btn btn-info") do %>
     <i class="glyphicon glyphicon-list"></i> List
   <% end %>
 
   <%= button_tag(type: 'submit', name: "display", value: "map", class: "btn btn-primary") do %>
->>>>>>> Improve appearance of the form.
     <i class="glyphicon glyphicon-map-marker"></i> Map
   <% end %>
 </div>

@@ -32,6 +32,9 @@
 //= require_self
 //= require_tree .
 
+// Global variables
+var TEXT_INPUT_DEBOUNCE_MS = 250;
+
 
 // Dumping ground for... stuff
 window.wca = window.wca || {};
@@ -237,6 +240,11 @@ $(function() {
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 };
+
+// Bootstrap-table default options
+$.extend($.fn.bootstrapTable.defaults, {
+  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS
+});
 
 // Setting up bootstrap-table
 $(function() {

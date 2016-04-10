@@ -36,4 +36,25 @@ onPage('competitions#index', function() {
   $('#select-all-events').on('click', function() {
     $('#events input[type="checkbox"]').prop('checked', true);
   });
+
+  // Ajax searching
+  $form = $('#comp-query-form');
+  function submitForm() {
+    $form.trigger('submit.rails');
+  }
+
+  $form.on('change', 'input[type="checkbox"], select', submitForm)
+       .on('input', 'input[type="text"]', _.debounce(submitForm, TEXT_INPUT_DEBOUNCE_MS))
+       .on('click', '#clear-all-events, #select-all-events', submitForm)
+       .on('click', '#present, .years .year a', submitForm);
+
+  $('#comp-query-form').on('ajax:send', function() {
+    $('#search-results').hide();
+    $('#loading').show();
+  });
+
+  $('#comp-query-form').on('ajax:complete', function() {
+    $('#loading').hide();
+    $('#search-results').show();
+  });
 });

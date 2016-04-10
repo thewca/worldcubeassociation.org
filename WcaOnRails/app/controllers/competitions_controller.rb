@@ -60,6 +60,11 @@ class CompetitionsController < ApplicationController
     unless params[:event_ids].empty?
       @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
     end
+
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   def create
