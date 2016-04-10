@@ -161,12 +161,11 @@ describe CompetitionsController do
         expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
-
-        new_comp_json = new_comp.as_json
+        expect(new_comp.name).to eq "Test 2015"
         # When cloning a competition, we don't want to clone its showAtAll and isConfirmed
         # attributes.
-        competition_json = competition.as_json.merge("id" => "Test2015", "name" => "Test 2015", "cellName" => "Test 2015", "showAtAll" => false, "isConfirmed" => false)
-        expect(new_comp_json).to eq competition_json
+        expect(new_comp.showAtAll).to eq false
+        expect(new_comp.isConfirmed).to eq false
 
         # Cloning a competition should clone its organizers.
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)

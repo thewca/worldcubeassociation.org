@@ -470,18 +470,21 @@ class Competition < ActiveRecord::Base
     Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
   end
 
-  def to_jsonable
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/c.php?i=#{id}",
 
       id: id,
       name: name,
+      website: website,
       cellName: cellName,
       cityName: cityName,
       countryId: countryId,
-      delegates: delegates.map(&:to_jsonable),
-      organizers: organizers.map(&:to_jsonable),
+      delegates: delegates,
+      organizers: organizers,
+      start_date: start_date,
+      end_date: end_date,
     }
     json
   end

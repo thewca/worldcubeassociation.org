@@ -43,7 +43,7 @@ class Post < ActiveRecord::Base
     Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
   end
 
-  def to_jsonable
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
 
@@ -51,7 +51,7 @@ class Post < ActiveRecord::Base
       title: title,
       body: body,
       slug: slug,
-      author: author ? author.to_jsonable : nil,
+      author: author,
     }
 
     json

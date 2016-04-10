@@ -6,7 +6,7 @@ class CompetitionIdInput < SimpleForm::Inputs::Base
       merged_input_options[:class] << "wca-autocomplete-only_one"
     end
     competitions = (@builder.object.send(attribute_name) || "").split(",").map { |id| Competition.find_by_id(id) }
-    merged_input_options[:data] = { data: competitions.map(&:to_jsonable).to_json }
+    merged_input_options[:data] = { data: competitions.to_json }
     @builder.text_field(attribute_name, merged_input_options)
   end
 end

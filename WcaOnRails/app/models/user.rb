@@ -504,7 +504,8 @@ class User < ActiveRecord::Base
     users
   end
 
-  def to_jsonable(doorkeeper_token: nil)
+  attr_accessor :doorkeeper_token
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",

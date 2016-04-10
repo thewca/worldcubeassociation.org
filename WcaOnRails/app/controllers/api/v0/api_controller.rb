@@ -5,7 +5,8 @@ class Api::V0::ApiController < ApplicationController
 
   def me
     current_resource_owner = User.find(doorkeeper_token.resource_owner_id)
-    render json: { me: current_resource_owner.to_jsonable(doorkeeper_token: doorkeeper_token) }
+    current_resource_owner.doorkeeper_token = doorkeeper_token
+    render json: { me: current_resource_owner }
   end
 
   def auth_results
@@ -55,7 +56,7 @@ class Api::V0::ApiController < ApplicationController
       return
     end
     result = models.map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }.flatten(1)
-    render json: { status: "ok", result: result.map(&:to_jsonable) }
+    render status: :ok, json: { result: result }
   end
 
   def posts_search
@@ -79,9 +80,9 @@ class Api::V0::ApiController < ApplicationController
 
   def show_user(user)
     if user
-      render status: :ok, json: { status: "ok", user: user.to_jsonable }
+      render status: :ok, json: { user: user }
     else
-      render status: :not_found, json: { status: "ok", user: nil }
+      render status: :not_found, json: { user: nil }
     end
   end
 
@@ -97,6 +98,7 @@ class Api::V0::ApiController < ApplicationController
 
   def competitions
     competitions = Competition.where(showAtAll: true).order(year: :desc, month: :desc, day: :desc)
+    competitions = competitions.includes(:delegates).includes(:organizers)
 
     paginate json: competitions
   end
