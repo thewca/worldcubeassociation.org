@@ -20,7 +20,7 @@
       <div class="row competition-list">
         <% if @past_selected %>
           <div class="col-md-12" id="past">
-            <%= render 'index_table', competitions: @competitions, title: "Past competitions from #{params[:year].downcase}" %>
+            <%= render 'index_table', competitions: @competitions, title: "Past competitions from #{params[:year]}" %>
           </div>
         <% else %>
           <% @in_progress_competitions, @upcoming_competitions = @competitions.partition(&:in_progress?) %>
