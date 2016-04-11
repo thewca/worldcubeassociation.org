@@ -97,7 +97,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def competitions
-    competitions = Competition.where(showAtAll: true).order(year: :desc, month: :desc, day: :desc)
+    params[:sort] ||= "-start_date"
+    competitions = Competition.search(params[:q], params: params)
     competitions = competitions.includes(:delegates).includes(:organizers)
 
     paginate json: competitions

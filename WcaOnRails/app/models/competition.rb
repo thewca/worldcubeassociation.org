@@ -466,8 +466,48 @@ class Competition < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    sql_query = "%#{query}%"
-    Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+    competitions = Competition.where(showAtAll: true)
+
+    if params[:country_iso2].present?
+      country = Country.find_by_iso2(params[:country_iso2])
+      competitions = competitions.where(countryId: country.id)
+    end
+
+    if params[:start].present?
+      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) >= ?", params[:start])
+    end
+
+    if params[:end].present?
+      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) <= ?", params[:end])
+    end
+
+    if query.present?
+      sql_query = "%#{query}%"
+      competitions = competitions.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+    end
+
+    if params[:sort].present?
+      params[:sort].split(",").each do |field|
+        order = nil
+        if field[0] == "-"
+          order = :desc
+          field = field[1..-1]
+        else
+          order = :asc
+        end
+
+        case field
+        when "start_date"
+          competitions = competitions.order(year: order, month: order, day: order)
+        when "end_date"
+          competitions = competitions.order(year: order, endMonth: order, endDay: order)
+        else
+          raise "Unrecognized sort field: #{field}"
+        end
+      end
+    end
+
+    competitions
   end
 
   def serializable_hash(options = nil)
@@ -478,13 +518,13 @@ class Competition < ActiveRecord::Base
       id: id,
       name: name,
       website: website,
-      cellName: cellName,
-      cityName: cityName,
-      countryId: countryId,
-      delegates: delegates,
-      organizers: organizers,
+      short_name: cellName,
+      city: cityName,
+      country_iso2: country.iso2,
       start_date: start_date,
       end_date: end_date,
+      delegates: delegates,
+      organizers: organizers,
     }
     json
   end
