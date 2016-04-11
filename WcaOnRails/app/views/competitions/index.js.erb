@@ -1,1 +1,2 @@
-$('#search-results').html('<%=j render 'index_content', competitions: @competitions %>');
+history.pushState(null, document.title, "<%= raw current_url %>");
+$('#search-results').html('<%=j render 'index_search_results', competitions: @competitions %>');

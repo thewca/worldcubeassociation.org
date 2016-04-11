@@ -46,7 +46,8 @@ onPage('competitions#index', function() {
   $form.on('change', 'input[type="checkbox"], select', submitForm)
        .on('input', 'input[type="text"]', _.debounce(submitForm, TEXT_INPUT_DEBOUNCE_MS))
        .on('click', '#clear-all-events, #select-all-events', submitForm)
-       .on('click', '#present, .years .year a', submitForm);
+       .on('click', '#present, .years .year a', submitForm)
+       .on('change', '#display', submitForm);
 
   $('#comp-query-form').on('ajax:send', function() {
     $('#search-results').hide();
@@ -56,5 +57,10 @@ onPage('competitions#index', function() {
   $('#comp-query-form').on('ajax:complete', function() {
     $('#loading').hide();
     $('#search-results').show();
+  });
+
+  // Reaload the page when back/forward is clicked.
+  $(window).on('popstate', function() {
+    location.reload();
   });
 });

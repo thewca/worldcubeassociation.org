@@ -170,17 +170,27 @@ $venue-map-wrapper-height: 400px;
     width: 100%;
   }
 
-  #submit-buttons {
-    display: block;
+  #display {
     width: 100%;
     margin-top: 20px;
-    text-align: center;
+    .btn-group {
+      width: 100%;
+      .btn {
+        width: 50%;
+      }
+    }
   }
 }
 
 .same-line {
   display: inline-block;
   margin-right: 5px;
+}
+
+#search-results {
+  #comps-map {
+    height: 500px; // Temporary, TODO: find a handy way to set the height (or set appropriate height on each device)
+  }
 }
 
 .competition-list {
@@ -260,20 +270,6 @@ $venue-map-wrapper-height: 400px;
       display: inline-block;
       margin-left: 20px;
     }
-  }
-}
-
-#lists-navigation {
-  margin: 0;
-
-  padding-left: 10px;
-
-  :last-child {
-    float: right;
-  }
-
-  a.disabled {
-    color: #555;
   }
 }
 

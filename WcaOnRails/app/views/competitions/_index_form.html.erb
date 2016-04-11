@@ -46,6 +46,20 @@
   </div>
 </div>
 
+<div id="display" class="form-group">
+  <div class="btn-group" data-toggle="buttons">
+    <label id="display-list" class="btn btn-info">
+      <%= radio_button_tag "display", "list" %>
+      <i class="glyphicon glyphicon-list"></i> List
+    </label>
+    <label id="display-map" class="btn btn-info">
+      <%= radio_button_tag "display", "map" %>
+      <i class="glyphicon glyphicon-map-marker"></i> Map
+    </label>
+  </div>
+</div>
+
+
 <script>
   $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
 
@@ -60,14 +74,6 @@
     $('.years input[name="year"]').val(year);
     $('#past').button('toggle');
   });
+
+  $('#<%= params[:display] == "map" ? "display-map" : "display-list" %>').button('toggle');
 </script>
-
-<div id="submit-buttons" class="form-group">
-  <%= button_tag(type: 'submit', name: "display", value: "list", class: "btn btn-info") do %>
-    <i class="glyphicon glyphicon-list"></i> List
-  <% end %>
-
-  <%= button_tag(type: 'submit', name: "display", value: "map", class: "btn btn-primary") do %>
-    <i class="glyphicon glyphicon-map-marker"></i> Map
-  <% end %>
-</div>

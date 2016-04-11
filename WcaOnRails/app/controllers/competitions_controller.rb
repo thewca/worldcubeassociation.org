@@ -63,7 +63,7 @@ class CompetitionsController < ApplicationController
 
     respond_to do |format|
       format.html {}
-      format.js {}
+      format.js { render 'index', locals: { current_url: request.original_url } }
     end
   end
 
