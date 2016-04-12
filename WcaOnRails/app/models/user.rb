@@ -316,7 +316,7 @@ class User < ActiveRecord::Base
   end
 
   def can_edit_users?
-    admin? || board_member? || any_kind_of_delegate?
+    admin? || board_member? || results_team? || any_kind_of_delegate?
   end
 
   def can_admin_results?
