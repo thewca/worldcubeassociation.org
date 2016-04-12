@@ -5,7 +5,7 @@ Rails.configuration.to_prepare do
   # http://stackoverflow.com/a/21034652/1739415
   Date.class_eval do
     def self.safe_parse(value, default = nil)
-      Date.parse(value.to_s)
+      Date.strptime(value.to_s, '%Y-%m-%d')
     rescue ArgumentError
       default
     end

@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 require_relative '../lib/middlewares/fix_accept_header'
 require_relative '../lib/middlewares/warden_user_logger'
+require_relative '../lib/wca_exceptions'
 
 require 'rails/all'
 

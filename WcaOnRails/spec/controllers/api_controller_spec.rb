@@ -243,6 +243,27 @@ describe Api::V0::ApiController do
       expect(json[0]["id"]).to eq terrible_comp.id
     end
 
+    it 'validates start' do
+      get :competitions, start: "2015"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid start: 2015"]
+    end
+
+    it 'validates end' do
+      get :competitions, end: "2014"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid end: 2014"]
+    end
+
+    it 'validates country_iso2' do
+      get :competitions, country_iso2: "this is not a country"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid country_iso2: this is not a country"]
+    end
+
     it 'can query by date' do
       last_feb_comp = FactoryGirl.create(:competition, starts: Date.new(2015, 2, 1))
       feb_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1))

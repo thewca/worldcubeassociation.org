@@ -470,15 +470,26 @@ class Competition < ActiveRecord::Base
 
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])
+      if !country
+        raise WcaExceptions::BadApiParameter, "Invalid country_iso2: #{params[:country_iso2]}"
+      end
       competitions = competitions.where(countryId: country.id)
     end
 
     if params[:start].present?
-      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) >= ?", params[:start])
+      start_date = Date.safe_parse(params[:start])
+      if !start_date
+        raise WcaExceptions::BadApiParameter, "Invalid start: #{params[:start]}"
+      end
+      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) >= ?", start_date)
     end
 
     if params[:end].present?
-      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) <= ?", params[:end])
+      end_date = Date.safe_parse(params[:end])
+      if !end_date
+        raise WcaExceptions::BadApiParameter, "Invalid end: #{params[:end]}"
+      end
+      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) <= ?", end_date)
     end
 
     if query.present?
