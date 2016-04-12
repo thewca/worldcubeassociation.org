@@ -471,7 +471,7 @@ class Competition < ActiveRecord::Base
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])
       if !country
-        raise WcaExceptions::BadApiParameter, "Invalid country_iso2: #{params[:country_iso2]}"
+        raise WcaExceptions::BadApiParameter, "Invalid country_iso2: '#{params[:country_iso2]}'"
       end
       competitions = competitions.where(countryId: country.id)
     end
@@ -479,17 +479,17 @@ class Competition < ActiveRecord::Base
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
       if !start_date
-        raise WcaExceptions::BadApiParameter, "Invalid start: #{params[:start]}"
+        raise WcaExceptions::BadApiParameter, "Invalid start: '#{params[:start]}'"
       end
-      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) >= ?", start_date)
+      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Date) >= ?", start_date)
     end
 
     if params[:end].present?
       end_date = Date.safe_parse(params[:end])
       if !end_date
-        raise WcaExceptions::BadApiParameter, "Invalid end: #{params[:end]}"
+        raise WcaExceptions::BadApiParameter, "Invalid end: '#{params[:end]}'"
       end
-      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) <= ?", end_date)
+      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
     end
 
     if query.present?
@@ -499,21 +499,15 @@ class Competition < ActiveRecord::Base
 
     if params[:sort].present?
       params[:sort].split(",").each do |field|
-        order = nil
-        if field[0] == "-"
-          order = :desc
-          field = field[1..-1]
-        else
-          order = :asc
-        end
+        order = field.start_with?("-") ? :desc : :asc
 
         case field
-        when "start_date"
+        when "start_date", "-start_date"
           competitions = competitions.order(year: order, month: order, day: order)
-        when "end_date"
+        when "end_date", "-end_date"
           competitions = competitions.order(year: order, endMonth: order, endDay: order)
         else
-          raise "Unrecognized sort field: #{field}"
+          raise WcaExceptions::BadApiParameter, "Unrecognized sort field: '#{field}'"
         end
       end
     end
