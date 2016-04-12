@@ -188,88 +188,93 @@ $venue-map-wrapper-height: 400px;
 }
 
 #search-results {
-  #comps-map {
-    height: 500px; // Temporary, TODO: find a handy way to set the height (or set appropriate height on each device)
-  }
-}
+  position: relative;
+  #competitions-list {
+    display: none;
 
-.competition-list {
-  li:nth-child(odd) {
-    background-color: $table-bg-accent;
-  }
-
-  li {
-    padding: 5px 10px;
-    font-size: 13px;
-
-    &.break {
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .date {
-    float: right;
-    font-weight: bold;
-    i {
-      float: left;
-      margin-right: 10px;
-    }
-  }
-
-  .flag {
-    position: relative;
-    top: 3px;
-    margin-right: 5px;
-  }
-
-  @media (min-width: $screen-sm) {
-    .competition-link {
-      display: inline-block;
-      margin-right: 20px;
-      /* As of 2016-03-25, this width fits about 93% of the competition names */
-      width: 250px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: bottom;
-    }
-    .location {
-      display: inline;
-      margin-left: 20px;
+    li:nth-child(odd) {
+      background-color: $table-bg-accent;
     }
 
-    .venue-link {
-      display: inline;
-    }
-  }
+    li {
+      padding: 5px 10px;
+      font-size: 13px;
 
-  @media (min-width: $screen-lg) {
-    p {
-      display: inline;
-      margin-right: 20px;
+      &.break {
+        text-align: center;
+        font-weight: bold;
+      }
     }
 
     .date {
-      float: inherit;
-      margin-right: 20px;
-      min-width: 150px;
-      text-align: left;
-      display: inline-block;
+      float: right;
+      font-weight: bold;
+      i {
+        float: left;
+        margin-right: 10px;
+      }
     }
 
-    .competition-link {
-      margin-left: 20px;
+    .flag {
+      position: relative;
+      top: 3px;
+      margin-right: 5px;
     }
 
-    .location {
-      margin-left: 20px;
+    @media (min-width: $screen-sm) {
+      .competition-link {
+        display: inline-block;
+        margin-right: 20px;
+        /* As of 2016-03-25, this width fits about 93% of the competition names */
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+      }
+      .location {
+        display: inline;
+        margin-left: 20px;
+      }
+
+      .venue-link {
+        display: inline;
+      }
     }
 
-    .venue-link {
-      display: inline-block;
-      margin-left: 20px;
+    @media (min-width: $screen-lg) {
+      p {
+        display: inline;
+        margin-right: 20px;
+      }
+
+      .date {
+        float: inherit;
+        margin-right: 20px;
+        min-width: 150px;
+        text-align: left;
+        display: inline-block;
+      }
+
+      .competition-link {
+        margin-left: 20px;
+      }
+
+      .location {
+        margin-left: 20px;
+      }
+
+      .venue-link {
+        display: inline-block;
+        margin-left: 20px;
+      }
     }
+  }
+
+
+  #competitions-map {
+    display: none;
+    height: 500px; // Temporary, TODO: find a handy way to set the height (or set appropriate height on each device)
   }
 }
 
@@ -292,5 +297,18 @@ $venue-map-wrapper-height: 400px;
 
 #loading {
   display: none;
-  text-align: center;
+  position: absolute;
+  margin: 0 15px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: transparentize(white, 0.5);
+  .spinner-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

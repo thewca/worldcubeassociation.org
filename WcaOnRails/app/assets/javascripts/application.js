@@ -50,13 +50,7 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-$.fn.competitionsMap = function(competitions) {
-  var $map = new google.maps.Map(document.getElementById(this.attr('id')), {
-    zoom: 2,
-    center: {lat: 0, lng: 0},
-    scrollwheel: true
-  });
-
+function competitionsToMarkers(map, competitions) {
   var markers = [];
 
   competitions.forEach(function(c) {
@@ -74,7 +68,7 @@ $.fn.competitionsMap = function(competitions) {
     }
 
     c.marker = new google.maps.Marker({
-      map: $map,
+      map: map,
       position: {
         lat: c.latitude_degrees,
         lng: c.longitude_degrees,
@@ -84,17 +78,14 @@ $.fn.competitionsMap = function(competitions) {
     });
 
     c.marker.addListener('click', function() {
-      infowindow.open($map, c.marker);
+      infowindow.open(map, c.marker);
     });
 
     markers.push(c.marker);
   });
 
-  var markerCluster = new MarkerClusterer($map, markers, {
-    maxZoom: 10,
-    clusterSize: 30
-  });
-};
+  return markers;
+}
 
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from

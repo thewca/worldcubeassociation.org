@@ -1,13 +1,15 @@
-<% if competitions.empty? %>
-  <div class="alert alert-warning">
-    <%= unless params[:event_ids].empty?
-      "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
-    else
-      "No competitions found."
-    end %>
-  </div>
-<% elsif params[:display] == "list" %>
-  <div class="row competition-list">
+<% if params[:display] == "list" %>
+  <% if competitions.empty? %>
+    <div class="col-md-12">
+      <div class="alert alert-warning">
+        <%= unless params[:event_ids].empty?
+          "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
+        else
+          "No competitions found."
+        end %>
+      </div>
+    </div>
+  <% elsif params[:display] == "list" %>
     <% if params[:state] == "past" %>
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
@@ -25,16 +27,11 @@
         </div>
       <% end %>
     <% end %>
-  </div>
+  <% end %>
 <% else %>
-  <div class="row competition-list">
-    <div class="col-xs-12 col-md-12">
-      <div id="comps-map"></div>
-    </div>
-  </div>
-
   <script>
-    var competitions = <%= competitions.map do |c|
+    $(function() {
+      var competitions = <%= competitions.map do |c|
         {
           id: c.id,
           name: c.name,
@@ -47,10 +44,13 @@
         }
       end.to_json.html_safe %>;
 
-    $(document).on('ready ajaxComplete', function() {
-      // executed multiple times TO FIX
-      // TODO: replace this with updating only the markers via Ajax!
-      $("#comps-map").competitionsMap(competitions);
+      if(window.competitionsMap == undefined) {
+        initializeCompetitionsMap();
+      }
+
+      var competitionMarkers = competitionsToMarkers(competitionsMap, competitions);
+      competitionsMarkerCluster.clearMarkers();
+      competitionsMarkerCluster.addMarkers(competitionMarkers);
     });
   </script>
 <% end %>

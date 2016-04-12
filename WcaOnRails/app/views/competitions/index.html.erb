@@ -7,10 +7,19 @@
     <%= render 'index_form' %>
   <% end %>
 
-  <div id="search-results">
-    <%= render 'index_search_results', competitions: @competitions %>
-  </div>
-  <div id="loading">
-    <i class="fa fa-spinner fa-spin fa-5x"></i>
+  <div id="search-results" class="row">
+    <div id="loading">
+      <div class="spinner-wrapper"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+    </div>
+    <div id="competitions-list">
+      <%= render 'index_competitions_list', competitions: @competitions %>
+    </div>
+    <div class="col-xs-12 col-md-12">
+      <div id="competitions-map"></div>
+    </div>
   </div>
 </div>
+
+<script>
+  $('#competitions-<%= params[:display] %>').show();
+</script>
