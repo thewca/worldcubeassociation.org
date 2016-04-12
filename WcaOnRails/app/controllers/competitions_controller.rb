@@ -63,7 +63,14 @@ class CompetitionsController < ApplicationController
 
     respond_to do |format|
       format.html {}
-      format.js { render 'index', locals: { current_url: request.original_url } }
+      format.js do
+        # We change the browser's history when replacing url after an Ajax request.
+        # So we must prevent a browser from caching the JavaScript response.
+        # It's necessary because if the browser caches the response, the user will see a JavaScript response
+        # when he clicks browser back/forward buttons.
+        response.headers["Cache-Control"] = "no-cache, no-store"
+        render 'index', locals: { current_url: request.original_url }
+      end
     end
   end
 
