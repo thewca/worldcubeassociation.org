@@ -3,7 +3,7 @@
 <% hide_pos = defined?(hide_pos) && hide_pos %>
 <% hide_name = defined?(hide_name) && hide_name %>
 
-<%= wca_table table_class: "wca-results" do %>
+<%= wca_table table_class: "wca-results", floatThead: false do %>
   <thead>
     <tr>
       <% if !hide_event %>
