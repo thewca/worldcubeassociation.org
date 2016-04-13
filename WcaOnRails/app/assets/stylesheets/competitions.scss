@@ -151,17 +151,19 @@ $venue-map-wrapper-height: 400px;
   width: 100%;
 }
 
-.competition-select.form-inline {
+#competition-query-form {
   width: 100%;
+  margin: 20px 0;
 
-  input:not([type="checkbox"]),
-  select {
+  #region,
+  #search {
     font-size: 12px;
     font-weight: normal;
     display: block;
   }
 
-  button {
+  #clear-all-events,
+  #select-all-events {
     width: 100px;
   }
 
@@ -171,14 +173,7 @@ $venue-map-wrapper-height: 400px;
   }
 
   #display {
-    width: 100%;
     margin-top: 20px;
-    .btn-group {
-      width: 100%;
-      .btn {
-        width: 50%;
-      }
-    }
   }
 }
 
@@ -274,12 +269,7 @@ $venue-map-wrapper-height: 400px;
 
   #competitions-map {
     display: none;
-    height: 500px; // Temporary, TODO: find a handy way to set the height (or set appropriate height on each device)
   }
-}
-
-#comp-query-form {
-  margin: 20px 0;
 }
 
 .competition-info {

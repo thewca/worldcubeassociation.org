@@ -50,7 +50,7 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-function competitionsToMarkers(map, competitions) {
+wca.competitionsToMarkers = function(map, competitions) {
   var markers = [];
 
   competitions.forEach(function(c) {
@@ -85,7 +85,7 @@ function competitionsToMarkers(map, competitions) {
   });
 
   return markers;
-}
+};
 
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from

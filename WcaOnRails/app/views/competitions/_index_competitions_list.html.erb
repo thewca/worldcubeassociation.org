@@ -9,7 +9,7 @@
         end %>
       </div>
     </div>
-  <% elsif params[:display] == "list" %>
+  <% else %>
     <% if params[:state] == "past" %>
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
@@ -40,17 +40,13 @@
           cityName: c.cityName,
           marker_date: c.start_date.to_formatted_s(:long),
           is_over: c.is_over?,
-          url: competition_path(c)
+          url: competition_path(c),
         }
       end.to_json.html_safe %>;
 
-      if(window.competitionsMap == undefined) {
-        initializeCompetitionsMap();
-      }
-
-      var competitionMarkers = competitionsToMarkers(competitionsMap, competitions);
-      competitionsMarkerCluster.clearMarkers();
-      competitionsMarkerCluster.addMarkers(competitionMarkers);
+      var competitionMarkers = wca.competitionsToMarkers(getCompetitionsMap(), competitions);
+      wca.competitionsMarkerCluster.clearMarkers();
+      wca.competitionsMarkerCluster.addMarkers(competitionMarkers);
     });
   </script>
 <% end %>

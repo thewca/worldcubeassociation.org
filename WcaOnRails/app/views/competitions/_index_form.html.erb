@@ -47,7 +47,7 @@
 </div>
 
 <div id="display" class="form-group">
-  <div class="btn-group" data-toggle="buttons">
+  <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">
       <%= radio_button_tag "display", "list" %>
       <i class="glyphicon glyphicon-list"></i> List
@@ -69,10 +69,16 @@
 
   $('.years .year a').on('click', function(e) {
     e.preventDefault();
+    var $past = $('#past');
     var year = $(this).data('year');
-    $('#past .caption').html('Past from ' + year);
+    $past.find('.caption').html('Past from ' + year);
     $('.years input[name="year"]').val(year);
-    $('#past').button('toggle');
+    if($past.is('.active')) {
+      $past.trigger('change');
+    } else {
+      // Also triggers 'change'
+      $past.button('toggle');
+    }
   });
 
   $('#<%= params[:display] == "map" ? "display-map" : "display-list" %>').button('toggle');
