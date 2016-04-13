@@ -97,7 +97,7 @@ describe UsersController do
     end
 
     it "can clear claimed id" do
-      person2 = FactoryGirl.create :person
+      FactoryGirl.create :person
       patch :update, id: user, user: { unconfirmed_wca_id: "" }
       user.reload
       expect(user.unconfirmed_wca_id).to be_nil

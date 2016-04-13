@@ -93,7 +93,7 @@ describe TeamsController do
     context 'when signed in as an admin' do
       let(:admin) { FactoryGirl.create :admin }
       before :each do
-        sign_in admin 
+        sign_in admin
       end
 
       it 'can change name' do
@@ -152,4 +152,3 @@ describe TeamsController do
     end
   end
 end
-

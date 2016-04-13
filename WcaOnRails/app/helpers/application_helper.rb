@@ -19,7 +19,7 @@ module ApplicationHelper
       notice: "alert-success",
       alert: "alert-danger",
 
-      recaptcha_error: "alert-danger"
+      recaptcha_error: "alert-danger",
     }[flash_type.to_sym] || flash_type.to_s
   end
 
@@ -33,7 +33,7 @@ module ApplicationHelper
     end
 
     options = {
-      hard_wrap: true
+      hard_wrap: true,
     }
 
     if target_blank
@@ -65,11 +65,11 @@ module ApplicationHelper
   end
 
   def wca_highlight(html, phrases, do_not_transliterate: false)
-    if !do_not_transliterate
-      text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
-    else
-      text = strip_tags(html)
-    end
+    text = if !do_not_transliterate
+             ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
+           else
+             strip_tags(html)
+           end
     highlight(text, phrases, highlighter: '<strong>\1</strong>')
   end
 
@@ -81,7 +81,7 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, table_class: "", data: {}, &block)
+  def wca_table(responsive: true, hover: true, striped: true, table_class: "", data: {})
     table_classes = "table wca-results floatThead table-condensed table-greedy-last-column #{table_class}"
     if hover
       table_classes += " table-hover"
@@ -92,7 +92,7 @@ module ApplicationHelper
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, class: table_classes, data: data do
-        block.call
+        yield
       end
     end
   end
@@ -139,19 +139,19 @@ module ApplicationHelper
     end
 
     if user.wca_id.blank?
-      if user.unconfirmed_wca_id? && user.delegate_to_handle_wca_id_claim
-        # The user has already claimed a WCA ID, let them know we're on it.
-        notifications << {
-          text: "Waiting for #{user.delegate_to_handle_wca_id_claim.name} to assign you WCA ID #{user.unconfirmed_wca_id}",
-          url: profile_claim_wca_id_path,
-        }
-      else
-        # Show users without WCA IDs how to claim a WCA ID for their account.
-        notifications << {
-          text: "Connect your WCA ID to your account!",
-          url: profile_claim_wca_id_path,
-        }
-      end
+      notifications << if user.unconfirmed_wca_id? && user.delegate_to_handle_wca_id_claim
+                         # The user has already claimed a WCA ID, let them know we're on it.
+                         {
+                           text: "Waiting for #{user.delegate_to_handle_wca_id_claim.name} to assign you WCA ID #{user.unconfirmed_wca_id}",
+                           url: profile_claim_wca_id_path,
+                         }
+                       else
+                         # Show users without WCA IDs how to claim a WCA ID for their account.
+                         {
+                           text: "Connect your WCA ID to your account!",
+                           url: profile_claim_wca_id_path,
+                         }
+                       end
     end
 
     # Show all the users who are waiting to have their WCA ID claims approved.

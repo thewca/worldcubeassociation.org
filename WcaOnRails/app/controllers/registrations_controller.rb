@@ -84,7 +84,7 @@ class RegistrationsController < ApplicationController
   def destroy
     @competition = competition_from_params
     @registration = Registration.find(params[:id])
-    if params.has_key?(:user_is_deleting_theirself)
+    if params.key?(:user_is_deleting_theirself)
       if !current_user.can_edit_registration?(@registration)
         flash[:danger] = "You cannot delete your registration."
       else
@@ -106,7 +106,6 @@ class RegistrationsController < ApplicationController
   def update_all
     @competition_registration_view = true
     @competition = competition_from_params
-    ids = []
     registration_ids = params[:selected_registrations].map { |r| r.split('-')[1] }
     registrations = registration_ids.map do |registration_id|
       @competition.registrations.find_by_id!(registration_id)
@@ -223,7 +222,7 @@ class RegistrationsController < ApplicationController
     end
     registration_params = params.require(:registration).permit(*permitted_params)
 
-    if registration_params.has_key?(:event_ids)
+    if registration_params.key?(:event_ids)
       registration_params[:eventIds] = registration_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
       registration_params.delete(:event_ids)
     end

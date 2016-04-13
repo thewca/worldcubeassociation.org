@@ -339,7 +339,7 @@ class Event
       rank: 1210,
       format: "time",
       cellName: "Magic one-handed",
-    }
+    },
   ].map { |e| Event.new(e.merge(valid: true)) }
 
   ALL_EVENTS_BY_ID = Hash[ALL_EVENTS.map { |e| [e.id, e] }]
