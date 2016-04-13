@@ -105,6 +105,8 @@ RSpec.feature "Sign up" do
 
       click_button "Sign up"
 
+      expect(page).to have_content "A message with a confirmation link has been sent to your email address."
+
       u = User.find_by_email!("jack@example.com")
       expect(u.gender).to eq "m"
     end
