@@ -71,8 +71,6 @@ class Person < ActiveRecord::Base
 
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    json = (user || User.new).serializable_hash.merge(json)
-
-    json
+    (user || User.new).serializable_hash.merge(json)
   end
 end
