@@ -34,6 +34,7 @@ RSpec.describe "registrations/psych_sheet_event" do
 
     assign(:competition, competition)
     assign(:event, event)
+    assign(:preferred_format, event.preferred_formats.first)
     assign(:registrations, registrations)
 
     render

@@ -5,10 +5,10 @@
     <span class="cubing-icon icon-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
   </h2>
 
-  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@event.sort_by.to_s}" do %>
+  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@preferred_format.sort_by.to_s}" do %>
     <thead>
       <tr>
-        <th class="position">#</th>
+        <th class="pos">#</th>
         <th class="name">Name</th>
         <th class="wca-id">WCA ID</th>
         <th class="country">Citizen of</th>
@@ -27,8 +27,8 @@
     <tbody>
       <% @registrations.each do |registration| %>
         <tr>
-          <td class="position <%= registration.tied_previous ? "tied-previous" : "" %>">
-            <%= registration.position %>
+          <td class="pos <%= registration.tied_previous ? "tied-previous" : "" %>">
+            <%= registration.pos %>
           </td>
           <td class="name"><%= registration.name %></td>
           <td class="wca-id">

@@ -538,8 +538,11 @@ class Competition < ActiveRecord::Base
   end
 
   def country_name
-    country = Country.find_by_id(countryId)
     country ? country.name : nil
+  end
+
+  def country
+    Country.find_by_id(countryId)
   end
 
   def self.search(query, params: {})
