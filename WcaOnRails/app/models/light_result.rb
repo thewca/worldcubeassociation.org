@@ -1,3 +1,6 @@
+require 'solve_time'
+require_relative './format'
+
 class LightResult
   attr_accessor :muted
 
@@ -51,10 +54,6 @@ class LightResult
 
   def format
     Format.find_by_id(formatId)
-  end
-
-  def muted
-    false
   end
 
   def wca_id

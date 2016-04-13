@@ -365,58 +365,52 @@ RSpec.describe Competition do
     let!(:r_222_c_first) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
 
     it "events_with_podium_results" do
-      expect(competition.events_with_podium_results).to eq [
-        [ three_by_three, [r_333_f_first, r_333_f_second, r_333_f_third] ],
-        [ two_by_two, [r_222_c_first] ],
-      ]
+      result = competition.events_with_podium_results
+      expect(result.size).to eq 2
+      expect(result.first.first).to eq three_by_three
+      expect(result.first.last.map(&:value1)).to eq [3000] * 3
+
+      expect(result.last.first).to eq two_by_two
+      expect(result.last.last.map(&:value1)).to eq [3000]
     end
 
     it "winning_results" do
-      expect(competition.winning_results).to eq [
-        r_333_f_first, r_222_c_first
-      ]
+      result = competition.winning_results
+      expect(result.size).to eq 2
+      expect(result.first.eventId).to eq "333"
+      expect(result.first.best).to eq 3000
+      expect(result.first.roundId).to eq "f"
+
+      expect(result.last.eventId).to eq "222"
+      expect(result.last.best).to eq 3000
+      expect(result.last.roundId).to eq "c"
     end
 
     it "person_names_with_results" do
-      expect(competition.person_names_with_results).to eq [
-        [ person_four, [ r_333_1_fourth ] ],
-        [ person_one, [ r_333_f_first, r_333_1_first, r_222_c_first ] ],
-        [ person_three, [ r_333_f_third, r_333_1_third ] ],
-        [ person_two, [ r_333_f_second, r_333_1_second ] ],
-      ]
-      expect(competition.person_names_with_results[1][1][1].muted).to eq true
-      expect(competition.person_names_with_results[1][1][2].muted).to eq false
+      result = competition.person_names_with_results
+      expect(result.size).to eq 4
+      expect(result.map(&:first)).to eq [person_four.name, person_one.name, person_three.name, person_two.name]
+      expect(result.second.last.map(&:roundId)).to eq ["f", "1", "c"]
 
-      expect(competition.person_names_with_results[2][1][1].muted).to eq true
-      expect(competition.person_names_with_results[3][1][1].muted).to eq true
+      expect(result[1][1][1].muted).to eq true
+      expect(result[1][1][2].muted).to eq false
+
+      expect(result[2][1][1].muted).to eq true
+      expect(result[3][1][1].muted).to eq true
     end
 
     it "events_with_rounds_with_results" do
-      expect(competition.events_with_rounds_with_results).to eq [
-        [
-          three_by_three,
-          [
-            [
-              Round.find("1"),
-              [ r_333_1_first, r_333_1_second, r_333_1_third, r_333_1_fourth ]
-            ],
-            [
-              Round.find("f"),
-              [ r_333_f_first, r_333_f_second, r_333_f_third ]
-            ]
-          ]
-        ],
+      results = competition.events_with_rounds_with_results
+      expect(results.size).to eq 2
+      expect(results[0].first).to eq three_by_three
+      expect(results[0].second.first.first).to eq Round.find("1")
+      expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 4
+      expect(results[0].second.first.last.map(&:eventId)).to eq ["333"] * 4
+      expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 3
 
-        [
-          two_by_two,
-          [
-            [
-              Round.find("c"),
-              [ r_222_c_first ]
-            ],
-          ],
-        ],
-      ]
+      expect(results[1].first).to eq two_by_two
+      expect(results[1].second.first.first).to eq Round.find("c")
+      expect(results[1].second.first.last.map(&:value1)).to eq [3000]
     end
   end
 end
