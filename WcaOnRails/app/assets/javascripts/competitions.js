@@ -1,4 +1,4 @@
-onPage('competitions#new', function() {
+onPage('competitions#new, competitions#create', function() {
   var $competitionSelect = $('#competition_competition_id_to_clone');
   if($competitionSelect.length > 0) {
     var selectize = $competitionSelect[0].selectize;
@@ -19,7 +19,7 @@ onPage('competitions#new', function() {
   }
 });
 
-onPage('competitions#edit', function() {
+onPage('competitions#edit, competitions#update', function() {
   var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
   if($useWcaRegistrationInput.length > 0) {
     var $registrationOptionsAreas = $('.wca-registration-options');
