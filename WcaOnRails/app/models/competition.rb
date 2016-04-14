@@ -16,6 +16,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -226,6 +227,7 @@ class Competition < ActiveRecord::Base
       CompetitionMedium.where(competitionId: id_was).update_all(competitionId: id)
       CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
       CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
+      DelegateReport.where(competition_id: id_was).update_all(competition_id: id)
     end
   end
 
@@ -572,6 +574,10 @@ class Competition < ActiveRecord::Base
 
         [ event, rounds_with_results ]
       end
+  end
+
+  def delegate_report
+    DelegateReport.find_by_competition_id(self.id) || DelegateReport.create!(competition_id: self.id, content: "Hey, enter some text here", posted: false)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some

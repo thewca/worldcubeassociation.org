@@ -1,0 +1,6 @@
+<%= render layout: "competitions/nav" do %>
+  <% if !@delegate_report.posted %>
+    <div class="alert alert-info">Hey, your report is not posted yet!</div>
+  <% end %>
+  <%= yield %>
+<% end %>

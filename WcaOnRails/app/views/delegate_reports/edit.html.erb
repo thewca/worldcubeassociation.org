@@ -1,0 +1,20 @@
+<% provide(:title, "Report for #{@competition.name}") %>
+
+<%= render layout: 'nav' do %>
+  <h2>Editing Delegate Report for <%= @competition.name%></h2>
+  <%= simple_form_for(@delegate_report, url: competition_report_path(@competition.id)) do |f| %>
+    <%= f.hidden_field :updated_at %>
+
+    <div class="form-inputs">
+      <%= f.input :content %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.button :submit %>
+      <%= button_tag(type: 'submit', name: "delegate_report[posted]", value: true, class: "btn btn-danger", data: { confirm: "You are about to post your report, are you sure you want to do this?" }) do %>
+        Post the report
+      <% end %>
+    </div>
+  <% end %>
+
+<% end %>

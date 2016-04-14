@@ -393,6 +393,14 @@ class User < ActiveRecord::Base
     admin? || results_team? || any_kind_of_delegate? || wrc_team?
   end
 
+  def can_view_delegate_reports?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team?
+  end
+
+  def can_edit_competition_report?(competition)
+    (can_admin_results? || competition.delegates.include?(self)) && !competition.delegate_report.posted?
+  end
+
   def get_cannot_delete_competition_reason(competition)
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
