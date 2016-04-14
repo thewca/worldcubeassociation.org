@@ -240,10 +240,10 @@ Math.trunc = Math.trunc || function(x) {
 
 // Setting up bootstrap-table
 $(function() {
-  $('table[data-toggle="table"]').addClass('bootstrap-table');
+  $('table[data-toggle="table"]').addClass('bs-table');
 
   // Hide loading box
-  $('.bootstrap-table').bootstrapTable('hideLoading');
+  $('.bs-table').bootstrapTable('hideLoading');
 
   // It's not necessary when bootstrap-table will be distributed with this merged:
   // https://github.com/wenzhixin/bootstrap-table/pull/2145
@@ -268,7 +268,7 @@ $(function() {
   // (and the appropriate gem will be updated)
   // -------------------------------------------------------------------
   // Prevent bootstrap-table from selecting a row when a link is clicked
-  $('.bootstrap-table td a').on('click', function(e) {
+  $('.bs-table td a').on('click', function(e) {
     e.stopPropagation();
   });
   // -------------------------------------------------------------------
@@ -279,7 +279,7 @@ $(function() {
       $(this).val($(this).parents('tr').attr('id'));
     });
   };
-  initCheckboxesValues($('.bootstrap-table'));
+  initCheckboxesValues($('.bs-table'));
   $('table').on('post-body.bs.table', function() {
     initCheckboxesValues($(this));
     // Re-apply tooltip on each table body change
