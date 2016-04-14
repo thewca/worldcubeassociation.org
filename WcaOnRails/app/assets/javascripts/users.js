@@ -1,4 +1,4 @@
-onPage('users', function() {
+onPage('users#edit', function() {
   // Hide/show senior delegate select based on what the user's role is.
   $('select[name="user[delegate_status]"]').on("change", function(e) {
     var delegateStatus = this.value;
@@ -39,7 +39,9 @@ onPage('users', function() {
     $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
+});
 
+onPage('users#index', function() {
   // Change bootstrap-table pagination description
   var $table = $('.bootstrap-table');
   var options = $table.bootstrapTable('getOptions');

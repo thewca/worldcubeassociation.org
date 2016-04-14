@@ -1,4 +1,4 @@
-onPage('competitions', function() {
+onPage('competitions#new', function() {
   var $competitionSelect = $('#competition_competition_id_to_clone');
   if($competitionSelect.length > 0) {
     var selectize = $competitionSelect[0].selectize;
@@ -17,7 +17,9 @@ onPage('competitions', function() {
     selectize.on("change", competitionChanged);
     selectize.$control_input.on("input", competitionChanged);
   }
+});
 
+onPage('competitions#edit', function() {
   var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
   if($useWcaRegistrationInput.length > 0) {
     var $registrationOptionsAreas = $('.wca-registration-options');
@@ -25,7 +27,9 @@ onPage('competitions', function() {
       $registrationOptionsAreas.toggle(this.checked);
     }).trigger("change");
   }
+});
 
+onPage('competitions#index', function() {
   $('#clear-all-events').on('click', function() {
     $('#events input[type="checkbox"]').prop('checked', false);
   });

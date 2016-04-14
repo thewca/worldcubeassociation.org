@@ -1,4 +1,4 @@
-onPage('registrations', function() {
+onPage('registrations#edit_registrations', function() {
   var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
   if($registrationsTable.length > 0) {
     var showHideActions = function(e) {
