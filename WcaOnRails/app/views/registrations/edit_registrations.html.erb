@@ -2,7 +2,7 @@
 
 <%= render layout: 'nav' do %>
 
-  <%= form_for @competition, url: competition_registrations_update_all_path(@competition) do |f| %>
+  <%= form_for @competition, url: competition_registrations_update_all_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted].each do |status| %>
       <% if :pending == status %>
         <h2>Waiting list</h2>
@@ -10,7 +10,8 @@
         <h2>Approved registrations</h2>
       <% end %>
       <% registrations = @competition.registrations.send(status) %>
-      <%= wca_table table_class: "registrations-table", data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
+      <%= wca_table table_class: "registrations-table #{status}",
+                    data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
           <tr>
             <th data-checkbox="true"></th>

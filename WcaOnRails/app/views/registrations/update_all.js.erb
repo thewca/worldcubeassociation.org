@@ -1,0 +1,40 @@
+// Show flash messages
+$('#flash-alerts').replaceWith('<%=j render 'layouts/flash' %>')
+$('#flash-alerts').addClass('sticky');
+setTimeout(function() { $('#flash-alerts').fadeOut(300); }, 2500);
+
+// Update the displayed count of pending registrations
+var pendingRegistrationsCount = <%= @competition.registrations.pending.count %>;
+$('#pending-registrations-count').html(pendingRegistrationsCount);
+$('#pending-registrations-count').removeClass("label-danger label-success")
+                                 .addClass(pendingRegistrationsCount > 0 ? "label-danger" : "label-success");
+
+// Update the tables
+var $registrationsTable = $('.registrations-table:not(.floatThead-table)');
+var $pendingTable = $registrationsTable.filter('.pending');
+var $acceptedTable = $registrationsTable.filter('.accepted');
+
+var selectedRows = $pendingTable.bootstrapTable('getSelections').concat($acceptedTable.bootstrapTable('getSelections'));
+var selectedRowIds = selectedRows.map(function(row) { return row._id }); // row._id contains <tr> id
+
+$registrationsTable.each(function() {
+  $(this).bootstrapTable('remove', {
+    field: '_id',
+    values: selectedRowIds,
+  });
+});
+
+<% case params[:registrations_action] %>
+<% when "accept-selected" %>
+  $acceptedTable.bootstrapTable('append', selectedRows);
+<% when "reject-selected" %>
+  $pendingTable.bootstrapTable('append', selectedRows);
+<% end %>
+
+$('.registrations-table.floatThead').floatThead('reflow');
+
+$pendingTable.find('tbody tr').removeClass('registration-accepted').addClass('registration-pending');
+$acceptedTable.find('tbody tr').removeClass('registration-pending').addClass('registration-accepted');
+
+$registrationsTable.bootstrapTable('uncheckAll');
+$registrationsTable.find('tr.selected').removeClass('selected');

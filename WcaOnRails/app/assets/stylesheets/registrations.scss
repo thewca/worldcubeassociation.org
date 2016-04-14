@@ -26,3 +26,12 @@ table.registrations-table {
   z-index: 1000; /* show over sticky table headers */
   bottom: calc(5px + #{$footer-height-px});
 }
+
+#flash-alerts.sticky {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  padding: 0 15%;
+  z-index: 1000;
+}

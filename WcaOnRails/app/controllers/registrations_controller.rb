@@ -119,7 +119,7 @@ class RegistrationsController < ApplicationController
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
         end
       end
-      flash[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
+      flash.now[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
@@ -127,17 +127,21 @@ class RegistrationsController < ApplicationController
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_now
         end
       end
-      flash[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
+      flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
     when "delete-selected"
       registrations.each do |registration|
         registration.destroy
         RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now
       end
-      flash[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
+      flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     else
       raise "Unrecognized action #{params[:registrations_action]}"
     end
-    redirect_to competition_edit_registrations_path(@competition)
+
+    respond_to do |format|
+      format.html { redirect_to competition_edit_registrations_path(@competition) }
+      format.js { }
+    end
   end
 
   def update
