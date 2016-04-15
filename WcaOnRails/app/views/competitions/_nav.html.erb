@@ -72,7 +72,7 @@
             <%= blocks.render :nav_icon, nav_item %>
             <%= nav_item[:text] %>
             <% if nav_item[:notification_count] %>
-              <span class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
+              <span id="pending-registrations-count" class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
                 <%= nav_item[:notification_count] %>
               </span>
             <% end %>

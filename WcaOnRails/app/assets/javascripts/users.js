@@ -43,7 +43,7 @@ onPage('users#edit, users#update', function() {
 
 onPage('users#index', function() {
   // Change bootstrap-table pagination description
-  var $table = $('.bootstrap-table');
+  var $table = $('.bs-table');
   var options = $table.bootstrapTable('getOptions');
   options.formatRecordsPerPage = function(pageNumber) {
     // Space after the input box with per page count
