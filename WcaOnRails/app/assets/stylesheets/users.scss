@@ -27,3 +27,14 @@ input[type="radio"].center-vertically {
   vertical-align: middle;
   height: 100%;
 }
+
+#have-you-competed-nav>li{
+  background: #bdc3c7;
+  width: 49.5%;
+  float:left;
+}
+
+
+#have-you-competed-nav>li:first-child{
+float:right;
+}
