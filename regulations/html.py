@@ -213,13 +213,6 @@ class html():
                      regOrGuideLiReplace
                      )
 
-    ## Replace any remaining 'SEPARATE' label in the Guidelines
-    # FIXME remove this when Guidelines are fixed and updated
-    self.replaceGuides(self.ANY,
-                       r'\[SEPARATE\]',
-                       ''
-                       )
-
     # Local Callback for re.subn function
     def checked_replace(re_obj):
       replace_template = regOrGuideLiReplace
