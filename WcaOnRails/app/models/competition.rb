@@ -527,6 +527,11 @@ class Competition < ActiveRecord::Base
       end
   end
 
+  # Profiling the rendering of _results_table.html.erb showed quite some
+  # time was spent in `ActiveRecord#read_attribute`. So, I load the results
+  # using raw SQL and instantiate a PORO. The code definitely got uglier,
+  # but the performance gains are worth it IMO. Not using ActiveRecord led
+  # to a 40% performance improvement.
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
       .execute(relation.to_sql)
