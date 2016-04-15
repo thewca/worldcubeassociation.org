@@ -33,14 +33,14 @@ describe "SolveTime" do
     end
 
     it "treats skipped as worst" do
-      expect(SolveTime::SKIPPED < SolveTime::DNF).to eq true
-      expect(SolveTime::SKIPPED < SolveTime::DNS).to eq true
-      expect(SolveTime::SKIPPED < solve_time(30)).to eq true
+      expect(SolveTime::SKIPPED > SolveTime::DNF).to eq true
+      expect(SolveTime::SKIPPED > SolveTime::DNS).to eq true
+      expect(SolveTime::SKIPPED > solve_time(30)).to eq true
     end
 
     it "treats DNS as worse than DNF" do
-      expect(SolveTime::DNS < SolveTime::DNF).to eq true
-      expect(SolveTime::DNS < solve_time(30)).to eq true
+      expect(SolveTime::DNS > SolveTime::DNF).to eq true
+      expect(SolveTime::DNS > solve_time(30)).to eq true
     end
 
     it "treats DNS as worse than a finished solve" do

@@ -42,7 +42,8 @@ class SolveTime
 
   protected def to_orderable
     [
-      self.skipped? ? 0 : 1,
+      self.skipped? ? 1 : 0,
+      self.dns? ? 1 : 0,
       self.dnf? ? 1 : 0,
       self.wca_value,
     ]
