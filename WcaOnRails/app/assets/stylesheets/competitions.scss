@@ -156,7 +156,7 @@ $venue-map-wrapper-height: 400px;
   margin: 20px 0;
 
   #region,
-  #search {
+  #search-field {
     font-size: 12px;
     font-weight: normal;
     display: block;
@@ -169,7 +169,11 @@ $venue-map-wrapper-height: 400px;
 
   #state {
     min-width: 220px;
-    width: 100%;
+    display: block;
+    @media (max-width: $screen-sm) {
+      display: inline-block;
+      width: 100%;
+    }
   }
 
   #display {
@@ -185,7 +189,6 @@ $venue-map-wrapper-height: 400px;
 #search-results {
   position: relative;
   #competitions-list {
-    display: none;
 
     li:nth-child(odd) {
       background-color: $table-bg-accent;
@@ -264,11 +267,6 @@ $venue-map-wrapper-height: 400px;
         margin-left: 20px;
       }
     }
-  }
-
-
-  #competitions-map {
-    display: none;
   }
 }
 

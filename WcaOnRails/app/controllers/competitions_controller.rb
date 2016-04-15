@@ -18,7 +18,23 @@ class CompetitionsController < ApplicationController
     @competition = Competition.new
   end
 
+  # Normalizes the params that old links to index still work.
+  private def support_old_links!
+    params[:display].downcase! if params[:display]  # 'List' -> 'list', 'Map' -> 'map'
+
+    if params[:years] == "all"
+      params[:state] = "past"
+      params[:year] = "all years"
+    elsif params[:years].to_i >= Date.today.year  #to_i: 'If there is not a valid number at the start of str, 0 is returned.' - RubyDoc
+      params[:state] = "past"
+      params[:year] = params[:years]
+    end
+    params[:years] = nil
+  end
+
   def index
+    support_old_links!
+
     # Default params
     params[:event_ids] ||= []
     params[:region] ||= "all"
