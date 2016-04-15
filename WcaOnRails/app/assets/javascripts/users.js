@@ -1,4 +1,4 @@
-onPage('users#edit', function() {
+onPage('users#edit, users#update', function() {
   // Hide/show senior delegate select based on what the user's role is.
   $('select[name="user[delegate_status]"]').on("change", function(e) {
     var delegateStatus = this.value;
