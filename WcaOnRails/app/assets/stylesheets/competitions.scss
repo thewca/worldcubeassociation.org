@@ -185,7 +185,6 @@ $venue-map-wrapper-height: 400px;
 #search-results {
   position: relative;
   #competitions-list {
-    display: none;
 
     li:nth-child(odd) {
       background-color: $table-bg-accent;
@@ -264,11 +263,6 @@ $venue-map-wrapper-height: 400px;
         margin-left: 20px;
       }
     }
-  }
-
-
-  #competitions-map {
-    display: none;
   }
 }
 
