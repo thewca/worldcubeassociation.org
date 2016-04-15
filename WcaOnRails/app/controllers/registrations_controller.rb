@@ -139,7 +139,6 @@ class RegistrationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to competition_edit_registrations_path(@competition) }
       format.js { }
     end
   end

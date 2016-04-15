@@ -95,7 +95,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
       expect do
-        patch :update_all, competition_id: competition.id, registrations_action: "delete-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
+        xhr :patch, :update_all, competition_id: competition.id, registrations_action: "delete-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
       expect(Registration.find_by_id(registration.id)).to eq nil
       expect(Registration.find_by_id(registration2.id)).to eq nil
@@ -112,7 +112,7 @@ RSpec.describe RegistrationsController do
       # still on the waiting list.
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_pending_registration).with(pending_registration).and_call_original
       expect do
-        patch :update_all, competition_id: competition.id, registrations_action: "reject-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"]
+        xhr :patch, :update_all, competition_id: competition.id, registrations_action: "reject-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"]
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
       expect(registration.reload.pending?).to be true
       expect(registration2.reload.pending?).to be true
@@ -129,7 +129,7 @@ RSpec.describe RegistrationsController do
       # still accepted.
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(accepted_registration).and_call_original
       expect do
-        patch :update_all, competition_id: competition.id, registrations_action: "accept-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"]
+        xhr :patch, :update_all, competition_id: competition.id, registrations_action: "accept-selected", selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"]
       end.to change { ActionMailer::Base.deliveries.length }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
