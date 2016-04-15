@@ -5,16 +5,23 @@
 
   <div id="comp-list-nav" class="col-md-12">
     <% if params[:display] == "List" %>
-      <ul id="lists-navigation">
+      <a href="#past" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>">
+        <span class="fa-stack fa" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @past_competitions.length > 0 ? 'Past competitions' : 'No past competitions selected' %>">
+          <i class="fa fa-repeat fa-flip-horizontal fa-stack-2x text-danger"></i>
+        </span>
+      </a>
 
-        <li class="same-line"><a href="#past" class="js-scroll-to <%= @past_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @past_competitions.length > 0 ? 'Past competitions' : 'No past competitions selected' %>"></span></a></li>
+      <a href="#current" class="js-scroll-to <%= @in_progress_competitions.length > 0 ? '' : 'disabled' %>">
+        <span class="fa-stack fa" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @in_progress_competitions.length > 0 ? 'Competitions in progress' : 'No competitions in progress' %>">
+          <i class="fa fa-clock-o fa-stack-2x"></i>
+        </span>
+      </a>
 
-        <li class="same-line"><a href="#current" class="js-scroll-to <%= @in_progress_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-time" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @in_progress_competitions.length > 0 ? 'Competitions in progress' : 'No competitions in progress' %>"></span></a></li>
-
-        <li class="same-line"><a href="#upcoming" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>"></span></a></li>
-
-        <li class="same-line"><a href="#comp-query-form" class="js-scroll-to">Top</a></li>
-      </ul>
+      <a href="#upcoming" class="js-scroll-to <%= @upcoming_competitions.length > 0 ? '' : 'disabled' %>">
+        <span class="fa-stack fa"  aria-hidden="true" data-toggle="tooltip" data-placement="bottom" data-container="body" title="<%= @upcoming_competitions.length > 0 ? 'Upcoming competitions' : 'No upcoming competitions selected' %>">
+          <i class="fa fa-repeat fa-stack-2x text-success"></i>
+        </span>
+      </a>
     <% end %>
   </div>
 
