@@ -151,27 +151,29 @@ $venue-map-wrapper-height: 400px;
   width: 100%;
 }
 
-.competition-select.form-inline {
+#competition-query-form {
   width: 100%;
-  position: relative;
-  top: 5px;
+  margin: 20px 0;
 
-  input:not([type="checkbox"]),
-  select {
+  #region,
+  #search {
     font-size: 12px;
     font-weight: normal;
     display: block;
   }
 
-  button {
+  #clear-all-events,
+  #select-all-events {
     width: 100px;
   }
 
-  #submit-buttons {
-    display: block;
+  #state {
+    min-width: 220px;
     width: 100%;
+  }
+
+  #display {
     margin-top: 20px;
-    text-align: center;
   }
 }
 
@@ -180,126 +182,94 @@ $venue-map-wrapper-height: 400px;
   margin-right: 5px;
 }
 
-.competition-list {
-  li:nth-child(odd) {
-    background-color: $table-bg-accent;
-  }
+#search-results {
+  position: relative;
+  #competitions-list {
+    display: none;
 
-  li {
-    padding: 5px 10px;
-    font-size: 13px;
-
-    &.break {
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .date {
-    float: right;
-    font-weight: bold;
-    i {
-      float: left;
-      margin-right: 10px;
-    }
-  }
-
-  .f16.flag {
-    position: relative;
-    top: -1px;
-    margin-right: 5px;
-  }
-
-  @media (min-width: $screen-sm) {
-    .competition-link {
-      display: inline-block;
-      margin-right: 20px;
-      /* As of 2016-03-25, this width fits about 93% of the competition names */
-      width: 250px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: bottom;
-    }
-    .location {
-      display: inline;
-      margin-left: 20px;
+    li:nth-child(odd) {
+      background-color: $table-bg-accent;
     }
 
-    .venue-link {
-      display: inline;
-    }
-  }
+    li {
+      padding: 5px 10px;
+      font-size: 13px;
 
-  @media (min-width: $screen-lg) {
-    p {
-      display: inline;
-      margin-right: 20px;
+      &.break {
+        text-align: center;
+        font-weight: bold;
+      }
     }
 
     .date {
-      float: inherit;
-      margin-right: 20px;
-      min-width: 150px;
-      text-align: left;
-      display: inline-block;
+      float: right;
+      font-weight: bold;
+      i {
+        float: left;
+        margin-right: 10px;
+      }
     }
 
-    .competition-link {
-      margin-left: 20px;
+    .f16.flag {
+      position: relative;
+      top: -1px;
+      margin-right: 5px;
     }
 
-    .location {
-      margin-left: 20px;
+    @media (min-width: $screen-sm) {
+      .competition-link {
+        display: inline-block;
+        margin-right: 20px;
+        /* As of 2016-03-25, this width fits about 93% of the competition names */
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+      }
+      .location {
+        display: inline;
+        margin-left: 20px;
+      }
+
+      .venue-link {
+        display: inline;
+      }
     }
 
-    .venue-link {
-      display: inline-block;
-      margin-left: 20px;
+    @media (min-width: $screen-lg) {
+      p {
+        display: inline;
+        margin-right: 20px;
+      }
+
+      .date {
+        float: inherit;
+        margin-right: 20px;
+        min-width: 150px;
+        text-align: left;
+        display: inline-block;
+      }
+
+      .competition-link {
+        margin-left: 20px;
+      }
+
+      .location {
+        margin-left: 20px;
+      }
+
+      .venue-link {
+        display: inline-block;
+        margin-left: 20px;
+      }
     }
   }
-}
 
-$comp-list-nav-height: 39px;
-#comp-list-nav {
-  z-index: 10;
-  background-color: #eee;
-  line-height: $comp-list-nav-height;
 
-  &.affix {
-    top: 0;
-    border-bottom: 1px solid $gray-base;
-
-    + .comp-list-nav-placeholder {
-      display: inherit;
-    }
-  }
-
-  + .comp-list-nav-placeholder {
+  #competitions-map {
     display: none;
   }
-}
-
-.comp-list-nav-placeholder {
-  height: $comp-list-nav-height;
-}
-
-#lists-navigation {
-  margin: 0;
-
-  padding-left: 10px;
-
-  :last-child {
-    float: right;
-  }
-
-  a.disabled {
-    color: #555;
-  }
-}
-
-#comp-query-form {
-  margin: 20px 0;
 }
 
 .competition-info {
@@ -313,4 +283,22 @@ $comp-list-nav-height: 39px;
   height: 40px;
   margin-top: -40px;
   visibility: hidden;
+}
+
+#loading {
+  display: none;
+  position: absolute;
+  margin: 0 15px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: transparentize(white, 0.5);
+  .spinner-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

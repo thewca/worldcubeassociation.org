@@ -32,6 +32,9 @@
 //= require_self
 //= require_tree .
 
+// Global variables
+var TEXT_INPUT_DEBOUNCE_MS = 250;
+
 
 // Dumping ground for... stuff
 window.wca = window.wca || {};
@@ -47,13 +50,7 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
-$.fn.competitionsMap = function(competitions) {
-  var $map = new google.maps.Map(document.getElementById(this.attr('id')), {
-    zoom: 2,
-    center: {lat: 0, lng: 0},
-    scrollwheel: true
-  });
-
+wca.competitionsToMarkers = function(map, competitions) {
   var markers = [];
 
   competitions.forEach(function(c) {
@@ -71,7 +68,7 @@ $.fn.competitionsMap = function(competitions) {
     }
 
     c.marker = new google.maps.Marker({
-      map: $map,
+      map: map,
       position: {
         lat: c.latitude_degrees,
         lng: c.longitude_degrees,
@@ -81,16 +78,13 @@ $.fn.competitionsMap = function(competitions) {
     });
 
     c.marker.addListener('click', function() {
-      infowindow.open($map, c.marker);
+      infowindow.open(map, c.marker);
     });
 
     markers.push(c.marker);
   });
 
-  var markerCluster = new MarkerClusterer($map, markers, {
-    maxZoom: 10,
-    clusterSize: 30
-  });
+  return markers;
 };
 
 wca.datetimepicker = function(){
@@ -237,6 +231,11 @@ $(function() {
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 };
+
+// Bootstrap-table default options
+$.extend($.fn.bootstrapTable.defaults, {
+  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS
+});
 
 // Setting up bootstrap-table
 $(function() {

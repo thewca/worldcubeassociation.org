@@ -22,21 +22,64 @@
 </div>
 
 <div class="form-group">
-  <%= label_tag(:years) %>
-  <%= select_tag(:years, options_for_select(@years, selected: params[:years], disabled: ""), class: "form-control") %>
-</div>
-
-<div class="form-group">
   <%= label_tag("Name, City or Venue") %>
   <%= text_field_tag "search", params[:search], class: "form-control" %>
 </div>
 
-<div id="submit-buttons" class="form-group">
-  <%= button_tag(type: 'submit', name: "display", value: "List", class: "btn btn-info") do %>
-    <i class="glyphicon glyphicon-list"></i> List
-  <% end %>
-
-  <%= button_tag(type: 'submit', name: "display", value: "Map", class: "btn btn-primary") do %>
-    <i class="glyphicon glyphicon-map-marker"></i> Map
-  <% end %>
+<div class="form-group">
+  <%= label_tag(:state) %>
+  <div id="state" class="btn-group" data-toggle="buttons">
+    <label id="present" class="btn btn-primary">
+      <%= radio_button_tag "state", "present" %>
+      <span class="caption">Present</span>
+    </label>
+    <ul class="dropdown-menu years">
+      <%= hidden_field_tag "year", params[:year] %>
+      <% @years.each do |year| %>
+        <li class="year"><%= link_to year.to_s.capitalize, "#", data: { year: year } %></li>
+      <% end %>
+    </ul>
+    <label id="past" class="btn btn-primary" data-toggle="dropdown">
+      <%= radio_button_tag "state", "past" %>
+      <span class="caption">Past <%= "from #{params[:year]}" if @past_selected %></span>
+    </label>
+  </div>
 </div>
+
+<div id="display" class="form-group">
+  <div class="btn-group btn-group-justified" data-toggle="buttons">
+    <label id="display-list" class="btn btn-info">
+      <%= radio_button_tag "display", "list" %>
+      <i class="glyphicon glyphicon-list"></i> List
+    </label>
+    <label id="display-map" class="btn btn-info">
+      <%= radio_button_tag "display", "map" %>
+      <i class="glyphicon glyphicon-map-marker"></i> Map
+    </label>
+  </div>
+</div>
+
+
+<script>
+  $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
+
+  $('#present').on('click', function() {
+    $('#past .caption').html('Past');
+  });
+
+  $('.years .year a').on('click', function(e) {
+    e.preventDefault();
+    var $past = $('#past');
+    var year = $(this).data('year');
+    $past.find('.caption').html('Past from ' + year);
+    $('.years input[name="year"]').val(year);
+    if($past.is('.active')) {
+      $past.trigger('change');
+    } else {
+      // Also triggers 'change'
+      $past.button('toggle');
+    }
+  });
+
+  $('#<%= params[:display] == "map" ? "display-map" : "display-list" %>').button('toggle');
+</script>

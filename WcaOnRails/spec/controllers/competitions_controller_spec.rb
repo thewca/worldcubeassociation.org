@@ -4,34 +4,74 @@ describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
 
   describe 'GET #index' do
-    let!(:competition1) { FactoryGirl.create(:competition, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
-    let!(:competition2) { FactoryGirl.create(:competition, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
-    let!(:competition3) { FactoryGirl.create(:competition, starts: 3.week.from_now, eventSpecs: "222 333 skewb 666 pyram sq1") }
-    let!(:competition4) { FactoryGirl.create(:competition, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
-
     describe "selecting events" do
+      let!(:competition1) { FactoryGirl.create(:competition, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
+      let!(:competition2) { FactoryGirl.create(:competition, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
+      let!(:competition3) { FactoryGirl.create(:competition, starts: 3.week.from_now, eventSpecs: "222 333 skewb 666 pyram sq1") }
+      let!(:competition4) { FactoryGirl.create(:competition, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
+
       context "when no event is selected" do
         it "competitions are sorted by start date" do
           get :index
-          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
       end
 
       context "when events are selected" do
         it "only competitions matching all of the selected events are shown" do
           get :index, event_ids: ["333", "pyram", "clock"]
-          expect(assigns(:competitions)).to eq [competition4, competition2]
+          expect(assigns(:competitions)).to eq [competition2, competition4]
         end
 
         it "competitions are still sorted by start date" do
           get :index, event_ids: ["333"]
-          expect(assigns(:competitions)).to eq [competition4, competition3, competition2, competition1]
+          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
 
         # See: https://github.com/cubing/worldcubeassociation.org/issues/472
         it "works when event_ids are passed as a hash instead of an array (facebook redirection)" do
           get :index, event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" }
-          expect(assigns(:competitions)).to eq [competition4, competition2]
+          expect(assigns(:competitions)).to eq [competition2, competition4]
+        end
+      end
+    end
+
+    describe "selecting present/past competitions" do
+      let!(:past_comp1) { FactoryGirl.create(:competition, starts: 1.year.ago) }
+      let!(:past_comp2) { FactoryGirl.create(:competition, starts: 3.years.ago) }
+      let!(:in_progress_comp1) { FactoryGirl.create(:competition, starts: Date.today, ends: 1.day.from_now) }
+      let!(:in_progress_comp2) { FactoryGirl.create(:competition, starts: Date.today, ends: Date.today) }
+      let!(:upcoming_comp1) { FactoryGirl.create(:competition, starts: 2.weeks.from_now) }
+      let!(:upcoming_comp2) { FactoryGirl.create(:competition, starts: 3.weeks.from_now) }
+
+      context "when present is selected" do
+        before do
+          get :index, state: :present
+        end
+
+        it "shows only competitions being in progress or upcoming" do
+          expect(assigns(:competitions)).to match_array [in_progress_comp1, in_progress_comp2, upcoming_comp1, upcoming_comp2]
+        end
+
+        it "upcoming competitions are sorted ascending by date" do
+          expect(assigns(:competitions).last(2)).to eq [upcoming_comp1, upcoming_comp2]
+        end
+      end
+
+      context "when past is selected" do
+        it "when all years are selected, shows all past competitions" do
+          get :index, state: :past, year: "all years"
+          expect(assigns(:competitions)).to match [past_comp1, past_comp2]
+        end
+
+        it "when a single year is selected, shows past competitions from this year" do
+          get :index, state: :past, year: past_comp1.year
+          expect(assigns(:competitions)).to eq [past_comp1]
+        end
+
+        it "competitions are sorted descending by date" do
+          get :index, state: :past, year: "all years"
+          expect(assigns(:competitions)).to eq [past_comp1, past_comp2]
         end
       end
     end

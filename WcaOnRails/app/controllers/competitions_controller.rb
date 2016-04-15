@@ -1,5 +1,4 @@
 class CompetitionsController < ApplicationController
-  PAST_COMPETITIONS_DAYS = 90
   before_action :authenticate_user!, except: [:show, :index]
   before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:post_announcement, :post_results, :admin_edit]
 
@@ -20,45 +19,37 @@ class CompetitionsController < ApplicationController
   end
 
   def index
-    # We use the ["",""] to separate the items. They are disabled in the view, so the
-    # user cannot select an empty param.
-    @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
-                 'Country' => Country.all.map { |country| [country.name, country.id] } }
-    @years = [ ["Current","current"],["All","all"],["",""] ] + Competition.where(showAtAll: true).map(&:year).uniq.sort.reverse!
-    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).reverse_order
-
-    # This needs to be the first thing, otherwise @competitions will be an array instead of an object
-    # and the .where will not work.
-    if params[:years].blank?
-      params[:years] = "current"
-    end
-
-    if params[:region].blank?
-      params[:region] = "all"
-    end
-
-    if params[:display].blank?
-      params[:display] = "List"
-    end
-
+    # Default params
     params[:event_ids] ||= []
+    params[:region] ||= "all"
+    params[:state] ||= "present"
+    params[:year] ||= "all years"
+    params[:display] ||= "list"
 
+    # Facebook adds indices to the params automatically when redirecting.
+    # See: https://github.com/cubing/worldcubeassociation.org/issues/472
     if params[:event_ids].is_a?(Hash)
       params[:event_ids] = params[:event_ids].values
     end
 
-    if params[:years] == "current"
-      @competitions = @competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Datetime) > ?",
-                                          (Date.today - PAST_COMPETITIONS_DAYS))
-      @past_comps_title = "Competitions from the last #{CompetitionsController::PAST_COMPETITIONS_DAYS} days "
-    elsif params[:years] == "all"
-      @past_comps_title = "All past competitions"
+    @past_selected = params[:state] == "past"
+    @present_selected = !@past_selected
+
+    @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
+                 'Country' => Country.all.map { |country| [country.name, country.id] } }
+    @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
+    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
+
+    if @present_selected
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
     else
-      @competitions = @competitions.select { |competition| competition.year.to_s == params[:years] }
-      @past_comps_title = "Competitions from #{params[:years]}"
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
+      unless params[:year] == "all years"
+        @competitions = @competitions.where(year: params[:year])
+      end
     end
 
-    if params[:region] && params[:region] != "all"
+    unless params[:region] == "all"
       @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
     end
 
@@ -70,8 +61,17 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
     end
 
-    @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
-    @in_progress_competitions, @upcoming_competitions = @not_past_competitions.partition(&:in_progress?)
+    respond_to do |format|
+      format.html {}
+      format.js do
+        # We change the browser's history when replacing url after an Ajax request.
+        # So we must prevent a browser from caching the JavaScript response.
+        # It's necessary because if the browser caches the response, the user will see a JavaScript response
+        # when he clicks browser back/forward buttons.
+        response.headers["Cache-Control"] = "no-cache, no-store"
+        render 'index', locals: { current_url: request.original_url }
+      end
+    end
   end
 
   def create

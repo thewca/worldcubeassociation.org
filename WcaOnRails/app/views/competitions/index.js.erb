@@ -1,0 +1,11 @@
+history.pushState(null, document.title, <%= current_url.to_json.html_safe %>);
+
+$('#competitions-list').html('<%=j render 'index_competitions_list', competitions: @competitions %>');
+
+<% if params[:display] == "list" %>
+  $('#competitions-map').hide();
+  $('#competitions-list').show();
+<% else %>
+  $('#competitions-list').hide();
+  $('#competitions-map').show();
+<% end %>
