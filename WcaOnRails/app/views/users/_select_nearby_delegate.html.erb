@@ -52,7 +52,7 @@
         <% value = "" %>
         <% if chose_extra_delegate %>
           <% delegate = @user.delegate_to_handle_wca_id_claim %>
-          <% input_data[:data] = [delegate.to_jsonable].to_json %>
+          <% input_data[:data] = [delegate].to_json %>
           <% value = @user.delegate_to_handle_wca_id_claim.id %>
         <% end %>
         <%= text_field_tag "", value,

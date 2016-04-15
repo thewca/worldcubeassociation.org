@@ -224,8 +224,10 @@ table.wca-results {
 }
 
 
-// Set flag imitations for competitions taking place in multiple countries.
 .f16.flag {
+  vertical-align: middle;
+
+  // Set flag imitations for competitions taking place in multiple countries.
   &.xe,
   &.xa,
   &.xs {

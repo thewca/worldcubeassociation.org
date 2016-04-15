@@ -181,6 +181,143 @@ describe Api::V0::ApiController do
     end
   end
 
+  describe 'GET #competitions' do
+    it 'sorts newest to oldest' do
+      yesteryear_comp = FactoryGirl.create(:competition, starts: 1.year.ago)
+      yesterday_comp = FactoryGirl.create(:competition, starts: 1.day.ago)
+      today_comp = FactoryGirl.create(:competition, starts: 0.days.ago)
+      tomorrow_comp = FactoryGirl.create(:competition, starts: 1.day.from_now)
+
+      get :competitions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ tomorrow_comp.id, today_comp.id, yesterday_comp.id, yesteryear_comp.id ]
+
+      get :competitions, sort: "start_date"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ yesteryear_comp.id, yesterday_comp.id, today_comp.id, tomorrow_comp.id ]
+    end
+
+    it 'can sort by start_date,end_date' do
+      one_day_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 1))
+      two_day_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
+
+      get :competitions, sort: "start_date,end_date"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ one_day_comp.id,  two_day_comp.id ]
+
+      get :competitions, sort: "start_date,-end_date"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ two_day_comp.id, one_day_comp.id ]
+    end
+
+    it 'can query by country_iso2' do
+      vietnam_comp = FactoryGirl.create(:competition, countryId: "Vietnam")
+      usa_comp = FactoryGirl.create(:competition, countryId: "USA")
+
+      get :competitions, country_iso2: "US"
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq usa_comp.id
+
+      get :competitions, country_iso2: "VN"
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq vietnam_comp.id
+    end
+
+    it 'can do a plaintext query' do
+      terrible_comp = FactoryGirl.create(:competition, name: "A terrible competition 2016", countryId: "USA")
+      awesome_comp = FactoryGirl.create(:competition, name: "An awesome competition 2016", countryId: "France")
+
+      get :competitions, q: "AWES"
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq awesome_comp.id
+
+      # Check that composing a plaintext query and a country query works.
+      get :competitions, q: "competition", country_iso2: "US"
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq terrible_comp.id
+    end
+
+    it 'validates start' do
+      get :competitions, start: "2015"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid start: '2015'"]
+    end
+
+    it 'validates end' do
+      get :competitions, end: "2014"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid end: '2014'"]
+    end
+
+    it 'validates country_iso2' do
+      get :competitions, country_iso2: "this is not a country"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Invalid country_iso2: 'this is not a country'"]
+    end
+
+    it 'validates sort' do
+      get :competitions, sort: "foo"
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq ["Unrecognized sort field: 'foo'"]
+    end
+
+    it 'can query by date' do
+      last_feb_comp = FactoryGirl.create(:competition, starts: Date.new(2015, 2, 1))
+      feb_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1))
+      march_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 3, 1))
+
+      get :competitions, start: "2015-02-01"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+
+      get :competitions, end: "2016-03-01"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+
+      get :competitions, start: "2015-02-01", end: "2016-02-15"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ feb_comp.id, last_feb_comp.id ]
+
+      get :competitions, start: "2015-02-01", end: "2015-02-01"
+      json = JSON.parse(response.body)
+      expect(json.map { |c| c["id"] }).to eq [ last_feb_comp.id ]
+    end
+
+    it 'paginates' do
+      30.times do
+        FactoryGirl.create :competition
+      end
+
+      get :competitions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 25
+
+      # Parse HTTP Link header mess
+      link = response.headers["Link"]
+      links = link.split(/, */)
+      next_link = links[1]
+      url, rel = next_link.split(/; */)
+      url = url[1...-1]
+      expect(rel).to eq 'rel="next"'
+
+      get :competitions, Rack::Utils.parse_query(URI(url).query)
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq Competition.count - 25
+    end
+  end
+
   describe 'GET #scramble_program' do
     it 'works' do
       get :scramble_program

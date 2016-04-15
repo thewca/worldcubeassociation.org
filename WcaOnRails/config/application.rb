@@ -1,8 +1,11 @@
 require File.expand_path('../boot', __FILE__)
 require_relative '../lib/middlewares/fix_accept_header'
 require_relative '../lib/middlewares/warden_user_logger'
+require_relative '../lib/wca_exceptions'
 
 require 'rails/all'
+
+require_relative '../lib/monkeypatch_json_renderer_to_pretty_print'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -48,6 +51,7 @@ module WcaOnRails
         resource '/api/*',
           headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
           methods: [:get, :post, :delete, :put, :patch, :options, :head],
+          expose: ['Total', 'Per-Page', 'Link'],
           max_age: 0,
           credentials: false
       end

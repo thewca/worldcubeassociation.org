@@ -3,11 +3,11 @@ class PostsController < ApplicationController
   before_action -> { redirect_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
 
   def index
-    @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).paginate(page: params[:page])
+    @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
   end
 
   def rss
-    @posts = Post.where(world_readable: true).order(created_at: :desc).includes(:author).paginate(page: params[:page])
+    @posts = Post.where(world_readable: true).order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
     request.format = :xml

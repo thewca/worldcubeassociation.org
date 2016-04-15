@@ -466,22 +466,70 @@ class Competition < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    sql_query = "%#{query}%"
-    Competition.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+    competitions = Competition.where(showAtAll: true)
+
+    if params[:country_iso2].present?
+      country = Country.find_by_iso2(params[:country_iso2])
+      if !country
+        raise WcaExceptions::BadApiParameter, "Invalid country_iso2: '#{params[:country_iso2]}'"
+      end
+      competitions = competitions.where(countryId: country.id)
+    end
+
+    if params[:start].present?
+      start_date = Date.safe_parse(params[:start])
+      if !start_date
+        raise WcaExceptions::BadApiParameter, "Invalid start: '#{params[:start]}'"
+      end
+      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Date) >= ?", start_date)
+    end
+
+    if params[:end].present?
+      end_date = Date.safe_parse(params[:end])
+      if !end_date
+        raise WcaExceptions::BadApiParameter, "Invalid end: '#{params[:end]}'"
+      end
+      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
+    end
+
+    if query.present?
+      sql_query = "%#{query}%"
+      competitions = competitions.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+    end
+
+    if params[:sort].present?
+      params[:sort].split(",").each do |field|
+        order = field.start_with?("-") ? :desc : :asc
+
+        case field
+        when "start_date", "-start_date"
+          competitions = competitions.order(year: order, month: order, day: order)
+        when "end_date", "-end_date"
+          competitions = competitions.order(year: order, endMonth: order, endDay: order)
+        else
+          raise WcaExceptions::BadApiParameter, "Unrecognized sort field: '#{field}'"
+        end
+      end
+    end
+
+    competitions
   end
 
-  def to_jsonable
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/c.php?i=#{id}",
 
       id: id,
       name: name,
-      cellName: cellName,
-      cityName: cityName,
-      countryId: countryId,
-      delegates: delegates.map(&:to_jsonable),
-      organizers: organizers.map(&:to_jsonable),
+      website: website,
+      short_name: cellName,
+      city: cityName,
+      country_iso2: country.iso2,
+      start_date: start_date,
+      end_date: end_date,
+      delegates: delegates,
+      organizers: organizers,
     }
     json
   end

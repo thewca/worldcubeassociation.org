@@ -56,7 +56,7 @@ class Person < ActiveRecord::Base
     SolveTime.new(event.id, type, rank ? rank.best : 0)
   end
 
-  def to_jsonable(include_private_info: false)
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",
@@ -69,14 +69,8 @@ class Person < ActiveRecord::Base
       country_iso2: self.country_iso2,
     }
 
-    if include_private_info
-      json[:dob] = person.dob
-    end
-
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
-    json = (user || User.new).to_jsonable.merge(json)
-
-    json
+    (user || User.new).serializable_hash.merge(json)
   end
 end

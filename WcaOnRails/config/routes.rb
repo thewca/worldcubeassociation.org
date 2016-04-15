@@ -102,6 +102,7 @@ Rails.application.routes.draw do
       get '/search/users' => 'api#users_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
+      get '/competitions' => 'api#competitions'
       resources :competitions, only: [:show]
     end
   end
