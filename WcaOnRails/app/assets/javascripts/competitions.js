@@ -96,8 +96,14 @@ onPage('competitions#index', function() {
     }
   });
 
-  // Reaload the page when back/forward is clicked.
-  $(window).on('popstate', function() {
-    location.reload();
+  // Necessary hack because Safari fires a popstate event on document load
+  $(window).load(function() {
+    setTimeout(function() {
+      // When back/forward is clicked the url changes since we use pushState,
+      // but the content is not reloaded so we have to do this manually.
+      $(window).on('popstate', function() {
+        location.reload();
+      });
+    }, 0);
   });
 });
