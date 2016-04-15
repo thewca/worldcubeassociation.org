@@ -1,3 +1,5 @@
+require 'solve_time'
+
 def solve_time(centis)
   SolveTime.new('333', :single, centis)
 end
@@ -41,8 +43,8 @@ describe "SolveTime" do
       expect(SolveTime::DNS < solve_time(30)).to eq true
     end
 
-    it "treats DNS as worst than a finished solve" do
-      expect(SolveTime::DNF < solve_time(30)).to eq true
+    it "treats DNS as worse than a finished solve" do
+      expect(SolveTime::DNF > solve_time(30)).to eq true
     end
   end
 end

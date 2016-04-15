@@ -40,11 +40,10 @@ class SolveTime
     wca_value == SKIPPED_VALUE
   end
 
-  def to_orderable
+  protected def to_orderable
     [
       self.skipped? ? 0 : 1,
-      self.dns? ? 0 : 1,
-      self.dnf? ? 0 : 1,
+      self.dnf? ? 1 : 0,
       self.wca_value,
     ]
   end
@@ -117,7 +116,7 @@ class SolveTime
       centis = time_centiseconds % 100
 
       clock_format = (CLOCK_FORMAT % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, EMPTY_STRING)
-      if clock_format.starts_with? DOT_STRING
+      if clock_format.start_with? DOT_STRING
         clock_format = ZERO_STRING + clock_format
       end
       clock_format
