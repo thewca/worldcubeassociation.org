@@ -21,12 +21,12 @@ class Format
     when :single
       :average
     else
-      raise "Unrecognized sort_by: #{@sort_by}"
+      fail "Unrecognized sort_by: #{@sort_by}"
     end
   end
 
   def self.find(id)
-    ALL_FORMATS_BY_ID[id] or throw "Unrecognized event id"
+    ALL_FORMATS_BY_ID[id] or fail "Unrecognized event id"
   end
 
   def self.find_by_id(id)
@@ -41,8 +41,8 @@ class Format
     id.hash
   end
 
-  def eql?(o)
-    id == o.id
+  def eql?(other)
+    id == other.id
   end
 
   ALL_FORMATS = [

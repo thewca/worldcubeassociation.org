@@ -7,21 +7,21 @@ class LightResult
   attr_accessor :muted
 
   attr_reader :value1,
-    :value2,
-    :value3,
-    :value4,
-    :value5,
-    :best,
-    :average,
-    :personName,
-    :eventId,
-    :formatId,
-    :roundId,
-    :pos,
-    :personId,
-    :regionalSingleRecord,
-    :regionalAverageRecord,
-    :countryId
+              :value2,
+              :value3,
+              :value4,
+              :value5,
+              :best,
+              :average,
+              :personName,
+              :eventId,
+              :formatId,
+              :roundId,
+              :pos,
+              :personId,
+              :regionalSingleRecord,
+              :regionalAverageRecord,
+              :countryId
 
   def initialize(r)
     @value1 = r["value1"]
@@ -79,7 +79,7 @@ class LightResult
   end
 
   private def sorted_solves_with_index
-    @sorted_solves_with_index ||= solves.each_with_index.reject { |s, i| s.skipped? }.sort
+    @sorted_solves_with_index ||= solves.each_with_index.reject { |s, _| s.skipped? }.sort
   end
 
   def solves
@@ -103,7 +103,7 @@ class LightResult
       sorted_solves = sorted_solves_with_index
       trimmed_solves_with_index = sorted_solves[0...format.trim_fastest_n]
       trimmed_solves_with_index += sorted_solves[(sorted_solves.length - format.trim_slowest_n)...sorted_solves.length]
-      trimmed_solves_with_index.map { |s, i| i }
+      trimmed_solves_with_index.map { |_, i| i }
     end
   end
 end

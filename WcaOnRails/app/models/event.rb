@@ -72,7 +72,7 @@ class Event
       rank: 10,
       format: "time",
       cellName: "Rubik's Cube",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "444",
@@ -80,7 +80,7 @@ class Event
       rank: 20,
       format: "time",
       cellName: "4x4 Cube",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "555",
@@ -88,7 +88,7 @@ class Event
       rank: 30,
       format: "time",
       cellName: "5x5 Cube",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "222",
@@ -96,7 +96,7 @@ class Event
       rank: 40,
       format: "time",
       cellName: "2x2 Cube",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "333bf",
@@ -104,7 +104,7 @@ class Event
       rank: 50,
       format: "time",
       cellName: "3x3 blindfolded",
-      preferred_format_ids: [ '3', '2', '1' ], # https://www.worldcubeassociation.org/regulations/#9b3
+      preferred_format_ids: %w(3 2 1), # https://www.worldcubeassociation.org/regulations/#9b3
     },
     {
       id: "333oh",
@@ -112,7 +112,7 @@ class Event
       rank: 60,
       format: "time",
       cellName: "3x3 one-handed",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "333fm",
@@ -120,7 +120,7 @@ class Event
       rank: 70,
       format: "number",
       cellName: "3x3 fewest moves",
-      preferred_format_ids: [ "m", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b2
+      preferred_format_ids: %w(m 2 1), # https://www.worldcubeassociation.org/regulations/#9b2
     },
     {
       id: "333ft",
@@ -128,7 +128,7 @@ class Event
       rank: 80,
       format: "time",
       cellName: "3x3 with feet",
-      preferred_format_ids: [ "m", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b2
+      preferred_format_ids: %w(m 2 1), # https://www.worldcubeassociation.org/regulations/#9b2
     },
     {
       id: "minx",
@@ -136,7 +136,7 @@ class Event
       rank: 110,
       format: "time",
       cellName: "Megaminx",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "pyram",
@@ -144,7 +144,7 @@ class Event
       rank: 120,
       format: "time",
       cellName: "Pyraminx",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "sq1",
@@ -152,7 +152,7 @@ class Event
       rank: 130,
       format: "time",
       cellName: "Square-1",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "clock",
@@ -160,7 +160,7 @@ class Event
       rank: 140,
       format: "time",
       cellName: "Rubik's Clock",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "skewb",
@@ -168,7 +168,7 @@ class Event
       rank: 150,
       format: "time",
       cellName: "Skewb",
-      preferred_format_ids: [ "a", "3", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b1
+      preferred_format_ids: %w(a 3 2 1), # https://www.worldcubeassociation.org/regulations/#9b1
     },
     {
       id: "666",
@@ -176,7 +176,7 @@ class Event
       rank: 200,
       format: "time",
       cellName: "6x6 Cube",
-      preferred_format_ids: [ "m", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b2
+      preferred_format_ids: %w(m 2 1), # https://www.worldcubeassociation.org/regulations/#9b2
     },
     {
       id: "777",
@@ -184,7 +184,7 @@ class Event
       rank: 210,
       format: "time",
       cellName: "7x7 Cube",
-      preferred_format_ids: [ "m", "2", "1" ], # https://www.worldcubeassociation.org/regulations/#9b2
+      preferred_format_ids: %w(m 2 1), # https://www.worldcubeassociation.org/regulations/#9b2
     },
     {
       id: "444bf",
@@ -192,7 +192,7 @@ class Event
       rank: 500,
       format: "time",
       cellName: "4x4 blindfolded",
-      preferred_format_ids: [ '3', '2', '1' ], # https://www.worldcubeassociation.org/regulations/#9b3
+      preferred_format_ids: %w(3 2 1), # https://www.worldcubeassociation.org/regulations/#9b3
     },
     {
       id: "555bf",
@@ -200,7 +200,7 @@ class Event
       rank: 510,
       format: "time",
       cellName: "5x5 blindfolded",
-      preferred_format_ids: [ '3', '2', '1' ], # https://www.worldcubeassociation.org/regulations/#9b3
+      preferred_format_ids: %w(3 2 1), # https://www.worldcubeassociation.org/regulations/#9b3
     },
     {
       id: "333mbf",
@@ -208,7 +208,7 @@ class Event
       rank: 520,
       format: "multi",
       cellName: "3x3 multi blind",
-      preferred_format_ids: [ '3', '2', '1' ], # https://www.worldcubeassociation.org/regulations/#9b3
+      preferred_format_ids: %w(3 2 1), # https://www.worldcubeassociation.org/regulations/#9b3
     },
 
     {
@@ -217,7 +217,7 @@ class Event
       rank: 997,
       format: "time",
       cellName: "Rubik's Magic",
-      preferred_format_ids: [ 'a' ],
+      preferred_format_ids: %w(a),
     },
     {
       id: "mmagic",
@@ -225,7 +225,7 @@ class Event
       rank: 998,
       format: "time",
       cellName: "Master Magic",
-      preferred_format_ids: [ 'a' ],
+      preferred_format_ids: %w(a),
     },
     {
       id: "333mbo",
@@ -233,7 +233,7 @@ class Event
       rank: 999,
       format: "multi",
       cellName: "3x3 multi blind old",
-      preferred_format_ids: [ 'a' ],
+      preferred_format_ids: %w(a),
     },
   ].map { |e| Event.new(e.merge(valid: true)) }
 

@@ -51,6 +51,7 @@ Lint/RescueException:
 Lint/ShadowingOuterLocalVariable:
   Exclude:
     - 'app/controllers/competitions_controller.rb'
+    - 'app/models/competition.rb'
     - 'db/seeds/development/competitions.seeds.rb'
 
 # Offense count: 8
@@ -76,6 +77,9 @@ Lint/UnusedMethodArgument:
     - 'app/models/post.rb'
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
+
+Metrics/ParameterLists:
+  Enabled: false
 
 # Offense count: 57
 Metrics/AbcSize:
@@ -108,7 +112,7 @@ Metrics/MethodLength:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 141
+  Max: 153
 
 # Offense count: 17
 Metrics/PerceivedComplexity:
@@ -177,6 +181,7 @@ Style/AndOr:
     - 'app/controllers/users_controller.rb'
     - 'app/models/country.rb'
     - 'app/models/event.rb'
+    - 'app/models/format.rb'
     - 'app/models/round.rb'
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'

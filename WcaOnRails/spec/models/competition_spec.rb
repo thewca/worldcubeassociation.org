@@ -139,7 +139,7 @@ RSpec.describe Competition do
   it "ignores equal signs in eventSpecs" do
     # See https://github.com/cubing/worldcubeassociation.org/issues/95
     competition = FactoryGirl.build :competition, eventSpecs: "   333=//sd    444   "
-    expect(competition.events.map(&:id)).to eq [ "333", "444" ]
+    expect(competition.events.map(&:id)).to eq %w(333 444)
   end
 
   it "validates event ids" do
@@ -359,7 +359,7 @@ RSpec.describe Competition do
     let!(:r_333_1_fourth) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 4, person: person_four }
 
     let!(:r_333_f_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 1, person: person_one }
-    let!(:r_333_f_second,) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
+    let!(:r_333_f_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
     let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 3, person: person_three }
 
     let!(:r_222_c_first) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
@@ -390,7 +390,7 @@ RSpec.describe Competition do
       result = competition.person_names_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four.name, person_one.name, person_three.name, person_two.name]
-      expect(result.second.last.map(&:roundId)).to eq ["f", "1", "c"]
+      expect(result.second.last.map(&:roundId)).to eq %w(f 1 c)
 
       expect(result[1][1][1].muted).to eq true
       expect(result[1][1][2].muted).to eq false

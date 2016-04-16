@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SolveTime
   EMPTY_STRING = ''.freeze
   CLOCK_FORMAT = "%d:%02d:%02d.%02d".freeze
@@ -42,15 +44,15 @@ class SolveTime
 
   protected def to_orderable
     [
-      self.skipped? ? 1 : 0,
-      self.dns? ? 1 : 0,
-      self.dnf? ? 1 : 0,
-      self.wca_value,
+      skipped? ? 1 : 0,
+      dns? ? 1 : 0,
+      dnf? ? 1 : 0,
+      wca_value,
     ]
   end
 
-  def <=>(o)
-    self.to_orderable <=> o.to_orderable
+  def <=>(other)
+    to_orderable <=> other.to_orderable
   end
 
   def clock_format
@@ -83,7 +85,6 @@ class SolveTime
         attempted = mb_value % 100
         mb_value = mb_value / 100
         solved = 99 - mb_value % 100
-        mb_value = mb_value / 100
       else
         missed = mb_value % 100
         mb_value = mb_value / 100
@@ -122,6 +123,5 @@ class SolveTime
       end
       clock_format
     end
-
   end
 end

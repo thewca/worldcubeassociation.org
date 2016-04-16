@@ -465,7 +465,7 @@ class Competition < ActiveRecord::Base
   end
 
   def is_over?
-    !!end_date && end_date < Date.today
+    !end_date.nil? && end_date < Date.today
   end
 
   def result_cache_key(view)
@@ -479,7 +479,7 @@ class Competition < ActiveRecord::Base
         .where(roundId: Round.final_rounds.map(&:id))
         .where("pos >= 1 AND pos <= 3")
     ).group_by(&:event)
-      .sort_by { |event, results| event.rank }
+      .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
@@ -493,7 +493,7 @@ class Competition < ActiveRecord::Base
   def person_names_with_results
     light_results_from_relation(results)
       .group_by(&:personName)
-      .sort_by { |personName, results| personName }
+      .sort_by { |personName, _results| personName }
       .map do |personName, results|
         results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
 
@@ -511,11 +511,11 @@ class Competition < ActiveRecord::Base
   def events_with_rounds_with_results
     light_results_from_relation(results)
       .group_by(&:event)
-      .sort_by { |event, results| event.rank }
+      .sort_by { |event, _results| event.rank }
       .map do |event, results|
         rounds_with_results = results
           .group_by(&:round)
-          .sort_by { |format, results| format.rank }
+          .sort_by { |format, _results| format.rank }
           .map { |round, results| [ round, results.sort_by(&:pos) ] }
 
         [ event, rounds_with_results ]
@@ -534,7 +534,7 @@ class Competition < ActiveRecord::Base
   end
 
   def started?
-    !!start_date && start_date < Date.today
+    !start_date.nil? && start_date < Date.today
   end
 
   def country_name

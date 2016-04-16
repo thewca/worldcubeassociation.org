@@ -30,7 +30,7 @@ after "development:users" do
     )
 
     eventIds.each do |eventId|
-      [ "1", "2", "f" ].each do |roundId|
+      %w(1 2 f).each do |roundId|
         users.each_with_index do |competitor, i|
           person = competitor.person
           Result.create!(
