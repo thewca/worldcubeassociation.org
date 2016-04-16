@@ -61,7 +61,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {
     protocol: root_url.scheme,
     host: root_url.host,
-    port: root_url.port
+    port: root_url.port,
   }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
@@ -78,7 +78,7 @@ Rails.application.configure do
       user_name: ENVied.SMTP_USERNAME,
       password: ENVied.SMTP_PASSWORD,
       authentication: 'login',
-      domain: root_url.host
+      domain: root_url.host,
     }
   else
     # When not on the live site, send emails to mailcatcher

@@ -23,7 +23,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {
     protocol: root_url.scheme,
     host: root_url.host,
-    port: root_url.port
+    port: root_url.port,
   }
 
   # Setup for mailcatcher (http://mailcatcher.me/)

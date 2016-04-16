@@ -47,7 +47,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AF"
+      "iso2": "AF",
     },
     {
       "id": "Albania",
@@ -56,7 +56,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AL"
+      "iso2": "AL",
     },
     {
       "id": "Algeria",
@@ -65,7 +65,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "DZ"
+      "iso2": "DZ",
     },
     {
       "id": "Andorra",
@@ -74,7 +74,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AD"
+      "iso2": "AD",
     },
     {
       "id": "Angola",
@@ -83,7 +83,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AO"
+      "iso2": "AO",
     },
     {
       "id": "Anguilla",
@@ -92,7 +92,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AI"
+      "iso2": "AI",
     },
     {
       "id": "Antigua",
@@ -101,7 +101,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AG"
+      "iso2": "AG",
     },
     {
       "id": "Argentina",
@@ -110,7 +110,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AR"
+      "iso2": "AR",
     },
     {
       "id": "Armenia",
@@ -119,7 +119,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AM"
+      "iso2": "AM",
     },
     {
       "id": "Aruba",
@@ -128,7 +128,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AW"
+      "iso2": "AW",
     },
     {
       "id": "Australia",
@@ -137,7 +137,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AU"
+      "iso2": "AU",
     },
     {
       "id": "Austria",
@@ -146,7 +146,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AT"
+      "iso2": "AT",
     },
     {
       "id": "Azerbaijan",
@@ -155,7 +155,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AZ"
+      "iso2": "AZ",
     },
     {
       "id": "Bahamas",
@@ -164,7 +164,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BS"
+      "iso2": "BS",
     },
     {
       "id": "Bahrain",
@@ -173,7 +173,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BH"
+      "iso2": "BH",
     },
     {
       "id": "Bangladesh",
@@ -182,7 +182,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BD"
+      "iso2": "BD",
     },
     {
       "id": "Barbados",
@@ -191,7 +191,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BB"
+      "iso2": "BB",
     },
     {
       "id": "Belarus",
@@ -200,7 +200,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BY"
+      "iso2": "BY",
     },
     {
       "id": "Belgium",
@@ -209,7 +209,7 @@ class Country
       "latitude": 50503887,
       "longitude": 4469936,
       "zoom": 7,
-      "iso2": "BE"
+      "iso2": "BE",
     },
     {
       "id": "Belize",
@@ -218,7 +218,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BZ"
+      "iso2": "BZ",
     },
     {
       "id": "Benin",
@@ -227,7 +227,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BJ"
+      "iso2": "BJ",
     },
     {
       "id": "Bhutan",
@@ -236,7 +236,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BT"
+      "iso2": "BT",
     },
     {
       "id": "Bolivia",
@@ -245,7 +245,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BO"
+      "iso2": "BO",
     },
     {
       "id": "Bosnia and Herzegovina",
@@ -254,7 +254,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BA"
+      "iso2": "BA",
     },
     {
       "id": "Botswana",
@@ -263,7 +263,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BW"
+      "iso2": "BW",
     },
     {
       "id": "Brazil",
@@ -272,7 +272,7 @@ class Country
       "latitude": -14235004,
       "longitude": -51925280,
       "zoom": 4,
-      "iso2": "BR"
+      "iso2": "BR",
     },
     {
       "id": "British Virgin Islands",
@@ -281,7 +281,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "VG"
+      "iso2": "VG",
     },
     {
       "id": "Brunei",
@@ -290,7 +290,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BN"
+      "iso2": "BN",
     },
     {
       "id": "Bulgaria",
@@ -299,7 +299,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BG"
+      "iso2": "BG",
     },
     {
       "id": "Burkina Faso",
@@ -308,7 +308,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "BF"
+      "iso2": "BF",
     },
     {
       "id": "Cambodia",
@@ -317,7 +317,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KH"
+      "iso2": "KH",
     },
     {
       "id": "Cameroon",
@@ -326,7 +326,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CM"
+      "iso2": "CM",
     },
     {
       "id": "Canada",
@@ -335,7 +335,7 @@ class Country
       "latitude": 56130366,
       "longitude": -106346771,
       "zoom": 3,
-      "iso2": "CA"
+      "iso2": "CA",
     },
     {
       "id": "Central African Republic",
@@ -344,7 +344,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CF"
+      "iso2": "CF",
     },
     {
       "id": "Chad",
@@ -353,7 +353,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TD"
+      "iso2": "TD",
     },
     {
       "id": "Chile",
@@ -362,7 +362,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CL"
+      "iso2": "CL",
     },
     {
       "id": "China",
@@ -371,7 +371,7 @@ class Country
       "latitude": 35861660,
       "longitude": 104195397,
       "zoom": 4,
-      "iso2": "CN"
+      "iso2": "CN",
     },
     {
       "id": "Colombia",
@@ -380,7 +380,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CO"
+      "iso2": "CO",
     },
     {
       "id": "Comoros",
@@ -389,7 +389,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KM"
+      "iso2": "KM",
     },
     {
       "id": "Congo",
@@ -398,7 +398,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CG"
+      "iso2": "CG",
     },
     {
       "id": "Cook Islands",
@@ -407,7 +407,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CK"
+      "iso2": "CK",
     },
     {
       "id": "Costa Rica",
@@ -416,7 +416,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CR"
+      "iso2": "CR",
     },
     {
       "id": "Cote d_Ivoire",
@@ -425,7 +425,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CI"
+      "iso2": "CI",
     },
     {
       "id": "Croatia",
@@ -434,7 +434,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "HR"
+      "iso2": "HR",
     },
     {
       "id": "Cuba",
@@ -443,7 +443,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CU"
+      "iso2": "CU",
     },
     {
       "id": "Cyprus",
@@ -452,7 +452,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CY"
+      "iso2": "CY",
     },
     {
       "id": "Czech Republic",
@@ -461,7 +461,7 @@ class Country
       "latitude": 49817492,
       "longitude": 15472962,
       "zoom": 7,
-      "iso2": "CZ"
+      "iso2": "CZ",
     },
     {
       "id": "Denmark",
@@ -470,7 +470,7 @@ class Country
       "latitude": 56263920,
       "longitude": 9501785,
       "zoom": 6,
-      "iso2": "DK"
+      "iso2": "DK",
     },
     {
       "id": "Djibouti",
@@ -479,7 +479,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "DJ"
+      "iso2": "DJ",
     },
     {
       "id": "Dominica",
@@ -488,7 +488,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "DM"
+      "iso2": "DM",
     },
     {
       "id": "Dominican Republic",
@@ -497,7 +497,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "DO"
+      "iso2": "DO",
     },
     {
       "id": "DR Congo",
@@ -506,7 +506,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "CD"
+      "iso2": "CD",
     },
     {
       "id": "Ecuador",
@@ -515,7 +515,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "EC"
+      "iso2": "EC",
     },
     {
       "id": "Egypt",
@@ -524,7 +524,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "EG"
+      "iso2": "EG",
     },
     {
       "id": "El Salvador",
@@ -533,7 +533,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SV"
+      "iso2": "SV",
     },
     {
       "id": "Equatorial Guinea",
@@ -542,7 +542,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GQ"
+      "iso2": "GQ",
     },
     {
       "id": "Eritrea",
@@ -551,7 +551,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ER"
+      "iso2": "ER",
     },
     {
       "id": "Estonia",
@@ -560,7 +560,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "EE"
+      "iso2": "EE",
     },
     {
       "id": "Ethiopia",
@@ -569,7 +569,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ET"
+      "iso2": "ET",
     },
     {
       "id": "Fiji",
@@ -578,7 +578,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "FJ"
+      "iso2": "FJ",
     },
     {
       "id": "Finland",
@@ -587,7 +587,7 @@ class Country
       "latitude": 61924110,
       "longitude": 25748151,
       "zoom": 5,
-      "iso2": "FI"
+      "iso2": "FI",
     },
     {
       "id": "France",
@@ -596,7 +596,7 @@ class Country
       "latitude": 46227638,
       "longitude": 2213749,
       "zoom": 5,
-      "iso2": "FR"
+      "iso2": "FR",
     },
     {
       "id": "French Guiana",
@@ -605,7 +605,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GF"
+      "iso2": "GF",
     },
     {
       "id": "French Polynesia",
@@ -614,7 +614,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PF"
+      "iso2": "PF",
     },
     {
       "id": "Gabon",
@@ -623,7 +623,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GA"
+      "iso2": "GA",
     },
     {
       "id": "Gambia",
@@ -632,7 +632,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GM"
+      "iso2": "GM",
     },
     {
       "id": "Georgia",
@@ -641,7 +641,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GE"
+      "iso2": "GE",
     },
     {
       "id": "Germany",
@@ -650,7 +650,7 @@ class Country
       "latitude": 51165691,
       "longitude": 10451526,
       "zoom": 5,
-      "iso2": "DE"
+      "iso2": "DE",
     },
     {
       "id": "Ghana",
@@ -659,7 +659,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GH"
+      "iso2": "GH",
     },
     {
       "id": "Greece",
@@ -668,7 +668,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GR"
+      "iso2": "GR",
     },
     {
       "id": "Grenada",
@@ -677,7 +677,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GD"
+      "iso2": "GD",
     },
     {
       "id": "Guatemala",
@@ -686,7 +686,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GT"
+      "iso2": "GT",
     },
     {
       "id": "Guernsey",
@@ -695,7 +695,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GG"
+      "iso2": "GG",
     },
     {
       "id": "Guinea",
@@ -704,7 +704,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GN"
+      "iso2": "GN",
     },
     {
       "id": "Guyana",
@@ -713,7 +713,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "GY"
+      "iso2": "GY",
     },
     {
       "id": "Haiti",
@@ -722,7 +722,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "HT"
+      "iso2": "HT",
     },
     {
       "id": "Honduras",
@@ -731,7 +731,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "HN"
+      "iso2": "HN",
     },
     {
       "id": "Hong Kong",
@@ -740,7 +740,7 @@ class Country
       "latitude": 22396428,
       "longitude": 114109497,
       "zoom": 10,
-      "iso2": "HK"
+      "iso2": "HK",
     },
     {
       "id": "Hungary",
@@ -749,7 +749,7 @@ class Country
       "latitude": 47162494,
       "longitude": 19503304,
       "zoom": 7,
-      "iso2": "HU"
+      "iso2": "HU",
     },
     {
       "id": "Iceland",
@@ -758,7 +758,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IS"
+      "iso2": "IS",
     },
     {
       "id": "India",
@@ -767,7 +767,7 @@ class Country
       "latitude": 20593684,
       "longitude": 78962880,
       "zoom": 4,
-      "iso2": "IN"
+      "iso2": "IN",
     },
     {
       "id": "Indonesia",
@@ -776,7 +776,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ID"
+      "iso2": "ID",
     },
     {
       "id": "Iran",
@@ -785,7 +785,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IR"
+      "iso2": "IR",
     },
     {
       "id": "Iraq",
@@ -794,7 +794,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IQ"
+      "iso2": "IQ",
     },
     {
       "id": "Ireland",
@@ -803,7 +803,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IE"
+      "iso2": "IE",
     },
     {
       "id": "Isle of Man",
@@ -812,7 +812,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IM"
+      "iso2": "IM",
     },
     {
       "id": "Israel",
@@ -821,7 +821,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "IL"
+      "iso2": "IL",
     },
     {
       "id": "Italy",
@@ -830,7 +830,7 @@ class Country
       "latitude": 41871940,
       "longitude": 12567380,
       "zoom": 5,
-      "iso2": "IT"
+      "iso2": "IT",
     },
     {
       "id": "Jamaica",
@@ -839,7 +839,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "JM"
+      "iso2": "JM",
     },
     {
       "id": "Japan",
@@ -848,7 +848,7 @@ class Country
       "latitude": 36204824,
       "longitude": 138252924,
       "zoom": 5,
-      "iso2": "JP"
+      "iso2": "JP",
     },
     {
       "id": "Jordan",
@@ -857,7 +857,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "JO"
+      "iso2": "JO",
     },
     {
       "id": "Kazakhstan",
@@ -866,7 +866,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KZ"
+      "iso2": "KZ",
     },
     {
       "id": "Kenya",
@@ -875,7 +875,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KE"
+      "iso2": "KE",
     },
     {
       "id": "Kiribati",
@@ -884,7 +884,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KI"
+      "iso2": "KI",
     },
     {
       "id": "Korea",
@@ -893,7 +893,7 @@ class Country
       "latitude": 35907757,
       "longitude": 127766922,
       "zoom": 6,
-      "iso2": "KR"
+      "iso2": "KR",
     },
     {
       "id": "Kosovo",
@@ -902,7 +902,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "XK"
+      "iso2": "XK",
     },
     {
       "id": "Kuwait",
@@ -911,7 +911,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KW"
+      "iso2": "KW",
     },
     {
       "id": "Laos",
@@ -920,7 +920,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LA"
+      "iso2": "LA",
     },
     {
       "id": "Latvia",
@@ -929,7 +929,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LV"
+      "iso2": "LV",
     },
     {
       "id": "Lebanon",
@@ -938,7 +938,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LB"
+      "iso2": "LB",
     },
     {
       "id": "Lesotho",
@@ -947,7 +947,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LS"
+      "iso2": "LS",
     },
     {
       "id": "Liberia",
@@ -956,7 +956,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LR"
+      "iso2": "LR",
     },
     {
       "id": "Libya",
@@ -965,7 +965,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LY"
+      "iso2": "LY",
     },
     {
       "id": "Lithuania",
@@ -974,7 +974,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LT"
+      "iso2": "LT",
     },
     {
       "id": "Luxembourg",
@@ -983,7 +983,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LU"
+      "iso2": "LU",
     },
     {
       "id": "Macau",
@@ -992,7 +992,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MO"
+      "iso2": "MO",
     },
     {
       "id": "Macedonia",
@@ -1001,7 +1001,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MK"
+      "iso2": "MK",
     },
     {
       "id": "Madagascar",
@@ -1010,7 +1010,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MG"
+      "iso2": "MG",
     },
     {
       "id": "Malawi",
@@ -1019,7 +1019,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MW"
+      "iso2": "MW",
     },
     {
       "id": "Malaysia",
@@ -1028,7 +1028,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MY"
+      "iso2": "MY",
     },
     {
       "id": "Mali",
@@ -1037,7 +1037,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ML"
+      "iso2": "ML",
     },
     {
       "id": "Malta",
@@ -1046,7 +1046,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MT"
+      "iso2": "MT",
     },
     {
       "id": "Marshall Islands",
@@ -1055,7 +1055,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MH"
+      "iso2": "MH",
     },
     {
       "id": "Mauritania",
@@ -1064,7 +1064,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MR"
+      "iso2": "MR",
     },
     {
       "id": "Mauritius",
@@ -1073,7 +1073,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MU"
+      "iso2": "MU",
     },
     {
       "id": "Mayotte",
@@ -1082,7 +1082,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "YT"
+      "iso2": "YT",
     },
     {
       "id": "Mexico",
@@ -1091,7 +1091,7 @@ class Country
       "latitude": 23634501,
       "longitude": -102552784,
       "zoom": 5,
-      "iso2": "MX"
+      "iso2": "MX",
     },
     {
       "id": "Moldova",
@@ -1100,7 +1100,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MD"
+      "iso2": "MD",
     },
     {
       "id": "Monaco",
@@ -1109,7 +1109,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MC"
+      "iso2": "MC",
     },
     {
       "id": "Mongolia",
@@ -1118,7 +1118,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MN"
+      "iso2": "MN",
     },
     {
       "id": "Montenegro",
@@ -1127,7 +1127,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ME"
+      "iso2": "ME",
     },
     {
       "id": "Morocco",
@@ -1136,7 +1136,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MA"
+      "iso2": "MA",
     },
     {
       "id": "Mozambique",
@@ -1145,7 +1145,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MZ"
+      "iso2": "MZ",
     },
     {
       "id": "Myanmar",
@@ -1154,7 +1154,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "MM"
+      "iso2": "MM",
     },
     {
       "id": "Namibia",
@@ -1163,7 +1163,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NA"
+      "iso2": "NA",
     },
     {
       "id": "Nauru",
@@ -1172,7 +1172,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NR"
+      "iso2": "NR",
     },
     {
       "id": "Nepal",
@@ -1181,7 +1181,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NP"
+      "iso2": "NP",
     },
     {
       "id": "Netherlands",
@@ -1190,7 +1190,7 @@ class Country
       "latitude": 52132633,
       "longitude": 5291266,
       "zoom": 7,
-      "iso2": "NL"
+      "iso2": "NL",
     },
     {
       "id": "New Caledonia",
@@ -1199,7 +1199,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NC"
+      "iso2": "NC",
     },
     {
       "id": "New Zealand",
@@ -1208,7 +1208,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NZ"
+      "iso2": "NZ",
     },
     {
       "id": "Nicaragua",
@@ -1217,7 +1217,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NI"
+      "iso2": "NI",
     },
     {
       "id": "Niger",
@@ -1226,7 +1226,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NE"
+      "iso2": "NE",
     },
     {
       "id": "Nigeria",
@@ -1235,7 +1235,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NG"
+      "iso2": "NG",
     },
     {
       "id": "Niue",
@@ -1244,7 +1244,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "NU"
+      "iso2": "NU",
     },
     {
       "id": "North Korea",
@@ -1253,7 +1253,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KP"
+      "iso2": "KP",
     },
     {
       "id": "Norway",
@@ -1262,7 +1262,7 @@ class Country
       "latitude": 65146114,
       "longitude": 13183593,
       "zoom": 4,
-      "iso2": "NO"
+      "iso2": "NO",
     },
     {
       "id": "Oman",
@@ -1271,7 +1271,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "OM"
+      "iso2": "OM",
     },
     {
       "id": "Pakistan",
@@ -1280,7 +1280,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PK"
+      "iso2": "PK",
     },
     {
       "id": "Palestine",
@@ -1289,7 +1289,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PS"
+      "iso2": "PS",
     },
     {
       "id": "Panama",
@@ -1298,7 +1298,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PA"
+      "iso2": "PA",
     },
     {
       "id": "Papua New Guinea",
@@ -1307,7 +1307,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PG"
+      "iso2": "PG",
     },
     {
       "id": "Paraguay",
@@ -1316,7 +1316,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PY"
+      "iso2": "PY",
     },
     {
       "id": "Peru",
@@ -1325,7 +1325,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PE"
+      "iso2": "PE",
     },
     {
       "id": "Philippines",
@@ -1334,7 +1334,7 @@ class Country
       "latitude": 12879721,
       "longitude": 121774017,
       "zoom": 5,
-      "iso2": "PH"
+      "iso2": "PH",
     },
     {
       "id": "Pitcairn Islands",
@@ -1343,7 +1343,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PN"
+      "iso2": "PN",
     },
     {
       "id": "Poland",
@@ -1352,7 +1352,7 @@ class Country
       "latitude": 51919438,
       "longitude": 19145136,
       "zoom": 6,
-      "iso2": "PL"
+      "iso2": "PL",
     },
     {
       "id": "Portugal",
@@ -1361,7 +1361,7 @@ class Country
       "latitude": 39399872,
       "longitude": -8224454,
       "zoom": 6,
-      "iso2": "PT"
+      "iso2": "PT",
     },
     {
       "id": "Puerto Rico",
@@ -1370,7 +1370,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "PR"
+      "iso2": "PR",
     },
     {
       "id": "Qatar",
@@ -1379,7 +1379,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "QA"
+      "iso2": "QA",
     },
     {
       "id": "Romania",
@@ -1388,7 +1388,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "RO"
+      "iso2": "RO",
     },
     {
       "id": "Russia",
@@ -1397,7 +1397,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "RU"
+      "iso2": "RU",
     },
     {
       "id": "Saint Kitts and Nevis",
@@ -1406,7 +1406,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "KN"
+      "iso2": "KN",
     },
     {
       "id": "Saint Lucia",
@@ -1415,7 +1415,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LC"
+      "iso2": "LC",
     },
     {
       "id": "Saint Vincent and the Grenadines",
@@ -1424,7 +1424,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "VC"
+      "iso2": "VC",
     },
     {
       "id": "Samoa",
@@ -1433,7 +1433,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "WS"
+      "iso2": "WS",
     },
     {
       "id": "San Marino",
@@ -1442,7 +1442,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SM"
+      "iso2": "SM",
     },
     {
       "id": "Sao Tome and Principe",
@@ -1451,7 +1451,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ST"
+      "iso2": "ST",
     },
     {
       "id": "Saudi Arabia",
@@ -1460,7 +1460,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SA"
+      "iso2": "SA",
     },
     {
       "id": "Senegal",
@@ -1469,7 +1469,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SN"
+      "iso2": "SN",
     },
     {
       "id": "Serbia",
@@ -1478,7 +1478,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "RS"
+      "iso2": "RS",
     },
     {
       "id": "Sierra Leone",
@@ -1487,7 +1487,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SL"
+      "iso2": "SL",
     },
     {
       "id": "Singapore",
@@ -1496,7 +1496,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SG"
+      "iso2": "SG",
     },
     {
       "id": "Slovakia",
@@ -1505,7 +1505,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SK"
+      "iso2": "SK",
     },
     {
       "id": "Slovenia",
@@ -1514,7 +1514,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SI"
+      "iso2": "SI",
     },
     {
       "id": "Solomon Islands",
@@ -1523,7 +1523,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SB"
+      "iso2": "SB",
     },
     {
       "id": "Somalia",
@@ -1532,7 +1532,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SO"
+      "iso2": "SO",
     },
     {
       "id": "South Africa",
@@ -1541,7 +1541,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ZA"
+      "iso2": "ZA",
     },
     {
       "id": "South Sudan",
@@ -1550,7 +1550,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SS"
+      "iso2": "SS",
     },
     {
       "id": "Spain",
@@ -1559,7 +1559,7 @@ class Country
       "latitude": 40463667,
       "longitude": -3749220,
       "zoom": 6,
-      "iso2": "ES"
+      "iso2": "ES",
     },
     {
       "id": "Sri Lanka",
@@ -1568,7 +1568,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "LK"
+      "iso2": "LK",
     },
     {
       "id": "Sudan",
@@ -1577,7 +1577,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SD"
+      "iso2": "SD",
     },
     {
       "id": "Suriname",
@@ -1586,7 +1586,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SR"
+      "iso2": "SR",
     },
     {
       "id": "Swaziland",
@@ -1595,7 +1595,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SZ"
+      "iso2": "SZ",
     },
     {
       "id": "Sweden",
@@ -1604,7 +1604,7 @@ class Country
       "latitude": 60128161,
       "longitude": 18643501,
       "zoom": 4,
-      "iso2": "SE"
+      "iso2": "SE",
     },
     {
       "id": "Switzerland",
@@ -1613,7 +1613,7 @@ class Country
       "latitude": 46818188,
       "longitude": 8227512,
       "zoom": 7,
-      "iso2": "CH"
+      "iso2": "CH",
     },
     {
       "id": "Syria",
@@ -1622,7 +1622,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "SY"
+      "iso2": "SY",
     },
     {
       "id": "Taiwan",
@@ -1631,7 +1631,7 @@ class Country
       "latitude": 23697810,
       "longitude": 120960515,
       "zoom": 7,
-      "iso2": "TW"
+      "iso2": "TW",
     },
     {
       "id": "Tanzania",
@@ -1640,7 +1640,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TZ"
+      "iso2": "TZ",
     },
     {
       "id": "Thailand",
@@ -1649,7 +1649,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TH"
+      "iso2": "TH",
     },
     {
       "id": "Togo",
@@ -1658,7 +1658,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TG"
+      "iso2": "TG",
     },
     {
       "id": "Tonga",
@@ -1667,7 +1667,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TO"
+      "iso2": "TO",
     },
     {
       "id": "Trinidad and Tobago",
@@ -1676,7 +1676,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TT"
+      "iso2": "TT",
     },
     {
       "id": "Tunisia",
@@ -1685,7 +1685,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TN"
+      "iso2": "TN",
     },
     {
       "id": "Turkey",
@@ -1694,7 +1694,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TR"
+      "iso2": "TR",
     },
     {
       "id": "Turks and Caicos Islands",
@@ -1703,7 +1703,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TC"
+      "iso2": "TC",
     },
     {
       "id": "Tuvalu",
@@ -1712,7 +1712,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "TV"
+      "iso2": "TV",
     },
     {
       "id": "Uganda",
@@ -1721,7 +1721,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "UG"
+      "iso2": "UG",
     },
     {
       "id": "Ukraine",
@@ -1730,7 +1730,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "UA"
+      "iso2": "UA",
     },
     {
       "id": "United Arab Emirates",
@@ -1739,7 +1739,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "AE"
+      "iso2": "AE",
     },
     {
       "id": "United Kingdom",
@@ -1748,7 +1748,7 @@ class Country
       "latitude": 55378051,
       "longitude": -3435973,
       "zoom": 5,
-      "iso2": "GB"
+      "iso2": "GB",
     },
     {
       "id": "Uruguay",
@@ -1757,7 +1757,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "UY"
+      "iso2": "UY",
     },
     {
       "id": "USA",
@@ -1766,7 +1766,7 @@ class Country
       "latitude": 37090240,
       "longitude": -95712891,
       "zoom": 4,
-      "iso2": "US"
+      "iso2": "US",
     },
     {
       "id": "Uzbekistan",
@@ -1775,7 +1775,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "UZ"
+      "iso2": "UZ",
     },
     {
       "id": "Vanuatu",
@@ -1784,7 +1784,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "VU"
+      "iso2": "VU",
     },
     {
       "id": "Venezuela",
@@ -1793,7 +1793,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "VE"
+      "iso2": "VE",
     },
     {
       "id": "Vietnam",
@@ -1802,7 +1802,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "VN"
+      "iso2": "VN",
     },
     {
       "id": "XA",
@@ -1811,7 +1811,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "XA"
+      "iso2": "XA",
     },
     {
       "id": "XE",
@@ -1820,7 +1820,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "XE"
+      "iso2": "XE",
     },
     {
       "id": "XS",
@@ -1829,7 +1829,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "XS"
+      "iso2": "XS",
     },
     {
       "id": "Yemen",
@@ -1838,7 +1838,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "YE"
+      "iso2": "YE",
     },
     {
       "id": "Zambia",
@@ -1847,7 +1847,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ZM"
+      "iso2": "ZM",
     },
     {
       "id": "Zimbabwe",
@@ -1856,7 +1856,7 @@ class Country
       "latitude": 0,
       "longitude": 0,
       "zoom": 0,
-      "iso2": "ZW"
+      "iso2": "ZW",
     },
   ].map { |e| Country.new(e) }
 

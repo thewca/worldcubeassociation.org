@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe "registrations/register" do
   it "shows waiting list information" do
     competition = FactoryGirl.create(:competition, :registration_open)
-    registration1 = FactoryGirl.create(:registration, competition: competition)
+    FactoryGirl.create(:registration, competition: competition)
     registration2 = FactoryGirl.create(:registration, competition: competition)
-    registration3 = FactoryGirl.create(:registration, competition: competition)
+    FactoryGirl.create(:registration, competition: competition)
 
     allow(view).to receive(:current_user) { registration2.user }
     assign(:registration, registration2)

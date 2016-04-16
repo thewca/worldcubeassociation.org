@@ -19,7 +19,7 @@ describe CompetitionsController do
 
       context "when events are selected" do
         it "only competitions matching all of the selected events are shown" do
-          get :index, event_ids: ["333", "pyram", "clock"]
+          get :index, event_ids: %w(333 pyram clock)
           expect(assigns(:competitions)).to eq [competition2, competition4]
         end
 

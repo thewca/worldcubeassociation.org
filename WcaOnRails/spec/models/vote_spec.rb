@@ -53,5 +53,3 @@ describe Vote do
     expect(vote.errors[:poll_options]).to eq ["One or more poll_options don't match the poll"]
   end
 end
-
-

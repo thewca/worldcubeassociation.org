@@ -20,12 +20,12 @@ class CompetitionsController < ApplicationController
 
   # Normalizes the params that old links to index still work.
   private def support_old_links!
-    params[:display].downcase! if params[:display]  # 'List' -> 'list', 'Map' -> 'map'
+    params[:display].downcase! if params[:display] # 'List' -> 'list', 'Map' -> 'map'
 
     if params[:years] == "all"
       params[:state] = "past"
       params[:year] = "all years"
-    elsif params[:years].to_i >= Date.today.year  #to_i: 'If there is not a valid number at the start of str, 0 is returned.' - RubyDoc
+    elsif params[:years].to_i >= Date.today.year # to_i: 'If there is not a valid number at the start of str, 0 is returned.' - RubyDoc
       params[:state] = "past"
       params[:year] = params[:years]
     end
@@ -234,7 +234,7 @@ class CompetitionsController < ApplicationController
     @competition = Competition.find(params[:id])
     @competition.assign_attributes(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.has_key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render partial: 'nearby_competitions'
   end
 
@@ -242,7 +242,7 @@ class CompetitionsController < ApplicationController
     @competition = Competition.find(params[:id])
     @competition.assign_attributes(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.has_key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render json: {
       has_date_errors: @competition.has_date_errors?,
       html: render_to_string(partial: 'time_until_competition'),
@@ -256,7 +256,7 @@ class CompetitionsController < ApplicationController
 
   def update
     @competition = Competition.find(params[:id])
-    @competition_admin_view = params.has_key?(:competition_admin_view) && current_user.can_admin_results?
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     @competition_organizer_view = !@competition_admin_view
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
@@ -330,13 +330,13 @@ class CompetitionsController < ApplicationController
       if current_user.can_admin_results?
         permitted_competition_params += [
           :isConfirmed,
-          :showAtAll
+          :showAtAll,
         ]
       end
     end
 
     competition_params = params.require(:competition).permit(*permitted_competition_params)
-    if competition_params.has_key?(:event_ids)
+    if competition_params.key?(:event_ids)
       competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
       competition_params.delete(:event_ids)
     end

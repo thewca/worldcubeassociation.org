@@ -137,7 +137,7 @@ class User < ActiveRecord::Base
   end
 
   def dummy_account?
-    wca_id.present? && encrypted_password.blank? && email.downcase == "#{wca_id}@worldcubeassociation.org".downcase
+    wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
   end
 
   before_validation :copy_data_from_persons
@@ -158,7 +158,7 @@ class User < ActiveRecord::Base
   before_save :remove_dummy_account_and_copy_name_when_wca_id_changed
   def remove_dummy_account_and_copy_name_when_wca_id_changed
     if wca_id_change && wca_id.present?
-      dummy_user = User.where(wca_id: wca_id).select(&:dummy_account?).first
+      dummy_user = User.where(wca_id: wca_id).find(&:dummy_account?)
       if dummy_user
         _mounter(:avatar).uploader.override_column_value = dummy_user.read_attribute :avatar
         dummy_user.destroy!
@@ -168,8 +168,8 @@ class User < ActiveRecord::Base
 
   AVATAR_PARAMETERS = {
     file_size: {
-      maximum: 2.megabytes.to_i
-    }
+      maximum: 2.megabytes.to_i,
+    },
   }
 
   mount_uploader :pending_avatar, PendingAvatarUploader
@@ -187,7 +187,7 @@ class User < ActiveRecord::Base
     avatar_uploader = AvatarUploader.new(self)
     store_dir = "public/#{avatar_uploader.store_dir}"
     filenames = Dir.glob("#{store_dir}/*[0-9].{#{avatar_uploader.extension_white_list.join(",")}}").sort
-    filenames = filenames.select do |f|
+    filenames.select do |f|
       (!pending_avatar.path || !File.identical?(pending_avatar.path, f)) && (!avatar.path || !File.identical?(avatar.path, f))
     end
   end

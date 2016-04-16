@@ -204,7 +204,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannnot delete other people's registrations" do
-      user_registration = FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
+      FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
       other_registration = FactoryGirl.create :registration, competitionId: competition.id
       delete :destroy, id: other_registration.id, user_is_deleting_theirself: true
       expect(response).to redirect_to competition_path(competition) + '/register'
@@ -251,7 +251,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot edit someone else's registration" do
-      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
       other_user = FactoryGirl.create(:user, :wca_id)
       other_registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: other_user.id
 
@@ -367,7 +367,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles user without average" do
-      registration = FactoryGirl.create(:registration, :accepted, competition: competition)
+      FactoryGirl.create(:registration, :accepted, competition: competition)
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333"
       registrations = assigns(:registrations)

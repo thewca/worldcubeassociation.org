@@ -147,10 +147,10 @@ describe Api::V0::ApiController do
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 2
-      expect(json["result"].select { |r| r["class"] == "competition" }.length).to eq 1
-      expect(json["result"].select { |r| r["class"] == "post" }.length).to eq 0
-      expect(json["result"].select { |r| r["class"] == "user" }.length).to eq 0
-      expect(json["result"].select { |r| r["class"] == "person" }.length).to eq 1
+      expect(json["result"].count { |r| r["class"] == "competition" }).to eq 1
+      expect(json["result"].count { |r| r["class"] == "post" }).to eq 0
+      expect(json["result"].count { |r| r["class"] == "user" }).to eq 0
+      expect(json["result"].count { |r| r["class"] == "person" }).to eq 1
     end
   end
 

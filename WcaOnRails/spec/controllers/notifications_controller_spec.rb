@@ -25,7 +25,7 @@ RSpec.describe NotificationsController, type: :controller do
           {
             text: "#{unconfirmed_competition.name} is not confirmed",
             url: edit_competition_path(unconfirmed_competition),
-          }
+          },
         ]
       end
 
@@ -41,7 +41,7 @@ RSpec.describe NotificationsController, type: :controller do
           {
             text: "#{unconfirmed_competition.name} is not confirmed",
             url: edit_competition_path(unconfirmed_competition),
-          }
+          },
         ]
       end
 
@@ -107,7 +107,7 @@ RSpec.describe NotificationsController, type: :controller do
           {
             text: "Connect your WCA ID to your account!",
             url: profile_claim_wca_id_path,
-          }
+          },
         ]
       end
 
@@ -125,7 +125,7 @@ RSpec.describe NotificationsController, type: :controller do
           {
             text: "Your profile is incomplete. You will not be able to register for competitions until you complete it!",
             url: profile_edit_path,
-          }
+          },
         ]
       end
 
@@ -143,7 +143,7 @@ RSpec.describe NotificationsController, type: :controller do
             {
               text: "Waiting for #{delegate.name} to assign you WCA ID #{person.id}",
               url: profile_claim_wca_id_path,
-            }
+            },
           ]
         end
       end

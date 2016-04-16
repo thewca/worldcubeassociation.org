@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
   def self.WCA_TEAMS
-    ['software', 'results', 'wdc', 'wrc']
+    %w(software results wdc wrc)
   end
 
   def index
@@ -27,9 +27,9 @@ class UsersController < ApplicationController
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
               name: user.name,
               email: user.email,
-              edit: view_context.link_to("Edit", edit_user_path(user))
+              edit: view_context.link_to("Edit", edit_user_path(user)),
             }
-          end
+          end,
         }
       end
     end
@@ -73,17 +73,17 @@ class UsersController < ApplicationController
     redirect_if_cannot_edit_user(@user) and return
 
     old_confirmation_sent_at = @user.confirmation_sent_at
-    dangerous_change = current_user == @user && (user_params.has_key?(:password) || user_params.has_key?(:password_confirmation) || user_params.has_key?(:email))
+    dangerous_change = current_user == @user && (user_params.key?(:password) || user_params.key?(:password_confirmation) || user_params.key?(:email))
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
         sign_in @user, bypass: true
       end
-      if @user.confirmation_sent_at != old_confirmation_sent_at
-        flash[:success] = "Account updated, emailed #{@user.unconfirmed_email} to confirm your new email address."
-      else
-        flash[:success] = "Account updated"
-      end
+      flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
+                          "Account updated, emailed #{@user.unconfirmed_email} to confirm your new email address."
+                        else
+                          "Account updated"
+                        end
       if @user.claiming_wca_id
         flash[:success] = "Successfully claimed WCA ID #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
@@ -129,10 +129,10 @@ class UsersController < ApplicationController
 
   private def user_params
     user_params = params.require(:user).permit(*current_user.editable_fields_of_user(user_to_edit))
-    if user_params.has_key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
+    if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end
-    if user_params.has_key?(:wca_id)
+    if user_params.key?(:wca_id)
       user_params[:wca_id] = user_params[:wca_id].upcase
     end
     user_params

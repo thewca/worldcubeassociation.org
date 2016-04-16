@@ -6,7 +6,7 @@ after "development:users" do
   # Create some past competitions with results
   500.times do |i|
     day = i.days.ago
-    eventIds = ["333", "333oh", "magic"]
+    eventIds = %w(333 333oh magic)
     competition = Competition.create!(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
@@ -74,7 +74,7 @@ after "development:users" do
   end
 
   day = Date.today
-  eventIds = ["333", "333oh", "magic"]
+  eventIds = %w(333 333oh magic)
   future_competition = Competition.create!(
     id: "NewComp#{day.year}",
     name: "New Comp #{day.year}",
@@ -100,8 +100,8 @@ after "development:users" do
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
 
-    eventIds = ["333", "333oh", "333bf"]
-    competition = Competition.create!(
+    eventIds = %w(333 333oh 333bf)
+    Competition.create!(
       id: "MyComp#{i+1}#{start_day.year}",
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",

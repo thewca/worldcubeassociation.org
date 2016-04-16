@@ -3,7 +3,7 @@ after "development:users" do
   100.times do
     sticky = (rand(25) == 0)
     title = Faker::Hacker.say_something_smart
-    post = Post.create!(
+    Post.create!(
       sticky: sticky,
       world_readable: true,
       created_at: 2.hours.ago,
