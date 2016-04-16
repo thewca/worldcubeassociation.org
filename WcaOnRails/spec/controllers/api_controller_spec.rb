@@ -136,7 +136,7 @@ describe Api::V0::ApiController do
     let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
 
     it 'requires query parameter' do
-      get :competitions_search
+      get :omni_search
       expect(response.status).to eq 400
       json = JSON.parse(response.body)
       expect(json["error"]).to eq "No query specified"
