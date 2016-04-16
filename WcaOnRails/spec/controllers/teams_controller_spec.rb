@@ -89,6 +89,33 @@ describe TeamsController do
     end
   end
 
+  describe 'GET #edit' do
+    context 'when signed in as a team leader without rights to manage all teams' do
+      let(:team_where_is_leader) { Team.find_by_friendly_id('wrc') }
+      let(:team_where_is_not_leader) { Team.find_by_friendly_id('software') }
+      let(:leader) do
+        user = FactoryGirl.create(:user)
+        FactoryGirl.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
+        user
+      end
+
+      before :each do
+        sign_in leader
+      end
+
+      it 'can edit his team' do
+        get :edit, id: team_where_is_leader.id
+        expect(response).to render_template :edit
+      end
+
+      it 'cannot edit other teams' do
+        get :edit, id: team_where_is_not_leader.id
+        expect(response).to redirect_to root_url
+        expect(flash[:danger]).to_not be_nil
+      end
+    end
+  end
+
   describe 'POST #update' do
     context 'when signed in as an admin' do
       let(:admin) { FactoryGirl.create :admin }

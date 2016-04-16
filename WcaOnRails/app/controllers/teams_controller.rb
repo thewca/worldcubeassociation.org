@@ -1,6 +1,8 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_edit_teams?) }
+  before_action -> { redirect_unless_user(:can_manage_teams?) }, except: [:edit, :update]
+  before_action :assign_team, only: [:edit, :update]
+  before_action -> { redirect_unless_user(:can_edit_team?, @team) }, only: [:edit, :update]
 
   def index
     @teams = Team.all
@@ -22,11 +24,9 @@ class TeamsController < ApplicationController
   end
 
   def edit
-    @team = Team.find(params[:id])
   end
 
   def update
-    @team = Team.find(params[:id])
     if @team.update_attributes(team_params)
       flash[:success] = "Updated team"
       redirect_to edit_team_path(@team)
@@ -36,7 +36,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def team_params
+  private def team_params
     team_params = params.require(:team).permit(:name, :description, :friendly_id, team_members_attributes: [:id, :team_id, :user_id, :start_date, :end_date, :team_leader, :_destroy])
     if team_params[:team_members_attributes]
       team_params[:team_members_attributes].each do |member|
@@ -44,5 +44,9 @@ class TeamsController < ApplicationController
       end
     end
     return team_params
+  end
+
+  private def assign_team
+    @team = Team.find(params[:id])
   end
 end

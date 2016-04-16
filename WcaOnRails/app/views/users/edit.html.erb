@@ -174,7 +174,7 @@
 
     <div class="form-group">
       <% @user.teams.each do |team| %>
-        <%= link_to team.name, edit_team_path(team), class: "btn btn-info #{"disabled" unless current_user.can_edit_teams?}" %>
+        <%= link_to team.name, edit_team_path(team), class: "btn btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
       <% end %>
     </div>
 
