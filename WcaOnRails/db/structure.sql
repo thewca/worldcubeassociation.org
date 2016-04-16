@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.26, for osx10.10 (x86_64)
 --
 -- Host: 127.0.0.1    Database: wca_development
 -- ------------------------------------------------------
--- Server version	5.5.46-0ubuntu0.14.04.2
+-- Server version	5.6.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -362,6 +362,7 @@ CREATE TABLE `Results` (
   `average` int(11) NOT NULL DEFAULT '0',
   `regionalSingleRecord` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `regionalAverageRecord` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `Results_fk_tournament` (`competitionId`),
   KEY `Results_fk_event` (`eventId`),
@@ -371,7 +372,8 @@ CREATE TABLE `Results` (
   KEY `Results_eventAndBest` (`eventId`,`best`),
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
-  KEY `Results_fk_competitor` (`personId`)
+  KEY `Results_fk_competitor` (`personId`),
+  KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=857992 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -745,7 +747,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-06 19:27:08
+-- Dump completed on 2016-04-08  3:31:14
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -838,6 +840,8 @@ INSERT INTO schema_migrations (version) VALUES ('20151222013017');
 
 INSERT INTO schema_migrations (version) VALUES ('20151230174411');
 
+INSERT INTO schema_migrations (version) VALUES ('20160109070723');
+
 INSERT INTO schema_migrations (version) VALUES ('20160120071503');
 
 INSERT INTO schema_migrations (version) VALUES ('20160128023834');
@@ -857,4 +861,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160305170821');
 INSERT INTO schema_migrations (version) VALUES ('20160406192349');
 
 INSERT INTO schema_migrations (version) VALUES ('20160407005537');
+
+INSERT INTO schema_migrations (version) VALUES ('20160407210623');
 

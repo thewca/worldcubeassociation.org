@@ -9,8 +9,8 @@ class PollsController < ApplicationController
     else
       @polls = Poll.where(confirmed: true)
     end
-    @open_polls = @polls.reject &:poll_is_over?
-    @closed_polls = @polls.select &:poll_is_over?
+    @open_polls = @polls.reject &:over?
+    @closed_polls = @polls.select &:over?
   end
 
   def new

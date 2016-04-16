@@ -1,9 +1,20 @@
 class CompetitionsController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index]
-  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [:post_announcement, :post_results, :admin_edit]
+  PAST_COMPETITIONS_DAYS = 90
+  before_action :authenticate_user!, except: [
+    :index,
+    :show,
+    :show_podiums,
+    :show_all_results,
+    :show_results_by_person,
+  ]
+  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [
+    :post_announcement,
+    :post_results,
+    :admin_edit,
+  ]
 
   private def competition_from_params
-    competition = Competition.find(params[:id])
+    competition = Competition.find(params[:competition_id] || params[:id])
     if !competition.user_can_view?(current_user)
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -133,7 +144,7 @@ class CompetitionsController < ApplicationController
     end
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
-    body = "The [#{comp.name}](#{root_url}results/c.php?i=#{comp.id})"
+    body = "The [#{comp.name}](#{competition_url(comp)})"
     body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
     unless comp.website.blank?
       body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
@@ -152,7 +163,7 @@ class CompetitionsController < ApplicationController
     top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
     if top333.empty? # If there was no 3x3x3 event.
       title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
-      body = "Results of the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id}) are now available.\n\n"
+      body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
     elsif top333.length < 3
       render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
       return
@@ -160,7 +171,7 @@ class CompetitionsController < ApplicationController
       title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
       body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
-      body += " won the [#{comp.name}](https://www.worldcubeassociation.org/results/c.php?i=#{comp.id})"
+      body += " won the the [#{comp.name}](#{competition_url(comp)})"
       body += " with an average of #{top333.first.to_s :average} seconds."
 
       body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
@@ -251,7 +262,18 @@ class CompetitionsController < ApplicationController
 
   def show
     @competition = competition_from_params
-    redirect_to "/results/c.php?i=#{@competition.id}"
+  end
+
+  def show_podiums
+    @competition = competition_from_params
+  end
+
+  def show_all_results
+    @competition = competition_from_params
+  end
+
+  def show_results_by_person
+    @competition = competition_from_params
   end
 
   def update

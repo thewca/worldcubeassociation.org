@@ -57,6 +57,7 @@ server {
   location ~ ^/results/admin/?$ {
     return 302 /admin/;
   }
+
   # Redirect competitions.php to /competitions
   location /results/competitions.php {
     set $rails_args "";
@@ -84,6 +85,48 @@ server {
     return 302 /competitions?$rails_args;
   }
 
+  # Redirect old competition results pages:
+  #  /results/c.php?i=IranSummerCube2013
+  # to:
+  #  /results/competition.php?i=IranSummerCube2013
+  # to new Rails page:
+  #  /competitions/IranSummerCube2013
+  location /results/c.php {
+    return 302 /results/competition.php$is_args$args;
+  }
+  location /results/competition.php {
+    # The competition id could be in the url parameter "competitionId" or "i".
+    if ($arg_competitionId = "") {
+      set $competitionId $arg_i;
+    }
+    if ($arg_competitionId != "") {
+      set $competitionId $arg_competitionId;
+    }
+
+    # Be liberal in how we accept spaces.
+    # Yes, that's competitiors, not competitors.
+    if ($arg_list = "List of Registered Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+    if ($arg_list = "List+of+Registered+Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+    if ($arg_list = "List%20of%20Registered%20Competitiors") {
+      return 302 /competitions/$competitionId/registrations;
+    }
+
+    if ($arg_form = "Registration Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+    if ($arg_form = "Registration+Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+    if ($arg_form = "Registration%20Form") {
+      return 302 /competitions/$competitionId/register;
+    }
+
+    return 302 /competitions/$competitionId;
+  }
 
   location /results {
     alias <%= @repo_root %>/webroot/results;
@@ -92,7 +135,7 @@ server {
     include fcgi.conf;
 
     location ^~ /results/admin {
-      # Delegate to rails to determine if the client is authorized to administer
+      # Delegate to Rails to determine if the client is authorized to administer
       # results. This is kind of painful, as it results in an extra request for every
       # single request, but this way we can avoid editing the existing PHP code.
       auth_request /api/v0/auth/results;
@@ -148,16 +191,16 @@ server {
   }
 
   #### Regulations
-  # This is kind of a mess: we're using rails to template most, but not all,
+  # This is kind of a mess: we're using Rails to template most, but not all,
   # of the regulations html. We also have static content such as pdfs and images
-  # that rails won't serve up for us. We have a carefully constructed regex here
-  # to only serve up files we don't want handled by rails.
+  # that Rails won't serve up for us. We have a carefully constructed regex here
+  # to only serve up files we don't want handled by Rails.
   location ~* /regulations(.*\.pdf|/history/.+|/scrambles/tnoodle/.*) {
     index index.html;
     alias <%= @repo_root %>/WcaOnRails/app/views/regulations/$1;
   }
 
-  #### New rails sytem
+  #### New Rails sytem
   # From http://unicorn.bogomips.org/examples/nginx.conf
   # path for static files
   root <%= @rails_root %>/public;

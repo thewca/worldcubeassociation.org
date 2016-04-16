@@ -1,21 +1,67 @@
+# frozen_string_literal: true
+
 class SolveTime
+  EMPTY_STRING = ''.freeze
+  CLOCK_FORMAT = "%d:%02d:%02d.%02d".freeze
+  DOT_STRING = ".".freeze
+  ZERO_STRING = "0".freeze
+  DNF_STRING = "DNF".freeze
+  DNS_STRING = "DNS".freeze
+  QUESTION_STRING = "?:??:??".freeze
+
+  include Comparable
+
+  attr_reader :wca_value
   def initialize(event_id, field, wca_value)
+    raise "Unrecognized wca_value: #{wca_value}" if wca_value < -2
     @event_id = event_id
     @field = field
     @wca_value = wca_value
   end
 
+  DNF_VALUE = -1
+  DNF = SolveTime.new(nil, nil, DNF_VALUE)
+  DNS_VALUE = -2
+  DNS = SolveTime.new(nil, nil, DNS_VALUE)
+  SKIPPED_VALUE = 0
+  SKIPPED = SolveTime.new(nil, nil, SKIPPED_VALUE)
+
+  def dn?
+    dnf? || dns?
+  end
+
+  def dns?
+    wca_value == DNS_VALUE
+  end
+
+  def dnf?
+    wca_value == DNF_VALUE
+  end
+
+  def skipped?
+    wca_value == SKIPPED_VALUE
+  end
+
+  protected def to_orderable
+    [
+      skipped? ? 1 : 0,
+      dns? ? 1 : 0,
+      dnf? ? 1 : 0,
+      wca_value,
+    ]
+  end
+
+  def <=>(other)
+    to_orderable <=> other.to_orderable
+  end
+
   def clock_format
-    wca_value = @wca_value
-    # Special cases.
-    if wca_value < -2
-      raise "Unrecognized wca_value: #{wca_value}"
-    elsif wca_value == -2
-      return "DNS"
-    elsif wca_value == -1
-      return "DNF"
-    elsif wca_value == 0
-      return ""
+    if dns?
+      return DNS_STRING
+    elsif dnf?
+      return DNF_STRING
+    elsif skipped?
+      return EMPTY_STRING
     end
 
     if @event_id == '333fm'
@@ -24,35 +70,36 @@ class SolveTime
         # of the solves, multiplied by 100 and rounded to the nearest integer.
         return "%.2f" % ( wca_value / 100.0 )
       end
-      # Otherwise, wca_value is simply the number of moves.
-      return wca_value.to_s
-    end
 
-    if @event_id == '333mbf' || @event_id == '333mbo'
+      # Otherwise, wca_value is simply the number of moves.
+      wca_value.to_s
+
+    elsif @event_id == '333mbf' || @event_id == '333mbo'
+
+      mb_value = wca_value
       # Extract wca_value parts.
-      old = wca_value / 1000000000 != 0
+      old = mb_value / 1000000000 != 0
       if old
-        time = wca_value % 100000
-        wca_value = wca_value / 100000
-        attempted = wca_value % 100
-        wca_value = wca_value / 100
-        solved = 99 - wca_value % 100
-        wca_value = wca_value / 100
+        time = mb_value % 100000
+        mb_value = mb_value / 100000
+        attempted = mb_value % 100
+        mb_value = mb_value / 100
+        solved = 99 - mb_value % 100
       else
-        missed = wca_value % 100
-        wca_value = wca_value / 100
-        time = wca_value % 100000
-        wca_value = wca_value / 100000
-        difference = 99 - ( wca_value % 100 )
+        missed = mb_value % 100
+        mb_value = mb_value / 100
+        time = mb_value % 100000
+        mb_value = mb_value / 100000
+        difference = 99 - ( mb_value % 100 )
         solved = difference + missed
         attempted = solved + missed
       end
 
       # Build time string.
       if time == 99999
-        result = '?:??:??'
+        result = QUESTION_STRING
       else
-        result = ""
+        result = EMPTY_STRING
         while time >= 60
           result = ":%02d#{result}" % ( time % 60 )
           time = time / 60
@@ -60,14 +107,21 @@ class SolveTime
         result = "#{time}#{result}"
       end
 
-      return "#{solved}/#{attempted} #{result}"
-    end
+      "#{solved}/#{attempted} #{result}"
 
-    time_centiseconds = wca_value
-    hours = time_centiseconds / 360000
-    minutes = (time_centiseconds % 360000) / 6000
-    seconds = (time_centiseconds % 6000) / 100
-    centis = time_centiseconds % 100
-    ("%d:%02d:%02d.%02d" % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, '')
+    else
+
+      time_centiseconds = wca_value
+      hours = time_centiseconds / 360000
+      minutes = (time_centiseconds % 360000) / 6000
+      seconds = (time_centiseconds % 6000) / 100
+      centis = time_centiseconds % 100
+
+      clock_format = (CLOCK_FORMAT % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, EMPTY_STRING)
+      if clock_format.start_with? DOT_STRING
+        clock_format = ZERO_STRING + clock_format
+      end
+      clock_format
+    end
   end
 end

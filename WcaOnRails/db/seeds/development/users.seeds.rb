@@ -45,3 +45,8 @@ after :teams do
     end
   end
 end
+
+# Create a bunch of people with WCA IDs so we can seed large competitions.
+100.times do
+  FactoryGirl.create :user, :wca_id
+end

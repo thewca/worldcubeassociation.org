@@ -45,29 +45,30 @@ class RegistrationsController < ApplicationController
   def psych_sheet_event
     @competition = competition_from_params
     @event = Event.find(params[:event_id])
+    @preferred_format = @event.preferred_formats.first
 
     # TODO - pull registered events out into a join table
     # https://github.com/cubing/worldcubeassociation.org/issues/275#issuecomment-167347053
     @registrations = @competition.registrations.accepted.all.select { |r|
       r.events.include?(@event)
     }.sort_by { |r|
-      has_competed = !!r.world_rank(@event, @event.sort_by)
-      [ has_competed ? 0 : 1, r.world_rank(@event, @event.sort_by) || Float::INFINITY, r.world_rank(@event, @event.sort_by_second) || Float::INFINITY, r.name ]
+      has_competed = !!r.world_rank(@event, @preferred_format.sort_by)
+      [ has_competed ? 0 : 1, r.world_rank(@event, @preferred_format.sort_by) || Float::INFINITY, r.world_rank(@event, @preferred_format.sort_by_second) || Float::INFINITY, r.name ]
     }
 
     @registrations.each_with_index do |registration, i|
       prev_registration = i > 0 ? @registrations[i - 1] : nil
       registration.tied_previous = false
       if prev_registration
-        registration.tied_previous = registration.world_rank(@event, @event.sort_by) == prev_registration.world_rank(@event, @event.sort_by)
+        registration.tied_previous = registration.world_rank(@event, @preferred_format.sort_by) == prev_registration.world_rank(@event, @preferred_format.sort_by)
       end
       if registration.tied_previous
-        registration.position = prev_registration.position
+        registration.pos = prev_registration.pos
       else
-        registration.position = i + 1
+        registration.pos = i + 1
       end
-      has_competed = !!registration.world_rank(@event, @event.sort_by)
-      registration.position = nil unless has_competed
+      has_competed = !!registration.world_rank(@event, @preferred_format.sort_by)
+      registration.pos = nil unless has_competed
     end
   end
 

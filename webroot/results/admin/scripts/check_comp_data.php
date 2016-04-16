@@ -16,7 +16,7 @@ $competition_data = $competition_data[0];
 
 print "<div class='notice'>
           Working with `$compIdUrl` Competition Data
-          | <a href='../c.php?i=$compIdUrl'>Competition Results Page</a>
+          | <a href='/competitions/$compId'>Competition Results Page</a>
           | <a href='/competitions/$compId/edit/admin'>Competition Admin Page</a> <br />
         </div>";
 
@@ -152,7 +152,7 @@ print "<li><p>Run some more scripts:</p>
 // table to check existence of results vs scrambles
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
-           <li><a href='../c.php?i=$compIdUrl' target='_blank' class='link-external external'>View the Public competition page</a></li>
+           <li><a href='/competitions/$compIdUrl' target='_blank' class='link-external external'>View the Public competition page</a></li>
            <li>Post the <a href='/competitions/$compIdUrl/post/results' target='_blank' class='link-external external'>results announcement</a>
                 </li>
            <li>";

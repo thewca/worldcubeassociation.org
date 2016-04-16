@@ -9,6 +9,15 @@ RSpec.describe Competition do
     expect(competition.cellName).to eq "Foo !Test- 2015"
   end
 
+  it "handles missing start/end_date" do
+    competition = FactoryGirl.build :competition, start_date: nil, end_date: nil
+    competition2 = FactoryGirl.build :competition, start_date: nil, end_date: nil
+    expect(competition.is_over?).to be false
+    expect(competition.started?).to be false
+    expect(competition.in_progress?).to be false
+    expect(competition.dangerously_close_to?(competition2)).to be false
+  end
+
   it "requires that registration_open be before registration_close" do
     competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
     expect(competition).to be_invalid
@@ -130,7 +139,7 @@ RSpec.describe Competition do
   it "ignores equal signs in eventSpecs" do
     # See https://github.com/cubing/worldcubeassociation.org/issues/95
     competition = FactoryGirl.build :competition, eventSpecs: "   333=//sd    444   "
-    expect(competition.events.map(&:id)).to eq [ "333", "444" ]
+    expect(competition.events.map(&:id)).to eq %w(333 444)
   end
 
   it "validates event ids" do
@@ -331,6 +340,77 @@ RSpec.describe Competition do
 
       expect(cd.reload.receive_registration_emails).to eq false
       expect(co.reload.receive_registration_emails).to eq false
+    end
+  end
+
+  describe "results" do
+    let(:competition) { FactoryGirl.create :competition, eventSpecs: "333 222" }
+    let(:three_by_three) { Event.find "333" }
+    let(:two_by_two) { Event.find "222" }
+
+    let(:person_one) { FactoryGirl.create :person, name: "One" }
+    let(:person_two) { FactoryGirl.create :person, name: "Two" }
+    let(:person_three) { FactoryGirl.create :person, name: "Three" }
+    let(:person_four) { FactoryGirl.create :person, name: "Four" }
+
+    let!(:r_333_1_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 1, person: person_one }
+    let!(:r_333_1_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 2, person: person_two }
+    let!(:r_333_1_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 3, person: person_three }
+    let!(:r_333_1_fourth) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 4, person: person_four }
+
+    let!(:r_333_f_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 1, person: person_one }
+    let!(:r_333_f_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
+    let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 3, person: person_three }
+
+    let!(:r_222_c_first) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
+
+    it "events_with_podium_results" do
+      result = competition.events_with_podium_results
+      expect(result.size).to eq 2
+      expect(result.first.first).to eq three_by_three
+      expect(result.first.last.map(&:value1)).to eq [3000] * 3
+
+      expect(result.last.first).to eq two_by_two
+      expect(result.last.last.map(&:value1)).to eq [3000]
+    end
+
+    it "winning_results" do
+      result = competition.winning_results
+      expect(result.size).to eq 2
+      expect(result.first.eventId).to eq "333"
+      expect(result.first.best).to eq 3000
+      expect(result.first.roundId).to eq "f"
+
+      expect(result.last.eventId).to eq "222"
+      expect(result.last.best).to eq 3000
+      expect(result.last.roundId).to eq "c"
+    end
+
+    it "person_names_with_results" do
+      result = competition.person_names_with_results
+      expect(result.size).to eq 4
+      expect(result.map(&:first)).to eq [person_four.name, person_one.name, person_three.name, person_two.name]
+      expect(result.second.last.map(&:roundId)).to eq %w(f 1 c)
+
+      expect(result[1][1][1].muted).to eq true
+      expect(result[1][1][2].muted).to eq false
+
+      expect(result[2][1][1].muted).to eq true
+      expect(result[3][1][1].muted).to eq true
+    end
+
+    it "events_with_rounds_with_results" do
+      results = competition.events_with_rounds_with_results
+      expect(results.size).to eq 2
+      expect(results[0].first).to eq three_by_three
+      expect(results[0].second.first.first).to eq Round.find("1")
+      expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 4
+      expect(results[0].second.first.last.map(&:eventId)).to eq ["333"] * 4
+      expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 3
+
+      expect(results[1].first).to eq two_by_two
+      expect(results[1].second.first.first).to eq Round.find("c")
+      expect(results[1].second.first.last.map(&:value1)).to eq [3000]
     end
   end
 end

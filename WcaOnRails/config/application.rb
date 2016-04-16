@@ -60,5 +60,7 @@ module WcaOnRails
 
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: -> (s) { Rails.logger.info(s) }
+
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

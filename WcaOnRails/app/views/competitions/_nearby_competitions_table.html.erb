@@ -15,7 +15,9 @@
       <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
       </td>
       <td><%= c.cityName %>, <%= c.countryId %></td>
-      <td class="text-nowrap text-right"><%= link_to "#{@competition.kilometers_to(c).round(2)} km", "https://www.google.com/maps/dir/#{c.latitude_degrees},#{c.longitude_degrees}/#{@competition.latitude_degrees},#{@competition.longitude_degrees}/", target: "_blank" %></td>
+      <td class="text-nowrap text-right">
+        <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
+      </td>
     </tr>
   <% end %>
 </table>

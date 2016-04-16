@@ -1,7 +1,7 @@
 after "development:users" do
   delegate = User.find_by(delegate_status: "delegate")
 
-  users = User.where.not(wca_id: nil).sample(5)
+  users = User.where.not(wca_id: nil).sample(93)
 
   # Create some past competitions with results
   500.times do |i|
@@ -29,27 +29,31 @@ after "development:users" do
       longitude_degrees: Random.new.rand(-180.0..180.0),
     )
 
-    users.each_with_index do |competitor, i|
-      person = competitor.person
-      Result.create!(
-        pos: i+1,
-        personId: person.id,
-        personName: person.name,
-        countryId: person.countryId,
-        competitionId: competition.id,
-        eventId: "333",
-        roundId: "f",
-        formatId: "a",
-        value1: 4242 + i*1000,
-        value2: 4242 + i*1000,
-        value3: 4242 + i*1000,
-        value4: 6000 + i*1000,
-        value5: 4000 + i*1000,
-        best: 4000 + i*1000,
-        average: 4242 + i*1000,
-        regionalSingleRecord: i == 0 ? "WR" : "",
-        regionalAverageRecord: i == 0 ? "WR" : "",
-      )
+    eventIds.each do |eventId|
+      %w(1 2 f).each do |roundId|
+        users.each_with_index do |competitor, i|
+          person = competitor.person
+          Result.create!(
+            pos: i+1,
+            personId: person.id,
+            personName: person.name,
+            countryId: person.countryId,
+            competitionId: competition.id,
+            eventId: eventId,
+            roundId: roundId,
+            formatId: "a",
+            value1: 4242 + i*1000,
+            value2: 4242 + i*1000,
+            value3: 4242 + i*1000,
+            value4: 6000 + i*1000,
+            value5: 4000 + i*1000,
+            best: 4000 + i*1000,
+            average: 4242 + i*1000,
+            regionalSingleRecord: i == 0 ? "WR" : "",
+            regionalAverageRecord: i == 0 ? "WR" : "",
+          )
+        end
+      end
     end
   end
 

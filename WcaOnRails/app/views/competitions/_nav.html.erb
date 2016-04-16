@@ -1,39 +1,56 @@
 <div class="container-fluid">
   <div class="row">
     <div id="competition-nav">
-      <% nav_items = [
-          {
-            text: "Info",
-            path: "/results/c.php?i=#{@competition.id}",
-            fa_icon: "info-circle",
-          },
-        ] + (
-          (!current_user || !current_user.can_manage_competition?(@competition)) ? [] : [
+      <% nav_items = [] %>
+      <% if @competition.results_uploaded? %>
+        <% nav_items << {
+          text: "Results",
+          path: competition_path(@competition),
+          fa_icon: "trophy",
+          children: [
+            { text: "Podiums", path: competition_results_podiums_path(@competition), fa_icon: "cubes" },
             {
-              text: "Edit",
-              path: edit_competition_path(@competition),
-              fa_icon: "lock",
-              children: [
-                { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
-                { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
-                  {
-                    text: "Registration",
-                    path: competition_edit_registrations_path(@competition),
-                    fa_icon: "list-ul",
-                    notification_count: @competition.registrations.pending.count,
-                    children: [{
-                      hidden: true,
-                      is_active: lambda do
-                        controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
-                      end,
-                    }],
-                  },
-                ])
+              text: "All",
+              path: competition_results_all_path(@competition),
+              fa_icon: "list",
+              tiny_children: @competition.events.map do |event|
+                { text: event.id, path: competition_results_all_path(@competition, anchor: "e#{event.id}"), cubing_icon: event.id, title: event.name }
+              end
             },
-          ]
-        )
-      %>
-      <% if @competition.use_wca_registration? %>
+            { text: "By Person", path: competition_results_by_person_path(@competition), fa_icon: "user" },
+          ],
+        } %>
+      <% else %>
+        <% nav_items << {
+          text: "Info",
+          path: competition_path(@competition),
+          fa_icon: "info-circle",
+        } %>
+      <% end %>
+      <% if current_user && current_user.can_manage_competition?(@competition) %>
+        <% nav_items << {
+          text: "Edit",
+          path: edit_competition_path(@competition),
+          fa_icon: "lock",
+          children: [
+            { text: "Organizer view", path: edit_competition_path(@competition), fa_icon: "lock" },
+            { text: "Admin view", path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
+              {
+                text: "Registration",
+                path: competition_edit_registrations_path(@competition),
+                fa_icon: "list-ul",
+                notification_count: @competition.registrations.pending.count,
+                children: [{
+                  hidden: true,
+                  is_active: lambda do
+                    controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
+                  end,
+                }],
+              },
+            ])
+        } %>
+      <% end %>
+      <% if @competition.use_wca_registration? && !@competition.results_uploaded? %>
         <% nav_items += [
           { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
           {
@@ -115,13 +132,25 @@
 
     </div>
     <div id="competition-data">
-      <h1><%= @competition.name %></h1>
+      <h3><%= @competition.name %></h3>
       <hr />
 
       <% if !@competition.showAtAll? %>
         <div class="alert alert-warning">
           <strong>Note:</strong> This competition is not visible to the public.
         </div>
+      <% end %>
+      <% if !@competition.results_uploaded? %>
+        <% if @competition.is_over? %>
+          <div class="alert alert-info">
+            <strong>Note:</strong> This competition is over, we are working to upload the results as soon as possible!
+          </div>
+        <% end %>
+        <% if @competition.in_progress? %>
+          <div class="alert alert-info">
+            <strong>Note:</strong> This competition is ongoing. Come back after <%= @competition.end_date.to_formatted_s(:long) %> to see the results!
+          </div>
+        <% end %>
       <% end %>
 
       <%= yield %>

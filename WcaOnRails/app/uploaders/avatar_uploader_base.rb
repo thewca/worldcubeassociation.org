@@ -1,5 +1,3 @@
-require 'file_size_validator'
-
 class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 

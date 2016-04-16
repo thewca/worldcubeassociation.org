@@ -11,6 +11,7 @@ class Competition < ActiveRecord::Base
   has_many :delegates, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
+  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
 
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -173,6 +174,7 @@ class Competition < ActiveRecord::Base
       Result.where(competitionId: id_was).update_all(competitionId: id)
       Registration.where(competitionId: id_was).update_all(competitionId: id)
       Scramble.where(competitionId: id_was).update_all(competitionId: id)
+      CompetitionMedium.where(competitionId: id_was).update_all(competitionId: id)
       CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
       CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
     end
@@ -443,6 +445,9 @@ class Competition < ActiveRecord::Base
   end
 
   def dangerously_close_to?(c)
+    if !c.start_date || !self.start_date
+      return false
+    end
     days_until = (c.start_date - self.start_date).to_i
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
@@ -460,11 +465,84 @@ class Competition < ActiveRecord::Base
   end
 
   def is_over?
-    end_date < Date.today
+    !end_date.nil? && end_date < Date.today
+  end
+
+  def result_cache_key(view)
+    results_updated_at = results.order('updated_at desc').limit(1).pluck(:updated_at).first
+    [id, view, results_updated_at.try(:iso8601) || ""]
+  end
+
+  def events_with_podium_results
+    light_results_from_relation(
+      results
+        .where(roundId: Round.final_rounds.map(&:id))
+        .where("pos >= 1 AND pos <= 3")
+    ).group_by(&:event)
+      .sort_by { |event, _results| event.rank }
+  end
+
+  def winning_results
+    light_results_from_relation(
+      results
+        .where(roundId: Round.final_rounds.map(&:id))
+        .where("pos = 1")
+    ).sort_by { |r| r.event.rank }
+  end
+
+  def person_names_with_results
+    light_results_from_relation(results)
+      .group_by(&:personName)
+      .sort_by { |personName, _results| personName }
+      .map do |personName, results|
+        results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
+
+        # Mute (soften) each result that wasn't the competitor's last for the event.
+        last_event = nil
+        results.each do |result|
+          result.muted = (result.event == last_event)
+          last_event = result.event
+        end
+
+        [ personName, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
+      end
+  end
+
+  def events_with_rounds_with_results
+    light_results_from_relation(results)
+      .group_by(&:event)
+      .sort_by { |event, _results| event.rank }
+      .map do |event, results|
+        rounds_with_results = results
+          .group_by(&:round)
+          .sort_by { |format, _results| format.rank }
+          .map { |round, results| [ round, results.sort_by(&:pos) ] }
+
+        [ event, rounds_with_results ]
+      end
+  end
+
+  # Profiling the rendering of _results_table.html.erb showed quite some
+  # time was spent in `ActiveRecord#read_attribute`. So, I load the results
+  # using raw SQL and instantiate a PORO. The code definitely got uglier,
+  # but the performance gains are worth it IMO. Not using ActiveRecord led
+  # to a 40% performance improvement.
+  private def light_results_from_relation(relation)
+    ActiveRecord::Base.connection
+      .execute(relation.to_sql)
+      .each(as: :hash).map(&LightResult.method(:new))
+  end
+
+  def started?
+    !start_date.nil? && start_date < Date.today
+  end
+
+  def country_name
+    country ? country.name : nil
   end
 
   def country
-    Country.find(countryId)
+    Country.find_by_id(countryId)
   end
 
   def self.search(query, params: {})
@@ -520,7 +598,7 @@ class Competition < ActiveRecord::Base
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: "/results/c.php?i=#{id}",
+      url: Rails.application.routes.url_helpers.competition_path(self),
 
       id: id,
       name: name,

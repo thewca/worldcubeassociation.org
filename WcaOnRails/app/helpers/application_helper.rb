@@ -23,6 +23,16 @@ module ApplicationHelper
     }[flash_type.to_sym] || flash_type.to_s
   end
 
+  def link_to_google_maps_place(text, latitude, longitude)
+    url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
+    link_to text, url, target: "_blank"
+  end
+
+  def link_to_google_maps_dir(text, start_latitude, start_longitude, end_latitude, end_longitude)
+    url = "https://www.google.com/maps/dir/#{start_latitude},#{start_longitude}/#{end_latitude},#{end_longitude}/"
+    link_to text, url, target: "_blank"
+  end
+
   def mail_to_wca_board
     mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
   end
@@ -33,6 +43,7 @@ module ApplicationHelper
     end
 
     options = {
+      escape_html: true,
       hard_wrap: true,
     }
 
@@ -47,8 +58,8 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text)
-    id = pretty_text.parameterize
+  def anchorable(pretty_text, id=nil)
+    id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'>#{pretty_text} <a href='##{id}'><span class='glyphicon glyphicon-link'></span></a></span>".html_safe
   end
 
@@ -81,8 +92,11 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, table_class: "", data: {})
-    table_classes = "table wca-results floatThead table-condensed table-greedy-last-column #{table_class}"
+  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {})
+    table_classes = "table wca-results table-condensed table-greedy-last-column #{table_class}"
+    if floatThead
+      table_classes += " floatThead"
+    end
     if hover
       table_classes += " table-hover"
     end

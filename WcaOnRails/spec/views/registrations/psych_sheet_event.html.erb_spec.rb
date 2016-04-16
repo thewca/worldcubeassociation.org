@@ -34,12 +34,13 @@ RSpec.describe "registrations/psych_sheet_event" do
 
     assign(:competition, competition)
     assign(:event, event)
+    assign(:preferred_format, event.preferred_formats.first)
     assign(:registrations, registrations)
 
     render
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(1) .single", text: /\A\s*20.00\s*\z/)
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\s*\z/)
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) .single", text: /\A\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) td.position.tied-previous")
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) td.pos.tied-previous")
   end
 end

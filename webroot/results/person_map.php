@@ -58,7 +58,7 @@ foreach($chosenCompetitions as $comp) {
   $markers[$comp['id']] = array();
   $markers[$comp['id']]['latitude'] = $comp['latitude'];
   $markers[$comp['id']]['longitude'] = $comp['longitude'];
-  $markers[$comp['id']]['info'] = "<a href='c.php?i=".$comp['id']."'>" . o($comp['cellName']) . "</a><br />"
+  $markers[$comp['id']]['info'] = "<a href='/competitions/${comp['id']}'>" . o($comp['cellName']) . "</a><br />"
     . date("M j, Y", mktime(0,0,0,$comp['month'],$comp['day'],$comp['year']))
     . " - " . o($comp['cityName']);
 }

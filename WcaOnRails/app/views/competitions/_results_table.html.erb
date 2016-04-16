@@ -1,0 +1,102 @@
+<% hide_event = defined?(hide_event) && hide_event %>
+<% hide_round = defined?(hide_round) && hide_round %>
+<% hide_pos = defined?(hide_pos) && hide_pos %>
+<% hide_name = defined?(hide_name) && hide_name %>
+
+<%= wca_table table_class: "wca-results", floatThead: false do %>
+  <thead>
+    <tr>
+      <% if !hide_event %>
+        <th class="event">Event</th>
+      <% end %>
+
+      <% if !hide_round %>
+        <th class="round">Round</th>
+      <% end %>
+
+      <% if !hide_pos %>
+        <th class="pos">#</th>
+      <% end %>
+
+      <% if !hide_name %>
+        <th class="name">Name</th>
+      <% end %>
+
+      <th class="single">Best</th>
+      <th class="regionalSingleRecord"></th>
+
+      <th class="average">Average</th>
+      <th class="regionalSingleRecord"></th>
+
+      <th class="country">Citizen of</th>
+      <th class="solves" colspan="5">Solves</th>
+
+      <% # Extra column for .table-greedy-last-column %>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% results.each_with_index do |result, i| %>
+      <tr class="sort-by-<%= result.format.sort_by.to_s %> <%= result.muted ? "text-muted" : "" %>">
+        <% if !hide_event %>
+          <td class="event">
+            <% if !result.muted %>
+              <span class="cubing-icon icon-<%= result.event.id %>"></span>
+              <%= result.event.cellName %>
+            <% end %>
+          </td>
+        <% end %>
+
+        <% if !hide_round %>
+          <td class="round"><%= result.round.cellName %></td>
+        <% end %>
+
+        <% if !hide_pos %>
+          <% classes = "pos" %>
+          <% previous_result = i > 0 ? results[i - 1] : nil %>
+          <% if previous_result && previous_result.eventId == result.eventId && previous_result.roundId == result.roundId && previous_result.pos == result.pos %>
+            <% classes << " tied-previous" %>
+          <% end %>
+          <td class="<%= classes %>">
+            <%= result.pos %>
+          </td>
+        <% end %>
+
+        <% if !hide_name %>
+          <td class="name">
+            <% if result.wca_id %>
+              <%= link_to result.personName, "/results/p.php?i=#{result.wca_id}" %>
+            <% else %>
+              <%= result.personName %>
+            <% end %>
+          </td>
+        <% end %>
+
+        <td class="single"><%= result.best_solve.clock_format %></td>
+        <td class="regionalSingleRecord"><%= result.regionalSingleRecord %></td>
+
+        <td class="average"><%= result.average_solve.clock_format %></td>
+        <td class="regionalAverageRecord"><%= result.regionalAverageRecord %></td>
+
+        <td class="country"><%= result.countryId %></td>
+
+        <% trimmed_indices = result.trimmed_indices %>
+        <% best_index = result.best_index %>
+        <% worst_index = result.worst_index %>
+        <% result.solves.each_with_index do |solve, i| %>
+          <% classes = "solve#{i + 1}" %>
+          <% classes << " trimmed" if trimmed_indices.include?(i) %>
+          <% classes << " best" if i == best_index %>
+          <% classes << " worst" if i == worst_index %>
+          <td class="<%= classes %>">
+            <%= solve.clock_format %>
+          </td>
+        <% end %>
+
+        <% # Extra column for .table-greedy-last-column %>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+<% end %>

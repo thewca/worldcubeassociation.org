@@ -1,0 +1,21 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <%= render "competition_info", competition: @competition %>
+
+  <% cache @competition.result_cache_key("all_results") do %>
+    <% @competition.events_with_rounds_with_results.each do |event, rounds_with_results| %>
+
+      <% # Empty div to allow linking directly to results for an event %>
+      <%= content_tag :div, "", id: "e#{event.id}" %>
+
+      <% rounds_with_results.each do |round, results| %>
+        <h3>
+          <%= anchorable "#{event.name} #{round.name}", "e#{event.id}_#{round.id}" %>
+        </h3>
+        <%= render "results_table", results: results, hide_event: true, hide_round: true %>
+      <% end %>
+    <% end %>
+
+  <% end %>
+<% end %>
