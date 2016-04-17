@@ -327,7 +327,7 @@ class User < ActiveRecord::Base
     admin? || board_member? || results_team?
   end
 
-  # Returns true if the user can perform every action for competitions.
+  # Returns true if the user can perform every action for teams.
   def can_manage_teams?
     admin? || board_member? || results_team?
   end

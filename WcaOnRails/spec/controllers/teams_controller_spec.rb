@@ -176,6 +176,14 @@ describe TeamsController do
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end
+
+      it 'cannot add overlapping membership periods for the same user'do
+        member = FactoryGirl.create :user
+        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
+                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false }} }
+        invalid_team = assigns(:team)
+        expect(invalid_team).to be_invalid
+      end
     end
   end
 end

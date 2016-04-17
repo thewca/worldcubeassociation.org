@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
 
   private def redirect_unless_user(action, *args)
     unless current_user && current_user.send(action, *args)
-      flash[:danger] = "You are not allowed to #{action.to_s.humanize.downcase.gsub('can', '').chomp('?')}"
+      flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
       redirect_to root_url
     end
   end
