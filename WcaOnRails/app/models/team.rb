@@ -6,12 +6,13 @@ class Team < ActiveRecord::Base
   validate :membership_periods_cannot_overlap_for_single_user
   def membership_periods_cannot_overlap_for_single_user
     team_members.group_by(&:user).each do |user, memberships|
-      memberships.combination(2).to_h.each do |first, second|
+      memberships.combination(2).to_a.each do |memberships_pair|
+        first, second = memberships_pair
         first_period = first.start_date..(first.end_date || Date::Infinity.new)
         second_period = second.start_date..(second.end_date || Date::Infinity.new)
         if first_period.overlaps? second_period
-          message = "Membership periods overlap for user #{user.name}"
-          errors[:base] << message unless errors[:base].include?(message)
+          errors[:base] << "Membership periods overlap for user #{user.name}"
+          break # One overlapping period for the user is found, skip to the next one
         end
       end
     end

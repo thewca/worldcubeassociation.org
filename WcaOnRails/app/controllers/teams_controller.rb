@@ -1,8 +1,7 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_manage_teams?) }, except: [:edit, :update]
-  before_action :assign_team, only: [:edit, :update]
-  before_action -> { redirect_unless_user(:can_edit_team?, @team) }, only: [:edit, :update]
+  before_action -> { redirect_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update]
 
   def index
     @teams = Team.all
@@ -24,9 +23,11 @@ class TeamsController < ApplicationController
   end
 
   def edit
+    @team = team_from_params
   end
 
   def update
+    @team = team_from_params
     if @team.update_attributes(team_params)
       flash[:success] = "Updated team"
       redirect_to edit_team_path(@team)
@@ -46,7 +47,7 @@ class TeamsController < ApplicationController
     return team_params
   end
 
-  private def assign_team
-    @team = Team.find(params[:id])
+  private def team_from_params
+    Team.find(params[:id])
   end
 end
