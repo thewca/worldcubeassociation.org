@@ -47,18 +47,26 @@ table.table {
 }
 
 .wca-user {
-  white-space: nowrap;
-
+  .avatar-thumbnail,
+  .info {
+    display: inline-block;
+    vertical-align: middle;
+  }
   .avatar-thumbnail {
-    // Put thumbnail to the left of both name and wca-id.
-    float: left;
     margin-right: 5px;
   }
   .name {
+    white-space: nowrap;
   }
   .wca-id {
-    // Put wca-id on a new line.
-    display: block;
+  }
+}
+
+.wca-user-link:hover,
+.wca-user-link:focus {
+  text-decoration: none;
+  .info {
+    text-decoration: underline;
   }
 }
 
