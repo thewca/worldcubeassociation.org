@@ -307,6 +307,10 @@ class User < ActiveRecord::Base
     self.team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).any?(&:current_member?)
   end
 
+  def teams_where_is_leader
+    self.team_members.where(team_leader: true).select(&:current_member?).map!(&:team).uniq
+  end
+
   def admin?
     software_team?
   end
@@ -323,10 +327,14 @@ class User < ActiveRecord::Base
     admin? || board_member? || results_team?
   end
 
-  # Team leaders should be able to edit their team.
-  # See https://github.com/cubing/worldcubeassociation.org/issues/427
-  def can_edit_teams?
+  # Returns true if the user can perform every action for teams.
+  def can_manage_teams?
     admin? || board_member? || results_team?
+  end
+
+  # Returns true if the user can edit the given team.
+  def can_edit_team?(team)
+    can_manage_teams? || team_leader?(team.friendly_id)
   end
 
   def can_create_competitions?

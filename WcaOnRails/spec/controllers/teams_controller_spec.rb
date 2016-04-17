@@ -89,6 +89,33 @@ describe TeamsController do
     end
   end
 
+  describe 'GET #edit' do
+    context 'when signed in as a team leader without rights to manage all teams' do
+      let(:team_where_is_leader) { Team.find_by_friendly_id('wrc') }
+      let(:team_where_is_not_leader) { Team.find_by_friendly_id('software') }
+      let(:leader) do
+        user = FactoryGirl.create(:user)
+        FactoryGirl.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
+        user
+      end
+
+      before :each do
+        sign_in leader
+      end
+
+      it 'can edit his team' do
+        get :edit, id: team_where_is_leader.id
+        expect(response).to render_template :edit
+      end
+
+      it 'cannot edit other teams' do
+        get :edit, id: team_where_is_not_leader.id
+        expect(response).to redirect_to root_url
+        expect(flash[:danger]).to_not be_nil
+      end
+    end
+  end
+
   describe 'POST #update' do
     context 'when signed in as an admin' do
       let(:admin) { FactoryGirl.create :admin }
@@ -146,6 +173,14 @@ describe TeamsController do
       it 'cannot set start_date < end_date' do
         member = FactoryGirl.create :user
         patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } }
+        invalid_team = assigns(:team)
+        expect(invalid_team).to be_invalid
+      end
+
+      it 'cannot add overlapping membership periods for the same user'do
+        member = FactoryGirl.create :user
+        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
+                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false }} }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end

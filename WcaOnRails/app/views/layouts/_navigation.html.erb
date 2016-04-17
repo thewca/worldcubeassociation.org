@@ -136,6 +136,16 @@
                 <li><%= link_to "New post", new_post_path %></li>
               <% end %>
 
+              <% unless current_user.teams_where_is_leader.empty? %>
+                <li class="divider"></li>
+                <li role="presentation" class="dropdown-header">
+                  Team leader
+                </li>
+                <% current_user.teams_where_is_leader.each do |team| %>
+                  <li><%= link_to team.name, edit_team_path(team) %></li>
+                <% end %>
+              <% end %>
+
               <li class="divider"></li>
               <li><%= link_to "API", api_path %></li>
               <li><%= link_to "Manage your applications", oauth_applications_path %></li>

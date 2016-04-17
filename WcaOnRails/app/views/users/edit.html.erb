@@ -172,6 +172,13 @@
       <%= f.input :region, disabled: !editable_fields.include?(:region) %>
     <% end %>
 
+    <div class="form-group">
+      <label>Member of</label>
+      <% @user.teams.each do |team| %>
+        <%= link_to team.name, edit_team_path(team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
+      <% end %>
+    </div>
+
     <%= f.submit 'Save', class: "btn btn-primary" %>
   <% end %>
 </div>
