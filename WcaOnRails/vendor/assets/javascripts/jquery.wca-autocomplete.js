@@ -47,7 +47,7 @@
         var toHtmlByClass = {
           user: function(user) {
             // Copied from app/views/shared/user.html.erb
-            var $div = $('<div class="wca-user"><span class="avatar-thumbnail"></span> <span class="name"></span> <span class="wca-id"></span></div>');
+            var $div = $('<div class="wca-user"> <div class="avatar-thumbnail"></div> <div class="info"><div class="name"></div><div class="wca-id"></div></div> </div>');
             $div.find(".name").text(user.name);
             $div.find(".avatar-thumbnail").css('background-image', 'url("' + user.avatar.thumb_url + '")');
             if(user.wca_id) {
