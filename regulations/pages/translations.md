@@ -10,9 +10,9 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2015-07-01](./chinese-traditional)
     - By [Rui-Jun Liu (劉睿鈞)](https://www.worldcubeassociation.org/results/p.php?i=2011LIUR02) and [Chia-Leo Lin (林珈樂)](https://www.worldcubeassociation.org/results/p.php?i=2006LINC01). (Previous contributions from [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).)
-- [French (Français) - 2015-07-01](./french/)
+- [French (Français) - 2016-04-18](./french/)
     - By [Philippe Virouleau](https://www.worldcubeassociation.org/results/p.php?i=2008VIRO01).
-- [German (Deutsch) - 2015-07-01](./german/)
+- [German (Deutsch) - 2016-04-18](./german/)
     - By [Sébastien Auroux](https://www.worldcubeassociation.org/results/p.php?i=2008AURO01), [Laura Ohrndorf](https://www.worldcubeassociation.org/results/p.php?i=2009OHRN01), and [Gregor Billing](https://www.worldcubeassociation.org/results/p.php?i=2012BILL01).
 - [Hungarian (magyar) - 2015-07-01](./hungarian/)
     - By [Niki Placskó](https://www.worldcubeassociation.org/results/p.php?i=2008PLAC01) and [Perge Olivér](https://www.worldcubeassociation.org/results/p.php?i=2007PERG01).
