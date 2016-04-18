@@ -2,9 +2,6 @@
 
 This repository contains files related to the maintenance of the [wca-documents](https://github.com/cubing/wca-documents) repository that are not directly part of the documents.
 
-[![Build Status](https://travis-ci.org/cubing/wca-documents-extra.png?branch=master)](https://travis-ci.org/cubing/wca-documents-extra)
-
-
 ## Build the WCA documents
 
     git clone https://github.com/cubing/wca-documents-extra.git
