@@ -1,22 +1,12 @@
 module Statistics
   class Top100 < AbstractStatistic
     def name; "Appearances in Rubik's Cube top 100 results"; end
-    def subtitle; "Single | Average"; end
+    def subtitle; "Single and Average"; end
     def info; nil; end
     def id; "appearances_top100_3x3"; end
 
-    def headers
-      [ LeftTh.new('Person'),
-        RightTh.new('Appearances'),
-        SpacerTh.new,
-        LeftTh.new('Person'),
-        RightTh.new('Appearances'),
-        TrailingTh.new,
-      ]
-    end
-
-    def rows
-      top100 = @q.(<<-SQL
+    def tables
+      top100 = @q.call(<<-SQL
         SELECT   average
         FROM     Results
         WHERE    eventId='333' AND average>0
@@ -33,7 +23,7 @@ module Statistics
       FROM     Results
       WHERE    eventId='333' AND average>0 AND average<=#{average_of_rank_100}
       SQL
-      average_candidates = @q.(<<-SQL
+      average_candidates = @q.call(<<-SQL
         SELECT   personId,
                  personName,
                  COUNT(personId) AS appearances
@@ -46,9 +36,8 @@ module Statistics
         [PersonTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
 
-
       trips = []
-      @q.(<<-SQL
+      @q.call(<<-SQL
         SELECT   personId,
                  personName,
                  value1,
@@ -76,11 +65,13 @@ module Statistics
         [PersonTd.new(id, name), BoldNumberTd.new(count)]
       end
 
-      Statistics::merge([single_candidates, average_candidates])
+      headers = [ LeftTh.new('Person'),
+        RightTh.new('Appearances'),
+      ]
+      [Table.new(headers, single_candidates), Table.new(headers, average_candidates)]
     end
 
-    private
-    def count(trips)
+    private def count(trips)
       counts = Hash.new { |h, k| h[k] = 0 }
       trips.each do |r|
         counts[[r[0], r[1]]] += 1

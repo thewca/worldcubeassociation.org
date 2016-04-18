@@ -9,20 +9,7 @@ module Statistics
     end
     def id; "most_competitions"; end
 
-    def headers
-      [ LeftTh.new('Person'),
-        RightTh.new('Competitions'),
-        SpacerTh.new,
-        LeftTh.new('Event'),
-        RightTh.new('Competitions'),
-        SpacerTh.new,
-        LeftTh.new('Country'),
-        RightTh.new('Competitions'),
-        TrailingTh.new('Competitions'),
-      ]
-    end
-
-    def rows
+    def tables
       persons = @q.(<<-SQL
         SELECT personId, name, COUNT(DISTINCT competitionId) as numberOfCompetitions
         FROM Results
@@ -60,8 +47,14 @@ module Statistics
       ).map do |row|
         [CountryTd.new(row[0], row[1]), BoldNumberTd.new(row[2])]
       end
+      persons_header = [LeftTh.new('Person'), RightTh.new('Competitions')]
+      events_header = [LeftTh.new('Event'), RightTh.new('Competitions')]
+      countries_header = [LeftTh.new('Country'), RightTh.new('Competitions')]
 
-      Statistics::merge([persons, events, countries])
+      [ Table.new(persons_header, persons),
+        Table.new(events_header, events),
+        Table.new(countries_header, countries)
+      ]
     end
   end
 end

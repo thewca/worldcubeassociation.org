@@ -92,10 +92,13 @@ module ApplicationHelper
     local_time(time, "%B %e, %Y %l:%M%P %Z")
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {})
-    table_classes = "table wca-results table-condensed table-greedy-last-column #{table_class}"
+  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, greedy_last_column: true, table_class: "", data: {})
+    table_classes = "table wca-results table-condensed #{table_class}"
     if floatThead
       table_classes += " floatThead"
+    end
+    if greedy_last_column
+      table_classes += " table-greedy-last-column"
     end
     if hover
       table_classes += " table-hover"

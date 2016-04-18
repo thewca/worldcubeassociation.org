@@ -1,7 +1,5 @@
 class StatisticsController < ApplicationController
-  layout "php_land"
-
   def index
-    @statistics = Statistics::all
+    @statistics = Statistics.all
   end
 end

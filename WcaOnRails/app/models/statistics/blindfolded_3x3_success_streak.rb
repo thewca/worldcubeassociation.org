@@ -73,16 +73,14 @@ module Statistics
     def headers
       [ LeftTh.new('Person'),
         RightTh.new('Length'),
-        EmptyTh.new,
         RightTh.new('Best'),
-        RightTh.new('Avg'),
+        RightTh.new('Average'),
         RightTh.new('Worst'),
-        RightTh.new('When?'),
-        TrailingTh.new,
+        LeftTh.new('When?'),
       ]
     end
 
-    def rows
+    def tables
       bf_results = @q.(<<-SQL
         SELECT personId, personName, value1, value2, value3, value4, value5, year, month
         FROM Results result, Competitions competition
@@ -118,18 +116,19 @@ module Statistics
         [person, streaks.max]
       end.sort_by { |f| f.last }.reverse!.take(10)
 
-      best_streaks.map do |row|
+      rows = best_streaks.map do |row|
         streak = row.last
         person_id, person_name = row.first
         [ PersonTd.new(person_id, person_name),
           NumberTd.new(streak.size),
-          EmptyTd.new,
-          TimeTd.new(streak.best),
+          TimeTd.new(streak.best, :green),
           TimeTd.new(streak.mean),
-          TimeTd.new(streak.worst),
+          TimeTd.new(streak.worst, :red),
           DateRangeTd.new(streak.date_range)
         ]
       end
+
+      [Table.new(headers, rows)]
     end
   end
 end

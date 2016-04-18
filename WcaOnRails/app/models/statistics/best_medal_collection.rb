@@ -10,16 +10,10 @@ module Statistics
         RightTh.new('Gold'),
         RightTh.new('Silver'),
         RightTh.new('Bronze'),
-        SpacerTh.new,
-        LeftTh.new('Person'),
-        RightTh.new('Gold'),
-        RightTh.new('Silver'),
-        RightTh.new('Bronze'),
-        TrailingTh.new,
       ]
     end
 
-    def rows
+    def tables
       just_three = @q.(<<-SQL
         SELECT
           personId,
@@ -62,7 +56,7 @@ module Statistics
         ]
       end
 
-      Statistics::merge([just_three, all])
+      [Table.new(headers, just_three), Table.new(headers, all)]
     end
   end
 end

@@ -4,7 +4,7 @@ module Statistics
   class SumOfRanks < AbstractStatistic
     def initialize(q, event_ids, name:, subtitle:, id:, type: :all)
       if !%i(average all single).include?(type)
-        raise ArgumentError.new("type must be either :all, :average or :single")
+        fail ArgumentError.new("type must be either :all, :average or :single")
       end
 
       super(q)
@@ -20,30 +20,18 @@ module Statistics
 
     def headers
       event_headers = @event_ids.map { |e| RightTh.new(e) }
-      if @type != :all
-        [ LeftTh.new('Person') ] +
-          [ RightTh.new('Sum') ] +
-          event_headers +
-          [ TrailingTh.new ]
-      else
-        [ LeftTh.new('Person') ] +
-          [ RightTh.new('Sum') ] +
-          event_headers +
-          [ SpacerTh.new ] +
-          [ LeftTh.new('Person') ] +
-          [ RightTh.new('Sum') ] +
-          event_headers +
-          [ TrailingTh.new ]
-      end
+      [ LeftTh.new('Person') ] +
+        [ RightTh.new('Sum') ] +
+        event_headers
     end
 
-    def rows
+    def tables
       if @type == :single
-        get_sum_table_for('Single')
+        [Table.new(headers, get_sum_table_for('Single'))]
       elsif @type == :average
-        get_sum_table_for('Average')
+        [Table.new(headers, get_sum_table_for('Average'))]
       else
-        Statistics.merge([get_sum_table_for('Single'), get_sum_table_for('Average')])
+        [Table.new(headers, get_sum_table_for('Single')), Table.new(headers, get_sum_table_for('Average'))]
       end
     end
 

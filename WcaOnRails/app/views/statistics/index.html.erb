@@ -1,59 +1,55 @@
-<h1>Fun Statistics</h1>
+<% provide(:title, 'Statistics') %>
 
-<p style="padding-left:20px;padding-right:20px;font-weight:bold">
-  Here you see a selection of fun statistics, based on official WCA competition results.
-</p>
+<div class="container">
+  <div class="row">
+    <h2>Fun Statistics</h2>
 
-<ul style="padding-left: 20px">
-  <% @statistics.each do |statistic| %>
-    <li style="padding-bottom: 5px">
-      <%= link_to statistic.name, "##{statistic.id}", style: "color:#33C;font-weight:normal" %>
-    </li>
-  <% end %>
-</ul>
+    <p>
+      Here you see a selection of fun statistics, based on official WCA competition results.
+    </p>
 
-<% @statistics.each do |statistic| %>
-  <div id="<%= statistic.id %>">
-    <div class="table-responsive">
-      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="results table table-condensed">
-
-        <tbody><tr><td colspan="9">&nbsp;<a name="13">&nbsp;</a></td></tr>
-
-          <!-- Why is this part of the table? -->
-          <tr>
-            <td class="caption" colspan="9">
-              <%= statistic.name %>
-              <% if statistic.info %>
-                (<a title="<%= statistic.info %>" style="color:#FC0" onclick='alert("<%=j statistic.info %>")'>info</a>)
-              <% elsif statistic.subtitle %>
-                <span style="color:#999">(<%= statistic.subtitle %>)</span>
-              <% end %>
-            </td>
-          </tr>
-
-          <!-- shouldn't this be in a thead? -->
-          <tr>
-            <% statistic.headers.each do |header| %>
-              <% if header.respond_to?(:render) %>
-                <%= header.render %>
-              <% else %>
-                <th><%= header %></th>
-              <% end %>
-            <% end %>
-          </tr>
-
-          <% statistic.rows.each do |p| %>
-            <tr class="<%= cycle("", "e") %>">
-              <% p.each do |r| %>
-                <%= r.render %>
-              <% end %>
-              <td class="f">&nbsp;</td>
-            </tr>
-          <% end %>
-          <% reset_cycle %>
-
-        </tbody>
-      </table>
-    </div>
+    <ul>
+      <% @statistics.each do |statistic| %>
+        <li>
+          <%= link_to statistic.name, "##{statistic.id}", style: "color:#33C;font-weight:normal" %>
+        </li>
+      <% end %>
+    </ul>
   </div>
-<% end %>
+
+  <% @statistics.each do |statistic| %>
+    <div id="<%= statistic.id %>">
+      <div class="row">
+        <h3>
+          <%= statistic.name %>
+          <% if statistic.subtitle %>
+            <small><%= statistic.subtitle %></small>
+          <% end %>
+        </h3>
+        <% tables = statistic.tables %>
+        <% tables.each do |t| %>
+          <div class="col-md-<%= 12 / tables.size %>">
+            <%= wca_table greedy_last_column: false, table_class: "statistics", floatThead: false do %>
+              <thead>
+                <tr>
+                  <% t.header.each do |r| %>
+                    <%= r.render %>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <% t.rows.each do |row| %>
+                  <tr>
+                    <% row.each do |td| %>
+                      <%= td.render %>
+                    <% end %>
+                  </tr>
+                <% end %>
+              </tbody>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
