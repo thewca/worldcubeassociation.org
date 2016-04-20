@@ -311,6 +311,10 @@ class User < ActiveRecord::Base
     self.team_members.where(team_leader: true).select(&:current_member?).map!(&:team).uniq
   end
 
+  def current_teams
+    self.team_members.select(&:current_member?).map!(&:team).uniq
+  end
+
   def admin?
     software_team?
   end

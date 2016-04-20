@@ -17,4 +17,8 @@ class Team < ActiveRecord::Base
       end
     end
   end
+
+  def current_members
+    self.team_members.where("end_date IS NULL OR end_date > ?", Date.today)
+  end
 end
