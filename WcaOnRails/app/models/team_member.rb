@@ -2,6 +2,8 @@ class TeamMember < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
 
+  scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
+
   attr_accessor :current_user
 
   def current_member?

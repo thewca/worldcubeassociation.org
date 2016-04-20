@@ -403,4 +403,17 @@ RSpec.describe User, type: :model do
       ]
     end
   end
+
+  it "#teams and #current_teams return unique team names" do
+    wrc_team = Team.find_by_friendly_id('wrc')
+    results_team = Team.find_by_friendly_id('results')
+    user = FactoryGirl.create(:user)
+
+    FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
+    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
+
+    expect(user.teams).to match_array [wrc_team, results_team]
+    expect(user.current_teams).to match_array [results_team]
+  end
 end

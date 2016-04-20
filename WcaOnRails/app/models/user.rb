@@ -11,8 +11,10 @@ class User < ActiveRecord::Base
   belongs_to :person, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
-  has_many :teams, through: :team_members
   has_many :team_members, dependent: :destroy
+  has_many :teams, -> { distinct }, through: :team_members
+  has_many :current_team_members, -> { current }, class_name: "TeamMember"
+  has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
@@ -309,10 +311,6 @@ class User < ActiveRecord::Base
 
   def teams_where_is_leader
     self.team_members.where(team_leader: true).select(&:current_member?).map!(&:team).uniq
-  end
-
-  def current_teams
-    self.team_members.select(&:current_member?).map!(&:team).uniq
   end
 
   def admin?
