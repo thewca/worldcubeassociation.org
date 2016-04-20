@@ -1,5 +1,6 @@
 class Team < ActiveRecord::Base
   has_many :team_members, dependent: :destroy
+  has_many :current_members, -> { current }, class_name: "TeamMember"
 
   accepts_nested_attributes_for :team_members, reject_if: :all_blank, allow_destroy: true
 
