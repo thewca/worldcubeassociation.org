@@ -1,4 +1,6 @@
 class CompetitionsController < ApplicationController
+  include ApplicationHelper
+
   PAST_COMPETITIONS_DAYS = 90
   before_action :authenticate_user!, except: [
     :index,
@@ -140,7 +142,7 @@ class CompetitionsController < ApplicationController
     if comp.start_date.nil? || comp.end_date.nil?
       date_range_str = "unscheduled"
     else
-      date_range_str = date_range(comp.start_date, comp.end_date)
+      date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
     end
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 

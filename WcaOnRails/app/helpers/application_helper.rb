@@ -196,4 +196,9 @@ module ApplicationHelper
   def processLinks_to_markdown(s)
     s ? s.gsub(/\[ *{([^}]+)} *{([^}]+)} *\]/, '[\1](\2)') : nil
   end
+
+  def wca_date_range(from_date, to_date, options={})
+    options[:separator] = '-'
+    date_range(from_date, to_date, options)
+  end
 end
