@@ -37,10 +37,4 @@ class ApplicationController < ActionController::Base
       redirect_to root_url
     end
   end
-
-  def date_range(from_date, to_date, options={})
-    options[:separator] = '-'
-    options[:format] = :long
-    super(from_date, to_date, options)
-  end
 end
