@@ -20,12 +20,14 @@
   <% @statistics.each do |statistic| %>
     <div id="<%= statistic.id %>">
       <div class="row">
-        <h3>
-          <%= statistic.name %>
-          <% if statistic.subtitle %>
-            <small><%= statistic.subtitle %></small>
-          <% end %>
-        </h3>
+        <div class="col-md-12">
+          <h3>
+            <%= statistic.name %>
+            <% if statistic.subtitle %>
+              <small><%= statistic.subtitle %></small>
+            <% end %>
+          </h3>
+        </div>
         <% tables = statistic.tables %>
         <% tables.each do |t| %>
           <div class="col-md-<%= 12 / tables.size %>">

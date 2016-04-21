@@ -105,6 +105,7 @@ module Statistics
                                  id: "sum_ranks_single",
                                  type: :average),
       Statistics::Top100.new(q),
+      Statistics::MostSubXSolves.new(q, [10, 9, 8, 7, 6]),
       Statistics::Blindfolded3x3SuccessStreak.new(q),
       Statistics::MostCompetitions.new(q),
     ]
