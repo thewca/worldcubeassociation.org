@@ -41,7 +41,7 @@ RSpec.describe Competition do
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.name).to eq "Alexander and the Terrible, Horrible, No Good 2015"
-    expect(competition.cellName).to eq "Alexander and the Terrible, Horrible,... 2015"
+    expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
   end
 
   it "saves without losing data" do
@@ -54,6 +54,7 @@ RSpec.describe Competition do
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
     expect(competition).to be_invalid
+    expect(competition.errors.messages[:name]).to eq ["The competition name must end in a year."]
   end
 
   it "requires that cellName end in a year" do
@@ -114,6 +115,20 @@ RSpec.describe Competition do
     competition.start_date = "1987-12-06"
     competition.end_date = "1988-12-07"
     expect(competition).to be_invalid
+  end
+
+  it "requires unapproved competition name is not greater than 32 characters" do
+    competition = FactoryGirl.create :competition
+    competition.showAtAll = false
+    competition.name = "A really long competition name 2016"
+    expect(competition).to be_invalid
+  end
+
+  it "competition name can be greater than 32 characters when approved" do
+    competition = FactoryGirl.create :competition
+    competition.showAtAll = true
+    competition.name = "A really long competition name 2016"
+    expect(competition).to be_valid
   end
 
   it "knows the calendar" do

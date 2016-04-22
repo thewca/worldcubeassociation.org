@@ -17,11 +17,10 @@ class Competition < ActiveRecord::Base
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
+  MAX_NAME_LENGTH = 32
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }
-  validates :name, length: { maximum: 50 },
-                   format: { with: ENDS_WITH_YEAR_RE }
-  MAX_CELL_NAME_LENGTH = 45
+  MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: ENDS_WITH_YEAR_RE }
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
@@ -37,6 +36,16 @@ class Competition < ActiveRecord::Base
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
+
+  validate :competition_name_validations
+  def competition_name_validations
+    if name.length > MAX_NAME_LENGTH && !self.showAtAll?
+      errors.add(:name, "Competition name can't be longer than 32 characters")
+    end
+    if !ENDS_WITH_YEAR_RE.match(name)
+      errors.add(:name, "The competition name must end in a year.")
+    end
+  end
 
   # We have stricter validations for confirming a competition
   [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
