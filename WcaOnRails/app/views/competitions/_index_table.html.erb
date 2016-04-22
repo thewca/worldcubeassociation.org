@@ -22,7 +22,7 @@
         </p>
         <p class="location"><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>
         <div class="venue-link">
-          <%=md(processLinks_to_markdown(competition.venue), target_blank: true) %>
+          <%=md(competition.venue, target_blank: true) %>
         </div>
       </span>
     </li>
