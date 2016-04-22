@@ -32,7 +32,7 @@ class TeamsController < ApplicationController
       flash[:success] = "Updated team"
       redirect_to edit_team_path(@team)
     else
-      flash[:danger] = "Failed to update team"
+      flash.now[:danger] = "Failed to update team"
       render :edit
     end
   end
