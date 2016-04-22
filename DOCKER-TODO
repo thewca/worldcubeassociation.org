@@ -1,0 +1,6 @@
+- stdin for debugging rails
+- travis to autobuild and push?
+- tests?
+- mysql max_packet_size? http://dba.stackexchange.com/questions/19135/mysql-error-reading-communication-packets
+- set up dev and test databases
+- install phantomjs on test
