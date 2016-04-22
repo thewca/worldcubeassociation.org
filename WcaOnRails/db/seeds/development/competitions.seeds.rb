@@ -4,13 +4,13 @@ after "development:users" do
   users = User.where.not(wca_id: nil).sample(93)
 
   # Create some past competitions with results
-  500.times do |i|
+  2.times do |i|
     day = i.days.ago
     eventIds = %w(333 333oh magic)
     competition = Competition.create!(
-      id: "My#{i}Comp#{day.year}",
-      name: "My #{i} Best Comp #{day.year}",
-      cellName: "My #{i} Comp #{day.year}",
+      id: "My#{i}ResultsComp#{day.year}",
+      name: "My #{i} Comp With Results #{day.year}",
+      cellName: "My #{i} Comp With Results #{day.year}",
       cityName: Faker::Address.city,
       countryId: Country::ALL_COUNTRIES.sample.id,
       information: "Information!",
@@ -55,6 +55,33 @@ after "development:users" do
         end
       end
     end
+  end
+
+  # Create a bunch of competitions just to fill up the competitions list
+  500.times do |i|
+    day = i.days.ago
+    eventIds = %w(333 333oh magic)
+    Competition.create!(
+      id: "My#{i}Comp#{day.year}",
+      name: "My #{i} Best Comp #{day.year}",
+      cellName: "My #{i} Comp #{day.year}",
+      cityName: Faker::Address.city,
+      countryId: Country::ALL_COUNTRIES.sample.id,
+      information: "Information!",
+      start_date: day.strftime("%F"),
+      end_date: day.strftime("%F"),
+      eventSpecs: eventIds.join(" "),
+      venue: Faker::Address.street_name,
+      website: "https://www.worldcubeassociation.org",
+      showAtAll: true,
+      delegates: [delegate],
+      organizers: User.all.sample(2),
+      use_wca_registration: true,
+      registration_open: 2.weeks.ago,
+      registration_close: 1.week.ago,
+      latitude_degrees: Random.new.rand(-90.0..90.0),
+      longitude_degrees: Random.new.rand(-180.0..180.0),
+    )
   end
 
   users.each_with_index do |user, i|
