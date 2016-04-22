@@ -279,18 +279,3 @@ server {
 }
 <% end %>
 <% end %>
-
-<% if @server_name.start_with? "www." %>
-# Redirect naked domain HTTP traffic to HTTP(S) on www....
-server {
-  server_name <%= @server_name.sub(/^www./, '') %>;
-
-  listen 80;
-
-<% if @https %>
-  return 301 https://www.$server_name$request_uri;
-<% else %>
-  return 301 http://www.$server_name$request_uri;
-<% end %>
-}
-<% end %>
