@@ -25,9 +25,9 @@
           <td><%= team.friendly_id %></td>
           <td><%= team.name %></td>
           <td><%= team.description %></td>
-          <td><%= team.team_members.map { |member| member.user.name }.to_sentence %></td>
+          <td><%= team.current_members.map { |member| member.user.name }.to_sentence %></td>
           <td>
-            <%= team.team_members.where(team_leader: true).map { |leader| leader.user.name }.sort.to_sentence %>
+            <%= team.current_members.where(team_leader: true).map { |leader| leader.user.name }.sort.to_sentence %>
           </td>
           <td><%= link_to "Manage team", edit_team_path(team) %></td>
         </tr>
