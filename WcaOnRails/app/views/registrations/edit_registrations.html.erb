@@ -100,26 +100,7 @@
           <% end %>
         </tbody>
 
-        <tfoot>
-          <tr>
-            <td colspan="4">
-              <%= render "registration_info_people", registrations: registrations %>
-            </td>
-            <% country_count = registrations.map(&:countryId).uniq.length %>
-            <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
-            <td></td>
-            <td></td>
-            <% @competition.events.each do |event| %>
-              <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
-            <% end %>
-            <td>
-              <% if @competition.guests_enabled? %>
-                <%= registrations.map(&:guests).reduce { |sum, guests| sum + guests } %>
-              <% end %>
-            </td>
-            <td colspan="3"></td>
-          </tr>
-        </tfoot>
+        <%= render "edit_registrations_table_footer", registrations: registrations %>
       <% end %>
     <% end %>
 

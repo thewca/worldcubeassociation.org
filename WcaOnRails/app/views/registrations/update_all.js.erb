@@ -38,3 +38,9 @@ $acceptedTable.find('tbody tr').removeClass('registration-pending').addClass('re
 
 $registrationsTable.bootstrapTable('uncheckAll');
 $registrationsTable.find('tr.selected').removeClass('selected');
+
+// Update registration table footers with summary info
+<% [:pending, :accepted].each do |status| %>
+  <% registrations = @competition.registrations.send(status) %>
+  $<%= status %>Table.find('tfoot').replaceWith('<%=j render "edit_registrations_table_footer", registrations: registrations %>');
+<% end %>
