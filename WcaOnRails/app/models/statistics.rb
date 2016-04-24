@@ -24,6 +24,14 @@ module Statistics
     end
   end
 
+  CompetitionTd = Struct.new(:id, :name) do
+    include ActionView::Helpers::FormHelper
+
+    def render
+      "<td>#{link_to name, Rails.application.routes.url_helpers.competition_path(id)}</td>".html_safe
+    end
+  end
+
   BoldNumberTd = Struct.new(:value) do
     def render
       "<td class=\"text-right\"><strong>#{value}</strong></td>".html_safe
@@ -112,6 +120,7 @@ module Statistics
       Statistics::MostSubXSolves.new(q, [10, 9, 8, 7, 6]),
       Statistics::BlindfoldedSuccessStreak.new(q),
       Statistics::BlindfoldedRecentSuccessRate.new(q),
+      Statistics::MostWorldRecords.new(q),
       Statistics::MostCompetitions.new(q),
     ]
   end
