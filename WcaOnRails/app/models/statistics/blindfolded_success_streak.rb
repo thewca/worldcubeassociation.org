@@ -1,6 +1,5 @@
 module Statistics
-
-  class Blindfolded3x3SuccessStreak < AbstractStatistic
+  class BlindfoldedSuccessStreak < AbstractStatistic
     # I actually want a ADT here, simulating it with
     # classes...
 
@@ -9,11 +8,12 @@ module Statistics
     class Streak
       def initialize
         @times = []
+        @finished = false
       end
 
       def <<(date_time)
         time = date_time.value
-        raise ArgumentError.new("must be a postive integer") unless time.is_a?(Fixnum) && time > 0
+        fail ArgumentError.new("must be a postive integer") unless time.is_a?(Fixnum) && time > 0
         @times << date_time
       end
 
@@ -22,7 +22,7 @@ module Statistics
       end
 
       def finished?
-        !!@finished
+        @finished
       end
 
       def size

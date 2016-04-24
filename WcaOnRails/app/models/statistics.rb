@@ -1,5 +1,3 @@
-require_relative './statistics/blindfolded_3x3_success_streak'
-
 module Statistics
   PersonTd = Struct.new(:id, :name) do
     include ActionView::Helpers::FormHelper
@@ -35,6 +33,12 @@ module Statistics
   NumberTd = Struct.new(:value) do
     def render
       "<td class=\"text-right\">#{value}</td>".html_safe
+    end
+  end
+
+  PercentageTd = Struct.new(:value) do
+    def render
+      "<td class=\"text-right\">#{"%.2f %" % (value * 100)}</td>".html_safe
     end
   end
 
@@ -106,7 +110,8 @@ module Statistics
                                  type: :average),
       Statistics::Top100.new(q),
       Statistics::MostSubXSolves.new(q, [10, 9, 8, 7, 6]),
-      Statistics::Blindfolded3x3SuccessStreak.new(q),
+      Statistics::BlindfoldedSuccessStreak.new(q),
+      Statistics::BlindfoldedRecentSuccessRate.new(q),
       Statistics::MostCompetitions.new(q),
     ]
   end
