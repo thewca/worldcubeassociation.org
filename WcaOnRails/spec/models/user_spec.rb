@@ -416,4 +416,23 @@ RSpec.describe User, type: :model do
     expect(user.teams).to match_array [wrc_team, results_team]
     expect(user.current_teams).to match_array [results_team]
   end
+
+  it 'former members of the results team are not considered current members' do
+    member = FactoryGirl.create :results_team
+    team_member = member.team_members.first
+    team_member.update_attributes!(end_date: 1.day.ago)
+
+    expect(member.reload.team_member?('results')).to eq false
+  end
+
+  it 'former leaders of the results team are not considered current leaders' do
+    leader = FactoryGirl.create :results_team
+    team_member = leader.team_members.first
+    team_member.update_attributes!(team_leader: true)
+    team_member.update_attributes!(end_date: 1.day.ago)
+
+    expect(leader.reload.team_leader?('results')).to eq false
+
+    expect(leader.teams_where_is_leader.count).to eq 0
+  end
 end
