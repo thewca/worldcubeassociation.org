@@ -109,15 +109,14 @@ function computeConciseRecords () {
 
     startTimer();
     echo "Building table Concise${valueName}Results...<br />\n";
-    
+
     dbCommand( "DROP TABLE IF EXISTS Concise${valueName}Results" );
     dbCommand("
       CREATE TABLE
         Concise${valueName}Results
       SELECT
-        result.id,
-        $valueSource,
-        valueAndId,
+        result.id resultId,
+        $valueSource value,
         personId,
         eventId,
         country.id countryId,
@@ -136,7 +135,7 @@ function computeConciseRecords () {
         AND competition.id = competitionId
         AND country.id     = result.countryId
     ");
-    
+
     stopTimer( "Concise${valueName}Results" );
     echo "... done<br /><br />\n";
   }
@@ -230,7 +229,7 @@ function computeRanks ( $valueSource, $valueName ) {
   #--- Free the result handle
   mysql_free_result( $personalRecords );
 
-  #--- Store the ranks of the last event  
+  #--- Store the ranks of the last event
   storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
 
   if( $missingPersonIDs )

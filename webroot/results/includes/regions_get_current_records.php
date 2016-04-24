@@ -23,7 +23,7 @@ function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {
       competition.cellName competitionName,
                        rank, year, month, day
     FROM
-      (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
+      (SELECT eventId recordEventId, MIN(value)
        FROM Concise{$valueName}Results
        WHERE 1 " . regionCondition('') . eventCondition() . yearCondition() . "
        GROUP BY eventId) record,
