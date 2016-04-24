@@ -302,15 +302,15 @@ class User < ActiveRecord::Base
   end
 
   def team_member?(team_friendly_id)
-    self.team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
+    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
   end
 
   def team_leader?(team_friendly_id)
-    self.team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).count > 0
+    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).count > 0
   end
 
   def teams_where_is_leader
-    self.team_members.where(team_leader: true).select(&:current_member?).map!(&:team).uniq
+    self.current_team_members.where(team_leader: true).map(&:team).uniq
   end
 
   def admin?

@@ -5,5 +5,4 @@ FactoryGirl.define do
     start_date "2016-02-18"
     end_date nil
   end
-
 end

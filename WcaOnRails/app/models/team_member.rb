@@ -17,13 +17,6 @@ class TeamMember < ActiveRecord::Base
     end
   end
 
-  validate :cannot_demote_leader
-  def cannot_demote_leader
-    if !current_member? && team_leader
-      errors.add(:team_leader, "A team leader must be a current member")
-    end
-  end
-
   validate :cannot_demote_oneself
   def cannot_demote_oneself
     if current_user == self.user_id && !current_member?
