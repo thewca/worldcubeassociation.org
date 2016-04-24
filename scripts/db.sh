@@ -24,7 +24,7 @@ if [ "$COMMAND" == "dump" ]; then
   sudo rm -rf $FOLDER
   mkdir -p $FOLDER
   for db_name in $db_names; do
-    echo "Backing up table $db_name to $FOLDER/$db_name.sql"
+    echo "Backing up database $db_name to $FOLDER/$db_name.sql"
     time mysqldump "$@" $db_name -r $FOLDER/$db_name.sql
   done
 elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
@@ -43,9 +43,9 @@ elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
 
   # Import .sql files in $FOLDER
   for sql_file in $FOLDER/*.sql; do
-    table_name=`basename $sql_file .sql`
-    echo "Importing $table_name table..."
-    mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $table_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;"
-    mysql "$@" $table_name -e "SOURCE $sql_file"
+    db_name=`basename $sql_file .sql`
+    echo "Importing $db_name database..."
+    mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;"
+    mysql "$@" $db_name -e "SOURCE $sql_file"
   done
 fi
