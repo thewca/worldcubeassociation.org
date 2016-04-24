@@ -229,8 +229,8 @@
 
       <%= f.input :information, hint: supports_md_message %>
       <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, only_delegates: true %>
-      <%= f.input :organizer_ids, hint: "Competition organizers.", as: :user_ids %>
-      <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. #{supports_md_message}".html_safe %>
+      <%= f.input :organizer_ids, hint: "Competition organizers (they need an account to be listed here).", as: :user_ids %>
+      <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. #{supports_md_message}. Example: [Text to display](mailto:some@email.com)".html_safe %>
       <%= f.input :website, hint: "The website of the competition. Must be a valid http(s) url.".html_safe %>
 
       <% event_groups = [
