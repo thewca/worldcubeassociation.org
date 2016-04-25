@@ -23,3 +23,6 @@ Style/TrailingCommaInLiteral:
 
 Style/GuardClause:
   Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
