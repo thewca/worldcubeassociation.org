@@ -50,6 +50,23 @@ wca.cancelPendingAjaxAndAjax = function(id, options) {
   return wca._pendingAjaxById[id];
 };
 
+wca._googleMapsLoaded = false;
+wca._onGoogleMapsLoaded = function() {
+  wca._googleMapsLoaded = true;
+  wca._googleMapsLoadedListeners.forEach(function(listener) {
+    listener();
+  });
+  wca._googleMapsLoadedListeners = null;
+};
+wca._googleMapsLoadedListeners = [];
+wca.addGoogleMapsLoadedListener = function(listener) {
+  if(wca._googleMapsLoaded) {
+    listener();
+  } else {
+    wca._googleMapsLoadedListeners.push(listener);
+  }
+};
+
 wca.competitionsToMarkers = function(map, competitions) {
   var markers = [];
 

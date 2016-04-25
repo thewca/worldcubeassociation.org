@@ -1,4 +1,5 @@
 <% provide(:title, @competition.name) %>
+<% provide(:include_gmaps, true) %>
 
 <%= render layout: 'nav' do %>
 
@@ -84,42 +85,61 @@
       </div>
       <script>
         (function() {
-          function roundToMicrodegrees($el) {
-            // To prevent are you sure? from firing even when nothing has changed,
-            // explicitly round coordinates to an integer number of microdegrees.
-            var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
-            $el.val(rounded);
-          }
           var $map = $('#venue-map-wrapper .map');
-          $map.locationpicker({
-            zoom: 8,
-            location: {
-              latitude: <%= @competition.latitude_degrees %>,
-              longitude: <%= @competition.longitude_degrees %>,
-            },
-            radius: 0,
-            scrollwheel: false,
-            inputBinding: {
-              latitudeInput: $('#competition_latitude'),
-              longitudeInput: $('#competition_longitude'),
-              locationNameInput: $('#googleMapsLocationInput')
-            },
-            enableAutocomplete: true,
-            oninitialized: function(component) {
-              roundToMicrodegrees($('#competition_latitude'));
-              roundToMicrodegrees($('#competition_longitude'));
-            },
-            onchanged: function(currentLocation, radius, isMarkerDropped) {
-              setTimeout(function() {
-                // The locationpicker library calls 'onchanged' before actually updating the input fields.
-                // setTimeout lets us wait until the inputs have actually changed.
+          wca.addGoogleMapsLoadedListener(function() {
+            function roundToMicrodegrees($el) {
+              // To prevent are you sure? from firing even when nothing has changed,
+              // explicitly round coordinates to an integer number of microdegrees.
+              var rounded = Math.trunc(parseFloat($el.val())*1e9) / 1e9;
+              $el.val(rounded);
+            }
+            $map.locationpicker({
+              zoom: 8,
+              location: {
+                latitude: <%= @competition.latitude_degrees %>,
+                longitude: <%= @competition.longitude_degrees %>,
+              },
+              radius: 0,
+              scrollwheel: false,
+              inputBinding: {
+                latitudeInput: $('#competition_latitude'),
+                longitudeInput: $('#competition_longitude'),
+                locationNameInput: $('#googleMapsLocationInput')
+              },
+              enableAutocomplete: true,
+              oninitialized: function(component) {
                 roundToMicrodegrees($('#competition_latitude'));
                 roundToMicrodegrees($('#competition_longitude'));
-                wca.fetchNearbyCompetitions();
-              }, 0);
-            },
+              },
+              onchanged: function(currentLocation, radius, isMarkerDropped) {
+                setTimeout(function() {
+                  // The locationpicker library calls 'onchanged' before actually updating the input fields.
+                  // setTimeout lets us wait until the inputs have actually changed.
+                  roundToMicrodegrees($('#competition_latitude'));
+                  roundToMicrodegrees($('#competition_longitude'));
+                  wca.fetchNearbyCompetitions();
+                }, 0);
+              },
+            });
+            var locationpicker = $map.data('locationpicker');
+
+            var dangerCircle = new google.maps.Circle({
+              map: locationpicker.map,
+              radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
+              strokeColor: '#d9534f', // @brand-danger
+              fillOpacity: 0.0,
+              clickable: false,
+            });
+            dangerCircle.bindTo('center', locationpicker.marker, 'position');
+            var warningCircle = new google.maps.Circle({
+              map: locationpicker.map,
+              radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
+              strokeColor: '#f0ad4e', // @brand-warning
+              fillOpacity: 0.0,
+              clickable: false,
+            });
+            warningCircle.bindTo('center', locationpicker.marker, 'position');
           });
-          var locationpicker = $map.data('locationpicker');
 
           wca.fetchNearbyCompetitions = function() {
             $("#nearby-competitions").addClass('loading');
@@ -155,53 +175,38 @@
 
           wca._nearbyCompetitionById = {};
           wca.setNearbyCompetitions = function(nearbyCompetitions) {
-            var desiredNearbyCompetitionById = _.indexBy(nearbyCompetitions, 'id');
+            wca.addGoogleMapsLoadedListener(function() {
+              var desiredNearbyCompetitionById = _.indexBy(nearbyCompetitions, 'id');
 
-            var desiredIds = Object.keys(desiredNearbyCompetitionById);
-            var currentIds = Object.keys(wca._nearbyCompetitionById);
-            var idsToAdd = _.difference(desiredIds, currentIds);
-            var idsToRemove = _.difference(currentIds, desiredIds);
+              var desiredIds = Object.keys(desiredNearbyCompetitionById);
+              var currentIds = Object.keys(wca._nearbyCompetitionById);
+              var idsToAdd = _.difference(desiredIds, currentIds);
+              var idsToRemove = _.difference(currentIds, desiredIds);
 
-            // First, remove all uneeded markers.
-            idsToRemove.forEach(function(id) {
-              wca._nearbyCompetitionById[id].marker.setMap(null);
-              delete wca._nearbyCompetitionById[id];
-            });
-
-            // Now create all the new markers.
-            idsToAdd.forEach(function(id) {
-              var c = desiredNearbyCompetitionById[id];
-              c.marker = new google.maps.Marker({
-                map: locationpicker.map,
-                position: {
-                  lat: c.latitude_degrees,
-                  lng: c.longitude_degrees,
-                },
-                title: c.name,
+              // First, remove all uneeded markers.
+              idsToRemove.forEach(function(id) {
+                wca._nearbyCompetitionById[id].marker.setMap(null);
+                delete wca._nearbyCompetitionById[id];
               });
-              wca._nearbyCompetitionById[id] = c;
+
+              var locationpicker = $map.data('locationpicker');
+              // Now create all the new markers.
+              idsToAdd.forEach(function(id) {
+                var c = desiredNearbyCompetitionById[id];
+                c.marker = new google.maps.Marker({
+                  map: locationpicker.map,
+                  position: {
+                    lat: c.latitude_degrees,
+                    lng: c.longitude_degrees,
+                  },
+                  title: c.name,
+                });
+                wca._nearbyCompetitionById[id] = c;
+              });
             });
 
             $("#nearby-competitions").removeClass('loading');
           };
-
-          var dangerCircle = new google.maps.Circle({
-            map: locationpicker.map,
-            radius: <%= (Competition::NEARBY_DISTANCE_KM_DANGER * 1000).to_json.html_safe %>,
-            strokeColor: '#d9534f', // @brand-danger
-            fillOpacity: 0.0,
-            clickable: false,
-          });
-          dangerCircle.bindTo('center', locationpicker.marker, 'position');
-          var warningCircle = new google.maps.Circle({
-            map: locationpicker.map,
-            radius: <%= (Competition::NEARBY_DISTANCE_KM_WARNING * 1000).to_json.html_safe %>,
-            strokeColor: '#f0ad4e', // @brand-warning
-            fillOpacity: 0.0,
-            clickable: false,
-          });
-          warningCircle.bindTo('center', locationpicker.marker, 'position');
-
         })();
       </script>
 
