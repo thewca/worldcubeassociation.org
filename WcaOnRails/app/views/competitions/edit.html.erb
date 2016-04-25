@@ -59,7 +59,7 @@
 
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>
-      <%= f.input :venue, hint: "The venue where the competition takes place. #{supports_md_message}".html_safe %>
+      <%= f.input :venue, hint: "The venue where the competition takes place. #{supports_md_message}. Example: [Text to display](http://somewebsite.com)".html_safe %>
       <%= f.input :venueDetails, hint: supports_md_message %>
       <%= f.input :venueAddress %>
 
