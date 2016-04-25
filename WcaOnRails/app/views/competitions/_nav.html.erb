@@ -135,22 +135,18 @@
       <h3><%= @competition.name %></h3>
       <hr />
 
-      <% if !@competition.showAtAll? %>
+      <% @competition.warnings.each do |field, message| %>
         <div class="alert alert-warning">
-          <strong>Note:</strong> This competition is not visible to the public.
+          <strong>Note:</strong>
+          <%= message %>
         </div>
       <% end %>
-      <% if !@competition.results_uploaded? %>
-        <% if @competition.is_over? %>
-          <div class="alert alert-info">
-            <strong>Note:</strong> This competition is over, we are working to upload the results as soon as possible!
-          </div>
-        <% end %>
-        <% if @competition.in_progress? %>
-          <div class="alert alert-info">
-            <strong>Note:</strong> This competition is ongoing. Come back after <%= @competition.end_date.to_formatted_s(:long) %> to see the results!
-          </div>
-        <% end %>
+
+      <% @competition.info.each do |field, message| %>
+        <div class="alert alert-info">
+          <strong>Note:</strong>
+          <%= message %>
+        </div>
       <% end %>
 
       <%= yield %>

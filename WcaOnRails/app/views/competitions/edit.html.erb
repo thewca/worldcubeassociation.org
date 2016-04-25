@@ -54,7 +54,7 @@
 
     <% if @competition_admin_view || !is_actually_confirmed %>
       <%= f.input :id %>
-      <%= f.input :name %>
+      <%= f.input :name, wrapper_html: { class: @competition.warnings[:name] ? "has-warning" : "" } %>
       <%= f.input :cellName %>
 
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
