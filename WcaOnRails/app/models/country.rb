@@ -31,6 +31,10 @@ class Country
     ALL_COUNTRIES
   end
 
+  def self.all_real
+    all.select { |country| country.name.exclude? "Multiple Countries" }
+  end
+
   def hash
     id.hash
   end

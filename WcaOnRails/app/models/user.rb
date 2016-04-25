@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
 
-  validates :country_iso2, inclusion: { in: Country.all.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
+  validates :country_iso2, inclusion: { in: Country.all_real.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
