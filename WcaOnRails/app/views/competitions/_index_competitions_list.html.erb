@@ -44,9 +44,11 @@
         }
       end.to_json.html_safe %>;
 
-      var competitionMarkers = wca.competitionsToMarkers(getCompetitionsMap(), competitions);
-      wca.competitionsMarkerCluster.clearMarkers();
-      wca.competitionsMarkerCluster.addMarkers(competitionMarkers);
+      wca.addGoogleMapsLoadedListener(function() {
+        var competitionMarkers = wca.competitionsToMarkers(getCompetitionsMap(), competitions);
+        wca.competitionsMarkerCluster.clearMarkers();
+        wca.competitionsMarkerCluster.addMarkers(competitionMarkers);
+      });
     });
   </script>
 <% end %>
