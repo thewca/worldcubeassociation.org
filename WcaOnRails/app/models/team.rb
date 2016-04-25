@@ -18,23 +18,4 @@ class Team < ActiveRecord::Base
       end
     end
   end
-
-  validate :member_cannot_be_empty
-  def member_cannot_be_empty
-    team_members.each do |member|
-      if member.user == nil
-        errors[:base] << "Team member cannot be empty"
-      end
-    end
-  end
-
-  validate :start_date_cannot_be_empty
-  def start_date_cannot_be_empty
-    team_members.each do |member|
-      if member.start_date == nil
-        errors[:base] << "Membership start cannot be empty"
-      end
-    end
-  end
-
 end
