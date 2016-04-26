@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     get 'results/by_person' => 'competitions#show_results_by_person'
 
     patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
+    get 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
