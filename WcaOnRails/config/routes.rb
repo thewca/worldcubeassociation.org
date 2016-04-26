@@ -33,7 +33,7 @@ Rails.application.routes.draw do
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
 
-    patch 'registrations/all' => 'registrations#update_all', as: :registrations_update_all
+    patch 'registrations/selected' => 'registrations#do_actions_for_slected', as: :registrations_do_actions_for_slected
     get 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event

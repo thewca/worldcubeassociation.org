@@ -22,7 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :edit]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_slected, :edit]
 
   def edit_registrations
     @competition = competition_from_params
@@ -114,7 +114,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def update_all
+  def do_actions_for_slected
     @competition = competition_from_params
     registrations = selected_registrations_from_params
 

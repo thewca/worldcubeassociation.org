@@ -2,7 +2,7 @@
 
 <%= render layout: 'nav' do %>
 
-  <%= form_for @competition, url: competition_registrations_update_all_path(@competition), remote: true do |f| %>
+  <%= form_for @competition, url: competition_registrations_do_actions_for_slected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted].each do |status| %>
       <% if :pending == status %>
         <h2>Waiting list</h2>
