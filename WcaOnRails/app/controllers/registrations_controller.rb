@@ -142,14 +142,16 @@ class RegistrationsController < ApplicationController
       end
       flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
     when "export-selected"
-      export_selected_registrations_url = competition_registrations_export_path({ format: :csv }.merge params.slice(:selected_registrations))
-      render js: "window.location = '#{export_selected_registrations_url}'" and return
     else
       raise "Unrecognized action #{params[:registrations_action]}"
     end
 
     respond_to do |format|
-      format.js { }
+      if params[:registrations_action] == "export-selected"
+        format.js { render "redirect_to_export" }
+      else
+        format.js { render "do_actions_for_slected" }
+      end
     end
   end
 
