@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "registrations/edit_registrations.csv.erb" do
+describe "registrations/export.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition
     competition.registrations.build(
@@ -17,6 +17,7 @@ describe "registrations/edit_registrations.csv.erb" do
       guests_old: 'jane', # will go away. https://github.com/cubing/worldcubeassociation.org/issues/403
     )
     assign(:competition, competition)
+    assign(:registrations, competition.registrations)
 
     render
     expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP\na,Bob,USA,\"\",1990-01-01,m,1,0,bob@bob.com,1 jane,\"\"\n"
