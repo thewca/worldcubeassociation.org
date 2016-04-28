@@ -21,8 +21,8 @@ RSpec.feature "competition results" do
   describe "by person" do
     it "displays the results for each person" do
       visit competition_results_by_person_path(competition)
-      expect(page).to have_content("#{person_1.name} USA")
-      expect(page).to have_content("#{person_2.name} USA")
+      expect(page).to have_content("#{person_1.name} - USA")
+      expect(page).to have_content("#{person_2.name} - USA")
     end
   end
 
