@@ -138,6 +138,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  scope :not_dummy_account, -> { where('wca_id = "" OR encrypted_password != "" OR email NOT LIKE "%@worldcubeassociation.org"') }
   def dummy_account?
     wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
   end
@@ -492,12 +493,10 @@ class User < ActiveRecord::Base
     if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
       users = User
 
-      if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:include_dummy_accounts])
-        # Ignore dummy accounts
-        users = users.where.not(encrypted_password: '')
-        # Ignore unconfirmed accounts
-        users = users.where.not(confirmed_at: nil)
-      end
+      users = users.where.not(confirmed_at: nil)
+
+      # Ignore dummy accounts
+      users = users.not_dummy_account
 
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
         users = users.where.not(delegate_status: nil)

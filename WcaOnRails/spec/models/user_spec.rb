@@ -10,6 +10,16 @@ RSpec.describe User, type: :model do
     user = FactoryGirl.create :dummy_user
     expect(user).to be_valid
     expect(user.dummy_account?).to be true
+    users = User.search("")
+    expect(users.count).to eq 0
+  end
+
+  it "search can find people who never logged in, but aren't dummy accounts" do
+    user = FactoryGirl.create :user, encrypted_password: ""
+    expect(user.dummy_account?).to be false
+    users = User.search("")
+    expect(users.count).to eq 1
+    expect(users.first).to eq user
   end
 
   it "allows empty country" do

@@ -63,8 +63,8 @@ describe Api::V0::ApiController do
     end
 
     it 'does not find dummy accounts' do
-      user.update_column(:encrypted_password, "")
-      get :users_search, q: "erem"
+      FactoryGirl.create :dummy_user, name: "Aaron"
+      get :users_search, q: "aaron"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 0
