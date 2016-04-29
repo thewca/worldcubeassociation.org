@@ -299,8 +299,8 @@ $venue-map-wrapper-height: 400px;
   background-color: transparentize(white, 0.5);
   .spinner-wrapper {
     position: absolute;
-    top: 50%;
+    top: 10px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
   }
 }
