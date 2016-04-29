@@ -40,7 +40,6 @@ gem 'carrierwave'
 gem 'carrierwave-crop', git: "git://github.com/jfly/carrierwave-crop.git"
 
 gem 'mini_magick'
-gem 'system'
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
