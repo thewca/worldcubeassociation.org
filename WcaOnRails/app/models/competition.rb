@@ -487,6 +487,7 @@ class Competition < ActiveRecord::Base
       results
         .where(roundId: Round.final_rounds.map(&:id))
         .where("pos >= 1 AND pos <= 3")
+        .order(:pos)
     ).group_by(&:event)
       .sort_by { |event, _results| event.rank }
   end
