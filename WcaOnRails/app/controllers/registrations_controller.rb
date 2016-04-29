@@ -22,18 +22,10 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :update_all, :edit]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit]
 
   def edit_registrations
-    @competition_registration_view = true
     @competition = competition_from_params
-    respond_to do |format|
-      format.html
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"#{@competition.id}-registration.csv\""
-        headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
-      end
-    end
   end
 
   def psych_sheet
@@ -104,13 +96,28 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def update_all
-    @competition_registration_view = true
-    @competition = competition_from_params
-    registration_ids = params[:selected_registrations].map { |r| r.split('-')[1] }
-    registrations = registration_ids.map do |registration_id|
-      @competition.registrations.find_by_id!(registration_id)
+  private def selected_registrations_from_params
+    params[:selected_registrations].map { |r| r.split('-')[1] }.map do |registration_id|
+      competition_from_params.registrations.find_by_id!(registration_id)
     end
+  end
+
+  def export
+    @competition = competition_from_params
+    @registrations = selected_registrations_from_params
+
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{@competition.id}-registration.csv\""
+        headers['Content-Type'] ||= 'text/csv; charset=UTF-8'
+      end
+    end
+  end
+
+  def do_actions_for_selected
+    @competition = competition_from_params
+    registrations = selected_registrations_from_params
+
     case params[:registrations_action]
     when "accept-selected"
       registrations.each do |registration|
@@ -134,12 +141,17 @@ class RegistrationsController < ApplicationController
         RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now
       end
       flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
+    when "export-selected"
     else
       raise "Unrecognized action #{params[:registrations_action]}"
     end
 
     respond_to do |format|
-      format.js { }
+      if params[:registrations_action] == "export-selected"
+        format.js { render :redirect_to_export }
+      else
+        format.js { render :do_actions_for_selected }
+      end
     end
   end
 

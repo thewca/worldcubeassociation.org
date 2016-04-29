@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
 
   it "can confirm a user who has never competed before" do
     user = FactoryGirl.build :user, unconfirmed_wca_id: ""
-    user.confirm!
+    user.confirm
   end
 
   it "doesn't allow demotion of a senior delegate with subordinate delegates" do
