@@ -188,6 +188,37 @@ $venue-map-wrapper-height: 400px;
 
 #search-results {
   position: relative;
+
+  #loading {
+    display: none;
+    position: absolute;
+    margin: 0 15px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background-color: transparentize(white, 0.5);
+    .spinner-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &.competitions-list #loading .spinner-wrapper {
+    top: 30px;
+  }
+
+  &.competitions-list #competitions-map {
+    display: none;
+  }
+
+  &.competitions-map #competitions-list {
+    display: none;
+  }
+
   #competitions-list {
 
     li:nth-child(odd) {
@@ -285,26 +316,4 @@ $venue-map-wrapper-height: 400px;
   height: 40px;
   margin-top: -40px;
   visibility: hidden;
-}
-
-#loading {
-  display: none;
-  position: absolute;
-  margin: 0 15px;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  background-color: transparentize(white, 0.5);
-  .spinner-wrapper {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.competitions-map #loading .spinner-wrapper {
-  top: 50%;
 }
