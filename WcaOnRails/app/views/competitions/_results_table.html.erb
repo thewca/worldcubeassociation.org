@@ -42,8 +42,10 @@
         <% if !hide_event %>
           <td class="event">
             <% if !result.muted %>
-              <span class="cubing-icon icon-<%= result.event.id %>"></span>
-              <%= result.event.cellName %>
+              <%= link_to competition_results_all_path(@competition, anchor: "e#{result.event.id}") do %>
+                <span class="cubing-icon icon-<%= result.event.id %>"></span>
+                <%= result.event.cellName %>
+              <% end %>
             <% end %>
           </td>
         <% end %>
