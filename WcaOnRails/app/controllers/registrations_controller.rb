@@ -22,7 +22,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_slected, :edit]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit]
 
   def edit_registrations
     @competition = competition_from_params
@@ -114,7 +114,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def do_actions_for_slected
+  def do_actions_for_selected
     @competition = competition_from_params
     registrations = selected_registrations_from_params
 
@@ -148,9 +148,9 @@ class RegistrationsController < ApplicationController
 
     respond_to do |format|
       if params[:registrations_action] == "export-selected"
-        format.js { render "redirect_to_export" }
+        format.js { render :redirect_to_export }
       else
-        format.js { render "do_actions_for_slected" }
+        format.js { render :do_actions_for_selected }
       end
     end
   end
