@@ -1,16 +1,43 @@
-.members {
-  border-top: 1px solid $gray;
-  padding-top: 2px;
+table.team-members {
+  tr {
+    th {
+      text-align: center;
+    }
 
-  input.date_picker.form-control {
-    width: 120px;
+    td {
+      vertical-align: middle;
+      &.team-leader {
+        text-align: center;
+      }
+    }
   }
 
-  div.selectize-control {
-    width: 280px;
+  .member {
+    &.past-member {
+      background-color: $past-member-color;
+    }
+
+    .form-group {
+      margin: 0;
+    }
+
+    input.date_picker.form-control {
+      width: 120px;
+      position: static;
+    }
+
+    div.selectize-control {
+      width: 300px;
+    }
   }
 }
 
-.past-member {
-  background-color: $past-member-color;
+// Prevent .table-responsive from hiding a DataTimePicker when it overflows.
+.team-members-wrapper .table-responsive {
+  overflow-x: visible;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 15px;
 }

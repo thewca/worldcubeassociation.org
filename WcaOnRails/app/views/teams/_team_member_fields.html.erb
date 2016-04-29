@@ -1,6 +1,7 @@
-<div class="members">
-  <%= f.input :user_id, required: true, as: :user_ids, only_one: true %>
-  <%= f.input :start_date, as: :date_picker, required: true %>
-  <%= f.input :end_date, as: :date_picker %>
-  <%= f.input :team_leader %>
-</div>
+<tr class="member <%= f.object.current_member? ? '' : 'past-member'%>">
+  <td><%= f.input :user_id, required: true, as: :user_ids, only_one: true, label: false %></td>
+  <td><%= f.input :start_date, as: :date_picker, required: true, label: false %></td>
+  <td><%= f.input :end_date, as: :date_picker, label: false %></td>
+  <td class="team-leader"><%= f.input :team_leader, label: false %></td>
+  <td></td> <!-- Extra column for .table-greedy-last-column -->
+</tr>
