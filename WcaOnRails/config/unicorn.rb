@@ -30,7 +30,6 @@ else
   stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
   stdout_path "#{dir}/log/unicorn-#{rack_env}.log"
 
-  require 'system'
   worker_processes (cpu_count * 1.5).ceil
 end
 
