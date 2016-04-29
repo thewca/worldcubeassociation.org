@@ -166,12 +166,20 @@ table.wca-results {
     &.solve4,
     &.solve5, {
       text-align: right;
+      &::before {
+        content: '(';
+        opacity: 0;
+      }
+      &::after {
+        content: ')';
+        opacity: 0;
+      }
       &.trimmed {
         &::before {
-          content: '(';
+          opacity: 1;
         }
         &::after {
-          content: ')';
+          opacity: 1;
         }
       }
     }

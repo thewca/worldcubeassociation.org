@@ -4,6 +4,10 @@ after "development:users" do
       all_official = Event.all_official.map(&:id)
       all_official.sample(rand(1..all_official.count))
     end
+
+    def random_wca_value
+      rand(5000..100000)
+    end
   end
 
   delegate = User.find_by(delegate_status: "delegate")
@@ -33,8 +37,8 @@ after "development:users" do
       use_wca_registration: true,
       registration_open: 2.weeks.ago,
       registration_close: 1.week.ago,
-      latitude_degrees: Random.new.rand(-90.0..90.0),
-      longitude_degrees: Random.new.rand(-180.0..180.0),
+      latitude_degrees: rand(-90.0..90.0),
+      longitude_degrees: rand(-180.0..180.0),
     )
 
     eventIds.each do |eventId|
@@ -50,13 +54,13 @@ after "development:users" do
             eventId: eventId,
             roundId: roundId,
             formatId: "a",
-            value1: 4242 + i*1000,
-            value2: 4242 + i*1000,
-            value3: 4242 + i*1000,
-            value4: 6000 + i*1000,
-            value5: 4000 + i*1000,
-            best: 4000 + i*1000,
-            average: 4242 + i*1000,
+            value1: random_wca_value,
+            value2: random_wca_value,
+            value3: random_wca_value,
+            value4: random_wca_value,
+            value5: random_wca_value,
+            best: random_wca_value,
+            average: random_wca_value,
             regionalSingleRecord: i == 0 ? "WR" : "",
             regionalAverageRecord: i == 0 ? "WR" : "",
           )
@@ -89,8 +93,8 @@ after "development:users" do
       use_wca_registration: true,
       registration_open: 2.weeks.ago,
       registration_close: 1.week.ago,
-      latitude_degrees: Random.new.rand(-90.0..90.0),
-      longitude_degrees: Random.new.rand(-180.0..180.0),
+      latitude_degrees: rand(-90.0..90.0),
+      longitude_degrees: rand(-180.0..180.0),
     )
   end
 
@@ -140,8 +144,8 @@ after "development:users" do
       use_wca_registration: true,
       registration_open: 1.week.ago,
       registration_close: start_day - (1.week),
-      latitude_degrees: Random.new.rand(-90.0..90.0),
-      longitude_degrees: Random.new.rand(-180.0..180.0),
+      latitude_degrees: rand(-90.0..90.0),
+      longitude_degrees: rand(-180.0..180.0),
     )
 
     # Create registrations for some competitions taking place far in the future
