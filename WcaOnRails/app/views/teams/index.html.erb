@@ -3,35 +3,36 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% can_edit = current_user.can_edit_users? %>
-  <% if can_edit %>
-    <%= link_to "New team", new_team_path %>
-  <% end %>
-
   <% if @teams.empty? %>
     <div class="alert alert-warning">There are currently no teams.</div>
   <% else %>
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Members</th>
-        <th>Leader(s)</th>
-        <th></th>
-      </tr>
-      <% @teams.each do |team| %>
+    <div class="table-responsive">
+      <table class="table teams-table">
         <tr>
-          <td><%= team.friendly_id %></td>
-          <td><%= team.name %></td>
-          <td><%= team.description %></td>
-          <td><%= team.current_members.map { |member| member.user.name }.to_sentence %></td>
-          <td>
-            <%= team.current_members.where(team_leader: true).map { |leader| leader.user.name }.sort.to_sentence %>
-          </td>
-          <td><%= link_to "Manage team", edit_team_path(team) %></td>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Members</th>
+          <th>Leader(s)</th>
+          <th></th>
         </tr>
-      <% end %>
-    </table>
+        <% @teams.each do |team| %>
+          <tr>
+            <td><%= team.friendly_id %></td>
+            <td><%= team.name %></td>
+            <td><%= team.description %></td>
+            <td><%= team.current_members.map { |member| member.user.name }.to_sentence %></td>
+            <td>
+              <%= team.current_members.where(team_leader: true).map { |leader| leader.user.name }.sort.to_sentence %>
+            </td>
+            <td><%= link_to icon("pencil-square-o", "Manage"), edit_team_path(team), class: "btn btn-success" %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+
+  <% if current_user.can_edit_users? %>
+    <%= link_to icon("plus", "New team"), new_team_path, class: "btn btn-primary" %>
   <% end %>
 </div>

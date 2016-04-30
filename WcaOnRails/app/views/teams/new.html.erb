@@ -1,11 +1,12 @@
 <% provide(:title, 'Create team') %>
 
-<div class="container">
+<div class="container new-team">
   <h1><%= yield(:title) %></h1>
 
   <%= simple_form_for @team, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form do |f| %>
     <%= f.input :name, required: true %>
 
+    <%= link_to icon("undo", "Back to Teams"), teams_path, class: "btn btn-default teams-home" %>
     <button type="submit" class="btn btn-success">Create team</button>
   <% end %>
 </div>
