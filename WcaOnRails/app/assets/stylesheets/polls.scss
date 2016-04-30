@@ -14,22 +14,36 @@
 
 }
 
-.polls-list {
+table.polls-list {
   width: auto;
+
+  tr td {
+    vertical-align: middle;
+
+    p {
+      margin: 0;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
 }
 
-.nested-fields input {
-  width: 300px;
-  display: inline;
-}
+.nested-fields {
+  margin: 5px 0;
 
-.polls-home {
-  margin-top: 20px;
-  position: relative;
-  display: block;
+  input {
+    width: 300px;
+    display: inline;
+  }
 }
 
 /*This is necessary because the "md" (Markdown) generates a <p> element, and we want the option label to appear inline with the radio/check*/
 .checkbox p {
   display: inline;
+}
+
+.new-poll {
+  text-align: center;
 }

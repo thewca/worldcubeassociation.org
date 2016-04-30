@@ -41,7 +41,11 @@
 
       <% if @poll.confirmed %>
         <%= f.input :comment, required: false %>
+      <% end %>
 
+      <%= link_to icon("undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
+
+      <% if @poll.confirmed %>
         <button type="submit" class="btn btn-success">
           <%= !@vote.new_record? ? "Update vote" : "Vote" %>
         </button>
@@ -52,5 +56,4 @@
   <% else %>
     <div class="alert alert-danger">Voting is not open</div>
   <% end %>
-  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
 </div>
