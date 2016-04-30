@@ -6,7 +6,7 @@
     </div>
     <div class="panel-body">
       <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { class: 'are-you-sure no-submit-on-enter' }) do |f| %>
-        <%= f.input :email, required: true %>
+        <%= f.input :email, required: true, autofocus: true %>
         <%= resource.password %>
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
