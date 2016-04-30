@@ -1,7 +1,7 @@
 <% provide(:title, 'Create team') %>
 
 <div class="container new-team">
-  <h1><%= yield(:title) %></h1>
+  <h1>Create a new team</h1>
 
   <%= simple_form_for @team, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form do |f| %>
     <%= f.input :name, required: true %>
