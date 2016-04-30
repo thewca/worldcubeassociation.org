@@ -180,9 +180,24 @@ describe TeamsController do
       it 'cannot add overlapping membership periods for the same user'do
         member = FactoryGirl.create :user
         patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
-                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false }} }
+                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
+      end
+
+      it 'does not see an exception when tries to add another membership for the same user without start_date' do
+        member = FactoryGirl.create :user
+        expect do
+          patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today+10, end_date: Date.today+5 },
+                                                                      "1" => { user_id: member.id, start_date: nil, end_date: Date.today+10 } } }
+        end.to_not raise_error
+      end
+
+      it 'does not see an exception when tries to add a member with end_date but without the start_date' do
+        member = FactoryGirl.create :user
+        expect do
+          patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } }
+        end.to_not raise_error
       end
     end
   end
