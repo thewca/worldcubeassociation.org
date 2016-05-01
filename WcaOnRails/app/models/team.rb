@@ -6,7 +6,7 @@ class Team < ActiveRecord::Base
 
   validate :membership_periods_cannot_overlap_for_single_user
   def membership_periods_cannot_overlap_for_single_user
-    team_members.group_by(&:user).each do |user, memberships|
+    team_members.select(&:valid?).group_by(&:user).each do |user, memberships|
       memberships.combination(2).to_a.each do |memberships_pair|
         first, second = memberships_pair
         first_period = first.start_date..(first.end_date || Date::Infinity.new)
