@@ -149,29 +149,31 @@ function checkRounds () {
       $isThisRoundQuals = false;
 
       # Article 9m, since April 9, 2008
-      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 9, 2008 ))
+      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 9, 2008 )) {
         if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
+        }
       }
 
       # Article 9m/n/o, since July 20, 2006 until April 8, 2008
-      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 9, 2008 )))
+      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 9, 2008 ))) {
         if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
+        }
       }
 
       $nbQualPersons = $isPrevRoundQuals ? getQualifications( $competitionId, $eventId, $prevRoundId, $roundId ) : $nbPersons;
 
       # Article 9p1, since April 14, 2010
-      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 14, 2010 ))
+      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 14, 2010 )) {
         if ( $nbQualPersons > ( 3*$prevNbPersons/4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
@@ -179,9 +181,10 @@ function checkRounds () {
           echo "<br /><hr />";
           $wrongs++;
         }
+      }
 
       # Article 9p, since July 20, 2006 until April 13, 2010
-      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 14, 2010 )))
+      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 14, 2010 ))) {
         if ( $nbQualPersons >= $prevNbPersons ) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
@@ -189,6 +192,7 @@ function checkRounds () {
           echo "<br /><hr />";
           $wrongs++;
         }
+      }
     }
     $nbRounds += 1;
     $prevNbPersons = $nbPersons;
