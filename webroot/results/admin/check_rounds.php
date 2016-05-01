@@ -91,6 +91,43 @@ function checkRounds () {
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";
 
+    $subsequentRoundCount = 0;
+    while(true) {
+      $nextRoundIndex = $i + $subsequentRoundCount + 1;
+      if($nextRoundIndex >= count($roundRows)) {
+        break;
+      }
+      $nextRoundRow = $roundRows[$nextRoundIndex];
+      if($nextRoundRow['competitionId'] != $competitionId || $nextRoundRow['eventId'] != $eventId) {
+        break;
+      }
+      $subsequentRoundCount++;
+    }
+
+    # Expanded Article 9m, since April 18, 2016
+    if (mktime( 0, 0, 0, 4, 18, 2016 ) <= $competitionDate) {
+      if($nbPersons <= 7) {
+        # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
+        $maxAllowedSubsequentRoundCount = 0;
+      } else if($nbPersons <= 15) {
+        # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
+        $maxAllowedSubsequentRoundCount = 1;
+      } else if($nbPersons <= 99) {
+        # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
+        $maxAllowedSubsequentRoundCount = 2;
+      } else {
+        # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
+        $maxAllowedSubsequentRoundCount = 3;
+      }
+
+      if($subsequentRoundCount > $maxAllowedSubsequentRoundCount) {
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p>There were $nbPersons competitors in this round, and $subsequentRoundCount subsequent round(s), which is more than the allowed $maxAllowedSubsequentRoundCount subsequent round(s).</p>";
+        echo "<br /><hr />";
+        $wrongs++;
+      }
+    }
+
     #--- First round
     if ( $event != $prevEvent ) {
       $nbRounds = 1;
