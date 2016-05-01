@@ -55,7 +55,7 @@
         <% end %>
 
         <div class="links">
-          <%= link_to_add_association button_tag('Add option', type: "button", class: "btn btn-primary"), f, :poll_options %>
+          <%= link_to_add_association button_tag(icon("plus", "Add option"), type: "button", class: "btn btn-primary"), f, :poll_options %>
         </div>
       </div>
     </div>
@@ -72,6 +72,6 @@
       </div>
     </div>
   <% end %>
-  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
+  <%= link_to icon("undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
 
 </div>

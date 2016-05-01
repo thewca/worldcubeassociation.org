@@ -44,5 +44,5 @@
       Voting is not closed yet. Please come back on <%= wca_local_time(@poll.deadline) %>, in <%= distance_of_time_in_words_to_now(@poll.deadline) %> to see the results.
     </div>
   <% end %>
-  <%= link_to 'Back to Polls', polls_path, class: "polls-home" %>
+  <%= link_to icon("undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
 </div>

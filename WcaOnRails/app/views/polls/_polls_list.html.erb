@@ -9,17 +9,17 @@
       </td>
       <td>
         <% if poll.over? %>
-          <%= link_to "Results", polls_results_path(poll) %>
+          <%= link_to "Results", polls_results_path(poll), class: "btn btn-xs btn-info" %>
         <% else %>
           <% if poll.user_already_voted?(current_user) %>
-            <%= link_to "Edit vote", polls_vote_path(poll) %>
+            <%= link_to "Edit vote", polls_vote_path(poll), class: "btn btn-xs btn-info" %>
           <% else %>
-            <%= link_to "Vote", polls_vote_path(poll) %>
+            <%= link_to "Vote", polls_vote_path(poll), class: "btn btn-xs btn-info" %>
           <% end %>
         <% end %>
       </td>
       <% if current_user.can_create_poll? %>
-        <td><%= link_to "Edit", edit_poll_path(poll) %></td>
+        <td><%= link_to "Edit", edit_poll_path(poll), class: "btn btn-xs btn-success" %></td>
       <% end %>
     </tr>
   <% end %>

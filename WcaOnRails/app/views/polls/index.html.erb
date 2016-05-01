@@ -1,12 +1,13 @@
 <% provide(:title, 'Polls') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
+  <h1>
+    <%= yield(:title) %>
 
-  <% can_create = current_user.can_create_poll? %>
-  <% if can_create %>
-    <%= link_to "New poll", new_poll_path %>
-  <% end %>
+    <% if current_user.can_create_poll? %>
+      <%= link_to icon("plus", "New"), new_poll_path, class: "btn btn-primary" %>
+    <% end %>
+  </h1>
 
   <% if @polls.empty? %>
     <div class="alert alert-warning">There are currently no polls.</div>
