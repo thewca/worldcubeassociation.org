@@ -90,6 +90,7 @@ function checkRounds () {
   foreach( $roundRows as $i => $roundRow ){
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";
+    $competitionDate = mktime( 0, 0, 0, $month, $day, $year );
 
     $subsequentRoundCount = 0;
     while(true) {
@@ -151,7 +152,7 @@ function checkRounds () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
-        if(( $i+1 ) < count( $roundRows )){ #--- Should be true.
+        if($subsequentRoundCount > 0) {
           $nextRoundId = $roundRows[$i+1]['roundId'];
           showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
         }
@@ -167,10 +168,9 @@ function checkRounds () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
-        if(( $i+1 ) < count( $roundRows )) #--- Is not always true.
-          if(( $roundRows[$i+1]['competitionId'] == $competitionId ) && ( $roundRows[$i+1]['eventId'] == $eventId )){ #--- Idem
-            $nextRoundId = $roundRows[$i+1]['roundId'];
-            showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
+        if($subsequentRoundCount > 0) {
+          $nextRoundId = $roundRows[$i+1]['roundId'];
+          showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
         }
 
         echo "<p>All persons that competed in $eventId are in $roundCellName. It should thus not be indicated as Qualification round</p>";
@@ -184,8 +184,6 @@ function checkRounds () {
     # Following rounds
     else {
       $isThisRoundQuals = false;
-
-      $competitionDate = mktime( 0, 0, 0, $month, $day, $year );
 
       # Article 9m, since April 9, 2008 until April 17, 2016
       if (mktime( 0, 0, 0, 4, 9, 2008 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 17, 2016 )) {
