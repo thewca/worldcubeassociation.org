@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
-  before_action :normalize_preferred_event_ids, only: [:update]
 
   def self.WCA_TEAMS
     %w(software results wdc wrc)
@@ -76,7 +75,7 @@ class UsersController < ApplicationController
     redirect_if_cannot_edit_user(@user) and return
 
     old_confirmation_sent_at = @user.confirmation_sent_at
-    dangerous_change = current_user == @user && (user_params.key?(:password) || user_params.key?(:password_confirmation) || user_params.key?(:email))
+    dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
@@ -92,7 +91,7 @@ class UsersController < ApplicationController
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
         redirect_to profile_claim_wca_id_path
       else
-        redirect_to edit_user_url(@user, section: params[:section])
+        redirect_to edit_user_url(@user, params.permit(:section))
       end
     else
       # update_with_password clears password and password_confirmation, but we
@@ -131,21 +130,20 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    user_params = params.require(:user).permit(*current_user.editable_fields_of_user(user_to_edit))
+    permitted_params = current_user.editable_fields_of_user(user_to_edit).to_a
+    permitted_params.delete :preferred_event_ids
+    permitted_params.push(preferred_event_ids: Event.all_official.map(&:id))
+
+    user_params = params.require(:user).permit(permitted_params)
     if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end
     if user_params.key?(:wca_id)
       user_params[:wca_id] = user_params[:wca_id].upcase
     end
-    user_params
-  end
-
-  private def normalize_preferred_event_ids
-    if params[:user].key?(:preferred_event_ids)
-      if params[:user][:preferred_event_ids].is_a?(ActionController::Parameters)
-        params[:user][:preferred_event_ids] = params[:user][:preferred_event_ids].select { |k, v| v == "1" }.keys.join " "
-      end
+    if user_params.key?(:preferred_event_ids)
+      user_params[:preferred_event_ids] = user_params[:preferred_event_ids].select { |k, v| v == "1" }.keys.join " "
     end
+    user_params
   end
 end

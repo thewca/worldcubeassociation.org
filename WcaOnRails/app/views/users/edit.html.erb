@@ -83,7 +83,7 @@
 
   <div class="tab-content" id="edit-user-tabs">
     <div class="tab-pane" id="general">
-      <%= simple_form_for @user, html: { multipart: true }, class: 'are-you-sure' do |f| %>
+      <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
         <%= hidden_field_tag "section", "general" %>
         <% if @user.wca_id.present? %>
             <div class="row">
