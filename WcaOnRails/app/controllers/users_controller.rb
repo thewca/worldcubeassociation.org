@@ -142,7 +142,7 @@ class UsersController < ApplicationController
       user_params[:wca_id] = user_params[:wca_id].upcase
     end
     if user_params.key?(:preferred_event_ids)
-      user_params[:preferred_event_ids] = user_params[:preferred_event_ids].select { |k, v| v == "1" }.keys.join " "
+      user_params[:preferred_event_ids] = user_params[:preferred_event_ids].select { |_k, v| v == "1" }.keys.join " "
     end
     user_params
   end
