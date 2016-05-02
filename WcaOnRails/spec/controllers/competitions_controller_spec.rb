@@ -207,6 +207,13 @@ describe CompetitionsController do
         # attributes.
         expect(new_comp.showAtAll).to eq false
         expect(new_comp.isConfirmed).to eq false
+        # We don't want to clone its dates.
+        %w(year month day endMonth endDay).each do |attribute|
+          expect(new_comp.send(attribute)).to eq 0
+        end
+        # The default registration dates should be set.
+        expect(new_comp.registration_open).to be_within(1.second).of(1.week.from_now)
+        expect(new_comp.registration_close).to be_within(1.second).of(2.weeks.from_now)
 
         # Cloning a competition should clone its organizers.
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
