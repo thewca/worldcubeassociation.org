@@ -696,6 +696,7 @@ CREATE TABLE `users` (
   `dob` date DEFAULT NULL,
   `gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `preferred_event_ids` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -863,4 +864,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160406192349');
 INSERT INTO schema_migrations (version) VALUES ('20160407005537');
 
 INSERT INTO schema_migrations (version) VALUES ('20160407210623');
+
+INSERT INTO schema_migrations (version) VALUES ('20160502113530');
 
