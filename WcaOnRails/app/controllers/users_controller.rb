@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
+  before_action :normalize_preferred_event_ids, only: [:update]
 
   def self.WCA_TEAMS
     %w(software results wdc wrc)
@@ -136,5 +137,13 @@ class UsersController < ApplicationController
       user_params[:wca_id] = user_params[:wca_id].upcase
     end
     user_params
+  end
+
+  private def normalize_preferred_event_ids
+    if params[:user].key?(:preferred_event_ids)
+      if params[:user][:preferred_event_ids].is_a?(ActionController::Parameters)
+        params[:user][:preferred_event_ids] = params[:user][:preferred_event_ids].select { |k, v| v == "1" }.keys.join " "
+      end
+    end
   end
 end

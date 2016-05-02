@@ -294,6 +294,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def preferred_events
+    (preferred_event_ids || "").split.map { |e| Event.find_by_id(e) }.sort_by(&:rank)
+  end
+
   def software_team?
     team_member?('software')
   end
@@ -447,6 +451,7 @@ class User < ActiveRecord::Base
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
+      fields << :preferred_event_ids
     end
     if admin? || board_member?
       fields << :delegate_status

@@ -102,6 +102,10 @@
 
     <% if @user == current_user %>
       <%= f.input :email, disabled: !editable_fields.include?(:email), hint: "Changing your email will require confirming the new email." %>
+
+      <%= f.input :preferred_event_ids, as: :events_picker, allowed_events: Event.all_official, selected_events: @user.preferred_events,
+                                        disabled: !editable_fields.include?(:preferred_event_ids), hint: "Selecting your preferred events makes registration for competitions quicker." %>
+
       <div class="panel panel-default">
         <% show_change_password = @user.errors.messages.has_key?(:password_confirmation) || @user.errors.messages.has_key?(:password) %>
         <div class="panel-heading">
