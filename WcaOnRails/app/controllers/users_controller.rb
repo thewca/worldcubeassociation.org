@@ -41,6 +41,8 @@ class UsersController < ApplicationController
   end
 
   def edit
+    params[:section] ||= "general"
+
     @user = user_to_edit
     redirect_if_cannot_edit_user(@user) and return
   end
