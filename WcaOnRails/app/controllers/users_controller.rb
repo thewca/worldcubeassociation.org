@@ -92,7 +92,7 @@ class UsersController < ApplicationController
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
         redirect_to profile_claim_wca_id_path
       else
-        redirect_to edit_user_url(@user)
+        redirect_to edit_user_url(@user, section: params[:section])
       end
     else
       # update_with_password clears password and password_confirmation, but we
