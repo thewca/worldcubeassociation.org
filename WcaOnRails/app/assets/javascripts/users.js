@@ -39,6 +39,14 @@ onPage('users#edit, users#update', function() {
     $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
+
+  // Change the 'section' parameter when a tab is switched.
+  $('a[data-toggle="tab"]').on('show.bs.tab', function() {
+    var section = $(this).attr('href').slice(1);
+    var url = window.location.toString();
+    url = url.replace(/edit.*/, 'edit?section=' + section);
+    history.replaceState(null, null, url);
+  });
 });
 
 onPage('users#index', function() {
