@@ -18,6 +18,16 @@ RSpec.feature "Registering for a competition" do
       registration = competition.registrations.find_by_user_id(user.id)
       expect(registration).not_to eq nil
     end
+
+    scenario "User with preferred events goes to register page" do
+      user.update_attribute :preferred_event_ids, "333 444 555"
+      competition.update_attribute :eventSpecs, "444 555 666"
+
+      visit competition_register_path(competition)
+      expect(find("#registration_event_ids_444")).to be_checked
+      expect(find("#registration_event_ids_555")).to be_checked
+      expect(find("#registration_event_ids_666")).to_not be_checked
+    end
   end
 
   context "not signed in" do

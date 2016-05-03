@@ -59,7 +59,7 @@
           <% else %>
             You have registered for <%= @competition.name %>.
             You can see your registration information below.
-            
+
             <% if !current_user.can_edit_registration?(@registration) %>
               Contact the organizer if you wish to make a change.
             <% end %>
@@ -84,7 +84,9 @@
             file: :horizontal_file_input,
             boolean: :horizontal_boolean
         }  do |f| %>
-          <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events, disabled: !current_user.can_edit_registration?(@registration) %>
+
+          <% selected_events = @registration.events.empty? ? @registration.user.preferred_events : @registration.events %>
+          <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: selected_events, disabled: !current_user.can_edit_registration?(@registration) %>
 
           <% if @competition.guests_enabled? %>
             <%= f.input :guests, disabled: !current_user.can_edit_registration?(@registration) %>
