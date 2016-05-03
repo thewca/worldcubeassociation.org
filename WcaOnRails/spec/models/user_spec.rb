@@ -328,9 +328,19 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
 
-    it "requires unconfirmed_wca_id" do
+    it "requires fields when claiming_wca_id" do
       user.unconfirmed_wca_id = nil
+      user.dob_verification = nil
+      user.delegate_id_to_handle_wca_id_claim = nil
       expect(user).to be_invalid
+      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
+      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
+    end
+
+    it "requires unconfirmed_wca_id" do
+      user.unconfirmed_wca_id = ""
+      expect(user).to be_invalid
+      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
     end
 
     it "requires dob verification" do
@@ -362,6 +372,7 @@ RSpec.describe User, type: :model do
     it "requires delegate_id_to_handle_wca_id_claim" do
       user.delegate_id_to_handle_wca_id_claim = nil
       expect(user).to be_invalid
+      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
     end
 
     it "delegate_id_to_handle_wca_id_claim must be a delegate" do
