@@ -94,28 +94,10 @@ class UsersController < ApplicationController
         redirect_to edit_user_url(@user, params.permit(:section))
       end
     else
-      # update_with_password clears password and password_confirmation, but we
-      # re-set them here so the :confirm_password view can work with its hidden
-      # inputs.
-      @user.password = user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation]
-      if @user.errors.messages == { current_password: ["can't be blank"] }
-        @user.errors.clear
-        render :confirm_password
-      elsif @user.errors.messages == { current_password: ["is invalid"] }
-        render :confirm_password
+      if @user.claiming_wca_id
+        render :claim_wca_id
       else
-        if @user.errors.messages[:current_password]
-          # Remove error about current_password for now, as there are other
-          # errors in the form the user needs to deal with first.
-          @user.errors.delete :current_password
-        end
-        if @user.claiming_wca_id
-          render :claim_wca_id
-        else
-          flash.now[:danger] = "Error updating user"
-          render :edit
-        end
+        render :edit
       end
     end
   end

@@ -177,6 +177,8 @@
           <%= hidden_field_tag "section", "email" %>
           <%= f.input :email, disabled: !editable_fields.include?(:email), hint: "Changing your email will require confirming the new email." %>
 
+          <%= f.input :current_password %>
+
           <%= f.submit 'Save', class: "btn btn-primary" %>
         <% end %>
       </div>
@@ -196,6 +198,8 @@
           <%= hidden_field_tag "section", "password" %>
           <%= f.input :password, :autocomplete => "off", class: "form-control" %>
           <%= f.input :password_confirmation, class: "form-control"  %>
+
+          <%= f.input :current_password %>
 
           <%= f.submit 'Save', class: "btn btn-primary" %>
         <% end %>
