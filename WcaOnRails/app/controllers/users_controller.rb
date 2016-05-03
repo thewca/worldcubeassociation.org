@@ -93,12 +93,10 @@ class UsersController < ApplicationController
       else
         redirect_to edit_user_url(@user, params.permit(:section))
       end
+    elsif @user.claiming_wca_id
+      render :claim_wca_id
     else
-      if @user.claiming_wca_id
-        render :claim_wca_id
-      else
-        render :edit
-      end
+      render :edit
     end
   end
 

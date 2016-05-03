@@ -558,4 +558,30 @@ class User < ActiveRecord::Base
 
     json
   end
+
+  # Devise's method overriding! (the unwanted lines are commented)
+  # We have the separate form for updating password and it requires current_password to be entered.
+  # So we don't want to remove the password and password_confirmation if they are in the params and are blank.
+  # Instead we want the presence validations to fail in order to show the error messages to the user.
+  # Also see: https://github.com/plataformatec/devise/blob/48220f087bc807629b42d731f6b68fe625edbb91/lib/devise/models/database_authenticatable.rb#L58-L64
+  def update_with_password(params, *options)
+    current_password = params.delete(:current_password)
+
+    # if params[:password].blank?
+    #   params.delete(:password)
+    #   params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    # end
+
+    result = if valid_password?(current_password)
+               update_attributes(params, *options)
+             else
+               self.assign_attributes(params, *options)
+               self.valid?
+               self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+               false
+             end
+
+    clean_up_passwords
+    result
+  end
 end

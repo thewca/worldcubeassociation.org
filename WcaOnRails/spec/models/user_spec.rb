@@ -477,4 +477,36 @@ RSpec.describe User, type: :model do
 
     expect(leader.teams_where_is_leader.count).to eq 0
   end
+
+  describe "#update_with_password" do
+    let(:user) { FactoryGirl.create(:user, password: "wca") }
+    context "when the password is not given in the params" do
+      it "updates the attributes if the current_password matches" do
+        user.update_with_password(email: "new@email.com", current_password: "wca")
+        expect(user.reload.unconfirmed_email).to eq "new@email.com"
+      end
+
+      it "does not update the attributes if the current_password doesn not match" do
+        user.update_with_password(email: "new@email.com", current_password: "wrong")
+        expect(user.reload.unconfirmed_email).to_not eq "new@email.com"
+      end
+    end
+
+    context "when the password is given in the params" do
+      it "updates the password if the current_password matches" do
+        user.update_with_password(password: "new", password_confirmation: "new", current_password: "wca")
+        expect(user.reload.valid_password?("new")).to eq true
+      end
+
+      it "does not update the password if the current_password does not match" do
+        user.update_with_password(password: "new", password_confirmation: "new", current_password: "wrong")
+        expect(user.reload.valid_password?("new")).to eq false
+      end
+
+      it "does not allow blank password" do
+        user.update_with_password(password: " ", password_confirmation: " ", current_password: "wca")
+        expect(user.errors.full_messages).to include "Password can't be blank"
+      end
+    end
+  end
 end
