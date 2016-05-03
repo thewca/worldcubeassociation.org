@@ -30,6 +30,10 @@ $competition-nav-padding: 50px;
     .list-group-item a.active {
       color: $list-group-active-bg;
     }
+
+    .list-group-item a:hover {
+      text-decoration: none;
+    }
   }
 }
 
