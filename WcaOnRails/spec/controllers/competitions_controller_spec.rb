@@ -207,6 +207,10 @@ describe CompetitionsController do
         # attributes.
         expect(new_comp.showAtAll).to eq false
         expect(new_comp.isConfirmed).to eq false
+        # We don't want to clone its dates.
+        %w(year month day endMonth endDay).each do |attribute|
+          expect(new_comp.send(attribute)).to eq 0
+        end
 
         # Cloning a competition should clone its organizers.
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
