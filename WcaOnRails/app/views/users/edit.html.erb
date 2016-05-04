@@ -75,9 +75,9 @@
   <ul class="nav nav-tabs nav-justified">
     <li><a href="#general" data-toggle="tab">General</a></li>
     <% if @user == current_user %>
-    <li><a href="#email" data-toggle="tab">Email</a></li>
-    <li><a href="#preferences" data-toggle="tab">Preferences</a></li>
-    <li><a href="#password" data-toggle="tab">Password</a></li>
+      <li><a href="#email" data-toggle="tab">Email</a></li>
+      <li><a href="#preferences" data-toggle="tab">Preferences</a></li>
+      <li><a href="#password" data-toggle="tab">Password</a></li>
     <% end %>
   </ul>
 
@@ -196,7 +196,7 @@
       <div class="tab-pane active" id="password">
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "password" %>
-          <%= f.input :password, :autocomplete => "off", class: "form-control" %>
+          <%= f.input :password, autocomplete: "off", class: "form-control" %>
           <%= f.input :password_confirmation, class: "form-control"  %>
 
           <%= f.input :current_password %>

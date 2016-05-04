@@ -486,7 +486,7 @@ RSpec.describe User, type: :model do
         expect(user.reload.unconfirmed_email).to eq "new@email.com"
       end
 
-      it "does not update the attributes if the current_password doesn not match" do
+      it "does not update the attributes if the current_password does not match" do
         user.update_with_password(email: "new@email.com", current_password: "wrong")
         expect(user.reload.unconfirmed_email).to_not eq "new@email.com"
       end
