@@ -57,7 +57,7 @@ describe UsersController do
   describe "approve wca id claim" do
     let(:delegate) { FactoryGirl.create(:delegate) }
     let(:person) { FactoryGirl.create(:person) }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate }
+    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
 
     before :each do
       sign_in delegate

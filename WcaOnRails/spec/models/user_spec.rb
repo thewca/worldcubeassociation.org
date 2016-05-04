@@ -319,18 +319,49 @@ RSpec.describe User, type: :model do
   describe "unconfirmed_wca_id" do
     let(:person) { FactoryGirl.create :person, year: 1990, month: 01, day: 02 }
     let(:delegate) { FactoryGirl.create :delegate }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, claiming_wca_id: true, dob_verification: "1990-01-2" }
+    let(:user) do
+      u = FactoryGirl.create :user
+      u.unconfirmed_wca_id = person.id
+      u.delegate_id_to_handle_wca_id_claim = delegate.id
+      u.claiming_wca_id = true
+      u.dob_verification = "1990-01-2"
+
+      u
+    end
 
     let(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
     let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
 
     it "defines a valid user" do
       expect(user).to be_valid
+
+      # The database object without the unpersisted fields like dob_verification should
+      # also be valid.
+      expect(User.find(user.id)).to be_valid
+    end
+
+    it "doesn't allow user to change unconfirmed_wca_id" do
+      expect(user).to be_valid
+      user.claiming_wca_id = false
+      other_person = FactoryGirl.create :person, year: 1980, month: 02, day: 01
+      user.unconfirmed_wca_id = other_person.wca_id
+      expect(user).to be_invalid
+      expect(user.errors.messages[:dob_verification]).to eq ['incorrect']
+    end
+
+    it "requires fields when claiming_wca_id" do
+      user.unconfirmed_wca_id = nil
+      user.dob_verification = nil
+      user.delegate_id_to_handle_wca_id_claim = nil
+      expect(user).to be_invalid
+      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
+      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
     end
 
     it "requires unconfirmed_wca_id" do
-      user.unconfirmed_wca_id = nil
+      user.unconfirmed_wca_id = ""
       expect(user).to be_invalid
+      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
     end
 
     it "requires dob verification" do
@@ -362,6 +393,7 @@ RSpec.describe User, type: :model do
     it "requires delegate_id_to_handle_wca_id_claim" do
       user.delegate_id_to_handle_wca_id_claim = nil
       expect(user).to be_invalid
+      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
     end
 
     it "delegate_id_to_handle_wca_id_claim must be a delegate" do

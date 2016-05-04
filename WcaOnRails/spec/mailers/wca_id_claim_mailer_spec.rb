@@ -4,7 +4,7 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
   describe "notify_board_of_confirmed_competition" do
     let(:delegate) { FactoryGirl.create :delegate }
     let(:person) { FactoryGirl.create :person }
-    let(:user_claiming_wca_id) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate }
+    let(:user_claiming_wca_id) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
     let(:mail) { WcaIdClaimMailer.notify_delegate_of_wca_id_claim(user_claiming_wca_id) }
 
     it "renders" do

@@ -25,7 +25,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
-  validates :name, presence: true
+  # When creating an account, we actually don't mind if the user leaves their
+  # name empty, so long as they're a returning competitor and are claiming their
+  # wca id.
+  validates :name, presence: true, if: -> { !claiming_wca_id }
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
@@ -85,6 +88,10 @@ class User < ActiveRecord::Base
   end
 
   attr_accessor :claiming_wca_id
+  def claiming_wca_id=(claiming_wca_id)
+    @claiming_wca_id = ActiveRecord::Type::Boolean.new.type_cast_from_database(claiming_wca_id)
+  end
+
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
     if !claiming_wca_id && unconfirmed_wca_id_was.present?
@@ -100,14 +107,7 @@ class User < ActiveRecord::Base
 
   validate :claim_wca_id_validations
   def claim_wca_id_validations
-    if unconfirmed_wca_id.present? && !delegate_id_to_handle_wca_id_claim.present?
-      errors.add(:delegate_id_to_handle_wca_id_claim, "required")
-    end
-
-    if !unconfirmed_wca_id.present? && delegate_id_to_handle_wca_id_claim.present?
-      errors.add(:unconfirmed_wca_id, "required")
-    end
-
+    already_assigned_to_user = false
     if unconfirmed_wca_id.present?
       already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
       if !unconfirmed_person
@@ -115,26 +115,34 @@ class User < ActiveRecord::Base
       elsif already_assigned_to_user
         errors.add(:unconfirmed_wca_id, "already assigned to a different user")
       end
-
-      if claiming_wca_id
-        dob_verification_date = Date.safe_parse(dob_verification, nil)
-        if unconfirmed_person
-          if !unconfirmed_person.dob
-            errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
-          elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
-            # Note that we don't verify DOB for WCA IDs that have already been
-            # claimed. This protects people from DOB guessing attacks.
-            errors.add(:dob_verification, "incorrect")
-          end
-        end
-        if person
-          errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
-        end
-      end
     end
 
-    if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
-      errors.add(:delegate_id_to_handle_wca_id_claim, "not found")
+    if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
+      if !delegate_id_to_handle_wca_id_claim.present?
+        errors.add(:delegate_id_to_handle_wca_id_claim, "required")
+      end
+
+      if !unconfirmed_wca_id.present?
+        errors.add(:unconfirmed_wca_id, "required")
+      end
+
+      dob_verification_date = Date.safe_parse(dob_verification, nil)
+      if unconfirmed_person && (!current_user || !current_user.can_edit_users?)
+        if !unconfirmed_person.dob
+          errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
+        elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
+          # Note that we don't verify DOB for WCA IDs that have already been
+          # claimed. This protects people from DOB guessing attacks.
+          errors.add(:dob_verification, "incorrect")
+        end
+      end
+      if claiming_wca_id && person
+        errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
+      end
+
+      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
+        errors.add(:delegate_id_to_handle_wca_id_claim, "not found")
+      end
     end
   end
 

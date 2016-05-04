@@ -26,3 +26,9 @@ Style/GuardClause:
 
 Metrics/ClassLength:
   Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 23
+
+Metrics/PerceivedComplexity:
+  Max: 23

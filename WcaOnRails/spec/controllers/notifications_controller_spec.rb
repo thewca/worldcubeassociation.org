@@ -48,10 +48,10 @@ RSpec.describe NotificationsController, type: :controller do
       it "shows WCA ID claims for confirmed accounts, but not for unconfirmed accounts" do
         person = FactoryGirl.create :person
         user = FactoryGirl.create :user
-        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
+        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         unconfirmed_user = FactoryGirl.create :user, :unconfirmed
-        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate)
+        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         get :index
         notifications = assigns(:notifications)
@@ -135,6 +135,7 @@ RSpec.describe NotificationsController, type: :controller do
           delegate = FactoryGirl.create :delegate
           user.unconfirmed_wca_id = person.id
           user.delegate_to_handle_wca_id_claim = delegate
+          user.dob_verification = person.dob
           user.save!
 
           get :index
