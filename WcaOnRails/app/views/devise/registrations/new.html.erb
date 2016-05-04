@@ -72,6 +72,18 @@
       $('input[type="submit"]').attr('disabled', false);
     });
 
+    $('.tab-pane').find("input").attr("disabled", true);
+    $('.nav-tabs').on('hidden.bs.tab', function(e) {
+      var $hiddenPanel = $("#" + $(e.target).attr("aria-controls"));
+      // Disable all <input>s in the just hidden panel.
+      $hiddenPanel.find("input").attr("disabled", true);
+    });
+    $('.nav-tabs').on('shown.bs.tab', function(e) {
+      var $shownPanel = $("#" + $(e.target).attr("aria-controls"));
+      // Enable all <input>s in the just shown panel.
+      $shownPanel.find("input").attr("disabled", false);
+    });
+
     var $haveCompetedLink = $('#have-you-competed-nav a[href="#have-competed"]');
     if($claiming_wca_id.val() === "true") {
       $haveCompetedLink.tab('show');

@@ -119,4 +119,63 @@ RSpec.feature "Sign up" do
       expect(page).to have_selector('#never-competed', visible: true)
     end
   end
+
+  context "changing between noobie and have competed", js: true do
+    it "disables previous competitor fields when signing up as a noobie" do
+      visit "/users/sign_up"
+
+      fill_in "Email", with: "jack@example.com"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+
+
+      click_on "I have competed in a WCA competition."
+      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
+      selectize_input.native.send_key(person.wca_id)
+      # Wait for selectize popup to appear.
+      expect(page).to have_selector("div.selectize-dropdown", visible: true)
+      # Select item with selectize.
+      page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
+
+      # Wait for select delegate area to load via ajax.
+      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      # Now that they've selected a valid WCA ID, make sure the birthdate
+      # verification field is visible.
+      expect(page.find("div.user_dob_verification", visible: true).visible?).to eq true
+      delegate = person.competitions.first.delegates.first
+      choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
+      # Now enter the wrong birthdate.
+      fill_in "Birthdate", with: "1900-02-03"
+
+
+      # We just filled some invalid information as if we were a returning competitor, but
+      # now change our minds and fill out the form as if we're a noobie. We should only show
+      # an error message about the full name.
+      click_on "I have never competed in a WCA competition."
+      click_button "Sign up"
+      expect(page).to have_selector(".alert.alert-danger.alert-block li", count: 1)
+      expect(page.find(".user_name span.help-block")).to have_content "can't be blank"
+
+      fill_in "Full name", with: "Jackson John"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+      click_button "Sign up"
+      u = User.find_by_email!("jack@example.com")
+      expect(u.name).to eq "Jackson John"
+    end
+
+    it "disables noobie fields when signing up as a previous competitor" do
+      visit "/users/sign_up"
+
+      fill_in "Email", with: "jack@example.com"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+
+      click_on "I have competed in a WCA competition."
+      click_button "Sign up"
+      expect(page).to have_selector(".alert.alert-danger.alert-block li", count: 2)
+      expect(page.find(".alert.alert-danger.alert-block")).to have_content "Delegate id to handle wca id claim required"
+      expect(page.find(".alert.alert-danger.alert-block")).to have_content "Unconfirmed WCA ID required"
+    end
+  end
 end

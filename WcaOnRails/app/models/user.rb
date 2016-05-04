@@ -25,7 +25,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
-  validates :name, presence: true
+  # When creating an account, we actually don't mind if the user leaves their
+  # name empty, so long as they're a returning competitor and are claiming their
+  # wca id.
+  validates :name, presence: true, if: -> { !claiming_wca_id }
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
@@ -114,7 +117,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    if claiming_wca_id
+    if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
       if !delegate_id_to_handle_wca_id_claim.present?
         errors.add(:delegate_id_to_handle_wca_id_claim, "required")
       end
@@ -124,7 +127,7 @@ class User < ActiveRecord::Base
       end
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
-      if unconfirmed_person
+      if unconfirmed_person && (!current_user || !current_user.can_edit_users?)
         if !unconfirmed_person.dob
           errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
@@ -133,7 +136,7 @@ class User < ActiveRecord::Base
           errors.add(:dob_verification, "incorrect")
         end
       end
-      if person
+      if claiming_wca_id && person
         errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
       end
 
