@@ -128,7 +128,6 @@ RSpec.feature "Sign up" do
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
 
-
       click_on "I have competed in a WCA competition."
       selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
       selectize_input.native.send_key(person.wca_id)
@@ -146,7 +145,6 @@ RSpec.feature "Sign up" do
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
       # Now enter the wrong birthdate.
       fill_in "Birthdate", with: "1900-02-03"
-
 
       # We just filled some invalid information as if we were a returning competitor, but
       # now change our minds and fill out the form as if we're a noobie. We should only show
