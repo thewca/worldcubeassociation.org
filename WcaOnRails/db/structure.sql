@@ -648,6 +648,22 @@ CREATE TABLE `teams` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_preferred_events`
+--
+
+DROP TABLE IF EXISTS `user_preferred_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_preferred_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `event_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_user_preferred_events_on_user_id_and_event_id` (`user_id`,`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -696,7 +712,6 @@ CREATE TABLE `users` (
   `dob` date DEFAULT NULL,
   `gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `preferred_event_ids` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -866,4 +881,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160407005537');
 INSERT INTO schema_migrations (version) VALUES ('20160407210623');
 
 INSERT INTO schema_migrations (version) VALUES ('20160502113530');
+
+INSERT INTO schema_migrations (version) VALUES ('20160504170758');
 

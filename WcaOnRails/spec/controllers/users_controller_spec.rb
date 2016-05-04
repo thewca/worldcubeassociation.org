@@ -127,7 +127,7 @@ describe UsersController do
     it "user can change his preferred events" do
       sign_in user
       patch :update, id: user.id, user: { preferred_event_ids: { "333" => "1", "444" => "1", "clock" => "1" } }
-      expect(user.reload.preferred_event_ids).to eq "333 444 clock"
+      expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
     end
 
     context "after registering for a competition" do

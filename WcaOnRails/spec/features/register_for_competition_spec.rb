@@ -20,7 +20,7 @@ RSpec.feature "Registering for a competition" do
     end
 
     scenario "User with preferred events goes to register page" do
-      user.update_attribute :preferred_event_ids, "333 444 555"
+      user.update_attribute :preferred_event_ids, %w(333 444 555)
       competition.update_attribute :eventSpecs, "444 555 666"
 
       visit competition_register_path(competition)

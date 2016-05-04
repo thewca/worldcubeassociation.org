@@ -480,6 +480,7 @@ RSpec.describe User, type: :model do
 
   describe "#update_with_password" do
     let(:user) { FactoryGirl.create(:user, password: "wca") }
+
     context "when the password is not given in the params" do
       it "updates the attributes if the current_password matches" do
         user.update_with_password(email: "new@email.com", current_password: "wca")
@@ -507,6 +508,27 @@ RSpec.describe User, type: :model do
         user.update_with_password(password: " ", password_confirmation: " ", current_password: "wca")
         expect(user.errors.full_messages).to include "Password can't be blank"
       end
+    end
+  end
+
+  describe "preferred events" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    it "can be set by updating the preferred_event_ids" do
+      user.update_attribute :preferred_event_ids, %w(333 444 555)
+      # Updates the user_preferred_events table in the database
+      expect(user.reload.user_preferred_events.count).to eq 3
+      # The appropriate method works
+      expect(user.preferred_events.map(&:id)).to eq %w(333 444 555)
+    end
+
+    it "user_preferred_events table is updated correctly when preferred_event_ids change" do
+      # Set some preferred events
+      user.update_attribute :preferred_event_ids, %w(333 444 555)
+      # Change them to be something else
+      user.reload.update_attribute :preferred_event_ids, %w(333 clock)
+      # user_preferred_events table in the database should be updated
+      expect(user.reload.user_preferred_events.pluck(:event_id)).to eq %w(333 clock)
     end
   end
 end

@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :user_preferred_events
 
   strip_attributes only: [:wca_id, :country_iso2]
 
@@ -294,8 +295,22 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Virtual attribute for assigning user preferred events
+  attr_accessor :preferred_event_ids
+
+  after_save :update_user_preferred_events, unless: -> { preferred_event_ids.nil? }
+  private def update_user_preferred_events
+    official_event_ids = Event.all_official.map(&:id)
+    # Destroy existing events that are no longer marked as preferred
+    user_preferred_events.where(event_id: official_event_ids - preferred_event_ids).destroy_all
+    # Add the new preferred events which aren't already in the database
+    event_ids_to_add = preferred_event_ids - user_preferred_events.pluck(:event_id)
+    event_ids_to_add.each { |event_id| user_preferred_events.create(event_id: event_id) }
+  end
+
+  # Returns the preferred events as an array of Event objects
   def preferred_events
-    (preferred_event_ids || "").split.map { |e| Event.find_by_id(e) }.sort_by(&:rank)
+    user_preferred_events.map(&:event_object).sort_by(&:rank)
   end
 
   def software_team?
