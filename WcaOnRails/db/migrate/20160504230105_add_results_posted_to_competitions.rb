@@ -1,10 +1,10 @@
 class AddResultsPostedToCompetitions < ActiveRecord::Migration
   def up
-    add_column :Competitions, :results_posted, :datetime
+    add_column :Competitions, :results_posted_at, :datetime
     execute <<-SQL
       UPDATE Competitions
-      SET results_posted = (SELECT max(updated_at) FROM Results)
-      WHERE results_posted is NULL AND id IN (SELECT competitionId FROM Results)
+      SET results_posted_at = (SELECT max(updated_at) FROM Results)
+      WHERE results_posted_at is NULL AND id IN (SELECT competitionId FROM Results)
     SQL
   end
 

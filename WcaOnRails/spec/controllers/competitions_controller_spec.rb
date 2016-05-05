@@ -489,7 +489,6 @@ describe CompetitionsController do
       sign_in { FactoryGirl.create(:results_team) }
 
       it "creates a results post" do
-        before_posting = Time.now
         Result.create!(
           pos: 1,
           personId: "2006SHEU01",
@@ -559,13 +558,14 @@ describe CompetitionsController do
           regionalSingleRecord: "NAR",
           regionalAverageRecord: "",
         )
+        expect(competition.results_posted_at).to be nil
         get :post_results, id: competition
         post = assigns(:post)
         expect(post.body).to include "World records: Jeremy Fleischman 3x3 one-handed 50.00 (average), Vincent Sheu (2006SHEU01) 3x3 fewest moves 25 (single), 3x3 fewest moves 26.00 (average), Vincent Sheu (2006SHEU02) 2x2 Cube 10.00 (single)"
         expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 41.00 (single), 3x3 one-handed 40.00 (single)"
         expect(post.title).to include "in #{competition.cityName}, #{competition.countryId}"
         competition.reload
-        expect(competition.results_posted).to be_within(1.second).of before_posting
+        expect(competition.results_posted_at.to_f).to be > Time.now.to_f
       end
     end
   end
