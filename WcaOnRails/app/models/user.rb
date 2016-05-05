@@ -300,9 +300,8 @@ class User < ActiveRecord::Base
 
   after_save :update_user_preferred_events, unless: -> { preferred_event_ids.nil? }
   private def update_user_preferred_events
-    official_event_ids = Event.all_official.map(&:id)
     # Destroy existing events that are no longer marked as preferred
-    user_preferred_events.where(event_id: official_event_ids - preferred_event_ids).destroy_all
+    user_preferred_events.where.not(event_id: preferred_event_ids).destroy_all
     # Add the new preferred events which aren't already in the database
     event_ids_to_add = preferred_event_ids - user_preferred_events.pluck(:event_id)
     event_ids_to_add.each { |event_id| user_preferred_events.create(event_id: event_id) }
