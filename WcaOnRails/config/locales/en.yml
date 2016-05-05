@@ -65,7 +65,6 @@ en:
     labels:
       defaults:
         event_ids: "Events"
-        preferred_event_ids: "Preferred events"
       competition:
         id: "ID"
     hints:

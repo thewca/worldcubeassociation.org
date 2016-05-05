@@ -1,0 +1,28 @@
+<%#
+Variables:
+ - form_builder
+ - label
+ - events_association_name -> name of the associated events relation
+ - selected_events -> an Array of Event objects that whould be marked as selected
+%>
+
+<%# Note: form_builder.object is the object having associated events. %>
+<% associated_events = form_builder.object.send(events_association_name)
+   all_events = Event.all_official.map do |event|
+     associated_events.find_by_event_id(event.id) || associated_events.build(event_id: event.id)
+   end %>
+
+<%= label_tag "associated_events", label %>
+<div id="associated_events">
+  <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
+    <span class="event-checkbox">
+      <% event = f.object.event_object %>
+      <%= f.hidden_field :event_id %>
+      <%= label_tag "checkbox-#{event.id}" do %>
+        <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "checkbox-#{event.id}" }, "0", "1" %>
+        <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+      <% end %>
+      <%= f.hidden_field :id %>
+    </span>
+  <% end %>
+</div>

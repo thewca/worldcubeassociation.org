@@ -111,8 +111,7 @@ class UsersController < ApplicationController
 
   private def user_params
     permitted_params = current_user.editable_fields_of_user(user_to_edit).to_a
-    permitted_params.delete :preferred_event_ids
-    permitted_params.push(preferred_event_ids: Event.all_official.map(&:id))
+    permitted_params.push(user_preferred_events_attributes: [:id, :event_id, :_destroy])
 
     user_params = params.require(:user).permit(permitted_params)
     if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
@@ -120,9 +119,6 @@ class UsersController < ApplicationController
     end
     if user_params.key?(:wca_id)
       user_params[:wca_id] = user_params[:wca_id].upcase
-    end
-    if user_params.key?(:preferred_event_ids)
-      user_params[:preferred_event_ids] = user_params[:preferred_event_ids].select { |_k, v| v == "1" }.keys
     end
     user_params
   end

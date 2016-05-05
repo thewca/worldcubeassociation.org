@@ -19,6 +19,8 @@ class User < ActiveRecord::Base
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events
 
+  accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
+
   strip_attributes only: [:wca_id, :country_iso2]
 
   attr_accessor :current_user
@@ -295,18 +297,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Virtual attribute for assigning user preferred events
-  attr_accessor :preferred_event_ids
-
-  after_save :update_user_preferred_events, unless: -> { preferred_event_ids.nil? }
-  private def update_user_preferred_events
-    # Destroy existing events that are no longer marked as preferred
-    user_preferred_events.where.not(event_id: preferred_event_ids).destroy_all
-    # Add the new preferred events which aren't already in the database
-    event_ids_to_add = preferred_event_ids - user_preferred_events.pluck(:event_id)
-    event_ids_to_add.each { |event_id| user_preferred_events.create(event_id: event_id) }
-  end
-
   # Returns the preferred events as an array of Event objects
   def preferred_events
     user_preferred_events.map(&:event_object).sort_by(&:rank)
@@ -465,7 +455,7 @@ class User < ActiveRecord::Base
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
-      fields << :preferred_event_ids
+      fields << :preferred_events
     end
     if admin? || board_member?
       fields << :delegate_status
