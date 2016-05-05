@@ -5,6 +5,10 @@ class Registration < ActiveRecord::Base
 
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
+  has_many :registration_events
+
+  accepts_nested_attributes_for :registration_events, allow_destroy: true
+
   validates :user, presence: true, on: [:create]
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0

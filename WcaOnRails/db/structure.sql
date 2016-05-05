@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.26, for osx10.10 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: wca_development
 -- ------------------------------------------------------
--- Server version	5.6.26
+-- Server version	5.7.12-0ubuntu1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -285,7 +285,6 @@ CREATE TABLE `Preregs` (
   `comments` text COLLATE utf8_unicode_ci NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'p',
-  `eventIds` text COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -602,6 +601,22 @@ CREATE TABLE `posts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `registration_events`
+--
+
+DROP TABLE IF EXISTS `registration_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registration_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `registration_id` int(11) DEFAULT NULL,
+  `event_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_registration_events_on_registration_id_and_event_id` (`registration_id`,`event_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `schema_migrations`
 --
 
@@ -764,7 +779,7 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-08  3:31:14
+-- Dump completed on 2016-05-06  1:31:08
 INSERT INTO schema_migrations (version) VALUES ('20150501004846');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504022234');
@@ -883,5 +898,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160407210623');
 
 INSERT INTO schema_migrations (version) VALUES ('20160504170758');
 
+<<<<<<< d819de4e79f19f7463c100e921b4983899a3b769
 INSERT INTO schema_migrations (version) VALUES ('20160504230105');
-
+=======
+INSERT INTO schema_migrations (version) VALUES ('20160505231300');
+>>>>>>> Set up database background.
