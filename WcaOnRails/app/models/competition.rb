@@ -70,11 +70,12 @@ class Competition < ActiveRecord::Base
 
   def warnings
     warnings = {}
-    if self.name.length > 32
-      warnings[:name] = "The competition name is too long (maximum is 32 characters)"
-    end
     if !self.showAtAll
       warnings[:invisible] = "This competition is not visible to the public."
+
+      if self.name.length > 32
+        warnings[:name] = "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      end
     end
     warnings
   end

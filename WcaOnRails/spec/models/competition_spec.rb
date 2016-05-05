@@ -123,10 +123,16 @@ RSpec.describe Competition do
     expect(competition.errors.messages[:name]).to eq ["is too long (maximum is 50 characters)"]
   end
 
-  it "warns if competition name is greater than 32 characters" do
-    competition = FactoryGirl.build :competition, name: "A really long competition name 2016"
+  it "warns if competition name is greater than 32 characters and it's not publicly visible" do
+    competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: false
     expect(competition).to be_valid
-    expect(competition.warnings[:name]).to eq "The competition name is too long (maximum is 32 characters)"
+    expect(competition.warnings[:name]).to eq "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+  end
+
+  it "does not warn about name greater than 32 when competition is publicly visible" do
+    competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: true
+    expect(competition).to be_valid
+    expect(competition.warnings[:name]).to eq nil
   end
 
   it "warns if competition is not visible" do
