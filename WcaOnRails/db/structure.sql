@@ -49,7 +49,7 @@ CREATE TABLE `Competitions` (
   `registration_close` datetime DEFAULT NULL,
   `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `results_posted` datetime DEFAULT NULL,
+  `results_posted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

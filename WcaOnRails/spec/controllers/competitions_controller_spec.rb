@@ -565,7 +565,7 @@ describe CompetitionsController do
         expect(post.body).to include "North American records: Jeremy Fleischman 3x3 one-handed 41.00 (single), 3x3 one-handed 40.00 (single)"
         expect(post.title).to include "in #{competition.cityName}, #{competition.countryId}"
         competition.reload
-        expect(competition.results_posted_at.to_f).to be > Time.now.to_f
+        expect(competition.results_posted_at.to_f).to be < Time.now.to_f
       end
     end
   end

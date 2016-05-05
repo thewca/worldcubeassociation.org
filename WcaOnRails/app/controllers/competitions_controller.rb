@@ -225,10 +225,9 @@ class CompetitionsController < ApplicationController
         body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
-    post = Post.new(title: title, body: body, author: current_user, world_readable: true)
-    post_post(post)
-    comp.results_posted_at = Time.now
+    comp.update(results_posted_at: Time.now)
     comp.save!
+    post_post(Post.new(title: title, body: body, author: current_user, world_readable: true))
   end
 
   def admin_edit
