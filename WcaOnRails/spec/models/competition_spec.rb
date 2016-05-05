@@ -54,7 +54,7 @@ RSpec.describe Competition do
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
     expect(competition).to be_invalid
-    expect(competition.errors.messages[:name]).to eq ["The competition name must end in a year."]
+    expect(competition.errors.messages[:name]).to eq ["must end with a year"]
   end
 
   it "requires that cellName end in a year" do
@@ -117,18 +117,37 @@ RSpec.describe Competition do
     expect(competition).to be_invalid
   end
 
-  it "requires unapproved competition name is not greater than 32 characters" do
-    competition = FactoryGirl.create :competition
-    competition.showAtAll = false
-    competition.name = "A really long competition name 2016"
+  it "requires competition name is not greater than 50 characters" do
+    competition = FactoryGirl.build :competition, name: "A really long competition name that is greater than 50 characters 2016"
     expect(competition).to be_invalid
+    expect(competition.errors.messages[:name]).to eq ["is too long (maximum is 50 characters)"]
   end
 
-  it "competition name can be greater than 32 characters when approved" do
-    competition = FactoryGirl.create :competition
-    competition.showAtAll = true
-    competition.name = "A really long competition name 2016"
+  it "warns if competition name is greater than 32 characters" do
+    competition = FactoryGirl.build :competition, name: "A really long competition name 2016"
     expect(competition).to be_valid
+    expect(competition.warnings[:name]).to eq "The competition name is too long (maximum is 32 characters)"
+  end
+
+  it "warns if competition is not visible" do
+    competition = FactoryGirl.build :competition, showAtAll: false
+    expect(competition).to be_valid
+    expect(competition.warnings[:invisible]).to eq "This competition is not visible to the public."
+  end
+
+  it "displays info if competition is finished but results aren't uploaded" do
+    competition = FactoryGirl.build :competition, starts: 1.month.ago
+    expect(competition).to be_valid
+    expect(competition.is_over?).to be true
+    expect(competition.results_uploaded?).to be false
+    expect(competition.info[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
+  end
+
+  it "displays info if competition is in progress" do
+    competition = FactoryGirl.build :competition, starts: Date.today
+    expect(competition).to be_valid
+    expect(competition.in_progress?).to be true
+    expect(competition.info[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
   end
 
   it "knows the calendar" do
