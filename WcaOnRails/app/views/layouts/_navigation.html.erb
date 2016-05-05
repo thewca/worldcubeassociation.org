@@ -131,8 +131,8 @@
                 <li><%= link_to "phpMyAdmin", '/results/admin/phpMyAdmin/' %></li>
               <% end %>
 
-              <li class="divider"></li>
               <% if current_user.can_create_posts? %>
+                <li class="divider"></li>
                 <li><%= link_to "New post", new_post_path %></li>
               <% end %>
 

@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :user_preferred_events
 
   strip_attributes only: [:wca_id, :country_iso2]
 
@@ -294,6 +295,23 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Virtual attribute for assigning user preferred events
+  attr_accessor :preferred_event_ids
+
+  after_save :update_user_preferred_events, unless: -> { preferred_event_ids.nil? }
+  private def update_user_preferred_events
+    # Destroy existing events that are no longer marked as preferred
+    user_preferred_events.where.not(event_id: preferred_event_ids).destroy_all
+    # Add the new preferred events which aren't already in the database
+    event_ids_to_add = preferred_event_ids - user_preferred_events.pluck(:event_id)
+    event_ids_to_add.each { |event_id| user_preferred_events.create(event_id: event_id) }
+  end
+
+  # Returns the preferred events as an array of Event objects
+  def preferred_events
+    user_preferred_events.map(&:event_object).sort_by(&:rank)
+  end
+
   def software_team?
     team_member?('software')
   end
@@ -447,6 +465,7 @@ class User < ActiveRecord::Base
       fields << :current_password
       fields << :password << :password_confirmation
       fields << :email
+      fields << :preferred_event_ids
     end
     if admin? || board_member?
       fields << :delegate_status
@@ -552,5 +571,31 @@ class User < ActiveRecord::Base
     end
 
     json
+  end
+
+  # Devise's method overriding! (the unwanted lines are commented)
+  # We have the separate form for updating password and it requires current_password to be entered.
+  # So we don't want to remove the password and password_confirmation if they are in the params and are blank.
+  # Instead we want the presence validations to fail in order to show the error messages to the user.
+  # Also see: https://github.com/plataformatec/devise/blob/48220f087bc807629b42d731f6b68fe625edbb91/lib/devise/models/database_authenticatable.rb#L58-L64
+  def update_with_password(params, *options)
+    current_password = params.delete(:current_password)
+
+    # if params[:password].blank?
+    #   params.delete(:password)
+    #   params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    # end
+
+    result = if valid_password?(current_password)
+               update_attributes(params, *options)
+             else
+               self.assign_attributes(params, *options)
+               self.valid?
+               self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+               false
+             end
+
+    clean_up_passwords
+    result
   end
 end

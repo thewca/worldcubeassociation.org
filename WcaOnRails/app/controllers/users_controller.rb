@@ -40,6 +40,8 @@ class UsersController < ApplicationController
   end
 
   def edit
+    params[:section] ||= "general"
+
     @user = user_to_edit
     redirect_if_cannot_edit_user(@user) and return
   end
@@ -73,7 +75,7 @@ class UsersController < ApplicationController
     redirect_if_cannot_edit_user(@user) and return
 
     old_confirmation_sent_at = @user.confirmation_sent_at
-    dangerous_change = current_user == @user && (user_params.key?(:password) || user_params.key?(:password_confirmation) || user_params.key?(:email))
+    dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
@@ -89,32 +91,12 @@ class UsersController < ApplicationController
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
         redirect_to profile_claim_wca_id_path
       else
-        redirect_to edit_user_url(@user)
+        redirect_to edit_user_url(@user, params.permit(:section))
       end
+    elsif @user.claiming_wca_id
+      render :claim_wca_id
     else
-      # update_with_password clears password and password_confirmation, but we
-      # re-set them here so the :confirm_password view can work with its hidden
-      # inputs.
-      @user.password = user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation]
-      if @user.errors.messages == { current_password: ["can't be blank"] }
-        @user.errors.clear
-        render :confirm_password
-      elsif @user.errors.messages == { current_password: ["is invalid"] }
-        render :confirm_password
-      else
-        if @user.errors.messages[:current_password]
-          # Remove error about current_password for now, as there are other
-          # errors in the form the user needs to deal with first.
-          @user.errors.delete :current_password
-        end
-        if @user.claiming_wca_id
-          render :claim_wca_id
-        else
-          flash.now[:danger] = "Error updating user"
-          render :edit
-        end
-      end
+      render :edit
     end
   end
 
@@ -128,12 +110,19 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    user_params = params.require(:user).permit(*current_user.editable_fields_of_user(user_to_edit))
+    permitted_params = current_user.editable_fields_of_user(user_to_edit).to_a
+    permitted_params.delete :preferred_event_ids
+    permitted_params.push(preferred_event_ids: Event.all_official.map(&:id))
+
+    user_params = params.require(:user).permit(permitted_params)
     if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end
     if user_params.key?(:wca_id)
       user_params[:wca_id] = user_params[:wca_id].upcase
+    end
+    if user_params.key?(:preferred_event_ids)
+      user_params[:preferred_event_ids] = user_params[:preferred_event_ids].select { |_k, v| v == "1" }.keys
     end
     user_params
   end
