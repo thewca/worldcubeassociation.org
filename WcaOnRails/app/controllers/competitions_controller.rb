@@ -227,6 +227,8 @@ class CompetitionsController < ApplicationController
     end
     post = Post.new(title: title, body: body, author: current_user, world_readable: true)
     post_post(post)
+    comp.results_posted = Time.now
+    comp.save!
   end
 
   def admin_edit
