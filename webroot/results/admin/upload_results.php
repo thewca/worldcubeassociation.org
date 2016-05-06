@@ -125,7 +125,7 @@ if($form->submitted()) {
     foreach($competition_data->persons as $person) {
       $id = property_exists($person, 'id') ? ($person->id) : false;
       $name = property_exists($person, 'name') ? ($person->name) : false;
-      $wcaId = property_exists($person, 'wcaId') ? ($person->wcaId) : false;
+      $wcaId = property_exists($person, 'wcaId') ? ($person->wcaId) : "";
       $countryId = property_exists($person, 'countryId') ? ($person->countryId) : false;
       $gender = property_exists($person, 'gender') ? ($person->gender) : false;
       $dob = property_exists($person, 'dob') ? ($person->dob) : false;
