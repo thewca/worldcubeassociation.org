@@ -456,6 +456,7 @@ class User < ActiveRecord::Base
       fields << :password << :password_confirmation
       fields << :email
       fields << :preferred_events
+      fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
     end
     if admin? || board_member?
       fields << :delegate_status

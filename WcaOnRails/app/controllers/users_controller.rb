@@ -110,10 +110,7 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    permitted_params = current_user.editable_fields_of_user(user_to_edit).to_a
-    permitted_params.push(user_preferred_events_attributes: [:id, :event_id, :_destroy])
-
-    user_params = params.require(:user).permit(permitted_params)
+    user_params = params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a)
     if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
       user_params["senior_delegate_id"] = nil
     end
