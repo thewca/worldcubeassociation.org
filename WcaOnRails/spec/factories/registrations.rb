@@ -3,12 +3,18 @@ FactoryGirl.define do
     transient do
       competition { FactoryGirl.create(:competition, :registration_open) }
       user { FactoryGirl.create(:user, :wca_id) }
+      event_ids ["333"]
     end
     competitionId { competition.id }
     user_id { user ? user.id : nil }
-    eventIds "333"
     guests 10
     comments ""
+    # Using accept_nested_attributes_for
+    registration_events_attributes do
+      event_ids.map do |event_id|
+        { event_id: event_id }
+      end
+    end
 
     trait :accepted do
       status "a"

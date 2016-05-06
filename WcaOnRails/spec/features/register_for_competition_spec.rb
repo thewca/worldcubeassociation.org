@@ -12,7 +12,7 @@ RSpec.feature "Registering for a competition" do
 
     scenario "User registers for a competition" do
       visit competition_register_path(competition)
-      check "registration_event_ids_333"
+      check "checkbox-333"
       click_button "Register!"
       expect(page).to have_text("Successfully registered!")
       registration = competition.registrations.find_by_user_id(user.id)
@@ -20,13 +20,13 @@ RSpec.feature "Registering for a competition" do
     end
 
     scenario "User with preferred events goes to register page" do
-      user.update_attribute :preferred_event_ids, %w(333 444 555)
+      user.update_attribute :user_preferred_events_attributes, [ {event_id: "333"}, {event_id: "444"}, {event_id: "555"} ]
       competition.update_attribute :eventSpecs, "444 555 666"
 
       visit competition_register_path(competition)
-      expect(find("#registration_event_ids_444")).to be_checked
-      expect(find("#registration_event_ids_555")).to be_checked
-      expect(find("#registration_event_ids_666")).to_not be_checked
+      expect(find("#checkbox-444")).to be_checked
+      expect(find("#checkbox-555")).to be_checked
+      expect(find("#checkbox-666")).to_not be_checked
     end
   end
 
