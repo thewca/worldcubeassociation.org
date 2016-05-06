@@ -26,6 +26,6 @@
         <em>Announced by <%= post.author.name %> on <%= wca_local_time(post.created_at) %></em>
       <% end %>
     </div>
-    <%=md post.body %>
+    <%=md render_teaser ? post.body_teaser : post.body_full %>
   </div>
 </div>
