@@ -7,11 +7,11 @@
     <li class="list-group-item <%= competition.is_over? ? "past" : "not-past" %>">
       <span class="date">
         <% if competition.is_over? %>
-          <%= icon('hourglass-end', title: "Ended #{ pluralize((Date.today - competition.end_date).to_i, "day") } ago") %>
+          <%= icon('hourglass-end', title: "Ended #{ pluralize((Date.today - competition.end_date).to_i, "day") } ago", data: { toggle: "tooltip" }) %>
         <% elsif competition.in_progress? %>
-          <%= icon('hourglass-half', title: "In progress!") %>
+          <%= icon('hourglass-half', title: "In progress!", data: { toggle: "tooltip" }) %>
         <% else %>
-          <%= icon('hourglass-start', title: "Starts in #{ pluralize((competition.start_date - Date.today).to_i, "day") }") %>
+          <%= icon('hourglass-start', title: "Starts in #{ pluralize((competition.start_date - Date.today).to_i, "day") }", data: { toggle: "tooltip" }) %>
         <% end %>
         <%= wca_date_range(competition.start_date, competition.end_date)  %>
       </span>
@@ -34,7 +34,5 @@
 
 <script>
   <%# Tooltips have to be initialized manually after each Ajax response in order to work. %>
-  $('.date i').tooltip({
-    placement: 'top'
-  });
+  $('[data-toggle="tooltip"]').tooltip();
 </script>
