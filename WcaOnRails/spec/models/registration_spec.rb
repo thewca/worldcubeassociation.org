@@ -54,13 +54,13 @@ RSpec.describe Registration do
   end
 
   it "requires at least one event" do
-    registration.registration_events.destroy_all
+    registration.registration_events = []
     expect(registration).to be_invalid
     expect(registration.errors[:events]).to eq ["must register for at least one event"]
   end
 
   it "requires events be offered by competition" do
-    registration.registration_events.create(event_id: "777")
+    registration.registration_events.create!(event_id: "777")
     expect(registration).to be_invalid
   end
 

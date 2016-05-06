@@ -321,13 +321,13 @@ textarea {
   }
 }
 
-// _associated_events_picker.html.erb specyfic styles
+// _associated_events_picker.html.erb specific styles
 .form-horizontal {
-  label[for="associated_events"] {
+  .associated-events-label {
     @extend .col-sm-2, .control-label;
   }
 
-  #associated_events {
+  .associated-events {
     @extend .col-sm-9;
   }
 }

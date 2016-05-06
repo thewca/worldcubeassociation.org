@@ -19,8 +19,8 @@ Variables:
    end %>
 
 <div class="form-group">
-  <%= label_tag "associated_events", label %>
-  <div id="associated_events">
+  <%= label_tag events_association_name, label, class: "associated-events-label" %>
+  <div id="<%= events_association_name %>" class="associated-events">
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
       <span class="event-checkbox <%= "disabled" if disabled %>">
         <% event = f.object.event_object %>
