@@ -3,7 +3,7 @@
 <%= render layout: 'nav' do %>
   <%= render "competition_info", competition: @competition %>
 
-  <% if @competition.results_uploaded? %>
+  <% if @competition.results_posted? %>
     <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
   <% end %>
 <% end %>

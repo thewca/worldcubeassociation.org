@@ -2,7 +2,7 @@
   <div class="row">
     <div id="competition-nav">
       <% nav_items = [] %>
-      <% if @competition.results_uploaded? %>
+      <% if @competition.results_posted? %>
         <% nav_items << {
           text: "Results",
           path: competition_path(@competition),
@@ -50,7 +50,7 @@
             ])
         } %>
       <% end %>
-      <% if @competition.use_wca_registration? && !@competition.results_uploaded? %>
+      <% if @competition.use_wca_registration? && !@competition.results_posted? %>
         <% nav_items += [
           { text: "Register", path: competition_register_path(@competition), fa_icon: "sign-in" },
           {

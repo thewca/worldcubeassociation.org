@@ -145,7 +145,7 @@ RSpec.describe Competition do
     competition = FactoryGirl.build :competition, starts: 1.month.ago
     expect(competition).to be_valid
     expect(competition.is_over?).to be true
-    expect(competition.results_uploaded?).to be false
+    expect(competition.results_posted?).to be false
     expect(competition.info[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
   end
 

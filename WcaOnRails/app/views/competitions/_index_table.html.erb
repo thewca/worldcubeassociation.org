@@ -19,7 +19,7 @@
         <p class="competition-link">
           <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
           <%= link_to competition.cellName, competition_path(competition) %>
-          <% if competition.results_posted_at %>
+          <% if competition.results_posted? %>
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are posted!"></span>
           <% end %>
         </p>

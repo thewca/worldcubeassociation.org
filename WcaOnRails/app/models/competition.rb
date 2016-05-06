@@ -82,7 +82,7 @@ class Competition < ActiveRecord::Base
 
   def info
     info = {}
-    if !self.results_uploaded? && self.is_over?
+    if !self.results_posted? && self.is_over?
       info[:upload_results] = "This competition is over, we are working to upload the results as soon as possible!"
     end
     if self.in_progress?
@@ -474,8 +474,8 @@ class Competition < ActiveRecord::Base
     self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
-  def results_uploaded?
-    Result.exists?(competitionId: self.id)
+  def results_posted?
+    !results_posted_at.nil?
   end
 
   def user_can_view?(user)
