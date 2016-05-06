@@ -1,14 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "competition results" do
-  let(:competition) { FactoryGirl.create :competition, eventSpecs: "333" }
+  let(:competition) { FactoryGirl.create :competition, eventSpecs: "333", results_posted_at: 1.day.ago }
   let(:person_1) { FactoryGirl.create :person, name: "Fast Cuber" }
   let(:person_2) { FactoryGirl.create :person, name: "Slow Cuber" }
 
   let!(:result_1) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "c", pos: 1, person: person_1 }
   let!(:result_2) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "c", pos: 2, person: person_2 }
-  before do
-  end
 
   describe "winners" do
     it "displays the winners for each event" do
