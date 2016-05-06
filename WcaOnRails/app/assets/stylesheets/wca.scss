@@ -298,3 +298,36 @@ table.wca-results {
 textarea {
   resize: none;
 }
+
+// Style for event pickers
+.event-checkbox {
+  label {
+    margin-bottom: 0;
+  }
+  input[type=checkbox] {
+    display: none;
+    + span.cubing-icon {
+      color: #ccc;
+    }
+    &:checked + span.cubing-icon {
+      color: black;
+    }
+  }
+
+  &:not(.disabled) {
+    label {
+      cursor: pointer;
+    }
+  }
+}
+
+// _associated_events_picker.html.erb specyfic styles
+.form-horizontal {
+  label[for="associated_events"] {
+    @extend .col-sm-2, .control-label;
+  }
+
+  #associated_events {
+    @extend .col-sm-9;
+  }
+}

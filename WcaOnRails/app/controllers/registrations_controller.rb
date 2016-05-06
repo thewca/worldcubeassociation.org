@@ -228,17 +228,11 @@ class RegistrationsController < ApplicationController
       :birthday,
       :guests,
       :comments,
-      event_ids: Event.all.map(&:id),
+      registration_events_attributes: [:id, :event_id, :_destroy]
     ]
     if current_user.can_manage_competition?(competition_from_params)
       permitted_params << :status
     end
-    registration_params = params.require(:registration).permit(*permitted_params)
-
-    if registration_params.key?(:event_ids)
-      registration_params[:eventIds] = registration_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
-      registration_params.delete(:event_ids)
-    end
-    registration_params
+    params.require(:registration).permit(*permitted_params)
   end
 end

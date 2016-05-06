@@ -898,8 +898,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160407210623');
 
 INSERT INTO schema_migrations (version) VALUES ('20160504170758');
 
-<<<<<<< d819de4e79f19f7463c100e921b4983899a3b769
 INSERT INTO schema_migrations (version) VALUES ('20160504230105');
-=======
+
 INSERT INTO schema_migrations (version) VALUES ('20160505231300');
->>>>>>> Set up database background.

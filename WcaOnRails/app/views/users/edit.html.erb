@@ -187,11 +187,9 @@
         <%= simple_form_for @user do |f| %>
           <%= hidden_field_tag "section", "preferences" %>
 
-          <% if editable_fields.include?(:preferred_events) %>
-            <%= render "shared/associated_events_picker", form_builder: f, label: "Preferred events",
-                                                          events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
-            <span class="help-block">Selecting your preferred events makes registration for competitions quicker.</span>
-          <% end %>
+          <%= render "shared/associated_events_picker", form_builder: f, label: "Preferred events", disabled: ! editable_fields.include?(:preferred_events),
+                                                        events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
+          <span class="help-block">Selecting your preferred events makes registration for competitions quicker.</span>
 
           <%= f.submit 'Save', class: "btn btn-primary" %>
         <% end %>
