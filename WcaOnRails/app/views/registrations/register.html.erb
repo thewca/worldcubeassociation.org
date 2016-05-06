@@ -37,6 +37,11 @@
   <% else %>
 
     <% if @competition.registration_opened? %>
+      <% if current_user.preferred_events.empty? %>
+        <div class="alert alert-info">
+          To speed up registration in the future, you can set your preferred events <%= link_to "here", profile_edit_path(current_user, section: :preferences) %>.
+        </div>
+      <% end %>
       <p>
         Hi, <%= current_user.name %>!
       </p>
