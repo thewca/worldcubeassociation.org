@@ -8,6 +8,16 @@ FactoryGirl.define do
     password "wca"
     password_confirmation { "wca" }
 
+    transient do
+      preferred_event_ids []
+    end
+    # Using accept_nested_attributes_for
+    user_preferred_events_attributes do
+      preferred_event_ids.map do |event_id|
+        { event_id: event_id }
+      end
+    end
+
     before(:create) { |user| user.skip_confirmation! }
     trait :unconfirmed do
       before(:create) { |user| user.confirmed_at = nil }

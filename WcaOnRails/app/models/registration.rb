@@ -5,6 +5,10 @@ class Registration < ActiveRecord::Base
 
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
+  has_many :registration_events
+
+  accepts_nested_attributes_for :registration_events, allow_destroy: true
+
   validates :user, presence: true, on: [:create]
 
   validates_numericality_of :guests, greater_than_or_equal_to: 0
@@ -19,7 +23,7 @@ class Registration < ActiveRecord::Base
   end
 
   def events
-    (eventIds || "").split.map { |e| Event.find_by_id(e) }.sort_by &:rank
+    registration_events.map(&:event_object).sort_by(&:rank)
   end
 
   def name
@@ -103,11 +107,6 @@ class Registration < ActiveRecord::Base
     unless invalid_events.empty?
       errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
-  end
-
-  before_save :normalize_event_ids
-  private def normalize_event_ids
-    self.eventIds = events.map(&:id).join(" ")
   end
 
   before_validation :unpack_dates

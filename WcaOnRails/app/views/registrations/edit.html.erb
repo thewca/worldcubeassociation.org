@@ -31,7 +31,7 @@
       <%= f.input :countryId, collection: Country.all_real, value_method: :id, label_method: :name %>
     <% end %>
 
-    <%= f.input :event_ids, as: :events_picker, allowed_events: @competition.events, selected_events: @registration.events %>
+    <%= render "shared/associated_events_picker", form_builder: f, events_association_name: :registration_events, allowed_events: @competition.events, selected_events: @registration.events %>
 
     <% if @competition.guests_enabled? %>
       <%= f.input :guests %>

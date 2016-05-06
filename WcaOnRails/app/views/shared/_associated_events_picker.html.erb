@@ -1,0 +1,36 @@
+<%#
+Variables:
+ - form_builder
+ - label
+ - disabled
+ - events_association_name -> name of the associated events relation
+ - allowed_events -> an Array of Event objects that should be shown (all by default)
+ - selected_events -> an Array of Event objects that whould be marked as selected
+%>
+
+<% label ||= "Events" %>
+<% disabled ||= false %>
+<% allowed_events ||= Event.all_official %>
+
+<%# Note: form_builder.object is the object having associated events. %>
+<% associated_events = form_builder.object.send(events_association_name)
+   all_events = allowed_events.map do |event|
+     associated_events.find_by_event_id(event.id) || associated_events.build(event_id: event.id)
+   end %>
+
+<div class="form-group">
+  <%= label_tag events_association_name, label, class: "associated-events-label" %>
+  <div id="<%= events_association_name %>" class="associated-events">
+    <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
+      <span class="event-checkbox <%= "disabled" if disabled %>">
+        <% event = f.object.event_object %>
+        <%= f.hidden_field :event_id %>
+        <%= label_tag "#{events_association_name}_#{event.id}" do %>
+          <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
+          <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+        <% end %>
+        <%= f.hidden_field :id %>
+      </span>
+    <% end %>
+  </div>
+</div>

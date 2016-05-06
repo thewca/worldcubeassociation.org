@@ -152,13 +152,13 @@ after "development:users" do
     next if i < 480
     users.each_with_index do |user, i|
       status = i % 4 == 0 ? "a" : "p"
-      registrationEventIds = eventIds.sample(rand(1..eventIds.count)).join(" ")
+      registration_event_ids = eventIds.sample(rand(1..eventIds.count))
       if i % 2 == 0
         Registration.new(
           competition: competition,
           name: Faker::Name.name,
           personId: user.wca_id,
-          countryId: Country::ALL_COUNTRIES.sample.id,
+          countryId: Country.all_real.sample.id,
           gender: "m",
           birthYear: 1990,
           birthMonth: 6,
@@ -168,10 +168,10 @@ after "development:users" do
           comments: Faker::Lorem.paragraph,
           ip: "1.1.1.1",
           status: status,
-          eventIds: registrationEventIds,
+          registration_events_attributes: registration_event_ids.map { |event_id| {event_id: event_id} },
         ).save!(validate: false)
       else
-        FactoryGirl.create(:registration, user: user, competition: competition, status: status, eventIds: registrationEventIds)
+        FactoryGirl.create(:registration, user: user, competition: competition, status: status, event_ids: registration_event_ids)
       end
     end
   end
