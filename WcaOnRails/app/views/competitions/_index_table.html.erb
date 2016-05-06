@@ -21,10 +21,10 @@
       </span>
       <span class="competition-info">
         <p class="competition-link">
+          <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
           <%= link_to competition.cellName, competition_path(competition) %>
         </p>
         <p class="location">
-          <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
           <strong><%= competition.country.name %></strong>, <%= competition.cityName %>
         </p>
         <div class="venue-link">
