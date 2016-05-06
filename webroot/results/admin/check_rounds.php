@@ -90,6 +90,44 @@ function checkRounds () {
   foreach( $roundRows as $i => $roundRow ){
     list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";
+    $competitionDate = mktime( 0, 0, 0, $month, $day, $year );
+
+    $subsequentRoundCount = 0;
+    while(true) {
+      $nextRoundIndex = $i + $subsequentRoundCount + 1;
+      if($nextRoundIndex >= count($roundRows)) {
+        break;
+      }
+      $nextRoundRow = $roundRows[$nextRoundIndex];
+      if($nextRoundRow['competitionId'] != $competitionId || $nextRoundRow['eventId'] != $eventId) {
+        break;
+      }
+      $subsequentRoundCount++;
+    }
+
+    # Expanded Article 9m, since April 18, 2016
+    if (mktime( 0, 0, 0, 4, 18, 2016 ) <= $competitionDate) {
+      if($nbPersons <= 7) {
+        # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
+        $maxAllowedSubsequentRoundCount = 0;
+      } else if($nbPersons <= 15) {
+        # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
+        $maxAllowedSubsequentRoundCount = 1;
+      } else if($nbPersons <= 99) {
+        # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
+        $maxAllowedSubsequentRoundCount = 2;
+      } else {
+        # https://www.worldcubeassociation.org/regulations/#9m: Events must have at most four rounds.
+        $maxAllowedSubsequentRoundCount = 3;
+      }
+
+      if($subsequentRoundCount > $maxAllowedSubsequentRoundCount) {
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p>There were $nbPersons competitors in this round, and $subsequentRoundCount subsequent round(s), which is more than the allowed $maxAllowedSubsequentRoundCount subsequent round(s).</p>";
+        echo "<br /><hr />";
+        $wrongs++;
+      }
+    }
 
     #--- First round
     if ( $event != $prevEvent ) {
@@ -114,7 +152,7 @@ function checkRounds () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
-        if(( $i+1 ) < count( $roundRows )){ #--- Should be true.
+        if($subsequentRoundCount > 0) {
           $nextRoundId = $roundRows[$i+1]['roundId'];
           showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
         }
@@ -130,10 +168,9 @@ function checkRounds () {
         echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
 
         #--- Peek at next roundId
-        if(( $i+1 ) < count( $roundRows )) #--- Is not always true.
-          if(( $roundRows[$i+1]['competitionId'] == $competitionId ) && ( $roundRows[$i+1]['eventId'] == $eventId )){ #--- Idem
-            $nextRoundId = $roundRows[$i+1]['roundId'];
-            showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
+        if($subsequentRoundCount > 0) {
+          $nextRoundId = $roundRows[$i+1]['roundId'];
+          showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
         }
 
         echo "<p>All persons that competed in $eventId are in $roundCellName. It should thus not be indicated as Qualification round</p>";
@@ -148,30 +185,32 @@ function checkRounds () {
     else {
       $isThisRoundQuals = false;
 
-      # Article 9m, since April 9, 2008
-      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 9, 2008 ))
+      # Article 9m, since April 9, 2008 until April 17, 2016
+      if (mktime( 0, 0, 0, 4, 9, 2008 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 17, 2016 )) {
         if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
+        }
       }
 
       # Article 9m/n/o, since July 20, 2006 until April 8, 2008
-      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 9, 2008 )))
+      if ( mktime( 0, 0, 0, 7, 20, 2006 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 8, 2008 )) {
         if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
           $wrongs++;
+        }
       }
 
       $nbQualPersons = $isPrevRoundQuals ? getQualifications( $competitionId, $eventId, $prevRoundId, $roundId ) : $nbPersons;
 
       # Article 9p1, since April 14, 2010
-      if ( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 4, 14, 2010 ))
+      if ( mktime( 0, 0, 0, 4, 14, 2010 ) <= $competitionDate ) {
         if ( $nbQualPersons > ( 3*$prevNbPersons/4 )) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
@@ -179,9 +218,10 @@ function checkRounds () {
           echo "<br /><hr />";
           $wrongs++;
         }
+      }
 
       # Article 9p, since July 20, 2006 until April 13, 2010
-      if (( mktime( 0, 0, 0, $month, $day, $year ) >= mktime( 0, 0, 0, 7, 20, 2006 )) and ( mktime( 0, 0, 0, $month, $day, $year ) < mktime( 0, 0, 0, 4, 14, 2010 )))
+      if (mktime( 0, 0, 0, 7, 20, 2006 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 13, 2010 )) {
         if ( $nbQualPersons >= $prevNbPersons ) {
           echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
           showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
@@ -189,6 +229,7 @@ function checkRounds () {
           echo "<br /><hr />";
           $wrongs++;
         }
+      }
     }
     $nbRounds += 1;
     $prevNbPersons = $nbPersons;
