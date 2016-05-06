@@ -85,7 +85,6 @@ function saveChoices () {
     }
 
     #--- Change the Persons table
-    echo "changing name to $chosenName";//<<<
     pdo_query(
       "UPDATE Persons SET name=?, countryId=?, gender=?, year=?, month=?, day=? WHERE id=? AND subId='1'",
       array($chosenName, $chosenCountryId, $chosenGender, $chosenYear, $chosenMonth, $chosenDay, $chosenId)
