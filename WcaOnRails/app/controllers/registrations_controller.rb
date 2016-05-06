@@ -228,7 +228,7 @@ class RegistrationsController < ApplicationController
       :birthday,
       :guests,
       :comments,
-      registration_events_attributes: [:id, :event_id, :_destroy]
+      registration_events_attributes: [:id, :event_id, :_destroy],
     ]
     if current_user.can_manage_competition?(competition_from_params)
       permitted_params << :status

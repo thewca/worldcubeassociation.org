@@ -36,9 +36,9 @@ RSpec.describe RegistrationsController do
     it 'can set name, email, events, countryId for registrations without user' do
       patch :update, id: registration_without_user.id, registration: { name: "test name", email: "foo@bar.com", countryId: "smerbia",
                                                                        registration_events_attributes: [ {event_id: "222"} ] }
-                                                                       # This registration's registration_event with event_id = '333' is already in the databse
       registration_without_user.reload
       expect(registration_without_user.name).to eq "test name"
+      # This registration's registration_event with event_id = '333' is already in the databse and we've just added 2x2x2
       expect(registration_without_user.events.map(&:id)).to eq %w(333 222)
       expect(registration_without_user.email).to eq "foo@bar.com"
       expect(registration_without_user.countryId).to eq "smerbia"
