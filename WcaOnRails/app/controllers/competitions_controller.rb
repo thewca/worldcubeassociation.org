@@ -127,8 +127,8 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  private def post_post(post)
-    @post = post
+  private def create_post_and_redirect(post_attrs)
+    @post = Post.new(post_attrs)
     if @post.save
       flash[:success] = "Created new post"
       redirect_to post_path(@post.slug)
@@ -151,8 +151,7 @@ class CompetitionsController < ApplicationController
     unless comp.website.blank?
       body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
     end
-    @post = Post.new(title: title, body: body, author: current_user, world_readable: true)
-    post_post(@post)
+    create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
   end
 
   def post_results
@@ -225,8 +224,8 @@ class CompetitionsController < ApplicationController
         body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
-    post = Post.new(title: title, body: body, author: current_user, world_readable: true)
-    post_post(post)
+    comp.update!(results_posted_at: Time.now)
+    create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
   end
 
   def admin_edit

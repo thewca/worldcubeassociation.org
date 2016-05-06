@@ -19,6 +19,9 @@
         <p class="competition-link">
           <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
           <%= link_to competition.cellName, competition_path(competition) %>
+          <% if competition.results_posted_at <= Time.now %>
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are posted!"></span>
+          <% end %>
         </p>
         <p class="location"><strong><%= competition.country.name %></strong>, <%= competition.cityName %></p>
         <div class="venue-link">
