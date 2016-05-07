@@ -1,7 +1,5 @@
 FROM ubuntu:14.04
 
-ADD ./WcaOnRails /app/WcaOnRails
-
 ENV agi="apt-get install --yes --no-install-recommends"
 
 # From https://www.brightbox.com/docs/ruby/ubuntu/
@@ -22,7 +20,8 @@ RUN $agi imagemagick
 
 RUN $agi build-essential
 
+COPY ./Gemfile /app/WcaOnRails/
+COPY ./Gemfile.lock /app/WcaOnRails/
+
 WORKDIR /app/WcaOnRails
 RUN bundle install
-
-EXPOSE 3000

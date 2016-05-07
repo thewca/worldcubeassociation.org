@@ -7,8 +7,14 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
 
+  WcaOnRails-reqs:
+    build: WcaOnRails/
+    image: worldcubeassociation/worldcubeassociation.org:WcaOnRails-reqs
+
   web:
-    image: worldcubeassociation/worldcubeassociation.org:latest
+    image: worldcubeassociation/worldcubeassociation.org:WcaOnRails-reqs
+    depends_on:
+      - WcaOnRails-reqs
     command: bin/rails server --port 3000 --binding 0.0.0.0
     ports:
       - "3000:3000"
