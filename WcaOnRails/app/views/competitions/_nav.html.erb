@@ -136,17 +136,11 @@
       <hr />
 
       <% @competition.warnings.each do |field, message| %>
-        <div class="alert alert-warning">
-          <strong>Note:</strong>
-          <%= message %>
-        </div>
+        <%= alert :info, message, note: true %>
       <% end %>
 
       <% @competition.info.each do |field, message| %>
-        <div class="alert alert-info">
-          <strong>Note:</strong>
-          <%= message %>
-        </div>
+        <%= alert :info, message, note: true %>
       <% end %>
 
       <%= yield %>

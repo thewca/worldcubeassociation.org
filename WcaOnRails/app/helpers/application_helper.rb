@@ -126,4 +126,9 @@ module ApplicationHelper
     options[:separator] = '-'
     date_range(from_date, to_date, options)
   end
+
+  def alert(type, content, note: false)
+    content.prepend("<strong>Note:</strong> ") if note
+    content_tag :div, content.html_safe, class: "alert alert-#{type}"
+  end
 end

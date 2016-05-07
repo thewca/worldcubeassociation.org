@@ -243,6 +243,7 @@ en:
       unconfirmed_wca_id: "Unconfirmed WCA ID"
       profile: "Profile"
       approve: "Approve"
+      unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       pending_mail_confirmation: "This account is pending confirmation of new email address %{email}."
       pending_avatar_confirmation: "This account is pending confirmation of a new avatar."
       pending_claim_confirmation_html: "This account is waiting for %{delegate} to confirm their claimed WCA ID %{wca_id}."
@@ -308,7 +309,7 @@ en:
         delete_registration: "Delete registration."
         will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
         will_close_html: "Registration closes in <strong>%{days}</strong> on %{time}."
-        closed_html: "Registration closed <strong>%{days}</strong> ago on %{time} %>."
+        closed_html: "Registration closed <strong>%{days}</strong> ago on %{time}."
         please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
         please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
         please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}"
@@ -351,5 +352,6 @@ en:
       submit_confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified."
       submit_delete: "Are you sure you want to delete this competition? There is no going back."
       coordinates: "Coordinates"
+      results_preview_alert: "You are viewing results that have not been posted yet."
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"

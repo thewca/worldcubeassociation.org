@@ -5,9 +5,7 @@
   <%= render 'shared/error_messages', object: @user %>
 
   <% if !@user.confirmed_at %>
-    <div class="alert alert-warning">
-      This account's email address (<%= @user.email %>) is not confirmed.
-    </div>
+    <%= alert :warning, t('.unconfirmed_email', email: @user.email) %>
     <% if @user.unconfirmed_wca_id.present? %>
       <div class="alert alert-warning">
         <%= t '.pending_claim_mail_confirmation_html',
@@ -28,9 +26,7 @@
   <% end %>
 
   <% if @user.unconfirmed_email %>
-    <div class="alert alert-warning">
-      <%= t '.pending_mail_confirmation', email: @user.unconfirmed_email %>
-    </div>
+    <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
   <% end %>
   <% if @user.pending_avatar? %>
     <div class="alert alert-warning">
@@ -63,9 +59,7 @@
     </div>
   <% end %>
   <% if current_user.cannot_edit_data_reason_html(@user) %>
-    <div class="alert alert-warning">
-      <%= current_user.cannot_edit_data_reason_html(@user) %>
-    </div>
+    <%= alert :warning, current_user.cannot_edit_data_reason_html(@user) %>
   <% end %>
 
   <% editable_fields = current_user.editable_fields_of_user(@user) %>

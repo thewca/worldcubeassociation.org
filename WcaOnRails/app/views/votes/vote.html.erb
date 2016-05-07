@@ -3,24 +3,20 @@
 <div class="container">
 
   <% if @poll.over? %>
-    <div class="alert alert-danger">Poll is closed. Check out the <%= link_to "results", polls_results_path(@poll) %>.</div>
+    <%= alert :danger, "Poll is closed. Check out the #{link_to "results", polls_results_path(@poll)}." %>
   <% elsif @poll.confirmed || current_user.can_create_poll? %>
 
     <% if @poll.confirmed %>
-      <div class="alert alert-info">
-        Voting closes in <%= distance_of_time_in_words_to_now(@poll.deadline) %>, on <%= wca_local_time(@poll.deadline) %>.
-      </div>
+      <%= alert :info, "Voting closes in #{distance_of_time_in_words_to_now(@poll.deadline)}, on #{wca_local_time(@poll.deadline)}." %>
     <% else %>
-      <div class="alert alert-danger">
-        This is just a preview! You can confirm this poll <%= link_to "here", edit_poll_path %>.
-      </div>
+      <%= alert :danger, "This is just a preview! You can confirm this poll #{link_to "here", edit_poll_path}." %>
     <% end %>
 
     <h3><%=md @poll.question %></h3>
     <%=md @poll.comment %>
 
     <% if !@vote.new_record? %>
-      <div class="alert alert-warning"><p>You have already voted for this poll!</p><p>You can edit your vote below</p></div>
+      <%= alert :warning, "<p>You have already voted for this poll!</p><p>You can edit your vote below</p>" %>
     <% end %>
 
     <%= simple_form_for @vote do |f| %>
@@ -54,6 +50,6 @@
     <% end %>
 
   <% else %>
-    <div class="alert alert-danger">Voting is not open</div>
+    <%= alert "Voting is not open." %>
   <% end %>
 </div>

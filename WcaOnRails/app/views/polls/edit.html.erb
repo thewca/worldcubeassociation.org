@@ -6,15 +6,11 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <% if @poll.over? %>
-      <div class="alert alert-danger">
-        This poll is closed (deadline has passed). Check out the <%= link_to "results", polls_results_path(@poll) %>.
-    </div>
-    <% else %>
-      <div class="alert alert-info">
-        This poll is open to <%= link_to "voting", polls_vote_path(@poll) %>. Editing question or options is not allowed.
-      </div>
-    <% end %>
+    <%= if @poll.over?
+          alert :danger, "This poll is closed (deadline has passed). Check out the #{link_to "results", polls_results_path(@poll)}"
+        else
+          alert :info, "This poll is open to #{link_to "voting", polls_vote_path(@poll)}. Editing question or options is not allowed."
+        end %>
     <script>
     $(document).ready(function() {
       $("#poll_question").prop("disabled", true);
@@ -27,9 +23,8 @@
     });
     </script>
   <% else %>
-    <div class="alert alert-info">
-      This poll is not open to voting. You can see a preview <%= link_to 'here', polls_vote_path, target: '_blank' %>. Click confirm when you're ready to enable voting!
-    </div>
+    <%= alert :info, "This poll is not open to voting. You can see a preview #{link_to 'here', polls_vote_path, target: '_blank'}.
+                      Click confirm when you're ready to enable voting!" %>
   <% end %>
 
   <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,

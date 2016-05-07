@@ -10,7 +10,7 @@
   </h1>
 
   <% if @polls.empty? %>
-    <div class="alert alert-warning">There are currently no polls.</div>
+    <%= alert :warning, "There are currently no polls." %>
   <% else %>
     <h4>Open polls</h4>
     <%= render 'polls_list', polls: @open_polls %>
