@@ -101,6 +101,9 @@ GEM
       sass (>= 3.3.0)
     bootstrap-table-rails (1.10.1)
     builder (3.2.2)
+    bullet (5.0.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
     byebug (4.0.5)
       columnize (= 0.9.0)
     call_with_params (0.0.2)
@@ -384,6 +387,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    uniform_notifier (1.9.0)
     valid_email (0.0.11)
       activemodel
       mail (~> 2.6.1)
@@ -410,6 +414,7 @@ DEPENDENCIES
   blocks
   bootstrap-sass
   bootstrap-table-rails
+  bullet
   byebug
   capybara
   capybara-screenshot
@@ -471,4 +476,4 @@ DEPENDENCIES
   world-flags!
 
 BUNDLED WITH
-   1.12.0
+   1.12.3
