@@ -5,11 +5,11 @@
   <%= render 'shared/error_messages', object: @user %>
   <% real_user = User.find(@user.id) %>
   <% if real_user.person %>
-    <%= t '.already_have_html', wca_id:render("shared/wca_id", wca_id: real_user.wca_id) %>
+    <%= t '.already_have_html', wca_id: render("shared/wca_id", wca_id: real_user.wca_id) %>
   <% elsif real_user.unconfirmed_person && real_user.delegate_to_handle_wca_id_claim %>
     <%= t '.already_claimed_html',
-          wca_id:render("shared/wca_id", wca_id: real_user.unconfirmed_wca_id),
-          delegate:mail_to(real_user.delegate_to_handle_wca_id_claim.email,
+          wca_id: render("shared/wca_id", wca_id: real_user.unconfirmed_wca_id),
+          delegate: mail_to(real_user.delegate_to_handle_wca_id_claim.email,
                            real_user.delegate_to_handle_wca_id_claim.name,
                            target: "_blank") %>
   <% else %>

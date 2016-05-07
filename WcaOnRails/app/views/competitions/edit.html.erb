@@ -34,11 +34,11 @@
     <% else %>
       <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
-          <%= t '.locked_edit_html', board:mail_to_wca_board %>
+          <%= t '.locked_edit_html', board: mail_to_wca_board %>
         </div>
       <% elsif is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          <%= t '.confirmed_not_visible_html', board:mail_to_wca_board %>
+          <%= t '.confirmed_not_visible_html', board: mail_to_wca_board %>
         </div>
       <% elsif !is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-danger">
@@ -46,7 +46,7 @@
         </div>
       <% elsif !is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          <%= t '.awaiting_confirmation_html', board:mail_to_wca_board %>
+          <%= t '.awaiting_confirmation_html', board: mail_to_wca_board %>
         </div>
       <% end %>
     <% end %>

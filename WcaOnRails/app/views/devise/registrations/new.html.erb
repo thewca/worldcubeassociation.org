@@ -2,9 +2,7 @@
   <%= bootstrap_devise_error_messages! %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <%# FIXME not sure the default is needed anymore : locale 'en' file is %>
-      <%# present for devise, and default locale fallback to 'en'. %>
-      <h4><%= t('.sign_up', :default => "Sign up") %></h4>
+      <h4><%= t '.sign_up' %></h4>
     </div>
     <div class="panel-body">
       <%= simple_form_for(resource, as: resource_name, url: user_registration_path, html: { class: 'are-you-sure no-submit-on-enter' }) do |f| %>
@@ -56,8 +54,7 @@
 
         <%= f.hidden_field :claiming_wca_id %>
 
-        <%# FIXME not sure the default is needed anymore %>
-        <%= f.submit t('.sign_up', :default => "Sign up"), class: "btn btn-primary", disabled: true %>
+        <%= f.submit t('.sign_up'), class: "btn btn-primary", disabled: true %>
       <% end %>
     </div>
   </div>

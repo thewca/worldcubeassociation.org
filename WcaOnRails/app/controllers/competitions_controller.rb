@@ -288,7 +288,7 @@ class CompetitionsController < ApplicationController
         render :edit
       else
         @competition.destroy
-        flash[:success] = t('.delete_success', id:@competition.id)
+        flash[:success] = t('.delete_success', id: @competition.id)
         redirect_to root_url
       end
     elsif @competition.update_attributes(competition_params)

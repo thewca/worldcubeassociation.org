@@ -157,7 +157,7 @@
               <li><%= link_to(t('.sign_in'), new_user_session_path, class: "top-nav") %></li>
               <li class="divider"></li>
               <li><%= link_to(t('.sign_up'), new_user_registration_path) %></li>
-              <li><%= link_to t('devise.shared.links.didn_t_receive_confirmation_instructions', :default => "Didn't receive confirmation instructions?"), new_user_confirmation_path %></li>
+              <li><%= link_to(t('devise.shared.links.didn_t_receive_confirmation_instructions'), new_user_confirmation_path) %></li>
             <% end %>
           </ul>
         </li>

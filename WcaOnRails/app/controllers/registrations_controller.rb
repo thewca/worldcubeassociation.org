@@ -84,7 +84,7 @@ class RegistrationsController < ApplicationController
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
-        flash[:success] = I18n.t('competitions.nav.registration.flash.deleted', comp:@competition.name)
+        flash[:success] = I18n.t('competitions.nav.registration.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)

@@ -433,13 +433,13 @@ class User < ActiveRecord::Base
       # Not using _html suffix as automatic html_safe is available only from
       # the view helper
       return I18n.t('users.edit.cannot_edit.msg',
-                    reason:I18n.t('users.edit.cannot_edit.reason.assigned'),
-                    delegate_url:Rails.application.routes.url_helpers.delegates_path).html_safe
+                    reason: I18n.t('users.edit.cannot_edit.reason.assigned'),
+                    delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
     if user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
       return I18n.t('users.edit.cannot_edit.msg',
-                    reason:I18n.t('users.edit.cannot_edit.reason.registered'),
-                    delegate_url:Rails.application.routes.url_helpers.delegates_path).html_safe
+                    reason: I18n.t('users.edit.cannot_edit.reason.registered'),
+                    delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
     return nil
   end

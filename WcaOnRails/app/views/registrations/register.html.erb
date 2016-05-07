@@ -6,39 +6,39 @@
       <div class="alert alert-info">
         <% #This internationally works because datetime.distance_in_words.x_days is translated.%>
         <%= t '.registration.will_open_html',
-              days:distance_of_time_in_words_to_now(@competition.registration_open),
-              time:wca_local_time(@competition.registration_open) %>
+              days: distance_of_time_in_words_to_now(@competition.registration_open),
+              time: wca_local_time(@competition.registration_open) %>
       </div>
     <% end %>
     <% if @competition.registration_past? %>
       <div class="alert alert-danger">
         <%= t '.registration.closed_html',
-              days:distance_of_time_in_words_to_now(@competition.registration_close),
-              time:wca_local_time(@competition.registration_close) %>
+              days: distance_of_time_in_words_to_now(@competition.registration_close),
+              time: wca_local_time(@competition.registration_close) %>
       </div>
     <% end %>
   <% else %>
     <div class="alert alert-info">
       <%= t '.registration.will_close_html',
-            days:distance_of_time_in_words_to_now(@competition.registration_close),
-            time:wca_local_time(@competition.registration_close) %>
+            days: distance_of_time_in_words_to_now(@competition.registration_close),
+            time: wca_local_time(@competition.registration_close) %>
     </div>
   <% end %>
 
   <% if !current_user %>
     <% if @competition.registration_past? %>
       <%= t '.registration.please_sign_in_past_html',
-        sign_in:link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
-        here:link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% elsif @competition.registration_not_yet_opened? %>
       <%= t '.registration.please_sign_in_not_yet_open_html',
-        sign_in:link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
-        here:link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% else %>
       <%= t '.registration.please_sign_in_html',
-        sign_in:link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
-        comp:@competition.name,
-        here:link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        comp: @competition.name,
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% end %>
   <% else %>
 
@@ -49,13 +49,13 @@
         </div>
       <% end %>
       <p>
-      <%= t '.registration.greeting', name:current_user.name %>
+      <%= t '.registration.greeting', name: current_user.name %>
       </p>
 
       <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
         <div class="alert alert-danger">
-          <%= t '.registration.please_fix_profile_html', comp:@competition.name,
-                profile:link_to(t('.registration.profile'), profile_edit_path) %>
+          <%= t '.registration.please_fix_profile_html', comp: @competition.name,
+                profile: link_to(t('.registration.profile'), profile_edit_path) %>
           <ul>
             <% current_user.cannot_register_for_competition_reasons.each do |reason| %>
               <li><%= reason %></li>
@@ -65,7 +65,7 @@
       <% else %>
         <div>
           <% if @registration.new_record? %>
-            <%= t '.registration.can_register', comp:@competition.name %>
+            <%= t '.registration.can_register', comp: @competition.name %>
           <% else %>
             <%= t '.registration.have_registered', comp: @competition.name %>
 
@@ -77,8 +77,8 @@
               <div class="alert alert-warning">
                 <% waiting_list_info = @registration.waiting_list_info %>
                 <%= t '.registration.waiting_list',
-                      i:waiting_list_info.index + 1,
-                      n:waiting_list_info.length %>
+                      i: waiting_list_info.index + 1,
+                      n: waiting_list_info.length %>
               </div>
             <% else %>
               <div class="alert alert-success">
