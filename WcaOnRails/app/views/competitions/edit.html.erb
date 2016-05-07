@@ -59,7 +59,7 @@
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>
       <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
-      <%= f.input :venueDetails, t('.venue_details__html', md: t('.supports_md_html')) %>
+      <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
       <%= f.input :venueAddress %>
 
       <div id="venue-map-wrapper">

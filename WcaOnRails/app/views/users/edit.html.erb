@@ -71,11 +71,11 @@
   <% editable_fields = current_user.editable_fields_of_user(@user) %>
 
   <ul class="nav nav-tabs nav-justified">
-    <li><a href="#general" data-toggle="tab">General</a></li>
+    <li><a href="#general" data-toggle="tab"><%= t '.general' %></a></li>
     <% if @user == current_user %>
-      <li><a href="#email" data-toggle="tab">Email</a></li>
-      <li><a href="#preferences" data-toggle="tab">Preferences</a></li>
-      <li><a href="#password" data-toggle="tab">Password</a></li>
+      <li><a href="#email" data-toggle="tab"><%= t '.email' %></a></li>
+      <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
+      <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
     <% end %>
   </ul>
 
@@ -99,7 +99,7 @@
                   <% end %>
                 <% end %>
 
-                <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar), label: "Upload new avatar", hint: "After uploading a new avatar, you will have to wait for the Board to approve it." %>
+                <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
                 <%= f.hidden_field :pending_avatar_cache %>
               </div>
             </div>

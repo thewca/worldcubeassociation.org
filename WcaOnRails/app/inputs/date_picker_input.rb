@@ -56,7 +56,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def date_options_base
     {
-        # FIXME see issue #585
+        # FIXME: see issue #585
         # Right now passing another locale raises an error in 'moment',
         # complaining the locale is not loaded.
         locale: I18n.default_locale.to_s,

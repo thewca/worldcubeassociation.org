@@ -88,8 +88,8 @@ class UsersController < ApplicationController
                         end
       if @user.claiming_wca_id
         flash[:success] = I18n.t('successes.messages.wca_id_claimed',
-                                 wca_id:@user.unconfirmed_wca_id,
-                                 user:@user.delegate_to_handle_wca_id_claim.name)
+                                 wca_id: @user.unconfirmed_wca_id,
+                                 user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
         redirect_to profile_claim_wca_id_path
       else
