@@ -20,6 +20,14 @@ To build everything, including all translations, run:
 
     ./make.py --wca
 
+To check whether the translations are ok, run:
+
+    ./make.py --do-not-build --check=all
+
+or:
+
+    ./make.py --do-not-build --check=french,german,japanese,russian
+
 ## Dependencies
 
 If you want to build the Regulations without creating the pdf :

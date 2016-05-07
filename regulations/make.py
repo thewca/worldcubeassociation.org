@@ -15,6 +15,7 @@ import webbrowser
 entryPoint = os.path.split(os.path.abspath(__file__))[0]
 os.chdir(entryPoint)
 
+import check
 import html
 import pdf
 
@@ -52,6 +53,9 @@ def main():
 
   if args.server:
     server(args)
+
+  if args.check != '':
+    checkTranslations(args)
 
 
 # Language Data Setup
@@ -155,6 +159,13 @@ parser.add_argument(
   help="Print lots of debug/progress info."
 )
 
+parser.add_argument(
+  '--check', '-!',
+  action='store',
+  default='',
+  help="Check consistency between translations and original versions, and some other tests. Specify comma-separated list of languages, or 'all' to check all translations."
+)
+
 
 # Clean
 
@@ -251,6 +262,23 @@ def server(args):
   # This seems to work better than trying to call it from Python.
   subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"], cwd="./build/")
 
+def checkTranslations(args):
+  if args.check == 'all':
+    check_translations = languages
+  else:
+    check_translations = []
+    for language in args.check.split(','):
+      if language in languages:
+        check_translations.append(language)
+      else:
+        print 'Warning: unknown language %s.' % language
+  translation_checker = check.translationChecker()
+  for language in check_translations:
+    if language == 'english':
+      continue
+    print 'Checking translation %s...' % language
+    translation_checker.checkTranslation(language)
+    print
 
 # Make the script work standalone.
 
