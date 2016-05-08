@@ -1,7 +1,7 @@
 <%= render layout: "nav" do %>
 
   <div class="page-header">
-    <h1>Your OAuth Applications</h1>
+    <h1><%= t('.your_apps') %></h1>
   </div>
 
   <p><%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-success' %></p>
@@ -11,7 +11,7 @@
     <tr>
       <th><%= t('.name') %></th>
       <th><%= t('.callback_url') %></th>
-      <th>Owner</th>
+      <th><%= t('.owner') %></th>
       <th></th>
       <th></th>
     </tr>

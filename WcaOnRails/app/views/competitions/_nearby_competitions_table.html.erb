@@ -1,10 +1,10 @@
 <table class="table">
   <tr>
-    <td>Name</td>
-    <td>Delegate(s)</td>
-    <td>Date</td>
-    <td>Location</td>
-    <td>Distance</td>
+    <td><%= t '.name' %></td>
+    <td><%= t '.delegates' %></td>
+    <td><%= t '.date' %></td>
+    <td><%= t '.location' %></td>
+    <td><%= t '.distance' %></td>
   </tr>
   <% nearby_competitions.each do |c| %>
     <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
@@ -12,7 +12,7 @@
       <td><%= c.delegates.map(&:name).to_sentence %></td>
       <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
       <% days_until = (c.start_date - @competition.start_date).to_i %>
-      <%= days_until.abs %> <%="day".pluralize(days_until) %> <%= days_until < 0 ? "before" : "after" %>
+      <%=t('datetime.distance_in_words.x_days', count: days_until) %> <%= days_until < 0 ? t('.before') : t('.after') %>
       </td>
       <td><%= c.cityName %>, <%= c.countryId %></td>
       <td class="text-nowrap text-right">

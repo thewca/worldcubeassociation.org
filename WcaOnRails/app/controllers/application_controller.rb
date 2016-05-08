@@ -4,12 +4,17 @@ class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   protect_from_forgery with: :exception
 
-  before_action :add_new_relic_headers
+  before_action :add_new_relic_headers, :set_locale
   protected def add_new_relic_headers
     ::NewRelic::Agent.add_custom_attributes({ user_id: current_user ? current_user.id : nil })
     ::NewRelic::Agent.add_custom_attributes({ HTTP_REFERER: request.headers['HTTP_REFERER'] })
     ::NewRelic::Agent.add_custom_attributes({ HTTP_ACCEPT: request.headers['HTTP_ACCEPT'] })
     ::NewRelic::Agent.add_custom_attributes({ HTTP_USER_AGENT: request.user_agent })
+  end
+
+  def set_locale
+    # We set this to have access to the locale in controller
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 
   def doorkeeper_unauthorized_render_options(error: nil)

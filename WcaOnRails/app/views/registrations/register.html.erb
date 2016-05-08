@@ -4,35 +4,41 @@
   <% if !@competition.registration_opened? %>
     <% if @competition.registration_not_yet_opened? %>
       <div class="alert alert-info">
-        Registration will open in <strong><%= distance_of_time_in_words_to_now(@competition.registration_open) %></strong> on <%= wca_local_time(@competition.registration_open) %>.
+        <% #This internationally works because datetime.distance_in_words.x_days is translated.%>
+        <%= t '.registration.will_open_html',
+              days: distance_of_time_in_words_to_now(@competition.registration_open),
+              time: wca_local_time(@competition.registration_open) %>
       </div>
     <% end %>
     <% if @competition.registration_past? %>
       <div class="alert alert-danger">
-        Registration closed <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> ago on <%= wca_local_time(@competition.registration_close) %>.
+        <%= t '.registration.closed_html',
+              days: distance_of_time_in_words_to_now(@competition.registration_close),
+              time: wca_local_time(@competition.registration_close) %>
       </div>
     <% end %>
   <% else %>
     <div class="alert alert-info">
-      Registration closes in <strong><%= distance_of_time_in_words_to_now(@competition.registration_close) %></strong> on <%= wca_local_time(@competition.registration_close) %>.
+      <%= t '.registration.will_close_html',
+            days: distance_of_time_in_words_to_now(@competition.registration_close),
+            time: wca_local_time(@competition.registration_close) %>
     </div>
   <% end %>
 
   <% if !current_user %>
     <% if @competition.registration_past? %>
-      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to check the status of
-      your registration. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>, but it
-      is too late to register for this competition.
+      <%= t '.registration.please_sign_in_past_html',
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% elsif @competition.registration_not_yet_opened? %>
-      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to check the status of
-      your registration. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>, but it
-      registration is not yet open.
+      <%= t '.registration.please_sign_in_not_yet_open_html',
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% else %>
-      <%= link_to "Sign in", competition_register_require_sign_in_path(@competition) %> to register for
-      <%= @competition.name %>. If you do not yet have a WCA account, you
-      can create one <%= link_to "here", new_user_registration_path, target: "_blank" %>.
+      <%= t '.registration.please_sign_in_html',
+        sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+        comp: @competition.name,
+        here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% end %>
   <% else %>
 
@@ -43,14 +49,13 @@
         </div>
       <% end %>
       <p>
-        Hi, <%= current_user.name %>!
+      <%= t '.registration.greeting', name: current_user.name %>
       </p>
 
       <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
         <div class="alert alert-danger">
-          In order to register for this <%= @competition.name %>,
-          you must fix the following problems with your
-          <%= link_to "profile", profile_edit_path %>:
+          <%= t '.registration.please_fix_profile_html', comp: @competition.name,
+                profile: link_to(t('.registration.profile'), profile_edit_path) %>
           <ul>
             <% current_user.cannot_register_for_competition_reasons.each do |reason| %>
               <li><%= reason %></li>
@@ -60,23 +65,24 @@
       <% else %>
         <div>
           <% if @registration.new_record? %>
-            You can register for <%= @competition.name %> below.
+            <%= t '.registration.can_register', comp: @competition.name %>
           <% else %>
-            You have registered for <%= @competition.name %>.
-            You can see your registration information below.
+            <%= t '.registration.have_registered', comp: @competition.name %>
 
             <% if !current_user.can_edit_registration?(@registration) %>
-              Contact the organizer if you wish to make a change.
+              <%= t '.registration.contact_organizer' %>
             <% end %>
 
             <% if @registration.pending? %>
               <div class="alert alert-warning">
                 <% waiting_list_info = @registration.waiting_list_info %>
-                You are currently number <%= waiting_list_info.index + 1 %> of <%= waiting_list_info.length %> on the waiting list.
+                <%= t '.registration.waiting_list',
+                      i: waiting_list_info.index + 1,
+                      n: waiting_list_info.length %>
               </div>
             <% else %>
               <div class="alert alert-success">
-                Your registration has been accepted!
+                <%= t '.registration.accepted' %>
               </div>
             <% end %>
           <% end %>
@@ -103,10 +109,10 @@
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
               <% if @registration.new_record? %>
-                <%= f.submit "Register!", class: "btn btn-success" %>
+                <%= f.submit t('.registration.register'), class: "btn btn-success" %>
               <% elsif current_user.can_edit_registration?(@registration) %>
-                <%= f.submit "Update Registration", class: "btn btn-success" %>
-                <%= link_to "Delete", registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete your registration?", toggle: "tooltip" }, title: "Delete registration." %>
+                <%= f.submit t('.registration.update'), class: "btn btn-success" %>
+                <%= link_to t('.registration.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('.registration.delete_confirm'), toggle: "tooltip" }, title: t('.registration.delete_registration') %>
               <% end %>
             </div>
           </div>

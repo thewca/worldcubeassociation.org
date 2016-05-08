@@ -1,9 +1,9 @@
-<%= f.input :unconfirmed_wca_id, label: "WCA ID", as: :user_ids, persons_table: true, only_one: true %>
+<%= f.input :unconfirmed_wca_id, label: t('common.wca_id'), as: :user_ids, persons_table: true, only_one: true %>
 <div id="select-nearby-delegate-area">
   <%= render "users/select_nearby_delegate" %>
 </div>
 
-<%= f.input :dob_verification, label: "Birthdate", as: :date_picker %>
+<%= f.input :dob_verification, label: t('activerecord.attributes.user.dob'), as: :date_picker %>
 
 <script>
   $(function() {

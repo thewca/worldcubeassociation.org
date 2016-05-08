@@ -4,19 +4,18 @@
 <%= render layout: 'nav' do %>
 
   <% if @competition_admin_view %>
-    <h2>Announcements</h2>
+    <h2><%= t '.announcements' %></h2>
     <ul>
-      <li><%= link_to "Upload results", "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
+      <li><%= link_to t('.upload_results'), "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
       <li>
         <%= button_to competition_post_announcement_path, class: 'btn', form: { target: "_blank" }, method: :get do %>
-          Post competition announcement
+          <%= t '.post_announcement' %>
         <% end %>
       </li>
     </ul>
     <hr>
   <% end %>
 
-  <% supports_md_message = "Supports <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>".html_safe %>
 
   <% is_actually_confirmed = Competition.find(@competition.id).isConfirmed? %>
   <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-competition-form' }, wrapper: :horizontal_form,
@@ -35,19 +34,19 @@
     <% else %>
       <% if is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-success">
-          This competition is publicly visible and locked for editing. If you need to make a change, contact the <%= mail_to_wca_board %>.
+          <%= t '.locked_edit_html', board: mail_to_wca_board %>
         </div>
       <% elsif is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          You've confirmed this competition, but it is not yet visible to the public. Wait for the <%= mail_to_wca_board %> to make it visible.
+          <%= t '.confirmed_not_visible_html', board: mail_to_wca_board %>
         </div>
       <% elsif !is_actually_confirmed && @competition.showAtAll? %>
         <div class="alert alert-danger">
-          This competition is publicly visible, any changes you make will show up to the public!
+          <%= t '.is_visible' %>
         </div>
       <% elsif !is_actually_confirmed && !@competition.showAtAll? %>
         <div class="alert alert-warning">
-          Fill in all the fields and click Confirm when you're ready for the <%= mail_to_wca_board %> to approve this competition.
+          <%= t '.awaiting_confirmation_html', board: mail_to_wca_board %>
         </div>
       <% end %>
     <% end %>
@@ -59,8 +58,8 @@
 
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>
-      <%= f.input :venue, hint: "The venue where the competition takes place. #{supports_md_message}. Example: [Text to display](http://somewebsite.com)".html_safe %>
-      <%= f.input :venueDetails, hint: supports_md_message %>
+      <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
+      <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
       <%= f.input :venueAddress %>
 
       <div id="venue-map-wrapper">
@@ -70,7 +69,7 @@
 
       <div class="form-group <%= !@competition.errors[:latitude].empty? || !@competition.errors[:longitude].empty? ? "has-error" : "" %>">
         <label class="integer optional col-sm-2 control-label" for="competition_latitude">
-          Coordinates
+          <%= t '.coordinates' %>
         </label>
         <div class="col-sm-9">
           <div class="input-group">
@@ -232,21 +231,21 @@
         <%= render "nearby_competitions" %>
       </div>
 
-      <%= f.input :information, hint: supports_md_message %>
-      <%= f.input :delegate_ids, hint: "WCA delegates for the competition.", as: :user_ids, only_delegates: true %>
-      <%= f.input :organizer_ids, hint: "Competition organizers (they need an account to be listed here).", as: :user_ids %>
-      <%= f.input :contact, hint: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. #{supports_md_message}. Example: [Text to display](mailto:some@email.com)".html_safe %>
-      <%= f.input :website, hint: "The website of the competition. Must be a valid http(s) url.".html_safe %>
+      <%= f.input :information, hint: t('.supports_md_html') %>
+      <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
+      <%= f.input :organizer_ids, as: :user_ids %>
+      <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
+      <%= f.input :website %>
 
       <% event_groups = [
         [
-          "Events",
+          t('.events'),
           true,
           @competition.events.select(&:official?),
           Event.all_official,
         ],
         [
-          "Events that are no longer official",
+          t('.unoff_events'),
           false, # Only show deprecated events if this competition has any.
           @competition.events.select(&:deprecated?),
           Event.all_deprecated,
@@ -274,26 +273,28 @@
 
       <div class="col-sm-offset-2 col-sm-9">
         <div class="row datetimerange">
-          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime, hint: "Note: Registration open and close are in UTC time" %>
+          <%= f.input :registration_open, as: :datetime_picker, wrapper: :ranged_datetime %>
           <%= f.input :registration_close, as: :datetime_picker, wrapper: :ranged_datetime %>
         </div>
       </div>
     </div>
 
     <hr>
-    <%= f.input :remarks, disabled: is_actually_confirmed, hint: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable." %>
+    <%= f.input :remarks, disabled: is_actually_confirmed %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <%= f.button :submit, class: "btn-primary" %>
+        <%= f.button :submit, t('.submit_update_value'), class: "btn-primary" %>
 
         <% if !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
-           <%= f.button :submit, "Confirm", class: "btn-warning", data: { confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified." } %>
+          <%= button_tag(type: 'submit', name: "commit", value: "Confirm", class: "btn btn-warning", data: { confirm: t('.submit_confirm') }) do %>
+            <%= t '.submit_confirm_value' %>
+          <% end %>
         <% end %>
 
         <% unless current_user.get_cannot_delete_competition_reason(@competition) %>
-          <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this competition? There is no going back." }) do %>
-            <i class="glyphicon glyphicon-trash"></i> Delete
+          <%= button_tag(type: 'submit', name: "commit", value: "Delete", class: "btn btn-danger", data: { confirm: t('.submit_delete') }) do %>
+            <i class="glyphicon glyphicon-trash"></i> <%= t '.submit_delete_value' %>
           <% end %>
         <% end %>
       </div>

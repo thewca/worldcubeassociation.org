@@ -39,7 +39,7 @@ module NotificationsHelper
                        else
                          # Show users without WCA IDs how to claim a WCA ID for their account.
                          {
-                           text: "Connect your WCA ID to your account!",
+                           text: I18n.t('notifications.connect_wca_id'),
                            url: profile_claim_wca_id_path,
                          }
                        end

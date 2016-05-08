@@ -82,12 +82,14 @@ class UsersController < ApplicationController
         sign_in @user, bypass: true
       end
       flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
-                          "Account updated, emailed #{@user.unconfirmed_email} to confirm your new email address."
+                          I18n.t('successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
                         else
-                          "Account updated"
+                          I18n.t('successes.messages.account_updated')
                         end
       if @user.claiming_wca_id
-        flash[:success] = "Successfully claimed WCA ID #{@user.unconfirmed_wca_id}. Check your email, and wait for #{@user.delegate_to_handle_wca_id_claim.name} to approve it!"
+        flash[:success] = I18n.t('successes.messages.wca_id_claimed',
+                                 wca_id: @user.unconfirmed_wca_id,
+                                 user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
         redirect_to profile_claim_wca_id_path
       else

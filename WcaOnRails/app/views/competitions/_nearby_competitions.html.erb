@@ -6,23 +6,23 @@
 
 <div class="form-group">
   <label class="col-sm-2 control-label">
-    Nearby competitions (within <%= Competition::NEARBY_DAYS_WARNING %> days and <%= Competition::NEARBY_DISTANCE_KM_WARNING %> km)
+    <%= t '.label', days: Competition::NEARBY_DAYS_WARNING, kms: Competition::NEARBY_DISTANCE_KM_WARNING %>
   </label>
   <div class="col-sm-9">
     <% if @competition.has_date? && @competition.has_location? %>
       <% nearby_competitions = @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10] %>
       <% if nearby_competitions.empty? %>
-        <div class="alert alert-success" role="alert">No nearby competitions!</div>
+        <div class="alert alert-success" role="alert"><%= t '.no_comp_nearby' %></div>
       <% else %>
         <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions %>
       <% end %>
     <% else %>
       <% nearby_competitions = [] %>
       <% if !@competition.has_date? %>
-        <div class="alert alert-danger" role="alert">You have not assigned a date for this competition yet.</div>
+        <div class="alert alert-danger" role="alert"><%= t '.no_date_yet' %></div>
       <% end %>
       <% if !@competition.has_location? %>
-        <div class="alert alert-danger" role="alert">You have not assigned a location for this competition yet.</div>
+        <div class="alert alert-danger" role="alert"><%= t '.no_location_yet' %></div>
       <% end %>
     <% end %>
   </div>
@@ -31,13 +31,13 @@
 <% if @competition_admin_view %>
   <div class="form-group">
     <label class="col-sm-2 control-label">
-      Last <%= Competition::NEARBY_DAYS_INFO %> days
+      <%= t '.label_admin', days: Competition::NEARBY_DAYS_INFO  %>
     </label>
     <div class="col-sm-9">
       <% nearby_competitions_info = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_INFO).sort_by(&:start_date) %>
       <% nearby_count = nearby_competitions_info.count %>
-      <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= nearby_count %> <%= "competition".pluralize(nearby_count) %> within <%= Competition::NEARBY_DISTANCE_KM_INFO %>km and <%= Competition::NEARBY_DAYS_INFO %> days.
-        <button type="button" class="btn" data-toggle="modal" data-target="#competitions-last-year-modal">Show</button>
+      <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= t '.nearby_admin', comps: nearby_count, comp: t('.comp').pluralize(nearby_count), kms: Competition::NEARBY_DISTANCE_KM_INFO, days: Competition::NEARBY_DAYS_INFO %>
+      <button type="button" class="btn" data-toggle="modal" data-target="#competitions-last-year-modal"><%= t '.show' %></button>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Within <%= Competition::NEARBY_DAYS_INFO %> days</h4>
+          <h4 class="modal-title"><%= t '.within', days: Competition::NEARBY_DAYS_INFO %></h4>
         </div>
         <div class="modal-body">
           <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions_info %>

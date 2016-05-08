@@ -41,7 +41,7 @@ RSpec.feature "Claim WCA ID" do
 
       # Make sure we inform the user of the incorrect birthdate they just
       # entered.
-      expect(page.find(".alert.alert-danger")).to have_content("Dob verification incorrect")
+      expect(page.find(".alert.alert-danger")).to have_content("Birthdate incorrect")
       # Now enter the correct birthdate and submit the form!
       fill_in "Birthdate", with: "1988-02-03"
       click_button "Claim WCA ID"

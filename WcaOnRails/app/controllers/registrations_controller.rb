@@ -84,7 +84,7 @@ class RegistrationsController < ApplicationController
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
-        flash[:success] = "Successfully deleted your registration for #{@competition.name}"
+        flash[:success] = I18n.t('competitions.nav.registration.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
@@ -174,7 +174,7 @@ class RegistrationsController < ApplicationController
         mailer.deliver_now
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else
-        flash[:success] = "Updated registration"
+        flash[:success] = I18n.t('competitions.nav.registration.flash.updated')
       end
       if params[:from_admin_view]
         redirect_to edit_registration_path(@registration)
@@ -182,7 +182,7 @@ class RegistrationsController < ApplicationController
         redirect_to competition_register_path(@registration.competition)
       end
     else
-      flash.now[:danger] = "Could not update registration"
+      flash.now[:danger] = I18n.t('competitions.nav.registration.flash.failed')
       render :edit
     end
   end
@@ -210,7 +210,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = "Successfully registered!"
+      flash[:success] = I18n.t('competitions.nav.registration.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_now
       redirect_to competition_register_path

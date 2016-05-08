@@ -1,0 +1,356 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+fr:
+  common:
+    here: "ici"
+    wca_id: "ID WCA"
+  oauth:
+    applications:
+      nav:
+        your_apps: "Vos applications OAuth"
+        new: "Créer"
+        name: "Nom"
+        callback_url: "Url du callback"
+        owner: "Propriétaire"
+  recaptcha:
+    errors:
+      verification_failed: "Êtes-vous un robot ?"
+      recaptcha_unreachable: "Erreur de communication au serveur recaptcha"
+  activerecord:
+    attributes:
+      user:
+        name: "Nom complet"
+        wca_id: "ID WCA"
+        unconfirmed_wca_id: "ID WCA à confirmer"
+        login: "Email ou ID WCA"
+        country_iso2: "Nationalité"
+        dob: "Date de naissance"
+        dob_verification: "Date de naissance"
+        gender: "Genre"
+        email: "Adresse email"
+        password: "Mot de passe"
+        current_password: "Mot de passe actuel"
+        password_confirmation: "Confirmation du mot de passe"
+        remember_me: "Se souvenir de moi"
+        pending_avatar: "Charger une nouvelle photo de profil"
+        remove_avatar: "Supprimer la photo de profil"
+      competition:
+        competition_id_to_clone: "Id de la compétition à cloner"
+
+        isConfirmed: "Bloquer l'édition pour les organisateurs"
+        showAtAll: "Rendre la compétition publique"
+
+        name: "Nom"
+        cellName: "Alias"
+        countryId: "Pays"
+        cityName: "Ville"
+        venue: "Salle"
+        venueAddress: "Adresse de la salle"
+        venueDetails: "Détails de la salle"
+
+        start_date: "Date de début"
+        end_date: "Date de fin"
+
+        delegate_ids: "Délégué(s) WCA"
+        organizer_ids: "Organisateur(s)"
+
+        website: "Site internet"
+
+        use_wca_registration: "Je souhaite utiliser le site de la WCA pour les inscriptions"
+        guests_enabled: "Accompagnateurs"
+        receive_registration_emails: "M'avertir par email quand quelqu'un s'inscrit à cette compétition"
+        registration_open: "Ouverture des inscriptions"
+        registration_close: "Fermeture des inscriptions"
+        remarks: "Remarques"
+      registration:
+        countryId: "Pays"
+  simple_form:
+    "yes": "Oui"
+    "no": "Non"
+    file:
+      text: "fichier"
+    required:
+      text: 'requis'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      html: ''
+    error_notification:
+      default_message: "Merci de corriger les problèmes ci dessous :"
+    labels:
+      defaults:
+        event_ids: "Épreuves"
+        guests: "Accompagnateurs"
+        comments: "Commentaires"
+      competition:
+        id: "ID"
+    hints:
+      defaults:
+        dob: "Sélectionnez votre date de naissance, ou entrez la au format AAAA-MM-JJ."
+      user:
+        name_html: "Entrez votre nom complet correctement, par exemple <strong>Stefan Pochmann</strong>. Pas négligemment comme <strong>s pochman</strong> ou <strong>Stefan POCHMAN</strong>."
+        email: "Si vous changez votre adresse email, vous devrez la confimer."
+        pending_avatar: "Après avoir chargé une nouvelle photo de profil, vous devrez attendre que le bureau de la WCA l'approuve."
+      competition:
+        competition_id_to_clone: "Optionnel. Cela vous permet de partir du modèle d'une compétition passée similaire, afin de gagner du temps."
+        name: "Le nom complet de la compétition, avec la date à la fin (Par exemple, European Rubik's Cube Championship 2006). Pensez à mettre la première lettre des mots en majuscule."
+        cellName: "Un nom court pour l'affichage. Si le nom de la compétition est déjà court, vous pouvez réutiliser ce nom (par exemple, France 2006)."
+        cityName: "Nom de la ville où la compétition a lieu. Ne pas mettre le pays (Par exemple, Paris)."
+        information: "Quelques informations à propos de la compétition (Par exemple, France 2006 est ouvert à toute les nationalités, maximum 100 compétiteurs). "
+        delegate_ids: "Délégué(s) WCA pour la compétition."
+        organizer_ids: "Organisateur(s) de la compétition (ils doivent avoir un compte pour être listé ici)."
+        website: "Le site internet de la compétition. Doit être une adresse http(s) valide."
+        registration_open: "Note : Les dates d'ouverture et de fermeture des inscriptions sont au fuseau horaire UTC !"
+        remarks: "Informations complémentaires que vous souhaitez faire parvenir au bureau de la WCA. Par exemple, les raisons pour lesquelles cette compétition a été créé moins d'un mois à l'avance, le cas échéant."
+      post:
+        body: "Utilisez la balise &lt;!-- break --&gt; pour afficher un extrait sur la page d'accueil. Un post sur la page d'accueil affichera tout le texte jusqu'à cette balise. Le post complet affichera tout le texte."
+    options:
+      registration:
+        status:
+          a: "Accepté"
+          p: "En attente"
+      competition:
+        guests_enabled:
+          "true": "Ne PAS demander de renseigner les accompagnateurs"
+          "false": "Demander de renseigner les accompagnateurs"
+  errors:
+    messages:
+      error: "erreur"
+      form_error: "Le formulaire contient %{x_error} :"
+      updating_user: "Erreur lors de la sauvegarde"
+      wrong_size: "n'est pas de la bonne taille (il devrait faire %{file_size})"
+      size_too_small: "est trop petit (il devrait faire au moins %{file_size})"
+      size_too_big: "est trop gros (il devrait faire au plus %{file_size})"
+      blank: "ne peut pas être vide"
+      confirmation: "ne correspond pas à %{attribute}"
+      invalid: "est invalide"
+  successes:
+    messages:
+      account_updated: "Compte mis à jour"
+      wca_id_claimed: "Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos emails, et attendez que %{user} l'approuve."
+      account_updated_confirm: "Compte mis à jour, un email a été envoyé à %{email} pour confirmer votre nouvelle adresse email."
+  doorkeeper:
+    authorizations:
+      new:
+        title: "Autorisation requise"
+    scopes:
+      public: 'Accéder à vos données publiques (nom, ID WCA, genre, nationalité, et photo de profil)'
+      dob: 'Accéder à votre date de naissance'
+      email: 'Accéder à votre adresse email'
+
+  # Views-related keys
+  devise:
+    conversion_message:
+      no_account: "Pas de compte ?"
+      sign_up: "Inscrivez vous "
+    registrations:
+      new:
+        have_competed: "J'ai déjà participé à une compétition de la WCA."
+        have_never_competed: "Je n'ai jamais participé à une compétition de la WCA."
+        let_us_know: "Merci de nous indiquer si vous avez déjà participé à une compétition de la WCA."
+        welcome_back: "Bon retour parmi nous ! Pour créer votre compte sur le site de la WCA, nous avons besoin de connaître l'ID WCA avec lequel vous avez participé."
+        welcome: "Bienvenue ! Avant que vous puissiez participer à votre première compétition WCA, nous avons besoin de plus d'informations pour vous identifier. Merci de noter que votre date de naissance ne sera jamais diffusée sans votre permission."
+        gender:
+          male: "Homme"
+          female: "Femme"
+          other: "Autre"
+  layouts:
+    navigation:
+      information: "Information"
+      about: "À propos de la WCA"
+      delegates: "Délégués WCA"
+      organisations: "Organisations Nationales"
+      faq: "Questions fréquentes"
+      contact: "Informations de Contact"
+      forum: "Forum"
+      tools: "Outils"
+      logo: "Logo"
+      competitions: "Compétitions"
+      all: "Toutes"
+      my_competitions: "Mes Compétitions"
+      new_competition: "Nouvelle Compétition"
+      results: "Résultats"
+      rankings: "Classements"
+      records: "Records"
+      persons: "Individuels"
+      statistics: "Statistiques"
+      multimedia: "Multimedia"
+      db_export: "Export de la base de données"
+      regulations: "Règlement"
+      guidelines: "Recommandations"
+      scrambles: "Mélanges"
+      history: "Historique"
+      translations: "Traductions"
+      administration: "Administration"
+      manage_users: "Gérer les utilisateurs"
+      delegate: "Délégué"
+      panel: "Tableau de bord"
+      results_team: "Équipe résultats"
+      results_admin: "Admin"
+      results_phpmyadmin: "phpMyAdmin"
+      new_post: "Nouveau post"
+      team_leader: "Chef d'équipe"
+      sign_in: "Connexion"
+      sign_out: "Déconnexion"
+      sign_up: "Inscription"
+      notifications: "Notifications"
+      edit_profile: "Editer votre profil"
+      api: "API"
+      manage_app: "Gérer vos applications"
+      manage_auth_app: "Gérer vos applications authentifiées"
+  users:
+    claim_wca_id:
+      title: "Réclamer un ID WCA"
+      competition: "compétition"
+      already_have_html: "Vous avez déjà cet ID WCA : %{wca_id}."
+      already_claimed_html: "Vous avez déjà réclamé l'ID WCA %{wca_id}. Contactez %{delegate} si vous avez des questions."
+      info_competed_before: "Si vous avez déjà participé à une compétition, vous pouvez demander à ce que votre ID WCA soit associé à votre compte."
+      info_never_competed_html: "Si vous n'avez jamais participé à une compétition, allez à une %{comp} ! Un ID WCA sera créé pour vous quand les résultats de votre première compétition seront publiés."
+      submit_value: "Réclamer cet ID WCA"
+    confirm_password:
+      enter_current: "Tapez votre mot de passe actuel pour confirmer les modifications."
+      submit_confirm_value: "Confirmer"
+    edit_avatar_thumbnail:
+      current: "Miniature actuelle :"
+      new: "Nouvelle miniature :"
+      save: "Sauvegarder"
+    edit:
+      general: "Général"
+      email: "Email"
+      preferences: "Préférences"
+      password: "Mot de passe"
+      member_of: "Membre de"
+      preferred_events: "Épreuves de préférence"
+      preferred_events_desc: "Sélectionner vos épreuves de préférence rendront les inscriptions aux compétitions plus rapides."
+      please_fix_profile: "Pour pouvoir vous inscrire à des compétitions, vous devez corriger les problèmes suivant :"
+      unconfirmed_wca_id: "ID WCA non confirmé"
+      profile: "Profil"
+      approve: "Approuver"
+      pending_mail_confirmation: "Ce compte est en attente de confirmation de la nouvelle adresse email %{email}."
+      pending_avatar_confirmation: "Ce compte est en attente de confirmation d'une nouvelle photo de profil."
+      pending_claim_confirmation_html: "Ce compte est en attente de %{delegate} pour confirmer l'ID WCA %{wca_id}."
+      pending_claim_mail_confirmation_html: "Cet utilisateur a réclamé l'ID WCA %{wca_id}. Le délégué %{delegate} sera informé de cette requète dès que l'adresse email de ce compte aura été confirmée."
+      your_thumbnail: "Miniature de votre photo de profil :"
+      edit_thumbnail: "Cliquer pour éditer la miniature"
+      manage_pending: "Gérer les photos de profil en attente"
+      change_password: "Changer votre mot de passe"
+      have_no_wca_id_html: "Vous n'avez pas encore d'ID WCA associé à votre compte. Si vous avez déjà participé à une compétition, faites une demande pour associer votre ID WCA à votre compte %{here} !"
+      have_wca_id_html: "Votre ID WCA est %{link_id}."
+      cannot_edit:
+        msg: "Vous ne pouvez pas changer votre nom, date de naissance, genre, ou pays car %{reason}. Contactez votre <a href='%{delegate_url}'>Délégué</a> si vous devez changer l'une de ces informations."
+        reason:
+          assigned: "vous avez déjà un ID WCA qui vous est assigné"
+          registered: "vous vous êtes inscrit à une compétition"
+      save: "Sauvegarder"
+    select_nearby_delegate:
+      select_delegate: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un Délégué confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
+      already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre Délégué local %{link_delegate}."
+      missing_dob_html: "L'ID WCA %{link_id} n'a pas de date de naissance associée. Merci de contacter la %{link_result_team} pour corriger le problème."
+      unknown_wca_id_html: "L'ID WCA %{link_id} n'existe pas."
+  competitions:
+    new:
+      create_competition: "Créer une compétition"
+    update:
+      save_success: "Compétition mise à jour avec succès"
+      confirm_success: "Compétition confirmée avec succès. Vérifiez vos mails et attendez que le bureau de la WCA l'annonce !"
+      delete_success: "La compétition %{id} a été supprimée avec succès"
+    time_until_competition:
+      competition_in: "La compétition est dans %{n_days}."
+      competition_was: "La compétition a eu lieu il y a %{n_days}."
+    nearby_competitions:
+      comp: "compétition"
+      label: "Compétitions à proximité (à %{days} jours près et dans un rayon de %{kms} km)"
+      label_admin: "Depuis %{days} jours"
+      nearby_admin: "%{comps} %{comp} dans un rayon de %{kms} km et à %{days} jours près."
+      no_comp_nearby: "Pas de compétition à proximité"
+      no_date_yet: "Vous n'avez pas encore choisi de date pour cette compétition."
+      no_location_yet: "Vous n'avez pas encore choisi de coordonnées pour cette compétition."
+      within: "À %{days} jours près"
+      show: "Afficher"
+    nearby_competitions_table:
+      name: "Nom"
+      delegates: "Délégué(s)"
+      date: "Date"
+      location: "Lieu"
+      distance: "Distance"
+      before: "avant"
+      after: "après"
+    nav:
+      registration:
+        flash:
+          updated: "Inscription mise à jour"
+          failed: "Impossible de mettre à jour l'inscription"
+          deleted: "Votre inscription au %{comp} a été supprimée avec succès."
+          registered: "Vous êtes inscrit !"
+        sign_in: "Connectez-vous"
+        profile: "profil"
+        register: "Je m'inscris !"
+        update: "Mettre à jour"
+        delete: "Supprimer"
+        delete_confirm: "Êtes vous sûr de vouloir supprimer votre inscription ?"
+        delete_registration: "Supprimer l'inscription"
+        will_open_html: "Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}."
+        will_close_html: "Les inscriptions ferment dans <strong>%{days}</strong> le %{time}."
+        closed_html: "Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}."
+        please_sign_in_past_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais il est trop tard pour s'inscrire à cette compétition."
+        please_sign_in_not_yet_open_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais les inscriptions ne sont pas encore ouvertes."
+        please_sign_in_html: "%{sign_in} pour vous inscrire au %{comp}. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}"
+        greeting: "Bonjour, %{name} !"
+        please_fix_profile_html: "Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les problèmes suivant dans votre %{profile} :"
+        can_register: "Vous pouvez vous inscrire au %{comp} ci-dessous."
+        have_registered: "Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre inscription ci-dessous."
+        contact_organizer: "Contactez l'organisateur si vous souhaitez effectuer des changements."
+        waiting_list: "Votre inscription est en attente, vous êtes en position %{i} sur %{n}."
+        accepted: "Votre inscription a été effectuée !"
+      menu:
+        results: "Résultats"
+        podiums: "Podiums"
+        all: "Tous"
+        by_person: "Par personne"
+        info: "Info"
+        edit: "Éditer"
+        orga_view: "Page organisateur"
+        admin_view: "Page administrateur"
+        registration: "Inscriptions"
+        register: "S'inscrire"
+        competitors: "Compétiteurs"
+      announcements: "Annonces"
+      supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
+      venue_html: "La salle où la compétition à lieu. %{md}. Par exemple : [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
+      venue_details_html: "Détails concernant la salle (Par exemple, au première étage au fond à gauche, suivez les panneaux). %{md}"
+      contact_html: "Information de contact (optionnel). Si vous ne remplissez pas ce champ, les adresses email des organisateurs seront affichées publiquement. %{md}. Exemple : [Texte à afficher](mailto:un@email.com)"
+      upload_results: "Publier les résultats"
+      events: "Épreuves"
+      unoff_events: "Épreuves qui ne sont plus officielles"
+      post_announcement: "Poster l'annonce de la compétition"
+      locked_edit_html: "Cette compétition est visible publiquement et son édition est vérouillée. Si vous souhaitez faire un changement, contactez le %{board}."
+      confirmed_not_visible_html: "Vous avez confirmé cette compétition, mais elle n'est pas encore visible publiquement. Attendez que le %{board} la rende visible."
+      is_visible: "Cette compétition est visible publiquement, chaque modification que vous ferez sera visible par le public !"
+      awaiting_confirmation_html: "Remplissez tous les champs et cliquez sur Confirmer quand vous êtes près à ce que le %{board} approuve cette compétition."
+      submit_update_value: "Mettre à jour la compétition"
+      submit_confirm_value: "Confirmer"
+      submit_delete_value: "Supprimer"
+      submit_confirm: "Êtes-vous sûr de vouloir confirmer ? Une fois la compétition confirmée, vous ne pourrez plus modifier les informations la concernant. Consultez ensuite vos emails après ça pour vérifier que le bureau de la WCA a été informé."
+      submit_delete: "Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération est irréversible."
+      coordinates: "Coordonnées GPS"
+  notifications:
+    connect_wca_id: "Associez votre ID WCA à votre compte !"

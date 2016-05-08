@@ -7,6 +7,7 @@ onPage('competitions#new, competitions#create', function() {
       var competitionId = selectize.getValue();
       var enteredCompetitionId = selectize.$control_input.val();
       var $createCompetition = $('#create-competition');
+      //TODO I18n for this, and in js in general
       $createCompetition.text((enteredCompetitionId || competitionId) ? "Clone competition" : "Create competition");
       // If they entered something into the competition field, but have not
       // actually selected a competition, then disable the clone competition button.
