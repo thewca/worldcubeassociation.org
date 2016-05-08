@@ -483,7 +483,7 @@ class Competition < ActiveRecord::Base
   end
 
   def in_progress?
-    (start_date..end_date).cover? Date.today
+    !results_posted? && (start_date..end_date).cover?(Date.today)
   end
 
   def is_over?

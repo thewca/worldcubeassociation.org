@@ -154,6 +154,10 @@ RSpec.describe Competition do
     expect(competition).to be_valid
     expect(competition.in_progress?).to be true
     expect(competition.info[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
+
+    competition.results_posted_at = Time.now
+    expect(competition.in_progress?).to be false
+    expect(competition.info[:in_progress]).to eq nil
   end
 
   it "knows the calendar" do
