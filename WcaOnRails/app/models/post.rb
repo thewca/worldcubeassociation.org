@@ -5,6 +5,21 @@ class Post < ActiveRecord::Base
   validates :body, presence: true
   validates :slug, presence: true, uniqueness: true
 
+  BREAK_TAG_RE = /<!--\s*break\s*-->/
+
+  def body_full
+    body.sub(BREAK_TAG_RE, "")
+  end
+
+  def body_teaser
+    split = body.split(BREAK_TAG_RE)
+    teaser = split.first
+    if split.length > 1
+      teaser += "\n\n[Read more....](" + Rails.application.routes.url_helpers.post_path(slug) + ")"
+    end
+    teaser
+  end
+
   before_validation :compute_slug
   private def compute_slug
     self.slug = title.parameterize

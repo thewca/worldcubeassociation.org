@@ -79,6 +79,8 @@ en:
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         venueDetails: "Details about the venue (e.g., On the first floor far in the back, follow the signs)."
         information: "Some information text about the competition (e.g., Euro 2006 is open to citizens of the European countries and Israel)."
+      post:
+        body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
     options:
       registration:
         status:
