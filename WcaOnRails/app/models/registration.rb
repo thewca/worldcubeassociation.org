@@ -93,19 +93,7 @@ class Registration < ActiveRecord::Base
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
     if events.length == 0
-      errors.add(:events, "must register for at least one event")
-    end
-  end
-
-  validate :events_must_be_offered
-  private def events_must_be_offered
-    if !competition
-      errors.add(:competitionId, "invalid")
-      return
-    end
-    invalid_events = events - competition.events
-    unless invalid_events.empty?
-      errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
+      errors.add(:registration_events, "must register for at least one event")
     end
   end
 
