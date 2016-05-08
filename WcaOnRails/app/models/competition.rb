@@ -482,6 +482,10 @@ class Competition < ActiveRecord::Base
     self.showAtAll || (user && user.can_manage_competition?(self))
   end
 
+  def user_can_view_results?(user)
+    results_posted? || (user && user.can_admin_results?)
+  end
+
   def in_progress?
     (start_date..end_date).cover? Date.today
   end

@@ -141,7 +141,7 @@ RSpec.describe Competition do
     expect(competition.warnings[:invisible]).to eq "This competition is not visible to the public."
   end
 
-  it "displays info if competition is finished but results aren't uploaded" do
+  it "displays info if competition is finished but results aren't posted" do
     competition = FactoryGirl.build :competition, starts: 1.month.ago
     expect(competition).to be_valid
     expect(competition.is_over?).to be true

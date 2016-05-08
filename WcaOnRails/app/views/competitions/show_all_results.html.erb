@@ -1,8 +1,6 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'nav' do %>
-  <%= render "competition_info", competition: @competition %>
-
+<%= render layout: 'results_nav' do %>
   <% cache @competition.result_cache_key("all_results") do %>
     <% @competition.events_with_rounds_with_results.each do |event, rounds_with_results| %>
 

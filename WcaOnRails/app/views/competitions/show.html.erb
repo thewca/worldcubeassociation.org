@@ -1,9 +1,5 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'nav' do %>
-  <%= render "competition_info", competition: @competition %>
-
-  <% if @competition.results_posted? %>
-    <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
-  <% end %>
+<%= render layout: 'results_nav' do %>
+  <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
 <% end %>

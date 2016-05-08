@@ -1,0 +1,12 @@
+<%= render layout: 'nav' do %>
+  <%= render "competition_info", competition: @competition %>
+
+  <% if @competition.user_can_view_results?(current_user) %>
+    <% if !@competition.results_posted? %>
+      <div class="alert alert-warning">
+        <strong>Note:</strong> You are viewing results that have not been posted yet.
+      </div>
+    <% end %>
+    <%= yield %>
+  <% end %>
+<% end %>

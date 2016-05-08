@@ -1,8 +1,6 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'nav' do %>
-  <%= render "competition_info", competition: @competition %>
-
+<%= render layout: 'results_nav' do %>
   <% cache @competition.result_cache_key("by_person") do %>
     <% @competition.person_names_with_results.each do |personName, results| %>
       <h3>
