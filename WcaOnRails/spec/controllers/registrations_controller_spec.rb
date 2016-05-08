@@ -49,7 +49,7 @@ RSpec.describe RegistrationsController do
 
       patch :update, id: registration.id, registration: { registration_events_attributes: [ {event_id: "333"}, {event_id: "222"} ] }
       registration = assigns(:registration)
-      expect(registration.errors.messages[:events]).to eq ["invalid event ids: 222"]
+      expect(registration.errors.messages[:"registration_events.events"]).to eq ["invalid event id: 222"]
     end
 
     it 'cannot change registration of a different competition' do

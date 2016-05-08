@@ -10,13 +10,13 @@ RSpec.describe Registration do
   it "requires a competitionId" do
     registration.competitionId = nil
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competitionId]).to eq ["invalid"]
+    expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
   end
 
   it "requires a valid competitionId" do
     registration.competitionId = "foobar"
     expect(registration).not_to be_valid
-    expect(registration.errors.messages[:competitionId]).to eq ["invalid"]
+    expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
   end
 
   it "cannot create a registration for a competition without wca registration" do
@@ -56,11 +56,11 @@ RSpec.describe Registration do
   it "requires at least one event" do
     registration.registration_events = []
     expect(registration).to be_invalid
-    expect(registration.errors[:events]).to eq ["must register for at least one event"]
+    expect(registration.errors[:registration_events]).to eq ["must register for at least one event"]
   end
 
   it "requires events be offered by competition" do
-    registration.registration_events.create!(event_id: "777")
+    registration.registration_events.build(event_id: "777")
     expect(registration).to be_invalid
   end
 
