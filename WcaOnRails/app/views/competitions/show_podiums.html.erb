@@ -1,8 +1,6 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'nav' do %>
-  <%= render "competition_info", competition: @competition %>
-
+<%= render layout: 'results_nav' do %>
   <% @competition.events_with_podium_results.each do |event, podium_results| %>
     <h3>
       <%= anchorable event.name, "e#{event.id}" %>

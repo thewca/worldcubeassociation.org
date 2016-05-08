@@ -2,7 +2,7 @@
   <div class="row">
     <div id="competition-nav">
       <% nav_items = [] %>
-      <% if @competition.results_posted? %>
+      <% if @competition.user_can_view_results?(current_user) %>
         <% nav_items << {
           text: "Results",
           path: competition_path(@competition),
