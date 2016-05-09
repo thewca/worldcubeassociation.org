@@ -3,10 +3,10 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <div class="alert alert-info" role="alert">
+  <%= alert :info do %>
     Before contacting any of the teams on this page,
     please take a look at our <%= link_to "frequently asked questions", faq_path %>!
-  </div>
+  <% end %>
 
   <p>
     For website questions, comments, and suggestions, use this

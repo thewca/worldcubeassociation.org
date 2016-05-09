@@ -33,16 +33,14 @@
 
     <% if @competition.registration_opened? %>
       <% if current_user.preferred_events.empty? %>
-        <div class="alert alert-info">
-          To speed up registration in the future, you can set your preferred events <%= link_to "here", profile_edit_path(current_user, section: :preferences) %>.
-        </div>
+        <%= alert :info, t('.registration.preferred_events_prompt', link: link_to(t('common.here'), profile_edit_path(current_user, section: :preferences))) %>
       <% end %>
       <p>
       <%= t '.registration.greeting', name: current_user.name %>
       </p>
 
       <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
-        <div class="alert alert-danger">
+        <%= alert :danger do %>
           <%= t '.registration.please_fix_profile_html', comp: @competition.name,
                 profile: link_to(t('.registration.profile'), profile_edit_path) %>
           <ul>
@@ -50,7 +48,7 @@
               <li><%= reason %></li>
             <% end %>
           </ul>
-        </div>
+        <% end %>
       <% else %>
         <div>
           <% if @registration.new_record? %>

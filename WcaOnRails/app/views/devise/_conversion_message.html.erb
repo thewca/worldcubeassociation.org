@@ -4,13 +4,13 @@
   <% wca_id = user.login.upcase %>
   <% person = Person.find_by_id(wca_id) %>
   <% if person && !person.user %>
-    <div class="alert alert-info">
+    <%= alert :info do %>
       Hi, <%= person.name %>! It looks like you have not created a WCA website account yet.      Please create one
       <%= link_to "here", new_user_registration_path %>. Afterwards, you
       can request that it be connected to your WCA ID
       (<%= render "shared/wca_id", wca_id: wca_id %>).
       <% conversion_shown = true %>
-    </div>
+    <% end %>
   <% end %>
 <% end %>
 

@@ -127,7 +127,8 @@ module ApplicationHelper
     date_range(from_date, to_date, options)
   end
 
-  def alert(type, content, note: false)
+  def alert(type, content=nil, note: false, &block)
+    content = capture(&block) if block_given?
     content.prepend("<strong>Note:</strong> ") if note
     content_tag :div, content.html_safe, class: "alert alert-#{type}"
   end
