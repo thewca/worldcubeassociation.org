@@ -313,9 +313,8 @@ class CompetitionsController < ApplicationController
     if current_user.person
       @competitions += current_user.person.competitions
     end
-    @competitions = @competitions.uniq.sort_by(&:start_date).reverse!
-    @not_past_competitions = @competitions.reject(&:is_over?)
-    @past_competitions = @competitions.select(&:is_over?)
+    @competitions = @competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
+    @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
   end
 
   private def competition_params
