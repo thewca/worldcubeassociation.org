@@ -309,12 +309,12 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    @competitions = (current_user.delegated_competitions + current_user.organized_competitions + current_user.competitions_registered_for)
+    competitions = (current_user.delegated_competitions + current_user.organized_competitions + current_user.competitions_registered_for)
     if current_user.person
-      @competitions += current_user.person.competitions
+      competitions += current_user.person.competitions
     end
-    @competitions = @competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
-    @past_competitions, @not_past_competitions = @competitions.partition(&:is_over?)
+    competitions = competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
+    @past_competitions, @not_past_competitions = competitions.partition(&:is_over?)
   end
 
   private def competition_params
