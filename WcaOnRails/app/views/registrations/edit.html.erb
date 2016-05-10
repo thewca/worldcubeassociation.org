@@ -12,8 +12,9 @@
     <%= f.hidden_field :updated_at %>
 
     <% if @registration.user %>
-      <%= alert :info, "This person registered with an account. You can edit their personal information #{link_to "here", edit_user_path(@registration.user)}" %>
-
+      <%= alert :info do %>
+        This person registered with an account. You can edit their personal information <%= link_to "here", edit_user_path(@registration.user) %>.
+      <% end %>
       <%= @registration.name %>
     <% else %>
       <%= alert :info, "This person did not register with an account. You can edit their personal information below." %>
