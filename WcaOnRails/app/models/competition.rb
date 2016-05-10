@@ -483,7 +483,7 @@ class Competition < ActiveRecord::Base
   end
 
   def user_can_view_results?(user)
-    results_posted? || (!results.empty? && user && user.can_admin_results?)
+    results_posted? || (user && user.can_admin_results? && !results.empty?)
   end
 
   def in_progress?
