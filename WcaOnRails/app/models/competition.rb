@@ -36,7 +36,7 @@ class Competition < ActiveRecord::Base
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
-    friendly_id
+    slug
     name
     year
     month
@@ -55,10 +55,10 @@ class Competition < ActiveRecord::Base
   INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )".freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
-  MAX_FRIENDLY_ID_LENGTH = 32
+  MAX_SLUG_LENGTH = 32
   MAX_NAME_LENGTH = 50
-  validates :friendly_id, presence: true, uniqueness: true, length: { maximum: MAX_FRIENDLY_ID_LENGTH },
-                          format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
+  validates :slug, presence: true, uniqueness: true, length: { maximum: MAX_SLUG_LENGTH },
+                   format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
@@ -174,11 +174,11 @@ class Competition < ActiveRecord::Base
         # Generate competition id from name
         # by replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
-        self.id = safe_name_without_year[0...(MAX_FRIENDLY_ID_LENGTH - year.length)] + year
+        self.id = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
       end
-      if friendly_id.blank?
-        # Generate friendly_id id from name.
-        self.friendly_id = safe_name_without_year[0...(MAX_FRIENDLY_ID_LENGTH - year.length)] + year
+      if slug.blank?
+        # Generate slug id from name.
+        self.slug = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
       end
       if cellName.blank?
         year = " " + year
@@ -675,7 +675,7 @@ class Competition < ActiveRecord::Base
 
     if query.present?
       sql_query = "%#{query}%"
-      competitions = competitions.where("friendly_id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query)
+      competitions = competitions.where("slug LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query)
         .order(year: :desc, month: :desc, day: :desc)
     end
 
@@ -695,6 +695,10 @@ class Competition < ActiveRecord::Base
     end
 
     competitions
+  end
+
+  def to_param
+    slug
   end
 
   def serializable_hash(options = nil)

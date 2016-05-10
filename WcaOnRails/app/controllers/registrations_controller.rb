@@ -3,7 +3,7 @@ class RegistrationsController < ApplicationController
 
   private def competition_from_params
     if params[:competition_id]
-      competition = Competition.find(params[:competition_id])
+      competition = Competition.find_by_slug!(params[:competition_id])
     else
       registration = Registration.find(params[:id])
       competition = registration.competition

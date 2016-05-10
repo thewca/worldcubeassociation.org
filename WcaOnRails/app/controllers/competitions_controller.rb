@@ -16,7 +16,7 @@ class CompetitionsController < ApplicationController
   ]
 
   private def competition_from_params
-    competition = Competition.find(params[:competition_id] || params[:id])
+    competition = Competition.find_by_slug!(params[:competition_id] || params[:id])
     if !competition.user_can_view?(current_user)
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -111,9 +111,9 @@ class CompetitionsController < ApplicationController
       flash[:success] = "Successfully created new competition!"
       redirect_to edit_competition_path(@competition)
     else
-      # Show friendly id errors under name, since we don't actually show a
-      # friendly id field to the user, so they wouldn't see any friendly id errors.
-      @competition.errors[:name].concat(@competition.errors[:friendly_id])
+      # Show slug errors under name, since we don't actually show a
+      # slug field to the user, so they wouldn't see any slug errors.
+      @competition.errors[:name].concat(@competition.errors[:slug])
       render :new
     end
   end
@@ -129,7 +129,7 @@ class CompetitionsController < ApplicationController
   end
 
   def post_announcement
-    comp = Competition.find(params[:id])
+    comp = Competition.find_by_slug!(params[:id])
     date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
@@ -142,7 +142,7 @@ class CompetitionsController < ApplicationController
   end
 
   def post_results
-    comp = Competition.find(params[:id])
+    comp = Competition.find_by_slug!(params[:id])
     unless comp.results
       render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
       return
@@ -217,14 +217,14 @@ class CompetitionsController < ApplicationController
   end
 
   def admin_edit
-    @competition = Competition.find(params[:id])
+    @competition = Competition.find_by_slug!(params[:id])
     @competition_admin_view = true
     @competition_organizer_view = false
     render :edit
   end
 
   def edit
-    @competition = Competition.find(params[:id])
+    @competition = Competition.find_by_slug!(params[:id])
     @competition_admin_view = false
     @competition_organizer_view = true
     render :edit
@@ -273,7 +273,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    @competition = Competition.find(params[:id])
+    @competition = Competition.find_by_slug!(params[:id])
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     @competition_organizer_view = !@competition_admin_view
     if params[:commit] == "Delete"
@@ -283,7 +283,7 @@ class CompetitionsController < ApplicationController
         render :edit
       else
         @competition.destroy
-        flash[:success] = t('.delete_success', id: @competition.friendly_id)
+        flash[:success] = t('.delete_success', id: @competition.slug)
         redirect_to root_url
       end
     elsif @competition.update_attributes(competition_params)
@@ -324,7 +324,7 @@ class CompetitionsController < ApplicationController
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
-        :friendly_id,
+        :slug,
         :name,
         :cellName,
         :countryId,

@@ -48,12 +48,12 @@ CREATE TABLE `Competitions` (
   `registration_open` datetime DEFAULT NULL,
   `registration_close` datetime DEFAULT NULL,
   `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
-  `friendly_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_Competitions_on_friendly_id` (`friendly_id`),
+  UNIQUE KEY `index_Competitions_on_slug` (`slug`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

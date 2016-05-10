@@ -54,7 +54,7 @@ RSpec.describe Competition do
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
-    expect(competition.friendly_id).to eq "AlexanderandtheTerribleHorri2015"
+    expect(competition.slug).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
   end
 
