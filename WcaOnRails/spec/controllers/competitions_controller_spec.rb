@@ -188,8 +188,9 @@ describe CompetitionsController do
       end
 
       it 'clones a competition' do
-        # First, lock the competition
-        competition.update_attribute(:isConfirmed, true)
+        # Set some attributes we don't want cloned.
+        competition.update_attributes(isConfirmed: true,
+                                      results_posted_at: Time.now)
 
         user1 = FactoryGirl.create(:delegate)
         user2 = FactoryGirl.create(:user)
@@ -203,10 +204,11 @@ describe CompetitionsController do
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
         expect(new_comp.name).to eq "Test 2015"
-        # When cloning a competition, we don't want to clone its showAtAll and isConfirmed
-        # attributes.
+        # When cloning a competition, we don't want to clone its showAtAll,
+        # isConfirmed, and results_posted_at attributes.
         expect(new_comp.showAtAll).to eq false
         expect(new_comp.isConfirmed).to eq false
+        expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
         %w(year month day endMonth endDay).each do |attribute|
           expect(new_comp.send(attribute)).to eq 0
