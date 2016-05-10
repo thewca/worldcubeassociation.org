@@ -44,6 +44,18 @@ module Statistics
     end
   end
 
+  FractionTd = Struct.new(:value1, :value2) do
+    def render
+      "<td class=\"text-right\"><strong>#{value1}</strong> / #{value2}</td>".html_safe
+    end
+  end
+
+  YearTd = Struct.new(:year) do
+    def render
+      "<td class=\"text-right\"><strong>#{year}</strong></td>".html_safe
+    end
+  end
+
   PercentageTd = Struct.new(:value) do
     def render
       "<td class=\"text-right\">#{"%.2f %" % (value * 100)}</td>".html_safe
@@ -122,6 +134,7 @@ module Statistics
       Statistics::BlindfoldedRecentSuccessRate.new(q),
       Statistics::MostWorldRecords.new(q),
       Statistics::MostCompetitions.new(q),
+      Statistics::MostSolvesInOneCompetitionOrYear.new(q),
     ]
   end
 end
