@@ -98,7 +98,7 @@ class Competition < ActiveRecord::Base
       if competition_to_clone
         attributes = competition_to_clone.attributes
         # Don't clone id, name, cellName, and dates.
-        %w(id name cellName year month day endMonth endDay registration_open registration_close).each { |attribute| attributes.delete attribute }
+        %w(id name cellName year month day endMonth endDay registration_open registration_close results_posted_at).each { |attribute| attributes.delete attribute }
         # Make sure the new competition is not publicly visible and is open for
         # editing.
         attributes["showAtAll"] = false
