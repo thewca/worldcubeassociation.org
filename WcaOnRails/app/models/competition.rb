@@ -169,15 +169,14 @@ class Competition < ActiveRecord::Base
     if m
       name_without_year = m[1]
       year = m[2]
+      # Generate competition id and slug from name
+      # by replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
       safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
       if id.blank?
-        # Generate competition id from name
-        # by replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
         self.id = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
       end
       if slug.blank?
-        # Generate slug id from name.
         self.slug = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
       end
       if cellName.blank?
