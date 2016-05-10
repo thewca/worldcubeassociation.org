@@ -12,17 +12,17 @@
     <% if @competition.has_date? && @competition.has_location? %>
       <% nearby_competitions = @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10] %>
       <% if nearby_competitions.empty? %>
-        <div class="alert alert-success" role="alert"><%= t '.no_comp_nearby' %></div>
+        <%= alert :success, t('.no_comp_nearby') %>
       <% else %>
         <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions %>
       <% end %>
     <% else %>
       <% nearby_competitions = [] %>
-      <% if !@competition.has_date? %>
-        <div class="alert alert-danger" role="alert"><%= t '.no_date_yet' %></div>
+      <% unless @competition.has_date? %>
+        <%= alert :danger, t('.no_date_yet') %>
       <% end %>
-      <% if !@competition.has_location? %>
-        <div class="alert alert-danger" role="alert"><%= t '.no_location_yet' %></div>
+      <% unless @competition.has_location? %>
+        <%= alert :danger, t('.no_location_yet') %>
       <% end %>
     <% end %>
   </div>

@@ -1,11 +1,11 @@
 <% if competitions.length < 1 %>
-  <div class="alert alert-info" role="alert">
+  <%= alert :info do %>
     <% if !past %>
       You currently have no upcoming competitions! Check out the <%= link_to 'competitions list', competitions_path %>.
     <% else %>
       You have no past competitions.
     <% end %>
-  </div>
+  <% end %>
 <% else %>
   <table class="table competitions-table floatThead <%= past ? "table-striped" : "" %>">
     <thead>

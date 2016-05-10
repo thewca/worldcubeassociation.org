@@ -126,4 +126,10 @@ module ApplicationHelper
     options[:separator] = '-'
     date_range(from_date, to_date, options)
   end
+
+  def alert(type, content=nil, note: false, &block)
+    content = capture(&block) if block_given?
+    content.prepend content_tag(:strong, "Note: ") if note
+    content_tag :div, content, class: "alert alert-#{type}"
+  end
 end

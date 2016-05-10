@@ -3,9 +3,7 @@
 
   <% if @competition.user_can_view_results?(current_user) %>
     <% if !@competition.results_posted? %>
-      <div class="alert alert-warning">
-        <strong>Note:</strong> You are viewing results that have not been posted yet.
-      </div>
+      <%= alert :warning, t('.results_preview_alert'), note: true %>
     <% end %>
     <%= yield %>
   <% end %>

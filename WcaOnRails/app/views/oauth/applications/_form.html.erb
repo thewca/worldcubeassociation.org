@@ -1,6 +1,6 @@
 <%= form_for application, url: doorkeeper_submit_path(application), html: {class: 'form-horizontal', role: 'form'} do |f| %>
   <% if application.errors.any? %>
-    <div class="alert alert-danger" data-alert><p><%= t('doorkeeper.applications.form.error') %></p></div>
+    <%= alert :danger, t('doorkeeper.applications.form.error') %>
   <% end %>
 
   <%= content_tag :div, class: "form-group#{' has-error' if application.errors[:name].present?}" do %>

@@ -4,7 +4,7 @@
   <h1><%= yield(:title) %></h1>
 
   <% if @teams.empty? %>
-    <div class="alert alert-warning">There are currently no teams.</div>
+    <%= alert :warning, "There are currently no teams." %>
   <% else %>
     <div class="table-responsive">
       <table class="table teams-table">

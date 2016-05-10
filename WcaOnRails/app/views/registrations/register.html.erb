@@ -1,31 +1,20 @@
 <% provide(:title, "Register for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
-  <% if !@competition.registration_opened? %>
+  <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
+  <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
+  <% unless @competition.registration_opened? %>
     <% if @competition.registration_not_yet_opened? %>
-      <div class="alert alert-info">
-        <% #This internationally works because datetime.distance_in_words.x_days is translated.%>
-        <%= t '.registration.will_open_html',
-              days: distance_of_time_in_words_to_now(@competition.registration_open),
-              time: wca_local_time(@competition.registration_open) %>
-      </div>
+      <%= alert :info, t('.registration.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
     <% end %>
     <% if @competition.registration_past? %>
-      <div class="alert alert-danger">
-        <%= t '.registration.closed_html',
-              days: distance_of_time_in_words_to_now(@competition.registration_close),
-              time: wca_local_time(@competition.registration_close) %>
-      </div>
+      <%= alert :danger, t('.registration.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
     <% end %>
   <% else %>
-    <div class="alert alert-info">
-      <%= t '.registration.will_close_html',
-            days: distance_of_time_in_words_to_now(@competition.registration_close),
-            time: wca_local_time(@competition.registration_close) %>
-    </div>
+    <%= alert :info, t('.registration.will_close_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
   <% end %>
 
-  <% if !current_user %>
+  <% unless current_user %>
     <% if @competition.registration_past? %>
       <%= t '.registration.please_sign_in_past_html',
         sign_in: link_to(t('.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
@@ -44,16 +33,14 @@
 
     <% if @competition.registration_opened? %>
       <% if current_user.preferred_events.empty? %>
-        <div class="alert alert-info">
-          To speed up registration in the future, you can set your preferred events <%= link_to "here", profile_edit_path(current_user, section: :preferences) %>.
-        </div>
+        <%= alert :info, t('.registration.preferred_events_prompt', link: link_to(t('common.here'), profile_edit_path(current_user, section: :preferences))) %>
       <% end %>
       <p>
       <%= t '.registration.greeting', name: current_user.name %>
       </p>
 
       <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
-        <div class="alert alert-danger">
+        <%= alert :danger do %>
           <%= t '.registration.please_fix_profile_html', comp: @competition.name,
                 profile: link_to(t('.registration.profile'), profile_edit_path) %>
           <ul>
@@ -61,7 +48,7 @@
               <li><%= reason %></li>
             <% end %>
           </ul>
-        </div>
+        <% end %>
       <% else %>
         <div>
           <% if @registration.new_record? %>
@@ -74,16 +61,10 @@
             <% end %>
 
             <% if @registration.pending? %>
-              <div class="alert alert-warning">
-                <% waiting_list_info = @registration.waiting_list_info %>
-                <%= t '.registration.waiting_list',
-                      i: waiting_list_info.index + 1,
-                      n: waiting_list_info.length %>
-              </div>
+              <% waiting_list_info = @registration.waiting_list_info %>
+              <%= alert :warning, t('.registration.waiting_list', i: waiting_list_info.index + 1, n: waiting_list_info.length) %>
             <% else %>
-              <div class="alert alert-success">
-                <%= t '.registration.accepted' %>
-              </div>
+              <%= alert :success, t('.registration.accepted') %>
             <% end %>
           <% end %>
         </div>

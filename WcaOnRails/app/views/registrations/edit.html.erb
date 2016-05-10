@@ -12,17 +12,12 @@
     <%= f.hidden_field :updated_at %>
 
     <% if @registration.user %>
-      <div class="alert alert-info">
-        This person registered with an account. You can edit their personal information
-        <%= link_to "here", edit_user_path(@registration.user) %>.
-      </div>
-
+      <%= alert :info do %>
+        This person registered with an account. You can edit their personal information <%= link_to "here", edit_user_path(@registration.user) %>.
+      <% end %>
       <%= @registration.name %>
     <% else %>
-      <div class="alert alert-info">
-        This person did not register with an account. You can edit their personal
-        information below.
-      </div>
+      <%= alert :info, "This person did not register with an account. You can edit their personal information below." %>
 
       <%# We can remove this code once competitions only have registrations with accounts. See https://github.com/cubing/worldcubeassociation.org/issues/275 %>
       <%= f.input :name %>

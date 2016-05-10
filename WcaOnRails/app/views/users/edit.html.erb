@@ -4,36 +4,20 @@
   <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
   <%= render 'shared/error_messages', object: @user %>
 
-  <% if !@user.confirmed_at %>
-    <div class="alert alert-warning">
-      This account's email address (<%= @user.email %>) is not confirmed.
-    </div>
-    <% if @user.unconfirmed_wca_id.present? %>
-      <div class="alert alert-warning">
-        <%= t '.pending_claim_mail_confirmation_html',
-              delegate: mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank"),
-              wca_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id)
-        %>
-      </div>
-    <% end %>
-  <% else %>
-    <% if @user.unconfirmed_wca_id.present? %>
-      <div class="alert alert-warning">
-        <%= t '.pending_claim_confirmation_html',
-              delegate: mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank"),
-              wca_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id)
-        %>
-      </div>
-    <% end %>
+  <% unless @user.confirmed_at %>
+    <%= alert :warning, t('.unconfirmed_email', email: @user.email) %>
   <% end %>
-
+  <% if @user.unconfirmed_wca_id.present? %>
+    <% mail_to_delegate = mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank") %>
+    <% wca_id_partial = render("shared/wca_id", wca_id: @user.unconfirmed_wca_id) %>
+    <% message = @user.confirmed_at ? '.pending_claim_confirmation_html' : '.pending_claim_mail_confirmation_html' %>
+    <%= alert :warning, t(message, delegate: mail_to_delegate, wca_id: wca_id_partial) %>
+  <% end %>
   <% if @user.unconfirmed_email %>
-    <div class="alert alert-warning">
-      <%= t '.pending_mail_confirmation', email: @user.unconfirmed_email %>
-    </div>
+    <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
   <% end %>
   <% if @user.pending_avatar? %>
-    <div class="alert alert-warning">
+    <%= alert :warning do %>
       <%= t '.pending_avatar_confirmation' %>
       <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
         <%= render "shared/user_avatar", user: @user, show_pending: true, title: t('.edit_thumbnail'), break_cache: true %>
@@ -41,31 +25,29 @@
       <% if current_user.can_admin_results? %>
         <%= link_to t('.manage_pending'), admin_avatars_path %>
       <% end %>
-    </div>
+    <% end %>
   <% end %>
   <% if @user.dummy_account? %>
-    <div class="alert alert-warning">
+    <%= alert :warning do %>
       This account is a dummy account. It serves as a placeholder because the competitor
       uploaded a profile picture before the website supported WCA accounts. This
       acount will be automatically deleted when another user is assigned WCA
       id <%= @user.wca_id %>.
       See <%= link_to "this commit", "https://github.com/cubing/worldcubeassociation.org/commit/32624f95b2c9e68967f8680ffa3ed7aefccd5319", target: "_blank" %> for more details.
-    </div>
+    <% end %>
   <% end %>
   <% if @user.cannot_register_for_competition_reasons.length > 0 %>
-    <div class="alert alert-warning">
+    <%= alert :warning do %>
       <%= t '.please_fix_profile' %>
       <ul>
         <% @user.cannot_register_for_competition_reasons.each do |reason| %>
           <li><%= reason %></li>
         <% end %>
       </ul>
-    </div>
+    <% end %>
   <% end %>
   <% if current_user.cannot_edit_data_reason_html(@user) %>
-    <div class="alert alert-warning">
-      <%= current_user.cannot_edit_data_reason_html(@user) %>
-    </div>
+    <%= alert :warning, current_user.cannot_edit_data_reason_html(@user) %>
   <% end %>
 
   <% editable_fields = current_user.editable_fields_of_user(@user) %>
