@@ -1,4 +1,16 @@
 module Statistics
+  TextTd = Struct.new(:text) do
+    def render
+      "<td>#{text}</td>".html_safe
+    end
+  end
+
+  SolveTd = Struct.new(:solve) do
+    def render
+      "<td class=\"text-right\">#{solve.clock_format}</td>".html_safe
+    end
+  end
+
   PersonTd = Struct.new(:id, :name) do
     include ActionView::Helpers::FormHelper
     include PathHelper
@@ -145,6 +157,7 @@ module Statistics
       Statistics::BlindfoldedRecentSuccessRate.new(q),
       Statistics::MostWorldRecords.new(q),
       Statistics::BestPodiums.new(q),
+      Statistics::OldestStandingRecords.new(q),
       Statistics::MostPersons.new(q),
       Statistics::MostCompetitions.new(q),
       Statistics::MostCountries.new(q),
