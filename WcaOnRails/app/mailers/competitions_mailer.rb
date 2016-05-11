@@ -9,4 +9,13 @@ class CompetitionsMailer < ApplicationMailer
       subject: "#{confirmer.name} just confirmed #{competition.name}"
     )
   end
+
+  def notify_users_of_results_presence(user, competition)
+    @competition = competition
+    @user = user
+    mail(
+      to: user.email,
+      subject: "The results of #{competition.name} are posted"
+    )
+  end
 end

@@ -225,6 +225,9 @@ class CompetitionsController < ApplicationController
       end
     end
     comp.update!(results_posted_at: Time.now)
+    comp.competitor_users.each do |user|
+      CompetitionsMailer.notify_users_of_results_presence(user, comp).deliver_now
+    end
     create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
   end
 

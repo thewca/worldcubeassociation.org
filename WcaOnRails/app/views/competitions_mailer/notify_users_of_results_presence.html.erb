@@ -1,0 +1,11 @@
+<p>
+  The results of <%= link_to @competition.name, competition_url(@competition) %> you've competed recently are now available.
+</p>
+
+<p>
+  Check out all your results <%= link_to "here", competition_results_by_person_url(@competition, anchor: @user.wca_id) %>.
+</p>
+
+<p>
+  Regards, <%= @competition.managers.map(&:name).sort.to_sentence(last_word_connector: " and ") %>.
+</p>

@@ -67,6 +67,8 @@ after "development:users" do
         end
       end
     end
+
+    competition.update!(results_posted_at: Time.now)
   end
 
   # Create a bunch of competitions just to fill up the competitions list
