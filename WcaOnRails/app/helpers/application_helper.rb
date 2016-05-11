@@ -132,4 +132,10 @@ module ApplicationHelper
     content.prepend content_tag(:strong, "Note: ") if note
     content_tag :div, content, class: "alert alert-#{type}"
   end
+
+  def users_to_sentence(users, include_email: false)
+    users.sort_by(&:name).map do |user|
+      include_email ? mail_to(user.email, user.name) : user.name
+    end.to_sentence(last_word_connector: " and ").html_safe
+  end
 end

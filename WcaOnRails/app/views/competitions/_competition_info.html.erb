@@ -24,20 +24,14 @@
       <% if competition.organizers.length > 0 %>
         <dt><%= "Organizer".pluralize(competition.organizers.length) %></dt>
         <dd>
-          <%=md competition.organizers.order(:name).map { |u|
-            # If the contact field is present, don't show organizers' emails.
-            if competition.contact.present?
-              u.name
-            else
-              "[#{u.name}](mailto:#{u.email})"
-            end
-          }.to_sentence %>
+          <%# If the contact field is present, don't show organizers' emails. %>
+          <%= users_to_sentence competition.organizers, include_email: competition.contact.blank? %>
         </dd>
       <% end %>
 
       <dt><%= "WCA Delegate".pluralize(competition.delegates.length) %></dt>
       <dd>
-        <%=md competition.delegates.order(:name).map { |u| "[#{u.name}](mailto:#{u.email})" }.to_sentence %>
+        <%= users_to_sentence competition.delegates, include_email: true %>
       </dd>
 
       <% if competition.contact.present? %>

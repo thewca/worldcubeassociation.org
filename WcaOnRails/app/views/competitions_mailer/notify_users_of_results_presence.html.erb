@@ -7,5 +7,5 @@
 </p>
 
 <p>
-  Regards, <%= @competition.managers.map(&:name).sort.to_sentence(last_word_connector: " and ") %>.
+  Regards, <%= users_to_sentence @competition.managers %>.
 </p>
