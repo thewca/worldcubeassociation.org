@@ -62,7 +62,7 @@ module Statistics
     end
   end
 
-  TimeTd = Struct.new(:time, :color) do
+  TimeTd = Struct.new(:time, :color, :bold) do
     def render
       minutes = (time / 6000).to_i
       seconds = time.fdiv(100) - minutes * 60
@@ -71,12 +71,17 @@ module Statistics
       else
         "%.2f" % seconds
       end
+      inner = if bold
+                "<strong>#{format}</strong>"
+              else
+                format
+              end
       if color == :red
-        "<td class=\"text-right\" style=\"color:#F00\">#{format}</td>".html_safe
+        "<td class=\"text-right\" style=\"color:#F00\">#{inner}</td>".html_safe
       elsif color == :green
-        "<td class=\"text-right\" style=\"color:#1CB71C\">#{format}</td>".html_safe
+        "<td class=\"text-right\" style=\"color:#1CB71C\">#{inner}</td>".html_safe
       else
-        "<td class=\"text-right\">#{format}</td>".html_safe
+        "<td class=\"text-right\">#{inner}</td>".html_safe
       end
     end
   end
@@ -96,6 +101,12 @@ module Statistics
   LeftTh = Struct.new(:value) do
     def render
       "<th>#{value}</th>".html_safe
+    end
+  end
+
+  class EmptyTh
+    def render
+      "<th></th>".html_safe
     end
   end
 
@@ -133,6 +144,7 @@ module Statistics
       Statistics::BlindfoldedSuccessStreak.new(q),
       Statistics::BlindfoldedRecentSuccessRate.new(q),
       Statistics::MostWorldRecords.new(q),
+      Statistics::BestPodiums.new(q),
       Statistics::MostCompetitions.new(q),
       Statistics::MostCountries.new(q),
       Statistics::MostSolvesInOneCompetitionOrYear.new(q),
