@@ -623,7 +623,7 @@ describe CompetitionsController do
           best: 2000,
           average: 2000,
           regionalSingleRecord: "WR",
-          regionalAverageRecord: "WR"
+          regionalAverageRecord: "WR",
         )
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq []

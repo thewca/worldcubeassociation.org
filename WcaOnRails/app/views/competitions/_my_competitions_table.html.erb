@@ -36,7 +36,7 @@
           <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %> <%= !past ? "not-past" : "past" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !past ? message : "" %>">
             <td><%= link_to competition.name, competition_path(competition) %></td>
             <td><%= competition.cityName %>, <%= competition.country ? competition.country.name : "" %></td>
-            <td><%= competition.start_date && competition.end_date ? wca_date_range(competition.start_date, competition.end_date) : "Unscheduled" %></td>
+            <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
             <td>
               <% if !past && current_user.can_manage_competition?(competition) %>
                 <%= link_to "Edit", edit_competition_path(competition) %>
