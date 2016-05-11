@@ -134,6 +134,7 @@ module Statistics
       Statistics::BlindfoldedRecentSuccessRate.new(q),
       Statistics::MostWorldRecords.new(q),
       Statistics::MostCompetitions.new(q),
+      Statistics::MostCountries.new(q),
       Statistics::MostSolvesInOneCompetitionOrYear.new(q),
     ]
   end
