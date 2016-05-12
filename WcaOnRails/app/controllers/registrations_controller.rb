@@ -66,7 +66,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted
+    @registrations = @competition.registrations.accepted.includes(:user, :registration_events)
   end
 
   def edit
