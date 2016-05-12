@@ -9,7 +9,7 @@
       <% else %>
         <h2>Approved registrations</h2>
       <% end %>
-      <% registrations = @competition.registrations.send(status) %>
+      <% registrations = @competition.registrations.public_send(status).includes(:user, :registration_events) %>
       <%= wca_table table_class: "registrations-table #{status}",
                     data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
