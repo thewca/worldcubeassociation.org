@@ -573,16 +573,16 @@ describe CompetitionsController do
   end
 
   describe 'GET #my_competitions' do
-    let!(:delegate) { FactoryGirl.create(:delegate) }
-    let!(:organizer) { FactoryGirl.create(:user) }
+    let(:delegate) { FactoryGirl.create(:delegate) }
+    let(:organizer) { FactoryGirl.create(:user) }
     let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], eventSpecs: "222 333") }
     let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
     let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
     let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], eventSpecs: "222 333") }
     let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], eventSpecs: "222 333") }
     let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], eventSpecs: "222 333") }
-    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, delegates: [delegate], eventSpecs: "222 333", year: "0") }
-    let!(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
+    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], eventSpecs: "222 333", year: "0") }
+    let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryGirl.create(:registration, competitionId: future_competition1.id, user: registered_user) }
     let!(:registration2) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: registered_user) }
     let!(:registration3) { FactoryGirl.create(:registration, competitionId: past_competition1.id, user: registered_user) }
@@ -590,6 +590,7 @@ describe CompetitionsController do
     let!(:registration5) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: delegate) }
     let!(:results_person) { FactoryGirl.create(:person, id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
+    let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
 
     context 'when not signed in' do
       sign_out
@@ -606,25 +607,6 @@ describe CompetitionsController do
       end
 
       it 'shows my upcoming and past competitions' do
-        Result.create!(
-          pos: 1,
-          personId: "2014PLUM01",
-          personName: "Jeff Plumb",
-          countryId: "AUS",
-          competitionId: past_competition1.id,
-          eventId: "333",
-          roundId: "f",
-          formatId: "a",
-          value1: 2000,
-          value2: 2000,
-          value3: 2000,
-          value4: 2000,
-          value5: 2000,
-          best: 2000,
-          average: 2000,
-          regionalSingleRecord: "WR",
-          regionalAverageRecord: "WR",
-        )
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq []
         expect(assigns(:past_competitions)).to eq [past_competition1]
@@ -661,7 +643,6 @@ describe CompetitionsController do
       end
 
       it 'shows my upcoming and past competitions' do
-        unscheduled_competition1.update_columns(year: 0, month: 0, day: 0, endMonth: 0, endDay: 0)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3]

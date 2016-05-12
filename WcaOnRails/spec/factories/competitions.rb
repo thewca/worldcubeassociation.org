@@ -11,8 +11,8 @@ FactoryGirl.define do
       ends { starts }
     end
 
-    start_date { starts.strftime("%F") }
-    end_date { ends.strftime("%F") }
+    start_date { starts.nil? ? nil : starts.strftime("%F") }
+    end_date { ends.nil? ? nil : ends.strftime("%F") }
 
     eventSpecs "333 333oh"
     venue "My backyard"
