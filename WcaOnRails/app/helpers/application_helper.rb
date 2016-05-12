@@ -127,7 +127,7 @@ module ApplicationHelper
       options[:separator] = '-'
       date_range(from_date, to_date, options)
     else
-      "unscheduled"
+      t "competitions.unscheduled"
     end
   end
 

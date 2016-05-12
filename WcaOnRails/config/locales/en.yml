@@ -266,6 +266,7 @@ en:
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact the %{link_result_team} to fix this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   competitions:
+    unscheduled: "unscheduled"
     new:
       create_competition: "Create competition"
     update:
