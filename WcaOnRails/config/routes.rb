@@ -91,7 +91,8 @@ Rails.application.routes.draw do
   get '/admin' => 'admin#index'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
-  get '/admin/change_person' => 'admin#change_person'
+  get '/admin/edit_person' => 'admin#edit_person'
+  patch '/admin/update_person' => 'admin#update_person'
 
   get '/search' => 'search_results#index'
 

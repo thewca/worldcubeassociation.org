@@ -9,6 +9,8 @@ class Person < ActiveRecord::Base
 
   alias_method :wca_id, :id
 
+  attr_writer :dob
+
   def likely_delegates
     all_delegates = competitions.order(:year, :month, :day).map(&:delegates).flatten.select(&:any_kind_of_delegate?)
     if all_delegates.empty?

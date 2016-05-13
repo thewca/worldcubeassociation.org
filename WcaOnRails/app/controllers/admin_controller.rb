@@ -27,6 +27,12 @@ class AdminController < ApplicationController
     render 'merge_people'
   end
 
-  def change_person
+  def edit_person
+    # This is necessary because the sample form needs some real active record when using user_ids picker.
+    # That's only to pass the appropriate attributes.
+    @person = Person.new
+  end
+
+  def update_person
   end
 end
