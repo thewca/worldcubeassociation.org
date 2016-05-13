@@ -109,7 +109,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been moved to the waiting list")
       expect(mail.body.encoded).to match("If you think this is an error, please reply to this email.")
       names = competition.managers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence(last_word_connector: " and ")}\\.")
+      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
     end
   end
 
@@ -127,7 +127,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the body" do
       expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been deleted")
       names = competition.managers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence(last_word_connector: " and ")}\\.")
+      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
     end
   end
 end

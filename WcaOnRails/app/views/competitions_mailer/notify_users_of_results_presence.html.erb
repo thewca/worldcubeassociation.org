@@ -1,5 +1,5 @@
 <p>
-  The results of <%= link_to @competition.name, competition_url(@competition) %> you've competed recently are now available.
+  Your results at <%= link_to @competition.name, competition_url(@competition) %> have just been posted.
 </p>
 
 <p>
@@ -7,5 +7,6 @@
 </p>
 
 <p>
-  Regards, <%= users_to_sentence @competition.managers %>.
+  Regards,
+  The WCA Results Team on behalf of <%= users_to_sentence @competition.managers %>.
 </p>

@@ -575,6 +575,7 @@ describe CompetitionsController do
           FactoryGirl.create_list(:result, 2, person: user.person, competitionId: competition.id)
         end
 
+        expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           get :post_results, id: competition
         end.to change { ActionMailer::Base.deliveries.count }.by(4)
