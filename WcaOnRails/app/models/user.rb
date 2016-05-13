@@ -462,6 +462,7 @@ class User < ActiveRecord::Base
       fields << :email
       fields << :preferred_events
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
+      fields << :results_notifications_enabled
     end
     if admin? || board_member?
       fields << :delegate_status
@@ -487,6 +488,12 @@ class User < ActiveRecord::Base
       fields << :remove_avatar
     end
     fields
+  end
+
+  def notify_of_results_presence(competition)
+    if results_notifications_enabled?
+      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_now
+    end
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)

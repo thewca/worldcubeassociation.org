@@ -11,7 +11,7 @@ describe StaticPagesHelper do
       FactoryGirl.create(:team_member, team_id: team.id, user_id: other_member.id, start_date: Date.today-1)
       FactoryGirl.create(:team_member, team_id: team.id, user_id: another_member.id, start_date: Date.today-1)
       string = helper.format_team_members(team.friendly_id)
-      expect(string).to eq "Jeremy (leader), Aaron and Pedro"
+      expect(string).to eq "Jeremy (leader), Aaron, and Pedro"
     end
 
     it "does not include the demoted members" do

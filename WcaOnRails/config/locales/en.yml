@@ -53,6 +53,7 @@ en:
         remember_me: "Remember me"
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
+        results_notifications_enabled: "Email me when my results are posted."
       competition:
         competition_id_to_clone: "Competition id to clone"
 

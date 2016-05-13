@@ -30,7 +30,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(/The results of .+ you've competed recently are now available/)
+      expect(mail.body.encoded).to match(/Your results at .+ have just been posted./)
     end
   end
 end

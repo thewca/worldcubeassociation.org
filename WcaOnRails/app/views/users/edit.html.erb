@@ -167,7 +167,12 @@
 
           <%= render "shared/associated_events_picker", form_builder: f, label: t('.preferred_events'), disabled: !editable_fields.include?(:preferred_events),
                                                         events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
-            <span class="help-block"><%= t '.preferred_events_desc' %></span>
+          <span class="help-block"><%= t '.preferred_events_desc' %></span>
+
+          <%= label_tag :notifications, t('layouts.navigation.notifications') %>
+          <div id="notifications">
+            <%= f.input :results_notifications_enabled %>
+          </div>
 
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
