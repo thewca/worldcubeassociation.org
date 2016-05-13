@@ -26,4 +26,7 @@ class AdminController < ApplicationController
     end
     render 'merge_people'
   end
+
+  def change_person
+  end
 end
