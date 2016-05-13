@@ -123,8 +123,12 @@ module ApplicationHelper
   end
 
   def wca_date_range(from_date, to_date, options={})
-    options[:separator] = '-'
-    date_range(from_date, to_date, options)
+    if from_date && to_date
+      options[:separator] = '-'
+      date_range(from_date, to_date, options)
+    else
+      t "competitions.unscheduled"
+    end
   end
 
   def alert(type, content=nil, note: false, &block)

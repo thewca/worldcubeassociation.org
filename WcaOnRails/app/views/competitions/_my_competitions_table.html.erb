@@ -18,40 +18,40 @@
         <th class="big-column"></th>
       </tr>
     </thead>
-    <% competitions.each do |competition| %>
-      <% if competition.isConfirmed %>
-        <% if competition.showAtAll %>
-          <% message = "This competition is confirmed and visible." %>
+    <tbody>
+      <% competitions.each do |competition| %>
+        <% if competition.isConfirmed %>
+          <% if competition.showAtAll %>
+            <% message = "This competition is confirmed and visible." %>
+          <% else %>
+            <% message = "This competition is confirmed but not visible." %>
+          <% end %>
         <% else %>
-          <% message = "This competition is confirmed but not visible." %>
+          <% if competition.showAtAll %>
+            <% message = "This competition is not confirmed but is visible." %>
+          <% else %>
+            <% message = "This competition is not confirmed and not visible." %>
+          <% end %>
         <% end %>
-      <% else %>
-        <% if competition.showAtAll %>
-          <% message = "This competition is not confirmed but is visible." %>
-        <% else %>
-          <% message = "This competition is not confirmed and not visible." %>
-        <% end %>
+          <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %> <%= !past ? "not-past" : "past" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !past ? message : "" %>">
+            <td><%= link_to competition.name, competition_path(competition) %></td>
+            <td><%= competition.cityName %>, <%= competition.country ? competition.country.name : "" %></td>
+            <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
+            <td>
+              <% if !past && current_user.can_manage_competition?(competition) %>
+                <%= link_to "Edit", edit_competition_path(competition) %>
+              <% elsif competition.results.length > 0 %>
+                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+              <% end %>
+            </td>
+            <td>
+              <% if !past && competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
+                <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
+              <% end %>
+            </td>
+            <td class="big-column"></td>
+          </tr>
       <% end %>
-      <tbody>
-        <tr class="<%= competition.isConfirmed ? "confirmed" : "not-confirmed" %> <%= competition.showAtAll ? "visible" : "not-visible" %> <%= !past ? "not-past" : "past" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !past ? message : "" %>">
-          <td><%= link_to competition.name, competition_path(competition) %></td>
-          <td><%= competition.cityName %>, <%= competition.country.name %></td>
-          <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
-          <td>
-            <% if !past && current_user.can_manage_competition?(competition) %>
-              <%= link_to "Edit", edit_competition_path(competition) %>
-            <% elsif competition.results.length > 0 %>
-              <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
-            <% end %>
-          </td>
-          <td>
-            <% if !past && competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-              <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
-            <% end %>
-          </td>
-          <td class="big-column"></td>
-        </tr>
-      </tbody>
-    <% end %>
+    </tbody>
   </table>
 <% end %>

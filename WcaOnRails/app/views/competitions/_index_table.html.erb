@@ -17,7 +17,7 @@
         <% else %>
           <%= icon('hourglass-start', title: "Starts in #{ pluralize((competition.start_date - Date.today).to_i, "day") }", data: { toggle: "tooltip" }) %>
         <% end %>
-        <%= wca_date_range(competition.start_date, competition.end_date)  %>
+        <%= wca_date_range(competition.start_date, competition.end_date) %>
       </span>
       <span class="competition-info">
         <p class="competition-link">

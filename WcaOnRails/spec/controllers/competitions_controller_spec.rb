@@ -571,4 +571,82 @@ describe CompetitionsController do
       end
     end
   end
+
+  describe 'GET #my_competitions' do
+    let(:delegate) { FactoryGirl.create(:delegate) }
+    let(:organizer) { FactoryGirl.create(:user) }
+    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], eventSpecs: "222 333") }
+    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
+    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
+    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], eventSpecs: "222 333") }
+    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], eventSpecs: "222 333") }
+    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], eventSpecs: "222 333") }
+    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], eventSpecs: "222 333", year: "0") }
+    let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
+    let!(:registration1) { FactoryGirl.create(:registration, competitionId: future_competition1.id, user: registered_user) }
+    let!(:registration2) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: registered_user) }
+    let!(:registration3) { FactoryGirl.create(:registration, competitionId: past_competition1.id, user: registered_user) }
+    let!(:registration4) { FactoryGirl.create(:registration, competitionId: past_competition3.id, user: organizer) }
+    let!(:registration5) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: delegate) }
+    let!(:results_person) { FactoryGirl.create(:person, id: "2014PLUM01", name: "Jeff Plumb") }
+    let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
+    let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
+
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :my_competitions
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as user with results for a comp they did not register for' do
+      before do
+        sign_in results_user
+      end
+
+      it 'shows my upcoming and past competitions' do
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq []
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      before do
+        sign_in registered_user
+      end
+
+      it 'shows my upcoming and past competitions' do
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+    end
+
+    context 'when signed in as an organizer' do
+      before do
+        sign_in organizer
+      end
+
+      it 'shows my upcoming and past competitions' do
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1, past_competition3]
+      end
+    end
+
+    context 'when signed in as a delegate' do
+      before do
+        sign_in delegate
+      end
+
+      it 'shows my upcoming and past competitions' do
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3]
+      end
+    end
+  end
 end
