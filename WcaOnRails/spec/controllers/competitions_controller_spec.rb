@@ -571,7 +571,7 @@ describe CompetitionsController do
       end
 
       it "sends the notification emails to users that competed" do
-        FactoryGirl.create_list(:user_with_wca_id, 4).each do |user|
+        FactoryGirl.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
           FactoryGirl.create_list(:result, 2, person: user.person, competitionId: competition.id)
         end
 

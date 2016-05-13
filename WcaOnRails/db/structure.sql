@@ -728,7 +728,7 @@ CREATE TABLE `users` (
   `dob` date DEFAULT NULL,
   `gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `results_notifications_enabled` tinyint(1) DEFAULT '1',
+  `results_notifications_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
