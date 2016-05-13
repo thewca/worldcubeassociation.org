@@ -133,7 +133,9 @@ module ApplicationHelper
 
   def alert(type, content=nil, note: false, &block)
     content = capture(&block) if block_given?
-    content.prepend content_tag(:strong, "Note: ") if note
+    if note
+      content = content_tag(:strong, "Note:") + " " + content
+    end
     content_tag :div, content, class: "alert alert-#{type}"
   end
 end
