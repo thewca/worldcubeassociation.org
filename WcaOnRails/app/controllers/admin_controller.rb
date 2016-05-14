@@ -35,4 +35,15 @@ class AdminController < ApplicationController
 
   def update_person
   end
+
+  def person_data
+    @person = Person.find_by_id(params[:person_wca_id])
+
+    render json: {
+      name: @person.name,
+      countryId: @person.countryId,
+      gender: @person.gender,
+      dob: @person.dob,
+    }
+  end
 end
