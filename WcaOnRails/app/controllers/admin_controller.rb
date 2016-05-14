@@ -34,10 +34,25 @@ class AdminController < ApplicationController
   end
 
   def update_person
+    @person = Person.find_current_by_id!(params[:person][:id])
+    case params[:commit]
+    when "Fix"
+      if @person.update_attributes(params.require(:person).permit(:name, :countryId, :gender, :dob))
+        flash.now[:success] = "Successfully fixed #{@person.name}."
+        if @person.country_id_changed
+          flash.now[:warning] = "The change you made may have affected records, be sure to run
+          <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+        end
+      end
+    when "Update"
+
+    end
+
+    render :edit_person
   end
 
   def person_data
-    @person = Person.find_by_id(params[:person_wca_id])
+    @person = Person.find_current_by_id!(params[:person_wca_id])
 
     render json: {
       name: @person.name,

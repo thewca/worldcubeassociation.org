@@ -9,7 +9,67 @@ class Person < ActiveRecord::Base
 
   alias_method :wca_id, :id
 
+  validates :name, presence: true
+  validates :countryId, presence: true
+
   attr_writer :dob
+
+  before_validation :unpack_dates
+  private def unpack_dates
+    if @dob.nil? && !dob.blank?
+      @dob = dob.strftime("%F")
+    end
+    if @dob.blank?
+      self.year = self.month = self.day = 0
+    else
+      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@dob)
+        errors.add(:dob, "is invalid")
+        return false
+      end
+      self.year, self.month, self.day = @dob.split("-").map(&:to_i)
+      unless Date.valid_date? self.year, self.month, self.day
+        errors.add(:dob, "is invalid")
+        return false
+      end
+    end
+  end
+
+  validate :dob_must_be_in_the_past
+  private def dob_must_be_in_the_past
+    if dob && dob >= Date.today
+      errors.add(:dob, "must be in the past")
+    end
+  end
+
+  # If someone represented country A, and now represents country B, it's
+  # easy to tell which solves are which (results have a countryId).
+  # Fixing their country (B) to a new country C is easy to undo, just change
+  # all Cs to Bs. However, if someone accidentally fixes their country from B
+  # to A, then we cannot go back, as all their results are now for country A.
+  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?
+  private def cannot_change_country_to_country_represented_before
+    has_been_a_citizen_of_this_country_already = Person.exists?(id: id, countryId: countryId)
+    if has_been_a_citizen_of_this_country_already
+      errors.add(:countryId, "Cannot change the country to a country the person have already represented in the past.")
+    end
+  end
+
+  after_save :update_person_name_in_results_table, if: :name_changed?
+  private def update_person_name_in_results_table
+    results.where(personName: name_was).update_all(personName: name)
+  end
+
+  after_save :update_person_country_in_results_table, if: :countryId_changed?
+  private def update_person_country_in_results_table
+    results.where(countryId: countryId_was).update_all(countryId: countryId)
+  end
+
+  attr_reader :country_id_changed
+  after_save -> { @country_id_changed = countryId_changed? }
+
+  def self.find_current_by_id!(id)
+    find_by!(id: id, subId: 1)
+  end
 
   def likely_delegates
     all_delegates = competitions.order(:year, :month, :day).map(&:delegates).flatten.select(&:any_kind_of_delegate?)
