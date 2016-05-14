@@ -4,7 +4,7 @@ describe "registrations/export.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition
     competition.registrations.build(
-      status: "a",
+      accepted_at: Time.now,
       name: "Bob",
       countryId: "USA",
       birthYear: 1990,

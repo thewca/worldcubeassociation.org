@@ -23,8 +23,8 @@ RSpec.describe RegistrationsController do
 
     it 'sorts by name, even if name is unpopulated because they registered with a WCA account' do
       # First accept registrations
-      registration.update_column(:status, "a")
-      registration_without_user.update_column(:status, "a")
+      registration.update_column(:accepted_at, Time.now)
+      registration_without_user.update_column(:accepted_at, Time.now)
 
       get :index, competition_id: competition
       registrations = assigns(:registrations)
@@ -56,7 +56,7 @@ RSpec.describe RegistrationsController do
       other_competition = FactoryGirl.create(:competition, :registration_open)
       other_registration = FactoryGirl.create(:registration, competition: other_competition)
 
-      patch :update, id: other_registration.id, registration: { status: :accepted }
+      patch :update, id: other_registration.id, registration: { accepted_at: Time.now }
       expect(other_registration.reload.pending?).to eq true
       expect(flash[:danger]).to eq "Could not update registration"
     end
@@ -64,17 +64,17 @@ RSpec.describe RegistrationsController do
     it "accepts a pending registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { status: :accepted }
+        patch :update, id: registration.id, registration: { accepted_at: Time.now }
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       expect(registration.reload.accepted?).to be true
     end
 
     it "changes an accepted registration to pending" do
-      registration.accepted!
+      registration.update!(accepted_at: Time.now)
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { status: :pending, updated_at: registration.updated_at }, from_admin_view: true
+        patch :update, id: registration.id, registration: { accepted_at: nil, updated_at: registration.updated_at }, from_admin_view: true
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       expect(registration.reload.pending?).to be true
       expect(response).to redirect_to edit_registration_path(registration)
@@ -105,7 +105,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can reject multiple registrations" do
-      registration.accepted!
+      registration.update!(accepted_at: Time.now)
       registration2 = FactoryGirl.create(:registration, :accepted, competitionId: competition.id)
       pending_registration = FactoryGirl.create(:registration, :pending, competitionId: competition.id)
 
@@ -149,7 +149,7 @@ RSpec.describe RegistrationsController do
         registration.guests = 4
         registration.save!
 
-        patch :update, id: registration.id, registration: { status: :accepted, updated_at: 1.day.ago }, from_admin_view: true
+        patch :update, id: registration.id, registration: { accepted_at: Time.now, updated_at: 1.day.ago }, from_admin_view: true
         expect(registration.reload.accepted?).to be false
         expect(response.status).to eq 200
       end
@@ -158,7 +158,7 @@ RSpec.describe RegistrationsController do
     it "can accept own registration" do
       registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: organizer.id
 
-      patch :update, id: registration.id, registration: { status: :accepted }
+      patch :update, id: registration.id, registration: { accepted_at: Time.now }
       expect(registration.reload.accepted?).to eq true
     end
   end
@@ -217,7 +217,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot create accepted registration" do
-      post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 0, comments: "", status: Registration::statuses[:accepted] }
+      post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 0, comments: "", accepted_at: Time.now }
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
@@ -227,7 +227,7 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "", status: :accepted }
+      post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "", accepted_at: Time.now }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end
@@ -267,7 +267,7 @@ RSpec.describe RegistrationsController do
     it "cannot accept own registration" do
       registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
 
-      patch :update, id: registration.id, registration: { status: :accepted }
+      patch :update, id: registration.id, registration: { accepted_at: Time.now }
       expect(registration.reload.accepted?).to eq false
     end
 

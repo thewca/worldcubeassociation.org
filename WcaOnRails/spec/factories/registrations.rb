@@ -17,11 +17,11 @@ FactoryGirl.define do
     end
 
     trait :accepted do
-      status "a"
+      accepted_at Time.now
     end
 
     trait :pending do
-      status "p"
+      accepted_at nil
     end
 
     factory :userless_registration do
