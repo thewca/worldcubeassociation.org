@@ -53,6 +53,11 @@ fr:
         remember_me: "Se souvenir de moi"
         pending_avatar: "Charger une nouvelle photo de profil"
         remove_avatar: "Supprimer la photo de profil"
+        results_notifications_enabled: "M'envoyer un email quand les résultats sont postés."
+        delegate_id_to_handle_wca_id_claim: "ID du Délégué WCA qui traitera la demande"
+        delegate_status: "Statut de Délégué"
+        senior_delegate: "Délégué sénior"
+        region: "Région"
       competition:
         competition_id_to_clone: "Id de la compétition à cloner"
 
@@ -261,12 +266,36 @@ fr:
           assigned: "vous avez déjà un ID WCA qui vous est assigné"
           registered: "vous vous êtes inscrit à une compétition"
       save: "Sauvegarder"
+    errors:
+      not_found: "introuvable"
+      already_assigned: "déjà associé à un autre compte"
+      required: "requis"
+      dob_incorrect: "incorrecte"
+      unique: "doit être unique"
+      dob_past: "doit être dans le passé"
+      must_be_senior: "doit être un Délégué sénior"
+      must_not_be_present: "ne doit pas être présent"
+      senior_has_delegate: "ne peut pas destituer un Délégué sénior qui supervise d'autres Délégués"
+      already_have_id: "impossible à réclamer car vous avez déjà l'ID WCA %{wca_id}"
+      wca_id_no_birthdate: "L'ID WCA n'a pas de date de naissance, contactez l'équipe en charge des résultats pour corriger le problème."
+      board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
+      avatar_requires_wca_id: "requiert d'avoir un ID WCA"
     select_nearby_delegate:
       select_delegate: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un Délégué confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
       already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre Délégué local %{link_delegate}."
       missing_dob_html: "L'ID WCA %{link_id} n'a pas de date de naissance associée. Merci de contacter la %{link_result_team} pour corriger le problème."
       unknown_wca_id_html: "L'ID WCA %{link_id} n'existe pas."
+  registrations:
+    errors:
+      need_name: "Nom obligatoire"
+      need_gender: "Genre obligatoire"
+      need_dob: "Date de naissance obligatoire"
+      need_country: "Pays obligatoire"
   competitions:
+    errors:
+      cannot_manage: "Ne peut pas gérer la compétition."
+      cannot_delete_public: "Impossible de supprimer une compétition visible publiquement."
+      cannot_delete_confirmed: "Impossible de supprimer une compétition confirmée."
     new:
       create_competition: "Créer une compétition"
     update:
