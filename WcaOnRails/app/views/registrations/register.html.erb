@@ -33,7 +33,7 @@
 
     <% if @competition.registration_opened? %>
       <% if current_user.preferred_events.empty? %>
-        <%= alert :info, t('.registration.preferred_events_prompt', link: link_to(t('common.here'), profile_edit_path(current_user, section: :preferences))) %>
+        <%= alert :info, t('.registration.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences))) %>
       <% end %>
       <p>
       <%= t '.registration.greeting', name: current_user.name %>
