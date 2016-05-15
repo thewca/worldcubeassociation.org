@@ -320,7 +320,7 @@ en:
         contact_organizer: "Contact the organizer if you wish to make a change."
         waiting_list: "You are currently number %{i} of %{n} on the waiting list."
         accepted: "Your registration has been accepted!"
-        preferred_events_prompt: "To speed up registration in the future, you can set your preferred events %{link}."
+        preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
       menu:
         results: "Results"
         podiums: "Podiums"
