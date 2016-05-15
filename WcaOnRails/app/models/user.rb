@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, foreign_key: "wca_id"
+  belongs_to :person, -> { where(subId: 1) }, foreign_key: "wca_id"
   belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :team_members, dependent: :destroy

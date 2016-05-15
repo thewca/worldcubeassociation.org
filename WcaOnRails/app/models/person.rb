@@ -46,7 +46,7 @@ class Person < ActiveRecord::Base
   # Fixing their country (B) to a new country C is easy to undo, just change
   # all Cs to Bs. However, if someone accidentally fixes their country from B
   # to A, then we cannot go back, as all their results are now for country A.
-  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?
+  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: :new_record?
   private def cannot_change_country_to_country_represented_before
     has_been_a_citizen_of_this_country_already = Person.exists?(id: id, countryId: countryId)
     if has_been_a_citizen_of_this_country_already
@@ -54,18 +54,32 @@ class Person < ActiveRecord::Base
     end
   end
 
-  after_save :update_person_name_in_results_table, if: :name_changed?
+  after_update :update_person_name_in_results_table, if: :name_changed?
   private def update_person_name_in_results_table
     results.where(personName: name_was).update_all(personName: name)
   end
 
-  after_save :update_person_country_in_results_table, if: :countryId_changed?
+  after_update :update_person_country_in_results_table, if: :countryId_changed?
   private def update_person_country_in_results_table
     results.where(countryId: countryId_was).update_all(countryId: countryId)
   end
 
   attr_reader :country_id_changed
-  after_save -> { @country_id_changed = countryId_changed? }
+  after_update -> { @country_id_changed = countryId_changed? }
+
+  # Update the person attributes and save the old state as a new Person with greater subId.
+  def update_using_sub_id(attributes)
+    if attributes[:name] == self.name && attributes[:countryId] == self.countryId
+      errors[:base] << "The name or the country must be different when updating the person."
+      return false
+    end
+    old_attributes = self.attributes
+    if update_attributes(attributes)
+      Person.where(id: id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
+      Person.create(old_attributes.merge!(subId: 2))
+      return true
+    end
+  end
 
   def self.find_current_by_id!(id)
     find_by!(id: id, subId: 1)

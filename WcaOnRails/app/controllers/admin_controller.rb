@@ -35,9 +35,11 @@ class AdminController < ApplicationController
 
   def update_person
     @person = Person.find_current_by_id!(params[:person][:id])
+    person_params = params.require(:person).permit(:name, :countryId, :gender, :dob)
+
     case params[:commit]
     when "Fix"
-      if @person.update_attributes(params.require(:person).permit(:name, :countryId, :gender, :dob))
+      if @person.update_attributes(person_params)
         flash.now[:success] = "Successfully fixed #{@person.name}."
         if @person.country_id_changed
           flash.now[:warning] = "The change you made may have affected records, be sure to run
@@ -45,7 +47,9 @@ class AdminController < ApplicationController
         end
       end
     when "Update"
-
+      if @person.update_using_sub_id(person_params)
+        flash.now[:success] = "Successfully updated #{@person.name}."
+      end
     end
 
     render :edit_person
