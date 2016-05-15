@@ -53,7 +53,7 @@ RSpec.describe RegistrationsController do
     end
 
     it 'cannot change registration of a different competition' do
-      other_competition = FactoryGirl.create(:competition, :registration_open)
+      other_competition = FactoryGirl.create(:competition, :confirmed, :visible, :registration_open)
       other_registration = FactoryGirl.create(:registration, competition: other_competition)
 
       patch :update, id: other_registration.id, registration: { status: :accepted }
@@ -166,7 +166,7 @@ RSpec.describe RegistrationsController do
   context "signed in as competitor" do
     let!(:user) { FactoryGirl.create(:user, :wca_id) }
     let!(:delegate) { FactoryGirl.create(:delegate) }
-    let!(:competition) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate]) }
+    let!(:competition) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
 
     before :each do
       sign_in user
@@ -274,7 +274,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "register" do
-    let(:competition) { FactoryGirl.create :competition, :registration_open }
+    let(:competition) { FactoryGirl.create :competition, :confirmed, :visible, :registration_open }
 
     it "redirects to competition root if competition is not using WCA registration" do
       competition.use_wca_registration = false
@@ -328,7 +328,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "psych sheet when not signed in" do
-    let!(:competition) { FactoryGirl.create(:competition, :registration_open, eventSpecs: "333 444 333bf") }
+    let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, eventSpecs: "333 444 333bf") }
 
     it "redirects psych sheet to 333" do
       get :psych_sheet, competition_id: competition.id

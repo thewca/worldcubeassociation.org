@@ -18,7 +18,7 @@ FactoryGirl.define do
     venue "My backyard"
     venueAddress "My backyard street"
     website "https://www.worldcubeassociation.org"
-    showAtAll true
+    showAtAll false
 
     guests_enabled true
 
@@ -43,6 +43,11 @@ FactoryGirl.define do
     trait :confirmed do
       with_delegate
       isConfirmed true
+    end
+
+    trait :visible do
+      with_delegate
+      showAtAll true
     end
   end
 end

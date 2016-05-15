@@ -5,10 +5,10 @@ describe CompetitionsController do
 
   describe 'GET #index' do
     describe "selecting events" do
-      let!(:competition1) { FactoryGirl.create(:competition, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
-      let!(:competition2) { FactoryGirl.create(:competition, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
-      let!(:competition3) { FactoryGirl.create(:competition, starts: 3.week.from_now, eventSpecs: "222 333 skewb 666 pyram sq1") }
-      let!(:competition4) { FactoryGirl.create(:competition, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
+      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
+      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
+      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, eventSpecs: "222 333 skewb 666 pyram sq1") }
+      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
 
       context "when no event is selected" do
         it "competitions are sorted by start date" do
@@ -37,12 +37,12 @@ describe CompetitionsController do
     end
 
     describe "selecting present/past competitions" do
-      let!(:past_comp1) { FactoryGirl.create(:competition, starts: 1.year.ago) }
-      let!(:past_comp2) { FactoryGirl.create(:competition, starts: 3.years.ago) }
-      let!(:in_progress_comp1) { FactoryGirl.create(:competition, starts: Date.today, ends: 1.day.from_now) }
-      let!(:in_progress_comp2) { FactoryGirl.create(:competition, starts: Date.today, ends: Date.today) }
-      let!(:upcoming_comp1) { FactoryGirl.create(:competition, starts: 2.weeks.from_now) }
-      let!(:upcoming_comp2) { FactoryGirl.create(:competition, starts: 3.weeks.from_now) }
+      let!(:past_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
+      let!(:past_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
+      let!(:in_progress_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
+      let!(:in_progress_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.today, ends: Date.today) }
+      let!(:upcoming_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
+      let!(:upcoming_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.weeks.from_now) }
 
       context "when present is selected" do
         before do
@@ -82,6 +82,7 @@ describe CompetitionsController do
       sign_out
 
       it 'redirects to the old php page' do
+        competition.update_column(:showAtAll, true)
         get :show, id: competition.id
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition
@@ -180,7 +181,7 @@ describe CompetitionsController do
       end
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
-        competition = FactoryGirl.create :competition
+        competition = FactoryGirl.create :competition, :with_delegate
         post :create, competition: { name: competition.name, competition_id_to_clone: "" }
         expect(response).to render_template(:new)
         new_comp = assigns(:competition)

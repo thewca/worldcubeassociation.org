@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Api::V0::ApiController do
   describe 'GET #competitions_search' do
-    let!(:comp) { FactoryGirl.create(:competition, name: "Jfly's Competition 2015") }
+    let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 
     it 'requires query parameter' do
       get :competitions_search
@@ -131,7 +131,7 @@ describe Api::V0::ApiController do
   end
 
   describe 'GET #omni_search' do
-    let!(:comp) { FactoryGirl.create(:competition, name: "jeremy Jfly's Competition 2015") }
+    let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015") }
     let!(:post) { FactoryGirl.create(:post, title: "jeremy post title", body: "post body") }
     let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
 
@@ -183,10 +183,10 @@ describe Api::V0::ApiController do
 
   describe 'GET #competitions' do
     it 'sorts newest to oldest' do
-      yesteryear_comp = FactoryGirl.create(:competition, starts: 1.year.ago)
-      yesterday_comp = FactoryGirl.create(:competition, starts: 1.day.ago)
-      today_comp = FactoryGirl.create(:competition, starts: 0.days.ago)
-      tomorrow_comp = FactoryGirl.create(:competition, starts: 1.day.from_now)
+      yesteryear_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.year.ago)
+      yesterday_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.day.ago)
+      today_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: 0.days.ago)
+      tomorrow_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.day.from_now)
 
       get :competitions
       expect(response.status).to eq 200
@@ -200,8 +200,8 @@ describe Api::V0::ApiController do
     end
 
     it 'can sort by start_date,end_date' do
-      one_day_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 1))
-      two_day_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
+      one_day_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 1))
+      two_day_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
 
       get :competitions, sort: "start_date,end_date"
       json = JSON.parse(response.body)
@@ -213,8 +213,8 @@ describe Api::V0::ApiController do
     end
 
     it 'can query by country_iso2' do
-      vietnam_comp = FactoryGirl.create(:competition, countryId: "Vietnam")
-      usa_comp = FactoryGirl.create(:competition, countryId: "USA")
+      vietnam_comp = FactoryGirl.create(:competition, :confirmed, :visible, countryId: "Vietnam")
+      usa_comp = FactoryGirl.create(:competition, :confirmed, :visible, countryId: "USA")
 
       get :competitions, country_iso2: "US"
       json = JSON.parse(response.body)
@@ -228,8 +228,8 @@ describe Api::V0::ApiController do
     end
 
     it 'can do a plaintext query' do
-      terrible_comp = FactoryGirl.create(:competition, name: "A terrible competition 2016", countryId: "USA")
-      awesome_comp = FactoryGirl.create(:competition, name: "An awesome competition 2016", countryId: "France")
+      terrible_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", countryId: "USA")
+      awesome_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", countryId: "France")
 
       get :competitions, q: "AWES"
       json = JSON.parse(response.body)
@@ -272,9 +272,9 @@ describe Api::V0::ApiController do
     end
 
     it 'can query by date' do
-      last_feb_comp = FactoryGirl.create(:competition, starts: Date.new(2015, 2, 1))
-      feb_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 2, 1))
-      march_comp = FactoryGirl.create(:competition, starts: Date.new(2016, 3, 1))
+      last_feb_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2015, 2, 1))
+      feb_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1))
+      march_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 3, 1))
 
       get :competitions, start: "2015-02-01"
       json = JSON.parse(response.body)
@@ -295,7 +295,7 @@ describe Api::V0::ApiController do
 
     it 'paginates' do
       30.times do
-        FactoryGirl.create :competition
+        FactoryGirl.create :competition, :confirmed, :visible
       end
 
       get :competitions

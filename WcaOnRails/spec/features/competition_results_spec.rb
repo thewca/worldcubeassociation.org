@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "competition results" do
-  let(:competition) { FactoryGirl.create :competition, eventSpecs: "333", results_posted_at: 1.day.ago }
+  let(:competition) { FactoryGirl.create :competition, :confirmed, :visible, eventSpecs: "333", results_posted_at: 1.day.ago }
   let(:person_1) { FactoryGirl.create :person, name: "Fast Cuber" }
   let(:person_2) { FactoryGirl.create :person, name: "Slow Cuber" }
 

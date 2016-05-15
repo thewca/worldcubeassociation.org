@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Api::V0::CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition,
+                                         :with_delegate,
                                          id: "TestComp2014",
                                          start_date: "2014-02-03",
                                          end_date: "2014-02-05",

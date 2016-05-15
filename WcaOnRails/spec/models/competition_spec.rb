@@ -130,7 +130,7 @@ RSpec.describe Competition do
   end
 
   it "does not warn about name greater than 32 when competition is publicly visible" do
-    competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: true
+    competition = FactoryGirl.build :competition, :confirmed, :visible, name: "A really long competition name 2016"
     expect(competition).to be_valid
     expect(competition.warnings[:name]).to eq nil
   end
@@ -311,33 +311,37 @@ RSpec.describe Competition do
     end
   end
 
-  describe "when confirming" do
-    let(:competition) { FactoryGirl.create :competition, :with_delegate }
+  describe "when confirming or making visible" do
+    let(:competition_with_delegate) { FactoryGirl.build :competition, :with_delegate }
+    let(:competition_without_delegate) { FactoryGirl.build :competition }
 
-    it "works" do
-      competition.isConfirmed = true
-      expect(competition).to be_valid
-    end
-
-    [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
-      it "requires #{field}" do
-        competition.public_send "#{field}=", ""
-        competition.isConfirmed = true
-        expect(competition).not_to be_valid
+    [:isConfirmed, :showAtAll].each do |action|
+      it "can set #{action}" do
+        competition_with_delegate.public_send "#{action}=", true
+        expect(competition_with_delegate).to be_valid
       end
-    end
 
-    it "must have at least one event" do
-      competition.eventSpecs = ""
-      competition.isConfirmed = true
-      expect(competition).not_to be_valid
-    end
+      [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
+        it "requires #{field} when setting #{action}" do
+          competition_with_delegate.assign_attributes field => "", action => true
+          expect(competition_with_delegate).not_to be_valid
+        end
+      end
 
-    it "requires both dates" do
-      competition.start_date = ""
-      competition.end_date = ""
-      competition.isConfirmed = true
-      expect(competition).not_to be_valid
+      it "must have at least one event when setting #{action}" do
+        competition_with_delegate.assign_attributes eventSpecs: "", action => true
+        expect(competition_with_delegate).not_to be_valid
+      end
+
+      it "requires both dates when setting #{action}" do
+        competition_with_delegate.assign_attributes start_date: "", end_date: "", action => true
+        expect(competition_with_delegate).not_to be_valid
+      end
+
+      it "requires at least one delegate when setting #{action}" do
+        competition_without_delegate.public_send "#{action}=", true
+        expect(competition_without_delegate).not_to be_valid
+      end
     end
   end
 

@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.feature "Create competition", js: true do
   let(:delegate) { FactoryGirl.create(:delegate) }
-  let(:competition_to_clone) { FactoryGirl.create :competition }
+  let(:cloned_delegate) { FactoryGirl.create(:delegate) }
+  let(:competition_to_clone) { FactoryGirl.create :competition, delegates: [cloned_delegate], showAtAll: true }
 
   before :each do
     sign_in delegate
@@ -49,7 +50,7 @@ RSpec.feature "Create competition", js: true do
     expect(Competition.all.length).to eq 2
     new_competition = Competition.find("NewComp2015")
     expect(new_competition.name).to eq "New Comp 2015"
-    expect(new_competition.delegates).to eq [delegate]
+    expect(new_competition.delegates).to eq [delegate, cloned_delegate]
     expect(new_competition.venue).to eq competition_to_clone.venue
   end
 end
