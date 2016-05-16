@@ -54,7 +54,7 @@ def main():
   if args.server:
     server(args)
 
-  if args.check != '':
+  if len(args.check) > 0 and args.do_not_build:
     checkTranslations(args)
 
 
@@ -67,6 +67,10 @@ with open(languages_file, "r") as fileHandle:
 languages = languageData.keys()
 
 max_lang_width = len(max(languages, key=len))
+
+# Translations checker
+
+translation_checker = check.TranslationChecker()
 
 # Script Parameters
 
@@ -161,8 +165,7 @@ parser.add_argument(
 
 parser.add_argument(
   '--check', '-!',
-  action='store',
-  default='',
+  action='append',
   help="Check consistency between translations and original versions, and some other tests. Specify comma-separated list of languages, or 'all' to check all translations."
 )
 
@@ -224,6 +227,10 @@ def buildLanguage(args, language):
 
   srcDir = "translations/" + language if isTranslation else "wca-regulations"
 
+  if language != 'english':
+    if 'all' in args.check or language in args.check:
+      translation_checker.checkTranslation(language, str("[" + language + "]").ljust(max_lang_width + 2))
+
   print "%s Generating HTML in %s" % (("[" + language + "]").ljust(max_lang_width + 2), buildDir)
   html.html(language, srcDir, buildDir, pdfName + ".pdf", isTranslation=isTranslation, verbose=args.verbose)
 
@@ -263,21 +270,20 @@ def server(args):
   subprocess.call(["python", "-m", "SimpleHTTPServer", "8081"], cwd="./build/")
 
 def checkTranslations(args):
-  if args.check == 'all':
+  if 'all' in args.check:
     check_translations = languages
   else:
     check_translations = []
-    for language in args.check.split(','):
+    for language in args.check:
       if language in languages:
         check_translations.append(language)
       else:
         print 'Warning: unknown language %s.' % language
-  translation_checker = check.translationChecker()
   for language in check_translations:
     if language == 'english':
       continue
     print 'Checking translation %s...' % language
-    translation_checker.checkTranslation(language)
+    translation_checker.checkTranslation(language, str("[" + language + "]").ljust(max_lang_width + 2))
     print
 
 # Make the script work standalone.

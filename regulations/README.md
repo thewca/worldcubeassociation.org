@@ -4,10 +4,6 @@ This repository contains files related to the maintenance of the [wca-documents]
 
 ## Build the WCA documents
 
-    git clone https://github.com/cubing/wca-documents-extra.git
-    cd wca-documents-extra
-    git submodule update --init ./wca-documents
-
     ./make.py
 
 To view the result in your browser (OSX):
