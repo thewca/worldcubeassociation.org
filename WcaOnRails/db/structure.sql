@@ -728,6 +728,7 @@ CREATE TABLE `users` (
   `dob` date DEFAULT NULL,
   `gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `results_notifications_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -901,3 +902,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160504170758');
 INSERT INTO schema_migrations (version) VALUES ('20160504230105');
 
 INSERT INTO schema_migrations (version) VALUES ('20160505231300');
+
+INSERT INTO schema_migrations (version) VALUES ('20160513162613');

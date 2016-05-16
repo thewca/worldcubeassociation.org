@@ -9,7 +9,7 @@
   <% nearby_competitions.each do |c| %>
     <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
       <td class="text-nowrap"><%= link_to c.name, admin_edit_competition_path(c.id) %></td>
-      <td><%= c.delegates.map(&:name).to_sentence %></td>
+      <td><%= users_to_sentence c.delegates %></td>
       <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
       <% days_until = (c.start_date - @competition.start_date).to_i %>
       <%=t('datetime.distance_in_words.x_days', count: days_until.abs) %> <%= days_until < 0 ? t('.before') : t('.after') %>

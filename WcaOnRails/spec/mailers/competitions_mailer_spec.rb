@@ -17,4 +17,20 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
     end
   end
+
+  describe "notify_users_of_results_presence" do
+    let(:competition) { FactoryGirl.create :competition }
+    let(:competitor_user) { FactoryGirl.create :user, :wca_id }
+    let(:mail) { CompetitionsMailer.notify_users_of_results_presence(competitor_user, competition) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq "The results of #{competition.name} are posted"
+      expect(mail.to).to eq [competitor_user.email]
+      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match(/Your results at .+ have just been posted./)
+    end
+  end
 end

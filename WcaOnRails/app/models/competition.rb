@@ -7,6 +7,8 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
+  has_many :competitors, -> { distinct }, through: :results, source: :person
+  has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
   has_many :delegates, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all

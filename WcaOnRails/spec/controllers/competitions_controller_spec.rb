@@ -569,6 +569,17 @@ describe CompetitionsController do
         competition.reload
         expect(competition.results_posted_at.to_f).to be < Time.now.to_f
       end
+
+      it "sends the notification emails to users that competed" do
+        FactoryGirl.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
+          FactoryGirl.create_list(:result, 2, person: user.person, competitionId: competition.id)
+        end
+
+        expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
+        expect do
+          get :post_results, id: competition
+        end.to change { ActionMailer::Base.deliveries.count }.by(4)
+      end
     end
   end
 

@@ -510,4 +510,20 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#notify_of_results_posted" do
+    let(:competition) { FactoryGirl.build(:competition) }
+
+    it "sends the notification if the user has it enabled" do
+      user = FactoryGirl.build(:user_with_wca_id, results_notifications_enabled: true)
+      expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).with(user, competition).and_call_original
+      user.notify_of_results_posted(competition)
+    end
+
+    it "doesn't send the notification if the user has it disabled" do
+      user = FactoryGirl.build(:user_with_wca_id, results_notifications_enabled: false)
+      expect(CompetitionsMailer).to_not receive(:notify_users_of_results_presence).with(user, competition).and_call_original
+      user.notify_of_results_posted(competition)
+    end
+  end
 end

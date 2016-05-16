@@ -1,0 +1,12 @@
+<p>
+  Your results at <%= link_to @competition.name, competition_url(@competition) %> have just been posted.
+</p>
+
+<p>
+  Check out all your results <%= link_to "here", competition_results_by_person_url(@competition, anchor: @user.wca_id) %>.
+</p>
+
+<p>
+  Regards,
+  The WCA Results Team on behalf of <%= users_to_sentence @competition.managers %>.
+</p>

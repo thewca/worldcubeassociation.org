@@ -18,5 +18,5 @@
 </p>
 
 <p>
-  Regards, <%= competition.managers.map(&:name).sort.to_sentence %>.
+  Regards, <%= users_to_sentence competition.managers %>.
 </p>
