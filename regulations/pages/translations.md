@@ -28,7 +28,7 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Daniel Buck Silva](https://www.worldcubeassociation.org/results/p.php?i=2012SILV10), [Pedro Santos Guimarães](https://www.worldcubeassociation.org/results/p.php?i=2007GUIM01) and Matheus Oliveira Silva.
 - [Portuguese, European (Português Europeu) - 2015-07-01](./portuguese-european/)
     - By António Gomes.
-- [Russian - 2015-07-01](./russian/)
+- [Russian - 2016-04-18](./russian/)
     - By [Anton Rostovikov](https://www.worldcubeassociation.org/results/p.php?i=2009ROST01) and [Oleg Gritsenko](https://www.worldcubeassociation.org/results/p.php?i=2011GRIT01) (with the help of [Oksana Ruzaeva](https://www.worldcubeassociation.org/results/p.php?i=2010RUZA01), [Anton Goryachikh](https://www.worldcubeassociation.org/results/p.php?i=2009GORY01) and [Dmitry Aniskin](https://www.worldcubeassociation.org/results/p.php?i=2011ANIS01)).
 - [Spanish, American (Español Americano) - 2015-07-01](./spanish-american/)
     - By Daniela Maldonado Hernández.
