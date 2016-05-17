@@ -91,8 +91,9 @@ class XmlFileLoader extends FileLoader
             return;
         }
 
+        $defaultDirectory = dirname($file);
         foreach ($imports as $import) {
-            $this->setCurrentDir(dirname($file));
+            $this->setCurrentDir($defaultDirectory);
             $this->import((string) $import['resource'], null, (bool) $import->getAttributeAsPhp('ignore-errors'), $file);
         }
     }
@@ -183,6 +184,10 @@ class XmlFileLoader extends FileLoader
                 }
                 // keep not normalized key for BC too
                 $parameters[$name] = SimpleXMLElement::phpize($value);
+            }
+
+            if ('' === (string) $tag['name']) {
+                throw new InvalidArgumentException(sprintf('The tag name for service "%s" in %s must be a non-empty string.', $id, $file));
             }
 
             $definition->addTag((string) $tag['name'], $parameters);

@@ -51,7 +51,7 @@ class UriSigner
 
         $uri = $this->buildUrl($url, $params);
 
-        return $uri.(false === (strpos($uri, '?')) ? '?' : '&').'_hash='.$this->computeHash($uri);
+        return $uri.(false === strpos($uri, '?') ? '?' : '&').'_hash='.$this->computeHash($uri);
     }
 
     /**
@@ -91,8 +91,8 @@ class UriSigner
 
     private function buildUrl(array $url, array $params = array())
     {
-        ksort($params);
-        $url['query'] = http_build_query($params);
+        ksort($params, SORT_STRING);
+        $url['query'] = http_build_query($params, '', '&');
 
         $scheme = isset($url['scheme']) ? $url['scheme'].'://' : '';
         $host = isset($url['host']) ? $url['host'] : '';

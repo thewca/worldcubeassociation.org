@@ -109,6 +109,7 @@ class Response
         428 => 'Precondition Required',                                       // RFC6585
         429 => 'Too Many Requests',                                           // RFC6585
         431 => 'Request Header Fields Too Large',                             // RFC6585
+        451 => 'Unavailable For Legal Reasons',                               // RFC7725
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
@@ -268,15 +269,15 @@ class Response
             return $this;
         }
 
-        // status
-        header(sprintf('HTTP/%s %s %s', $this->version, $this->statusCode, $this->statusText));
-
         // headers
         foreach ($this->headers->allPreserveCase() as $name => $values) {
             foreach ($values as $value) {
                 header($name.': '.$value, false);
             }
         }
+
+        // status
+        header(sprintf('HTTP/%s %s %s', $this->version, $this->statusCode, $this->statusText), true, $this->statusCode);
 
         // cookies
         foreach ($this->headers->getCookies() as $cookie) {
@@ -929,7 +930,7 @@ class Response
      * Sets the Vary header.
      *
      * @param string|array $headers
-     * @param bool         $replace Whether to replace the actual value of not (true by default)
+     * @param bool         $replace Whether to replace the actual value or not (true by default)
      *
      * @return Response
      */
@@ -976,11 +977,12 @@ class Response
         return $notModified;
     }
 
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     /**
      * Is response invalid?
      *
      * @return bool
+     *
+     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
      */
     public function isInvalid()
     {

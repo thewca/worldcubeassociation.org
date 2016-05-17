@@ -322,8 +322,12 @@ class Application
      */
     public function getLongVersion()
     {
-        if ('UNKNOWN' !== $this->getName() && 'UNKNOWN' !== $this->getVersion()) {
-            return sprintf('<info>%s</info> version <comment>%s</comment>', $this->getName(), $this->getVersion());
+        if ('UNKNOWN' !== $this->getName()) {
+            if ('UNKNOWN' !== $this->getVersion()) {
+                return sprintf('<info>%s</info> version <comment>%s</comment>', $this->getName(), $this->getVersion());
+            }
+
+            return sprintf('<info>%s</info>', $this->getName());
         }
 
         return '<info>Console Tool</info>';
@@ -432,7 +436,7 @@ class Application
     public function getNamespaces()
     {
         $namespaces = array();
-        foreach ($this->commands as $command) {
+        foreach ($this->all() as $command) {
             $namespaces = array_merge($namespaces, $this->extractAllNamespaces($command->getName()));
 
             foreach ($command->getAliases() as $alias) {
@@ -526,7 +530,7 @@ class Application
 
         // name
         $commands = array();
-        foreach ($this->commands as $command) {
+        foreach ($this->all() as $command) {
             $extractedNamespace = $this->extractNamespace($command->getName());
             if ($extractedNamespace === $namespace
                || !empty($namespace) && 0 === strpos($extractedNamespace, $namespace)
@@ -552,7 +556,7 @@ class Application
 
         // aliases
         $aliases = array();
-        foreach ($this->commands as $command) {
+        foreach ($this->all() as $command) {
             foreach ($command->getAliases() as $alias) {
                 $extractedNamespace = $this->extractNamespace($alias);
                 if ($extractedNamespace === $namespace
@@ -673,6 +677,8 @@ class Application
      */
     public function renderException($e, $output)
     {
+        $output->writeln('');
+
         do {
             $title = sprintf('  [%s]  ', get_class($e));
 
@@ -695,14 +701,13 @@ class Application
                 }
             }
 
-            $messages = array('', '');
+            $messages = array();
             $messages[] = $emptyLine = $formatter->format(sprintf('<error>%s</error>', str_repeat(' ', $len)));
             $messages[] = $formatter->format(sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - $this->stringWidth($title)))));
             foreach ($lines as $line) {
                 $messages[] = $formatter->format(sprintf('<error>  %s  %s</error>', $line[0], str_repeat(' ', $len - $line[1])));
             }
             $messages[] = $emptyLine;
-            $messages[] = '';
             $messages[] = '';
 
             $output->writeln($messages, OutputInterface::OUTPUT_RAW);
@@ -730,13 +735,11 @@ class Application
                 }
 
                 $output->writeln('');
-                $output->writeln('');
             }
         } while ($e = $e->getPrevious());
 
         if (null !== $this->runningCommand) {
             $output->writeln(sprintf('<info>%s</info>', sprintf($this->runningCommand->getSynopsis(), $this->getName())));
-            $output->writeln('');
             $output->writeln('');
         }
     }
@@ -1025,7 +1028,7 @@ class Application
             return $item->getName();
         };
 
-        return $this->findAlternatives($name, $this->commands, $abbrevs, $callback);
+        return $this->findAlternatives($name, $this->all(), $abbrevs, $callback);
     }
 
     /**

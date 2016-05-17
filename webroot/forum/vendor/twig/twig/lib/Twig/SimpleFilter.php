@@ -34,6 +34,8 @@ class Twig_SimpleFilter
             'pre_escape' => null,
             'preserves_safety' => null,
             'node_class' => 'Twig_Node_Expression_Filter',
+            'deprecated' => false,
+            'alternative' => null,
         ), $options);
     }
 
@@ -96,5 +98,20 @@ class Twig_SimpleFilter
     public function isVariadic()
     {
         return $this->options['is_variadic'];
+    }
+
+    public function isDeprecated()
+    {
+        return (bool) $this->options['deprecated'];
+    }
+
+    public function getDeprecatedVersion()
+    {
+        return $this->options['deprecated'];
+    }
+
+    public function getAlternative()
+    {
+        return $this->options['alternative'];
     }
 }

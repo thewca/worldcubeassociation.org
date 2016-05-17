@@ -242,7 +242,7 @@ class Request
         // stores the Content-Type and Content-Length header values in
         // HTTP_CONTENT_TYPE and HTTP_CONTENT_LENGTH fields.
         $server = $_SERVER;
-        if ('cli-server' === php_sapi_name()) {
+        if ('cli-server' === PHP_SAPI) {
             if (array_key_exists('HTTP_CONTENT_LENGTH', $_SERVER)) {
                 $server['CONTENT_LENGTH'] = $_SERVER['HTTP_CONTENT_LENGTH'];
             }
@@ -769,8 +769,7 @@ class Request
 
         $clientIps = array_map('trim', explode(',', $this->headers->get(self::$trustedHeaders[self::HEADER_CLIENT_IP])));
         $clientIps[] = $ip; // Complete the IP chain with the IP the request actually came from
-
-        $ip = $clientIps[0]; // Fallback to this when the client IP falls into the range of trusted proxies
+        $firstTrustedIp = null;
 
         // Eliminate all IPs from the forwarded IP chain which are trusted proxies
         foreach ($clientIps as $key => $clientIp) {
@@ -779,13 +778,24 @@ class Request
                 $clientIps[$key] = $clientIp = $match[1];
             }
 
+            if (!filter_var($clientIp, FILTER_VALIDATE_IP)) {
+                unset($clientIps[$key]);
+
+                continue;
+            }
+
             if (IpUtils::checkIp($clientIp, self::$trustedProxies)) {
                 unset($clientIps[$key]);
+
+                // Fallback to this when the client IP falls into the range of trusted proxies
+                if (null ===  $firstTrustedIp) {
+                    $firstTrustedIp = $clientIp;
+                }
             }
         }
 
         // Now the IP chain contains only untrusted proxies and the client IP
-        return $clientIps ? array_reverse($clientIps) : array($ip);
+        return $clientIps ? array_reverse($clientIps) : array($firstTrustedIp);
     }
 
     /**
@@ -1706,8 +1716,6 @@ class Request
         if (null === ($requestUri = $this->getRequestUri())) {
             return '/';
         }
-
-        $pathInfo = '/';
 
         // Remove the query string from REQUEST_URI
         if ($pos = strpos($requestUri, '?')) {

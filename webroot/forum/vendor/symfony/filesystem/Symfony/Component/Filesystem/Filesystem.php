@@ -100,6 +100,10 @@ class Filesystem
     public function exists($files)
     {
         foreach ($this->toIterator($files) as $file) {
+            if ('\\' === DIRECTORY_SEPARATOR && strlen($file) > 258) {
+                throw new IOException(sprintf('Could not check if file exist because path length exceeds 258 characters for file "%s"', $file));
+            }
+
             if (!file_exists($file)) {
                 return false;
             }
@@ -139,27 +143,23 @@ class Filesystem
         $files = iterator_to_array($this->toIterator($files));
         $files = array_reverse($files);
         foreach ($files as $file) {
-            if (!file_exists($file) && !is_link($file)) {
+            if (@(unlink($file) || rmdir($file))) {
                 continue;
             }
-
-            if (is_dir($file) && !is_link($file)) {
+            if (is_link($file)) {
+                // See https://bugs.php.net/52176
+                $error = error_get_last();
+                throw new IOException(sprintf('Failed to remove symlink "%s": %s.', $file, $error['message']));
+            } elseif (is_dir($file)) {
                 $this->remove(new \FilesystemIterator($file));
 
-                if (true !== @rmdir($file)) {
-                    throw new IOException(sprintf('Failed to remove directory %s', $file));
+                if (!@rmdir($file)) {
+                    $error = error_get_last();
+                    throw new IOException(sprintf('Failed to remove directory "%s": %s.', $file, $error['message']));
                 }
-            } else {
-                // https://bugs.php.net/bug.php?id=52176
-                if ('\\' === DIRECTORY_SEPARATOR && is_dir($file)) {
-                    if (true !== @rmdir($file)) {
-                        throw new IOException(sprintf('Failed to remove file %s', $file));
-                    }
-                } else {
-                    if (true !== @unlink($file)) {
-                        throw new IOException(sprintf('Failed to remove file %s', $file));
-                    }
-                }
+            } elseif (file_exists($file)) {
+                $error = error_get_last();
+                throw new IOException(sprintf('Failed to remove file "%s": %s.', $file, $error['message']));
             }
         }
     }
@@ -177,11 +177,11 @@ class Filesystem
     public function chmod($files, $mode, $umask = 0000, $recursive = false)
     {
         foreach ($this->toIterator($files) as $file) {
-            if ($recursive && is_dir($file) && !is_link($file)) {
-                $this->chmod(new \FilesystemIterator($file), $mode, $umask, true);
-            }
             if (true !== @chmod($file, $mode & ~$umask)) {
                 throw new IOException(sprintf('Failed to chmod file %s', $file));
+            }
+            if ($recursive && is_dir($file) && !is_link($file)) {
+                $this->chmod(new \FilesystemIterator($file), $mode, $umask, true);
             }
         }
     }
@@ -253,13 +253,29 @@ class Filesystem
     public function rename($origin, $target, $overwrite = false)
     {
         // we check that target does not exist
-        if (!$overwrite && is_readable($target)) {
+        if (!$overwrite && $this->isReadable($target)) {
             throw new IOException(sprintf('Cannot rename because the target "%s" already exist.', $target));
         }
 
         if (true !== @rename($origin, $target)) {
             throw new IOException(sprintf('Cannot rename "%s" to "%s".', $origin, $target));
         }
+    }
+
+    /**
+     * Tells whether a file exists and is readable.
+     *
+     * @param string $filename Path to the file.
+     *
+     * @throws IOException When windows path is longer than 258 characters
+     */
+    private function isReadable($filename)
+    {
+        if ('\\' === DIRECTORY_SEPARATOR && strlen($filename) > 258) {
+            throw new IOException(sprintf('Could not check if file is readable because path length exceeds 258 characters for file "%s"', $filename));
+        }
+
+        return is_readable($filename);
     }
 
     /**
@@ -273,10 +289,15 @@ class Filesystem
      */
     public function symlink($originDir, $targetDir, $copyOnWindows = false)
     {
-        if ($copyOnWindows && !function_exists('symlink')) {
-            $this->mirror($originDir, $targetDir);
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $originDir = strtr($originDir, '/', '\\');
+            $targetDir = strtr($targetDir, '/', '\\');
 
-            return;
+            if ($copyOnWindows) {
+                $this->mirror($originDir, $targetDir);
+
+                return;
+            }
         }
 
         $this->mkdir(dirname($targetDir));
@@ -381,7 +402,7 @@ class Filesystem
         }
 
         $copyOnWindows = false;
-        if (isset($options['copy_on_windows']) && !function_exists('symlink')) {
+        if (isset($options['copy_on_windows'])) {
             $copyOnWindows = $options['copy_on_windows'];
         }
 
@@ -398,7 +419,7 @@ class Filesystem
             $target = str_replace($originDir, $targetDir, $file->getPathname());
 
             if ($copyOnWindows) {
-                if (is_link($file) || is_file($file)) {
+                if (is_file($file)) {
                     $this->copy($file, $target, isset($options['override']) ? $options['override'] : false);
                 } elseif (is_dir($file)) {
                     $this->mkdir($target);
@@ -428,13 +449,13 @@ class Filesystem
      */
     public function isAbsolutePath($file)
     {
-        return (strspn($file, '/\\', 0, 1)
+        return strspn($file, '/\\', 0, 1)
             || (strlen($file) > 3 && ctype_alpha($file[0])
                 && substr($file, 1, 1) === ':'
-                && (strspn($file, '/\\', 2, 1))
+                && strspn($file, '/\\', 2, 1)
             )
             || null !== parse_url($file, PHP_URL_SCHEME)
-        );
+        ;
     }
 
     /**
@@ -477,9 +498,9 @@ class Filesystem
             throw new IOException(sprintf('Failed to write file "%s".', $filename));
         }
 
-        $this->rename($tmpFile, $filename, true);
         if (null !== $mode) {
-            $this->chmod($filename, $mode);
+            $this->chmod($tmpFile, $mode);
         }
+        $this->rename($tmpFile, $filename, true);
     }
 }
