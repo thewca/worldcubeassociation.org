@@ -166,6 +166,7 @@ parser.add_argument(
 parser.add_argument(
   '--check', '-!',
   action='append',
+  default=[],
   help="Check consistency between translations and original versions, and some other tests. Specify comma-separated list of languages, or 'all' to check all translations."
 )
 
