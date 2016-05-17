@@ -6,7 +6,7 @@ Note: Even though these translations are provided on the WCA website, they are n
 
 - [Belarusian - 2014](./belarusian/)
     - By [Anatolii Kalinin](https://www.worldcubeassociation.org/results/p.php?i=2011KALI01) and [Ilya Tereshko](https://www.worldcubeassociation.org/results/p.php?i=2012TERE01).
-- [Chinese - 2015-07-01](./chinese/)
+- [Chinese - 2016-04-18](./chinese/)
     - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2015-07-01](./chinese-traditional)
     - By [Rui-Jun Liu (劉睿鈞)](https://www.worldcubeassociation.org/results/p.php?i=2011LIUR02) and [Chia-Leo Lin (林珈樂)](https://www.worldcubeassociation.org/results/p.php?i=2006LINC01). (Previous contributions from [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).)
