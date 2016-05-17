@@ -234,7 +234,7 @@ class RegistrationsController < ApplicationController
       permitted_params << :accepted_at
       status = params[:registration][:status]
       if status
-        params[:registration][:accepted_at] = status == "a" ? Time.now : nil
+        params[:registration][:accepted_at] = (status == "a" ? Time.now : nil)
       end
     end
     params.require(:registration).permit(*permitted_params)

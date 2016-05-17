@@ -284,7 +284,6 @@ CREATE TABLE `Preregs` (
   `guests_old` text COLLATE utf8_unicode_ci,
   `comments` text COLLATE utf8_unicode_ci NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'p',
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -907,3 +906,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160505231300');
 INSERT INTO schema_migrations (version) VALUES ('20160513162613');
 
 INSERT INTO schema_migrations (version) VALUES ('20160514124545');
+
+INSERT INTO schema_migrations (version) VALUES ('20160514141051');
