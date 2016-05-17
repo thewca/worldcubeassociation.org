@@ -161,6 +161,17 @@ RSpec.describe RegistrationsController do
       patch :update, id: registration.id, registration: { status: :accepted }
       expect(registration.reload.accepted?).to eq true
     end
+
+    it "can register for their own competition that is not yet visible" do
+      competition.update_column(:showAtAll, false)
+      expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
+      expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
+      expect do
+        post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "" }
+      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+
+      expect(organizer.registrations).to eq competition.registrations
+    end
   end
 
   context "signed in as competitor" do
@@ -220,6 +231,14 @@ RSpec.describe RegistrationsController do
       post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 0, comments: "", status: Registration::statuses[:accepted] }
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
+    end
+
+    it "cannot create registration when competition is not visible" do
+      competition.update_column(:showAtAll, false)
+
+      expect {
+        post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "", status: :accepted }
+      }.to raise_error(ActionController::RoutingError)
     end
 
     it "cannot create registration after registration is closed" do
