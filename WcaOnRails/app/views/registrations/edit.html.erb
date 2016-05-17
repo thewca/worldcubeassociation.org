@@ -34,7 +34,7 @@
 
     <%= f.input :comments %>
 
-    <%= f.input :status, as: :radio_buttons, collection: [:a, :p], checked: @registration.read_attribute(:status), include_blank: false %>
+    <%= f.input :status, as: :radio_buttons, collection: [:a, :p], checked: @registration.accepted? ? :a : :p, include_blank: false %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">

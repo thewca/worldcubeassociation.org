@@ -1,7 +1,8 @@
 class Registration < ActiveRecord::Base
   self.table_name = "Preregs"
 
-  enum status: { accepted: "a", pending: "p" }
+  scope :pending, -> { where(accepted_at: nil) }
+  scope :accepted, -> { where.not(accepted_at: nil) }
 
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
@@ -20,6 +21,14 @@ class Registration < ActiveRecord::Base
     elsif !competition.use_wca_registration?
       errors.add(:competition, "Competition registration is closed")
     end
+  end
+
+  def pending?
+    accepted_at.nil?
+  end
+
+  def accepted?
+    !pending?
   end
 
   def events

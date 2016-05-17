@@ -122,7 +122,7 @@ class RegistrationsController < ApplicationController
     when "accept-selected"
       registrations.each do |registration|
         if !registration.accepted?
-          registration.accepted!
+          registration.update!(accepted_at: Time.now)
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
         end
       end
@@ -130,7 +130,7 @@ class RegistrationsController < ApplicationController
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
-          registration.pending!
+          registration.update!(accepted_at: nil)
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_now
         end
       end
@@ -231,7 +231,11 @@ class RegistrationsController < ApplicationController
       registration_events_attributes: [:id, :event_id, :_destroy],
     ]
     if current_user.can_manage_competition?(competition_from_params)
-      permitted_params << :status
+      permitted_params << :accepted_at
+      status = params[:registration][:status]
+      if status
+        params[:registration][:accepted_at] = (status == "a" ? Time.now : nil)
+      end
     end
     params.require(:registration).permit(*permitted_params)
   end

@@ -284,11 +284,11 @@ CREATE TABLE `Preregs` (
   `guests_old` text COLLATE utf8_unicode_ci,
   `comments` text COLLATE utf8_unicode_ci NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'p',
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `guests` int(11) NOT NULL DEFAULT '0',
+  `accepted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=80561 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -904,3 +904,7 @@ INSERT INTO schema_migrations (version) VALUES ('20160504230105');
 INSERT INTO schema_migrations (version) VALUES ('20160505231300');
 
 INSERT INTO schema_migrations (version) VALUES ('20160513162613');
+
+INSERT INTO schema_migrations (version) VALUES ('20160514124545');
+
+INSERT INTO schema_migrations (version) VALUES ('20160514141051');

@@ -153,7 +153,7 @@ after "development:users" do
     # Create registrations for some competitions taking place far in the future
     next if i < 480
     users.each_with_index do |user, i|
-      status = i % 4 == 0 ? "a" : "p"
+      accepted_at = i % 4 == 0 ? Time.now : nil
       registration_event_ids = eventIds.sample(rand(1..eventIds.count))
       if i % 2 == 0
         Registration.new(
@@ -169,11 +169,11 @@ after "development:users" do
           guests: rand(10),
           comments: Faker::Lorem.paragraph,
           ip: "1.1.1.1",
-          status: status,
+          accepted_at: accepted_at,
           registration_events_attributes: registration_event_ids.map { |event_id| {event_id: event_id} },
         ).save!(validate: false)
       else
-        FactoryGirl.create(:registration, user: user, competition: competition, status: status, event_ids: registration_event_ids)
+        FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, event_ids: registration_event_ids)
       end
     end
   end
