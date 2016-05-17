@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA ID, fail validation.
       if user && !user.dummy_account?
-        errors.add(:wca_id, "must be unique")
+        errors.add(:wca_id, I18n.t('users.errors.unique'))
       end
     end
   end
@@ -72,21 +72,21 @@ class User < ActiveRecord::Base
   validate :name_must_match_person_name
   def name_must_match_person_name
     if wca_id && !person
-      errors.add(:wca_id, "not found")
+      errors.add(:wca_id, I18n.t('users.errors.not_found'))
     end
   end
 
   validate :dob_must_be_in_the_past
   def dob_must_be_in_the_past
     if dob && dob >= Date.today
-      errors.add(:dob, "must be in the past")
+      errors.add(:dob, I18n.t('users.errors.dob_past'))
     end
   end
 
   validate :cannot_demote_senior_delegate_with_subordinate_delegates
   def cannot_demote_senior_delegate_with_subordinate_delegates
     if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && subordinate_delegates.length != 0
-      errors.add(:delegate_status, "cannot demote senior delegate with subordinate delegates")
+      errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
 
@@ -114,37 +114,37 @@ class User < ActiveRecord::Base
     if unconfirmed_wca_id.present?
       already_assigned_to_user = unconfirmed_person && unconfirmed_person.user && !unconfirmed_person.user.dummy_account?
       if !unconfirmed_person
-        errors.add(:unconfirmed_wca_id, "not found")
+        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.not_found'))
       elsif already_assigned_to_user
-        errors.add(:unconfirmed_wca_id, "already assigned to a different user")
+        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_assigned'))
       end
     end
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
       if !delegate_id_to_handle_wca_id_claim.present?
-        errors.add(:delegate_id_to_handle_wca_id_claim, "required")
+        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.required'))
       end
 
       if !unconfirmed_wca_id.present?
-        errors.add(:unconfirmed_wca_id, "required")
+        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.required'))
       end
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_edit_users?)
         if !unconfirmed_person.dob
-          errors.add(:dob_verification, "WCA ID does not have a birthdate. Contact the Results team to resolve this.")
+          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate'))
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
-          errors.add(:dob_verification, "incorrect")
+          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect'))
         end
       end
       if claiming_wca_id && person
-        errors.add(:unconfirmed_wca_id, "cannot claim a WCA ID because you already have WCA ID #{wca_id}")
+        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
       if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
-        errors.add(:delegate_id_to_handle_wca_id_claim, "not found")
+        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
   end
@@ -250,14 +250,14 @@ class User < ActiveRecord::Base
   validate :senior_delegate_must_be_senior_delegate
   def senior_delegate_must_be_senior_delegate
     if senior_delegate && !senior_delegate.senior_delegate?
-      errors.add(:senior_delegate, "must be a senior delegate")
+      errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
     end
   end
 
   validate :senior_delegate_presence
   def senior_delegate_presence
     if !User.delegate_status_allows_senior_delegate(delegate_status) and senior_delegate
-      errors.add(:senior_delegate, "must not be present")
+      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
     end
   end
 
@@ -277,7 +277,7 @@ class User < ActiveRecord::Base
     about_to_lose_access = !board_member?
     if current_user == self && about_to_lose_access
       if delegate_status_was == "board_member"
-        errors.add(:delegate_status, "You cannot resign from your role as a board member! Find another board member to fire you.")
+        errors.add(:delegate_status, I18n.t('users.errors.board_member_cannot_resign'))
       end
     end
   end
@@ -285,7 +285,7 @@ class User < ActiveRecord::Base
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
-      errors.add(:avatar, "requires a WCA ID to be assigned")
+      errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
     end
   end
 
@@ -396,11 +396,11 @@ class User < ActiveRecord::Base
   def get_cannot_delete_competition_reason(competition)
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
-      "Cannot manage competition."
+      I18n.t('competitions.errors.cannot_manage')
     elsif competition.showAtAll
-      "Cannot delete a competition that is publicly visible."
+      I18n.t('competitions.errors.cannot_delete_public')
     elsif competition.isConfirmed && !self.can_admin_results?
-      "Cannot delete a confirmed competition."
+      I18n.t('competitions.errors.cannot_delete_confirmed')
     else
       nil
     end
@@ -410,16 +410,16 @@ class User < ActiveRecord::Base
     reasons = []
 
     if name.blank?
-      reasons << "Need a name"
+      reasons << I18n.t('registrations.errors.need_name')
     end
     if gender.blank?
-      reasons << "Need a gender"
+      reasons << I18n.t('registrations.errors.need_gender')
     end
     if dob.blank?
-      reasons << "Need a birthdate"
+      reasons << I18n.t('registrations.errors.need_dob')
     end
     if country_iso2.blank?
-      reasons << "Need a country"
+      reasons << I18n.t('registrations.errors.need_country')
     end
 
     reasons

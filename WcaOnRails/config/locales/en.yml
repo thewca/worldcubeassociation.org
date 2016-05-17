@@ -54,6 +54,10 @@ en:
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
         results_notifications_enabled: "Email me when my results are posted."
+        delegate_id_to_handle_wca_id_claim: "Delegate id to handle wca id claim"
+        delegate_status: "Delegate status"
+        senior_delegate: "Senior delegate"
+        region: "Region"
       competition:
         competition_id_to_clone: "Competition id to clone"
 
@@ -261,12 +265,36 @@ en:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       save: "Save"
+    errors:
+      not_found: "not found"
+      already_assigned: "already assigned to a different user"
+      required: "required"
+      dob_incorrect: "incorrect"
+      unique: "must be unique"
+      dob_past: "must be in the past"
+      must_be_senior: "must be a senior delegate"
+      must_not_be_present: "must not be present"
+      senior_has_delegate: "cannot demote senior delegate with subordinate delegates"
+      already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
+      wca_id_no_birthdate: "WCA ID does not have a birthdate. Contact the Results team to resolve this."
+      board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
+      avatar_requires_wca_id: "requires a WCA ID to be assigned"
     select_nearby_delegate:
       select_delegate: "In order to assign you your WCA ID, we need a delegate to confirm your identify. Please select the delegate you think knows you best and enter your birthdate."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local %{link_delegate}."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact the %{link_result_team} to fix this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
+  registrations:
+    errors:
+      need_name: "Need a name"
+      need_gender: "Need a gender"
+      need_dob: "Need a birthdate"
+      need_country: "Need a country"
   competitions:
+    errors:
+      cannot_manage: "Cannot manage competition."
+      cannot_delete_public: "Cannot delete a competition that is publicly visible."
+      cannot_delete_confirmed: "Cannot delete a confirmed competition."
     unscheduled: "unscheduled"
     new:
       create_competition: "Create competition"
