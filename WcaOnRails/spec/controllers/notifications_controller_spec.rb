@@ -11,9 +11,8 @@ RSpec.describe NotificationsController, type: :controller do
 
     context "when signed in as delegate" do
       let(:delegate) { FactoryGirl.create :delegate }
-      let!(:unconfirmed_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: false, showAtAll: false }
-      let!(:confirmed_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: true, showAtAll: false }
-      let!(:visible_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: true, showAtAll: true }
+      let!(:unconfirmed_competition) { FactoryGirl.create :competition, delegates: [delegate] }
+      let!(:confirmed_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: true }
       before :each do
         sign_in delegate
       end
@@ -70,10 +69,10 @@ RSpec.describe NotificationsController, type: :controller do
 
     context "when signed in as a board member" do
       let(:board_member) { FactoryGirl.create :board_member }
-      let!(:unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: false }
-      let!(:confirmed_competition) { FactoryGirl.create(:competition, :confirmed, showAtAll: false) }
-      let!(:visible_confirmed_competition) { FactoryGirl.create(:competition, :confirmed, showAtAll: true) }
-      let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, isConfirmed: false, showAtAll: true }
+      let!(:unconfirmed_competition) { FactoryGirl.create :competition }
+      let!(:confirmed_competition) { FactoryGirl.create(:competition, :confirmed) }
+      let!(:visible_confirmed_competition) { FactoryGirl.create(:competition, :confirmed, :visible) }
+      let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, :visible }
       before :each do
         sign_in board_member
       end

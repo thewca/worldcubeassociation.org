@@ -42,21 +42,24 @@ class Competition < ActiveRecord::Base
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
   # We have stricter validations for confirming a competition
-  [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
-    validates field, presence: true, if: :isConfirmed?
-  end
-  validate :must_have_at_least_one_event, if: :isConfirmed?
+  validates :cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+
+  validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
     if events.length == 0
       errors.add(:eventSpecs, "Competition must have at least one event")
     end
   end
 
-  validate :must_have_at_least_one_delegate, if: :isConfirmed?
+  validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
     if delegate_ids.length == 0
       errors.add(:delegate_ids, "Competition must have at least one WCA delegate")
     end
+  end
+
+  def confirmed_or_visible?
+    self.isConfirmed || self.showAtAll
   end
 
   # Currently we don't have a history of who was a delegate and when. Hence we need this
@@ -396,7 +399,7 @@ class Competition < ActiveRecord::Base
   end
 
   private def dates_must_be_valid
-    if !isConfirmed && self.year == 0 && self.month == 0 && self.day == 0 && @endYear == 0 && self.endMonth == 0 && self.endDay == 0
+    if !confirmed_or_visible? && [year, month, day, @endYear, endMonth, endDay].all? { |n| n == 0 }
       # If the user left both dates empty, that's a-okay.
       return
     end
