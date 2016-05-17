@@ -1,7 +1,7 @@
 onPage('admin#edit_person, admin#update_person', function() {
   var $personFields = $('#person-fields :input');
 
-  $('#person_id').on('change', function() {
+  $('#person_wca_id').on('change', function() {
     if($(this).val() === '') {
       $personFields.attr('disabled', true);
       $personFields.not('[type="submit"]').val('');
@@ -24,7 +24,7 @@ onPage('admin#edit_person, admin#update_person', function() {
     }
   });
 
-  if($('#person_id').val() === '') {
-    $('#person_id').trigger('change');
+  if($('#person_wca_id').val() === '') {
+    $('#person_wca_id').trigger('change');
   }
 });

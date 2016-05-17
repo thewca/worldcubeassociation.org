@@ -47,7 +47,7 @@ RSpec.feature "Claim WCA ID" do
       click_button "Claim WCA ID"
 
       user.reload
-      expect(user.unconfirmed_wca_id).to eq person.id
+      expect(user.unconfirmed_wca_id).to eq person.wca_id
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
     end
 

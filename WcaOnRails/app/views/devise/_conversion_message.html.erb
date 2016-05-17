@@ -2,7 +2,7 @@
 
 <% if user.login.present? %>
   <% wca_id = user.login.upcase %>
-  <% person = Person.find_by_id(wca_id) %>
+  <% person = Person.find_by_wca_id(wca_id) %>
   <% if person && !person.user %>
     <%= alert :info do %>
       Hi, <%= person.name %>! It looks like you have not created a WCA website account yet.

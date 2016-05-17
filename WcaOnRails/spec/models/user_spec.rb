@@ -158,7 +158,7 @@ RSpec.describe User, type: :model do
     end
 
     it "verifies WCA ID unique when changing WCA ID" do
-      person2 = FactoryGirl.create :person, id: "2006FLEI01"
+      person2 = FactoryGirl.create :person, wca_id: "2006FLEI01"
       user2 = FactoryGirl.create :user, wca_id: "2006FLEI01", name: person2.name
       user.wca_id = user2.wca_id
       expect(user).to be_invalid
@@ -321,7 +321,7 @@ RSpec.describe User, type: :model do
     let(:delegate) { FactoryGirl.create :delegate }
     let(:user) do
       u = FactoryGirl.create :user
-      u.unconfirmed_wca_id = person.id
+      u.unconfirmed_wca_id = person.wca_id
       u.delegate_id_to_handle_wca_id_claim = delegate.id
       u.claiming_wca_id = true
       u.dob_verification = "1990-01-2"
@@ -437,7 +437,7 @@ RSpec.describe User, type: :model do
 
     it "cannot have an unconfirmed_wca_id if you already have a wca_id" do
       user_with_wca_id.claiming_wca_id = true
-      user_with_wca_id.unconfirmed_wca_id = person.id
+      user_with_wca_id.unconfirmed_wca_id = person.wca_id
       user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
       expect(user_with_wca_id).to be_invalid
       expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [

@@ -1,18 +1,15 @@
 class Person < ActiveRecord::Base
-  self.table_name = "Persons"
+  self.table_name = "rails_persons"
   self.primary_key = "id"
-  has_one :user, foreign_key: "wca_id"
-  has_many :results, foreign_key: "personId"
-  has_many :competitions, -> { distinct }, through: :results
-  has_many :ranksAverage, foreign_key: "personId", class_name: "RanksAverage"
-  has_many :ranksSingle, foreign_key: "personId", class_name: "RanksSingle"
 
-  alias_method :wca_id, :id
+  has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
+  has_many :results, primary_key: "wca_id", foreign_key: "personId"
+  has_many :competitions, -> { distinct }, through: :results
+  has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
+  has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
   validates :name, presence: true
   validates :countryId, presence: true
-
-  attr_writer :dob
 
   before_validation :unpack_dates
   private def unpack_dates
@@ -48,11 +45,18 @@ class Person < ActiveRecord::Base
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: :new_record?
   private def cannot_change_country_to_country_represented_before
-    has_been_a_citizen_of_this_country_already = Person.exists?(id: id, countryId: countryId)
+    has_been_a_citizen_of_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
     if has_been_a_citizen_of_this_country_already
       errors.add(:countryId, "Cannot change the country to a country the person have already represented in the past.")
     end
   end
+
+  # This is necessary because we use a view instead of a real table.
+  # Using `select` statement with `id` column causes mysql to set a default value of 0,
+  # so creating a Person returns the new record with id = 0, making the record reference 'died'.
+  # The workaround is to set id attribute to nil before the object is created and let Rails reload it after creation.
+  # For reference: https://github.com/rails/rails/issues/5982
+  before_create -> { self.id = nil }
 
   after_update :update_person_name_in_results_table, if: :name_changed?
   private def update_person_name_in_results_table
@@ -75,14 +79,14 @@ class Person < ActiveRecord::Base
     end
     old_attributes = self.attributes
     if update_attributes(attributes)
-      Person.where(id: id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
+      Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
       Person.create(old_attributes.merge!(subId: 2))
       return true
     end
   end
 
-  def self.find_current_by_id!(id)
-    find_by!(id: id, subId: 1)
+  def self.find_current_by_wca_id!(wca_id)
+    find_by!(wca_id: wca_id, subId: 1)
   end
 
   def likely_delegates
@@ -99,8 +103,10 @@ class Person < ActiveRecord::Base
   end
 
   def sub_ids
-    Person.where(id: id).map(&:subId)
+    Person.where(wca_id: wca_id).map(&:subId)
   end
+
+  attr_writer :dob
 
   def dob
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
@@ -141,7 +147,7 @@ class Person < ActiveRecord::Base
       class: self.class.to_s.downcase,
       url: results_path,
 
-      id: self.id,
+      id: self.wca_id,
       wca_id: self.wca_id,
       name: self.name,
 

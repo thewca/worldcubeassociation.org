@@ -48,7 +48,7 @@ after "development:users" do
           person = competitor.person
           Result.create!(
             pos: i+1,
-            personId: person.id,
+            personId: person.wca_id,
             personName: person.name,
             countryId: person.countryId,
             competitionId: competition.id,

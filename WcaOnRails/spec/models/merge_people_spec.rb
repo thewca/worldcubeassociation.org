@@ -25,14 +25,14 @@ describe MergePeople do
     person = FactoryGirl.create(:person_with_multiple_sub_ids)
     merge_people.person1_wca_id = person.wca_id
     expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person1_wca_id]).to eq ["This person has multiple subIds"]
+    expect(merge_people.errors.messages[:person1_wca_id]).to include "This person has multiple subIds"
   end
 
   it "requires person2 not have multiple subIds" do
     person = FactoryGirl.create(:person_with_multiple_sub_ids)
     merge_people.person2_wca_id = person.wca_id
     expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["This person has multiple subIds", "Names don't match"]
+    expect(merge_people.errors.messages[:person2_wca_id]).to include "This person has multiple subIds"
   end
 
   it "requires same name" do

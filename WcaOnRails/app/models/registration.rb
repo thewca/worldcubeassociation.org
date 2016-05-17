@@ -75,7 +75,7 @@ class Registration < ActiveRecord::Base
   alias_method :wca_id, :personId
 
   def person
-    Person.find_by_id(personId)
+    Person.find_by_wca_id(personId)
   end
 
   def world_rank(event, type)

@@ -2,7 +2,7 @@ class Result < ActiveRecord::Base
   self.table_name = "Results"
 
   belongs_to :competition, foreign_key: :competitionId
-  belongs_to :person, foreign_key: :personId
+  belongs_to :person, primary_key: :wca_id, foreign_key: :personId
 
   def to_s(field)
     SolveTime.new(eventId, field, send(field)).clock_format

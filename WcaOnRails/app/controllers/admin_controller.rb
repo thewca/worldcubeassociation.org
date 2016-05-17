@@ -56,7 +56,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.find_current_by_id!(params[:person_wca_id])
+    @person = Person.find_current_by_wca_id!(params[:person_wca_id])
 
     render json: {
       name: @person.name,

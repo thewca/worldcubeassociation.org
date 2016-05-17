@@ -599,7 +599,7 @@ describe CompetitionsController do
     let!(:registration3) { FactoryGirl.create(:registration, competitionId: past_competition1.id, user: registered_user) }
     let!(:registration4) { FactoryGirl.create(:registration, competitionId: past_competition3.id, user: organizer) }
     let!(:registration5) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: delegate) }
-    let!(:results_person) { FactoryGirl.create(:person, id: "2014PLUM01", name: "Jeff Plumb") }
+    let!(:results_person) { FactoryGirl.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
     let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
 

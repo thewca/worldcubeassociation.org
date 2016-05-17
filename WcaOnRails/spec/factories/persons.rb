@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :person do
-    sequence :id do |n|
+    sequence :wca_id do |n|
       "%04iFLEI%02i" % [2003 + (n / 100), n % 100]
     end
     subId 1
@@ -13,7 +13,8 @@ FactoryGirl.define do
 
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
-        Person.create!(id: person.id, subId: person.subId + 1, countryId: "Israel")
+        # Person.create!(wca_id: person.wca_id, subId: person.subId + 1, countryId: "Israel")
+        person.update_using_sub_id(countryId: "Israel")
       end
     end
 
