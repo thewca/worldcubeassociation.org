@@ -4,10 +4,6 @@ This repository contains files related to the maintenance of the [wca-documents]
 
 ## Build the WCA documents
 
-    git clone https://github.com/cubing/wca-documents-extra.git
-    cd wca-documents-extra
-    git submodule update --init ./wca-documents
-
     ./make.py
 
 To view the result in your browser (OSX):
@@ -19,6 +15,14 @@ To build everything, including all translations, run:
     git submodule update --init # Run this once to set up the translations.
 
     ./make.py --wca
+
+To check whether the translations are ok, run:
+
+    ./make.py --do-not-build --check=all
+
+or:
+
+    ./make.py --do-not-build --check=french,german,japanese,russian
 
 ## Dependencies
 
