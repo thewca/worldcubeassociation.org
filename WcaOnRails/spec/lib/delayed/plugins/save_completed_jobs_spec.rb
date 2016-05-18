@@ -41,7 +41,7 @@ describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
       expect(CompletedJob.count).to eq 1
     end
 
-    it "doesn't delete failed jobs" do
+    it "doesn't delete failed jobs, and notifies on failure" do
       expect(Delayed::Job.count).to eq 0
       expect(CompletedJob.count).to eq 0
 
@@ -54,8 +54,11 @@ describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
 
       # Create a worker and run this job until it's marked as failed.
       dw = Delayed::Worker.new
+      expect(JobFailureMailer).to receive(:notify_admin_of_job_failure).and_call_original.exactly(Delayed::Worker.max_attempts).times
       Delayed::Worker.max_attempts.times do
-        dw.run Delayed::Job.last
+        expect do
+          dw.run Delayed::Job.last
+        end.to change { ActionMailer::Base.deliveries.length }.by(1)
       end
 
       expect(Delayed::Job.count).to eq 1

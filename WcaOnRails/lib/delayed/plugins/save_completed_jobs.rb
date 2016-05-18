@@ -3,8 +3,13 @@ module Delayed
     class SaveCompletedJobs < Delayed::Plugin
       callbacks do |lifecycle|
         lifecycle.around(:invoke_job) do |job, *args, &block|
-          block.call(job, *args)
-          Delayed::Plugins::SaveCompletedJobs.save_completed_job(job)
+          begin
+            block.call(job, *args)
+            Delayed::Plugins::SaveCompletedJobs.save_completed_job(job)
+          rescue Exception => error
+            JobFailureMailer.notify_admin_of_job_failure(job, error).deliver_now
+            raise error
+          end
         end
       end
 
