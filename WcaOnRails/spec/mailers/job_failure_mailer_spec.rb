@@ -4,11 +4,7 @@ RSpec.describe JobFailureMailer, type: :mailer do
   describe "notify_admin_of_job_failure" do
     let(:job) { Delayed::Job.new(id: 42, handler: "I tried to take care of this") }
     let(:exception) do
-      begin
-        raise "error!"
-      rescue Exception => e
-        return e
-      end
+      RuntimeError.new("error!").tap { |e| e.set_backtrace(["stack level 1", "stack level 2"]) }
     end
     let(:mail) { JobFailureMailer.notify_admin_of_job_failure(job, exception) }
 
@@ -24,6 +20,7 @@ RSpec.describe JobFailureMailer, type: :mailer do
       expect(mail.body.encoded).to match("Handler")
       expect(mail.body.encoded).to match("I tried to take care of this")
       expect(mail.body.encoded).to match("Backtrace")
+      expect(mail.body.encoded).to match("<pre>stack level 1\r\nstack level 2</pre>")
     end
   end
 end
