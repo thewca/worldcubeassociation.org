@@ -51,6 +51,8 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
 gem 'api-pagination'
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'

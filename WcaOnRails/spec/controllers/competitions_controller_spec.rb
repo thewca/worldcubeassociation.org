@@ -577,9 +577,8 @@ describe CompetitionsController do
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
-        expect do
-          get :post_results, id: competition
-        end.to change { ActionMailer::Base.deliveries.count }.by(4)
+        get :post_results, id: competition
+        assert_enqueued_jobs 4
       end
     end
   end

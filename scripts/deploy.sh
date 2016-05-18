@@ -34,6 +34,9 @@ rebuild_rails() {
 
     # Note that we are intentionally not automating database migrations.
 
+    # Restart delayed_job worker.
+    bin/delayed_job restart
+
     # Attempt to restart unicorn gracefully as per
     #  http://unicorn.bogomips.org/SIGNALS.html
     pid=$(<"pids/unicorn.pid")
