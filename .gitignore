@@ -9,3 +9,15 @@ webroot/favicon.ico
 
 # Vagrant stuff
 .vagrant/
+
+# phpBB mess
+webroot/forum/cache/*
+!webroot/forum/cache/.htaccess
+!webroot/forum/cache/index.html
+webroot/forum/composer.phar
+webroot/forum/config*.php
+webroot/forum/files/*
+webroot/forum/images/avatars/gallery/*
+webroot/forum/images/avatars/upload/*
+webroot/forum/store/*
+
