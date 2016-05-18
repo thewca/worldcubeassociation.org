@@ -469,6 +469,27 @@ CREATE TABLE `competition_organizers` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2290 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `completed_jobs`
+--
+
+DROP TABLE IF EXISTS `completed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `completed_jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `priority` int(11) NOT NULL DEFAULT '0',
+  `attempts` int(11) NOT NULL DEFAULT '0',
+  `handler` text COLLATE utf8_unicode_ci NOT NULL,
+  `run_at` datetime DEFAULT NULL,
+  `queue` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `delayed_jobs`
 --
 
@@ -934,3 +955,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160514124545');
 INSERT INTO schema_migrations (version) VALUES ('20160514141051');
 
 INSERT INTO schema_migrations (version) VALUES ('20160518020433');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518045741');
