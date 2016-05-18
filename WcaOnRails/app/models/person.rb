@@ -58,12 +58,12 @@ class Person < ActiveRecord::Base
   # For reference: https://github.com/rails/rails/issues/5982
   before_create -> { self.id = nil }
 
-  after_update :update_person_name_in_results_table, if: :name_changed?
+  after_update :update_person_name_in_results_table, if: :name_changed?, unless: :updating_using_sub_id
   private def update_person_name_in_results_table
     results.where(personName: name_was).update_all(personName: name)
   end
 
-  after_update :update_person_country_in_results_table, if: :countryId_changed?
+  after_update :update_person_country_in_results_table, if: :countryId_changed?, unless: :updating_using_sub_id
   private def update_person_country_in_results_table
     results.where(countryId: countryId_was).update_all(countryId: countryId)
   end
@@ -71,6 +71,7 @@ class Person < ActiveRecord::Base
   attr_reader :country_id_changed
   after_update -> { @country_id_changed = countryId_changed? }
 
+  attr_reader :updating_using_sub_id
   # Update the person attributes and save the old state as a new Person with greater subId.
   def update_using_sub_id(attributes)
     if attributes[:name] == self.name && attributes[:countryId] == self.countryId
@@ -78,6 +79,7 @@ class Person < ActiveRecord::Base
       return false
     end
     old_attributes = self.attributes
+    @updating_using_sub_id = true
     if update_attributes(attributes)
       Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
       Person.create(old_attributes.merge!(subId: 2))
