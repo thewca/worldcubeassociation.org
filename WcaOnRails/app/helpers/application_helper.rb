@@ -140,8 +140,8 @@ module ApplicationHelper
   end
 
   def users_to_sentence(users, include_email: false)
-    users.sort_by(&:name).map do |user|
+    "".html_safe + users.sort_by(&:name).map do |user|
       include_email ? mail_to(user.email, user.name) : user.name
-    end.to_sentence.html_safe
+    end.to_sentence
   end
 end
