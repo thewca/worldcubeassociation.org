@@ -4,8 +4,8 @@ class JobFailureMailerPreview < ActionMailer::Preview
     job = Delayed::Job.new(id: 4242)
     exception = nil
     begin
-      raise "This is an error!"
-    rescue Exception => e
+      fail "This is an error!"
+    rescue StandardError => e
       exception = e
     end
     JobFailureMailer.notify_admin_of_job_failure(job, exception)

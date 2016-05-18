@@ -5,7 +5,7 @@ class JobFailureMailer < ApplicationMailer
     mail(
       to: "admin@worldcubeassociation.org",
       reply_to: "admin@worldcubeassociation.org",
-      subject: "Job #{@job.id} failed"
+      subject: "Job #{@job.id} failed",
     )
   end
 end
