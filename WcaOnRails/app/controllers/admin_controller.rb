@@ -34,7 +34,7 @@ class AdminController < ApplicationController
   end
 
   def update_person
-    @person = Person.find_current_by_id!(params[:person][:id])
+    @person = Person.current.find_by!(wca_id: params[:person][:wca_id])
     person_params = params.require(:person).permit(:name, :countryId, :gender, :dob)
 
     case params[:commit]
@@ -56,7 +56,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.find_current_by_wca_id!(params[:person_wca_id])
+    @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 
     render json: {
       name: @person.name,

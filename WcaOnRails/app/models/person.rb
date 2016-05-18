@@ -8,6 +8,8 @@ class Person < ActiveRecord::Base
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
+  scope :current, -> { where(subId: 1) }
+
   validates :name, presence: true
   validates :countryId, presence: true
 
@@ -43,7 +45,7 @@ class Person < ActiveRecord::Base
   # Fixing their country (B) to a new country C is easy to undo, just change
   # all Cs to Bs. However, if someone accidentally fixes their country from B
   # to A, then we cannot go back, as all their results are now for country A.
-  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: :new_record?
+  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: -> { new_record? || @updating_using_sub_id }
   private def cannot_change_country_to_country_represented_before
     has_been_a_citizen_of_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
     if has_been_a_citizen_of_this_country_already
@@ -52,7 +54,7 @@ class Person < ActiveRecord::Base
   end
 
   # This is necessary because we use a view instead of a real table.
-  # Using `select` statement with `id` column causes mysql to set a default value of 0,
+  # Using `select` statement with `id` column causes MySQL to set a default value of 0,
   # so creating a Person returns the new record with id = 0, making the record reference 'died'.
   # The workaround is to set id attribute to nil before the object is created and let Rails reload it after creation.
   # For reference: https://github.com/rails/rails/issues/5982
@@ -85,10 +87,6 @@ class Person < ActiveRecord::Base
       Person.create(old_attributes.merge!(subId: 2))
       return true
     end
-  end
-
-  def self.find_current_by_wca_id!(wca_id)
-    find_by!(wca_id: wca_id, subId: 1)
   end
 
   def likely_delegates
