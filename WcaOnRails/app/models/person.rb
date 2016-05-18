@@ -70,6 +70,12 @@ class Person < ActiveRecord::Base
     results.where(countryId: countryId_was).update_all(countryId: countryId)
   end
 
+  after_update :update_associated_user
+  private def update_associated_user
+    # User copies data from the person before validation, so this will update him.
+    user.save! if user
+  end
+
   attr_reader :country_id_changed
   after_update -> { @country_id_changed = countryId_changed? }
 

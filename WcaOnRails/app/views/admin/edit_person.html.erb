@@ -26,8 +26,8 @@
         <%= f.input :gender, collection: [:m, :f], label_method: lambda { |g| { m: "Male", f: "Female" }[g] } %>
         <%= f.input :dob, label: "Date of birthday", as: :date_picker, hint: "Date of birth should have the format YYYY-MM-DD." %>
 
-        <%= f.submit "Fix", class: "btn btn-primary" %>
-        <%= f.submit "Update", class: "btn btn-primary" %>
+        <%= f.submit "Fix", class: "btn btn-primary", data: { confirm: "Are you sure that you want to 'Fix', the competitor's data?" } %>
+        <%= f.submit "Update", class: "btn btn-primary", data: { confirm: "Are you sure that you want to 'Change', the competitor's data?" } %>
       </div>
     <% end %>
   <% end %>
