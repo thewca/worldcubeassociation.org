@@ -172,6 +172,11 @@ server {
     }
   }
 
+  # Redirect /admin/change_person.php to /admin/change_person
+  location /admin/change_person.php {
+    return 302 /admin/change_person;
+  }
+
   #### phpBB forum
   location /forum {
     alias <%= @repo_root %>/webroot/forum;
