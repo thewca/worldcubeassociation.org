@@ -21,12 +21,15 @@ class Competition < ActiveRecord::Base
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
-                 format: { with: /\A[a-zA-Z0-9]+\Z/ }
+                 format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
+  private def name_valid_or_updating?
+    self.persisted? ? true : name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE
+  end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: ENDS_WITH_YEAR_RE, message: "must end with a year"  }
   MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: ENDS_WITH_YEAR_RE }
+                       format: { with: ENDS_WITH_YEAR_RE }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
@@ -96,27 +99,6 @@ class Competition < ActiveRecord::Base
     info
   end
 
-  before_validation :clone_competition, on: [:create]
-  def clone_competition
-    if competition_id_to_clone.present?
-      competition_to_clone = Competition.find_by_id(competition_id_to_clone)
-      if competition_to_clone
-        attributes = competition_to_clone.attributes
-        # Don't clone id, name, cellName, and dates.
-        %w(id name cellName year month day endMonth endDay registration_open registration_close results_posted_at).each { |attribute| attributes.delete attribute }
-        # Make sure the new competition is not publicly visible and is open for
-        # editing.
-        attributes["showAtAll"] = false
-        attributes["isConfirmed"] = false
-        assign_attributes(attributes)
-        self.organizers |= competition_to_clone.organizers
-        self.delegates |= competition_to_clone.delegates
-      else
-        errors.add(:competition_id_to_clone, "invalid")
-      end
-    end
-  end
-
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
@@ -151,8 +133,6 @@ class Competition < ActiveRecord::Base
       end
     end
   end
-
-  attr_accessor :competition_id_to_clone
 
   attr_writer :delegate_ids, :organizer_ids
   def delegate_ids
@@ -331,7 +311,11 @@ class Competition < ActiveRecord::Base
   def events
     # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
     # what these equal signs are about.
-    eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
+    if eventSpecs
+      eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
+    else
+      []
+    end
   end
 
   def has_events_with_ids?(event_ids)

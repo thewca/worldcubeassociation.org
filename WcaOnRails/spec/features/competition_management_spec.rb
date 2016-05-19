@@ -10,7 +10,7 @@ RSpec.feature "Competition management" do
     scenario "User creates a new competition" do
       visit "/competitions/new"
       fill_in "Name", with: "My Competition 2015"
-      click_button "create-competition"
+      click_button "Create Competition"
 
       expect(page).to have_text("Successfully created new competition!")
     end

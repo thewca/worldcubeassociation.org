@@ -50,6 +50,13 @@
             ])
         } %>
       <% end %>
+      <% if current_user && current_user.can_create_competitions? %>
+        <% nav_items << {
+          text: t('.menu.clone'),
+          path: clone_competition_path(@competition),
+          fa_icon: "lock",
+        } %>
+      <% end %>
       <% if @competition.use_wca_registration? && !@competition.results_posted? %>
         <% nav_items += [
           { text: t('.menu.register'), path: competition_register_path(@competition), fa_icon: "sign-in" },
