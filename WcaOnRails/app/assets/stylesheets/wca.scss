@@ -113,6 +113,9 @@ table.wca-results {
     }
     &.country {
     }
+    &.event-count {
+      text-align: right;
+    }
     &.average {
       text-align: right;
     }
@@ -147,6 +150,9 @@ table.wca-results {
       vertical-align: middle;
     }
     &.country {
+    }
+    &.event-count {
+      text-align: right;
     }
     &.average {
       text-align: right;

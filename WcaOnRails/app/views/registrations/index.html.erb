@@ -19,6 +19,7 @@
           </th>
         <% end %>
 
+        <th class="event-count" data-sortable="true">Total</th>
         <!-- Extra column for .table-greedy-last-column -->
         <th></th>
       </tr>
@@ -48,6 +49,9 @@
             </td>
           <% end %>
 
+          <td class="event-count">
+            <%= registration.registration_events.count %>
+          </td>
           <!-- Extra column for .table-greedy-last-column -->
           <td></td>
         </tr>
