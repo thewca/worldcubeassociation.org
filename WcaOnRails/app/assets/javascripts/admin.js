@@ -10,7 +10,7 @@ onPage('admin#edit_person, admin#update_person', function() {
       wca.cancelPendingAjaxAndAjax('grab_person_data', {
         url: '/admin/person_data',
         data: {
-          'person_wca_id]': $(this).val(),
+          'person_wca_id': $(this).val(),
         },
         success: function(data) {
           $.each(data, function(attribute, value) {

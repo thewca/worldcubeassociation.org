@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
     if @dob.blank?
       self.year = self.month = self.day = 0
     else
-      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@dob)
+      unless @dob =~ /\A\d{4}-\d{2}-\d{2}\z/
         errors.add(:dob, "is invalid")
         return false
       end

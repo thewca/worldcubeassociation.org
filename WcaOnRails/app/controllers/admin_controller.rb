@@ -42,7 +42,7 @@ class AdminController < ApplicationController
       if @person.update_attributes(person_params)
         flash.now[:success] = "Successfully fixed #{@person.name}."
         if @person.country_id_changed
-          flash.now[:warning] = "The change you made may have affected records, be sure to run
+          flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
           <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
         end
       end
