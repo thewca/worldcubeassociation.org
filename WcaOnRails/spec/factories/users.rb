@@ -47,7 +47,8 @@ FactoryGirl.define do
     end
 
     trait :wca_id do
-      wca_id { FactoryGirl.create(:person, name: name).wca_id }
+      person
+      wca_id { person.wca_id }
     end
 
     factory :user_with_wca_id, traits: [:wca_id]
