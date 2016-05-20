@@ -94,10 +94,10 @@ form .event-checkbox-sm .cubing-icon {
 table.table-greedy-last-column {
   white-space: nowrap;
 
-  thead tr th:last-child {
+  > thead > tr > th:last-child {
     width: 100%;
   }
-  tbody tr td:last-child {
+  > tbody > tr > td:last-child {
     width: 100%;
   }
 }
