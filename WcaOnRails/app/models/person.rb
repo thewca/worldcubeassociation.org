@@ -13,8 +13,8 @@ class Person < ActiveRecord::Base
   validates :name, presence: true
   validates :countryId, presence: true
 
-  before_validation :unpack_dates
-  private def unpack_dates
+  before_validation :unpack_dob
+  private def unpack_dob
     if @dob.nil? && !dob.blank?
       @dob = dob.strftime("%F")
     end
@@ -47,8 +47,8 @@ class Person < ActiveRecord::Base
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: -> { new_record? || @updating_using_sub_id }
   private def cannot_change_country_to_country_represented_before
-    has_been_a_citizen_of_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
-    if has_been_a_citizen_of_this_country_already
+    has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
+    if has_represented_this_country_already
       errors.add(:countryId, "Cannot change the country to a country the person have already represented in the past.")
     end
   end
@@ -60,22 +60,16 @@ class Person < ActiveRecord::Base
   # For reference: https://github.com/rails/rails/issues/5982
   before_create -> { self.id = nil }
 
-  after_update :update_person_name_in_results_table, if: :name_changed?, unless: :updating_using_sub_id
-  private def update_person_name_in_results_table
-    results.where(personName: name_was).update_all(personName: name)
+  after_update :update_results_table_and_associated_user
+  private def update_results_table_and_associated_user
+    unless @updating_using_sub_id
+      results.where(personName: name_was).update_all(personName: name) if name_changed?
+      results.where(countryId: countryId_was).update_all(countryId: countryId) if countryId_changed?
+    end
+    user.save! if user # User copies data from the person before validation, so this will update him.
   end
 
-  after_update :update_person_country_in_results_table, if: :countryId_changed?, unless: :updating_using_sub_id
-  private def update_person_country_in_results_table
-    results.where(countryId: countryId_was).update_all(countryId: countryId)
-  end
-
-  after_update :update_associated_user
-  private def update_associated_user
-    # User copies data from the person before validation, so this will update him.
-    user.save! if user
-  end
-
+  # Keep the information since admin_controller needs it.
   attr_reader :country_id_changed
   after_update -> { @country_id_changed = countryId_changed? }
 
