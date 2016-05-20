@@ -5,3 +5,5 @@ WcaOnRails/tmp/**
 WcaOnRails/db/structure.sql
 chef/**
 .gitmodules
+
+*.pdf
