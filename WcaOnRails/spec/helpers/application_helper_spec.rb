@@ -21,8 +21,9 @@ describe ApplicationHelper do
     it "includes email" do
       users = []
       users << FactoryGirl.create(:user, name: "Jonatan O'Klosko", email: "jonatan@worldcubeassociation.org")
+      users << FactoryGirl.create(:user, name: "Jeremy", email: "jfly@worldcubeassociation.org")
       string = helper.users_to_sentence(users, include_email: true)
-      expect(string).to eq '<a href="mailto:jonatan@worldcubeassociation.org">Jonatan O&#39;Klosko</a>'
+      expect(string).to eq '<a href="mailto:jfly@worldcubeassociation.org">Jeremy</a> and <a href="mailto:jonatan@worldcubeassociation.org">Jonatan O&#39;Klosko</a>'
     end
   end
 end
