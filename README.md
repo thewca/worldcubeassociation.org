@@ -32,6 +32,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `git checkout upstream/master`
 - `git push upstream HEAD:production`
 - `ssh -A cubing@worldcubeassociation.org worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_regs rebuild_rails`
+  - NOTE: This command needs to be run twice in the event `deploy.sh` changes. See https://github.com/cubing/worldcubeassociation.org/issues/651.
   (`rebuild_regs` can be skipped most of the time)
 - Enter the password
 
