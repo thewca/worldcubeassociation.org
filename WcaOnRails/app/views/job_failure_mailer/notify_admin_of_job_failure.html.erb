@@ -1,0 +1,10 @@
+<p>
+  Job <%= @job.id %> failed.
+  <%= @exception.inspect %>
+</p>
+
+<h2>Handler</h2>
+<pre><%= @job.handler %></pre>
+
+<h2>Backtrace</h2>
+<pre><%= @exception.backtrace.join("\n") %></pre>

@@ -34,6 +34,11 @@ rebuild_rails() {
 
     # Note that we are intentionally not automating database migrations.
 
+    # Kill all delayed_job workers.
+    pkill -f "wca_worker/delayed_job"
+    # Restart delayed_job worker.
+    bin/delayed_job -p wca_worker --pool=mailers:1 --pool=*:1 start
+
     # Attempt to restart unicorn gracefully as per
     #  http://unicorn.bogomips.org/SIGNALS.html
     pid=$(<"pids/unicorn.pid")

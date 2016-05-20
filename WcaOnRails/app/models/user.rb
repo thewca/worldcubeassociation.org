@@ -492,7 +492,7 @@ class User < ActiveRecord::Base
 
   def notify_of_results_posted(competition)
     if results_notifications_enabled?
-      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_now
+      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later
     end
   end
 
