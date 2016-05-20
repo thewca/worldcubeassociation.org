@@ -18,12 +18,12 @@ RSpec.describe Person, type: :model do
       delegate = competition.delegates.first
       expect(person.likely_delegates).to eq [delegate]
 
-      competition2 = FactoryGirl.create :competition, delegates: [delegate]
+      competition2 = FactoryGirl.create :competition, delegates: [delegate], starts: 3.days.ago
       FactoryGirl.create :result, person: person, competitionId: competition2.id
       expect(person.likely_delegates).to eq [delegate]
 
       new_delegate = FactoryGirl.create :delegate
-      competition3 = FactoryGirl.create :competition, delegates: [new_delegate]
+      competition3 = FactoryGirl.create :competition, delegates: [new_delegate], starts: 2.days.ago
       FactoryGirl.create :result, person: person, competitionId: competition3.id
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
