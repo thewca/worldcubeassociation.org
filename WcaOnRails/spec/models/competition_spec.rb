@@ -460,5 +460,11 @@ RSpec.describe Competition do
       expect(results[1].second.first.first).to eq Round.find("c")
       expect(results[1].second.first.last.map(&:value1)).to eq [3000]
     end
+
+    it "winning_results and events_with_podium_results don't include results with DNF as best" do
+      competition.results.where(eventId: "222").update_all(best: SolveTime::DNF_VALUE)
+      expect(competition.winning_results.map(&:event).uniq).to eq [three_by_three]
+      expect(competition.events_with_podium_results.map(&:first).uniq).to eq [three_by_three]
+    end
   end
 end
