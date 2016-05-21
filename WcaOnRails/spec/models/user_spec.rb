@@ -298,7 +298,7 @@ RSpec.describe User, type: :model do
     let!(:other_delegate_unconfirmed_competition) { FactoryGirl.create :competition, delegates: [other_delegate] }
 
     it "sees delegated competitions" do
-      expect(delegate.delegated_competitions).to eq [
+      expect(delegate.delegated_competitions).to match_array [
         confirmed_competition1,
         confirmed_competition2,
         unconfirmed_competition1,
