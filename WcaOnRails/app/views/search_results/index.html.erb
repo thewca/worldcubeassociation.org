@@ -35,7 +35,7 @@
       <h2><%= anchorable "People" %></h2>
       <table class="table table-nonfluid table-vertical-align-middle">
         <tbody>
-          <% @persons.each do |person| %>
+          <% @persons.includes(:user).each do |person| %>
             <tr>
               <td>
                 <%= render "shared/user_avatar", user: (person.user || User.new) %>
