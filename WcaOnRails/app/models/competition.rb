@@ -96,6 +96,16 @@ class Competition < ActiveRecord::Base
     info
   end
 
+  validate :cannot_remove_event_with_registrants
+  def cannot_remove_event_with_registrants
+    if eventSpecs_change
+      removed_events_with_registrations = registrations.all.map { |r| (r.events - self.events) }.flatten(1).uniq
+      if removed_events_with_registrations.length > 0
+        errors.add(:eventSpecs, "There are still people registered for #{removed_events_with_registrations.map(&:name).to_sentence}")
+      end
+    end
+  end
+
   before_validation :clone_competition, on: [:create]
   def clone_competition
     if competition_id_to_clone.present?

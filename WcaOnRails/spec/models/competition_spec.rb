@@ -186,6 +186,14 @@ RSpec.describe Competition do
     expect(competition.events.map(&:id)).to eq %w(333 444)
   end
 
+  it "doesn't allow removing an event with registrations" do
+    competition = FactoryGirl.create :competition, :registration_open, eventSpecs: "333 444"
+    registration = FactoryGirl.create :registration, eventIds: "444", competition: competition
+    competition.eventSpecs = "333"
+    expect(competition.save).to eq false
+    expect(competition.errors.messages[:eventSpecs]).to eq ["There are still people registered for 4x4 Cube"]
+  end
+
   it "validates event ids" do
     competition = FactoryGirl.build :competition, eventSpecs: "333 333wtf"
     expect(competition).to be_invalid
