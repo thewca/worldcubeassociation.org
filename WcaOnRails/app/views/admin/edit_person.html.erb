@@ -18,7 +18,7 @@
 
     <%= render 'shared/error_messages', object: @person %>
 
-    <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
+    <%= simple_form_for @person, url: admin_update_person_path, method: :patch, html: { autocomplete: :off } do |f| %>
       <%= f.input :wca_id, label: "Person", as: :user_ids, persons_table: true, only_one: true %>
       <div id="person-fields">
         <%= f.input :name %>

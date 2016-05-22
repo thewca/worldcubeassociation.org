@@ -2,13 +2,7 @@ require 'rails_helper'
 
 describe MergePeople do
   let(:person1) { FactoryGirl.create(:person) }
-  let(:person2) { FactoryGirl.create(:person,
-                                     name: person1.name,
-                                     countryId: person1.countryId,
-                                     gender: person1.gender,
-                                     year: person1.year,
-                                     month: person1.month,
-                                     day: person1.day)
+  let(:person2) { FactoryGirl.create(:person, person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day))
   }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
@@ -22,15 +16,13 @@ describe MergePeople do
   end
 
   it "requires person1 not have multiple subIds" do
-    person = FactoryGirl.create(:person_with_multiple_sub_ids)
-    merge_people.person1_wca_id = person.wca_id
+    merge_people.person1_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids).wca_id
     expect(merge_people).to be_invalid
     expect(merge_people.errors.messages[:person1_wca_id]).to include "This person has multiple subIds"
   end
 
   it "requires person2 not have multiple subIds" do
-    person = FactoryGirl.create(:person_with_multiple_sub_ids)
-    merge_people.person2_wca_id = person.wca_id
+    merge_people.person2_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids).wca_id
     expect(merge_people).to be_invalid
     expect(merge_people.errors.messages[:person2_wca_id]).to include "This person has multiple subIds"
   end

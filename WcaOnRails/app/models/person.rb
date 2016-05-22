@@ -45,11 +45,13 @@ class Person < ActiveRecord::Base
   # Fixing their country (B) to a new country C is easy to undo, just change
   # all Cs to Bs. However, if someone accidentally fixes their country from B
   # to A, then we cannot go back, as all their results are now for country A.
-  validate :cannot_change_country_to_country_represented_before, if: :countryId_changed?, unless: -> { new_record? || @updating_using_sub_id }
+  validate :cannot_change_country_to_country_represented_before
   private def cannot_change_country_to_country_represented_before
-    has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
-    if has_represented_this_country_already
-      errors.add(:countryId, "Cannot change the country to a country the person have already represented in the past.")
+    if countryId_changed? && !new_record? && !@updating_using_sub_id
+      has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
+      if has_represented_this_country_already
+        errors.add(:countryId, "Cannot change the country to a country the person has already represented in the past.")
+      end
     end
   end
 
@@ -73,7 +75,6 @@ class Person < ActiveRecord::Base
   attr_reader :country_id_changed
   after_update -> { @country_id_changed = countryId_changed? }
 
-  attr_reader :updating_using_sub_id
   # Update the person attributes and save the old state as a new Person with greater subId.
   def update_using_sub_id(attributes)
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }

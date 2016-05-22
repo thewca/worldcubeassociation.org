@@ -28,7 +28,7 @@ class AdminController < ApplicationController
   end
 
   def edit_person
-    # This is necessary because the sample form needs some real active record when using user_ids picker.
+    # This is necessary because the simple form needs some real active record when using user_ids picker.
     # That's only to pass the appropriate attributes.
     @person = Person.new
   end

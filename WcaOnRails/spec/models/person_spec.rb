@@ -38,7 +38,7 @@ RSpec.describe Person, type: :model do
         Person.create(wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
         person.countryId = "New Zealand"
         expect(person).to be_invalid
-        expect(person.errors[:countryId]).to eq ["Cannot change the country to a country the person have already represented in the past."]
+        expect(person.errors[:countryId]).to eq ["Cannot change the country to a country the person has already represented in the past."]
       end
 
       it "updates personName and countryId columns in the results table" do
@@ -54,7 +54,7 @@ RSpec.describe Person, type: :model do
         expect(person.results.pluck(:countryId).uniq).to match_array ["France", "New Zealand"]
       end
 
-      it "updates the associated person" do
+      it "updates the associated user" do
         person.update_attributes!(name: "New Name", countryId: "New Zealand", dob: "1990-10-10")
         expect(user.reload.name).to eq "New Name"
         expect(user.country_iso2).to eq "NZ"
@@ -84,7 +84,7 @@ RSpec.describe Person, type: :model do
         expect(Person.where(wca_id: person.wca_id, subId: 2, name: "Feliks Zemdegs", countryId: "Australia")).to exist
       end
 
-      it "updates the associated person" do
+      it "updates the associated user" do
         person.update_using_sub_id(name: "New Name", countryId: "New Zealand", dob: "1990-10-10")
         expect(user.reload.name).to eq "New Name"
         expect(user.country_iso2).to eq "NZ"

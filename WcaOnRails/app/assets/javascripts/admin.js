@@ -23,8 +23,4 @@ onPage('admin#edit_person, admin#update_person', function() {
       });
     }
   });
-
-  if($('#person_wca_id').val() === '') {
-    $('#person_wca_id').trigger('change');
-  }
 });

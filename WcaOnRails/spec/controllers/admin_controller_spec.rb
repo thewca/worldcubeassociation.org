@@ -53,7 +53,7 @@ RSpec.describe AdminController, type: :controller do
       expect(response).to render_template :edit_person
     end
 
-    it "shows a successfull message when the person has been changed" do
+    it "shows a successful message when the person has been changed" do
       patch :update_person, commit: "Fix", person: { wca_id: person.wca_id, name: "New Name" }
       expect(response.status).to eq 200
       expect(response).to render_template :edit_person

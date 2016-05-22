@@ -13,7 +13,6 @@ FactoryGirl.define do
 
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
-        # Person.create!(wca_id: person.wca_id, subId: person.subId + 1, countryId: "Israel")
         person.update_using_sub_id(countryId: "Israel")
       end
     end
