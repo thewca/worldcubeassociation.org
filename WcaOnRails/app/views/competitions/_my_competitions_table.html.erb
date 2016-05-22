@@ -40,7 +40,7 @@
             <td>
               <% if !past && current_user.can_manage_competition?(competition) %>
                 <%= link_to "Edit", edit_competition_path(competition) %>
-              <% elsif competition.results.length > 0 %>
+              <% elsif competition.results_posted? %>
                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
               <% end %>
             </td>

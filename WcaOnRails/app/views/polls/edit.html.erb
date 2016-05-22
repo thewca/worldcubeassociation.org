@@ -6,7 +6,7 @@
 
   <% is_actually_confirmed = Poll.find(@poll.id).confirmed? %>
   <% if is_actually_confirmed %>
-    <%= if @poll.over? %>
+    <% if @poll.over? %>
       <%= alert :danger do %>
         This poll is closed (deadline has passed). Check out the <%= link_to "results", polls_results_path(@poll) %>.
       <% end %>
@@ -28,7 +28,7 @@
     </script>
   <% else %>
     <%= alert :info do %>
-      This poll is not open to voting. You can see a preview <%= link_to 'here', polls_vote_path, target: '_blank'} %>.
+      This poll is not open to voting. You can see a preview <%= link_to 'here', polls_vote_path, target: '_blank' %>.
       Click confirm when you're ready to enable voting!
     <% end %>
   <% end %>
