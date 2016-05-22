@@ -54,7 +54,7 @@
         <% nav_items << {
           text: t('.menu.clone'),
           path: clone_competition_path(@competition),
-          fa_icon: "lock",
+          fa_icon: "clone",
         } %>
       <% end %>
       <% if @competition.use_wca_registration? && !@competition.results_posted? %>

@@ -1,4 +1,4 @@
-onPage('competitions#edit, competitions#new', function() {
+onPage('competitions#edit, competitions#update, competitions#admin_edit, competitions#new, competitions#create, competitions#clone_competition', function() {
   var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
   if($useWcaRegistrationInput.length > 0) {
     var $registrationOptionsAreas = $('.wca-registration-options');

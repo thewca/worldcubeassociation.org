@@ -23,7 +23,7 @@ class Competition < ActiveRecord::Base
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
-    self.persisted? ? true : name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE
+    self.persisted? || name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: ENDS_WITH_YEAR_RE, message: "must end with a year"  }
@@ -97,6 +97,19 @@ class Competition < ActiveRecord::Base
       info[:in_progress] = "This competition is ongoing. Come back after #{self.end_date.to_formatted_s(:long)} to see the results!"
     end
     info
+  end
+
+  def build_clone
+    # Don't clone the following attributes.
+    attributes_to_clone = attributes
+    %w(id name cellName year month day endMonth endDay registration_open registration_close results_posted_at).each { |attribute| attributes_to_clone.delete attribute }
+    clone = Competition.new
+    clone.assign_attributes(attributes_to_clone)
+    clone.organizers = organizers
+    clone.delegates = delegates
+    clone.showAtAll = false
+    clone.isConfirmed = false
+    clone
   end
 
   attr_writer :start_date, :end_date
@@ -311,11 +324,7 @@ class Competition < ActiveRecord::Base
   def events
     # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
     # what these equal signs are about.
-    if eventSpecs
-      eventSpecs.split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
-    else
-      []
-    end
+    (eventSpecs || []).split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
   end
 
   def has_events_with_ids?(event_ids)

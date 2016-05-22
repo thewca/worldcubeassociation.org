@@ -30,7 +30,7 @@ class CompetitionsController < ApplicationController
   def new
     @competition = Competition.new
     if current_user.any_kind_of_delegate?
-      @competition.delegates |= [current_user]
+      @competition.delegates = [current_user]
     end
   end
 
@@ -233,21 +233,11 @@ class CompetitionsController < ApplicationController
   end
 
   def clone_competition
-    @competition = Competition.new
-    cloned_competition = Competition.find(params[:id])
-    if cloned_competition
-      attributes = cloned_competition.attributes
-      # Don't clone the following attributes.
-      %w(id name cellName year month day endMonth endDay registration_open registration_close results_posted_at).each { |attribute| attributes.delete attribute }
-      @competition.assign_attributes(attributes)
-      @competition.organizers |= cloned_competition.organizers
-      @competition.delegates |= cloned_competition.delegates
-    end
+    competition_to_clone = Competition.find(params[:id])
+    @competition = competition_to_clone.build_clone
     if current_user.any_kind_of_delegate?
       @competition.delegates |= [current_user]
     end
-    @competition.showAtAll = false
-    @competition.isConfirmed = false
     render :new
   end
 
@@ -371,8 +361,15 @@ class CompetitionsController < ApplicationController
       competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
       competition_params.delete(:event_ids)
     end
-    if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
-      competition_params[:isConfirmed] = true
+    # Ensure that the user is a delegate if they are confirming the competition.
+    if params[:commit] == "Confirm"
+      if @competition
+        if current_user.can_confirm_competition?(@competition)
+          competition_params[:isConfirmed] = true
+        end
+      elsif competition_params[:delegate_ids].split(",").include? current_user.id.to_s
+        competition_params[:isConfirmed] = true
+      end
     end
     competition_params[:editing_user_id] = current_user.id
     competition_params
