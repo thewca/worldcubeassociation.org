@@ -1,7 +1,17 @@
 onPage('admin#edit_person, admin#update_person', function() {
-  var $personFields = $('#person-fields :input');
 
   $('#person_wca_id').on('change', function() {
+    // Update person wca id in the url.
+    var currentUrl = location.toString();
+    var personWcaId = $('#person_wca_id').val();
+    var newUrl = currentUrl.replace(/admin.*/, 'admin/edit_person');
+    if(personWcaId !== '') {
+      newUrl +='?person[wca_id]=' + personWcaId;
+    }
+    history.replaceState(null, null, newUrl);
+
+    // Clear or fill all the other fields.
+    var $personFields = $('#person-fields :input');
     if($(this).val() === '') {
       $personFields.attr('disabled', true);
       $personFields.not('[type="submit"]').val('');
@@ -23,4 +33,7 @@ onPage('admin#edit_person, admin#update_person', function() {
       });
     }
   });
+
+  // When the page is ready, disable the appropriate fields if the form is empty and normalize the url.
+  $('#person_wca_id').trigger('change');
 });

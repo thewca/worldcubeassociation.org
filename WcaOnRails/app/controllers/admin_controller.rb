@@ -28,30 +28,34 @@ class AdminController < ApplicationController
   end
 
   def edit_person
-    # This is necessary because the simple form needs some real active record when using user_ids picker.
-    # That's only to pass the appropriate attributes.
-    @person = Person.new
+    @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
+    # If there isn't a person in the params, make an empty one that simple form have an object to work with.
+    # Note: most of the time persons are dynamically selected using user_id picker.
+    @person ||= Person.new
   end
 
   def update_person
-    @person = Person.current.find_by!(wca_id: params[:person][:wca_id])
-    person_params = params.require(:person).permit(:name, :countryId, :gender, :dob)
-
-    case params[:commit]
-    when "Fix"
-      if @person.update_attributes(person_params)
-        flash.now[:success] = "Successfully fixed #{@person.name}."
-        if @person.country_id_changed
-          flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-          <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+    @person = Person.current.find_by(wca_id: params[:person][:wca_id])
+    if @person
+      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob)
+      case params[:method]
+      when "fix"
+        if @person.update_attributes(person_params)
+          flash.now[:success] = "Successfully fixed #{@person.name}."
+          if @person.country_id_changed
+            flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
+            <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+          end
+        end
+      when "update"
+        if @person.update_using_sub_id(person_params)
+          flash.now[:success] = "Successfully updated #{@person.name}."
         end
       end
-    when "Update"
-      if @person.update_using_sub_id(person_params)
-        flash.now[:success] = "Successfully updated #{@person.name}."
-      end
+    else
+      @person = Person.new
+      flash.now[:danger] = "No person has been chosen."
     end
-
     render :edit_person
   end
 
