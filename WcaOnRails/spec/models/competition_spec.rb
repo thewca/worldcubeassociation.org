@@ -136,41 +136,59 @@ RSpec.describe Competition do
     expect(competition.errors.messages[:name]).to eq ["is too long (maximum is 50 characters)"]
   end
 
-  it "warns if competition name is greater than 32 characters and it's not publicly visible" do
-    competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: false
-    expect(competition).to be_valid
-    expect(competition.warnings[:name]).to eq "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+  context "warnings_for" do
+    it "warns if competition name is greater than 32 characters and it's not publicly visible" do
+      competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: false
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+    end
+
+    it "does not warn about name greater than 32 when competition is publicly visible" do
+      competition = FactoryGirl.build :competition, :confirmed, :visible, name: "A really long competition name 2016"
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:name]).to eq nil
+    end
+
+    it "warns if competition is not visible" do
+      competition = FactoryGirl.build :competition, showAtAll: false
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:invisible]).to eq "This competition is not visible to the public."
+    end
+
+    it "warns if delegate report needs to be submitted" do
+      competition = FactoryGirl.create :competition, :with_delegate, starts: 1.day.ago
+      delegate = competition.delegates.first
+
+      expect(competition.warnings_for(nil)[:report_not_submitted]).to eq nil
+      expect(competition.warnings_for(delegate)[:report_not_submitted]).to match /Your report is not posted yet! Click .*here.* to work on it./
+
+      # Don't bug delegates about their reports for competitions that have not happened yet.
+      competition.start_date = 1.day.from_now.strftime("%F")
+      competition.end_date = 1.day.from_now.strftime("%F")
+      competition.save!
+      expect(competition.warnings_for(delegate)[:report_not_submitted]).to eq nil
+    end
   end
 
-  it "does not warn about name greater than 32 when competition is publicly visible" do
-    competition = FactoryGirl.build :competition, :confirmed, :visible, name: "A really long competition name 2016"
-    expect(competition).to be_valid
-    expect(competition.warnings[:name]).to eq nil
-  end
+  context "info_for" do
+    it "displays info if competition is finished but results aren't posted" do
+      competition = FactoryGirl.build :competition, starts: 1.month.ago
+      expect(competition).to be_valid
+      expect(competition.is_over?).to be true
+      expect(competition.results_posted?).to be false
+      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
+    end
 
-  it "warns if competition is not visible" do
-    competition = FactoryGirl.build :competition, showAtAll: false
-    expect(competition).to be_valid
-    expect(competition.warnings[:invisible]).to eq "This competition is not visible to the public."
-  end
+    it "displays info if competition is in progress" do
+      competition = FactoryGirl.build :competition, starts: Date.today
+      expect(competition).to be_valid
+      expect(competition.in_progress?).to be true
+      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
 
-  it "displays info if competition is finished but results aren't posted" do
-    competition = FactoryGirl.build :competition, starts: 1.month.ago
-    expect(competition).to be_valid
-    expect(competition.is_over?).to be true
-    expect(competition.results_posted?).to be false
-    expect(competition.info[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
-  end
-
-  it "displays info if competition is in progress" do
-    competition = FactoryGirl.build :competition, starts: Date.today
-    expect(competition).to be_valid
-    expect(competition.in_progress?).to be true
-    expect(competition.info[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
-
-    competition.results_posted_at = Time.now
-    expect(competition.in_progress?).to be false
-    expect(competition.info[:in_progress]).to eq nil
+      competition.results_posted_at = Time.now
+      expect(competition.in_progress?).to be false
+      expect(competition.info_for(nil)[:in_progress]).to eq nil
+    end
   end
 
   it "knows the calendar" do

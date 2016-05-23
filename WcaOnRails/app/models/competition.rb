@@ -112,7 +112,7 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def warnings
+  def warnings_for(user)
     warnings = {}
     if !self.showAtAll
       warnings[:invisible] = "This competition is not visible to the public."
@@ -121,10 +121,23 @@ class Competition < ActiveRecord::Base
         warnings[:name] = "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
       end
     end
+
+    if user && user.can_edit_competition_report?(self) && is_over? && !delegate_report.posted?
+      url_helpers = Rails.application.routes.url_helpers
+      path_to_edit_report = Rails.application.routes.url_helpers.competition_report_edit_path(self)
+      link_to_edit_report = ActionController::Base.helpers.link_to('here', path_to_edit_report)
+      warnings[:report_not_submitted] = (
+        "".html_safe +
+        "Your report is not posted yet! Click " +
+        link_to_edit_report +
+        " to work on it."
+      )
+    end
+
     warnings
   end
 
-  def info
+  def info_for(user)
     info = {}
     if !self.results_posted? && self.is_over?
       info[:upload_results] = "This competition is over, we are working to upload the results as soon as possible!"
@@ -577,7 +590,7 @@ class Competition < ActiveRecord::Base
   end
 
   def delegate_report
-    DelegateReport.find_by_competition_id(self.id) || DelegateReport.create!(competition_id: self.id, content: "Hey, enter some text here", posted: false)
+    DelegateReport.find_by_competition_id(self.id) || DelegateReport.create!(competition_id: self.id, content: "Hey, enter some text here", posted_at: nil)
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some

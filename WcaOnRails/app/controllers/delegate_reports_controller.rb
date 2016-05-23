@@ -1,7 +1,7 @@
 class DelegateReportsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action -> { redirect_unless_user(:can_view_delegate_reports?) }, only: [
+  before_action -> { redirect_unless_user(:can_view_delegate_report?, competition_from_params) }, only: [
     :show,
   ]
   before_action -> { redirect_unless_user(:can_edit_competition_report?, competition_from_params) }, only: [
@@ -32,9 +32,14 @@ class DelegateReportsController < ApplicationController
   def update
     @competition = competition_from_params
     @delegate_report = @competition.delegate_report
+    was_posted = @delegate_report.posted?
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"
       if @delegate_report.posted?
+        if !was_posted
+          CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
+          flash[:info] = "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
+        end
         redirect_to competition_report_path(@competition)
       else
         redirect_to competition_report_edit_path(@competition)

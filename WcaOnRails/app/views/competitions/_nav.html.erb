@@ -60,7 +60,7 @@
           fa_icon: "clone",
         }
       end
-      if current_user && current_user.can_view_delegate_reports?
+      if current_user && current_user.can_view_delegate_report?(@competition)
         nav_items << {
           text: t('.menu.delegate_report'),
           path: competition_report_path(@competition),
@@ -153,11 +153,11 @@
       <h3><%= @competition.name %></h3>
       <hr />
 
-      <% @competition.warnings.each do |field, message| %>
+      <% @competition.warnings_for(current_user).each do |field, message| %>
         <%= alert :info, message, note: true %>
       <% end %>
 
-      <% @competition.info.each do |field, message| %>
+      <% @competition.info_for(current_user).each do |field, message| %>
         <%= alert :info, message, note: true %>
       <% end %>
 

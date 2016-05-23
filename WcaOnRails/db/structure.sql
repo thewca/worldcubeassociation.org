@@ -518,7 +518,7 @@ CREATE TABLE `delegate_reports` (
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `posted` tinyint(1) NOT NULL,
+  `posted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

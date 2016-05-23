@@ -5,7 +5,7 @@ class CreateDelegateReports < ActiveRecord::Migration
       t.text :content, null: false
       t.datetime :created_at
       t.datetime :updated_at
-      t.boolean :posted, null: false
+      t.datetime :posted_at
 
       t.timestamps null: false
     end

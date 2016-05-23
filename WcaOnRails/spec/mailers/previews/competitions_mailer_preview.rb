@@ -15,4 +15,14 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     competition = Competition.last
     CompetitionsMailer.submit_results_nag(competition)
   end
+
+  def notify_of_delegate_report_submission
+    report = DelegateReport.where.not(posted_at: nil).first
+    if !report
+      report = Competition.first.delegate_report
+      report.update_attributes!(posted_at: Time.now)
+    end
+    competition = report.competition
+    CompetitionsMailer.notify_of_delegate_report_submission(competition)
+  end
 end

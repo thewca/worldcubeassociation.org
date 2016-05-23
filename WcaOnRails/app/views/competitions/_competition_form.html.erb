@@ -31,7 +31,7 @@
       <% if @competition.persisted? %>
         <%= f.input :id %>
       <% end %>
-      <%= f.input :name, wrapper_html: { class: @competition.warnings[:name] ? "has-warning" : "" } %>
+      <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
       <% if @competition.persisted? %>
         <%= f.input :cellName %>
       <% end %>

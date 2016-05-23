@@ -1,19 +1,19 @@
 <% provide(:title, "Report for #{@competition.name}") %>
+
 <%= render layout: 'nav' do %>
+  <div>
+    <strong>Report:</strong>
+    <%=md @delegate_report.content %>
+  </div>
 
-
-  <p>
-    <strong>Content:</strong>
-    <%= @delegate_report.content %>
-  </p>
-
-  <p>
-    <strong>Updated at:</strong>
-    <%= wca_local_time(@delegate_report.updated_at) %>
-  </p>
+  <% if @delegate_report.posted_at %>
+    <p>
+      <strong>Posted at:</strong>
+      <%= wca_local_time(@delegate_report.posted_at) %>
+    </p>
+  <% end %>
 
   <% if current_user.can_edit_competition_report?(@competition) %>
     <%= link_to 'Edit', competition_report_edit_path(@competition) %>
   <% end %>
-
 <% end %>

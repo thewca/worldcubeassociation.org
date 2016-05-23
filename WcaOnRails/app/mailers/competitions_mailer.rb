@@ -15,7 +15,15 @@ class CompetitionsMailer < ApplicationMailer
     @user = user
     mail(
       to: user.email,
-      subject: "The results of #{competition.name} are posted"
+      subject: "The results of #{competition.name} are posted",
+    )
+  end
+
+  def notify_of_delegate_report_submission(competition)
+    @competition = competition
+    mail(
+      to: "reports@worldcubeassociation.org",
+      subject: "Delegate report for #{competition.name}",
     )
   end
 
