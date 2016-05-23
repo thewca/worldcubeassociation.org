@@ -1,9 +1,10 @@
 <div class="container-fluid">
   <div class="row">
     <div id="competition-nav">
-      <% nav_items = [] %>
-      <% if @competition.user_can_view_results?(current_user) %>
-        <% nav_items << {
+      <%
+      nav_items = []
+      if @competition.user_can_view_results?(current_user)
+        nav_items << {
           text: t('.menu.results'),
           path: competition_path(@competition),
           fa_icon: "trophy",
@@ -19,46 +20,55 @@
             },
             { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), fa_icon: "user" },
           ],
-        } %>
-      <% else %>
-        <% nav_items << {
+        }
+      else
+        nav_items << {
           text: t('.menu.info'),
           path: competition_path(@competition),
           fa_icon: "info-circle",
-        } %>
-      <% end %>
-      <% if current_user&.can_manage_competition?(@competition) %>
-        <% nav_items << {
+        }
+      end
+      if current_user&.can_manage_competition?(@competition)
+        nav_items << {
           text: t('.menu.edit'),
           path: edit_competition_path(@competition),
           fa_icon: "lock",
           children: [
             { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fa_icon: "lock" },
-            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), fa_icon: "lock" } ] + (!@competition.use_wca_registration? ? [] : [
-              {
-                text: t('.menu.registration'),
-                path: competition_edit_registrations_path(@competition),
-                fa_icon: "list-ul",
-                notification_count: @competition.registrations.pending.count,
-                children: [{
-                  hidden: true,
-                  is_active: lambda do
-                    controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
-                  end,
-                }],
-              },
-            ])
-        } %>
-      <% end %>
-      <% if current_user&.can_create_competitions? %>
-        <% nav_items << {
+            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), fa_icon: "lock" },
+          ]
+        }
+        if @competition.use_wca_registration?
+          nav_items << {
+            text: t('.menu.registration'),
+            path: competition_edit_registrations_path(@competition),
+            fa_icon: "list-ul",
+            notification_count: @competition.registrations.pending.count,
+            children: [{
+              hidden: true,
+              is_active: lambda do
+                controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
+              end,
+            }],
+          }
+        end
+      end
+      if current_user&.can_create_competitions?
+        nav_items << {
           text: t('.menu.clone'),
           path: clone_competition_path(@competition),
           fa_icon: "clone",
-        } %>
-      <% end %>
-      <% if @competition.use_wca_registration? && !@competition.results_posted? %>
-        <% nav_items += [
+        }
+      end
+      if current_user && current_user.can_view_delegate_reports?
+        nav_items << {
+          text: t('.menu.delegate_report'),
+          path: competition_report_path(@competition),
+          fa_icon: "pencil-square-o"
+        }
+      end
+      if @competition.use_wca_registration? && !@competition.results_posted?
+        nav_items += [
           { text: t('.menu.register'), path: competition_register_path(@competition), fa_icon: "sign-in" },
           {
             text: t('.menu.competitors'),
@@ -68,9 +78,10 @@
               { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
             end
           },
-        ] %>
-      <% end %>
-      <% nav_items = process_nav_items(nav_items) %>
+        ]
+      end
+      nav_items = process_nav_items(nav_items)
+      %>
 
       <% blocks.define :nav_list do |nav_items| %>
         <div class="list-group list-group-root">
