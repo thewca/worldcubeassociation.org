@@ -37,23 +37,6 @@ module ApplicationHelper
     mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
   end
 
-  def md(content, target_blank: false)
-    if content.nil?
-      return ""
-    end
-
-    options = {
-      escape_html: true,
-      hard_wrap: true,
-    }
-
-    if target_blank
-      options[:link_attributes] = { target: "_blank" }
-    end
-
-    Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(options)).render(content).html_safe
-  end
-
   def filename_to_url(filename)
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
