@@ -1,0 +1,38 @@
+<% provide(:title, 'Edit person') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>
+      Choose 'Fix' if you want to replace a person's information in the database.
+      It will modify the Persons table accordingly and the Results table if the person's name is different.
+      This should be used to fix mistakes in the database.
+    </p>
+
+    <p>
+      Choose 'Update' if the person's name or country has been changed.
+      It will add a new entry in the Persons table and make it the current information for that person (subId=1)
+      but it will not modify the Results table so previous results keep the old name.
+    </p>
+
+    <%= render 'shared/error_messages', object: @person %>
+
+    <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
+      <%= f.input :wca_id, label: "Person", as: :user_ids, persons_table: true, only_one: true %>
+      <div id="person-fields">
+        <%= f.input :name %>
+        <%= f.input :countryId, label: "Country", collection: Country.all_real.map(&:id), label_method: lambda { |id| Country.find(id).name } %>
+        <%= f.input :gender, collection: [:m, :f], label_method: lambda { |g| { m: "Male", f: "Female" }[g] } %>
+        <%= f.input :dob, label: "Date of birthday", as: :date_picker, hint: "Date of birth should have the format YYYY-MM-DD." %>
+
+        <button type="submit" name="method" value="fix" class="btn btn-primary">
+          <%= icon("wrench", "Fix") %>
+        </button>
+        <button type="submit" name="method" value="update" class="btn btn-warning" data-confirm="Are you sure that you want to 'Change', the competitor's data?">
+          <%= icon("clone", "Update") %>
+        </button>
+      </div>
+    <% end %>
+  <% end %>
+</div>

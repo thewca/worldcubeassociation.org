@@ -85,22 +85,25 @@ Rails.application.routes.draw do
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
 
-  get "/regulations" => 'regulations#show', id: "index"
-  get "/regulations/*id" => 'regulations#show'
+  get '/regulations' => 'regulations#show', id: 'index'
+  get '/regulations/*id' => 'regulations#show'
 
-  get "/admin" => 'admin#index'
-  get "/admin/merge_people" => 'admin#merge_people'
-  post "/admin/merge_people" => 'admin#do_merge_people'
+  get '/admin' => 'admin#index'
+  get '/admin/merge_people' => 'admin#merge_people'
+  post '/admin/merge_people' => 'admin#do_merge_people'
+  get '/admin/edit_person' => 'admin#edit_person'
+  patch '/admin/update_person' => 'admin#update_person'
+  get '/admin/person_data' => 'admin#person_data'
 
-  get "/search" => 'search_results#index'
+  get '/search' => 'search_results#index'
 
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do
-      get '/' => "api#help"
-      get '/me' => "api#me"
-      get '/auth/results' => "api#auth_results"
-      get '/scramble-program' => "api#scramble_program"
+      get '/' => 'api#help'
+      get '/me' => 'api#me'
+      get '/auth/results' => 'api#auth_results'
+      get '/scramble-program' => 'api#scramble_program'
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'

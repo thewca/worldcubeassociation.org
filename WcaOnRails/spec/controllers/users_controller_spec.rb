@@ -25,12 +25,12 @@ describe UsersController do
     it "works" do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(user).and_call_original
       expect do
-        patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") }
+        patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") }
       end.to change { ActionMailer::Base.deliveries.length }.by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
-      expect(user.reload.unconfirmed_wca_id).to eq person.id
-      expect(flash[:success]).to eq "Successfully claimed WCA ID #{person.id}. Check your email, and wait for #{delegate.name} to approve it!"
+      expect(user.reload.unconfirmed_wca_id).to eq person.wca_id
+      expect(flash[:success]).to eq "Successfully claimed WCA ID #{person.wca_id}. Check your email, and wait for #{delegate.name} to approve it!"
       expect(response).to redirect_to profile_claim_wca_id_path
     end
 
@@ -38,16 +38,16 @@ describe UsersController do
       other_user = FactoryGirl.create :user
 
       old_unconfirmed_wca_id = other_user.unconfirmed_wca_id
-      patch :update, id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      patch :update, id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id }
       expect(other_user.unconfirmed_wca_id).to eq old_unconfirmed_wca_id
     end
 
     it "cannot claim wca id if already has a wca id" do
       other_person = FactoryGirl.create :person
-      user.wca_id = other_person.id
+      user.wca_id = other_person.wca_id
       user.save!
 
-      patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id }
       new_user = assigns(:user)
       expect(new_user).to be_invalid
       expect(user.reload.unconfirmed_wca_id).to be_nil
@@ -57,7 +57,7 @@ describe UsersController do
   describe "approve wca id claim" do
     let(:delegate) { FactoryGirl.create(:delegate) }
     let(:person) { FactoryGirl.create(:person) }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
+    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
 
     before :each do
       sign_in delegate
@@ -66,7 +66,7 @@ describe UsersController do
     it "works when not explicitly clearing unconfirmed_wca_id" do
       patch :update, id: user, user: { wca_id: user.unconfirmed_wca_id }
       user.reload
-      expect(user.wca_id).to eq person.id
+      expect(user.wca_id).to eq person.wca_id
       expect(user.unconfirmed_wca_id).to be_nil
       expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
@@ -74,25 +74,25 @@ describe UsersController do
     it "works when explicitly clearing unconfirmed_wca_id" do
       patch :update, id: user, user: { wca_id: user.unconfirmed_wca_id, unconfirmed_wca_id: "" }
       user.reload
-      expect(user.wca_id).to eq person.id
+      expect(user.wca_id).to eq person.wca_id
       expect(user.unconfirmed_wca_id).to be_nil
       expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
 
     it "can set id to something not claimed" do
       person2 = FactoryGirl.create :person
-      patch :update, id: user, user: { wca_id: person2.id }
+      patch :update, id: user, user: { wca_id: person2.wca_id }
       user.reload
-      expect(user.wca_id).to eq person2.id
-      expect(user.unconfirmed_wca_id).to eq person.id
+      expect(user.wca_id).to eq person2.wca_id
+      expect(user.unconfirmed_wca_id).to eq person.wca_id
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
     end
 
     it "can change claimed id" do
       person2 = FactoryGirl.create :person
-      patch :update, id: user, user: { unconfirmed_wca_id: person2.id }
+      patch :update, id: user, user: { unconfirmed_wca_id: person2.wca_id }
       user.reload
-      expect(user.unconfirmed_wca_id).to eq person2.id
+      expect(user.unconfirmed_wca_id).to eq person2.wca_id
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
     end
 

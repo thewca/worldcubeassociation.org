@@ -47,7 +47,7 @@ describe "users" do
     person = FactoryGirl.create :person
 
     # attempt to sign in
-    post_via_redirect user_session_path, 'user[login]' => person.id, 'user[password]' => "a password"
+    post_via_redirect user_session_path, 'user[login]' => person.wca_id, 'user[password]' => "a password"
     expect(response).to be_success
     expect(response.body).to include "It looks like you have not created a WCA website account yet"
   end
@@ -56,7 +56,7 @@ describe "users" do
     person = FactoryGirl.create :person
 
     # attempt to reset password
-    post_via_redirect user_password_path, 'user[login]' => person.id, 'user[password]' => "a password"
+    post_via_redirect user_password_path, 'user[login]' => person.wca_id, 'user[password]' => "a password"
     expect(response).to be_success
     expect(response.body).to include "It looks like you have not created a WCA website account yet"
   end

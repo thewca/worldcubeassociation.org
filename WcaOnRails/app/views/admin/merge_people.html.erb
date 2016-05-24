@@ -14,7 +14,7 @@
       <%= f.input :person2_wca_id, as: :user_ids, persons_table: true, only_one: true, label: "Person 2" %>
 
       <button type="submit" class="btn btn-success" data-confirm="Are you sure you want to merge Person 2 into Person 1? Person 2 will be deleted.">
-        <i class="fa fa-code-fork"></i> Merge
+        <%= icon("code-fork", "Merge") %>
       </button>
     <% end %>
   <% end %>

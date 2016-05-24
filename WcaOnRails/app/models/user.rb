@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, foreign_key: "wca_id"
-  belongs_to :unconfirmed_person, foreign_key: "unconfirmed_wca_id", class_name: "Person"
+  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id"
+  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person"
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
@@ -519,14 +519,9 @@ class User < ActiveRecord::Base
   def self.search(query, params: {})
     sql_query = "%#{query}%"
 
-    users = nil
-    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
-      users = User
-
-      users = users.where.not(confirmed_at: nil)
-
-      # Ignore dummy accounts
-      users = users.not_dummy_account
+    users = Person
+    unless ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
+      users = User.where.not(confirmed_at: nil).not_dummy_account
 
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
         users = users.where.not(delegate_status: nil)
@@ -535,12 +530,9 @@ class User < ActiveRecord::Base
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
         users = users.where.not(wca_id: nil)
       end
-      users = users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query).order(:name)
-    else
-      users = Person.where("name LIKE :sql_query OR id LIKE :sql_query", sql_query: sql_query).order(:name)
     end
 
-    users
+    users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query).order(:name)
   end
 
   attr_accessor :doorkeeper_token

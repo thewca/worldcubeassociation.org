@@ -47,10 +47,10 @@ RSpec.describe NotificationsController, type: :controller do
       it "shows WCA ID claims for confirmed accounts, but not for unconfirmed accounts" do
         person = FactoryGirl.create :person
         user = FactoryGirl.create :user
-        user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
+        user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         unconfirmed_user = FactoryGirl.create :user, :unconfirmed
-        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
+        unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         get :index
         notifications = assigns(:notifications)
@@ -60,7 +60,7 @@ RSpec.describe NotificationsController, type: :controller do
             url: edit_competition_path(unconfirmed_competition),
           },
           {
-            text: "#{user.email} has claimed WCA ID #{person.id}",
+            text: "#{user.email} has claimed WCA ID #{person.wca_id}",
             url: edit_user_path(user.id, anchor: "wca_id"),
           },
         ]
@@ -132,7 +132,7 @@ RSpec.describe NotificationsController, type: :controller do
         it "tells me who is working on it" do
           person = FactoryGirl.create :person
           delegate = FactoryGirl.create :delegate
-          user.unconfirmed_wca_id = person.id
+          user.unconfirmed_wca_id = person.wca_id
           user.delegate_to_handle_wca_id_claim = delegate
           user.dob_verification = person.dob
           user.save!
@@ -141,7 +141,7 @@ RSpec.describe NotificationsController, type: :controller do
           notifications = assigns(:notifications)
           expect(notifications).to eq [
             {
-              text: "Waiting for #{delegate.name} to assign you WCA ID #{person.id}",
+              text: "Waiting for #{delegate.name} to assign you WCA ID #{person.wca_id}",
               url: profile_claim_wca_id_path,
             },
           ]

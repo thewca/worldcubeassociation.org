@@ -91,12 +91,12 @@ describe Api::V0::ApiController do
       let!(:person) { FactoryGirl.create(:person, name: "Bob") }
 
       it "can find by wca_id" do
-        get :users_search, q: person.id, persons_table: true
+        get :users_search, q: person.wca_id, persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq person.id
-        expect(json["result"][0]["wca_id"]).to eq person.id
+        expect(json["result"][0]["id"]).to eq person.wca_id
+        expect(json["result"][0]["wca_id"]).to eq person.wca_id
         expect(json['result'][0]['avatar']['url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['result'][0]['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['result'][0]['avatar']['is_default']).to eq true
@@ -107,8 +107,8 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq person.id
-        expect(json["result"][0]["wca_id"]).to eq person.id
+        expect(json["result"][0]["id"]).to eq person.wca_id
+        expect(json["result"][0]["wca_id"]).to eq person.wca_id
       end
     end
 
@@ -350,7 +350,7 @@ describe Api::V0::ApiController do
       let(:user) do
         FactoryGirl.create :user, {
           avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
-          wca_id: person.id,
+          wca_id: person.wca_id,
         }
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }

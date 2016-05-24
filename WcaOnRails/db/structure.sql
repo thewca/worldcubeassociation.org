@@ -256,7 +256,9 @@ CREATE TABLE `Persons` (
   `month` tinyint(4) NOT NULL DEFAULT '0',
   `day` tinyint(4) NOT NULL DEFAULT '0',
   `comments` varchar(40) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`,`subId`),
+  `rails_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`rails_id`),
+  UNIQUE KEY `index_Persons_on_id_and_subId` (`id`,`subId`),
   KEY `Persons_fk_country` (`countryId`),
   KEY `Persons_id` (`id`),
   KEY `Persons_name` (`name`)
@@ -633,6 +635,27 @@ CREATE TABLE `posts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Temporary view structure for view `rails_persons`
+--
+
+DROP TABLE IF EXISTS `rails_persons`;
+/*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `rails_persons` AS SELECT
+ 1 AS `id`,
+ 1 AS `wca_id`,
+ 1 AS `subId`,
+ 1 AS `name`,
+ 1 AS `countryId`,
+ 1 AS `gender`,
+ 1 AS `year`,
+ 1 AS `month`,
+ 1 AS `day`,
+ 1 AS `comments`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `registration_events`
 --
 
@@ -802,6 +825,24 @@ CREATE TABLE `votes` (
   CONSTRAINT `votes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Final view structure for view `rails_persons`
+--
+
+/*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments` from `Persons` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -946,3 +987,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160518020433');
 INSERT INTO schema_migrations (version) VALUES ('20160518045741');
 
 INSERT INTO schema_migrations (version) VALUES ('20160520230353');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517140653');
