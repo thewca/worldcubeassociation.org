@@ -6,7 +6,7 @@
     <%= f.hidden_field :updated_at %>
 
     <div class="form-inputs">
-      <%= f.input :content %>
+      <%= f.input :content, input_html: { class: "markdown-editor" } %>
     </div>
 
     <div class="form-actions">
