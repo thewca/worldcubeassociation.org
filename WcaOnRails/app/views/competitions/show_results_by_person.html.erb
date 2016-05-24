@@ -5,7 +5,7 @@
     <% @competition.person_names_with_results.each do |personName, results| %>
       <h3>
         <% first_result = results.first %>
-        <%= anchorable "#{personName} - #{first_result.countryId}", first_result.wca_id %>
+        <%= anchorable "#{personName} - #{first_result.country.name}", first_result.wca_id %>
         <%= link_to "WCA profile", first_result.results_path %>
       </h3>
       <%= render "results_table", results: results, hide_name: true, hide_country: true %>
