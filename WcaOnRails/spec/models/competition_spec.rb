@@ -207,7 +207,7 @@ RSpec.describe Competition do
   end
 
   it "ensures all attributes are defined as either cloneable or uncloneable" do
-    expect(Competition.column_names()).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
+    expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 
   describe "validates website" do
