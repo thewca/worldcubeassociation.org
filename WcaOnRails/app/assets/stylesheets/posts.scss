@@ -6,3 +6,9 @@ div.pagination {
 textarea[name="post[body]"] {
   height: 400px;
 }
+
+.panel-wca-post .panel-title .pull-right {
+  a {
+    text-decoration: none;
+  }
+}

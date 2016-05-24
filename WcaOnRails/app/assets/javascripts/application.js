@@ -29,6 +29,7 @@
 //= require markerclusterer
 //= require bootstrap-table
 //= require autosize
+//= require simplemde
 //= require_self
 //= require_tree .
 
@@ -177,6 +178,16 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
+  $('.markdown-editor').each(function() {
+    new SimpleMDE({
+      element: this,
+      spellChecker: false,
+      promptURLs: true,
+
+      // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
+      status: false,
+    });
+  });
 
   var $tablesToFloatHeaders = $('table.floatThead');
   $tablesToFloatHeaders.floatThead({
