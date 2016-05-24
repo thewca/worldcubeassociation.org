@@ -11,7 +11,7 @@
 
     <div class="form-actions">
       <%= f.button :submit %>
-      <%= button_tag(type: 'submit', name: "delegate_report[posted]", value: true, class: "btn btn-danger", data: { confirm: "You are about to post your report, are you sure you want to do this?" }) do %>
+      <%= button_tag(type: 'submit', name: "delegate_report[posted]", value: true, class: "btn btn-danger", data: { confirm: "You are about to post your report, are you sure you want to do this? Once posted, a report cannot be changed." }) do %>
         Post the report
       <% end %>
     </div>
