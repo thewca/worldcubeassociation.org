@@ -58,6 +58,10 @@ class LightResult
     Format.find_by_id(formatId)
   end
 
+  def country
+    Country.find(countryId)
+  end
+
   def wca_id
     @personId
   end
