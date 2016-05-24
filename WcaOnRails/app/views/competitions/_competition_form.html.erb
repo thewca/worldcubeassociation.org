@@ -273,7 +273,7 @@
           <%= f.button :submit, t('.submit_create_value'), class: "btn-primary" %>
         <% end %>
 
-        <% if !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
+        <% if @competition.persisted? && !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>
           <%= button_tag(type: 'submit', name: "commit", value: "Confirm", class: "btn btn-warning", data: { confirm: t('.submit_confirm') }) do %>
             <%= t '.submit_confirm_value' %>
           <% end %>
