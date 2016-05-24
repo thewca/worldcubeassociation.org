@@ -135,8 +135,11 @@ function competitionDate ( $competition ) {
 
 function chosenRegionName ( $visibleWorld = false ) {
   global $chosenRegionId;
-  if ( !$chosenRegionId && $visibleWorld ) return 'World';
-  return preg_replace( '/^_/', '', $chosenRegionId );
+  if ( !$chosenRegionId && $visibleWorld )
+    return 'World';
+  if( preg_match( '/^_/', $chosenRegionId ) )
+    return substr($chosenRegionId, 1);
+  return dbQuery( "SELECT name FROM Countries WHERE id='$chosenRegionId'" )[0]['name'];
 }
 
 function chosenEventName () {
@@ -178,7 +181,7 @@ function yearCondition () {
 
 function regionCondition ( $countrySource ) {
   global $chosenRegionId;
-  
+
   if( preg_match( '/^(world)?$/i', $chosenRegionId ))
     return '';
 
