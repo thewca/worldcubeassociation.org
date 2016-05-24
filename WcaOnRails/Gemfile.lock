@@ -287,6 +287,7 @@ GEM
       railties (= 4.2.1)
       sprockets-rails
     rails-assets-autosize (3.0.15)
+    rails-assets-simplemde (1.10.1)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -460,6 +461,7 @@ DEPENDENCIES
   rack-cors
   rails (= 4.2.1)
   rails-assets-autosize!
+  rails-assets-simplemde!
   rake
   recaptcha
   redcarpet (~> 3.3)

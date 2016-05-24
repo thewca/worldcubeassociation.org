@@ -1,0 +1,6 @@
+// Styles for simplemde-markdown-editor
+.CodeMirror-fullscreen,
+.editor-toolbar.fullscreen,
+.editor-preview-active-side {
+  z-index: 1001; // on top of navbar
+}

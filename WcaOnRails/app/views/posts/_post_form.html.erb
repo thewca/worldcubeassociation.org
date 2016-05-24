@@ -3,7 +3,7 @@
   <%= render 'shared/error_messages', object: f.object %>
 
   <%= f.input :title, disabled: !editable_post_fields.include?(:title), autofocus: true %>
-  <%= f.input :body if editable_post_fields.include? :body %>
+  <%= f.input :body, input_html: { class: 'markdown-editor' } if editable_post_fields.include? :body %>
   <%= f.input :sticky if editable_post_fields.include? :sticky %>
   <%= f.button :submit %>
 

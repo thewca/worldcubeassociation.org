@@ -29,6 +29,7 @@
 //= require markerclusterer
 //= require bootstrap-table
 //= require autosize
+//= require simplemde
 //= require_self
 //= require_tree .
 
@@ -177,6 +178,13 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
+  $('.markdown-editor').each(function() {
+    new SimpleMDE({
+      element: this,
+      spellChecker: false,
+      promptURLs: true,
+    });
+  });
 
   var $tablesToFloatHeaders = $('table.floatThead');
   $tablesToFloatHeaders.floatThead({
