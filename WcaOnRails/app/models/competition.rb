@@ -15,6 +15,8 @@ class Competition < ActiveRecord::Base
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
 
+  CLONEABLE_ATTRIBUTES = %w(cityName countryId information eventSpecs venue venueAddress venueDetails website latitude longitude contact remarks use_wca_registration guests_enabled)
+  UNCLONEABLE_ATTRIBUTES = %w(id name year month day endMonth endDay cellName showAtAll isConfirmed registration_open registration_close results_posted_at)
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
@@ -100,16 +102,10 @@ class Competition < ActiveRecord::Base
   end
 
   def build_clone
-    # Don't clone the following attributes.
-    attributes_to_clone = attributes
-    %w(id name cellName year month day endMonth endDay registration_open registration_close results_posted_at).each { |attribute| attributes_to_clone.delete attribute }
-    clone = Competition.new
-    clone.assign_attributes(attributes_to_clone)
-    clone.organizers = organizers
-    clone.delegates = delegates
-    clone.showAtAll = false
-    clone.isConfirmed = false
-    clone
+    Competition.new(attributes.except(*UNCLONEABLE_ATTRIBUTES)).tap do |clone|
+      clone.organizers = organizers
+      clone.delegates = delegates
+    end
   end
 
   attr_writer :start_date, :end_date
