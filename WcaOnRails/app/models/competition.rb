@@ -25,7 +25,7 @@ class Competition < ActiveRecord::Base
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
-    self.persisted? || name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE
+    self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: ENDS_WITH_YEAR_RE, message: "must end with a year"  }
@@ -102,7 +102,7 @@ class Competition < ActiveRecord::Base
   end
 
   def build_clone
-    Competition.new(attributes.except(*UNCLONEABLE_ATTRIBUTES)).tap do |clone|
+    Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.organizers = organizers
       clone.delegates = delegates
     end

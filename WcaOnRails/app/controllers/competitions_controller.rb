@@ -242,16 +242,14 @@ class CompetitionsController < ApplicationController
   end
 
   def nearby_competitions
-    @competition = Competition.new
-    @competition.assign_attributes(competition_params)
+    @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render partial: 'nearby_competitions'
   end
 
   def time_until_competition
-    @competition = Competition.new
-    @competition.assign_attributes(competition_params)
+    @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render json: {
