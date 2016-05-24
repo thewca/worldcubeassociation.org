@@ -34,7 +34,7 @@ class Post < ActiveRecord::Base
   end
 
   def deletable
-    !is_crash_course_post?
+    persisted? && !is_crash_course_post?
   end
 
   def edit_path
