@@ -15,8 +15,37 @@ class Competition < ActiveRecord::Base
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
 
-  CLONEABLE_ATTRIBUTES = %w(cityName countryId information eventSpecs venue venueAddress venueDetails website latitude longitude contact remarks use_wca_registration guests_enabled).freeze
-  UNCLONEABLE_ATTRIBUTES = %w(id name year month day endMonth endDay cellName showAtAll isConfirmed registration_open registration_close results_posted_at).freeze
+  CLONEABLE_ATTRIBUTES = %w(
+    cityName
+    countryId
+    information
+    eventSpecs
+    venue
+    venueAddress
+    venueDetails
+    website
+    latitude
+    longitude
+    contact
+    remarks
+    use_wca_registration
+    guests_enabled
+  ).freeze
+  UNCLONEABLE_ATTRIBUTES = %w(
+    id
+    name
+    year
+    month
+    day
+    endMonth
+    endDay
+    cellName
+    showAtAll
+    isConfirmed
+    registration_open
+    registration_close
+    results_posted_at
+  ).freeze
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
