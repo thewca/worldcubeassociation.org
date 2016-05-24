@@ -183,6 +183,9 @@ $(function() {
       element: this,
       spellChecker: false,
       promptURLs: true,
+
+      // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
+      status: false,
     });
   });
 
