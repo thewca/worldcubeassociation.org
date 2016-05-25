@@ -43,8 +43,9 @@ Rails.application.routes.draw do
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
   end
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
-  get 'competitions/:id/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
-  get 'competitions/:id/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
+  get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
+  get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
+  get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
 
   resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'

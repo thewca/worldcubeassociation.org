@@ -1,26 +1,4 @@
-onPage('competitions#new, competitions#create', function() {
-  var $competitionSelect = $('#competition_competition_id_to_clone');
-  if($competitionSelect.length > 0) {
-    var selectize = $competitionSelect[0].selectize;
-
-    var competitionChanged = function() {
-      var competitionId = selectize.getValue();
-      var enteredCompetitionId = selectize.$control_input.val();
-      var $createCompetition = $('#create-competition');
-      //TODO I18n for this, and in js in general
-      $createCompetition.text((enteredCompetitionId || competitionId) ? "Clone competition" : "Create competition");
-      // If they entered something into the competition field, but have not
-      // actually selected a competition, then disable the clone competition button.
-      $createCompetition.prop("disabled", enteredCompetitionId && !competitionId);
-    };
-    competitionChanged();
-
-    selectize.on("change", competitionChanged);
-    selectize.$control_input.on("input", competitionChanged);
-  }
-});
-
-onPage('competitions#edit, competitions#update', function() {
+onPage('competitions#edit, competitions#update, competitions#admin_edit, competitions#new, competitions#create, competitions#clone_competition', function() {
   var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
   if($useWcaRegistrationInput.length > 0) {
     var $registrationOptionsAreas = $('.wca-registration-options');
@@ -29,7 +7,6 @@ onPage('competitions#edit, competitions#update', function() {
     }).trigger("change");
   }
 });
-
 
 // Creates the competitions map and marker cluster if they don't already exist. Returns the map.
 function getCompetitionsMap() {

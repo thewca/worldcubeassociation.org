@@ -172,17 +172,17 @@ describe CompetitionsController do
       end
 
       it 'creates a new competition' do
-        post :create, competition: { name: "Test 2015", competition_id_to_clone: "" }
+        post :create, competition: { name: "Test 2015", delegate_ids: delegate.id }
         expect(response).to redirect_to edit_competition_path("Test2015")
-        expect(flash[:success]).to eq "Successfully created new competition!"
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
-        expect(new_comp.delegates).to include subject.current_user
+        expect(new_comp.name).to eq "Test 2015"
+        expect(new_comp.cellName).to eq "Test 2015"
       end
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
         competition = FactoryGirl.create :competition, :with_delegate
-        post :create, competition: { name: competition.name, competition_id_to_clone: "" }
+        post :create, competition: { name: competition.name }
         expect(response).to render_template(:new)
         new_comp = assigns(:competition)
         expect(new_comp.errors.messages[:name]).to eq ["has already been taken"]
@@ -199,12 +199,10 @@ describe CompetitionsController do
         competition.delegates << user1
         competition.organizers << user2
         competition.organizers << user3
-        post :create, competition: { name: "Test 2015", competition_id_to_clone: competition.id }
-        expect(response).to redirect_to edit_competition_path("Test2015")
-        expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
+        get :clone_competition, id: competition
         new_comp = assigns(:competition)
-        expect(new_comp.id).to eq "Test2015"
-        expect(new_comp.name).to eq "Test 2015"
+        expect(new_comp.id).to eq ""
+        expect(new_comp.name).to eq ""
         # When cloning a competition, we don't want to clone its showAtAll,
         # isConfirmed, and results_posted_at attributes.
         expect(new_comp.showAtAll).to eq false
@@ -225,24 +223,15 @@ describe CompetitionsController do
       it 'clones a competition that they delegated' do
         # First, make ourselves the delegate of the competition we're going to clone.
         competition.delegates = [delegate]
-        post :create, competition: { name: "Test 2015", competition_id_to_clone: competition.id }
-        expect(response).to redirect_to edit_competition_path("Test2015")
-        expect(flash[:success]).to eq "Successfully cloned #{competition.id}!"
+        get :clone_competition, id: competition
         new_comp = assigns(:competition)
-        expect(new_comp.id).to eq "Test2015"
+        expect(new_comp.id).to eq ""
 
         # Cloning a competition should clone its organizers.
         expect(new_comp.organizers.sort_by(&:id)).to eq []
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq [delegate]
-      end
-
-      it 'clones an non existant competition' do
-        post :create, competition: { name: "Test 2015", competition_id_to_clone: "invalidcompetitionid" }
-        expect(response).to render_template(:new)
-        invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:competition_id_to_clone]).to eq ["invalid"]
       end
     end
   end

@@ -206,6 +206,10 @@ RSpec.describe Competition do
     expect(competition.longitude).to eq 4.6*1e6
   end
 
+  it "ensures all attributes are defined as either cloneable or uncloneable" do
+    expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
+  end
+
   describe "validates website" do
     it "likes http://foo.com" do
       competition = FactoryGirl.build :competition, website: "http://foo.com"

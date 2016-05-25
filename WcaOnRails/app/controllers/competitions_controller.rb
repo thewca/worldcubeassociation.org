@@ -29,6 +29,9 @@ class CompetitionsController < ApplicationController
 
   def new
     @competition = Competition.new
+    if current_user.any_kind_of_delegate?
+      @competition.delegates = [current_user]
+    end
   end
 
   # Normalizes the params that old links to index still work.
@@ -104,20 +107,10 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    new_competition_params = params.require(:competition).permit(:name, :competition_id_to_clone)
-    @competition = Competition.new(new_competition_params.merge(
-                                   registration_open: 1.week.from_now,
-                                   registration_close: 2.weeks.from_now))
-    if current_user.any_kind_of_delegate?
-      @competition.delegates |= [current_user]
-    end
+    @competition = Competition.new(competition_params)
 
     if @competition.save
-      if @competition.competition_id_to_clone.present?
-        flash[:success] = "Successfully cloned #{@competition.competition_id_to_clone}!"
-      else
-        flash[:success] = "Successfully created new competition!"
-      end
+      flash[:success] = "Successfully created new competition!"
       redirect_to edit_competition_path(@competition)
     else
       # Show id errors under name, since we don't actually show an
@@ -239,17 +232,24 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
+  def clone_competition
+    competition_to_clone = Competition.find(params[:id])
+    @competition = competition_to_clone.build_clone
+    if current_user.any_kind_of_delegate?
+      @competition.delegates |= [current_user]
+    end
+    render :new
+  end
+
   def nearby_competitions
-    @competition = Competition.find(params[:id])
-    @competition.assign_attributes(competition_params)
+    @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render partial: 'nearby_competitions'
   end
 
   def time_until_competition
-    @competition = Competition.find(params[:id])
-    @competition.assign_attributes(competition_params)
+    @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     render json: {

@@ -2,13 +2,8 @@
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
-
-  <%= simple_form_for @competition, html: { class: 'form-horizontal new-competition' }  do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-
-    <%= f.input :name, required: true, autofocus: true %>
-    <%= f.input :competition_id_to_clone, as: :competition_id, only_one: true %>
-
-    <button type="submit" id="create-competition" class="btn btn-success"></button>
+  <% if action_name == "new" %>
+    <%= alert :info, 'To clone an existing competition visit the information page for that competition and click the "Clone" link in the menu.', note: true %>
   <% end %>
+  <%= render 'competition_form' %>
 </div>
