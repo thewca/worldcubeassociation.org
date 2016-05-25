@@ -59,7 +59,7 @@ describe DelegateReportsController do
       expect(flash[:info]).to eq "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
       comp.reload
       expect(comp.delegate_report.content).to eq "My newer content"
-      expect(comp.delegate_report.posted).to eq true
+      expect(comp.delegate_report.posted?).to eq true
 
       # Try to update the report when it's posted.
       post :update, competition_id: comp.id, delegate_report: { content: "My newerer content" }

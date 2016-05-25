@@ -4,4 +4,8 @@ class DelegateReport < ActiveRecord::Base
   def posted?
     !!self.posted_at
   end
+
+  def posted=(new_posted)
+    self.posted_at = (new_posted ? Time.now : nil)
+  end
 end

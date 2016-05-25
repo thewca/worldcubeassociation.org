@@ -1,4 +1,6 @@
 class CompetitionsMailer < ApplicationMailer
+  helper :markdown
+
   def notify_board_of_confirmed_competition(confirmer, competition)
     @competition = competition
     @confirmer = confirmer
