@@ -123,7 +123,6 @@ class Competition < ActiveRecord::Base
     end
 
     if user && user.can_edit_competition_report?(self) && is_over? && !delegate_report.posted?
-      url_helpers = Rails.application.routes.url_helpers
       path_to_edit_report = Rails.application.routes.url_helpers.competition_report_edit_path(self)
       link_to_edit_report = ActionController::Base.helpers.link_to('here', path_to_edit_report)
       warnings[:report_not_submitted] = (

@@ -9,6 +9,6 @@ class CreateDelegateReports < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_index :delegate_reports, :competition_id, unique:true
+    add_index :delegate_reports, :competition_id, unique: true
   end
 end

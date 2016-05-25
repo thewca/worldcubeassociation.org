@@ -160,7 +160,7 @@ RSpec.describe Competition do
       delegate = competition.delegates.first
 
       expect(competition.warnings_for(nil)[:report_not_submitted]).to eq nil
-      expect(competition.warnings_for(delegate)[:report_not_submitted]).to match /Your report is not posted yet! Click .*here.* to work on it./
+      expect(competition.warnings_for(delegate)[:report_not_submitted]).to match(/Your report is not posted yet! Click .*here.* to work on it./)
 
       # Don't bug delegates about their reports for competitions that have not happened yet.
       competition.start_date = 1.day.from_now.strftime("%F")

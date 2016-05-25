@@ -32,3 +32,9 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Max: 23
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
