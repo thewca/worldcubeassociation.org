@@ -23,6 +23,7 @@ en:
   common:
     here: "here"
     wca_id: "WCA ID"
+    search: "Search"
   oauth:
     applications:
       nav:
@@ -388,3 +389,6 @@ en:
       post_announcement: "Post competition announcement"
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+  persons:
+    index:
+      name_or_wca_id: "Name or WCA ID"
