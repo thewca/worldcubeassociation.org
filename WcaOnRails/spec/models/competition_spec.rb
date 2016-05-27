@@ -156,7 +156,7 @@ RSpec.describe Competition do
     end
 
     it "warns if delegate report needs to be submitted" do
-      competition = FactoryGirl.create :competition, :with_delegate, starts: 1.day.ago
+      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
       delegate = competition.delegates.first
 
       expect(competition.warnings_for(nil)[:report_not_submitted]).to eq nil
