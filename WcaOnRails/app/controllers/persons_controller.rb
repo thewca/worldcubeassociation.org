@@ -14,7 +14,6 @@ class PersonsController < ApplicationController
         end
         persons = persons.where("rails_persons.name LIKE :input OR wca_id LIKE :input", input: "%#{params[:search]}%")
         persons = persons.order(:name, :countryId)
-        # support for swapped names ?
 
         render json: {
           total: persons.count,

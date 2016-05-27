@@ -32,7 +32,11 @@
     <% end %>
 
     <% if !@persons.empty? %>
-      <h2><%= anchorable "People" %></h2>
+      <h2>
+        <%= anchorable "People" %>
+        |
+        <%= link_to content_tag(:small, icon("search", "Advanced search")), persons_path(search: params[:q]) %>
+      </h2>
       <table class="table table-nonfluid table-vertical-align-middle">
         <tbody>
           <% @persons.includes(:user).each do |person| %>
