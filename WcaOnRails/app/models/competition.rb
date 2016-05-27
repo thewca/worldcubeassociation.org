@@ -122,7 +122,7 @@ class Competition < ActiveRecord::Base
       end
     end
 
-    if user && user.can_edit_delegate_report?(delegate_report) && is_over? && !delegate_report.posted?
+    if !new_record? && user && user.can_edit_delegate_report?(delegate_report)
       path_to_edit_report = Rails.application.routes.url_helpers.delegate_report_edit_path(self)
       link_to_edit_report = ActionController::Base.helpers.link_to('here', path_to_edit_report)
       warnings[:report_not_submitted] = (
@@ -592,6 +592,7 @@ class Competition < ActiveRecord::Base
   end
 
   def delegate_report
+    raise if new_record?
     DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
       dr.competition_id = self.id
       dr.content = "Hey, enter some text here"
