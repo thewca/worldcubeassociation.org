@@ -1,6 +1,23 @@
-#persons-query-form {
-  #region,
+#persons-query-fields {
   #search-box {
-    display: block;
+    margin: 15px 0;
   }
+}
+
+.persons-table {
+  .name {
+    width: 50%;
+  }
+
+  .wca-id {
+    width: 10%;
+  }
+  .country {
+    width: 40%;
+  }
+}
+
+.fixed-table-loading,
+.pagination-detail {
+  display: none !important;
 }

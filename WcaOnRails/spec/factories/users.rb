@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user, aliases: [:author] do
     name { Faker::Name.name }
     email { Faker::Internet.email }
-    country_iso2 "US"
+    country_iso2 { Country.all_real.sample.iso2 }
     gender "m"
     dob Date.new(1980, 1, 1)
     password "wca"

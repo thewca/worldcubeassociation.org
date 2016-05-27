@@ -3,20 +3,27 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= form_tag persons_path, remote: true, class: "form-inline", id: "persons-query-form" do %>
+  <div id="persons-query-fields" class="form-inline">
     <div class="form-group">
-      <%= label_tag :region, t('activerecord.attributes.user.region') %>
-      <%= select_tag(:region, content_tag(:option, "All", value: "all") + grouped_options_for_select(@regions, params[:region]), class: "form-control") %>
+      <%= select_tag(:region, content_tag(:option, t('.all_regions'), value: "all") + grouped_options_for_select(@regions, params[:region]), class: "form-control") %>
     </div>
-    <div class="form-group">
-      <%= label_tag :search, t('common.search') %>
-      <div id="search-box">
-        <div class="input-group">
-          <%= content_tag :span, icon("search"), class: "input-group-addon", title: t('.name_or_wca_id'),
-                                                 data: { toggle: "tooltip", placement: "top" } %>
-          <%= text_field_tag :search, params[:search], class: "form-control" %>
-        </div>
+    <div id="search-box" class="form-group">
+      <div class="input-group">
+        <%= content_tag :span, icon("search"), class: "input-group-addon" %>
+        <%= text_field_tag :search, params[:search], placeholder: t('.name_or_wca_id'), class: "form-control" %>
       </div>
     </div>
+  </div>
+
+  <%= wca_table table_class: "persons-table",
+                data: { toggle: "table", pagination: true, side_pagination: "server", url: persons_path,
+                        query_params: "queryParams" } do %>
+    <thead>
+      <tr>
+        <th class="name" data-field="name"><%=t '.name' %></th>
+        <th class="wca-id" data-field="wca_id"><%=t 'common.wca_id' %></th>
+        <th class="country" data-field="country"><%=t '.country' %></th>
+      </tr>
+    </thead>
   <% end %>
 </div>
