@@ -45,7 +45,6 @@ class DelegateReportsController < ApplicationController
         redirect_to competition_report_edit_path(@competition)
       end
     else
-      flash.now[:danger] = "Could not update the report!"
       render :edit
     end
   end
