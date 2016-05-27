@@ -2,7 +2,7 @@
 
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
-  <%= simple_form_for(@delegate_report, url: competition_report_path(@competition.id)) do |f| %>
+  <%= simple_form_for(@delegate_report) do |f| %>
     <%= render 'shared/error_messages', object: @delegate_report %>
 
     <%= f.hidden_field :updated_at %>
@@ -13,7 +13,11 @@
 
     <div class="form-actions">
       <%= f.button :submit %>
-      <%= button_tag(type: 'submit', name: "delegate_report[posted]", value: true, class: "btn btn-danger", data: { confirm: "You are about to post your report, are you sure you want to do this? Once posted, a report cannot be changed." }) do %>
+      <%= button_tag(type: 'submit',
+                     name: "delegate_report[posted]",
+                     value: true,
+                     class: "btn btn-danger",
+                     data: { confirm: "You are about to post your report, are you sure you want to do this? Once posted, a report cannot be changed." }) do %>
         Post the report
       <% end %>
     </div>

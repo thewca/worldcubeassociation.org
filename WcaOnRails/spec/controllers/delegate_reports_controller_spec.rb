@@ -45,7 +45,7 @@ describe DelegateReportsController do
 
     it "can edit report" do
       post :update, competition_id: comp.id, delegate_report: { content: "My new content" }
-      expect(response).to redirect_to(competition_report_edit_path(comp))
+      expect(response).to redirect_to(delegate_report_edit_path(comp))
       comp.reload
       expect(comp.delegate_report.content).to eq "My new content"
     end
@@ -54,7 +54,7 @@ describe DelegateReportsController do
       # Update the content *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original
       post :update, competition_id: comp.id, delegate_report: { content: "My newer content", posted: true }
-      expect(response).to redirect_to(competition_report_path(comp))
+      expect(response).to redirect_to(delegate_report_path(comp))
       assert_enqueued_jobs 1
       expect(flash[:info]).to eq "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
       comp.reload

@@ -64,8 +64,8 @@
               <% end %>
             </td>
             <td>
-              <% if current_user.can_edit_competition_report?(competition) && competition.is_over? %>
-                <%= link_to "Report", competition_report_edit_path(competition) %>
+              <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
+                <%= link_to "Report", delegate_report_path(competition) %>
               <% end %>
             </td>
             <td class="big-column"></td>

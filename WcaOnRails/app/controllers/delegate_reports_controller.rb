@@ -1,10 +1,10 @@
 class DelegateReportsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action -> { redirect_unless_user(:can_view_delegate_report?, competition_from_params) }, only: [
+  before_action -> { redirect_unless_user(:can_view_delegate_report?, competition_from_params.delegate_report) }, only: [
     :show,
   ]
-  before_action -> { redirect_unless_user(:can_edit_competition_report?, competition_from_params) }, only: [
+  before_action -> { redirect_unless_user(:can_edit_delegate_report?, competition_from_params.delegate_report) }, only: [
     :edit,
     :update,
   ]
@@ -36,9 +36,9 @@ class DelegateReportsController < ApplicationController
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
           flash[:info] = "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
         end
-        redirect_to competition_report_path(@competition)
+        redirect_to delegate_report_path(@competition)
       else
-        redirect_to competition_report_edit_path(@competition)
+        redirect_to delegate_report_edit_path(@competition)
       end
     else
       render :edit

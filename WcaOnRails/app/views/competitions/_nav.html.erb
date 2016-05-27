@@ -60,10 +60,10 @@
           fa_icon: "clone",
         }
       end
-      if current_user && current_user.can_view_delegate_report?(@competition)
+      if current_user && current_user.can_view_delegate_report?(@competition.delegate_report)
         nav_items << {
           text: t('.menu.delegate_report'),
-          path: competition_report_path(@competition),
+          path: delegate_report_path(@competition),
           fa_icon: "pencil-square-o"
         }
       end

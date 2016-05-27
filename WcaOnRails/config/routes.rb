@@ -38,13 +38,15 @@ Rails.application.routes.draw do
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
-    get 'report/edit' => 'delegate_reports#edit'
-    get 'report' => 'delegate_reports#show'
-    patch 'report' => 'delegate_reports#update'
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
   end
+
+  get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
+  get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
+  patch 'competitions/:competition_id/report' => 'delegate_reports#update'
+
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition

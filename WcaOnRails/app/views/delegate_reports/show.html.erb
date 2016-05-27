@@ -6,14 +6,14 @@
     <%=md @delegate_report.content %>
   </div>
 
-  <% if @delegate_report.posted_at %>
+  <% if @delegate_report.posted? %>
     <p>
       <strong>Posted at:</strong>
       <%= wca_local_time(@delegate_report.posted_at) %>
     </p>
   <% end %>
 
-  <% if current_user.can_edit_competition_report?(@competition) %>
-    <%= link_to 'Edit', competition_report_edit_path(@competition) %>
+  <% if current_user.can_edit_delegate_report?(@competition.delegate_report) %>
+    <%= link_to icon("pencil", "Edit"), delegate_report_edit_path(@competition), class: "btn btn-default" %>
   <% end %>
 <% end %>
