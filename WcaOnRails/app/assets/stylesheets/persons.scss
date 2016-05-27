@@ -6,14 +6,21 @@
 
 .persons-table {
   .name {
-    width: 50%;
+    width: 40%;
   }
 
   .wca-id {
     width: 10%;
   }
+
   .country {
-    width: 40%;
+    width: 30%;
+  }
+
+  .competitions-count,
+  .podiums-count {
+    width: 10%;
+    text-align: center;
   }
 }
 

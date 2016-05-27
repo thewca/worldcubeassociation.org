@@ -258,7 +258,8 @@ en:
       edit_thumbnail: "Click to edit thumbnail"
       manage_pending: "Manage pending avatars"
       change_password: "Change password"
-      have_no_wca_id_html: "You do not have a WCA ID assigned yet. If you have competed before, request to have your WCA ID connected to your account %{here}!"
+      have_no_wca_id_html: "You do not have a WCA ID assigned yet. If you have competed before, request to have your layouts:
+    navigation:WCA ID connected to your account %{here}!"
       have_wca_id_html: "Your WCA ID is %{link_id}."
       cannot_edit:
         msg: "You cannot change your name, birthdate, gender, or country because %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
@@ -395,3 +396,5 @@ en:
       all_regions: "All regions"
       name: "Name"
       country: "Country"
+      podiums: "Podiums"
+      no_persons_found: "No person matches the given criteria."

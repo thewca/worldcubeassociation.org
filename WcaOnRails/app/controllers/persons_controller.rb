@@ -13,6 +13,7 @@ class PersonsController < ApplicationController
           persons = persons.where("countryId = :region OR continentId = :region", region: params[:region])
         end
         persons = persons.where("rails_persons.name LIKE :input OR wca_id LIKE :input", input: "%#{params[:search]}%")
+        persons = persons.order(:name, :countryId)
         # support for swapped names ?
 
         render json: {
@@ -22,6 +23,8 @@ class PersonsController < ApplicationController
               name: view_context.link_to(person.name, "/results/p.php?i=#{person.wca_id}"),
               wca_id: person.wca_id,
               country: person.country.name,
+              competitions_count: person.competitions.count,
+              podiums_count: person.results.where(roundId: [:f, :c], pos: [1, 2, 3]).where('best > 0').count,
             }
           end,
         }
