@@ -203,7 +203,7 @@ class Competition < ActiveRecord::Base
     # We hack around this by pretending our id actually didn't change, and then
     # we restore it at the end. This means we'll preseve our existing
     # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
-    # We'll fix their competition_id below in update_foreign_keys_when_id_changes.
+    # We'll fix their competition_id below in update_foreign_keys.
     new_id = self.id
     self.id = id_was
 
@@ -230,16 +230,19 @@ class Competition < ActiveRecord::Base
   # remember all the places in our database that refer to competition ids, and
   # update them. We can get rid of all this once we're done with
   # https://github.com/cubing/worldcubeassociation.org/issues/91.
-  after_save :update_foreign_keys_when_id_changes
-  def update_foreign_keys_when_id_changes
-    if id_change
-      Result.where(competitionId: id_was).update_all(competitionId: id)
-      Registration.where(competitionId: id_was).update_all(competitionId: id)
-      Scramble.where(competitionId: id_was).update_all(competitionId: id)
-      CompetitionMedium.where(competitionId: id_was).update_all(competitionId: id)
-      CompetitionDelegate.where(competition_id: id_was).update_all(competition_id: id)
-      CompetitionOrganizer.where(competition_id: id_was).update_all(competition_id: id)
-      DelegateReport.where(competition_id: id_was).update_all(competition_id: id)
+  after_save :update_foreign_keys, if: :id_changed?
+  def update_foreign_keys
+    [
+      Result,
+      Registration,
+      Scramble,
+      CompetitionMedium,
+      CompetitionDelegate,
+      CompetitionOrganizer,
+      DelegateReport,
+    ].each do |model|
+      foreign_key = model.column_names.include?("competitionId") ? "competitionId" : "competition_id"
+      model.where(foreign_key => id_was).update_all(foreign_key => id)
     end
   end
 
@@ -589,7 +592,11 @@ class Competition < ActiveRecord::Base
   end
 
   def delegate_report
-    DelegateReport.find_by_competition_id(self.id) || DelegateReport.create!(competition_id: self.id, content: "Hey, enter some text here", posted_at: nil)
+    DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
+      dr.competition_id = self.id
+      dr.content = "Hey, enter some text here"
+      dr.posted_at = nil
+    end
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some
