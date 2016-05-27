@@ -11,13 +11,20 @@ onPage('persons#index', function() {
 
   function reloadPersons() {
     $('#search-box i').removeClass('fa-search').addClass('fa-spinner fa-spin');
+
+    url = location.toString();
+    // Get region and search params.
+    params = $.param(queryParams({}));
+    url = url.replace(/persons.*/, 'persons?' + params);
+    history.replaceState(null, null, url);
+
     $table.bootstrapTable('refresh');
   }
 
   $('#region').on('change', reloadPersons);
   $('#search').on('input', _.debounce(reloadPersons, TEXT_INPUT_DEBOUNCE_MS));
 
-  $table.on('load-success.bs.table', function() {
+  $table.on('load-success.bs.table', function(e, data) {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');
   });
 });
