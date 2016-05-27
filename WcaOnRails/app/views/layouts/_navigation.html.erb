@@ -38,7 +38,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="<%= competitions_path %>"><%= icon('globe', class: 'fa-fw') %> <%= t '.all' %></a></li>
             <li><a href="<%= my_comps_path %>"><%= icon('list', class: 'fa-fw') %> <%= t '.my_competitions' %></a></li>
-            <% if current_user && current_user.can_create_competitions? %>
+            <% if current_user&.can_create_competitions? %>
               <li><a href="<%= new_competition_path %>"><%= icon('plus', class: 'fa-fw') %> <%= t '.new_competition' %></a></li>
             <% end %>
           </ul>

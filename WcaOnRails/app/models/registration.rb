@@ -94,7 +94,7 @@ class Registration < ActiveRecord::Base
 
   validate :user_can_register_for_competition
   private def user_can_register_for_competition
-    if user && user.cannot_register_for_competition_reasons.length > 0
+    if user&.cannot_register_for_competition_reasons.present?
       errors.add(:user_id, "User must be able to register for competition")
     end
   end
