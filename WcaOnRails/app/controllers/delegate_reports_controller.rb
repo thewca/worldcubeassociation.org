@@ -10,9 +10,11 @@ class DelegateReportsController < ApplicationController
   ]
 
   private def competition_from_params
-    params[:competition_id] ?
-      Competition.find(params[:competition_id]) :
+    if params[:competition_id]
+      Competition.find(params[:competition_id])
+    else
       DelegateReport.find(params[:id]).competition
+    end
   end
 
   def show
