@@ -55,7 +55,7 @@ class DelegateReportsController < ApplicationController
       :organization,
       :incidents,
       :remarks,
-      :posted
+      :posted,
     )
   end
 end

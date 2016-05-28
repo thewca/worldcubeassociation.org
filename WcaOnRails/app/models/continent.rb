@@ -15,7 +15,7 @@ class Continent
   end
 
   def self.find(id)
-    ALL_CONTINENTS_BY_ID[id] or raise "Unrecognized continent id"
+    ALL_CONTINENTS_BY_ID[id] || fail("Unrecognized continent id")
   end
 
   def self.find_by_id(id)
@@ -30,8 +30,8 @@ class Continent
     id.hash
   end
 
-  def eql?(o)
-    id == o.id
+  def eql?(other)
+    id == other.id
   end
 
   ALL_CONTINENTS = [
