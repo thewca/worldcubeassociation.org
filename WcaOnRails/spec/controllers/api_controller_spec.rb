@@ -1,5 +1,11 @@
 require 'rails_helper'
 
+def api_sign_in_as(user, scopes: nil)
+  scopes = Doorkeeper::OAuth::Scopes.new if scopes.nil?
+  token = double acceptable?: true, resource_owner_id: user.id, scopes: scopes
+  allow(controller).to receive(:doorkeeper_token) { token }
+end
+
 describe Api::V0::ApiController do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
@@ -337,6 +343,88 @@ describe Api::V0::ApiController do
       end
     end
 
+    context 'signed in as board member' do
+      before :each do
+        api_sign_in_as(FactoryGirl.create(:board_member))
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'board_member'
+      end
+    end
+
+    context 'signed in as senior delegate' do
+      before :each do
+        api_sign_in_as(FactoryGirl.create(:senior_delegate))
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'senior_delegate'
+      end
+    end
+
+    context 'signed in as candidate delegate' do
+      before :each do
+        api_sign_in_as(FactoryGirl.create(:candidate_delegate))
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'candidate_delegate'
+      end
+    end
+
+    context 'signed in as delegate' do
+      before :each do
+        api_sign_in_as(FactoryGirl.create(:delegate))
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'delegate'
+      end
+    end
+
+    context 'signed in as a member of some teams and a leader of others' do
+      before :each do
+        user = FactoryGirl.create :user
+
+        wrc_team = Team.find_by_friendly_id('wrc')
+        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+
+        results_team = Team.find_by_friendly_id('results')
+        FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, team_leader: true)
+
+        api_sign_in_as(user)
+      end
+
+      it 'has correct team membership' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq nil
+        expect(json['me']['teams']).to match_array [
+          { "friendly_id" => "results", "leader" => true },
+          { "friendly_id" => "wrc", "leader" => false },
+        ]
+      end
+    end
+
     context 'signed in with valid wca id' do
       let(:person) do
         FactoryGirl.create(:person, {
@@ -354,9 +442,8 @@ describe Api::V0::ApiController do
         }
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
-      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
-        allow(controller).to receive(:doorkeeper_token) {token}
+        api_sign_in_as(user, scopes: scopes)
       end
 
       it 'works' do
@@ -374,6 +461,9 @@ describe Api::V0::ApiController do
 
         expect(json['me']['dob']).to eq(nil)
         expect(json['me']['email']).to eq(nil)
+
+        expect(json['me']['delegate_status']).to eq(nil)
+        expect(json['me']['teams']).to eq([])
       end
 
       it 'can request dob scope' do
