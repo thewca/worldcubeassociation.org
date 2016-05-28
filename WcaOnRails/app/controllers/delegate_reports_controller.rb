@@ -36,7 +36,7 @@ class DelegateReportsController < ApplicationController
       if @delegate_report.posted?
         if !was_posted
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
-          flash[:info] = "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
+          flash[:info] = "Your report has been posted!"
         end
         redirect_to delegate_report_path(@competition)
       else
@@ -49,6 +49,7 @@ class DelegateReportsController < ApplicationController
 
   private def delegate_report_params
     params.require(:delegate_report).permit(
+      :schedule_url,
       :equipment,
       :venue,
       :organization,

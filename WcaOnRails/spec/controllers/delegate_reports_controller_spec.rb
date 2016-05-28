@@ -56,7 +56,7 @@ describe DelegateReportsController do
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true }
       expect(response).to redirect_to(delegate_report_path(comp))
       assert_enqueued_jobs 1
-      expect(flash[:info]).to eq "Your report has been submitted and emailed to reports@worldcubeassociation.org!"
+      expect(flash[:info]).to eq "Your report has been posted!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
       expect(comp.delegate_report.posted?).to eq true

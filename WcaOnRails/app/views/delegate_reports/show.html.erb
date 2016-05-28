@@ -2,14 +2,14 @@
 
 <%= render layout: 'nav' do %>
 
-  <%= render @delegate_report %>
-
   <% if @delegate_report.posted? %>
     <p>
       <strong>Posted at:</strong>
       <%= wca_local_time(@delegate_report.posted_at) %>
     </p>
   <% end %>
+
+  <%= render @delegate_report %>
 
   <% if current_user.can_edit_delegate_report?(@competition.delegate_report) %>
     <%= link_to icon("pencil", "Edit"), delegate_report_edit_path(@competition), class: "btn btn-default" %>

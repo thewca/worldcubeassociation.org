@@ -24,7 +24,7 @@ class CompetitionsMailer < ApplicationMailer
   def notify_of_delegate_report_submission(competition)
     @competition = competition
     mail(
-      to: "reports@worldcubeassociation.org",
+      to: "delegates@worldcubeassociation.org",
       subject: "[wca-report] [#{competition.continent.name}] Delegate report for #{competition.name}",
     )
   end
