@@ -549,6 +549,12 @@ class User < ActiveRecord::Base
       delegate_status: delegate_status,
       created_at: self.created_at,
       updated_at: self.updated_at,
+      teams: current_team_members.map do |team_member|
+        {
+          friendly_id: team_member.team.friendly_id,
+          leader: team_member.team_leader?,
+        }
+      end,
       avatar: {
         url: self.avatar.url,
         thumb_url: self.avatar.url(:thumb),
