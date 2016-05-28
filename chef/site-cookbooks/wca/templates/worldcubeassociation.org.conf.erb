@@ -177,6 +177,21 @@ server {
     return 302 /admin/edit_person;
   }
 
+  # Redirect /results/persons.php to /persons
+  location /results/persons.php {
+    set $rails_args "";
+
+    if ($arg_regionId != "") {
+      set $rails_args "${rails_args}&region=${arg_regionId}";
+    }
+
+    if ($arg_pattern != "") {
+      set $rails_args "${rails_args}&search=${arg_pattern}";
+    }
+
+    return 302 /persons?$rails_args;
+  }
+
   #### phpBB forum
   location /forum {
     alias <%= @repo_root %>/webroot/forum;
