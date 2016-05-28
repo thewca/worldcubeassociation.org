@@ -24,6 +24,7 @@ en:
     here: "here"
     wca_id: "WCA ID"
     search: "Search"
+    all_regions: "All regions"
   oauth:
     applications:
       nav:
@@ -392,7 +393,6 @@ en:
   persons:
     index:
       name_or_wca_id: "Name or WCA ID"
-      all_regions: "All regions"
       name: "Name"
       country: "Country"
       podiums: "Podiums"

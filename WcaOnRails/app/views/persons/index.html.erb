@@ -5,8 +5,7 @@
 
   <div id="persons-query-fields" class="form-inline">
     <div class="form-group">
-      <%= select_tag(:region, content_tag(:option, t('.all_regions'), value: "all") +
-                              grouped_options_for_select(@regions, params[:region]), class: "form-control") %>
+      <%= select_tag(:region, region_option_tags(selected_id: params[:region]), class: "form-control") %>
     </div>
     <div id="search-box" class="form-group">
       <div class="input-group">
