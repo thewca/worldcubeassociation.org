@@ -345,7 +345,7 @@ describe Api::V0::ApiController do
 
     context 'signed in as board member' do
       before :each do
-        api_sign_in_as(FactoryGirl.create :board_member)
+        api_sign_in_as(FactoryGirl.create(:board_member))
       end
 
       it 'has correct delegate_status' do
@@ -359,7 +359,7 @@ describe Api::V0::ApiController do
 
     context 'signed in as senior delegate' do
       before :each do
-        api_sign_in_as(FactoryGirl.create :senior_delegate)
+        api_sign_in_as(FactoryGirl.create(:senior_delegate))
       end
 
       it 'has correct delegate_status' do
@@ -373,7 +373,7 @@ describe Api::V0::ApiController do
 
     context 'signed in as candidate delegate' do
       before :each do
-        api_sign_in_as(FactoryGirl.create :candidate_delegate)
+        api_sign_in_as(FactoryGirl.create(:candidate_delegate))
       end
 
       it 'has correct delegate_status' do
@@ -387,7 +387,7 @@ describe Api::V0::ApiController do
 
     context 'signed in as delegate' do
       before :each do
-        api_sign_in_as(FactoryGirl.create :delegate)
+        api_sign_in_as(FactoryGirl.create(:delegate))
       end
 
       it 'has correct delegate_status' do
