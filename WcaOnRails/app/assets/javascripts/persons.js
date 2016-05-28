@@ -6,6 +6,10 @@ function queryParams(params) {
   });
 }
 
+function personsTableAjax(options) {
+  return wca.cancelPendingAjaxAndAjax('persons-index', options);
+}
+
 onPage('persons#index', function() {
   var $table = $('.persons-table');
 
