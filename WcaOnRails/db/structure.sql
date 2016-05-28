@@ -515,10 +515,15 @@ DROP TABLE IF EXISTS `delegate_reports`;
 CREATE TABLE `delegate_reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `competition_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `equipment` text COLLATE utf8_unicode_ci,
+  `venue` text COLLATE utf8_unicode_ci,
+  `organization` text COLLATE utf8_unicode_ci,
+  `schedule_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `incidents` text COLLATE utf8_unicode_ci,
+  `remarks` text COLLATE utf8_unicode_ci,
+  `posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `posted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1003,6 +1008,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160514124545');
 
 INSERT INTO schema_migrations (version) VALUES ('20160514141051');
 
+INSERT INTO schema_migrations (version) VALUES ('20160517140653');
+
 INSERT INTO schema_migrations (version) VALUES ('20160518020433');
 
 INSERT INTO schema_migrations (version) VALUES ('20160518045741');
@@ -1010,7 +1017,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160518045741');
 INSERT INTO schema_migrations (version) VALUES ('20160520230353');
 
 INSERT INTO schema_migrations (version) VALUES ('20160517140653');
-
 
 INSERT INTO schema_migrations (version) VALUES ('20160528071910');
 

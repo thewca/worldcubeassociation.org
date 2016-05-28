@@ -48,6 +48,13 @@ class DelegateReportsController < ApplicationController
   end
 
   private def delegate_report_params
-    params.require(:delegate_report).permit(:content, :posted)
+    params.require(:delegate_report).permit(
+      :equipment,
+      :venue,
+      :organization,
+      :incidents,
+      :remarks,
+      :posted
+    )
   end
 end

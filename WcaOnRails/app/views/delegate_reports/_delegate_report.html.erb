@@ -1,0 +1,57 @@
+<% competition = delegate_report.competition %>
+
+<div>
+  <strong>Date</strong>
+  <%= wca_date_range(competition.start_date, competition.end_date) %>
+  <% if delegate_report.schedule_url.present? %>
+    (<%= link_to "Schedule", delegate_report.schedule_url %>)
+  <% else %>
+    (Schedule missing)
+  <% end %>
+</div>
+
+<div>
+  <strong>Location</strong>
+  <%= competition.cityName %>, <%= competition.country_name %>
+  <%= link_to_google_maps_place competition.venueAddress, competition.latitude_degrees, competition.longitude_degrees %>
+</div>
+
+<div>
+  <strong>Competitors</strong>
+
+  <% if competition.results_posted? %>
+    <%= competition.competitors.count %>
+  <% else %>
+    Unknown, results are not posted yet.
+  <% end %>
+</div>
+
+<div>
+  <strong>Equipment</strong>
+  <%=md delegate_report.equipment %>
+</div>
+
+<div>
+  <strong>Venue</strong>
+  <%=md delegate_report.venue %>
+</div>
+
+<div>
+  <strong>Organization</strong>
+  <%=md delegate_report.organization %>
+</div>
+
+<div>
+  <strong>Incidents</strong>
+  <%=md delegate_report.incidents %>
+</div>
+
+<div>
+  <strong>Remarks:</strong>
+  <%=md delegate_report.remarks %>
+</div>
+
+<div>Regards,</div>
+<div>
+  <%= users_to_sentence competition.delegates %>
+</div>

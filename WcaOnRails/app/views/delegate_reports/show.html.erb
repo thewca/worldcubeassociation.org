@@ -1,10 +1,8 @@
 <% provide(:title, "Report for #{@competition.name}") %>
 
 <%= render layout: 'nav' do %>
-  <div>
-    <strong>Report:</strong>
-    <%=md @delegate_report.content %>
-  </div>
+
+  <%= render @delegate_report %>
 
   <% if @delegate_report.posted? %>
     <p>

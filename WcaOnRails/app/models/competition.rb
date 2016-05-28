@@ -594,8 +594,6 @@ class Competition < ActiveRecord::Base
     raise if new_record?
     DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
       dr.competition_id = self.id
-      dr.content = "Hey, enter some text here"
-      dr.posted_at = nil
     end
   end
 

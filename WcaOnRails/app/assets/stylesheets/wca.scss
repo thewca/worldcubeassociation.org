@@ -337,3 +337,8 @@ textarea {
     @extend .col-sm-9;
   }
 }
+
+.CodeMirror,
+.CodeMirror-scroll {
+  min-height: 50px;
+}
