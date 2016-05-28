@@ -498,7 +498,7 @@ describe Api::V0::ApiController do
 
     context 'signed in with invalid wca id' do
       let(:user) do
-        u = FactoryGirl.create :user
+        u = FactoryGirl.create :user, country_iso2: "US"
         u.update_column(:wca_id, "fooooo")
         u
       end
@@ -528,7 +528,7 @@ describe Api::V0::ApiController do
     end
 
     context 'signed in without wca id' do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { FactoryGirl.create :user, country_iso2: "US" }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
