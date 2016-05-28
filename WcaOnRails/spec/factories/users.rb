@@ -60,7 +60,7 @@ FactoryGirl.define do
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status "delegate"
+      delegate_status "candidate_delegate"
     end
 
     factory :senior_delegate, traits: [:wca_id] do

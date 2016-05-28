@@ -337,6 +337,74 @@ describe Api::V0::ApiController do
       end
     end
 
+    context 'signed in as board member' do
+      let(:user) { FactoryGirl.create :board_member }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      before :each do
+        allow(controller).to receive(:doorkeeper_token) {token}
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'board_member'
+      end
+    end
+
+    context 'signed in as senior delegate' do
+      let(:user) { FactoryGirl.create :senior_delegate }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      before :each do
+        allow(controller).to receive(:doorkeeper_token) {token}
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'senior_delegate'
+      end
+    end
+
+    context 'signed in as candidate delegate' do
+      let(:user) { FactoryGirl.create :candidate_delegate }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      before :each do
+        allow(controller).to receive(:doorkeeper_token) {token}
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'candidate_delegate'
+      end
+    end
+
+    context 'signed in as delegate' do
+      let(:user) { FactoryGirl.create :delegate }
+      let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+      let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
+      before :each do
+        allow(controller).to receive(:doorkeeper_token) {token}
+      end
+
+      it 'has correct delegate_status' do
+        get :me
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+
+        expect(json['me']['delegate_status']).to eq 'delegate'
+      end
+    end
+
     context 'signed in with valid wca id' do
       let(:person) do
         FactoryGirl.create(:person, {
@@ -374,6 +442,8 @@ describe Api::V0::ApiController do
 
         expect(json['me']['dob']).to eq(nil)
         expect(json['me']['email']).to eq(nil)
+
+        expect(json['me']['delegate_status']).to eq(nil)
       end
 
       it 'can request dob scope' do

@@ -546,6 +546,7 @@ class User < ActiveRecord::Base
       name: self.name,
       gender: self.gender,
       country_iso2: self.country_iso2,
+      delegate_status: delegate_status,
       created_at: self.created_at,
       updated_at: self.updated_at,
       avatar: {
