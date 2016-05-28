@@ -25,7 +25,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: "reports@worldcubeassociation.org",
-      subject: "Delegate report for #{competition.name}",
+      subject: "[wca-report] [#{competition.continent.name}] Delegate report for #{competition.name}",
     )
   end
 

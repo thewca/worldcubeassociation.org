@@ -53,14 +53,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
-      FactoryGirl.create(:competition, name: "Comp of the Future 2016").tap do |comp|
-        comp.delegate_report.update_attributes(content: "This was a great competition", posted_at: Time.now)
+      FactoryGirl.create(:competition, name: "Comp of the Future 2016", countryId: "Australia").tap do |comp|
+        comp.delegate_report.update_attributes(remarks: "This was a great competition", posted_at: Time.now)
       end
     end
     let(:mail) { CompetitionsMailer.notify_of_delegate_report_submission(competition) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq "Delegate report for Comp of the Future 2016"
+      expect(mail.subject).to eq "[wca-report] [Oceania] Delegate report for Comp of the Future 2016"
       expect(mail.to).to eq ["reports@worldcubeassociation.org"]
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
     end
