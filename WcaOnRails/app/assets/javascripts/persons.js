@@ -16,9 +16,9 @@ onPage('persons#index', function() {
   function reloadPersons() {
     $('#search-box i').removeClass('fa-search').addClass('fa-spinner fa-spin');
 
-    url = location.toString();
+    var url = location.toString();
     // Get region and search params.
-    params = $.param(queryParams({}));
+    var params = $.param(queryParams({}));
     url = url.replace(/persons.*/, 'persons?' + params);
     history.replaceState(null, null, url);
 

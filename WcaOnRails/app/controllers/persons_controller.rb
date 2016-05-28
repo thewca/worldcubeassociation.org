@@ -12,7 +12,9 @@ class PersonsController < ApplicationController
         if params[:region] != "all"
           persons = persons.where("countryId = :region OR continentId = :region", region: params[:region])
         end
-        persons = persons.where("rails_persons.name LIKE :input OR wca_id LIKE :input", input: "%#{params[:search]}%")
+        if params[:search].present?
+          persons = persons.where("rails_persons.name LIKE :input OR wca_id LIKE :input", input: "%#{params[:search]}%")
+        end
         persons = persons.order(:name, :countryId)
 
         render json: {
