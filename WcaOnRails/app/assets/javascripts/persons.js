@@ -1,14 +1,15 @@
 // Add params from the search fields to the bootstrap-table for on Ajax request.
-function queryParams(params) {
-  return $.extend(params, {
-    region: $('#region').val(),
-    search: $('#search').val(),
-  });
-}
-
-function personsTableAjax(options) {
-  return wca.cancelPendingAjaxAndAjax('persons-index', options);
-}
+var personsTableAjax = {
+  queryParams: function(params) {
+    return $.extend(params, {
+      region: $('#region').val(),
+      search: $('#search').val(),
+    });
+  },
+  doAjax: function(options) {
+    return wca.cancelPendingAjaxAndAjax('persons-index', options);
+  },
+};
 
 onPage('persons#index', function() {
   var $table = $('.persons-table');
@@ -18,7 +19,7 @@ onPage('persons#index', function() {
 
     var url = location.toString();
     // Get region and search params.
-    var params = $.param(queryParams({}));
+    var params = $.param(personsTableAjax.queryParams({}));
     url = url.replace(/persons.*/, 'persons?' + params);
     history.replaceState(null, null, url);
 

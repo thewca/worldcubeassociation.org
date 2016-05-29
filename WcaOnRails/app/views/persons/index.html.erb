@@ -17,7 +17,7 @@
 
   <%= wca_table table_class: "persons-table", floatThead: false,
                 data: { toggle: "table", pagination: true, side_pagination: "server", url: persons_path,
-                        query_params: "queryParams", mobile_responsive: true, ajax: "personsTableAjax" } do %>
+                        query_params: "personsTableAjax.queryParams", mobile_responsive: true, ajax: "personsTableAjax.doAjax" } do %>
     <thead>
       <tr>
         <th class="name" data-field="name"><%=t '.name' %></th>
