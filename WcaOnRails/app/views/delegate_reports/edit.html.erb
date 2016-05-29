@@ -15,7 +15,7 @@
     <%= f.input :incidents, input_html: { class: "markdown-editor" } %>
     <%= f.input :remarks, input_html: { class: "markdown-editor" } %>
 
-    <%= f.button :submit %>
+    <%= f.button :submit, class: "btn-primary" %>
     <%= button_tag(type: 'submit',
                    name: "delegate_report[posted]",
                    value: true,
