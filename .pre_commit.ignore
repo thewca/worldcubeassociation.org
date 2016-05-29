@@ -7,6 +7,3 @@ chef/**
 .gitmodules
 
 *.pdf
-
-# We need to use '!important' in this file
-WcaOnRails/app/assets/stylesheets/persons.scss

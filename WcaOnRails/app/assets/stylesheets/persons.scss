@@ -26,9 +26,10 @@
 
 .fixed-table-loading,
 .pagination-detail {
-  display: none !important;
+  // We need !important here because these elements are toggled via jQuery by bootstrap-table.
+  display: none !important; // scss-lint:disable ImportantRule
 }
 
 #persons-index .table-responsive {
-  border: none;
+  border: 0;
 }
