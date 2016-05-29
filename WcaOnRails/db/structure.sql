@@ -517,7 +517,7 @@ CREATE TABLE `delegate_reports` (
   `competition_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `equipment` text COLLATE utf8_unicode_ci,
   `venue` text COLLATE utf8_unicode_ci,
-  `organization` text COLLATE utf8_unicode_ci,
+  `organisation` text COLLATE utf8_unicode_ci,
   `schedule_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `incidents` text COLLATE utf8_unicode_ci,
   `remarks` text COLLATE utf8_unicode_ci,

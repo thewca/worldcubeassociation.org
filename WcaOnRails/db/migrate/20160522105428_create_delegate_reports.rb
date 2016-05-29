@@ -5,7 +5,7 @@ class CreateDelegateReports < ActiveRecord::Migration
 
       t.text :equipment
       t.text :venue
-      t.text :organization
+      t.text :organisation
       t.string :schedule_url
       t.text :incidents
       t.text :remarks
