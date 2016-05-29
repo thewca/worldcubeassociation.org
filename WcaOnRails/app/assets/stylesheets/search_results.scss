@@ -1,0 +1,7 @@
+.advanved-search {
+  @extend small;
+  &:hover {
+    text-decoration: none;
+    color: $gray-dark;
+  }
+}

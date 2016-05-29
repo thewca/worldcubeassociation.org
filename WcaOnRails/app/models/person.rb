@@ -113,6 +113,10 @@ class Person < ActiveRecord::Base
     year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end
 
+  def country
+    Country.find(countryId)
+  end
+
   def country_iso2
     c = Country.find(countryId)
     c ? c.iso2 : nil

@@ -1,0 +1,9 @@
+// We don't include the whole bootstrap-table.css file because it contains a lot of unwanted styles.
+// Copied from https://github.com/wenzhixin/bootstrap-table/blob/develop/src/bootstrap-table.css
+
+.fixed-table-body .card-view .title {
+  font-weight: bold;
+  display: inline-block;
+  min-width: 30%;
+  text-align: left;
+}

@@ -1866,4 +1866,5 @@ class Country
 
   ALL_COUNTRIES_BY_ID = Hash[ALL_COUNTRIES.map { |e| [e.id, e] }]
   ALL_COUNTRIES_BY_ISO2 = Hash[ALL_COUNTRIES.map { |e| [e.iso2, e] }]
+  ALL_COUNTRIES_WITH_NAME_AND_ID = Hash[ALL_COUNTRIES.map { |e| [e.name, e.id] }]
 end

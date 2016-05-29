@@ -28,6 +28,7 @@
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
+//= require extensions/bootstrap-table-mobile
 //= require autosize
 //= require simplemde
 //= require_self

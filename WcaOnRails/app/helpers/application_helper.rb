@@ -127,4 +127,13 @@ module ApplicationHelper
       include_email ? mail_to(user.email, user.name) : user.name
     end.xss_aware_to_sentence
   end
+
+  def region_option_tags(selected_id: nil)
+    regions = {
+      'Continent' => Continent::ALL_CONTINENTS_WITH_NAME_AND_ID,
+      'Country' => Country::ALL_COUNTRIES_WITH_NAME_AND_ID,
+    }
+
+    content_tag(:option, t('common.all_regions'), value: "all") + grouped_options_for_select(regions, selected_id)
+  end
 end

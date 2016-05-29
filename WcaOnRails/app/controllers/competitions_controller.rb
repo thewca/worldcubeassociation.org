@@ -67,8 +67,6 @@ class CompetitionsController < ApplicationController
     @past_selected = params[:state] == "past"
     @present_selected = !@past_selected
 
-    @regions = { 'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
-                 'Country' => Country.all.map { |country| [country.name, country.id] } }
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
