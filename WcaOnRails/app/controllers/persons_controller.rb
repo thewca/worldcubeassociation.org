@@ -22,7 +22,7 @@ class PersonsController < ApplicationController
               wca_id: person.wca_id,
               country: person.country.name,
               competitions_count: person.competitions.count,
-              podiums_count: person.results.where(roundId: [:f, :c], pos: [1, 2, 3]).where('best > 0').count,
+              podiums_count: person.results.podium.count,
             }
           end,
         }

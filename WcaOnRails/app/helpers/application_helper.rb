@@ -128,7 +128,7 @@ module ApplicationHelper
     end.xss_aware_to_sentence
   end
 
-  def region_option_tags(selected_id:)
+  def region_option_tags(selected_id: nil)
     regions = {
       'Continent' => Continent::ALL_CONTINENTS_WITH_NAME_AND_ID,
       'Country' => Country::ALL_COUNTRIES_WITH_NAME_AND_ID,

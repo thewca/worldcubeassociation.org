@@ -524,11 +524,7 @@ class Competition < ActiveRecord::Base
 
   def events_with_podium_results
     light_results_from_relation(
-      results
-        .where(roundId: Round.final_rounds.map(&:id))
-        .where("pos >= 1 AND pos <= 3")
-        .where("best > 0")
-        .order(:pos)
+      results.podium.order(:pos)
     ).group_by(&:event)
       .sort_by { |event, _results| event.rank }
   end
