@@ -5,15 +5,16 @@
     </td>
     <% country_count = registrations.map(&:countryId).uniq.length %>
     <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
-    <td colspan="2"></td>
+    <td></td>
     <% @competition.events.each do |event| %>
       <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
     <% end %>
+    <td></td>
     <td>
       <% if @competition.guests_enabled? %>
         <%= registrations.sum :guests %>
       <% end %>
     </td>
-    <td colspan="3"></td>
+    <td colspan="2"></td>
   </tr>
 </tfoot>
