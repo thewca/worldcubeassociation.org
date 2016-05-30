@@ -50,6 +50,7 @@ CREATE TABLE `Competitions` (
   `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `results_posted_at` datetime DEFAULT NULL,
+  `results_nag_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -989,3 +990,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160518045741');
 INSERT INTO schema_migrations (version) VALUES ('20160520230353');
 
 INSERT INTO schema_migrations (version) VALUES ('20160517140653');
+
+INSERT INTO schema_migrations (version) VALUES ('20160528071910');

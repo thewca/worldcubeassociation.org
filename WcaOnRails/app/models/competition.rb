@@ -45,6 +45,7 @@ class Competition < ActiveRecord::Base
     registration_open
     registration_close
     results_posted_at
+    results_nag_sent_at
   ).freeze
   ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
