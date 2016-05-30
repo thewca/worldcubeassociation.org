@@ -8,6 +8,9 @@
 
     <%= f.hidden_field :updated_at %>
 
+    <% if @delegate_report.posted? %>
+      <%= f.input :discussion_url %>
+    <% end %>
     <%= f.input :schedule_url %>
 
     <%= f.input :equipment, input_html: { class: "markdown-editor" } %>
@@ -17,7 +20,7 @@
     <%= f.input :remarks, input_html: { class: "markdown-editor" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
-    <% if @delegate_report.can_be_posted? %>
+    <% if @delegate_report.can_be_posted? && !@delegate_report.posted? %>
       <%= button_tag(type: 'submit',
                      name: "delegate_report[posted]",
                      value: true,

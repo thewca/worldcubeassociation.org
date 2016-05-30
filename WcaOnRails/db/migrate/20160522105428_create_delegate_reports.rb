@@ -10,6 +10,8 @@ class CreateDelegateReports < ActiveRecord::Migration
       t.text :incidents
       t.text :remarks
 
+      t.string :discussion_url
+
       t.datetime :posted_at
 
       t.datetime :created_at

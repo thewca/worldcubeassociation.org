@@ -403,7 +403,7 @@ class User < ActiveRecord::Base
 
   def can_edit_delegate_report?(delegate_report)
     competition = delegate_report.competition
-    (can_admin_results? || competition.delegates.include?(self)) && !delegate_report.posted?
+    can_admin_results? || (competition.delegates.include?(self) && !delegate_report.posted?)
   end
 
   def get_cannot_delete_competition_reason(competition)

@@ -31,11 +31,9 @@ class DelegateReportsController < ApplicationController
     was_posted = @delegate_report.posted?
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"
-      if @delegate_report.posted?
-        if !was_posted
-          CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
-          flash[:info] = "Your report has been posted!"
-        end
+      if @delegate_report.posted? && !was_posted
+        CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
+        flash[:info] = "Your report has been posted!"
         redirect_to delegate_report_path(@competition)
       else
         redirect_to delegate_report_edit_path(@competition)
@@ -47,6 +45,7 @@ class DelegateReportsController < ApplicationController
 
   private def delegate_report_params
     params.require(:delegate_report).permit(
+      :discussion_url,
       :schedule_url,
       :equipment,
       :venue,

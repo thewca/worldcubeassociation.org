@@ -521,6 +521,7 @@ CREATE TABLE `delegate_reports` (
   `schedule_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `incidents` text COLLATE utf8_unicode_ci,
   `remarks` text COLLATE utf8_unicode_ci,
+  `discussion_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

@@ -9,6 +9,19 @@
     </p>
   <% end %>
 
+  <% if @delegate_report.posted? %>
+    <% if @delegate_report.discussion_url.present? %>
+      <div class="alert alert-info">
+        View the discussion for this delegate report
+        <%= link_to "here", @delegate_report.discussion_url, target: "_blank" %>
+      </div>
+    <% else %>
+      <div class="alert alert-warning">
+        This delegate report is missing a discussion url.
+      </div>
+    <% end %>
+  <% end %>
+
   <%= render @delegate_report %>
 
   <% if current_user.can_edit_delegate_report?(@competition.delegate_report) %>

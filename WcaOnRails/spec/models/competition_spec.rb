@@ -136,6 +136,33 @@ RSpec.describe Competition do
     expect(competition.errors.messages[:name]).to eq ["is too long (maximum is 50 characters)"]
   end
 
+  context "#user_should_post_delegate_report?" do
+    it "warns for unposted reports" do
+      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
+      delegate = competition.delegates.first
+      expect(competition.user_should_post_delegate_report?(delegate)).to eq true
+    end
+
+    it "does not warn for posted reports" do
+      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
+      competition.delegate_report.update_attributes(posted: true)
+      delegate = competition.delegates.first
+      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
+    end
+
+    it "does not warn for upcoming competitions" do
+      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 1.days.from_now
+      delegate = competition.delegates.first
+      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
+    end
+
+    it "does not warn board members" do
+      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
+      board_member = FactoryGirl.create :board_member
+      expect(competition.user_should_post_delegate_report?(board_member)).to eq false
+    end
+  end
+
   context "warnings_for" do
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
       competition = FactoryGirl.build :competition, name: "A really long competition name 2016", showAtAll: false
@@ -153,21 +180,6 @@ RSpec.describe Competition do
       competition = FactoryGirl.build :competition, showAtAll: false
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:invisible]).to eq "This competition is not visible to the public."
-    end
-
-    it "warns if delegate report needs to be submitted" do
-      competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      delegate = competition.delegates.first
-
-      expect(competition.user_should_post_delegate_report?(nil)).to eq false
-      expect(competition.user_should_post_delegate_report?(delegate)).to eq true
-
-      # Don't bug delegates about their reports for competitions that have not happened yet.
-      competition.start_date = 1.day.from_now.strftime("%F")
-      competition.end_date = 1.day.from_now.strftime("%F")
-      competition.save!
-      expect(competition.user_should_post_delegate_report?(nil)).to eq false
-      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
   end
 
