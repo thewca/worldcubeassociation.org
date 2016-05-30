@@ -7,18 +7,23 @@
       <strong>Posted at:</strong>
       <%= wca_local_time(@delegate_report.posted_at) %>
     </p>
+  <% elsif !@competition.user_should_post_delegate_report?(current_user) %>
+    <%= alert :warning, note: true do %>
+      This report has not been posted yet.
+    <% end %>
   <% end %>
 
   <% if @delegate_report.posted? %>
     <% if @delegate_report.discussion_url.present? %>
-      <div class="alert alert-info">
+      <%= alert :info do %>
         View the discussion for this delegate report
         <%= link_to "here", @delegate_report.discussion_url, target: "_blank" %>
-      </div>
+      <% end %>
     <% else %>
+      <%= alert :warning do %>
       <div class="alert alert-warning">
         This delegate report is missing a discussion url.
-      </div>
+      <% end %>
     <% end %>
   <% end %>
 
