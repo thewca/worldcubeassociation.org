@@ -135,8 +135,8 @@ en:
           p: "Waiting list"
       competition:
         guests_enabled:
-          "true": "Do NOT ask about guests"
-          "false": "Ask about guests"
+          "true": "Ask about guests"
+          "false": "Do NOT ask about guests"
   errors:
     messages:
       error: "error"
