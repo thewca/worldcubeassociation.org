@@ -167,6 +167,7 @@ RSpec.describe Competition do
       competition.end_date = 1.day.from_now.strftime("%F")
       competition.save!
       expect(competition.user_should_post_delegate_report?(nil)).to eq false
+      expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
   end
 
