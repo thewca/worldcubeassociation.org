@@ -1,4 +1,5 @@
 <% provide(:title, "Report for #{@competition.name}") %>
+<% provide(:editing_delegate_report, true) %>
 
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
@@ -16,12 +17,14 @@
     <%= f.input :remarks, input_html: { class: "markdown-editor" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
-    <%= button_tag(type: 'submit',
-                   name: "delegate_report[posted]",
-                   value: true,
-                   class: "btn btn-danger",
-                   data: { confirm: "You are about to post your report, are you sure you want to do this? Once posted, a report cannot be changed." }) do %>
-      Post the report
+    <% if @delegate_report.can_be_posted? %>
+      <%= button_tag(type: 'submit',
+                     name: "delegate_report[posted]",
+                     value: true,
+                     class: "btn btn-danger",
+                     data: { confirm: "You are about to post your report, are you sure you want to do this? Once posted, a report cannot be changed." }) do %>
+        Post the report
+      <% end %>
     <% end %>
   <% end %>
 

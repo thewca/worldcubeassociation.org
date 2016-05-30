@@ -112,6 +112,10 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  def user_should_post_delegate_report?(user)
+    !new_record? && !!user && user.can_edit_delegate_report?(delegate_report)
+  end
+
   def warnings_for(user)
     warnings = {}
     if !self.showAtAll
@@ -120,16 +124,6 @@ class Competition < ActiveRecord::Base
       if self.name.length > 32
         warnings[:name] = "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
       end
-    end
-
-    if !new_record? && user && user.can_edit_delegate_report?(delegate_report)
-      path_to_edit_report = Rails.application.routes.url_helpers.delegate_report_edit_path(self)
-      link_to_edit_report = ActionController::Base.helpers.link_to('here', path_to_edit_report)
-      warnings[:report_not_submitted] = [
-        "Your report is not posted yet! Click ",
-        link_to_edit_report,
-        " to work on it.",
-      ].xss_aware_join
     end
 
     warnings

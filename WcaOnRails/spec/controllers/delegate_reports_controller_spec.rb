@@ -50,6 +50,23 @@ describe DelegateReportsController do
       expect(comp.delegate_report.remarks).to eq "My new remarks"
     end
 
+    it "can edit report before comp is over, but cannot post report" do
+      # Update comp to be in the future.
+      comp.start_date = 1.day.from_now.strftime("%F")
+      comp.end_date = 1.day.from_now.strftime("%F")
+      comp.save!
+
+      post :update, competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false }
+      comp.reload
+      expect(comp.delegate_report.remarks).to eq "My new remarks"
+      expect(comp.delegate_report.posted?).to eq false
+
+      post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true }
+      comp.reload
+      expect(comp.delegate_report.remarks).to eq "My new remarks"
+      expect(comp.delegate_report.posted?).to eq false
+    end
+
     it "can post report and cannot edit report if it's posted" do
       # Update the remarks *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original

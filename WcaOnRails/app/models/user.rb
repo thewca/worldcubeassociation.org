@@ -394,12 +394,16 @@ class User < ActiveRecord::Base
   end
 
   def can_view_delegate_report?(delegate_report)
-    delegate_report.competition.is_over? && (any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team?)
+    if delegate_report.posted?
+      any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team?
+    else
+      delegate_report.competition.delegates.include?(self) || can_admin_results?
+    end
   end
 
   def can_edit_delegate_report?(delegate_report)
     competition = delegate_report.competition
-    competition.is_over? && (can_admin_results? || competition.delegates.include?(self)) && !delegate_report.posted?
+    (can_admin_results? || competition.delegates.include?(self)) && !delegate_report.posted?
   end
 
   def get_cannot_delete_competition_reason(competition)
