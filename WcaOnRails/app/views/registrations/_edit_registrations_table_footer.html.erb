@@ -12,7 +12,11 @@
     <td></td>
     <td>
       <% if @competition.guests_enabled? %>
-        <%= registrations.sum :guests %>
+        <%# We need to convert `registrations` to an array here rather than computing the sum directly in the database.
+            The reason is that we incude `registration_events` table which results in having duplicated registrations
+            in the result set, thus the produced sum is too large.
+            See: https://github.com/cubing/worldcubeassociation.org/issues/678#issuecomment-222386567 %>
+        <%= registrations.to_a.sum(&:guests) %>
       <% end %>
     </td>
     <td colspan="3"></td>
