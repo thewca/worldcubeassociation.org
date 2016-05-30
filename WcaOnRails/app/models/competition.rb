@@ -113,7 +113,7 @@ class Competition < ActiveRecord::Base
   end
 
   def user_should_post_delegate_report?(user)
-    persisted? && is_over? && !delegate_report.posted? && delegates.include?(user)
+    persisted? && delegate_report.can_be_posted? && !delegate_report.posted? && delegates.include?(user)
   end
 
   def warnings_for(user)

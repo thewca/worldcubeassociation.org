@@ -145,7 +145,7 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = FactoryGirl.create :competition, :visible, :with_delegate, starts: 2.days.ago
-      competition.delegate_report.update_attributes(posted: true)
+      competition.delegate_report.update_attributes!(posted: true)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to eq false
     end
