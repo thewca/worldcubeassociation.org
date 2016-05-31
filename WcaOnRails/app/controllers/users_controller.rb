@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    unless current_user && current_user.can_edit_users?
+    unless current_user&.can_edit_users?
       flash[:danger] = "You cannot edit users"
       redirect_to root_url
     end

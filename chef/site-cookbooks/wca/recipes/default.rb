@@ -118,7 +118,7 @@ remote_file '/usr/bin/phantomjs' do
   action :create_if_missing
 end
 
-node.default['brightbox-ruby']['version'] = "2.2"
+node.default['brightbox-ruby']['version'] = "2.3"
 include_recipe "brightbox-ruby"
 gem_package "rails" do
   version "4.2.1"

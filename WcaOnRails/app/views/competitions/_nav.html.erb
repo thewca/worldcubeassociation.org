@@ -27,7 +27,7 @@
           fa_icon: "info-circle",
         } %>
       <% end %>
-      <% if current_user && current_user.can_manage_competition?(@competition) %>
+      <% if current_user&.can_manage_competition?(@competition) %>
         <% nav_items << {
           text: t('.menu.edit'),
           path: edit_competition_path(@competition),
@@ -50,7 +50,7 @@
             ])
         } %>
       <% end %>
-      <% if current_user && current_user.can_create_competitions? %>
+      <% if current_user&.can_create_competitions? %>
         <% nav_items << {
           text: t('.menu.clone'),
           path: clone_competition_path(@competition),

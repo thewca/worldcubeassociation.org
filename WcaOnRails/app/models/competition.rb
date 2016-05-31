@@ -502,11 +502,11 @@ class Competition < ActiveRecord::Base
   end
 
   def user_can_view?(user)
-    self.showAtAll || (user && user.can_manage_competition?(self))
+    self.showAtAll || user&.can_manage_competition?(self)
   end
 
   def user_can_view_results?(user)
-    results_posted? || (user && user.can_admin_results? && !results.empty?)
+    results_posted? || (user&.can_admin_results? && !results.empty?)
   end
 
   def in_progress?
