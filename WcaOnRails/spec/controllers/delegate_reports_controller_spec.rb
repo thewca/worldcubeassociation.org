@@ -45,7 +45,7 @@ describe DelegateReportsController do
 
     it "can edit report" do
       post :update, competition_id: comp.id, delegate_report: { remarks: "My new remarks" }
-      expect(response).to redirect_to(delegate_report_edit_path(comp))
+      expect(response).to redirect_to delegate_report_edit_path(comp)
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
     end

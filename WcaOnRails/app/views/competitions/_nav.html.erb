@@ -47,7 +47,7 @@
             children: [{
               hidden: true,
               is_active: lambda do
-                controller.is_a?(RegistrationsController) && (action_name == "edit" || action_name == "update")
+                controller.is_a?(RegistrationsController) && ["edit", "update"].include?(action_name)
               end,
             }],
           }
