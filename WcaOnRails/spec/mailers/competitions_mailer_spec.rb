@@ -42,7 +42,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq "Comp of the Future 2016 Results"
-      expect(mail.to).to match_array competition.delegates.map(&:email)
+      expect(mail.to).to match_array competition.delegates.pluck(:email)
       expect(mail.cc).to eq ["results@worldcubeassociation.org"]
       expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
