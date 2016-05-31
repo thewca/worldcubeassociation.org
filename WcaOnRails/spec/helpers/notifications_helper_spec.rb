@@ -1,25 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe NotificationsController, type: :controller do
-  describe "GET #index" do
-    context "when not signed in" do
-      it "redirects to the sign in page" do
-        get :index
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context "when signed in as delegate" do
+describe NotificationsHelper do
+  describe "#notifications_for_user" do
+    context "when delegate" do
       let(:delegate) { FactoryGirl.create :delegate }
       let!(:unconfirmed_competition) { FactoryGirl.create :competition, delegates: [delegate] }
       let!(:confirmed_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: true }
-      before :each do
-        sign_in delegate
-      end
 
       it "shows unconfirmed competitions" do
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(delegate)
         expect(notifications).to eq [
           {
             text: "#{unconfirmed_competition.name} is not confirmed",
@@ -34,8 +23,7 @@ RSpec.describe NotificationsController, type: :controller do
         unconfirmed_competition.organizers << delegate
         unconfirmed_competition.save
 
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(delegate)
         expect(notifications).to eq [
           {
             text: "#{unconfirmed_competition.name} is not confirmed",
@@ -52,8 +40,7 @@ RSpec.describe NotificationsController, type: :controller do
         unconfirmed_user = FactoryGirl.create :user, :unconfirmed
         unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(delegate)
         expect(notifications).to eq [
           {
             text: "#{unconfirmed_competition.name} is not confirmed",
@@ -73,13 +60,9 @@ RSpec.describe NotificationsController, type: :controller do
       let!(:confirmed_competition) { FactoryGirl.create(:competition, :confirmed) }
       let!(:visible_confirmed_competition) { FactoryGirl.create(:competition, :confirmed, :visible) }
       let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, :visible }
-      before :each do
-        sign_in board_member
-      end
 
       it "shows confirmed, but not visible competitions, as well as unconfirmed, but visible competitions" do
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(board_member)
         expect(notifications).to eq [
           {
             text: "#{confirmed_competition.name} is waiting to be announced",
@@ -95,13 +78,9 @@ RSpec.describe NotificationsController, type: :controller do
 
     context "when signed in as someone without a wca id" do
       let(:user) { FactoryGirl.create :user }
-      before :each do
-        sign_in user
-      end
 
       it "asks me to request my WCA ID" do
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(user)
         expect(notifications).to eq [
           {
             text: "Connect your WCA ID to your account!",
@@ -114,8 +93,7 @@ RSpec.describe NotificationsController, type: :controller do
         user.dob = nil
         user.save!
 
-        get :index
-        notifications = assigns(:notifications)
+        notifications = helper.notifications_for_user(user)
         expect(notifications).to eq [
           {
             text: "Connect your WCA ID to your account!",
@@ -137,8 +115,7 @@ RSpec.describe NotificationsController, type: :controller do
           user.dob_verification = person.dob
           user.save!
 
-          get :index
-          notifications = assigns(:notifications)
+          notifications = helper.notifications_for_user(user)
           expect(notifications).to eq [
             {
               text: "Waiting for #{delegate.name} to assign you WCA ID #{person.wca_id}",
