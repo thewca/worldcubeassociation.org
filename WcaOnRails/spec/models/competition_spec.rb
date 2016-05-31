@@ -2,11 +2,24 @@ require 'rails_helper'
 
 RSpec.describe Competition do
   it "defines a valid competition" do
-    competition = FactoryGirl.build :competition, name: "Foo !Test- 2015"
+    competition = FactoryGirl.build :competition, name: "Foo: Test - 2015"
     expect(competition).to be_valid
     expect(competition.id).to eq "FooTest2015"
-    expect(competition.name).to eq "Foo !Test- 2015"
-    expect(competition.cellName).to eq "Foo !Test- 2015"
+    expect(competition.name).to eq "Foo: Test - 2015"
+    expect(competition.cellName).to eq "Foo: Test - 2015"
+  end
+
+  it "rejects invalid names" do
+    [
+      "foo (Test) - 2015",
+      "Poly^3 2016",
+      "HOOAH! SMA 2015",
+      "Campeonato de Cubos Mágicos de São Carlos/SP 2013",
+      "Moldavian Nationals – Winter 2016",
+      "PingSkills Cubing Classic, 2016",
+    ].each do |name|
+      expect(FactoryGirl.build(:competition, name: name)).to be_invalid
+    end
   end
 
   it "handles missing start/end_date" do
@@ -37,10 +50,10 @@ RSpec.describe Competition do
   end
 
   it "truncates name as necessary to produce id and cellName" do
-    competition = FactoryGirl.build :competition, name: "Alexander and the Terrible, Horrible, No Good 2015"
+    competition = FactoryGirl.build :competition, name: "Alexander and the Terrible Horrible No Good 2015"
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
-    expect(competition.name).to eq "Alexander and the Terrible, Horrible, No Good 2015"
+    expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
     expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
   end
 
@@ -54,7 +67,7 @@ RSpec.describe Competition do
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
     expect(competition).to be_invalid
-    expect(competition.errors.messages[:name]).to eq ["must end with a year"]
+    expect(competition.errors.messages[:name]).to eq ["must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"]
   end
 
   it "requires that cellName end in a year" do
