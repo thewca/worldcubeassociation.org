@@ -34,7 +34,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     mail(
       to: registration.email,
-      reply_to: registration.competition.managers.map(&:email),
+      reply_to: registration.competition.organizers_or_delegates.map(&:email),
       subject: "You have registered for #{registration.competition.name}",
     )
   end
@@ -43,7 +43,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     mail(
       to: registration.email,
-      reply_to: registration.competition.managers.map(&:email),
+      reply_to: registration.competition.organizers_or_delegates.map(&:email),
       subject: "Your registration for #{registration.competition.name} has been accepted",
     )
   end
@@ -52,7 +52,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     mail(
       to: registration.email,
-      reply_to: registration.competition.managers.map(&:email),
+      reply_to: registration.competition.organizers_or_delegates.map(&:email),
       subject: "You have been moved to the waiting list for #{registration.competition.name}",
     )
   end
@@ -61,7 +61,7 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     mail(
       to: registration.email,
-      reply_to: registration.competition.managers.map(&:email),
+      reply_to: registration.competition.organizers_or_delegates.map(&:email),
       subject: "Your registration for #{registration.competition.name} has been deleted",
     )
   end

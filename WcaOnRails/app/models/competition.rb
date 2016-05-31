@@ -593,6 +593,10 @@ class Competition < ActiveRecord::Base
     Country.find_by_id(countryId)
   end
 
+  def organizers_or_delegates
+    self.organizers.empty? ? self.delegates : self.organizers
+  end
+
   def self.search(query, params: {})
     competitions = Competition.where(showAtAll: true)
 

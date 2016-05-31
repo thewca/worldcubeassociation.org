@@ -1,7 +1,7 @@
-<% competition = @registration.competition %>
+<% @competition = @registration.competition %>
 
 <p>
-  Your registration for <%= link_to competition.name, competition_url(competition) %> has been moved to the waiting list. Possible causes are:
+  Your registration for <%= link_to @competition.name, competition_url(@competition) %> has been moved to the waiting list. Possible causes are:
 </p>
 
 <ul>
@@ -17,6 +17,4 @@
   If you think this is an error, please reply to this email.
 </p>
 
-<p>
-  Regards, <%= users_to_sentence competition.managers %>.
-</p>
+<%= render partial: 'organizers_or_delegates_signature' %>
