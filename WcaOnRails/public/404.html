@@ -1,68 +1,119 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-  body {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link href="http://fonts.google.apis.com/css?family=" rel="stylesheet" type="text/css" />
+		<link href="/assets/wca-0e38e06e4765b5d1c9c349f9660ae864f509c331e281c1e617e8542cf32a48b3.ico" rel="icon" type="image/x-icon" />
+		<title>
+			Error 404
+		</title>
+		<style type="text/css">
+			/* apply to all */
+			* {
+				color       : #EEE ;
+				height      : 100% ;
+				font-family : 'Droid Sans' , sans-serif ;
+				text-align  : center ;
 
-  div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
+				/* text selection */
+				-khtml-user-select   : none ;
+				-moz-user-select     : none ;
+				-o-user-select       : none ;
+				-ms-user-select      : none ;
+				-webkit-touch-select : none ;
+				-webkit-user-select  : none ;
+			}
 
-  div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+			/* equivalent heights for all 3 subbody tags */
+			header , footer , main { height : 33% }
 
-  h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
+			/* full body rules */
+			html {
+				background :
+					linear-gradient(
+					rgba( 0 , 0 , 0 , 0.75 ) ,
+					rgba( 0 , 0 , 0, 0.75 ) ) ,
+					url( '/images/404_cube.jpg' ) ;
 
-  div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-  </style>
-</head>
+				background-attachment : fixed ;
+				background-position   : center center ;
+				background-repeat     : no-repeat ;
+				background-size       : cover ;
+				margin-top            : 5% ;
+				overflow              : hidden ;
+			}
 
-<body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <div>
-      <h1>The page you were looking for doesn't exist.</h1>
-      <p>You may have mistyped the address or the page may have moved.</p>
-    </div>
-    <p>If you are the application owner check the logs for more information.</p>
-  </div>
-</body>
-<!-- THIS IS AN EASTER EGG -->
+			/* apply to links */
+			a {
+				border-color  : #EEE ;
+				border-radius : 2px ;
+				border-style  : solid ;
+				border-width  : 2px ;
+				padding       : 0.8em ;
+
+				/* off hover transition */
+				transition-duration        : 0.25s ;
+				transition-property        : background-color , color ;
+				transition-timing-function : linear ;
+			}
+
+			a:active  { text-decoration : none }
+			a:link    { text-decoration : none }
+			a:visited { text-decoration : none }
+
+			a:hover {
+				background-color : #EEE ;
+				color            : black ;
+				text-decoration  : none ;
+
+				/* on hover transition */
+				transition-duration        : 0.25s ;
+				transition-property        : background-color , color ;
+				transition-timing-function : linear ;
+			}
+
+
+			/* apply to text on the page */
+			b#error { font-size : 8em }
+
+			/* photo creds to chris */
+			div#credit {
+				bottom     : 0 ;
+				color      : rgba( 150 , 150 , 150 , 0.75 ) ;
+				font-size  : 17px ;
+				font-style : italic ;
+				height     : 5% ;
+
+				/* fix the position */
+				margin-right : 25px ;
+				position     : absolute ;
+				right        : 0 ;
+			}
+
+			p#msg {
+				font-size   : 1.75em ;
+				line-height : 1.5em ;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<b id="error">
+				404
+			</b>
+		</header>
+		<main>
+			<p id="msg">
+				Nothing was found at the requested URL. Sorry!
+			</p>
+		</main>
+		<footer>
+			<a href="/">
+				Return Home
+			</a>
+			<div id="credit">
+					Photo by Christopher Olson
+			</div>
+		</footer>
+	</body>
 </html>
