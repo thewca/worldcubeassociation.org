@@ -1,19 +1,17 @@
-<% competition = @registration.competition %>
+<% @competition = @registration.competition %>
 
 <p>
-  You just registered for <%= link_to competition.name, competition_url(competition) %>.
+  You just registered for <%= link_to @competition.name, competition_url(@competition) %>.
 </p>
 
 <p>
-  Your registration is on the waiting list, which currently has <%= competition.registrations.pending.count %> <%= "person".pluralize(competition.registrations.pending.count) %> on it.
+  Your registration is on the waiting list, which currently has <%= @competition.registrations.pending.count %> <%= "person".pluralize(@competition.registrations.pending.count) %> on it.
 </p>
 
 <p>
   You will be emailed when your registration is approved.
   You can also check the status of your registration
-  <%= link_to "here", competition_register_url(competition) %>.
+  <%= link_to "here", competition_register_url(@competition) %>.
 </p>
 
-<p>
-  Regards, <%= users_to_sentence competition.managers %>.
-</p>
+<%= render partial: 'organizers_or_delegates_signature' %>
