@@ -5,5 +5,8 @@
 
 <p>
   @<%= @user_claiming_wca_id.delegate_to_handle_wca_id_claim.name %>: You can approve or reject this claim <%= link_to "here", edit_user_url(@user_claiming_wca_id.id, anchor: "wca_id") %>.
+  Note that any delegate can handle a WCA ID claim. If you feel another delegate should be handling this claim please forward this email to them.
+</p>
+<p>
   For a complete list of unconfirmed WCA ID claims see your <%= link_to "notifications", notifications_url %>.
 </p>
