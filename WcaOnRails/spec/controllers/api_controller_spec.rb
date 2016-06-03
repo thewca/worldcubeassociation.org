@@ -139,7 +139,7 @@ describe Api::V0::ApiController do
   describe 'GET #omni_search' do
     let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015") }
     let!(:post) { FactoryGirl.create(:post, title: "jeremy post title", body: "post body") }
-    let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
+    let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy Fleischman") }
 
     it 'requires query parameter' do
       get :omni_search
@@ -157,6 +157,14 @@ describe Api::V0::ApiController do
       expect(json["result"].count { |r| r["class"] == "post" }).to eq 0
       expect(json["result"].count { |r| r["class"] == "user" }).to eq 0
       expect(json["result"].count { |r| r["class"] == "person" }).to eq 1
+    end
+
+    it "works well when parts of the name are given" do
+      get :omni_search, q: "Flei Jer"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["result"].length).to eq 1
+      expect(json["result"][0]["name"]).to include "Jeremy Fleischman"
     end
   end
 
