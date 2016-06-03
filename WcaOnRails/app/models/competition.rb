@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
   # FIXME Tests fail with "Unknown primary key for table Competitions in model Competition."
@@ -47,7 +49,8 @@ class Competition < ActiveRecord::Base
     results_posted_at
     results_nag_sent_at
   ).freeze
-  ENDS_WITH_YEAR_RE = /\A(.*) (\d{4})\z/
+  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
+  INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )".freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
@@ -55,13 +58,13 @@ class Competition < ActiveRecord::Base
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
-    self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ ENDS_WITH_YEAR_RE)
+    self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
-                   format: { with: ENDS_WITH_YEAR_RE, message: "must end with a year"  }
+                   format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }
   MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: ENDS_WITH_YEAR_RE }, if: :name_valid_or_updating?
+                       format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
@@ -155,7 +158,7 @@ class Competition < ActiveRecord::Base
 
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
-    m = ENDS_WITH_YEAR_RE.match(name)
+    m = VALID_NAME_RE.match(name)
     if m
       name_without_year = m[1]
       year = m[2]
