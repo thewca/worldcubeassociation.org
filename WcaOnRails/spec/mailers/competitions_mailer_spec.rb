@@ -33,4 +33,23 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to match(/Your results at .+ have just been posted./)
     end
   end
+
+  describe "submit_results_nag" do
+    let(:competition) do
+      FactoryGirl.create(:competition, name: "Comp of the Future 2016")
+    end
+    let(:mail) { CompetitionsMailer.submit_results_nag(competition) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq "Comp of the Future 2016 Results"
+      expect(mail.to).to match_array competition.delegates.pluck(:email)
+      expect(mail.cc).to eq ["results@worldcubeassociation.org"]
+      expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
+      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
+    end
+  end
 end

@@ -22,6 +22,19 @@ unless node.chef_environment.start_with?("development")
   end
 end
 
+unless node.chef_environment.start_with?("development")
+  cron "hourly schedule rails work" do
+    minute '0'
+    hour '*'
+    weekday '*'
+
+    path path
+    mailto admin_email
+    user username
+    command "(cd #{repo_root}; bin/rake work:schedule)"
+  end
+end
+
 html_format_envvars = {
   "CONTENT_TYPE" => "text/html",
   "CONTENT_TRANSFER_ENCODING" => "utf8",

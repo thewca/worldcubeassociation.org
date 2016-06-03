@@ -1,0 +1,16 @@
+<p>
+  Dear <%= "Delegate".pluralize(@competition.delegates.count) %> of <%= @competition.name %>,
+</p>
+
+<p>
+  This is an automated reminder. Over a week has passed since <%= @competition.name %> took
+  place and the results of the competition are still not available as required by regulation
+  <a href="https://www.worldcubeassociation.org/regulations/#1c3">1c3)</a>.
+  There might be valid reasons for this, but nonetheless you are requested to reply to this mail
+  to inform the results team about the state of the competition results as soon as possible
+  (if not already done).
+</p>
+
+<p>
+  Regards, The WCA Results Team.
+</p>

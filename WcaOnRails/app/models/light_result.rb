@@ -1,5 +1,4 @@
 require 'solve_time'
-require_relative './format'
 
 # This is an alternative to `Result` used for performance reasons.
 # See also the comment in `app/models/competition.rb`.
