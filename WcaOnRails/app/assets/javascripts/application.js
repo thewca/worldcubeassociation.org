@@ -180,7 +180,7 @@ $(function() {
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
   $('.markdown-editor').each(function() {
-    new SimpleMDE({
+    var editor = new SimpleMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
@@ -188,6 +188,11 @@ $(function() {
       // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
       status: false,
     });
+
+    // Trick to fix tab and shift+tab focus from:
+    //  https://github.com/NextStepWebs/simplemde-markdown-editor/issues/122#issuecomment-176329907
+    editor.codemirror.options.extraKeys.Tab = false;
+    editor.codemirror.options.extraKeys['Shift-Tab'] = false;
   });
 
   var $tablesToFloatHeaders = $('table.floatThead');
