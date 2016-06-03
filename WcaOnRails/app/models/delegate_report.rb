@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class DelegateReport < ActiveRecord::Base
   belongs_to :competition, required: true
   belongs_to :posted_by_user, class_name: "User"
 
   attr_accessor :current_user
 
-  URL_RE = /\Ahttps?:\/\/\S+\z/
-  VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://"
+  URL_RE = %r{\Ahttps?://\S+\z}
+  VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://".freeze
   validate :url_validations
   def url_validations
     if (schedule_url.present? || posted?) && !URL_RE.match(schedule_url)

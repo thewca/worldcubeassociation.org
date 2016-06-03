@@ -30,6 +30,12 @@ FactoryGirl.define do
       organizers { [ FactoryGirl.create(:user) ] }
     end
 
+    trait :with_delegate_report do
+      after(:create) do |competition|
+        FactoryGirl.create :delegate_report, :posted, competition: competition
+      end
+    end
+
     use_wca_registration false
     registration_open 2.weeks.ago.change(usec: 0)
     registration_close 1.week.ago.change(usec: 0)

@@ -54,9 +54,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
-      FactoryGirl.create(:competition, name: "Comp of the Future 2016", countryId: "Australia").tap do |comp|
-        comp.delegate_report.update_attributes!(schedule_url: "http://example.com", remarks: "This was a great competition", posted_at: Time.now)
-      end
+      competition = FactoryGirl.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016")
+      competition.delegate_report.update_attributes!(remarks: "This was a great competition")
+      competition
     end
     let(:mail) { CompetitionsMailer.notify_of_delegate_report_submission(competition) }
 
