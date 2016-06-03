@@ -1,9 +1,11 @@
 class DelegateReport < ActiveRecord::Base
   belongs_to :competition, required: true
+  belongs_to :posted_by_user, class_name: "User"
+
+  attr_accessor :current_user
 
   URL_RE = /\Ahttps?:\/\/\S+\z/
   VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://"
-
   validate :url_validations
   def url_validations
     if (schedule_url.present? || posted?) && !URL_RE.match(schedule_url)
@@ -32,5 +34,6 @@ class DelegateReport < ActiveRecord::Base
 
   def posted=(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
+    self.posted_by_user_id = current_user&.id
   end
 end

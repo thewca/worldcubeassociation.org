@@ -32,13 +32,23 @@
 </div>
 
 <div>
-  <strong>Venue</strong>
-  <%=md delegate_report.venue %>
+  <strong>Delegates</strong>
+  <%= competition.delegates.pluck(:name).to_sentence %>
 </div>
-
+<% if competition.organizers.length > 0 %>
+  <div>
+    <strong>Organisers</strong>
+    <%= competition.organizers.pluck(:name).to_sentence %>
+  </div>
+<% end %>
 <div>
   <strong>Organisation</strong>
   <%=md delegate_report.organisation %>
+</div>
+
+<div>
+  <strong>Venue</strong>
+  <%=md delegate_report.venue %>
 </div>
 
 <div>
@@ -52,7 +62,5 @@
 </div>
 
 <br>
-<div>Regards,</div>
-<div>
-  <%= users_to_sentence competition.delegates %>
-</div>
+
+Report submitted by <%= delegate_report.posted_by_user.name %>

@@ -28,6 +28,7 @@ class DelegateReportsController < ApplicationController
     return if redirect_unless_user(:can_edit_delegate_report?, @competition.delegate_report)
 
     @delegate_report = @competition.delegate_report
+    @delegate_report.current_user = current_user
     was_posted = @delegate_report.posted?
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"

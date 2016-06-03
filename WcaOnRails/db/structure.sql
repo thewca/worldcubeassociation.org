@@ -522,6 +522,7 @@ CREATE TABLE `delegate_reports` (
   `incidents` text COLLATE utf8_unicode_ci,
   `remarks` text COLLATE utf8_unicode_ci,
   `discussion_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `posted_by_user_id` int(11) DEFAULT NULL,
   `posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1023,4 +1024,4 @@ INSERT INTO schema_migrations (version) VALUES ('20160528071910');
 
 INSERT INTO schema_migrations (version) VALUES ('20160531124049');
 
-INSERT INTO schema_migrations (version) VALUES ('20160522105428');
+INSERT INTO schema_migrations (version) VALUES ('20160602105428');

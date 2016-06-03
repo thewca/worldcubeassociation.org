@@ -20,7 +20,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     report = DelegateReport.where.not(posted_at: nil).first
     if !report
       report = Competition.first.delegate_report
-      report.update_attributes!(schedule_url: "http://example.com", posted_at: Time.now)
+      report.update_attributes!(schedule_url: "http://example.com", posted_by_user_id: User.last.id, posted_at: Time.now)
     end
     competition = report.competition
     CompetitionsMailer.notify_of_delegate_report_submission(competition)

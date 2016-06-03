@@ -12,6 +12,7 @@ class CreateDelegateReports < ActiveRecord::Migration
 
       t.string :discussion_url
 
+      t.integer :posted_by_user_id
       t.datetime :posted_at
 
       t.timestamps null: false

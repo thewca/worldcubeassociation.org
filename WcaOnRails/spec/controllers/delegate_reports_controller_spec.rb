@@ -79,8 +79,9 @@ describe DelegateReportsController do
   end
 
   context "logged in as THE delegate" do
+    let(:user) { comp.delegates.first }
     before :each do
-      sign_in comp.delegates.first
+      sign_in user
     end
 
     it "can view edit page" do
@@ -122,6 +123,7 @@ describe DelegateReportsController do
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
       expect(comp.delegate_report.posted?).to eq true
+      expect(comp.delegate_report.posted_by_user_id).to eq user.id
 
       # Try to update the report when it's posted.
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" }
