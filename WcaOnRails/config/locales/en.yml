@@ -133,8 +133,8 @@ en:
         equipment: "Number and type of timers and displays used in the competition."
         venue: "Talk about rooms, light, public access, distribution of the zones (solving, scrambling, waiting, score-taking), if you set up different solving stages, problems that arose (for example, noise) and how you solved them... Please, be concise and do not report irrelevant details."
         organisation: "Talk about the organisation team and how they worked out the competition, if you got involved on it, their previous experience and if you noticed progress on their work, if they were professional and active the competition days, problems that arose (e.g., getting behind schedule) and how they solved them... Please, be concise and do not report irrelevant details."
-        incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
-        remarks: "Talk about any other detail that you'd like to share (e.g., records broken in your competition). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
+        incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
+        remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
     options:
       registration:
         status:
