@@ -43,6 +43,14 @@ RSpec.describe PersonsController, type: :controller do
         expect(json['total']).to eq 2
         expect(json['rows'].count).to eq 2
       end
+
+      it "works well when parts of the name are given" do
+        xhr :get, :index, search: "Law Jenn"
+        json = JSON.parse(response.body)
+        expect(json['total']).to eq 1
+        expect(json['rows'].count).to eq 1
+        expect(json['rows'][0]['name']).to include "Jennifer Lawrence"
+      end
     end
   end
 end

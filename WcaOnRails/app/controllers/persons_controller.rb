@@ -10,7 +10,9 @@ class PersonsController < ApplicationController
           persons = persons.where("countryId = :region OR continentId = :region", region: params[:region])
         end
         if params[:search].present?
-          persons = persons.where("rails_persons.name LIKE :input OR wca_id LIKE :input", input: "%#{params[:search]}%")
+          params[:search].split.each do |part|
+            persons = persons.where("rails_persons.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+          end
         end
         persons = persons.order(:name, :countryId)
 
