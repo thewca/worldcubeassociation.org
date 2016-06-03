@@ -517,8 +517,6 @@ class User < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    sql_query = "%#{query}%"
-
     users = Person
     unless ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
       users = User.where.not(confirmed_at: nil).not_dummy_account
@@ -532,7 +530,11 @@ class User < ActiveRecord::Base
       end
     end
 
-    users.where("name LIKE :sql_query OR wca_id LIKE :sql_query", sql_query: sql_query).order(:name)
+    query.split.each do |part|
+      users = users.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+    end
+
+    users.order(:name)
   end
 
   attr_accessor :doorkeeper_token

@@ -392,7 +392,7 @@ en:
     connect_wca_id: "Connect your WCA ID to your account!"
   persons:
     index:
-      name_or_wca_id: "Name or WCA ID"
+      name_or_wca_id: "Name parts or WCA ID"
       name: "Name"
       country: "Country"
       podiums: "Podiums"
