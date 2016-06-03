@@ -14,7 +14,7 @@ describe DelegateReport do
       end
 
       it "can view delegate report with posted report" do
-        competition.delegate_report.update_attributes(posted: true)
+        competition.delegate_report.update_attributes!(schedule_url: "http://example.com", posted: true)
 
         expect(other_delegate.can_view_delegate_report?(competition.delegate_report)).to eq true
       end

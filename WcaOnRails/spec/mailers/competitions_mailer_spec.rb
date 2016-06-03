@@ -45,6 +45,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.to).to match_array competition.delegates.pluck(:email)
       expect(mail.cc).to eq ["results@worldcubeassociation.org"]
       expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
+    end
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
@@ -54,7 +55,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
       FactoryGirl.create(:competition, name: "Comp of the Future 2016", countryId: "Australia").tap do |comp|
-        comp.delegate_report.update_attributes(remarks: "This was a great competition", posted_at: Time.now)
+        comp.delegate_report.update_attributes!(schedule_url: "http://example.com", remarks: "This was a great competition", posted_at: Time.now)
       end
     end
     let(:mail) { CompetitionsMailer.notify_of_delegate_report_submission(competition) }
