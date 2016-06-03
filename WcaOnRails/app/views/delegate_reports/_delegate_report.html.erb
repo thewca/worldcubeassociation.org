@@ -61,6 +61,9 @@
   <%=md delegate_report.remarks %>
 </div>
 
-<br>
-
-Report submitted by <%= delegate_report.posted_by_user.name %>
+<% if delegate_report.posted_by_user %>
+  <br>
+  <div>
+    Report submitted by <%= delegate_report.posted_by_user.name %>
+  </div>
+<% end %>

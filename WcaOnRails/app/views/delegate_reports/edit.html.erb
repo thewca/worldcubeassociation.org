@@ -20,7 +20,8 @@
     <%= f.input :remarks, input_html: { class: "markdown-editor" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
-    <% if @delegate_report.can_be_posted? && !@delegate_report.posted? %>
+    <% is_actually_posted = DelegateReport.find(@delegate_report).posted? %>
+    <% if @delegate_report.can_be_posted? && !is_actually_posted %>
       <%= button_tag(type: 'submit',
                      name: "delegate_report[posted]",
                      value: true,
@@ -30,5 +31,4 @@
       <% end %>
     <% end %>
   <% end %>
-
 <% end %>
