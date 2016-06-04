@@ -233,6 +233,18 @@ $venue-map-wrapper-height: 400px;
       margin-right: 5px;
     }
 
+    .location {
+      display: inline;
+    }
+
+    .venue-link {
+      display: inline;
+
+      p {
+        display: inline;
+      }
+    }
+
     @media (min-width: $screen-sm) {
       .competition-link {
         display: inline-block;
@@ -244,13 +256,9 @@ $venue-map-wrapper-height: 400px;
         text-overflow: ellipsis;
         vertical-align: bottom;
       }
-      .location {
-        display: inline;
-        margin-left: 20px;
-      }
 
-      .venue-link {
-        display: inline;
+      .location {
+        margin-left: 20px;
       }
     }
 
@@ -277,7 +285,6 @@ $venue-map-wrapper-height: 400px;
       }
 
       .venue-link {
-        display: inline-block;
         margin-left: 20px;
       }
     }
