@@ -1,0 +1,13 @@
+<% provide(:title, 'WCA Committees') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <% @committees.each do |committee| %>
+    <h2><%= link_to committee.name, committee_path(committee) %></h2>
+    <p><%=md committee.duties %></p>
+    <hr />
+  <% end %>
+  <% if current_user&.can_manage_committees? %>
+    <%= link_to icon("plus", "New Committee"), new_committee_path, class: "btn btn-primary" %>
+  <% end %>
+</div>

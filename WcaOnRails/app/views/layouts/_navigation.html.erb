@@ -115,7 +115,7 @@
                 <li><%= link_to t('.manage_users'), users_path %></li>
               <% end %>
 
-              <% if current_user.any_kind_of_delegate? %>
+              <% if current_user.delegates_committee? %>
                 <li class="divider"></li>
                 <li role="presentation" class="dropdown-header">
                   <%= t '.delegate' %>
@@ -145,7 +145,7 @@
                   <%= t '.team_leader' %>
                 </li>
                 <% current_user.teams_where_is_leader.each do |team| %>
-                  <li><%= link_to team.name, edit_team_path(team) %></li>
+                  <li><%= link_to team.name, edit_committee_team_path(team.committee.slug, team.slug) %></li>
                 <% end %>
               <% end %>
 

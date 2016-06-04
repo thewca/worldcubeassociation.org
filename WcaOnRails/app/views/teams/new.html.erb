@@ -1,12 +1,6 @@
-<% provide(:title, 'Create team') %>
+<% provide(:title, 'Create a Team Under The ' + @committee.name) %>
 
 <div class="container new-team">
-  <h1>Create a new team</h1>
-
-  <%= horizontal_simple_form_for @team, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
-    <%= f.input :name, required: true, autofocus: true %>
-
-    <%= link_to icon("undo", "Back to Teams"), teams_path, class: "btn btn-default teams-home" %>
-    <button type="submit" class="btn btn-success">Create team</button>
-  <% end %>
+  <h1><%= yield(:title) %></h1>
+  <%= render 'team_form' %>
 </div>

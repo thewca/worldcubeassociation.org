@@ -1,0 +1,8 @@
+<% provide(:title, "Editing position #{@position.name}") %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= render 'committee_position_form', url: committee_position_path(@committee, @position)  %>
+
+</div>

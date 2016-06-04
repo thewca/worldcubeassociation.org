@@ -464,7 +464,7 @@ describe CompetitionsController do
 
   describe 'GET #post_announcement' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:results_team_member) }
 
       it 'creates an announcement post' do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
@@ -485,7 +485,7 @@ describe CompetitionsController do
 
   describe 'GET #post_announcement' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:results_team_member) }
 
       it "creates a results post" do
         Result.create!(

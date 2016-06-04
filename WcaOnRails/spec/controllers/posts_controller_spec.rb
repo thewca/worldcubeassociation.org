@@ -62,7 +62,7 @@ describe PostsController do
   end
 
   context "logged in as wrc team" do
-    sign_in { FactoryGirl.create :wrc_team }
+    sign_in { FactoryGirl.create :regulations_team_member }
 
     describe "GET #new" do
       it "works" do

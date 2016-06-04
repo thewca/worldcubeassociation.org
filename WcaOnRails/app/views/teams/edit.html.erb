@@ -1,57 +1,6 @@
-<% provide(:title, "Editing team #{@team.friendly_id}") %>
+<% provide(:title, "Editing team #{@team.name}") %>
 
 <div class="container">
-  <h3><%= yield(:title) %></h3>
-
-  <%= horizontal_simple_form_for @team, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-
-    <%= f.input :friendly_id, label: "Friendly ID" %>
-    <%= f.input :name %>
-    <%= f.input :description %>
-
-      <div class="team-members-wrapper">
-        <h3>Members</h3>
-        <%= wca_table table_class: "team-members", hover: false, striped: false do %>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Start date</th>
-              <th>End date</th>
-              <th>Team leader</th>
-              <th></th> <!-- Extra column for .table-greedy-last-column -->
-            </tr>
-          </thead>
-          <tbody>
-          <% # We need to use `sort_by` instead of `order` to keep the new builded, unsaved objects.
-             team_members = @team.team_members.sort_by do |m|
-               # We call `to_s` on the dates to avoid an exception when one of them is nil.
-               [(m.end_date.nil? ? 1 : 0), m.end_date.to_s, m.start_date.to_s]
-             end.reverse!
-          %>
-          <%= f.simple_fields_for :team_members, team_members do |t| %>
-            <%= render "team_member_fields", f: t %>
-          <% end %>
-          </tbody>
-        <% end %>
-
-        <div class="links">
-          <%= link_to_add_association button_tag(icon("plus", "Add member"), type: "button", class: "btn btn-primary add"), f, :team_members,
-                                      data: { association_insertion_node: '.team-members:not(.floatThead-table)', association_insertion_method: 'append' } %>
-        </div>
-      </div>
-
-    <div class="form-group form-actions">
-      <%= link_to icon("undo", "Back to Teams"), teams_path, class: "btn btn-default teams-home" %>
-      <%= f.button :submit, class: "btn btn-primary" %>
-    </div>
-  <% end %>
+  <h1><%= yield(:title) %></h1>
+  <%= render 'team_form' %>
 </div>
-
-<script>
-$(".team-members-wrapper").on('cocoon:after-insert', function() {
-  $('input.wca-autocomplete').wcaAutocomplete();
-
-  wca.datetimepicker();
-});
-</script>

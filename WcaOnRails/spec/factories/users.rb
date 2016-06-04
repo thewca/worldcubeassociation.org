@@ -28,22 +28,38 @@ FactoryGirl.define do
       name "Mr. Admin"
       email "admin@worldcubeassociation.org"
       after(:create) do |user|
-        software_team = Team.find_by_friendly_id('software')
-        FactoryGirl.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
+        software_team = Team.find_by_slug('software-team') || FactoryGirl.create(:team, name: 'Software Team', committee: Committee.find_by_slug(Committee::WCA_SOFTWARE_COMMITTEE))
+        FactoryGirl.create(:team_member, team: software_team, user: user)
       end
     end
 
-    factory :results_team do
+    factory :admin_demoted do
+      name "Mr. Admin"
+      email "admin@worldcubeassociation.org"
       after(:create) do |user|
-        results_team = Team.find_by_friendly_id('results')
-        FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id)
+        software_team = Team.find_by_slug('software-team') || FactoryGirl.create(:team, name: 'Software Team', committee: Committee.find_by_slug(Committee::WCA_SOFTWARE_COMMITTEE))
+        FactoryGirl.create(:team_member, :demoted, team: software_team, user: user)
       end
     end
 
-    factory :wrc_team do
+    factory :results_team_member do
       after(:create) do |user|
-        wrc_team = Team.find_by_friendly_id('wrc')
-        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+        results_team = Team.find_by_slug('results-team') || FactoryGirl.create(:team, name: 'Results Team', committee: Committee.find_by_slug(Committee::WCA_RESULTS_COMMITTEE))
+        FactoryGirl.create(:team_member, team: results_team, user: user)
+      end
+    end
+
+    factory :regulations_team_member do
+      after(:create) do |user|
+        regulations_team = Team.find_by_slug('regulations-team') || FactoryGirl.create(:team, name: 'Regulations Team', committee: Committee.find_by_slug(Committee::WCA_REGULATIONS_COMMITTEE))
+        FactoryGirl.create(:team_member, team: regulations_team, user: user)
+      end
+    end
+
+    factory :disciplinary_team_member do
+      after(:create) do |user|
+        disciplinary_team = Team.find_by_slug('disciplinary-team') || FactoryGirl.create(:team, name: 'Disciplinary Team', committee: Committee.find_by_slug(Committee::WCA_DISCIPLINARY_COMMITTEE))
+        FactoryGirl.create(:team_member, team: disciplinary_team, user: user)
       end
     end
 
@@ -56,20 +72,54 @@ FactoryGirl.define do
 
     factory :user_with_wca_id, traits: [:wca_id]
 
-    factory :delegate, traits: [:wca_id] do
-      delegate_status "delegate"
+    factory :candidate_delegate, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :senior_delegate)
+        FactoryGirl.create(:team_member, :candidate_delegate, user: user)
+      end
     end
 
-    factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status "candidate_delegate"
+    factory :delegate, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :senior_delegate)
+        FactoryGirl.create(:team_member, :delegate, user: user)
+      end
     end
 
     factory :senior_delegate, traits: [:wca_id] do
-      delegate_status "senior_delegate"
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :senior_delegate, user: user)
+      end
     end
 
     factory :board_member, traits: [:wca_id] do
-      delegate_status "board_member"
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :board_member, user: user)
+      end
+    end
+
+    factory :software_team_leader, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :software_team_leader, user: user)
+      end
+    end
+
+    factory :results_team_leader, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :results_team_leader, user: user)
+      end
+    end
+
+    factory :regulations_team_leader, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :regulations_team_leader, user: user)
+      end
+    end
+
+    factory :disciplinary_team_leader, traits: [:wca_id] do
+      after(:create) do |user|
+        FactoryGirl.create(:team_member, :disciplinary_team_leader, user: user)
+      end
     end
 
     factory :dummy_user, traits: [:wca_id] do

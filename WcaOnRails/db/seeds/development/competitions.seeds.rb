@@ -11,7 +11,7 @@ after "development:users" do
     end
   end
 
-  delegate = User.find_by(delegate_status: "delegate")
+  delegate = User.joins(:current_committees).where(committees: {slug: 'wca-delegates-committee'}).take
 
   users = User.where.not(wca_id: nil).sample(93)
 

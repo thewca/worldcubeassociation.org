@@ -1,0 +1,16 @@
+  <%= simple_form_for [@committee, @position], url: url, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
+    wrapper_mappings: {
+      check_boxes: :horizontal_radio_and_checkboxes,
+      radio_buttons: :horizontal_radio_and_checkboxes,
+      file: :horizontal_file_input,
+      boolean: :horizontal_boolean
+    }  do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.input :name %>
+    <%= f.input :description, hint: t('.description_html', md: t('common.hints.supports_md_html')) %>
+    <%= f.input :team_leader %>
+    <%= link_to icon("undo", "Back to #{@committee.name}"), committee_path(@committee), class: "btn btn-primary" %>
+    <%= f.button :submit, class: "btn btn-info" %>
+    </div>
+  <% end %>

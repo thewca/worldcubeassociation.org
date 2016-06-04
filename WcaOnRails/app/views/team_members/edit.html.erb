@@ -1,0 +1,9 @@
+<% provide(:title, "Editing #{@team_member.user.name}'s Membership of the #{@team.name}") %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <%= alert :info, "To update a team member's position please end date this membership and create a new one.", note: true %>
+
+  <%= render 'team_member_form' %>
+
+</div>

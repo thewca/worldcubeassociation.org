@@ -413,7 +413,51 @@ CREATE TABLE `Scrambles` (
   `scramble` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`scrambleId`),
   KEY `competitionId` (`competitionId`,`eventId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=302666 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `committee_positions`
+--
+
+DROP TABLE IF EXISTS `committee_positions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `committee_positions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `team_leader` tinyint(1) NOT NULL,
+  `committee_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_committee_positions_on_committee_id_and_slug` (`committee_id`,`slug`),
+  KEY `index_committee_positions_on_committee_id` (`committee_id`),
+  CONSTRAINT `fk_rails_8ecd522f1f` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `committees`
+--
+
+DROP TABLE IF EXISTS `committees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `committees` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `duties` text COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_committees_on_name` (`name`),
+  UNIQUE KEY `index_committees_on_slug` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -742,11 +786,17 @@ CREATE TABLE `team_members` (
   `user_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
-  `team_leader` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `committee_position_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_team_members_on_committee_position_id` (`committee_position_id`),
+  KEY `fk_rails_194b5b076d` (`team_id`),
+  KEY `fk_rails_9ec2d5e75e` (`user_id`),
+  CONSTRAINT `fk_rails_194b5b076d` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
+  CONSTRAINT `fk_rails_9ec2d5e75e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_rails_e54679ca2e` FOREIGN KEY (`committee_position_id`) REFERENCES `committee_positions` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -758,13 +808,18 @@ DROP TABLE IF EXISTS `teams`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `friendly_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `committee_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_teams_on_name` (`name`),
+  UNIQUE KEY `index_teams_on_slug` (`slug`),
+  KEY `index_teams_on_committee_id` (`committee_id`),
+  CONSTRAINT `fk_rails_5ea9f6833c` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -809,9 +864,6 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `delegate_status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `senior_delegate_id` int(11) DEFAULT NULL,
-  `region` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `wca_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `pending_avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -833,9 +885,8 @@ CREATE TABLE `users` (
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
-  KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
-) ENGINE=InnoDB AUTO_INCREMENT=6144 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6314 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1059,3 +1110,24 @@ INSERT INTO schema_migrations (version) VALUES ('20160831212003');
 
 INSERT INTO schema_migrations (version) VALUES ('20160901120254');
 
+INSERT INTO schema_migrations (version) VALUES ('20160811013347');
+
+INSERT INTO schema_migrations (version) VALUES ('20160604005639');
+
+INSERT INTO schema_migrations (version) VALUES ('20160605123132');
+
+INSERT INTO schema_migrations (version) VALUES ('20160605123133');
+
+INSERT INTO schema_migrations (version) VALUES ('20160605123134');
+
+INSERT INTO schema_migrations (version) VALUES ('20160606110013');
+
+INSERT INTO schema_migrations (version) VALUES ('20160608151054');
+
+INSERT INTO schema_migrations (version) VALUES ('20160608160245');
+
+INSERT INTO schema_migrations (version) VALUES ('20160609122550');
+
+INSERT INTO schema_migrations (version) VALUES ('20160615031948');
+
+INSERT INTO schema_migrations (version) VALUES ('20160620141216');

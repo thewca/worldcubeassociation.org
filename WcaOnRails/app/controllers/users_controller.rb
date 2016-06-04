@@ -2,10 +2,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
-  def self.WCA_TEAMS
-    %w(software results wdc wrc)
-  end
-
   def index
     unless current_user&.can_edit_users?
       flash[:danger] = "You cannot edit users"

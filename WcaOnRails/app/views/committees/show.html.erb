@@ -1,0 +1,78 @@
+<% provide(:title, @committee.name) %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <p><%= mail_to @committee.email %></p>
+  <p><%=md @committee.duties %></p>
+  <% if current_user&.can_manage_committees? %>
+    <%= link_to icon("list", "Show Positions"), committee_positions_path(@committee), class: "btn btn-info" %>
+  <% end %>
+  <hr />
+  <% @committee.teams.includes(:team_members).order("teams.name").each do |team| %>
+    <% if @committee.teams.count > 1 %>
+      <h2><%= team.name %></h2>
+      <p><%=md team.description %></p>
+    <% end %>
+    <div class="table-responsive">
+      <table class="table team-members-table">
+        <colgroup>
+          <col />
+          <col class="col-md-4" />
+          <col class="col-md-4" />
+          <col class="col-md-4" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% team.current_members.includes(:user).includes(:committee_position).order("committee_positions.team_leader desc").order("users.name asc").each do |member| %>
+          <tr class="<%= member.committee_position.slug %>">
+            <td>
+              <%= mail_to member.user.email, target: "_blank", class: "hide-new-window-icon" do %>
+                <span class="glyphicon glyphicon-envelope"></span>
+              <% end %>
+              <% if current_user&.can_edit_users? %>
+                <%= link_to edit_committee_team_team_member_path(@committee, team, member) do %>
+                  <span class="glyphicon glyphicon-pencil"></span>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to "/results/p.php?i=#{member.user.wca_id}", class: "wca-user-link" do %>
+                <%= render "shared/user", user: member.user %>
+              <% end %>
+            </td>
+            <td><%= member.start_date.strftime('%B %d, %Y')  %></td>
+            <td><%= member.committee_position.name %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if current_user&.can_manage_committees? %>
+      <p>
+        <%= link_to icon("edit", "Edit #{team.name}"), edit_committee_team_path(@committee, team), class: "btn btn-info" %>
+        <%= link_to icon("user-plus", "Add a member to #{team.name}"), new_committee_team_team_member_path(@committee, team), class: "btn btn-info" %>
+        <% if team.team_members.empty? %>
+          <%= link_to icon("trash", "Delete #{team.name}"), committee_team_path(@committee, team), method: :delete, data: { confirm: 'Are you sure you want to delete this team?' }, class: "btn btn-danger" %>
+        <% end %>
+      </p>
+      <hr />
+    <% end %>
+  <% end %>
+  <p>
+    <%= link_to icon("undo", "Back to Committees"), committees_path, class: "btn btn-primary" %>
+    <% if current_user&.can_manage_committees? %>
+      <%= link_to icon("edit", "Edit Committee"), edit_committee_path, class: "btn btn-info" %>
+      <% if @committee.teams.empty? %>
+        <%= link_to icon("trash", "Delete Committee"), committee_path(@committee), method: :delete, data: { confirm: 'Are you sure you want to delete this committee?' }, class: "btn btn-danger" %>
+      <% end %>
+      <%= link_to icon("plus", "Create New Team"), new_committee_team_path(@committee), class: "btn btn-info" %>
+    <% end %>
+  </p>
+</div>

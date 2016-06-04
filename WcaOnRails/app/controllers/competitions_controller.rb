@@ -30,7 +30,7 @@ class CompetitionsController < ApplicationController
 
   def new
     @competition = Competition.new
-    if current_user.any_kind_of_delegate?
+    if current_user.delegates_committee?
       @competition.delegates = [current_user]
     end
   end
@@ -240,7 +240,7 @@ class CompetitionsController < ApplicationController
   def clone_competition
     competition_to_clone = Competition.find(params[:id])
     @competition = competition_to_clone.build_clone
-    if current_user.any_kind_of_delegate?
+    if current_user.delegates_committee?
       @competition.delegates |= [current_user]
     end
     render :new

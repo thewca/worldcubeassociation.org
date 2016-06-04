@@ -113,7 +113,7 @@ class Competition < ActiveRecord::Base
   # Once that is done, we'll be able to change this validation to work on old competitions.
   validate :delegates_must_be_delegates
   def delegates_must_be_delegates
-    if !self.delegates.all?(&:any_kind_of_delegate?)
+    if !self.delegates.all?(&:delegates_committee?)
       errors.add(:delegate_ids, "are not all delegates")
     end
   end

@@ -2,13 +2,15 @@ tr.board-member {
   font-weight: bold;
 }
 
-tr.senior-delegate {
-  background-color: black;
-  color: white;
+tr.senior-delegate,
+tr.team-leader {
+  background-color: #eeeeee;
+  color: #333333;
   font-weight: bold;
 }
 
-tr.candidate-delegate {
+tr.candidate-delegate,
+tr.candidate-member {
   font-style: italic;
 }
 
@@ -17,7 +19,7 @@ tr.candidate-delegate {
   max-height: 100%;
 }
 
-.delegates-table tbody tr td {
+.team-members-table tbody tr td {
   vertical-align: middle;
 }
 

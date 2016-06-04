@@ -61,7 +61,12 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:index, :new, :create, :update, :edit]
+  resources :committees do
+    resources :teams, only: [:new, :edit, :create, :update, :destroy] do
+      resources :team_members, only: [:new, :edit, :create, :update]
+    end
+    resources :committee_positions, as: :positions, path: :positions, only: [:index, :new, :edit, :create, :update, :destroy]
+  end
 
   resources :votes, only: [:create, :update]
 

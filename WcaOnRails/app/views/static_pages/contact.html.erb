@@ -12,38 +12,15 @@
     For website questions, comments, and suggestions, use this
     <a href="/contact/website">contact form</a>. For inquiries concerning a
     specific area or competition, please contact your local <%= link_to "WCA
-    Delegate", delegates_path %>.
+    Delegate", committee_path(Committee::WCA_DELEGATES_COMMITTEE) %>.
   </p>
 
-  <h2><u>Committees and Teams</u></h2>
-
-  <p>
-    <strong>WCA Board</strong> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
-    (WCA organisation, delegate reports, competition approval, general inquiries)<br />
-    <%= @board_members.order(:name).map(&:name).join(", ") %>
-  </p>
-
-  <p>
-    <strong>WCA Disciplinary Committee</strong> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
-    (independent advice to WCA board, independent investigations, counselor for important personal matters)<br />
-    <%= format_team_members('wdc') %>
-  </p>
-
-  <p>
-    <strong>WCA Results Team</strong> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
-    (competition results, result corrections)<br />
-    <%= format_team_members('results') %>
-  </p>
-
-  <p>
-    <strong>WCA Regulations Committee</strong> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
-    (maintenance of the WCA Regulations)<br />
-    <%= format_team_members('wrc') %>
-  </p>
-
-  <p>
-    <strong>WCA Software Team</strong> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
-    (maintenance of software of WCA)<br />
-    <%= format_team_members('software') %>
-  </p>
+  <h2><u><%= link_to "Committees and Teams", committees_path %></u></h2>
+  <% @committees.each do |committee| %>
+    <p>
+      <strong><%= link_to committee.name, committee_path(committee) %></strong> - <%= mail_to committee.email %></a><br />
+      <%=md committee.duties %>
+      <br />
+    </p>
+  <% end %>
 </div>
