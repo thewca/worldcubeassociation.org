@@ -25,6 +25,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: "delegates@worldcubeassociation.org",
+      cc: competition.delegates.pluck(:email),
       subject: "[wca-report] [#{competition.continent.name}] Delegate report for #{competition.name}",
     )
   end
