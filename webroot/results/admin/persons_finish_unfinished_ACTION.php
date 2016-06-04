@@ -56,7 +56,7 @@ function finishUnfinishedPersons () {
       $newId = completeId( $newSemiId );
       
       #--- Insert the new person into the Persons table.
-      insertPerson( $newName, $newCountry, $newId );
+      insertPerson( $oldName, $oldCountry, $newName, $newCountry, $newId );
 
       #--- Adapt the Results table entries.
       adaptResults( $oldName, $oldCountry, $newName, $newCountry, $newId );
@@ -106,7 +106,23 @@ function completeId ( $newSemiId ) {
 }
 
 #----------------------------------------------------------------------
-function insertPerson( $newName, $newCountry, $newId ) {
+function getIso2FromCountryId($countryId) {
+#----------------------------------------------------------------------
+  $country = dbQueryHandle("
+    SELECT iso2
+    FROM Countries
+    WHERE id='$countryId'
+  ");
+  $row = mysql_fetch_row( $country );
+  if ( !$row ){
+      showErrorMessage( "'$countryId' is not a known country ID'" );
+      return null;
+  }
+  return $row[0];
+}
+
+#----------------------------------------------------------------------
+function insertPerson( $oldName, $oldCountry, $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 
   #--- Mysql-ify.
@@ -125,6 +141,30 @@ function insertPerson( $newName, $newCountry, $newId ) {
   
   #--- Execute the command.
   dbCommand( $command );
+
+  if ( $oldCountry <> $newCountry || $oldName <> $newName){
+
+    #--- Guess countries iso2
+    $newCountryIso2 = getIso2FromCountryId( $newCountry );
+    if ( $newCountryIso2 ){
+      if ( $oldCountry == $newCountry ){
+        $oldCountryIso2 = $newCountryIso2;
+      } else {
+        $oldCountryIso2 = getIso2FromCountryId( $oldCountry );
+      }
+      if ( $oldCountryIso2 ){
+        #--- Build the command.
+        $command = "
+          UPDATE InboxPersons SET name='$newName', countryId='$newCountryIso2'
+          WHERE name='$oldName' AND countryId='$oldCountryIso2'
+        ";
+        #--- Show the command.
+        echo colorize( $command );
+        #--- Execute the command.
+        dbCommand( $command );
+      }
+    }
+  }
 }
 
 #----------------------------------------------------------------------

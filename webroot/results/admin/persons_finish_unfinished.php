@@ -192,10 +192,7 @@ function showUnfinishedPersons () {
       visualize( $countryId ),
       peekLink( $name, $countryId ),
       'mm/dd/yyyy',
-
-      # This input is disabled because of https://github.com/cubing/worldcubeassociation.org/issues/695.
-      "<input type='hidden' name='name$caseNr' value='$nameHtml' /><input type='text' name='name$caseNr' value='$nameHtml' size='20' disabled='disabled' />",
-
+      "<input type='text' name='name$caseNr' value='$nameHtml' size='20' />",
       "<input type='text' name='country$caseNr' value='$countryIdHtml' size='20' />",
       "<input type='text' name='semiId$caseNr' value='$semiId' size='10' maxlength='8' />",
     ));
