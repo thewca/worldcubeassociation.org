@@ -3,51 +3,6 @@ require 'rails_helper'
 describe DelegateReportsController do
   let(:comp) { FactoryGirl.create(:competition, :with_delegate) }
 
-  it "factory makes a valid delegate report" do
-    dr = FactoryGirl.create :delegate_report
-    expect(dr).to be_valid
-  end
-
-  it "validates urls" do
-    valid_urls = [
-      'http://www.google.com',
-      'https://www.google.com',
-    ]
-    invalid_urls = [
-      'https://',
-      'http://',
-      'http://www.google.com ',
-      ' http://www.google.com',
-      'http://www. google.com',
-      'foo.com',
-      "bar",
-    ]
-
-    valid_urls.each do |valid_url|
-      dr = FactoryGirl.build :delegate_report, schedule_url: valid_url, discussion_url: valid_url
-      expect(dr).to be_valid
-    end
-
-    invalid_urls.each do |invalid_url|
-      dr = FactoryGirl.build :delegate_report, schedule_url: invalid_url, discussion_url: nil
-      expect(dr).to be_invalid
-
-      dr = FactoryGirl.build :delegate_report, schedule_url: nil, discussion_url: invalid_url
-      expect(dr).to be_invalid
-    end
-  end
-
-  it "requires schedule_url but allows missing discussion_url when posted" do
-    dr = FactoryGirl.build :delegate_report, schedule_url: nil, discussion_url: nil
-    expect(dr).to be_valid
-
-    dr.posted = true
-    expect(dr).to be_invalid
-
-    dr.schedule_url = "http://www.google.com"
-    expect(dr).to be_valid
-  end
-
   context "not logged in" do
     it "redirects to sign in" do
       get :show, competition_id: comp.id

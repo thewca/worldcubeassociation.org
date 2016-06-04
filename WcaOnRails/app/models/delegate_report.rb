@@ -10,7 +10,7 @@ class DelegateReport < ActiveRecord::Base
   VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://".freeze
   validate :url_validations
   def url_validations
-    if (schedule_url.present? || posted?) && !URL_RE.match(schedule_url)
+    if schedule_url.present? && !URL_RE.match(schedule_url)
       errors.add(:schedule_url, VALID_URL_MESSAGE)
     end
 
