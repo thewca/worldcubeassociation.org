@@ -589,8 +589,9 @@ class Competition < ActiveRecord::Base
     DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
       dr.competition_id = self.id
       dr.equipment = "Gen 2 Timer: 0
-Gen 3 Timer: 0
-Gen 4 Timer: 0
+Gen 3 Pro Timer: 0
+Gen 4 Pro Timer: 0
+
 Gen 2 Display: 0
 Gen 3 Display: 0"
     end
