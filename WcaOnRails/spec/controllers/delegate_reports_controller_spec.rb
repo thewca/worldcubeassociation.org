@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe DelegateReportsController do
-  let(:comp) { FactoryGirl.create(:competition, :with_delegate) }
+  let(:delegate) { FactoryGirl.create :delegate }
+  let(:comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: 1.day.ago) }
+  let(:pre_delegate_reports_form_comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -74,7 +76,7 @@ describe DelegateReportsController do
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true }
       expect(response).to redirect_to(delegate_report_path(comp))
       assert_enqueued_jobs 1
-      expect(flash[:info]).to eq "Your report has been posted!"
+      expect(flash[:info]).to eq "Your report has been posted and emailed!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
       expect(comp.delegate_report.posted?).to eq true
@@ -84,6 +86,14 @@ describe DelegateReportsController do
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
+    end
+
+    it "posting report for an ancient competition doesn't send email notification" do
+      # Update the remarks *and* set posted to true for next test.
+      post :update, competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true }
+      expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
+      expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
+      assert_enqueued_jobs 0
     end
   end
 end

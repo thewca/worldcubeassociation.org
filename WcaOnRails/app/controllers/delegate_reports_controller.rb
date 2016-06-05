@@ -33,8 +33,14 @@ class DelegateReportsController < ApplicationController
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"
       if @delegate_report.posted? && !was_posted
-        CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
-        flash[:info] = "Your report has been posted!"
+        # Don't email when posting old delegate reports.
+        # See https://github.com/cubing/worldcubeassociation.org/issues/704 for details.
+        if @competition.end_date >= Date.new(2016, 6, 1)
+          CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
+          flash[:info] = "Your report has been posted and emailed!"
+        else
+          flash[:info] = "Your report has been posted but not emailed because it is for a pre June 2016 competition."
+        end
         redirect_to delegate_report_path(@competition)
       else
         redirect_to delegate_report_edit_path(@competition)
