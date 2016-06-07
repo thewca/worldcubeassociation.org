@@ -31,7 +31,7 @@ unless node.chef_environment.start_with?("development")
     path path
     mailto admin_email
     user username
-    command "(cd #{repo_root}; bin/rake work:schedule)"
+    command "(cd #{repo_root}/WcaOnRails; RACK_ENV=production bin/rake work:schedule)"
   end
 end
 
