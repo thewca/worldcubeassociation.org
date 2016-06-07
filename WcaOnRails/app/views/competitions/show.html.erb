@@ -2,7 +2,7 @@
 
 <%= render layout: 'nav' do %>
   <ul class="nav nav-tabs">
-    <li><a href="#general-info" data-toggle="tab"><%=t '.show.general_info' %></a></li>
+    <li><a href="#general-info" data-toggle="tab"><%=t 'competitions.show.general_info' %></a></li>
     <% @competition.tabs.each do |tab| %>
       <li><a href="#<%= tab.slug %>" data-toggle="tab"><%= tab.name %></a></li>
     <% end %>

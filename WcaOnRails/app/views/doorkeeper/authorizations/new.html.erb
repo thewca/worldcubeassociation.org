@@ -4,7 +4,7 @@
 <header class="page-header" role="banner">
   <h1>
     <%= image_tag "wca_logo.svg" %>
-    <%= t('.title') %>
+    <%= t('.title', scope: [:wca]) %>
   </h1>
 </header>
 
@@ -19,7 +19,7 @@
 
       <ul class="text-info">
         <% @pre_auth.scopes.each do |scope| %>
-          <li><%= t scope, scope: [:doorkeeper, :scopes] %></li>
+          <li><%= t scope, scope: [:wca, :doorkeeper, :scopes] %></li>
         <% end %>
       </ul>
     </div>

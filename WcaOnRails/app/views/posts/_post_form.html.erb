@@ -8,7 +8,7 @@
   <%= f.button :submit %>
 
   <% if @post.deletable %>
-    <%= link_to post_path(@post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) }, class: "btn btn-danger" do %>
+    <%= link_to post_path(@post.slug), method: "delete", data: { confirm: I18n.t('posts.confirm_delete_post') }, class: "btn btn-danger" do %>
       <span class="glyphicon glyphicon-trash"></span> Delete post
     <% end %>
   <% end %>

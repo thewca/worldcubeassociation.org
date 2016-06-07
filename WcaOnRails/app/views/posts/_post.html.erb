@@ -12,7 +12,7 @@
             <span class="glyphicon glyphicon-pencil"></span>
           <% end %>
           <% if post.deletable %>
-            <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t(:confirm_delete_post) } do %>
+            <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t('posts.confirm_delete_post') } do %>
               <span class="glyphicon glyphicon-trash"></span>
             <% end %>
           <% end %>

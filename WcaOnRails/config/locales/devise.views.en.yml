@@ -99,12 +99,3 @@ en:
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
-  activerecord:
-    models:
-      user: "User"
-    attributes:
-      user:
-        current_sign_in_at: "Signed in at"
-        email: "Email"
-        password: "Password"
-        last_sign_in_at: "Last signed in at"

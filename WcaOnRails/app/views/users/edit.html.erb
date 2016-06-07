@@ -11,6 +11,8 @@
     <% mail_to_delegate = mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank") %>
     <% wca_id_partial = render("shared/wca_id", wca_id: @user.unconfirmed_wca_id) %>
     <% message = @user.confirmed_at ? '.pending_claim_confirmation_html' : '.pending_claim_mail_confirmation_html' %>
+    <% # i18n-tasks-use t('.pending_claim_confirmation_html') #<- useful because the previous line tricks i18n-tasks %>
+    <% # i18n-tasks-use t('.pending_claim_mail_confirmation_html') %>
     <%= alert :warning, t(message, delegate: mail_to_delegate, wca_id: wca_id_partial) %>
   <% end %>
   <% if @user.unconfirmed_email %>
