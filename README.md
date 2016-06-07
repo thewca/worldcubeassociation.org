@@ -28,13 +28,8 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `time ssh -A user@example.com 'sudo wget https://raw.githubusercontent.com/cubing/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh staging/production'`
 
 ## Deploy
-- `git fetch upstream`
-- `git checkout upstream/master`
-- `git push upstream HEAD:production`
-- `ssh -A cubing@worldcubeassociation.org worldcubeassociation.org/scripts/deploy.sh pull_latest rebuild_regs rebuild_rails`
-  - NOTE: This command needs to be run twice in the event `deploy.sh` changes. See https://github.com/cubing/worldcubeassociation.org/issues/651.
-  (`rebuild_regs` can be skipped most of the time)
-- Enter the password
+
+See [this wiki](https://github.com/cubing/worldcubeassociation.org/wiki/Merging-and-deploying).
 
 ## Secrets
 - Production secrets are stored in an encrypted chef [data bag](https://docs.chef.io/data_bags.html) at `chef/data_bags/secrets/production.json`.
