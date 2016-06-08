@@ -41,14 +41,15 @@
     <%= competition.organizers.pluck(:name).to_sentence %>
   </div>
 <% end %>
-<div>
-  <strong>Organisation</strong>
-  <%=md delegate_report.organisation %>
-</div>
 
 <div>
   <strong>Venue</strong>
   <%=md delegate_report.venue %>
+</div>
+
+<div>
+  <strong>Organisation</strong>
+  <%=md delegate_report.organisation %>
 </div>
 
 <div>
