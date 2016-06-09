@@ -3,7 +3,8 @@
 
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
-  <%= simple_form_for(@delegate_report, url: delegate_report_path(@competition.id)) do |f| %>
+  <%= simple_form_for @delegate_report, url: delegate_report_path(@competition.id),
+                                        html: { class: "delegate-report" } do |f| %>
     <%= render 'shared/error_messages', object: @delegate_report %>
 
     <%= f.hidden_field :updated_at %>
