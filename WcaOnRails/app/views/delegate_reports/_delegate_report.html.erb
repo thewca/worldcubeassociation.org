@@ -1,70 +1,72 @@
 <% competition = delegate_report.competition %>
 
-<div>
-  <strong>Date</strong>
-  <%= wca_date_range(competition.start_date, competition.end_date) %>
-  <% if delegate_report.schedule_url.present? %>
-    (<%= link_to "Schedule", delegate_report.schedule_url %>)
-  <% else %>
-    (Schedule missing)
+<div class="delegate-report">
+  <div>
+    <strong>Date</strong>
+    <%= wca_date_range(competition.start_date, competition.end_date) %>
+    <% if delegate_report.schedule_url.present? %>
+      (<%= link_to "Schedule", delegate_report.schedule_url %>)
+    <% else %>
+      (Schedule missing)
+    <% end %>
+  </div>
+
+  <div>
+    <strong>Location</strong>
+    <%= competition.cityName %>, <%= competition.country_name %>
+    <%= link_to_google_maps_place competition.venueAddress, competition.latitude_degrees, competition.longitude_degrees %>
+  </div>
+
+  <div>
+    <strong>Competitors</strong>
+
+    <% if competition.results_posted? %>
+      <%= competition.competitors.count %>
+    <% else %>
+      Unknown, results are not posted yet.
+    <% end %>
+  </div>
+
+  <div>
+    <strong>Equipment</strong>
+    <%=md delegate_report.equipment %>
+  </div>
+
+  <div>
+    <strong>Delegates</strong>
+    <%= competition.delegates.pluck(:name).to_sentence %>
+  </div>
+  <% if competition.organizers.length > 0 %>
+    <div>
+      <strong>Organisers</strong>
+      <%= competition.organizers.pluck(:name).to_sentence %>
+    </div>
+  <% end %>
+
+  <div>
+    <strong>Venue</strong>
+    <%=md delegate_report.venue %>
+  </div>
+
+  <div>
+    <strong>Organisation</strong>
+    <%=md delegate_report.organisation %>
+  </div>
+
+  <div>
+    <strong>Incidents</strong>
+    <%=md delegate_report.incidents %>
+  </div>
+
+  <div>
+    <strong>Remarks:</strong>
+    <%=md delegate_report.remarks %>
+  </div>
+
+  <% if delegate_report.posted_by_user %>
+    <br>
+    <div>
+      Report submitted by <%= delegate_report.posted_by_user.name %>
+    </div>
   <% end %>
 </div>
-
-<div>
-  <strong>Location</strong>
-  <%= competition.cityName %>, <%= competition.country_name %>
-  <%= link_to_google_maps_place competition.venueAddress, competition.latitude_degrees, competition.longitude_degrees %>
-</div>
-
-<div>
-  <strong>Competitors</strong>
-
-  <% if competition.results_posted? %>
-    <%= competition.competitors.count %>
-  <% else %>
-    Unknown, results are not posted yet.
-  <% end %>
-</div>
-
-<div>
-  <strong>Equipment</strong>
-  <%=md delegate_report.equipment %>
-</div>
-
-<div>
-  <strong>Delegates</strong>
-  <%= competition.delegates.pluck(:name).to_sentence %>
-</div>
-<% if competition.organizers.length > 0 %>
-  <div>
-    <strong>Organisers</strong>
-    <%= competition.organizers.pluck(:name).to_sentence %>
-  </div>
-<% end %>
-
-<div>
-  <strong>Venue</strong>
-  <%=md delegate_report.venue %>
-</div>
-
-<div>
-  <strong>Organisation</strong>
-  <%=md delegate_report.organisation %>
-</div>
-
-<div>
-  <strong>Incidents</strong>
-  <%=md delegate_report.incidents %>
-</div>
-
-<div>
-  <strong>Remarks:</strong>
-  <%=md delegate_report.remarks %>
-</div>
-
-<% if delegate_report.posted_by_user %>
-  <br>
-  <div>
-    Report submitted by <%= delegate_report.posted_by_user.name %>
-  </div>
-<% end %>
