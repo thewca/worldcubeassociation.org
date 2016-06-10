@@ -29,7 +29,7 @@ class DelegateReportsController < ApplicationController
 
     @delegate_report = @competition.delegate_report
     @delegate_report.current_user = current_user
-    @delegate_report.discussion_url = "https://groups.google.com/forum/#!searchin/wca-delegates/subject$3A$20" + URI::encode(@delegate_report.competition.name)
+    @delegate_report.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI::encode(@delegate_report.competition.name)
     was_posted = @delegate_report.posted?
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"
