@@ -16,6 +16,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_many :competition_tabs
   has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
