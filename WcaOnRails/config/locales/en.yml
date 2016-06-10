@@ -389,6 +389,7 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         admin_view: "Admin view"
+        tabs: "Manage tabs"
         delegate_report: "Delegate report"
         registration: "Registration"
         register: "Register"
