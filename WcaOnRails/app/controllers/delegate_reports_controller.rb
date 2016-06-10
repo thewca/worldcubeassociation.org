@@ -29,13 +29,14 @@ class DelegateReportsController < ApplicationController
 
     @delegate_report = @competition.delegate_report
     @delegate_report.current_user = current_user
-    @delegate_report.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(@delegate_report.competition.name)
     was_posted = @delegate_report.posted?
     if @delegate_report.update_attributes(delegate_report_params)
       flash[:success] = "Updated report"
       if @delegate_report.posted? && !was_posted
         # Don't email when posting old delegate reports.
         # See https://github.com/cubing/worldcubeassociation.org/issues/704 for details.
+        # Set the discussion_url column only at posting
+        @delegate_report.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(@delegate_report.competition.name)
         if @competition.end_date >= Date.new(2016, 6, 1)
           CompetitionsMailer.notify_of_delegate_report_submission(@competition).deliver_later
           flash[:info] = "Your report has been posted and emailed!"
