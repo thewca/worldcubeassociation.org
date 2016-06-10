@@ -1,0 +1,10 @@
+<% provide(:title, "New tab for #{@competition.name}") %>
+
+<%= render layout: 'competitions/nav' do %>
+  <%= simple_form_for @competition_tab do |f| %>
+    <%= f.input :name %>
+    <%= f.input :content, input_html: { class: "markdown-editor" } %>
+
+    <%= f.submit "Create", class: "btn btn-primary" %>
+  <% end %>
+<% end %>

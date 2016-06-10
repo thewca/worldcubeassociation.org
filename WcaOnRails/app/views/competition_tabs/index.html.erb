@@ -1,0 +1,11 @@
+<% provide(:title, "Manage tabs") %>
+
+<%= render layout: 'competitions/nav' do %>
+  Here you can add and edit tabs which are shown on the competition info page.
+
+  <div id="tabs">
+    <%# Display the tabs %>
+  </div>
+
+  <%= link_to icon(:plus, "New tab"), new_competition_tab_path, class: "btn btn-primary" %>
+<% end %>

@@ -5,4 +5,13 @@ class CompetitionTabsController < ApplicationController
   private def competition_from_params
     Competition.find(params[:competition_id])
   end
+
+  def index
+    @competition = competition_from_params
+  end
+
+  def new
+    @competition = competition_from_params
+    @competition_tab = @competition.competition_tabs.build
+  end
 end
