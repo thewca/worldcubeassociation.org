@@ -11,6 +11,16 @@ class DelegateReport < ActiveRecord::Base
     self.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(competition.name)
   end
 
+  before_create :equipment_default
+  def equipment_default
+    self.equipment = "Gen 2 Timer: 0
+Gen 3 Pro Timer: 0
+Gen 4 Pro Timer: 0
+
+Gen 2 Display: 0
+Gen 3 Display: 0"
+  end
+
   URL_RE = %r{\Ahttps?://\S+\z}
   VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://".freeze
   validate :url_validations
