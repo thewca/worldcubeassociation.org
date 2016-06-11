@@ -397,6 +397,8 @@ en:
       announcements: "Announcements"
       upload_results: "Upload results"
       post_announcement: "Post competition announcement"
+      show:
+        general_info: "General info"
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   persons:

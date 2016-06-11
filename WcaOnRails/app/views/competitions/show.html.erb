@@ -1,5 +1,27 @@
 <% provide(:title, @competition.name) %>
 
-<%= render layout: 'results_nav' do %>
-  <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
+<!-- # <%= render layout: 'results_nav' do %>
+#
+#   <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
+# <% end %> -->
+
+<%= render layout: 'nav' do %>
+  <ul class="nav nav-tabs">
+    <li><a href="#general-info" data-toggle="tab"><%=t '.show.general_info' %></a></li>
+    <% @competition.competition_tabs.each do |tab| %>
+      <li><a href="#tab-<%= tab.id %>" data-toggle="tab"><%= tab.name %></a></li>
+    <% end %>
+  </ul>
+
+  <div class="tab-content" id="competition-tabs">
+    <div class="tab-pane" id="general-info">
+      <%= render "competition_info", competition: @competition %>
+    </div>
+    <% @competition.competition_tabs.each do |tab| %>
+      <div class="tab-pane" id="tab-<%= tab.id %>">
+        <%=md tab.content %>
+      </div>
+    <% end %>
+  </div>
+
 <% end %>

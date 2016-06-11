@@ -16,8 +16,13 @@
       <% @competition.competition_tabs.each do |tab| %>
         <tr>
           <th><%= tab.name %></th>
-          <th><%= link_to icon("pencil", "Edit"), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %></th>
-          <th><%= link_to icon("trash", "Delete"), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger" %></th>
+          <th>
+            <%= link_to icon("pencil", "Edit"), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %>
+          </th>
+          <th>
+            <%= link_to icon("trash", "Delete"), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger",
+                                                 data: { confirm: "Are you sure you want to delete #{tab.name} tab?" } %>
+          </th>
         </tr>
       <% end %>
     </tbody>
