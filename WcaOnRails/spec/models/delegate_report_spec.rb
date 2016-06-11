@@ -47,7 +47,7 @@ describe DelegateReport do
   end
 
   it "discussion_url is set on creation" do
-    dr = FactoryGirl.build :delegate_report
+    dr = FactoryGirl.create :delegate_report
     expect(dr.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(dr.competition.name)
   end
 
