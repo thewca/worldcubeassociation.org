@@ -5,6 +5,7 @@
     <%= f.input :name %>
     <%= f.input :content, input_html: { class: "markdown-editor" } %>
 
+    <%= link_to icon("undo", "Back to tabs"), competition_tabs_path, class: "btn btn-default" %>
     <%= f.submit "Create", class: "btn btn-primary" %>
   <% end %>
 <% end %>

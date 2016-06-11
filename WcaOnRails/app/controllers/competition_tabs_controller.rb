@@ -2,10 +2,6 @@ class CompetitionTabsController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }
 
-  private def competition_from_params
-    Competition.find(params[:competition_id])
-  end
-
   def index
     @competition = competition_from_params
   end
@@ -13,5 +9,22 @@ class CompetitionTabsController < ApplicationController
   def new
     @competition = competition_from_params
     @competition_tab = @competition.competition_tabs.build
+  end
+
+  def create
+    @competition = competition_from_params
+    if @competition.competition_tabs.create(competition_tab_params)
+      redirect_to competition_tabs_path(@competition)
+    else
+      render :edit
+    end
+  end
+
+  private def competition_from_params
+    Competition.find(params[:competition_id])
+  end
+
+  private def competition_tab_params
+    params.require(:competition_tab).permit(:name, :content)
   end
 end

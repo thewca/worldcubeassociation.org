@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
-    resources :competition_tabs, only: [:index, :new, :create, :edit, :update], as: :tabs, path: :tabs
+    resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
