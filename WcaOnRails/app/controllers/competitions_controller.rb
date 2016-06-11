@@ -159,7 +159,7 @@ class CompetitionsController < ApplicationController
       title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
       body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
-      body += " won the the [#{comp.name}](#{competition_url(comp)})"
+      body += " won the [#{comp.name}](#{competition_url(comp)})"
       body += " with an average of #{top333.first.to_s :average} seconds."
 
       body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
