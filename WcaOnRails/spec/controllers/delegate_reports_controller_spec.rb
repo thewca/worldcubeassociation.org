@@ -81,8 +81,6 @@ describe DelegateReportsController do
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
       expect(comp.delegate_report.posted?).to eq true
       expect(comp.delegate_report.posted_by_user_id).to eq user.id
-      # Check if the discussion_url was set
-      expect(comp.delegate_report.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(comp.name)
 
       # Try to update the report when it's posted.
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" }
