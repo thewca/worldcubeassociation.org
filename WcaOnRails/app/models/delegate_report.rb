@@ -7,9 +7,8 @@ class DelegateReport < ActiveRecord::Base
   attr_accessor :current_user
 
   before_create :set_discussion_url
-
   def set_discussion_url
-    discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(self.competition.name)
+    self.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(competition.name)
   end
 
   URL_RE = %r{\Ahttps?://\S+\z}
