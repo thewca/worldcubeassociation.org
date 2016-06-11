@@ -16,6 +16,21 @@ class CompetitionTabsController < ApplicationController
     if @competition.competition_tabs.create(competition_tab_params)
       redirect_to competition_tabs_path(@competition)
     else
+      render :new
+    end
+  end
+
+  def edit
+    @competition = competition_from_params
+    @competition_tab = CompetitionTab.find(params[:id])
+  end
+
+  def update
+    @competition = competition_from_params
+    @competition_tab = CompetitionTab.find(params[:id])
+    if @competition_tab.update_attributes(competition_tab_params)
+      redirect_to edit_competition_tab_path(@competition, @competition_tab)
+    else
       render :edit
     end
   end

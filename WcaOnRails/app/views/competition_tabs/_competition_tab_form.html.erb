@@ -1,0 +1,15 @@
+<% if @competition_tab.new_record?
+     submit_url = competition_tabs_path
+     submit_text = "Create"
+   else
+     submit_url = competition_tab_path(@competition, @competition_tab)
+     submit_text = "Update"
+   end %>
+
+<%= simple_form_for @competition_tab, url: submit_url do |f| %>
+  <%= f.input :name, hint: "Examples: Travel, Payments, Awards, Accommodation" %>
+  <%= f.input :content, input_html: { class: "markdown-editor" } %>
+
+  <%= link_to icon("undo", "Back to tabs"), competition_tabs_path, class: "btn btn-default" %>
+  <%= f.submit submit_text, class: "btn btn-primary" %>
+<% end %>

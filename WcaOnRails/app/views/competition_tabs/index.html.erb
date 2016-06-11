@@ -3,9 +3,25 @@
 <%= render layout: 'competitions/nav' do %>
   Here you can add and edit tabs which are shown on the competition info page.
 
-  <div id="tabs">
-    <%# Display the tabs %>
-  </div>
+  <h3>Tabs</h3>
+  <table id="competition-tabs" class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @competition.competition_tabs.each do |tab| %>
+        <tr>
+          <th><%= tab.name %></th>
+          <th><%= link_to icon("pencil", "Edit"), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %></th>
+          <th><%= link_to icon("trash", "Delete"), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger" %></th>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
   <%= link_to icon(:plus, "New tab"), new_competition_tab_path, class: "btn btn-primary" %>
 <% end %>
