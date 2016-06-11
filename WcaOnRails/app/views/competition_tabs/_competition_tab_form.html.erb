@@ -7,6 +7,8 @@
    end %>
 
 <%= simple_form_for @competition_tab, url: submit_url do |f| %>
+  <%= render "shared/error_messages", object: f.object %>
+
   <%= f.input :name, hint: "Examples: Travel, Payments, Awards, Accommodation" %>
   <%= f.input :content, input_html: { class: "markdown-editor" } %>
 

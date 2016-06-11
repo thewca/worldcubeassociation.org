@@ -13,7 +13,8 @@ class CompetitionTabsController < ApplicationController
 
   def create
     @competition = competition_from_params
-    if @competition.competition_tabs.create(competition_tab_params)
+    @competition_tab = @competition.competition_tabs.build(competition_tab_params)
+    if @competition_tab.save
       redirect_to competition_tabs_path(@competition)
     else
       render :new
