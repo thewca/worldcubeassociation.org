@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
     <li><a href="#general-info" data-toggle="tab"><%=t '.show.general_info' %></a></li>
     <% @competition.competition_tabs.each do |tab| %>
-      <li><a href="#<%= "#{tab.id}-#{tab.name.parameterize}" %>" data-toggle="tab"><%= tab.name %></a></li>
+      <li><a href="#<%= tab.slug %>" data-toggle="tab"><%= tab.name %></a></li>
     <% end %>
   </ul>
 
@@ -15,7 +15,7 @@
       <% end %>
     </div>
     <% @competition.competition_tabs.each do |tab| %>
-      <div class="tab-pane" id="<%= "#{tab.id}-#{tab.name.parameterize}" %>">
+      <div class="tab-pane" id="<%= tab.slug %>">
         <%=md tab.content %>
       </div>
     <% end %>
