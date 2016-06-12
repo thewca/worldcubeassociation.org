@@ -234,6 +234,7 @@ class Competition < ActiveRecord::Base
       CompetitionDelegate,
       CompetitionOrganizer,
       DelegateReport,
+      CompetitionTab,
     ].each do |model|
       foreign_key = model.column_names.include?("competitionId") ? "competitionId" : "competition_id"
       model.where(foreign_key => id_was).update_all(foreign_key => id)
