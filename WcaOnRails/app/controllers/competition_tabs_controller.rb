@@ -15,6 +15,7 @@ class CompetitionTabsController < ApplicationController
     @competition = competition_from_params
     @competition_tab = @competition.competition_tabs.build(competition_tab_params)
     if @competition_tab.save
+      flash[:success] = "Successfully created #{@competition_tab.name} tab."
       redirect_to competition_tabs_path(@competition)
     else
       render :new
@@ -30,6 +31,7 @@ class CompetitionTabsController < ApplicationController
     @competition = competition_from_params
     @competition_tab = CompetitionTab.find(params[:id])
     if @competition_tab.update_attributes(competition_tab_params)
+      flash[:success] = "Successfully updated #{@competition_tab.name} tab."
       redirect_to edit_competition_tab_path(@competition, @competition_tab)
     else
       render :edit
