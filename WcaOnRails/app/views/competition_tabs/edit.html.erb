@@ -1,5 +1,5 @@
 <% provide(:title, "Edit #{@competition_tab.name} tab") %>
 
 <%= render layout: 'competitions/nav' do %>
-  <%= render "competition_tab_form" %>
+  <%= render "competition_tab_form", submit_text: "Update", submit_url: competition_tab_path(@competition, @competition_tab) %>
 <% end %>

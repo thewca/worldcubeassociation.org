@@ -1,11 +1,3 @@
-<% if @competition_tab.new_record?
-     submit_url = competition_tabs_path
-     submit_text = "Create"
-   else
-     submit_url = competition_tab_path(@competition, @competition_tab)
-     submit_text = "Update"
-   end %>
-
 <%= simple_form_for @competition_tab, url: submit_url do |f| %>
   <%= render "shared/error_messages", object: f.object %>
 
