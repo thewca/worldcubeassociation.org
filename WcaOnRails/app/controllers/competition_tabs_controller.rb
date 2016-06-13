@@ -4,6 +4,7 @@ class CompetitionTabsController < ApplicationController
 
   def index
     @competition = competition_from_params
+    @competition_tabs = @competition.competition_tabs
   end
 
   def new
