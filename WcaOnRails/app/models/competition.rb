@@ -9,6 +9,7 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
+  has_many :scrambles, foreign_key: "competitionId"
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
@@ -220,24 +221,15 @@ class Competition < ActiveRecord::Base
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
-  # This is kind of scary. Whenever a competition's id changes, We need to
-  # remember all the places in our database that refer to competition ids, and
-  # update them. We can get rid of all this once we're done with
-  # https://github.com/cubing/worldcubeassociation.org/issues/91.
+  # This callback updates all tables having the competition id, when the id changes.
+  # This should be deleted after competition id is made immutable: https://github.com/cubing/worldcubeassociation.org/pull/381
   after_save :update_foreign_keys, if: :id_changed?
   def update_foreign_keys
-    [
-      Result,
-      Registration,
-      Scramble,
-      CompetitionMedium,
-      CompetitionDelegate,
-      CompetitionOrganizer,
-      DelegateReport,
-      CompetitionTab,
-    ].each do |model|
-      foreign_key = model.column_names.include?("competitionId") ? "competitionId" : "competition_id"
-      model.where(foreign_key => id_was).update_all(foreign_key => id)
+    Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
+      foreign_key = association_reflection.foreign_key
+      if ["competition_id", "competitionId"].include?(foreign_key)
+        association_reflection.klass.where(foreign_key => id_was).update_all(foreign_key => id)
+      end
     end
   end
 

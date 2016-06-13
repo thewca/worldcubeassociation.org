@@ -515,4 +515,22 @@ RSpec.describe Competition do
       expect(competition.events_with_podium_results.map(&:first).uniq).to eq [three_by_three]
     end
   end
+
+  it "when id is changed, foreign keys are updated as well" do
+    competition = FactoryGirl.create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
+    FactoryGirl.create(:result, competitionId: competition.id)
+    FactoryGirl.create(:competition_tab, competition: competition)
+    FactoryGirl.create(:registration, competition: competition)
+
+    expect do
+      competition.update_attribute(:id, "NewName2016")
+    end.to_not change {
+      [:results, :organizers, :delegates, :competition_tabs, :registrations, :delegate_report].map do |associated|
+        competition.send(associated)
+      end
+    }
+
+    expect(competition).to respond_to(:update_foreign_keys),
+                           "This whole test should be removed alongside update_foreign_keys callback in the Competition model."
+  end
 end
