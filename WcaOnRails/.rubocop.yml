@@ -38,3 +38,6 @@ Style/DoubleNegation:
 
 Style/NegatedIf:
   Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
