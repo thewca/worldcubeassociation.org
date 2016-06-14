@@ -107,6 +107,18 @@ wca.competitionsToMarkers = function(map, competitions) {
   return markers;
 };
 
+wca.renderMarkdownRequest = function(markdownContent) {
+  return wca.cancelPendingAjaxAndAjax('render_markdown', {
+    url: '/render_markdown',
+    data: {
+      'markdown_content': markdownContent,
+    },
+    success: function(result) {
+      html = result;
+    },
+  });
+};
+
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
@@ -198,8 +210,8 @@ $(function() {
             var cm = editor.codemirror;
 
             var mapMarkup = {
-              start: '[map(',
-              end: ')]',
+              start: 'map(',
+              end: ')',
               build: function(address) { return this.start + address + this.end; }
             };
 
@@ -233,6 +245,19 @@ $(function() {
 
       // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
       status: false,
+      previewRender: function(plainText, preview) {
+        if(this.markdownReqest) {
+          clearTimeout(this.markdownReqest);
+        }
+
+        this.markdownReqest = setTimeout(function() {
+          wca.renderMarkdownRequest(plainText).done(function(result) {
+            preview.innerHTML = result;
+          });
+        }, TEXT_INPUT_DEBOUNCE_MS);
+
+        return "Waiting...";
+      },
     });
 
     // Trick to fix tab and shift+tab focus from:

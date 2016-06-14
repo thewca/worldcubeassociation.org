@@ -106,6 +106,8 @@ Rails.application.routes.draw do
 
   get '/search' => 'search_results#index'
 
+  get '/render_markdown' => 'markdown_renderer#render_markdown'
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do
