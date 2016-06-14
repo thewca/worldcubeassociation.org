@@ -35,16 +35,20 @@ describe DelegateReport do
     end
   end
 
-  it "both schedule_url and are not required when posted" do
-    dr = FactoryGirl.build :delegate_report, schedule_url: nil, discussion_url: nil
+  it "schedule_url is not required when posted" do
+    dr = FactoryGirl.build :delegate_report, schedule_url: nil
     expect(dr).to be_valid
 
     dr.posted = true
     expect(dr).to be_valid
 
     dr.schedule_url = "http://www.google.com"
-    dr.discussion_url = "http://www.google.com"
     expect(dr).to be_valid
+  end
+
+  it "discussion_url is set on creation" do
+    dr = FactoryGirl.create :delegate_report
+    expect(dr.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(dr.competition.name)
   end
 
   context "can_view_delegate_report?" do

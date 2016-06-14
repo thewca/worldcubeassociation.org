@@ -88,12 +88,6 @@ describe DelegateReportsController do
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
     end
 
-    it "updating report sets the discussion_url" do
-      post :update, competition_id: comp.id, delegate_report: { remarks: "Setting the discussion_url automatically" }
-      comp.reload
-      expect(comp.delegate_report.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(comp.name)
-    end
-
     it "posting report for an ancient competition doesn't send email notification" do
       # Update the remarks *and* set posted to true for next test.
       post :update, competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true }
