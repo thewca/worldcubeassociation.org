@@ -186,8 +186,50 @@ $(function() {
       spellChecker: false,
       promptURLs: true,
       insertTexts: {
-        image: ["![Image description", "](#url#)"],
+        image: ['![Image description', '](#url#)'],
       },
+      toolbar: [
+        'bold', 'italic', 'heading',
+        '|', 'quote', 'unordered-list', 'ordered-list',
+        '|', 'link', 'image',
+        {
+          name: 'map',
+          action: function insertMap(editor) {
+            var cm = editor.codemirror;
+
+            var mapMarkup = {
+              start: '[map(',
+              end: ')]',
+              build: function(address) { return this.start + address + this.end; }
+            };
+
+            var startPoint = cm.getCursor('start');
+            var endPoint = cm.getCursor('end');
+            var address;
+            var somethingSelected = cm.somethingSelected();
+
+            if(somethingSelected) {
+              address = cm.getSelection();
+            } else {
+              address = prompt('Address of the place:');
+            }
+
+            cm.replaceSelection(mapMarkup.build(address));
+
+            if(somethingSelected) {
+              startPoint.ch += mapMarkup.start.length;
+              endPoint.ch += mapMarkup.start.length;
+              cm.setSelection(startPoint, endPoint);
+            }
+
+            cm.focus();
+          },
+          className: 'fa fa-map-marker',
+          title: 'Insert Map',
+        },
+        '|', 'preview', 'side-by-side', 'fullscreen',
+        '|', 'guide',
+      ],
 
       // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
       status: false,
