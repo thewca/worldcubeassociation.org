@@ -10,7 +10,7 @@ module MarkdownHelper
 
     def postprocess(full_document)
       full_document.gsub!(/map\(([^)]*)\)/) do
-        google_maps_url = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCTTbqJwwOOKlNL6iPC_Kfz59GGKE2NEV0&q=#{URI.escape($1)}"
+        google_maps_url = "https://www.google.com/maps/embed/v1/place?key=#{ENVied.GOOGLE_MAPS_API_KEY}&q=#{URI.escape($1)}"
         "<iframe width='600' height='450' frameborder='0' style='border:0' src='#{google_maps_url}'></iframe>"
       end
       full_document
