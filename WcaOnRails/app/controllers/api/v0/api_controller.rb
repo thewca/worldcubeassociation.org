@@ -76,11 +76,15 @@ class Api::V0::ApiController < ApplicationController
     search(User)
   end
 
+  def regulations_search
+    search(Regulation)
+  end
+
   def omni_search
     # We intentionally exclude Post, as our autocomplete ui isn't very useful with
     # them yet.
     params[:persons_table] = true
-    search(Competition, User)
+    search(Competition, User, Regulation)
   end
 
   def show_user(user)

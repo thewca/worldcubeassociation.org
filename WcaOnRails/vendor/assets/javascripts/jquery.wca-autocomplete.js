@@ -15,10 +15,12 @@
       var posts_search = $(that).hasClass("wca-autocomplete-posts_search");
 
       var delimiter = ',';
-      var searchFields = [];
-      searchFields = searchFields.concat([ 'wca_id', 'name' ]); // user search fields
-      searchFields = searchFields.concat([ 'id', 'name', 'cellName', 'cityName', 'countryId' ]); // competition search fields
-      searchFields = searchFields.concat([ 'title', 'body' ]); // post search fields
+      var searchFields = [
+        'wca_id', 'name', // user search fields
+        'id', 'cellName', 'cityName', 'countryId', // competition search fields ('name' already added)
+        'title', 'body', // post search fields
+        'text', // regulation search fields ('id' already added)
+      ];
 
       var url;
       var defaultSearchData = {};
@@ -70,6 +72,14 @@
           post: function(post) {
             var $div = $('<div class="wca-autocomplete-post"><span class="title"></span></div>');
             $div.find(".title").text(post.title);
+            return $div[0].outerHTML;
+          },
+
+          regulation: function(regulation) {
+            var $div = $('<div class="wca-autocomplete-regulation"><span class="id"></span>: <span class="text"></span></div>');
+            $div.find(".id").text(regulation.id);
+            // NOTE: the regulation 'text' field may contain links (references to other regulations/guidelines)
+            $div.find(".text").html(regulation.text);
             return $div[0].outerHTML;
           },
 
