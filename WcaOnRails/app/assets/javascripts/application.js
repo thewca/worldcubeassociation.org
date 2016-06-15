@@ -220,7 +220,11 @@ $(function() {
             if(somethingSelected) {
               address = cm.getSelection();
             } else {
-              address = prompt('Address of the place:');
+              address = prompt('Address or coordinates of the place:');
+            }
+
+            if(!address) {
+              return false;
             }
 
             cm.replaceSelection(mapMarkup.build(address));
