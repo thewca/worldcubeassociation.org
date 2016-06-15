@@ -113,9 +113,6 @@ wca.renderMarkdownRequest = function(markdownContent) {
     data: {
       'markdown_content': markdownContent,
     },
-    success: function(result) {
-      html = result;
-    },
   });
 };
 
