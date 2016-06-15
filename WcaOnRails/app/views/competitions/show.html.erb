@@ -17,6 +17,9 @@
     <% @competition.competition_tabs.each do |tab| %>
       <div class="tab-pane" id="<%= tab.slug %>">
         <%=md tab.content %>
+        <% if current_user&.can_manage_competition?(@competition) %>
+          <%= link_to icon("pencil", "Edit"), edit_competition_tab_path(@competition, tab), class: "btn btn-primary" %>
+        <% end %>
       </div>
     <% end %>
   </div>

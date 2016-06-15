@@ -4,3 +4,17 @@ table#competition-tabs {
     vertical-align: middle;
   }
 }
+
+.competition-tab-form {
+  .buttons {
+    @extend .clearfix;
+
+    .buttons-left {
+      float: left;
+    }
+
+    .buttons-right {
+      float: right;
+    }
+  }
+}
