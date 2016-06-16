@@ -9,7 +9,7 @@ RSpec.describe CompetitionTab, type: :model do
     expect(CompetitionTab.column_names).to match_array(CompetitionTab::CLONEABLE_ATTRIBUTES + CompetitionTab::UNCLONEABLE_ATTRIBUTES)
   end
 
-  context "display_order" do
+  context "#display_order" do
     let(:competition) { FactoryGirl.create(:competition) }
     let(:other_competition) { FactoryGirl.create(:competition) }
 
@@ -35,6 +35,33 @@ RSpec.describe CompetitionTab, type: :model do
       expect(competition.competition_tabs.pluck(:display_order)).to eq [1, 2, 3]
       competition.competition_tabs.last.destroy
       expect(competition.competition_tabs.pluck(:display_order)).to eq [1, 2]
+    end
+  end
+
+  context "#reorder" do
+    let!(:competition) { FactoryGirl.create(:competition) }
+    let!(:tab1) { FactoryGirl.create(:competition_tab, competition: competition) }
+    let!(:tab2) { FactoryGirl.create(:competition_tab, competition: competition) }
+    let!(:tab3) { FactoryGirl.create(:competition_tab, competition: competition) }
+
+    it "can swap tab with its predecessor" do
+      tab2.reorder("up")
+      expect(competition.competition_tabs.to_a).to eq [tab2, tab1, tab3]
+    end
+
+    it "can swap tab with its successor" do
+      tab2.reorder("down")
+      expect(competition.competition_tabs.to_a).to eq [tab1, tab3, tab2]
+    end
+
+    it "doesn't change anything when swapping first tab with its predecessor" do
+      tab1.reorder("up")
+      expect(competition.competition_tabs.to_a).to eq [tab1, tab2, tab3]
+    end
+
+    it "doesn't change anything when swapping last tab with its successor" do
+      tab3.reorder("down")
+      expect(competition.competition_tabs.to_a).to eq [tab1, tab2, tab3]
     end
   end
 end
