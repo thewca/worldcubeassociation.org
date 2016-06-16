@@ -45,6 +45,12 @@ class CompetitionTabsController < ApplicationController
     redirect_to competition_tabs_path(@competition)
   end
 
+  def reorder
+    competition_tab = CompetitionTab.find(params[:id])
+    competition_tab.reorder(params[:direction])
+    render nothing: true
+  end
+
   private def competition_from_params
     Competition.find(params[:competition_id])
   end

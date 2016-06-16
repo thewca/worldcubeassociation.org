@@ -30,7 +30,7 @@ class CompetitionTab < ActiveRecord::Base
   end
 
   def reorder(direction)
-    current_display_order = self.display_order
+    current_display_order = display_order
     case direction.to_s
     when "up"
       unless current_display_order == 1
