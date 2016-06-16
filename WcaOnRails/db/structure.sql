@@ -471,8 +471,10 @@ CREATE TABLE `competition_tabs` (
   `competition_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `content` text COLLATE utf8_unicode_ci,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `display_order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1041,3 +1043,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160531124049');
 INSERT INTO schema_migrations (version) VALUES ('20160602105428');
 
 INSERT INTO schema_migrations (version) VALUES ('20160610191605');
+
+INSERT INTO schema_migrations (version) VALUES ('20160616183719');
+
