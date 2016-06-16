@@ -319,6 +319,8 @@ class CompetitionsController < ApplicationController
       :registration_open,
       :registration_close,
       :guests_enabled,
+      :cloned_from_id,
+      :clone_tabs,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.

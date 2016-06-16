@@ -8,6 +8,7 @@
     boolean: :horizontal_boolean
   } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+
     <% if @competition.persisted? %>
       <% if @competition_admin_view %>
         <%= hidden_field_tag :competition_admin_view, "1" %>
@@ -264,6 +265,11 @@
 
     <hr>
     <%= f.input :remarks, disabled: is_actually_confirmed %>
+
+    <% if @competition.new_record? && @competition.cloned_from && !@competition.cloned_from.competition_tabs.empty? %>
+      <%= f.input :cloned_from_id, as: :hidden %>
+      <%= f.input :clone_tabs, as: :boolean %>
+    <% end %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">

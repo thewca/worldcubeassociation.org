@@ -142,10 +142,44 @@ class Competition < ActiveRecord::Base
     info
   end
 
+  attr_accessor :cloned_from_id
+  def cloned_from
+    Competition.find_by(id: cloned_from_id)
+  end
+
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
-      clone.organizers = organizers
-      clone.delegates = delegates
+      clone.cloned_from_id = id
+
+      Competition.reflections.keys.each do |association_name|
+        case association_name
+        when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
+             'competition_delegates', 'competition_organizers', 'media', 'scrambles'
+          # Should be neither cloned nor copied.
+        when 'organizers'
+          clone.organizers = organizers
+        when 'delegates'
+          clone.delegates = delegates
+        when 'competition_tabs'
+          # Clone tabs in the clone_associations callback after the competition is saved.
+          clone.clone_tabs = true # True by default.
+        else
+          raise "Cloning/copying behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
+        end
+      end
+    end
+  end
+
+  attr_accessor :clone_tabs
+
+  # After the cloned competition is created, clone other associations which cannot just be copied.
+  after_create :clone_associations
+  private def clone_associations
+    # Clone competition_tabs.
+    if clone_tabs
+      cloned_from&.competition_tabs.each do |tab|
+        competition_tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+      end
     end
   end
 

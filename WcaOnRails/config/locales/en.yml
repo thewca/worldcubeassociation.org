@@ -88,6 +88,7 @@ en:
         registration_open: "Registration open"
         registration_close: "Registration close"
         remarks: "Remarks"
+        clone_tabs: "I would like to clone all tabs with additional informations as well"
       registration:
         countryId: "Country"
   simple_form:

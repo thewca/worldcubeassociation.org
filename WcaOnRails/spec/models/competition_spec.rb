@@ -533,4 +533,31 @@ RSpec.describe Competition do
     expect(competition).to respond_to(:update_foreign_keys),
                            "This whole test should be removed alongside update_foreign_keys callback in the Competition model."
   end
+
+  context "when cloned competition is saved" do
+    let!(:competition) { FactoryGirl.create(:competition) }
+    let!(:clone) do
+      competition.build_clone.tap do |clone|
+        clone.name = "Cloned Competition 2016"
+        clone.start_date, clone.end_date = [1.month.from_now.strftime("%F")] * 2
+      end
+    end
+    let!(:tab) { FactoryGirl.create(:competition_tab, competition: competition) }
+
+    it "tabs are cloned" do
+      expect do
+        clone.save
+      end.to change(CompetitionTab, :count).by(1)
+      cloned_tab = clone.reload.competition_tabs.first
+      expect(cloned_tab).to_not eq tab
+      expect(cloned_tab.name).to eq tab.name
+      expect(cloned_tab.content).to eq tab.content
+    end
+
+    it "tabs are not cloned if clone_tabs is set to false" do
+      clone.clone_tabs = false
+      clone.save
+      expect(clone.competition_tabs).to be_empty
+    end
+  end
 end
