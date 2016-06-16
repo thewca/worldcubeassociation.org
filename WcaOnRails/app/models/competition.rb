@@ -17,7 +17,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
-  has_many :competition_tabs
+  has_many :competition_tabs, dependent: :delete_all
   has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
@@ -97,6 +97,10 @@ class Competition < ActiveRecord::Base
     if delegate_ids.length == 0
       errors.add(:delegate_ids, "must contain at least one WCA delegate")
     end
+  end
+
+  def competition_tabs
+    super.order(:display_order)
   end
 
   def confirmed_or_visible?
