@@ -319,7 +319,7 @@ class CompetitionsController < ApplicationController
       :registration_open,
       :registration_close,
       :guests_enabled,
-      :cloned_from_id,
+      :being_cloned_from_id,
       :clone_tabs,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?

@@ -17,7 +17,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
-  has_many :competition_tabs, dependent: :delete_all
+  has_many :competition_tabs, -> { order(:display_order) }, dependent: :delete_all
   has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
@@ -99,10 +99,6 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def competition_tabs
-    super.order(:display_order)
-  end
-
   def confirmed_or_visible?
     self.isConfirmed || self.showAtAll
   end
@@ -146,29 +142,29 @@ class Competition < ActiveRecord::Base
     info
   end
 
-  attr_accessor :cloned_from_id
-  def cloned_from
-    Competition.find_by(id: cloned_from_id)
+  attr_accessor :being_cloned_from_id
+  def being_cloned_from
+    Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
-      clone.cloned_from_id = id
+      clone.being_cloned_from_id = id
 
       Competition.reflections.keys.each do |association_name|
         case association_name
         when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
              'competition_delegates', 'competition_organizers', 'media', 'scrambles'
-          # Should be neither cloned nor copied.
+          # Should be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
         when 'competition_tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
-          clone.clone_tabs = true # True by default.
+          clone.clone_tabs = true
         else
-          raise "Cloning/copying behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
+          raise "Cloning behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
         end
       end
     end
@@ -181,7 +177,7 @@ class Competition < ActiveRecord::Base
   private def clone_associations
     # Clone competition_tabs.
     if clone_tabs
-      cloned_from&.competition_tabs.each do |tab|
+      being_cloned_from&.competition_tabs&.each do |tab|
         competition_tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
       end
     end
