@@ -32,8 +32,8 @@ describe TeamMember do
   end
 
   it "can add 2 memberships to a single team with non overlapping dates" do
-    team_member = FactoryGirl.create :team_member, :demoted
-    team_member2 = FactoryGirl.build :team_member, user_id: team_member.user_id, team_id: team_member.team_id, committee_position_id: team_member.committee_position_id
+    team_member = FactoryGirl.create :team_member, start_date: 9.months.ago, end_date: 6.months.ago
+    team_member2 = FactoryGirl.build :team_member, start_date: 3.months.ago, user_id: team_member.user_id, team_id: team_member.team_id, committee_position_id: team_member.committee_position_id
     expect(team_member2).to be_valid
   end
 

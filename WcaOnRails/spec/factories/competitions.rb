@@ -24,7 +24,7 @@ FactoryGirl.define do
     guests_enabled true
 
     trait :with_delegate do
-      delegates { [ FactoryGirl.create(:delegate) ] }
+      delegates { [ FactoryGirl.create(:delegate, start_date: start_date) ] }
     end
 
     trait :with_organizer do

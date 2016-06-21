@@ -10,6 +10,14 @@ RSpec.describe Competition do
     expect(competition.cellName).to eq "Foo: Test - 2015"
   end
 
+  it "rejects delegates who are no longer delegates" do
+    delegate_team_member = FactoryGirl.build :team_member, :delegate, start_date: 6.months.ago, end_date: 3.months.ago
+    competition = FactoryGirl.build :competition, name: "Foo: Test - 2015", starts: 1.month.since, delegates: [delegate_team_member.user]
+
+    expect(competition).to be_invalid
+    expect(competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
+  end
+
   it "rejects invalid names" do
     [
       "foo (Test) - 2015",

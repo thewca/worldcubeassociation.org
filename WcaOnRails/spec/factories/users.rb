@@ -80,9 +80,12 @@ FactoryGirl.define do
     end
 
     factory :delegate, traits: [:wca_id] do
-      after(:create) do |user|
+      transient do
+        start_date 1.year.ago
+      end
+      after(:create) do |user, dates|
         FactoryGirl.create(:team_member, :senior_delegate)
-        FactoryGirl.create(:team_member, :delegate, user: user)
+        FactoryGirl.create(:team_member, :delegate, user: user, start_date: dates.start_date)
       end
     end
 

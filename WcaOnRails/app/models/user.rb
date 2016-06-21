@@ -267,15 +267,15 @@ class User < ActiveRecord::Base
   end
 
   def senior_delegate?
-    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: 'senior-delegate'}).count > 0
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::SENIOR_DELEGATE}).count > 0
   end
 
   def delegate?
-    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: 'delegate'}).count > 0
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::DELEGATE}).count > 0
   end
 
   def candidate_delegate?
-    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: 'candidate-delegate'}).count > 0
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::CANDIDATE_DELEGATE}).count > 0
   end
 
   def delegates_committee?
@@ -428,7 +428,7 @@ class User < ActiveRecord::Base
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
+                         elsif user_to_edit == self && !(admin? || delegates_committee?) && user_to_edit.registrations.count > 0
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     if cannot_edit_reason

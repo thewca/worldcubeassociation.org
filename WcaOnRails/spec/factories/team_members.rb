@@ -3,7 +3,7 @@ FactoryGirl.define do
   factory :team_member do
     team
     user
-    start_date 1.month.ago
+    start_date 1.year.ago
     end_date nil
     committee_position do
       CommitteePosition.find_by_committee_id_and_slug(team.committee_id, 'team-member') || FactoryGirl.create(:committee_position, name: 'Team Member', committee: team.committee)
@@ -14,7 +14,7 @@ FactoryGirl.define do
         Team.where("slug = :slug", slug: 'delegate-testing-team').first_or_create(name: 'Delegate Testing Team', description: 'For testing', committee: Committee.find_by_slug(Committee::WCA_DELEGATES_COMMITTEE))
       end
       committee_position do
-        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, 'candidate-delegate') || FactoryGirl.create(:committee_position, name: 'Candidate Delegate', committee: team.committee)
+        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, CommitteePosition::CANDIDATE_DELEGATE) || FactoryGirl.create(:committee_position, name: 'Candidate Delegate', committee: team.committee)
       end
     end
 
@@ -23,7 +23,7 @@ FactoryGirl.define do
         Team.where("slug = :slug", slug: 'delegate-testing-team').first_or_create(name: 'Delegate Testing Team', description: 'For testing', committee: Committee.find_by_slug(Committee::WCA_DELEGATES_COMMITTEE))
       end
       committee_position do
-        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, 'delegate') || FactoryGirl.create(:committee_position, name: 'Delegate', committee: team.committee)
+        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, CommitteePosition::DELEGATE) || FactoryGirl.create(:committee_position, name: 'Delegate', committee: team.committee)
       end
     end
 
@@ -32,7 +32,7 @@ FactoryGirl.define do
         Team.where("slug = :slug", slug: 'delegate-testing-team').first_or_create(name: 'Delegate Testing Team', description: 'For testing', committee: Committee.find_by_slug(Committee::WCA_DELEGATES_COMMITTEE))
       end
       committee_position do
-        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, 'senior-delegate') || FactoryGirl.create(:committee_position, name: 'Senior Delegate', team_leader: true, committee: team.committee)
+        CommitteePosition.find_by_committee_id_and_slug(team.committee_id, CommitteePosition::SENIOR_DELEGATE) || FactoryGirl.create(:committee_position, name: 'Senior Delegate', team_leader: true, committee: team.committee)
       end
     end
 

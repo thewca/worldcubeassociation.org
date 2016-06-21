@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class TestDbManager
-  CONSTANT_TABLES = %w(Countries Continents Events Rounds Formats teams).freeze
+  CONSTANT_TABLES = %w(Countries Continents Events Rounds Formats committees).freeze
 
   def self.fill_tables
     Dir["db/seeds/*.seeds.rb"].each { |file| load file }

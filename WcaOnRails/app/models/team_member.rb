@@ -8,7 +8,7 @@ class TeamMember < ActiveRecord::Base
   scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
 
   def senior_delegate?
-    self.current_member? && self.committee.slug == Committee::WCA_DELEGATES_COMMITTEE && self.committee_position.slug == 'senior-delegate'
+    self.current_member? && self.committee.slug == Committee::WCA_DELEGATES_COMMITTEE && self.committee_position.slug == CommitteePosition::SENIOR_DELEGATE
   end
 
   def committee_member?(committee_slug)
@@ -54,7 +54,7 @@ class TeamMember < ActiveRecord::Base
     if committee_member?(Committee::WCA_DELEGATES_COMMITTEE) && !self.senior_delegate?
       senior_delegate_count = 0
       team.current_members.each do |team_member|
-        if team_member.committee_position.slug == 'senior-delegate' && self.id != team_member.id
+        if team_member.committee_position.slug == CommitteePosition::SENIOR_DELEGATE && self.id != team_member.id
           senior_delegate_count += 1
         end
       end
