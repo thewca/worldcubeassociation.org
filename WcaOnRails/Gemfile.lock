@@ -158,6 +158,8 @@ GEM
       warden (~> 1.2.3)
     devise-bootstrap-views (0.0.4)
     diff-lcs (1.2.5)
+    domain_name (0.5.20160615)
+      unf (>= 0.0.5, < 1.0.0)
     doorkeeper (3.1.0)
       railties (>= 3.2)
     dotenv (2.0.1)
@@ -200,6 +202,8 @@ GEM
     high_voltage (2.4.0)
     hitimes (1.2.2)
     htmlentities (4.3.4)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     jbuilder (2.2.13)
       activesupport (>= 3.0.0, < 5)
@@ -240,6 +244,7 @@ GEM
     multi_json (1.11.0)
     mysql2 (0.3.18)
     nenv (0.2.0)
+    netrc (0.11.0)
     newrelic_rpm (3.13.2.302)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
@@ -313,6 +318,10 @@ GEM
     ref (1.0.5)
     responders (2.1.1)
       railties (>= 4.2.0, < 5.1)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -373,6 +382,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
     strip_attributes (1.7.0)
       activemodel (>= 3.0, < 5.0)
+    stripe (1.43.1)
+      rest-client (~> 1.4)
     test_after_commit (0.4.1)
       activerecord (>= 3.2)
     therubyracer (0.12.2)
@@ -390,6 +401,9 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     unicorn (4.9.0)
       kgio (~> 2.6)
       rack
@@ -476,6 +490,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   strip_attributes
+  stripe
   test_after_commit
   therubyracer
   time_will_tell
@@ -486,4 +501,4 @@ DEPENDENCIES
   world-flags!
 
 BUNDLED WITH
-   1.12.3
+   1.12.4

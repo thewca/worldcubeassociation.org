@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
+    post 'process_payment' => 'registrations#process_payment'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
   end
 

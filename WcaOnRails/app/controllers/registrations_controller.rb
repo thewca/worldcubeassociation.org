@@ -201,6 +201,26 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def process_payment
+    # Amount in cents
+    @amount = 1500
+
+    # Get the credit card details submitted by the form
+    token = params[:stripeToken]
+
+    # Create the charge on Stripe's servers - this will charge the user's card
+    charge = Stripe::Charge.create(
+      amount: 1500, # amount in cents, again
+      currency: "aud",
+      source: token,
+      description: "Registration payment"
+    )
+    redirect_to competition_register_path
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
+    redirect_to competition_register_path
+  end
+
   def create
     @competition = competition_from_params
     if !@competition.registration_opened?
