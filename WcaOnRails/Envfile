@@ -19,6 +19,8 @@ variable :WCA_LIVE_SITE, :boolean, default: false
 # defined (during rake tasks, for instance).
 if defined? Rails::Server
   default_root_url = "http://localhost:#{Rails::Server.new.options[:Port]}"
+elsif Rails.env.test?
+  default_root_url = "test.host"
 else
   default_root_url = ""
 end

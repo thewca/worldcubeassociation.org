@@ -28,7 +28,8 @@ class Competition < ActiveRecord::Base
     venue
     venueAddress
     venueDetails
-    website
+    generate_website
+    external_website
     latitude
     longitude
     contact
@@ -69,7 +70,7 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
+  validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
@@ -83,7 +84,8 @@ class Competition < ActiveRecord::Base
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
@@ -297,6 +299,19 @@ class Competition < ActiveRecord::Base
   attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
+  end
+
+  after_save :clear_external_website, if: :generate_website?
+  private def clear_external_website
+    update_column :external_website, nil
+  end
+
+  def website
+    generate_website ? internal_website : external_website
+  end
+
+  def internal_website
+    Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL)
   end
 
   def managers

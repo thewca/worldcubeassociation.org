@@ -163,6 +163,12 @@ describe CompetitionsController do
         expect(new_comp.name).to eq "FatBoyXPC 2015"
         expect(new_comp.cellName).to eq "FatBoyXPC 2015"
       end
+
+      it "creates a competition with correct website when using WCA as competition's website" do
+        post :create, competition: { name: "Awesome Competition 2016", external_website: nil, generate_website: "1" }
+        competition = assigns(:competition)
+        expect(competition.website).to eq competition_url(competition)
+      end
     end
 
     context 'when signed in as a delegate' do

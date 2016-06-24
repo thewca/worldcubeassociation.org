@@ -1,11 +1,13 @@
 onPage('competitions#edit, competitions#update, competitions#admin_edit, competitions#new, competitions#create, competitions#clone_competition', function() {
-  var $useWcaRegistrationInput = $('input[name="competition[use_wca_registration]"]');
-  if($useWcaRegistrationInput.length > 0) {
-    var $registrationOptionsAreas = $('.wca-registration-options');
-    $useWcaRegistrationInput.on("change", function() {
-      $registrationOptionsAreas.toggle(this.checked);
-    }).trigger("change");
-  }
+  $('input[name="competition[use_wca_registration]"]').on('change', function() {
+    $('.wca-registration-options').toggle(this.checked);
+  }).trigger('change');
+
+  $('input[name="competition[generate_website]"]').on('change', function() {
+    var generateWebsite = this.checked;
+    $('div.competition_external_website').toggle(!generateWebsite);
+    $('input#competition_external_website').prop('disabled', generateWebsite);
+  }).trigger('change');
 });
 
 // Creates the competitions map and marker cluster if they don't already exist. Returns the map.

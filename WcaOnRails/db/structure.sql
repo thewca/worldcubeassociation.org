@@ -37,7 +37,7 @@ CREATE TABLE `Competitions` (
   `venue` varchar(240) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `venueAddress` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `venueDetails` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `external_website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cellName` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` int(11) NOT NULL DEFAULT '0',
@@ -51,6 +51,7 @@ CREATE TABLE `Competitions` (
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
+  `generate_website` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1045,4 +1046,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160602105428');
 INSERT INTO schema_migrations (version) VALUES ('20160610191605');
 
 INSERT INTO schema_migrations (version) VALUES ('20160616183719');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705120632');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705121551');
 

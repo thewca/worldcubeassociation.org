@@ -254,20 +254,25 @@ RSpec.describe Competition do
     expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 
-  describe "validates website" do
+  describe "validates internal website" do
     it "likes http://foo.com" do
-      competition = FactoryGirl.build :competition, website: "http://foo.com"
+      competition = FactoryGirl.build :competition, external_website: "http://foo.com"
       expect(competition).to be_valid
     end
 
     it "dislikes [{foo}{http://foo.com}]" do
-      competition = FactoryGirl.build :competition, website: "[{foo}{http://foo.com}]"
+      competition = FactoryGirl.build :competition, external_website: "[{foo}{http://foo.com}]"
       expect(competition).not_to be_valid
     end
 
     it "dislikes htt://foo" do
-      competition = FactoryGirl.build :competition, website: "htt://foo"
+      competition = FactoryGirl.build :competition, external_website: "htt://foo"
       expect(competition).not_to be_valid
+    end
+
+    it "doesn't valitate if the inernal website is used" do
+      competition = FactoryGirl.build :competition, external_website: "", generate_website: true
+      expect(competition).to be_valid
     end
   end
 
@@ -360,7 +365,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { FactoryGirl.build :competition, :with_delegate }
+    let(:competition_with_delegate) { FactoryGirl.build :competition, :with_delegate, generate_website: false }
     let(:competition_without_delegate) { FactoryGirl.build :competition }
 
     [:isConfirmed, :showAtAll].each do |action|
@@ -369,7 +374,7 @@ RSpec.describe Competition do
         expect(competition_with_delegate).to be_valid
       end
 
-      [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
+      [:cityName, :countryId, :venue, :venueAddress, :external_website, :latitude, :longitude].each do |field|
         it "requires #{field} when setting #{action}" do
           competition_with_delegate.assign_attributes field => "", action => true
           expect(competition_with_delegate).not_to be_valid
@@ -558,6 +563,19 @@ RSpec.describe Competition do
       clone.clone_tabs = false
       clone.save
       expect(clone.competition_tabs).to be_empty
+    end
+  end
+
+  context "website" do
+    let!(:competition) { FactoryGirl.build(:competition, id: "Competition2016", external_website: "https://external.website.com") }
+
+    it "returns the internal url if WCA website is used as competition's one" do
+      competition.generate_website = true
+      expect(competition.website).to end_with "Competition2016"
+    end
+
+    it "returns external url if WCA website is not used as competitin's one" do
+      expect(competition.website).to eq "https://external.website.com"
     end
   end
 end
