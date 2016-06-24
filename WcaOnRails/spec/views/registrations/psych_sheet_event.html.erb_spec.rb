@@ -4,10 +4,12 @@ RSpec.describe "registrations/psych_sheet_event" do
   it "works" do
     competition = FactoryGirl.create(:competition, :registration_open)
     event = Event.find("333")
+    user1 = FactoryGirl.create(:user, :wca_id, name: "Andrew Apple")
+    user2 = FactoryGirl.create(:user, :wca_id, name: "Bill Banana")
 
     registrations = []
 
-    registrations << FactoryGirl.create(:registration, competition: competition)
+    registrations << FactoryGirl.create(:registration, :accepted, user: user1, competition: competition)
     RanksAverage.create!(
       personId: registrations.last.personId,
       eventId: "333",
@@ -25,13 +27,30 @@ RSpec.describe "registrations/psych_sheet_event" do
       countryRank: 1,
     )
 
-    # Someone who has never competed before.
-    registrations << FactoryGirl.create(:registration, user: FactoryGirl.create(:user), competition: competition)
+    registrations << FactoryGirl.create(:registration, :accepted, user: user2, competition: competition)
+    RanksAverage.create!(
+      personId: registrations.last.personId,
+      eventId: "333",
+      best: "4242",
+      worldRank: 10,
+      continentRank: 10,
+      countryRank: 10,
+    )
+    RanksSingle.create!(
+      personId: registrations.last.personId,
+      eventId: "333",
+      best: "3334",
+      worldRank: 23,
+      continentRank: 23,
+      countryRank: 23,
+    )
 
-    # Someone who has not competed in 333 before.
-    registrations << FactoryGirl.create(:registration, competition: competition)
-    registrations.last.tied_previous = true
+    # Two users who have never competed before.
+    2.times do
+      registrations << FactoryGirl.create(:registration, :accepted, user: FactoryGirl.create(:user), competition: competition)
+    end
 
+    registrations = competition.psych_sheet_event(event)
     assign(:competition, competition)
     assign(:event, event)
     assign(:preferred_format, event.preferred_formats.first)
@@ -39,8 +58,9 @@ RSpec.describe "registrations/psych_sheet_event" do
 
     render
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(1) .single", text: /\A\s*20.00\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\s*\z/)
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\s*33.34\s*\z/)
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) td.pos.tied-previous", text: 1)
     expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) .single", text: /\A\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) td.pos.tied-previous")
+    expect(rendered).to have_css(".wca-results tbody tr:nth-child(4) .single", text: /\A\s*\z/)
   end
 end

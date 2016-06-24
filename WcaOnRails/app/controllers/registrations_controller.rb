@@ -38,30 +38,7 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @event = Event.find(params[:event_id])
     @preferred_format = @event.preferred_formats.first
-
-    @registrations = @competition.registrations.
-                                  accepted.
-                                  joins(:registration_events).
-                                  where("registration_events.event_id=?", @event.id).
-                                  sort_by do |r|
-                                    has_competed = !!r.world_rank(@event, @preferred_format.sort_by)
-                                    [ has_competed ? 0 : 1, r.world_rank(@event, @preferred_format.sort_by) || Float::INFINITY, r.world_rank(@event, @preferred_format.sort_by_second) || Float::INFINITY, r.name ]
-                                  end
-
-    @registrations.each_with_index do |registration, i|
-      prev_registration = i > 0 ? @registrations[i - 1] : nil
-      registration.tied_previous = false
-      if prev_registration
-        registration.tied_previous = registration.world_rank(@event, @preferred_format.sort_by) == prev_registration.world_rank(@event, @preferred_format.sort_by)
-      end
-      if registration.tied_previous
-        registration.pos = prev_registration.pos
-      else
-        registration.pos = i + 1
-      end
-      has_competed = !!registration.world_rank(@event, @preferred_format.sort_by)
-      registration.pos = nil unless has_competed
-    end
+    @registrations = @competition.psych_sheet_event(@event)
   end
 
   def index
