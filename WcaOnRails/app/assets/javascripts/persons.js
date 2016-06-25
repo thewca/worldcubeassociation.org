@@ -23,6 +23,8 @@ onPage('persons#index', function() {
     url = url.replace(/persons.*/, 'persons?' + params);
     history.replaceState(null, null, url);
 
+    $table.bootstrapTable('getOptions').pageNumber = 1;
+
     $table.bootstrapTable('refresh');
   }
 
