@@ -1,7 +1,10 @@
 FactoryGirl.define do
   factory :person do
-    sequence :wca_id do |n|
-      "%04iFLEI%02i" % [2003 + (n / 100), n % 100]
+    wca_id do
+      mid = ('A'..'Z').to_a.sample(4).join
+      "2016#{mid}01".tap do |id|
+        id.next! while Person.exists?(wca_id: id)
+      end
     end
     subId 1
     name { Faker::Name.name }
