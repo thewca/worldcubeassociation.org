@@ -31,6 +31,7 @@
 //= require extensions/bootstrap-table-mobile
 //= require autosize
 //= require simplemde
+//= require jquery_plugins
 //= require_self
 //= require_tree .
 
@@ -251,17 +252,6 @@ $(function() {
     }
   });
 });
-
-// http://stackoverflow.com/a/5603156
-(function($) {
-  $.fn.serializeJSON = function() {
-    var json = {};
-    $.map($(this).serializeArray(), function(n, i) {
-      json[n.name] = n.value;
-    });
-    return json;
-  };
-})(jQuery);
 
 // Polyfill for Math.trunc from
 //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc#Polyfill
