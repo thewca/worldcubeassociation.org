@@ -86,14 +86,14 @@ class Competition < ActiveRecord::Base
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
     if events.length == 0
-      errors.add(:eventSpecs, "Competition must have at least one event")
+      errors.add(:eventSpecs, "must contain at least one event for this competition")
     end
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
     if delegate_ids.length == 0
-      errors.add(:delegate_ids, "Competition must have at least one WCA delegate")
+      errors.add(:delegate_ids, "must contain at least one WCA delegate")
     end
   end
 
@@ -439,11 +439,11 @@ class Competition < ActiveRecord::Base
     valid_dates = true
     unless Date.valid_date? year, month, day
       valid_dates = false
-      errors.add(:start_date, "Invalid start date.")
+      errors.add(:start_date, "is invalid")
     end
     unless Date.valid_date? @endYear, endMonth, endDay
       valid_dates = false
-      errors.add(:end_date, "Invalid end date.")
+      errors.add(:end_date, "is invalid")
     end
     unless valid_dates
       # There's no use continuing validation at this point.
