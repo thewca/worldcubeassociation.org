@@ -1,77 +1,79 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
-  <%= wca_table data: { toggle: "table", sort_name: "name" } do %>
-    <thead>
-      <tr>
-        <th class="name" data-sortable="true" data-field="name">Name</th>
-        <th class="wca-id" data-sortable="true">WCA ID</th>
-        <th class="country" data-sortable="true">Citizen of</th>
-
-        <% @competition.events.each do |event| %>
-          <th class="<%= event.id %>">
-            <span title="<%= event.name %>"
-                  class="cubing-icon icon-<%= event.id %>"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  data-container="body">
-            </span>
-          </th>
-        <% end %>
-
-        <th class="event-count" data-sortable="true">Total</th>
-        <!-- Extra column for .table-greedy-last-column -->
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @registrations.each do |registration| %>
+  <% cache ["registrations_index", @registrations.pluck(:id), @registrations.maximum(:updated_at)] do %>
+    <%= wca_table data: { toggle: "table", sort_name: "name" } do %>
+      <thead>
         <tr>
-          <td class="name"><%= registration.name %></td>
-          <td class="wca-id">
-            <% if registration.wca_id.present? %>
-              <%= render "shared/wca_id", wca_id: registration.wca_id %>
-            <% end %>
-          </td>
-          <td class="country"><%= registration.countryId %></td>
+          <th class="name" data-sortable="true" data-field="name">Name</th>
+          <th class="wca-id" data-sortable="true">WCA ID</th>
+          <th class="country" data-sortable="true">Citizen of</th>
 
           <% @competition.events.each do |event| %>
-            <td class="<%= event.id %>">
-              <% if registration.events.include?(event) %>
-                <span title="<%= event.name %>"
-                      class="cubing-icon icon-<%= event.id %>"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-container="body">
-                </span>
-              <% end %>
-            </td>
+            <th class="<%= event.id %>">
+              <span title="<%= event.name %>"
+                    class="cubing-icon icon-<%= event.id %>"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    data-container="body">
+              </span>
+            </th>
           <% end %>
 
-          <td class="event-count">
-            <%= registration.registration_events.count %>
+          <th class="event-count" data-sortable="true">Total</th>
+          <!-- Extra column for .table-greedy-last-column -->
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @registrations.each do |registration| %>
+          <tr>
+            <td class="name"><%= registration.name %></td>
+            <td class="wca-id">
+              <% if registration.wca_id.present? %>
+                <%= render "shared/wca_id", wca_id: registration.wca_id %>
+              <% end %>
+            </td>
+            <td class="country"><%= registration.countryId %></td>
+
+            <% @competition.events.each do |event| %>
+              <td class="<%= event.id %>">
+                <% if registration.events.include?(event) %>
+                  <span title="<%= event.name %>"
+                        class="cubing-icon icon-<%= event.id %>"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        data-container="body">
+                  </span>
+                <% end %>
+              </td>
+            <% end %>
+
+            <td class="event-count">
+              <%= registration.registration_events.length %>
+            </td>
+            <!-- Extra column for .table-greedy-last-column -->
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td colspan="2">
+            <%= render "registration_info_people", registrations: @registrations %>
           </td>
+          <% country_count = @registrations.map(&:countryId).uniq.length %>
+          <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+          <% @competition.events.each do |event| %>
+            <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
+          <% end %>
+
           <!-- Extra column for .table-greedy-last-column -->
           <td></td>
         </tr>
-      <% end %>
-    </tbody>
-
-    <tfoot>
-      <tr>
-        <td colspan="2">
-          <%= render "registration_info_people", registrations: @registrations %>
-        </td>
-        <% country_count = @registrations.map(&:countryId).uniq.length %>
-        <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
-        <% @competition.events.each do |event| %>
-          <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
-        <% end %>
-
-        <!-- Extra column for .table-greedy-last-column -->
-        <td></td>
-      </tr>
-    </tfoot>
+      </tfoot>
+    <% end %>
   <% end %>
 <% end %>
