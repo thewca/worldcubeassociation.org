@@ -1,6 +1,0 @@
-[submodule "regulations/wca-regulations"]
-	path = regulations/wca-regulations
-	url = https://github.com/cubing/wca-regulations.git
-[submodule "regulations/translations"]
-	path = regulations/translations
-	url = https://github.com/cubing/wca-regulations-translations
