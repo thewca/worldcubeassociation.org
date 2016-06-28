@@ -1,5 +1,13 @@
 # Compiled regulations assets
-WcaOnRails/app/views/regulations/
+WcaOnRails/app/views/regulations/*.*
+WcaOnRails/app/views/regulations/translations/*
+WcaOnRails/app/views/regulations/scrambles/*
+WcaOnRails/app/views/regulations/history/*
+regulations/
+# Except static pages
+!WcaOnRails/app/views/regulations/translations/*.erb
+!WcaOnRails/app/views/regulations/scrambles/*.erb
+!WcaOnRails/app/views/regulations/history/*.erb
 WcaOnRails/app/views/regulations-todelete/
 
 # It appears that Dreamhost automatically creates these files for us. See:

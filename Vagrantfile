@@ -10,17 +10,9 @@ Vagrant.configure(2) do |config|
     vb.memory = 2048
   end
 
-  # For most development, the regulations dependencies are not needed.
-  config.vm.define "noregs", autostart: false do |noregs|
-    noregs.vm.provision "shell" do |s|
-      s.path = "scripts/wca-bootstrap.sh"
-      s.args = ["development-noregs"]
-    end
-  end
-
-  # A full development environment that takes a very long time to setup.
-  config.vm.define "all", autostart: false do |noregs|
-    noregs.vm.provision "shell" do |s|
+  # A full development environment
+  config.vm.define "all", autostart: false do |all|
+    all.vm.provision "shell" do |s|
       s.path = "scripts/wca-bootstrap.sh"
       s.args = ["development"]
     end

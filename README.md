@@ -11,9 +11,8 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run in Vagrant (easier and gets everything working)
-- `vagrant up noregs` - Once the VM finishes initializing (which can take some time),
+- `vagrant up all` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:2331](http://localhost:2331).
-  - Note: Starting up the `noregs` vm is much faster than the `all` vm, because the dependencies required to build the WCA regulations take *ages* to install.
   - Note: There are some minor [issues with development on Windows](https://github.com/cubing/worldcubeassociation.org/issues/393).
 - All emails will be accessible at `http://localhost:2332`.
 - Please take a look at this [wiki page](https://github.com/cubing/worldcubeassociation.org/wiki/Misc.-important-commands-to-know) for more detailed informations about the application's internals.
