@@ -10,6 +10,8 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Shuang Chen](https://www.worldcubeassociation.org/results/p.php?i=2008CHEN27).
 - [Chinese, Traditional - 2015-07-01](./chinese-traditional)
     - By [Rui-Jun Liu (劉睿鈞)](https://www.worldcubeassociation.org/results/p.php?i=2011LIUR02) and [Chia-Leo Lin (林珈樂)](https://www.worldcubeassociation.org/results/p.php?i=2006LINC01). (Previous contributions from [David Guo](https://www.worldcubeassociation.org/results/p.php?i=2008GUOJ01) and [Han Wu](https://www.worldcubeassociation.org/results/p.php?i=2008WUHA01).)
+- [Finnish (Suomi) - 2016-04-18](./finnish/)
+    - By [Niko Ronkainen](https://www.worldcubeassociation.org/results/p.php?i=2010RONK01) and [Kim Jokinen](https://www.worldcubeassociation.org/results/p.php?i=2013JOKI01).
 - [French (Français) - 2016-04-18](./french/)
     - By [Philippe Virouleau](https://www.worldcubeassociation.org/results/p.php?i=2008VIRO01).
 - [German (Deutsch) - 2016-04-18](./german/)
@@ -24,7 +26,7 @@ Note: Even though these translations are provided on the WCA website, they are n
     - By [Lorenzo Vigani Poli](https://www.worldcubeassociation.org/results/p.php?i=2007POLI01), [Filippo Brancaleoni](https://www.worldcubeassociation.org/results/p.php?i=2008BRAN01), [Lorenzo Gravina](https://www.worldcubeassociation.org/results/p.php?i=2009GRAV01), and [Matteo Colombo](https://www.worldcubeassociation.org/results/p.php?i=2009COLO03).
 - [Japanese - 2016-04-18](./japanese/)
     - By [Kotaro Terada (寺田晃太朗)](https://www.worldcubeassociation.org/results/p.php?i=2010TERA01), [Kentaro Nishi (西賢太郎)](https://www.worldcubeassociation.org/results/p.php?i=2006NISH01), [Sinpei Araki (荒木慎平)](https://www.worldcubeassociation.org/results/p.php?i=2006ARAK01), and [Akihiro Ishida (石田朗大)](https://www.worldcubeassociation.org/results/p.php?i=2009ISHI01).
-- [Portuguese, Brazilian (Português do Brasil) - 2013](./portuguese-brazilian/)
+- [Portuguese, Brazilian (Português do Brasil) - 2016-04-18](./portuguese-brazilian/)
     - By [Daniel Buck Silva](https://www.worldcubeassociation.org/results/p.php?i=2012SILV10), [Pedro Santos Guimarães](https://www.worldcubeassociation.org/results/p.php?i=2007GUIM01) and Matheus Oliveira Silva.
 - [Portuguese, European (Português Europeu) - 2015-07-01](./portuguese-european/)
     - By António Gomes.

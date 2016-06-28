@@ -26,6 +26,15 @@
     "tex_command": "xelatex",
     "tex_encoding": "cjk"
   },
+  "finnish": {
+    "name": "Finnish",
+    "native": "Suomi",
+    "regulations": "Säännöt",
+    "guidelines": "Ohjesäännöt",
+    "pdf": "wca-saannot-ja-ohjesaannot",
+    "tex_command": "pdflatex",
+    "tex_encoding": "utf8"
+  },
   "french": {
     "name": "French",
     "native": "Français",
