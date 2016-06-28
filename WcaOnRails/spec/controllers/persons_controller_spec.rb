@@ -13,11 +13,6 @@ RSpec.describe PersonsController, type: :controller do
       let!(:competition) { FactoryGirl.create(:competition) }
       let!(:result) { FactoryGirl.create(:result, pos: 1, roundId: "f", competitionId: competition.id, person: person1) }
 
-      before do
-        # Filled Countries table is necessary here.
-        load "#{Rails.root}/db/seeds/countries.seeds.rb"
-      end
-
       it "responds with correct JSON when region and search are specified" do
         xhr :get, :index, search: "Jennifer", region: "USA"
         json = JSON.parse(response.body)

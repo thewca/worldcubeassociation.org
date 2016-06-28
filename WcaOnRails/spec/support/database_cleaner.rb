@@ -1,6 +1,11 @@
 RSpec.configure do |config|
+  reference_tables_to_keep = %w(Countries Continents Events Rounds Formats teams)
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation, except: reference_tables_to_keep)
+    reference_tables_to_keep.each do |table|
+      ActiveRecord::Base.connection.execute("TRUNCATE #{table};")
+      load "#{Rails.root}/db/seeds/#{table.underscore}.seeds.rb"
+    end
   end
 
   config.before(:each) do
@@ -8,15 +13,11 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :truncation, {except: reference_tables_to_keep}
   end
 
   config.before(:each) do
     DatabaseCleaner.start
-    FactoryGirl.create(:team, friendly_id: 'software', name: 'Software Team', description: 'Does software')
-    FactoryGirl.create(:team, friendly_id: 'results', name: 'Results Team', description: 'Posts results')
-    FactoryGirl.create(:team, friendly_id: 'wrc', name: 'WRC Team', description: 'Regulations')
-    FactoryGirl.create(:team, friendly_id: 'wdc', name: 'WDC Team', description: 'Disciplinary Committee')
   end
 
   config.after(:each) do
