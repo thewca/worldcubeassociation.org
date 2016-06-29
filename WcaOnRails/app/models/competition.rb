@@ -622,6 +622,56 @@ class Competition < ActiveRecord::Base
     country ? Continent.find_by_id(country.continentId) : nil
   end
 
+  def psych_sheet_event(event)
+    preferred_format = event.preferred_formats.first
+
+    joinsql = <<-ENDSQL
+      join registration_events on registration_events.registration_id = Preregs.id
+      join users on users.id = Preregs.user_id
+      join Countries on Countries.iso2 = users.country_iso2
+      left join RanksSingle on RanksSingle.personId = users.wca_id and RanksSingle.eventId = '#{event.id}'
+      left join RanksAverage on RanksAverage.personId = users.wca_id and RanksAverage.eventId = '#{event.id}'
+    ENDSQL
+
+    selectsql = <<-ENDSQL
+      Preregs.id,
+      users.name select_name,
+      users.wca_id select_wca_id,
+      Preregs.accepted_at,
+      Countries.name select_country,
+      registration_events.event_id,
+      RanksAverage.worldRank average_rank,
+      ifnull(RanksAverage.best, 0) average_best,
+      RanksSingle.worldRank single_rank,
+      ifnull(RanksSingle.best, 0) single_best
+    ENDSQL
+
+    sort_clause = "-#{preferred_format.sort_by}_rank desc, -#{preferred_format.sort_by_second}_rank desc, users.name"
+
+    registrations = self.registrations.
+                         accepted.
+                         joins(joinsql).
+                         where("registration_events.event_id=?", event.id).
+                         order(sort_clause).
+                         select(selectsql)
+
+    prev_registration = nil
+    registrations.each_with_index do |registration, i|
+      if preferred_format.sort_by == :single
+        rank = registration.single_rank
+        prev_rank = prev_registration&.single_rank
+      else
+        rank = registration.average_rank
+        prev_rank = prev_registration&.average_rank
+      end
+      registration.tied_previous = (rank == prev_rank)
+      break if !rank # hasn't competed in this event yet and all subsequent registrations too
+      registration.pos = registration.tied_previous ? prev_registration.pos : i + 1
+      prev_registration = registration
+    end
+    registrations
+  end
+
   def self.search(query, params: {})
     competitions = Competition.where(showAtAll: true)
 

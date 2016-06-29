@@ -30,19 +30,19 @@
           <td class="pos <%= registration.tied_previous ? "tied-previous" : "" %>">
             <%= registration.pos %>
           </td>
-          <td class="name"><%= registration.name %></td>
+          <td class="name"><%= registration.select_name %></td>
           <td class="wca-id">
-            <% if registration.wca_id.present? %>
-              <%= render "shared/wca_id", wca_id: registration.wca_id %>
+            <% if registration.select_wca_id %>
+              <%= render "shared/wca_id", wca_id: registration.select_wca_id %>
             <% end %>
           </td>
-          <td class="country"><%= registration.countryId %></td>
+          <td class="country"><%= registration.select_country %></td>
 
-          <td class="average"><%= registration.best_solve(@event, :average).clock_format %></td>
-          <td class="world-rank-average"><%= registration.world_rank(@event, :average) %></td>
+          <td class="average"><%= SolveTime.new(@event.id, :average, registration.average_best).clock_format %></td>
+          <td class="world-rank-average"><%= registration.average_rank %></td>
 
-          <td class="single"><%= registration.best_solve(@event, :single).clock_format %></td>
-          <td class="world-rank-single"><%= registration.world_rank(@event, :single) %></td>
+          <td class="single"><%= SolveTime.new(@event.id, :single, registration.single_best).clock_format %></td>
+          <td class="world-rank-single"><%= registration.single_rank %></td>
 
           <!-- Extra column for .table-greedy-last-column -->
           <td></td>
