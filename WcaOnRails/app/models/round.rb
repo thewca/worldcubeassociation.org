@@ -1,112 +1,17 @@
 # frozen_string_literal: true
-class Round
-  attr_accessor :id, :rank, :name, :cellName, :valid, :final
-  alias_method :valid?, :valid
-  alias_method :final?, :final
+class Round < ActiveRecord::Base
+  self.table_name = "Rounds"
 
-  @@all = []
-  @@all_by_id = {}
-  def initialize(attributes={})
-    @id = attributes[:id]
-    @rank = attributes[:rank]
-    @name = attributes[:name]
-    @cellName = attributes[:cellName]
-    @final = attributes[:final]
-    @valid = attributes[:valid]
-    if @valid
-      @@all << self
-      @@all_by_id[self.id] = self
-    end
-  end
+  has_many :results, foreign_key: :roundId
 
-  def self.find(id)
-    @@all_by_id[id] or raise "Unrecognized round id"
-  end
+  scope :final_rounds, -> { where("final = 1") }
 
-  def self.find_by_id(id)
-    @@all_by_id[id] || Round.new(id: id, rank: 0, name: "Invalid", cellName: "Invalid", valid: false)
-  end
+  MAX_ID_LENGTH = 1
+  MAX_NAME_LENGTH = 11
+  MAX_CELLNAME_LENGTH = 45
+  validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH }
+  validates :name, presence: true, uniqueness: true, length: { maximum: MAX_NAME_LENGTH }
+  validates :rank, numericality: { only_integer: true }
+  validates :cellName, presence: true, uniqueness: true, length: { maximum: MAX_CELLNAME_LENGTH }
 
-  def self.final_rounds
-    @@all_by_id.values.select(&:final?)
-  end
-
-  def self.all
-    @@all
-  end
-
-  [
-    {
-      id: 'h',
-      rank: 10,
-      name: 'Combined qualification',
-      cellName: 'Combined qualification',
-    },
-    {
-      id: '0',
-      rank: 19,
-      name: 'Qualification round',
-      cellName: 'Qualification',
-    },
-    {
-      id: 'd',
-      rank: 20,
-      name: 'Combined First round',
-      cellName: 'Combined First',
-    },
-    {
-      id: '1',
-      rank: 29,
-      name: 'First round',
-      cellName: 'First',
-    },
-    {
-      id: 'b',
-      rank: 39,
-      name: 'B Final',
-      cellName: 'B Final',
-      final: false, # B Finals don't determine the podium
-    },
-    {
-      id: '2',
-      rank: 50,
-      name: 'Second round',
-      cellName: 'Second',
-    },
-    {
-      id: 'e',
-      rank: 59,
-      name: 'Combined Second round',
-      cellName: 'Combined Second',
-    },
-    {
-      id: 'g',
-      rank: 70,
-      name: 'Combined Third round',
-      cellName: 'Combined Third',
-    },
-    {
-      id: '3',
-      rank: 79,
-      name: 'Semi Final',
-      cellName: 'Semi Final',
-    },
-    {
-      id: 'c',
-      rank: 90,
-      name: 'Combined Final',
-      cellName: 'Combined Final',
-      final: true,
-    },
-    {
-      id: 'f',
-      rank: 99,
-      name: 'Final',
-      cellName: 'Final',
-      final: true,
-    },
-  ].each do |round_json|
-    round_json[:valid] = true
-    Round.new(round_json)
-  end
 end

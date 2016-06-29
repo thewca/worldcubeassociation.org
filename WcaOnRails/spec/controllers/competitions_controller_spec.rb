@@ -6,10 +6,10 @@ describe CompetitionsController do
 
   describe 'GET #index' do
     describe "selecting events" do
-      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, eventSpecs: "222 333 444 555 666") }
-      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, eventSpecs: "333 444 555 pyram clock") }
-      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, eventSpecs: "222 333 skewb 666 pyram sq1") }
-      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, eventSpecs: "333 pyram 666 777 clock") }
+      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: [Event.find("222"), Event.find("333"), Event.find("444"), Event.find("555"), Event.find("666")]) }
+      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: [Event.find("333"), Event.find("444"), Event.find("555"), Event.find("pyram"), Event.find("clock")]) }
+      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: [Event.find("222"), Event.find("333"), Event.find("skewb"), Event.find("666"), Event.find("pyram"), Event.find("sq1")]) }
+      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: [Event.find("333"), Event.find("pyram"), Event.find("666"), Event.find("777"), Event.find("clock")]) }
 
       context "when no event is selected" do
         it "competitions are sorted by start date" do
@@ -219,6 +219,9 @@ describe CompetitionsController do
         %w(year month day endMonth endDay).each do |attribute|
           expect(new_comp.send(attribute)).to eq 0
         end
+
+        # Cloning a competition should clone its events.
+        expect(new_comp.events.sort_by(&:id)).to eq competition.events.sort_by(&:id)
 
         # Cloning a competition should clone its organizers.
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
@@ -582,19 +585,19 @@ describe CompetitionsController do
   describe 'GET #my_competitions' do
     let(:delegate) { FactoryGirl.create(:delegate) }
     let(:organizer) { FactoryGirl.create(:user) }
-    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], eventSpecs: "222 333") }
-    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
-    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], eventSpecs: "222 333") }
-    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], eventSpecs: "222 333") }
-    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], eventSpecs: "222 333") }
-    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], eventSpecs: "222 333") }
-    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], eventSpecs: "222 333", year: "0") }
+    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
+    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
+    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
+    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
+    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
+    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
+    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: [Event.find("222"), Event.find("333")], year: "0") }
     let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
-    let!(:registration1) { FactoryGirl.create(:registration, competitionId: future_competition1.id, user: registered_user) }
-    let!(:registration2) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: registered_user) }
-    let!(:registration3) { FactoryGirl.create(:registration, competitionId: past_competition1.id, user: registered_user) }
-    let!(:registration4) { FactoryGirl.create(:registration, competitionId: past_competition3.id, user: organizer) }
-    let!(:registration5) { FactoryGirl.create(:registration, competitionId: future_competition3.id, user: delegate) }
+    let!(:registration1) { FactoryGirl.create(:registration, competition: future_competition1, user: registered_user) }
+    let!(:registration2) { FactoryGirl.create(:registration, competition: future_competition3, user: registered_user) }
+    let!(:registration3) { FactoryGirl.create(:registration, competition: past_competition1, user: registered_user) }
+    let!(:registration4) { FactoryGirl.create(:registration, competition: past_competition3, user: organizer) }
+    let!(:registration5) { FactoryGirl.create(:registration, competition: future_competition3, user: delegate) }
     let!(:results_person) { FactoryGirl.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
     let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }

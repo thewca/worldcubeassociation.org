@@ -8,6 +8,7 @@ class Registration < ActiveRecord::Base
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
   has_many :registration_events
+  has_many :events, through: :registration_events
 
   accepts_nested_attributes_for :registration_events, allow_destroy: true
 
@@ -30,10 +31,6 @@ class Registration < ActiveRecord::Base
 
   def accepted?
     !pending?
-  end
-
-  def events
-    registration_events.map(&:event_object).sort_by(&:rank)
   end
 
   def name
@@ -87,6 +84,10 @@ class Registration < ActiveRecord::Base
     person ? person.best_solve(event, type) : SolveTime.new(event.id, type, 0)
   end
 
+  def event_picker_events
+    registration_events.map(&:event_object).sort_by(&:rank)
+  end
+
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
@@ -102,7 +103,7 @@ class Registration < ActiveRecord::Base
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if events.empty?
+    if registration_events.length { |r| !r.marked_for_destruction? } == 0
       errors.add(:registration_events, "must register for at least one event")
     end
   end

@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events
+  has_many :preferred_events, through: :user_preferred_events, source: :event
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
@@ -298,11 +299,6 @@ class User < ActiveRecord::Base
     if unconfirmed_wca_id.present?
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
     end
-  end
-
-  # Returns the preferred events as an array of Event objects
-  def preferred_events
-    user_preferred_events.map(&:event_object).sort_by(&:rank)
   end
 
   def software_team?

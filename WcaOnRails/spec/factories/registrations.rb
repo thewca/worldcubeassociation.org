@@ -1,21 +1,11 @@
 # frozen_string_literal: true
 FactoryGirl.define do
   factory :registration do
-    transient do
-      competition { FactoryGirl.create(:competition, :registration_open) }
-      user { FactoryGirl.create(:user, :wca_id) }
-      event_ids ["333"]
-    end
-    competitionId { competition.id }
-    user_id { user ? user.id : nil }
+    association :competition, factory: [:competition, :registration_open]
+    association :user, factory: [:user, :wca_id]
     guests 10
     comments ""
-    # Using accept_nested_attributes_for
-    registration_events_attributes do
-      event_ids.map do |event_id|
-        { event_id: event_id }
-      end
-    end
+    events { competition.events }
 
     trait :accepted do
       accepted_at Time.now

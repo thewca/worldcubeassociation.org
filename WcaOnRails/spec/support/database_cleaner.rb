@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 RSpec.configure do |config|
   config.before(:suite) do
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks = 0;")
     DatabaseCleaner.clean_with :truncation
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks = 1;")
     TestDbManager.fill_tables
   end
 

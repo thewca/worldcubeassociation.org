@@ -150,7 +150,7 @@
           <%= hidden_field_tag "section", "preferences" %>
 
           <%= render "shared/associated_events_picker", form_builder: f, label: t('.preferred_events'), disabled: !editable_fields.include?(:preferred_events),
-                                                        events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
+                                                        events_association_name: :user_preferred_events, selected_events: @user.preferred_events.to_a %>
           <span class="help-block"><%= t '.preferred_events_desc' %></span>
 
           <%= label_tag :notifications, t('layouts.navigation.notifications') %>

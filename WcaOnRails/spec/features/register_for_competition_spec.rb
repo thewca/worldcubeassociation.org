@@ -21,8 +21,8 @@ RSpec.feature "Registering for a competition" do
     end
 
     scenario "User with preferred events goes to register page" do
-      user.update_attribute :user_preferred_events_attributes, [ {event_id: "333"}, {event_id: "444"}, {event_id: "555"} ]
-      competition.update_attribute :eventSpecs, "444 555 666"
+      user.update_attribute :preferred_events, [ Event.find("333"), Event.find("444"), Event.find("555") ]
+      competition.update_attribute :events, [ Event.find("444"), Event.find("555"), Event.find("666") ]
 
       visit competition_register_path(competition)
       expect(find("#registration_events_444")).to be_checked

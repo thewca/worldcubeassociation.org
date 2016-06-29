@@ -73,9 +73,9 @@
                                            : registration_path(@registration) %>
         <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
 
-          <% selected_events = @registration.events.empty? ? @registration.user.preferred_events : @registration.events %>
+          <% selected_events = @registration.event_picker_events.empty? ? @registration.user.preferred_events : @registration.event_picker_events %>
           <%= render "shared/associated_events_picker", form_builder: f, disabled: !current_user.can_edit_registration?(@registration),
-                      events_association_name: :registration_events, allowed_events: @competition.events, selected_events: selected_events %>
+                      events_association_name: :registration_events, allowed_events: @competition.events.order(:rank), selected_events: selected_events %>
 
           <% if @competition.guests_enabled? %>
             <%= f.input :guests, disabled: !current_user.can_edit_registration?(@registration) %>

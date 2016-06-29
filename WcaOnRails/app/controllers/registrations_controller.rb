@@ -38,7 +38,6 @@ class RegistrationsController < ApplicationController
   def psych_sheet_event
     @competition = competition_from_params
     @event = Event.find(params[:event_id])
-    @preferred_format = @event.preferred_formats.first
     @registrations = @competition.psych_sheet_event(@event)
   end
 

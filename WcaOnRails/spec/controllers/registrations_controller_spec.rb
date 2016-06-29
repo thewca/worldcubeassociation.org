@@ -4,14 +4,9 @@ require 'rails_helper'
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
     let(:organizer) { FactoryGirl.create(:user) }
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], eventSpecs: "222 333") }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
     let(:zzyzx_user) { FactoryGirl.create :user, name: "Zzyzx" }
-    let(:registration) { FactoryGirl.create(:registration, competitionId: competition.id, user: zzyzx_user) }
-    let(:registration_without_user) {
-      u = FactoryGirl.build(:registration, competitionId: competition.id, name: "Aaron", user: nil)
-      u.save!(validate: false)
-      u
-    }
+    let(:registration) { FactoryGirl.create(:registration, competition: competition, user: zzyzx_user) }
 
     before :each do
       sign_in organizer
@@ -22,31 +17,8 @@ RSpec.describe RegistrationsController do
       expect(response.status).to eq 200
     end
 
-    it 'sorts by name, even if name is unpopulated because they registered with a WCA account' do
-      # First accept registrations
-      registration.update_column(:accepted_at, Time.now)
-      registration_without_user.update_column(:accepted_at, Time.now)
-
-      get :index, competition_id: competition
-      registrations = assigns(:registrations)
-      expect(registrations.length).to eq 2
-      expect(registrations[0].name).to eq "Aaron"
-      expect(registrations[1].name).to eq "Zzyzx"
-    end
-
-    it 'can set name, email, events, countryId for registrations without user' do
-      patch :update, id: registration_without_user.id, registration: { name: "test name", email: "foo@bar.com", countryId: "smerbia",
-                                                                       registration_events_attributes: [ {event_id: "222"} ] }
-      registration_without_user.reload
-      expect(registration_without_user.name).to eq "test name"
-      # This registration's registration_event with event_id = '333' is already in the databse and we've just added 2x2x2
-      expect(registration_without_user.events.map(&:id)).to eq %w(333 222)
-      expect(registration_without_user.email).to eq "foo@bar.com"
-      expect(registration_without_user.countryId).to eq "smerbia"
-    end
-
     it 'cannot set events that are not offered' do
-      competition.update_column(:eventSpecs, "333")
+      competition.events = [Event.find("333")]
 
       patch :update, id: registration.id, registration: { registration_events_attributes: [ {event_id: "333"}, {event_id: "222"} ] }
       registration = assigns(:registration)
@@ -93,7 +65,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can delete multiple registrations" do
-      registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
+      registration2 = FactoryGirl.create(:registration, competition: competition)
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
@@ -107,8 +79,8 @@ RSpec.describe RegistrationsController do
 
     it "can reject multiple registrations" do
       registration.update!(accepted_at: Time.now)
-      registration2 = FactoryGirl.create(:registration, :accepted, competitionId: competition.id)
-      pending_registration = FactoryGirl.create(:registration, :pending, competitionId: competition.id)
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition)
+      pending_registration = FactoryGirl.create(:registration, :pending, competition: competition)
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration2).and_call_original
@@ -125,8 +97,8 @@ RSpec.describe RegistrationsController do
     end
 
     it "can accept multiple registrations" do
-      registration2 = FactoryGirl.create(:registration, competitionId: competition.id)
-      accepted_registration = FactoryGirl.create(:registration, :accepted, competitionId: competition.id)
+      registration2 = FactoryGirl.create(:registration, competition: competition)
+      accepted_registration = FactoryGirl.create(:registration, :accepted, competition: competition)
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration2).and_call_original
@@ -145,7 +117,7 @@ RSpec.describe RegistrationsController do
     describe "with views" do
       render_views
       it "does not update registration that changed" do
-        registration = FactoryGirl.create(:registration, competitionId: competition.id)
+        registration = FactoryGirl.create(:registration, competition: competition)
 
         registration.guests = 4
         registration.save!
@@ -157,7 +129,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can accept own registration" do
-      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: organizer.id
+      registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: organizer.id
 
       patch :update, id: registration.id, registration: { accepted_at: Time.now }
       expect(registration.reload.accepted?).to eq true
@@ -196,7 +168,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can delete registration when on waitlist" do
-      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
       expect do
@@ -209,7 +181,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot delete registration when approved" do
-      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
 
       expect do
         delete :destroy, id: registration.id, user_is_deleting_theirself: true
@@ -221,8 +193,8 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannnot delete other people's registrations" do
-      FactoryGirl.create :registration, competitionId: competition.id, user_id: user.id
-      other_registration = FactoryGirl.create :registration, competitionId: competition.id
+      FactoryGirl.create :registration, competition: competition, user_id: user.id
+      other_registration = FactoryGirl.create :registration, competition: competition
       delete :destroy, id: other_registration.id, user_is_deleting_theirself: true
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(other_registration.id)).to eq other_registration
@@ -253,7 +225,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "can edit registration when pending" do
-      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
       patch :update, id: registration.id, registration: { comments: "new comment" }
       expect(registration.reload.comments).to eq "new comment"
@@ -262,7 +234,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot edit registration when approved" do
-      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
 
       patch :update, id: registration.id, registration: { comments: "new comment" }
       expect(registration.reload.comments).to eq ""
@@ -270,22 +242,22 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot access edit page" do
-      registration = FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
       get :edit, id: registration.id
       expect(response).to redirect_to root_path
     end
 
     it "cannot edit someone else's registration" do
-      FactoryGirl.create :registration, :accepted, competitionId: competition.id, user_id: user.id
+      FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
       other_user = FactoryGirl.create(:user, :wca_id)
-      other_registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: other_user.id
+      other_registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: other_user.id
 
       patch :update, id: other_registration.id, registration: { comments: "new comment" }
       expect(other_registration.reload.comments).to eq ""
     end
 
     it "cannot accept own registration" do
-      registration = FactoryGirl.create :registration, :pending, competitionId: competition.id, user_id: user.id
+      registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
       patch :update, id: registration.id, registration: { accepted_at: Time.now }
       expect(registration.reload.accepted?).to eq false
@@ -331,7 +303,7 @@ RSpec.describe RegistrationsController do
 
   context "competition not visible" do
     let(:organizer) { FactoryGirl.create :user }
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, eventSpecs: "333 444 333bf", showAtAll: false, organizers: [organizer]) }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, events: [Event.find("333"), Event.find("444"), Event.find("333bf")], showAtAll: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do
       expect {
@@ -348,7 +320,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "psych sheet when not signed in" do
-    let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, eventSpecs: "333 444 333bf") }
+    let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, events: [Event.find("333"), Event.find("444"), Event.find("333bf")]) }
 
     it "redirects psych sheet to 333" do
       get :psych_sheet, competition_id: competition.id
@@ -374,7 +346,7 @@ RSpec.describe RegistrationsController do
 
 
     it "redirects psych sheet to highest ranked event if no 333" do
-      competition.eventSpecs = "222 444"
+      competition.events = [Event.find("222"), Event.find("444")]
       competition.save!
 
       get :psych_sheet, competition_id: competition.id
@@ -400,18 +372,18 @@ RSpec.describe RegistrationsController do
     end
 
     it "sorts 444 by average and handles ties" do
-      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
       FactoryGirl.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
 
-      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
 
-      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 9, best: 4242, eventId: "444", personId: registration3.personId
 
-      registration4 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration4 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 11, best: 4242, eventId: "444", personId: registration4.personId
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
@@ -423,15 +395,15 @@ RSpec.describe RegistrationsController do
 
     it "handles missing average" do
       # Missing an average
-      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.personId
 
-      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
 
       # Never competed
-      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
@@ -440,7 +412,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles 1 registration" do
-      registration = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
         personId: registration.personId,
         eventId: "444",
@@ -457,7 +429,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "sorts 333bf by single" do
-      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(333bf))
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
         personId: registration1.personId,
         eventId: "333bf",
@@ -475,7 +447,7 @@ RSpec.describe RegistrationsController do
         countryRank: 1,
       )
 
-      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(333bf))
+      registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
         personId: registration2.personId,
         eventId: "333bf",
@@ -500,7 +472,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "shows first timers on bottom" do
-      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(333bf))
+      registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
         personId: registration1.personId,
         eventId: "333bf",
@@ -520,11 +492,11 @@ RSpec.describe RegistrationsController do
 
       # Someone who has never competed in a WCA competition
       user2 = FactoryGirl.create(:user, name: "Zzyzx")
-      registration2 = FactoryGirl.create(:registration, :accepted, user: user2, competition: competition, event_ids: %w(333bf))
+      registration2 = FactoryGirl.create(:registration, :accepted, user: user2, competition: competition, events: [Event.find("333bf")])
 
       # Someone who has never competed in 333bf
       user3 = FactoryGirl.create(:user, :wca_id, name: "Aaron")
-      registration3 = FactoryGirl.create(:registration, :accepted, user: user3, competition: competition, event_ids: %w(333bf))
+      registration3 = FactoryGirl.create(:registration, :accepted, user: user3, competition: competition, events: [Event.find("333bf")])
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
@@ -533,7 +505,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "handles 1 registration" do
-      registration = FactoryGirl.create(:registration, :accepted, competition: competition, event_ids: %w(444))
+      registration = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
         personId: registration.personId,
         eventId: "444",

@@ -225,17 +225,6 @@ RSpec.describe Competition do
     expect(competition.end_date).to eq Date.parse("1988-12-07")
   end
 
-  it "ignores equal signs in eventSpecs" do
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95
-    competition = FactoryGirl.build :competition, eventSpecs: "   333=//sd    444   "
-    expect(competition.events.map(&:id)).to eq %w(333 444)
-  end
-
-  it "validates event ids" do
-    competition = FactoryGirl.build :competition, eventSpecs: "333 333wtf"
-    expect(competition).to be_invalid
-  end
-
   it "converts microdegrees to degrees" do
     competition = FactoryGirl.build :competition, latitude: 40, longitude: 30
     expect(competition.latitude_degrees).to eq 40/1e6
@@ -383,7 +372,7 @@ RSpec.describe Competition do
       end
 
       it "must have at least one event when setting #{action}" do
-        competition_with_delegate.assign_attributes eventSpecs: "", action => true
+        competition_with_delegate.assign_attributes events: [], action => true
         expect(competition_with_delegate).not_to be_valid
       end
 
@@ -446,9 +435,9 @@ RSpec.describe Competition do
   end
 
   describe "results" do
-    let(:competition) { FactoryGirl.create :competition, eventSpecs: "333 222" }
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
+    let(:competition) { FactoryGirl.create :competition, events: [three_by_three, two_by_two] }
 
     let(:person_one) { FactoryGirl.create :person, name: "One" }
     let(:person_two) { FactoryGirl.create :person, name: "Two" }

@@ -7,6 +7,8 @@ class Competition < ActiveRecord::Base
   #       no clue why... (th, 2015-09-19)
   self.primary_key = "id"
 
+  has_many :competition_events, dependent: :destroy
+  has_many :events, through: :competition_events
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
@@ -20,11 +22,12 @@ class Competition < ActiveRecord::Base
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
 
+  accepts_nested_attributes_for :competition_events, allow_destroy: true
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
     information
-    eventSpecs
     venue
     venueAddress
     venueDetails
@@ -48,6 +51,7 @@ class Competition < ActiveRecord::Base
     cellName
     showAtAll
     isConfirmed
+    eventSpecs
     registration_open
     registration_close
     results_posted_at
@@ -91,8 +95,8 @@ class Competition < ActiveRecord::Base
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
-    if events.empty?
-      errors.add(:eventSpecs, "must contain at least one event for this competition")
+    if events.length == 0
+      errors.add(:events, "must contain at least one event for this competition")
     end
   end
 
@@ -164,6 +168,8 @@ class Competition < ActiveRecord::Base
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
+        when 'events'
+          clone.events = events
         when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
@@ -407,16 +413,10 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def events
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
-    (eventSpecs || []).split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
-  end
-
   def has_events_with_ids?(event_ids)
     # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
     # what these equal signs are about.
-    (event_ids - eventSpecs.split.map { |e| e.split("=")[0] }).empty?
+    (event_ids - events.ids).empty?
   end
 
   def has_event?(event)
@@ -511,8 +511,12 @@ class Competition < ActiveRecord::Base
   private def events_must_be_valid
     invalid_events = events - Event.all_official - Event.all_deprecated
     unless invalid_events.empty?
-      errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
+      errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
+  end
+
+  def event_picker_events
+    competition_events.map(&:event_object).sort_by(&:rank)
   end
 
   def nearby_competitions(days, distance)
@@ -665,8 +669,6 @@ class Competition < ActiveRecord::Base
   end
 
   def psych_sheet_event(event)
-    preferred_format = event.preferred_formats.first
-
     joinsql = <<-ENDSQL
       join registration_events on registration_events.registration_id = Preregs.id
       join users on users.id = Preregs.user_id
@@ -688,7 +690,7 @@ class Competition < ActiveRecord::Base
       ifnull(RanksSingle.best, 0) single_best
     ENDSQL
 
-    sort_clause = "-#{preferred_format.sort_by}_rank desc, -#{preferred_format.sort_by_second}_rank desc, users.name"
+    sort_clause = "-#{event.recommended_format.sort_by}_rank desc, -#{event.recommended_format.sort_by_second}_rank desc, users.name"
 
     registrations = self.registrations.
                          accepted.
@@ -699,7 +701,7 @@ class Competition < ActiveRecord::Base
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
-      if preferred_format.sort_by == :single
+      if event.recommended_format.sort_by == :single
         rank = registration.single_rank
         prev_rank = prev_registration&.single_rank
       else
