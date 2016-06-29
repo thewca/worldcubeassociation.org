@@ -186,6 +186,35 @@ $(function() {
     }).trigger("dp.change");
   });
 
+  function insertText(editor, markup, promptText) {
+    var cm = editor.codemirror;
+
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
+    var text;
+    var somethingSelected = cm.somethingSelected();
+
+    if(somethingSelected) {
+      text = cm.getSelection();
+    } else {
+      text = prompt(promptText);
+    }
+
+    if(!text) {
+      return false;
+    }
+
+    cm.replaceSelection(markup.build(text));
+
+    if(somethingSelected) {
+      startPoint.ch += markup.start.length;
+      endPoint.ch += markup.start.length;
+      cm.setSelection(startPoint, endPoint);
+    }
+
+    cm.focus();
+  }
+
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
@@ -204,41 +233,30 @@ $(function() {
         {
           name: 'map',
           action: function insertMap(editor) {
-            var cm = editor.codemirror;
-
             var mapMarkup = {
               start: 'map(',
               end: ')',
               build: function(address) { return this.start + address + this.end; }
             };
 
-            var startPoint = cm.getCursor('start');
-            var endPoint = cm.getCursor('end');
-            var address;
-            var somethingSelected = cm.somethingSelected();
-
-            if(somethingSelected) {
-              address = cm.getSelection();
-            } else {
-              address = prompt('Address or coordinates of the place:');
-            }
-
-            if(!address) {
-              return false;
-            }
-
-            cm.replaceSelection(mapMarkup.build(address));
-
-            if(somethingSelected) {
-              startPoint.ch += mapMarkup.start.length;
-              endPoint.ch += mapMarkup.start.length;
-              cm.setSelection(startPoint, endPoint);
-            }
-
-            cm.focus();
+            insertText(editor, mapMarkup, 'Address or coordinates of the place:');
           },
           className: 'fa fa-map-marker',
           title: 'Insert Map',
+        },
+        {
+          name: 'youtube',
+          action: function insertMap(editor) {
+            var youTubeMarkup = {
+              start: 'youtube(',
+              end: ')',
+              build: function(videoUrl) { return this.start + videoUrl + this.end; }
+            };
+
+            insertText(editor, youTubeMarkup, 'Full url to the YouTube video:');
+          },
+          className: 'fa fa-youtube-play',
+          title: 'Insert YouTube Video',
         },
         '|', 'preview', 'side-by-side', 'fullscreen',
         '|', 'guide',
