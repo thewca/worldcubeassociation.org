@@ -1,7 +1,7 @@
 <% provide(:title, "Registrations for #{@competition.name}") %>
 
 <%= render layout: "nav" do %>
-  <% cache ["registrations_index", @registrations.pluck(:id), @registrations.maximum(:updated_at)] do %>
+  <% cache ["registrations_index", @competition.events, @registrations.pluck(:id), @registrations.maximum(:updated_at)] do %>
     <%= wca_table data: { toggle: "table", sort_name: "name" } do %>
       <thead>
         <tr>
