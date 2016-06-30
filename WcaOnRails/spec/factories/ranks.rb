@@ -4,6 +4,7 @@ FactoryGirl.define do
       rank 1
     end
 
+    best { rank * 100 }
     worldRank { rank }
     continentRank { rank }
     countryRank { rank }
@@ -14,6 +15,7 @@ FactoryGirl.define do
       rank 1
     end
 
+    best { rank * 100 }
     worldRank { rank }
     continentRank { rank }
     countryRank { rank }
