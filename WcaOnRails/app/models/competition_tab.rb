@@ -31,21 +31,12 @@ class CompetitionTab < ActiveRecord::Base
 
   def reorder(direction)
     current_display_order = display_order
-    case direction.to_s
-    when "up"
-      unless current_display_order == 1
-        earlier = competition.competition_tabs.find_by(display_order: current_display_order - 1)
-        update_column :display_order, nil
-        earlier.update_column :display_order, current_display_order
-        update_column :display_order, current_display_order - 1
-      end
-    when "down"
-      unless current_display_order == competition.competition_tabs.count
-        later = competition.competition_tabs.find_by(display_order: current_display_order + 1)
-        update_column :display_order, nil
-        later.update_column :display_order, current_display_order
-        update_column :display_order, current_display_order + 1
-      end
+    other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
+    other_tab = competition.competition_tabs.find_by(display_order: other_display_order)
+    if other_tab
+      update_column :display_order, nil
+      other_tab.update_column :display_order, current_display_order
+      update_column :display_order, other_display_order
     end
   end
 end

@@ -191,14 +191,9 @@ $(function() {
 
     var startPoint = cm.getCursor('start');
     var endPoint = cm.getCursor('end');
-    var text;
     var somethingSelected = cm.somethingSelected();
 
-    if(somethingSelected) {
-      text = cm.getSelection();
-    } else {
-      text = prompt(promptText);
-    }
+    var text = (somethingSelected ? cm.getSelection() : prompt(promptText));
 
     if(!text) {
       return false;
