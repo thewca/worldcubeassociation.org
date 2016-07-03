@@ -17,7 +17,7 @@ RSpec.feature "Create competition", js: true do
     click_button "Create Competition"
 
     expect(Competition.all.length).to eq 1
-    new_competition = Competition.find("NewComp2015")
+    new_competition = Competition.find_by_slug!("NewComp2015")
     expect(new_competition.name).to eq "New Comp 2015"
     expect(new_competition.delegates).to eq [delegate]
   end
@@ -31,7 +31,7 @@ RSpec.feature "Create competition", js: true do
     click_button "Create Competition"
 
     expect(Competition.all.length).to eq 2
-    new_competition = Competition.find("NewComp2015")
+    new_competition = Competition.find_by_slug!("NewComp2015")
     expect(new_competition.name).to eq "New Comp 2015"
     expect(new_competition.delegates).to eq [delegate, cloned_delegate]
     expect(new_competition.venue).to eq competition_to_clone.venue

@@ -36,6 +36,7 @@ class Competition < ActiveRecord::Base
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
+    slug
     name
     year
     month
@@ -54,10 +55,10 @@ class Competition < ActiveRecord::Base
   INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )".freeze
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
-  MAX_ID_LENGTH = 32
+  MAX_SLUG_LENGTH = 32
   MAX_NAME_LENGTH = 50
-  validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
-                 format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
+  validates :slug, presence: true, uniqueness: true, length: { maximum: MAX_SLUG_LENGTH },
+                   format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
@@ -168,12 +169,15 @@ class Competition < ActiveRecord::Base
     if m
       name_without_year = m[1]
       year = m[2]
+      # Generate competition id and slug from name
+      # by replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
+      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
       if id.blank?
-        # Generate competition id from name
-        # By replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
-        self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+        self.id = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
+      end
+      if slug.blank?
+        self.slug = safe_name_without_year[0...(MAX_SLUG_LENGTH - year.length)] + year
       end
       if cellName.blank?
         year = " " + year
@@ -191,23 +195,12 @@ class Competition < ActiveRecord::Base
   end
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
-    # This is a mess. When changing competition ids, the calls to delegates=
-    # and organizers= below will cause database writes with a new competition_id.
-    # We hack around this by pretending our id actually didn't change, and then
-    # we restore it at the end. This means we'll preseve our existing
-    # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
-    # We'll fix their competition_id below in update_foreign_keys.
-    new_id = self.id
-    self.id = id_was
-
     if @delegate_ids
       self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
     end
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
-
-    self.id = new_id
   end
 
   # Workaround for PHP code that requires these tables to be clean.
@@ -217,26 +210,6 @@ class Competition < ActiveRecord::Base
   def remove_non_existent_organizers_and_delegates
     CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
-  end
-
-  # This is kind of scary. Whenever a competition's id changes, We need to
-  # remember all the places in our database that refer to competition ids, and
-  # update them. We can get rid of all this once we're done with
-  # https://github.com/cubing/worldcubeassociation.org/issues/91.
-  after_save :update_foreign_keys, if: :id_changed?
-  def update_foreign_keys
-    [
-      Result,
-      Registration,
-      Scramble,
-      CompetitionMedium,
-      CompetitionDelegate,
-      CompetitionOrganizer,
-      DelegateReport,
-    ].each do |model|
-      foreign_key = model.column_names.include?("competitionId") ? "competitionId" : "competition_id"
-      model.where(foreign_key => id_was).update_all(foreign_key => id)
-    end
   end
 
   attr_accessor :editing_user_id
@@ -701,7 +674,8 @@ class Competition < ActiveRecord::Base
 
     if query.present?
       sql_query = "%#{query}%"
-      competitions = competitions.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+      competitions = competitions.where("slug LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query)
+        .order(year: :desc, month: :desc, day: :desc)
     end
 
     if params[:sort].present?
@@ -720,6 +694,10 @@ class Competition < ActiveRecord::Base
     end
 
     competitions
+  end
+
+  def to_param
+    slug
   end
 
   def serializable_hash(options = nil)

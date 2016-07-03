@@ -204,10 +204,11 @@ describe CompetitionsController do
         expect(new_comp.id).to eq ""
         expect(new_comp.name).to eq ""
         # When cloning a competition, we don't want to clone its showAtAll,
-        # isConfirmed, and results_posted_at attributes.
+        # isConfirmed, slug and results_posted_at attributes.
         expect(new_comp.showAtAll).to eq false
         expect(new_comp.isConfirmed).to eq false
         expect(new_comp.results_posted_at).to eq nil
+        expect(new_comp.slug).to eq nil
         # We don't want to clone its dates.
         %w(year month day endMonth endDay).each do |attribute|
           expect(new_comp.send(attribute)).to eq 0
@@ -286,17 +287,10 @@ describe CompetitionsController do
         expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
 
-      it "can change competition id" do
-        cds = competition.competition_delegates.to_a
-        cos = competition.competition_organizers.to_a
+      it "can change slug" do
+        patch :update, id: competition.id, competition: { slug: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") }
 
-        old_id = competition.id
-        patch :update, id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") }
-
-        expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
-        expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
-        expect(CompetitionDelegate.where(competition_id: "NewId2015").map(&:id).sort).to eq cds.map(&:id).sort
-        expect(CompetitionOrganizer.where(competition_id: "NewId2015").map(&:id).sort).to eq cos.map(&:id).sort
+        expect(competition.reload.slug).to eq "NewId2015"
       end
     end
 

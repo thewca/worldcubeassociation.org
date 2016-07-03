@@ -49,9 +49,11 @@ CREATE TABLE `Competitions` (
   `registration_close` datetime DEFAULT NULL,
   `use_wca_registration` tinyint(1) NOT NULL DEFAULT '0',
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_Competitions_on_slug` (`slug`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -979,6 +981,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160109070723');
 INSERT INTO schema_migrations (version) VALUES ('20160120071503');
 
 INSERT INTO schema_migrations (version) VALUES ('20160128023834');
+
+INSERT INTO schema_migrations (version) VALUES ('20160207125654');
 
 INSERT INTO schema_migrations (version) VALUES ('20160218135313');
 

@@ -54,6 +54,7 @@ RSpec.describe Competition do
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
+    expect(competition.slug).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
   end
 
@@ -287,52 +288,6 @@ RSpec.describe Competition do
     organizer_ids = organizers.map(&:id).join(",")
     competition = FactoryGirl.create :competition, organizer_ids: organizer_ids
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
-  end
-
-  describe "when changing the id of a competition" do
-    let(:competition) { FactoryGirl.create(:competition, :with_delegate, :with_organizer, use_wca_registration: true) }
-
-    it "changes the competitionId of registrations" do
-      reg1 = FactoryGirl.create(:registration, competitionId: competition.id)
-      competition.update_attribute(:id, "NewID2015")
-      expect(reg1.reload.competitionId).to eq "NewID2015"
-    end
-
-    it "changes the competitionId of results" do
-      r1 = FactoryGirl.create(:result, competitionId: competition.id)
-      r2 = FactoryGirl.create(:result, competitionId: competition.id)
-      competition.update_attribute(:id, "NewID2015")
-      expect(r1.reload.competitionId).to eq "NewID2015"
-      expect(r2.reload.competitionId).to eq "NewID2015"
-    end
-
-    it "changes the competitionId of scrambles" do
-      scramble1 = FactoryGirl.create(:scramble, competitionId: competition.id)
-      competition.update_attribute(:id, "NewID2015")
-      expect(scramble1.reload.competitionId).to eq "NewID2015"
-    end
-
-    it "updates the competition_id of competition_delegates and competition_organizers" do
-      organizer = competition.organizers.first
-      delegate = competition.delegates.first
-
-      expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
-      expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
-
-      cd = CompetitionDelegate.find_by_delegate_id(delegate.id)
-      expect(cd).not_to eq nil
-      co = CompetitionOrganizer.find_by_organizer_id(organizer.id)
-      expect(co).not_to eq nil
-
-      c = Competition.find(competition.id)
-      c.id = "NewID2015"
-      c.save!
-
-      expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
-      expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
-      expect(CompetitionDelegate.find(cd.id).competition_id).to eq "NewID2015"
-      expect(CompetitionOrganizer.find(co.id).competition_id).to eq "NewID2015"
-    end
   end
 
   describe "when deleting a competition" do
