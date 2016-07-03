@@ -574,12 +574,12 @@ function checkEvents () {
   echo "<hr /><p>Checking <b> events for $competitionDescription</b>... (wait for the result message box at the end)</p>\n";
 
   #--- Get events from Results and Competitions
-  $eventsResults = dbQuery( "SELECT r.competitionId, r.eventId, c.eventSpecs FROM Results r, Competitions c WHERE c.id = r.competitionId AND r.eventId != '333mbo' $competitionCondition GROUP BY r.competitionId, r.eventId" );
+  $eventsResults = dbQuery( "SELECT r.competitionId, r.eventId FROM Results r, Competitions c WHERE c.id = r.competitionId AND r.eventId != '333mbo' $competitionCondition GROUP BY r.competitionId, r.eventId" );
 
   # Grossness to handle the fact that the competition id in the Competitions table
   # is the "id" column, not the "competitionId" column.
-  $competitionConditionForCompetitionsTable = str_replace("competitionId", "id", $competitionCondition);
-  $eventsCompetition = dbQuery( "SELECT id, eventSpecs FROM Competitions WHERE 1 $competitionConditionForCompetitionsTable" );
+  $competitionConditionForCompetitionsTable = str_replace("competitionId", "competition_id", $competitionCondition);
+  $eventsCompetition = dbQuery( "SELECT competition_id, event_id FROM competition_events WHERE 1 $competitionConditionForCompetitionsTable" );
 
   #--- Group events by competitions.
   foreach( $eventsResults as $eventResults ){
@@ -589,7 +589,7 @@ function checkEvents () {
 
   foreach( $eventsCompetition as $eventCompetition ){
     extract( $eventCompetition );
-    $arrayEventsCompetition[$id] = getEventSpecsEventIds ( $eventSpecs );
+    $arrayEventsCompetition[$competition_id][] = $event_id;
   }
 
   $ok = true;
@@ -607,7 +607,12 @@ function checkEvents () {
       $competitionOnly = array_diff( $arrayEventsCompetition[$competitionId], $arrayEventsResults[$competitionId] );
       echo "  Old events list: ".implode(' ', $intersect)." <b style='color:#F00'>".implode(' ',$competitionOnly)."</b><br />\n";
       echo "  New events list: ".implode(' ', $intersect)." <b style='color:#3C3'>".implode(' ',$resultsOnly)."</b><br />\n";
-      dbCommand( "UPDATE Competitions SET eventSpecs='".implode(' ', $arrayEventsResults[$competitionId])."' WHERE id='$competitionId'" );
+      foreach($competitionOnly as $event) {
+        dbCommand("DELETE from competition_events where competition_id='$competitionId' and event_id = '$event'");
+      }
+      foreach($resultsOnly as $event) {
+        dbCommand("INSERT INTO competition_events (id, competition_id, event_id) VALUES (NULL, '$competitionId', '$event')");
+      }
     }
   }
 
