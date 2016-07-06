@@ -38,7 +38,7 @@ if( $chosenExport ){
                               GROUP_CONCAT(DISTINCT(CONCAT("[{", users_delegates.name, "}{mailto:", users_delegates.email, "}]")) SEPARATOR " ") as wcaDelegate,
                               GROUP_CONCAT(DISTINCT(CONCAT("[{", users_organizers.name, "}{mailto:", users_organizers.email, "}]")) SEPARATOR " ") as organiser,
                               Competitions.venue, Competitions.venueAddress,
-                              Competitions.venueDetails, Competitions.website, Competitions.cellName, Competitions.latitude, Competitions.longitude
+                              Competitions.venueDetails, Competitions.external_website, Competitions.cellName, Competitions.latitude, Competitions.longitude
                               FROM Competitions
                               LEFT JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id LEFT JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id
                               LEFT JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id LEFT JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id

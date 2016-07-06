@@ -254,20 +254,25 @@ RSpec.describe Competition do
     expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 
-  describe "validates website" do
+  describe "validates internal website" do
     it "likes http://foo.com" do
-      competition = FactoryGirl.build :competition, website: "http://foo.com"
+      competition = FactoryGirl.build :competition, external_website: "http://foo.com"
       expect(competition).to be_valid
     end
 
     it "dislikes [{foo}{http://foo.com}]" do
-      competition = FactoryGirl.build :competition, website: "[{foo}{http://foo.com}]"
+      competition = FactoryGirl.build :competition, external_website: "[{foo}{http://foo.com}]"
       expect(competition).not_to be_valid
     end
 
     it "dislikes htt://foo" do
-      competition = FactoryGirl.build :competition, website: "htt://foo"
+      competition = FactoryGirl.build :competition, external_website: "htt://foo"
       expect(competition).not_to be_valid
+    end
+
+    it "doesn't valitate if the inernal website is used" do
+      competition = FactoryGirl.build :competition, external_website: "", generate_website: true
+      expect(competition).to be_valid
     end
   end
 
@@ -360,7 +365,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { FactoryGirl.build :competition, :with_delegate }
+    let(:competition_with_delegate) { FactoryGirl.build :competition, :with_delegate, generate_website: false }
     let(:competition_without_delegate) { FactoryGirl.build :competition }
 
     [:isConfirmed, :showAtAll].each do |action|
@@ -369,7 +374,7 @@ RSpec.describe Competition do
         expect(competition_with_delegate).to be_valid
       end
 
-      [:cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude].each do |field|
+      [:cityName, :countryId, :venue, :venueAddress, :external_website, :latitude, :longitude].each do |field|
         it "requires #{field} when setting #{action}" do
           competition_with_delegate.assign_attributes field => "", action => true
           expect(competition_with_delegate).not_to be_valid
@@ -513,6 +518,64 @@ RSpec.describe Competition do
       competition.results.where(eventId: "222").update_all(best: SolveTime::DNF_VALUE)
       expect(competition.winning_results.map(&:event).uniq).to eq [three_by_three]
       expect(competition.events_with_podium_results.map(&:first).uniq).to eq [three_by_three]
+    end
+  end
+
+  it "when id is changed, foreign keys are updated as well" do
+    competition = FactoryGirl.create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
+    FactoryGirl.create(:result, competitionId: competition.id)
+    FactoryGirl.create(:competition_tab, competition: competition)
+    FactoryGirl.create(:registration, competition: competition)
+
+    expect do
+      competition.update_attribute(:id, "NewName2016")
+    end.to_not change {
+      [:results, :organizers, :delegates, :tabs, :registrations, :delegate_report].map do |associated|
+        competition.send(associated)
+      end
+    }
+
+    expect(competition).to respond_to(:update_foreign_keys),
+                           "This whole test should be removed alongside update_foreign_keys callback in the Competition model."
+  end
+
+  context "when cloned competition is saved" do
+    let!(:competition) { FactoryGirl.create(:competition) }
+    let!(:clone) do
+      competition.build_clone.tap do |clone|
+        clone.name = "Cloned Competition 2016"
+        clone.start_date, clone.end_date = [1.month.from_now.strftime("%F")] * 2
+      end
+    end
+    let!(:tab) { FactoryGirl.create(:competition_tab, competition: competition) }
+
+    it "tabs are cloned" do
+      expect do
+        clone.save
+      end.to change(CompetitionTab, :count).by(1)
+      cloned_tab = clone.reload.tabs.first
+      expect(cloned_tab).to_not eq tab
+      expect(cloned_tab.name).to eq tab.name
+      expect(cloned_tab.content).to eq tab.content
+    end
+
+    it "tabs are not cloned if clone_tabs is set to false" do
+      clone.clone_tabs = false
+      clone.save
+      expect(clone.tabs).to be_empty
+    end
+  end
+
+  context "website" do
+    let!(:competition) { FactoryGirl.build(:competition, id: "Competition2016", external_website: "https://external.website.com") }
+
+    it "returns the internal url if WCA website is used as competition's one" do
+      competition.generate_website = true
+      expect(competition.website).to end_with "Competition2016"
+    end
+
+    it "returns external url if WCA website is not used as competitin's one" do
+      expect(competition.website).to eq "https://external.website.com"
     end
   end
 end

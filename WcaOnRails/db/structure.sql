@@ -37,7 +37,7 @@ CREATE TABLE `Competitions` (
   `venue` varchar(240) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `venueAddress` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `venueDetails` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `external_website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cellName` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` int(11) NOT NULL DEFAULT '0',
@@ -51,6 +51,7 @@ CREATE TABLE `Competitions` (
   `guests_enabled` tinyint(1) NOT NULL DEFAULT '1',
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
+  `generate_website` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -456,7 +457,25 @@ CREATE TABLE `competition_organizers` (
   UNIQUE KEY `idx_competition_organizers_on_competition_id_and_organizer_id` (`competition_id`,`organizer_id`),
   KEY `index_competition_organizers_on_competition_id` (`competition_id`),
   KEY `index_competition_organizers_on_organizer_id` (`organizer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2290 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4296 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `competition_tabs`
+--
+
+DROP TABLE IF EXISTS `competition_tabs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `competition_tabs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  `display_order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1023,3 +1042,12 @@ INSERT INTO schema_migrations (version) VALUES ('20160528071910');
 INSERT INTO schema_migrations (version) VALUES ('20160531124049');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602105428');
+
+INSERT INTO schema_migrations (version) VALUES ('20160610191605');
+
+INSERT INTO schema_migrations (version) VALUES ('20160616183719');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705120632');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705121551');
+

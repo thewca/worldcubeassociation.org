@@ -107,6 +107,15 @@ wca.competitionsToMarkers = function(map, competitions) {
   return markers;
 };
 
+wca.renderMarkdownRequest = function(markdownContent) {
+  return wca.cancelPendingAjaxAndAjax('render_markdown', {
+    url: '/render_markdown',
+    data: {
+      'markdown_content': markdownContent,
+    },
+  });
+};
+
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
@@ -177,6 +186,30 @@ $(function() {
     }).trigger("dp.change");
   });
 
+  function insertText(editor, markup, promptText) {
+    var cm = editor.codemirror;
+
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
+    var somethingSelected = cm.somethingSelected();
+
+    var text = (somethingSelected ? cm.getSelection() : prompt(promptText));
+
+    if(!text) {
+      return false;
+    }
+
+    cm.replaceSelection(markup.build(text));
+
+    if(somethingSelected) {
+      startPoint.ch += markup.start.length;
+      endPoint.ch += markup.start.length;
+      cm.setSelection(startPoint, endPoint);
+    }
+
+    cm.focus();
+  }
+
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
@@ -186,11 +219,59 @@ $(function() {
       spellChecker: false,
       promptURLs: true,
       insertTexts: {
-        image: ["![Image description", "](#url#)"],
+        image: ['![Image description', '](#url#)'],
       },
+      toolbar: [
+        'bold', 'italic', 'heading',
+        '|', 'quote', 'unordered-list', 'ordered-list',
+        '|', 'link', 'image',
+        {
+          name: 'map',
+          action: function insertMap(editor) {
+            var mapMarkup = {
+              start: 'map(',
+              end: ')',
+              build: function(address) { return this.start + address + this.end; }
+            };
+
+            insertText(editor, mapMarkup, 'Address or coordinates of the place:');
+          },
+          className: 'fa fa-map-marker',
+          title: 'Insert Map',
+        },
+        {
+          name: 'youtube',
+          action: function insertMap(editor) {
+            var youTubeMarkup = {
+              start: 'youtube(',
+              end: ')',
+              build: function(videoUrl) { return this.start + videoUrl + this.end; }
+            };
+
+            insertText(editor, youTubeMarkup, 'Full url to the YouTube video:');
+          },
+          className: 'fa fa-youtube-play',
+          title: 'Insert YouTube Video',
+        },
+        '|', 'preview', 'side-by-side', 'fullscreen',
+        '|', 'guide',
+      ],
 
       // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
       status: false,
+      previewRender: function(plainText, preview) {
+        if(this.markdownReqest) {
+          clearTimeout(this.markdownReqest);
+        }
+
+        this.markdownReqest = setTimeout(function() {
+          wca.renderMarkdownRequest(plainText).done(function(result) {
+            preview.innerHTML = result;
+          });
+        }, TEXT_INPUT_DEBOUNCE_MS);
+
+        return "Waiting...";
+      },
     });
 
     // Trick to fix tab and shift+tab focus from:

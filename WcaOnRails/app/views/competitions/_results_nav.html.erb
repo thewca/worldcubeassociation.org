@@ -1,4 +1,4 @@
-<%= render layout: 'nav' do %>
+<% content = capture do %>
   <%= render "competition_info", competition: @competition %>
 
   <% if @competition.user_can_view_results?(current_user) %>
@@ -7,4 +7,12 @@
     <% end %>
     <%= yield %>
   <% end %>
+<% end %>
+
+<% if !defined?(layout_nav) || layout_nav %>
+  <%= render layout: 'nav' do %>
+    <%= content %>
+  <% end %>
+<% else %>
+  <%= content %>
 <% end %>

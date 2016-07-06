@@ -19,6 +19,8 @@ variable :WCA_LIVE_SITE, :boolean, default: false
 # defined (during rake tasks, for instance).
 if defined? Rails::Server
   default_root_url = "http://localhost:#{Rails::Server.new.options[:Port]}"
+elsif Rails.env.test?
+  default_root_url = "test.host"
 else
   default_root_url = ""
 end
@@ -27,3 +29,5 @@ variable :ROOT_URL, :string, default: default_root_url
 variable :RECAPTCHA_PUBLIC_KEY, :string, default: ''
 variable :RECAPTCHA_PRIVATE_KEY, :string, default: ''
 variable :NEW_RELIC_LICENSE_KEY, :string, default: ''
+
+variable :GOOGLE_MAPS_API_KEY, :string, default: 'AIzaSyCthnikDc6olZ2lftHfqb_nkRuRrqBp17w'

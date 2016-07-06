@@ -1,0 +1,16 @@
+<%= simple_form_for @competition_tab, url: submit_url, html: { class: "competition-tab-form" } do |f| %>
+  <%= render "shared/error_messages", object: f.object %>
+
+  <%= f.input :name, hint: "Examples: Travel, Payments, Awards, Accommodation" %>
+  <%= f.input :content, input_html: { class: "markdown-editor" } %>
+
+  <div class="buttons">
+    <div class="buttons-left">
+      <%= f.submit submit_text, class: "btn btn-primary" %>
+    </div>
+    <div class="buttons-right">
+      <%= link_to icon("undo", "Back to tabs"), competition_tabs_path, class: "btn btn-default" %>
+      <%= buttons if defined?(buttons) %>
+    </div>
+  </div>
+<% end %>

@@ -77,7 +77,8 @@ en:
         start_date: "Start date"
         end_date: "End date"
 
-        website: "Website"
+        external_website: "Website"
+        generate_website: "I would like to use WCA website instead of an external one for additional informations."
 
         delegate_ids: "WCA delegate(s)"
         organizer_ids: "Organizers(s)"
@@ -88,6 +89,7 @@ en:
         registration_open: "Registration open"
         registration_close: "Registration close"
         remarks: "Remarks"
+        clone_tabs: "I would like to clone all tabs with additional informations as well"
       registration:
         countryId: "Country"
   simple_form:
@@ -123,7 +125,7 @@ en:
         information: "Some information text about the competition (e.g., Euro 2006 is open to citizens of the European countries and Israel)."
         delegate_ids: "WCA delegates for the competition."
         organizer_ids: "Competition organizers (they need an account to be listed here)."
-        website: "The website of the competition. Must be a valid http(s) url."
+        external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
         remarks: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable."
       post:
@@ -389,6 +391,7 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         admin_view: "Admin view"
+        tabs: "Manage tabs"
         delegate_report: "Delegate report"
         registration: "Registration"
         register: "Register"
@@ -396,6 +399,8 @@ en:
       announcements: "Announcements"
       upload_results: "Upload results"
       post_announcement: "Post competition announcement"
+      show:
+        general_info: "General info"
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   persons:

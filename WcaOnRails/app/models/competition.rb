@@ -9,6 +9,7 @@ class Competition < ActiveRecord::Base
 
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
+  has_many :scrambles, foreign_key: "competitionId"
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
@@ -16,6 +17,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
@@ -26,7 +28,8 @@ class Competition < ActiveRecord::Base
     venue
     venueAddress
     venueDetails
-    website
+    generate_website
+    external_website
     latitude
     longitude
     contact
@@ -67,7 +70,7 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
+  validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
@@ -81,7 +84,8 @@ class Competition < ActiveRecord::Base
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :website, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
@@ -140,10 +144,44 @@ class Competition < ActiveRecord::Base
     info
   end
 
+  attr_accessor :being_cloned_from_id
+  def being_cloned_from
+    Competition.find_by(id: being_cloned_from_id)
+  end
+
   def build_clone
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
-      clone.organizers = organizers
-      clone.delegates = delegates
+      clone.being_cloned_from_id = id
+
+      Competition.reflections.keys.each do |association_name|
+        case association_name
+        when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
+             'competition_delegates', 'competition_organizers', 'media', 'scrambles'
+          # Should be cloned.
+        when 'organizers'
+          clone.organizers = organizers
+        when 'delegates'
+          clone.delegates = delegates
+        when 'tabs'
+          # Clone tabs in the clone_associations callback after the competition is saved.
+          clone.clone_tabs = true
+        else
+          raise "Cloning behavior for Competition.#{association_name} is not defined. See Competition#build_clone."
+        end
+      end
+    end
+  end
+
+  attr_accessor :clone_tabs
+
+  # After the cloned competition is created, clone other associations which cannot just be copied.
+  after_create :clone_associations
+  private def clone_associations
+    # Clone competition tabs.
+    if clone_tabs
+      being_cloned_from&.tabs&.each do |tab|
+        tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+      end
     end
   end
 
@@ -219,23 +257,15 @@ class Competition < ActiveRecord::Base
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
-  # This is kind of scary. Whenever a competition's id changes, We need to
-  # remember all the places in our database that refer to competition ids, and
-  # update them. We can get rid of all this once we're done with
-  # https://github.com/cubing/worldcubeassociation.org/issues/91.
+  # This callback updates all tables having the competition id, when the id changes.
+  # This should be deleted after competition id is made immutable: https://github.com/cubing/worldcubeassociation.org/pull/381
   after_save :update_foreign_keys, if: :id_changed?
   def update_foreign_keys
-    [
-      Result,
-      Registration,
-      Scramble,
-      CompetitionMedium,
-      CompetitionDelegate,
-      CompetitionOrganizer,
-      DelegateReport,
-    ].each do |model|
-      foreign_key = model.column_names.include?("competitionId") ? "competitionId" : "competition_id"
-      model.where(foreign_key => id_was).update_all(foreign_key => id)
+    Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
+      foreign_key = association_reflection.foreign_key
+      if ["competition_id", "competitionId"].include?(foreign_key)
+        association_reflection.klass.where(foreign_key => id_was).update_all(foreign_key => id)
+      end
     end
   end
 
@@ -269,6 +299,19 @@ class Competition < ActiveRecord::Base
   attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
     @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
+  end
+
+  after_save :clear_external_website, if: :generate_website?
+  private def clear_external_website
+    update_column :external_website, nil
+  end
+
+  def website
+    generate_website ? internal_website : external_website
+  end
+
+  def internal_website
+    Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL)
   end
 
   def managers

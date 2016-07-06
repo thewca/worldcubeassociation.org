@@ -1,0 +1,36 @@
+table#competition-tabs {
+  width: auto;
+  td {
+    vertical-align: middle;
+  }
+
+  .reorder-up,
+  .reorder-down {
+    color: $gray;
+    font-size: 19px;
+    &:hover {
+      color: $gray-darker;
+    }
+  }
+
+  tbody tr:first-child .reorder-up,
+  tbody tr:last-child  .reorder-down {
+    display: none;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.competition-tab-form {
+  .buttons {
+    @extend .clearfix;
+
+    .buttons-left {
+      float: left;
+    }
+
+    .buttons-right {
+      float: right;
+    }
+  }
+}

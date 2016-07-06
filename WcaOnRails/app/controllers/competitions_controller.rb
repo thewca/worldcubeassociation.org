@@ -319,6 +319,8 @@ class CompetitionsController < ApplicationController
       :registration_open,
       :registration_close,
       :guests_enabled,
+      :being_cloned_from_id,
+      :clone_tabs,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.
@@ -340,7 +342,8 @@ class CompetitionsController < ApplicationController
         :delegate_ids,
         :organizer_ids,
         :contact,
-        :website,
+        :generate_website,
+        :external_website,
         :remarks,
         event_ids: Event.all.map { |event| event.id.to_sym },
       ]

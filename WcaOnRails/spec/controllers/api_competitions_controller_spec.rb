@@ -6,7 +6,7 @@ describe Api::V0::CompetitionsController do
                                          id: "TestComp2014",
                                          start_date: "2014-02-03",
                                          end_date: "2014-02-05",
-                                         website: "http://example.com",
+                                         external_website: "http://example.com",
                                          showAtAll: true,
                                         ) }
 

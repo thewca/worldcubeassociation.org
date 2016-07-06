@@ -8,6 +8,7 @@
     boolean: :horizontal_boolean
   } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
+
     <% if @competition.persisted? %>
       <% if @competition_admin_view %>
         <%= hidden_field_tag :competition_admin_view, "1" %>
@@ -218,7 +219,11 @@
       <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
       <%= f.input :organizer_ids, as: :user_ids %>
       <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
-      <%= f.input :website %>
+
+      <hr>
+      <%= f.input :generate_website %>
+      <%= f.input :external_website %>
+      <hr>
 
       <% event_groups = [
         [
@@ -264,6 +269,11 @@
 
     <hr>
     <%= f.input :remarks, disabled: is_actually_confirmed %>
+
+    <% if @competition.being_cloned_from&.tabs&.present? %>
+      <%= f.input :being_cloned_from_id, as: :hidden %>
+      <%= f.input :clone_tabs, as: :boolean %>
+    <% end %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">

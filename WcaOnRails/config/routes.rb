@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
+    resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
+    get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
@@ -104,6 +106,8 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
 
   get '/search' => 'search_results#index'
+
+  get '/render_markdown' => 'markdown_renderer#render_markdown'
 
   namespace :api do
     get '/', to: redirect('/api/v0')

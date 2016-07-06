@@ -17,7 +17,7 @@ FactoryGirl.define do
     eventSpecs "333 333oh"
     venue "My backyard"
     venueAddress "My backyard street"
-    website "https://www.worldcubeassociation.org"
+    external_website "https://www.worldcubeassociation.org"
     showAtAll false
 
     guests_enabled true
