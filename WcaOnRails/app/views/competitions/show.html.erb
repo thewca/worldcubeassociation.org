@@ -3,7 +3,7 @@
 <%= render layout: 'nav' do %>
   <ul class="nav nav-tabs">
     <li><a href="#general-info" data-toggle="tab"><%=t '.show.general_info' %></a></li>
-    <% @competition.competition_tabs.each do |tab| %>
+    <% @competition.tabs.each do |tab| %>
       <li><a href="#<%= tab.slug %>" data-toggle="tab"><%= tab.name %></a></li>
     <% end %>
   </ul>
@@ -14,7 +14,7 @@
         <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
       <% end %>
     </div>
-    <% @competition.competition_tabs.each do |tab| %>
+    <% @competition.tabs.each do |tab| %>
       <div class="tab-pane" id="<%= tab.slug %>">
         <%=md tab.content %>
         <% if current_user&.can_manage_competition?(@competition) %>

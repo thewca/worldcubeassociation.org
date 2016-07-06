@@ -19,8 +19,8 @@ RSpec.describe CompetitionTabsController, type: :controller do
       expect do
         get :create, competition_id: competition.id,
                      competition_tab: { name: "Accommodation", content: "On your own." }
-      end.to change { competition.competition_tabs.count }.by(1)
-      tab = competition.competition_tabs.last
+      end.to change { competition.tabs.count }.by(1)
+      tab = competition.tabs.last
       expect(tab.name).to eq "Accommodation"
       expect(tab.content).to eq "On your own."
     end
@@ -37,7 +37,7 @@ RSpec.describe CompetitionTabsController, type: :controller do
       tab = FactoryGirl.create(:competition_tab, competition: competition)
       expect do
         delete :destroy, competition_id: competition.id, id: tab.id
-      end.to change { competition.competition_tabs.count }.by(-1)
+      end.to change { competition.tabs.count }.by(-1)
     end
   end
 end

@@ -270,7 +270,7 @@
     <hr>
     <%= f.input :remarks, disabled: is_actually_confirmed %>
 
-    <% if @competition.being_cloned_from&.competition_tabs&.present? %>
+    <% if @competition.being_cloned_from&.tabs&.present? %>
       <%= f.input :being_cloned_from_id, as: :hidden %>
       <%= f.input :clone_tabs, as: :boolean %>
     <% end %>

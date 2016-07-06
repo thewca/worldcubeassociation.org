@@ -4,17 +4,17 @@ class CompetitionTabsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @competition_tabs = @competition.competition_tabs
+    @competition_tabs = @competition.tabs
   end
 
   def new
     @competition = competition_from_params
-    @competition_tab = @competition.competition_tabs.build
+    @competition_tab = @competition.tabs.build
   end
 
   def create
     @competition = competition_from_params
-    @competition_tab = @competition.competition_tabs.build(competition_tab_params)
+    @competition_tab = @competition.tabs.build(competition_tab_params)
     if @competition_tab.save
       flash[:success] = "Successfully created #{@competition_tab.name} tab."
       redirect_to competition_tabs_path(@competition)

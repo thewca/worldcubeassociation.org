@@ -17,7 +17,7 @@ class Competition < ActiveRecord::Base
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
-  has_many :competition_tabs, -> { order(:display_order) }, dependent: :delete_all
+  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report
 
   CLONEABLE_ATTRIBUTES = %w(
@@ -162,7 +162,7 @@ class Competition < ActiveRecord::Base
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
-        when 'competition_tabs'
+        when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
         else
@@ -177,10 +177,10 @@ class Competition < ActiveRecord::Base
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
-    # Clone competition_tabs.
+    # Clone competition tabs.
     if clone_tabs
-      being_cloned_from&.competition_tabs&.each do |tab|
-        competition_tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+      being_cloned_from&.tabs&.each do |tab|
+        tabs.create(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
       end
     end
   end

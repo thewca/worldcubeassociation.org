@@ -530,7 +530,7 @@ RSpec.describe Competition do
     expect do
       competition.update_attribute(:id, "NewName2016")
     end.to_not change {
-      [:results, :organizers, :delegates, :competition_tabs, :registrations, :delegate_report].map do |associated|
+      [:results, :organizers, :delegates, :tabs, :registrations, :delegate_report].map do |associated|
         competition.send(associated)
       end
     }
@@ -553,7 +553,7 @@ RSpec.describe Competition do
       expect do
         clone.save
       end.to change(CompetitionTab, :count).by(1)
-      cloned_tab = clone.reload.competition_tabs.first
+      cloned_tab = clone.reload.tabs.first
       expect(cloned_tab).to_not eq tab
       expect(cloned_tab.name).to eq tab.name
       expect(cloned_tab.content).to eq tab.content
@@ -562,7 +562,7 @@ RSpec.describe Competition do
     it "tabs are not cloned if clone_tabs is set to false" do
       clone.clone_tabs = false
       clone.save
-      expect(clone.competition_tabs).to be_empty
+      expect(clone.tabs).to be_empty
     end
   end
 

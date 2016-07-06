@@ -21,18 +21,18 @@ class CompetitionTab < ActiveRecord::Base
 
   after_create :set_display_order
   private def set_display_order
-    update_column :display_order, competition.competition_tabs.count
+    update_column :display_order, competition.tabs.count
   end
 
   after_destroy :fix_display_order
   private def fix_display_order
-    competition.competition_tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
+    competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
   end
 
   def reorder(direction)
     current_display_order = display_order
     other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
-    other_tab = competition.competition_tabs.find_by(display_order: other_display_order)
+    other_tab = competition.tabs.find_by(display_order: other_display_order)
     if other_tab
       update_column :display_order, nil
       other_tab.update_column :display_order, current_display_order
