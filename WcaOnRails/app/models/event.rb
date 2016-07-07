@@ -11,9 +11,11 @@ class Event < ActiveRecord::Base
   has_many :preferred_formats
   has_many :formats, through: :preferred_formats
 
-  scope :all_official, -> { where("rank < 990").order(:rank) }
-  scope :all_deprecated, -> { where("rank between 990 and 999").order(:rank) }
-  scope :all_never_were_official, -> { where("rank >= 1000").order(:rank) }
+  default_scope -> { order(:rank) }
+
+  scope :official, -> { where("rank < 990") }
+  scope :deprecated, -> { where("rank between 990 and 999") }
+  scope :never_were_official, -> { where("rank >= 1000") }
 
   def recommended_format
     formats.recommended.first

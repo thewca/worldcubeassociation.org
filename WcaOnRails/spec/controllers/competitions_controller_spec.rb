@@ -6,10 +6,10 @@ describe CompetitionsController do
 
   describe 'GET #index' do
     describe "selecting events" do
-      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: [Event.find("222"), Event.find("333"), Event.find("444"), Event.find("555"), Event.find("666")]) }
-      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: [Event.find("333"), Event.find("444"), Event.find("555"), Event.find("pyram"), Event.find("clock")]) }
-      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: [Event.find("222"), Event.find("333"), Event.find("skewb"), Event.find("666"), Event.find("pyram"), Event.find("sq1")]) }
-      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: [Event.find("333"), Event.find("pyram"), Event.find("666"), Event.find("777"), Event.find("clock")]) }
+      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: Event.where(id: %w(222 333 444 555 666))) }
+      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: Event.where(id: %w(333 444 555 pyram clock))) }
+      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: Event.where(id: %w(222 333 skewb 666 pyram sq1))) }
+      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: Event.where(id: %w(333 pyram 666 777 clock))) }
 
       context "when no event is selected" do
         it "competitions are sorted by start date" do
@@ -585,13 +585,13 @@ describe CompetitionsController do
   describe 'GET #my_competitions' do
     let(:delegate) { FactoryGirl.create(:delegate) }
     let(:organizer) { FactoryGirl.create(:user) }
-    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
-    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
-    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
-    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
-    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
-    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: [Event.find("222"), Event.find("333")]) }
-    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: [Event.find("222"), Event.find("333")], year: "0") }
+    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
     let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryGirl.create(:registration, competition: future_competition1, user: registered_user) }
     let!(:registration2) { FactoryGirl.create(:registration, competition: future_competition3, user: registered_user) }

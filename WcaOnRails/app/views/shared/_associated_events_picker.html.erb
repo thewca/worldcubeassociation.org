@@ -4,13 +4,13 @@ Variables:
  - label
  - disabled
  - events_association_name -> name of the associated events relation
- - allowed_events -> an Array of Event objects that should be shown (all by default)
- - selected_events -> an Array of Event objects that whould be marked as selected
+ - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
+ - selected_events -> a relation or an Array of Event objects that whould be marked as selected
 %>
 
 <% label ||= t('registrations.events') %>
 <% disabled ||= false %>
-<% allowed_events ||= Event.all_official %>
+<% allowed_events ||= Event.official %>
 
 <%# Note: form_builder.object is the object having associated events. %>
 <% associated_events = form_builder.object.send(events_association_name)

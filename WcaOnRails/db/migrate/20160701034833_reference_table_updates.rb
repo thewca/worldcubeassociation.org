@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ReferenceTableUpdates < ActiveRecord::Migration
   def up
     change_table :Rounds do |t|

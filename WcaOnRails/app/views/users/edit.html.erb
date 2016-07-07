@@ -74,7 +74,7 @@
         <%= f.input :name, disabled: !editable_fields.include?(:name) %>
         <%= f.input :dob, as: :date_picker, disabled: !editable_fields.include?(:dob) %>
         <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] }, disabled: !editable_fields.include?(:gender) %>
-        <%= f.input :country_iso2, collection: Country.all_real.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name }, disabled: !editable_fields.include?(:country_iso2) %>
+        <%= f.input :country_iso2, collection: Country.real.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name }, disabled: !editable_fields.include?(:country_iso2) %>
 
         <% if current_user.can_edit_users? %>
           <div class="row" id="wca_id">
@@ -150,7 +150,7 @@
           <%= hidden_field_tag "section", "preferences" %>
 
           <%= render "shared/associated_events_picker", form_builder: f, label: t('.preferred_events'), disabled: !editable_fields.include?(:preferred_events),
-                                                        events_association_name: :user_preferred_events, selected_events: @user.preferred_events.to_a %>
+                                                        events_association_name: :user_preferred_events, selected_events: @user.preferred_events %>
           <span class="help-block"><%= t '.preferred_events_desc' %></span>
 
           <%= label_tag :notifications, t('layouts.navigation.notifications') %>

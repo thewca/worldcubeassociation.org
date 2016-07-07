@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCompetitionEvents < ActiveRecord::Migration
   def up
     create_table :competition_events do |t|
@@ -10,8 +11,8 @@ class CreateCompetitionEvents < ActiveRecord::Migration
     # Move the data to the new table.
     Competition.all.each do |competition|
       (competition.eventSpecs || []).split.each do |event_spec|
-        event = Event.find_by_id(event_spec.split("=")[0])
-        ActiveRecord::Base.connection.execute("insert into competition_events (competition_id, event_id) values ('#{competition.id}', '#{event.id}');")
+        event = Event.find(event_spec.split("=")[0])
+        execute "insert into competition_events (competition_id, event_id) values ('#{competition.id}', '#{event.id}');"
       end
     end
   end

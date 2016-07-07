@@ -95,7 +95,7 @@ class Competition < ActiveRecord::Base
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
-    if events.length == 0
+    if events.empty?
       errors.add(:events, "must contain at least one event for this competition")
     end
   end
@@ -162,7 +162,7 @@ class Competition < ActiveRecord::Base
       Competition.reflections.keys.each do |association_name|
         case association_name
         when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
-             'competition_delegates', 'competition_organizers', 'media', 'scrambles'
+             'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
           # Should be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -509,7 +509,7 @@ class Competition < ActiveRecord::Base
   end
 
   private def events_must_be_valid
-    invalid_events = events - Event.all_official - Event.all_deprecated
+    invalid_events = events - Event.official - Event.deprecated
     unless invalid_events.empty?
       errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end

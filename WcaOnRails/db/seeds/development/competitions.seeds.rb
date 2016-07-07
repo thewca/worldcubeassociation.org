@@ -2,14 +2,16 @@
 after "development:users" do
   class << self
     def random_event_ids
-      all_official = Event.all_official.map(&:id)
-      all_official.sample(rand(1..all_official.count))
+      official = Event.official.map(&:id)
+      official.sample(rand(1..official.count))
     end
 
     def random_wca_value
       rand(5000..100000)
     end
   end
+
+  countries = Country.all
 
   delegate = User.find_by(delegate_status: "delegate")
 
@@ -20,12 +22,12 @@ after "development:users" do
     day = i.days.ago
     eventIds = random_event_ids
 
-    competition = Competition.create!(
+    competition = Competition.new(
       id: "My#{i}ResultsComp#{day.year}",
       name: "My #{i} Comp With Results #{day.year}",
       cellName: "My #{i} Comp With Results #{day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -42,6 +44,11 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    eventIds.each do |eventId|
+      competition.events << Event.find(eventId)
+    end
+
+    competition.save!
 
     eventIds.each do |eventId|
       %w(1 2 f).each do |roundId|
@@ -79,12 +86,12 @@ after "development:users" do
   500.times do |i|
     day = i.days.ago
     eventIds = random_event_ids
-    Competition.create!(
+    competition = Competition.new(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
@@ -101,6 +108,11 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    eventIds.each do |eventId|
+      competition.events << Event.find(eventId)
+    end
+
+    competition.save!
   end
 
   users.each_with_index do |user, i|
@@ -131,12 +143,12 @@ after "development:users" do
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
 
-    competition = Competition.create!(
+    competition = Competition.new(
       id: "MyComp#{i+1}#{start_day.year}",
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date:  end_day.strftime("%F"),
@@ -153,6 +165,11 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    eventIds.each do |eventId|
+      competition.events << Event.find(eventId)
+    end
+
+    competition.save!
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
@@ -164,7 +181,7 @@ after "development:users" do
           competition: competition,
           name: Faker::Name.name,
           personId: user.wca_id,
-          countryId: Country.all_real.sample.id,
+          countryId: Country.real.sample.id,
           gender: "m",
           birthYear: 1990,
           birthMonth: 6,

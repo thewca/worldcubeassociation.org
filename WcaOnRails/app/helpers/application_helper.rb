@@ -139,8 +139,8 @@ module ApplicationHelper
 
   def region_option_tags(selected_id: nil)
     regions = {
-      'Continent' => Continent.all.map { |continent| [continent.name, continent.id] },
-      'Country' => Country.all.map { |country| [country.name, country.id] },
+      'Continent' => Continent::ALL_CONTINENTS_WITH_NAME_AND_ID,
+      'Country' => Country::ALL_COUNTRIES_WITH_NAME_AND_ID,
     }
 
     content_tag(:option, t('common.all_regions'), value: "all") + grouped_options_for_select(regions, selected_id)

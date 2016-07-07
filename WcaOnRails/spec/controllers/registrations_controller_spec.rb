@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
     let(:organizer) { FactoryGirl.create(:user) }
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], events: [Event.find("222"), Event.find("333")]) }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let(:zzyzx_user) { FactoryGirl.create :user, name: "Zzyzx" }
     let(:registration) { FactoryGirl.create(:registration, competition: competition, user: zzyzx_user) }
 
@@ -303,7 +303,7 @@ RSpec.describe RegistrationsController do
 
   context "competition not visible" do
     let(:organizer) { FactoryGirl.create :user }
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, events: [Event.find("333"), Event.find("444"), Event.find("333bf")], showAtAll: false, organizers: [organizer]) }
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do
       expect {
@@ -320,7 +320,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "psych sheet when not signed in" do
-    let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, events: [Event.find("333"), Event.find("444"), Event.find("333bf")]) }
+    let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, events: Event.where(id: %w(333 444 333bf))) }
 
     it "redirects psych sheet to 333" do
       get :psych_sheet, competition_id: competition.id
