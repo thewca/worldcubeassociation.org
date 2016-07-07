@@ -4,63 +4,43 @@ RSpec.describe "registrations/psych_sheet_event" do
   it "works" do
     competition = FactoryGirl.create(:competition, :registration_open)
     event = Event.find("333")
-    user1 = FactoryGirl.create(:user, :wca_id, name: "Andrew Apple")
-    user2 = FactoryGirl.create(:user, :wca_id, name: "Bill Banana")
 
-    registrations = []
+    the_best = FactoryGirl.create(:user, :wca_id, name: "Best Guy")
+    FactoryGirl.create(:ranks_average, eventId: "333", rank: 1, best: "500", personId: the_best.wca_id)
+    FactoryGirl.create(:ranks_single, eventId: "333", rank: 1, best: "450", personId: the_best.wca_id)
 
-    registrations << FactoryGirl.create(:registration, :accepted, user: user1, competition: competition)
-    RanksAverage.create!(
-      personId: registrations.last.personId,
-      eventId: "333",
-      best: "4242",
-      worldRank: 10,
-      continentRank: 10,
-      countryRank: 10,
-    )
-    RanksSingle.create!(
-      personId: registrations.last.personId,
-      eventId: "333",
-      best: "2000",
-      worldRank: 1,
-      continentRank: 1,
-      countryRank: 1,
-    )
+    tied_first = FactoryGirl.create(:user, :wca_id, name: "Tied But Better")
+    FactoryGirl.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_first.wca_id)
+    FactoryGirl.create(:ranks_single, eventId: "333", rank: 10, best: "1500", personId: tied_first.wca_id)
 
-    registrations << FactoryGirl.create(:registration, :accepted, user: user2, competition: competition)
-    RanksAverage.create!(
-      personId: registrations.last.personId,
-      eventId: "333",
-      best: "4242",
-      worldRank: 10,
-      continentRank: 10,
-      countryRank: 10,
-    )
-    RanksSingle.create!(
-      personId: registrations.last.personId,
-      eventId: "333",
-      best: "3334",
-      worldRank: 23,
-      continentRank: 23,
-      countryRank: 23,
-    )
+    tied_second = FactoryGirl.create(:user, :wca_id, name: "Tied But Worse")
+    FactoryGirl.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_second.wca_id)
+    FactoryGirl.create(:ranks_single, eventId: "333", rank: 20, best: "1899", personId: tied_second.wca_id)
 
-    # Two users who have never competed before.
-    2.times do
-      registrations << FactoryGirl.create(:registration, :accepted, user: FactoryGirl.create(:user), competition: competition)
+    # Two guys who have never competed before.
+    newcomer1 = FactoryGirl.create(:user, name: "Newcomer I")
+    newcomer2 = FactoryGirl.create(:user, name: "Newcomer II")
+
+    [the_best, tied_first, tied_second, newcomer1, newcomer2].each do |user|
+      FactoryGirl.create(:registration, :accepted, user: user, competition: competition, event_ids: ["333"])
     end
 
-    registrations = competition.psych_sheet_event(event)
     assign(:competition, competition)
     assign(:event, event)
     assign(:preferred_format, event.preferred_formats.first)
-    assign(:registrations, registrations)
+    assign(:registrations, competition.psych_sheet_event(event))
 
     render
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(1) .single", text: /\A\s*20.00\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) .single", text: /\A\s*33.34\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(2) td.pos.tied-previous", text: 1)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(3) .single", text: /\A\s*\z/)
-    expect(rendered).to have_css(".wca-results tbody tr:nth-child(4) .single", text: /\A\s*\z/)
+
+    [ { pos: 1,   name: "Best Guy",         average: "5.00",  single: "4.50" },
+      { pos: 2,   name: "Tied But Better",  average: "20.00", single: "15.00" },
+      { pos: 2,   name: "Tied But Worse",   average: "20.00", single: "18.99" },
+      { pos: "",  name: "Newcomer I",       average: "",      single: "" },
+      { pos: "",  name: "Newcomer II",      average: "",      single: "" },
+    ].each_with_index do |criteria, i|
+      criteria.each do |td_class, value|
+        expect(rendered).to have_css(".wca-results tbody tr:nth-child(#{i + 1}) td.#{td_class}", text: value)
+      end
+    end
   end
 end
