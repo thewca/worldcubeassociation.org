@@ -223,7 +223,7 @@ $(function() {
       },
       toolbar: [
         'bold', 'italic', 'heading',
-        '|', 'quote', 'unordered-list', 'ordered-list',
+        '|', 'quote', 'unordered-list', 'ordered-list', 'table',
         '|', 'link', 'image',
         {
           name: 'map',
