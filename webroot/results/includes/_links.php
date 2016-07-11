@@ -6,8 +6,8 @@ function competitionLink ( $id, $name, $eventId=false, $roundId=false ) {
 
 function competitionLinkClassed ( $class, $id, $name, $eventId=false, $roundId=false ) {
   $name = htmlEntities( $name, ENT_QUOTES, "UTF-8" );
-  $inpageLink = $eventId ? ("all#e$eventId" . ($roundId ? "_$roundId" : '')) : '';
-  return "<a class='$class' href='/competitions/$id/results/$inpageLink'>$name</a>";
+  $inpageLink = $eventId ? ("/results/all#e$eventId" . ($roundId ? "_$roundId" : '')) : '';
+  return "<a class='$class' href='/competitions/$id$inpageLink'>$name</a>";
 }
 
 function personLink ( $id, $name ) {
