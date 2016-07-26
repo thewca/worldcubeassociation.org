@@ -54,4 +54,15 @@ RSpec.describe Result do
       expect(result.to_s :best).to eq "3/3 ?:??:??"
     end
   end
+
+  describe "person association" do
+    it "always looks for subId 1" do
+      person1 = FactoryGirl.create :person_with_multiple_sub_ids
+      person2 = Person.find_by!(wca_id: person1.wca_id, subId: 2)
+      result1 = FactoryGirl.create :result, person: person1
+      result2 = FactoryGirl.create :result, person: person2
+      expect(result1.person).to eq person1
+      expect(result2.person).to eq person1
+    end
+  end
 end

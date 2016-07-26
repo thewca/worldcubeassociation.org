@@ -578,4 +578,20 @@ RSpec.describe Competition do
       expect(competition.website).to eq "https://external.website.com"
     end
   end
+
+  context "competitors" do
+    let!(:competition) { FactoryGirl.build(:competition) }
+
+    it "works" do
+      FactoryGirl.create_list :result, 2, competition: competition
+      expect(competition.competitors.count).to eq 2
+    end
+
+    it "handles competitors with multiple subIds" do
+      person_with_sub_ids = FactoryGirl.create :person_with_multiple_sub_ids
+      FactoryGirl.create :result, competition: competition, person: person_with_sub_ids
+      FactoryGirl.create :result, competition: competition
+      expect(competition.competitors.count).to eq 2
+    end
+  end
 end
