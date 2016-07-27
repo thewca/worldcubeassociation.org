@@ -102,6 +102,7 @@ sql = "INSERT INTO `Countries` (`id`, `name`, `continentId`, `latitude`, `longit
 ('Lesotho', 'Lesotho', '_Africa', 0, 0, 0, 'LS'),
 ('Liberia', 'Liberia', '_Africa', 0, 0, 0, 'LR'),
 ('Libya', 'Libya', '_Africa', 0, 0, 0, 'LY'),
+('Liechtenstein', 'Liechtenstein', '_Europe', 0, 0, 0, 'LI'),
 ('Lithuania', 'Lithuania', '_Europe', 0, 0, 0, 'LT'),
 ('Luxembourg', 'Luxembourg', '_Europe', 0, 0, 0, 'LU'),
 ('Macau', 'Macau', '_Asia', 0, 0, 0, 'MO'),

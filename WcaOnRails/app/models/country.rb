@@ -972,6 +972,15 @@ class Country
       "iso2": "LY",
     },
     {
+      "id": "Liechtenstein",
+      "name": "Liechtenstein",
+      "continentId": "_Europe",
+      "latitude": 0,
+      "longitude": 0,
+      "zoom": 0,
+      "iso2": "LI",
+    },
+    {
       "id": "Lithuania",
       "name": "Lithuania",
       "continentId": "_Europe",
