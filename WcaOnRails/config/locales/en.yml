@@ -88,6 +88,8 @@ en:
 
         delegate_ids: "WCA delegate(s)"
         organizer_ids: "Organizers(s)"
+        contact: "Contact"
+        information: "Informations"
 
         use_wca_registration: "I would like to use the WCA website for registration"
         guests_enabled: "Guests"
@@ -100,6 +102,40 @@ en:
         countryId: "Country"
         guests: "Guests"
         comments: "Comments"
+        status: "Status"
+        # We can remove the following 3 keys once https://github.com/cubing/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
+        name: "Name"
+        birthday: "Birthday"
+        gender: "Gender"
+      competition_tab:
+        content: "Content"
+        name: "Name"
+      delegate_report:
+        discussion_url: "Discussion's url on the Google Group"
+        schedule_url: "Schedule url"
+        equipment: "Equipment"
+        venue: "Venue"
+        organisation: "Organisation"
+        incidents: "Incidents"
+        remarks: "Remarks"
+      person:
+        wca_id: "Person"
+        countryId: "Country"
+        dob: "Birthdate"
+        gender: "Gender"
+        name: "Name"
+      poll:
+        question: "Question"
+        deadline: "Deadline"
+      post:
+        title: "Title"
+        body: "Body"
+        sticky: "Sticky"
+      team:
+        name: "Name"
+        description: "Description"
+      vote:
+        comment: "Comment"
   simple_form:
     "yes": "Yes"
     "no": "No"
@@ -111,12 +147,31 @@ en:
       html: ''
     error_notification:
       default_message: "Please review the problems below:"
+    labels:
+      contact:
+        name: "Name"
+        your_email: "Your email"
+        message: "Message"
     hints:
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
         name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
         email: "Changing your email will require confirming the new email."
         pending_avatar: "After uploading a new avatar, you will have to wait for the Board to approve it."
+        country_iso2: ""
+        current_password: ""
+        delegate_status: ""
+        dob_verification: ""
+        gender: ""
+        login: ""
+        password: ""
+        password_confirmation: ""
+        region: ""
+        remember_me: ""
+        remove_avatar: ""
+        results_notifications_enabled: ""
+        unconfirmed_wca_id: ""
+        wca_id: ""
       competition:
         competition_id_to_clone: "Optional. Can save you some typing if you're running a similar competition to a past competition."
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
@@ -128,8 +183,28 @@ en:
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
         remarks: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable."
+        clone_tabs: ""
+        countryId: ""
+        end_date: ""
+        event_ids: ""
+        generate_website: ""
+        guests_enabled: ""
+        id: ""
+        isConfirmed: ""
+        receive_registration_emails: ""
+        registration_close: ""
+        showAtAll: ""
+        start_date: ""
+        use_wca_registration: ""
+        venueAddress: ""
+      contact:
+        message: ""
+        name: ""
+        your_email: ""
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
+        sticky: ""
+        title: ""
       delegate_report:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
@@ -137,6 +212,36 @@ en:
         organisation: "Talk about the organisation team and how they worked out the competition, if you got involved on it, their previous experience and if you noticed progress on their work, if they were professional and active the competition days, problems that arose (e.g., getting behind schedule) and how they solved them... Please, be concise and do not report irrelevant details."
         incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
+        discussion_url: ""
+      competition_tab:
+        name: "Examples: Travel, Payments, Awards, Accommodation"
+        content: ""
+      person:
+        dob: "Date of birth should have the format YYYY-MM-DD."
+        countryId: ""
+        gender: ""
+        name: ""
+        person1_wca_id: ""
+        person2_wca_id: ""
+        wca_id: ""
+      poll:
+        comment: ""
+        multiple: ""
+        question: ""
+      registration:
+        birthday: ""
+        comments: ""
+        countryId: ""
+        gender: ""
+        guests: ""
+        name: ""
+        status: ""
+      team:
+        description: ""
+        friendly_id: ""
+        name: ""
+      vote:
+        comment: ""
     options:
       registration:
         status:

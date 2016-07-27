@@ -75,6 +75,8 @@ fr:
 
         delegate_ids: "Délégué(s) WCA"
         organizer_ids: "Organisateur(s)"
+        contact: "Contact"
+        information: "Informations"
 
         external_website: "Site internet"
         generate_website: "Je veux utiliser le site de la WCA plutôt qu'un site externe pour les informations complémentaires concernant la compétition."
@@ -89,6 +91,22 @@ fr:
         countryId: "Pays"
         guests: "Accompagnateurs"
         comments: "Commentaires"
+        status: "Statut"
+      competition_tab:
+        content: "Contenu"
+        name: "Nom"
+      delegate_report:
+        discussion_url: "Url de la discussion sur le Google Group"
+        schedule_url: "Url vers le planning"
+        equipment: "Équipement"
+        venue: "Salle"
+        organisation: "Organisation"
+        incidents: "Incidents"
+        remarks: "Remarques"
+  helpers:
+    label:
+      application:
+        name: "Namei"
   simple_form:
     "yes": "Oui"
     "no": "Non"
@@ -100,6 +118,11 @@ fr:
       html: ''
     error_notification:
       default_message: "Merci de corriger les problèmes ci dessous :"
+    labels:
+      contact:
+        name: "Votre nom"
+        your_email: "Votre adresse email"
+        message: "Message"
     hints:
       user:
         dob: "Sélectionnez votre date de naissance, ou entrez la au format AAAA-MM-JJ."
@@ -119,6 +142,9 @@ fr:
         remarks: "Informations complémentaires que vous souhaitez faire parvenir au bureau de la WCA. Par exemple, les raisons pour lesquelles cette compétition a été créé moins d'un mois à l'avance, le cas échéant."
       post:
         body: "Utilisez la balise &lt;!-- break --&gt; pour afficher un extrait sur la page d'accueil. Un post sur la page d'accueil affichera tout le texte jusqu'à cette balise. Le post complet affichera tout le texte."
+      competition_tab:
+        name: "Exemples: Transport, Prix, Hébergement, Salle"
+        content: ""
     options:
       registration:
         status:
