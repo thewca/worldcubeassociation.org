@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe MergePeople do
-  let(:person1) { FactoryGirl.create(:person) }
+  let(:person1) { FactoryGirl.create(:person, countryId: "USA") }
   let(:person2) { FactoryGirl.create(:person, person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day))
   }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
