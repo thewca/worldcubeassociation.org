@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe DelegateReportsController do
   let(:delegate) { FactoryGirl.create :delegate }
-  let(:comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: 1.day.ago) }
+  let(:comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: 2.days.ago) }
   let(:pre_delegate_reports_form_comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
 
   context "not logged in" do
