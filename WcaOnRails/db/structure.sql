@@ -151,9 +151,6 @@ CREATE TABLE `Countries` (
   `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `continentId` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `latitude` int(11) NOT NULL DEFAULT '0',
-  `longitude` int(11) NOT NULL DEFAULT '0',
-  `zoom` tinyint(4) NOT NULL DEFAULT '0',
   `iso2` char(2) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `iso2` (`iso2`),
@@ -1052,4 +1049,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160705120632');
 INSERT INTO schema_migrations (version) VALUES ('20160705121551');
 
 INSERT INTO schema_migrations (version) VALUES ('20160727000015');
+
+INSERT INTO schema_migrations (version) VALUES ('20160731181145');
 
