@@ -291,7 +291,7 @@ en:
       board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
     select_nearby_delegate:
-      select_delegate: "In order to assign you your WCA ID, we need a delegate to confirm your identify. Please select the delegate you think knows you best and enter your birthdate."
+      select_delegate: "In order to assign you your WCA ID, we need a delegate to confirm your identify. Please enter your birthdate and select the delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local %{link_delegate}."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact the %{link_result_team} to fix this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
