@@ -1,0 +1,24 @@
+/*Local bootstrap?
+*/
+
+$state-warning-bg: #ffe58a;
+
+body {
+  font-size: 12px;
+}
+
+@import "bootstrap";
+@import "bootstrap-sprockets";
+
+/*@import "wice_grid";*/
+/* Courtesy of https://github.com/hisea/devise-bootstrap-views */
+/*@import "devise_bootstrap_views";
+@import "bootstrap-datepicker3";
+@import "bootstrap-datetimepicker";
+@import "cubing-icons";
+@import "selectize";
+@import "selectize.bootstrap3";
+@import "jquery.jcrop";
+@import "purr";
+@import "font-awesome-sprockets";
+@import "font-awesome";*/

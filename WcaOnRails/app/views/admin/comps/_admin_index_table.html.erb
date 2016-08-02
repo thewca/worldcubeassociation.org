@@ -1,0 +1,51 @@
+<table class="table table-striped table-condensed admin-competitions">
+  <thead>
+    <tr>
+      <th>
+        <strong><%= "#{title} (#{competitions.count})" %></strong>
+      </th>
+      <th class="admin-date">
+        Date
+      </th>
+      <th class="admin-date">
+        Announced
+      </th>
+      <th class="admin-date">
+        Report posted
+      </th>
+      <th class="admin-date">
+        Results posted
+      </th>
+      <th class="admin-button"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% competitions.each_with_index do |competition, index| %>
+      <tr>
+        <td>
+          <%= link_to competition.cellName, competition_path(competition) %>, <%= competition.country_name %>
+        </td>
+        <td class="admin-date">
+          <%= wca_date_range(competition.start_date, competition.end_date) %>
+        </td>
+        <td class="admin-date">
+          Jul 29, 2016 (30)
+        </td>
+        <td class="admin-date">
+          Sep 15, 2016 (5)
+        </td>
+        <td class="admin-date">
+          <%= competition.results_posted_at %>
+        </td>
+        <td>
+          <%= link_to icon("pencil-square-o", "Edit"), admin_edit_competition_path(competition), class: "btn btn-sm btn-primary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  <%# Tooltips have to be initialized manually after each Ajax response in order to work. %>
+  $('[data-toggle="tooltip"]').tooltip();
+</script>

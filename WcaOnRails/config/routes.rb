@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
   get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
   get 'admin/avatars' => 'admin/avatars#index'
+  get 'admin/comps' => 'admin/comps#admin_index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps

@@ -1,0 +1,30 @@
+<% if params[:display] == "list" %>
+  <% if competitions.empty? %>
+    <div class="col-md-12">
+      <%= alert :warning do
+        unless params[:event_ids].empty?
+          "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
+        else
+          "No competitions found."
+        end
+      end %>
+  <% else %>
+    <% if params[:state] == "past" %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'admin_index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
+      </div>
+    <% else %>
+      <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
+      <% unless in_progress_competitions.empty? %>
+        <div class="col-md-12" id="in-progress-comps">
+          <%= render 'admin_index_table', competitions: in_progress_competitions, title: "Competitions in progress" %>
+        </div>
+      <% end %>
+      <% unless upcoming_competitions.empty? %>
+        <div class="col-md-12" id="upcoming-comps">
+          <%= render 'admin_index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

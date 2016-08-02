@@ -1,0 +1,154 @@
+// Small enough to fit even at sm screen size
+$competition-nav-width: 200px;
+$competition-nav-padding: 50px;
+
+#competition-nav {
+  @extend .col-sm-4;
+  z-index: 1; /* Display on top of the competition map */
+
+  // Take up full width in sm
+  @media (max-width: $screen-sm-min) {
+    width: 100%;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    width: $competition-nav-width + $competition-nav-padding;
+    > .list-group {
+      width: $competition-nav-width;
+    }
+  }
+
+  > .list-group {
+    top: 20px;
+
+    // Disable affix on mobile
+    //  http://stackoverflow.com/a/17395219/1739415
+    @media (max-width: $screen-sm-min) {
+      position: static;
+    }
+
+    .list-group-item a.active {
+      color: $list-group-active-bg;
+    }
+  }
+}
+
+#competition-data {
+  @extend .col-sm-8;
+  /* Static so the map can escape and size itself relative to the full page */
+  position: static;
+
+  // Take up full width in sm
+  @media (max-width: $screen-sm-min) {
+    width: 100%;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    width: calc(100% - (#{$competition-nav-width} + #{$competition-nav-padding}));
+  }
+
+}
+
+// Workaround for https://github.com/cubing/icons/issues/8
+.cubing-icon.icon-mmagic::before {
+  content: 'mmagic';
+}
+.cubing-icon.icon-magic::before {
+  content: 'magic';
+}
+.cubing-icon.icon-333mbo::before {
+  content: '333mbo';
+}
+
+// Workaround for https://github.com/cubing/icons/issues/16
+.cubing-icon.fa-fw {
+  display: inline-block;
+}
+
+.event-checkbox {
+  label {
+    margin-bottom: 0;
+  }
+  input[type=checkbox] {
+    display: none;
+    + span.cubing-icon {
+      color: #ccc;
+    }
+    &:checked + span.cubing-icon {
+      color: black;
+    }
+  }
+
+  &:not(.disabled) {
+    label {
+      cursor: pointer;
+    }
+  }
+}
+
+$venue-map-wrapper-height: 400px;
+#venue-map-wrapper {
+  height: $venue-map-wrapper-height;
+
+  #googleMapsLocationInput {
+    position: absolute;
+    z-index: 1;
+    width: 50%;
+    margin-top: 10px;
+  }
+
+  .map {
+    height: $venue-map-wrapper-height - 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+}
+
+#nearby-competitions {
+  position: relative;
+
+  .progress {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+  }
+
+  &.loading .progress {
+    display: inline;
+  }
+}
+
+.modal-wide {
+  overflow-y: auto;
+  width: 800px;
+}
+
+.competitions-table {
+  
+  tr {
+    &.not-visible {
+      opacity: 0.5;
+    }
+
+    &.confirmed {
+      background-color: $state-success-bg;
+    }
+
+    &.not-confirmed {
+      background-color: $state-danger-bg;
+    }
+  }
+
+  td {
+    white-space: nowrap;
+
+    padding: 8px 12px;
+  }
+}
+
+.big-column {
+  width: 100%;
+}
