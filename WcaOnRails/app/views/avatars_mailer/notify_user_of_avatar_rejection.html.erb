@@ -1,0 +1,12 @@
+<p>Hello <%= @user.name %></p>
+
+<p>Your new avatar request has been rejected.</p>
+
+<% if @reason.present? %>
+  <p>
+    Here's the reason:
+    <blockquote><%= @reason %></blockquote>
+  </p>
+<% end %>
+
+<p>Please provide more suitable picture.</p>

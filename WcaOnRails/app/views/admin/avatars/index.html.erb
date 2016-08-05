@@ -16,16 +16,16 @@
               <div class="col-sm-6">
                 <div class="pending-avatar">
                   <%= link_to image_tag(user.pending_avatar), user.pending_avatar.url, target: "_blank", class: "hide-new-window-icon" %>
-                  <div class="btn-group" data-toggle="buttons">
-                    <% key = "avatar-" + user.wca_id %>
+                  <div class="btn-group actions" data-toggle="buttons">
+                    <% name = "avatars[#{user.wca_id}][action]" %>
                     <label class="btn btn-default btn-success">
-                      <%= radio_button_tag(key, "approve") %> Approve
+                      <%= radio_button_tag(name, "approve") %> Approve
                     </label>
                     <label class="btn btn-default btn-danger">
-                      <%= radio_button_tag(key, "reject") %> Reject
+                      <%= radio_button_tag(name, "reject") %> Reject
                     </label>
                     <label class="btn btn-default active">
-                      <%= radio_button_tag(key, "defer", checked: true) %> Defer
+                      <%= radio_button_tag(name, "defer", checked: true) %> Defer
                     </label>
                   </div>
                 </div>
@@ -75,6 +75,11 @@
                     </a>
                   </div>
                 <% end %>
+              </div>
+              <div class="col-sm-6">
+                <%= text_area_tag "avatars[#{user.wca_id}][rejection_reason]", "",
+                                  class: "form-control rejection-reason",
+                                  placeholder: "Please provide the reason for rejection" %>
               </div>
             </div>
           </div>
