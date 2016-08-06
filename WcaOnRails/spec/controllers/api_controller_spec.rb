@@ -23,6 +23,13 @@ describe Api::V0::ApiController do
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
     end
+
+    it "works well with multiple parts" do
+      get :competitions_search, q: "Jfly Comp 15"
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["result"].length).to eq 1
+    end
   end
 
   describe 'GET #posts_search' do

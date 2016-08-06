@@ -742,23 +742,21 @@ class Competition < ActiveRecord::Base
       competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
     end
 
-    if query.present?
-      sql_query = "%#{query}%"
-      competitions = competitions.where("id LIKE :sql_query OR name LIKE :sql_query OR cellName LIKE :sql_query OR cityName LIKE :sql_query OR countryId LIKE :sql_query", sql_query: sql_query).order(year: :desc, month: :desc, day: :desc)
+    query&.split&.each do |part|
+      like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
+      competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    if params[:sort].present?
-      params[:sort].split(",").each do |field|
-        order = field.start_with?("-") ? :desc : :asc
+    (params[:sort] || "-start_date").split(",").each do |field|
+      order = field.start_with?("-") ? :desc : :asc
 
-        case field
-        when "start_date", "-start_date"
-          competitions = competitions.order(year: order, month: order, day: order)
-        when "end_date", "-end_date"
-          competitions = competitions.order(year: order, endMonth: order, endDay: order)
-        else
-          raise WcaExceptions::BadApiParameter, "Unrecognized sort field: '#{field}'"
-        end
+      case field
+      when "start_date", "-start_date"
+        competitions = competitions.order(year: order, month: order, day: order)
+      when "end_date", "-end_date"
+        competitions = competitions.order(year: order, endMonth: order, endDay: order)
+      else
+        raise WcaExceptions::BadApiParameter, "Unrecognized sort field: '#{field}'"
       end
     end
 
