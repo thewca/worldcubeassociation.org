@@ -48,14 +48,21 @@ module ApplicationHelper
 
   WCA_EXCERPT_RADIUS = 50
 
-  def wca_excerpt(html, phrase)
+  def wca_excerpt(html, phrases)
     text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
-    excerpted = excerpt(text, phrase, radius: WCA_EXCERPT_RADIUS)
-    # If nothing matches the given phrase, just return the beginning.
-    if excerpted.blank?
-      excerpted = truncate(text, length: WCA_EXCERPT_RADIUS)
-    end
-    wca_highlight(excerpted, phrase)
+    # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
+    first = phrases.map { |phrase| text.index(phrase) }.compact.min
+    last = phrases.map do |phrase|
+      index = text.index(phrase)
+      index + phrase.length if index
+    end.compact.max
+    excerpted = if first && last
+                  excerpt(text, text[first..last], radius: WCA_EXCERPT_RADIUS)
+                else
+                  # If nothing matches the given phrase, just return the beginning.
+                  truncate(text, length: WCA_EXCERPT_RADIUS)
+                end
+    wca_highlight(excerpted, phrases)
   end
 
   def wca_highlight(html, phrases, do_not_transliterate: false)

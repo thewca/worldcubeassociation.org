@@ -67,10 +67,10 @@
       <% @posts.each do |post| %>
         <div>
           <%= link_to post_path(post.slug) do %>
-            <h4><%= wca_highlight(post.title, @omni_query) %></h4>
+            <h4><%= wca_highlight(post.title, query_parts) %></h4>
           <% end %>
           <blockquote>
-            <%= wca_excerpt(md(post.body), @omni_query) %>
+            <%= wca_excerpt(md(post.body), query_parts) %>
           </blockquote>
         </div>
       <% end %>

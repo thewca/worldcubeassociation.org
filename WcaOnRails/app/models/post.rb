@@ -54,8 +54,11 @@ class Post < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    sql_query = "%#{query}%"
-    Post.where("world_readable = 1 AND (title LIKE :sql_query OR body LIKE :sql_query)", sql_query: sql_query).order(created_at: :desc)
+    posts = Post.where("world_readable = 1")
+    query&.split&.each do |part|
+      posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")
+    end
+    posts.order(created_at: :desc)
   end
 
   def serializable_hash(options = nil)
