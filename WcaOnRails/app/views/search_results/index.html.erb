@@ -6,7 +6,8 @@
   <% if @omni_query.blank? %>
     <h3>Try searching for something!</h3>
   <% else %>
-    <% if !@competitions.empty? %>
+    <% query_parts = @omni_query.split %>
+    <% if @competitions.present? %>
       <h2><%= anchorable "Competitions" %></h2>
       <table class="table table-nonfluid">
         <tbody>
@@ -17,12 +18,12 @@
               </td>
               <td>
                 <%= link_to competition_path(competition) do %>
-                  <%= wca_highlight(competition.name, @omni_query) %>
+                  <%= wca_highlight(competition.name, query_parts) %>
                 <% end %>
               </td>
               <td>
-                <%= wca_highlight(competition.countryId, @omni_query) %>,
-                <%= wca_highlight(competition.cityName, @omni_query) %>
+                <%= wca_highlight(competition.countryId, query_parts) %>,
+                <%= wca_highlight(competition.cityName, query_parts) %>
               </td>
             </tr>
           <% end %>
@@ -31,7 +32,7 @@
       <%= paginate @competitions, param_name: :competitions_page, params: { anchor: "competitions" } %>
     <% end %>
 
-    <% if !@persons.empty? %>
+    <% if @persons.present? %>
       <h2>
         <%= anchorable "People" %> |
         <%= link_to icon("search", "Advanced search"), persons_path(search: params[:q]), class: "advanved-search" %>
@@ -44,11 +45,11 @@
                 <%= render "shared/user_avatar", user: (person.user || User.new) %>
               </td>
               <td>
-                <span class="wca-id"><%= wca_highlight(person.wca_id, @omni_query) %></span>
+                <span class="wca-id"><%= wca_highlight(person.wca_id, query_parts) %></span>
               </td>
               <td>
                 <%= link_to "/results/p.php?i=#{person.wca_id}" do %>
-                  <%= wca_highlight(person.name, @omni_query) %>
+                  <%= wca_highlight(person.name, query_parts) %>
                 <% end %>
               </td>
               <td>
@@ -61,7 +62,7 @@
       <%= paginate @persons, param_name: :people_page, params: { anchor: "people" } %>
     <% end %>
 
-    <% if !@posts.empty? %>
+    <% if @posts.present? %>
       <h2><%= anchorable "Posts" %></h2>
       <% @posts.each do |post| %>
         <div>
