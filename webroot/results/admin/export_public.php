@@ -27,7 +27,7 @@ if( $chosenExport ){
     'Rounds'       => '*',
     'Events'       => '*',
     'Formats'      => '*',
-    'Countries'    => '*',
+    'Countries'    => 'SELECT id, name, continentId, 0 as latitude, 0 as longitude, 0 as zoom, iso2 FROM Countries',
     'Continents'   => '*',
     'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
     # To maintain the database export format, we have to build up the
