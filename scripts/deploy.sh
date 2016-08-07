@@ -43,12 +43,12 @@ rebuild_regs() {
 
   # Else we have to rebuild something
 
+  # This save tracked files that may have unstashed changes too
+  cp -r $regs_folder $build_folder
+
   # Checkout data (scramble programs, history)
   git checkout origin/regulations-data $build_folder
   git reset HEAD $build_folder
-
-  # This save tracked files that may have unstashed changes too
-  cp -r $regs_folder $build_folder
 
   languages=`wrc-languages`
   if [ $rebuild_translations -eq 1 ]; then
