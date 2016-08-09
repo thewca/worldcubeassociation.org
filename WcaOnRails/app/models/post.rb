@@ -54,7 +54,7 @@ class Post < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    posts = Post.where("world_readable = 1")
+    posts = Post.where(world_readable: true)
     query&.split&.each do |part|
       posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")
     end

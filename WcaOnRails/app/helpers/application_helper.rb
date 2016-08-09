@@ -56,10 +56,10 @@ module ApplicationHelper
       index = text.index(phrase)
       index + phrase.length if index
     end.compact.max
-    excerpted = if first && last
+    excerpted = if first # At least one phrase matches the text.
                   excerpt(text, text[first..last], radius: WCA_EXCERPT_RADIUS)
                 else
-                  # If nothing matches the given phrase, just return the beginning.
+                  # If nothing matches the given phrases, just return the beginning.
                   truncate(text, length: WCA_EXCERPT_RADIUS)
                 end
     wca_highlight(excerpted, phrases)
