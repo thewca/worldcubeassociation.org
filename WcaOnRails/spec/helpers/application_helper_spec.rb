@@ -26,4 +26,12 @@ describe ApplicationHelper do
       expect(string).to eq '<a href="mailto:jfly@worldcubeassociation.org">Jeremy</a> and <a href="mailto:jonatan@worldcubeassociation.org">Jonatan O&#39;Klosko</a>'
     end
   end
+
+  describe "#wca_excerpt" do
+    it "handles multiple phrases correctly highlighting them" do
+      text = "A long text with a super word in the middle (directly here) followed by the rest of an awesome and peculiar sentence. What do you think?"
+      expected = "...t with a super word in the middle (directly here) <strong>followed</strong> by the rest of an awesome and peculiar sentence. What do you <strong>think</strong>?"
+      expect(helper.wca_excerpt(text, ["followed", "think"])).to eq expected
+    end
+  end
 end
