@@ -747,20 +747,7 @@ class Competition < ActiveRecord::Base
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    (params[:sort] || "-start_date").split(",").each do |field|
-      order = field.start_with?("-") ? :desc : :asc
-
-      case field
-      when "start_date", "-start_date"
-        competitions = competitions.order(year: order, month: order, day: order)
-      when "end_date", "-end_date"
-        competitions = competitions.order(year: order, endMonth: order, endDay: order)
-      else
-        raise WcaExceptions::BadApiParameter, "Unrecognized sort field: '#{field}'"
-      end
-    end
-
-    competitions
+    competitions.order(year: :desc, month: :desc, day: :desc)
   end
 
   def serializable_hash(options = nil)
