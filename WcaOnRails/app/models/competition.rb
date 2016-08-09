@@ -621,7 +621,7 @@ class Competition < ActiveRecord::Base
         rounds_with_results = results
           .group_by(&:round)
           .sort_by { |format, _results| format.rank }
-          .map { |round, results| [ round, results.sort_by(&:pos) ] }
+          .map { |round, results| [ round, results.sort_by { |r| [r.pos, r.personName] } ] }
 
         [ event, rounds_with_results ]
       end

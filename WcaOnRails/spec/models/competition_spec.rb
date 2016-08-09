@@ -463,7 +463,8 @@ RSpec.describe Competition do
     let!(:r_333_f_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
     let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 3, person: person_three }
 
-    let!(:r_222_c_first) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
+    let!(:r_222_c_second_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_two }
+    let!(:r_222_c_first_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -472,12 +473,12 @@ RSpec.describe Competition do
       expect(result.first.last.map(&:value1)).to eq [3000] * 3
 
       expect(result.last.first).to eq two_by_two
-      expect(result.last.last.map(&:value1)).to eq [3000]
+      expect(result.last.last.map(&:value1)).to eq [3000, 3000]
     end
 
     it "winning_results" do
       result = competition.winning_results
-      expect(result.size).to eq 2
+      expect(result.size).to eq 3
       expect(result.first.eventId).to eq "333"
       expect(result.first.best).to eq 3000
       expect(result.first.roundId).to eq "f"
@@ -511,7 +512,10 @@ RSpec.describe Competition do
 
       expect(results[1].first).to eq two_by_two
       expect(results[1].second.first.first).to eq Round.find("c")
-      expect(results[1].second.first.last.map(&:value1)).to eq [3000]
+      expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
+
+      # Orders results which tied by person name.
+      expect(results[1].second.first.last.map(&:personName)).to eq %w(One Two)
     end
 
     it "winning_results and events_with_podium_results don't include results with DNF as best" do
