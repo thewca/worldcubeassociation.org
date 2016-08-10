@@ -4,6 +4,18 @@
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
+    <div class="well">
+      <h3>Guidelines</h3>
+      <ul>
+        <li>All avatars should be pictures of real persons.</li>
+        <li>The person shown must be the involved member (as far as can be judged).</li>
+        <li>If there is more than one person on the avatar, it should be clear who is the involved member.</li>
+        <li>The head of the involved member, not necessarily the full face, should be visible.</li>
+        <li>The avatar should not include texts other than regular background texts.</li>
+        <li>If the correct orientation of the picture is clear (portrait or landscape) the picture must be submitted in that correct orientation.</li>
+      </ul>
+    </div>
+
     <%= form_tag admin_avatars_path, class: 'are-you-sure' do |f| %>
       <% @users.each do |user| %>
         <div class="panel panel-default">
