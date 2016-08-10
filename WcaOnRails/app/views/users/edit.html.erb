@@ -59,33 +59,15 @@
       <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
       <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
     <% end %>
+    <% if @user.wca_id.present? %>
+      <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
+    <% end %>
   </ul>
 
   <div class="tab-content" id="edit-user-tabs">
     <div class="tab-pane" id="general">
-      <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
+      <%= simple_form_for @user, html: { class: 'are-you-sure' } do |f| %>
         <%= hidden_field_tag "section", "general" %>
-        <% if @user.wca_id.present? %>
-            <div class="row">
-              <% if @user.avatar? %>
-                <div class="col-sm-6">
-                  <%= image_tag @user.avatar.url, class: "img-responsive center-block" %>
-                </div>
-              <% end %>
-              <div class="col-sm-6">
-                <% if @user.avatar? %>
-                  <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-                  <p>Your account thumbnail:</p>
-                  <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                    <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
-                  <% end %>
-                <% end %>
-
-                <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
-                <%= f.hidden_field :pending_avatar_cache %>
-              </div>
-            </div>
-        <% end %>
 
         <%= f.input :name, disabled: !editable_fields.include?(:name) %>
         <%= f.input :dob, as: :date_picker, disabled: !editable_fields.include?(:dob) %>
@@ -189,6 +171,44 @@
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>
+
+      <% if @user.wca_id.present? %>
+        <div class="tab-pane active" id="avatar">
+          <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
+            <%= hidden_field_tag "section", "avatar" %>
+
+            <div class="row">
+              <% if @user.avatar? %>
+                <div class="col-sm-6">
+                  <%= image_tag @user.avatar.url, class: "img-responsive center-block" %>
+                </div>
+              <% end %>
+              <div class="col-sm-6">
+                <div class="well">
+                  <h3><%=t '.guidelines' %></h3>
+                  <ul>
+                    <% t('.avatar_guidelines').values.each do |guideline| %>
+                      <li><%= guideline %></li>
+                    <% end %>
+                  </ul>
+                </div>
+                <% if @user.avatar? %>
+                  <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
+                  <p>Your account thumbnail:</p>
+                  <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
+                    <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
+                  <% end %>
+                <% end %>
+
+                <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
+                <%= f.hidden_field :pending_avatar_cache %>
+
+                <%= f.submit t('.save'), class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
 
   </div>
