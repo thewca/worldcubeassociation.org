@@ -1,7 +1,6 @@
 module Admin
   class CompsController < AdminController
     def admin_index
-
       # Default params
       params[:region] ||= "all"
       params[:state] ||= "present"

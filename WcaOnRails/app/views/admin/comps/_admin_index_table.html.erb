@@ -29,7 +29,9 @@
           <%= wca_date_range(competition.start_date, competition.end_date) %>
         </td>
         <td class="admin-date">
-          <%= competition.announced_at %>
+          <% if competition.announced_at %>
+            <%= competition.announced_at.strftime("%b %d, %Y") %> (<%= (competition.start_date - competition.announced_at.to_date).to_i %>)
+          <% end %>
         </td>
         <td class="admin-date">
           Sep 15, 2016 (5)
