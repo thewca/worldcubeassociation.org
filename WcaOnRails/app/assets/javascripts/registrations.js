@@ -21,7 +21,8 @@ onPage('registrations#edit_registrations', function() {
   showHideActions();
 
   $('button[value=delete-selected]').on("click", function(e) {
-    if(!confirm("Are you sure you want to delete the selected registrations?")) {
+    var $selectedRows = $registrationsTable.find("tr.selected");
+    if(!confirm("Delete the " + $selectedRows.length + " selected registrations?")) {
       e.preventDefault();
     }
   });
