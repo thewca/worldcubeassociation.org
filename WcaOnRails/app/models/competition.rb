@@ -52,6 +52,7 @@ class Competition < ActiveRecord::Base
     registration_close
     results_posted_at
     results_nag_sent_at
+    announced_at
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
