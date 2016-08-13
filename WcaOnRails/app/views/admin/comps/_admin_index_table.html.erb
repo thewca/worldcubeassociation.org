@@ -4,6 +4,9 @@
       <th>
         <strong><%= "#{title} (#{competitions.count})" %></strong>
       </th>
+      <th class="admin-delegate">
+        Delegate(s)
+      </th>
       <th class="admin-date">
         Date
       </th>
@@ -23,24 +26,54 @@
     <% competitions.each_with_index do |competition, index| %>
       <tr>
         <td>
-          <%= link_to competition.cellName, competition_path(competition) %>, <%= competition.country_name %>
+          <i class="flag f16 <%= competition.country.iso2.downcase %>"></i><%= link_to competition.cellName, competition_path(competition) %>, <%= competition.country_name %>
+        </td>
+        <td class="admin-delegate">
+          <%= competition.delegates.map(&:name).to_sentence %>
         </td>
         <td class="admin-date">
           <%= wca_date_range(competition.start_date, competition.end_date) %>
         </td>
         <td class="admin-date">
           <% if competition.announced_at %>
-            <%= competition.announced_at.strftime("%b %d, %Y") %> (<%= (competition.start_date - competition.announced_at.to_date).to_i %>)
+            <% distance_announced = (competition.start_date - competition.announced_at.to_date).to_i %>
+            <% if distance_announced < 15 %>
+              <% span_class = "alert-danger" %>
+            <% elsif distance_announced < 28 %>
+              <% span_class = "alert-warning" %>
+            <% end %>
+            <span class="<%= span_class %>"><%= competition.announced_at.strftime("%b %d, %Y") %> (<%= distance_announced %>)</span>
           <% end %>
         </td>
         <td class="admin-date">
-          Sep 15, 2016 (5)
+          <% if competition.delegate_report.posted_at %>
+            <% distance_report = (competition.delegate_report.posted_at.to_date - competition.end_date).to_i %>
+            <% if distance_report > 14 %>
+              <% span_class = "alert-danger" %>
+            <% elsif distance_report > 7 %>
+              <% span_class = "alert-warning" %>
+            <% else %>
+              <% span_class = "alert-success" %>
+            <% end %>
+            <%= competition.delegate_report.posted_at.strftime("%b %d, %Y") %>
+            <span class="<%= span_class %>"> (<%= distance_report %>)</span>
+          <% end %>
         </td>
         <td class="admin-date">
-          <%= competition.results_posted_at %>
+          <% if competition.results_posted_at %>
+            <% distance_results = (competition.results_posted_at.to_date - competition.end_date).to_i %>
+            <% if distance_results > 14 %>
+              <% span_class = "alert-danger" %>
+            <% elsif distance_results > 7 %>
+              <% span_class = "alert-warning" %>
+            <% else %>
+              <% span_class = "alert-success" %>
+            <% end %>
+            <span class="<%= span_class %>"><%= competition.results_posted_at.strftime("%b %d, %Y") %> (<%= distance_results %>)</span>
+          <% end %>
         </td>
         <td>
-          <%= link_to icon("pencil-square-o", "Edit"), admin_edit_competition_path(competition), class: "btn btn-sm btn-primary" %>
+          <%= link_to icon("pencil-square-o", "Edit"), admin_edit_competition_path(competition), class: "btn btn-sm btn-primary", target: "_blank" %>
         </td>
       </tr>
     <% end %>

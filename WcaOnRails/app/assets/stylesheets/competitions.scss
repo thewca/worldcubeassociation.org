@@ -319,12 +319,17 @@ table.table-condensed.admin-competitions {
   font-size: 13px;
   td {
     vertical-align: middle;
-    white-space: nowrap;
+  }
+
+  .admin-delegate {
+    width: 230px;
   }
 
   .admin-date {
-    width: 150px;
+    width: 130px;
+    max-width: 130px;
     text-align: center;
+    white-space: nowrap;
   }
 
   .admin-button {
