@@ -140,6 +140,8 @@ class CompetitionsController < ApplicationController
       body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
     end
     create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+
+    comp.update!(announced_at: Time.now)
   end
 
   def post_results
