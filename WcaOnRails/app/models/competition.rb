@@ -427,7 +427,7 @@ class Competition < ActiveRecord::Base
   end
 
   def contains?(search_param)
-    [name, cityName, venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
+    [name, cityName, delegates.map(&:name).join(','), venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
       field.downcase.include?(search_param.downcase)
     end
   end
