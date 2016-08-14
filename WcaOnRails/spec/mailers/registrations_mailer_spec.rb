@@ -19,7 +19,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
       expect(mail.subject).to eq("#{registration.name} just registered for #{registration.competition.name}")
       expect(mail.to).to eq([delegate1.email])
-      expect(mail.reply_to).to eq(competition_without_organizers.managers.map(&:email))
+      expect(mail.reply_to).to eq([registration.user.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 

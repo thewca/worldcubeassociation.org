@@ -7,11 +7,9 @@ class RegistrationsMailer < ApplicationMailer
     if to.length > 0
       mail(
         to: to,
-        reply_to: registration.competition.managers.map(&:email),
+        reply_to: [registration.user.email],
         subject: "#{registration.name} just registered for #{registration.competition.name}"
       )
-    else
-      nil
     end
   end
 
