@@ -336,3 +336,8 @@ table.table-condensed.admin-competitions {
     width: 50px;
   }
 }
+
+.alert-orange {
+  @extend .alert-warning;
+  background-color: #ffeca8;
+}
