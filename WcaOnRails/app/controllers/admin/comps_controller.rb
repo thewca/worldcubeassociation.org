@@ -13,6 +13,8 @@ module Admin
       @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
       @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
+      @competitions = @competitions.includes(:delegates)
+
       if @present_selected
         @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
       else
