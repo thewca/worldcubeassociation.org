@@ -5,21 +5,21 @@ module Admin
     end
 
     def update_all
-      avatars = params.select { |k| k.start_with?("avatar-") }
+      avatars = params.require(:avatars)
       ActiveRecord::Base.transaction do
-        avatars.each do |k, v|
-          wca_id = k.split('-', 2)[1]
+        avatars.each do |wca_id, args|
           user = User.find_by_wca_id!(wca_id)
-          case v
+          case args[:action]
           when "approve"
             user.approve_pending_avatar!
           when "reject"
             user.remove_pending_avatar = true
             user.save!
+            AvatarsMailer.notify_user_of_avatar_rejection(user, args[:rejection_reason]).deliver_later
           when "defer"
             # do nothing!
           else
-            raise "Unrecognized avatar action #{v}"
+            raise "Unrecognized avatar action '#{args[:action]}'"
           end
         end
       end
