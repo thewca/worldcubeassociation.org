@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:title)) %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="WCA Website Team">
+    <meta name="description" content="Official World Cube Association Competition Results">
+    <meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA">
+    <%= csrf_meta_tags %>
+    <link rel="shortcut icon" href="/results/images/wca.ico">
+
+    <script async="" src="//www.google-analytics.com/analytics.js"></script><script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js?v=201409231900"></script><script src="/results/js/ga.js?v=201409231900"></script><script src="/results/js/bootstrap.min.js?v=201409231900"></script><script src="/results/js/bootstrap-hover-dropdown.min.js?v=201409231900"></script><link rel="stylesheet" href="/results/style/bootstrap.min.css?v=201409231900" type="text/css"><link rel="stylesheet" href="/results/style/navbar-static-top.css?v=201409231900" type="text/css"><link rel="stylesheet" href="/results/style/general.css?v=201409231900" type="text/css"><link rel="stylesheet" href="/results/style/pageMenu.css?v=201409231900" type="text/css"><link rel="stylesheet" href="/results/style/tables.css?v=201409231900" type="text/css"><link rel="stylesheet" href="/results/style/links.css?v=201409231900" type="text/css">
+
+  </head>
+  <body data-rails-controller-name="<%= controller_name %>" data-rails-controller-action-name="<%= action_name %>">
+    <!-- Static navbar -->
+    <%= render 'layouts/navigation' %>
+
+    <%= render 'layouts/flash' %>
+
+    <div id="main">
+      <div id="content" class="container">
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

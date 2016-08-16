@@ -1,0 +1,57 @@
+<% provide(:title, 'Statistics') %>
+
+<div class="container">
+  <div class="row">
+    <h2>Fun Statistics</h2>
+
+    <p>
+      Here you see a selection of fun statistics, based on official WCA competition results.
+    </p>
+
+    <ul>
+      <% @statistics.each do |statistic| %>
+        <li>
+          <%= link_to statistic.name, "##{statistic.id}", style: "color:#33C;font-weight:normal" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <% @statistics.each do |statistic| %>
+    <div id="<%= statistic.id %>">
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            <%= statistic.name %>
+            <% if statistic.subtitle %>
+              <small><%= statistic.subtitle %></small>
+            <% end %>
+          </h3>
+        </div>
+        <% tables = statistic.tables %>
+        <% tables.each do |t| %>
+          <div class="col-md-<%= 12 / tables.size %>">
+            <%= wca_table greedy_last_column: false, table_class: "statistics", floatThead: false do %>
+              <thead>
+                <tr>
+                  <% t.header.each do |r| %>
+                    <%= r.render %>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <% t.rows.each do |row| %>
+                  <tr>
+                    <% row.each do |td| %>
+                      <%= td.render %>
+                    <% end %>
+                  </tr>
+                <% end %>
+              </tbody>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
