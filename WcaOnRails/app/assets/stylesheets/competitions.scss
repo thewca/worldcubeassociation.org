@@ -341,3 +341,9 @@ table.table-condensed.admin-competitions {
   @extend .alert-warning;
   background-color: #ffeca8;
 }
+
+.hide-div {
+  font-weight: normal;
+  font-size: 12px;
+  cursor: pointer;
+}
