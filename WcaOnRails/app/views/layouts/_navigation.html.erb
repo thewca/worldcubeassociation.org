@@ -16,58 +16,61 @@
       <ul class="nav navbar-nav">
         <li class="dropdown <%= params[:controller] == 'static_pages' || params[:controller] == 'posts' ? 'active' : '' %>">
           <a href="/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('info-circle', class: 'fa-fw') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
+            <%= icon('info-circle') %> <span class="hidden-sm"><%= t '.information' %></span> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="<%= about_path %>"><%= icon('file-text', class: 'fa-fw') %> <%= t '.about' %></a></li>
-            <li><a href="<%= delegates_path %>"><%= icon('sitemap', class: 'fa-fw') %> <%= t '.delegates' %></a></li>
-            <li><a href="<%= organisations_path %>"><%= icon('flag', class: 'fa-fw') %> <%= t '.organisations' %></a></li>
+            <li><a href="<%= about_path %>"><%= icon('file-text') %> <%= t '.about' %></a></li>
+            <li><a href="<%= delegates_path %>"><%= icon('sitemap') %> <%= t '.delegates' %></a></li>
+            <li><a href="<%= organisations_path %>"><%= icon('flag') %> <%= t '.organisations' %></a></li>
             <li class="divider"></li>
-            <li><a href="<%= faq_path %>"><%= icon('question-circle', class: 'fa-fw') %> <%= t '.faq' %></a></li>
-            <li><a href="<%= contact_path %>"><%= icon('envelope', class: 'fa-fw') %> <%= t '.contact' %></a></li>
-            <li><a href="/forum/" class="top-nav"><%= icon('comments', class: 'fa-fw') %> <%= t '.forum' %></a></li>
+            <li><a href="<%= faq_path %>"><%= icon('question-circle') %> <%= t '.faq' %></a></li>
+            <li><a href="<%= contact_path %>"><%= icon('envelope') %> <%= t '.contact' %></a></li>
+            <li><a href="/forum/" class="top-nav"><%= icon('comments') %> <%= t '.forum' %></a></li>
             <li class="divider"></li>
-            <li><a href="<%= score_tools_path %>"><%= icon('wrench', class: 'fa-fw') %> <%= t '.tools' %></a></li>
-            <li><a href="<%= logo_path %>"><%= image_tag('wca_logo.svg', width: '16px', class: 'fa-fw') %> <%= t '.logo' %></a></li>
+            <li><a href="<%= score_tools_path %>"><%= icon('wrench') %> <%= t '.tools' %></a></li>
+            <li><a href="<%= logo_path %>"><%= image_tag('wca_logo.svg', width: '16px') %> <%= t '.logo' %></a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-             <%= icon('cube', class: 'fa-fw') %> <%= t '.competitions' %> <span class="caret"></span>
+             <%= icon('cube') %> <%= t '.competitions' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="<%= competitions_path %>"><%= icon('globe', class: 'fa-fw') %> <%= t '.all' %></a></li>
-            <li><a href="<%= my_comps_path %>"><%= icon('list', class: 'fa-fw') %> <%= t '.my_competitions' %></a></li>
+            <li><a href="<%= competitions_path %>"><%= icon('globe') %> <%= t '.all' %></a></li>
+            <li><a href="<%= my_comps_path %>"><%= icon('list') %> <%= t '.my_competitions' %></a></li>
             <% if current_user&.can_create_competitions? %>
-              <li><a href="<%= new_competition_path %>"><%= icon('plus', class: 'fa-fw') %> <%= t '.new_competition' %></a></li>
+              <li><a href="<%= new_competition_path %>"><%= icon('plus') %> <%= t '.new_competition' %></a></li>
             <% end %>
           </ul>
         </li>
         <li class="dropdown">
           <a href="/results/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('list-ol', class: 'fa-fw') %> <%= t '.results' %> <span class="caret"></span>
+            <%= icon('list-ol') %> <%= t '.results' %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/results/events.php"><%= icon('signal', class: 'fa-fw fa-rotate-90') %> <%= t '.rankings' %></a></li>
-            <li><a href="/results/regions.php"><%= icon('trophy', class: 'fa-fw') %> <%= t '.records' %></a></li>
-            <li><a href="<%= persons_path %>"><%= icon('user', class: 'fa-fw') %> <%= t '.persons' %></a></li>
+            <li><a href="/results/events.php"><%= icon('signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
+            <li><a href="/results/regions.php"><%= icon('trophy') %> <%= t '.records' %></a></li>
+            <li><a href="<%= persons_path %>"><%= icon('users') %> <%= t '.persons' %></a></li>
+            <% if current_user&.wca_id? %>
+              <li><%= link_to icon('user', t('.my_results')), "/results/p.php?i=#{current_user.wca_id}" -%></li>
+            <% end %>
             <li class="divider"></li>
-            <li><a href="/results/statistics.php"><%= icon('area-chart', class: 'fa-fw') %> <%= t '.statistics' %></a></li>
-            <li><a href="/results/media.php"><%= icon('film', class: 'fa-fw') %> <%= t '.multimedia' %></a></li>
-            <li><a href="/results/misc/export.html"><%= icon('download', class: 'fa-fw') %> <%= t '.db_export' %></a></li>
+            <li><a href="/results/statistics.php"><%= icon('area-chart') %> <%= t '.statistics' %></a></li>
+            <li><a href="/results/media.php"><%= icon('film') %> <%= t '.multimedia' %></a></li>
+            <li><a href="/results/misc/export.html"><%= icon('download') %> <%= t '.db_export' %></a></li>
           </ul>
         </li>
         <li class="dropdown <%= params[:controller] == 'regulations' ? 'active' : '' %>">
           <a href="/regulations/" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-            <%= icon('book', class: 'fa-fw') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
+            <%= icon('book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/regulations/"><%= icon('book', class: 'fa-fw') %> <%= t '.regulations' %></a></li>
-            <li><a href="/regulations/guidelines.html"><%= icon('question-circle', class: 'fa-fw') %> <%= t '.guidelines' %></a></li>
-            <li><a href="/regulations/scrambles/"><%= icon('random', class: 'fa-fw') %> <%= t '.scrambles' %></a></li>
+            <li><a href="/regulations/"><%= icon('book') %> <%= t '.regulations' %></a></li>
+            <li><a href="/regulations/guidelines.html"><%= icon('question-circle') %> <%= t '.guidelines' %></a></li>
+            <li><a href="/regulations/scrambles/"><%= icon('random') %> <%= t '.scrambles' %></a></li>
             <li class="divider"></li>
-            <li><a href="/regulations/history/"><%= icon('history', class: 'fa-fw') %> <%= t '.history' %></a></li>
-            <li><a href="/regulations/translations/"><%= icon('language', class: 'fa-fw') %> <%= t '.translations' %></a></li>
+            <li><a href="/regulations/history/"><%= icon('history') %> <%= t '.history' %></a></li>
+            <li><a href="/regulations/translations/"><%= icon('language') %> <%= t '.translations' %></a></li>
           </ul>
         </li>
       </ul>
