@@ -5,7 +5,8 @@
     background-color: #ccc;
   }
 
-  .dropdown-menu .fa-fw {
+  .dropdown-menu .fa {
+    @extend .fa-fw;
     margin-right: 10px;
   }
 
