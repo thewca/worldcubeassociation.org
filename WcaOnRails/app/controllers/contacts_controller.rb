@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
     @contact = Contact.new(params[:contact])
     @contact.request = request
     @contact.to_email = "contact@worldcubeassociation.org"
-    @contact.subject = "WCA Website Comments"
+    @contact.subject = DateTime.now.strftime("WCA Website Comments by #{@contact.name} on %d %b %Y at %R")
     maybe_send_email success_url: contact_website_url, fail_view: :website
   end
 
