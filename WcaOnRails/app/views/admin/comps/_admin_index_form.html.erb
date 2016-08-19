@@ -11,28 +11,8 @@
             title="Name, city, venue, delegate(s), country or month">
         <%= icon('search') %>
       </span>
-      <%= text_field_tag "search", params[:search], class: "form-control" %>
+      <%= text_field_tag "search", params[:search], class: "form-control admin-comp-search", placeholder: "Name, city, venue, delegate(s), country or month" %>
     </div>
-  </div>
-</div>
-
-<div class="form-group">
-  <%= label_tag(:state) %>
-  <div id="state" class="btn-group" data-toggle="buttons">
-    <label id="present" class="btn btn-primary">
-      <%= radio_button_tag "state", "present" %>
-      <span class="caption">Present</span>
-    </label>
-    <ul class="dropdown-menu years">
-      <%= hidden_field_tag "year", params[:year] %>
-      <% @years.each do |year| %>
-        <li class="year"><%= link_to year.to_s.capitalize, "#", data: { year: year } %></li>
-      <% end %>
-    </ul>
-    <label id="past" class="btn btn-primary" data-toggle="dropdown">
-      <%= radio_button_tag "state", "past" %>
-      <span class="caption">Past <%= "from #{params[:year]}" if @past_selected %></span>
-    </label>
   </div>
 </div>
 

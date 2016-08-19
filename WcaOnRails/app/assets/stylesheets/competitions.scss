@@ -162,6 +162,10 @@ $venue-map-wrapper-height: 400px;
   #display {
     margin-top: 20px;
   }
+
+  input.admin-comp-search {
+    width: 350px;
+  }
 }
 
 .same-line {
@@ -340,6 +344,11 @@ table.table-condensed.admin-competitions {
 .alert-orange {
   @extend .alert-warning;
   background-color: #ffeca8;
+}
+
+.alert-green {
+  @extend .alert-success;
+  background-color: #c4e8b5;
 }
 
 .hide-div {

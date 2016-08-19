@@ -3,26 +3,11 @@ module Admin
     def admin_index
       # Default params
       params[:region] ||= "all"
-      params[:state] ||= "present"
-      params[:year] ||= "all years"
       params[:display] ||= "list"
 
-      @past_selected = params[:state] == "past"
-      @present_selected = !@past_selected
-
-      @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
       @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
       @competitions = @competitions.includes(:delegates)
-
-      if @present_selected
-        @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
-      else
-        @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
-        unless params[:year] == "all years"
-          @competitions = @competitions.where(year: params[:year])
-        end
-      end
 
       unless params[:region] == "all"
         @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
