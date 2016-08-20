@@ -39,7 +39,7 @@ function resizeMapContainer() {
   $('#competitions-map').height(mapHeight);
 }
 
-onPage('competitions#index, competitions#admin_index', function() {
+onPage('competitions#index', function() {
   resizeMapContainer();
   $(window).on('resize', resizeMapContainer);
 

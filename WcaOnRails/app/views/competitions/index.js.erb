@@ -3,4 +3,4 @@ history.pushState(null, document.title, <%= current_url.to_json.html_safe %>);
 $('#competitions-list').html('<%=j render 'index_competitions_list', competitions: @competitions %>');
 
 $('#search-results').removeClass('competitions-list').removeClass('competitions-map');
-$('#search-results').addClass('competitions-<%= params[:display] == "list" ? "list" : "map" %>');
+$('#search-results').addClass('competitions-<%= params[:display] %>');
