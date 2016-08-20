@@ -318,6 +318,11 @@ $venue-map-wrapper-height: 400px;
 
 table.table-condensed.admin-competitions {
   font-size: 13px;
+
+  tr.admin-table-header {
+    background-color: #ccc;
+  }
+
   td {
     vertical-align: middle;
   }
