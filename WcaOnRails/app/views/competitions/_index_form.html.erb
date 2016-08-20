@@ -65,7 +65,7 @@
       <i class="glyphicon glyphicon-map-marker"></i> Map
     </label>
     <% if current_user&.can_see_admin_competitions? %>
-      <label id="admin-list" class="btn btn-info">
+      <label id="display-admin" class="btn btn-info">
         <%= radio_button_tag "display", "admin" %>
         <i class="fa fa-user-secret"></i> Admin
       </label>
@@ -94,5 +94,5 @@
     }
   });
 
-  $('#<%= params[:display] == "map" ? "display-map" : "display-list" %>').button('toggle');
+  $('#display-<%= params[:display] %>').button('toggle');
 </script>

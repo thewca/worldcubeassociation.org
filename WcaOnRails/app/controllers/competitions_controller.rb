@@ -72,7 +72,6 @@ class CompetitionsController < ApplicationController
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     @competitions = @competitions.includes(:delegates)
-    @competitions = @competitions.includes(:delegate_report)
 
     if params[:display] != "admin"
       if @present_selected
