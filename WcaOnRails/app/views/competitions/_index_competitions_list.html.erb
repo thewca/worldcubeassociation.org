@@ -51,29 +51,35 @@
     });
   </script>
 <% else %>
-  <% if competitions.empty? %>
-    <div class="col-md-12">
-      <%= alert :warning do
-        unless params[:event_ids].empty?
-          "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
-        else
-          "No competitions found."
-        end
-      end %>
-  <% else %>
-    <% past_competitions, upcoming_competitions = competitions.partition(&:is_over?) %>
-    <% recent_competitions, distant_competitions = past_competitions.partition { |c| (Date.today - c.end_date).to_i < 30 } %>
-    <% unless upcoming_competitions.empty? %>
-      <div class="col-md-12" id="upcoming-comps">
-        <%= render 'admin_index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+  <% if current_user&.can_see_admin_competitions? %>
+    <% if competitions.empty? %>
+      <div class="col-md-12">
+        <%= alert :warning do
+          unless params[:event_ids].empty?
+            "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
+          else
+            "No competitions found."
+          end
+        end %>
+    <% else %>
+      <% past_competitions, upcoming_competitions = competitions.partition(&:is_over?) %>
+      <% recent_competitions, distant_competitions = past_competitions.partition { |c| (Date.today - c.end_date).to_i < 30 } %>
+      <% unless upcoming_competitions.empty? %>
+        <div class="col-md-12" id="upcoming-comps">
+          <%= render 'admin_index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+        </div>
+      <% end %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'admin_index_table', competitions: recent_competitions, title: "Recent competitions" %>
+      </div>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'admin_index_table', competitions: distant_competitions, title: "Past competitions" %>
       </div>
     <% end %>
-    <div class="col-md-12" id="past-comps">
-      <%= render 'admin_index_table', competitions: recent_competitions, title: "Recent competitions" %>
-    </div>
-    <div class="col-md-12" id="past-comps">
-      <%= render 'admin_index_table', competitions: distant_competitions, title: "Past competitions" %>
-    </div>
+  <% else %>
+    <%= alert :warning do
+      "You don't have access to this page!"
+      end %>
   <% end %>
 <% end %>
 <script>
