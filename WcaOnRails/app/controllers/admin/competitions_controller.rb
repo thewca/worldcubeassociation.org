@@ -1,6 +1,7 @@
 module Admin
-  class CompsController < AdminController
-    def admin_index
+  class CompetitionsController < AdminController
+    before_action -> { redirect_unless_user(:board_member?) }, only: [:index]
+    def index
       # Default params
       params[:region] ||= "all"
       params[:display] ||= "list"

@@ -3,7 +3,7 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= form_tag admin_comps_path, method: :get, remote: true, class: "competition-select form-inline", id: "competition-query-form" do %>
+  <%= form_tag admin_competitions_path, method: :get, remote: true, class: "competition-select form-inline", id: "competition-query-form" do %>
     <%= render 'admin_index_form' %>
   <% end %>
 
