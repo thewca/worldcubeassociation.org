@@ -39,7 +39,7 @@ function resizeMapContainer() {
   $('#competitions-map').height(mapHeight);
 }
 
-onPage('competitions#index', function() {
+onPage('competitions#index, competitions#admin_index', function() {
   resizeMapContainer();
   $(window).on('resize', resizeMapContainer);
 
@@ -73,37 +73,6 @@ onPage('competitions#index', function() {
       var formTop = $('#competition-query-form').offset().top;
       $('html, body').animate({ scrollTop: formTop - 5 }, 300);
     }
-  });
-
-  // Necessary hack because Safari fires a popstate event on document load
-  $(window).load(function() {
-    setTimeout(function() {
-      // When back/forward is clicked the url changes since we use pushState,
-      // but the content is not reloaded so we have to do this manually.
-      $(window).on('popstate', function() {
-        location.reload();
-      });
-    }, 0);
-  });
-});
-
-onPage('comps#admin_index', function() {
-
-  // Ajax searching
-  var $form = $('#competition-query-form');
-  function submitForm() {
-    $form.trigger('submit.rails');
-  }
-
-  $form.on('change', '#region, #state, #display', submitForm)
-       .on('input', '#search', _.debounce(submitForm, TEXT_INPUT_DEBOUNCE_MS));
-
-  $('#competition-query-form').on('ajax:send', function() {
-    $('#loading').show();
-  });
-
-  $('#competition-query-form').on('ajax:complete', function() {
-    $('#loading').hide();
   });
 
   // Necessary hack because Safari fires a popstate event on document load

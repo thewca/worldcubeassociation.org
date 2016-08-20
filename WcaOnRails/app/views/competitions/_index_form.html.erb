@@ -1,20 +1,22 @@
-<div class="form-group">
-  <%= label_tag "events" do %>
-    Events
-    <button type="button" id="select-all-events" class="btn btn-primary btn-xs">All</button>
-    <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
-  <% end %>
-  <div id="events">
-    <% Event.all_official.each do |event| %>
-    <span class="event-checkbox">
-      <%= label_tag "checkbox-#{event.id}" do %>
-        <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
-        <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
-      <% end %>
-    </span>
+<% if !admin_view %>
+  <div class="form-group">
+    <%= label_tag "events" do %>
+      Events
+      <button type="button" id="select-all-events" class="btn btn-primary btn-xs">All</button>
+      <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
     <% end %>
+    <div id="events">
+      <% Event.all_official.each do |event| %>
+      <span class="event-checkbox">
+        <%= label_tag "checkbox-#{event.id}" do %>
+          <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
+          <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+        <% end %>
+      </span>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <div class="form-group">
   <%= label_tag(:region) %>
@@ -29,44 +31,45 @@
             title="Name, city, venue, country or month">
         <%= icon('search') %>
       </span>
-      <%= text_field_tag "search", params[:search], class: "form-control" %>
+      <%= text_field_tag "search", params[:search], class: "form-control #{admin_view ? "admin-comp-search" : ""}", placeholder: "#{admin_view ? "Name, city, venue, delegate(s), country or month" : ""}" %>
     </div>
   </div>
 </div>
 
-<div class="form-group">
-  <%= label_tag(:state) %>
-  <div id="state" class="btn-group" data-toggle="buttons">
-    <label id="present" class="btn btn-primary">
-      <%= radio_button_tag "state", "present" %>
-      <span class="caption">Present</span>
-    </label>
-    <ul class="dropdown-menu years">
-      <%= hidden_field_tag "year", params[:year] %>
-      <% @years.each do |year| %>
-        <li class="year"><%= link_to year.to_s.capitalize, "#", data: { year: year } %></li>
-      <% end %>
-    </ul>
-    <label id="past" class="btn btn-primary" data-toggle="dropdown">
-      <%= radio_button_tag "state", "past" %>
-      <span class="caption">Past <%= "from #{params[:year]}" if @past_selected %></span>
-    </label>
+<% if !admin_view %>
+  <div class="form-group">
+    <%= label_tag(:state) %>
+    <div id="state" class="btn-group" data-toggle="buttons">
+      <label id="present" class="btn btn-primary">
+        <%= radio_button_tag "state", "present" %>
+        <span class="caption">Present</span>
+      </label>
+      <ul class="dropdown-menu years">
+        <%= hidden_field_tag "year", params[:year] %>
+        <% @years.each do |year| %>
+          <li class="year"><%= link_to year.to_s.capitalize, "#", data: { year: year } %></li>
+        <% end %>
+      </ul>
+      <label id="past" class="btn btn-primary" data-toggle="dropdown">
+        <%= radio_button_tag "state", "past" %>
+        <span class="caption">Past <%= "from #{params[:year]}" if @past_selected %></span>
+      </label>
+    </div>
   </div>
-</div>
 
-<div id="display" class="form-group">
-  <div class="btn-group btn-group-justified" data-toggle="buttons">
-    <label id="display-list" class="btn btn-info">
-      <%= radio_button_tag "display", "list" %>
-      <i class="glyphicon glyphicon-list"></i> List
-    </label>
-    <label id="display-map" class="btn btn-info">
-      <%= radio_button_tag "display", "map" %>
-      <i class="glyphicon glyphicon-map-marker"></i> Map
-    </label>
+  <div id="display" class="form-group">
+    <div class="btn-group btn-group-justified" data-toggle="buttons">
+      <label id="display-list" class="btn btn-info">
+        <%= radio_button_tag "display", "list" %>
+        <i class="glyphicon glyphicon-list"></i> List
+      </label>
+      <label id="display-map" class="btn btn-info">
+        <%= radio_button_tag "display", "map" %>
+        <i class="glyphicon glyphicon-map-marker"></i> Map
+      </label>
+    </div>
   </div>
-</div>
-
+<% end %>
 
 <script>
   $('#<%= @past_selected ? "past" : "present" %>').button('toggle');

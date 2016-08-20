@@ -5,7 +5,7 @@
   <h2><%= yield(:title) %></h2>
 
   <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline", id: "competition-query-form" do %>
-    <%= render 'index_form' %>
+    <%= render 'index_form', admin_view: false %>
   <% end %>
 
   <div id="search-results" class="row competitions-<%= params[:display] == "list" ? "list" : "map" %>">
