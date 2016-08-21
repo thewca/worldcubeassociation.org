@@ -1,5 +1,5 @@
 <table class="table table-striped table-condensed admin-competitions">
-  <% tbody_class = title.include?("Recent") ? "" : "hide" %>
+  <% tbody_class = title.include?("Recent") ? "show" : "hide" %>
   <thead>
     <tr class="admin-table-header">
       <th>
@@ -21,7 +21,7 @@
         Results posted
       </th>
       <th class="admin-button">
-        <span class="hide-div">(<%= tbody_class == "hide" ? "show" : "hide" %>)</span>
+        <span class="hide-div">(<%= tbody_class %>)</span>
       </th>
     </tr>
   </thead>
