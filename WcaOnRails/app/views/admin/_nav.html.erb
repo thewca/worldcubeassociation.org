@@ -1,11 +1,8 @@
 <div class="row">
   <div class="col-sm-4 col-md-3">
     <div class="list-group">
-      <% if current_user.can_see_admin_competitions? %>
-        <% competitions_view = "/competitions?display=admin" %>
-      <% else %>
-        <% competitions_view = "/competitions" %>
-      <% end %>
+      <% competitions_view = "/competitions"
+         competitions_view += "?display=admin" if current_user.can_see_admin_competitions %>
       <% [
         { text: "Upload results", path: "/results/admin/upload_results.php", fa_icon: "upload" },
         { text: "Create competition", path: new_competition_path, fa_icon: "plus" },

@@ -345,12 +345,12 @@ table.table-condensed.admin-competitions {
 
 .alert-orange {
   @extend .alert-warning;
-  background-color: #ffeca8;
+  background-color: $orange;
 }
 
 .alert-green {
   @extend .alert-success;
-  background-color: #c4e8b5;
+  background-color: $green;
 }
 
 .hide-div {
