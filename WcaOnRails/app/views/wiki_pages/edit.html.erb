@@ -1,0 +1,5 @@
+<% provide(:title, "Edit wiki page") %>
+
+<div class="container">
+  <%= render "wiki_page_form", submit_url: wiki_page_path(@wiki_page), submit_text: "Save" %>
+</div>

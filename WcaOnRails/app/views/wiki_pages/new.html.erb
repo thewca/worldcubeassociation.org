@@ -1,1 +1,5 @@
-New post form =)
+<% provide(:title, "New wiki page") %>
+
+<div class="container">
+  <%= render "wiki_page_form", submit_url: wiki_pages_path, submit_text: "Create" %>
+</div>

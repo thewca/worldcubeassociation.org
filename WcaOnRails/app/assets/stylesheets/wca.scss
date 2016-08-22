@@ -342,3 +342,12 @@ textarea {
 .CodeMirror-scroll {
   min-height: 50px;
 }
+
+.markdown-editor.large {
+  ~ .CodeMirror {
+    &,
+    .CodeMirror-scroll {
+      min-height: 200px;
+    }
+  }
+};
