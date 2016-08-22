@@ -1,4 +1,10 @@
 class WikiPagesController < ApplicationController
+  before_action :authenticate_user!
+  before_action -> { redirect_unless_user(:can_view_wiki?) }
+  before_action -> { redirect_unless_user(:can_manage_wiki?) }, only: %i(
+    new create edit update destroy
+  )
+
   def index
     @wiki_pages = WikiPage.all
   end

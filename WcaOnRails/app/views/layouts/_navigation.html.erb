@@ -129,6 +129,7 @@
                 <li role="presentation" class="dropdown-header">
                   <%= t '.results_team' %>
                 </li>
+                <li><%= link_to t('.wiki'), wiki_path %></li>
                 <li><%= link_to t('.results_admin'), admin_path %></li>
                 <li><%= link_to t('.competitions'), competitions_path %></li>
                 <li><%= link_to t('.results_phpmyadmin'), '/results/admin/phpMyAdmin/' %></li>
@@ -150,7 +151,6 @@
               <% end %>
 
               <li class="divider"></li>
-              <li><%= link_to t('.wiki'), wiki_path %></li>
               <li><%= link_to t('.api'), api_path %></li>
               <li><%= link_to t('.manage_app'), oauth_applications_path %></li>
               <li><%= link_to t('.manage_auth_app'), oauth_authorized_applications_path %></li>

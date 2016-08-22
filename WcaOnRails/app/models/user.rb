@@ -431,6 +431,10 @@ class User < ActiveRecord::Base
     board_member? || senior_delegate? || admin?
   end
 
+  # Now we have single wiki and it's meant for Results Team.
+  alias can_manage_wiki? results_team?
+  alias can_view_wiki? results_team?
+
   def get_cannot_delete_competition_reason(competition)
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
