@@ -19,15 +19,15 @@ class WikiPagesController < ApplicationController
   end
 
   def show
-    @wiki_page = WikiPage.find(params[:id])
+    @wiki_page = wiki_from_params
   end
 
   def edit
-    @wiki_page = WikiPage.find(params[:id])
+    @wiki_page = wiki_from_params
   end
 
   def update
-    @wiki_page = WikiPage.find(params[:id])
+    @wiki_page = wiki_from_params
 
     if @wiki_page.update(wiki_page_params)
       flash[:success] = "Wiki page successfully updated."
@@ -46,5 +46,9 @@ class WikiPagesController < ApplicationController
   private
     def wiki_page_params
       params.require(:wiki_page).permit(:title, :content)
+    end
+
+    def wiki_from_params
+      WikiPage.find(params[:id])
     end
 end
