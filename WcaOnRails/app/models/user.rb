@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
+  has_many :user_preferred_events
+  has_many :wiki_pages, foreign_key: :author_id
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 

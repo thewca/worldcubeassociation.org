@@ -915,6 +915,24 @@ CREATE TABLE `votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `wiki_pages`
+--
+
+DROP TABLE IF EXISTS `wiki_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wiki_pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author_id` int(11) DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Final view structure for view `rails_persons`
 --
 
@@ -1118,3 +1136,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160930213354');
 INSERT INTO schema_migrations (version) VALUES ('20161011005956');
 
 INSERT INTO schema_migrations (version) VALUES ('20161018220122');
+
+INSERT INTO schema_migrations (version) VALUES ('20160822122458');

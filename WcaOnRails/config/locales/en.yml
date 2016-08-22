@@ -375,6 +375,7 @@ en:
       sign_up: "Sign up"
       notifications: "Notifications"
       edit_profile: "Edit profile"
+      wiki: "Wiki"
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
