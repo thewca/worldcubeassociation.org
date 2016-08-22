@@ -1,0 +1,26 @@
+.wiki-page {
+  .title {
+    @extend h1;
+
+    &:after {
+      content: '';
+      display: block;
+      border: 3px solid $blue;
+      margin-top: 10px;
+      width: 50px;
+      border-radius: 2px;
+    }
+  }
+
+  .content {
+    margin: 20px 0;
+  }
+
+  .info {
+    font-style: italic;
+  }
+
+  .actions {
+    margin-top: 20px;
+  }
+}
