@@ -114,7 +114,7 @@ en:
       defaults:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
       user:
-        name_html: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
+        name_html: "Enter your full (first, middle and last) name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
         email: "Changing your email will require confirming the new email."
         pending_avatar: "After uploading a new avatar, you will have to wait for the Board to approve it."
       competition:
