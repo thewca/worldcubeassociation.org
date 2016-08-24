@@ -66,6 +66,32 @@
             <% else %>
               <%= alert :success, t('.registration.accepted') %>
             <% end %>
+            <div>
+              <%= form_tag competition_process_payment_path do %>
+                <article>
+                  <% if flash[:payment_error].present? %>
+                    <div id="error_explanation">
+                      <p><%= flash[:payment_error] %></p>
+                    </div>
+                  <% end %>
+                  <label class="amount">
+                    <span>Amount: $15.00</span>
+                  </label>
+                </article>
+
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+                        data-name="Speedcubing Australia"
+                        data-description="Registration fee"
+                        data-amount="1500"
+                        data-currency="aud"
+                        data-email="<%= @registration.user.email %>"
+                        data-zip-code="true"
+                        data-label="Pay for your registration with card"
+                        data-locale="auto"></script>
+              <% end %>
+              <hr />
+            </div>
           <% end %>
         </div>
 
