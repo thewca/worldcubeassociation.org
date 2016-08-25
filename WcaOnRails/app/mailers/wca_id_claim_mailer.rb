@@ -9,4 +9,14 @@ class WcaIdClaimMailer < ApplicationMailer
       subject: "#{user_claiming_wca_id.email} just requested WCA ID #{user_claiming_wca_id.unconfirmed_wca_id}",
     )
   end
+
+  def notify_user_of_delegate_demotion(user, delegate)
+    @user = user
+    @delegate = delegate
+    mail(
+      to: user.email,
+      reply_to: ["notifications@worldcubeassociation.org"],
+      subject: "The delegate to handle your WCA ID claim has been demoted"
+    )
+  end
 end
