@@ -15,8 +15,9 @@ class WcaIdClaimMailer < ApplicationMailer
     @delegate = delegate
     mail(
       to: user.email,
-      reply_to: ["notifications@worldcubeassociation.org"],
-      subject: "The delegate to handle your WCA ID claim has been demoted"
+      cc: delegate.email,
+      reply_to: "notifications@worldcubeassociation.org",
+      subject: "Repeat your WCA ID claim"
     )
   end
 end
