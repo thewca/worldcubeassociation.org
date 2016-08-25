@@ -1,4 +1,4 @@
 <p>Hello <%= @user.name %></p>
 
-<p><%= @delegate.name %> - who you've picked to confirm your WCA ID is no longer delegate.</p>
-<p>Please repeat your claim here: <%= link_to "here", profile_claim_wca_id_url %>.</p>
+<p>Your WCA id claim could not be processed by <%= @delegate.name %>.</p>
+<p>Please make a new claim <%= link_to "here", profile_claim_wca_id_url %> choosing a different delegate.</p>
