@@ -319,7 +319,8 @@ RSpec.describe User, type: :model do
 
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryGirl.create :person, year: 1990, month: 1, day: 2 }
-    let!(:delegate) { FactoryGirl.create :delegate }
+    let!(:senior_delegate) { FactoryGirl.create :senior_delegate }
+    let!(:delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
     let!(:user) do
       FactoryGirl.create(:user, unconfirmed_wca_id: person.wca_id,
                                 delegate_id_to_handle_wca_id_claim: delegate.id,
@@ -445,15 +446,15 @@ RSpec.describe User, type: :model do
 
     context "when the delegate to handle WCA ID claim is demoted" do
       it "sets delegate_id_to_handle_wca_id_claim and unconfirmed_wca_id to nil" do
-        delegate.update!(delegate_status: nil)
+        delegate.update!(delegate_status: nil, senior_delegate_id: nil)
         user.reload
         expect(user.delegate_id_to_handle_wca_id_claim).to eq nil
         expect(user.unconfirmed_wca_id).to eq nil
       end
 
       it "notifies the user via email" do
-        expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate).and_call_original
-        delegate.update!(delegate_status: nil)
+        expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate, senior_delegate).and_call_original
+        delegate.update!(delegate_status: nil, senior_delegate_id: nil)
       end
     end
   end

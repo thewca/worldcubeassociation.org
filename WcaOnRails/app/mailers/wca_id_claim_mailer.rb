@@ -10,13 +10,15 @@ class WcaIdClaimMailer < ApplicationMailer
     )
   end
 
-  def notify_user_of_delegate_demotion(user, delegate)
+  def notify_user_of_delegate_demotion(user, delegate, senior_delegate = nil)
     @user = user
     @delegate = delegate
+    reply_to = ["board@worldcubeassociation.org"]
+    reply_to << senior_delegate.email if senior_delegate
     mail(
       to: user.email,
-      cc: delegate.email,
-      reply_to: "notifications@worldcubeassociation.org",
+      cc: reply_to,
+      reply_to: reply_to,
       subject: "Repeat your WCA ID claim",
     )
   end

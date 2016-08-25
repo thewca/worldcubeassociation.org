@@ -297,7 +297,8 @@ class User < ActiveRecord::Base
     if delegate_status_changed? && !delegate_status
       users_claiming_wca_id.each do |user|
         user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
-        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self).deliver_later
+        senior_delegate = User.find_by_id(senior_delegate_id_was)
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
       end
     end
   end

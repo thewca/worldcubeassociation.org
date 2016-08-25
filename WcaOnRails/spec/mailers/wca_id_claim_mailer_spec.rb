@@ -20,14 +20,20 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
   end
 
   describe "notify_user_of_delegate_demotion" do
+    let(:senior_delegate) { FactoryGirl.create :senior_delegate }
     let(:demoted_delegate) { FactoryGirl.create :user, name: "Sherlock Holmes" }
     let(:user_claiming_wca_id) { FactoryGirl.create :user, name: "Bilbo Baggins" }
     let(:mail) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate) }
+    let(:mail_with_senior) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate, senior_delegate) }
 
     it "sets appropriate headers" do
       expect(mail.to).to eq [user_claiming_wca_id.email]
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
-      expect(mail.reply_to).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.reply_to).to eq ["board@worldcubeassociation.org"]
+    end
+
+    it "replies to senior delegate as well if present" do
+      expect(mail_with_senior.reply_to).to eq ["board@worldcubeassociation.org", senior_delegate.email]
     end
 
     it "renders body" do
