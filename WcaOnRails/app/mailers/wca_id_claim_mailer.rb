@@ -17,7 +17,7 @@ class WcaIdClaimMailer < ApplicationMailer
       to: user.email,
       cc: delegate.email,
       reply_to: "notifications@worldcubeassociation.org",
-      subject: "Repeat your WCA ID claim"
+      subject: "Repeat your WCA ID claim",
     )
   end
 end

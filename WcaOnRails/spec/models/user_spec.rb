@@ -318,20 +318,17 @@ RSpec.describe User, type: :model do
   end
 
   describe "unconfirmed_wca_id" do
-    let(:person) { FactoryGirl.create :person, year: 1990, month: 1, day: 2 }
-    let(:delegate) { FactoryGirl.create :delegate }
-    let(:user) do
-      u = FactoryGirl.create :user
-      u.unconfirmed_wca_id = person.wca_id
-      u.delegate_id_to_handle_wca_id_claim = delegate.id
-      u.claiming_wca_id = true
-      u.dob_verification = "1990-01-2"
-
-      u
+    let!(:person) { FactoryGirl.create :person, year: 1990, month: 1, day: 2 }
+    let!(:delegate) { FactoryGirl.create :delegate }
+    let!(:user) do
+      FactoryGirl.create(:user, unconfirmed_wca_id: person.wca_id,
+                                delegate_id_to_handle_wca_id_claim: delegate.id,
+                                claiming_wca_id: true,
+                                dob_verification: "1990-01-2")
     end
 
-    let(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
-    let(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
+    let!(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
+    let!(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
 
     it "defines a valid user" do
       expect(user).to be_valid
@@ -444,6 +441,20 @@ RSpec.describe User, type: :model do
       expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [
         "cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}",
       ]
+    end
+
+    context "when the delegate to handle WCA ID claim is demoted" do
+      it "sets delegate_id_to_handle_wca_id_claim and unconfirmed_wca_id to nil" do
+        delegate.update!(delegate_status: nil)
+        user.reload
+        expect(user.delegate_id_to_handle_wca_id_claim).to eq nil
+        expect(user.unconfirmed_wca_id).to eq nil
+      end
+
+      it "notifies the user via email" do
+        expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate).and_call_original
+        delegate.update!(delegate_status: nil)
+      end
     end
   end
 

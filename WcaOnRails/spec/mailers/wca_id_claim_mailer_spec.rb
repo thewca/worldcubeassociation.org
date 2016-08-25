@@ -20,8 +20,8 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
   end
 
   describe "notify_user_of_delegate_demotion" do
-    let(:demoted_delegate) { FactoryGirl.create :user }
-    let(:user_claiming_wca_id) { FactoryGirl.create :user }
+    let(:demoted_delegate) { FactoryGirl.create :user, name: "Sherlock Holmes" }
+    let(:user_claiming_wca_id) { FactoryGirl.create :user, name: "Bilbo Baggins" }
     let(:mail) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate) }
 
     it "sets appropriate headers" do

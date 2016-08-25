@@ -295,13 +295,9 @@ class User < ActiveRecord::Base
   after_save :remove_pending_wca_id_claims
   private def remove_pending_wca_id_claims
     if delegate_status_changed? && !delegate_status
-      User.where(delegate_id_to_handle_wca_id_claim: self.id).each do |user|
-        user.update(
-          delegate_id_to_handle_wca_id_claim: nil,
-          unconfirmed_wca_id: nil,
-          dob_verification: nil
-        )
-        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self).deliver_now
+      users_claiming_wca_id.each do |user|
+        user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self).deliver_later
       end
     end
   end
