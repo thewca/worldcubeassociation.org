@@ -347,7 +347,8 @@ Math.trunc = Math.trunc || function(x) {
 
 // Bootstrap-table default options
 $.extend($.fn.bootstrapTable.defaults, {
-  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS
+  searchTimeOut: TEXT_INPUT_DEBOUNCE_MS,
+  trimOnSearch: false
 });
 
 // Setting up bootstrap-table
