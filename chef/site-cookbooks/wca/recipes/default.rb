@@ -93,14 +93,6 @@ template "/etc/my.cnf" do
 end
 
 
-#### Global logrotate rules
-WCA_LOGROTATE_FREQUENCY = 'daily'
-# Make sure the log files stay under 512 MB, but don't bother
-# rotating if they haven't grown that large.
-WCA_LOGROTATE_MAXSIZE = 512*1024*1024
-WCA_LOGROTATE_SIZE = 512*1024*1024
-WCA_LOGROTATE_ROTATE = 5
-
 #### Ruby and Rails
 # Install native dependencies for gems
 package 'libghc-zlib-dev'
@@ -132,11 +124,11 @@ chef_env_to_rails_env = {
 rails_env = chef_env_to_rails_env[node.chef_environment]
 
 logrotate_app 'rails-wca' do
-  frequency WCA_LOGROTATE_FREQUENCY
-  maxsize WCA_LOGROTATE_MAXSIZE
-  size WCA_LOGROTATE_SIZE
-  rotate WCA_LOGROTATE_ROTATE
-  path "#{repo_root}/WcaOnRails/log/production.log"
+  path		"#{repo_root}/WcaOnRails/log/production.log"
+  size		"512M"
+  maxage	90
+  postrotate	"[ ! -f /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid ] || kill -USR1 `cat /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid`"
+  options	['nodelaycompress']
 end
 
 # Run mailcatcher in every environment except production.
@@ -210,11 +202,11 @@ directory "/etc/nginx/conf.d" do
   group 'root'
 end
 logrotate_app 'nginx-wca' do
-  frequency WCA_LOGROTATE_FREQUENCY
-  maxsize WCA_LOGROTATE_MAXSIZE
-  size WCA_LOGROTATE_SIZE
-  rotate WCA_LOGROTATE_ROTATE
-  path "/var/log/nginx/*.log"
+  path		"/var/log/nginx/*.log"
+  size		"512M"
+  maxage	30
+  postrotate	"[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`"
+  options	['nodelaycompress']
 end
 
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "", "development-noregs" => "" }[node.chef_environment]
