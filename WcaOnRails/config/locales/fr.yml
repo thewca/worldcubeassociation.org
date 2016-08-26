@@ -176,7 +176,6 @@ fr:
         unconfirmed_wca_id: ""
         wca_id: ""
       competition:
-        competition_id_to_clone: "Optionnel. Peut économiser du temps si vous organisez une compétition similaires à une compétition précédente."
         name: "Le nom complet de la compétition, avec la date à la fin (Par exemple, European Rubik's Cube Championship 2006). Pensez à mettre la première lettre des mots en majuscule. Le nom doit contenir uniquement des caractères alphanumériques, ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('), et espaces( )."
         cellName: "Un nom court pour l'affichage. Si le nom de la compétition est déjà court, vous pouvez réutiliser ce nom (par exemple, France 2006)."
         cityName: "Nom de la ville où la compétition a lieu. Ne pas mettre le pays (Par exemple, Paris)."
@@ -377,6 +376,15 @@ fr:
           assigned: "vous avez déjà un ID WCA qui vous est assigné"
           registered: "vous vous êtes inscrit à une compétition"
       save: "Sauvegarder"
+      guidelines: "Recommendations"
+      avatar_guidelines:
+        1: "Toutes les photos doivent être des photos de personnes réelles."
+        2: "La personne sur la photo doit être vous."
+        3: "S'il y a plus d'une personne sur la photo, il devrait être facile de vous identifier."
+        4: "Votre tête, mais pas nécessairement tout votre visage, devrait être visible."
+        5: "La photo de doit pas avoir d'autres textes que ceux présents en arrière plan."
+        6: "La photo doit être soumise dans la bonne orientation."
+
     errors:
       not_found: "introuvable"
       already_assigned: "déjà associé à un autre compte"

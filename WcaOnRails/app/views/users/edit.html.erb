@@ -196,7 +196,7 @@
                 </div>
                 <% if @user.avatar? %>
                   <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-                  <p>Your account thumbnail:</p>
+                  <p><%= t('.your_thumbnail') %></p>
                   <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
                     <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
                   <% end %>

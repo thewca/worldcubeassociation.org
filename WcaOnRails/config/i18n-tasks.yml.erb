@@ -98,6 +98,8 @@ search:
 ignore_unused:
   - 'simple_form.{yes,no}'
   - 'simple_form.{error_notification,required}.:'
+  # We iterate through the children, so we use all of them
+  - 'users.edit.avatar_guidelines.*'
 # - 'simple_form.{placeholders,hints,labels}.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
