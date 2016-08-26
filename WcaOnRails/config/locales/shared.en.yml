@@ -1,0 +1,10 @@
+# Do *NOT* translate this locale file.
+# The keys in this file should be kept as is as they are used for forms validation
+en:
+  datepicker:
+    dformat: "%Y-%m-%d"
+    pformat: "YYYY-MM-DD"
+    dayViewHeaderFormat: "MMMM YYYY"
+  timepicker:
+    dformat: "%R"
+    pformat: "HH:mm"

@@ -24,15 +24,6 @@ en:
     here: "here"
     wca_id: "WCA ID"
     all_regions: "All regions"
-  datepicker:
-    # Do *NOT* change these, they would break fields' validation
-    dformat: "%Y-%m-%d"
-    pformat: "YYYY-MM-DD"
-    dayViewHeaderFormat: "MMMM YYYY"
-  timepicker:
-    # Do *NOT* change these, they would break fields' validation
-    dformat: "%R"
-    pformat: "HH:mm"
   oauth:
     applications:
       your_apps: "Your OAuth Applications"
@@ -261,8 +252,9 @@ en:
     # Putting them under "wca" ensures we can check through i18n-tasks that we define and use them properly.
     errors:
       messages:
-        error: "error"
-        form_error: "The form contains %{x_error}:"
+        form_error:
+          one: "The form contains one error:"
+          other: "The form contains %{count} errors:"
     successes:
       messages:
         account_updated: "Account updated"

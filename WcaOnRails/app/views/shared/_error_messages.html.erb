@@ -1,7 +1,7 @@
 <% if object.errors.any? %>
   <div id="error_explanation">
     <%= alert :danger do %>
-      <%= t 'wca.errors.messages.form_error', x_error: pluralize(object.errors.count, t('wca.errors.messages.error')) %>
+      <%= t 'wca.errors.messages.form_error', count: object.errors.count %>
       <ul>
         <% object.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>

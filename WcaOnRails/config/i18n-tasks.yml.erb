@@ -18,12 +18,7 @@ data:
     ## Default:
     - config/locales/%{locale}.yml
     ## More files:
-    - config/locales/devise.views.%{locale}.yml
-    - config/locales/doorkeeper.%{locale}.yml
-    - config/locales/kaminari.%{locale}.yml
-    - config/locales/rails.%{locale}.yml
-    - config/locales/time_will_tell.%{locale}.yml
-    - config/locales/carrierwave.%{locale}.yml
+    - config/locales/**/*.%{locale}.yml
     ## Another gem (replace %#= with %=):
     # - "<%#= %x[bundle show vagrant].chomp %>/templates/locales/%{locale}.yml"
 
@@ -112,7 +107,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,devise,kaminari,doorkeeper,mongoid,mongo_mapper}.*'
+  - '{time_will_tell,devise,kaminari,doorkeeper}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should

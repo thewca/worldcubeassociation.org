@@ -24,15 +24,6 @@ fr:
     here: "ici"
     wca_id: "ID WCA"
     all_regions: "Toutes les régions"
-  datepicker:
-    # Do *NOT* change these, they would break fields' validation
-    dformat: "%Y-%m-%d"
-    pformat: "YYYY-MM-DD"
-    dayViewHeaderFormat: "MMMM YYYY"
-  timepicker:
-    # Do *NOT* change these, they would break fields' validation
-    dformat: "%R"
-    pformat: "HH:mm"
   oauth:
     applications:
       your_apps: "Vos applications OAuth"
@@ -261,8 +252,9 @@ fr:
   wca:
     errors:
       messages:
-        error: "erreur"
-        form_error: "Le formulaire contient %{x_error} :"
+        form_error:
+          one: "Le formulaire contient une erreur :"
+          other: "Le formulaire contient %{count} erreurs:"
     successes:
       messages:
         account_updated: "Compte mis à jour"
