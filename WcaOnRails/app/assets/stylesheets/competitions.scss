@@ -319,6 +319,10 @@ $venue-map-wrapper-height: 400px;
 table.admin-competitions {
   font-size: 13px;
 
+  .hide-tbody {
+    display: none;
+  }
+
   tr.admin-table-header {
     background-color: #ccc;
   }

@@ -83,7 +83,7 @@
   <% end %>
 <% end %>
 <script>
-$(".hide-div").on('click', function(){
+$(".toggle-body").on('click', function(){
   $(this).closest("table").children("tbody").toggle();
   if($(this).html() == '(show)') {
     $(this).html("(hide)");
