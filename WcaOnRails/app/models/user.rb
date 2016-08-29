@@ -442,19 +442,18 @@ class User < ActiveRecord::Base
     # Don't allow editing data if they have a WCA ID, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
-    if user_to_edit.wca_id
-      # Not using _html suffix as automatic html_safe is available only from
-      # the view helper
-      return I18n.t('users.edit.cannot_edit.msg',
-                    reason: I18n.t('users.edit.cannot_edit.reason.assigned'),
-                    delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
+    cannot_edit_reason = if user_to_edit.wca_id
+                           # Not using _html suffix as automatic html_safe is available only from
+                           # the view helper
+                           I18n.t('users.edit.cannot_edit.reason.assigned')
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
+                           I18n.t('users.edit.cannot_edit.reason.registered')
+                         end
+    if cannot_edit_reason
+      I18n.t('users.edit.cannot_edit.msg',
+             reason: cannot_edit_reason,
+             delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
-    if user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
-      return I18n.t('users.edit.cannot_edit.msg',
-                    reason: I18n.t('users.edit.cannot_edit.reason.registered'),
-                    delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
-    end
-    return nil
   end
 
   CLAIM_WCA_ID_PARAMS = [

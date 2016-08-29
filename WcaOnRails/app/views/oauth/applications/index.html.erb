@@ -1,17 +1,17 @@
 <%= render layout: "nav" do %>
 
   <div class="page-header">
-    <h1><%= t('.your_apps') %></h1>
+    <h1><%= t('oauth.applications.your_apps') %></h1>
   </div>
 
-  <p><%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-success' %></p>
+  <p><%= link_to t('oauth.applications.new'), new_oauth_application_path, class: 'btn btn-success' %></p>
 
   <table class="table table-striped">
     <thead>
     <tr>
-      <th><%= t('.name') %></th>
-      <th><%= t('.callback_url') %></th>
-      <th><%= t('.owner') %></th>
+      <th><%= t('oauth.applications.name') %></th>
+      <th><%= t('oauth.applications.callback_url') %></th>
+      <th><%= t('oauth.applications.owner') %></th>
       <th></th>
       <th></th>
     </tr>

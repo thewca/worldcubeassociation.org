@@ -41,3 +41,6 @@ Style/NegatedIf:
 
 Style/PerlBackrefs:
   Enabled: false
+
+Style/Next:
+  Enabled: false

@@ -43,23 +43,20 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   end
 
   def display_pattern
-    I18n.t('datepicker.dformat', default: '%Y-%m-%d')
+    I18n.t('datepicker.dformat')
   end
 
   def picker_pattern
-    I18n.t('datepicker.pformat', default: 'YYYY-MM-DD')
+    I18n.t('datepicker.pformat')
   end
 
   def date_view_header_format
-    I18n.t('dayViewHeaderFormat', default: 'MMMM YYYY')
+    I18n.t('datepicker.dayViewHeaderFormat')
   end
 
   def date_options_base
     {
-        # FIXME: see issue #585
-        # Right now passing another locale raises an error in 'moment',
-        # complaining the locale is not loaded.
-        locale: I18n.default_locale.to_s,
+        locale: I18n.locale.to_s,
         format: picker_pattern,
         dayViewHeaderFormat: date_view_header_format,
     }

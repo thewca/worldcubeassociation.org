@@ -99,12 +99,3 @@ fr:
       not_saved:
         one: "1 erreur a empêché ce %{resource} d'être sauvegardé :"
         other: "%{count} erreurs ont empêchées ce %{resource} d'être sauvegardé :"
-  activerecord:
-    models:
-      user: "Utilisateur"
-    attributes:
-      user:
-        current_sign_in_at: "Connecté à"
-        email: "Email"
-        password: "Mot de passe"
-        last_sign_in_at: "Dernière connexion à"

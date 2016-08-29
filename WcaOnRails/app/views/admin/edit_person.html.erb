@@ -19,12 +19,12 @@
     <%= render 'shared/error_messages', object: @person %>
 
     <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
-      <%= f.input :wca_id, label: "Person", as: :user_ids, persons_table: true, only_one: true %>
+      <%= f.input :wca_id, as: :user_ids, persons_table: true, only_one: true %>
       <div id="person-fields">
         <%= f.input :name %>
-        <%= f.input :countryId, label: "Country", collection: Country.all_real.map(&:id), label_method: lambda { |id| Country.find(id).name } %>
+        <%= f.input :countryId, collection: Country.all_real.map(&:id), label_method: lambda { |id| Country.find(id).name } %>
         <%= f.input :gender, collection: [:m, :f], label_method: lambda { |g| { m: "Male", f: "Female" }[g] } %>
-        <%= f.input :dob, label: "Date of birthday", as: :date_picker, hint: "Date of birth should have the format YYYY-MM-DD." %>
+        <%= f.input :dob, as: :date_picker %>
 
         <button type="submit" name="method" value="fix" class="btn btn-primary">
           <%= icon("wrench", "Fix") %>

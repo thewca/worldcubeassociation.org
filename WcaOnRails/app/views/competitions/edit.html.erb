@@ -3,12 +3,12 @@
 <%= render layout: 'nav' do %>
 
   <% if @competition_admin_view %>
-    <h2><%= t '.announcements' %></h2>
+    <h2><%= t 'competitions.announcements' %></h2>
     <ul>
-      <li><%= link_to t('.upload_results'), "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
+      <li><%= link_to t('competitions.upload_results'), "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
       <li>
         <%= button_to competition_post_announcement_path, class: 'btn', form: { target: "_blank" }, method: :get do %>
-          <%= t '.post_announcement' %>
+          <%= t 'competitions.post_announcement' %>
         <% end %>
       </li>
     </ul>
