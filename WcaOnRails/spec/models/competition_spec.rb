@@ -600,7 +600,7 @@ RSpec.describe Competition do
     end
   end
 
-  context "searching with #contains" do
+  describe "#contains" do
     let!(:delegate) { FactoryGirl.create :delegate, name: 'Pedro' }
     let!(:search_comp) { FactoryGirl.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba", delegates: [delegate] }
     it "searching with two words" do
