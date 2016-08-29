@@ -316,7 +316,7 @@ $venue-map-wrapper-height: 400px;
   }
 }
 
-table.table-condensed.admin-competitions {
+table.admin-competitions {
   font-size: 13px;
 
   tr.admin-table-header {
@@ -353,7 +353,7 @@ table.table-condensed.admin-competitions {
   background-color: $green;
 }
 
-.hide-div {
+.toggle-body {
   font-weight: normal;
   font-size: 12px;
   cursor: pointer;
