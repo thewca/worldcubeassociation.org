@@ -85,10 +85,4 @@ onPage('competitions#index', function() {
       });
     }, 0);
   });
-
-  $('.toggle-body').on('click', function() {
-    $(this).closest('table').children('tbody').toggleClass('hidden');
-    var newMessage = $(this).html() == '(show)' ? '(hide)' : '(show)';
-    $(this).html(newMessage);
-  });
 });
