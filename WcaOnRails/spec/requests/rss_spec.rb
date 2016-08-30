@@ -10,7 +10,7 @@ describe "rss" do
   let!(:post_2) { FactoryGirl.create :sticky_post,
                                      body: '[link](http://google.de)',
                                      title: 'sticky post',
-                                     created_at: DateTime.new(2014, 3, 14, 11, 18, 00) }
+                                     created_at: DateTime.new(2014, 3, 14, 11, 18, 0) }
 
   describe "posts" do
     before do

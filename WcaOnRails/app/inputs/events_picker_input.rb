@@ -9,15 +9,20 @@ class EventsPickerInput < SimpleForm::Inputs::Base
         checked_value = "1"
         unchecked_value = "0"
         check_box = ActionView::Helpers::Tags::CheckBox.new("#{@builder.object_name}[#{attribute_name}]", event.id, template, checked_value, unchecked_value, merged_input_options.merge(checked: selected_events.include?(event)))
-        template.concat template.content_tag(:span,
-          template.content_tag(:label,
-            (
-              check_box.render +
-              template.content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name )
+        template.concat(
+          template.content_tag(
+            :span,
+            template.content_tag(
+              :label,
+              (
+                check_box.render +
+                template.content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name )
+              ),
+              for: check_box.send(:tag_id),
             ),
-            for: check_box.send(:tag_id),
+            class: "event-checkbox" + (merged_input_options[:disabled] ? " disabled" : ""),
           ),
-        class: "event-checkbox" + (merged_input_options[:disabled] ? " disabled" : ""))
+        )
       end
     end
   end

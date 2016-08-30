@@ -513,9 +513,9 @@ class Competition < ActiveRecord::Base
 
   def nearby_competitions(days, distance)
     Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
-      .select { |c| kilometers_to(c) <= distance }
-      .sort_by { |c| kilometers_to(c) }
+      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id
+    ).select { |c| kilometers_to(c) <= distance }
+     .sort_by { |c| kilometers_to(c) }
   end
 
   private def to_radians(degrees)
