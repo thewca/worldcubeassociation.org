@@ -68,13 +68,3 @@
       end %>
   <% end %>
 <% end %>
-<script>
-$(".toggle-body").on('click', function(){
-  $(this).closest("table").children("tbody").toggle();
-  if($(this).html() == '(show)') {
-    $(this).html("(hide)");
-  } else {
-    $(this).html("(show)");
-  }
-});
-</script>

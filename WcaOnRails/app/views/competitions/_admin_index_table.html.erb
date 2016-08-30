@@ -1,5 +1,5 @@
 <table class="table table-striped table-condensed admin-competitions">
-  <% show_tbody_message = title.include?("Recent") ? "hide" : "show" %>
+  <% toggle_tbody_message = title.include?("Recent") ? "hide" : "show" %>
   <thead>
     <tr class="admin-table-header">
       <th>
@@ -21,11 +21,11 @@
         Results posted
       </th>
       <th class="admin-button">
-        <span class="toggle-body">(<%= show_tbody_message %>)</span>
+        <span class="toggle-body">(<%= toggle_tbody_message %>)</span>
       </th>
     </tr>
   </thead>
-  <tbody class="<%= show_tbody_message == "show" ? "hide-tbody" : "" %>">
+  <tbody class="<%= "hidden" if toggle_tbody_message == "show" %>">
     <% competitions.each_with_index do |competition, index| %>
       <% announced = competition.announced_at %>
       <% report = competition.delegate_report.posted_at %>
