@@ -25,8 +25,8 @@ class UsersController < ApplicationController
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
-              name: user.name,
-              email: user.email,
+              name: ERB::Util.html_escape(user.name),
+              email: ERB::Util.html_escape(user.email),
               edit: view_context.link_to("Edit", edit_user_path(user)),
             }
           end,
