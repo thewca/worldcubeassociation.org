@@ -80,6 +80,7 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_DANGER = 28
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
+  RECENT_DAYS = 30
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29

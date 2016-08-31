@@ -408,7 +408,7 @@ class User < ActiveRecord::Base
   end
 
   def can_see_admin_competitions?
-    board_member? || senior_delegate?
+    board_member? || senior_delegate? || admin?
   end
 
   def get_cannot_delete_competition_reason(competition)

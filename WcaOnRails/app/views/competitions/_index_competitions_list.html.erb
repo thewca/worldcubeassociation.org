@@ -1,4 +1,4 @@
-<% if params[:display] == "list" %>
+<% if @display == "list" %>
   <% if competitions.empty? %>
     <%= render 'no_competitions_found' %>
   <% else %>
@@ -20,7 +20,7 @@
       <% end %>
     <% end %>
   <% end %>
-<% elsif params[:display] == "map" %>
+<% elsif @display == "map" %>
   <script>
     $(function() {
       var competitions = <%= competitions.map do |c|
@@ -48,15 +48,15 @@
     <% if competitions.empty? %>
       <%= render 'no_competitions_found' %>
     <% else %>
-      <% past_competitions, upcoming_competitions = competitions.partition(&:is_over?) %>
-      <% recent_competitions, distant_competitions = past_competitions.partition { |c| (Date.today - c.end_date).to_i < 30 } %>
-      <% unless upcoming_competitions.empty? %>
+      <% past_competitions, ongoing_and_upcoming_competitions = competitions.partition(&:is_over?) %>
+      <% recent_competitions, distant_competitions = past_competitions.partition { |c| (Date.today - c.end_date).to_i < Competition::RECENT_DAYS } %>
+      <% unless ongoing_and_upcoming_competitions.empty? %>
         <div class="col-md-12" id="upcoming-comps">
-          <%= render 'admin_index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+          <%= render 'admin_index_table', competitions: ongoing_and_upcoming_competitions, title: "Ongoing and upcoming competitions" %>
         </div>
       <% end %>
       <div class="col-md-12" id="recent-comps">
-        <%= render 'admin_index_table', competitions: recent_competitions, title: "Recent competitions" %>
+        <%= render 'admin_index_table', competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
       </div>
       <div class="col-md-12" id="past-comps">
         <%= render 'admin_index_table', competitions: distant_competitions, title: "Past competitions" %>

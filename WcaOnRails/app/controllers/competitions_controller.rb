@@ -57,7 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
-    params[:display] ||= "list"
+    @display = params[:display] ||= "list"
 
     # Facebook adds indices to the params automatically when redirecting.
     # See: https://github.com/cubing/worldcubeassociation.org/issues/472
@@ -71,7 +71,7 @@ class CompetitionsController < ApplicationController
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
-    if params[:display] != "admin"
+    if @display != "admin"
       if @present_selected
         @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
       else

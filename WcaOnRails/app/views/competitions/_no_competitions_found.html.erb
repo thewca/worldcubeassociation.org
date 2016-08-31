@@ -1,9 +1,9 @@
 <div class="col-md-12">
   <%= alert :warning do
-    unless params[:event_ids].empty?
-      "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
-    else
+    if params[:event_ids].empty?
       "No competitions found."
+    else
+      "We didn't find any competitions with those #{ pluralize(params[:event_ids].count, "event" )}! Try searching for fewer events."
     end
   end %>
 </div>
