@@ -5,7 +5,7 @@ class AddAnnouncedAtToCompetitions < ActiveRecord::Migration
       UPDATE Competitions
       SET announced_at = (SELECT created_at
         FROM posts
-        WHERE posts.title LIKE CONCAT(Competitions.name,'%')
+        WHERE posts.title LIKE CONCAT(Competitions.name,' on %')
         AND posts.created_at IS NOT NULL)
     SQL
   end
