@@ -130,7 +130,7 @@ RSpec.describe WikiPagesController, type: :controller do
     describe "DELETE #destroy" do
       before { delete :destroy, id: wiki_page }
 
-      it { is_expected.to redirect_to wiki_url }
+      it { is_expected.to redirect_to wiki_pages_url }
 
       it "deletes the wiki page" do
         expect(WikiPage.exists?(wiki_page.id)).to eq false

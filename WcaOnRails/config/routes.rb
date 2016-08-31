@@ -114,7 +114,6 @@ Rails.application.routes.draw do
   get '/render_markdown' => 'markdown_renderer#render_markdown'
 
   resources :wiki_pages
-  get '/wiki' => 'wiki_pages#index', as: :wiki
 
   namespace :api do
     get '/', to: redirect('/api/v0')

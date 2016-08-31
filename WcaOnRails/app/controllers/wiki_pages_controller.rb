@@ -46,7 +46,7 @@ class WikiPagesController < ApplicationController
   def destroy
     WikiPage.find(params[:id]).destroy
     flash[:success] = "Wiki page successfully deleted."
-    redirect_to wiki_url
+    redirect_to wiki_pages_url
   end
 
   private def wiki_page_params

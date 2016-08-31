@@ -4,6 +4,6 @@
  <%= f.input :title %>
  <%= f.input :content, input_html: { class: "markdown-editor large" } %>
 
- <%= link_to icon(:undo, "Back to wiki"), wiki_path, class: "btn btn-default" %>
+ <%= link_to icon(:undo, "Back to wiki"), wiki_pages_path, class: "btn btn-default" %>
  <%= f.submit submit_text, class: "btn btn-primary" %>
 <% end %>
