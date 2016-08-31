@@ -81,7 +81,7 @@ class CompetitionsController < ApplicationController
         end
       end
     else
-      @competitions = @competitions.includes(:delegates)
+      @competitions = @competitions.includes(:delegates, :delegate_report)
     end
 
     unless params[:region] == "all"
