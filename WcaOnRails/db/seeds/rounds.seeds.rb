@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 sql = "INSERT INTO `Rounds` (`id`, `rank`, `name`, `cellName`) VALUES
 ('0', 19, 'Qualification round', 'Qualification'),
 ('1', 29, 'First round', 'First'),

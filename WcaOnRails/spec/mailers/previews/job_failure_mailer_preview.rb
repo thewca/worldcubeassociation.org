@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Preview all emails at http://localhost:3000/rails/mailers/job_failure_mailer
 class JobFailureMailerPreview < ActionMailer::Preview
   def notify_admin_of_job_failure

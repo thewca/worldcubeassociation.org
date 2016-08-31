@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MergePeople
   include ActiveModel::Model
 

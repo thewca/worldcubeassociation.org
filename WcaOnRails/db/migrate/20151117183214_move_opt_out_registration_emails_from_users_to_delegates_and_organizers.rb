@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MoveOptOutRegistrationEmailsFromUsersToDelegatesAndOrganizers < ActiveRecord::Migration
   def change
     remove_column :users, :opt_out_registration_emails, :bool

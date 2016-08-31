@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Preview all emails at http://localhost:3000/rails/mailers/avatars_mailer
 class AvatarsMailerPreview < ActionMailer::Preview
   def notify_user_of_avatar_rejection

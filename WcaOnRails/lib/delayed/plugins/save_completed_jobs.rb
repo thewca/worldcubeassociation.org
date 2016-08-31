@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Delayed
   module Plugins
     class SaveCompletedJobs < Delayed::Plugin

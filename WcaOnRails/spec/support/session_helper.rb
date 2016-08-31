@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module SessionHelper
   def sign_in(user)
     visit "/users/sign_in"

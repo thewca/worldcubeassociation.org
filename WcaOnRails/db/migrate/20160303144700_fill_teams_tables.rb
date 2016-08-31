@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FillTeamsTables < ActiveRecord::Migration
   def change
     execute <<-SQL

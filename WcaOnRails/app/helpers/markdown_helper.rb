@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module MarkdownHelper
   class WcaMarkdownRenderer < Redcarpet::Render::HTML
     def table(header, body)

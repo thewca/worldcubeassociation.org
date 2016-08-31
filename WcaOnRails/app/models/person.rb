@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Person < ActiveRecord::Base
   self.table_name = "rails_persons"
   self.primary_key = "id"

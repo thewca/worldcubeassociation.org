@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def full_title(page_title='')
     base_title = WcaOnRails::Application.config.site_name

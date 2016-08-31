@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RegistrationsMailer < ApplicationMailer
 
   def notify_organizers_of_new_registration(registration)

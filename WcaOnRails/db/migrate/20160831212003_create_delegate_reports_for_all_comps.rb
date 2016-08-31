@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateDelegateReportsForAllComps < ActiveRecord::Migration
   def change
     Competition.all.each do |competition|

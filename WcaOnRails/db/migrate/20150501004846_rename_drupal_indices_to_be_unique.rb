@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameDrupalIndicesToBeUnique < ActiveRecord::Migration
   def change
     # In sqlite, index names must be unique across the entire database.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Event
   attr_accessor :id, :name, :rank, :format, :cellName, :valid, :preferred_formats
   alias_method :valid?, :valid

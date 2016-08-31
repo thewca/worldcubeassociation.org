@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Copied from https://mattbrictson.com/easier-nested-layouts-in-rails
 # Place this in app/helpers/layouts_helper.rb
 module LayoutsHelper

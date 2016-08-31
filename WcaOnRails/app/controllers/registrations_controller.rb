@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 

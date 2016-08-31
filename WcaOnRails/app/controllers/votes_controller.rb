@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_vote_in_poll?) }

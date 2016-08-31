@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 def api_sign_in_as(user, scopes: nil)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../app/models/light_result'
 require 'spec_helper'
 

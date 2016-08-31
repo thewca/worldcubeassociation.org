@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Registration < ActiveRecord::Base
   self.table_name = "Preregs"
 

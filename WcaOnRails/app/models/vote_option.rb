@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class VoteOption < ActiveRecord::Base
 
   belongs_to :vote

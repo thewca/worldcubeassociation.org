@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCompletedJobs < ActiveRecord::Migration
   def change
     # Idea for storing completed jobs inspired by

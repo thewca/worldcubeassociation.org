@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CompetitionsHelper
   def competition_message_for_user(competition, user)
     messages = []

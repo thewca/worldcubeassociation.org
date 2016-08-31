@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NotificationsHelper
   def notifications_for_user(user)
     notifications = []

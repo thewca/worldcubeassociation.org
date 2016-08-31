@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Country
   attr_accessor :id, :name, :continentId, :iso2
 
