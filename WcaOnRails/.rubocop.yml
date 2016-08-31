@@ -48,8 +48,5 @@ Style/Next:
 Style/NumericPredicate:
   Enabled: false
 
-Style/ZeroLengthPredicate:
-  Enabled: false
-
 Style/SignalException:
   EnforcedStyle: semantic

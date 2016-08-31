@@ -5,7 +5,9 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     organizer_user_ids = (registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) + registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id))
     to = User.where(id: organizer_user_ids).map(&:email)
-    if to.length > 0
+    if to.empty?
+      nil
+    else
       mail(
         to: to,
         reply_to: [registration.user.email],
@@ -18,14 +20,14 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     organizer_user_ids = (registration.competition.competition_organizers.select(&:receive_registration_emails).map(&:organizer_id) + registration.competition.competition_delegates.select(&:receive_registration_emails).map(&:delegate_id))
     to = User.where(id: organizer_user_ids).map(&:email)
-    if to.length > 0
+    if to.empty?
+      nil
+    else
       mail(
         to: to,
         reply_to: registration.competition.managers.map(&:email),
         subject: "#{registration.name} just deleted their registration for #{registration.competition.name}"
       )
-    else
-      nil
     end
   end
 

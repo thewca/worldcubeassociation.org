@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
 
   validate :cannot_demote_senior_delegate_with_subordinate_delegates
   def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && subordinate_delegates.length != 0
+    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
       errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
