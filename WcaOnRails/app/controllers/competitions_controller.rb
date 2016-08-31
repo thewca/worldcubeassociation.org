@@ -57,7 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
-    @display = params[:display] ||= "list"
+    @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
     # See: https://github.com/cubing/worldcubeassociation.org/issues/472
