@@ -185,6 +185,8 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  after_create :create_delegate_report
+
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
@@ -625,13 +627,6 @@ class Competition < ActiveRecord::Base
 
         [ event, rounds_with_results ]
       end
-  end
-
-  def delegate_report
-    raise if new_record?
-    DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
-      dr.competition_id = self.id
-    end
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some

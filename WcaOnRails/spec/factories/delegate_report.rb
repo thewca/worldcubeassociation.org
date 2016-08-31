@@ -7,5 +7,9 @@ FactoryGirl.define do
       posted_at { Time.now }
       posted_by_user { FactoryGirl.create(:user) }
     end
+
+    initialize_with do
+      competition.delegate_report
+    end
   end
 end
