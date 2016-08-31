@@ -15,34 +15,34 @@ module CompetitionsHelper
     messages.join(' ')
   end
 
-  def announced_class(distance_announced)
-    if distance_announced <= 21
+  def announced_class(days_announced)
+    if days_announced <= 21
       "alert-danger"
-    elsif distance_announced <= 28
+    elsif days_announced <= 28
       "alert-orange"
     else
       "alert-green"
     end
   end
 
-  def report_class(distance_report)
-    if distance_report > 21
+  def report_class(days_report)
+    if days_report > 21
       "alert-danger"
-    elsif distance_report > 14
+    elsif days_report > 14
       "alert-orange"
-    elsif distance_report > 7
+    elsif days_report > 7
       "alert-success"
     else
       "alert-green"
     end
   end
 
-  def results_class(distance_results)
-    if distance_results > 21
+  def results_class(days_results)
+    if days_results > 21
       "alert-danger"
-    elsif distance_results > 14
+    elsif days_results > 14
       "alert-orange"
-    elsif distance_results > 7
+    elsif days_results > 7
       "alert-success"
     else
       "alert-green"
