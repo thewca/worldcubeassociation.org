@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CommitteesController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action -> { redirect_unless_user(:can_manage_committees?) }, except: [ :index, :show ]
@@ -52,15 +53,11 @@ class CommitteesController < ApplicationController
     end
   end
 
-  def to_params
-    slug
-  end
-
-  def committee_from_params
+  private def committee_from_params
     Committee.find_by_slug(params[:id])
   end
 
-  def committee_params
+  private def committee_params
     params.require(:committee).permit(:name, :email, :duties)
   end
 end

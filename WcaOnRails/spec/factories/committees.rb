@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :committee do
     sequence(:name) { |n| "WCA Software Committee #{n}" }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CommitteePositionsController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_manage_committees?) }
@@ -54,11 +55,11 @@ class CommitteePositionsController < ApplicationController
     redirect_to committee_positions_path(@committee)
   end
 
-  def committee_position_params
+  private def committee_position_params
     params.require(:committee_position).permit(:name, :description, :team_leader)
   end
 
-  def committee_from_params
+  private def committee_from_params
     Committee.find_by_slug(params[:committee_id])
   end
 

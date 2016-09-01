@@ -5,9 +5,9 @@ class CommitteePosition < ActiveRecord::Base
   has_many :team_members
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
-  SENIOR_DELEGATE = "senior-delegate".freeze
-  DELEGATE = "delegate".freeze
-  CANDIDATE_DELEGATE = "candidate-delegate".freeze
+  SENIOR_DELEGATE = "senior-delegate"
+  DELEGATE = "delegate"
+  CANDIDATE_DELEGATE = "candidate-delegate"
 
   MAX_NAME_LENGTH = 50
   VALID_NAME_RE = /\A[[:alnum:] -]+\z/

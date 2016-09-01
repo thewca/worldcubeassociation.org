@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCommitteePositionRefToTeamMembers < ActiveRecord::Migration
   def change
     add_reference :team_members, :committee_position, index: true, foreign_key: true

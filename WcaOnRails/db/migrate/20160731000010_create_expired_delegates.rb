@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateExpiredDelegates < ActiveRecord::Migration
   def up
     execute "insert into team_members \

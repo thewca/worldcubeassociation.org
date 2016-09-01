@@ -5,12 +5,12 @@ class Committee < ActiveRecord::Base
   has_many :team_members, through: :teams
   has_many :committee_positions
 
-  WCA_BOARD = "wca-board".freeze
-  WCA_DELEGATES_COMMITTEE = "wca-delegates-committee".freeze
-  WCA_SOFTWARE_COMMITTEE = "wca-software-committee".freeze
-  WCA_RESULTS_COMMITTEE = "wca-results-committee".freeze
-  WCA_REGULATIONS_COMMITTEE = "wca-regulations-committee".freeze
-  WCA_DISCIPLINARY_COMMITTEE = "wca-disciplinary-committee".freeze
+  WCA_BOARD = "wca-board"
+  WCA_DELEGATES_COMMITTEE = "wca-delegates-committee"
+  WCA_SOFTWARE_COMMITTEE = "wca-software-committee"
+  WCA_RESULTS_COMMITTEE = "wca-results-committee"
+  WCA_REGULATIONS_COMMITTEE = "wca-regulations-committee"
+  WCA_DISCIPLINARY_COMMITTEE = "wca-disciplinary-committee"
 
   MAX_NAME_LENGTH = 50
   VALID_NAME_RE = /\A[[:alnum:] -]+\z/

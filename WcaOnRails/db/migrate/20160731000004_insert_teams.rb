@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class InsertTeams < ActiveRecord::Migration
   def up
     execute "insert into teams \

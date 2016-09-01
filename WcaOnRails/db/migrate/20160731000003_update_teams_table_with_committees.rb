@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UpdateTeamsTableWithCommittees < ActiveRecord::Migration
   def change
     add_reference :teams, :committee, index: true

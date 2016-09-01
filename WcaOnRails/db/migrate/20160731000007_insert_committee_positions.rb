@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class InsertCommitteePositions < ActiveRecord::Migration
   def up
     execute "insert into committee_positions \

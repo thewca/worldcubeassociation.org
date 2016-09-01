@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :committee_position do
     sequence(:name) { |n| "Position #{n}" }

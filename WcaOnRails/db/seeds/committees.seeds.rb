@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 board_duties = <<EOS
 Responsible for the governance of the WCA.
 EOS

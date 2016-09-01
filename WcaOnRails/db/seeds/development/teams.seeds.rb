@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 board = Committee.find_by_slug('wca-board')
 delegates = Committee.find_by_slug('wca-delegates-committee')
 regulations = Committee.find_by_slug('wca-regulations-committee')

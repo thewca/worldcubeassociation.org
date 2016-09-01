@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UpdateTeamMembersWithPositions < ActiveRecord::Migration
   def update_existing_team_members
     execute "update team_members tm \
