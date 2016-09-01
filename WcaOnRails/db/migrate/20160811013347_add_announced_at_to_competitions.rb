@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddAnnouncedAtToCompetitions < ActiveRecord::Migration
   def up
     add_column :Competitions, :announced_at, :datetime
