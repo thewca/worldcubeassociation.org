@@ -57,8 +57,14 @@ en:
         pending_avatar: "Upload new avatar"
         remove_avatar: "Remove avatar"
         results_notifications_enabled: "Email me when my results are posted."
-        delegate_status: "Delegate status"
-        region: "Region"
+      committee:
+        duties: "Duties"
+        email: "Email for this committee"
+        name: "The name of this committee"
+      committee_position:
+        description: "The description of this position"
+        name: "The name of this position"
+        team_leader: "Indicates if this position is for a team leader"
       competition:
         id: "ID"
 
@@ -127,6 +133,10 @@ en:
       team:
         name: "Name"
         description: "Description"
+      team_member:
+        end_date: "The date this member left the team"
+        start_date: "The date this member joined the team"
+        user_id: "team member"
       vote:
         comment: "Comment"
   simple_form:
@@ -153,13 +163,11 @@ en:
         pending_avatar: "After uploading a new avatar, you will have to wait for the Board to approve it."
         country_iso2: ""
         current_password: ""
-        delegate_status: ""
         dob_verification: ""
         gender: ""
         login: ""
         password: ""
         password_confirmation: ""
-        region: ""
         remember_me: ""
         remove_avatar: ""
         results_notifications_enabled: ""
@@ -240,7 +248,6 @@ en:
         name: "The name of this team (e.g., Software Team, or Results Team)"
       team_member:
         user_id: "The user who is joining the team."
-        committee_position: "Please choose the position this user will hold in this team."
         start_date: "The date this member joined the team."
         end_date: "The date this member left the team. Leave this blank if the member is still part of this team."
     options:
@@ -395,12 +402,8 @@ en:
       dob_incorrect: "incorrect"
       unique: "must be unique"
       dob_past: "must be in the past"
-      must_be_senior: "must be a senior delegate"
-      must_not_be_present: "must not be present"
-      senior_has_delegate: "cannot demote senior delegate with subordinate delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate: "WCA ID does not have a birthdate. Contact the Results team to resolve this."
-      board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
     select_nearby_delegate:
       select_delegate: "In order to assign you your WCA ID, we need a delegate to confirm your identify. Please enter your birthdate and select the delegate you think knows you best."
@@ -531,8 +534,6 @@ en:
       duties_html: "What this committee is responsible for? %{md}"
       submit_create_value: "Create a New Committee"
       submit_update_value: "Update Committee"
-      submit_delete_value: "Delete Committee"
-      submit_delete: "Are you sure you want to delete this committee? There is no going back."
   committee_positions:
     committee_position_form:
       description_html: "What this committee is responsible for? %{md}"

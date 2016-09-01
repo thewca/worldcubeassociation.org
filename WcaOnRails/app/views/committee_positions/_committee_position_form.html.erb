@@ -11,6 +11,6 @@
     <%= f.input :description, hint: t('.description_html', md: t('common.hints.supports_md_html')) %>
     <%= f.input :team_leader %>
     <%= link_to icon("undo", "Back to #{@committee.name}"), committee_path(@committee), class: "btn btn-primary" %>
-    <%= f.button :submit, class: "btn btn-info" %>
+    <%= f.button :submit, class: "btn btn-success" %>
     </div>
   <% end %>

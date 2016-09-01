@@ -8,6 +8,6 @@
     <hr />
   <% end %>
   <% if current_user&.can_manage_committees? %>
-    <%= link_to icon("plus", "New Committee"), new_committee_path, class: "btn btn-primary" %>
+    <%= link_to icon("plus", "New Committee"), new_committee_path, class: "btn btn-success" %>
   <% end %>
 </div>
