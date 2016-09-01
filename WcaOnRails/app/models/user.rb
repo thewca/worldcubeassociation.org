@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA ID, fail validation.
       if user && !user.dummy_account?
-        errors.add(:wca_id, I18n.t('users.errors.unique'))
+        errors.add(:wca_id, I18n.t('users.errors.unique', email: user.email))
       end
     end
   end
