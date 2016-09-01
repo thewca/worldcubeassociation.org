@@ -3,7 +3,7 @@
 <div class="container new-poll">
   <h1><%= yield(:title) %></h1>
 
-  <%= simple_form_for @poll, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form do |f| %>
+  <%= horizontal_simple_form_for @poll, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
     <%= f.input :question, required: true, autofocus: true %>
 
     <%= link_to icon("undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
