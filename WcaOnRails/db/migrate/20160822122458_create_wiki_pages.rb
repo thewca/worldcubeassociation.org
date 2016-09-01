@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateWikiPages < ActiveRecord::Migration
   def change
     create_table :wiki_pages do |t|

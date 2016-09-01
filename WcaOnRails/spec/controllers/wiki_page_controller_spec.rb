@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 def does_not_have_access_and(expect_to_be_redirected_somewhere)
