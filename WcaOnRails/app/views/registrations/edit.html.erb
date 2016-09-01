@@ -1,13 +1,7 @@
 <% provide(:title, "#{@registration.name} for #{@competition.name}") %>
 
 <%= render layout: 'nav' do %>
-  <%= simple_form_for @registration, html: { class: 'form-horizontal are-you-sure' }, wrapper: :horizontal_form,
-    wrapper_mappings: {
-      check_boxes: :horizontal_radio_and_checkboxes,
-      radio_buttons: :horizontal_radio_and_checkboxes,
-      file: :horizontal_file_input,
-      boolean: :horizontal_boolean
-  }  do |f| %>
+  <%= horizontal_simple_form_for @registration, html: { class: 'are-you-sure' } do |f| %>
     <%= hidden_field_tag :from_admin_view, "1" %>
     <%= f.hidden_field :updated_at %>
 

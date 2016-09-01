@@ -69,13 +69,9 @@
           <% end %>
         </div>
 
-        <%= simple_form_for @registration, url: @registration.new_record? ? competition_registrations_path(@competition) : registration_path(@registration), html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form,
-          wrapper_mappings: {
-            check_boxes: :horizontal_radio_and_checkboxes,
-            radio_buttons: :horizontal_radio_and_checkboxes,
-            file: :horizontal_file_input,
-            boolean: :horizontal_boolean
-        }  do |f| %>
+        <% url = @registration.new_record? ? competition_registrations_path(@competition)
+                                           : registration_path(@registration) %>
+        <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
 
           <% selected_events = @registration.events.empty? ? @registration.user.preferred_events : @registration.events %>
           <%= render "shared/associated_events_picker", form_builder: f, disabled: !current_user.can_edit_registration?(@registration),
