@@ -16,36 +16,24 @@ module CompetitionsHelper
   end
 
   def announced_class(days_announced)
-    if days_announced <= 21
-      "alert-danger"
-    elsif days_announced <= 28
-      "alert-orange"
-    else
-      "alert-green"
-    end
+    level = [21, 28].select{|d| days_announced > d}.count
+    ["alert-danger", "alert-orange", "alert-green"][level]
+    # if days_announced <= 21
+    #   "alert-danger"
+    # elsif days_announced <= 28
+    #   "alert-orange"
+    # else
+    #   "alert-green"
+    # end
   end
 
   def report_class(days_report)
-    if days_report > 21
-      "alert-danger"
-    elsif days_report > 14
-      "alert-orange"
-    elsif days_report > 7
-      "alert-success"
-    else
-      "alert-green"
-    end
+    level = [7, 14, 21].select{|d| days_report >  d}.count
+    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 
   def results_class(days_results)
-    if days_results > 21
-      "alert-danger"
-    elsif days_results > 14
-      "alert-orange"
-    elsif days_results > 7
-      "alert-success"
-    else
-      "alert-green"
-    end
+    level = [7, 14, 21].select{|d| days_results >  d}.count
+    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 end
