@@ -52,6 +52,7 @@ class Competition < ActiveRecord::Base
     registration_close
     results_posted_at
     results_nag_sent_at
+    announced_at
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -79,6 +80,7 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_DANGER = 28
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
+  RECENT_DAYS = 30
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
@@ -426,8 +428,10 @@ class Competition < ActiveRecord::Base
   end
 
   def contains?(search_param)
-    [name, cityName, venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
-      field.downcase.include?(search_param.downcase)
+    search_param.split.all? do |part|
+      [name, cityName, delegates.pluck(&:name).join(','), venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
+        field.downcase.include?(part.downcase)
+      end
     end
   end
 

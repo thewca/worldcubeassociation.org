@@ -194,11 +194,13 @@ $venue-map-wrapper-height: 400px;
     top: 30px;
   }
 
-  &.competitions-list #competitions-map {
+  &.competitions-list #competitions-map,
+  &.competitions-admin #competitions-map {
     display: none;
   }
 
-  &.competitions-map #competitions-list {
+  &.competitions-map #competitions-list,
+  &.competitions-map #competitions-admin {
     display: none;
   }
 
@@ -313,4 +315,49 @@ $venue-map-wrapper-height: 400px;
   &:target {
     background-color: inherit;
   }
+}
+
+table.admin-competitions {
+  font-size: 13px;
+
+  tr.admin-table-header {
+    background-color: #ccc;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  .admin-delegate {
+    width: 230px;
+    vertical-align: middle;
+  }
+
+  .admin-date {
+    width: 130px;
+    max-width: 130px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .admin-button {
+    width: 50px;
+  }
+}
+
+.alert-orange {
+  @extend .alert-warning;
+  background-color: $orange;
+}
+
+.alert-green {
+  @extend .alert-success;
+  background-color: $green;
+}
+
+.toggle-body {
+  font-weight: normal;
+  font-size: 12px;
+  cursor: pointer;
 }
