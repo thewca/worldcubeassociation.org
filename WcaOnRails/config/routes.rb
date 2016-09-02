@@ -121,10 +121,12 @@ Rails.application.routes.draw do
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
       get '/search/users' => 'api#users_search'
-      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
-      get '/users/:wca_id' => 'api#show_user_by_wca_id'
+      get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users/:wca_id' => 'users#show_user_by_wca_id'
+      get '/users/:wca_id/results' => 'users#results'
       get '/competitions' => 'api#competitions'
-      resources :competitions, only: [:show]
+      get '/competitions/:id' => 'competitions#show'
+      get '/competitions/:id/results' => 'competitions#results'
     end
   end
 end
