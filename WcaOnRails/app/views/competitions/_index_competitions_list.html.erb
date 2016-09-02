@@ -2,7 +2,7 @@
   <% if competitions.empty? %>
     <%= render 'no_competitions_found' %>
   <% else %>
-    <% if params[:state] == "past" %>
+    <% if @past_selected %>
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
       </div>
@@ -48,19 +48,13 @@
     <% if competitions.empty? %>
       <%= render 'no_competitions_found' %>
     <% else %>
-      <% past_competitions, ongoing_and_upcoming_competitions = competitions.partition(&:is_over?) %>
-      <% recent_competitions, distant_competitions = past_competitions.partition { |c| (Date.today - c.end_date).to_i < Competition::RECENT_DAYS } %>
-      <% unless ongoing_and_upcoming_competitions.empty? %>
-        <div class="col-md-12" id="upcoming-comps">
-          <%= render 'admin_index_table', competitions: ongoing_and_upcoming_competitions, title: "Ongoing and upcoming competitions" %>
-        </div>
+      <% if @past_selected %>
+        <% recent_competitions, distant_competitions = competitions.partition { |c| (Date.today - c.end_date).to_i < Competition::RECENT_DAYS } %>
+        <%= render 'admin_index_table', id: "recent-comps", competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
+        <%= render 'admin_index_table', id: "distant-comps", competitions: distant_competitions, title: "Past competitions" %>
+      <% else %>
+        <%= render 'admin_index_table', id: "ongoing-and-upcoming-comps", competitions: competitions, title: "Ongoing and upcoming competitions" %>
       <% end %>
-      <div class="col-md-12" id="recent-comps">
-        <%= render 'admin_index_table', competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
-      </div>
-      <div class="col-md-12" id="past-comps">
-        <%= render 'admin_index_table', competitions: distant_competitions, title: "Past competitions" %>
-      </div>
     <% end %>
   <% else %>
     <%= alert :warning do

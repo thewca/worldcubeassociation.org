@@ -71,16 +71,16 @@ class CompetitionsController < ApplicationController
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
-    if @display != "admin"
-      if @present_selected
-        @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
-      else
-        @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
-        unless params[:year] == "all years"
-          @competitions = @competitions.where(year: params[:year])
-        end
-      end
+    if @present_selected
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
     else
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
+      unless params[:year] == "all years"
+        @competitions = @competitions.where(year: params[:year])
+      end
+    end
+
+    if @display == 'admin'
       @competitions = @competitions.includes(:delegates, :delegate_report)
     end
 
