@@ -96,16 +96,6 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
-  def show_user_by_id
-    user = User.find_by_id(params[:id])
-    show_user(user)
-  end
-
-  def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
-    show_user(user)
-  end
-
   def competitions
     params[:sort] ||= "-start_date"
     competitions = Competition.search(params[:q], params: params)
