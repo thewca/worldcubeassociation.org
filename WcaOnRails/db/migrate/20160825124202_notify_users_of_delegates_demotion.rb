@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class NotifyUsersOfDelegatesDemotion < ActiveRecord::Migration
   def change
     User.where.not(unconfirmed_wca_id: nil).each do |user|
