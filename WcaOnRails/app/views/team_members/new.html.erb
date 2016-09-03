@@ -1,0 +1,8 @@
+<% provide(:title, "Add a New Team Member To #{@team.name}") %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= render 'team_member_form' %>
+
+</div>

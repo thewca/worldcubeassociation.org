@@ -21,7 +21,7 @@
         { text: "Compute auxiliary data", path: "/results/admin/compute_auxiliary_data.php", fa_icon: "cogs" },
         { text: "Update statistics", path: "/results/statistics.php?update8392=1", fa_icon: "area-chart" },
         { text: "Export public", path: "/results/admin/export_public.php", fa_icon: "cloud-upload" },
-        { text: "Edit teams", path: teams_path, fa_icon: "users" },
+        { text: "Edit committees", path: committees_path, fa_icon: "users" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i> <%= nav_item[:text] %>

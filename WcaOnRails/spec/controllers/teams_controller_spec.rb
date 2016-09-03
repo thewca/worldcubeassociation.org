@@ -2,53 +2,36 @@
 require 'rails_helper'
 
 describe TeamsController do
-  let(:team) { FactoryGirl.create :team }
-
-  describe "GET #index" do
-    context "when not signed in" do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        get :index
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context "when signed in as admin" do
-      sign_in { FactoryGirl.create :admin }
-
-      it 'shows the teams index page' do
-        get :index
-        expect(response).to render_template :index
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
-
-      it 'does not allow access' do
-        get :index
-        expect(response).to redirect_to root_url
-      end
-    end
-  end
+  let!(:team) { FactoryGirl.create(:team) }
+  let!(:team_to_delete) { FactoryGirl.create(:team, name: "No members") }
+  let!(:team_to_delete_with_member) { FactoryGirl.create(:team, :with_team_member, name: "Team with a member") }
+  let!(:team_attributes) { FactoryGirl.attributes_for(:team, name: "Team 2016") }
 
   describe "GET #new" do
     context "when not signed in" do
       sign_out
 
       it 'redirects to the sign in page' do
-        get :new
+        get :new, committee_id: team.committee.slug
         expect(response).to redirect_to new_user_session_path
       end
     end
 
     context "when signed in as admin" do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryGirl.create(:admin) }
 
-      it 'shows the teams index page' do
-        get :new
+      it 'shows the teams new page' do
+        get :new, committee_id: team.committee.slug
         expect(response).to render_template :new
+      end
+    end
+
+    context 'when signed in as a demoted admin' do
+      sign_in { FactoryGirl.create :admin_demoted }
+
+      it 'does not allow access' do
+        get :new, committee_id: team.committee.slug
+        expect(response).to redirect_to root_url
       end
     end
 
@@ -56,7 +39,7 @@ describe TeamsController do
       sign_in { FactoryGirl.create :user }
 
       it 'does not allow access' do
-        get :new
+        get :new, committee_id: team.committee.slug
         expect(response).to redirect_to root_url
       end
     end
@@ -65,52 +48,58 @@ describe TeamsController do
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, team: { name: "Team2016" }
+        post :create, committee_id: team.committee.slug, team: team_attributes
         expect(response).to redirect_to new_user_session_path
       end
     end
 
     context 'when signed in as a regular user' do
       sign_in { FactoryGirl.create :user }
+
       it 'does not allow creation' do
-        post :create, team: { name: "Team2016" }
+        post :create, committee_id: team.committee.slug, team: team_attributes
         expect(response).to redirect_to root_url
       end
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryGirl.create(:admin) }
 
       it 'creates a new team' do
-        post :create, team: { name: "Team2016" }
-        new_team = Team.find_by_name("Team2016")
-        expect(response).to redirect_to edit_team_path(new_team)
-        expect(new_team.name).to eq "Team2016"
+        post :create, committee_id: team.committee.slug, team: team_attributes
+        new_team = Team.find_by_name("Team 2016")
+        expect(response).to redirect_to committee_path(team.committee.slug)
+        expect(new_team.name).to eq "Team 2016"
+      end
+    end
+
+    context 'when signed in as a demoted admin' do
+      sign_in { FactoryGirl.create :admin_demoted }
+
+      it 'does not allow creation' do
+        post :create, committee_id: team.committee.slug, team: team.attributes
+        expect(response).to redirect_to root_url
       end
     end
   end
 
   describe 'GET #edit' do
     context 'when signed in as a team leader without rights to manage all teams' do
-      let(:team_where_is_leader) { Team.find_by_friendly_id('wrc') }
-      let(:team_where_is_not_leader) { Team.find_by_friendly_id('software') }
-      let(:leader) do
-        user = FactoryGirl.create(:user)
-        FactoryGirl.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
-        user
-      end
+      let(:leader) { FactoryGirl.create(:regulations_team_leader) }
+      let(:team_where_is_leader) { Team.find_by_slug('regulations-team') || FactoryGirl.create(:team, name: 'Regulations Team', committee: Committee.find_by_slug(Committee::WCA_REGULATIONS_COMMITTEE)) }
+      let(:team_where_is_not_leader) { Team.find_by_slug('software-team') || FactoryGirl.create(:team, name: 'Software Team', committee: Committee.find_by_slug(Committee::WCA_SOFTWARE_COMMITTEE)) }
 
       before :each do
         sign_in leader
       end
 
       it 'can edit his team' do
-        get :edit, id: team_where_is_leader.id
+        get :edit, committee_id: team_where_is_leader.committee.slug, id: team_where_is_leader.slug
         expect(response).to render_template :edit
       end
 
       it 'cannot edit other teams' do
-        get :edit, id: team_where_is_not_leader.id
+        get :edit, committee_id: team_where_is_not_leader.committee.slug, id: team_where_is_not_leader.slug
         expect(response).to redirect_to root_url
         expect(flash[:danger]).to_not be_nil
       end
@@ -118,85 +107,69 @@ describe TeamsController do
   end
 
   describe 'POST #update' do
+    context 'when signed in as a demoted admin' do
+      sign_in { FactoryGirl.create :admin_demoted }
+
+      it 'cannot update teams' do
+        patch :update, committee_id: team.committee.slug, id: team.slug, team: { name: "Hello" }
+        expect(response).to redirect_to root_url
+        expect(flash[:danger]).to_not be_nil
+      end
+    end
+
     context 'when signed in as an admin' do
-      let(:admin) { FactoryGirl.create :admin }
+      let(:admin) { FactoryGirl.create(:admin) }
       before :each do
         sign_in admin
       end
 
       it 'can change name' do
-        patch :update, id: team, team: { name: "Hello" }
-        expect(response).to redirect_to edit_team_path(team)
+        patch :update, committee_id: team.committee.slug, id: team.slug, team: { name: "Hello" }
+        expect(response).to redirect_to committee_path(team.committee.slug)
         team.reload
         expect(team.name).to eq "Hello"
       end
 
       it 'can change description' do
-        patch :update, id: team, team: { description: "This team is the best!" }
-        expect(response).to redirect_to edit_team_path(team)
+        patch :update, committee_id: team.committee.slug, id: team.slug, team: { description: "This team is the best!" }
+        expect(response).to redirect_to committee_path(team.committee.slug)
         team.reload
         expect(team.description).to eq "This team is the best!"
       end
 
-      it 'can change friendly ID' do
-        patch :update, id: team, team: { friendly_id: "bestteam" }
-        expect(response).to redirect_to edit_team_path(team)
+      it 'cannot change slug' do
+        original_slug = team.slug
+        patch :update, committee_id: team.committee.slug, id: team.slug, team: { slug: "no-changes-allowed" }
+        expect(response).to redirect_to committee_path(team.committee.slug)
         team.reload
-        expect(team.friendly_id).to eq "bestteam"
+        expect(team.slug).to eq original_slug
+      end
+    end
+  end
+
+  describe 'POST #destroy' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        delete :destroy, committee_id: team.committee.slug, id: team.slug
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
+      it 'can delete a team with no team members' do
+        delete :destroy, committee_id: team_to_delete.committee.slug, id: team_to_delete.slug
+        expect(response).to redirect_to committee_path(team_to_delete.committee.slug)
+        expect(flash[:success]).to eq "Successfully deleted team!"
       end
 
-      it 'can add a member' do
-        member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, team_leader: false } } }
-        expect(response).to redirect_to edit_team_path(team)
-        team.reload
-        expect(team.team_members.first.user.id).to eq member.id
-      end
-
-      it 'can deactivate a member' do
-        other_member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false} } }
-        expect(response).to redirect_to edit_team_path(team)
-        team.reload
-        new_member = team.team_members.first
-        patch :update, id: team, team: { team_members_attributes: {"0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
-        team.reload
-        expect(team.team_members.first.current_member?).to be false
-      end
-
-      it 'cannot demote oneself' do
-        admin_team = admin.teams.first
-        patch :update, id: admin_team.id, team: { team_members_attributes: {"0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } }
-        admin_team.reload
-        expect(admin_team.team_members.first.end_date).to eq nil
-      end
-
-      it 'cannot set start_date < end_date' do
-        member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } }
-        invalid_team = assigns(:team)
-        expect(invalid_team).to be_invalid
-      end
-
-      it 'cannot add overlapping membership periods for the same user' do
-        member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
-                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false } } }
-        invalid_team = assigns(:team)
-        expect(invalid_team).to be_invalid
-      end
-
-      it 'cannot add another membership for the same user without start_date' do
-        member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today+10, end_date: Date.today+5 },
-                                                                    "1" => { user_id: member.id, start_date: nil, end_date: Date.today+10 } } }
-        expect(team.reload.team_members.count).to eq 0
-      end
-
-      it 'cannot add a membership with end_date but without start_date' do
-        member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } }
-        expect(team.reload.team_members.count).to eq 0
+      it 'cannot delete a team with team members' do
+        delete :destroy, committee_id: team_to_delete_with_member.committee.slug, id: team_to_delete_with_member.slug
+        expect(response).to redirect_to committee_path(team_to_delete_with_member.committee.slug)
+        expect(flash[:error]).to eq "Cannot delete a team whilst it still has team members. If you really want to delete this team then delete the team members first."
       end
     end
   end

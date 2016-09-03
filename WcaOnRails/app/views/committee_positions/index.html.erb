@@ -1,0 +1,21 @@
+<% provide(:title, "#{@committee.name} Positions") %>
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <% if @positions.empty? %>
+    <%= alert :warning, "There are currently no committee positions." %>
+  <% else %>
+    <% @positions.includes(:team_members).each do |position| %>
+      <h2><%= position.name %></h2>
+      <p><%=md position.description %></p>
+      <%= link_to icon("edit", "Edit #{position.name} Position"), edit_committee_position_path(@committee, position), class: "btn btn-info" %>
+      <% if position.team_members.empty? %>
+        <%= link_to icon("trash", "Delete Position"), committee_position_path(@committee, position), method: :delete, data: { confirm: 'Are you sure you want to delete this position?' }, class: "btn btn-danger" %>
+      <% end %>
+      <hr />
+    <% end %>
+  <% end %>
+  <p>
+    <%= link_to icon("undo", "Back to #{@committee.name}"), committee_path(@committee), class: "btn btn-primary" %>
+    <%= link_to icon("plus", "Create New Position"), new_committee_position_path(@committee), class: "btn btn-success" %>
+  </p>
+</div>

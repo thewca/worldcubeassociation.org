@@ -334,20 +334,6 @@ describe Api::V0::ApiController do
       end
     end
 
-    context 'signed in as board member' do
-      before :each do
-        api_sign_in_as(FactoryGirl.create(:board_member))
-      end
-
-      it 'has correct delegate_status' do
-        get :me
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-
-        expect(json['me']['delegate_status']).to eq 'board_member'
-      end
-    end
-
     context 'signed in as senior delegate' do
       before :each do
         api_sign_in_as(FactoryGirl.create(:senior_delegate))
@@ -358,7 +344,7 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['delegate_status']).to eq 'senior_delegate'
+        expect(json['me']['delegate_status']).to eq 'Senior Delegate'
       end
     end
 
@@ -372,7 +358,7 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['delegate_status']).to eq 'candidate_delegate'
+        expect(json['me']['delegate_status']).to eq 'Candidate Delegate'
       end
     end
 
@@ -386,19 +372,15 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['delegate_status']).to eq 'delegate'
+        expect(json['me']['delegate_status']).to eq 'Delegate'
       end
     end
 
     context 'signed in as a member of some teams and a leader of others' do
       before :each do
-        user = FactoryGirl.create :user
+        user = FactoryGirl.create :regulations_team_member
 
-        wrc_team = Team.find_by_friendly_id('wrc')
-        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
-
-        results_team = Team.find_by_friendly_id('results')
-        FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, team_leader: true)
+        FactoryGirl.create(:team_member, :results_team_leader, user_id: user.id)
 
         api_sign_in_as(user)
       end
@@ -410,8 +392,8 @@ describe Api::V0::ApiController do
 
         expect(json['me']['delegate_status']).to eq nil
         expect(json['me']['teams']).to match_array [
-          { "friendly_id" => "results", "leader" => true },
-          { "friendly_id" => "wrc", "leader" => false },
+          { "slug" => "results-team", "leader" => true },
+          { "slug" => "regulations-team", "leader" => false },
         ]
       end
     end

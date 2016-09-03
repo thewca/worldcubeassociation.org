@@ -114,17 +114,11 @@
           </p>
         <% end %>
 
-        <% if current_user.can_edit_users? %>
-          <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !editable_fields.include?(:senior_delegate_id) %>
-          <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
-          <%= f.input :region, disabled: !editable_fields.include?(:region) %>
-        <% end %>
-
         <% unless @user.current_teams.empty? %>
           <div class="form-group">
             <label><%= t '.member_of' %></label>
             <% @user.current_teams.each do |team| %>
-              <%= link_to team.name, edit_team_path(team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
+              <%= link_to team.name, edit_committee_team_path(team.committee, team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
             <% end %>
           </div>
         <% end %>

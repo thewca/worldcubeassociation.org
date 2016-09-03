@@ -33,8 +33,8 @@
 
       <%= f.input :countryId, collection: Country.all, label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
       <%= f.input :cityName %>
-      <%= f.input :venue, hint: t('.venue_html', md: t('.supports_md_html')) %>
-      <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('.supports_md_html')) %>
+      <%= f.input :venue, hint: t('.venue_html', md: t('common.hints.supports_md_html')) %>
+      <%= f.input :venueDetails, hint: t('.venue_details_html', md: t('common.hints.supports_md_html')) %>
       <%= f.input :venueAddress %>
 
       <div id="venue-map-wrapper">
@@ -212,13 +212,11 @@
       <%= f.input :information, input_html: { class: "markdown-editor" } %>
       <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
       <%= f.input :organizer_ids, as: :user_ids %>
-      <%= f.input :contact, hint: t('.contact_html', md: t('.supports_md_html')) %>
-
+      <%= f.input :contact, hint: t('.contact_html', md: t('common.hints.supports_md_html')) %>
       <hr>
       <%= f.input :generate_website %>
       <%= f.input :external_website %>
       <hr>
-
       <% event_groups = [
         [
           t('.events'),

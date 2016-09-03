@@ -7,6 +7,51 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "has a factory to create a senior delegate" do
+    user = FactoryGirl.create :senior_delegate
+    expect(user.senior_delegate?).to be true
+  end
+
+  it "has a factory to create a delegate" do
+    user = FactoryGirl.create :delegate
+    expect(user.delegate?).to be true
+  end
+
+  it "has a factory to create a candidate delegate" do
+    user = FactoryGirl.create :candidate_delegate
+    expect(user.candidate_delegate?).to be true
+  end
+
+  it "recognises board members as team leaders" do
+    user = FactoryGirl.create :board_member
+    expect(user.team_leader?('board-members')).to be true
+  end
+
+  it "recognises senior delegates as team leaders" do
+    user = FactoryGirl.create :senior_delegate
+    expect(user.team_leader?('delegate-testing-team')).to be true
+  end
+
+  it "recognises software team leader positions as team leaders" do
+    user = FactoryGirl.create :software_team_leader
+    expect(user.team_leader?('software-team')).to be true
+  end
+
+  it "recognises results team leader positions as team leaders" do
+    user = FactoryGirl.create :results_team_leader
+    expect(user.team_leader?('results-team')).to be true
+  end
+
+  it "recognises regulations team leader positions as team leaders" do
+    user = FactoryGirl.create :regulations_team_leader
+    expect(user.team_leader?('regulations-team')).to be true
+  end
+
+  it "recognises disciplinary team leader positions as team leaders" do
+    user = FactoryGirl.create :disciplinary_team_leader
+    expect(user.team_leader?('disciplinary-team')).to be true
+  end
+
   it "defines a dummy user" do
     user = FactoryGirl.create :dummy_user
     expect(user).to be_valid
@@ -36,37 +81,6 @@ RSpec.describe User, type: :model do
     user.confirm
   end
 
-  it "doesn't allow demotion of a senior delegate with subordinate delegates" do
-    delegate = FactoryGirl.create :delegate
-    senior_delegate = FactoryGirl.create :senior_delegate
-
-    delegate.senior_delegate = senior_delegate
-    delegate.save!
-
-    senior_delegate.delegate_status = ""
-    expect(senior_delegate.save).to eq false
-    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote senior delegate with subordinate delegates"]
-  end
-
-  it "allows demotion of a senior delegate with no subordinate delegates" do
-    senior_delegate = FactoryGirl.create :senior_delegate
-
-    senior_delegate.delegate_status = ""
-    expect(senior_delegate.save).to eq true
-    expect(senior_delegate.reload.delegate_status).to eq nil
-  end
-
-  it "requires senior delegate be a senior delegate" do
-    delegate = FactoryGirl.create :delegate
-    user = FactoryGirl.create :user
-
-    delegate.senior_delegate = user
-    expect(delegate).to be_invalid
-
-    user.senior_delegate!
-    expect(delegate).to be_valid
-  end
-
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.
@@ -81,41 +95,6 @@ RSpec.describe User, type: :model do
   it "does not give delegates results admin privileges" do
     delegate = FactoryGirl.create :delegate
     expect(delegate.can_admin_results?).to be false
-  end
-
-  it "does not allow senior delegate if senior delegate" do
-    senior_delegate1 = FactoryGirl.create :user
-    senior_delegate1.senior_delegate!
-
-    senior_delegate2 = FactoryGirl.create :user
-    senior_delegate2.senior_delegate!
-
-    expect(senior_delegate1).to be_valid
-    senior_delegate1.senior_delegate = senior_delegate2
-    expect(senior_delegate1).to be_invalid
-  end
-
-  it "does not allow senior delegate if board member" do
-    board_member = FactoryGirl.create :user
-    board_member.board_member!
-
-    senior_delegate = FactoryGirl.create :user
-    senior_delegate.senior_delegate!
-
-    expect(board_member).to be_valid
-    board_member.senior_delegate = senior_delegate
-    expect(board_member).to be_invalid
-  end
-
-  it "does not allow senior delegate if regular user" do
-    user = FactoryGirl.create :user
-
-    senior_delegate = FactoryGirl.create :user
-    senior_delegate.senior_delegate!
-
-    expect(user).to be_valid
-    user.senior_delegate = senior_delegate
-    expect(user).to be_invalid
   end
 
   describe "WCA ID" do
@@ -448,33 +427,32 @@ RSpec.describe User, type: :model do
   end
 
   it "#teams and #current_teams return unique team names" do
-    wrc_team = Team.find_by_friendly_id('wrc')
-    results_team = Team.find_by_friendly_id('results')
+    wrc_team = Team.find_by_slug('regulations-team') || FactoryGirl.create(:team, name: 'Regulations Team', committee: Committee.find_by_slug(Committee::WCA_REGULATIONS_COMMITTEE))
+    results_team = Team.find_by_slug('results-team') || FactoryGirl.create(:team, name: 'Results Team', committee: Committee.find_by_slug(Committee::WCA_RESULTS_COMMITTEE))
     user = FactoryGirl.create(:user)
 
-    FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
+    FactoryGirl.create(:team_member, team: wrc_team, user: user, start_date: Date.today - 20, end_date: Date.today - 10)
+    FactoryGirl.create(:team_member, team: results_team, user: user, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryGirl.create(:team_member, team: results_team, user: user, start_date: Date.today + 6, end_date: Date.today + 10)
 
     expect(user.teams).to match_array [wrc_team, results_team]
     expect(user.current_teams).to match_array [results_team]
   end
 
   it 'former members of the results team are not considered current members' do
-    member = FactoryGirl.create :results_team
+    member = FactoryGirl.create :results_team_member
     team_member = member.team_members.first
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(member.reload.team_member?('results')).to eq false
+    expect(member.reload.committee_member?(Committee::WCA_RESULTS_COMMITTEE)).to eq false
   end
 
   it 'former leaders of the results team are not considered current leaders' do
-    leader = FactoryGirl.create :results_team
+    leader = FactoryGirl.create :results_team_leader
     team_member = leader.team_members.first
-    team_member.update_attributes!(team_leader: true)
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(leader.reload.team_leader?('results')).to eq false
+    expect(leader.reload.team_leader?('results-team')).to eq false
 
     expect(leader.teams_where_is_leader.count).to eq 0
   end

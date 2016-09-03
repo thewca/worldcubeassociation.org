@@ -24,6 +24,8 @@ fr:
     here: "ici"
     wca_id: "ID WCA"
     all_regions: "Toutes les régions"
+    hints:
+      supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
   oauth:
     applications:
       your_apps: "Vos applications OAuth"
@@ -55,8 +57,6 @@ fr:
         pending_avatar: "Charger une nouvelle photo de profil"
         remove_avatar: "Supprimer la photo de profil"
         results_notifications_enabled: "M'envoyer un email quand mes résultats sont postés."
-        delegate_status: "Statut de Délégué"
-        region: "Région"
       competition:
         id: "ID"
 
@@ -154,13 +154,11 @@ fr:
         pending_avatar: "Après avoir chargé une nouvelle photo de profil, vous devrez attendre que le bureau de la WCA l'approuve."
         country_iso2: ""
         current_password: ""
-        delegate_status: ""
         dob_verification: ""
         gender: ""
         login: ""
         password: ""
         password_confirmation: ""
-        region: ""
         remember_me: ""
         remove_avatar: ""
         results_notifications_enabled: ""
@@ -229,10 +227,6 @@ fr:
         guests: ""
         name: ""
         status: ""
-      team:
-        description: ""
-        friendly_id: ""
-        name: ""
       vote:
         comment: ""
     options:
@@ -384,12 +378,8 @@ fr:
       dob_incorrect: "incorrecte"
       unique: "doit être unique"
       dob_past: "doit être dans le passé"
-      must_be_senior: "doit être un Délégué sénior"
-      must_not_be_present: "ne doit pas être présent"
-      senior_has_delegate: "ne peut pas destituer un Délégué sénior qui supervise d'autres Délégués"
       already_have_id: "impossible à réclamer car vous avez déjà l'ID WCA %{wca_id}"
       wca_id_no_birthdate: "L'ID WCA n'a pas de date de naissance, contactez l'équipe en charge des résultats pour corriger le problème."
-      board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
       avatar_requires_wca_id: "requiert d'avoir un ID WCA"
     select_nearby_delegate:
       select_delegate: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un Délégué confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
@@ -406,7 +396,6 @@ fr:
   competitions:
     results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
     competition_form:
-      supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
       venue_html: "La salle où la compétition à lieu. %{md}. Par exemple : [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
       venue_details_html: "Détails concernant la salle (Par exemple, au première étage au fond à gauche, suivez les panneaux). %{md}"
       contact_html: "Information de contact (optionnel). Si vous ne remplissez pas ce champ, les adresses email des organisateurs seront affichées publiquement. %{md}. Exemple : [Texte à afficher](mailto:un@email.com)"

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 describe DelegatesPanelController do
   describe "signed in as results team member" do
-    let(:results_team_user) { FactoryGirl.create :results_team }
+    let(:results_team_user) { FactoryGirl.create :results_team_member }
     before :each do
       sign_in results_team_user
     end

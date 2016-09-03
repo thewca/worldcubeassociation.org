@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 class Team < ActiveRecord::Base
-  has_many :team_members, dependent: :destroy
+  belongs_to :committee
+  has_many :team_members
   has_many :current_members, -> { current }, class_name: "TeamMember"
 
-  accepts_nested_attributes_for :team_members, reject_if: :all_blank, allow_destroy: true
+  MAX_NAME_LENGTH = 50
+  VALID_NAME_RE = /\A[[:alnum:] -]+\z/
+  MAX_SLUG_LENGTH = 50
+  VALID_SLUG_RE = /\A[[:alnum:]-]+\z/
 
-  validate :membership_periods_cannot_overlap_for_single_user
-  def membership_periods_cannot_overlap_for_single_user
-    team_members.select(&:valid?).group_by(&:user).each do |user, memberships|
-      memberships.combination(2).to_a.each do |memberships_pair|
-        first, second = memberships_pair
-        first_period = first.start_date..(first.end_date || Date::Infinity.new)
-        second_period = second.start_date..(second.end_date || Date::Infinity.new)
-        if first_period.overlaps? second_period
-          errors[:base] << "Membership periods overlap for user #{user.name}"
-          break # One overlapping period for the user is found, skip to the next one
-        end
-      end
-    end
+  validates :name, presence: true, uniqueness: true, length: { maximum: MAX_NAME_LENGTH }, format: { with: VALID_NAME_RE, message: "must contain alpanumric characters and spaces only" }
+  validates :slug, presence: true, uniqueness: true, length: { maximum: MAX_SLUG_LENGTH }, format: { with: VALID_SLUG_RE, message: "must contain alpanumric characters and dashes only" }
+  validates :description, presence: true
+
+  before_validation :compute_slug
+  private def compute_slug
+    self.slug ||= name.parameterize
+  end
+
+  def to_param
+    slug
   end
 end

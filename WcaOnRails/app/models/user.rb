@@ -11,14 +11,18 @@ class User < ActiveRecord::Base
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id"
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person"
-  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
-  has_many :team_members, dependent: :destroy
+  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :team_members
   has_many :teams, -> { distinct }, through: :team_members
+  has_many :committees, -> { distinct }, through: :teams
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
+  has_many :current_committees, -> { distinct }, through: :current_teams, source: :committee
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events
+
+  scope :delegates, -> { joins(:current_committees).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}) }
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
@@ -36,6 +40,7 @@ class User < ActiveRecord::Base
   WCA_ID_RE = /\A(|\d{4}[A-Z]{4}\d{2})\z/
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
+
   WCA_ID_MAX_LENGTH = 10
 
   validates :country_iso2, inclusion: { in: Country.all_real.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
@@ -49,15 +54,6 @@ class User < ActiveRecord::Base
 
   ALLOWABLE_GENDERS = [:m, :f, :o]
   enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
-
-  enum delegate_status: {
-    candidate_delegate: "candidate_delegate",
-    delegate: "delegate",
-    senior_delegate: "senior_delegate",
-    board_member: "board_member",
-  }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -81,13 +77,6 @@ class User < ActiveRecord::Base
   def dob_must_be_in_the_past
     if dob && dob >= Date.today
       errors.add(:dob, I18n.t('users.errors.dob_past'))
-    end
-  end
-
-  validate :cannot_demote_senior_delegate_with_subordinate_delegates
-  def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
-      errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
 
@@ -144,13 +133,13 @@ class User < ActiveRecord::Base
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
-      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
+      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim.delegates_committee?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
   end
 
-  scope :not_dummy_account, -> { where('wca_id = "" OR encrypted_password != "" OR email NOT LIKE "%@worldcubeassociation.org"') }
+  scope :not_dummy_account, -> { where('users.wca_id = "" OR users.encrypted_password != "" OR users.email NOT LIKE "%@worldcubeassociation.org"') }
   def dummy_account?
     wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
   end
@@ -248,41 +237,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  validate :senior_delegate_must_be_senior_delegate
-  def senior_delegate_must_be_senior_delegate
-    if senior_delegate && !senior_delegate.senior_delegate?
-      errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
-    end
-  end
-
-  validate :senior_delegate_presence
-  def senior_delegate_presence
-    if !User.delegate_status_allows_senior_delegate(delegate_status) and senior_delegate
-      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
-    end
-  end
-
-  def self.delegate_status_allows_senior_delegate(delegate_status)
-    {
-      nil => false,
-      "" => false,
-      "candidate_delegate" => true,
-      "delegate" => true,
-      "senior_delegate" => false,
-      "board_member" => false,
-    }.fetch(delegate_status)
-  end
-
-  validate :not_illegally_demoting_oneself
-  def not_illegally_demoting_oneself
-    about_to_lose_access = !board_member?
-    if current_user == self && about_to_lose_access
-      if delegate_status_was == "board_member"
-        errors.add(:delegate_status, I18n.t('users.errors.board_member_cannot_resign'))
-      end
-    end
-  end
-
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
@@ -303,74 +257,97 @@ class User < ActiveRecord::Base
     user_preferred_events.map(&:event_object).sort_by(&:rank)
   end
 
-  def software_team?
-    team_member?('software')
+  def delegate_status
+    committee_positions = current_team_members.joins(:committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}).map(&:committee_position)
+    committee_positions.empty? ? nil : committee_positions.map(&:name).join(", ")
   end
 
-  def results_team?
-    team_member?('results')
+  def board_member?
+    committee_member?(Committee::WCA_BOARD)
   end
 
-  def wrc_team?
-    team_member?('wrc')
+  def senior_delegate?
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::SENIOR_DELEGATE}).count > 0
   end
 
-  def wdc_team?
-    team_member?('wdc')
+  def delegate?
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::DELEGATE}).count > 0
   end
 
-  def team_member?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id).count > 0
+  def candidate_delegate?
+    self.current_team_members.joins(:committee_position).joins(team: :committee).where(committees: {slug: Committee::WCA_DELEGATES_COMMITTEE}, committee_positions: {slug: CommitteePosition::CANDIDATE_DELEGATE}).count > 0
   end
 
-  def team_leader?(team_friendly_id)
-    self.current_team_members.where(team_id: Team.find_by_friendly_id!(team_friendly_id).id, team_leader: true).count > 0
+  def delegates_committee?
+    committee_member?(Committee::WCA_DELEGATES_COMMITTEE)
+  end
+
+  def software_committee?
+    committee_member?(Committee::WCA_SOFTWARE_COMMITTEE)
+  end
+
+  alias admin? software_committee?
+
+  def results_committee?
+    committee_member?(Committee::WCA_RESULTS_COMMITTEE)
+  end
+
+  def wrc_committee?
+    committee_member?(Committee::WCA_REGULATIONS_COMMITTEE)
+  end
+
+  def wdc_committee?
+    committee_member?(Committee::WCA_DISCIPLINARY_COMMITTEE)
+  end
+
+  def committee_member?(committee_slug)
+    self.current_committees.where(slug: committee_slug).count > 0
+  end
+
+  def delegate_as_at?(as_at_date)
+    self.committees.where(["committees.slug = :slug and start_date <= :as_at_date and (end_date is null or end_date >= :as_at_date)", { slug: Committee::WCA_DELEGATES_COMMITTEE, as_at_date: as_at_date }]).count > 0
+  end
+
+  def team_leader?(team_slug)
+    self.current_team_members.joins(:team).joins(:committee_position).where(teams: {slug: team_slug}, committee_positions: {team_leader: true}).count > 0
   end
 
   def teams_where_is_leader
-    self.current_team_members.where(team_leader: true).map(&:team).uniq
-  end
-
-  def admin?
-    software_team?
-  end
-
-  def any_kind_of_delegate?
-    delegate_status.present?
+    self.current_team_members.joins(:committee_position).where(committee_positions: {team_leader: true}).map(&:team).uniq
   end
 
   def can_edit_users?
-    admin? || board_member? || results_team? || any_kind_of_delegate?
+    admin? || board_member? || results_committee? || delegates_committee?
   end
 
   def can_admin_results?
-    admin? || board_member? || results_team?
+    admin? || board_member? || results_committee?
   end
 
   # Returns true if the user can perform every action for teams.
-  def can_manage_teams?
-    admin? || board_member? || results_team?
+  def can_manage_committees?
+    admin? || board_member? || results_committee?
   end
 
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    can_manage_teams? || team_leader?(team.friendly_id)
+    can_manage_committees? || team_leader?(team.slug)
   end
 
   def can_create_competitions?
-    can_admin_results? || any_kind_of_delegate?
+    can_admin_results? || delegates_committee?
   end
 
   def can_view_crash_course?
-    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team?
+    admin? || board_member? || delegates_committee? || results_committee? || wdc_committee? || wrc_committee?
   end
 
   def can_create_posts?
-    admin? || board_member? || results_team? || wdc_team? || wrc_team?
+    admin? || board_member? || results_committee? || wdc_committee? || wrc_committee?
   end
 
   def can_update_crash_course?
-    admin? || board_member? || results_team?
+    admin? || board_member? || results_committee?
   end
 
   def can_manage_competition?(competition)
@@ -387,16 +364,16 @@ class User < ActiveRecord::Base
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team? || wdc_team?
+    admin? || board_member? || wrc_committee? || wdc_committee?
   end
 
   def can_vote_in_poll?
-    admin? || results_team? || any_kind_of_delegate? || wrc_team?
+    admin? || results_committee? || delegates_committee? || wrc_committee?
   end
 
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
-      any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team?
+      delegates_committee? || can_admin_results? || wrc_committee? || wdc_committee?
     else
       delegate_report.competition.delegates.include?(self) || can_admin_results?
     end
@@ -451,7 +428,7 @@ class User < ActiveRecord::Base
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
+                         elsif user_to_edit == self && !(admin? || delegates_committee?) && user_to_edit.registrations.count > 0
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     if cannot_edit_reason
@@ -481,16 +458,11 @@ class User < ActiveRecord::Base
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
       fields << :results_notifications_enabled
     end
-    if admin? || board_member?
-      fields << :delegate_status
-      fields << :senior_delegate_id
-      fields << :region
-    end
-    if admin? || any_kind_of_delegate?
+    if admin? || delegates_committee?
       fields << :wca_id << :unconfirmed_wca_id
       fields << :avatar << :avatar_cache
     end
-    if user == self || admin? || any_kind_of_delegate?
+    if user == self || admin? || delegates_committee?
       cannot_edit_data = !!cannot_edit_data_reason_html(user)
       if !cannot_edit_data
         fields << :name
@@ -534,23 +506,27 @@ class User < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    users = Person
-    unless ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
+    if !ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
       users = User.where.not(confirmed_at: nil).not_dummy_account
 
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
-        users = users.where.not(delegate_status: nil)
+        users = users.delegates
       end
 
       if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
         users = users.where.not(wca_id: nil)
       end
-    end
 
-    query.split.each do |part|
-      users = users.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
-    end
+      query.split.each do |part|
+        users = users.where("users.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      end
 
+    else
+      users = Person
+      query.split.each do |part|
+        users = users.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      end
+    end
     users.order(:name)
   end
 
@@ -570,8 +546,8 @@ class User < ActiveRecord::Base
       updated_at: self.updated_at,
       teams: current_team_members.includes(:team).map do |team_member|
         {
-          friendly_id: team_member.team.friendly_id,
-          leader: team_member.team_leader?,
+          slug: team_member.team.slug,
+          leader: self.team_leader?(team_member.team.slug),
         }
       end,
       avatar: {

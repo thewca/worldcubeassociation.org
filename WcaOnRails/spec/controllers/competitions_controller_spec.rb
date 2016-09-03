@@ -463,20 +463,22 @@ describe CompetitionsController do
   end
 
   describe 'GET #post_announcement' do
+    let(:delegate_team_member) { FactoryGirl.create(:delegate, start_date: "2010-01-01") }
+    let(:competition_to_post) { FactoryGirl.create(:competition, delegates: [delegate_team_member]) }
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:results_team_member) }
 
       it 'creates an announcement post' do
-        competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
-        get :post_announcement, id: competition
+        competition_to_post.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
+        get :post_announcement, id: competition_to_post
         post = assigns(:post)
-        expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
-        expect(post.body).to match /in #{competition.cityName}, #{competition.countryId}\./
+        expect(post.title).to eq "#{competition_to_post.name} on December 4 - 5, 2011 in #{competition_to_post.cityName}, #{competition_to_post.countryId}"
+        expect(post.body).to match /in #{competition_to_post.cityName}, #{competition_to_post.countryId}\./
       end
 
       it 'handles nil start date' do
-        competition.update_attributes(start_date: "", end_date: "")
-        get :post_announcement, id: competition
+        competition_to_post.update_attributes(start_date: "", end_date: "")
+        get :post_announcement, id: competition_to_post
         post = assigns(:post)
         expect(post.title).to match /unscheduled/
       end
@@ -485,7 +487,7 @@ describe CompetitionsController do
 
   describe 'GET #post_announcement' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:results_team_member) }
 
       it "creates a results post" do
         Result.create!(

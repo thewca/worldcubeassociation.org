@@ -5,20 +5,18 @@ class StaticPagesController < ApplicationController
   end
 
   def about
-    @board_members = User.where(delegate_status: "board_member")
+    @committees = Committee.all
   end
 
   def delegates
-    @board_members = User.where(delegate_status: "board_member")
-    @senior_delegates = User.where(delegate_status: "senior_delegate")
-    @delegates_without_senior_delegates = User.where(delegate_status: ["candidate_delegate", "delegate"], senior_delegate: nil)
+    redirect_to committee_path(Committee::WCA_DELEGATES_COMMITTEE)
   end
 
   def organisations
   end
 
   def contact
-    @board_members = User.where(delegate_status: "board_member")
+    @committees = Committee.all
   end
 
   def score_tools
