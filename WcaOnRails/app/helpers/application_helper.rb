@@ -52,9 +52,10 @@ module ApplicationHelper
   def wca_excerpt(html, phrases)
     text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
-    first = phrases.map { |phrase| text.index(phrase) }.compact.min
+    text_downcase = text.downcase
+    first = phrases.map { |phrase| text_downcase.index(phrase.downcase) }.compact.min
     last = phrases.map do |phrase|
-      index = text.index(phrase)
+      index = text_downcase.index(phrase.downcase)
       index + phrase.length if index
     end.compact.max
     excerpted = if first # At least one phrase matches the text.

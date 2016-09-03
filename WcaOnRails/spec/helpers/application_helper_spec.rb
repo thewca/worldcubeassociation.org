@@ -32,7 +32,14 @@ describe ApplicationHelper do
     it "handles multiple phrases correctly highlighting them" do
       text = "A long text with a super word in the middle (directly here) followed by the rest of an awesome and peculiar sentence. What do you think?"
       expected = "...t with a super word in the middle (directly here) <strong>followed</strong> by the rest of an awesome and peculiar sentence. What do you <strong>think</strong>?"
-      expect(helper.wca_excerpt(text, ["followed", "think"])).to eq expected
+      expect(helper.wca_excerpt(text, %w(followed think))).to eq expected
+    end
+
+    it "is case insensitive" do
+      divider = (["thing"] * 15).join(' ')
+      text = "Some #{divider} match #{divider} end."
+      expected = "<strong>Some</strong> #{divider} <strong>match</strong> #{divider} <strong>end</strong>."
+      expect(helper.wca_excerpt(text, %w(some match END))).to eq expected
     end
   end
 end
