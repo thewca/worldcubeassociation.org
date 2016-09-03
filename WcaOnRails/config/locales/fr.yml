@@ -25,7 +25,7 @@ fr:
     wca_id: "ID WCA"
     all_regions: "Toutes les régions"
     hints:
-      supports_md_html: ""
+      supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
   oauth:
     applications:
       your_apps: "Vos applications OAuth"
@@ -57,14 +57,6 @@ fr:
         pending_avatar: "Charger une nouvelle photo de profil"
         remove_avatar: "Supprimer la photo de profil"
         results_notifications_enabled: "M'envoyer un email quand mes résultats sont postés."
-      committee:
-        duties: ""
-        email: ""
-        name: ""
-      committee_position:
-        description: ""
-        name: ""
-        team_leader: ""
       competition:
         id: "ID"
 
@@ -132,10 +124,6 @@ fr:
       team:
         name: "Nom"
         description: "Description"
-      team_member:
-        end_date: ""
-        start_date: ""
-        user_id: ""
       vote:
         comment: "Commentaire"
   helpers:
@@ -241,18 +229,6 @@ fr:
         status: ""
       vote:
         comment: ""
-      committee:
-        name: ""
-        email: ""
-      committee_position:
-        name: ""
-        team_leader: ""
-      team:
-        name: ""
-      team_member:
-        user_id: ""
-        start_date: ""
-        end_date: ""
     options:
       registration:
         status:
@@ -527,16 +503,3 @@ fr:
       no_persons_found: "Personne ne correspond aux critères donnés."
   posts:
     confirm_delete_post: "Êtes-vous sûr de vouloir supprimer ce post ? Cette action n'est pas réversible."
-  committees:
-    new:
-      create_committee: ""
-    committee_form:
-      duties_html: ""
-      submit_create_value: ""
-      submit_update_value: ""
-  committee_positions:
-    committee_position_form:
-      description_html: ""
-  teams:
-    team_form:
-      description_html: ""

@@ -6,6 +6,7 @@ RSpec.describe CommitteePositionsController, type: :controller do
   let!(:committee_position) { FactoryGirl.create(:committee_position) }
   let!(:committee_position_no_members) { FactoryGirl.create(:committee_position, name: "Committee position with no members") }
   let!(:team_member) { FactoryGirl.create(:team_member) }
+  let(:committee_position_attributes) { FactoryGirl.attributes_for(:committee_position) }
 
   describe "GET #new" do
     context "when not signed in" do
@@ -48,7 +49,7 @@ RSpec.describe CommitteePositionsController, type: :controller do
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, committee_id: committee.slug, committee_position: {name: "An important position", description: "This is a very important position"}
+        post :create, committee_id: committee.slug, committee_position: committee_position_attributes
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -57,7 +58,7 @@ RSpec.describe CommitteePositionsController, type: :controller do
       sign_in { FactoryGirl.create :user }
 
       it 'does not allow creation' do
-        post :create, committee_id: committee.slug, committee_position: {name: "An important position", description: "This is a very important position"}
+        post :create, committee_id: committee.slug, committee_position: committee_position_attributes
         expect(response).to redirect_to root_url
       end
     end
@@ -77,7 +78,7 @@ RSpec.describe CommitteePositionsController, type: :controller do
       sign_in { FactoryGirl.create :admin_demoted }
 
       it 'does not allow creation' do
-        post :create, committee_id: committee.slug, committee_position: {name: "An important position", description: "This is a very important position"}
+        post :create, committee_id: committee.slug, committee_position: committee_position_attributes
         expect(response).to redirect_to root_url
       end
     end

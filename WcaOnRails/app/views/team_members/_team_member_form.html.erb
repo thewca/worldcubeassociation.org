@@ -6,13 +6,8 @@
       boolean: :horizontal_boolean
     }  do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <% if @team_member.persisted? %>
-      <%= f.input :user_id, disabled: true, required: true, as: :user_ids, only_one: true %>
-      <%= f.association :committee_position, collection: @committee.committee_positions, label_method: :name, value_method: :id, disabled: true %>
-    <% else %>
-      <%= f.input :user_id, required: true, as: :user_ids, only_one: true %>
-      <%= f.association :committee_position, collection: @committee.committee_positions, label_method: :name, value_method: :id %>
-    <% end %>
+    <%= f.input :user_id, disabled: @team_member.persisted?, required: true, as: :user_ids, only_one: true %>
+    <%= f.association :committee_position, collection: @committee.committee_positions, label_method: :name, value_method: :id, disabled: @team_member.persisted? %>
     <%= f.input :start_date, as: :date_picker %>
     <%= f.input :end_date, as: :date_picker %>
     <%= link_to icon("undo", "Back to #{@committee.name}"), committee_path(@committee), class: "btn btn-primary teams-home" %>

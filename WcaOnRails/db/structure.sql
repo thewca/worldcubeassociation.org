@@ -436,7 +436,7 @@ CREATE TABLE `committee_positions` (
   UNIQUE KEY `index_committee_positions_on_committee_id_and_slug` (`committee_id`,`slug`),
   KEY `index_committee_positions_on_committee_id` (`committee_id`),
   CONSTRAINT `fk_rails_8ecd522f1f` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,7 +457,7 @@ CREATE TABLE `committees` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_committees_on_name` (`name`),
   UNIQUE KEY `index_committees_on_slug` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -819,7 +819,7 @@ CREATE TABLE `teams` (
   UNIQUE KEY `index_teams_on_slug` (`slug`),
   KEY `index_teams_on_committee_id` (`committee_id`),
   CONSTRAINT `fk_rails_5ea9f6833c` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1113,8 +1113,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160811013347');
 INSERT INTO schema_migrations (version) VALUES ('20160831212003');
 
 INSERT INTO schema_migrations (version) VALUES ('20160901120254');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811013347');
 
 INSERT INTO schema_migrations (version) VALUES ('20160731000001');
 

@@ -46,12 +46,9 @@ describe TeamMembersController do
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, committee_id: team_member_to_create.committee.slug, \
-                      team_id: team_member_to_create.team.slug, \
-                      team_member: { user_id: team_member_to_create.user_id, \
-                                     start_date: team_member_to_create.start_date, \
-                                     end_date: team_member_to_create.end_date, \
-                                     committee_position_id: team_member_to_create.committee_position_id }
+        post :create, committee_id: team_member_to_create.committee.slug,
+                      team_id: team_member_to_create.team.slug,
+                      team_member: team_member_to_create.attributes
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -60,12 +57,9 @@ describe TeamMembersController do
       sign_in { FactoryGirl.create :user }
 
       it 'does not allow creation' do
-        post :create, committee_id: team_member_to_create.committee.slug, \
-                      team_id: team_member_to_create.team.slug, \
-                      team_member: { user_id: team_member_to_create.user_id, \
-                                     start_date: team_member_to_create.start_date, \
-                                     end_date: team_member_to_create.end_date, \
-                                     committee_position_id: team_member_to_create.committee_position_id }
+        post :create, committee_id: team_member_to_create.committee.slug,
+                      team_id: team_member_to_create.team.slug,
+                      team_member: team_member_to_create.attributes
         expect(response).to redirect_to root_url
       end
     end
@@ -74,12 +68,9 @@ describe TeamMembersController do
       sign_in { FactoryGirl.create(:admin) }
 
       it 'creates a new team member' do
-        post :create, committee_id: team_member_to_create.committee.slug, \
-                      team_id: team_member_to_create.team.slug, \
-                      team_member: { user_id: team_member_to_create.user_id, \
-                                     start_date: team_member_to_create.start_date, \
-                                     end_date: team_member_to_create.end_date, \
-                                     committee_position_id: team_member_to_create.committee_position_id }
+        post :create, committee_id: team_member_to_create.committee.slug,
+                      team_id: team_member_to_create.team.slug,
+                      team_member: team_member_to_create.attributes
         tm = TeamMember.find_by_user_id(team_member_to_create.user_id)
         expect(tm.committee_position_id).to eq team_member_to_create.committee_position_id
         expect(tm.start_date).to eq team_member_to_create.start_date
@@ -91,12 +82,9 @@ describe TeamMembersController do
       sign_in { FactoryGirl.create :admin_demoted }
 
       it 'does not allow creation' do
-        post :create, committee_id: team_member_to_create.committee.slug, \
-                      team_id: team_member_to_create.team.slug, \
-                      team_member: { user_id: team_member_to_create.user_id, \
-                                     start_date: team_member_to_create.start_date, \
-                                     end_date: team_member_to_create.end_date, \
-                                     committee_position_id: team_member_to_create.committee_position_id }
+        post :create, committee_id: team_member_to_create.committee.slug,
+                      team_id: team_member_to_create.team.slug,
+                      team_member: team_member_to_create.attributes
         expect(response).to redirect_to root_url
       end
     end

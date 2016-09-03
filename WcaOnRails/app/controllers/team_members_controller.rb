@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class TeamMembersController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_manage_committees?) }, only: [:new, :create]
-  before_action -> { redirect_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update]
+  before_action -> { redirect_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update, :new, :create]
 
   def new
     @committee = committee_from_params

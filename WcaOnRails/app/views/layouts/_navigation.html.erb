@@ -145,7 +145,7 @@
                   <%= t '.team_leader' %>
                 </li>
                 <% current_user.teams_where_is_leader.each do |team| %>
-                  <li><%= link_to team.name, edit_committee_team_path(team.committee.slug, team.slug) %></li>
+                  <li><%= link_to team.name, edit_committee_team_path(team.committee, team) %></li>
                 <% end %>
               <% end %>
 

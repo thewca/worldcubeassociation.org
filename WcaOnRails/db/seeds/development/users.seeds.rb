@@ -30,28 +30,28 @@ after :teams do
 
   # Create a leader and members for the software WCA committee
   software_team = Team.find_by_slug('software-team')
-  FactoryGirl.create(:team_member, :software_team_leader, team: software_team)
+  FactoryGirl.create(:team_member, :software_team_leader)
   3.times do
     FactoryGirl.create(:team_member, team: software_team)
   end
 
   # Create a leader and members for the results WCA committee
   results_team = Team.find_by_slug('results-team')
-  FactoryGirl.create(:team_member, :results_team_leader, team: results_team)
+  FactoryGirl.create(:team_member, :results_team_leader)
   3.times do
     FactoryGirl.create(:team_member, team: results_team)
   end
 
   # Create a leader and members for the regulations WCA committee
   regulations_team = Team.find_by_slug('regulations-team')
-  FactoryGirl.create(:team_member, :regulations_team_leader, team: regulations_team)
+  FactoryGirl.create(:team_member, :regulations_team_leader)
   3.times do
     FactoryGirl.create(:team_member, team: regulations_team)
   end
 
   # Create a leader and members for the disciplinary WCA committee
   disciplinary_team = Team.find_by_slug('disciplinary-team')
-  FactoryGirl.create(:team_member, :disciplinary_team_leader, team: disciplinary_team)
+  FactoryGirl.create(:team_member, :disciplinary_team_leader)
   3.times do
     FactoryGirl.create(:team_member, team: disciplinary_team)
   end

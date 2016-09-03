@@ -118,7 +118,7 @@
           <div class="form-group">
             <label><%= t '.member_of' %></label>
             <% @user.current_teams.each do |team| %>
-              <%= link_to team.name, edit_committee_team_path(team.committee.slug, team.slug), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
+              <%= link_to team.name, edit_committee_team_path(team.committee, team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
             <% end %>
           </div>
         <% end %>

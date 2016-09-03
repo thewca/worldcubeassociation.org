@@ -2,9 +2,9 @@
 class CreateCommitteePositions < ActiveRecord::Migration
   def change
     create_table :committee_positions do |t|
-      t.string :name, limit: 50, null: false
-      t.string :slug, limit: 50, null: false
-      t.string :description, limit: 255, null: false
+      t.string :name, null: false
+      t.string :slug, null: false
+      t.string :description, null: false
       t.boolean :team_leader, null: false
       t.references :committee, index: true, foreign_key: true
 

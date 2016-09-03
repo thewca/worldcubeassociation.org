@@ -136,7 +136,7 @@ en:
       team_member:
         end_date: "The date this member left the team"
         start_date: "The date this member joined the team"
-        user_id: "team member"
+        user_id: "Team member"
       vote:
         comment: "Comment"
   simple_form:

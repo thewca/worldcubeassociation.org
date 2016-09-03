@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-        <% team.current_members.includes(:user).includes(:committee_position).order("committee_positions.team_leader desc").order("users.name asc").each do |member| %>
+        <% team.current_members.includes(:user, :committee_position).order("committee_positions.team_leader desc").order("users.name asc").each do |member| %>
           <tr class="<%= member.committee_position.slug %>">
             <td>
               <% if @committee.slug == Committee::WCA_DELEGATES_COMMITTEE %>

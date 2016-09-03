@@ -1,6 +1,6 @@
 <% provide(:title, 'Create a New Position In The ' + @committee.name) %>
 
-<div class="container new-team">
+<div class="container">
   <h1><%= yield(:title) %></h1>
 
   <%= render 'committee_position_form', url: committee_positions_path(@committee)  %>

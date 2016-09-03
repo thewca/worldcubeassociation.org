@@ -463,8 +463,8 @@ describe CompetitionsController do
   end
 
   describe 'GET #post_announcement' do
-    let(:delegate_team_member) { FactoryGirl.create(:team_member, :senior_delegate, start_date: "2010-01-01") }
-    let(:competition_to_post) { FactoryGirl.create(:competition, delegates: [delegate_team_member.user]) }
+    let(:delegate_team_member) { FactoryGirl.create(:delegate, start_date: "2010-01-01") }
+    let(:competition_to_post) { FactoryGirl.create(:competition, delegates: [delegate_team_member]) }
     context 'when signed in as results team member' do
       sign_in { FactoryGirl.create(:results_team_member) }
 

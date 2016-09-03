@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe CommitteesController, type: :controller do
   let(:committee) { FactoryGirl.create :committee }
   let(:committee_with_team) { FactoryGirl.create :committee, :with_team }
+  let(:committee_attributes) { FactoryGirl.attributes_for(:committee, name: "My Test Committee") }
 
   describe "GET #index" do
     context "when not signed in" do
@@ -97,7 +98,7 @@ RSpec.describe CommitteesController, type: :controller do
       sign_out
 
       it 'redirects to the sign in page' do
-        post :create, committee: { name: "Software", email: "software@worldcubeassociation.org", duties: "Responsible for all WCA software" }
+        post :create, committee: committee_attributes
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -105,7 +106,7 @@ RSpec.describe CommitteesController, type: :controller do
     context 'when signed in as a regular user' do
       sign_in { FactoryGirl.create :user }
       it 'does not allow creation' do
-        post :create, committee: { name: "Software", email: "software@worldcubeassociation.org", duties: "Responsible for all WCA software" }
+        post :create, committee: committee_attributes
         expect(response).to redirect_to root_url
       end
     end
@@ -114,12 +115,11 @@ RSpec.describe CommitteesController, type: :controller do
       sign_in { FactoryGirl.create :admin }
 
       it 'creates a new committee' do
-        post :create, committee: { name: "Software", email: "software@worldcubeassociation.org", duties: "Responsible for all WCA software" }
-        new_committee = Committee.find_by_name("Software")
+        post :create, committee: committee_attributes
+        new_committee = Committee.find_by_name("My Test Committee")
         expect(response).to redirect_to committee_path(new_committee.slug)
-        expect(new_committee.name).to eq "Software"
-        expect(new_committee.slug).to eq "software"
-        expect(new_committee.duties).to eq "Responsible for all WCA software"
+        expect(new_committee.name).to eq "My Test Committee"
+        expect(new_committee.slug).to eq "my-test-committee"
       end
     end
   end

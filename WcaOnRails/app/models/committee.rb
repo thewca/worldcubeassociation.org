@@ -3,7 +3,7 @@
 class Committee < ActiveRecord::Base
   has_many :teams
   has_many :team_members, through: :teams
-  has_many :committee_positions
+  has_many :committee_positions, dependent: :destroy
 
   WCA_BOARD = "wca-board"
   WCA_DELEGATES_COMMITTEE = "wca-delegates-committee"

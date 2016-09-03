@@ -5,6 +5,7 @@ describe TeamsController do
   let!(:team) { FactoryGirl.create(:team) }
   let!(:team_to_delete) { FactoryGirl.create(:team, name: "No members") }
   let!(:team_to_delete_with_member) { FactoryGirl.create(:team, :with_team_member, name: "Team with a member") }
+  let!(:team_attributes) { FactoryGirl.attributes_for(:team, name: "Team 2016") }
 
   describe "GET #new" do
     context "when not signed in" do
@@ -47,7 +48,7 @@ describe TeamsController do
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, committee_id: team.committee.slug, team: {name: "Team 2016", description: "An important team for 2016"}
+        post :create, committee_id: team.committee.slug, team: team_attributes
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -56,7 +57,7 @@ describe TeamsController do
       sign_in { FactoryGirl.create :user }
 
       it 'does not allow creation' do
-        post :create, committee_id: team.committee.slug, team: {name: "Team 2016", description: "An important team for 2016"}
+        post :create, committee_id: team.committee.slug, team: team_attributes
         expect(response).to redirect_to root_url
       end
     end
@@ -65,7 +66,7 @@ describe TeamsController do
       sign_in { FactoryGirl.create(:admin) }
 
       it 'creates a new team' do
-        post :create, committee_id: team.committee.slug, team: {name: "Team 2016", description: "An important team for 2016"}
+        post :create, committee_id: team.committee.slug, team: team_attributes
         new_team = Team.find_by_name("Team 2016")
         expect(response).to redirect_to committee_path(team.committee.slug)
         expect(new_team.name).to eq "Team 2016"
@@ -76,7 +77,7 @@ describe TeamsController do
       sign_in { FactoryGirl.create :admin_demoted }
 
       it 'does not allow creation' do
-        post :create, committee_id: team.committee.slug, team: {name: "Team 2016", description: "An important team for 2016"}
+        post :create, committee_id: team.committee.slug, team: team.attributes
         expect(response).to redirect_to root_url
       end
     end
