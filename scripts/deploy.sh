@@ -29,7 +29,7 @@ rebuild_rails() {
     else
       export RAILS_ENV=development
     fi
-    bundle install --without none
+    bundle install
     bundle exec rake assets:clean assets:precompile
 
     # Note that we are intentionally not automating database migrations.
