@@ -22,7 +22,7 @@
       <%= f.input :wca_id, as: :user_ids, persons_table: true, only_one: true %>
       <div id="person-fields">
         <%= f.input :name %>
-        <%= f.input :countryId, collection: Country.real.map(&:id), label_method: lambda { |id| Country.find(id).name } %>
+        <%= f.input :countryId, collection: Country.real.pluck, label_method: lambda { |id| Country.find(id).name } %>
         <%= f.input :gender, collection: [:m, :f], label_method: lambda { |g| { m: "Male", f: "Female" }[g] } %>
         <%= f.input :dob, as: :date_picker %>
 

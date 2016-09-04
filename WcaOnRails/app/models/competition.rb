@@ -414,8 +414,6 @@ class Competition < ActiveRecord::Base
   end
 
   def has_events_with_ids?(event_ids)
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
     (event_ids - events.ids).empty?
   end
 
@@ -516,7 +514,7 @@ class Competition < ActiveRecord::Base
   end
 
   def event_picker_events
-    competition_events.map(&:event_object).sort_by(&:rank)
+    competition_events.map(&:event).sort_by(&:rank)
   end
 
   def nearby_competitions(days, distance)

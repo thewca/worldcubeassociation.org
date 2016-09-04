@@ -1,11 +1,6 @@
 # frozen_string_literal: true
-sql = "INSERT INTO Formats
-(id, name, sort_by, sort_by_second, expected_solve_count,
-trim_fastest_n, trim_slowest_n)
-VALUES
-('1', 'Best of 1', 'single', 'average', 1, 0, 0),
-('2', 'Best of 2', 'single', 'average', 2, 0, 0),
-('3', 'Best of 3', 'single', 'average', 3, 0, 0),
-('a', 'Average of 5', 'average', 'single', 5, 1, 1),
-('m', 'Mean of 3', 'average', 'single', 3, 0, 0);"
-ActiveRecord::Base.connection.execute(sql)
+Format.create(id: '1', name: 'Best of 1', sort_by: 'single', sort_by_second: 'average', expected_solve_count: 1, trim_fastest_n: 0, trim_slowest_n: 0)
+Format.create(id: '2', name: 'Best of 2', sort_by: 'single', sort_by_second: 'average', expected_solve_count: 2, trim_fastest_n: 0, trim_slowest_n: 0)
+Format.create(id: '3', name: 'Best of 3', sort_by: 'single', sort_by_second: 'average', expected_solve_count: 3, trim_fastest_n: 0, trim_slowest_n: 0)
+Format.create(id: 'a', name: 'Average of 5', sort_by: 'single', sort_by_second: 'average', expected_solve_count: 5, trim_fastest_n: 1, trim_slowest_n: 1)
+Format.create(id: 'm', name: 'Mean of 3', sort_by: 'average', sort_by_second: 'single', expected_solve_count: 3, trim_fastest_n: 0, trim_slowest_n: 0)

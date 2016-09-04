@@ -5,8 +5,8 @@ class ReferenceTableUpdates < ActiveRecord::Migration
       t.boolean :final, null: false
     end
 
-    ActiveRecord::Base.connection.execute("update Rounds set final = 1 where id in ('c', 'f');")
-    ActiveRecord::Base.connection.execute("update Rounds set final = 0 where id not in ('c', 'f');")
+    Round.where(id: ['c', 'f']).update_all(final: 1)
+    Round.where.not(id: ['c', 'f']).update_all(final: 0)
 
     change_table :Formats do |t|
       t.string :sort_by, limit: 10, null: false
@@ -31,27 +31,32 @@ class ReferenceTableUpdates < ActiveRecord::Migration
     add_foreign_key :preferred_formats, :Formats, column: :format_id
     add_index :preferred_formats, [:event_id, :format_id], unique: true
 
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333', 'a', 1), ('333', '3', 2), ('333', '2', 3), ('333', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('444', 'a', 1), ('444', '3', 2), ('444', '2', 3), ('444', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('555', 'a', 1), ('555', '3', 2), ('555', '2', 3), ('555', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('222', 'a', 1), ('222', '3', 2), ('222', '2', 3), ('222', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333bf', '3', 1), ('333bf', '2', 2), ('333bf', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333oh', 'a', 1), ('333oh', '3', 2), ('333oh', '2', 3), ('333oh', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333fm', 'm', 1), ('333fm', '2', 2), ('333fm', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333ft', 'm', 1), ('333ft', '2', 2), ('333ft', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('minx', 'a', 1), ('minx', '3', 2), ('minx', '2', 3), ('minx', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('pyram', 'a', 1), ('pyram', '3', 2), ('pyram', '2', 3), ('pyram', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('sq1', 'a', 1), ('sq1', '3', 2), ('sq1', '2', 3), ('sq1', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('clock', 'a', 1), ('clock', '3', 2), ('clock', '2', 3), ('clock', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('skewb', 'a', 1), ('skewb', '3', 2), ('skewb', '2', 3), ('skewb', '1', 4);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('666', 'm', 1), ('666', '2', 2), ('666', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('777', 'm', 1), ('777', '2', 2), ('777', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('444bf', '3', 1), ('444bf', '2', 2), ('444bf', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('555bf', '3', 1), ('555bf', '2', 2), ('555bf', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333mbf', '3', 1), ('333mbf', '2', 2), ('333mbf', '1', 3);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('magic', 'a', 1);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('mmagic', 'a', 1);")
-    ActiveRecord::Base.connection.execute("insert into preferred_formats (event_id, format_id, ranking) values ('333mbo', 'a', 1);")
+    { "333" => %(a 3 2 1),
+      "444" => %(a 3 2 1),
+      "555" => %(a 3 2 1),
+      "222" => %(a 3 2 1),
+      "333bf" => %(3 2 1),
+      "333oh" => %(a 3 2 1),
+      "333fm" => %(m 2 1),
+      "333ft" => %(m 2 1),
+      "minx" => %(a 3 2 1),
+      "pyram" => %(a 3 2 1),
+      "sq1" => %(a 3 2 1),
+      "clock" => %(a 3 2 1),
+      "skewb" => %(a 3 2 1),
+      "666" => %(m 2 1),
+      "777" => %(m 2 1),
+      "444bf" => %(3 2 1),
+      "555bf" => %(3 2 1),
+      "333mbf" => %(3 2 1),
+      "magic" => %(a),
+      "mmagic" => %(a),
+      "333mbo" => %(a),
+    }.each do |event_id, format_ids|
+      format_ids.each_with_index do |format_id, i|
+        Format.create(event_id: event_id, format_id: format_id, ranking: (i + 1))
+      end
+    end
   end
 
   def down

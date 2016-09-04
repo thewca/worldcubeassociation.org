@@ -85,7 +85,7 @@ class Registration < ActiveRecord::Base
   end
 
   def event_picker_events
-    registration_events.map(&:event_object).sort_by(&:rank)
+    registration_events.map(&:event).sort_by(&:rank)
   end
 
   def waiting_list_info
