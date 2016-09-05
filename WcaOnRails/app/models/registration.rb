@@ -84,7 +84,11 @@ class Registration < ActiveRecord::Base
     person ? person.best_solve(event, type) : SolveTime.new(event.id, type, 0)
   end
 
-  def event_picker_events
+  # Since Registration.events only includes saved events
+  # this method is required to ensure that in any forms which
+  # select events, unsaved events are still presented if
+  # there are any validation issues on the form.
+  def saved_and_unsaved_events
     registration_events.map(&:event).sort_by(&:rank)
   end
 

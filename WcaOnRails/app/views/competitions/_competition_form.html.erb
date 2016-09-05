@@ -223,13 +223,13 @@
         [
           t('.events'),
           true,
-          @competition.event_picker_events,
+          @competition.saved_and_unsaved_events,
           Event.official,
         ],
         [
           t('.unoff_events'),
           false, # Only show deprecated events if this competition has any.
-          @competition.event_picker_events,
+          @competition.saved_and_unsaved_events,
           Event.deprecated,
         ]
       ] %>

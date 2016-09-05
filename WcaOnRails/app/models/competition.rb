@@ -513,7 +513,11 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def event_picker_events
+  # Since Competition.events only includes saved events
+  # this method is required to ensure that in any forms which
+  # select events, unsaved events are still presented if
+  # there are any validation issues on the form.
+  def saved_and_unsaved_events
     competition_events.map(&:event).sort_by(&:rank)
   end
 

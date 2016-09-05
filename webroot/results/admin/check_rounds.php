@@ -576,8 +576,8 @@ function checkEvents () {
   #--- Get events from Results and Competitions
   $eventsResults = dbQuery( "SELECT r.competitionId, r.eventId FROM Results r, Competitions c WHERE c.id = r.competitionId AND r.eventId != '333mbo' $competitionCondition GROUP BY r.competitionId, r.eventId" );
 
-  # Grossness to handle the fact that the competition id in the Competitions table
-  # is the "id" column, not the "competitionId" column.
+  # Grossness to handle the fact that the competition id in the competition_events table
+  # is the "competition_id" column, not the "competitionId" column.
   $competitionConditionForCompetitionsTable = str_replace("competitionId", "competition_id", $competitionCondition);
   $eventsCompetition = dbQuery( "SELECT competition_id, event_id FROM competition_events WHERE 1 $competitionConditionForCompetitionsTable" );
 
