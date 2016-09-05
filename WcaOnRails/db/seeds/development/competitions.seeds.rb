@@ -2,7 +2,7 @@
 after "development:users" do
   class << self
     def random_event_ids
-      official = Event.official.pluck
+      official = Event.official.pluck(:id)
       official.sample(rand(1..official.count))
     end
 

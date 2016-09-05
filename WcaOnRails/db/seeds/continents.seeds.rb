@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-Continent.create([
-                   { id: '_Africa', name: 'Africa', recordName: 'AfR', latitude: 213671, longitude: 16984850, zoom: 3 },
-                   { id: '_Asia', name: 'Asia', recordName: 'AsR', latitude: 34364439, longitude: 108330700, zoom: 2 },
-                   { id: '_Europe', name: 'Europe', recordName: 'ER', latitude: 58299984, longitude: 23049300, zoom: 3 },
-                   { id: '_North America', name: 'North America', recordName: 'NAR', latitude: 45486546, longitude: -93449700, zoom: 3 },
-                   { id: '_Oceania', name: 'Oceania', recordName: 'OcR', latitude: -25274398, longitude: 133775136, zoom: 3 },
-                   { id: '_South America', name: 'South America', recordName: 'SAR', latitude: -21735104, longitude: -63281250, zoom: 3 },
-                 ])
+sql = "INSERT INTO `Continents` (`id`, `name`, `recordName`, `latitude`, `longitude`, `zoom`) VALUES
+('_Africa', 'Africa', 'AfR', 213671, 16984850, 3),
+('_Asia', 'Asia', 'AsR', 34364439, 108330700, 2),
+('_Europe', 'Europe', 'ER', 58299984, 23049300, 3),
+('_North America', 'North America', 'NAR', 45486546, -93449700, 3),
+('_Oceania', 'Oceania', 'OcR', -25274398, 133775136, 3),
+('_South America', 'South America', 'SAR', -21735104, -63281250, 3);"
+ActiveRecord::Base.connection.execute(sql)

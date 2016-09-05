@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :user_preferred_events
+  has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
   belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
 
