@@ -1,39 +1,36 @@
 # frozen_string_literal: true
-sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
-('222', '2x2 Cube', 40, 'time', '2x2 Cube'),
-('222bf', '2x2 Cube: Blindfolded', 1050, 'time', '2x2 blindfolded'),
-('222oh', '2x2 Cube: One-handed', 1200, 'time', '2x2 one-handed'),
-('333', 'Rubik''s Cube', 10, 'time', 'Rubik''s Cube'),
-('333bf', 'Rubik''s Cube: Blindfolded', 50, 'time', '3x3 blindfolded'),
-('333bts', 'Rubik''s Cube: Blindfolded team solving', 1040, 'time', '3x3 blindfolded team solving'),
-('333fm', 'Rubik''s Cube: Fewest moves', 70, 'number', '3x3 fewest moves'),
-('333ft', 'Rubik''s Cube: With feet', 80, 'time', '3x3 with feet'),
-('333mbf', 'Rubik''s Cube: Multiple Blindfolded', 520, 'multi', '3x3 multi blind'),
-('333mbo', 'Rubik''s Cube: Multi blind old style', 999, 'multi', '3x3 multi blind old'),
-('333ni', 'Rubik''s Cube: No inspection', 1010, 'time', '3x3 no inspection'),
-('333oh', 'Rubik''s Cube: One-handed', 60, 'time', '3x3 one-handed'),
-('333r3', 'Rubik''s Cube: 3 in a row', 1030, 'time', '3x3 3 in a row'),
-('333sbf', 'Rubik''s Cube: Speed Blindfolded', 1020, 'time', '3x3 speed blindfolded'),
-('333si', 'Siamese Rubik''s Cube', 1100, 'time', 'Siamese Cube'),
-('333ts', 'Rubik''s Cube: Team solving', 1035, 'time', '3x3 team solving'),
-('360', 'Rubik''s 360', 1150, 'time', 'Rubik''s 360'),
-('444', '4x4 Cube', 20, 'time', '4x4 Cube'),
-('444bf', '4x4 Cube: Blindfolded', 500, 'time', '4x4 blindfolded'),
-('555', '5x5 Cube', 30, 'time', '5x5 Cube'),
-('555bf', '5x5 Cube: Blindfolded', 510, 'time', '5x5 blindfolded'),
-('666', '6x6 Cube', 200, 'time', '6x6 Cube'),
-('777', '7x7 Cube', 210, 'time', '7x7 Cube'),
-('clkbf', 'Rubik''s Clock: Blindfolded', 1060, 'time', 'Clock blindfolded'),
-('clock', 'Rubik''s Clock', 140, 'time', 'Rubik''s Clock'),
-('magic', 'Rubik''s Magic', 997, 'time', 'Rubik''s Magic'),
-('magico', 'Rubik''s Magic: One-handed', 1210, 'time', 'Magic one-handed'),
-('minx', 'Megaminx', 110, 'time', 'Megaminx'),
-('mirbl', 'Mirror Blocks', 1140, 'time', 'Mirror Blocks'),
-('mmagic', 'Master Magic', 998, 'time', 'Master Magic'),
-('pyram', 'Pyraminx', 120, 'time', 'Pyraminx'),
-('rainb', 'Rainbow Cube', 1110, 'time', 'Rainbow Cube'),
-('skewb', 'Skewb', 150, 'time', 'Skewb'),
-('snake', 'Rubik''s Snake', 1120, 'time', 'Rubik''s Snake'),
-('sq1', 'Square-1', 130, 'time', 'Square-1');"
-connection = ActiveRecord::Base.connection()
-connection.execute(sql)
+Event.create(id: '222', name: '2x2 Cube', rank: 40, format: 'time', cellName: '2x2 Cube')
+Event.create(id: '222bf', name: '2x2 Cube: Blindfolded', rank: 1050, format: 'time', cellName: '2x2 blindfolded')
+Event.create(id: '222oh', name: '2x2 Cube: One-handed', rank: 1200, format: 'time', cellName: '2x2 one-handed')
+Event.create(id: '333', name: 'Rubik''s Cube', rank: 10, format: 'time', cellName: 'Rubik''s Cube')
+Event.create(id: '333bf', name: 'Rubik''s Cube: Blindfolded', rank: 50, format: 'time', cellName: '3x3 blindfolded')
+Event.create(id: '333bts', name: 'Rubik''s Cube: Blindfolded team solving', rank: 1040, format: 'time', cellName: '3x3 blindfolded team solving')
+Event.create(id: '333fm', name: 'Rubik''s Cube: Fewest moves', rank: 70, format: 'number', cellName: '3x3 fewest moves')
+Event.create(id: '333ft', name: 'Rubik''s Cube: With feet', rank: 80, format: 'time', cellName: '3x3 with feet')
+Event.create(id: '333mbf', name: 'Rubik''s Cube: Multiple Blindfolded', rank: 520, format: 'multi', cellName: '3x3 multi blind')
+Event.create(id: '333mbo', name: 'Rubik''s Cube: Multi blind old style', rank: 999, format: 'multi', cellName: '3x3 multi blind old')
+Event.create(id: '333ni', name: 'Rubik''s Cube: No inspection', rank: 1010, format: 'time', cellName: '3x3 no inspection')
+Event.create(id: '333oh', name: 'Rubik''s Cube: One-handed', rank: 60, format: 'time', cellName: '3x3 one-handed')
+Event.create(id: '333r3', name: 'Rubik''s Cube: 3 in a row', rank: 1030, format: 'time', cellName: '3x3 3 in a row')
+Event.create(id: '333sbf', name: 'Rubik''s Cube: Speed Blindfolded', rank: 1020, format: 'time', cellName: '3x3 speed blindfolded')
+Event.create(id: '333si', name: 'Siamese Rubik''s Cube', rank: 1100, format: 'time', cellName: 'Siamese Cube')
+Event.create(id: '333ts', name: 'Rubik''s Cube: Team solving', rank: 1035, format: 'time', cellName: '3x3 team solving')
+Event.create(id: '360', name: 'Rubik''s 360', rank: 1150, format: 'time', cellName: 'Rubik''s 360')
+Event.create(id: '444', name: '4x4 Cube', rank: 20, format: 'time', cellName: '4x4 Cube')
+Event.create(id: '444bf', name: '4x4 Cube: Blindfolded', rank: 500, format: 'time', cellName: '4x4 blindfolded')
+Event.create(id: '555', name: '5x5 Cube', rank: 30, format: 'time', cellName: '5x5 Cube')
+Event.create(id: '555bf', name: '5x5 Cube: Blindfolded', rank: 510, format: 'time', cellName: '5x5 blindfolded')
+Event.create(id: '666', name: '6x6 Cube', rank: 200, format: 'time', cellName: '6x6 Cube')
+Event.create(id: '777', name: '7x7 Cube', rank: 210, format: 'time', cellName: '7x7 Cube')
+Event.create(id: 'clkbf', name: 'Rubik''s Clock: Blindfolded', rank: 1060, format: 'time', cellName: 'Clock blindfolded')
+Event.create(id: 'clock', name: 'Rubik''s Clock', rank: 140, format: 'time', cellName: 'Rubik''s Clock')
+Event.create(id: 'magic', name: 'Rubik''s Magic', rank: 997, format: 'time', cellName: 'Rubik''s Magic')
+Event.create(id: 'magico', name: 'Rubik''s Magic: One-handed', rank: 1210, format: 'time', cellName: 'Magic one-handed')
+Event.create(id: 'minx', name: 'Megaminx', rank: 110, format: 'time', cellName: 'Megaminx')
+Event.create(id: 'mirbl', name: 'Mirror Blocks', rank: 1140, format: 'time', cellName: 'Mirror Blocks')
+Event.create(id: 'mmagic', name: 'Master Magic', rank: 998, format: 'time', cellName: 'Master Magic')
+Event.create(id: 'pyram', name: 'Pyraminx', rank: 120, format: 'time', cellName: 'Pyraminx')
+Event.create(id: 'rainb', name: 'Rainbow Cube', rank: 1110, format: 'time', cellName: 'Rainbow Cube')
+Event.create(id: 'skewb', name: 'Skewb', rank: 150, format: 'time', cellName: 'Skewb')
+Event.create(id: 'snake', name: 'Rubik''s Snake', rank: 1120, format: 'time', cellName: 'Rubik''s Snake')
+Event.create(id: 'sq1', name: 'Square-1', rank: 130, format: 'time', cellName: 'Square-1')

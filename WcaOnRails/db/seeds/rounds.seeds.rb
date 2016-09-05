@@ -1,15 +1,12 @@
 # frozen_string_literal: true
-sql = "INSERT INTO `Rounds` (`id`, `rank`, `name`, `cellName`, `final`) VALUES
-('0', 19, 'Qualification round', 'Qualification', 0),
-('1', 29, 'First round', 'First', 0),
-('2', 50, 'Second round', 'Second', 0),
-('3', 79, 'Semi Final', 'Semi Final', 0),
-('b', 39, 'B Final', 'B Final', 0),
-('c', 90, 'Combined Final', 'Combined Final', 1),
-('d', 20, 'Combined First round', 'Combined First', 0),
-('e', 59, 'Combined Second round', 'Combined Second', 0),
-('f', 99, 'Final', 'Final', 1),
-('g', 70, 'Combined Third round', 'Combined Third', 0),
-('h', 10, 'Combined qualification', 'Combined qualification', 0);"
-connection = ActiveRecord::Base.connection()
-connection.execute(sql)
+Round.create(id: '0', rank: 19, name: 'Qualification round', cellName: 'Qualification', final: 0)
+Round.create(id: '1', rank: 29, name: 'First round', cellName: 'First', final: 0)
+Round.create(id: '2', rank: 50, name: 'Second round', cellName: 'Second', final: 0)
+Round.create(id: '3', rank: 79, name: 'Semi Final', cellName: 'Semi Final', final: 0)
+Round.create(id: 'b', rank: 39, name: 'B Final', cellName: 'B Final', final: 0)
+Round.create(id: 'c', rank: 90, name: 'Combined Final', cellName: 'Combined Final', final: 1)
+Round.create(id: 'd', rank: 20, name: 'Combined First round', cellName: 'Combined First', final: 0)
+Round.create(id: 'e', rank: 59, name: 'Combined Second round', cellName: 'Combined Second', final: 0)
+Round.create(id: 'f', rank: 99, name: 'Final', cellName: 'Final', final: 1)
+Round.create(id: 'g', rank: 70, name: 'Combined Third round', cellName: 'Combined Third', final: 0)
+Round.create(id: 'h', rank: 10, name: 'Combined qualification', cellName: 'Combined qualification', final: 0)
