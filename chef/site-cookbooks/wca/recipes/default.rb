@@ -71,7 +71,7 @@ rails_root = "#{repo_root}/WcaOnRails"
 
 #### Mysql
 mysql_service 'default' do
-  version '5.5'
+  version '5.6'
   initial_root_password secrets['mysql_password']
   # Force default socket to make rails happy
   socket "/var/run/mysqld/mysqld.sock"
