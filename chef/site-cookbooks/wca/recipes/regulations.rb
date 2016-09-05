@@ -18,9 +18,7 @@ bash "install_wkhtmltopdf" do
   EOH
 end
 
-execute "pip install wrc --upgrade" do
-  user "root"
-end
+execute "pip install wrc --upgrade"
 
 execute "#{repo_root}/scripts/deploy.sh rebuild_regs" do
   user username

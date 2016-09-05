@@ -7,7 +7,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Install [Vagrant](https://www.vagrantup.com/), which requires
   [VirtualBox](https://www.virtualbox.org/).
 - `git clone https://github.com/cubing/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
-- `git submodule update --init --recursive` - Initialize submodules.
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run in Vagrant (easier and gets everything working)

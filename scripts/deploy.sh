@@ -11,13 +11,12 @@ rebuild_regs() {
   # pdf generations relies on wkhtmltopdf (with patched qt), which should be in $PATH
   build_folder=regulations/build
   regs_folder_root=WcaOnRails/app/views
+  tmp_dir=/tmp/regs-todelete
   regs_folder=$regs_folder_root/regulations
   regs_version=$regs_folder/version
   translations_version=$regs_folder/translations/version
 
-  if [ -a $build_folder ]; then
-    rm -rf $build_folder
-  fi
+  rm -rf $build_folder
   mkdir -p $build_folder
 
   # We want latest commit hash, so we do a shallow copy of the repositories (and not simply a wget)
@@ -43,7 +42,7 @@ rebuild_regs() {
 
   # Else we have to rebuild something
 
-  # This save tracked files that may have unstashed changes too
+  # This saves tracked files that may have unstashed changes too
   cp -r $regs_folder $build_folder
 
   # Checkout data (scramble programs, history)
@@ -60,7 +59,7 @@ rebuild_regs() {
         inputdir=$build_folder/wca-regulations-translations/${l}
         outputdir=$build_folder/regulations/translations/${l}
         mkdir -p $outputdir
-        echo "Doing "${kind}" for language "${l}
+        echo "Generating ${kind} for language ${l}"
         wrc --target=$kind -l $l -o $outputdir -g $git_translations_hash $inputdir
       done
     done
@@ -84,11 +83,10 @@ rebuild_regs() {
     echo "Regulations are up to date"
   fi
 
-  if [ -a $regs_folder ]; then
-    # Remove previous build
-    rm -rf $regs_folder
-  fi
-  mv $outputdir $regs_folder_root
+  rm -rf $tmp_dir
+  mv $regs_folder $tmp_dir
+  mv $outputdir $regs_folder
+  rm -rf $tmp_dir
 }
 
 rebuild_rails() {
