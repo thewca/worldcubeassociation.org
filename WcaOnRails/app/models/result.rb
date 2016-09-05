@@ -34,7 +34,7 @@ class Result < ActiveRecord::Base
       results = results.where(roundId: params[:roundId])
     end
 
-    results.group_by {|r| r[:eventId]}
+    results.group_by(&:eventId)
   end
 
   def self.search_by_competition(competitionId, params: {})
@@ -53,6 +53,6 @@ class Result < ActiveRecord::Base
       results = results.where(roundId: params[:roundId])
     end
 
-    results.group_by {|r| r[:eventId]}
+    results.group_by(&:eventId)
   end
 end

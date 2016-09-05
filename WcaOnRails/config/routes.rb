@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id'
       get '/users/:wca_id/results' => 'users#results'
+      get '/users/:wca_id/rankings' => 'users#rankings'
       get '/competitions' => 'api#competitions'
       get '/competitions/:id' => 'competitions#show'
       get '/competitions/:id/results' => 'competitions#results'
