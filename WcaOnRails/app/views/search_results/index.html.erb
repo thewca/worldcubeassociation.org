@@ -77,7 +77,7 @@
       <%= paginate @posts, param_name: :posts_page, params: { anchor: "posts" } %>
     <% end %>
 
-    <% if !@regulations.empty? %>
+    <% if @regulations.present? %>
       <h2><%= anchorable "Regulations and Guidelines" %></h2>
       <% @regulations.each do |reg| %>
         <div>
@@ -85,7 +85,7 @@
             <h4><%= wca_highlight(reg["id"], query_parts) %></h4>
           <% end %>
           <blockquote>
-            <%= wca_highlight(reg["text"], query_parts) %>
+            <%= wca_highlight(reg["content_html"], query_parts) %>
           </blockquote>
         </div>
       <% end %>
@@ -102,7 +102,7 @@
       <h2>No posts found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
     <% if @regulations.empty? %>
-      <h2>No Regulation or Guideline found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
+      <h2>No Regulations or Guidelines found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
   <% end %>
 </div>

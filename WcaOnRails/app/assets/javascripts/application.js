@@ -117,6 +117,10 @@ wca.renderMarkdownRequest = function(markdownContent) {
   });
 };
 
+wca.stripHtmlTags = function(text) {
+  return $("<div/>").html(text).text();
+};
+
 wca.datetimepicker = function(){
   // Copied (and modified by jfly) from
   // https://github.com/zpaulovics/datetimepicker-rails
