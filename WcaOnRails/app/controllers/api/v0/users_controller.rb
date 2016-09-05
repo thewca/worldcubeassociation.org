@@ -20,10 +20,23 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def results
     results = Result.search_by_person(params[:wca_id], params: params)
-    if !results
-      render status: 404, json: {error: "WCA ID doesn't exist", results: results}
+
+    if results
+    	render status: :ok, json: results
     else
-    render status: :ok, json: results
+      render status: 404, json: { error: "WCA ID does not exist" }
     end
+  end
+
+  def rankings
+  	person = Person.find_by_wca_id(params[:wca_id])
+  	ranksSingle = person.ranksSingle.index_by(&:eventId)
+  	ranksAverage = person.ranksAverage.index_by(&:eventId)
+
+  	if person
+  		render status: :ok, json: { single: ranksSingle, average: ranksAverage }
+  	else
+  		render status: 404, json: { error: "WCA ID does not exist" }
+  	end
   end
 end
