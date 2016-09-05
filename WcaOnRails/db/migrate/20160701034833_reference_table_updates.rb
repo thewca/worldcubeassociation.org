@@ -51,8 +51,7 @@ class ReferenceTableUpdates < ActiveRecord::Migration
       "333mbf" => %w(3 2 1),
       "magic" => %w(a),
       "mmagic" => %w(a),
-      "333mbo" => %w(a),
-    }.each do |event_id, format_ids|
+      "333mbo" => %w(a) }.each do |event_id, format_ids|
       format_ids.each_with_index do |format_id, i|
         PreferredFormat.create(event_id: event_id, format_id: format_id, ranking: (i + 1))
       end
