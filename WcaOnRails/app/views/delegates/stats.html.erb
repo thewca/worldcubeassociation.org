@@ -14,19 +14,19 @@
         <th class="last" data-sortable="true">Last delegated</th>
         <th class="first" data-sortable="true">First delegated</th>
         <th class="total" data-sortable="true">Total competitions</th>
-        <th></th>
+        
       </tr>
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
-        <tr>
+        <tr class="<%= delegate_class(delegate.delegate_status) %>">
           <td class="delegate"><%= delegate.name %></td>
           <td class="position"><%= position(delegate.delegate_status) %></td>
           <td class="country"><%= delegate.region %></td>
           <td class="last"><%= delegate.delegated_competitions.last.start_date if delegate.delegated_competitions.present? %></td>
           <td class="first"><%= delegate.delegated_competitions.first.start_date if delegate.delegated_competitions.present? %></td>
           <td class="total"><%= delegate.delegated_competitions.count if delegate.delegated_competitions.present? %></td>
-          <td></td>
+          
         </tr>
       <% end %>
     </tbody>
