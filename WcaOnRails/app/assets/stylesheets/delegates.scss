@@ -31,15 +31,14 @@ tr.candidate-delegate {
 }
 
 .delegates-table {
+  font-size: 13px;
+
   .delegate {
-    width: 25%;
+    max-width: 25%;
   }
 
-  .position {
-    width: 15%;
-  }
-
-  .country {
+  .position,
+  .region {
     width: 15%;
   }
 

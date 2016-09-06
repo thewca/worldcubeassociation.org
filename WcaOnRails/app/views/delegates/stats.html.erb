@@ -10,24 +10,24 @@
       <tr>
         <th class="delegate" data-sortable="true" data-field="delegate">Delegate</th>
         <th class="position" data-sortable="true">Position</th>
-        <th class="country" data-sortable="true">Country</th>
+        <th class="region" data-sortable="true">Region</th>
         <th class="last" data-sortable="true">Last delegated</th>
         <th class="first" data-sortable="true">First delegated</th>
-        <th class="total" data-sortable="true">Delegated competitions</th>
-        
+        <th class="total" data-sortable="true">Total delegated</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
-        <% competitions = delegate.delegated_competitions.order(:year, :month, :day) %>
+        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select{ |c| c.is_over? } %>
         <tr class="<%= delegate_class(delegate.delegate_status) %>">
           <td class="delegate"><%= delegate.name %></td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
-          <td class="country"><%= delegate.region %></td>
+          <td class="region"><%= delegate.region %></td>
           <td class="last"><%= competitions.last.start_date if competitions.present? %></td>
           <td class="first"><%= competitions.first.start_date if competitions.present? %></td>
           <td class="total"><%= competitions.count if competitions.present? %></td>
-          
+          <td></td>
         </tr>
       <% end %>
     </tbody>
