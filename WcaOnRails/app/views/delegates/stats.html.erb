@@ -3,28 +3,33 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <table class="table table-striped">
+  <%= wca_table table_class: "delegates-table",
+                data: { toggle: "table", sort_name: "delegate", search: "true" } do %>
+  <!--table class="table table-striped"-->
     <thead>
       <tr>
-        <th>Delegate</th>
-        <th>Position</th>
-        <th>Country</th>
-        <th>Last delegated</th>
-        <th>First delegated</th>
-        <th>Total competitions</th>
+        <th class="delegate" data-sortable="true" data-field="delegate">Delegate</th>
+        <th class="position" data-sortable="true">Position</th>
+        <th class="country" data-sortable="true">Country</th>
+        <th class="last" data-sortable="true">Last delegated</th>
+        <th class="first" data-sortable="true">First delegated</th>
+        <th class="total" data-sortable="true">Total competitions</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
         <tr>
-          <td><%= delegate.name %></td>
-          <td><%= delegate.delegate_status %></td>
-          <td><%= delegate.region %></td>
-          <td><%= delegate.delegated_competitions.last.start_date if delegate.delegated_competitions.present? %></td>
-          <td><%= delegate.delegated_competitions.first.start_date if delegate.delegated_competitions.present? %></td>
-          <td><%= delegate.delegated_competitions.count if delegate.delegated_competitions.present? %></td>
+          <td class="delegate"><%= delegate.name %></td>
+          <td class="position"><%= position(delegate.delegate_status) %></td>
+          <td class="country"><%= delegate.region %></td>
+          <td class="last"><%= delegate.delegated_competitions.last.start_date if delegate.delegated_competitions.present? %></td>
+          <td class="first"><%= delegate.delegated_competitions.first.start_date if delegate.delegated_competitions.present? %></td>
+          <td class="total"><%= delegate.delegated_competitions.count if delegate.delegated_competitions.present? %></td>
+          <td></td>
         </tr>
       <% end %>
     </tbody>
-  </table>
+  <!--/table-->
+  <% end %>
 </div>

@@ -29,3 +29,28 @@ tr.candidate-delegate {
 #avatar_thumbnail {
   cursor: pointer;
 }
+
+.delegates-table {
+  .delegate {
+    width: 25%;
+  }
+
+  .position {
+    width: 15%;
+  }
+
+  .country {
+    width: 15%;
+  }
+
+  .first,
+  .last {
+    width: 12%;
+    text-align: center;
+  }
+
+  .total {
+    width: 12%;
+    text-align: center;
+  }
+}
