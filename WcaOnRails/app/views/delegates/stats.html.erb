@@ -3,7 +3,7 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <%= wca_table table_class: "delegates-table",
+  <%= wca_table table_class: "delegates-table", striped: false,
                 data: { toggle: "table", sort_name: "delegate", search: "true" } do %>
   <!--table class="table table-striped"-->
     <thead>
@@ -22,7 +22,7 @@
         <% competitions = delegate.delegated_competitions.order(:year, :month, :day) %>
         <tr class="<%= delegate_class(delegate.delegate_status) %>">
           <td class="delegate"><%= delegate.name %></td>
-          <td class="position"><%= position(delegate.delegate_status) %></td>
+          <td class="position"><%= delegate.delegate_status.humanize %></td>
           <td class="country"><%= delegate.region %></td>
           <td class="last"><%= competitions.last.start_date if competitions.present? %></td>
           <td class="first"><%= competitions.first.start_date if competitions.present? %></td>
