@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Hook into rails auto reload mechanism.
 #  http://stackoverflow.com/a/7670266/1739415
 Rails.configuration.to_prepare do

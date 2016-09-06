@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class SolveTime
-  EMPTY_STRING = ''.freeze
-  CLOCK_FORMAT = "%d:%02d:%02d.%02d".freeze
-  DOT_STRING = ".".freeze
-  ZERO_STRING = "0".freeze
-  DNF_STRING = "DNF".freeze
-  DNS_STRING = "DNS".freeze
-  QUESTION_STRING = "?:??:??".freeze
+  EMPTY_STRING = ''
+  CLOCK_FORMAT = "%d:%02d:%02d.%02d"
+  DOT_STRING = "."
+  ZERO_STRING = "0"
+  DNF_STRING = "DNF"
+  DNS_STRING = "DNS"
+  QUESTION_STRING = "?:??:??"
 
   include Comparable
 

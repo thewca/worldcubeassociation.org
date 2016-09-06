@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Poll do
@@ -23,12 +24,12 @@ describe Poll do
 
     it "testing deadline bug" do
       # Skipping validation because can't create poll with past deadline.
-      poll = FactoryGirl.build(:poll, deadline: Date.new(2014, 02, 11))
+      poll = FactoryGirl.build(:poll, deadline: Date.new(2014, 2, 11))
       poll.save!(validate: false)
       poll.comment = "Hey Jeremy"
       poll.save!(validate: false)
       poll.reload
-      expect(poll.deadline).to eq Date.new(2014, 02, 11)
+      expect(poll.deadline).to eq Date.new(2014, 2, 11)
     end
   end
 

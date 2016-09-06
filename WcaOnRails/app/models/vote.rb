@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Vote < ActiveRecord::Base
 
   belongs_to :user
@@ -22,7 +23,7 @@ class Vote < ActiveRecord::Base
 
   validate :must_have_at_least_one_option
   def must_have_at_least_one_option
-    if poll_options.length == 0
+    if poll_options.empty?
       errors.add(:poll_options, "can't be empty")
     end
   end

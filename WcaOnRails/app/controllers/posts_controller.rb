@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :rss, :show]
   before_action -> { redirect_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]

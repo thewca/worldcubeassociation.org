@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreatePollsTables < ActiveRecord::Migration
   def change
     create_table "polls", force: :cascade do |t|

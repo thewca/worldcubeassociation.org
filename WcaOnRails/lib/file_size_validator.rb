@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # lib/file_size_validator.rb
 # Based on: https://gist.github.com/795665
 

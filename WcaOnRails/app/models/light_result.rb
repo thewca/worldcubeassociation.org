@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'solve_time'
 
 # This is an alternative to `Result` used for performance reasons.

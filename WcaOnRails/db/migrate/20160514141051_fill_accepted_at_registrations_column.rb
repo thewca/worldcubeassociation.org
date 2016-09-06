@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FillAcceptedAtRegistrationsColumn < ActiveRecord::Migration
   def change
     # Move the data

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Round
   attr_accessor :id, :rank, :name, :cellName, :valid, :final
   alias_method :valid?, :valid

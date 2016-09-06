@@ -44,3 +44,9 @@ Style/PerlBackrefs:
 
 Style/Next:
   Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: semantic

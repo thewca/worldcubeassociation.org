@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 begin
   spring_bin_path = File.expand_path('../spring', __FILE__)
   load spring_bin_path

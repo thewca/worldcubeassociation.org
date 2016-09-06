@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Doorkeeper.configure do
   # NOTE: Keep this at the top of the file, so we can link directly to it
   #       without line numbers changing.

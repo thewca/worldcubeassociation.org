@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Preview all emails at http://localhost:3000/rails/mailers/competitions_mailer
 class CompetitionsMailerPreview < ActionMailer::Preview
   def notify_board_of_confirmed_competition

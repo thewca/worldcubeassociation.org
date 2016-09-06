@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Format
   attr_accessor :id, :name, :sort_by, :trim_fastest_n, :trim_slowest_n, :expected_solve_count
 

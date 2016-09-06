@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PollsController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_create_poll?) }, only: [:new, :create, :update, :destroy]

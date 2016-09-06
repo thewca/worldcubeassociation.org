@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'i18n/tasks/scanners/file_scanner'
 class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
   include I18n::Tasks::Scanners::RelativeKeys
@@ -31,7 +32,8 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
       # 'absolute_key' returns something that we assume looks like model.(.*).attribute
       abskey = absolute_key(".#{attribute}", path)
       occurrence = occurrence_from_position(
-        path, text, Regexp.last_match.offset(0).first)
+        path, text, Regexp.last_match.offset(0).first
+      )
       model = extract_model_name(abskey)
       # Mark the hint as used if we don't use custom hint
       if !input_params.include?("hint:")
@@ -53,7 +55,8 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     text.scan(/^\s*<%= f.input :(\w+), as: :radio_buttons, collection: \[(.*)\](.*)%>/) do |attribute, collection|
       abskey = absolute_key(".#{attribute}", path)
       occurrence = occurrence_from_position(
-        path, text, Regexp.last_match.offset(0).first)
+        path, text, Regexp.last_match.offset(0).first
+      )
       model = extract_model_name(abskey)
       # Get all choices from the f.input
       options = collection.gsub(/[: ]/, '').split(',')

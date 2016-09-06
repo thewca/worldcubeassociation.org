@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 CarrierWave.configure do |config|
   config.storage = :file
   # From http://stackoverflow.com/a/32463067

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 after "development:users" do
   results_team_users = Team.find_by_friendly_id('software').team_members.map(&:user)
   100.times do

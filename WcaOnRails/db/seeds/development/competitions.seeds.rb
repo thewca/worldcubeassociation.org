@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 after "development:users" do
   class << self
     def random_event_ids

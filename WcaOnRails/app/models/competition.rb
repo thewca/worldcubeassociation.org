@@ -18,7 +18,7 @@ class Competition < ActiveRecord::Base
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
-  has_one :delegate_report
+  has_one :delegate_report, dependent: :destroy
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -52,9 +52,10 @@ class Competition < ActiveRecord::Base
     registration_close
     results_posted_at
     results_nag_sent_at
+    announced_at
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
-  INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )".freeze
+  INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
@@ -79,6 +80,7 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_DANGER = 28
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
+  RECENT_DAYS = 30
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
@@ -89,14 +91,14 @@ class Competition < ActiveRecord::Base
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   def must_have_at_least_one_event
-    if events.length == 0
+    if events.empty?
       errors.add(:eventSpecs, "must contain at least one event for this competition")
     end
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
-    if delegate_ids.length == 0
+    if delegate_ids.empty?
       errors.add(:delegate_ids, "must contain at least one WCA delegate")
     end
   end
@@ -184,6 +186,8 @@ class Competition < ActiveRecord::Base
       end
     end
   end
+
+  after_create :create_delegate_report
 
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
@@ -424,8 +428,10 @@ class Competition < ActiveRecord::Base
   end
 
   def contains?(search_param)
-    [name, cityName, venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
-      field.downcase.include?(search_param.downcase)
+    search_param.split.all? do |part|
+      [name, cityName, delegates.pluck(:name).join(','), venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
+        field.downcase.include?(part.downcase)
+      end
     end
   end
 
@@ -511,9 +517,9 @@ class Competition < ActiveRecord::Base
 
   def nearby_competitions(days, distance)
     Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
-      .select { |c| kilometers_to(c) <= distance }
-      .sort_by { |c| kilometers_to(c) }
+      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id
+    ).select { |c| kilometers_to(c) <= distance }
+     .sort_by { |c| kilometers_to(c) }
   end
 
   private def to_radians(degrees)
@@ -625,13 +631,6 @@ class Competition < ActiveRecord::Base
 
         [ event, rounds_with_results ]
       end
-  end
-
-  def delegate_report
-    raise if new_record?
-    DelegateReport.find_or_create_by!(competition_id: self.id) do |dr|
-      dr.competition_id = self.id
-    end
   end
 
   # Profiling the rendering of _results_table.html.erb showed quite some

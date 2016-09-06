@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "fileutils"
 
 class User < ActiveRecord::Base
@@ -85,7 +86,7 @@ class User < ActiveRecord::Base
 
   validate :cannot_demote_senior_delegate_with_subordinate_delegates
   def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && subordinate_delegates.length != 0
+    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
       errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
@@ -406,6 +407,10 @@ class User < ActiveRecord::Base
   def can_edit_delegate_report?(delegate_report)
     competition = delegate_report.competition
     can_admin_results? || (competition.delegates.include?(self) && !delegate_report.posted?)
+  end
+
+  def can_see_admin_competitions?
+    board_member? || senior_delegate? || admin?
   end
 
   def get_cannot_delete_competition_reason(competition)

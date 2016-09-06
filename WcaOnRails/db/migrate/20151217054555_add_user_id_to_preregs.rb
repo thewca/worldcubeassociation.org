@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddUserIdToPreregs < ActiveRecord::Migration
   def change
     add_column :Preregs, :user_id, :int

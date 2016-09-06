@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 sql = "INSERT INTO `Formats` (`id`, `name`) VALUES
 ('1', 'Best of 1'),
 ('2', 'Best of 2'),

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CompetitionDelegate < ActiveRecord::Base
   belongs_to :delegate, class_name: "User"
   validates_presence_of :delegate

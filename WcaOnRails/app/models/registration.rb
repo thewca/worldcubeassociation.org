@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Registration < ActiveRecord::Base
   self.table_name = "Preregs"
 
@@ -101,7 +102,7 @@ class Registration < ActiveRecord::Base
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if events.length == 0
+    if events.empty?
       errors.add(:registration_events, "must register for at least one event")
     end
   end

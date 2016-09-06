@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: wca_development
 -- ------------------------------------------------------
--- Server version	10.1.14-MariaDB
+-- Server version 10.1.14-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -52,6 +52,7 @@ CREATE TABLE `Competitions` (
   `results_posted_at` datetime DEFAULT NULL,
   `results_nag_sent_at` datetime DEFAULT NULL,
   `generate_website` tinyint(1) DEFAULT NULL,
+  `announced_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1051,4 +1052,12 @@ INSERT INTO schema_migrations (version) VALUES ('20160705121551');
 INSERT INTO schema_migrations (version) VALUES ('20160727000015');
 
 INSERT INTO schema_migrations (version) VALUES ('20160731181145');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811013347');
+
+INSERT INTO schema_migrations (version) VALUES ('20160831212003');
+
+INSERT INTO schema_migrations (version) VALUES ('20160901120254');
+
+INSERT INTO schema_migrations (version) VALUES ('20160902230822');
 

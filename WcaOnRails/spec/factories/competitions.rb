@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }

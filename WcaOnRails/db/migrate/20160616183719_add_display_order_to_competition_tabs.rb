@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddDisplayOrderToCompetitionTabs < ActiveRecord::Migration
   def change
     add_column :competition_tabs, :display_order, :integer
