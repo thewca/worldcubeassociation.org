@@ -378,7 +378,7 @@ GEM
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     slop (3.6.0)
-    spring (1.4.3)
+    spring (1.7.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (3.0.2)

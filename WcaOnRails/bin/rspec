@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 begin
-  spring_bin_path = File.expand_path('../spring', __FILE__)
-  load spring_bin_path
+  load File.expand_path('../spring', __FILE__)
 rescue LoadError => e
-  raise unless e.message.end_with? spring_bin_path, 'spring/binstub'
+  raise unless e.message.include?('spring')
 end
 require 'bundler/setup'
 load Gem.bin_path('rspec-core', 'rspec')
