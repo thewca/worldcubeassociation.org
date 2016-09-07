@@ -5,7 +5,6 @@
 
   <%= wca_table table_class: "delegates-stats-table", striped: false,
                 data: { toggle: "table", sort_name: "delegate", search: "true" } do %>
-  <!--table class="table table-striped"-->
     <thead>
       <tr>
         <th class="delegate" data-sortable="true" data-field="delegate">Delegate</th>
@@ -19,18 +18,17 @@
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
-        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select{ |c| c.is_over? } %>
+        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select(&:is_over?) %>
         <tr class="<%= delegate_class(delegate.delegate_status) %>">
           <td class="delegate"><%= delegate.name %></td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
           <td class="region"><%= delegate.region %></td>
-          <td class="last"><%= competitions.last.start_date if competitions.present? %></td>
-          <td class="first"><%= competitions.first.start_date if competitions.present? %></td>
-          <td class="total"><%= competitions.count if competitions.present? %></td>
-          <td></td>
+          <td class="last"><%= competitions&.last&.start_date %></td>
+          <td class="first"><%= competitions&.first&.start_date %></td>
+          <td class="total"><%= competitions&.count %></td>
+          <td><%= link_to "History", "/competitions?display=admin&years=all&search=#{delegate.name.gsub(' ', '+')}", target: "_blank" %></td>
         </tr>
       <% end %>
     </tbody>
-  <!--/table-->
   <% end %>
 </div>
