@@ -323,12 +323,14 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
 end
 
 #### Initialize rails gems/database
-execute "bundle install --without none" do
+execute "bundle install #{'--deployment --without development test' if rails_env == 'production'} --path /home/#{username}/.bundle" do
+  user username
   cwd rails_root
   environment({
     "RACK_ENV" => rails_env,
   })
 end
+
 if node.chef_environment.start_with?("development")
   db_setup_lockfile = '/tmp/rake-db-setup-run'
   execute "bundle exec rake db:setup" do
