@@ -4,9 +4,6 @@ require 'securerandom'
 include_recipe "wca::base"
 include_recipe "nodejs"
 
-unless node.chef_environment.include? "-noregs"
-  include_recipe "wca::regulations"
-end
 
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
@@ -125,7 +122,6 @@ gem_package "rails" do
 end
 chef_env_to_rails_env = {
   "development" => "development",
-  "development-noregs" => "development",
   "staging" => "production",
   "production" => "production",
 }
@@ -217,7 +213,7 @@ logrotate_app 'nginx-wca' do
   path "/var/log/nginx/*.log"
 end
 
-server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "", "development-noregs" => "" }[node.chef_environment]
+server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644

@@ -3,7 +3,7 @@
 print_usage_and_exit() {
   echo "Usage: $0 <environment>"
   echo "Bootstraps a WCA server."
-  echo "<environment> must be one of development, development-noregs, staging, production."
+  echo "<environment> must be one of development, staging, production."
   exit 1
 }
 if [ $# -gt 1 ]; then
@@ -12,8 +12,6 @@ fi
 
 environment=$1
 if [ "$environment" == "development" ]; then
-  git_branch=master
-elif [ "$environment" == "development-noregs" ]; then
   git_branch=master
 elif [ "$environment" == "staging" ]; then
   git_branch=master
@@ -63,17 +61,17 @@ EOL
   fi
   # Let the root user do the git-ing, and then chown appropriately.
   if ! [ -d $repo_root ]; then
-    git clone -b $git_branch --recursive https://github.com/cubing/worldcubeassociation.org.git $repo_root
+    git clone -b $git_branch https://github.com/cubing/worldcubeassociation.org.git $repo_root
   else
     (
       cd $repo_root
-      git pull --recurse-submodules && git submodule update
+      git pull
     )
   fi
   chown -R cubing:cubing $repo_root
 fi
 
-if [ "$environment" != "development" ] && [ "$environment" != "development-noregs" ]; then
+if [ "$environment" != "development" ]; then
   # Download database export and other secrets that are required to provision a new server.
   # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
   # software-admins@worldcubeassociation.org if you need access.

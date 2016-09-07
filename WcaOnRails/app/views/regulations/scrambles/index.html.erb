@@ -1,0 +1,52 @@
+<% provide(:title, 'WCA Scrambles') %>
+<div class="container">
+  <h1>WCA Scrambles</h1>
+  <p>The current official scramble program is <em>TNoodle-WCA-0.11.1</em>. It generates high-quality scramble sequences for all the events of a competition at once.</p>
+  <center>
+    <span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
+      Download the official scramble program:<br/>
+      <strong><%= link_to "TNoodle-WCA-0.11.1.jar", "./tnoodle/TNoodle-WCA-0.11.1.jar" %></strong>
+    </span>
+    <br/>
+    Last official change: April 4, 2016
+  </center>
+  <h2>Important Notes for Delegates</h2>
+  <ul>
+    <li>Official competitions must always use the current version of the official scramble program.</li>
+    <li>Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons).</li>
+    <li>Delegates must save all scramble sequences generated for an official competition, and send them with the results (see <%= link_to "Regulation 1c3a", "../#1c3a" %>).</li>
+  </ul>
+  <h2>Detailed Instructions for TNoodle</h2>
+  <p>TNoodle requires <%= link_to "Java", "https://www.java.com/en/" %> to be installed on your computer.</p>
+  <ol>
+    <li>Run the <code>TNoodle-WCA-0.11.1.jar</code> file on your computer.<br />It will open the page <%= link_to nil, "http://localhost:2014/scramble" %> in your browser.</li>
+    <li>Enter the details for your competition (competition name, number of rounds for each event, details for each round).<br />
+      If you would like to password protect the file, enter a password.</li>
+    <li>Wait for the loading bar to finish and click the "Scramble!" button that appears.<br />
+      A <code>.zip</code> file will download in your browser.</li>
+  </ol>
+  <h3>Notes</h3>
+  <ul>
+    <li>4x4x4 scramble sequences <strong>may take a few minutes</strong> to initialize and generate. If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck.</li>
+    <li>TNoodle creates a <code>tnoodle_resources</code> folder with a few MB of files (mostly cached tables) in the same folder it is run.<br />
+      Keep this folder if you want to generate more 4x4x4 scramble sequences more quickly in the future, but feel free to delete it if you need to reclaim disk space.</li>
+    <li>TNoodle performs scramble filtering according to rules set by the WCA Board. Check its readme if you would like to know the current rules.</li>
+  </ul>
+  <h2>About TNoodle</h2>
+  <p>TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Cl&#233;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the <%= link_to "TNoodle project on GitHub", "https://github.com/cubing/tnoodle" %> to view the source, report an issue, or contribute to its development.</p>
+  <h2>History of Official Releases</h2>
+  <p>Old versions must not be used without permission from the WCA Board. These are provided in case you want to check the behaviour of an older version.</p>
+  <ul>
+    <li><%= link_to "TNoodle-0.7.4", "./tnoodle/old/TNoodle-0.7.4.jar" %> (2013-01-01)</li>
+    <li><%= link_to "TNoodle-0.7.5", "./tnoodle/old/TNoodle-0.7.5.jar" %> (2013-02-26)</li>
+    <li><%= link_to "TNoodle-0.7.8", "./tnoodle/old/TNoodle-0.7.8.jar" %> (2013-04-26)</li>
+    <li><%= link_to "TNoodle-0.7.12", "./tnoodle/old/TNoodle-0.7.12.jar" %> (2013-10-01)</li>
+    <li><%= link_to "TNoodle-WCA-0.8.0", "./tnoodle/old/TNoodle-WCA-0.8.0.jar" %> (2014-01-13)</li>
+    <li><%= link_to "TNoodle-WCA-0.8.1", "./tnoodle/old/TNoodle-WCA-0.8.1.jar" %> (2014-01-14)</li>
+    <li><%= link_to "TNoodle-WCA-0.8.2", "./tnoodle/old/TNoodle-WCA-0.8.2.jar" %> (2014-01-28)</li>
+    <li><%= link_to "TNoodle-WCA-0.8.4", "./tnoodle/old/TNoodle-WCA-0.8.4.jar" %> (2014-02-10)</li>
+    <li><%= link_to "TNoodle-WCA-0.9.0", "./tnoodle/old/TNoodle-WCA-0.9.0.jar" %> (2015-03-30)</li>
+    <li><%= link_to "TNoodle-WCA-0.10.0", "./tnoodle/old/TNoodle-WCA-0.10.0.jar" %> (2015-06-30)</li>
+    <li><%= link_to "TNoodle-WCA-0.11.1", "./tnoodle/TNoodle-WCA-0.11.1.jar" %> (2016-04-04)</li>
+  </ul>
+</div>
