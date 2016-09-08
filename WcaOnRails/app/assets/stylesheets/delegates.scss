@@ -33,6 +33,18 @@ tr.candidate-delegate {
 .delegates-stats-table {
   font-size: 13px;
 
+  .board_member {
+    @extend .alert-success;
+  }
+
+  .candidate_delegate {
+    @extend .alert-warning;
+  }
+
+  .senior_delegate {
+    @extend .alert-info;
+  }
+
   .delegate {
     max-width: 25%;
   }

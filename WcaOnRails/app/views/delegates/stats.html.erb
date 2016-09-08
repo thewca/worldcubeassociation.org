@@ -19,14 +19,14 @@
     <tbody>
       <% @delegates.each do |delegate| %>
         <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select(&:is_over?) %>
-        <tr class="<%= delegate_class(delegate.delegate_status) %>">
+        <tr class="<%= delegate.delegate_status %>">
           <td class="delegate"><%= delegate.name %></td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
           <td class="region"><%= delegate.region %></td>
           <td class="last"><%= competitions&.last&.start_date %></td>
           <td class="first"><%= competitions&.first&.start_date %></td>
           <td class="total"><%= competitions&.count %></td>
-          <td><%= link_to "History", "/competitions?display=admin&years=all&search=#{delegate.name.gsub(' ', '+')}", target: "_blank" %></td>
+          <td><%= link_to "History", competitions_path(display: "admin", years: "all", search: delegate.name), target: "_blank" %></td>
         </tr>
       <% end %>
     </tbody>
