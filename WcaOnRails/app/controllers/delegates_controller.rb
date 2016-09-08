@@ -4,6 +4,6 @@ class DelegatesController < ApplicationController
   before_action -> { redirect_unless_user(:can_admin_results?) }
 
   def stats
-    @delegates = User.delegate
+    @delegates = User.delegates
   end
 end
