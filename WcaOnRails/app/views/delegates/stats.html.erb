@@ -1,0 +1,34 @@
+<% provide(:title, 'Delegates stats') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= wca_table table_class: "delegates-stats-table", striped: false,
+                data: { toggle: "table", sort_name: "delegate", search: "true" } do %>
+    <thead>
+      <tr>
+        <th class="delegate" data-sortable="true" data-field="delegate">Delegate</th>
+        <th class="position" data-sortable="true">Position</th>
+        <th class="region" data-sortable="true">Region</th>
+        <th class="last" data-sortable="true">Last delegated</th>
+        <th class="first" data-sortable="true">First delegated</th>
+        <th class="total" data-sortable="true">Total delegated</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @delegates.each do |delegate| %>
+        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select(&:is_over?) %>
+        <tr class="<%= delegate.delegate_status %>">
+          <td class="delegate"><%= delegate.name %></td>
+          <td class="position"><%= delegate.delegate_status.humanize %></td>
+          <td class="region"><%= delegate.region %></td>
+          <td class="last"><%= competitions&.last&.start_date %></td>
+          <td class="first"><%= competitions&.first&.start_date %></td>
+          <td class="total"><%= competitions&.count %></td>
+          <td><%= link_to "History", competitions_path(display: "admin", years: "all", search: delegate.name), target: "_blank" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
+</div>

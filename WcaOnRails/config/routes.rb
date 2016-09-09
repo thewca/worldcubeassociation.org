@@ -81,6 +81,8 @@ Rails.application.routes.draw do
   resources :posts
   get 'rss' => 'posts#rss'
 
+  get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
+
   get 'robots' => 'static_pages#robots'
 
   get 'about' => 'static_pages#about'

@@ -155,6 +155,8 @@ class User < ActiveRecord::Base
     wca_id.present? && encrypted_password.blank? && email.casecmp("#{wca_id}@worldcubeassociation.org") == 0
   end
 
+  scope :delegates, -> { where.not(delegate_status: nil) }
+
   before_validation :copy_data_from_persons
   def copy_data_from_persons
     p = person || unconfirmed_person

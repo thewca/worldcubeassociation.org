@@ -29,3 +29,39 @@ tr.candidate-delegate {
 #avatar_thumbnail {
   cursor: pointer;
 }
+
+.delegates-stats-table {
+  font-size: 13px;
+
+  .board_member {
+    @extend .alert-success;
+  }
+
+  .candidate_delegate {
+    @extend .alert-warning;
+  }
+
+  .senior_delegate {
+    @extend .alert-info;
+  }
+
+  .delegate {
+    max-width: 25%;
+  }
+
+  .position,
+  .region {
+    width: 15%;
+  }
+
+  .first,
+  .last {
+    width: 12%;
+    text-align: center;
+  }
+
+  .total {
+    width: 12%;
+    text-align: center;
+  }
+}
