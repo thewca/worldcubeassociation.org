@@ -98,13 +98,13 @@ RSpec.describe Competition do
     it "start_date" do
       competition.start_date = "1987-12-04f"
       expect(competition).to be_invalid
-      expect(competition.errors.messages[:start_date]).to eq ["is invalid"]
+      expect(competition.errors.messages[:start_date]).to eq ["invalid"]
     end
 
     it "end_date" do
       competition.end_date = "1987-12-04f"
       expect(competition).to be_invalid
-      expect(competition.errors.messages[:end_date]).to eq ["is invalid"]
+      expect(competition.errors.messages[:end_date]).to eq ["invalid"]
     end
   end
 

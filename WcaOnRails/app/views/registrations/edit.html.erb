@@ -1,4 +1,4 @@
-<% provide(:title, "#{@registration.name} for #{@competition.name}") %>
+<% provide(:title, t('registrations.edit_registration.title', person: @registration.name, comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
   <%= horizontal_simple_form_for @registration, html: { class: 'are-you-sure' } do |f| %>
@@ -7,7 +7,7 @@
 
     <% if @registration.user %>
       <%= alert :info do %>
-        This person registered with an account. You can edit their personal information <%= link_to "here", edit_user_path(@registration.user) %>.
+        <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
       <% end %>
       <%= @registration.name %>
     <% else %>
@@ -33,7 +33,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.submit class: "btn btn-default" %>
-        <%= link_to "Delete", registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete #{@registration.name}'s registration?", toggle: "tooltip" }, title: "Delete registration. This will email #{@registration.name} at #{@registration.email}." %>
+        <%= link_to t('registrations.delete'), registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.admin_delete_confirm', name: @registration.name), toggle: "tooltip" }, title: t('registrations.delete_tooltip', name: @registration.name, mail: @registration.email) %>
       </div>
     </div>
   <% end %>

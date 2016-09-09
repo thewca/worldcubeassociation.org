@@ -26,8 +26,16 @@ fr:
   "but not": "mais pas"
   common:
     here: "ici"
-    wca_id: "ID WCA"
+    best: "Meilleur"
+    single: "Meilleur temps"
+    average: "Moyenne"
+    solves: "Résolutions"
+    user:
+      wca_id: "ID WCA"
+      citizen_of: "Pays"
     all_regions: "Toutes les régions"
+    errors:
+      invalid: "invalide"
     days:
       zero: "0 jour"
       one: "1 jour"
@@ -248,7 +256,7 @@ fr:
     options:
       registration:
         status:
-          a: "Accepté"
+          a: "Acceptée"
           p: "En attente"
       competition:
         guests_enabled:
@@ -400,6 +408,7 @@ fr:
       wca_id_no_birthdate: "L'ID WCA n'a pas de date de naissance, contactez l'équipe en charge des résultats pour corriger le problème."
       board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
       avatar_requires_wca_id: "requiert d'avoir un ID WCA"
+      valid_country: "%{value} n'est pas un pays valide"
     select_nearby_delegate:
       select_delegate: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un Délégué confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
       already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre Délégué local %{link_delegate}."
@@ -412,6 +421,78 @@ fr:
       need_gender: "Genre obligatoire"
       need_dob: "Date de naissance obligatoire"
       need_country: "Pays obligatoire"
+      comp_not_found: "Compétition introuvable"
+      registration_closed: "Les inscriptions pour la compétition sont fermées"
+      can_register: "L'utilisateur doit pouvoir s'inscrire à la compétition"
+      must_register: "doit s'inscrire à au moins une épreuve"
+    registration_info_people:
+      newcomer:
+        zero: "nouveau"
+        one: "nouveau"
+        other: "nouveaux"
+      returner: "de retour"
+      people:
+        zero: "personne"
+        one: "personne"
+        other: "personnes"
+    flash:
+      not_using_wca: "Cette compétition n'utilise pas les inscriptions WCA."
+      accepted_and_mailed:
+        one: "Inscription acceptée ! Email de notification envoyé."
+        other: "Inscriptions acceptées ! Emails de notification envoyés."
+      rejected_and_mailed:
+        one: "Inscription déplacée en liste d'attente"
+        other: "Inscriptions déplacées en liste d'attente"
+      deleted_and_mailed:
+        one: "Inscription supprimée"
+        other: "Inscriptions supprimées"
+      single_deletion_and_mail: "Inscription supprimée et email envoyé à %{mail}"
+      cannot_delete: "Vous ne pouvez pas supprimer votre inscription."
+      updated: "Inscription mise à jour"
+      failed: "Impossible de mettre à jour l'inscription"
+      deleted: "Votre inscription au %{comp} a été supprimée avec succès."
+      registered: "Vous êtes inscrit !"
+    edit_registration:
+      title: "%{person} pour %{comp}"
+    list:
+      title: "Inscriptions pour %{comp}"
+      country: "pays"
+      edit: "Éditer"
+      export_csv: "Exporter en CSV"
+      email: "Email"
+      approve: "Accepter"
+      reject: "Rejeter"
+      delete: "Supprimer"
+      waiting_list: "Liste d'attente"
+      approved_registrations: "Inscriptions acceptées"
+      registered: "Inscription"
+      total: "Total"
+    new_registration:
+      title: "S'inscrire pour %{comp}"
+    registered_with_account_html: "Cette personne s'est inscrite avec un compte. Vous pouvez éditer ses données personelles %{here}."
+    sign_in: "Connectez-vous"
+    profile: "profil"
+    register: "Je m'inscris !"
+    update: "Mettre à jour"
+    delete: "Supprimer"
+    delete_tooltip: "Supprime l'inscription. Cela enverra un email à %{name} à l'adresse %{mail}"
+    delete_confirm: "Êtes vous sûr de vouloir supprimer votre inscription ?"
+    admin_delete_confirm: "Êtes vous sûr de vouloir supprimer l'inscription de %{name} ?"
+    delete_registration: "Supprimer l'inscription"
+    will_open_html: "Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}."
+    will_close_html: "Les inscriptions ferment dans <strong>%{days}</strong> le %{time}."
+    closed_html: "Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}."
+    please_sign_in_past_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais il est trop tard pour s'inscrire à cette compétition."
+    please_sign_in_not_yet_open_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais les inscriptions ne sont pas encore ouvertes."
+    please_sign_in_html: "%{sign_in} pour vous inscrire au %{comp}. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}"
+    greeting: "Bonjour, %{name} !"
+    please_fix_profile_html: "Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les problèmes suivant dans votre %{profile} :"
+    can_register: "Vous pouvez vous inscrire au %{comp} ci-dessous."
+    have_registered: "Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre inscription ci-dessous."
+    contact_organizer: "Contactez l'organisateur si vous souhaitez effectuer des changements."
+    waiting_list: "Votre inscription est en attente, vous êtes en position %{i} sur %{n}."
+    accepted: "Votre inscription a été effectuée !"
+    preferred_events_prompt_html: "Pour accélérer vos prochaines inscriptions, vous pouvez définir vos épreuves favorites %{link}."
   competitions:
     messages:
       not_visible: "Cette compétition n'est pas visible pour le public."
@@ -498,7 +579,6 @@ fr:
       coordinates: "Coordonnées GPS"
     errors:
       invalid_name_message: "doit se terminer par une année, et doit contenir uniquement des caractères alphanumériques, ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('), et espaces( )."
-      is_invalid: "est invalide"
       cannot_manage: "Ne peut pas gérer la compétition."
       cannot_delete_public: "Impossible de supprimer une compétition visible publiquement."
       cannot_delete_confirmed: "Impossible de supprimer une compétition confirmée."
@@ -542,33 +622,6 @@ fr:
     post_announcement: "Poster l'annonce de la compétition"
     show:
       general_info: "Informations générales"
-    registration:
-      flash:
-        updated: "Inscription mise à jour"
-        failed: "Impossible de mettre à jour l'inscription"
-        deleted: "Votre inscription au %{comp} a été supprimée avec succès."
-        registered: "Vous êtes inscrit !"
-      sign_in: "Connectez-vous"
-      profile: "profil"
-      register: "Je m'inscris !"
-      update: "Mettre à jour"
-      delete: "Supprimer"
-      delete_confirm: "Êtes vous sûr de vouloir supprimer votre inscription ?"
-      delete_registration: "Supprimer l'inscription"
-      will_open_html: "Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}."
-      will_close_html: "Les inscriptions ferment dans <strong>%{days}</strong> le %{time}."
-      closed_html: "Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}."
-      please_sign_in_past_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais il est trop tard pour s'inscrire à cette compétition."
-      please_sign_in_not_yet_open_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais les inscriptions ne sont pas encore ouvertes."
-      please_sign_in_html: "%{sign_in} pour vous inscrire au %{comp}. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}"
-      greeting: "Bonjour, %{name} !"
-      please_fix_profile_html: "Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les problèmes suivant dans votre %{profile} :"
-      can_register: "Vous pouvez vous inscrire au %{comp} ci-dessous."
-      have_registered: "Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre inscription ci-dessous."
-      contact_organizer: "Contactez l'organisateur si vous souhaitez effectuer des changements."
-      waiting_list: "Votre inscription est en attente, vous êtes en position %{i} sur %{n}."
-      accepted: "Votre inscription a été effectuée !"
-      preferred_events_prompt_html: "Pour accélérer vos prochaines inscriptions, vous pouvez définir vos épreuves favorites %{link}."
     nav:
       menu:
         results: "Résultats"
@@ -590,10 +643,6 @@ fr:
       event: "Épreuve"
       round: "Tour"
       name: "Nom"
-      best: "Meilleur"
-      average: "Moyenne"
-      citizen_of: "Pays"
-      solves: "Résolutions"
   notifications:
     connect_wca_id: "Associez votre ID WCA à votre compte !"
   persons:

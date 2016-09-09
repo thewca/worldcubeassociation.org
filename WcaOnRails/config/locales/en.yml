@@ -26,8 +26,16 @@ en:
   "but not": "but not"
   common:
     here: "here"
-    wca_id: "WCA ID"
+    best: "Best"
+    single: "Single"
+    average: "Average"
+    solves: "Solves"
+    user:
+      wca_id: "WCA ID"
+      citizen_of: "Citizen of"
     all_regions: "All regions"
+    errors:
+      invalid: "invalid"
     days:
       one: "1 day"
       other: "%{count} days"
@@ -399,6 +407,7 @@ en:
       wca_id_no_birthdate: "WCA ID does not have a birthdate. Contact the Results team to resolve this."
       board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
+      valid_country: "%{value} is not a valid country"
     select_nearby_delegate:
       select_delegate: "In order to assign you your WCA ID, we need a delegate to confirm your identify. Please enter your birthdate and select the delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local %{link_delegate}."
@@ -411,6 +420,76 @@ en:
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
       need_country: "Need a country"
+      comp_not_found: "Competition not found"
+      registration_closed: "Competition registration is closed"
+      can_register: "User must be able to register for competition"
+      must_register: "must register for at least one event"
+    registration_info_people:
+      newcomer:
+        one: "first-timer"
+        other: "first-timers"
+      returner:
+        one: "returner"
+        other: "returners"
+      people: "people"
+    flash:
+      not_using_wca: "This competition is not using WCA registration"
+      accepted_and_mailed:
+        one: "Registration accepted! Email notification sent."
+        other: "Registrations accepted! Email notifications sent."
+      rejected_and_mailed:
+        one: "Registration moved to waiting list"
+        other: "Registrations moved to waiting list"
+      deleted_and_mailed:
+        one: "Registration deleted"
+        other: "Registrations deleted"
+      single_deletion_and_mail: "Deleted registration and emailed %{mail}"
+      cannot_delete: "You cannot delete your registration."
+      updated: "Updated registration"
+      failed: "Could not update registration"
+      deleted: "Successfully deleted your registration for %{comp}"
+      registered: "Successfully registered!"
+    edit_registration:
+      title: "%{person} for %{comp}"
+    list:
+      title: "Registrations for %{comp}"
+      country: "country"
+      edit: "Edit"
+      export_csv: "Export to CSV"
+      email: "Email"
+      approve: "Approve"
+      reject: "Reject"
+      delete: "Delete"
+      waiting_list: "Waiting List"
+      approved_registrations: "Approved registrations"
+      registered: "Registered"
+      total: "Total"
+    new_registration:
+      title: "Register for %{comp}"
+    registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
+    sign_in: "Sign in"
+    profile: "profile"
+    register: "Register!"
+    update: "Update Registration"
+    delete: "Delete"
+    delete_tooltip: "Delete registration. This will email %{name} at %{mail}."
+    delete_confirm: "Are you sure you want to delete your registration?"
+    admin_delete_confirm: "Are you sure you want to delete %{name}'s registration?"
+    delete_registration: "Delete registration."
+    will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
+    will_close_html: "Registration closes in <strong>%{days}</strong> on %{time}."
+    closed_html: "Registration closed <strong>%{days}</strong> ago on %{time}."
+    please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
+    please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
+    please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}"
+    greeting: "Hi, %{name}!"
+    please_fix_profile_html: "In order to register for this %{comp}, you must fix the following problems with your %{profile}:"
+    can_register: "You can register for %{comp} below."
+    have_registered: "You have registered for %{comp}. You can see your registration information below."
+    contact_organizer: "Contact the organizer if you wish to make a change."
+    waiting_list: "You are currently number %{i} of %{n} on the waiting list."
+    accepted: "Your registration has been accepted!"
+    preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
   competitions:
     messages:
       not_visible: "This competition is not visible to the public."
@@ -497,7 +576,6 @@ en:
       coordinates: "Coordinates"
     errors:
       invalid_name_message: "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
-      is_invalid: "is invalid"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
@@ -541,33 +619,6 @@ en:
     post_announcement: "Post competition announcement"
     show:
       general_info: "General info"
-    registration:
-      flash:
-        updated: "Updated registration"
-        failed: "Could not update registration"
-        deleted: "Successfully deleted your registration for %{comp}"
-        registered: "Successfully registered!"
-      sign_in: "Sign in"
-      profile: "profile"
-      register: "Register!"
-      update: "Update Registration"
-      delete: "Delete"
-      delete_confirm: "Are you sure you want to delete your registration?"
-      delete_registration: "Delete registration."
-      will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
-      will_close_html: "Registration closes in <strong>%{days}</strong> on %{time}."
-      closed_html: "Registration closed <strong>%{days}</strong> ago on %{time}."
-      please_sign_in_past_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but it is too late to register for this competition."
-      please_sign_in_not_yet_open_html: "%{sign_in} to check the status of your registration. If you do not yet have a WCA account, you can create one %{here}, but its registration is not yet open."
-      please_sign_in_html: "%{sign_in} to register for %{comp}. If you do not yet have a WCA account, you can create one %{here}"
-      greeting: "Hi, %{name}!"
-      please_fix_profile_html: "In order to register for this %{comp}, you must fix the following problems with your %{profile}:"
-      can_register: "You can register for %{comp} below."
-      have_registered: "You have registered for %{comp}. You can see your registration information below."
-      contact_organizer: "Contact the organizer if you wish to make a change."
-      waiting_list: "You are currently number %{i} of %{n} on the waiting list."
-      accepted: "Your registration has been accepted!"
-      preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     nav:
       menu:
         results: "Results"
@@ -589,10 +640,6 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
-      best: "Best"
-      average: "Average"
-      citizen_of: "Citizen of"
-      solves: "Solves"
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   persons:

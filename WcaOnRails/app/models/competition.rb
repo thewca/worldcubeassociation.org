@@ -465,12 +465,12 @@ class Competition < ActiveRecord::Base
       self.year = self.month = self.day = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
-        errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
+        errors.add(:start_date, I18n.t('common.errors.invalid'))
         return false
       end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
+        errors.add(:start_date, I18n.t('common.errors.invalid'))
         return false
       end
     end
@@ -481,12 +481,12 @@ class Competition < ActiveRecord::Base
       @endYear = self.endMonth = self.endDay = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
-        errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
+        errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
       @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
       unless Date.valid_date? @endYear, self.endMonth, self.endDay
-        errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
+        errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
     end
@@ -501,11 +501,11 @@ class Competition < ActiveRecord::Base
     valid_dates = true
     unless Date.valid_date? year, month, day
       valid_dates = false
-      errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
+      errors.add(:start_date, I18n.t('common.errors.invalid'))
     end
     unless Date.valid_date? @endYear, endMonth, endDay
       valid_dates = false
-      errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
+      errors.add(:end_date, I18n.t('common.errors.invalid'))
     end
     unless valid_dates
       # There's no use continuing validation at this point.
