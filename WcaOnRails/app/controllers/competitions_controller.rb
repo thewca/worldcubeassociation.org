@@ -113,7 +113,7 @@ class CompetitionsController < ApplicationController
     @competition = Competition.new(competition_params)
 
     if @competition.save
-      flash[:success] = t('competitions.create_success')
+      flash[:success] = t('competitions.messages.create_success')
       redirect_to edit_competition_path(@competition)
     else
       # Show id errors under name, since we don't actually show an

@@ -412,22 +412,22 @@ en:
       need_dob: "Need a birthdate"
       need_country: "Need a country"
   competitions:
-    not_visible: "This competition is not visible to the public."
-    name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
-    create_success: "Successfully created new competition!"
-    results_preview_alert: "You are viewing results that have not been posted yet."
-    info:
+    messages:
+      not_visible: "This competition is not visible to the public."
+      name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      create_success: "Successfully created new competition!"
+      results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over, we are working to upload the results as soon as possible!"
       in_progress: "This competition is ongoing. Come back after %{date} to see the results!"
+      registration_tooltip: "You are %{message}."
+      registered: "registered"
+      waiting_list: "currently on the waiting list"
+      confirmed: "This competition is confirmed %{link_word} visible"
+      not_confirmed: "This competition is not confirmed %{link_word} visible"
     my_competitions:
       title: "My competitions"
       disclaimer: "Only competitions which use the WCA registration system will be shown here."
       past_competitions: "Past competitions"
-    registration_tooltip: "You are %{message}."
-    registered: "registered"
-    waiting_list: "currently on the waiting list"
-    confirmed: "This competition is confirmed %{link_word} visible"
-    not_confirmed: "This competition is not confirmed %{link_word} visible"
     competition_info:
       date: "Date"
       city: "City"

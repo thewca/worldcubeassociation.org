@@ -132,10 +132,10 @@ class Competition < ActiveRecord::Base
   def warnings_for(user)
     warnings = {}
     if !self.showAtAll
-      warnings[:invisible] = I18n.t('competitions.not_visible')
+      warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
       if self.name.length > 32
-        warnings[:name] = I18n.t('competitions.name_too_long')
+        warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
     end
 
@@ -145,10 +145,10 @@ class Competition < ActiveRecord::Base
   def info_for(user)
     info = {}
     if !self.results_posted? && self.is_over?
-      info[:upload_results] = I18n.t('competitions.info.upload_results')
+      info[:upload_results] = I18n.t('competitions.messages.upload_results')
     end
     if self.in_progress?
-      info[:in_progress] = I18n.t('competitions.info.in_progress', date: I18n.l(self.end_date, format: :long))
+      info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
     end
     info
   end

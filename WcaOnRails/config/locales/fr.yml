@@ -413,22 +413,22 @@ fr:
       need_dob: "Date de naissance obligatoire"
       need_country: "Pays obligatoire"
   competitions:
-    not_visible: "Cette compétition n'est pas visible pour le public."
-    name_too_long: "Le nom de la compétition est plus long que 32 caractères. Un nom plus court serait préférable, et on serait ravi que vous le changiez."
-    create_success: "Nouvelle compétition créée avec succès !"
-    results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
-    info:
+    messages:
+      not_visible: "Cette compétition n'est pas visible pour le public."
+      name_too_long: "Le nom de la compétition est plus long que 32 caractères. Un nom plus court serait préférable, et on serait ravi que vous le changiez."
+      create_success: "Nouvelle compétition créée avec succès !"
+      results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
       upload_results: "Cette compétition est terminée, nous travaillons à mettre les résultats en ligne dès que possible !"
       in_progress: "Cette compétition est en cours. Revenez après le %{date} pour voir les résultats !"
+      registration_tooltip: "Vous êtes %{message}."
+      registered: "inscrit"
+      waiting_list: "sur liste d'attente"
+      confirmed: "Cette compétition est confirmée %{link_word} visible"
+      not_confirmed: "Cette compétition n'est pas confirmée %{link_word} visible"
     my_competitions:
       title: "Mes compétitions"
       disclaimer: "Seules les compétitions qui utilisent le site de la WCA pour les inscriptions seront affichées ici."
       past_competitions: "Historique des compétitions"
-    registration_tooltip: "Vous êtes %{message}."
-    registered: "inscrit"
-    waiting_list: "sur liste d'attente"
-    confirmed: "Cette compétition est confirmée %{link_word} visible"
-    not_confirmed: "Cette compétition n'est pas confirmée %{link_word} visible"
     competition_info:
       date: "Date"
       city: "Ville"
