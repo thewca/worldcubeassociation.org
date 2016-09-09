@@ -63,7 +63,6 @@ class Competition < ActiveRecord::Base
     announced_at
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
-  INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
@@ -74,10 +73,10 @@ class Competition < ActiveRecord::Base
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
-                   format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }
+                   format: { with: VALID_NAME_RE, message: I18n.t('competitions.errors.invalid_name_message') }
   MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }, if: :name_valid_or_updating?
+                       format: { with: VALID_NAME_RE, message: I18n.t('competitions.errors.invalid_name_message') }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
@@ -100,14 +99,14 @@ class Competition < ActiveRecord::Base
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
     if competition_events.reject(&:marked_for_destruction?).empty?
-      errors.add(:competition_events, "must contain at least one event for this competition")
+      errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
     end
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
     if delegate_ids.empty?
-      errors.add(:delegate_ids, "must contain at least one WCA delegate")
+      errors.add(:delegate_ids, I18n.t('competitions.errors.must_contain_delegate'))
     end
   end
 
@@ -122,7 +121,7 @@ class Competition < ActiveRecord::Base
   validate :delegates_must_be_delegates
   def delegates_must_be_delegates
     if !self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:delegate_ids, "are not all delegates")
+      errors.add(:delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
     end
   end
 
@@ -133,10 +132,10 @@ class Competition < ActiveRecord::Base
   def warnings_for(user)
     warnings = {}
     if !self.showAtAll
-      warnings[:invisible] = "This competition is not visible to the public."
+      warnings[:invisible] = I18n.t('competitions.not_visible')
 
       if self.name.length > 32
-        warnings[:name] = "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+        warnings[:name] = I18n.t('competitions.name_too_long')
       end
     end
 
@@ -146,10 +145,10 @@ class Competition < ActiveRecord::Base
   def info_for(user)
     info = {}
     if !self.results_posted? && self.is_over?
-      info[:upload_results] = "This competition is over, we are working to upload the results as soon as possible!"
+      info[:upload_results] = I18n.t('competitions.info.upload_results')
     end
     if self.in_progress?
-      info[:in_progress] = "This competition is ongoing. Come back after #{self.end_date.to_formatted_s(:long)} to see the results!"
+      info[:in_progress] = I18n.t('competitions.info.in_progress', date: I18n.l(self.end_date, format: :long))
     end
     info
   end
@@ -311,13 +310,13 @@ class Competition < ActiveRecord::Base
   def registration_must_close_after_it_opens
     if use_wca_registration?
       if !registration_open
-        errors.add(:registration_open, "required")
+        errors.add(:registration_open, I18n.t('simple_form.required.text'))
       end
       if !registration_close
-        errors.add(:registration_close, "required")
+        errors.add(:registration_close, I18n.t('simple_form.required.text'))
       end
       if registration_open && registration_close && !(registration_open < registration_close)
-        errors.add(:registration_close, "registration close must be after registration open")
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open'))
       end
     end
   end
@@ -466,12 +465,12 @@ class Competition < ActiveRecord::Base
       self.year = self.month = self.day = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
-        errors.add(:start_date, "invalid")
+        errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
         return false
       end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:start_date, "invalid")
+        errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
         return false
       end
     end
@@ -482,12 +481,12 @@ class Competition < ActiveRecord::Base
       @endYear = self.endMonth = self.endDay = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
-        errors.add(:end_date, "invalid")
+        errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
         return false
       end
       @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
       unless Date.valid_date? @endYear, self.endMonth, self.endDay
-        errors.add(:end_date, "invalid")
+        errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
         return false
       end
     end
@@ -502,11 +501,11 @@ class Competition < ActiveRecord::Base
     valid_dates = true
     unless Date.valid_date? year, month, day
       valid_dates = false
-      errors.add(:start_date, "is invalid")
+      errors.add(:start_date, I18n.t('competitions.errors.is_invalid'))
     end
     unless Date.valid_date? @endYear, endMonth, endDay
       valid_dates = false
-      errors.add(:end_date, "is invalid")
+      errors.add(:end_date, I18n.t('competitions.errors.is_invalid'))
     end
     unless valid_dates
       # There's no use continuing validation at this point.
@@ -514,11 +513,11 @@ class Competition < ActiveRecord::Base
     end
 
     if end_date < start_date
-      errors.add(:end_date, "End date cannot be before start date.")
+      errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
     end
 
     if @endYear != year
-      errors.add(:end_date, "Competition dates cannot span multiple years.")
+      errors.add(:end_date, I18n.t('competitions.errors.span_multiple_years'))
     end
   end
 

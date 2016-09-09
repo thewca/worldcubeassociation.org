@@ -7,11 +7,11 @@
   <thead>
     <tr>
       <% if !hide_event %>
-        <th class="event">Event</th>
+        <th class="event"><%= t '.event' %></th>
       <% end %>
 
       <% if !hide_round %>
-        <th class="round">Round</th>
+        <th class="round"><%= t '.round' %></th>
       <% end %>
 
       <% if !hide_pos %>
@@ -19,17 +19,17 @@
       <% end %>
 
       <% if !hide_name %>
-        <th class="name">Name</th>
+        <th class="name"><%= t '.name' %></th>
       <% end %>
 
-      <th class="single">Best</th>
+      <th class="single"><%= t '.best' %></th>
       <th class="regionalSingleRecord"></th>
 
-      <th class="average">Average</th>
+      <th class="average"><%= t '.average' %></th>
       <th class="regionalSingleRecord"></th>
 
-      <th class="country">Citizen of</th>
-      <th class="solves" colspan="5">Solves</th>
+      <th class="country"><%= t '.citizen_of' %></th>
+      <th class="solves" colspan="5"><%= t '.solves' %></th>
 
       <% # Extra column for .table-greedy-last-column %>
       <th></th>

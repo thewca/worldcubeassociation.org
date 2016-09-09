@@ -123,11 +123,11 @@ class User < ActiveRecord::Base
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
       if !delegate_id_to_handle_wca_id_claim.present?
-        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.required'))
+        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text'))
       end
 
       if !unconfirmed_wca_id.present?
-        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.required'))
+        errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text'))
       end
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)

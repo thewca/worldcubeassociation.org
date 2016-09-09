@@ -4,18 +4,18 @@
   <% else %>
     <% if @past_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
+        <%= render 'index_table', competitions: competitions, title: t('.past', year: params[:year]) %>
       </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
         <div class="col-md-12" id="in-progress-comps">
-          <%= render 'index_table', competitions: in_progress_competitions, title: "Competitions in progress" %>
+          <%= render 'index_table', competitions: in_progress_competitions, title: t('.in_progress') %>
         </div>
       <% end %>
       <% unless upcoming_competitions.empty? %>
         <div class="col-md-12" id="upcoming-comps">
-          <%= render 'index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+          <%= render 'index_table', competitions: upcoming_competitions, title: t('.upcoming') %>
         </div>
       <% end %>
     <% end %>
@@ -58,7 +58,7 @@
     <% end %>
   <% else %>
     <%= alert :warning do
-      "You don't have access to this page!"
+      t '.no_access'
       end %>
   <% end %>
 <% end %>

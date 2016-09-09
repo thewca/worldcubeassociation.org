@@ -4,13 +4,19 @@ module CompetitionsHelper
     messages = []
     registration = competition.registrations.find_by_user_id(user.id)
     if registration
-      messages << "You are " + (registration.accepted? ? "registered." : "currently on the waiting list.")
+      # i18n-tasks-use t('competitions.registered')
+      # i18n-tasks-use t('competitions.waiting_list')
+      messages << t('competitions.registration_tooltip', message: registration.accepted? ? t('competitions.registered') : t('competitions.waiting_list'))
     end
     visible = competition.showAtAll?
     messages << if competition.isConfirmed?
-                  "This competition is confirmed #{visible ? 'and' : 'but not'} visible."
+                  # i18n-tasks-use t('and')
+                  # i18n-tasks-use t('but not')
+                  t('competitions.confirmed', link_word: visible ? t('and') : t('but not'))
                 else
-                  "This competition is not confirmed #{visible ? 'but' : 'and not'} visible."
+                  # i18n-tasks-use t('and not')
+                  # i18n-tasks-use t('but')
+                  t('competitions.not_confirmed', link_word: visible ? t('but') : t('and not'))
                 end
     messages.join(' ')
   end

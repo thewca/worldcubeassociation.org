@@ -1,9 +1,9 @@
 <% if competitions.length < 1 %>
   <%= alert :info do %>
     <% if !past %>
-      You currently have no upcoming competitions! Check out the <%= link_to 'competitions list', competitions_path %>.
+      <%= t '.no_upcoming_competitions_html', link: link_to('competitions list', competitions_path) %>
     <% else %>
-      You have no past competitions.
+      <%= t '.no_past_competitions' %>
     <% end %>
   <% end %>
 <% else %>
@@ -11,9 +11,9 @@
     <table class="table competitions-table floatThead <%= past ? "table-striped" : "" %>">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Date</th>
+          <th><%= t 'competitions.nearby_competitions_table.name' %></th>
+          <th><%= t 'competitions.nearby_competitions_table.location' %></th>
+          <th><%= t 'competitions.nearby_competitions_table.date' %></th>
           <th></th>
           <th></th>
           <th></th>
@@ -29,7 +29,7 @@
               data-toggle="tooltip" data-placement="top" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
             <td><%= link_to competition.name, competition_path(competition) %></td>
-            <td><%= competition.cityName %>, <%= competition.country ? competition.country.name : "" %></td>
+            <td><%= competition.cityName %>, <%= competition.country_name %></td>
             <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
             <td>
               <% if registration %>
@@ -38,19 +38,19 @@
             </td>
             <td>
               <% if !past && current_user.can_manage_competition?(competition) %>
-                <%= link_to "Edit", edit_competition_path(competition) %>
+                <%= link_to t('.edit'), edit_competition_path(competition) %>
               <% elsif competition.results_posted? %>
-                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Results are up!"></span>
+                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= t '.results_up' %>"></span>
               <% end %>
             </td>
             <td>
               <% if !past && competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
-                <%= link_to "Registrations", competition_edit_registrations_path(competition) %>
+                <%= link_to t('.registrations'), competition_edit_registrations_path(competition) %>
               <% end %>
             </td>
             <td>
               <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
-                <%= link_to "Report", delegate_report_path(competition) %>
+                <%= link_to t('.report'), delegate_report_path(competition) %>
               <% end %>
             </td>
             <td class="big-column"></td>

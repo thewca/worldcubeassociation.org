@@ -20,10 +20,21 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 fr:
+  "and": "et"
+  "and not": "et pas"
+  "but": "mais"
+  "but not": "mais pas"
   common:
     here: "ici"
     wca_id: "ID WCA"
     all_regions: "Toutes les régions"
+    days:
+      zero: "0 jour"
+      one: "1 jour"
+      other: "%{count} jours"
+    these_events:
+      one: "cette épreuve"
+      other: "ces %{count} épreuves"
   oauth:
     applications:
       your_apps: "Vos applications OAuth"
@@ -299,7 +310,7 @@ fr:
       results: "Résultats"
       rankings: "Classements"
       records: "Records"
-      persons: "Individuels"
+      persons: "Compétiteurs"
       my_results: "Mes résultats"
       statistics: "Statistiques"
       multimedia: "Multimedia"
@@ -379,7 +390,6 @@ fr:
     errors:
       not_found: "introuvable"
       already_assigned: "déjà associé à un autre compte"
-      required: "requis"
       dob_incorrect: "incorrecte"
       unique: "doit être unique"
       dob_past: "doit être dans le passé"
@@ -403,7 +413,71 @@ fr:
       need_dob: "Date de naissance obligatoire"
       need_country: "Pays obligatoire"
   competitions:
+    not_visible: "Cette compétition n'est pas visible pour le public."
+    name_too_long: "Le nom de la compétition est plus long que 32 caractères. Un nom plus court serait préférable, et on serait ravi que vous le changiez."
+    create_success: "Nouvelle compétition créée avec succès !"
     results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
+    info:
+      upload_results: "Cette compétition est terminée, nous travaillons à mettre les résultats en ligne dès que possible !"
+      in_progress: "Cette compétition est en cours. Revenez après le %{date} pour voir les résultats !"
+    my_competitions:
+      title: "Mes compétitions"
+      disclaimer: "Seules les compétitions qui utilisent le site de la WCA pour les inscriptions seront affichées ici."
+      past_competitions: "Historique des compétitions"
+    registration_tooltip: "Vous êtes %{message}."
+    registered: "inscrit"
+    waiting_list: "sur liste d'attente"
+    confirmed: "Cette compétition est confirmée %{link_word} visible"
+    not_confirmed: "Cette compétition n'est pas confirmée %{link_word} visible"
+    competition_info:
+      date: "Date"
+      city: "Ville"
+      venue: "Salle"
+      address: "Adresse"
+      details: "Détails"
+      website: "Site internet"
+      organizer: "Organisateur"
+      delegate:
+        one: "Délégué WCA"
+        other: "Délégués WCA"
+      contact: "Contact"
+      information: "Information"
+    index:
+      title: "Compétitions"
+    index_form:
+      all: "Toutes"
+      all_years: "Toutes les années"
+      clear: "Effacer"
+      list: "Liste"
+      map: "Carte"
+      region: "Région"
+      search: "Rechercher"
+      state: "État"
+      search_tooltip: "Nom, ville, salle, délégué(s), pays, ou mois"
+      present: "Courantes"
+      past: "Terminées"
+      past_from: "Terminées en %{year}"
+      past_all: "Terminées (toutes)"
+    index_competitions_list:
+      in_progress: "Compétitions en cours"
+      past: "Compétitions terminées en %{year}"
+      upcoming: "Compétitions à venir"
+      no_access: "Vous n'avez pas accès à cette page !"
+    index_table:
+      ended: "Terminée il y a %{days}"
+      in_progress: "En cours !"
+      posted: "Résultats en ligne !"
+      starts_in: "Démarre dans %{days}"
+    no_competitions_found:
+      no_found: "Pas de compétition trouvée."
+      no_match: "Nous n'avons pas trouvé de compétition avec %{events} ! Essayez une recherche avec moins d'épreuves."
+    my_competitions_table:
+      edit: "Éditer"
+      registrations: "Inscriptions"
+      results_up: "Les résultats sont en ligne !"
+      report: "Rapport"
+      no_upcoming_competitions_html: "Vous n'avez pas de compétitions à venir! Allez voir la %{link}."
+      no_past_competitions: "Vous n'avez participé à aucune compétition."
     competition_form:
       supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
       venue_html: "La salle où la compétition à lieu. %{md}. Par exemple : [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
@@ -423,12 +497,21 @@ fr:
       submit_delete: "Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération est irréversible."
       coordinates: "Coordonnées GPS"
     errors:
+      invalid_name_message: "doit se terminer par une année, et doit contenir uniquement des caractères alphanumériques, ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('), et espaces( )."
+      is_invalid: "est invalide"
       cannot_manage: "Ne peut pas gérer la compétition."
       cannot_delete_public: "Impossible de supprimer une compétition visible publiquement."
       cannot_delete_confirmed: "Impossible de supprimer une compétition confirmée."
+      must_contain_event: "doit contenir au moins une épreuve pour cette compétition"
+      must_contain_delegate: "doit contenir au moins un délégué WCA"
+      not_all_delegates: "ne sont pas tous des délégués"
+      registration_close_after_open: "doit être après l'ouverture des inscriptions."
+      end_date_before_start: "ne peut pas être avant la date de début."
+      span_multiple_years: "Les dates de la compétition ne peuvent pas être sur plusieurs années."
     unscheduled: "non prévue"
     new:
       create_competition: "Créer une compétition"
+      note_clone: "Pour cloner une compétition existante, visitez la page d'information pour cette compétition et cliquez le lien \"Cloner\" dans le menu."
     update:
       save_success: "Compétition mise à jour avec succès"
       confirm_success: "Compétition confirmée avec succès. Vérifiez vos mails et attendez que le bureau de la WCA l'annonce !"
@@ -502,6 +585,15 @@ fr:
         registration: "Inscriptions"
         register: "S'inscrire"
         competitors: "Compétiteurs"
+    results_table:
+      wca_profile: "Profil WCA"
+      event: "Épreuve"
+      round: "Tour"
+      name: "Nom"
+      best: "Meilleur"
+      average: "Moyenne"
+      citizen_of: "Pays"
+      solves: "Résolutions"
   notifications:
     connect_wca_id: "Associez votre ID WCA à votre compte !"
   persons:
