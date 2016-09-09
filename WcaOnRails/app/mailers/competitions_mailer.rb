@@ -27,7 +27,7 @@ class CompetitionsMailer < ApplicationMailer
     mail(
       to: "delegates@worldcubeassociation.org",
       cc: competition.delegates.pluck(:email),
-      subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
+      subject: "[wca-report] [#{competition.continent.name_in(:en)}] #{competition.name}",
     )
   end
 

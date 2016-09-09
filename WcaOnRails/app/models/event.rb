@@ -13,6 +13,14 @@ class Event < ActiveRecord::Base
 
   default_scope -> { order(:rank) }
 
+  def name
+    I18n.t(id, scope: :events)
+  end
+
+  def name_in(locale)
+    I18n.t(id, scope: :events, locale: locale)
+  end
+
   scope :official, -> { where("rank < 990") }
   scope :deprecated, -> { where("rank between 990 and 999") }
   scope :never_were_official, -> { where("rank >= 1000") }

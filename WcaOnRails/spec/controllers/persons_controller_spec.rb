@@ -21,7 +21,7 @@ RSpec.describe PersonsController, type: :controller do
         json_person = json['rows'][0]
         expect(json_person['name']).to include "Jennifer Lawrence"
         expect(json_person['wca_id']).to eq "2016LAWR01"
-        expect(json_person['country']).to eq "USA"
+        expect(json_person['country']).to eq "United States"
         expect(json_person['competitions_count']).to eq 1
         expect(json_person['podiums_count']).to eq 1
       end
