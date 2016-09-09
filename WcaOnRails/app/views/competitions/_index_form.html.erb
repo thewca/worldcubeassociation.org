@@ -41,6 +41,10 @@
       <%= radio_button_tag "state", "present" %>
       <span class="caption">Present</span>
     </label>
+    <label id="recent" class="btn btn-primary">
+      <%= radio_button_tag "state", "recent" %>
+      <span class="caption">Recent</span>
+    </label>
     <ul class="dropdown-menu years">
       <%= hidden_field_tag "year", params[:year] %>
       <% @years.each do |year| %>

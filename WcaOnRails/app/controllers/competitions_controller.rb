@@ -66,13 +66,18 @@ class CompetitionsController < ApplicationController
     end
 
     @past_selected = params[:state] == "past"
-    @present_selected = !@past_selected
+    @present_selected = params[:state] == "present"
+    @recent_selected = params[:state] == "recent"
+    #@present_selected = !@past_selected
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
+    #else
+    elsif @recent_selected
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - 30), Date.today).reverse_order
     else
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
       unless params[:year] == "all years"

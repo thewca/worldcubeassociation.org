@@ -27,7 +27,7 @@
           </th>
         </tr>
       </thead>
-      <tbody class="<%= "hidden" if toggle_tbody_message == "show" %>">
+      <tbody class="<%#= "hidden" if toggle_tbody_message == "show" %>">
         <% competitions.each_with_index do |competition, index| %>
           <% announced = competition.announced_at %>
           <% report = competition.delegate_report.posted_at %>
@@ -54,6 +54,12 @@
                 days_report = (report.to_date - competition.end_date).to_i
                 report_class = report_class(days_report)
                 report_content = "#{pluralize(days_report, "day")} after"
+              else
+                if competition.is_over?
+                  days_report = (Date.today - competition.end_date).to_i
+                  report_class = report_class(days_report)
+                  report_content = "pending (#{pluralize(days_report, "day")})"
+                end
               end %>
             <%= content_tag :td, report_content, class: "admin-date #{report_class}" %>
 
@@ -61,6 +67,12 @@
                days_results = (results.to_date - competition.end_date).to_i
                results_class = results_class(days_results)
                results_content = "#{pluralize(days_results, "day")} after"
+              else
+                if competition.is_over?
+                  days_results = (Date.today - competition.end_date).to_i
+                  results_class = results_class(days_results)
+                  results_content = "pending"
+                end
               end %>
             <%= content_tag :td, results_content, class: "admin-date #{results_class}" %>
             <td>

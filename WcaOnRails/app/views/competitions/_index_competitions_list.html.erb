@@ -6,6 +6,10 @@
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
       </div>
+    <% elsif @recent_selected %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'index_table', competitions: competitions, title: "Recent competitions (last 30 days)" %>
+      </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
@@ -50,8 +54,10 @@
     <% else %>
       <% if @past_selected %>
         <% recent_competitions, distant_competitions = competitions.partition { |c| (Date.today - c.end_date).to_i < Competition::RECENT_DAYS } %>
-        <%= render 'admin_index_table', id: "recent-comps", competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
+        <%#= render 'admin_index_table', id: "recent-comps", competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
         <%= render 'admin_index_table', id: "distant-comps", competitions: distant_competitions, title: "Past competitions" %>
+      <% elsif @recent_selected %>
+        <%= render 'admin_index_table', id: "recent-comps", competitions: competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
       <% else %>
         <%= render 'admin_index_table', id: "ongoing-and-upcoming-comps", competitions: competitions, title: "Ongoing and upcoming competitions" %>
       <% end %>
