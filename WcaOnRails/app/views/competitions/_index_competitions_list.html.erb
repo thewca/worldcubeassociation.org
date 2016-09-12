@@ -66,10 +66,3 @@
       end %>
   <% end %>
 <% end %>
-<script>
-$('.toggle-body').on('click', function() {
-  $(this).closest('table').children('tbody').toggleClass('hidden');
-  var newMessage = $(this).closest('table').children('tbody').hasClass('hidden') ? '(show)' : '(hide)';
-  $(this).html(newMessage);
-});
-</script>

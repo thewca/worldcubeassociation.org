@@ -1,7 +1,6 @@
 <% unless competitions.empty? %>
   <div class="col-md-12" id="<%= id %>">
     <table class="table table-striped table-condensed admin-competitions">
-      <% toggle_tbody_message = title.include?("Past") ? "show" : "hide" %>
       <thead>
         <tr class="admin-table-header">
           <th>
@@ -23,11 +22,10 @@
             Results posted
           </th>
           <th class="admin-button">
-            <span class="toggle-body">(<%= toggle_tbody_message %>)</span>
           </th>
         </tr>
       </thead>
-      <tbody class="<%#= "hidden" if toggle_tbody_message == "show" %>">
+      <tbody>
         <% competitions.each_with_index do |competition, index| %>
           <% announced = competition.announced_at %>
           <% report = competition.delegate_report.posted_at %>
