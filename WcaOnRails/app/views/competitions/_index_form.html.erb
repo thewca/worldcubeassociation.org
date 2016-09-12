@@ -41,7 +41,7 @@
       <%= radio_button_tag "state", "present" %>
       <span class="caption">Present</span>
     </label>
-    <label id="recent" class="btn btn-primary">
+    <label id="recent" class="btn btn-primary" data-toggle="tooltip" title="Last <%= Competition::RECENT_DAYS %> days">
       <%= radio_button_tag "state", "recent" %>
       <span class="caption">Recent</span>
     </label>
