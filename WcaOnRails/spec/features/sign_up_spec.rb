@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryGirl.create(:person_who_has_competed_once, year: 1988, month: 02, day: 03) }
+  let!(:person) { FactoryGirl.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
   let!(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
 
   context 'when signing up as a returning competitor', js: true do

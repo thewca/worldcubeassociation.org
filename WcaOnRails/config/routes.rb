@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers applications: 'oauth/applications'
@@ -79,6 +80,8 @@ Rails.application.routes.draw do
   root 'posts#index'
   resources :posts
   get 'rss' => 'posts#rss'
+
+  get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
 
   get 'robots' => 'static_pages#robots'
 

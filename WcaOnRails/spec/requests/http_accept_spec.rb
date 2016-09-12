@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 # In production, we see lots of requests that correspond to an HTTP_ACCEPT

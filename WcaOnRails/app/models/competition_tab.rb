@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CompetitionTab < ActiveRecord::Base
   belongs_to :competition, required: true
 

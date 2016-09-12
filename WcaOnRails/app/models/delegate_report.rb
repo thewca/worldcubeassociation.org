@@ -22,7 +22,7 @@ Gen 3 Display: 0"
   end
 
   URL_RE = %r{\Ahttps?://\S+\z}
-  VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://".freeze
+  VALID_URL_MESSAGE = "must be a valid url starting with http:// or https://"
   validate :url_validations
   def url_validations
     if schedule_url.present? && !URL_RE.match(schedule_url)

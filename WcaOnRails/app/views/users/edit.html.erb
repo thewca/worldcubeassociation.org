@@ -11,6 +11,8 @@
     <% mail_to_delegate = mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank") %>
     <% wca_id_partial = render("shared/wca_id", wca_id: @user.unconfirmed_wca_id) %>
     <% message = @user.confirmed_at ? '.pending_claim_confirmation_html' : '.pending_claim_mail_confirmation_html' %>
+    <% # i18n-tasks-use t('.pending_claim_confirmation_html') #<- useful because the previous line tricks i18n-tasks %>
+    <% # i18n-tasks-use t('.pending_claim_mail_confirmation_html') %>
     <%= alert :warning, t(message, delegate: mail_to_delegate, wca_id: wca_id_partial) %>
   <% end %>
   <% if @user.unconfirmed_email %>
@@ -171,44 +173,44 @@
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>
+    <% end %>
 
-      <% if @user.wca_id.present? %>
-        <div class="tab-pane active" id="avatar">
-          <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
-            <%= hidden_field_tag "section", "avatar" %>
+    <% if @user.wca_id.present? %>
+      <div class="tab-pane active" id="avatar">
+        <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
+          <%= hidden_field_tag "section", "avatar" %>
 
-            <div class="row">
-              <% if @user.avatar? %>
-                <div class="col-sm-6">
-                  <%= image_tag @user.avatar.url, class: "img-responsive center-block" %>
-                </div>
-              <% end %>
+          <div class="row">
+            <% if @user.avatar? %>
               <div class="col-sm-6">
-                <div class="well">
-                  <h3><%=t '.guidelines' %></h3>
-                  <ul>
-                    <% t('.avatar_guidelines').values.each do |guideline| %>
-                      <li><%= guideline %></li>
-                    <% end %>
-                  </ul>
-                </div>
-                <% if @user.avatar? %>
-                  <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-                  <p>Your account thumbnail:</p>
-                  <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                    <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
-                  <% end %>
-                <% end %>
-
-                <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
-                <%= f.hidden_field :pending_avatar_cache %>
-
-                <%= f.submit t('.save'), class: "btn btn-primary" %>
+                <%= image_tag @user.avatar.url, class: "img-responsive center-block" %>
               </div>
+            <% end %>
+            <div class="col-sm-6">
+              <div class="well">
+                <h3><%=t '.guidelines' %></h3>
+                <ul>
+                  <% t('.avatar_guidelines').values.each do |guideline| %>
+                    <li><%= guideline %></li>
+                  <% end %>
+                </ul>
+              </div>
+              <% if @user.avatar? %>
+                <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
+                <p><%= t('.your_thumbnail') %></p>
+                <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
+                  <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
+                <% end %>
+              <% end %>
+
+              <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
+              <%= f.hidden_field :pending_avatar_cache %>
+
+              <%= f.submit t('.save'), class: "btn btn-primary" %>
             </div>
-          <% end %>
-        </div>
-      <% end %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
 
   </div>

@@ -8,7 +8,7 @@ Variables:
  - selected_events -> an Array of Event objects that whould be marked as selected
 %>
 
-<% label ||= "Events" %>
+<% label ||= t('registrations.events') %>
 <% disabled ||= false %>
 <% allowed_events ||= Event.all_official %>
 

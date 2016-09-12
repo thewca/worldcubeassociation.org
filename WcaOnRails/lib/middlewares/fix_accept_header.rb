@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Middlewares
   class FixAcceptHeader
     def initialize(app)

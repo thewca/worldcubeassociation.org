@@ -3,7 +3,7 @@
 <div class="container new-team">
   <h1>Create a new team</h1>
 
-  <%= simple_form_for @team, html: { class: 'form-horizontal are-you-sure no-submit-on-enter' }, wrapper: :horizontal_form do |f| %>
+  <%= horizontal_simple_form_for @team, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
     <%= f.input :name, required: true, autofocus: true %>
 
     <%= link_to icon("undo", "Back to Teams"), teams_path, class: "btn btn-default teams-home" %>

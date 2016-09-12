@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCropCoordinatesToUsers < ActiveRecord::Migration
   def change
     add_column :users, :avatar_crop_x, :integer

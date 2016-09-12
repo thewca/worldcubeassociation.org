@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'delayed/plugins/save_completed_jobs'
 
 Delayed::Worker.destroy_failed_jobs = false

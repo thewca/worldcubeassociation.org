@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CompetitionsController < ApplicationController
   include ApplicationHelper
 
@@ -56,7 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
-    params[:display] ||= "list"
+    @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
     # See: https://github.com/cubing/worldcubeassociation.org/issues/472
@@ -77,6 +78,10 @@ class CompetitionsController < ApplicationController
       unless params[:year] == "all years"
         @competitions = @competitions.where(year: params[:year])
       end
+    end
+
+    if @display == 'admin'
+      @competitions = @competitions.includes(:delegates, :delegate_report)
     end
 
     unless params[:region] == "all"
@@ -139,6 +144,8 @@ class CompetitionsController < ApplicationController
       body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
     end
     create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+
+    comp.update!(announced_at: Time.now)
   end
 
   def post_results

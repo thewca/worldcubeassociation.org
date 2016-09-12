@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'valid_email'
 
 class Contact < MailForm::Base

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RemoveTeamsColumns < ActiveRecord::Migration
   def change
     remove_column :users, :wrc_team

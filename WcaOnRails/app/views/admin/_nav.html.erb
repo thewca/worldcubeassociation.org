@@ -1,10 +1,12 @@
 <div class="row">
   <div class="col-sm-4 col-md-3">
     <div class="list-group">
+      <% competitions_view = "/competitions"
+         competitions_view += "?display=admin" if current_user.can_see_admin_competitions? %>
       <% [
         { text: "Upload results", path: "/results/admin/upload_results.php", fa_icon: "upload" },
         { text: "Create competition", path: new_competition_path, fa_icon: "plus" },
-        { text: "List competitions", path: competitions_path, fa_icon: "list" },
+        { text: "List competitions", path: competitions_view, fa_icon: "list" },
         { text: "Edit person", path: admin_edit_person_path, fa_icon: "user" },
         { text: "Merge people", path: admin_merge_people_path, fa_icon: "code-fork" },
         { text: "Fix results", path: "/results/admin/fix_results.php", fa_icon: "pencil-square-o" },
@@ -20,6 +22,7 @@
         { text: "Update statistics", path: "/results/statistics.php?update8392=1", fa_icon: "area-chart" },
         { text: "Export public", path: "/results/admin/export_public.php", fa_icon: "cloud-upload" },
         { text: "Edit teams", path: teams_path, fa_icon: "users" },
+        { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap"}
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i> <%= nav_item[:text] %>

@@ -4,9 +4,6 @@ require 'securerandom'
 include_recipe "wca::base"
 include_recipe "nodejs"
 
-unless node.chef_environment.include? "-noregs"
-  include_recipe "wca::regulations"
-end
 
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
@@ -71,7 +68,7 @@ rails_root = "#{repo_root}/WcaOnRails"
 
 #### Mysql
 mysql_service 'default' do
-  version '5.5'
+  version '5.6'
   initial_root_password secrets['mysql_password']
   # Force default socket to make rails happy
   socket "/var/run/mysqld/mysqld.sock"
@@ -117,7 +114,6 @@ gem_package "rails" do
 end
 chef_env_to_rails_env = {
   "development" => "development",
-  "development-noregs" => "development",
   "staging" => "production",
   "production" => "production",
 }
@@ -209,7 +205,7 @@ logrotate_app 'nginx-wca' do
   options	['nodelaycompress']
 end
 
-server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "", "development-noregs" => "" }[node.chef_environment]
+server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644
@@ -315,12 +311,14 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
 end
 
 #### Initialize rails gems/database
-execute "bundle install --without none" do
+execute "bundle install #{'--deployment --without development test' if rails_env == 'production'} --path /home/#{username}/.bundle" do
+  user username
   cwd rails_root
   environment({
     "RACK_ENV" => rails_env,
   })
 end
+
 if node.chef_environment.start_with?("development")
   db_setup_lockfile = '/tmp/rake-db-setup-run'
   execute "bundle exec rake db:setup" do

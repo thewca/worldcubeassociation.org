@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe "registrations/psych_sheet_event" do
@@ -32,7 +33,8 @@ RSpec.describe "registrations/psych_sheet_event" do
 
     render
 
-    [ { pos: 1,   name: "Best Guy",         average: "5.00",  single: "4.50" },
+    [
+      { pos: 1,   name: "Best Guy",         average: "5.00",  single: "4.50" },
       { pos: 2,   name: "Tied But Better",  average: "20.00", single: "15.00" },
       { pos: 2,   name: "Tied But Worse",   average: "20.00", single: "18.99" },
       { pos: "",  name: "Newcomer I",       average: "",      single: "" },

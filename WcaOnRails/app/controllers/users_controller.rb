@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
@@ -25,8 +26,8 @@ class UsersController < ApplicationController
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
-              name: user.name,
-              email: user.email,
+              name: ERB::Util.html_escape(user.name),
+              email: ERB::Util.html_escape(user.email),
               edit: view_context.link_to("Edit", edit_user_path(user)),
             }
           end,
@@ -82,12 +83,12 @@ class UsersController < ApplicationController
         sign_in @user, bypass: true
       end
       flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
-                          I18n.t('successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
+                          I18n.t('wca.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
                         else
-                          I18n.t('successes.messages.account_updated')
+                          I18n.t('wca.successes.messages.account_updated')
                         end
       if @user.claiming_wca_id
-        flash[:success] = I18n.t('successes.messages.wca_id_claimed',
+        flash[:success] = I18n.t('wca.successes.messages.wca_id_claimed',
                                  wca_id: @user.unconfirmed_wca_id,
                                  user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now

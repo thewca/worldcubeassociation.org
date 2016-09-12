@@ -215,7 +215,7 @@ server {
   # of the regulations html. We also have static content such as pdfs and images
   # that Rails won't serve up for us. We have a carefully constructed regex here
   # to only serve up files we don't want handled by Rails.
-  location ~* /regulations(.*\.pdf|/history/.+|/scrambles/tnoodle/.*) {
+  location ~* /regulations(.*\.pdf|/history/files/.+|/scrambles/tnoodle/.*) {
     index index.html;
     alias <%= @repo_root %>/WcaOnRails/app/views/regulations/$1;
   }

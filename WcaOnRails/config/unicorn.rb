@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Ported from `system` gem, see
 # https://github.com/roja/system/blob/master/lib/system/cpu.rb
 #

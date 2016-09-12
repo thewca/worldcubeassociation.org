@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -317,7 +318,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "unconfirmed_wca_id" do
-    let(:person) { FactoryGirl.create :person, year: 1990, month: 01, day: 02 }
+    let(:person) { FactoryGirl.create :person, year: 1990, month: 1, day: 2 }
     let(:delegate) { FactoryGirl.create :delegate }
     let(:user) do
       u = FactoryGirl.create :user
@@ -343,7 +344,7 @@ RSpec.describe User, type: :model do
     it "doesn't allow user to change unconfirmed_wca_id" do
       expect(user).to be_valid
       user.claiming_wca_id = false
-      other_person = FactoryGirl.create :person, year: 1980, month: 02, day: 01
+      other_person = FactoryGirl.create :person, year: 1980, month: 2, day: 1
       user.unconfirmed_wca_id = other_person.wca_id
       expect(user).to be_invalid
       expect(user.errors.messages[:dob_verification]).to eq ['incorrect']

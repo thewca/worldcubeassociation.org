@@ -6,6 +6,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
   $('input[name="competition[generate_website]"]').on('change', function() {
     var generateWebsite = this.checked;
     $('div.competition_external_website').toggle(!generateWebsite);
+    $('input#competition_external_website').prop('disabled', generateWebsite);
   }).trigger('change');
 });
 

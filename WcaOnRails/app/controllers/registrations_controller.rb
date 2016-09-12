@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 
@@ -61,7 +62,7 @@ class RegistrationsController < ApplicationController
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
-        flash[:success] = I18n.t('competitions.nav.registration.flash.deleted', comp: @competition.name)
+        flash[:success] = I18n.t('competitions.registration.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
@@ -151,7 +152,7 @@ class RegistrationsController < ApplicationController
         mailer.deliver_now
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else
-        flash[:success] = I18n.t('competitions.nav.registration.flash.updated')
+        flash[:success] = I18n.t('competitions.registration.flash.updated')
       end
       if params[:from_admin_view]
         redirect_to edit_registration_path(@registration)
@@ -159,7 +160,7 @@ class RegistrationsController < ApplicationController
         redirect_to competition_register_path(@registration.competition)
       end
     else
-      flash.now[:danger] = I18n.t('competitions.nav.registration.flash.failed')
+      flash.now[:danger] = I18n.t('competitions.registration.flash.failed')
       render :edit
     end
   end
@@ -187,7 +188,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('competitions.nav.registration.flash.registered')
+      flash[:success] = I18n.t('competitions.registration.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_now
       redirect_to competition_register_path

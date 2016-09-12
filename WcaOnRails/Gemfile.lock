@@ -81,7 +81,7 @@ GEM
     ansi (1.5.0)
     api-pagination (4.3.0)
     arel (6.0.0)
-    ast (2.2.0)
+    ast (2.3.0)
     autoprefixer-rails (5.2.1)
       execjs
       json
@@ -163,6 +163,10 @@ GEM
     dotenv (2.0.1)
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
+    easy_translate (0.5.0)
+      json
+      thread
+      thread_safe
     envied (0.8.1)
       coercible (~> 1.0)
       rack (~> 1.4)
@@ -198,9 +202,20 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     hashie (3.4.3)
     high_voltage (2.4.0)
+    highline (1.7.8)
     hitimes (1.2.2)
     htmlentities (4.3.4)
     i18n (0.7.0)
+    i18n-tasks (0.9.5)
+      activesupport (>= 4.0.2)
+      ast (>= 2.1.0)
+      easy_translate (>= 0.5.0)
+      erubis
+      highline (>= 1.7.3)
+      i18n
+      parser (>= 2.2.3.0)
+      term-ansicolor (>= 1.3.2)
+      terminal-table (>= 1.5.1)
     jbuilder (2.2.13)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -250,7 +265,7 @@ GEM
       ast
       ruby-ll (~> 2.1)
     orm_adapter (0.5.0)
-    parser (2.3.0.7)
+    parser (2.3.1.2)
       ast (~> 2.2)
     pluginator (1.3.0)
     poltergeist (1.8.1)
@@ -334,15 +349,16 @@ GEM
       rspec-mocks (~> 3.2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    rubocop (0.36.0)
-      parser (>= 2.3.0.0, < 3.0)
+    rubocop (0.42.0)
+      parser (>= 2.3.1.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-ll (2.1.2)
       ansi
       ast
-    ruby-progressbar (1.7.5)
+    ruby-progressbar (1.8.1)
     sass (3.4.16)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -362,7 +378,7 @@ GEM
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     slop (3.6.0)
-    spring (1.4.3)
+    spring (1.7.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (3.0.2)
@@ -373,23 +389,29 @@ GEM
       sprockets (>= 2.8, < 4.0)
     strip_attributes (1.7.0)
       activemodel (>= 3.0, < 5.0)
+    term-ansicolor (1.3.2)
+      tins (~> 1.0)
+    terminal-table (1.5.2)
     test_after_commit (0.4.1)
       activerecord (>= 3.2)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
     thor (0.19.1)
+    thread (0.2.2)
     thread_safe (0.3.5)
     tilt (1.4.1)
     time_will_tell (0.1.0)
       railties (>= 3.2)
     timers (4.0.1)
       hitimes
+    tins (1.10.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unicode-display_width (1.1.0)
     unicorn (4.9.0)
       kgio (~> 2.6)
       rack
@@ -442,6 +464,7 @@ DEPENDENCIES
   font-awesome-sass
   guard-rspec
   high_voltage
+  i18n-tasks (~> 0.9.5)
   jbuilder
   jquery-rails
   kaminari
@@ -466,7 +489,7 @@ DEPENDENCIES
   recaptcha
   redcarpet (~> 3.3)
   rspec-rails
-  rubocop (= 0.36)
+  rubocop
   sass-rails
   scss_lint
   sdoc

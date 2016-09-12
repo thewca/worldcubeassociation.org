@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def full_title(page_title='')
     base_title = WcaOnRails::Application.config.site_name
@@ -51,9 +52,10 @@ module ApplicationHelper
   def wca_excerpt(html, phrases)
     text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/cubing/worldcubeassociation.org/issues/238
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
-    first = phrases.map { |phrase| text.index(phrase) }.compact.min
+    text_downcase = text.downcase
+    first = phrases.map { |phrase| text_downcase.index(phrase.downcase) }.compact.min
     last = phrases.map do |phrase|
-      index = text.index(phrase)
+      index = text_downcase.index(phrase.downcase)
       index + phrase.length if index
     end.compact.max
     excerpted = if first # At least one phrase matches the text.
@@ -142,5 +144,19 @@ module ApplicationHelper
     }
 
     content_tag(:option, t('common.all_regions'), value: "all") + grouped_options_for_select(regions, selected_id)
+  end
+
+  def horizontal_simple_form_for(resource, options = {}, &block)
+    options[:html] ||= {}
+    options[:html][:class] ||= ""
+    options[:html][:class] += " form-horizontal"
+    options[:wrapper] = :horizontal_form
+    options[:wrapper_mappings] = {
+      check_boxes: :horizontal_radio_and_checkboxes,
+      radio_buttons: :horizontal_radio_and_checkboxes,
+      file: :horizontal_file_input,
+      boolean: :horizontal_boolean,
+    }
+    simple_form_for(resource, options, &block)
   end
 end

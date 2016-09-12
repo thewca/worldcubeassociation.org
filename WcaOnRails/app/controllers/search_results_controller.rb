@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SearchResultsController < ApplicationController
   SEARCH_RESULT_LIMIT = 10
 

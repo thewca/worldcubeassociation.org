@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NotificationsHelper
   def notifications_for_user(user)
     notifications = []
@@ -58,7 +59,7 @@ module NotificationsHelper
       }
     end
 
-    if user.cannot_register_for_competition_reasons.length > 0
+    unless user.cannot_register_for_competition_reasons.empty?
       notifications << {
         text: "Your profile is incomplete. You will not be able to register for competitions until you complete it!",
         url: profile_edit_path,

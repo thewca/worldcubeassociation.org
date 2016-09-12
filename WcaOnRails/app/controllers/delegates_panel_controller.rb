@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DelegatesPanelController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_unless_user(:can_view_crash_course?) }

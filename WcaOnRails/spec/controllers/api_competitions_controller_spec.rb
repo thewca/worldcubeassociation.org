@@ -1,14 +1,18 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Api::V0::CompetitionsController do
-  let(:competition) { FactoryGirl.create(:competition,
-                                         :with_delegate,
-                                         id: "TestComp2014",
-                                         start_date: "2014-02-03",
-                                         end_date: "2014-02-05",
-                                         external_website: "http://example.com",
-                                         showAtAll: true,
-                                        ) }
+  let(:competition) {
+    FactoryGirl.create(
+      :competition,
+      :with_delegate,
+      id: "TestComp2014",
+      start_date: "2014-02-03",
+      end_date: "2014-02-05",
+      external_website: "http://example.com",
+      showAtAll: true,
+    )
+  }
 
   describe 'GET #show' do
     it '404s on invalid competition' do

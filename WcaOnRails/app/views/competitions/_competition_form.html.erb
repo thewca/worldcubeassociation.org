@@ -1,12 +1,6 @@
   <% provide(:include_gmaps, true) %>
   <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).isConfirmed? : false %>
-  <%= simple_form_for @competition, html: { class: 'form-horizontal are-you-sure no-submit-on-enter', id: 'edit-competition-form' }, wrapper: :horizontal_form,
-  wrapper_mappings: {
-    check_boxes: :horizontal_radio_and_checkboxes,
-    radio_buttons: :horizontal_radio_and_checkboxes,
-    file: :horizontal_file_input,
-    boolean: :horizontal_boolean
-  } do |f| %>
+  <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'edit-competition-form' } do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
 
     <% if @competition.persisted? %>

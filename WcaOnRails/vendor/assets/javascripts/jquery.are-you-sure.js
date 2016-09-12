@@ -68,13 +68,27 @@
       $field.data('ays-orig', getValue($field));
     };
 
-    var checkForm = function(evt) {
+    // Oftentimes, forms have some javascript that runs immediately when fields change.
+    // It makes sense to wait for those events to run (and possibly dirty or clean the form)
+    // before we check to see if the form is dirty. -JFLY
+    var checkForm = function(evt) {//JFLY
+      var that = this;
+      setTimeout(function() {//JFLY
+        checkFormNow.call(that, evt);//JFLY
+      }, 0);//JFLY
+    };//JFLY
+    var checkFormNow = function(evt) {
 
       var isFieldDirty = function($field) {
         var origValue = $field.data('ays-orig');
         if (undefined === origValue) {
           return false;
         }
+        if($field.is(":disabled")) {//JFLY
+          // Disabled fields cannot be dirty, as they won't
+          // submit anything to the server.
+          return false;//JFLY
+        }//JFLY
         if($field.data('ays-ignore-float-close')) {//JFLY
           var delta = parseFloat(getValue($field)) - parseFloat(origValue);//JFLY
           return delta > 1e-5;//JFLY

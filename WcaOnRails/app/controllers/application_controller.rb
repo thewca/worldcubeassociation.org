@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "newrelic_rpm"
 
 class ApplicationController < ActionController::Base

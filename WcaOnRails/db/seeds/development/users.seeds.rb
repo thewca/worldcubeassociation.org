@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 after :teams do
   def self.random_user
     {

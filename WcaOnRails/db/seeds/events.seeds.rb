@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('222', '2x2 Cube', 40, 'time', '2x2 Cube'),
 ('222bf', '2x2 Cube: Blindfolded', 1050, 'time', '2x2 blindfolded'),

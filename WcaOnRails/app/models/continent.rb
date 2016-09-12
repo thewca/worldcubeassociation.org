@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Continent
   attr_accessor :id, :name, :recordName, :latitude, :longitude, :zoom
 
