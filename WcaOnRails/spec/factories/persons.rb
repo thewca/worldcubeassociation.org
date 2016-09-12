@@ -3,9 +3,9 @@ FactoryGirl.define do
   factory :person do
     wca_id do
       mid = ('A'..'Z').to_a.sample(4).join
-      "2016#{mid}01".tap do |id|
-        id.next! while Person.exists?(wca_id: id)
-      end
+      id = "2016#{mid}01"
+      id = id.next while Person.exists?(wca_id: id)
+      id
     end
     subId 1
     name { Faker::Name.name }
