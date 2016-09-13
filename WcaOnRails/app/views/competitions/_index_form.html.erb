@@ -58,6 +58,26 @@
   </div>
 </div>
 
+<% if current_user&.can_see_admin_competitions? %>
+  <div class="form-group">
+    <%= label_tag(:status) %>
+    <div id="status" class="btn-group" data-toggle="buttons">
+      <label id="all" class="btn btn-info">
+        <%= radio_button_tag "status", "all" %>
+        <span class="caption">All</span>
+      </label>
+      <label id="warning" class="btn btn-warning">
+        <%= radio_button_tag "status", "warning" %>
+        <span class="caption">Warning</span>
+      </label>
+      <label id="danger" class="btn btn-danger">
+        <%= radio_button_tag "status", "danger" %>
+        <span class="caption">Danger</span>
+      </label>
+    </div>
+  </div>
+<% end %>
+
 <div id="display" class="form-group">
   <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">

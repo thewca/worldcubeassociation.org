@@ -57,6 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
+    params[:status] ||= "all"
     @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
@@ -97,6 +98,14 @@ class CompetitionsController < ApplicationController
 
     unless params[:event_ids].empty?
       @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
+    end
+
+    unless params[:status] == "all"
+      if params[:status] == "warning"
+        @competitions = @competitions.select { |competition| competition.pending_results_or_report(14) }
+      else
+        @competitions = @competitions.select { |competition| competition.pending_results_or_report(21) }
+      end
     end
 
     respond_to do |format|
