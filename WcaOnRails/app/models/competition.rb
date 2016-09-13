@@ -7,6 +7,8 @@ class Competition < ActiveRecord::Base
   #       no clue why... (th, 2015-09-19)
   self.primary_key = "id"
 
+  scope :visible, -> { where(showAtAll: true) }
+
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
