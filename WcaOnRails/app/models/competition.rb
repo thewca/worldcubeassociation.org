@@ -436,7 +436,7 @@ class Competition < ActiveRecord::Base
   end
 
   def pending_results_or_report(days)
-    self.end_date < (Date.today - days) && (self.delegate_report.posted_at == nil || results_posted_at == nil)
+    self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
   def start_date
