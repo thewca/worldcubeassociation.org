@@ -40,6 +40,10 @@ class Competition < ActiveRecord::Base
     use_wca_registration
     guests_enabled
   ).freeze
+  # The eventsSpecs column will be removed as per #886.
+  # This can be done once PR #759 has been deployed to production.
+  # Until then we need eventSpecs in UNCLONEABLE_ATTRIBUTES to ensure
+  # our tests pass successfully.
   UNCLONEABLE_ATTRIBUTES = %w(
     id
     name
@@ -94,9 +98,9 @@ class Competition < ActiveRecord::Base
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
-  def must_have_at_least_one_event
-    if events.empty?
-      errors.add(:events, "must contain at least one event for this competition")
+  private def must_have_at_least_one_event
+    if competition_events.reject(&:marked_for_destruction?).empty?
+      errors.add(:competition_events, "must contain at least one event for this competition")
     end
   end
 
@@ -254,6 +258,19 @@ class Competition < ActiveRecord::Base
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
+
+    self.id = new_id
+  end
+
+  old_competition_events_attributes = instance_method(:competition_events_attributes=)
+  define_method(:competition_events_attributes=) do |attributes|
+    # This is also a mess. We "overload" the competition_events_attributes= method
+    # so it won't be confused by the fact that our competition's id changing.
+    # See similar hack and comment in unpack_delegate_organizer_ids.
+    new_id = self.id
+    self.id = id_was
+
+    old_competition_events_attributes.bind(self).call(attributes)
 
     self.id = new_id
   end
@@ -518,7 +535,7 @@ class Competition < ActiveRecord::Base
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    competition_events.map(&:event).sort_by(&:rank)
+    competition_events.reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
   end
 
   def nearby_competitions(days, distance)

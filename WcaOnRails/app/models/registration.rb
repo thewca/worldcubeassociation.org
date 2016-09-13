@@ -89,7 +89,7 @@ class Registration < ActiveRecord::Base
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    registration_events.map(&:event).sort_by(&:rank)
+    registration_events.reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
   end
 
   def waiting_list_info
@@ -107,7 +107,7 @@ class Registration < ActiveRecord::Base
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if registration_events.length { |r| !r.marked_for_destruction? } == 0
+    if registration_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_events, "must register for at least one event")
     end
   end
