@@ -20,6 +20,14 @@ describe Poll do
       poll.confirmed = true
       expect(poll).to be_invalid
       expect(poll.errors.keys).to eq [:poll_options]
+
+      FactoryGirl.create(:poll_option, poll_id: poll.id)
+      FactoryGirl.create(:poll_option, poll_id: poll.id)
+      poll.confirmed = true
+      expect(poll).to be_valid
+
+      poll.poll_options[0].mark_for_destruction
+      expect(poll).to be_invalid
     end
 
     it "testing deadline bug" do
