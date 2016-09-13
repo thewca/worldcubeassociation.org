@@ -202,7 +202,6 @@ class Competition < ActiveRecord::Base
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
-  validate :events_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
@@ -520,13 +519,6 @@ class Competition < ActiveRecord::Base
 
     if @endYear != year
       errors.add(:end_date, "Competition dates cannot span multiple years.")
-    end
-  end
-
-  private def events_must_be_valid
-    invalid_events = events - Event.official - Event.deprecated
-    unless invalid_events.empty?
-      errors.add(:events, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
     end
   end
 
