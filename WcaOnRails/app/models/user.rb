@@ -292,6 +292,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  after_save :remove_pending_wca_id_claims
+  private def remove_pending_wca_id_claims
+    if delegate_status_changed? && !delegate_status
+      users_claiming_wca_id.each do |user|
+        user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
+        senior_delegate = User.find_by_id(senior_delegate_id_was)
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
+      end
+    end
+  end
+
   # After the user confirms their account, if they claimed a WCA ID, now is the
   # time to notify their delegate!
   def after_confirmation
