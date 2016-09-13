@@ -23,7 +23,7 @@ describe Poll do
 
       FactoryGirl.create(:poll_option, poll_id: poll.id)
       FactoryGirl.create(:poll_option, poll_id: poll.id)
-      poll.confirmed = true
+      poll.poll_options.reload
       expect(poll).to be_valid
 
       poll.poll_options[0].mark_for_destruction
