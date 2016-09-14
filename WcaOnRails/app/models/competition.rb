@@ -40,10 +40,6 @@ class Competition < ActiveRecord::Base
     use_wca_registration
     guests_enabled
   ).freeze
-  # The eventsSpecs column will be removed as per #886.
-  # This can be done once PR #759 has been deployed to production.
-  # Until then we need eventSpecs in UNCLONEABLE_ATTRIBUTES to ensure
-  # our tests pass successfully.
   UNCLONEABLE_ATTRIBUTES = %w(
     id
     name
@@ -55,7 +51,6 @@ class Competition < ActiveRecord::Base
     cellName
     showAtAll
     isConfirmed
-    eventSpecs
     registration_open
     registration_close
     results_posted_at
@@ -207,11 +202,6 @@ class Competition < ActiveRecord::Base
   alias_attribute :longitude_microdegrees, :longitude
   attr_accessor :longitude_degrees, :latitude_degrees
   before_validation :compute_coordinates
-
-  before_validation :cleanup_event_specs
-  def cleanup_event_specs
-    self.eventSpecs ||= ""
-  end
 
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
