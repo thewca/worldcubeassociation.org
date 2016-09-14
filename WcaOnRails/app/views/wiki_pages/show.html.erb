@@ -9,8 +9,8 @@
       <%= md @wiki_page.content %>
     </main>
     <aside class="info">
-      Created by <%= @wiki_page.author.name %> on <%= @wiki_page.created_at.strftime "%d %b %Y at %R" %>
-      Last update on <%= @wiki_page.updated_at.strftime "%d %b %Y at %R" %>
+      Created by <%= @wiki_page.author.name %> on <%= I18n.l @wiki_page.created_at.to_date, format: :long %>
+      Last update on <%= I18n.l @wiki_page.updated_at.to_date, format: :long %>
     </aside>
     <nav class="actions">
       <%= link_to icon(:undo, "Back to wiki"), wiki_pages_path, class: "btn btn-default" %>
