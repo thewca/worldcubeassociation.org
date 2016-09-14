@@ -20,10 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  "and": "and"
-  "and not": "and not"
-  "but": "but"
-  "but not": "but not"
   countries:
     XA: "Multiple Countries (Asia)"
     XE: "Multiple Countries (Europe)"
@@ -532,11 +528,12 @@ en:
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over, we are working to upload the results as soon as possible!"
       in_progress: "This competition is ongoing. Come back after %{date} to see the results!"
-      registration_tooltip: "You are %{message}."
-      registered: "registered"
-      waiting_list: "currently on the waiting list"
-      confirmed: "This competition is confirmed %{link_word} visible"
-      not_confirmed: "This competition is not confirmed %{link_word} visible"
+      tooltip_registered: "You are registered."
+      tooltip_waiting_list: "You are currently on the waiting list."
+      confirmed_visible: "This competition is confirmed and visible"
+      confirmed_not_visible: "This competition is confirmed but not visible"
+      not_confirmed_visible: "This competition is not confirmed but visible"
+      not_confirmed_not_visible: "This competition is not confirmed and not visible"
     my_competitions:
       title: "My competitions"
       disclaimer: "Only competitions which use the WCA registration system will be shown here."

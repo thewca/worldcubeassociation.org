@@ -73,10 +73,10 @@ class Competition < ActiveRecord::Base
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
-                   format: { with: VALID_NAME_RE, message: I18n.t('competitions.errors.invalid_name_message') }
+                   format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: I18n.t('competitions.errors.invalid_name_message') }, if: :name_valid_or_updating?
+                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 

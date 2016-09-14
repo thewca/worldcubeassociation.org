@@ -30,5 +30,4 @@ class Country < ActiveRecord::Base
       # Now we want to sort countries according to their localized name
     end.sort!(&COMPARE_LOCALIZED_NAMES)]
   end].freeze
-
 end
