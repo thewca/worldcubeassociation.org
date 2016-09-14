@@ -77,6 +77,21 @@
       <%= paginate @posts, param_name: :posts_page, params: { anchor: "posts" } %>
     <% end %>
 
+    <% if @regulations.present? %>
+      <h2><%= anchorable "Regulations and Guidelines" %></h2>
+      <% @regulations.each do |reg| %>
+        <div>
+          <%= link_to reg["url"] do %>
+            <h4><%= wca_highlight(reg["id"], query_parts) %></h4>
+          <% end %>
+          <blockquote>
+            <%= wca_highlight(reg["content_html"], query_parts) %>
+          </blockquote>
+        </div>
+      <% end %>
+      <%= paginate @regulations, param_name: :regulations_page, params: { anchor: "regulations-and-guidelines" } %>
+    <% end %>
+
     <% if @competitions.empty? %>
       <h2>No competitions found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
@@ -85,6 +100,9 @@
     <% end %>
     <% if @posts.empty? %>
       <h2>No posts found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
+    <% end %>
+    <% if @regulations.empty? %>
+      <h2>No Regulations or Guidelines found for <%= wca_highlight(@omni_query, @omni_query) %></h2>
     <% end %>
   <% end %>
 </div>
