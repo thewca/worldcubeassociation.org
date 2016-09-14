@@ -26,7 +26,7 @@ class Event < ActiveRecord::Base
   end
 
   def deprecated?
-    rank >= 990 && rank < 1000
+    990 <= rank && rank < 1000
   end
 
   def never_was_official?
