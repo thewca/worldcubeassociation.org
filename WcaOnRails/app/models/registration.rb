@@ -8,6 +8,7 @@ class Registration < ActiveRecord::Base
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
   has_many :registration_events
+  has_many :events, through: :registration_events
 
   accepts_nested_attributes_for :registration_events, allow_destroy: true
 
@@ -30,10 +31,6 @@ class Registration < ActiveRecord::Base
 
   def accepted?
     !pending?
-  end
-
-  def events
-    registration_events.map(&:event_object).sort_by(&:rank)
   end
 
   def name
@@ -87,6 +84,14 @@ class Registration < ActiveRecord::Base
     person ? person.best_solve(event, type) : SolveTime.new(event.id, type, 0)
   end
 
+  # Since Registration.events only includes saved events
+  # this method is required to ensure that in any forms which
+  # select events, unsaved events are still presented if
+  # there are any validation issues on the form.
+  def saved_and_unsaved_events
+    registration_events.reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
+  end
+
   def waiting_list_info
     pending_registrations = competition.registrations.pending.order(:created_at)
     index = pending_registrations.index(self)
@@ -102,7 +107,7 @@ class Registration < ActiveRecord::Base
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if events.empty?
+    if registration_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_events, "must register for at least one event")
     end
   end

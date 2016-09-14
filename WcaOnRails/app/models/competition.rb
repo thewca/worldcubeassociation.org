@@ -7,6 +7,8 @@ class Competition < ActiveRecord::Base
   #       no clue why... (th, 2015-09-19)
   self.primary_key = "id"
 
+  has_many :competition_events, dependent: :destroy
+  has_many :events, through: :competition_events
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
@@ -20,11 +22,12 @@ class Competition < ActiveRecord::Base
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
 
+  accepts_nested_attributes_for :competition_events, allow_destroy: true
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
     information
-    eventSpecs
     venue
     venueAddress
     venueDetails
@@ -37,6 +40,10 @@ class Competition < ActiveRecord::Base
     use_wca_registration
     guests_enabled
   ).freeze
+  # The eventsSpecs column will be removed as per #886.
+  # This can be done once PR #759 has been deployed to production.
+  # Until then we need eventSpecs in UNCLONEABLE_ATTRIBUTES to ensure
+  # our tests pass successfully.
   UNCLONEABLE_ATTRIBUTES = %w(
     id
     name
@@ -48,6 +55,7 @@ class Competition < ActiveRecord::Base
     cellName
     showAtAll
     isConfirmed
+    eventSpecs
     registration_open
     registration_close
     results_posted_at
@@ -90,9 +98,9 @@ class Competition < ActiveRecord::Base
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
-  def must_have_at_least_one_event
-    if events.empty?
-      errors.add(:eventSpecs, "must contain at least one event for this competition")
+  private def must_have_at_least_one_event
+    if competition_events.reject(&:marked_for_destruction?).empty?
+      errors.add(:competition_events, "must contain at least one event for this competition")
     end
   end
 
@@ -158,12 +166,14 @@ class Competition < ActiveRecord::Base
       Competition.reflections.keys.each do |association_name|
         case association_name
         when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
-             'competition_delegates', 'competition_organizers', 'media', 'scrambles'
+             'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
           # Should be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
+        when 'events'
+          clone.events = events
         when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
@@ -192,7 +202,6 @@ class Competition < ActiveRecord::Base
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
-  validate :events_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
@@ -248,6 +257,19 @@ class Competition < ActiveRecord::Base
     if @organizer_ids
       self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
     end
+
+    self.id = new_id
+  end
+
+  old_competition_events_attributes = instance_method(:competition_events_attributes=)
+  define_method(:competition_events_attributes=) do |attributes|
+    # This is also a mess. We "overload" the competition_events_attributes= method
+    # so it won't be confused by the fact that our competition's id changing.
+    # See similar hack and comment in unpack_delegate_organizer_ids.
+    new_id = self.id
+    self.id = id_was
+
+    old_competition_events_attributes.bind(self).call(attributes)
 
     self.id = new_id
   end
@@ -407,16 +429,8 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def events
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
-    (eventSpecs || []).split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
-  end
-
   def has_events_with_ids?(event_ids)
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
-    (event_ids - eventSpecs.split.map { |e| e.split("=")[0] }).empty?
+    (event_ids - events.ids).empty?
   end
 
   def has_event?(event)
@@ -508,11 +522,12 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  private def events_must_be_valid
-    invalid_events = events - Event.all_official - Event.all_deprecated
-    unless invalid_events.empty?
-      errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
-    end
+  # Since Competition.events only includes saved events
+  # this method is required to ensure that in any forms which
+  # select events, unsaved events are still presented if
+  # there are any validation issues on the form.
+  def saved_and_unsaved_events
+    competition_events.reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
   end
 
   def nearby_competitions(days, distance)
@@ -665,8 +680,6 @@ class Competition < ActiveRecord::Base
   end
 
   def psych_sheet_event(event)
-    preferred_format = event.preferred_formats.first
-
     joinsql = <<-ENDSQL
       join registration_events on registration_events.registration_id = Preregs.id
       join users on users.id = Preregs.user_id
@@ -688,7 +701,7 @@ class Competition < ActiveRecord::Base
       ifnull(RanksSingle.best, 0) single_best
     ENDSQL
 
-    sort_clause = "-#{preferred_format.sort_by}_rank desc, -#{preferred_format.sort_by_second}_rank desc, users.name"
+    sort_clause = "-#{event.recommended_format.sort_by}_rank desc, -#{event.recommended_format.sort_by_second}_rank desc, users.name"
 
     registrations = self.registrations.
                          accepted.
@@ -699,7 +712,7 @@ class Competition < ActiveRecord::Base
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
-      if preferred_format.sort_by == :single
+      if event.recommended_format.sort_by == :single
         rank = registration.single_rank
         prev_rank = prev_registration&.single_rank
       else

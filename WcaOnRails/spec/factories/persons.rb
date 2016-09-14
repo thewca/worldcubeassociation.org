@@ -9,7 +9,7 @@ FactoryGirl.define do
     end
     subId 1
     name { Faker::Name.name }
-    countryId { Country.all_real.sample.id }
+    countryId { Country.real.sample.id }
     gender "m"
     year 1966
     month 4

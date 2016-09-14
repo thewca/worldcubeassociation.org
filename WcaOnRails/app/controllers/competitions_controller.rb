@@ -352,7 +352,7 @@ class CompetitionsController < ApplicationController
         :generate_website,
         :external_website,
         :remarks,
-        event_ids: Event.all.map { |event| event.id.to_sym },
+        competition_events_attributes: [:id, :event_id, :_destroy],
       ]
       if current_user.can_admin_results?
         permitted_competition_params += [
@@ -363,10 +363,6 @@ class CompetitionsController < ApplicationController
     end
 
     competition_params = params.require(:competition).permit(*permitted_competition_params)
-    if competition_params.key?(:event_ids)
-      competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
-      competition_params.delete(:event_ids)
-    end
     if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
       competition_params[:isConfirmed] = true
     end

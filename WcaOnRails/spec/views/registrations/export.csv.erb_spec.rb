@@ -13,7 +13,7 @@ describe "registrations/export.csv.erb" do
       birthDay: 1,
       gender: "m",
       email: "bob@bob.com",
-      registration_events_attributes: [ {event_id: "333"} ],
+      events: [ Event.find("333") ],
       guests: 1,
       guests_old: 'jane', # will go away. https://github.com/cubing/worldcubeassociation.org/issues/403
     )

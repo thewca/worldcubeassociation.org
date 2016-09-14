@@ -5,7 +5,7 @@
     <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
   <% end %>
   <div id="events">
-    <% Event.all_official.each do |event| %>
+    <% Event.official.each do |event| %>
     <span class="event-checkbox">
       <%= label_tag "checkbox-#{event.id}" do %>
         <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>

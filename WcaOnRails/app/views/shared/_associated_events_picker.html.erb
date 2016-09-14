@@ -4,13 +4,13 @@ Variables:
  - label
  - disabled
  - events_association_name -> name of the associated events relation
- - allowed_events -> an Array of Event objects that should be shown (all by default)
- - selected_events -> an Array of Event objects that whould be marked as selected
+ - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
+ - selected_events -> a relation or an Array of Event objects that whould be marked as selected
 %>
 
 <% label ||= t('registrations.events') %>
 <% disabled ||= false %>
-<% allowed_events ||= Event.all_official %>
+<% allowed_events ||= Event.official %>
 
 <%# Note: form_builder.object is the object having associated events. %>
 <% associated_events = form_builder.object.send(events_association_name)
@@ -24,7 +24,7 @@ Variables:
   <div id="<%= events_association_name %>" class="associated-events">
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
       <span class="event-checkbox <%= "disabled" if disabled %>">
-        <% event = f.object.event_object %>
+        <% event = f.object.event %>
         <%= f.hidden_field :event_id %>
         <%= label_tag "#{events_association_name}_#{event.id}" do %>
           <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>

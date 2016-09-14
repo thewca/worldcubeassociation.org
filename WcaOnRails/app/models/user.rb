@@ -18,7 +18,9 @@ class User < ActiveRecord::Base
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :user_preferred_events
+  has_many :user_preferred_events, dependent: :destroy
+  has_many :preferred_events, through: :user_preferred_events, source: :event
+  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
@@ -37,8 +39,6 @@ class User < ActiveRecord::Base
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
-
-  validates :country_iso2, inclusion: { in: Country.all_real.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
@@ -309,11 +309,6 @@ class User < ActiveRecord::Base
     if unconfirmed_wca_id.present?
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
     end
-  end
-
-  # Returns the preferred events as an array of Event objects
-  def preferred_events
-    user_preferred_events.map(&:event_object).sort_by(&:rank)
   end
 
   def software_team?
