@@ -101,11 +101,8 @@ class CompetitionsController < ApplicationController
     end
 
     unless params[:status] == "all"
-      if params[:status] == "warning"
-        @competitions = @competitions.select { |competition| competition.pending_results_or_report(14) }
-      else
-        @competitions = @competitions.select { |competition| competition.pending_results_or_report(21) }
-      end
+      days = (params[:status] == "warning" ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
+      @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
     respond_to do |format|
