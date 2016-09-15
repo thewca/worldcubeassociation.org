@@ -33,7 +33,6 @@ CREATE TABLE `Competitions` (
   `day` smallint(5) unsigned NOT NULL DEFAULT '0',
   `endMonth` smallint(5) unsigned NOT NULL DEFAULT '0',
   `endDay` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `eventSpecs` text COLLATE utf8_unicode_ci NOT NULL,
   `venue` varchar(240) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `venueAddress` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `venueDetails` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1103,10 +1102,12 @@ INSERT INTO schema_migrations (version) VALUES ('20160731181145');
 
 INSERT INTO schema_migrations (version) VALUES ('20160811013347');
 
+INSERT INTO schema_migrations (version) VALUES ('20160825124202');
+
 INSERT INTO schema_migrations (version) VALUES ('20160831212003');
 
 INSERT INTO schema_migrations (version) VALUES ('20160901120254');
 
 INSERT INTO schema_migrations (version) VALUES ('20160902230822');
 
-INSERT INTO schema_migrations (version) VALUES ('20160825124202');
+INSERT INTO schema_migrations (version) VALUES ('20160914122252');
