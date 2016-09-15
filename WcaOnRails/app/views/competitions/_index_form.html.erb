@@ -58,25 +58,23 @@
   </div>
 </div>
 
-<% if @display == 'admin' %>
-  <div class="form-group">
-    <%= label_tag(:status) %>
-    <div id="status" class="btn-group" data-toggle="buttons">
-      <label id="all" class="btn btn-info">
-        <%= radio_button_tag "status", "all" %>
-        <span class="caption">All</span>
-      </label>
-      <label id="warning" class="btn btn-warning">
-        <%= radio_button_tag "status", "warning" %>
-        <span class="caption">Warning</span>
-      </label>
-      <label id="danger" class="btn btn-danger">
-        <%= radio_button_tag "status", "danger" %>
-        <span class="caption">Danger</span>
-      </label>
-    </div>
+<div class="form-group admin-selectors">
+  <%= label_tag(:status) %>
+  <div id="status" class="btn-group" data-toggle="buttons">
+    <label id="all" class="btn btn-info">
+      <%= radio_button_tag "status", "all" %>
+      <span class="caption">All</span>
+    </label>
+    <label id="warning" class="btn btn-warning">
+      <%= radio_button_tag "status", "warning" %>
+      <span class="caption">Warning</span>
+    </label>
+    <label id="danger" class="btn btn-danger">
+      <%= radio_button_tag "status", "danger" %>
+      <span class="caption">Danger</span>
+    </label>
   </div>
-<% end %>
+</div>
 
 <div id="display" class="form-group">
   <div class="btn-group btn-group-justified" data-toggle="buttons">
@@ -99,6 +97,7 @@
 
 <script>
   $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
+  $('#<%= @recent_selected ? "recent" : ""%>').button('toggle');
 
   $('#present').on('click', function() {
     $('#past .caption').html('Past');
@@ -123,4 +122,31 @@
   });
 
   $('#display-<%= @display %>').button('toggle');
+
+  // From http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript/901144#901144
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  function display_selectors() {
+    $(".admin-selectors, .map-selectors").hide();
+    $display_class = "." + getParameterByName('display') + '-selectors';
+    $($display_class).toggle();
+    //$($display_class).css('display','inline-block');
+  }
+
+  $(function(){
+    display_selectors();
+  });
+
+  // From http://stackoverflow.com/a/14038050/5656749
+  $(document).ajaxStop(function(){
+    display_selectors();
+  });
 </script>
