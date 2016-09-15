@@ -66,6 +66,18 @@ function showBody () {
   if( $picture )
     echo "<center><img class='person' src='$picture' /></center>";
 
+  #--- Show the In Memoriam if any.
+  $inMemoriamArray = array(
+    "2008COUR01" => "https://www.worldcubeassociation.org/forum/viewtopic.php?t=2028",
+    "2003LARS01" => "https://www.worldcubeassociation.org/forum/viewtopic.php?t=1982",
+    "2012GALA02" => "https://www.worldcubeassociation.org/forum/viewtopic.php?t=1044",
+    "2008LIMR01" => "https://www.worldcubeassociation.org/forum/viewtopic.php?t=945",
+    "2008KIRC01" => "https://www.worldcubeassociation.org/forum/viewtopic.php?t=470",
+  );
+  if( array_key_exists($chosenPersonId, $inMemoriamArray) ){
+    echo "<center><a target='_blank' href='$inMemoriamArray[$chosenPersonId]'>In Memoriam</a></center>";
+  }
+
   #--- Show the details.
   tableBegin( 'results', 4 );
   tableCaption( false, 'Details' );
