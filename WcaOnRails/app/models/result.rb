@@ -5,8 +5,10 @@ class Result < ActiveRecord::Base
   belongs_to :competition, foreign_key: :competitionId
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
   belongs_to :round, foreign_key: :roundId
+  belongs_to :event, foreign_key: :eventId
 
-  scope :podium, -> { where(roundId: Round.final_rounds.map(&:id), pos: [1..3]).where("best > 0") }
+  scope :podium, -> { joins(:round).merge(Round.final_rounds).where(pos: [1..3]).where("best > 0") }
+  scope :winners, -> { joins(:round, :event).merge(Round.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
 
   def to_s(field)
     SolveTime.new(eventId, field, send(field)).clock_format

@@ -599,11 +599,8 @@ class Competition < ActiveRecord::Base
 
   def winning_results
     light_results_from_relation(
-      results
-        .where(roundId: Round.final_rounds.map(&:id))
-        .where("pos = 1")
-        .where("best > 0")
-    ).sort_by { |r| r.event.rank }
+      results.winners
+    )
   end
 
   def person_ids_with_results
