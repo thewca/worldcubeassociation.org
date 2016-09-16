@@ -365,3 +365,12 @@ table.admin-competitions {
 #status {
   display: block;
 }
+
+
+#competition-query-form .admin-selectors {
+  display: none;
+}
+
+#competition-query-form.admin .admin-selectors {
+  display: inline-block;
+}

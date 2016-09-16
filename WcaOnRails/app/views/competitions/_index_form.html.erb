@@ -141,10 +141,14 @@
   }
 
   function display_selectors() {
-    $(".admin-selectors, .map-selectors").hide();
-    $display_class = "." + getParameterByName('display') + '-selectors';
-    $($display_class).toggle();
-    //$($display_class).css('display','inline-block');
+    $display_class_from_url = getParameterByName('display');
+    switch($display_class_from_url) {
+      case 'list': $display_class = 'list'; break;
+      case 'map': $display_class = 'map'; break;
+      case 'admin': $display_class = 'admin'; break;
+      default: $display_class = 'list'; break;
+    }
+    $('#competition-query-form').removeClass('admin map').addClass($display_class);
   }
 
   $(function(){
