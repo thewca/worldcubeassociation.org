@@ -20,13 +20,8 @@ module CompetitionsHelper
     ["alert-danger", "alert-orange", "alert-green"][level]
   end
 
-  def report_class(days_report)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days_report > d}.count
-    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
-  end
-
-  def results_class(days_results)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days_results > d}.count
+  def report_and_results_class(days)
+    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days > d}.count
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 end

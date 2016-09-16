@@ -96,8 +96,14 @@
 </div>
 
 <script>
-  $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
-  $('#<%= @recent_selected ? "recent" : ""%>').button('toggle');
+  <% if @past_selected
+    state_click = "past"
+  elsif @present_selected
+    state_click = "present"
+  elsif @recent_selected
+    state_click = "recent"
+    end %>
+  $('#<%= state_click %>').button('toggle');
 
   $('#present').on('click', function() {
     $('#past .caption').html('Past');
