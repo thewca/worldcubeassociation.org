@@ -33,6 +33,10 @@ class Registration < ActiveRecord::Base
     !pending?
   end
 
+  def events
+    registration_events.reject(&:marked_for_destruction?).map(&:event_object).sort_by(&:rank)
+  end
+
   def name
     user ? user.name : read_attribute(:name)
   end
