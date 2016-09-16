@@ -128,35 +128,4 @@
   });
 
   $('#display-<%= @display %>').button('toggle');
-
-  // From http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript/901144#901144
-  function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  function display_selectors() {
-    $display_class_from_url = getParameterByName('display');
-    switch($display_class_from_url) {
-      case 'list': $display_class = 'list'; break;
-      case 'map': $display_class = 'map'; break;
-      case 'admin': $display_class = 'admin'; break;
-      default: $display_class = 'list'; break;
-    }
-    $('#competition-query-form').removeClass('admin map').addClass($display_class);
-  }
-
-  $(function(){
-    display_selectors();
-  });
-
-  // From http://stackoverflow.com/a/14038050/5656749
-  $(document).ajaxStop(function(){
-    display_selectors();
-  });
 </script>
