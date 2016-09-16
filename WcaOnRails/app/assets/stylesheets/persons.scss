@@ -1,35 +1,37 @@
-#persons-query-fields {
-  #search-box {
-    margin: 15px 0;
-  }
-}
-
-.persons-table {
-  .name {
-    width: 40%;
+#persons-index {
+  #persons-query-fields {
+    #search-box {
+      margin: 15px 0;
+    }
   }
 
-  .wca-id {
-    width: 10%;
+  .persons-table {
+    .name {
+      width: 40%;
+    }
+
+    .wca-id {
+      width: 10%;
+    }
+
+    .country {
+      width: 30%;
+    }
+
+    .competitions-count,
+    .podiums-count {
+      width: 10%;
+      text-align: center;
+    }
   }
 
-  .country {
-    width: 30%;
+  .fixed-table-loading,
+  .pagination-detail {
+    // We need !important here because these elements are toggled via jQuery by bootstrap-table.
+    display: none !important; // scss-lint:disable ImportantRule
   }
 
-  .competitions-count,
-  .podiums-count {
-    width: 10%;
-    text-align: center;
+  .table-responsive {
+    border: 0;
   }
-}
-
-.fixed-table-loading,
-.pagination-detail {
-  // We need !important here because these elements are toggled via jQuery by bootstrap-table.
-  display: none !important; // scss-lint:disable ImportantRule
-}
-
-#persons-index .table-responsive {
-  border: 0;
 }
