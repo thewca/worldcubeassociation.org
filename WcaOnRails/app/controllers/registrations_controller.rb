@@ -38,7 +38,18 @@ class RegistrationsController < ApplicationController
   def psych_sheet_event
     @competition = competition_from_params
     @event = Event.find(params[:event_id])
-    @registrations = @competition.psych_sheet_event(@event)
+    @sort_by = params[:sort_by]
+    if @sort_by == @event.recommended_format.sort_by
+      @sort_by_second = @event.recommended_format.sort_by_second
+    elsif @sort_by == @event.recommended_format.sort_by_second
+      @sort_by_second = @event.recommended_format.sort_by
+      @sort_by = @event.recommended_format.sort_by_second
+    else
+      @sort_by = @event.recommended_format.sort_by
+      @sort_by_second = @event.recommended_format.sort_by_second
+    end
+
+    @registrations = @competition.psych_sheet_event(@event, @sort_by, @sort_by_second)
   end
 
   def index

@@ -371,26 +371,32 @@ RSpec.describe RegistrationsController do
       expect(registrations.map(&:accepted?).all?).to be true
     end
 
-    it "sorts 444 by average and handles ties" do
+    it "sorts 444 by single, and average, and handles ties" do
       registration1 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
       FactoryGirl.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
 
       registration2 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
-      FactoryGirl.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
+      FactoryGirl.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
 
       registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryGirl.create :ranks_average, rank: 9, best: 4242, eventId: "444", personId: registration3.personId
+      FactoryGirl.create :ranks_average, rank: 9, best: 3232, eventId: "444", personId: registration3.personId
 
       registration4 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryGirl.create :ranks_average, rank: 11, best: 4242, eventId: "444", personId: registration4.personId
+      FactoryGirl.create :ranks_average, rank: 11, best: 4545, eventId: "444", personId: registration4.personId
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id, registration4.id ]
       expect(registrations.map(&:pos)).to eq [ 1, 2, 2, 4 ]
       expect(registrations.map(&:tied_previous)).to eq [ false, false, true, false ]
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "444", sort_by: :single
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id, registration3.id, registration4.id ]
+      expect(registrations.map(&:pos)).to eq [ 1, 2, nil, nil ]
+      expect(registrations.map(&:tied_previous)).to eq [ false, false, nil, nil ]
     end
 
     it "handles missing average" do
@@ -468,6 +474,11 @@ RSpec.describe RegistrationsController do
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [ registration1.id, registration2.id ]
+      expect(registrations.map(&:pos)).to eq [ 1, 2 ]
+
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf", sort_by: :average
+      registrations = assigns(:registrations)
+      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id ]
       expect(registrations.map(&:pos)).to eq [ 1, 2 ]
     end
 

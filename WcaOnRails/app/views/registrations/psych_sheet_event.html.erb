@@ -4,8 +4,11 @@
   <h2>
     <span class="cubing-icon icon-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
   </h2>
+  <p>
+  Sorted by: <%= @sort_by %>, sort by <a href="<%= competition_psych_sheet_event_path(@competition, @event.id) %>?sort_by=<%= @sort_by_second %>"><%= @sort_by_second %></a>
+  </p>
 
-  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@event.recommended_format.sort_by.to_s}" do %>
+  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@sort_by}" do %>
     <thead>
       <tr>
         <th class="pos">#</th>

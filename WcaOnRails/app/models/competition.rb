@@ -666,7 +666,7 @@ class Competition < ActiveRecord::Base
     country ? Continent.find_by_id(country.continentId) : nil
   end
 
-  def psych_sheet_event(event)
+  def psych_sheet_event(event, sort_by, sort_by_second)
     joinsql = <<-ENDSQL
       join registration_events on registration_events.registration_id = Preregs.id
       join users on users.id = Preregs.user_id
@@ -688,7 +688,7 @@ class Competition < ActiveRecord::Base
       ifnull(RanksSingle.best, 0) single_best
     ENDSQL
 
-    sort_clause = "-#{event.recommended_format.sort_by}_rank desc, -#{event.recommended_format.sort_by_second}_rank desc, users.name"
+    sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
     registrations = self.registrations.
                          accepted.
@@ -699,15 +699,15 @@ class Competition < ActiveRecord::Base
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
-      if event.recommended_format.sort_by == :single
+      if sort_by == 'single'
         rank = registration.single_rank
         prev_rank = prev_registration&.single_rank
       else
         rank = registration.average_rank
         prev_rank = prev_registration&.average_rank
       end
-      registration.tied_previous = (rank == prev_rank)
       break if !rank # hasn't competed in this event yet and all subsequent registrations too
+      registration.tied_previous = (rank == prev_rank)
       registration.pos = registration.tied_previous ? prev_registration.pos : i + 1
       prev_registration = registration
     end
