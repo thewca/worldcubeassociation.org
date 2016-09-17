@@ -83,6 +83,11 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
   RECENT_DAYS = 30
+  REPORT_AND_RESULTS_DAYS_OK = 7
+  REPORT_AND_RESULTS_DAYS_WARNING = 14
+  REPORT_AND_RESULTS_DAYS_DANGER = 21
+  ANNOUNCED_DAYS_WARNING = 21
+  ANNOUNCED_DAYS_DANGER = 28
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
@@ -436,6 +441,10 @@ class Competition < ActiveRecord::Base
         field.downcase.include?(part.downcase)
       end
     end
+  end
+
+  def pending_results_or_report(days)
+    self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
   def start_date

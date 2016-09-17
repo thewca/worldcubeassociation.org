@@ -57,6 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
+    params[:status] ||= "all"
     @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
@@ -66,13 +67,16 @@ class CompetitionsController < ApplicationController
     end
 
     @past_selected = params[:state] == "past"
-    @present_selected = !@past_selected
+    @present_selected = params[:state] == "present"
+    @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
+    elsif @recent_selected
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
     else
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
       unless params[:year] == "all years"
@@ -94,6 +98,11 @@ class CompetitionsController < ApplicationController
 
     unless params[:event_ids].empty?
       @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
+    end
+
+    unless params[:status] == "all"
+      days = (params[:status] == "warning" ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
+      @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
     respond_to do |format|

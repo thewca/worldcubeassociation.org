@@ -58,7 +58,7 @@ onPage('competitions#index', function() {
     $form.trigger('submit.rails');
   }
 
-  $form.on('change', '#events, #region, #state, #display', submitForm)
+  $form.on('change', '#events, #region, #state, #display, #status', submitForm)
        .on('click', '#clear-all-events, #select-all-events', submitForm)
        .on('input', '#search', _.debounce(submitForm, TEXT_INPUT_DEBOUNCE_MS));
 

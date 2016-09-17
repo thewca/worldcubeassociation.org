@@ -41,6 +41,10 @@
       <%= radio_button_tag "state", "present" %>
       <span class="caption"><%= t '.present' %></span>
     </label>
+    <label id="recent" class="btn btn-primary" data-toggle="tooltip" title="Last <%= Competition::RECENT_DAYS %> days">
+      <%= radio_button_tag "state", "recent" %>
+      <span class="caption">Recent</span>
+    </label>
     <ul class="dropdown-menu years">
       <%= hidden_field_tag "year", params[:year] %>
       <% @years.each do |year| %>
@@ -58,6 +62,24 @@
           <%= t '.past' %>
         <% end %>
       </span>
+    </label>
+  </div>
+</div>
+
+<div class="form-group admin-selectors">
+  <%= label_tag(:status) %>
+  <div id="status" class="btn-group" data-toggle="buttons">
+    <label id="all" class="btn btn-info">
+      <%= radio_button_tag "status", "all" %>
+      <span class="caption">All</span>
+    </label>
+    <label id="warning" class="btn btn-warning">
+      <%= radio_button_tag "status", "warning" %>
+      <span class="caption">Warning</span>
+    </label>
+    <label id="danger" class="btn btn-danger">
+      <%= radio_button_tag "status", "danger" %>
+      <span class="caption">Danger</span>
     </label>
   </div>
 </div>
@@ -82,10 +104,21 @@
 </div>
 
 <script>
-  $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
+  <% if @past_selected
+    state_click = "past"
+  elsif @present_selected
+    state_click = "present"
+  elsif @recent_selected
+    state_click = "recent"
+    end %>
+  $('#<%= state_click %>').button('toggle');
 
   $('#present').on('click', function() {
     $('#past .caption').html("<%= t('.past') %>");
+  });
+
+  $('#recent').on('click', function() {
+    $('#past .caption').html('Past');
   });
 
   $('.years .year a').on('click', function(e) {
