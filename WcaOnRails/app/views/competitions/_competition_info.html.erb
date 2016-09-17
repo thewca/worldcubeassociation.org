@@ -1,41 +1,41 @@
 <div class="row competition-info">
   <div class="col-md-6">
     <dl class="dl-horizontal">
-      <dt>Date</dt>
+      <dt><%= t '.date' %></dt>
       <dd><%= wca_date_range(competition.start_date, competition.end_date) %></dd>
 
-      <dt>City</dt>
+      <dt><%= t '.city' %></dt>
       <dd><%= competition.cityName %>, <%= competition.country_name %></dd>
 
-      <dt>Venue</dt>
+      <dt><%= t '.venue' %></dt>
       <dd><%=md competition.venue %></dd>
 
-      <dt class="text-muted">Address</dt>
+      <dt class="text-muted"><%= t '.address' %></dt>
       <dd><%= link_to_google_maps_place competition.venueAddress, competition.latitude_degrees, competition.longitude_degrees %></dd>
 
       <% if competition.venueDetails.present? %>
-        <dt class="text-muted">Details</dt>
+        <dt class="text-muted"><%= t '.details' %></dt>
         <dd><%=md competition.venueDetails %></dd>
       <% end %>
 
-      <dt>Website</dt>
+      <dt><%= t '.website' %></dt>
       <dd><%= link_to "#{competition.name} website", competition.website, target: "_blank" %></dd>
 
       <% if competition.organizers.length > 0 %>
-        <dt><%= "Organizer".pluralize(competition.organizers.length) %></dt>
+        <dt><%= t('.organizer').pluralize(competition.organizers.length) %></dt>
         <dd>
           <%# If the contact field is present, don't show organizers' emails. %>
           <%= users_to_sentence competition.organizers, include_email: competition.contact.blank? %>
         </dd>
       <% end %>
 
-      <dt><%= "WCA Delegate".pluralize(competition.delegates.length) %></dt>
+      <dt><%= t('.delegate', count: competition.delegates.length) %></dt>
       <dd>
         <%= users_to_sentence competition.delegates, include_email: true %>
       </dd>
 
       <% if competition.contact.present? %>
-        <dt>Contact</dt>
+        <dt><%= t '.contact' %></dt>
         <dd><%=md competition.contact %></dd>
       <% end %>
     </dl>
@@ -43,7 +43,7 @@
 
   <div class="col-md-6">
     <dl class="dl-horizontal">
-      <dt>Information</dt>
+      <dt><%= t '.information' %></dt>
       <dd><%=md competition.information %></dd>
     </dl>
 

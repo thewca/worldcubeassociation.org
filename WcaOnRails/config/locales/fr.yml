@@ -20,10 +20,60 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 fr:
+  countries:
+    XA: "Pays multiple (Asie)"
+    XE: "Pays multiple (Europe)"
+    XS: "Pays multiple (Amérique du Sud)"
+  continents:
+    AfR: "Afrique"
+    AsR: "Asie"
+    ER: "Europe"
+    NAR: "Amérique du Nord"
+    OcR: "Oceanie"
+    SAR: "Amérique du Sud"
+  events:
+    "333": "Rubik's Cube"
+    "444": "Cube 4x4"
+    "555": "Cube 5x5"
+    "222": "Cube 2x2"
+    333bf: "Rubik's Cube : à l'aveugle"
+    333oh: "Rubik's Cube : à une main"
+    333fm: "Rubik's Cube : résolution optimisée"
+    333ft: "Rubik's Cube : avec les pieds"
+    minx: "Megaminx"
+    pyram: "Pyraminx"
+    sq1: "Square-1"
+    clock: "Rubik's Clock"
+    skewb: "Skewb"
+    "666": "Cube 6x6 "
+    "777": "Cube 7x7"
+    444bf: "Cube 4x4 : à l'aveugle"
+    555bf: "Cube 5x5 : à l'aveugle"
+    333mbf: "Rubik's Cube : résolution multiple à l'aveugle"
+    magic: "Rubik's Magic"
+    mmagic: "Master Magic"
+    333mbo: "Rubik's Cube : résolution multiple à l'aveugle (à l'ancienne)"
   common:
+    continent: "Continent"
+    country: "Pays"
     here: "ici"
-    wca_id: "ID WCA"
+    best: "Meilleur"
+    single: "Meilleur temps"
+    average: "Moyenne"
+    solves: "Résolutions"
+    user:
+      wca_id: "ID WCA"
+      citizen_of: "Pays"
     all_regions: "Toutes les régions"
+    errors:
+      invalid: "invalide"
+    days:
+      zero: "0 jour"
+      one: "1 jour"
+      other: "%{count} jours"
+    these_events:
+      one: "cette épreuve"
+      other: "ces %{count} épreuves"
   oauth:
     applications:
       your_apps: "Vos applications OAuth"
@@ -237,7 +287,7 @@ fr:
     options:
       registration:
         status:
-          a: "Accepté"
+          a: "Acceptée"
           p: "En attente"
       competition:
         guests_enabled:
@@ -299,7 +349,7 @@ fr:
       results: "Résultats"
       rankings: "Classements"
       records: "Records"
-      persons: "Individuels"
+      persons: "Compétiteurs"
       my_results: "Mes résultats"
       statistics: "Statistiques"
       multimedia: "Multimedia"
@@ -379,7 +429,6 @@ fr:
     errors:
       not_found: "introuvable"
       already_assigned: "déjà associé à un autre compte"
-      required: "requis"
       dob_incorrect: "incorrecte"
       unique: "doit être unique"
       dob_past: "doit être dans le passé"
@@ -402,8 +451,145 @@ fr:
       need_gender: "Genre obligatoire"
       need_dob: "Date de naissance obligatoire"
       need_country: "Pays obligatoire"
+      comp_not_found: "Compétition introuvable"
+      registration_closed: "Les inscriptions pour la compétition sont fermées"
+      can_register: "L'utilisateur doit pouvoir s'inscrire à la compétition"
+      must_register: "doit s'inscrire à au moins une épreuve"
+    registration_info_people:
+      newcomer:
+        zero: "nouveau"
+        one: "nouveau"
+        other: "nouveaux"
+      returner: "de retour"
+      people:
+        zero: "personne"
+        one: "personne"
+        other: "personnes"
+    flash:
+      not_using_wca: "Cette compétition n'utilise pas les inscriptions WCA."
+      accepted_and_mailed:
+        one: "Inscription acceptée ! Email de notification envoyé."
+        other: "Inscriptions acceptées ! Emails de notification envoyés."
+      rejected_and_mailed:
+        one: "Inscription déplacée en liste d'attente"
+        other: "Inscriptions déplacées en liste d'attente"
+      deleted_and_mailed:
+        one: "Inscription supprimée"
+        other: "Inscriptions supprimées"
+      single_deletion_and_mail: "Inscription supprimée et email envoyé à %{mail}"
+      cannot_delete: "Vous ne pouvez pas supprimer votre inscription."
+      updated: "Inscription mise à jour"
+      failed: "Impossible de mettre à jour l'inscription"
+      deleted: "Votre inscription au %{comp} a été supprimée avec succès."
+      registered: "Vous êtes inscrit !"
+    edit_registration:
+      title: "%{person} pour %{comp}"
+    list:
+      title: "Inscriptions pour %{comp}"
+      country: "pays"
+      edit: "Éditer"
+      export_csv: "Exporter en CSV"
+      email: "Email"
+      approve: "Accepter"
+      reject: "Rejeter"
+      delete: "Supprimer"
+      waiting_list: "Liste d'attente"
+      approved_registrations: "Inscriptions acceptées"
+      registered: "Inscription"
+      total: "Total"
+    new_registration:
+      title: "S'inscrire pour %{comp}"
+    registered_with_account_html: "Cette personne s'est inscrite avec un compte. Vous pouvez éditer ses données personelles %{here}."
+    sign_in: "Connectez-vous"
+    profile: "profil"
+    register: "Je m'inscris !"
+    update: "Mettre à jour"
+    delete: "Supprimer"
+    delete_tooltip: "Supprime l'inscription. Cela enverra un email à %{name} à l'adresse %{mail}"
+    delete_confirm: "Êtes vous sûr de vouloir supprimer votre inscription ?"
+    admin_delete_confirm: "Êtes vous sûr de vouloir supprimer l'inscription de %{name} ?"
+    delete_registration: "Supprimer l'inscription"
+    will_open_html: "Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}."
+    will_close_html: "Les inscriptions ferment dans <strong>%{days}</strong> le %{time}."
+    closed_html: "Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}."
+    please_sign_in_past_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais il est trop tard pour s'inscrire à cette compétition."
+    please_sign_in_not_yet_open_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais les inscriptions ne sont pas encore ouvertes."
+    please_sign_in_html: "%{sign_in} pour vous inscrire au %{comp}. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}"
+    greeting: "Bonjour, %{name} !"
+    please_fix_profile_html: "Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les problèmes suivant dans votre %{profile} :"
+    can_register: "Vous pouvez vous inscrire au %{comp} ci-dessous."
+    have_registered: "Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre inscription ci-dessous."
+    contact_organizer: "Contactez l'organisateur si vous souhaitez effectuer des changements."
+    waiting_list: "Votre inscription est en attente, vous êtes en position %{i} sur %{n}."
+    accepted: "Votre inscription a été effectuée !"
+    preferred_events_prompt_html: "Pour accélérer vos prochaines inscriptions, vous pouvez définir vos épreuves favorites %{link}."
   competitions:
-    results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
+    messages:
+      not_visible: "Cette compétition n'est pas visible pour le public."
+      name_too_long: "Le nom de la compétition est plus long que 32 caractères. Un nom plus court serait préférable, et on serait ravi que vous le changiez."
+      create_success: "Nouvelle compétition créée avec succès !"
+      results_preview_alert: "Vous visualisez des résultats qui n'ont pas encore été postés."
+      upload_results: "Cette compétition est terminée, nous travaillons à mettre les résultats en ligne dès que possible !"
+      in_progress: "Cette compétition est en cours. Revenez après le %{date} pour voir les résultats !"
+      tooltip_registered: "Vous êtes inscrit."
+      tooltip_waiting_list: "Vous êtes sur liste d'attente."
+      confirmed_visible: "Cette compétition est confirmée et visible"
+      confirmed_not_visible: "Cette compétition est confirmée mais n'est pas visible"
+      not_confirmed_visible: "Cette compétition n'est pas confirmée mais est visible"
+      not_confirmed_not_visible: "Cette compétition n'est pas confirmée ni visible"
+    my_competitions:
+      title: "Mes compétitions"
+      disclaimer: "Seules les compétitions qui utilisent le site de la WCA pour les inscriptions seront affichées ici."
+      past_competitions: "Historique des compétitions"
+    competition_info:
+      date: "Date"
+      city: "Ville"
+      venue: "Salle"
+      address: "Adresse"
+      details: "Détails"
+      website: "Site internet"
+      organizer: "Organisateur"
+      delegate:
+        one: "Délégué WCA"
+        other: "Délégués WCA"
+      contact: "Contact"
+      information: "Information"
+    index:
+      title: "Compétitions"
+    index_form:
+      all: "Toutes"
+      all_years: "Toutes les années"
+      clear: "Effacer"
+      list: "Liste"
+      map: "Carte"
+      region: "Région"
+      search: "Rechercher"
+      state: "État"
+      search_tooltip: "Nom, ville, salle, délégué(s), pays (en Anglais), ou mois"
+      present: "Courantes"
+      past: "Terminées"
+      past_from: "Terminées en %{year}"
+      past_all: "Terminées (toutes)"
+    index_competitions_list:
+      in_progress: "Compétitions en cours"
+      past: "Compétitions terminées en %{year}"
+      upcoming: "Compétitions à venir"
+      no_access: "Vous n'avez pas accès à cette page !"
+    index_table:
+      ended: "Terminée il y a %{days}"
+      in_progress: "En cours !"
+      posted: "Résultats en ligne !"
+      starts_in: "Démarre dans %{days}"
+    no_competitions_found:
+      no_found: "Pas de compétition trouvée."
+      no_match: "Nous n'avons pas trouvé de compétition avec %{events} ! Essayez une recherche avec moins d'épreuves."
+    my_competitions_table:
+      edit: "Éditer"
+      registrations: "Inscriptions"
+      results_up: "Les résultats sont en ligne !"
+      report: "Rapport"
+      no_upcoming_competitions_html: "Vous n'avez pas de compétitions à venir! Allez voir la %{link}."
+      no_past_competitions: "Vous n'avez participé à aucune compétition."
     competition_form:
       supports_md_html: "Supporte le <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
       venue_html: "La salle où la compétition à lieu. %{md}. Par exemple : [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
@@ -423,12 +609,20 @@ fr:
       submit_delete: "Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération est irréversible."
       coordinates: "Coordonnées GPS"
     errors:
+      invalid_name_message: "doit se terminer par une année, et doit contenir uniquement des caractères alphanumériques, ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('), et espaces( )."
       cannot_manage: "Ne peut pas gérer la compétition."
       cannot_delete_public: "Impossible de supprimer une compétition visible publiquement."
       cannot_delete_confirmed: "Impossible de supprimer une compétition confirmée."
+      must_contain_event: "doit contenir au moins une épreuve pour cette compétition"
+      must_contain_delegate: "doit contenir au moins un délégué WCA"
+      not_all_delegates: "ne sont pas tous des délégués"
+      registration_close_after_open: "doit être après l'ouverture des inscriptions."
+      end_date_before_start: "ne peut pas être avant la date de début."
+      span_multiple_years: "Les dates de la compétition ne peuvent pas être sur plusieurs années."
     unscheduled: "non prévue"
     new:
       create_competition: "Créer une compétition"
+      note_clone: "Pour cloner une compétition existante, visitez la page d'information pour cette compétition et cliquez le lien \"Cloner\" dans le menu."
     update:
       save_success: "Compétition mise à jour avec succès"
       confirm_success: "Compétition confirmée avec succès. Vérifiez vos mails et attendez que le bureau de la WCA l'annonce !"
@@ -459,33 +653,6 @@ fr:
     post_announcement: "Poster l'annonce de la compétition"
     show:
       general_info: "Informations générales"
-    registration:
-      flash:
-        updated: "Inscription mise à jour"
-        failed: "Impossible de mettre à jour l'inscription"
-        deleted: "Votre inscription au %{comp} a été supprimée avec succès."
-        registered: "Vous êtes inscrit !"
-      sign_in: "Connectez-vous"
-      profile: "profil"
-      register: "Je m'inscris !"
-      update: "Mettre à jour"
-      delete: "Supprimer"
-      delete_confirm: "Êtes vous sûr de vouloir supprimer votre inscription ?"
-      delete_registration: "Supprimer l'inscription"
-      will_open_html: "Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}."
-      will_close_html: "Les inscriptions ferment dans <strong>%{days}</strong> le %{time}."
-      closed_html: "Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}."
-      please_sign_in_past_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais il est trop tard pour s'inscrire à cette compétition."
-      please_sign_in_not_yet_open_html: "%{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}, mais les inscriptions ne sont pas encore ouvertes."
-      please_sign_in_html: "%{sign_in} pour vous inscrire au %{comp}. Si vous n'avez pas de compte WCA, vous pouvez en créer un %{here}"
-      greeting: "Bonjour, %{name} !"
-      please_fix_profile_html: "Pour pouvoir vous inscrire au %{comp}, vous devez d'abord corriger les problèmes suivant dans votre %{profile} :"
-      can_register: "Vous pouvez vous inscrire au %{comp} ci-dessous."
-      have_registered: "Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre inscription ci-dessous."
-      contact_organizer: "Contactez l'organisateur si vous souhaitez effectuer des changements."
-      waiting_list: "Votre inscription est en attente, vous êtes en position %{i} sur %{n}."
-      accepted: "Votre inscription a été effectuée !"
-      preferred_events_prompt_html: "Pour accélérer vos prochaines inscriptions, vous pouvez définir vos épreuves favorites %{link}."
     nav:
       menu:
         results: "Résultats"
@@ -502,6 +669,11 @@ fr:
         registration: "Inscriptions"
         register: "S'inscrire"
         competitors: "Compétiteurs"
+    results_table:
+      wca_profile: "Profil WCA"
+      event: "Épreuve"
+      round: "Tour"
+      name: "Nom"
   notifications:
     connect_wca_id: "Associez votre ID WCA à votre compte !"
   persons:

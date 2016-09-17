@@ -197,7 +197,7 @@ RSpec.describe Competition do
       competition = FactoryGirl.build :competition, starts: Date.today
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
-      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
+      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.results_posted_at = Time.now
       expect(competition.in_progress?).to be false

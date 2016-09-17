@@ -102,7 +102,7 @@ RSpec.feature "Sign up" do
       fill_in "Full name", with: "Jack Johnson"
       fill_in "Birthdate", with: "1975-05-18"
       select "Male", from: "Gender"
-      select "USA", from: "Citizenship"
+      select "United States", from: "Citizenship"
 
       click_button "Sign up"
 

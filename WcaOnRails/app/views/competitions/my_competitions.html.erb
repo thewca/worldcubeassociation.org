@@ -1,16 +1,17 @@
-<% provide(:title, 'My competitions') %>
+<% provide(:title, t('.title')) %>
 
 <div class="container">
   <h3><%= yield(:title) %></h3>
 
-  <small>Only competitions which use the WCA registration system will be shown here.</small>
+  <small><%= t '.disclaimer' %></small>
+
   <%= render "my_competitions_table", competitions: @not_past_competitions, past: false %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
         <a data-toggle="collapse" href="#past-competitions" class="collapsed">
-          <span>Past competitions (<%= @past_competitions.length %>)</span>
+          <span><%= t '.past_competitions' %> (<%= @past_competitions.length %>)</span>
           <span class="collapse-indicator"></span>
         </a>
       </h3>
@@ -35,7 +36,7 @@
 
   <p>
     <% if current_user.wca_id %>
-      <%= link_to "My profile", "/results/p.php?i=" + current_user.wca_id %>
+      <%= link_to t('layouts.navigation.my_results'), "/results/p.php?i=" + current_user.wca_id %>
     <% end %>
   </p>
 
