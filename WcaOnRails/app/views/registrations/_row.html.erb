@@ -1,0 +1,54 @@
+<tr id="registration-<%= registration.id %>" class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
+  <td></td>
+
+  <td>
+    <%= link_to t('registrations.list.edit'), edit_registration_path(registration) %>
+  </td>
+
+  <td class="wca-id">
+    <% if registration.wca_id %>
+      <%= render "shared/wca_id", wca_id: registration.wca_id %>
+    <% end %>
+  </td>
+
+  <td class="name"><%= registration.name %></td>
+  <td class="countryId"><%= registration.countryId %></td>
+  <td class="birthday"><%= registration.birthday %></td>
+  <% @competition.events.each_with_index do |event, i| %>
+    <td>
+      <% if registration_events[i] == 1 %>
+        <span title="<%= event.name %>"
+              class="cubing-icon icon-<%= event.id %>"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              data-container="body">
+        </span>
+      <% end %>
+    </td>
+  <% end %>
+  <td>
+    <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
+      <%= registration.created_at.to_date %>
+    </span>
+  </td>
+  <td class="guests">
+    <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %> <%= registration.guests_old %>">
+      <%= registration.guests %>
+      <% #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
+      <%= registration.guests_old %>
+    </span>
+  </td>
+  <td class="comments">
+    <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
+      <%= registration.comments %>
+    </span>
+  </td>
+  <td>
+    <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
+      <span class="glyphicon glyphicon-envelope"></span>
+    <% end %>
+  </td>
+
+  <!-- Extra column for .table-greedy-last-column -->
+  <td></td>
+</tr>

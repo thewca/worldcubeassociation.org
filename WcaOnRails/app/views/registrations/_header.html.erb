@@ -1,0 +1,27 @@
+        <thead>
+          <tr>
+            <th data-checkbox="true"></th>
+            <th></th>
+            <th class="wca-id" data-sortable="true"><%= t 'common.user.wca_id' %></th>
+            <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
+            <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
+            <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
+            <% @competition.events.each do |event| %>
+              <th>
+                <span title="<%= event.name %>"
+                      class="cubing-icon icon-<%= event.id %>"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      data-container="body">
+                </span>
+              </th>
+            <% end %>
+            <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
+            <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
+            <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
+            <th></th>
+
+            <!-- Extra column for .table-greedy-last-column -->
+            <th></th>
+          </tr>
+        </thead>
