@@ -33,10 +33,6 @@ class Registration < ActiveRecord::Base
     !pending?
   end
 
-  def events
-    registration_events.reject(&:marked_for_destruction?).map(&:event_object).sort_by(&:rank)
-  end
-
   def name
     user ? user.name : read_attribute(:name)
   end
@@ -93,7 +89,7 @@ class Registration < ActiveRecord::Base
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    registration_events.reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
+    registration_events.includes(:event).reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
   end
 
   def waiting_list_info
