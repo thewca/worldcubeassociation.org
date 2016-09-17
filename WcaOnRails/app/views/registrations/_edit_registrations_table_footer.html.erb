@@ -6,8 +6,9 @@
     <% country_count = registrations.map(&:countryId).uniq.length %>
     <td><%= country_count %> <%= t('registrations.list.country').pluralize(country_count) %></td>
     <td></td>
-    <% @competition.events.each do |event| %>
-      <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
+    <% transposed = @registered_event_matrix[status].transpose %>
+    <% @competition.events.each_with_index do |event, i| %>
+      <td><%= transposed[i].reduce(0, :+) %></td>
     <% end %>
     <td></td>
     <td>

@@ -27,6 +27,19 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @competition = competition_from_params
+    @registered_event_matrix = {}
+    comp_event_ids = @competition.event_ids.to_a
+    [:pending, :accepted].each do |status|
+      @registered_event_matrix[status] = @competition.registrations.public_send(status).includes(:registration_events).map do |reg|
+        comp_event_ids.map do |event_id|
+          if reg.registration_events.map(&:event_id).include?(event_id)
+            1
+          else
+            0
+          end
+        end
+      end
+    end
   end
 
   def psych_sheet

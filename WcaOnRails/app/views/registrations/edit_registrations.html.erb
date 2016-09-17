@@ -12,94 +12,15 @@
       <% registrations = @competition.registrations.public_send(status).includes(:user, :events) %>
       <%= wca_table table_class: "registrations-table #{status}",
                     data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
-        <thead>
-          <tr>
-            <th data-checkbox="true"></th>
-            <th></th>
-            <th class="wca-id" data-sortable="true"><%= t 'common.user.wca_id' %></th>
-            <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
-            <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
-            <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
-            <% @competition.events.each do |event| %>
-              <th>
-                <span title="<%= event.name %>"
-                      class="cubing-icon icon-<%= event.id %>"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-container="body">
-                </span>
-              </th>
-            <% end %>
-            <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
-            <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
-            <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
-            <th></th>
 
-            <!-- Extra column for .table-greedy-last-column -->
-            <th></th>
-          </tr>
-        </thead>
-
+        <%= render "header" %>
         <tbody>
-          <% registrations.each do |registration| %>
-            <tr id="registration-<%= registration.id %>" class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
-              <td></td>
-
-              <td>
-                <%= link_to t('registrations.list.edit'), edit_registration_path(registration) %>
-              </td>
-
-              <td class="wca-id">
-                <% if registration.wca_id %>
-                  <%= render "shared/wca_id", wca_id: registration.wca_id %>
-                <% end %>
-              </td>
-
-              <td class="name"><%= registration.name %></td>
-              <td class="countryId"><%= registration.countryId %></td>
-              <td class="birthday"><%= registration.birthday %></td>
-              <% @competition.events.each do |event| %>
-                <td>
-                  <% if registration.events.include?(event) %>
-                    <span title="<%= event.name %>"
-                          class="cubing-icon icon-<%= event.id %>"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          data-container="body">
-                    </span>
-                  <% end %>
-                </td>
-              <% end %>
-              <td>
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
-                  <%= registration.created_at.to_date %>
-                </span>
-              </td>
-              <td class="guests">
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %> <%= registration.guests_old %>">
-                  <%= registration.guests %>
-                  <% #https://github.com/cubing/worldcubeassociation.org/issues/403 %>
-                  <%= registration.guests_old %>
-                </span>
-              </td>
-              <td class="comments">
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
-                  <%= registration.comments %>
-                </span>
-              </td>
-              <td>
-                <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
-                  <span class="glyphicon glyphicon-envelope"></span>
-                <% end %>
-              </td>
-
-              <!-- Extra column for .table-greedy-last-column -->
-              <td></td>
-            </tr>
+          <% registrations.each_with_index do |registration, i| %>
+            <%= render "row", registration: registration, registration_events: @registered_event_matrix[status][i] %>
           <% end %>
         </tbody>
 
-        <%= render "edit_registrations_table_footer", registrations: registrations %>
+        <%= render "edit_registrations_table_footer", registrations: registrations, status: status %>
       <% end %>
     <% end %>
 

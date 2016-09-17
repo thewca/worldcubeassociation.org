@@ -98,7 +98,7 @@ group :test do
   gem 'test_after_commit'
 end
 
+gem 'newrelic_rpm'
 group :production do
   gem 'unicorn'
-  gem 'newrelic_rpm'
 end
