@@ -21,6 +21,8 @@ class Competition < ActiveRecord::Base
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
+  has_one :country, primary_key: "countryId", foreign_key: "id"
+  has_one :continent, through: :country
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
@@ -164,9 +166,9 @@ class Competition < ActiveRecord::Base
 
       Competition.reflections.keys.each do |association_name|
         case association_name
-        when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
+        when 'registrations', 'results', 'country', 'continent', 'competitors', 'competitor_users', 'delegate_report',
              'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
-          # Should be cloned.
+          # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
@@ -432,7 +434,7 @@ class Competition < ActiveRecord::Base
   end
 
   def belongs_to_region?(region)
-    self.countryId == region || self.country.continentId == region
+    self.countryId == region || self.continent.id == region
   end
 
   def contains?(search_param)
@@ -658,20 +660,8 @@ class Competition < ActiveRecord::Base
     !start_date.nil? && start_date < Date.today
   end
 
-  def country_name
-    country ? country.name : nil
-  end
-
-  def country
-    Country.find_by_id(countryId)
-  end
-
   def organizers_or_delegates
     self.organizers.empty? ? self.delegates : self.organizers
-  end
-
-  def continent
-    country ? Continent.find_by_id(country.continentId) : nil
   end
 
   def psych_sheet_event(event, sort_by, sort_by_second)

@@ -5,7 +5,7 @@
       <dd><%= wca_date_range(competition.start_date, competition.end_date) %></dd>
 
       <dt><%= t '.city' %></dt>
-      <dd><%= competition.cityName %>, <%= competition.country_name %></dd>
+      <dd><%= competition.cityName %>, <%= competition.country.name %></dd>
 
       <dt><%= t '.venue' %></dt>
       <dd><%=md competition.venue %></dd>

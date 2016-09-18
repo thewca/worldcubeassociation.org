@@ -13,7 +13,7 @@
 
   <div>
     <strong>Location</strong>
-    <%= competition.cityName %>, <%= competition.country_name %>
+    <%= competition.cityName %>, <%= competition.country.name_in(:en) %>
     <%= link_to_google_maps_place competition.venueAddress, competition.latitude_degrees, competition.longitude_degrees %>
   </div>
 
