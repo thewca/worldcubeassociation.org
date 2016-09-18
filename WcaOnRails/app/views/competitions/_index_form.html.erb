@@ -128,4 +128,8 @@
   });
 
   $('#display-<%= @display %>').button('toggle');
+
+  $(function(){
+    $('#competition-query-form').removeClass('list admin map').addClass('<%= @display %>');
+  });
 </script>
