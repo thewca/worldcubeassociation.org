@@ -124,7 +124,7 @@ logrotate_app 'rails-wca' do
   size "512M"
   maxage 90
   postrotate "[ ! -f /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid ] || kill -USR1 `cat /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid`"
-  options ['nodelaycompress']
+  options ['nodelaycompress','compress']
 end
 
 # Run mailcatcher in every environment except production.
@@ -202,7 +202,7 @@ logrotate_app 'nginx-wca' do
   size "512M"
   maxage 30
   postrotate "[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`"
-  options ['nodelaycompress']
+  options ['nodelaycompress','compress']
 end
 
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
