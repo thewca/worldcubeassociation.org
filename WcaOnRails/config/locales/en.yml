@@ -564,12 +564,15 @@ en:
       state: "State"
       search_tooltip: "Name, city, venue, delegate(s), country or month"
       present: "Present"
+      recent: "Recent"
+      recent_tooltip: "Last %{count} days"
       past: "Past"
       past_from: "Past from %{year}"
       past_all: "Past from all years"
     index_competitions_list:
       in_progress: "Competitions in progress"
       past: "Past competitions from %{year}"
+      recent: "Recent competitions (last %{count} days)"
       upcoming: "Upcoming competitions"
       no_access: "You don't have access to this page!"
     index_table:
