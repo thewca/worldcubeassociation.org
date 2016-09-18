@@ -567,12 +567,15 @@ fr:
       state: "État"
       search_tooltip: "Nom, ville, salle, délégué(s), pays (en Anglais), ou mois"
       present: "Courantes"
+      recent: "Récentes"
+      recent_tooltip: "%{count} derniers jours"
       past: "Terminées"
       past_from: "Terminées en %{year}"
       past_all: "Terminées (toutes)"
     index_competitions_list:
       in_progress: "Compétitions en cours"
       past: "Compétitions terminées en %{year}"
+      recent: "Compétitions récentes (%{count} derniers jours)"
       upcoming: "Compétitions à venir"
       no_access: "Vous n'avez pas accès à cette page !"
     index_table:

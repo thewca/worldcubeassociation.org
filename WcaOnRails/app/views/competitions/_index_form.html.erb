@@ -41,9 +41,9 @@
       <%= radio_button_tag "state", "present" %>
       <span class="caption"><%= t '.present' %></span>
     </label>
-    <label id="recent" class="btn btn-primary" data-toggle="tooltip" title="Last <%= Competition::RECENT_DAYS %> days">
+    <label id="recent" class="btn btn-primary" data-toggle="tooltip" title="<%= t '.recent_tooltip', count: Competition::RECENT_DAYS %>">
       <%= radio_button_tag "state", "recent" %>
-      <span class="caption">Recent</span>
+      <span class="caption"><%= t '.recent' %></span>
     </label>
     <ul class="dropdown-menu years">
       <%= hidden_field_tag "year", params[:year] %>
@@ -105,12 +105,12 @@
 
 <script>
   <% if @past_selected
-    state_click = "past"
-  elsif @present_selected
-    state_click = "present"
-  elsif @recent_selected
-    state_click = "recent"
-    end %>
+       state_click = "past"
+     elsif @present_selected
+       state_click = "present"
+     elsif @recent_selected
+       state_click = "recent"
+     end %>
   $('#<%= state_click %>').button('toggle');
 
   $('#present').on('click', function() {
@@ -118,7 +118,7 @@
   });
 
   $('#recent').on('click', function() {
-    $('#past .caption').html('Past');
+    $('#past .caption').html("<%= t('.past') %>");
   });
 
   $('.years .year a').on('click', function(e) {

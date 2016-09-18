@@ -8,7 +8,7 @@
       </div>
     <% elsif @recent_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= render 'index_table', competitions: competitions, title: "Recent competitions (last 30 days)" %>
+        <%= render 'index_table', competitions: competitions, title: t('.recent', count: Competition::RECENT_DAYS) %>
       </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
