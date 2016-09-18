@@ -651,9 +651,13 @@ class Competition < ActiveRecord::Base
   # but the performance gains are worth it IMO. Not using ActiveRecord led
   # to a 40% performance improvement.
   private def light_results_from_relation(relation)
+    countries = Country.all.index_by(&:id)
+    formats = Format.all.index_by(&:id)
+    rounds = Round.all.index_by(&:id)
+    events = Event.all.index_by(&:id)
     ActiveRecord::Base.connection
       .execute(relation.to_sql)
-      .each(as: :hash).map(&LightResult.method(:new))
+      .each(as: :hash).map { |r| LightResult.new(r, countries, events, formats, rounds) }
   end
 
   def started?

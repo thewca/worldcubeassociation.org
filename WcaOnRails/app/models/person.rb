@@ -8,6 +8,7 @@ class Person < ActiveRecord::Base
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
+  has_one :country, primary_key: "countryId", foreign_key: "id"
 
   scope :current, -> { where(subId: 1) }
 
