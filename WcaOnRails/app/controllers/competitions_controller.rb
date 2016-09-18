@@ -55,7 +55,9 @@ class CompetitionsController < ApplicationController
     # Default params
     params[:event_ids] ||= []
     params[:region] ||= "all"
-    params[:state] ||= "present"
+    unless %w(past present recent).include? params[:state]
+      params[:state] = "present"
+    end
     params[:year] ||= "all years"
     params[:status] ||= "all"
     @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"

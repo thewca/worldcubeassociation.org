@@ -104,14 +104,7 @@
 </div>
 
 <script>
-  <% if @past_selected
-       state_click = "past"
-     elsif @present_selected
-       state_click = "present"
-     elsif @recent_selected
-       state_click = "recent"
-     end %>
-  $('#<%= state_click %>').button('toggle');
+  $('#<%= params[:state] %>').button('toggle');
 
   $('#present').on('click', function() {
     $('#past .caption').html("<%= t('.past') %>");
