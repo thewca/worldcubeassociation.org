@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 after "development:users" do
   class << self
-    def random_event_ids
-      all_official = Event.all_official.map(&:id)
-      all_official.sample(rand(1..all_official.count))
+    def random_events
+      official = Event.official
+      official.sample(rand(1..official.count))
     end
 
     def random_wca_value
       rand(5000..100000)
     end
   end
+
+  countries = Country.all
 
   delegate = User.find_by(delegate_status: "delegate")
 
@@ -18,18 +20,16 @@ after "development:users" do
   # Create some past competitions with results
   2.times do |i|
     day = i.days.ago
-    eventIds = random_event_ids
 
-    competition = Competition.create!(
+    competition = Competition.new(
       id: "My#{i}ResultsComp#{day.year}",
       name: "My #{i} Comp With Results #{day.year}",
       cellName: "My #{i} Comp With Results #{day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
-      eventSpecs: eventIds.join(" "),
       venue: Faker::Address.street_name,
       venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
       external_website: "https://www.worldcubeassociation.org",
@@ -42,8 +42,11 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    competition.events = random_events
 
-    eventIds.each do |eventId|
+    competition.save!
+
+    competition.events.each do |event|
       %w(1 2 f).each do |roundId|
         users.each_with_index do |competitor, i|
           person = competitor.person
@@ -53,7 +56,7 @@ after "development:users" do
             personName: person.name,
             countryId: person.countryId,
             competitionId: competition.id,
-            eventId: eventId,
+            eventId: event.id,
             roundId: roundId,
             formatId: "a",
             value1: random_wca_value,
@@ -78,17 +81,15 @@ after "development:users" do
   # Past competitions
   500.times do |i|
     day = i.days.ago
-    eventIds = random_event_ids
-    Competition.create!(
+    competition = Competition.new(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
       cellName: "My #{i} Comp #{day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
-      eventSpecs: eventIds.join(" "),
       venue: Faker::Address.street_name,
       venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
       external_website: "https://www.worldcubeassociation.org",
@@ -101,6 +102,9 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    competition.events = random_events
+
+    competition.save!
   end
 
   users.each_with_index do |user, i|
@@ -125,22 +129,19 @@ after "development:users" do
 
   # Upcoming competitions
   500.times do |i|
-    eventIds = random_event_ids
-
     start_day = (i+1).days.from_now
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
 
-    competition = Competition.create!(
+    competition = Competition.new(
       id: "MyComp#{i+1}#{start_day.year}",
       name: "My #{i+1} Comp #{start_day.year}",
       cellName: "My #{i+1} Comp #{start_day.year}",
       cityName: Faker::Address.city,
-      countryId: Country::ALL_COUNTRIES.sample.id,
+      countryId: countries.sample.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date:  end_day.strftime("%F"),
-      eventSpecs: eventIds.join(" "),
       venue: Faker::Address.street_name,
       venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
       external_website: "https://www.worldcubeassociation.org",
@@ -153,32 +154,16 @@ after "development:users" do
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
+    competition.events = random_events
+
+    competition.save!
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
     users.each_with_index do |user, i|
       accepted_at = i % 4 == 0 ? Time.now : nil
-      registration_event_ids = eventIds.sample(rand(1..eventIds.count))
-      if i % 2 == 0
-        Registration.new(
-          competition: competition,
-          name: Faker::Name.name,
-          personId: user.wca_id,
-          countryId: Country.all_real.sample.id,
-          gender: "m",
-          birthYear: 1990,
-          birthMonth: 6,
-          birthDay: 4,
-          email: Faker::Internet.email,
-          guests: rand(10),
-          comments: Faker::Lorem.paragraph,
-          ip: "1.1.1.1",
-          accepted_at: accepted_at,
-          registration_events_attributes: registration_event_ids.map { |event_id| {event_id: event_id} },
-        ).save!(validate: false)
-      else
-        FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, event_ids: registration_event_ids)
-      end
+      registration_events = competition.events.sample(rand(1..competition.events.count))
+      FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, events: registration_events)
     end
   end
 end

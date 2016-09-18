@@ -4,18 +4,22 @@
   <% else %>
     <% if @past_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= render 'index_table', competitions: competitions, title: "Past competitions from #{params[:year]}" %>
+        <%= render 'index_table', competitions: competitions, title: t('.past', year: params[:year]) %>
+      </div>
+    <% elsif @recent_selected %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'index_table', competitions: competitions, title: "Recent competitions (last 30 days)" %>
       </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
         <div class="col-md-12" id="in-progress-comps">
-          <%= render 'index_table', competitions: in_progress_competitions, title: "Competitions in progress" %>
+          <%= render 'index_table', competitions: in_progress_competitions, title: t('.in_progress') %>
         </div>
       <% end %>
       <% unless upcoming_competitions.empty? %>
         <div class="col-md-12" id="upcoming-comps">
-          <%= render 'index_table', competitions: upcoming_competitions, title: "Upcoming competitions" %>
+          <%= render 'index_table', competitions: upcoming_competitions, title: t('.upcoming') %>
         </div>
       <% end %>
     <% end %>
@@ -49,23 +53,16 @@
       <%= render 'no_competitions_found' %>
     <% else %>
       <% if @past_selected %>
-        <% recent_competitions, distant_competitions = competitions.partition { |c| (Date.today - c.end_date).to_i < Competition::RECENT_DAYS } %>
-        <%= render 'admin_index_table', id: "recent-comps", competitions: recent_competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
-        <%= render 'admin_index_table', id: "distant-comps", competitions: distant_competitions, title: "Past competitions" %>
+        <%= render 'admin_index_table', id: "distant-comps", competitions: competitions, title: "Past competitions" %>
+      <% elsif @recent_selected %>
+        <%= render 'admin_index_table', id: "recent-comps", competitions: competitions, title: "Competitions within the last #{Competition::RECENT_DAYS} days" %>
       <% else %>
         <%= render 'admin_index_table', id: "ongoing-and-upcoming-comps", competitions: competitions, title: "Ongoing and upcoming competitions" %>
       <% end %>
     <% end %>
   <% else %>
     <%= alert :warning do
-      "You don't have access to this page!"
+      t '.no_access'
       end %>
   <% end %>
 <% end %>
-<script>
-$('.toggle-body').on('click', function() {
-  $(this).closest('table').children('tbody').toggleClass('hidden');
-  var newMessage = $(this).closest('table').children('tbody').hasClass('hidden') ? '(show)' : '(hide)';
-  $(this).html(newMessage);
-});
-</script>

@@ -3,7 +3,7 @@
 
   <% if @competition.user_can_view_results?(current_user) %>
     <% if !@competition.results_posted? %>
-      <%= alert :warning, t('competitions.results_preview_alert'), note: true %>
+      <%= alert :warning, t('competitions.messages.results_preview_alert'), note: true %>
     <% end %>
     <%= yield %>
   <% end %>

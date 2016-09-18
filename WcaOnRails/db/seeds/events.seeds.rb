@@ -35,5 +35,4 @@ sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('skewb', 'Skewb', 150, 'time', 'Skewb'),
 ('snake', 'Rubik''s Snake', 1120, 'time', 'Rubik''s Snake'),
 ('sq1', 'Square-1', 130, 'time', 'Square-1');"
-connection = ActiveRecord::Base.connection()
-connection.execute(sql)
+ActiveRecord::Base.connection.execute(sql)

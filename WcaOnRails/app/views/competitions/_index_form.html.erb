@@ -1,11 +1,11 @@
 <div class="form-group">
   <%= label_tag "events" do %>
-    Events
-    <button type="button" id="select-all-events" class="btn btn-primary btn-xs">All</button>
-    <button type="button" id="clear-all-events" class="btn btn-default btn-xs">Clear</button>
+    <%= t 'competitions.competition_form.events' %>
+    <button type="button" id="select-all-events" class="btn btn-primary btn-xs"><%= t '.all' %></button>
+    <button type="button" id="clear-all-events" class="btn btn-default btn-xs"><%= t '.clear' %></button>
   <% end %>
   <div id="events">
-    <% Event.all_official.each do |event| %>
+    <% Event.official.each do |event| %>
     <span class="event-checkbox">
       <%= label_tag "checkbox-#{event.id}" do %>
         <%= check_box_tag "event_ids[]", event.id, params[:event_ids].include?(event.id), id: "checkbox-#{event.id}" %>
@@ -17,16 +17,16 @@
 </div>
 
 <div class="form-group">
-  <%= label_tag(:region) %>
+  <%= label_tag(t('.region')) %>
   <%= select_tag(:region, region_option_tags(selected_id: params[:region]), class: "form-control") %>
 </div>
 
 <div class="form-group">
-  <%= label_tag("Search") %>
+  <%= label_tag(t('.search')) %>
   <div id="search-field">
     <div class="input-group">
       <span class="input-group-addon" data-toggle="tooltip" data-placement="top"
-            title="Name, city, venue, delegate(s), country or month">
+            title="<%= t '.search_tooltip' %>">
         <%= icon('search') %>
       </span>
       <%= text_field_tag "search", params[:search], class: "form-control" %>
@@ -35,21 +35,51 @@
 </div>
 
 <div class="form-group">
-  <%= label_tag(:state) %>
+  <%= label_tag(t('.state')) %>
   <div id="state" class="btn-group" data-toggle="buttons">
     <label id="present" class="btn btn-primary">
       <%= radio_button_tag "state", "present" %>
-      <span class="caption">Present</span>
+      <span class="caption"><%= t '.present' %></span>
+    </label>
+    <label id="recent" class="btn btn-primary" data-toggle="tooltip" title="Last <%= Competition::RECENT_DAYS %> days">
+      <%= radio_button_tag "state", "recent" %>
+      <span class="caption">Recent</span>
     </label>
     <ul class="dropdown-menu years">
       <%= hidden_field_tag "year", params[:year] %>
       <% @years.each do |year| %>
-        <li class="year"><%= link_to year.to_s.capitalize, "#", data: { year: year } %></li>
+        <% year_label = year.is_a?(Integer) ? year.to_s : t('.all_years') %>
+        <li class="year"><%= link_to year_label, "#", data: { year: year } %></li>
       <% end %>
     </ul>
     <label id="past" class="btn btn-primary" data-toggle="dropdown">
       <%= radio_button_tag "state", "past" %>
-      <span class="caption">Past <%= "from #{params[:year]}" if @past_selected %></span>
+      <span class="caption">
+        <% if @past_selected %>
+          <% #Here params[:year] is a string, so we need regexp %>
+          <%= params[:year] =~ /\A\d+\z/ ? t('.past_from', year: params[:year]) : t('.past_all') %>
+        <% else %>
+          <%= t '.past' %>
+        <% end %>
+      </span>
+    </label>
+  </div>
+</div>
+
+<div class="form-group admin-selectors">
+  <%= label_tag(:status) %>
+  <div id="status" class="btn-group" data-toggle="buttons">
+    <label id="all" class="btn btn-info">
+      <%= radio_button_tag "status", "all" %>
+      <span class="caption">All</span>
+    </label>
+    <label id="warning" class="btn btn-warning">
+      <%= radio_button_tag "status", "warning" %>
+      <span class="caption">Warning</span>
+    </label>
+    <label id="danger" class="btn btn-danger">
+      <%= radio_button_tag "status", "danger" %>
+      <span class="caption">Danger</span>
     </label>
   </div>
 </div>
@@ -58,11 +88,11 @@
   <div class="btn-group btn-group-justified" data-toggle="buttons">
     <label id="display-list" class="btn btn-info">
       <%= radio_button_tag "display", "list" %>
-      <i class="glyphicon glyphicon-list"></i> List
+      <i class="glyphicon glyphicon-list"></i> <%= t '.list' %>
     </label>
     <label id="display-map" class="btn btn-info">
       <%= radio_button_tag "display", "map" %>
-      <i class="glyphicon glyphicon-map-marker"></i> Map
+      <i class="glyphicon glyphicon-map-marker"></i> <%= t '.map' %>
     </label>
     <% if current_user&.can_see_admin_competitions? %>
       <label id="display-admin" class="btn btn-info">
@@ -74,9 +104,20 @@
 </div>
 
 <script>
-  $('#<%= @past_selected ? "past" : "present" %>').button('toggle');
+  <% if @past_selected
+    state_click = "past"
+  elsif @present_selected
+    state_click = "present"
+  elsif @recent_selected
+    state_click = "recent"
+    end %>
+  $('#<%= state_click %>').button('toggle');
 
   $('#present').on('click', function() {
+    $('#past .caption').html("<%= t('.past') %>");
+  });
+
+  $('#recent').on('click', function() {
     $('#past .caption').html('Past');
   });
 
@@ -84,7 +125,10 @@
     e.preventDefault();
     var $past = $('#past');
     var year = $(this).data('year');
-    $past.find('.caption').html('Past from ' + year);
+    var past_from = "<%= t('.past_from') %>";
+    var past_all = "<%= t('.past_all') %>";
+    var caption = Number.isInteger(year) ? past_from.replace("%{year}", year) : past_all;
+    $past.find('.caption').html(caption);
     $('.years input[name="year"]').val(year);
     if($past.is('.active')) {
       $past.trigger('change');

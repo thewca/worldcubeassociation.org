@@ -3,7 +3,7 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
   <% if action_name == "new" %>
-    <%= alert :info, 'To clone an existing competition visit the information page for that competition and click the "Clone" link in the menu.', note: true %>
+    <%= alert :info, t('.note_clone'), note: true %>
   <% end %>
   <%= render 'competition_form' %>
 </div>

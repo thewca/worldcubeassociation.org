@@ -126,6 +126,7 @@ function insertPerson( $oldName, $oldCountry, $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 
   #--- Mysql-ify.
+  $oldName      = mysqlEscape( $oldName );
   $newName      = mysqlEscape( $newName );
   $newCountry   = mysqlEscape( $newCountry );
   $newId        = mysqlEscape( $newId );

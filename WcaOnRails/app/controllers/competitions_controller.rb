@@ -57,6 +57,7 @@ class CompetitionsController < ApplicationController
     params[:region] ||= "all"
     params[:state] ||= "present"
     params[:year] ||= "all years"
+    params[:status] ||= "all"
     @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
@@ -66,13 +67,16 @@ class CompetitionsController < ApplicationController
     end
 
     @past_selected = params[:state] == "past"
-    @present_selected = !@past_selected
+    @present_selected = params[:state] == "present"
+    @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
+    elsif @recent_selected
+      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
     else
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
       unless params[:year] == "all years"
@@ -96,6 +100,11 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
     end
 
+    unless params[:status] == "all"
+      days = (params[:status] == "warning" ? Competition::REPORT_AND_RESULTS_DAYS_WARNING : Competition::REPORT_AND_RESULTS_DAYS_DANGER)
+      @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
+    end
+
     respond_to do |format|
       format.html {}
       format.js do
@@ -113,7 +122,7 @@ class CompetitionsController < ApplicationController
     @competition = Competition.new(competition_params)
 
     if @competition.save
-      flash[:success] = "Successfully created new competition!"
+      flash[:success] = t('competitions.messages.create_success')
       redirect_to edit_competition_path(@competition)
     else
       # Show id errors under name, since we don't actually show an
@@ -352,7 +361,7 @@ class CompetitionsController < ApplicationController
         :generate_website,
         :external_website,
         :remarks,
-        event_ids: Event.all.map { |event| event.id.to_sym },
+        competition_events_attributes: [:id, :event_id, :_destroy],
       ]
       if current_user.can_admin_results?
         permitted_competition_params += [
@@ -363,10 +372,6 @@ class CompetitionsController < ApplicationController
     end
 
     competition_params = params.require(:competition).permit(*permitted_competition_params)
-    if competition_params.key?(:event_ids)
-      competition_params[:eventSpecs] = competition_params[:event_ids].select { |k, v| v == "1" }.keys.join " "
-      competition_params.delete(:event_ids)
-    end
     if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
       competition_params[:isConfirmed] = true
     end

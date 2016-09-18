@@ -203,5 +203,4 @@ sql = "INSERT INTO `Countries` (`id`, `name`, `continentId`, `iso2`) VALUES
 ('Yemen', 'Yemen', '_Asia', 'YE'),
 ('Zambia', 'Zambia', '_Africa', 'ZM'),
 ('Zimbabwe', 'Zimbabwe', '_Africa', 'ZW');"
-connection = ActiveRecord::Base.connection()
-connection.execute(sql)
+ActiveRecord::Base.connection.execute(sql)

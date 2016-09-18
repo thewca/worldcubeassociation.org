@@ -1,31 +1,31 @@
-<% provide(:title, "Register for #{@competition.name}") %>
+<% provide(:title, I18n.t('registrations.new_registration.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
   <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
   <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
   <% unless @competition.registration_opened? %>
     <% if @competition.registration_not_yet_opened? %>
-      <%= alert :info, t('competitions.registration.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
+      <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
     <% end %>
     <% if @competition.registration_past? %>
-      <%= alert :danger, t('competitions.registration.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
+      <%= alert :danger, t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
     <% end %>
   <% else %>
-    <%= alert :info, t('competitions.registration.will_close_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
+    <%= alert :info, t('registrations.will_close_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
   <% end %>
 
   <% unless current_user %>
     <% if @competition.registration_past? %>
-      <%= t 'competitions.registration.please_sign_in_past_html',
-        sign_in: link_to(t('competitions.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+      <%= t 'registrations.please_sign_in_past_html',
+        sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
         here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% elsif @competition.registration_not_yet_opened? %>
-      <%= t 'competitions.registration.please_sign_in_not_yet_open_html',
-        sign_in: link_to(t('competitions.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+      <%= t 'registrations.please_sign_in_not_yet_open_html',
+        sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
         here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% else %>
-      <%= t 'competitions.registration.please_sign_in_html',
-        sign_in: link_to(t('competitions.registration.sign_in'), competition_register_require_sign_in_path(@competition)),
+      <%= t 'registrations.please_sign_in_html',
+        sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
         comp: @competition.name,
         here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
     <% end %>
@@ -33,16 +33,16 @@
 
     <% if @competition.registration_opened? %>
       <% if current_user.preferred_events.empty? %>
-        <%= alert :info, t('competitions.registration.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences))) %>
+        <%= alert :info, t('registrations.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences))) %>
       <% end %>
       <p>
-      <%= t 'competitions.registration.greeting', name: current_user.name %>
+      <%= t 'registrations.greeting', name: current_user.name %>
       </p>
 
       <% if current_user.cannot_register_for_competition_reasons.length > 0 %>
         <%= alert :danger do %>
-          <%= t 'competitions.registration.please_fix_profile_html', comp: @competition.name,
-                profile: link_to(t('competitions.registration.profile'), profile_edit_path) %>
+          <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
+                profile: link_to(t('registrations.profile'), profile_edit_path) %>
           <ul>
             <% current_user.cannot_register_for_competition_reasons.each do |reason| %>
               <li><%= reason %></li>
@@ -52,19 +52,19 @@
       <% else %>
         <div>
           <% if @registration.new_record? %>
-            <%= t 'competitions.registration.can_register', comp: @competition.name %>
+            <%= t 'registrations.can_register', comp: @competition.name %>
           <% else %>
-            <%= t 'competitions.registration.have_registered', comp: @competition.name %>
+            <%= t 'registrations.have_registered', comp: @competition.name %>
 
             <% if !current_user.can_edit_registration?(@registration) %>
-              <%= t 'competitions.registration.contact_organizer' %>
+              <%= t 'registrations.contact_organizer' %>
             <% end %>
 
             <% if @registration.pending? %>
               <% waiting_list_info = @registration.waiting_list_info %>
-              <%= alert :warning, t('competitions.registration.waiting_list', i: waiting_list_info.index + 1, n: waiting_list_info.length) %>
+              <%= alert :warning, t('registrations.waiting_list', i: waiting_list_info.index + 1, n: waiting_list_info.length) %>
             <% else %>
-              <%= alert :success, t('competitions.registration.accepted') %>
+              <%= alert :success, t('registrations.accepted') %>
             <% end %>
           <% end %>
         </div>
@@ -73,7 +73,7 @@
                                            : registration_path(@registration) %>
         <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
 
-          <% selected_events = @registration.events.empty? ? @registration.user.preferred_events : @registration.events %>
+          <% selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events %>
           <%= render "shared/associated_events_picker", form_builder: f, disabled: !current_user.can_edit_registration?(@registration),
                       events_association_name: :registration_events, allowed_events: @competition.events, selected_events: selected_events %>
 
@@ -86,10 +86,10 @@
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
               <% if @registration.new_record? %>
-                <%= f.submit t('competitions.registration.register'), class: "btn btn-success" %>
+                <%= f.submit t('registrations.register'), class: "btn btn-success" %>
               <% elsif current_user.can_edit_registration?(@registration) %>
-                <%= f.submit t('competitions.registration.update'), class: "btn btn-success" %>
-                <%= link_to t('competitions.registration.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('competitions.registration.delete_confirm'), toggle: "tooltip" }, title: t('competitions.registration.delete_registration') %>
+                <%= f.submit t('registrations.update'), class: "btn btn-success" %>
+                <%= link_to t('registrations.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.delete_confirm'), toggle: "tooltip" }, title: t('registrations.delete_registration') %>
               <% end %>
             </div>
           </div>

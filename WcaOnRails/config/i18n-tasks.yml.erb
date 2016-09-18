@@ -95,6 +95,11 @@ ignore_unused:
   - 'simple_form.{error_notification,required}.:'
   # We iterate through the children, so we use all of them
   - 'users.edit.avatar_guidelines.*'
+  # Mark all events/continents/countries as used.
+  # FYI if a language doesn't translate one of them, it will appear in the missing keys, as long as it exists in English
+  - 'events.*'
+  - 'continents.*'
+  - 'countries.*'
 # - 'simple_form.{placeholders,hints,labels}.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:

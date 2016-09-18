@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.feature "competition results" do
-  let(:competition) { FactoryGirl.create :competition, :confirmed, :visible, eventSpecs: "333", results_posted_at: 1.day.ago }
+  let(:competition) { FactoryGirl.create :competition, :confirmed, :visible, events: Event.where(id: '333'), results_posted_at: 1.day.ago }
   let(:person_1) { FactoryGirl.create :person, name: "Fast Cuber", countryId: "USA" }
   let(:person_2) { FactoryGirl.create :person, name: "Slow Cuber", countryId: "USA" }
 
@@ -20,8 +20,8 @@ RSpec.feature "competition results" do
   describe "by person" do
     it "displays the results for each person" do
       visit competition_results_by_person_path(competition)
-      expect(page).to have_content("#{person_1.name} - USA")
-      expect(page).to have_content("#{person_2.name} - USA")
+      expect(page).to have_content("#{person_1.name} - United States")
+      expect(page).to have_content("#{person_2.name} - United States")
     end
   end
 

@@ -18,7 +18,9 @@ class User < ActiveRecord::Base
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :user_preferred_events
+  has_many :user_preferred_events, dependent: :destroy
+  has_many :preferred_events, through: :user_preferred_events, source: :event
+  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
@@ -37,8 +39,6 @@ class User < ActiveRecord::Base
   validates :wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   validates :unconfirmed_wca_id, format: { with: WCA_ID_RE }, allow_nil: true
   WCA_ID_MAX_LENGTH = 10
-
-  validates :country_iso2, inclusion: { in: Country.all_real.map(&:iso2), message: "%{value} is not a valid country" }, allow_nil: true
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
@@ -123,11 +123,11 @@ class User < ActiveRecord::Base
 
     if claiming_wca_id || (unconfirmed_wca_id.present? && unconfirmed_wca_id_change)
       if !delegate_id_to_handle_wca_id_claim.present?
-        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.required'))
+        errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('simple_form.required.text'))
       end
 
       if !unconfirmed_wca_id.present?
-        errors.add(:unconfirmed_wca_id, I18n.t('users.errors.required'))
+        errors.add(:unconfirmed_wca_id, I18n.t('simple_form.required.text'))
       end
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
@@ -292,17 +292,23 @@ class User < ActiveRecord::Base
     end
   end
 
+  after_save :remove_pending_wca_id_claims
+  private def remove_pending_wca_id_claims
+    if delegate_status_changed? && !delegate_status
+      users_claiming_wca_id.each do |user|
+        user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
+        senior_delegate = User.find_by_id(senior_delegate_id_was)
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
+      end
+    end
+  end
+
   # After the user confirms their account, if they claimed a WCA ID, now is the
   # time to notify their delegate!
   def after_confirmation
     if unconfirmed_wca_id.present?
       WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
     end
-  end
-
-  # Returns the preferred events as an array of Event objects
-  def preferred_events
-    user_preferred_events.map(&:event_object).sort_by(&:rank)
   end
 
   def software_team?

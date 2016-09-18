@@ -197,7 +197,7 @@ RSpec.describe Competition do
       competition = FactoryGirl.build :competition, starts: Date.today
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
-      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{competition.end_date.to_formatted_s(:long)} to see the results!"
+      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.results_posted_at = Time.now
       expect(competition.in_progress?).to be false
@@ -223,17 +223,6 @@ RSpec.describe Competition do
     competition.save
     expect(competition).to be_invalid
     expect(competition.end_date).to eq Date.parse("1988-12-07")
-  end
-
-  it "ignores equal signs in eventSpecs" do
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95
-    competition = FactoryGirl.build :competition, eventSpecs: "   333=//sd    444   "
-    expect(competition.events.map(&:id)).to eq %w(333 444)
-  end
-
-  it "validates event ids" do
-    competition = FactoryGirl.build :competition, eventSpecs: "333 333wtf"
-    expect(competition).to be_invalid
   end
 
   it "converts microdegrees to degrees" do
@@ -318,6 +307,25 @@ RSpec.describe Competition do
       expect(scramble1.reload.competitionId).to eq "NewID2015"
     end
 
+    it "can set competition_events_attributes" do
+      comp_events = competition.competition_events
+
+      # Force ActiveRecord to do database queries for the associated competition_events
+      # with the new competition id.
+      competition.reload
+
+      old_events = competition.events
+      competition.update_attributes!(
+        id: "MyerComp2016",
+        competition_events_attributes: [
+          {"id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0"},
+          {"id"=> comp_events[1].id, "event_id"=>comp_events[1].event_id, "_destroy"=>"0"},
+        ],
+      )
+      new_events = competition.events
+      expect(new_events).to eq old_events
+    end
+
     it "updates the competition_id of competition_delegates and competition_organizers" do
       organizer = competition.organizers.first
       delegate = competition.delegates.first
@@ -383,7 +391,7 @@ RSpec.describe Competition do
       end
 
       it "must have at least one event when setting #{action}" do
-        competition_with_delegate.assign_attributes eventSpecs: "", action => true
+        competition_with_delegate.assign_attributes events: [], action => true
         expect(competition_with_delegate).not_to be_valid
       end
 
@@ -446,9 +454,9 @@ RSpec.describe Competition do
   end
 
   describe "results" do
-    let(:competition) { FactoryGirl.create :competition, eventSpecs: "333 222" }
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
+    let(:competition) { FactoryGirl.create :competition, events: [three_by_three, two_by_two] }
 
     let(:person_one) { FactoryGirl.create :person, name: "One" }
     let(:person_two) { FactoryGirl.create :person, name: "Two" }

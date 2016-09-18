@@ -18,7 +18,7 @@ class RegistrationsController < ApplicationController
   before_action :competition_must_be_using_wca_registration!
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
-      flash[:danger] = "This competition is not using WCA registration"
+      flash[:danger] = I18n.t('registrations.flash.not_using_wca')
       redirect_to competition_path(competition_from_params)
     end
   end
@@ -38,13 +38,23 @@ class RegistrationsController < ApplicationController
   def psych_sheet_event
     @competition = competition_from_params
     @event = Event.find(params[:event_id])
-    @preferred_format = @event.preferred_formats.first
-    @registrations = @competition.psych_sheet_event(@event)
+    @sort_by = params[:sort_by]
+    if @sort_by == @event.recommended_format.sort_by
+      @sort_by_second = @event.recommended_format.sort_by_second
+    elsif @sort_by == @event.recommended_format.sort_by_second
+      @sort_by_second = @event.recommended_format.sort_by
+      @sort_by = @event.recommended_format.sort_by_second
+    else
+      @sort_by = @event.recommended_format.sort_by
+      @sort_by_second = @event.recommended_format.sort_by_second
+    end
+
+    @registrations = @competition.psych_sheet_event(@event, @sort_by, @sort_by_second)
   end
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.includes(:user, :registration_events)
+    @registrations = @competition.registrations.accepted.includes(:user, :registration_events, :events)
   end
 
   def edit
@@ -57,19 +67,19 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find(params[:id])
     if params.key?(:user_is_deleting_theirself)
       if !current_user.can_edit_registration?(@registration)
-        flash[:danger] = "You cannot delete your registration."
+        flash[:danger] = I18n.t('registrations.flash.cannot_delete')
       else
         @registration.destroy!
         mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
         mailer.deliver_now
-        flash[:success] = I18n.t('competitions.registration.flash.deleted', comp: @competition.name)
+        flash[:success] = I18n.t('registrations.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
       @registration.destroy!
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
       mailer.deliver_now
-      flash[:success] = "Deleted registration and emailed #{mailer.to.join(" ")}"
+      flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(" "))
       redirect_to competition_edit_registrations_path(@registration.competition)
     end
   end
@@ -104,7 +114,7 @@ class RegistrationsController < ApplicationController
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
         end
       end
-      flash.now[:success] = "#{"Registration".pluralize(registrations.length)} accepted! Email #{"notification".pluralize(registrations.length)} sent."
+      flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: registrations.length)
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
@@ -112,13 +122,13 @@ class RegistrationsController < ApplicationController
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_now
         end
       end
-      flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} moved to waiting list"
+      flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: registrations.length)
     when "delete-selected"
       registrations.each do |registration|
         registration.destroy
         RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now
       end
-      flash.now[:warning] = "#{"Registration".pluralize(registrations.length)} deleted"
+      flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: registrations.length)
     when "export-selected"
     else
       raise "Unrecognized action #{params[:registrations_action]}"
@@ -152,7 +162,7 @@ class RegistrationsController < ApplicationController
         mailer.deliver_now
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else
-        flash[:success] = I18n.t('competitions.registration.flash.updated')
+        flash[:success] = I18n.t('registrations.flash.updated')
       end
       if params[:from_admin_view]
         redirect_to edit_registration_path(@registration)
@@ -160,7 +170,7 @@ class RegistrationsController < ApplicationController
         redirect_to competition_register_path(@registration.competition)
       end
     else
-      flash.now[:danger] = I18n.t('competitions.registration.flash.failed')
+      flash.now[:danger] = I18n.t('registrations.flash.failed')
       render :edit
     end
   end
@@ -188,7 +198,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('competitions.registration.flash.registered')
+      flash[:success] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_now
       redirect_to competition_register_path

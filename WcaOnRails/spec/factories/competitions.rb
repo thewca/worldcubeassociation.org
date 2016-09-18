@@ -15,7 +15,8 @@ FactoryGirl.define do
     start_date { starts.nil? ? nil : starts.strftime("%F") }
     end_date { ends.nil? ? nil : ends.strftime("%F") }
 
-    eventSpecs "333 333oh"
+    events { Event.where(id: %w(333 333oh)) }
+
     venue "My backyard"
     venueAddress "My backyard street"
     external_website "https://www.worldcubeassociation.org"

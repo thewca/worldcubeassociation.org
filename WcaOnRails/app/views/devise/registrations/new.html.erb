@@ -47,7 +47,7 @@
             <%= f.input :name %>
             <%= f.input :dob, as: :date_picker %>
             <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: t('wca.devise.gender.male'), f: t('wca.devise.gender.female'), o: t('wca.devise.gender.other') }[g] } %>
-            <%= f.input :country_iso2, collection: Country.all_real.map(&:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name } %>
+            <%= f.input :country_iso2, collection: Country.real.pluck(:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name } %>
 
           </div>
         </div>

@@ -5,8 +5,13 @@ cache:
 rvm:
   - 2.3.1
 env:
-  - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
+  global:
+    - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
+    - PATH=$HOME/.local/bin:$PATH
 before_install:
+  - pip install --user wrc
+  - git clone --depth=1 https://github.com/cubing/wca-regulations.git
+  - wrc wca-regulations -o WcaOnRails/app/views/regulations --target=json
   # Travis has an old install of PhantomJS without .bind() support, here we upgrade to
   # version 2.0.0
   # From https://mediocre.com/forum/topics/phantomjs-2-and-travis-ci-we-beat-our-heads-against-a-wall-so-you-dont-have-to

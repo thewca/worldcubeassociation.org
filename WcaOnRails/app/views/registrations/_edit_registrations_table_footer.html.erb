@@ -4,7 +4,7 @@
       <%= render "registration_info_people", registrations: registrations %>
     </td>
     <% country_count = registrations.map(&:countryId).uniq.length %>
-    <td><%= country_count %> <%= "country".pluralize(country_count) %></td>
+    <td><%= country_count %> <%= t('registrations.list.country').pluralize(country_count) %></td>
     <td></td>
     <% @competition.events.each do |event| %>
       <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>

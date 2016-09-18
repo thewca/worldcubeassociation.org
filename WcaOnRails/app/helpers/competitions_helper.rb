@@ -4,29 +4,24 @@ module CompetitionsHelper
     messages = []
     registration = competition.registrations.find_by_user_id(user.id)
     if registration
-      messages << "You are " + (registration.accepted? ? "registered." : "currently on the waiting list.")
+      messages << (registration.accepted? ? t('competitions.messages.tooltip_registered') : t('competitions.messages.tooltip_waiting_list'))
     end
     visible = competition.showAtAll?
     messages << if competition.isConfirmed?
-                  "This competition is confirmed #{visible ? 'and' : 'but not'} visible."
+                  visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
                 else
-                  "This competition is not confirmed #{visible ? 'but' : 'and not'} visible."
+                  visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
                 end
     messages.join(' ')
   end
 
   def announced_class(days_announced)
-    level = [21, 28].select {|d| days_announced > d}.count
+    level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select {|d| days_announced > d}.count
     ["alert-danger", "alert-orange", "alert-green"][level]
   end
 
-  def report_class(days_report)
-    level = [7, 14, 21].select {|d| days_report > d}.count
-    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
-  end
-
-  def results_class(days_results)
-    level = [7, 14, 21].select {|d| days_results > d}.count
+  def report_and_results_class(days)
+    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days > d}.count
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 end

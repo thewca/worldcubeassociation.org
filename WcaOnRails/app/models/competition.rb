@@ -7,6 +7,8 @@ class Competition < ActiveRecord::Base
   #       no clue why... (th, 2015-09-19)
   self.primary_key = "id"
 
+  has_many :competition_events, dependent: :destroy
+  has_many :events, through: :competition_events
   has_many :registrations, foreign_key: "competitionId"
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
@@ -20,11 +22,12 @@ class Competition < ActiveRecord::Base
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
 
+  accepts_nested_attributes_for :competition_events, allow_destroy: true
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
     information
-    eventSpecs
     venue
     venueAddress
     venueDetails
@@ -55,7 +58,6 @@ class Competition < ActiveRecord::Base
     announced_at
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
-  INVALID_NAME_MESSAGE = "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
@@ -66,10 +68,10 @@ class Competition < ActiveRecord::Base
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
-                   format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }
+                   format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   MAX_CELL_NAME_LENGTH = 32
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: INVALID_NAME_MESSAGE }, if: :name_valid_or_updating?
+                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
 
@@ -81,6 +83,11 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
   RECENT_DAYS = 30
+  REPORT_AND_RESULTS_DAYS_OK = 7
+  REPORT_AND_RESULTS_DAYS_WARNING = 14
+  REPORT_AND_RESULTS_DAYS_DANGER = 21
+  ANNOUNCED_DAYS_WARNING = 21
+  ANNOUNCED_DAYS_DANGER = 28
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
@@ -90,16 +97,16 @@ class Competition < ActiveRecord::Base
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
-  def must_have_at_least_one_event
-    if events.empty?
-      errors.add(:eventSpecs, "must contain at least one event for this competition")
+  private def must_have_at_least_one_event
+    if competition_events.reject(&:marked_for_destruction?).empty?
+      errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
     end
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
     if delegate_ids.empty?
-      errors.add(:delegate_ids, "must contain at least one WCA delegate")
+      errors.add(:delegate_ids, I18n.t('competitions.errors.must_contain_delegate'))
     end
   end
 
@@ -114,7 +121,7 @@ class Competition < ActiveRecord::Base
   validate :delegates_must_be_delegates
   def delegates_must_be_delegates
     if !self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:delegate_ids, "are not all delegates")
+      errors.add(:delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
     end
   end
 
@@ -125,10 +132,10 @@ class Competition < ActiveRecord::Base
   def warnings_for(user)
     warnings = {}
     if !self.showAtAll
-      warnings[:invisible] = "This competition is not visible to the public."
+      warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
       if self.name.length > 32
-        warnings[:name] = "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+        warnings[:name] = I18n.t('competitions.messages.name_too_long')
       end
     end
 
@@ -138,10 +145,10 @@ class Competition < ActiveRecord::Base
   def info_for(user)
     info = {}
     if !self.results_posted? && self.is_over?
-      info[:upload_results] = "This competition is over, we are working to upload the results as soon as possible!"
+      info[:upload_results] = I18n.t('competitions.messages.upload_results')
     end
     if self.in_progress?
-      info[:in_progress] = "This competition is ongoing. Come back after #{self.end_date.to_formatted_s(:long)} to see the results!"
+      info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
     end
     info
   end
@@ -158,12 +165,14 @@ class Competition < ActiveRecord::Base
       Competition.reflections.keys.each do |association_name|
         case association_name
         when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
-             'competition_delegates', 'competition_organizers', 'media', 'scrambles'
+             'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
           # Should be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
+        when 'events'
+          clone.events = events
         when 'tabs'
           # Clone tabs in the clone_associations callback after the competition is saved.
           clone.clone_tabs = true
@@ -192,17 +201,11 @@ class Competition < ActiveRecord::Base
   attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
-  validate :events_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
   attr_accessor :longitude_degrees, :latitude_degrees
   before_validation :compute_coordinates
-
-  before_validation :cleanup_event_specs
-  def cleanup_event_specs
-    self.eventSpecs ||= ""
-  end
 
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
@@ -252,6 +255,19 @@ class Competition < ActiveRecord::Base
     self.id = new_id
   end
 
+  old_competition_events_attributes = instance_method(:competition_events_attributes=)
+  define_method(:competition_events_attributes=) do |attributes|
+    # This is also a mess. We "overload" the competition_events_attributes= method
+    # so it won't be confused by the fact that our competition's id changing.
+    # See similar hack and comment in unpack_delegate_organizer_ids.
+    new_id = self.id
+    self.id = id_was
+
+    old_competition_events_attributes.bind(self).call(attributes)
+
+    self.id = new_id
+  end
+
   # Workaround for PHP code that requires these tables to be clean.
   # Once we're in all railsland, this can go, and we can add a script
   # that checks our database sanity instead.
@@ -289,13 +305,13 @@ class Competition < ActiveRecord::Base
   def registration_must_close_after_it_opens
     if use_wca_registration?
       if !registration_open
-        errors.add(:registration_open, "required")
+        errors.add(:registration_open, I18n.t('simple_form.required.text'))
       end
       if !registration_close
-        errors.add(:registration_close, "required")
+        errors.add(:registration_close, I18n.t('simple_form.required.text'))
       end
       if registration_open && registration_close && !(registration_open < registration_close)
-        errors.add(:registration_close, "registration close must be after registration open")
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open'))
       end
     end
   end
@@ -407,16 +423,8 @@ class Competition < ActiveRecord::Base
     end
   end
 
-  def events
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
-    (eventSpecs || []).split.map { |e| Event.find_by_id(e.split("=")[0]) }.sort_by &:rank
-  end
-
   def has_events_with_ids?(event_ids)
-    # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
-    # what these equal signs are about.
-    (event_ids - eventSpecs.split.map { |e| e.split("=")[0] }).empty?
+    (event_ids - events.ids).empty?
   end
 
   def has_event?(event)
@@ -433,6 +441,10 @@ class Competition < ActiveRecord::Base
         field.downcase.include?(part.downcase)
       end
     end
+  end
+
+  def pending_results_or_report(days)
+    self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
   def start_date
@@ -452,12 +464,12 @@ class Competition < ActiveRecord::Base
       self.year = self.month = self.day = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
-        errors.add(:start_date, "invalid")
+        errors.add(:start_date, I18n.t('common.errors.invalid'))
         return false
       end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:start_date, "invalid")
+        errors.add(:start_date, I18n.t('common.errors.invalid'))
         return false
       end
     end
@@ -468,12 +480,12 @@ class Competition < ActiveRecord::Base
       @endYear = self.endMonth = self.endDay = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
-        errors.add(:end_date, "invalid")
+        errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
       @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
       unless Date.valid_date? @endYear, self.endMonth, self.endDay
-        errors.add(:end_date, "invalid")
+        errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
     end
@@ -488,11 +500,11 @@ class Competition < ActiveRecord::Base
     valid_dates = true
     unless Date.valid_date? year, month, day
       valid_dates = false
-      errors.add(:start_date, "is invalid")
+      errors.add(:start_date, I18n.t('common.errors.invalid'))
     end
     unless Date.valid_date? @endYear, endMonth, endDay
       valid_dates = false
-      errors.add(:end_date, "is invalid")
+      errors.add(:end_date, I18n.t('common.errors.invalid'))
     end
     unless valid_dates
       # There's no use continuing validation at this point.
@@ -500,19 +512,20 @@ class Competition < ActiveRecord::Base
     end
 
     if end_date < start_date
-      errors.add(:end_date, "End date cannot be before start date.")
+      errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
     end
 
     if @endYear != year
-      errors.add(:end_date, "Competition dates cannot span multiple years.")
+      errors.add(:end_date, I18n.t('competitions.errors.span_multiple_years'))
     end
   end
 
-  private def events_must_be_valid
-    invalid_events = events - Event.all_official - Event.all_deprecated
-    unless invalid_events.empty?
-      errors.add(:eventSpecs, "invalid event ids: #{invalid_events.map(&:id).join(',')}")
-    end
+  # Since Competition.events only includes saved events
+  # this method is required to ensure that in any forms which
+  # select events, unsaved events are still presented if
+  # there are any validation issues on the form.
+  def saved_and_unsaved_events
+    competition_events.includes(:event).reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
   end
 
   def nearby_competitions(days, distance)
@@ -594,11 +607,8 @@ class Competition < ActiveRecord::Base
 
   def winning_results
     light_results_from_relation(
-      results
-        .where(roundId: Round.final_rounds.map(&:id))
-        .where("pos = 1")
-        .where("best > 0")
-    ).sort_by { |r| r.event.rank }
+      results.winners
+    )
   end
 
   def person_ids_with_results
@@ -664,9 +674,7 @@ class Competition < ActiveRecord::Base
     country ? Continent.find_by_id(country.continentId) : nil
   end
 
-  def psych_sheet_event(event)
-    preferred_format = event.preferred_formats.first
-
+  def psych_sheet_event(event, sort_by, sort_by_second)
     joinsql = <<-ENDSQL
       join registration_events on registration_events.registration_id = Preregs.id
       join users on users.id = Preregs.user_id
@@ -688,7 +696,7 @@ class Competition < ActiveRecord::Base
       ifnull(RanksSingle.best, 0) single_best
     ENDSQL
 
-    sort_clause = "-#{preferred_format.sort_by}_rank desc, -#{preferred_format.sort_by_second}_rank desc, users.name"
+    sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
     registrations = self.registrations.
                          accepted.
@@ -699,15 +707,15 @@ class Competition < ActiveRecord::Base
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
-      if preferred_format.sort_by == :single
+      if sort_by == 'single'
         rank = registration.single_rank
         prev_rank = prev_registration&.single_rank
       else
         rank = registration.average_rank
         prev_rank = prev_registration&.average_rank
       end
-      registration.tied_previous = (rank == prev_rank)
       break if !rank # hasn't competed in this event yet and all subsequent registrations too
+      registration.tied_previous = (rank == prev_rank)
       registration.pos = registration.tied_previous ? prev_registration.pos : i + 1
       prev_registration = registration
     end
