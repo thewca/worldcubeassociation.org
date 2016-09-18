@@ -25,7 +25,7 @@
           <%= link_to competition.cellName, competition_path(competition) %>
         </p>
         <p class="location">
-          <strong><%= competition.country_name %></strong>, <%= competition.cityName %>
+          <strong><%= competition.country.name %></strong>, <%= competition.cityName %>
         </p>
         <div class="venue-link">
           <%=md(competition.venue, target_blank: true) %>
