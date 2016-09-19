@@ -15,18 +15,16 @@ class LightResult
               :average,
               :personName,
               :event,
-              :eventId,
+              :event,
               :format,
-              :formatId,
               :round,
-              :roundId,
               :pos,
               :personId,
               :regionalSingleRecord,
               :regionalAverageRecord,
               :country
 
-  def initialize(r, countries, events, formats, rounds)
+  def initialize(r)
     @value1 = r["value1"]
     @value2 = r["value2"]
     @value3 = r["value3"]
@@ -35,17 +33,22 @@ class LightResult
     @best = r["best"]
     @average = r["average"]
     @personName = r["personName"]
-    @eventId = r["eventId"]
-    @event = events[@eventId]
-    @formatId = r["formatId"]
-    @format = formats[@formatId]
-    @roundId = r["roundId"]
-    @round = rounds[@roundId]
     @pos = r["pos"]
     @personId = r["personId"]
     @regionalSingleRecord = r["regionalSingleRecord"]
     @regionalAverageRecord = r["regionalAverageRecord"]
-    @country = countries[r["countryId"]]
+    @country = Country.find(r["countryId"])
+    @format = Format.find(r["formatId"])
+    @round = Round.find(r["roundId"])
+    @event = Event.find(r["eventId"])
+  end
+
+  def eventId
+    event.id
+  end
+
+  def roundId
+    round.id
   end
 
   def results_path

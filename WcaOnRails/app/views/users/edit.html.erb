@@ -72,7 +72,7 @@
         <%= f.input :name, disabled: !editable_fields.include?(:name) %>
         <%= f.input :dob, as: :date_picker, disabled: !editable_fields.include?(:dob) %>
         <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] }, disabled: !editable_fields.include?(:gender) %>
-        <%= f.input :country_iso2, collection: Country.real.pluck(:iso2), label_method: lambda { |iso2| Country.find_by_iso2(iso2).name }, disabled: !editable_fields.include?(:country_iso2) %>
+        <%= f.input :country_iso2, collection: Country.real, value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name }, disabled: !editable_fields.include?(:country_iso2) %>
 
         <% if current_user.can_edit_users? %>
           <div class="row" id="wca_id">

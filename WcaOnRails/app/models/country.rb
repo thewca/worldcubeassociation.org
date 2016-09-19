@@ -1,10 +1,11 @@
 # frozen_string_literal: true
-class Country < ActiveRecord::Base
+# rubocop:disable Style/ClassVars
+class Country < AbstractCachedModel
   self.table_name = "Countries"
 
   belongs_to :continent, foreign_key: :continentId
 
-  scope :real, -> { where("name not like 'Multiple Countries%'") }
+  scope :uncached_real, -> { where("name not like 'Multiple Countries%'") }
 
   def name
     I18n.t(iso2, scope: :countries)
@@ -12,6 +13,15 @@ class Country < ActiveRecord::Base
 
   def name_in(locale)
     I18n.t(iso2, scope: :countries, locale: locale)
+  end
+
+  def self.real
+    @@real_countries ||= Country.uncached_real
+    @@real_countries
+  end
+
+  def self.find_by_iso2(iso2)
+    call_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
 
   COMPARE_LOCALIZED_NAMES = lambda do |a, b|

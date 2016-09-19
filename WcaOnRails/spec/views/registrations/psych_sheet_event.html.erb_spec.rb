@@ -23,7 +23,7 @@ RSpec.describe "registrations/psych_sheet_event" do
     newcomer2 = FactoryGirl.create(:user, name: "Newcomer II")
 
     [the_best, tied_first, tied_second, newcomer1, newcomer2].each do |user|
-      FactoryGirl.create(:registration, :accepted, user: user, competition: competition, event_ids: ["333"])
+      FactoryGirl.create(:registration, :accepted, user: user, competition: competition, events: [Event.find("333")])
     end
 
     assign(:competition, competition)

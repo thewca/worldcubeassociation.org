@@ -21,8 +21,6 @@ class Competition < ActiveRecord::Base
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
-  has_one :country, primary_key: "countryId", foreign_key: "id"
-  has_one :continent, through: :country
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
@@ -166,7 +164,7 @@ class Competition < ActiveRecord::Base
 
       Competition.reflections.keys.each do |association_name|
         case association_name
-        when 'registrations', 'results', 'country', 'continent', 'competitors', 'competitor_users', 'delegate_report',
+        when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
              'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
@@ -326,6 +324,14 @@ class Competition < ActiveRecord::Base
   after_save :clear_external_website, if: :generate_website?
   private def clear_external_website
     update_column :external_website, nil
+  end
+
+  def continent
+    Continent.find(country.continentId)
+  end
+
+  def country
+    Country.find(countryId)
   end
 
   def website
@@ -651,13 +657,9 @@ class Competition < ActiveRecord::Base
   # but the performance gains are worth it IMO. Not using ActiveRecord led
   # to a 40% performance improvement.
   private def light_results_from_relation(relation)
-    countries = Country.all.index_by(&:id)
-    formats = Format.all.index_by(&:id)
-    rounds = Round.all.index_by(&:id)
-    events = Event.all.index_by(&:id)
     ActiveRecord::Base.connection
       .execute(relation.to_sql)
-      .each(as: :hash).map { |r| LightResult.new(r, countries, events, formats, rounds) }
+      .each(as: :hash).map(&LightResult.method(:new))
   end
 
   def started?
@@ -748,7 +750,7 @@ class Competition < ActiveRecord::Base
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    competitions.order(year: :desc, month: :desc, day: :desc)
+    competitions.includes(:delegates, :organizers).order(year: :desc, month: :desc, day: :desc)
   end
 
   def serializable_hash(options = nil)

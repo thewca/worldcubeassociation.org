@@ -73,7 +73,7 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
-    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day).includes(:country)
+    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
@@ -91,7 +91,7 @@ class CompetitionsController < ApplicationController
     end
 
     unless params[:region] == "all"
-      @competitions = @competitions.includes(:continent).select { |competition| competition.belongs_to_region?(params[:region]) }
+      @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
     end
 
     if params[:search].present?

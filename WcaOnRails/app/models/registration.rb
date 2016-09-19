@@ -54,13 +54,7 @@ class Registration < ActiveRecord::Base
   end
 
   def countryId
-    if user
-      country = Country.find_by_iso2(user.country_iso2)
-      if country
-        return country.id
-      end
-    end
-    read_attribute(:countryId)
+    user&.country&.id || read_attribute(:countryId)
   end
 
   def email

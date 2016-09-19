@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Format < ActiveRecord::Base
+class Format < AbstractCachedModel
   self.table_name = "Formats"
 
   has_many :preferred_formats

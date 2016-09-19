@@ -8,7 +8,6 @@ class Person < ActiveRecord::Base
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
-  has_one :country, primary_key: "countryId", foreign_key: "id"
 
   scope :current, -> { where(subId: 1) }
 
@@ -120,8 +119,7 @@ class Person < ActiveRecord::Base
   end
 
   def country_iso2
-    c = Country.find(countryId)
-    c ? c.iso2 : nil
+    country&.iso2
   end
 
   private def rank_for_event_type(event, type)

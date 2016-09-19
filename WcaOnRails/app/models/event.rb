@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Event < ActiveRecord::Base
+class Event < AbstractCachedModel
   self.table_name = "Events"
 
   has_many :competitions_events

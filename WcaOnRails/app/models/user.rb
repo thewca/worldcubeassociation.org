@@ -20,7 +20,6 @@ class User < ActiveRecord::Base
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
-  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
@@ -316,6 +315,10 @@ class User < ActiveRecord::Base
     devise_mailer.send(notification, self, *args).deliver_later
   end
 
+  def country
+    Country.find_by_iso2(country_iso2)
+  end
+
   def software_team?
     team_member?('software')
   end
@@ -547,7 +550,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search(query, params: {})
-    users = Person
+    users = Person.includes(:user)
     unless ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
       users = User.where.not(confirmed_at: nil).not_dummy_account
 
