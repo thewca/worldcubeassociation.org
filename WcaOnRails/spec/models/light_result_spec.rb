@@ -5,7 +5,7 @@ require 'spec_helper'
 
 RSpec.describe LightResult do
   def build_result(args)
-    LightResult.new(args)
+    LightResult.new(args, Country.cfind(args["countryId"]), Format.cfind(args["formatId"]), Round.cfind(args["roundId"]), Event.cfind(args["eventId"]))
   end
 
   def solve_time(centis)

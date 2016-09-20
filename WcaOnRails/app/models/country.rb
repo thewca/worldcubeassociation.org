@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Style/ClassVars
 class Country < AbstractCachedModel
   self.table_name = "Countries"
 
@@ -17,7 +16,6 @@ class Country < AbstractCachedModel
 
   def self.real
     @@real_countries ||= Country.uncached_real
-    @@real_countries
   end
 
   def self.find_by_iso2(iso2)

@@ -327,11 +327,11 @@ class Competition < ActiveRecord::Base
   end
 
   def continent
-    Continent.find(country.continentId)
+    Continent.cfind(country.continentId)
   end
 
   def country
-    Country.find(countryId)
+    Country.cfind(countryId)
   end
 
   def website
@@ -659,7 +659,7 @@ class Competition < ActiveRecord::Base
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
       .execute(relation.to_sql)
-      .each(as: :hash).map(&LightResult.method(:new))
+      .each(as: :hash).map { |r| LightResult.new(r, Country.cfind(r["countryId"]), Format.cfind(r["formatId"]), Round.cfind(r["roundId"]), Event.cfind(r["eventId"])) }
   end
 
   def started?

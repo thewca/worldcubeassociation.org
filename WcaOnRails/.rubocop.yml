@@ -50,3 +50,7 @@ Style/NumericPredicate:
 
 Style/SignalException:
   EnforcedStyle: semantic
+
+Style/ClassVars:
+  Exclude:
+    - app/models/country.rb
