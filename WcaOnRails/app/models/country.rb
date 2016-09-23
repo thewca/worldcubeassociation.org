@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class Country < AbstractCachedModel
+class Country < ActiveRecord::Base
+  include Cachable
   self.table_name = "Countries"
 
   belongs_to :continent, foreign_key: :continentId
@@ -19,7 +20,7 @@ class Country < AbstractCachedModel
   end
 
   def self.find_by_iso2(iso2)
-    call_by_id.values.select { |c| c.iso2 == iso2 }.first
+    c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
 
   COMPARE_LOCALIZED_NAMES = lambda do |a, b|

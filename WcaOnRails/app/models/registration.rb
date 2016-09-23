@@ -34,7 +34,7 @@ class Registration < ActiveRecord::Base
   end
 
   def name
-    user ? user.name : read_attribute(:name)
+    user&.name || read_attribute(:name)
   end
 
   attr_accessor :pos
@@ -50,7 +50,7 @@ class Registration < ActiveRecord::Base
   end
 
   def gender
-    user ? user.gender : read_attribute(:gender)
+    user&.gender || read_attribute(:gender)
   end
 
   def countryId
@@ -58,11 +58,11 @@ class Registration < ActiveRecord::Base
   end
 
   def email
-    user ? user.email : read_attribute(:email)
+    user&.email || read_attribute(:email)
   end
 
   def personId
-    user ? user.wca_id : read_attribute(:personId)
+    user&.wca_id || read_attribute(:personId)
   end
   alias_method :wca_id, :personId
 
@@ -71,11 +71,11 @@ class Registration < ActiveRecord::Base
   end
 
   def world_rank(event, type)
-    person ? person.world_rank(event, type) : nil
+    person&.world_rank(event, type)
   end
 
   def best_solve(event, type)
-    person ? person.best_solve(event, type) : SolveTime.new(event.id, type, 0)
+    person&.best_solve(event, type) || SolveTime.new(event.id, type, 0)
   end
 
   # Since Registration.events only includes saved events

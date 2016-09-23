@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class Round < AbstractCachedModel
+class Round < ActiveRecord::Base
+  include Cachable
   self.table_name = "Rounds"
 
   has_many :results, foreign_key: :roundId

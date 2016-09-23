@@ -115,7 +115,7 @@ class Person < ActiveRecord::Base
   end
 
   def country
-    Country.cfind(countryId)
+    Country.c_find(countryId)
   end
 
   def country_iso2
