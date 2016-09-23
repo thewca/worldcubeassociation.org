@@ -85,7 +85,7 @@ print $styles->getHTMLAll();
     <div class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-brand">
-          <a href="/forum/viewtopic.php?t=2028"><img src="<?php print pathToRoot(); ?>images/wca_rose.png"/></a>
+          <a href="/"><img src="<?php print pathToRoot(); ?>images/wca_logo.svg"/></a>
           <a href="/"><span>World Cube Association</span></a></div>
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
