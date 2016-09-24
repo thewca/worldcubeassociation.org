@@ -24,6 +24,8 @@ fr:
     XA: "Pays multiple (Asie)"
     XE: "Pays multiple (Europe)"
     XS: "Pays multiple (Amérique du Sud)"
+    MO: "Macau"
+    HK: "Hong Kong"
   continents:
     AfR: "Afrique"
     AsR: "Asie"
