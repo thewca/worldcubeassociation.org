@@ -5,6 +5,15 @@ pull_latest() {
   git pull --recurse-submodules && git submodule update
 }
 
+restart_app() {
+  # Attempt to restart unicorn gracefully as per
+  #  http://unicorn.bogomips.org/SIGNALS.html
+  pid=$(<"pids/unicorn.pid")
+  kill -SIGUSR2 $pid
+  sleep 5
+  kill -SIGQUIT $pid
+}
+
 rebuild_regs() {
   # Build WCA regulations
   # Uses wrc, see here: https://github.com/cubing/wca-regulations-compiler
@@ -108,15 +117,10 @@ rebuild_rails() {
     # Restart delayed_job worker.
     bin/delayed_job -p wca_worker --pool=mailers:1 --pool=*:1 start
 
-    # Attempt to restart unicorn gracefully as per
-    #  http://unicorn.bogomips.org/SIGNALS.html
-    pid=$(<"pids/unicorn.pid")
-    kill -SIGUSR2 $pid
-    sleep 5
-    kill -SIGQUIT $pid
+    restart_app
   )
 }
 
 cd "$(dirname "$0")"/..
-allowed_commands="pull_latest rebuild_rails rebuild_regs"
+allowed_commands="pull_latest restart_app rebuild_rails rebuild_regs"
 source scripts/_parse_args.sh
