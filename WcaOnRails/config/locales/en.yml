@@ -24,6 +24,8 @@ en:
     XA: "Multiple Countries (Asia)"
     XE: "Multiple Countries (Europe)"
     XS: "Multiple Countries (South America)"
+    MO: "Macao"
+    HK: "Hong Kong"
   continents:
     AfR: "Africa"
     AsR: "Asia"
