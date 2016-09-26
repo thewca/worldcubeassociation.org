@@ -98,8 +98,8 @@ class User < ActiveRecord::Base
 
   before_validation :maybe_clear_claimed_wca_id
   def maybe_clear_claimed_wca_id
-    if !claiming_wca_id && unconfirmed_wca_id_was.present?
-      if wca_id == unconfirmed_wca_id_was || unconfirmed_wca_id.blank?
+    unless claiming_wca_id
+      if (unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?
         self.unconfirmed_wca_id = nil
         self.delegate_to_handle_wca_id_claim = nil
       end

@@ -457,6 +457,12 @@ RSpec.describe User, type: :model do
         delegate.update!(delegate_status: nil, senior_delegate_id: nil)
       end
     end
+
+    it "when empty, is set to nil" do
+      user = FactoryGirl.create :user, unconfirmed_wca_id: nil
+      user.update! unconfirmed_wca_id: ""
+      expect(user.reload.unconfirmed_wca_id).to eq nil
+    end
   end
 
   it "#teams and #current_teams return unique team names" do
