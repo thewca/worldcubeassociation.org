@@ -49,7 +49,7 @@ if username == "cubing"
   if !Dir.exists? repo_root
     branch = chef_env_to_branch[node.chef_environment]
     git repo_root do
-      repository "https://github.com/cubing/worldcubeassociation.org.git"
+      repository "https://github.com/thewca/worldcubeassociation.org.git"
       revision branch
       # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
       # for the reason for checkout_branch and "enable_checkout false"
@@ -123,7 +123,7 @@ logrotate_app 'rails-wca' do
   path "#{repo_root}/WcaOnRails/log/production.log"
   size "512M"
   maxage 90
-  postrotate "[ ! -f /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid ] || kill -USR1 `cat /home/cubing/worldcubeassociation.org/WcaOnRails/pids/unicorn.pid`"
+  postrotate "[ ! -f #{repo_root}/WcaOnRails/pids/unicorn.pid ] || kill -USR1 `cat #{repo_root}/WcaOnRails/pids/unicorn.pid`"
   options ['nodelaycompress','compress']
 end
 

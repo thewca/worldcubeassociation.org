@@ -29,7 +29,7 @@ describe CompetitionsController do
           expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
 
-        # See: https://github.com/cubing/worldcubeassociation.org/issues/472
+        # See: https://github.com/thewca/worldcubeassociation.org/issues/472
         it "works when event_ids are passed as a hash instead of an array (facebook redirection)" do
           get :index, event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" }
           expect(assigns(:competitions)).to eq [competition2, competition4]

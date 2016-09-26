@@ -61,7 +61,7 @@ EOL
   fi
   # Let the root user do the git-ing, and then chown appropriately.
   if ! [ -d $repo_root ]; then
-    git clone -b $git_branch https://github.com/cubing/worldcubeassociation.org.git $repo_root
+    git clone -b $git_branch https://github.com/thewca/worldcubeassociation.org.git $repo_root
   else
     (
       cd $repo_root

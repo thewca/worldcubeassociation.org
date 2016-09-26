@@ -16,7 +16,7 @@ restart_app() {
 
 rebuild_regs() {
   # Build WCA regulations
-  # Uses wrc, see here: https://github.com/cubing/wca-regulations-compiler
+  # Uses wrc, see here: https://github.com/thewca/wca-regulations-compiler
   # pdf generations relies on wkhtmltopdf (with patched qt), which should be in $PATH
   build_folder=regulations/build
   regs_folder_root=WcaOnRails/app/views
@@ -29,8 +29,8 @@ rebuild_regs() {
   mkdir -p $build_folder
 
   # We want latest commit hash, so we do a shallow copy of the repositories (and not simply a wget)
-  git clone --depth=1 https://github.com/cubing/wca-regulations.git $build_folder/wca-regulations
-  git clone --depth=1 https://github.com/cubing/wca-regulations-translations.git $build_folder/wca-regulations-translations
+  git clone --depth=1 https://github.com/thewca/wca-regulations.git $build_folder/wca-regulations
+  git clone --depth=1 https://github.com/thewca/wca-regulations-translations.git $build_folder/wca-regulations-translations
   git_reg_hash=`git -C $build_folder/wca-regulations rev-parse --short HEAD`
   git_translations_hash=`git -C $build_folder/wca-regulations-translations rev-parse --short HEAD`
 

@@ -15,7 +15,7 @@ describe "registrations/export.csv.erb" do
       email: "bob@bob.com",
       events: [ Event.find("333") ],
       guests: 1,
-      guests_old: 'jane', # will go away. https://github.com/cubing/worldcubeassociation.org/issues/403
+      guests_old: 'jane', # will go away. https://github.com/thewca/worldcubeassociation.org/issues/403
     )
     assign(:competition, competition)
     assign(:registrations, competition.registrations)

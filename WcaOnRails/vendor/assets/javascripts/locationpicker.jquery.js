@@ -144,7 +144,7 @@
             }
             if (inputBinding.locationNameInput && gmapContext.settings.enableAutocomplete) {
                 gmapContext.autocomplete = new google.maps.places.SearchBox(inputBinding.locationNameInput.get(0));
-                //JFLY See https://github.com/cubing/worldcubeassociation.org/issues/190.
+                //JFLY See https://github.com/thewca/worldcubeassociation.org/issues/190.
                 //JFLYgoogle.maps.event.addListener(gmapContext.autocomplete, "place_changed", function() {
                     //JFLYvar place = gmapContext.autocomplete.getPlace();
                 google.maps.event.addListener(gmapContext.autocomplete, "places_changed", function() {//JFLY
