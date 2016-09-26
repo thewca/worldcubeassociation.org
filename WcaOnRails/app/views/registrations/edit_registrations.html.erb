@@ -23,7 +23,7 @@
             <% @competition.events.each do |event| %>
               <th>
                 <span title="<%= event.name %>"
-                      class="cubing-icon icon-<%= event.id %>"
+                      class="cubing-icon event-<%= event.id %>"
                       data-toggle="tooltip"
                       data-placement="bottom"
                       data-container="body">
@@ -62,7 +62,7 @@
                 <td>
                   <% if registration.events.include?(event) %>
                     <span title="<%= event.name %>"
-                          class="cubing-icon icon-<%= event.id %>"
+                          class="cubing-icon event-<%= event.id %>"
                           data-toggle="tooltip"
                           data-placement="bottom"
                           data-container="body">

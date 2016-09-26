@@ -2,7 +2,7 @@
 
 <%= render layout: "nav" do %>
   <h2>
-    <span class="cubing-icon icon-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
+    <span class="cubing-icon event-<%= @event.id %>"></span> <%= @event.name %> Psych Sheet
   </h2>
   <p>
   Sorted by: <%= @sort_by %>, sort by <a href="<%= competition_psych_sheet_event_path(@competition, @event.id) %>?sort_by=<%= @sort_by_second %>"><%= @sort_by_second %></a>

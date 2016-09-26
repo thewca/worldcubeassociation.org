@@ -28,7 +28,7 @@ Variables:
         <%= f.hidden_field :event_id %>
         <%= label_tag "#{events_association_name}_#{event.id}" do %>
           <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
-          <%= content_tag(:span, "", class: "cubing-icon icon-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+          <%= content_tag(:span, "", class: "cubing-icon event-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
         <% end %>
         <%= f.hidden_field :id %>
       </span>
