@@ -10,7 +10,7 @@ env:
     - PATH=$HOME/.local/bin:$PATH
 before_install:
   - pip install --user wrc
-  - git clone --depth=1 https://github.com/cubing/wca-regulations.git
+  - git clone --depth=1 https://github.com/thewca/wca-regulations.git
   - wrc wca-regulations -o WcaOnRails/app/views/regulations --target=json
   # Travis has an old install of PhantomJS without .bind() support, here we upgrade to
   # version 2.0.0

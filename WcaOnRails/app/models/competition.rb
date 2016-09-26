@@ -116,7 +116,7 @@ class Competition < ActiveRecord::Base
 
   # Currently we don't have a history of who was a delegate and when. Hence we need this
   # validation, so people cannot pass a non-delegate as a delegate (even for an old comp).
-  # See https://github.com/cubing/worldcubeassociation.org/issues/185#issuecomment-168402252
+  # See https://github.com/thewca/worldcubeassociation.org/issues/185#issuecomment-168402252
   # Once that is done, we'll be able to change this validation to work on old competitions.
   validate :delegates_must_be_delegates
   def delegates_must_be_delegates
@@ -278,7 +278,7 @@ class Competition < ActiveRecord::Base
   end
 
   # This callback updates all tables having the competition id, when the id changes.
-  # This should be deleted after competition id is made immutable: https://github.com/cubing/worldcubeassociation.org/pull/381
+  # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
   after_save :update_foreign_keys, if: :id_changed?
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|

@@ -150,7 +150,7 @@ wca.datetimepicker = function(){
   });
 
   // Using 'blur' here, because 'change' or 'dp.change' is not fired every time
-  // (see https://github.com/cubing/worldcubeassociation.org/issues/376#issuecomment-180547289).
+  // (see https://github.com/thewca/worldcubeassociation.org/issues/376#issuecomment-180547289).
   // Also, 'input' gets too annoying, because it flashes at every stroke until you have
   // a valid date typed.
   $datetimepicker.off('blur.wcaDateValidation').on('blur.wcaDateValidation', function() {

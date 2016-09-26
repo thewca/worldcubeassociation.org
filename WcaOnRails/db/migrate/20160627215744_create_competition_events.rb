@@ -10,7 +10,7 @@ class CreateCompetitionEvents < ActiveRecord::Migration
 
     # Move the data to the new table.
     Competition.all.each do |competition|
-      # See https://github.com/cubing/worldcubeassociation.org/issues/95 for
+      # See https://github.com/thewca/worldcubeassociation.org/issues/95 for
       # what these equal signs are about.
       (competition.eventSpecs || []).split.each do |event_spec|
         event = Event.find(event_spec.split("=")[0])

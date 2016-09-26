@@ -145,7 +145,7 @@ en:
         guests: "Guests"
         comments: "Comments"
         status: "Status"
-        # We can remove the following 3 keys once https://github.com/cubing/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
+        # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
         gender: "Gender"

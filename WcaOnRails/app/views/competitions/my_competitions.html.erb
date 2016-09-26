@@ -26,8 +26,8 @@
   <script>
     (function() {
       // Reflow table when its made visible. See:
-      // https://github.com/cubing/worldcubeassociation.org/issues/343
-      // changed to .trigger, see https://github.com/cubing/worldcubeassociation.org/issues/343#issuecomment-182916594
+      // https://github.com/thewca/worldcubeassociation.org/issues/343
+      // changed to .trigger, see https://github.com/thewca/worldcubeassociation.org/issues/343#issuecomment-182916594
       $('#past-competitions').on('show.bs.collapse', function(e) {
         $('#past-competitions table:not(.floatThead-table)').trigger('reflow');
       });

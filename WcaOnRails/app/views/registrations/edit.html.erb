@@ -13,7 +13,7 @@
     <% else %>
       <%= alert :info, "This person did not register with an account. You can edit their personal information below." %>
 
-      <%# We can remove this code once competitions only have registrations with accounts. See https://github.com/cubing/worldcubeassociation.org/issues/275 %>
+      <%# We can remove this code once competitions only have registrations with accounts. See https://github.com/thewca/worldcubeassociation.org/issues/275 %>
       <%= f.input :name %>
       <%= f.input :birthday, as: :date_picker %>
       <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>

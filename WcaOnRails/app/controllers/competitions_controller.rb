@@ -63,7 +63,7 @@ class CompetitionsController < ApplicationController
     @display = %w(list map admin).include?(params[:display]) ? params[:display] : "list"
 
     # Facebook adds indices to the params automatically when redirecting.
-    # See: https://github.com/cubing/worldcubeassociation.org/issues/472
+    # See: https://github.com/thewca/worldcubeassociation.org/issues/472
     if params[:event_ids].is_a?(Hash)
       params[:event_ids] = params[:event_ids].values
     end
