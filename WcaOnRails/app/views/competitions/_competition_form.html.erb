@@ -1,8 +1,6 @@
   <% provide(:include_gmaps, true) %>
   <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).isConfirmed? : false %>
   <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'edit-competition-form' } do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-
     <% if @competition.persisted? %>
       <% if @competition_admin_view %>
         <%= hidden_field_tag :competition_admin_view, "1" %>

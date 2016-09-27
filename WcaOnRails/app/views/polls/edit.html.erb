@@ -34,8 +34,6 @@
   <% end %>
 
   <%= horizontal_simple_form_for @poll, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-
     <%= f.input :question %>
     <%= f.input :comment, label: "Room for additional information" %>
     <%= f.input :multiple, label: "Allow multiple answers", disabled: is_actually_confirmed %>

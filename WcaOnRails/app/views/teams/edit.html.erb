@@ -4,8 +4,6 @@
   <h3><%= yield(:title) %></h3>
 
   <%= horizontal_simple_form_for @team, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-
     <%= f.input :friendly_id, label: "Friendly ID" %>
     <%= f.input :name %>
     <%= f.input :description %>

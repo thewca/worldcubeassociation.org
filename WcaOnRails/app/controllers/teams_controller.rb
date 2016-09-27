@@ -18,7 +18,6 @@ class TeamsController < ApplicationController
       flash[:success] = "Created new team"
       redirect_to edit_team_path(@team)
     else
-      flash[:danger] = "Failed to create team"
       render :new
     end
   end
@@ -33,7 +32,6 @@ class TeamsController < ApplicationController
       flash[:success] = "Updated team"
       redirect_to edit_team_path(@team)
     else
-      flash.now[:danger] = "Failed to update team"
       render :edit
     end
   end
