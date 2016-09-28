@@ -2,8 +2,6 @@
 
 <div class="container">
   <h1 class="text-center"><%= yield(:title) %> (<%= mail_to @user.email %>)</h1>
-  <%= render 'shared/error_messages', object: @user %>
-
   <% unless @user.confirmed_at %>
     <%= alert :warning, t('.unconfirmed_email', email: @user.email) %>
   <% end %>

@@ -44,8 +44,6 @@ fr:
         send_me_reset_password_instructions: "Envoyez-moi un mail pour réinitialiser mon mot de passe."
       edit:
         change_your_password: "Changer votre mot de passe"
-        new_password: "Nouveau mot de passe"
-        confirm_new_password: "Confirmer le nouveau mot de passe"
         change_my_password: "Changer mon mot de passe"
       no_token: "Vous ne pouvez pas accéder cette page sans provenir d'un email de réinitialisation. Si vous venez effectivement d'un email de réinitialisation, merci de vérifier que vous avez utiliser l'adresse complète qui vous a été donnée."
       send_instructions: "Vous allez recevoir un mail expliquant comment réinitialiser votre mot de passe dans quelques instants."

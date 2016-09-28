@@ -1,16 +1,12 @@
 <div class="container">
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
-    <%= bootstrap_devise_error_messages! %>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4><%= t('devise.passwords.new.forgot_your_password') %></h4>
       </div>
       <div class="panel-body">
-        <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, role: "form" }) do |f| %>
-          <div class="form-group">
-            <%= f.label :login %>
-            <%= f.text_field :login, autofocus: true, class: "form-control" %>
-          </div>
+        <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, role: "form" }) do |f| %>
+          <%= f.input :login, autofocus: true %>
 
           <%= f.submit t('devise.passwords.new.send_me_reset_password_instructions'), class: "btn btn-primary" %>
         <% end %>

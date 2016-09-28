@@ -16,8 +16,6 @@
       but it will not modify the Results table so previous results keep the old name.
     </p>
 
-    <%= render 'shared/error_messages', object: @person %>
-
     <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
       <%= f.input :wca_id, as: :user_ids, persons_table: true, only_one: true %>
       <div id="person-fields">

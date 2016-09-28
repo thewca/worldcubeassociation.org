@@ -152,7 +152,7 @@ RSpec.feature "Sign up" do
       # an error message about the full name.
       click_on "I have never competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_selector(".alert.alert-danger.alert-block li", count: 1)
+      expect(page).to have_selector(".alert.alert-danger li", count: 1)
       expect(page.find(".user_name span.help-block")).to have_content "can't be blank"
 
       fill_in "Full name", with: "Jackson John"
@@ -172,9 +172,9 @@ RSpec.feature "Sign up" do
 
       click_on "I have competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_selector(".alert.alert-danger.alert-block li", count: 2)
-      expect(page.find(".alert.alert-danger.alert-block")).to have_content "Delegate id to handle wca id claim required"
-      expect(page.find(".alert.alert-danger.alert-block")).to have_content "Unconfirmed WCA ID required"
+      expect(page).to have_selector(".alert.alert-danger li", count: 2)
+      expect(page.find(".alert.alert-danger")).to have_content "Delegate id to handle wca id claim required"
+      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
     end
   end
 end

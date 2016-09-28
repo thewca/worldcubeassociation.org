@@ -146,6 +146,14 @@ module ApplicationHelper
     content_tag(:option, t('common.all_regions'), value: "all") + grouped_options_for_select(regions, selected_id)
   end
 
+  def simple_form_for(resource, options = {}, &block)
+    super do |f|
+      error_messages = render('shared/error_messages', object: f.object)
+      form = capture(f, &block)
+      error_messages + form
+    end
+  end
+
   def horizontal_simple_form_for(resource, options = {}, &block)
     options[:html] ||= {}
     options[:html][:class] ||= ""
