@@ -13,6 +13,8 @@ if node.chef_environment == "production"
   backup_command += "&& #{repo_root}/scripts/backup.sh"
 end
 unless node.chef_environment.start_with?("development")
+  execute "pip2 install github-backup"
+
   cron "backup" do
     minute '0'
     hour '0'
