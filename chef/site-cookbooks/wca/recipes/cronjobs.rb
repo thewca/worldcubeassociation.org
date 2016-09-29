@@ -7,7 +7,7 @@ path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
 secrets_folder = "#{repo_root}/secrets"
 db_dump_folder = "#{secrets_folder}/wca_db"
 dump_db_command = "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
-dump_gh_command = "github-backup --incremental --all -t #{secrets['GITHUB_BACKUP_ACCESS_TOKEN']} --organization thewca -o #{secrets_folder}/github-thewca"
+dump_gh_command = "github-backup --incremental --fork --private --all -t #{secrets['GITHUB_BACKUP_ACCESS_TOKEN']} --organization thewca -o #{secrets_folder}/github-thewca"
 backup_command = "#{dump_db_command} && #{dump_gh_command}"
 if node.chef_environment == "production"
   backup_command += "&& #{repo_root}/scripts/backup.sh"
