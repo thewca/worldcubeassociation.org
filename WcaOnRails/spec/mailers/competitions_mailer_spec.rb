@@ -66,6 +66,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.to).to eq ["delegates@worldcubeassociation.org"]
       expect(mail.cc).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
     end
 
     it "renders the body" do
