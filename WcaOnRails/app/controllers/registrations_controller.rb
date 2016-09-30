@@ -70,15 +70,14 @@ class RegistrationsController < ApplicationController
         flash[:danger] = I18n.t('registrations.flash.cannot_delete')
       else
         @registration.destroy!
-        mailer = RegistrationsMailer.notify_organizers_of_deleted_registration(@registration)
-        mailer.deliver_now
+        RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_later
         flash[:success] = I18n.t('registrations.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
       @registration.destroy!
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
-      mailer.deliver_now
+      mailer.deliver_later
       flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(" "))
       redirect_to competition_edit_registrations_path(@registration.competition)
     end
@@ -111,7 +110,7 @@ class RegistrationsController < ApplicationController
       registrations.each do |registration|
         if !registration.accepted?
           registration.update!(accepted_at: Time.now)
-          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_now
+          RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
         end
       end
       flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: registrations.length)
@@ -119,14 +118,14 @@ class RegistrationsController < ApplicationController
       registrations.each do |registration|
         if !registration.pending?
           registration.update!(accepted_at: nil)
-          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_now
+          RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         end
       end
       flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: registrations.length)
     when "delete-selected"
       registrations.each do |registration|
         registration.destroy
-        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now
+        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
       end
       flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: registrations.length)
     when "export-selected"
@@ -155,11 +154,11 @@ class RegistrationsController < ApplicationController
     if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
-        mailer.deliver_now
+        mailer.deliver_later
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       elsif was_accepted && !@registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_pending_registration(@registration)
-        mailer.deliver_now
+        mailer.deliver_later
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
       else
         flash[:success] = I18n.t('registrations.flash.updated')
@@ -199,8 +198,8 @@ class RegistrationsController < ApplicationController
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
       flash[:success] = I18n.t('registrations.flash.registered')
-      RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_now
-      RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_now
+      RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
+      RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path
     else
       render :register

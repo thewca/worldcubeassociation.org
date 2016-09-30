@@ -307,8 +307,13 @@ class User < ActiveRecord::Base
   # time to notify their delegate!
   def after_confirmation
     if unconfirmed_wca_id.present?
-      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_now
+      WcaIdClaimMailer.notify_delegate_of_wca_id_claim(self).deliver_later
     end
+  end
+
+  # From https://github.com/plataformatec/devise#activejob-integration
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
   end
 
   def software_team?

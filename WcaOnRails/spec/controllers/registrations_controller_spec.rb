@@ -38,7 +38,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
         patch :update, id: registration.id, registration: { accepted_at: Time.now }
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.accepted?).to be true
     end
 
@@ -48,7 +48,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
       expect do
         patch :update, id: registration.id, registration: { accepted_at: nil, updated_at: registration.updated_at }, from_admin_view: true
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.pending?).to be true
       expect(response).to redirect_to edit_registration_path(registration)
     end
@@ -58,7 +58,7 @@ RSpec.describe RegistrationsController do
 
       expect do
         delete :destroy, id: registration.id
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      end.to change { enqueued_jobs.size }.by(1)
 
       expect(flash[:success]).to eq "Deleted registration and emailed #{registration.email}"
       expect(Registration.find_by_id(registration.id)).to eq nil
@@ -72,7 +72,7 @@ RSpec.describe RegistrationsController do
       expect do
         xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
                                               selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      end.to change { enqueued_jobs.size }.by(2)
       expect(Registration.find_by_id(registration.id)).to eq nil
       expect(Registration.find_by_id(registration2.id)).to eq nil
     end
@@ -90,7 +90,7 @@ RSpec.describe RegistrationsController do
       expect do
         xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "reject-selected",
                                               selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"]
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.pending?).to be true
       expect(registration2.reload.pending?).to be true
       expect(pending_registration.reload.pending?).to be true
@@ -108,7 +108,7 @@ RSpec.describe RegistrationsController do
       expect do
         xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "accept-selected",
                                               selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"]
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
       expect(accepted_registration.reload.accepted?).to be true
@@ -141,7 +141,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
         post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "" }
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      end.to change { enqueued_jobs.size }.by(2)
 
       expect(organizer.registrations).to eq competition.registrations
     end
@@ -161,7 +161,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
         post :create, competition_id: competition.id, registration: { registration_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "" }
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
+      end.to change { enqueued_jobs.size }.by(2)
 
       registration = Registration.find_by_user_id(user.id)
       expect(registration.competitionId).to eq competition.id
@@ -173,7 +173,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
       expect do
         delete :destroy, id: registration.id, user_is_deleting_theirself: true
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      end.to change { enqueued_jobs.size }.by(1)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).to eq nil
@@ -185,7 +185,7 @@ RSpec.describe RegistrationsController do
 
       expect do
         delete :destroy, id: registration.id, user_is_deleting_theirself: true
-      end.to change { ActionMailer::Base.deliveries.length }.by(0)
+      end.to change { enqueued_jobs.size }.by(0)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).not_to eq nil

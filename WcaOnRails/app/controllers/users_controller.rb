@@ -91,7 +91,7 @@ class UsersController < ApplicationController
         flash[:success] = I18n.t('wca.successes.messages.wca_id_claimed',
                                  wca_id: @user.unconfirmed_wca_id,
                                  user: @user.delegate_to_handle_wca_id_claim.name)
-        WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_now
+        WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_later
         redirect_to profile_claim_wca_id_path
       else
         redirect_to edit_user_url(@user, params.permit(:section))

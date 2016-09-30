@@ -71,7 +71,7 @@ RSpec.feature "Sign up" do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(u).and_call_original
       expect do
         visit "/users/confirmation?confirmation_token=#{u.confirmation_token}"
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      end.to change { enqueued_jobs.size }.by(1)
     end
 
     it "remembers that they have competed before on validation error" do
