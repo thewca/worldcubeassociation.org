@@ -54,7 +54,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.includes(:user, :registration_events, :events).order("users.name")
+    @registrations = @competition.registrations.accepted.includes(:user, :registration_competition_events, :events).order("users.name")
   end
 
   def edit
@@ -215,7 +215,7 @@ class RegistrationsController < ApplicationController
       :birthday,
       :guests,
       :comments,
-      registration_events_attributes: [:id, :event_id, :_destroy],
+      registration_competition_events_attributes: [:id, :competition_event_id, :_destroy],
     ]
     if current_user.can_manage_competition?(competition_from_params)
       permitted_params << :accepted_at

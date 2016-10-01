@@ -310,6 +310,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  # For associated_events_picker
+  def events_to_associated_events(events)
+    events.map do |event|
+      user_preferred_events.find_by_event_id(event.id) || user_preferred_events.build(event_id: event.id)
+    end
+  end
+
   def country
     Country.find_by_iso2(country_iso2)
   end

@@ -6,29 +6,38 @@ Variables:
  - events_association_name -> name of the associated events relation
  - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
  - selected_events -> a relation or an Array of Event objects that whould be marked as selected
+
+Note: form_builder.object is the object having associated events.
 %>
 
-<% label ||= t('registrations.events') %>
-<% disabled ||= false %>
-<% allowed_events ||= Event.official %>
+<%
+  label ||= t('registrations.events')
+  disabled ||= false
+  allowed_events ||= Event.official
 
-<%# Note: form_builder.object is the object having associated events. %>
-<% associated_events = form_builder.object.send(events_association_name)
-   all_events = allowed_events.map do |event|
-     associated_events.find_by_event_id(event.id) || associated_events.build(event_id: event.id)
-   end %>
+  using_competition_events = events_association_name == :registration_competition_events
+  all_events = form_builder.object.events_to_associated_events(allowed_events)
+  errors = form_builder.object.errors.messages[events_association_name] || []
+%>
 
-<% errors = form_builder.object.errors.messages[events_association_name] || [] %>
 <div class="form-group <%= "has-error" unless errors.empty? %>">
   <%= label_tag events_association_name, label, class: "associated-events-label" %>
   <div id="<%= events_association_name %>" class="associated-events">
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
       <span class="event-checkbox <%= "disabled" if disabled %>">
         <% event = f.object.event %>
-        <%= f.hidden_field :event_id %>
+        <% if using_competition_events %>
+          <%= f.hidden_field :competition_event_id %>
+        <% else %>
+          <% f.hidden_field :event_id %>
+        <% end %>
         <%= label_tag "#{events_association_name}_#{event.id}" do %>
           <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
-          <%= content_tag(:span, "", class: "cubing-icon event-#{event.id}", data: { toggle: "tooltip", placement: "top" }, title: event.name ) %>
+          <%= content_tag(:span, "",
+                          class: "cubing-icon event-#{event.id}",
+                          data: { toggle: "tooltip", placement: "top" },
+                          title: event.name
+          ) %>
         <% end %>
         <%= f.hidden_field :id %>
       </span>

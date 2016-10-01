@@ -284,6 +284,23 @@ RSpec.describe Competition do
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
 
+  describe "adding/removing events" do
+    let(:two_by_two) { Event.find "222" }
+    let(:three_by_three) { Event.find "333" }
+    let(:competition) { FactoryGirl.create(:competition, use_wca_registration: true, events: [ two_by_two, three_by_three ]) }
+
+    it "removes registrations when event is removed" do
+      r = FactoryGirl.create(:registration, competition: competition, competition_events: competition.competition_events)
+
+      expect(RegistrationCompetitionEvent.count).to eq 2
+      competition.competition_events.joins(:event).find_by(event: two_by_two).destroy!
+      expect(RegistrationCompetitionEvent.count).to eq 1
+
+      r.reload
+      expect(r.events).to match_array [three_by_three]
+    end
+  end
+
   describe "when changing the id of a competition" do
     let(:competition) { FactoryGirl.create(:competition, :with_delegate, :with_organizer, use_wca_registration: true) }
 
