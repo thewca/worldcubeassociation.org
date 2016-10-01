@@ -173,7 +173,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
       expect do
         delete :destroy, id: registration.id, user_is_deleting_theirself: true
-      end.to change { enqueued_jobs.size }.by(1)
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id)).to eq nil

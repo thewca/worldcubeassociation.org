@@ -70,7 +70,7 @@ class RegistrationsController < ApplicationController
         flash[:danger] = I18n.t('registrations.flash.cannot_delete')
       else
         @registration.destroy!
-        RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_later
+        RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
         flash[:success] = I18n.t('registrations.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
