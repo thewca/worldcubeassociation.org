@@ -58,7 +58,7 @@ RSpec.describe RegistrationsController do
 
       expect do
         delete :destroy, id: registration.id
-      end.to change { enqueued_jobs.size }.by(1)
+      end.to change { ActionMailer::Base.deliveries.length }.by(1)
 
       expect(flash[:success]).to eq "Deleted registration and emailed #{registration.email}"
       expect(Registration.find_by_id(registration.id)).to eq nil
@@ -72,7 +72,7 @@ RSpec.describe RegistrationsController do
       expect do
         xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
                                               selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
-      end.to change { enqueued_jobs.size }.by(2)
+      end.to change { ActionMailer::Base.deliveries.length }.by(2)
       expect(Registration.find_by_id(registration.id)).to eq nil
       expect(Registration.find_by_id(registration2.id)).to eq nil
     end

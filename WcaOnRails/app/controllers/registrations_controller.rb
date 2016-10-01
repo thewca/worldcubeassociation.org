@@ -77,7 +77,7 @@ class RegistrationsController < ApplicationController
     elsif current_user.can_manage_competition?(@competition)
       @registration.destroy!
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
-      mailer.deliver_later
+      mailer.deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
       flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(" "))
       redirect_to competition_edit_registrations_path(@registration.competition)
     end
@@ -125,7 +125,7 @@ class RegistrationsController < ApplicationController
     when "delete-selected"
       registrations.each do |registration|
         registration.destroy
-        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
+        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
       end
       flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: registrations.length)
     when "export-selected"
