@@ -30,8 +30,7 @@ module Cachable
     end
 
     def c_find(id)
-      c_all_by_id unless class_variable_defined?(:@@models_by_id)
-      class_variable_get(:@@models_by_id)[id]
+      c_all_by_id[id]
     end
   end
 end
