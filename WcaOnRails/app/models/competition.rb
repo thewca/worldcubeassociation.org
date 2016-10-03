@@ -166,7 +166,7 @@ class Competition < ActiveRecord::Base
         case association_name
         when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
              'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
-          # Should be cloned.
+          # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
@@ -326,6 +326,14 @@ class Competition < ActiveRecord::Base
     update_column :external_website, nil
   end
 
+  def continent
+    Continent.c_find(country.continentId)
+  end
+
+  def country
+    Country.c_find(countryId)
+  end
+
   def website
     generate_website ? internal_website : external_website
   end
@@ -432,7 +440,7 @@ class Competition < ActiveRecord::Base
   end
 
   def belongs_to_region?(region)
-    self.countryId == region || self.country.continentId == region
+    self.countryId == region || self.continent.id == region
   end
 
   def contains?(search_param)
@@ -651,27 +659,15 @@ class Competition < ActiveRecord::Base
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
       .execute(relation.to_sql)
-      .each(as: :hash).map(&LightResult.method(:new))
+      .each(as: :hash).map { |r| LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"])) }
   end
 
   def started?
     !start_date.nil? && start_date < Date.today
   end
 
-  def country_name
-    country ? country.name : nil
-  end
-
-  def country
-    Country.find_by_id(countryId)
-  end
-
   def organizers_or_delegates
     self.organizers.empty? ? self.delegates : self.organizers
-  end
-
-  def continent
-    country ? Continent.find_by_id(country.continentId) : nil
   end
 
   def psych_sheet_event(event, sort_by, sort_by_second)
@@ -754,7 +750,7 @@ class Competition < ActiveRecord::Base
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    competitions.order(year: :desc, month: :desc, day: :desc)
+    competitions.includes(:delegates, :organizers).order(year: :desc, month: :desc, day: :desc)
   end
 
   def serializable_hash(options = nil)

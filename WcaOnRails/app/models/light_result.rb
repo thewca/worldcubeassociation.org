@@ -14,16 +14,17 @@ class LightResult
               :best,
               :average,
               :personName,
-              :eventId,
-              :formatId,
-              :roundId,
+              :event,
+              :event,
+              :format,
+              :round,
               :pos,
               :personId,
               :regionalSingleRecord,
               :regionalAverageRecord,
-              :countryId
+              :country
 
-  def initialize(r)
+  def initialize(r, country, format, round, event)
     @value1 = r["value1"]
     @value2 = r["value2"]
     @value3 = r["value3"]
@@ -32,34 +33,26 @@ class LightResult
     @best = r["best"]
     @average = r["average"]
     @personName = r["personName"]
-    @eventId = r["eventId"]
-    @formatId = r["formatId"]
-    @roundId = r["roundId"]
     @pos = r["pos"]
     @personId = r["personId"]
     @regionalSingleRecord = r["regionalSingleRecord"]
     @regionalAverageRecord = r["regionalAverageRecord"]
-    @countryId = r["countryId"]
+    @country = country
+    @format = format
+    @round = round
+    @event = event
+  end
+
+  def eventId
+    event.id
+  end
+
+  def roundId
+    round.id
   end
 
   def results_path
     "/results/p.php?i=#{personId}"
-  end
-
-  def event
-    Event.find(eventId)
-  end
-
-  def round
-    Round.find(roundId)
-  end
-
-  def format
-    Format.find_by_id(formatId)
-  end
-
-  def country
-    Country.find(countryId)
   end
 
   def wca_id

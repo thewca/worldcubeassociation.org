@@ -210,10 +210,10 @@ class CompetitionsController < ApplicationController
               uniqueName = personName
             end
             record_strs = results.sort_by do |r|
-              round = Round.find(r.roundId)
-              [Event.find(r.eventId).rank, round.rank]
+              round = Round.c_find(r.roundId)
+              [Event.c_find(r.eventId).rank, round.rank]
             end.map do |result|
-              event = Event.find(result.eventId)
+              event = Event.c_find(result.eventId)
               record_strs = []
               if result.regionalSingleRecord == code
                 record_strs << "#{event.cellName} #{result.to_s :best} (single)"

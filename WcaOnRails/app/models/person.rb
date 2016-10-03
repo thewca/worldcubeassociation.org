@@ -115,12 +115,11 @@ class Person < ActiveRecord::Base
   end
 
   def country
-    Country.find(countryId)
+    Country.c_find(countryId)
   end
 
   def country_iso2
-    c = Country.find(countryId)
-    c ? c.iso2 : nil
+    country&.iso2
   end
 
   private def rank_for_event_type(event, type)

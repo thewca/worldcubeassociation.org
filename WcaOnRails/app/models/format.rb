@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Format < ActiveRecord::Base
+  include Cachable
   self.table_name = "Formats"
 
   has_many :preferred_formats
