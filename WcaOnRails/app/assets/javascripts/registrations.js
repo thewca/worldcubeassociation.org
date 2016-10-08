@@ -27,3 +27,9 @@ onPage('registrations#edit_registrations', function() {
     }
   });
 });
+
+onPage('registrations#index', function() {
+  // To improve performance we do the first sorting by name server-side.
+  // This makes the interface resemble the order.
+  $('.name .sortable').addClass('asc');
+});
