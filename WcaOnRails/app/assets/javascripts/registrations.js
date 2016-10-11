@@ -12,7 +12,7 @@ onPage('registrations#edit_registrations', function() {
     $('.selected-pending-registrations-actions').toggle($selectedPendingRows.length > 0);
 
     var emails = $selectedRows.find("a[href^=mailto]").map(function() { return this.href.match(/^mailto:(.*)/)[1]; }).toArray();
-    document.getElementById("email-selected").href = "mailto:" + emails.join(",");
+    document.getElementById("email-selected").href = "mailto:?bcc=" + emails.join(",");
   };
   $registrationsTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function() {
     // Wait in order to let bootstrap-table script add a 'selected' class to the appropriate rows
