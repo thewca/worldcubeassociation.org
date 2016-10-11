@@ -10,7 +10,7 @@ dump_db_command = "#{repo_root}/scripts/db.sh dump #{db_dump_folder}"
 dump_gh_command = "github-backup --incremental --fork --private --all -t #{secrets['GITHUB_BACKUP_ACCESS_TOKEN']} --organization thewca -o #{secrets_folder}/github-thewca"
 backup_command = "#{dump_db_command} && #{dump_gh_command}"
 if node.chef_environment == "production"
-  backup_command += "&& #{repo_root}/scripts/backup.sh"
+  backup_command += " && #{repo_root}/scripts/backup.sh"
 end
 unless node.chef_environment.start_with?("development")
   execute "pip2 install github-backup"
