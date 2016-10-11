@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Registration < ActiveRecord::Base
-  self.table_name = "Preregs"
-
   scope :pending, -> { where(accepted_at: nil) }
   scope :accepted, -> { where.not(accepted_at: nil) }
 

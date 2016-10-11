@@ -673,18 +673,18 @@ class Competition < ActiveRecord::Base
   def psych_sheet_event(event, sort_by, sort_by_second)
     competition_event = competition_events.find_by!(event_id: event.id)
     joinsql = <<-ENDSQL
-      JOIN registration_competition_events ON registration_competition_events.registration_id = Preregs.id
-      JOIN users ON users.id = Preregs.user_id
+      JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
+      JOIN users ON users.id = registrations.user_id
       JOIN Countries ON Countries.iso2 = users.country_iso2
       LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
       LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
     ENDSQL
 
     selectsql = <<-ENDSQL
-      Preregs.id,
+      registrations.id,
       users.name select_name,
       users.wca_id select_wca_id,
-      Preregs.accepted_at,
+      registrations.accepted_at,
       Countries.name select_country,
       registration_competition_events.competition_event_id,
       RanksAverage.worldRank average_rank,
