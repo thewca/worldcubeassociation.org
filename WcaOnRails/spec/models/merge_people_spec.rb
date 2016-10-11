@@ -57,6 +57,12 @@ describe MergePeople do
     expect(merge_people).to be_invalid
   end
 
+  it "requires person2 to not have an account" do
+    FactoryGirl.create :user, :wca_id, person: person2
+    expect(merge_people).to be_invalid
+    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Must not have an account"]
+  end
+
   it "can actually merge people" do
     result1 = FactoryGirl.create(:result, person: person1)
     result2 = FactoryGirl.create(:result, person: person2)

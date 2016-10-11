@@ -57,6 +57,13 @@ class MergePeople
     end
   end
 
+  validate :person2_must_not_have_associated_user
+  def person2_must_not_have_associated_user
+    if @person2&.user
+      errors.add(:person2_wca_id, "Must not have an account")
+    end
+  end
+
   def do_merge
     if !valid?
       return false
