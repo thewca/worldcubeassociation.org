@@ -310,11 +310,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # From https://github.com/plataformatec/devise#activejob-integration
-  def send_devise_notification(notification, *args)
-    devise_mailer.send(notification, self, *args).deliver_later
-  end
-
   def country
     Country.find_by_iso2(country_iso2)
   end
