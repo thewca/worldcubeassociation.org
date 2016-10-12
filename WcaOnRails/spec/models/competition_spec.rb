@@ -199,6 +199,12 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:invisible]).to eq "This competition is not visible to the public."
     end
+
+    it "warns if competition has no events" do
+      competition = FactoryGirl.build :competition, events: []
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:events]).to eq "Please add at least one event before confirming the competition."
+    end
   end
 
   context "info_for" do

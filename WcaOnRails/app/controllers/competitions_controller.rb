@@ -24,7 +24,7 @@ class CompetitionsController < ApplicationController
     competition
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events]
 
   before_action -> { redirect_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -232,6 +232,20 @@ class CompetitionsController < ApplicationController
     comp.update!(results_posted_at: Time.now)
     comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
     create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+  end
+
+  def edit_events
+    @competition = Competition.find(params[:id])
+  end
+
+  def update_events
+    @competition = Competition.find(params[:id])
+    if @competition.update_attributes(competition_params)
+      flash[:success] = t('.update_success')
+      redirect_to edit_events_path(@competition)
+    else
+      render :edit_events
+    end
   end
 
   def admin_edit

@@ -98,9 +98,13 @@ class Competition < ActiveRecord::Base
 
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
-    if competition_events.reject(&:marked_for_destruction?).empty?
+    if no_events?
       errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
     end
+  end
+
+  def no_events?
+    competition_events.reject(&:marked_for_destruction?).empty?
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
@@ -139,6 +143,10 @@ class Competition < ActiveRecord::Base
 
       if self.name.length > 32
         warnings[:name] = I18n.t('competitions.messages.name_too_long')
+      end
+
+      if no_events?
+        warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
     end
 

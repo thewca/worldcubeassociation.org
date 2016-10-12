@@ -527,6 +527,7 @@ en:
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      must_have_events: "Please add at least one event before confirming the competition."
       create_success: "Successfully created new competition!"
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over, we are working to upload the results as soon as possible!"
@@ -604,6 +605,7 @@ en:
       confirmed_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{board} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
       awaiting_confirmation_html: "Fill in all the fields and click Confirm when you're ready for the %{board} to approve this competition."
+      submit_modify_value: "Modify Events"
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
@@ -626,6 +628,8 @@ en:
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
+    update_events:
+      update_success: "Successfully updated the competition events"
     update:
       save_success: "Successfully saved competition"
       confirm_success: "Successfully confirmed competition. Check your email, and wait for the Board to announce it!"
@@ -666,6 +670,7 @@ en:
         edit: "Edit"
         clone: "Clone"
         orga_view: "Organizer view"
+        event_view: "Manage events"
         admin_view: "Admin view"
         tabs: "Manage tabs"
         delegate_report: "Delegate report"
