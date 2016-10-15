@@ -319,6 +319,9 @@ describe CompetitionsController do
       end
 
       it 'cannot pass a non-delegate as delegate' do
+        # Update competition to be in the future
+        competition.update_attributes(start_date: 1.day.from_now.strftime("%F"), end_date: 1.day.from_now.strftime("%F"))
+
         delegate_ids_old = competition.delegate_ids
         fake_delegate = FactoryGirl.create(:user)
         post :update, id: competition, competition: { delegate_ids: fake_delegate.id }

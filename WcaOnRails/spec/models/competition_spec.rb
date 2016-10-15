@@ -23,6 +23,23 @@ RSpec.describe Competition do
     end
   end
 
+  context "delegates" do
+    it "delegates for future comps must be current delegates" do
+      competition = FactoryGirl.build :competition, :with_delegate, :future
+      competition.delegates.first.update_columns(delegate_status: nil)
+
+      expect(competition).to be_invalid
+      expect(competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
+    end
+
+    it "delegates for past comps may no longer be delegates" do
+      competition = FactoryGirl.build :competition, :with_delegate, starts: 1.year.ago
+      competition.delegates.first.update_columns(delegate_status: nil)
+
+      expect(competition).to be_valid
+    end
+  end
+
   it "handles missing start/end_date" do
     competition = FactoryGirl.build :competition, start_date: nil, end_date: nil
     competition2 = FactoryGirl.build :competition, start_date: nil, end_date: nil

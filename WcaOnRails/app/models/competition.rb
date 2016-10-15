@@ -114,11 +114,14 @@ class Competition < ActiveRecord::Base
     self.isConfirmed || self.showAtAll
   end
 
-  # Currently we don't have a history of who was a delegate and when. Hence we need this
-  # validation, so people cannot pass a non-delegate as a delegate (even for an old comp).
+  # Enforce that the users marked as delegates for this competition are
+  # actually delegates. Note: just because someone (legally) delegated a
+  # competition in the past does not mean that they are still a delegate,
+  # so we do not enforce this validation for past competitions.
   # See https://github.com/thewca/worldcubeassociation.org/issues/185#issuecomment-168402252
-  # Once that is done, we'll be able to change this validation to work on old competitions.
-  validate :delegates_must_be_delegates
+  # for a discussion about tracking delegate history so we could tighten up
+  # this validation.
+  validate :delegates_must_be_delegates, unless: :is_over?
   def delegates_must_be_delegates
     if !self.delegates.all?(&:any_kind_of_delegate?)
       errors.add(:delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
