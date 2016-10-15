@@ -1,0 +1,25 @@
+<% provide(:title, 'Server Status') %>
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <% if @everything_good %>
+    <%= alert :success, "We're fine. We're all fine here, now, thank you. How are you?" %>
+  <% else %>
+    <%= alert :danger, "Check below, something may be wrong." %>
+  <% end %>
+
+  <ul>
+    <li>
+      Jobs:
+      <% if @oldest_job_that_should_have_run_by_now %>
+        <span class="label label-warning">
+          Uh oh! Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
+          <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
+          ago and still has not run.
+        </span>
+      <% else %>
+        <span class="label label-success">Looking good!</span>
+      <% end %>
+    </li>
+  </ul>
+</div>
