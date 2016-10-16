@@ -3,6 +3,7 @@ require 'rails_helper'
 
 describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
+  let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
     describe "selecting events" do
@@ -314,21 +315,18 @@ describe CompetitionsController do
       let(:organizer) { FactoryGirl.create(:delegate) }
       before :each do
         competition.organizers << organizer
-        competition.save!
+        future_competition.organizers << organizer
         sign_in organizer
       end
 
       it 'cannot pass a non-delegate as delegate' do
-        # Update competition to be in the future
-        competition.update_attributes(start_date: 1.day.from_now.strftime("%F"), end_date: 1.day.from_now.strftime("%F"))
-
-        delegate_ids_old = competition.delegate_ids
+        delegate_ids_old = future_competition.delegate_ids
         fake_delegate = FactoryGirl.create(:user)
-        post :update, id: competition, competition: { delegate_ids: fake_delegate.id }
+        post :update, id: future_competition, competition: { delegate_ids: fake_delegate.id }
         invalid_competition = assigns(:competition)
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
-        competition.reload
-        expect(competition.delegate_ids).to eq delegate_ids_old
+        future_competition.reload
+        expect(future_competition.delegate_ids).to eq delegate_ids_old
       end
 
       it 'can change the delegate' do

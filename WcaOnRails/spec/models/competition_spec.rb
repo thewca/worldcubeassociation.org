@@ -32,8 +32,8 @@ RSpec.describe Competition do
       expect(competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
     end
 
-    it "delegates for past comps may no longer be delegates" do
-      competition = FactoryGirl.build :competition, :with_delegate, starts: 1.year.ago
+    it "delegates for past comps no longer need to be delegates" do
+      competition = FactoryGirl.build :competition, :with_delegate, :past
       competition.delegates.first.update_columns(delegate_status: nil)
 
       expect(competition).to be_valid
@@ -211,7 +211,7 @@ RSpec.describe Competition do
     end
 
     it "displays info if competition is in progress" do
-      competition = FactoryGirl.build :competition, starts: Date.today
+      competition = FactoryGirl.build :competition, :ongoing
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
       expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"

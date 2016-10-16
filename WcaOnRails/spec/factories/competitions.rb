@@ -15,6 +15,18 @@ FactoryGirl.define do
     start_date { starts.nil? ? nil : starts.strftime("%F") }
     end_date { ends.nil? ? nil : ends.strftime("%F") }
 
+    trait :future do
+      starts 1.week.from_now
+    end
+
+    trait :ongoing do
+      starts Time.now
+    end
+
+    trait :past do
+      starts 1.week.ago
+    end
+
     events { Event.where(id: %w(333 333oh)) }
 
     venue "My backyard"
