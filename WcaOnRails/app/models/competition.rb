@@ -671,21 +671,22 @@ class Competition < ActiveRecord::Base
   end
 
   def psych_sheet_event(event, sort_by, sort_by_second)
+    competition_event = competition_events.find_by!(event_id: event.id)
     joinsql = <<-ENDSQL
-      join registration_events on registration_events.registration_id = Preregs.id
-      join users on users.id = Preregs.user_id
-      join Countries on Countries.iso2 = users.country_iso2
-      left join RanksSingle on RanksSingle.personId = users.wca_id and RanksSingle.eventId = '#{event.id}'
-      left join RanksAverage on RanksAverage.personId = users.wca_id and RanksAverage.eventId = '#{event.id}'
+      JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
+      JOIN users ON users.id = registrations.user_id
+      JOIN Countries ON Countries.iso2 = users.country_iso2
+      LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
+      LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
     ENDSQL
 
     selectsql = <<-ENDSQL
-      Preregs.id,
+      registrations.id,
       users.name select_name,
       users.wca_id select_wca_id,
-      Preregs.accepted_at,
+      registrations.accepted_at,
       Countries.name select_country,
-      registration_events.event_id,
+      registration_competition_events.competition_event_id,
       RanksAverage.worldRank average_rank,
       ifnull(RanksAverage.best, 0) average_best,
       RanksSingle.worldRank single_rank,
@@ -697,7 +698,7 @@ class Competition < ActiveRecord::Base
     registrations = self.registrations.
                          accepted.
                          joins(joinsql).
-                         where("registration_events.event_id=?", event.id).
+                         where("registration_competition_events.competition_event_id=?", competition_event.id).
                          order(sort_clause).
                          select(selectsql)
 
@@ -716,6 +717,13 @@ class Competition < ActiveRecord::Base
       prev_registration = registration
     end
     registrations
+  end
+
+  # For associated_events_picker
+  def events_to_associated_events(events)
+    events.map do |event|
+      competition_events.find_by_event_id(event.id) || competition_events.build(event_id: event.id)
+    end
   end
 
   def self.search(query, params: {})

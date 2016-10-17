@@ -5,7 +5,10 @@ FactoryGirl.define do
     association :user, factory: [:user, :wca_id]
     guests 10
     comments ""
-    events { competition.events }
+    transient do
+      events { competition.events }
+    end
+    competition_events { competition.competition_events.where(event: events) }
 
     trait :accepted do
       accepted_at Time.now

@@ -270,37 +270,6 @@ CREATE TABLE `Persons` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Preregs`
---
-
-DROP TABLE IF EXISTS `Preregs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Preregs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `competitionId` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `personId` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `countryId` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `gender` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `email` varchar(80) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `guests_old` text COLLATE utf8_unicode_ci,
-  `comments` text COLLATE utf8_unicode_ci NOT NULL,
-  `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `user_id` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `guests` int(11) NOT NULL DEFAULT '0',
-  `accepted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_Preregs_on_competitionId_and_user_id` (`competitionId`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82421 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `RanksAverage`
 --
 
@@ -743,19 +712,49 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `registration_events`
+-- Table structure for table `registration_competition_events`
 --
 
-DROP TABLE IF EXISTS `registration_events`;
+DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registration_events` (
+CREATE TABLE `registration_competition_events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `registration_id` int(11) DEFAULT NULL,
-  `event_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `competition_event_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20230 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `registrations`
+--
+
+DROP TABLE IF EXISTS `registrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `competitionId` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `personId` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `countryId` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `gender` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `email` varchar(80) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `guests_old` text COLLATE utf8_unicode_ci,
+  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `guests` int(11) NOT NULL DEFAULT '0',
+  `accepted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_registration_events_on_registration_id_and_event_id` (`registration_id`,`event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10502 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=84281 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1111,3 +1110,7 @@ INSERT INTO schema_migrations (version) VALUES ('20160901120254');
 INSERT INTO schema_migrations (version) VALUES ('20160902230822');
 
 INSERT INTO schema_migrations (version) VALUES ('20160914122252');
+
+INSERT INTO schema_migrations (version) VALUES ('20160930213354');
+
+INSERT INTO schema_migrations (version) VALUES ('20161011005956');

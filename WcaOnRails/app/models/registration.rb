@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 class Registration < ActiveRecord::Base
-  self.table_name = "Preregs"
-
   scope :pending, -> { where(accepted_at: nil) }
   scope :accepted, -> { where.not(accepted_at: nil) }
 
   belongs_to :competition, foreign_key: "competitionId"
   belongs_to :user
-  has_many :registration_events
-  has_many :events, through: :registration_events
+  has_many :registration_competition_events
+  has_many :competition_events, through: :registration_competition_events
+  has_many :events, through: :competition_events
 
-  accepts_nested_attributes_for :registration_events, allow_destroy: true
+  accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 
   validates :user, presence: true, on: [:create]
 
@@ -83,7 +82,12 @@ class Registration < ActiveRecord::Base
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    registration_events.includes(:event).reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
+    registration_competition_events.
+      joins(:competition_event).
+      joins(:event).
+      reject(&:marked_for_destruction?).
+      map(&:event).
+      sort_by(&:rank)
   end
 
   def waiting_list_info
@@ -101,8 +105,8 @@ class Registration < ActiveRecord::Base
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if registration_events.reject(&:marked_for_destruction?).empty?
-      errors.add(:registration_events, I18n.t('registrations.errors.must_register'))
+    if registration_competition_events.reject(&:marked_for_destruction?).empty?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
     end
   end
 
@@ -129,6 +133,14 @@ class Registration < ActiveRecord::Base
           return
         end
       end
+    end
+  end
+
+  # For associated_events_picker
+  def events_to_associated_events(events)
+    events.map do |event|
+      competition_event = competition.competition_events.find_by!(event: event)
+      registration_competition_events.find_by_competition_event_id(event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
 end

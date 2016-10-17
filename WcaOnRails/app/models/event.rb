@@ -5,8 +5,8 @@ class Event < ActiveRecord::Base
 
   has_many :competitions_events
   has_many :competitions, through: :competition_events
-  has_many :registration_events
-  has_many :registrations, through: :registration_events
+  has_many :registration_competition_events, through: :competition_events
+  has_many :registrations, through: :registration_competition_events
   has_many :user_preferred_events
   has_many :users, through: :user_preferred_events
   has_many :preferred_formats

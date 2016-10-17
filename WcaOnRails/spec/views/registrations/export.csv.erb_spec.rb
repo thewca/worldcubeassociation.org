@@ -4,7 +4,10 @@ require "rails_helper"
 describe "registrations/export.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition
-    competition.registrations.build(
+    FactoryGirl.build(
+      :registration,
+      competition: competition,
+      user: nil,
       accepted_at: Time.now,
       name: "Bob",
       countryId: "USA",
@@ -13,10 +16,10 @@ describe "registrations/export.csv.erb" do
       birthDay: 1,
       gender: "m",
       email: "bob@bob.com",
-      events: [ Event.find("333") ],
+      competition_events: [ competition.competition_events.find_by!(event_id: "333") ],
       guests: 1,
       guests_old: 'jane', # will go away. https://github.com/thewca/worldcubeassociation.org/issues/403
-    )
+    ).save!(validate: false)
     assign(:competition, competition)
     assign(:registrations, competition.registrations)
 
