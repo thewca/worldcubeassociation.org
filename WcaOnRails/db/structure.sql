@@ -722,8 +722,9 @@ CREATE TABLE `registration_competition_events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `registration_id` int(11) DEFAULT NULL,
   `competition_event_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20230 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `index_reg_events_reg_id_comp_event_id` (`registration_id`,`competition_event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20428 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
