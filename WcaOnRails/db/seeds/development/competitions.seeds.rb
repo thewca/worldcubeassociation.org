@@ -163,7 +163,7 @@ after "development:users" do
     users.each_with_index do |user, i|
       accepted_at = i % 4 == 0 ? Time.now : nil
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
-      FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, events: registration_competition_events)
+      FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, competition_events: registration_competition_events)
     end
   end
 end
