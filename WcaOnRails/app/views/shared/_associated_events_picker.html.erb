@@ -29,7 +29,7 @@ Note: form_builder.object is the object having associated events.
         <% if using_competition_events %>
           <%= f.hidden_field :competition_event_id %>
         <% else %>
-          <% f.hidden_field :event_id %>
+          <%= f.hidden_field :event_id %>
         <% end %>
         <%= label_tag "#{events_association_name}_#{event.id}" do %>
           <%= f.check_box "_destroy", { checked: selected_events.include?(event), id: "#{events_association_name}_#{event.id}", disabled: disabled }, "0", "1" %>
