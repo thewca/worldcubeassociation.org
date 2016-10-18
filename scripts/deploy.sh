@@ -8,7 +8,7 @@ pull_latest() {
 restart_app() {
   # Attempt to restart unicorn gracefully as per
   #  http://unicorn.bogomips.org/SIGNALS.html
-  pid=$(<"pids/unicorn.pid")
+  pid=$(<"WcaOnRails/pids/unicorn.pid")
   kill -SIGUSR2 $pid
   sleep 5
   kill -SIGQUIT $pid
@@ -116,9 +116,9 @@ rebuild_rails() {
     pkill -f "wca_worker/delayed_job" || true
     # Restart delayed_job worker.
     bin/delayed_job -p wca_worker --pool=mailers:1 --pool=*:1 start
-
-    restart_app
   )
+
+  restart_app
 }
 
 cd "$(dirname "$0")"/..
