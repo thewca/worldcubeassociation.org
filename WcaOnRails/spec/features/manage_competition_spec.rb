@@ -20,6 +20,7 @@ RSpec.feature "Manage competition" do
       fill_in "Name", with: "New Comp 2015"
 
       click_button "Create Competition"
+      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
 
       expect(Competition.all.length).to eq 1
       new_competition = Competition.find("NewComp2015")
@@ -34,6 +35,7 @@ RSpec.feature "Manage competition" do
 
       expect(page).to have_button('Create Competition')
       click_button "Create Competition"
+      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
 
       expect(Competition.all.length).to eq 2
       new_competition = Competition.find("NewComp2015")
