@@ -723,8 +723,9 @@ CREATE TABLE `registration_competition_events` (
   `registration_id` int(11) DEFAULT NULL,
   `competition_event_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_registration_competition_events_on_reg_id_and_comp_event_id` (`registration_id`,`competition_event_id`),
   KEY `index_reg_events_reg_id_comp_event_id` (`registration_id`,`competition_event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20428 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18568 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1115,3 +1116,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160914122252');
 INSERT INTO schema_migrations (version) VALUES ('20160930213354');
 
 INSERT INTO schema_migrations (version) VALUES ('20161011005956');
+
+INSERT INTO schema_migrations (version) VALUES ('20161018220122');

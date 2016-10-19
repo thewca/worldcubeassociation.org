@@ -140,7 +140,7 @@ class Registration < ActiveRecord::Base
   def events_to_associated_events(events)
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by_competition_event_id(event.id) || registration_competition_events.build(competition_event: competition_event)
+      registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
 end
