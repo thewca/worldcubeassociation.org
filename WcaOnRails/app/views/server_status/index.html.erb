@@ -10,15 +10,22 @@
 
   <ul>
     <li>
-      Jobs:
       <% if @oldest_job_that_should_have_run_by_now %>
-        <span class="label label-warning">
-          Uh oh! Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
-          <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
-          ago and still has not run.
-        </span>
+        <span class="label label-warning">Jobs</span>
+
+        Uh oh!
+        Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
+        <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
+        ago and still has not run.
+        <%= @jobs_that_should_have_run_by_now.count %>
+        <%= "job".pluralize(@jobs_that_should_have_run_by_now.count) %>
+        <%= "is".pluralize(@jobs_that_should_have_run_by_now.count) %>
+        waiting to run.
+
       <% else %>
-        <span class="label label-success">Looking good!</span>
+        <span class="label label-success">Jobs</span>
+
+        Looking good!
       <% end %>
     </li>
   </ul>
