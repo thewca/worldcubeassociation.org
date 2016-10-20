@@ -148,4 +148,16 @@ describe UsersController do
       end
     end
   end
+
+  describe "GET #index" do
+    sign_in { FactoryGirl.create :admin }
+
+    it "is injection safe" do
+      get :index, format: :json, sort: "country", order: "ASC -- HMM"
+      users = assigns(:users)
+      sql = users.to_sql
+      expect(sql).to_not match "HMM"
+      expect(sql).to match(/order by .+ desc/i)
+    end
+  end
 end
