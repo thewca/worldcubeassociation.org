@@ -7,18 +7,26 @@ class UsersController < ApplicationController
   end
 
   def index
+    params[:order] = params[:order] == "asc" ? "asc" : "desc"
+
     unless current_user&.can_edit_users?
       flash[:danger] = "You cannot edit users"
       redirect_to root_url
     end
+
     respond_to do |format|
       format.html { }
       format.json do
-        @users = User
-        if params[:search]
-          @users = @users.where("name LIKE :input OR wca_id LIKE :input OR email LIKE :input", { input: "%#{params[:search]}%" })
+        @users = User.joins("INNER JOIN Countries ON iso2 = country_iso2")
+        params[:search]&.split&.each do |part|
+          like_query = %w(users.name wca_id email Countries.name).map do |column|
+            column + " LIKE :part"
+          end.join(" OR ")
+          @users = @users.where(like_query, { part: "%#{part}%" })
         end
-        if params[:sort]
+        if params[:sort] == "country"
+          @users = @users.order("Countries.name #{params[:order]}")
+        elsif params[:sort]
           @users = @users.order(params[:sort] => params[:order])
         end
         render json: {
@@ -27,6 +35,7 @@ class UsersController < ApplicationController
             {
               wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
               name: ERB::Util.html_escape(user.name),
+              country: user.country.id,
               email: ERB::Util.html_escape(user.email),
               edit: view_context.link_to("Edit", edit_user_path(user)),
             }
