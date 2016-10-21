@@ -660,4 +660,64 @@ describe CompetitionsController do
       end
     end
   end
+
+  describe 'GET #edit_events' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :edit_events, id: competition.id
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
+      it 'shows the edit competition events form' do
+        get :edit_events, id: competition.id
+        expect(response).to render_template :edit_events
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'does not allow access' do
+        expect {
+          get :edit_events, id: competition.id
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+  end
+
+  describe 'POST #udpate_events' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        patch :update_events, id: competition, competition: { name: competition.name }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
+      it 'updates the competition events' do
+        patch :update_events, id: competition, competition: { name: competition.name }
+        expect(response).to redirect_to edit_events_path(competition)
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'does not allow access' do
+        expect {
+          patch :update_events, id: competition, competition: { name: competition.name }
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+  end
 end

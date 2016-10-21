@@ -49,10 +49,10 @@ RSpec.feature "Manage competition" do
       threes = Event.find("333")
       competition = FactoryGirl.create :competition, events: [fours], delegates: [delegate]
 
-      visit edit_competition_path(competition)
+      visit edit_events_path(competition)
       check "competition_events_333"
       uncheck "competition_events_444"
-      click_button "Update Competition"
+      click_button "Modify Events"
 
       expect(competition.reload.events).to match_array [ threes ]
     end

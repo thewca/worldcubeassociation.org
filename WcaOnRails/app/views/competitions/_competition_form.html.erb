@@ -217,29 +217,8 @@
       <%= f.input :external_website %>
       <hr>
 
-      <% event_groups = [
-        [
-          t('.events'),
-          true,
-          @competition.saved_and_unsaved_events.select(&:official?),
-          Event.official,
-        ],
-        [
-          t('.unoff_events'),
-          false, # Only show deprecated events if this competition has any.
-          @competition.saved_and_unsaved_events.select(&:deprecated?),
-          Event.deprecated,
-        ]
-      ] %>
-      <% event_groups.each do |label, always_show, selected_events, allowed_events| %>
-        <% if always_show || !selected_events.empty? %>
-          <%= render "shared/associated_events_picker", form_builder: f, label: label, disabled: false,
-                      events_association_name: :competition_events, allowed_events: allowed_events, selected_events: selected_events %>
-        <% end %>
-      <% end %>
     <% end %>
 
-    <hr>
     <%= f.input :use_wca_registration %>
 
     <div class="wca-registration-options">

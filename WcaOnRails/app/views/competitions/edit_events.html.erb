@@ -1,0 +1,43 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <% disable_form = @competition.isConfirmed? && !current_user.can_admin_results? %>
+  <%= horizontal_simple_form_for @competition, :url => update_events_path, html: { class: 'are-you-sure no-submit-on-enter', id: 'edit-competition-events' } do |f| %>
+    <% event_groups = [
+      [
+        t('competitions.competition_form.events'),
+        true,
+        @competition.saved_and_unsaved_events.select(&:official?),
+        Event.official,
+      ],
+      [
+        t('competitions.competition_form.unoff_events'),
+        false, # Only show deprecated events if this competition has any.
+        @competition.saved_and_unsaved_events.select(&:deprecated?),
+        Event.deprecated,
+      ]
+    ] %>
+    <% event_groups.each do |label, always_show, selected_events, allowed_events| %>
+      <% if always_show || !selected_events.empty? %>
+        <%= render "shared/associated_events_picker",
+          form_builder: f,
+          label: label,
+          disabled: disable_form,
+          events_association_name: :competition_events, allowed_events: allowed_events,
+          selected_events: selected_events %>
+      <% end %>
+    <% end %>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.button :submit,
+          t('competitions.competition_form.submit_modify_value'),
+          class: disable_form ? "btn-primary disabled" : "btn-primary",
+          disabled: disable_form
+        %>
+      </div>
+    </div>
+  <% end %>
+  <% if disable_form %>
+    <p>You can't manage a competition's events after it has been confirmed.</p>
+  <% end %>
+<% end %>
