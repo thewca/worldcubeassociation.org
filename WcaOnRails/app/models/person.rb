@@ -76,6 +76,10 @@ class Person < ActiveRecord::Base
   attr_reader :country_id_changed
   after_update -> { @country_id_changed = countryId_changed? }
 
+  def update_using_sub_id!(attributes)
+    raise unless update_using_sub_id(attributes)
+  end
+
   # Update the person attributes and save the old state as a new Person with greater subId.
   def update_using_sub_id(attributes)
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }

@@ -17,7 +17,7 @@ FactoryGirl.define do
 
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
-        person.update_using_sub_id(countryId: "Israel")
+        person.update_using_sub_id!(name: "new #{person.name}")
       end
     end
 
