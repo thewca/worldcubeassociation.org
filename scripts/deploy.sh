@@ -102,11 +102,6 @@ rebuild_rails() {
   (
     cd WcaOnRails
 
-    if [ "$(git rev-parse --abbrev-ref HEAD)" == "production" ]; then
-      export RAILS_ENV=production
-    else
-      export RAILS_ENV=development
-    fi
     bundle install
     bundle exec rake assets:clean assets:precompile
 
@@ -122,5 +117,12 @@ rebuild_rails() {
 }
 
 cd "$(dirname "$0")"/..
+
+if [ "$(hostname)" == "production" ] || [ "$(hostname)" == "staging" ]; then
+  export RAILS_ENV=production
+else
+  export RAILS_ENV=development
+fi
+
 allowed_commands="pull_latest restart_app rebuild_rails rebuild_regs"
 source scripts/_parse_args.sh
