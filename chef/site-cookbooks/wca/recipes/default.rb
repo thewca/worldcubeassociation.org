@@ -127,6 +127,17 @@ logrotate_app 'rails-wca' do
   options ['nodelaycompress','compress']
 end
 
+logrotate_app 'delayed_job-wca' do
+  path "#{repo_root}/WcaOnRails/log/delayed_job.log"
+  size "512M"
+  maxage 30
+  options ['nodelaycompress','compress']
+
+  # According to https://groups.google.com/forum/#!topic/railsmachine-moonshine/vrfNwrqmzOA,
+  # it looks like we have to restart delayed job after after logrotate.
+  postrotate "#{repo_root}/scripts/deploy.sh restart_dj"
+end
+
 # Run mailcatcher in every environment except production.
 if rails_env != "production"
   gem_package "mailcatcher"

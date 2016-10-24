@@ -98,6 +98,17 @@ rebuild_regs() {
   rm -rf $tmp_dir
 }
 
+restart_dj() {
+  (
+    cd WcaOnRails
+
+    # Kill all delayed_job workers (ignore if they were not running).
+    pkill -f "wca_worker/delayed_job" || true
+    # Restart delayed_job worker.
+    bin/delayed_job -p wca_worker --pool=mailers:1 --pool=*:1 start
+  )
+}
+
 rebuild_rails() {
   (
     cd WcaOnRails
@@ -106,13 +117,9 @@ rebuild_rails() {
     bundle exec rake assets:clean assets:precompile
 
     # Note that we are intentionally not automating database migrations.
-
-    # Kill all delayed_job workers (ignore if they were not running).
-    pkill -f "wca_worker/delayed_job" || true
-    # Restart delayed_job worker.
-    bin/delayed_job -p wca_worker --pool=mailers:1 --pool=*:1 start
   )
 
+  restart_dj
   restart_app
 }
 
@@ -124,5 +131,5 @@ else
   export RAILS_ENV=development
 fi
 
-allowed_commands="pull_latest restart_app rebuild_rails rebuild_regs"
+allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs"
 source scripts/_parse_args.sh
