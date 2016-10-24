@@ -119,19 +119,22 @@ chef_env_to_rails_env = {
 }
 rails_env = chef_env_to_rails_env[node.chef_environment]
 
+LOGROTATE_OPTIONS = ['nodelaycompress', 'compress']
+
 logrotate_app 'rails-wca' do
   path "#{repo_root}/WcaOnRails/log/production.log"
   size "512M"
   maxage 90
+  options LOGROTATE_OPTIONS
+
   postrotate "[ ! -f #{repo_root}/WcaOnRails/pids/unicorn.pid ] || kill -USR1 `cat #{repo_root}/WcaOnRails/pids/unicorn.pid`"
-  options ['nodelaycompress','compress']
 end
 
 logrotate_app 'delayed_job-wca' do
   path "#{repo_root}/WcaOnRails/log/delayed_job.log"
   size "512M"
   maxage 30
-  options ['nodelaycompress','compress']
+  options LOGROTATE_OPTIONS
 
   # According to https://groups.google.com/forum/#!topic/railsmachine-moonshine/vrfNwrqmzOA,
   # it looks like we have to restart delayed job after after logrotate.
@@ -212,8 +215,9 @@ logrotate_app 'nginx-wca' do
   path "/var/log/nginx/*.log"
   size "512M"
   maxage 30
+  options LOGROTATE_OPTIONS
+
   postrotate "[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`"
-  options ['nodelaycompress','compress']
 end
 
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
