@@ -103,8 +103,18 @@ class Competition < ActiveRecord::Base
     end
   end
 
+  def with_old_id
+    new_id = self.id
+    self.id = id_was
+    yield
+  ensure
+    self.id = new_id
+  end
+
   def no_events?
-    competition_events.reject(&:marked_for_destruction?).empty?
+    with_old_id do
+      competition_events.reject(&:marked_for_destruction?).empty?
+    end
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
@@ -253,30 +263,24 @@ class Competition < ActiveRecord::Base
     # we restore it at the end. This means we'll preseve our existing
     # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
     # We'll fix their competition_id below in update_foreign_keys.
-    new_id = self.id
-    self.id = id_was
-
-    if @delegate_ids
-      self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
+    with_old_id do
+      if @delegate_ids
+        self.delegates = @delegate_ids.split(",").map { |id| User.find(id) }
+      end
+      if @organizer_ids
+        self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
+      end
     end
-    if @organizer_ids
-      self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
-    end
-
-    self.id = new_id
   end
 
   old_competition_events_attributes = instance_method(:competition_events_attributes=)
   define_method(:competition_events_attributes=) do |attributes|
     # This is also a mess. We "overload" the competition_events_attributes= method
-    # so it won't be confused by the fact that our competition's id changing.
+    # so it won't be confused by the fact that our competition's id is changing.
     # See similar hack and comment in unpack_delegate_organizer_ids.
-    new_id = self.id
-    self.id = id_was
-
-    old_competition_events_attributes.bind(self).call(attributes)
-
-    self.id = new_id
+    with_old_id do
+      old_competition_events_attributes.bind(self).call(attributes)
+    end
   end
 
   # Workaround for PHP code that requires these tables to be clean.
@@ -286,6 +290,12 @@ class Competition < ActiveRecord::Base
   def remove_non_existent_organizers_and_delegates
     CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
+  end
+
+  def delegate_report
+    with_old_id do
+      DelegateReport.find_by_competition_id(id)
+    end
   end
 
   # This callback updates all tables having the competition id, when the id changes.

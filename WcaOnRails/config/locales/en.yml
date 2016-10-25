@@ -629,11 +629,11 @@ en:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
     update_events:
-      update_success: "Successfully updated the competition events"
+      update_success: "Successfully updated the competition events."
     update:
-      save_success: "Successfully saved competition"
+      save_success: "Successfully saved competition."
       confirm_success: "Successfully confirmed competition. Check your email, and wait for the Board to announce it!"
-      delete_success: "Successfully deleted competition %{id}"
+      delete_success: "Successfully deleted competition %{id}."
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."

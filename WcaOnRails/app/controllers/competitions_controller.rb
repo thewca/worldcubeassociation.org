@@ -331,6 +331,14 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
+      # Changing the competition id breaks all our associations, and our view
+      # code was not written to handle this. Rather than trying to update our view
+      # code, just revert the attempted id change. The user will have to deal with
+      # editing the ID text box manually. This will go away once we have proper
+      # immutable ids for competitions.
+      if @competition.id_changed?
+        @competition.id = @competition.id_was
+      end
       render :edit
     end
   end

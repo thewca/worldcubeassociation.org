@@ -33,6 +33,7 @@ FactoryGirl.define do
     venueAddress "My backyard street"
     external_website "https://www.worldcubeassociation.org"
     showAtAll false
+    isConfirmed false
 
     guests_enabled true
 
