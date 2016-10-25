@@ -23,28 +23,36 @@ rebuild_regs() {
   tmp_dir=/tmp/regs-todelete
   regs_folder=$regs_folder_root/regulations
   regs_version=$regs_folder/version
+  regs_data_version=$regs_folder/data_version
   translations_version=$regs_folder/translations/version
 
   rm -rf $build_folder
   mkdir -p $build_folder
 
-  # We want latest commit hash, so we do a shallow copy of the repositories (and not simply a wget)
-  git clone --depth=1 https://github.com/thewca/wca-regulations.git $build_folder/wca-regulations
-  git clone --depth=1 https://github.com/thewca/wca-regulations-translations.git $build_folder/wca-regulations-translations
-  git_reg_hash=`git -C $build_folder/wca-regulations rev-parse --short HEAD`
-  git_translations_hash=`git -C $build_folder/wca-regulations-translations rev-parse --short HEAD`
+  # The /regulations directory build relies on three sources:
+  #  - The WCA Regulations
+  #  - The WCA Regulations translations
+  #  - The 'regulations-data' branch of this repo, which contains data such as TNoodle binaries
+  git_reg_hash=`git ls-remote https://github.com/thewca/wca-regulations.git official | sed 's/\(.\{7\}\).*/\1/'`
+  git_translations_hash=`git ls-remote https://github.com/thewca/wca-regulations-translations.git HEAD | sed 's/\(.\{7\}\).*/\1/'`
+  git_reg_data_hash=`git rev-parse --short origin/regulations-data`
 
   rebuild_regulations=1
+  rebuild_regulations_data=1
   rebuild_translations=1
   # Check if the cloned regulations match the current version
   if [ -r $regs_version ] && [ "`cat $regs_version`" == "$git_reg_hash" ]; then
     rebuild_regulations=0
   fi
+  # Check if the latest regulations-data match the current version
+  if [ -r $regs_data_version ] && [ "`cat $regs_data_version`" == "$git_reg_data_hash" ]; then
+    rebuild_regulations_data=0
+  fi
   # Check if the cloned translations match the current version
   if [ -r $translations_version ] && [ "`cat $translations_version`" == "$git_translations_hash" ]; then
     rebuild_translations=0
   fi
-  if [ $rebuild_regulations -eq 0 ] && [ $rebuild_translations -eq 0 ]; then
+  if [ $rebuild_regulations -eq 0 ] && [ $rebuild_translations -eq 0 ] && [ $rebuild_regulations_data -eq 0 ]; then
     echo "WCA Regulations and translations are up to date."
     return
   fi
@@ -55,11 +63,13 @@ rebuild_regs() {
   cp -r $regs_folder $build_folder
 
   # Checkout data (scramble programs, history)
+  # Assuming we ran pull_latest, this automatically checks out the latest regulations-data
   git checkout origin/regulations-data $build_folder
   git reset HEAD $build_folder
 
-  languages=`wrc-languages`
   if [ $rebuild_translations -eq 1 ]; then
+    git clone --depth=1 https://github.com/thewca/wca-regulations-translations.git $build_folder/wca-regulations-translations
+    languages=`wrc-languages`
     # Clean up translations directories
     find $build_folder/regulations/translations ! -name 'translations' -type d -exec rm -rf {} +
     # Rebuild all translations
@@ -80,6 +90,7 @@ rebuild_regs() {
 
   outputdir=$build_folder/regulations
   if [ $rebuild_regulations -eq 1 ]; then
+    git clone --depth=1 --branch=official https://github.com/thewca/wca-regulations.git $build_folder/wca-regulations
     # Clean up regulations directory files
     find $build_folder/regulations -maxdepth 1 -type f -exec rm -f {} +
     # Rebuild Regulations
@@ -91,6 +102,9 @@ rebuild_regs() {
   else
     echo "Regulations are up to date"
   fi
+
+  # Update regulations-data version built
+  echo $git_reg_data_hash > $build_folder/regulations/data_version
 
   rm -rf $tmp_dir
   mv $regs_folder $tmp_dir
