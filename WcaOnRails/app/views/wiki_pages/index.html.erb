@@ -1,0 +1,15 @@
+<% provide(:title, 'Wiki') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <div class="wiki-pages">
+    <div class="list-group">
+      <% @wiki_pages.each do |wiki_page| %>
+        <%= link_to wiki_page.title, wiki_page_path(wiki_page), class: "list-group-item" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= link_to icon(:plus, "New page"), new_wiki_page_path, class: "btn btn-primary" %>
+</div>

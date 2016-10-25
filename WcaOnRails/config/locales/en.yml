@@ -179,6 +179,9 @@ en:
         description: "Description"
       vote:
         comment: "Comment"
+      wiki_page:
+        title: "Title"
+        content: "Content"
   simple_form:
     "yes": "Yes"
     "no": "No"
@@ -283,6 +286,9 @@ en:
         name: ""
       vote:
         comment: ""
+      wiki_page:
+        title: ""
+        content: ""
     options:
       registration:
         status:
@@ -375,6 +381,7 @@ en:
       sign_up: "Sign up"
       notifications: "Notifications"
       edit_profile: "Edit profile"
+      wiki: "Wiki"
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"

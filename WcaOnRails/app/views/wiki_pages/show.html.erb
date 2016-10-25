@@ -1,0 +1,22 @@
+<%= provide(:title, "Wiki") %>
+
+<div class="container">
+  <article class="wiki-page">
+    <header class="title">
+      <%= @wiki_page.title %>
+    </header>
+    <main class="content">
+      <%= md @wiki_page.content %>
+    </main>
+    <aside class="info">
+      Created by <%= @wiki_page.author.name %> on <%= I18n.l @wiki_page.created_at.to_date, format: :long %>
+      Last update on <%= I18n.l @wiki_page.updated_at.to_date, format: :long %>
+    </aside>
+    <nav class="actions">
+      <%= link_to icon(:undo, "Back to wiki"), wiki_pages_path, class: "btn btn-default" %>
+      <%= link_to icon(:pencil, "Edit"), edit_wiki_page_path(@wiki_page), class: "btn btn-primary" %>
+      <%= link_to icon(:trash, "Delete"), wiki_page_path(@wiki_page), method: :delete, class: "btn btn-danger",
+      data: { confirm: "Are you sure you want to delete this wiki page?" } %>
+    </nav>
+  </article>
+</div>

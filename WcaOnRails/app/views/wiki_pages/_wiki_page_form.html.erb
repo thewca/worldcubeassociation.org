@@ -1,0 +1,9 @@
+<%= simple_form_for @wiki_page, url: submit_url do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <%= f.input :title %>
+  <%= f.input :content, input_html: { class: "markdown-editor large" } %>
+
+  <%= link_to icon(:undo, "Back to wiki"), wiki_pages_path, class: "btn btn-default" %>
+  <%= f.submit submit_text, class: "btn btn-primary" %>
+<% end %>
