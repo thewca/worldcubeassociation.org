@@ -1,10 +1,18 @@
 onPage("competitions#show", function() {
-  var hash = window.location.hash || '#general-info';
-  $('a[href="' + hash + '"]').tab('show');
+  showTab(window.location.hash || '#general-info');
 
   $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
     window.location.hash = $(e.target).attr('href');
   });
+
+  // Update the displayed tab when the back/forward is clicked changing the hash.
+  $(window).on('hashchange', function() {
+    showTab(window.location.hash);
+  });
+
+  function showTab(id) {
+    $('a[href="' + id + '"]').tab('show');
+  }
 });
 
 onPage("competition_tabs#index", function() {
