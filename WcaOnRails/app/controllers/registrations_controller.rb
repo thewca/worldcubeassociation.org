@@ -38,6 +38,10 @@ class RegistrationsController < ApplicationController
   def psych_sheet_event
     @competition = competition_from_params
     @event = Event.c_find(params[:event_id])
+    if @competition.results_posted?
+      render :psych_results_posted
+      return
+    end
     @sort_by = params[:sort_by]
     if @sort_by == @event.recommended_format.sort_by
       @sort_by_second = @event.recommended_format.sort_by_second

@@ -321,6 +321,15 @@ RSpec.describe RegistrationsController do
     end
   end
 
+  context "psych sheet when results posted" do
+    let(:competition) { FactoryGirl.create(:competition, :visible, :past, :results_posted, use_wca_registration: true, events: Event.where(id: "333")) }
+
+    it "renders psych_results_posted" do
+      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      expect(subject).to render_template(:psych_results_posted)
+    end
+  end
+
   context "psych sheet when not signed in" do
     let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, events: Event.where(id: %w(333 444 333bf))) }
 

@@ -1,9 +1,9 @@
 // This dummy form is necessary because we need to pass all the selected registrations to the registrations#export action.
 
 <% dummy_form_for_export = form_tag competition_registrations_export_path(format: :csv), id: "dummy-form-for-export" do %>
-    <% params[:selected_registrations].each do |registration| %>
-      <%= hidden_field_tag 'selected_registrations[]', registration %>
-    <% end %>
+  <% params[:selected_registrations].each do |registration| %>
+    <%= hidden_field_tag 'selected_registrations[]', registration %>
+  <% end %>
 <% end %>
 
 $('body').append("<%=j dummy_form_for_export %>");

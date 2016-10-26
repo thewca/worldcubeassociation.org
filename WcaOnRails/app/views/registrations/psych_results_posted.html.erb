@@ -1,0 +1,7 @@
+<% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
+
+<%= render layout: "nav" do %>
+  Results for this competition have already been posted.
+  Check out the
+  <%= link_to "results for #{@event.name}", competition_results_all_path(anchor: "e#{@event.id}") %>.
+<% end %>

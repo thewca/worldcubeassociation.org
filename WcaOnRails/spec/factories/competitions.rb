@@ -27,6 +27,10 @@ FactoryGirl.define do
       starts 1.week.ago
     end
 
+    trait :results_posted do
+      results_posted_at Time.now
+    end
+
     events { Event.where(id: %w(333 333oh)) }
 
     venue "My backyard"
