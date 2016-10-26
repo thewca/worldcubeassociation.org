@@ -1,16 +1,15 @@
 onPage("competitions#show", function() {
-  showTab(window.location.hash || '#general-info');
+  showTabFromHash();
 
   $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
     window.location.hash = $(e.target).attr('href');
   });
 
   // Update the displayed tab when the back/forward is clicked changing the hash.
-  $(window).on('hashchange', function() {
-    showTab(window.location.hash);
-  });
+  $(window).on('hashchange', showTabFromHash);
 
-  function showTab(id) {
+  function showTabFromHash() {
+    id = window.location.hash || '#general-info';
     $('a[href="' + id + '"]').tab('show');
   }
 });
