@@ -17,14 +17,5 @@ FactoryGirl.define do
     trait :pending do
       accepted_at nil
     end
-
-    factory :userless_registration do
-      name { Faker::Name.name }
-      email { Faker::Internet.email }
-      birthday "2015-04-30"
-      after :create do |registration|
-        registration.update_column(:user_id, nil)
-      end
-    end
   end
 end

@@ -327,10 +327,10 @@ RSpec.describe Competition do
   describe "when changing the id of a competition" do
     let(:competition) { FactoryGirl.create(:competition, :with_delegate, :with_organizer, use_wca_registration: true) }
 
-    it "changes the competitionId of registrations" do
-      reg1 = FactoryGirl.create(:registration, competitionId: competition.id)
+    it "changes the competition_id of registrations" do
+      reg1 = FactoryGirl.create(:registration, competition_id: competition.id)
       competition.update_attribute(:id, "NewID2015")
-      expect(reg1.reload.competitionId).to eq "NewID2015"
+      expect(reg1.reload.competition_id).to eq "NewID2015"
     end
 
     it "changes the competitionId of results" do

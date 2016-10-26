@@ -3,7 +3,7 @@ class Registration < ActiveRecord::Base
   scope :pending, -> { where(accepted_at: nil) }
   scope :accepted, -> { where.not(accepted_at: nil) }
 
-  belongs_to :competition, foreign_key: "competitionId"
+  belongs_to :competition
   belongs_to :user
   has_many :registration_competition_events
   has_many :competition_events, through: :registration_competition_events
@@ -33,37 +33,33 @@ class Registration < ActiveRecord::Base
   end
 
   def name
-    user&.name || read_attribute(:name)
+    user.name
   end
 
   attr_accessor :pos
   attr_accessor :tied_previous
 
-  attr_writer :birthday
   def birthday
-    if user
-      user.dob
-    else
-      birthYear == 0 || birthMonth == 0 || birthDay == 0 ? nil : Date.new(birthYear, birthMonth, birthDay)
-    end
+    user.dob
   end
 
   def gender
-    user&.gender || read_attribute(:gender)
+    user.gender
   end
 
   def countryId
-    user&.country&.id || read_attribute(:countryId)
+    user.country&.id
   end
 
   def email
-    user&.email || read_attribute(:email)
+    user.email
   end
 
-  def personId
-    user&.wca_id || read_attribute(:personId)
+  def wca_id
+    user.wca_id
   end
-  alias_method :wca_id, :personId
+
+  alias_method :personId, :wca_id
 
   def person
     Person.find_by_wca_id(personId)
@@ -107,32 +103,6 @@ class Registration < ActiveRecord::Base
   private def must_register_for_gte_one_event
     if registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
-    end
-  end
-
-  before_validation :unpack_dates
-  private def unpack_dates
-    if @birthday.nil? && !birthday.blank?
-      @birthday = birthday.strftime("%F")
-    end
-    if @birthday.blank?
-      self.birthYear = self.birthMonth = self.birthDay = 0
-    else
-      if @birthday.is_a? Date
-        self.birthYear = @birthday.year
-        self.birthMonth = @birthday.month
-        self.birthDay = @birthday.day
-      else
-        unless /\A\d{4}-\d{2}-\d{2}\z/.match(@birthday)
-          errors.add(:birthday, I18n.t('common.errors.invalid'))
-          return
-        end
-        self.birthYear, self.birthMonth, self.birthDay = @birthday.split("-").map(&:to_i)
-        unless Date.valid_date? self.birthYear, self.birthMonth, self.birthDay
-          errors.add(:birthday, I18n.t('common.errors.invalid'))
-          return
-        end
-      end
     end
   end
 

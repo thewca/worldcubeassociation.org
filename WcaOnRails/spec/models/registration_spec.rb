@@ -8,14 +8,14 @@ RSpec.describe Registration do
     expect(registration).to be_valid
   end
 
-  it "requires a competitionId" do
-    registration.competitionId = nil
+  it "requires a competition_id" do
+    registration.competition_id = nil
     expect(registration).not_to be_valid
     expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
   end
 
-  it "requires a valid competitionId" do
-    registration.competitionId = "foobar"
+  it "requires a valid competition_id" do
+    registration.competition_id = "foobar"
     expect(registration).not_to be_valid
     expect(registration.errors.messages[:competition]).to eq ["Competition not found"]
   end

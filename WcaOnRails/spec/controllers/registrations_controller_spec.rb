@@ -166,7 +166,7 @@ RSpec.describe RegistrationsController do
       end.to change { enqueued_jobs.size }.by(2)
 
       registration = Registration.find_by_user_id(user.id)
-      expect(registration.competitionId).to eq competition.id
+      expect(registration.competition_id).to eq competition.id
     end
 
     it "can delete registration when on waitlist" do

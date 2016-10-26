@@ -212,11 +212,6 @@ class RegistrationsController < ApplicationController
 
   private def registration_params
     permitted_params = [
-      :personId,
-      :email,
-      :name,
-      :countryId,
-      :birthday,
       :guests,
       :comments,
       registration_competition_events_attributes: [:id, :competition_event_id, :_destroy],
