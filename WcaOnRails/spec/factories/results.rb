@@ -3,12 +3,13 @@ FactoryGirl.define do
   factory :result do
     transient do
       person { FactoryGirl.create(:person) }
+      competition { FactoryGirl.create(:competition) }
     end
 
     personId { person.wca_id }
     personName { person.name }
     countryId { person.countryId }
-    competitionId "USNationals2010"
+    competitionId { competition.id }
     pos 1
     eventId "333oh"
     roundId "f"

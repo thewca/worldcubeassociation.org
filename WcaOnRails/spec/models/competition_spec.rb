@@ -633,7 +633,7 @@ RSpec.describe Competition do
   end
 
   context "competitors" do
-    let!(:competition) { FactoryGirl.build(:competition) }
+    let!(:competition) { FactoryGirl.create(:competition) }
 
     it "works" do
       FactoryGirl.create_list :result, 2, competition: competition

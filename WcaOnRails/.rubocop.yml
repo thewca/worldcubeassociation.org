@@ -54,3 +54,6 @@ Style/SignalException:
 Style/ClassVars:
   Exclude:
     - app/models/country.rb
+
+Style/IfInsideElse:
+  Enabled: false
