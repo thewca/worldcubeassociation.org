@@ -6,6 +6,9 @@ RSpec.feature "Manage competition" do
   let(:cloned_delegate) { FactoryGirl.create(:delegate) }
   let(:competition_to_clone) { FactoryGirl.create :competition, cityName: 'Melbourne', delegates: [cloned_delegate], showAtAll: true }
 
+  let(:threes) { Event.find("333") }
+  let(:fours) { Event.find("444") }
+
   before :each do
     sign_in delegate
   end
@@ -17,6 +20,7 @@ RSpec.feature "Manage competition" do
       fill_in "Name", with: "New Comp 2015"
 
       click_button "Create Competition"
+      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
 
       expect(Competition.all.length).to eq 1
       new_competition = Competition.find("NewComp2015")
@@ -31,6 +35,7 @@ RSpec.feature "Manage competition" do
 
       expect(page).to have_button('Create Competition')
       click_button "Create Competition"
+      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
 
       expect(Competition.all.length).to eq 2
       new_competition = Competition.find("NewComp2015")
@@ -44,17 +49,15 @@ RSpec.feature "Manage competition" do
   end
 
   context "edit" do
-    it 'can edit events' do
-      fours = Event.find("444")
-      threes = Event.find("333")
-      competition = FactoryGirl.create :competition, events: [fours], delegates: [delegate]
+    let(:comp_with_fours) { FactoryGirl.create :competition, events: [fours], delegates: [delegate] }
 
-      visit edit_events_path(competition)
+    it 'can edit events' do
+      visit edit_events_path(comp_with_fours)
       check "competition_events_333"
       uncheck "competition_events_444"
       click_button "Modify Events"
 
-      expect(competition.reload.events).to match_array [ threes ]
+      expect(comp_with_fours.reload.events).to match_array [ threes ]
     end
   end
 end
