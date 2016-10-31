@@ -395,6 +395,10 @@ class User < ActiveRecord::Base
     can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self)
   end
 
+  def can_view_hidden_competitions?
+    can_admin_results? || self.any_kind_of_delegate?
+  end
+
   def can_edit_registration?(registration)
     can_manage_competition?(registration.competition) || (registration.pending? && registration.user_id == self.id)
   end
