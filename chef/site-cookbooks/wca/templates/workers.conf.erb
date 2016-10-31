@@ -1,0 +1,16 @@
+<% rails_root = "#{@repo_root}/WcaOnRails" %>
+
+[program:mailer_worker]
+directory=<%= rails_root %>
+command=<%= rails_root %>/bin/rake jobs:work
+environment=QUEUE="mailers",RAILS_ENV="production"
+autorestart=true
+
+[program:everything_worker]
+directory=<%= rails_root %>
+command=<%= rails_root %>/bin/rake jobs:work
+environment=RAILS_ENV="production"
+autorestart=true
+
+[group:workers]
+programs=mailer_worker,everything_worker
