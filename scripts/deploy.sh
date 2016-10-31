@@ -99,14 +99,6 @@ rebuild_regs() {
 }
 
 restart_dj() {
-  (
-    cd WcaOnRails
-
-    # Kill all delayed_job workers (ignore if they were not running).
-    # This bit will disappear once we've switched to supervisor
-    pkill -f "wca_worker/delayed_job" || true
-  )
-
   sudo supervisorctl restart workers:*
 }
 
