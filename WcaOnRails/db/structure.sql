@@ -52,6 +52,8 @@ CREATE TABLE `Competitions` (
   `results_nag_sent_at` datetime DEFAULT NULL,
   `generate_website` tinyint(1) DEFAULT NULL,
   `announced_at` datetime DEFAULT NULL,
+  `base_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
+  `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1142,3 +1144,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161011005956');
 INSERT INTO schema_migrations (version) VALUES ('20161018220122');
 
 INSERT INTO schema_migrations (version) VALUES ('20161026201019');
+
+INSERT INTO schema_migrations (version) VALUES ('20161031215932');
+

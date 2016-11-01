@@ -69,6 +69,12 @@
           <% end %>
         </div>
 
+        <% if @competition.base_entry_fee %>
+          <%= alert :info do %>
+            <%= t 'registrations.entry_fee' %><strong><%= humanized_money_with_symbol @competition.base_entry_fee %></strong>
+          <% end %>
+        <% end %>
+
         <% url = @registration.new_record? ? competition_registrations_path(@competition)
                                            : registration_path(@registration) %>
         <%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
