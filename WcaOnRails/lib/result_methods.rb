@@ -25,11 +25,11 @@ module ResultMethods
   end
 
   private def sorted_solves
-    @sorted_solves ||= solve_times.reject(&:skipped?).sort
+    @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
   end
 
   private def sorted_solves_with_index
-    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort
+    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
   end
 
   def solve_times
@@ -37,7 +37,7 @@ module ResultMethods
                       SolveTime.new(eventId, :single, value2),
                       SolveTime.new(eventId, :single, value3),
                       SolveTime.new(eventId, :single, value4),
-                      SolveTime.new(eventId, :single, value5)]
+                      SolveTime.new(eventId, :single, value5)].freeze
   end
 
   def worst_index
