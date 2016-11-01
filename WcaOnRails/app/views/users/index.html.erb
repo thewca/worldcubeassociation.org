@@ -1,9 +1,9 @@
 <% provide(:title, 'Users') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
+  <h2><%= yield(:title) %></h2>
 
-  <div id="users-query-fields" class="form-inline">
+  <div id="users-query-fields" class="form-inline bs-table-query-fields">
     <div id="search-box" class="form-group">
       <div class="input-group">
         <%= content_tag :span, icon("search"), class: "input-group-addon" %>

@@ -3,7 +3,7 @@
 <div class="container" id="persons-index">
   <h2><%= yield(:title) %></h2>
 
-  <div id="persons-query-fields" class="form-inline">
+  <div id="persons-query-fields" class="form-inline bs-table-query-fields">
     <div class="form-group">
       <%= select_tag(:region, region_option_tags(selected_id: params[:region]), class: "form-control") %>
     </div>
