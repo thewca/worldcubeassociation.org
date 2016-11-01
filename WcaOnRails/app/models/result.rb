@@ -23,64 +23,86 @@ class Result < ActiveRecord::Base
     end
   end
 
-  validate :validate_best
-  def validate_best
-    correct_best_solve_time = sorted_solves.first
-    if correct_best_solve_time && correct_best_solve_time.wca_value != best
-      errors.add(:best, "should be #{correct_best_solve_time.wca_value}")
-    end
-  end
+  validates :competition, presence: true
+  validates :country, presence: true
+  validates :event, presence: true
+  validates :round, presence: true
+  validates :format, presence: true
 
-  def hlp
-    ActionController::Base.helpers
-  end
-
-  validate :validate_number_of_solves
-  def validate_number_of_solves
-    return errors.add(:competitionId, "invalid") unless competition
-    return errors.add(:countryId, "invalid") unless country
-    return errors.add(:roundId, "invalid") unless round
-    return errors.add(:eventId, "invalid") unless event
-    return errors.add(:formatId, "invalid") unless format
-    return errors.add(:base, "Cannot skip all solves.") if solve_times.all?(&:skipped?)
-
-    last_unskipped_index = solve_times.rindex(&:unskipped?) || 0
-    first_skipped_index = solve_times.index(&:skipped?) || Float::INFINITY
-    return "Skipped solves must all come at the end." if last_unskipped_index > first_skipped_index
-
-    unskipped_count = solve_times.length - solve_times.count(&:skipped?)
-    if round.combined?
-      if unskipped_count > format.expected_solve_count
-        return errors.add(:base, "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}.")
-      end
-    else
-      if unskipped_count != format.expected_solve_count
-        return errors.add(:base, "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}.")
-      end
+  validate :validate_solve_count
+  def validate_solve_count
+    # We need to know the round and the format in order to validate the number of solves.
+    if round && format
+      errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
   end
 
   validate :validate_average
   def validate_average
-    # Don't try to validate the average unless everything else is correct.
-    # It doesn't make sense to try to compute the average unless the result
-    # has the correct number of solves in it.
-    return unless errors.blank?
+    return if average_is_not_computable_reason
 
-    if eventId == "333fm"
-      sum_moves = counting_solve_times.sum(&:move_count)
-      correct_average_wca_value = 100 * sum_moves / counting_solve_times.length
+    correct_average = compute_correct_average
+    errors.add(:average, "should be #{correct_average}") if correct_average != average
+  end
+
+  validate :validate_best
+  def validate_best
+    correct_best = compute_correct_best
+    errors.add(:best, "should be #{correct_best}") if correct_best != best
+  end
+
+  def invalid_solve_count_reason
+    return "Invalid format" unless format
+    return "Invalid round" unless round
+    return "Cannot skip all solves." if solve_times.all?(&:skipped?)
+
+    last_unskipped_index = solve_times.rindex(&:unskipped?) || 0
+    first_skipped_index = solve_times.index(&:skipped?) || Float::INFINITY
+    return "Skipped solves must all come at the end." if last_unskipped_index > first_skipped_index
+
+    unskipped_count = solve_times.count(&:unskipped?)
+    if round.combined?
+      if unskipped_count > format.expected_solve_count
+        return "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
+      end
     else
-      sum_centis = counting_solve_times.sum(&:time_centiseconds)
-      correct_average_wca_value = sum_centis / counting_solve_times.length
+      if unskipped_count != format.expected_solve_count
+        return "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
+      end
     end
+  end
 
-    if correct_average_wca_value != average
-      errors.add(:average, "should be #{correct_average_wca_value}")
+  def average_is_not_computable_reason
+    # To compute the average, we need to have a valid number of solves,
+    # and we need to know what event we are dealing with (because
+    # 333fm is computed differently than other events).
+    event ? invalid_solve_count_reason : "Event needed to compute average"
+  end
+
+  def compute_correct_best
+    best_solve = sorted_solves.first
+    best_solve ? best_solve.wca_value : 0
+  end
+
+  def compute_correct_average
+    if average_is_not_computable_reason || missed_combined_round_cutoff?
+      0
+    else
+      if eventId == "333fm"
+        sum_moves = counting_solve_times.sum(&:move_count)
+        100 * sum_moves / counting_solve_times.length
+      else
+        sum_centis = counting_solve_times.sum(&:time_centiseconds)
+        sum_centis / counting_solve_times.length
+      end
     end
   end
 
   def to_s(field)
     SolveTime.new(eventId, field, send(field)).clock_format
+  end
+
+  def hlp
+    ActionController::Base.helpers
   end
 end

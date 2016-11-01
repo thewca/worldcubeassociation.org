@@ -116,6 +116,7 @@ class SolveTime
   def skipped?
     wca_value == SKIPPED_VALUE
   end
+
   def unskipped?
     !skipped?
   end

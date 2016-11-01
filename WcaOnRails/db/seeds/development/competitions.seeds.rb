@@ -7,7 +7,13 @@ after "development:users" do
     end
 
     def random_wca_value
-      rand(5000..100000)
+      r = rand(5000..100000)
+
+      # Solves over 10 minutes must be rounded to the nearest second.
+      if r > 10 * 60 * 100
+        r = 100 * (r / 100)
+      end
+      r
     end
   end
 
@@ -50,7 +56,7 @@ after "development:users" do
       %w(1 2 f).each do |roundId|
         users.each_with_index do |competitor, i|
           person = competitor.person
-          Result.create!(
+          result = Result.new(
             pos: i+1,
             personId: person.wca_id,
             personName: person.name,
@@ -64,11 +70,12 @@ after "development:users" do
             value3: random_wca_value,
             value4: random_wca_value,
             value5: random_wca_value,
-            best: random_wca_value,
-            average: random_wca_value,
             regionalSingleRecord: i == 0 ? "WR" : "",
             regionalAverageRecord: i == 0 ? "WR" : "",
           )
+          result.average = result.compute_correct_average
+          result.best = result.compute_correct_best
+          result.save!
         end
       end
     end
