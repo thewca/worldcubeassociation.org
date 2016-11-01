@@ -6,7 +6,9 @@
   <div id="users-query-fields" class="form-inline bs-table-query-fields">
     <div id="search-box" class="form-group">
       <div class="input-group">
-        <%= content_tag :span, icon("search"), class: "input-group-addon" %>
+        <%= content_tag :span, icon("search"), class: "input-group-addon",
+                               data: { toggle: "tooltip", placement: "top" },
+                               title: "Type name, WCA ID, email, or country. Use a space to separate them." %>
         <%= text_field_tag :search, params[:search], class: "form-control" %>
       </div>
     </div>
