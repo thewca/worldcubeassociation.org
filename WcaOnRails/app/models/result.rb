@@ -56,9 +56,9 @@ class Result < ActiveRecord::Base
     return "Invalid round" unless round
     return "Cannot skip all solves." if solve_times.all?(&:skipped?)
 
-    last_unskipped_index = solve_times.rindex(&:unskipped?) || 0
-    first_skipped_index = solve_times.index(&:skipped?) || Float::INFINITY
-    return "Skipped solves must all come at the end." if last_unskipped_index > first_skipped_index
+    unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
+      return "Skipped solves must all come at the end."
+    end
 
     unskipped_count = solve_times.count(&:unskipped?)
     if round.combined?
