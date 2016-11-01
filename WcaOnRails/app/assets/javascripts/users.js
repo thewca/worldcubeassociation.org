@@ -49,10 +49,23 @@ onPage('users#edit, users#update', function() {
   });
 });
 
+
+// Add params from the search fields to the bootstrap-table for on Ajax request.
+var usersTableAjax = {
+  queryParams: function(params) {
+    return $.extend(params || {}, {
+      search: $('#search').val(),
+    });
+  },
+  doAjax: function(options) {
+    return wca.cancelPendingAjaxAndAjax('users-index', options);
+  },
+};
+
 onPage('users#index', function() {
-  // Change bootstrap-table pagination description
   var $table = $('.bs-table');
   var options = $table.bootstrapTable('getOptions');
+  // Change bootstrap-table pagination description
   options.formatRecordsPerPage = function(pageNumber) {
     // Space after the input box with per page count
     return pageNumber + ' users per page';
@@ -61,4 +74,35 @@ onPage('users#index', function() {
     // Space before the input box with per page count
     return 'Showing ' + pageFrom + ' to ' + pageTo + ' of ' + totalRows + ' users ';
   };
+
+  // Set the table options from the url params.
+  $.extend(options, {
+    pageNumber: parseInt($.getUrlParam('page')) || options.pageNumber,
+    sortOrder: $.getUrlParam('order') || options.sortOrder,
+    sortName: $.getUrlParam('sort') || options.sortName
+  });
+  // Load the data using the options set above.
+  $table.bootstrapTable('refresh');
+
+  function reloadUsers() {
+    $('#search-box i').removeClass('fa-search').addClass('fa-spinner fa-spin');
+    options.pageNumber = 1;
+    $table.bootstrapTable('refresh');
+  }
+
+  $('#search').on('input', _.debounce(reloadUsers, TEXT_INPUT_DEBOUNCE_MS));
+
+  $table.on('load-success.bs.table', function(e, data) {
+    $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');
+
+    // Update params in the url.
+    var params = personsTableAjax.queryParams({
+      page: options.pageNumber,
+      order: options.sortOrder,
+      sort: options.sortName
+    });
+    var url = location.toString();
+    url = url.replace(/users.*/, 'users?' + $.param(params));
+    history.replaceState(null, null, url);
+  });
 });

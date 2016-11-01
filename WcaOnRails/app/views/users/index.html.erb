@@ -3,9 +3,19 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
+  <div id="users-query-fields" class="form-inline">
+    <div id="search-box" class="form-group">
+      <div class="input-group">
+        <%= content_tag :span, icon("search"), class: "input-group-addon" %>
+        <%= text_field_tag :search, params[:search], class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
   <%= wca_table table_class: "users-table",
                 data: { toggle: "table", pagination: "true", side_pagination: "server", url: users_url,
-                        search: "true", sort_name: "name", undefined_text: "" } do %>
+                        query_params: "usersTableAjax.queryParams", ajax: "usersTableAjax.doAjax",
+                        sort_name: "name", undefined_text: "" } do %>
     <thead>
       <tr>
         <th class="wca-id" data-field="wca_id" data-sortable="true">WCA ID</th>
