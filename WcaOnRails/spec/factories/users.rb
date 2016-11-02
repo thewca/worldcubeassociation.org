@@ -51,8 +51,9 @@ FactoryGirl.define do
       transient do
         person { FactoryGirl.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
       end
-      wca_id { person.wca_id }
     end
+
+    wca_id { person&.wca_id }
 
     factory :user_with_wca_id, traits: [:wca_id]
 

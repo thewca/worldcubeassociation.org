@@ -60,7 +60,8 @@ describe Api::V0::ApiController do
   end
 
   describe 'GET #users_search' do
-    let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy") }
+    let(:person) { FactoryGirl.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
+    let!(:user) { FactoryGirl.create(:user, person: person) }
 
     it 'requires query parameter' do
       get :users_search
@@ -102,15 +103,15 @@ describe Api::V0::ApiController do
     end
 
     context 'Person without User' do
-      let!(:person) { FactoryGirl.create(:person, name: "Bob") }
+      let!(:userless_person) { FactoryGirl.create(:person, name: "Bob") }
 
       it "can find by wca_id" do
-        get :users_search, q: person.wca_id, persons_table: true
+        get :users_search, q: userless_person.wca_id, persons_table: true
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq person.wca_id
-        expect(json["result"][0]["wca_id"]).to eq person.wca_id
+        expect(json["result"][0]["id"]).to eq userless_person.wca_id
+        expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
         expect(json['result'][0]['avatar']['url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['result'][0]['avatar']['thumb_url']).to eq "/assets/missing_avatar_thumb.png"
         expect(json['result'][0]['avatar']['is_default']).to eq true
@@ -121,8 +122,8 @@ describe Api::V0::ApiController do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
-        expect(json["result"][0]["id"]).to eq person.wca_id
-        expect(json["result"][0]["wca_id"]).to eq person.wca_id
+        expect(json["result"][0]["id"]).to eq userless_person.wca_id
+        expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
       end
     end
 
