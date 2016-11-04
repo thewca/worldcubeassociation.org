@@ -38,6 +38,11 @@
         <dt><%= t '.contact' %></dt>
         <dd><%=md competition.contact %></dd>
       <% end %>
+
+      <% if competition.base_entry_fee %>
+        <dt><%= t '.entry_fee' %></dt>
+        <dd><%= humanized_money_with_symbol competition.base_entry_fee %></dd>
+      <% end %>
     </dl>
   </div>
 

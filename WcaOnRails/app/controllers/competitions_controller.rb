@@ -361,6 +361,8 @@ class CompetitionsController < ApplicationController
       :guests_enabled,
       :being_cloned_from_id,
       :clone_tabs,
+      :base_entry_fee_lowest_denomination,
+      :currency_code,
     ]
     if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.

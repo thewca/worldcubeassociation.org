@@ -219,6 +219,9 @@
 
     <% end %>
 
+    <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }  %>
+    <%= f.input :base_entry_fee_lowest_denomination %>
+
     <%= f.input :use_wca_registration %>
 
     <div class="wca-registration-options">

@@ -255,6 +255,16 @@ GEM
     mini_magick (4.2.7)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
+    monetize (1.4.0)
+      money (~> 6.7)
+    money (6.7.1)
+      i18n (>= 0.6.4, <= 0.7.0)
+      sixarm_ruby_unaccent (>= 1.1.1, < 2)
+    money-rails (1.7.0)
+      activesupport (>= 3.0)
+      monetize (~> 1.4.0)
+      money (~> 6.7)
+      railties (>= 3.0)
     multi_json (1.11.0)
     mysql2 (0.3.18)
     nenv (0.2.0)
@@ -380,6 +390,7 @@ GEM
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    sixarm_ruby_unaccent (1.1.1)
     slop (3.6.0)
     spring (1.7.2)
     spring-commands-rspec (1.0.4)
@@ -478,6 +489,7 @@ DEPENDENCIES
   mail_form
   mini_magick
   momentjs-rails (~> 2.9)!
+  money-rails
   mysql2
   newrelic_rpm
   nokogiri

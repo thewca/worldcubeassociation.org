@@ -24,6 +24,11 @@ class Competition < ActiveRecord::Base
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
+  monetize :base_entry_fee_lowest_denomination,
+           as: "base_entry_fee",
+           allow_nil: true,
+           with_model_currency: :currency_code
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
@@ -39,6 +44,8 @@ class Competition < ActiveRecord::Base
     remarks
     use_wca_registration
     guests_enabled
+    base_entry_fee_lowest_denomination
+    currency_code
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
