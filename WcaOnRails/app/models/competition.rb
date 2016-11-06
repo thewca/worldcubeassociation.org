@@ -629,6 +629,10 @@ class Competition < ActiveRecord::Base
     !end_date.nil? && end_date < Date.today
   end
 
+  def city_and_country
+    [cityName, country&.name].compact.join(', ')
+  end
+
   def result_cache_key(view)
     results_updated_at = results.order('updated_at desc').limit(1).pluck(:updated_at).first
     [id, view, results_updated_at.try(:iso8601) || ""]

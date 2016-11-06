@@ -29,7 +29,7 @@
               data-toggle="tooltip" data-placement="top" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
             <td><%= link_to competition.name, competition_path(competition) %></td>
-            <td><%= competition.cityName %>, <%= competition.country.name %></td>
+            <td><%= competition.city_and_country %></td>
             <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
             <td>
               <% if registration %>
