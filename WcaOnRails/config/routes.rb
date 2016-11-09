@@ -110,7 +110,6 @@ Rails.application.routes.draw do
   get '/admin/edit_person' => 'admin#edit_person'
   patch '/admin/update_person' => 'admin#update_person'
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/check_results' => 'admin/check_results#index'
 
   get '/search' => 'search_results#index'
 
