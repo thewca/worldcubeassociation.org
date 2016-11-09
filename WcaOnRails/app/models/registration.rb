@@ -9,6 +9,7 @@ class Registration < ActiveRecord::Base
   belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User"
   belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User"
   has_many :registration_competition_events
+  has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
 
@@ -99,6 +100,33 @@ class Registration < ActiveRecord::Base
 
   def best_solve(event, type)
     person&.best_solve(event, type) || SolveTime.new(event.id, type, 0)
+  end
+
+  def entry_fee
+    competition.base_entry_fee
+  end
+
+  def entry_fee_currency_code
+    competition.currency_code
+  end
+
+  def paid_entry_fees
+    Money.new(
+      registration_payments.sum(:amount_lowest_denomination),
+      entry_fee_currency_code,
+    )
+  end
+
+  def outstanding_entry_fees
+    entry_fee.nil? ? nil : entry_fee - Money.new(paid_entry_fees, entry_fee_currency_code)
+  end
+
+  def record_payment(amount, currency_code, stripe_charge_id)
+    registration_payments.create!(
+      amount_lowest_denomination: amount,
+      currency_code: currency_code,
+      stripe_charge_id: stripe_charge_id,
+    )
   end
 
   # Since Registration.events only includes saved events

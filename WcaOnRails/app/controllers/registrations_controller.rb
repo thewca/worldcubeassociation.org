@@ -196,6 +196,43 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def process_payment
+    competition = competition_from_params
+    if current_user
+      registrations = competition.registrations
+      registration = registrations.find_by_user_id!(current_user.id)
+    end
+    token = params[:stripeToken]
+    Stripe.api_key = ENVied.STRIPE_API_KEY
+
+    begin
+      charge = Stripe::Charge.create({
+        amount: registration.outstanding_entry_fees.cents,
+        currency: registration.entry_fee_currency_code,
+        source: token,
+        description: "Registration payment",
+        metadata: registration.user.wca_id,
+        application_fee: 100,
+      }, stripe_account: competition.connected_stripe_account_id)
+    rescue Stripe::CardError => e
+      flash[:danger] = 'Unsuccessful payment: ' + e.message
+      redirect_to competition_register_path
+      return
+    rescue => e
+      flash[:danger] = 'Something went wrong: ' + e.message
+      redirect_to competition_register_path
+      return
+    end
+
+    registration.record_payment(
+      charge.amount,
+      charge.currency,
+      charge.id,
+    )
+
+    redirect_to competition_register_path
+  end
+
   def create
     @competition = competition_from_params
     if !@competition.registration_opened?

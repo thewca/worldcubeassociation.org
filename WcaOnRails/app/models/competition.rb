@@ -86,6 +86,7 @@ class Competition < ActiveRecord::Base
     results_posted_at
     results_nag_sent_at
     announced_at
+    connected_stripe_account_id
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/

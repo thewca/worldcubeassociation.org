@@ -24,7 +24,7 @@ class CompetitionsController < ApplicationController
     competition
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
 
   before_action -> { redirect_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -285,6 +285,64 @@ class CompetitionsController < ApplicationController
     @competition_organizer_view = true
     @nearby_competitions = get_nearby_competitions(@competition)
     render :edit
+  end
+
+  def payment_setup
+    @competition = Competition.find(params[:id])
+
+    client = create_stripe_oauth_client
+    oauth_params = {
+      scope: 'read_write',
+      state: @competition.id,
+    }
+    @authorize_url = client.auth_code.authorize_url(oauth_params)
+  end
+
+  def revoke_stripe_access
+    @competition = Competition.find(params[:id])
+    if @competition.connected_stripe_account_id
+      Stripe.api_key = ENVied.STRIPE_API_KEY
+      account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
+      account.deauthorize(
+        ENVied.STRIPE_CLIENT_ID,
+        { stripe_user_id: @competition.connected_stripe_account_id},
+      )
+      @competition.connected_stripe_account_id = nil
+      @competition.save!
+    end
+    redirect_to competitions_payment_setup_path
+  end
+
+  def stripe_connect
+    code = params[:code]
+    competition = Competition.find(params[:state])
+    if !competition.user_can_view?(current_user)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    client = create_stripe_oauth_client
+    resp = client.auth_code.get_token(code, params: {scope: 'read_write'})
+    competition.connected_stripe_account_id = resp.params['stripe_user_id']
+    if competition.save
+      flash[:success] = t('competitions.messages.stripe_connected')
+    else
+      flash[:success] = t('competitions.messages.stripe_not_connected')
+    end
+    redirect_to competitions_payment_setup_path(competition)
+  end
+
+  private def create_stripe_oauth_client
+    options = {
+      site: 'https://connect.stripe.com',
+      authorize_url: '/oauth/authorize',
+      token_url: '/oauth/token',
+    }
+
+    client = OAuth2::Client.new(
+      ENVied.STRIPE_CLIENT_ID,
+      ENVied.STRIPE_API_KEY,
+      options,
+    )
+    client
   end
 
   def clone_competition

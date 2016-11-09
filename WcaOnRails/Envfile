@@ -32,3 +32,7 @@ variable :NEW_RELIC_LICENSE_KEY, :string, default: ''
 
 variable :GOOGLE_MAPS_API_KEY, :string, default: 'AIzaSyCthnikDc6olZ2lftHfqb_nkRuRrqBp17w'
 variable :GITHUB_BOT_ACCESS_TOKEN, :string, default: ''
+variable :STRIPE_API_KEY, :string, default: ''
+variable :STRIPE_PUBLISHABLE_KEY, :string, default: ''
+variable :STRIPE_CLIENT_ID, :string, default: ''
+variable :STRIPE_REDIRECT_URI, :string, default: ''

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
+    post 'process_payment' => 'registrations#process_payment'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
@@ -51,6 +52,9 @@ Rails.application.routes.draw do
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+  get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
+  get 'competitions/:id/revoke_stripe_access' => 'competitions#revoke_stripe_access', as: :competitions_revoke_stripe_access
+  get 'stripe-connect' => 'competitions#stripe_connect'
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   patch 'competitions/:id/events' => 'competitions#update_events', as: :update_events
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions

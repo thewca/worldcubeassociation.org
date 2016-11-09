@@ -1,0 +1,5 @@
+<% if @registration.entry_fee %>
+  <%= alert :info do %>
+    <%= t 'registrations.entry_fee' %><strong><%= humanized_money_with_symbol @competition.base_entry_fee %></strong>
+  <% end %>
+<% end %>

@@ -195,6 +195,7 @@ en:
       registration:
         guests: "Guests"
         comments: "Comments"
+        paid_entry_fees: "Paid"
         status: "Status"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
@@ -667,6 +668,9 @@ en:
     contact_organizer: "Contact the organizer if you wish to make a change."
     waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
     accepted: "Your registration has been accepted!"
+    entry_fees_partially_paid: "You have currently paid %{paid} of your total %{total_entry_fee} entry fee."
+    entry_fees_fully_paid: "You have paid your entry fee of %{paid} in full."
+    payment_button_text: "Pay your %{entry_fee} entry fee with card"
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
   #context: Key used when managing competitions
   competitions:
@@ -685,6 +689,8 @@ en:
       confirmed_not_visible: "This competition is confirmed but not visible"
       not_confirmed_visible: "This competition is not confirmed but visible"
       not_confirmed_not_visible: "This competition is not confirmed and not visible"
+      stripe_connected: "You have now successfully connected your Stripe account and can now recieve registration payments for this competition."
+      stripe_not_connected: "There was a problem and we could not connect your Stripe account."
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
