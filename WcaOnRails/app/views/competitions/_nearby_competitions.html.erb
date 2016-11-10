@@ -10,14 +10,13 @@
   </label>
   <div class="col-sm-9">
     <% if @competition.has_date? && @competition.has_location? %>
-      <% nearby_competitions = @competition.nearby_competitions(Competition::NEARBY_DAYS_WARNING, Competition::NEARBY_DISTANCE_KM_WARNING)[0, 10] %>
-      <% if nearby_competitions.empty? %>
+      <% if @nearby_competitions.empty? %>
         <%= alert :success, t('.no_comp_nearby') %>
       <% else %>
-        <%= render 'nearby_competitions_table', nearby_competitions: nearby_competitions %>
+        <%= render 'nearby_competitions_table', nearby_competitions: @nearby_competitions %>
       <% end %>
     <% else %>
-      <% nearby_competitions = [] %>
+      <% @nearby_competitions = [] %>
       <% unless @competition.has_date? %>
         <%= alert :danger, t('.no_date_yet') %>
       <% end %>
@@ -60,7 +59,7 @@
 <script>
   (function() {
     $('[data-toggle="tooltip"]').tooltip();
-    wca.setNearbyCompetitions(<%= nearby_competitions.map do |c|
+    wca.setNearbyCompetitions(<%= @nearby_competitions.map do |c|
         {
           id: c.id,
           name: c.name,

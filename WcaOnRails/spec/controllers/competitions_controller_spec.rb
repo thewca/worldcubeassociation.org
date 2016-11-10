@@ -138,6 +138,39 @@ describe CompetitionsController do
     end
   end
 
+  describe 'GET #edit' do
+    let(:organizer) { FactoryGirl.create(:user) }
+    let(:admin) { FactoryGirl.create :admin }
+    let!(:my_competition) { FactoryGirl.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
+    let!(:other_competition) { FactoryGirl.create(:competition, :with_delegate, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
+
+    context 'when signed in as an organizer' do
+      before :each do
+        sign_in organizer
+      end
+
+      it 'cannot see unconfirmed nearby competitions' do
+        get :edit, id: my_competition
+        expect(assigns(:nearby_competitions)).to eq []
+        other_competition.isConfirmed = true
+        other_competition.save!
+        get :edit, id: my_competition
+        expect(assigns(:nearby_competitions)).to eq [other_competition]
+      end
+    end
+
+    context 'when signed in as an admin' do
+      before :each do
+        sign_in admin
+      end
+
+      it "can see unconfirmed nearby competitions" do
+        get :edit, id: my_competition
+        expect(assigns(:nearby_competitions)).to eq [other_competition]
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
