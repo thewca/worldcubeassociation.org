@@ -316,7 +316,7 @@ class CompetitionsController < ApplicationController
   def stripe_connect
     code = params[:code]
     competition = Competition.find(params[:state])
-    if !competition.user_can_view?(current_user)
+    unless current_user && current_user.can_manage_competition?(competition)
       raise ActionController::RoutingError.new('Not Found')
     end
     client = create_stripe_oauth_client

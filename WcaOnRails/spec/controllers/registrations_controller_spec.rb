@@ -562,4 +562,17 @@ RSpec.describe RegistrationsController do
       expect(registrations.map(&:pos)).to eq [ 1 ]
     end
   end
+
+  describe 'POST #process_payment' do
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, events: Event.where(id: %w(222 333))) }
+
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        post :process_payment, competition_id: competition.id
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
 end

@@ -778,4 +778,86 @@ describe CompetitionsController do
       end
     end
   end
+
+  describe 'GET #payment_setup' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :payment_setup, id: competition, competition: { name: competition.name }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
+      it 'displays payment setup status' do
+        get :payment_setup, id: competition, competition: { name: competition.name }
+        expect(response.status).to eq 200
+        expect(assigns(:competition)).to eq competition
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'does not allow access' do
+        expect {
+          get :payment_setup, id: competition, competition: { name: competition.name }
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+  end
+
+  describe 'GET #revoke_stripe_access' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :revoke_stripe_access, id: competition, competition: { name: competition.name }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as an admin' do
+      sign_in { FactoryGirl.create :admin }
+
+      it 'redirects to competition payment setup' do
+        get :revoke_stripe_access, id: competition, competition: { name: competition.name }
+        expect(response).to redirect_to competitions_payment_setup_path(competition)
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'does not allow access' do
+        expect {
+          get :revoke_stripe_access, id: competition, competition: { name: competition.name }
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+  end
+
+  describe 'GET #stripe_connect' do
+    context 'when not signed in' do
+      sign_out
+
+      it 'redirects to the sign in page' do
+        get :stripe_connect, state: competition, competition: { name: competition.name }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in as a regular user' do
+      sign_in { FactoryGirl.create :user }
+
+      it 'does not allow access' do
+        expect {
+          get :stripe_connect, state: competition, competition: { name: competition.name }
+        }.to raise_error(ActionController::RoutingError)
+      end
+    end
+  end
 end
