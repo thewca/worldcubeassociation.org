@@ -616,8 +616,9 @@ describe CompetitionsController do
 
       it "sends notifications of id claim possibility to newcomers" do
         competition = FactoryGirl.create(:competition, :registration_open)
-        FactoryGirl.create_list(:registration, 2, :newcomer, competition: competition)
-        FactoryGirl.create_list(:registration, 4, competition: competition)
+        FactoryGirl.create_list(:registration, 2, :accepted, :newcomer, competition: competition)
+        FactoryGirl.create_list(:registration, 3, :pending, :newcomer, competition: competition)
+        FactoryGirl.create_list(:registration, 4, :accepted, competition: competition)
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
         get :post_results, id: competition
