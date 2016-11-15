@@ -1,0 +1,11 @@
+<p>
+  You've taken part in <%= link_to @competition.name, competition_url(@competition) %> recently.
+</p>
+
+<p>
+  You can assign your WCA ID to your WCA account <%= link_to "here", profile_claim_wca_id_url %>.
+</p>
+
+<p>
+  If you haven't created an account yet, you can do this <%= link_to "here", new_user_registration_url %>.
+</p>

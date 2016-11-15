@@ -535,6 +535,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def notify_of_id_claim_possibility(competition)
+    if !wca_id && !unconfirmed_wca_id
+      CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later
+    end
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)

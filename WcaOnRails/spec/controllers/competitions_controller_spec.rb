@@ -520,7 +520,7 @@ describe CompetitionsController do
     end
   end
 
-  describe 'GET #post_announcement' do
+  describe 'GET #post_results' do
     context 'when signed in as results team member' do
       sign_in { FactoryGirl.create(:results_team) }
 
@@ -612,6 +612,16 @@ describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         get :post_results, id: competition
         assert_enqueued_jobs 4
+      end
+
+      it "sends notifications of id claim possibility to newcomers" do
+        competition = FactoryGirl.create(:competition, :registration_open)
+        FactoryGirl.create_list(:registration, 2, :newcomer, competition: competition)
+        FactoryGirl.create_list(:registration, 4, competition: competition)
+
+        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
+        get :post_results, id: competition
+        assert_enqueued_jobs 2
       end
     end
   end
