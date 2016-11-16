@@ -43,11 +43,12 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq "Please link your WCA ID with your account"
       expect(mail.to).to eq [newcomer_user.email]
+      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match "You can assign your WCA ID to your WCA account"
+      expect(mail.body.encoded).to match competition.name
       expect(mail.body.encoded).to match profile_claim_wca_id_url
     end
   end

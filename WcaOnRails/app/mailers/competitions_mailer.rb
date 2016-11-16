@@ -26,6 +26,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: user.email,
+      reply_to: competition.delegates.pluck(:email),
       subject: "Please link your WCA ID with your account",
     )
   end
