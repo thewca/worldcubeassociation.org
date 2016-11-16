@@ -432,14 +432,12 @@ fr:
     errors:
       not_found: "introuvable"
       already_assigned: "déjà associé à un autre compte"
-      dob_incorrect: "incorrecte"
       unique: "doit être unique"
       dob_past: "doit être dans le passé"
       must_be_senior: "doit être un Délégué sénior"
       must_not_be_present: "ne doit pas être présent"
       senior_has_delegate: "ne peut pas destituer un Délégué sénior qui supervise d'autres Délégués"
       already_have_id: "impossible à réclamer car vous avez déjà l'ID WCA %{wca_id}"
-      wca_id_no_birthdate: "L'ID WCA n'a pas de date de naissance, contactez l'équipe en charge des résultats pour corriger le problème."
       board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
       avatar_requires_wca_id: "requiert d'avoir un ID WCA"
     select_nearby_delegate:

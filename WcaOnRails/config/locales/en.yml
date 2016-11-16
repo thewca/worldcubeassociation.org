@@ -436,14 +436,14 @@ en:
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
-      dob_incorrect: "incorrect"
+      dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>, report this error and send a picture of any legal document (identity card, driver license,...) where your name and date of birth are visible."
       unique: "must be unique"
       dob_past: "must be in the past"
       must_be_senior: "must be a senior delegate"
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote senior delegate with subordinate delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
-      wca_id_no_birthdate: "WCA ID does not have a birthdate. Contact the Results team to resolve this."
+      wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> with a photo of any legal document (ID card, driver license, etc) where your name and date of birth are visible."
       board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
     select_nearby_delegate:
