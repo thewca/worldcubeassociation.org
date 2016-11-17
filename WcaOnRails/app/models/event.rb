@@ -24,7 +24,6 @@ class Event < ActiveRecord::Base
 
   scope :official, -> { where("rank < 990") }
   scope :deprecated, -> { where("rank between 990 and 999") }
-  scope :never_were_official, -> { where("rank >= 1000") }
 
   def recommended_format
     formats.recommended.first
@@ -36,9 +35,5 @@ class Event < ActiveRecord::Base
 
   def deprecated?
     990 <= rank && rank < 1000
-  end
-
-  def never_was_official?
-    rank >= 1000
   end
 end
