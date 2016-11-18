@@ -69,8 +69,8 @@
             $map.locationpicker({
               zoom: 8,
               location: {
-                latitude: <%= @competition.latitude_degrees %>,
-                longitude: <%= @competition.longitude_degrees %>,
+                latitude: <%= @competition.latitude_degrees ||= 0 %>,
+                longitude: <%= @competition.longitude_degrees ||= 0 %>,
               },
               radius: 0,
               scrollwheel: false,
