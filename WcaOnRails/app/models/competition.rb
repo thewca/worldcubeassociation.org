@@ -589,7 +589,7 @@ class Competition < ActiveRecord::Base
   end
 
   def has_location?
-    latitude != 0 && longitude != 0
+    !latitude.nil? && !longitude.nil?
   end
 
   def days_until

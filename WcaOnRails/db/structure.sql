@@ -39,8 +39,8 @@ CREATE TABLE `Competitions` (
   `external_website` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cellName` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `showAtAll` tinyint(1) NOT NULL DEFAULT '0',
-  `latitude` int(11) NOT NULL DEFAULT '0',
-  `longitude` int(11) NOT NULL DEFAULT '0',
+  `latitude` int(11) NOT NULL,
+  `longitude` int(11) NOT NULL,
   `isConfirmed` tinyint(1) NOT NULL DEFAULT '0',
   `contact` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `remarks` text COLLATE utf8_unicode_ci,
@@ -1147,3 +1147,4 @@ INSERT INTO schema_migrations (version) VALUES ('20161026201019');
 
 INSERT INTO schema_migrations (version) VALUES ('20161031215932');
 
+INSERT INTO schema_migrations (version) VALUES ('20161118141833');
