@@ -624,7 +624,7 @@ fr:
       not_all_delegates: "ne sont pas tous des délégués"
       registration_close_after_open: "doit être après l'ouverture des inscriptions."
       end_date_before_start: "ne peut pas être avant la date de début."
-      span_multiple_years: "Les dates de la compétition ne peuvent pas être sur plusieurs années."
+      span_too_many_days: "La compétition ne peut pas durer plus de %{max_days} jours."
     unscheduled: "non prévue"
     new:
       create_competition: "Créer une compétition"

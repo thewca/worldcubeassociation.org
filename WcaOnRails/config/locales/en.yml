@@ -630,7 +630,7 @@ en:
       not_all_delegates: "are not all delegates"
       registration_close_after_open: "registration close must be after registration open"
       end_date_before_start: "End date cannot be before start date."
-      span_multiple_years: "Competition dates cannot span multiple years."
+      span_too_many_days: "Competition cannot last more than %{max_days} days."
     unscheduled: "unscheduled"
     new:
       create_competition: "Create competition"

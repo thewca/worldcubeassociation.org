@@ -53,6 +53,7 @@ class Competition < ActiveRecord::Base
     year
     month
     day
+    endYear
     endMonth
     endDay
     cellName
@@ -95,6 +96,7 @@ class Competition < ActiveRecord::Base
   REPORT_AND_RESULTS_DAYS_DANGER = 21
   ANNOUNCED_DAYS_WARNING = 21
   ANNOUNCED_DAYS_DANGER = 28
+  MAX_SPAN_DAYS = 6
 
   # https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++
   SHOULD_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 29
@@ -488,7 +490,6 @@ class Competition < ActiveRecord::Base
   end
 
   def end_date
-    endYear = @endYear || year # gross hack to remember the years of a multiyear competition
     endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.new(endYear, endMonth, endDay)
   end
 
@@ -513,14 +514,14 @@ class Competition < ActiveRecord::Base
       @end_date = end_date.strftime("%F")
     end
     if @end_date.blank?
-      @endYear = self.endMonth = self.endDay = 0
+      self.endYear = self.endMonth = self.endDay = 0
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
         errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
-      @endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
-      unless Date.valid_date? @endYear, self.endMonth, self.endDay
+      self.endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
+      unless Date.valid_date? self.endYear, self.endMonth, self.endDay
         errors.add(:end_date, I18n.t('common.errors.invalid'))
         return false
       end
@@ -528,7 +529,7 @@ class Competition < ActiveRecord::Base
   end
 
   private def dates_must_be_valid
-    if !confirmed_or_visible? && [year, month, day, @endYear, endMonth, endDay].all? { |n| n == 0 }
+    if !confirmed_or_visible? && [year, month, day, endYear, endMonth, endDay].all? { |n| n == 0 }
       # If the user left both dates empty, that's a-okay.
       return
     end
@@ -538,7 +539,7 @@ class Competition < ActiveRecord::Base
       valid_dates = false
       errors.add(:start_date, I18n.t('common.errors.invalid'))
     end
-    unless Date.valid_date? @endYear, endMonth, endDay
+    unless Date.valid_date? endYear, endMonth, endDay
       valid_dates = false
       errors.add(:end_date, I18n.t('common.errors.invalid'))
     end
@@ -551,8 +552,9 @@ class Competition < ActiveRecord::Base
       errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
     end
 
-    if @endYear != year
-      errors.add(:end_date, I18n.t('competitions.errors.span_multiple_years'))
+    span_in_days = (end_date - start_date).to_i
+    if span_in_days > MAX_SPAN_DAYS
+      errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
   end
 
@@ -782,7 +784,7 @@ class Competition < ActiveRecord::Base
       if !end_date
         raise WcaExceptions::BadApiParameter, "Invalid end: '#{params[:end]}'"
       end
-      competitions = competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
+      competitions = competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
     end
 
     query&.split&.each do |part|

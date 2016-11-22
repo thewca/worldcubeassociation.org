@@ -93,16 +93,17 @@ RSpec.describe Competition do
     expect(competition).to be_invalid
   end
 
-  it "populates year, month, day, endMonth, endDay" do
+  it "populates year, month, day, endYear, endMonth, endDay" do
     competition = FactoryGirl.create :competition
-    competition.start_date = "1987-11-06"
-    competition.end_date = "1987-12-07"
+    competition.start_date = "1987-12-31"
+    competition.end_date = "1988-01-01"
     competition.save!
     expect(competition.year).to eq 1987
-    expect(competition.month).to eq 11
-    expect(competition.day).to eq 6
-    expect(competition.endMonth).to eq 12
-    expect(competition.endDay).to eq 7
+    expect(competition.month).to eq 12
+    expect(competition.day).to eq 31
+    expect(competition.endYear).to eq 1988
+    expect(competition.endMonth).to eq 1
+    expect(competition.endDay).to eq 1
   end
 
   describe "validates date formats" do
@@ -141,11 +142,12 @@ RSpec.describe Competition do
     expect(competition).to be_invalid
   end
 
-  it "requires that competition starts and ends in the same year" do
+  it "last less than MAX_SPAN_DAYS days" do
     competition = FactoryGirl.create :competition
-    competition.start_date = "1987-12-06"
-    competition.end_date = "1988-12-07"
+    competition.start_date = 1.days.ago.strftime("%F")
+    competition.end_date = Competition::MAX_SPAN_DAYS.days.from_now.strftime("%F")
     expect(competition).to be_invalid
+    expect(competition.errors.messages[:end_date]).to eq [I18n.t('competitions.errors.span_too_many_days', max_days: Competition::MAX_SPAN_DAYS)]
   end
 
   it "requires competition name is not greater than 50 characters" do
