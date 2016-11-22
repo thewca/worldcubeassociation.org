@@ -124,10 +124,14 @@ function competitionDate ( $competition ) {
   $date = $month ? $months[$month] : '&nbsp;';
   if( $day )
     $date .= " $day";
+  if( $endYear != $year )
+    $date .= " $year";
   if( $endMonth != $month )
     $date .= " - " . $months[$endMonth] . " $endDay";
   elseif( $endDay != $day )
     $date .= "-$endDay";
+  if( $endYear )
+    $date .= " $endYear";
   return $date;
 }
 

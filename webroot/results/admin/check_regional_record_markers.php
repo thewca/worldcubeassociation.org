@@ -135,7 +135,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
         AND competition.id = result.competitionId
         AND country.id     = result.countryId
         AND event.id       = result.eventId
-        AND year*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) < $startDate
+        AND endYear*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) < $startDate
       GROUP BY eventId, countryId");
     while( $row = mysql_fetch_row( $results ) ) {
       list( $eventId, $countryId, $continentId, $value, $valueFormat ) = $row;
@@ -149,7 +149,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
   #--- Otherwise we need the endDate of each competition
   else {
     $competitions = dbQuery("
-      SELECT id, year*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) endDate
+      SELECT id, endYear*10000 + if(endMonth,endMonth,month)*100 + if(endDay,endDay,day) endDate
       FROM   Competitions competition");
     foreach ( $competitions as $competition )
       $endDate[$competition['id']] = $competition['endDate'];
