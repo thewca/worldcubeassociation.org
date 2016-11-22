@@ -427,7 +427,7 @@ class Competition < ActiveRecord::Base
   end
 
   def longitude_degrees
-    longitude_microdegrees / 1e6
+    longitude_microdegrees ? longitude_microdegrees / 1e6 : nil
   end
 
   def longitude_degrees=(new_longitude_degrees)
@@ -439,7 +439,7 @@ class Competition < ActiveRecord::Base
   end
 
   def latitude_degrees
-    latitude_microdegrees / 1e6
+    latitude_microdegrees ? latitude_microdegrees / 1e6 : nil
   end
 
   def latitude_degrees=(new_latitude_degrees)
@@ -589,7 +589,7 @@ class Competition < ActiveRecord::Base
   end
 
   def has_location?
-    latitude != 0 && longitude != 0
+    !latitude.nil? && !longitude.nil?
   end
 
   def days_until

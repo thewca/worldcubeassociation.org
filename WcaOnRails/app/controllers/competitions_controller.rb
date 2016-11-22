@@ -348,6 +348,7 @@ class CompetitionsController < ApplicationController
       if @competition.id_changed?
         @competition.id = @competition.id_was
       end
+      @nearby_competitions = get_nearby_competitions(@competition)
       render :edit
     end
   end
