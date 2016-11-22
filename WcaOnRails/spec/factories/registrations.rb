@@ -14,6 +14,10 @@ FactoryGirl.define do
       accepted_at Time.now
     end
 
+    trait :deleted do
+      deleted_at Time.now
+    end
+
     trait :pending do
       accepted_at nil
     end

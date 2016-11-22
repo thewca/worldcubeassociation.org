@@ -38,7 +38,7 @@ RSpec.describe RegistrationsController do
     it "accepts a pending registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { accepted_at: Time.now }
+        patch :update, id: registration.id, registration: { status: 'accepted' }
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.accepted?).to be true
     end
@@ -57,12 +57,10 @@ RSpec.describe RegistrationsController do
     it "can delete registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
 
-      expect do
-        delete :destroy, id: registration.id
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+      delete :destroy, id: registration.id
 
       expect(flash[:success]).to eq "Deleted registration and emailed #{registration.email}"
-      expect(Registration.find_by_id(registration.id)).to eq nil
+      expect(Registration.find_by_id(registration.id).deleted?).to eq true
     end
 
     it "can delete multiple registrations" do
@@ -70,12 +68,12 @@ RSpec.describe RegistrationsController do
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
-      expect do
-        xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
-                                              selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
-      end.to change { ActionMailer::Base.deliveries.length }.by(2)
-      expect(Registration.find_by_id(registration.id)).to eq nil
-      expect(Registration.find_by_id(registration2.id)).to eq nil
+
+      xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
+                                            selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
+
+      expect(Registration.find_by_id(registration.id).deleted?).to eq true
+      expect(Registration.find_by_id(registration2.id).deleted?).to eq true
     end
 
     it "can reject multiple registrations" do
@@ -132,7 +130,7 @@ RSpec.describe RegistrationsController do
     it "can accept own registration" do
       registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: organizer.id
 
-      patch :update, id: registration.id, registration: { accepted_at: Time.now }
+      patch :update, id: registration.id, registration: { status: 'accepted' }
       expect(registration.reload.accepted?).to eq true
     end
 
@@ -169,16 +167,29 @@ RSpec.describe RegistrationsController do
       expect(registration.competition_id).to eq competition.id
     end
 
+    it "can re-create registration after it was deleted" do
+      registration = FactoryGirl.create :registration, :accepted, :deleted, competition: competition, user_id: user.id
+      registration_competition_event = registration.registration_competition_events.first
+
+      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [ {id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0} ],
+                                                          comments: "Registered again" }
+      expect(registration.reload.comments).to eq "Registered again"
+      expect(registration.reload.pending?).to eq true
+      expect(registration.reload.accepted?).to eq false
+      expect(registration.reload.deleted?).to eq false
+      expect(flash[:success]).to eq "Updated registration"
+      expect(response).to redirect_to competition_register_path(competition)
+    end
+
     it "can delete registration when on waitlist" do
       registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
-      expect do
-        delete :destroy, id: registration.id, user_is_deleting_theirself: true
-      end.to change { ActionMailer::Base.deliveries.length }.by(1)
+
+      delete :destroy, id: registration.id, user_is_deleting_theirself: true
 
       expect(response).to redirect_to competition_path(competition) + '/register'
-      expect(Registration.find_by_id(registration.id)).to eq nil
+      expect(Registration.find_by_id(registration.id).deleted?).to eq true
       expect(flash[:success]).to eq "Successfully deleted your registration for #{competition.name}"
     end
 
@@ -212,7 +223,7 @@ RSpec.describe RegistrationsController do
       competition.update_column(:showAtAll, false)
 
       expect {
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "", status: :accepted }
+        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ {competition_event_id: threes_comp_event.id} ], guests: 1, comments: "", status: :accepted }
       }.to raise_error(ActionController::RoutingError)
     end
 
@@ -221,7 +232,7 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ {event_id: "333"} ], guests: 1, comments: "", accepted_at: Time.now }
+      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ {competition_event_id: threes_comp_event.id} ], guests: 1, comments: "", accepted_at: Time.now }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end

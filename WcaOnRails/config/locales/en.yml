@@ -145,14 +145,12 @@ en:
         remarks: "Remarks"
         clone_tabs: "I would like to clone all tabs with additional information as well"
       registration:
-        countryId: "Country"
         guests: "Guests"
         comments: "Comments"
         status: "Status"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
-        gender: "Gender"
       competition_tab:
         content: "Content"
         name: "Name"
@@ -275,12 +273,8 @@ en:
         multiple: ""
         question: ""
       registration:
-        birthday: ""
         comments: ""
-        countryId: ""
-        gender: ""
         guests: ""
-        name: ""
         status: ""
       team:
         description: ""
@@ -291,8 +285,9 @@ en:
     options:
       registration:
         status:
-          a: "Accepted"
-          p: "Waiting list"
+          accepted: "Accepted"
+          pending: "Waiting list"
+          deleted: "Deleted"
       competition:
         guests_enabled:
           "true": "Ask about guests"
@@ -500,6 +495,7 @@ en:
       delete: "Delete"
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
+      deleted_registrations: "Deleted registrations"
       registered: "Registered"
       total: "Total"
     new_registration:
@@ -510,9 +506,7 @@ en:
     register: "Register!"
     update: "Update Registration"
     delete: "Delete"
-    delete_tooltip: "Delete registration. This will email %{name} at %{mail}."
     delete_confirm: "Are you sure you want to delete your registration?"
-    admin_delete_confirm: "Are you sure you want to delete %{name}'s registration?"
     delete_registration: "Delete registration."
     will_open_html: "Registration will open in <strong>%{days}</strong> on %{time}."
     will_close_html: "Registration closes in <strong>%{days}</strong> on %{time}."

@@ -73,15 +73,15 @@ class RegistrationsController < ApplicationController
       if !current_user.can_edit_registration?(@registration)
         flash[:danger] = I18n.t('registrations.flash.cannot_delete')
       else
-        @registration.destroy!
-        RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
+        @registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
+        RegistrationsMailer.notify_organizers_of_deleted_registration(@registration).deliver_later
         flash[:success] = I18n.t('registrations.flash.deleted', comp: @competition.name)
       end
       redirect_to competition_register_path(@competition)
     elsif current_user.can_manage_competition?(@competition)
-      @registration.destroy!
+      @registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
-      mailer.deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
+      mailer.deliver_later
       flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(" "))
       redirect_to competition_edit_registrations_path(@registration.competition)
     end
@@ -113,7 +113,7 @@ class RegistrationsController < ApplicationController
     when "accept-selected"
       registrations.each do |registration|
         if !registration.accepted?
-          registration.update!(accepted_at: Time.now)
+          registration.update!(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
         end
       end
@@ -121,15 +121,15 @@ class RegistrationsController < ApplicationController
     when "reject-selected"
       registrations.each do |registration|
         if !registration.pending?
-          registration.update!(accepted_at: nil)
+          registration.update!(accepted_at: nil, deleted_at: nil)
           RegistrationsMailer.notify_registrant_of_pending_registration(registration).deliver_later
         end
       end
       flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: registrations.length)
     when "delete-selected"
       registrations.each do |registration|
-        registration.destroy
-        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_now # TODO - convert to deliver_later see https://github.com/thewca/worldcubeassociation.org/issues/922
+        registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
+        RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later
       end
       flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: registrations.length)
     when "export-selected"
@@ -155,15 +155,20 @@ class RegistrationsController < ApplicationController
       return
     end
     was_accepted = @registration.accepted?
+    was_deleted = @registration.deleted?
     if current_user.can_edit_registration?(@registration) && @registration.update_attributes(registration_params)
       if !was_accepted && @registration.accepted?
         mailer = RegistrationsMailer.notify_registrant_of_accepted_registration(@registration)
         mailer.deliver_later
         flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
-      elsif was_accepted && !@registration.accepted?
+      elsif was_accepted && @registration.pending?
         mailer = RegistrationsMailer.notify_registrant_of_pending_registration(@registration)
         mailer.deliver_later
-        flash[:success] = "Accepted registration and emailed #{mailer.to.join(" ")}"
+        flash[:success] = "Moved registration to the waiting list and emailed #{mailer.to.join(" ")}"
+      elsif !was_deleted && @registration.deleted?
+        mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
+        mailer.deliver_later
+        flash[:success] = "Deleted registration and emailed #{mailer.to.join(" ")}"
       else
         flash[:success] = I18n.t('registrations.flash.updated')
       end
@@ -187,8 +192,7 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     @registration = nil
     if current_user
-      registrations = @competition.registrations
-      @registration = registrations.find_by_user_id(current_user.id) || registrations.build(user_id: current_user.id)
+      @registration = Registration.find_by(user_id: current_user.id, competition_id: @competition.id) || @competition.registrations.build(user_id: current_user.id)
     end
   end
 
@@ -214,13 +218,28 @@ class RegistrationsController < ApplicationController
     permitted_params = [
       :guests,
       :comments,
+      :accepted_at,
+      :deleted_at,
       registration_competition_events_attributes: [:id, :competition_event_id, :_destroy],
     ]
+    params[:registration][:deleted_at] = nil
+    params[:registration][:accepted_at] = nil
     if current_user.can_manage_competition?(competition_from_params)
-      permitted_params << :accepted_at
+      permitted_params << [
+        :accepted_by,
+        :deleted_by,
+      ]
       status = params[:registration][:status]
-      if status
-        params[:registration][:accepted_at] = (status == "a" ? Time.now : nil)
+      if status == "accepted"
+        params[:registration][:accepted_at] = Time.now
+        params[:registration][:accepted_by] = current_user.id
+        params[:registration][:deleted_at] = nil
+      elsif status == "deleted"
+        params[:registration][:deleted_at] = Time.now
+        params[:registration][:deleted_by] = current_user.id
+      else
+        params[:registration][:accepted_at] = nil
+        params[:registration][:deleted_at] = nil
       end
     end
     params.require(:registration).permit(*permitted_params)

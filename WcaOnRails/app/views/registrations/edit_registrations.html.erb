@@ -3,11 +3,13 @@
 <%= render layout: 'nav' do %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
-    <% [:pending, :accepted].each do |status| %>
+    <% [:pending, :accepted, :deleted].each do |status| %>
       <% if :pending == status %>
         <h2><%= t 'registrations.list.waiting_list' %></h2>
-      <% else %>
+      <% elsif :accepted == status %>
         <h2><%= t 'registrations.list.approved_registrations' %></h2>
+      <% else %>
+        <h2><%= t 'registrations.list.deleted_registrations' %></h2>
       <% end %>
       <% registrations = @competition.registrations.public_send(status).includes(:user, :events) %>
       <%= wca_table table_class: "registrations-table #{status}",
@@ -42,7 +44,7 @@
 
         <tbody>
           <% registrations.each do |registration| %>
-            <tr id="registration-<%= registration.id %>" class="<%= registration.pending? ? "registration-pending" : "" %> <%= registration.accepted? ? "registration-accepted" : "" %>">
+            <tr id="registration-<%= registration.id %>" class="registration-<%= registration.checked_status %>">
               <td></td>
 
               <td>
@@ -108,13 +110,13 @@
       <a href="#" id="email-selected" target="_blank" class="btn btn-info selected-registrations-actions">
         <%= icon 'envelope', t('registrations.list.email') %>
       </a>
-      <button type="submit" class="btn btn-success selected-pending-registrations-actions" name="registrations_action" value="accept-selected">
+      <button type="submit" class="btn btn-success selected-pending-deleted-registrations-actions" name="registrations_action" value="accept-selected">
         <%= icon 'check', t('registrations.list.approve') %>
       </button>
-      <button type="submit" class="btn btn-warning selected-approved-registrations-actions" name="registrations_action" value="reject-selected">
+      <button type="submit" class="btn btn-warning selected-approved-deleted-registrations-actions" name="registrations_action" value="reject-selected">
         <%= icon 'times', t('registrations.list.reject') %>
       </button>
-      <button type="submit" class="btn btn-danger selected-registrations-actions" name="registrations_action" value="delete-selected">
+      <button type="submit" class="btn btn-danger selected-pending-approved-registrations-actions" name="registrations_action" value="delete-selected">
         <%= icon 'trash', t('registrations.list.delete') %>
       </button>
     </div>

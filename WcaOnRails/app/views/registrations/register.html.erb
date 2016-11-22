@@ -51,7 +51,7 @@
         <% end %>
       <% else %>
         <div>
-          <% if @registration.new_record? %>
+          <% if @registration.new_or_deleted? %>
             <%= t 'registrations.can_register', comp: @competition.name %>
           <% else %>
             <%= t 'registrations.have_registered', comp: @competition.name %>
@@ -91,7 +91,7 @@
 
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <% if @registration.new_record? %>
+              <% if @registration.new_or_deleted? %>
                 <%= f.submit t('registrations.register'), class: "btn btn-success" %>
               <% elsif current_user.can_edit_registration?(@registration) %>
                 <%= f.submit t('registrations.update'), class: "btn btn-success" %>

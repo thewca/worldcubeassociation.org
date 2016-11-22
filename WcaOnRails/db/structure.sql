@@ -779,9 +779,11 @@ CREATE TABLE `registrations` (
   `updated_at` datetime NOT NULL,
   `guests` int(11) NOT NULL DEFAULT '0',
   `accepted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_registrations_on_competition_id_and_user_id` (`competition_id`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84281 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `accepted_by` int(11) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=86147 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1153,3 +1155,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161118141833');
 INSERT INTO schema_migrations (version) VALUES ('20161122162029');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117085757');
+
+INSERT INTO schema_migrations (version) VALUES ('20161122014040');
