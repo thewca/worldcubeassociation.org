@@ -16,7 +16,7 @@ class ChangeLatitudeAndLongitudeDefault < ActiveRecord::Migration
   def down
     change_column_default(:Competitions, :latitude, 0)
     change_column_default(:Competitions, :longitude, 0)
-    change_column_null(:Competitions, :latitude, false)
-    change_column_null(:Competitions, :longitude, false)
+    change_column_null(:Competitions, :latitude, false, 0)
+    change_column_null(:Competitions, :longitude, false, 0)
   end
 end
