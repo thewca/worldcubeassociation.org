@@ -76,11 +76,11 @@ class CompetitionsController < ApplicationController
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
-      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
+      @competitions = @competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
     elsif @recent_selected
-      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
+      @competitions = @competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
     else
-      @competitions = @competitions.where("CAST(CONCAT(year,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
+      @competitions = @competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) < ?", Date.today).reverse_order
       unless params[:year] == "all years"
         @competitions = @competitions.where(year: params[:year])
       end

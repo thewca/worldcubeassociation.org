@@ -94,7 +94,7 @@ function showMedia () {
   $media = dbQuery("
     SELECT media.*,
            competition.year, competition.month, competition.day,
-           competition.endMonth, competition.endDay,
+           competition.endYear, competition.endMonth, competition.endDay,
            competition.countryId, competition.cityName,
            cellName,
            country.name AS countryName

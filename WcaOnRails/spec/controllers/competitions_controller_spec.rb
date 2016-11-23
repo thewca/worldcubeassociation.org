@@ -250,7 +250,7 @@ describe CompetitionsController do
         expect(new_comp.isConfirmed).to eq false
         expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
-        %w(year month day endMonth endDay).each do |attribute|
+        %w(year month day endYear endMonth endDay).each do |attribute|
           expect(new_comp.send(attribute)).to eq 0
         end
 
