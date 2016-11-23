@@ -8,28 +8,45 @@ RSpec.feature "Competition management" do
       sign_in admin
     end
 
-    scenario "User creates a new competition" do
-      visit "/competitions/new"
-      fill_in "Name", with: "My Competition 2015"
-      click_button "Create Competition"
+    feature "create a competition" do
+      scenario "with valid data" do
+        visit "/competitions/new"
+        fill_in "Name", with: "My Competition 2015"
+        click_button "Create Competition"
 
-      expect(page).to have_text("Successfully created new competition!")
+        expect(page).to have_text("Successfully created new competition!")
+      end
 
-      visit "/competitions/new"
-      click_button "Create Competition"
+      scenario "with validation errors" do
+        visit "/competitions/new"
+        click_button "Create Competition"
 
-      expect(page).to have_text("Name must end with a year")
+        expect(page).to have_text("Name must end with a year")
+      end
     end
 
-    scenario "User clones an existing competition" do
-      competition = FactoryGirl.create(:competition, :with_delegate)
-      visit edit_competition_path(competition)
-      click_link "Clone"
-      # See https://github.com/thewca/worldcubeassociation.org/issues/1016#issuecomment-262573451
-      fill_in "Start date", with: "2016-11-30"
-      fill_in "End date", with: "2016-11-30"
-      click_button "Create Competition"
-      expect(page).to have_text("Name must end with a year")
+    feature "clone an existing competition" do
+      scenario "with valid data" do
+        competition = FactoryGirl.create(:competition, :with_delegate)
+        visit edit_competition_path(competition)
+        click_link "Clone"
+        fill_in "Name", with: "Pedro 2016"
+        fill_in "Start date", with: "2016-11-30"
+        fill_in "End date", with: "2016-11-30"
+        click_button "Create Competition"
+        expect(page).to have_text("Successfully created new competition!")
+      end
+
+      scenario "with validation errors" do
+        competition = FactoryGirl.create(:competition, :with_delegate)
+        visit edit_competition_path(competition)
+        click_link "Clone"
+        # See https://github.com/thewca/worldcubeassociation.org/issues/1016#issuecomment-262573451
+        fill_in "Start date", with: "2016-11-30"
+        fill_in "End date", with: "2016-11-30"
+        click_button "Create Competition"
+        expect(page).to have_text("Name must end with a year")
+      end
     end
 
     scenario "User confirms a competition" do
