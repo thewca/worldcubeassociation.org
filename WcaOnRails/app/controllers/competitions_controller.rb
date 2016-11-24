@@ -260,6 +260,9 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = true
     @competition_organizer_view = false
     @nearby_competitions = get_nearby_competitions(@competition)
+    if @competition.restricted?
+      @restricted_competitions = @competition.restricted_competitions(Competition::RESTRICTED_DISTANCE_KM)
+    end
     render :edit
   end
 
@@ -268,6 +271,9 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = false
     @competition_organizer_view = true
     @nearby_competitions = get_nearby_competitions(@competition)
+    if @competition.restricted?
+      @restricted_competitions = @competition.restricted_competitions(Competition::RESTRICTED_DISTANCE_KM)
+    end
     render :edit
   end
 
@@ -301,7 +307,7 @@ class CompetitionsController < ApplicationController
   def show
     @competition = competition_from_params
     if @competition.restricted?
-      @nearby_competitions = get_nearby_competitions(@competition)
+      @restricted_competitions = @competition.restricted_competitions(Competition::RESTRICTED_DISTANCE_KM)
     end
   end
 

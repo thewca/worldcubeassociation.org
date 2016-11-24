@@ -87,7 +87,7 @@
       <div class="alert alert-danger">
         <strong><p>Attention!</p></strong>
         If you compete at this competition, you cannot participate in the following other competitions:
-        <% @nearby_competitions.each do |n| %>
+        <% @restricted_competitions.each do |n| %>
           <br/>- <%= link_to n.cellName, competition_path(n)  %>
         <% end %>
       </div>
