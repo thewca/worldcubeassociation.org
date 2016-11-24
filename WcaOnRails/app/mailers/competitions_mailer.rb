@@ -22,6 +22,15 @@ class CompetitionsMailer < ApplicationMailer
     )
   end
 
+  def notify_users_of_id_claim_possibility(user, competition)
+    @competition = competition
+    mail(
+      to: user.email,
+      reply_to: competition.delegates.pluck(:email),
+      subject: "Please link your WCA ID with your account",
+    )
+  end
+
   def notify_of_delegate_report_submission(competition)
     @competition = competition
     mail(

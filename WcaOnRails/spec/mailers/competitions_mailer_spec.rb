@@ -35,6 +35,24 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
   end
 
+  describe "notify_users_of_id_claim_possibility" do
+    let(:competition) { FactoryGirl.create :competition }
+    let(:newcomer_user) { FactoryGirl.create :user }
+    let(:mail) { CompetitionsMailer.notify_users_of_id_claim_possibility(newcomer_user, competition) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq "Please link your WCA ID with your account"
+      expect(mail.to).to eq [newcomer_user.email]
+      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match competition.name
+      expect(mail.body.encoded).to match profile_claim_wca_id_url
+    end
+  end
+
   describe "submit_results_nag" do
     let(:competition) do
       FactoryGirl.create(:competition, name: "Comp of the Future 2016")

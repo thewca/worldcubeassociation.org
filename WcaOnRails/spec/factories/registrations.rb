@@ -17,5 +17,9 @@ FactoryGirl.define do
     trait :pending do
       accepted_at nil
     end
+
+    trait :newcomer do
+      association :user, factory: [:user]
+    end
   end
 end
