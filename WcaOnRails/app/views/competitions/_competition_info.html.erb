@@ -82,4 +82,15 @@
     <% end %>
 
   </div>
+  <div class="col-md-8">
+    <% if competition.restricted %>
+      <div class="alert alert-danger">
+        <strong><p>Attention!</p></strong>
+        If you compete at this competition, you cannot participate in the following other competitions:
+        <% @nearby_competitions.each do |n| %>
+          <br/>- <%= link_to n.cellName, competition_path(n)  %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

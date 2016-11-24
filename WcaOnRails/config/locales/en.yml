@@ -115,6 +115,8 @@ en:
         isConfirmed: "Do not let organizers edit this competition"
         showAtAll: "Make competition visible to the public"
 
+        restricted: "Make this competition restricted"
+
         name: "Name"
         cellName: "Competition nickname"
         countryId: "Country"
@@ -620,6 +622,7 @@ en:
       submit_confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified."
       submit_delete: "Are you sure you want to delete this competition? There is no going back."
       coordinates: "Coordinates"
+      restricted: "Restricted"
     errors:
       invalid_name_message: "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
