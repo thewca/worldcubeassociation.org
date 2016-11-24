@@ -209,28 +209,8 @@
 
       <hr>
 
-      <div class="form-group">
-        <label class="integer optional col-sm-2 control-label" for="competition_latitude">
-          <%= t '.coordinates' %>
-        </label>
-        <div class="col-sm-9">
-          <div class="input-group">
-            <span class="input-group-addon">Latitude</span>
-            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[latitude_degrees]" id="competition_latitude" value="<%= @competition.latitude_degrees %>" />
-            <span class="input-group-addon">Longitude</span>
-            <input type="text" data-ays-ignore-float-close="true" class="input-sm form-control" name="competition[longitude_degrees]" id="competition_longitude" value="<%= @competition.longitude_degrees %>" />
-          </div>
-        </div>
-      </div>
+      <%= f.input :restricted, hint: "According to the policy on competitions, a restricted competition can take place within 4 weeks and 200 km of other competitions, but competitors are limited to one competition per calendar month within 200 km." %>
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="restricted">
-          <%= t '.restricted' %>
-        </label>
-        
-          <%= f.input :restricted %>
-        
-      </div>
       <hr>
 
       <%= f.input :information, input_html: { class: "markdown-editor" } %>

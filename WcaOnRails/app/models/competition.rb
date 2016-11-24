@@ -46,6 +46,7 @@ class Competition < ActiveRecord::Base
     guests_enabled
     base_entry_fee_lowest_denomination
     currency_code
+    restricted
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id

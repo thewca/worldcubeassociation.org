@@ -82,8 +82,8 @@
     <% end %>
 
   </div>
-  <div class="col-md-8">
-    <% if competition.restricted %>
+  <% if competition.restricted? %>
+    <div class="col-md-8">
       <div class="alert alert-danger">
         <strong><p>Attention!</p></strong>
         If you compete at this competition, you cannot participate in the following other competitions:
@@ -91,6 +91,6 @@
           <br/>- <%= link_to n.cellName, competition_path(n)  %>
         <% end %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
