@@ -130,6 +130,7 @@ class CompetitionsController < ApplicationController
       # Show id errors under name, since we don't actually show an
       # id field to the user, so they wouldn't see any id errors.
       @competition.errors[:name].concat(@competition.errors[:id])
+      @nearby_competitions = get_nearby_competitions(@competition)
       render :new
     end
   end
