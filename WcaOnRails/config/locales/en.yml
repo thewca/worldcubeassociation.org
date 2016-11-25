@@ -437,7 +437,7 @@ en:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
       dob_incorrect: "incorrect"
-      unique: "must be unique"
+      unique: "is already assigned to %{email}"
       dob_past: "must be in the past"
       must_be_senior: "must be a senior delegate"
       must_not_be_present: "must not be present"
