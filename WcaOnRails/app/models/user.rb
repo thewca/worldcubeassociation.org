@@ -132,11 +132,11 @@ class User < ActiveRecord::Base
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_edit_users?)
         if !unconfirmed_person.dob
-          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate'))
+          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html').html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
-          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect'))
+          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html').html_safe)
         end
       end
       if claiming_wca_id && person

@@ -52,7 +52,7 @@ RSpec.feature "Sign up" do
 
       # Make sure we inform the user of the incorrect birthdate they just
       # entered.
-      expect(page.find(".alert.alert-danger")).to have_content("Birthdate incorrect")
+      expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
       # Now enter the correct birthdate and submit the form!
       fill_in "Birthdate", with: "1988-02-03"
       # We also have to re-fill in the password and password confirmation
