@@ -1,0 +1,28 @@
+<table class="table">
+  <tr>
+    <td><%= t '.name' %></td>
+    <td><%= t '.delegates' %></td>
+    <td><%= t '.date' %></td>
+    <td><%= t '.location' %></td>
+    <td><%= t '.distance' %></td>
+  </tr>
+  <% restricted_competitions.each do |c| %>
+    <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
+      <td class="text-nowrap">
+        <%= link_to c.name, admin_edit_competition_path(c.id) %>
+        <% unless c.isConfirmed? %>
+          <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
+        <% end %>
+      </td>
+      <td><%= users_to_sentence c.delegates %></td>
+      <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= c.name %> starts on <%= c.start_date %>">
+      <% days_until = (c.start_date - @competition.start_date).to_i %>
+      <%=t('datetime.distance_in_words.x_days', count: days_until.abs) %> <%= days_until < 0 ? t('.before') : t('.after') %>
+      </td>
+      <td><%= c.cityName %>, <%= c.countryId %></td>
+      <td class="text-nowrap text-right">
+        <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
+      </td>
+    </tr>
+  <% end %>
+</table>

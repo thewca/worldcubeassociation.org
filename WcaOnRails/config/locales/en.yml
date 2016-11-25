@@ -115,6 +115,8 @@ en:
         isConfirmed: "Do not let organizers edit this competition"
         showAtAll: "Make competition visible to the public"
 
+        restricted: "Make this competition restricted"
+
         name: "Name"
         cellName: "Competition nickname"
         countryId: "Country"
@@ -655,6 +657,14 @@ en:
       within: "Within %{days} days"
       show: "Show"
     nearby_competitions_table:
+      name: "Name"
+      delegates: "Delegate(s)"
+      date: "Date"
+      location: "Location"
+      distance: "Distance"
+      before: "before"
+      after: "after"
+    restricted_competitions_table:
       name: "Name"
       delegates: "Delegate(s)"
       date: "Date"

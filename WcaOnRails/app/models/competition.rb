@@ -46,6 +46,7 @@ class Competition < ActiveRecord::Base
     guests_enabled
     base_entry_fee_lowest_denomination
     currency_code
+    restricted
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -90,6 +91,7 @@ class Competition < ActiveRecord::Base
   NEARBY_DAYS_DANGER = 28
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
+  RESTRICTED_DISTANCE_KM = 200
   RECENT_DAYS = 30
   REPORT_AND_RESULTS_DAYS_OK = 7
   REPORT_AND_RESULTS_DAYS_WARNING = 14
@@ -571,6 +573,10 @@ class Competition < ActiveRecord::Base
       "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id
     ).select { |c| kilometers_to(c) <= distance }
      .sort_by { |c| kilometers_to(c) }
+  end
+
+  def restricted_competitions(distance)
+    Competition.where("month = ? and id <> ?", month, id).select { |c| kilometers_to(c) <= distance }.sort_by(&:name)
   end
 
   private def to_radians(degrees)

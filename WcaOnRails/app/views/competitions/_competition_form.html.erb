@@ -207,6 +207,15 @@
         <%= render "nearby_competitions" %>
       </div>
 
+      <hr>
+
+      <%= f.input :restricted, hint: "According to the policy on competitions, a restricted competition can take place within 4 weeks and 200 km of other competitions, but competitors are limited to one competition per calendar month within 200 km." %>
+
+      <% if @competition.restricted? %>
+        <%= render 'restricted_competitions_table', restricted_competitions: @restricted_competitions %>
+      <% end %>
+      <hr>
+
       <%= f.input :information, input_html: { class: "markdown-editor" } %>
       <%= f.input :delegate_ids, as: :user_ids, only_delegates: true %>
       <%= f.input :organizer_ids, as: :user_ids %>
