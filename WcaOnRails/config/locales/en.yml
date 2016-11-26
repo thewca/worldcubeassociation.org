@@ -127,15 +127,15 @@ en:
         end_date: "End date"
 
         external_website: "Website"
-        generate_website: "I would like to use WCA website instead of an external one for additional informations."
+        generate_website: "I would like to use WCA website instead of an external one for additional information."
 
         base_entry_fee_lowest_denomination: "Base entry fee in the lowest denomination"
         currency_code: "Currency code"
 
         delegate_ids: "WCA delegate(s)"
-        organizer_ids: "Organizers(s)"
+        organizer_ids: "Organizer(s)"
         contact: "Contact"
-        information: "Informations"
+        information: "Information"
 
         use_wca_registration: "I would like to use the WCA website for registration"
         guests_enabled: "Guests"
@@ -143,7 +143,7 @@ en:
         registration_open: "Registration open"
         registration_close: "Registration close"
         remarks: "Remarks"
-        clone_tabs: "I would like to clone all tabs with additional informations as well"
+        clone_tabs: "I would like to clone all tabs with additional information as well"
       registration:
         countryId: "Country"
         guests: "Guests"
