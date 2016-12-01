@@ -109,6 +109,9 @@ en:
         results_notifications_enabled: "Email me when my results are posted."
         delegate_status: "Delegate status"
         region: "Region"
+        location_description: "Location description"
+        phone_number: "Phone number"
+        notes: "Notes"
       competition:
         id: "ID"
 
@@ -216,6 +219,9 @@ en:
         results_notifications_enabled: ""
         unconfirmed_wca_id: ""
         wca_id: ""
+        location_description: ""
+        phone_number: ""
+        notes: ""
       competition:
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."

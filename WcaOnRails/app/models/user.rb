@@ -508,6 +508,11 @@ class User < ActiveRecord::Base
       fields << :senior_delegate_id
       fields << :region
     end
+    if user.any_kind_of_delegate? && (user == self || user.senior_delegate == self || admin? || board_member)
+      fields << :location_description
+      fields << :phone_number
+      fields << :notes
+    end
     if admin? || any_kind_of_delegate?
       fields << :wca_id << :unconfirmed_wca_id
       fields << :avatar << :avatar_cache
