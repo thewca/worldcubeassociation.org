@@ -37,7 +37,7 @@
     </div>
     <% if @registration.accepted_at %>
       <div>
-        Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name %>
+        Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
       </div>
     <% end %>
     <% if @registration.deleted_at %>

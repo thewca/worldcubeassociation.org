@@ -27,12 +27,19 @@ class Registration < ActiveRecord::Base
     end
   end
 
+  validate :registration_cannot_be_deleted_and_accepted_simultaneously
+  private def registration_cannot_be_deleted_and_accepted_simultaneously
+    if deleted? && accepted?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
+    end
+  end
+
   def deleted?
     !deleted_at.nil?
   end
 
   def accepted?
-    !deleted? && !accepted_at.nil?
+    !accepted_at.nil? && !deleted?
   end
 
   def pending?

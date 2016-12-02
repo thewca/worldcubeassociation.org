@@ -69,8 +69,11 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
 
-      xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
-                                            selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
+
+      expect do
+        xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
+                                              selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
+      end.to change { enqueued_jobs.size }.by(2)
 
       expect(Registration.find_by_id(registration.id).deleted?).to eq true
       expect(Registration.find_by_id(registration2.id).deleted?).to eq true
@@ -170,6 +173,9 @@ RSpec.describe RegistrationsController do
     it "can re-create registration after it was deleted" do
       registration = FactoryGirl.create :registration, :accepted, :deleted, competition: competition, user_id: user.id
       registration_competition_event = registration.registration_competition_events.first
+      expect(registration.reload.pending?).to eq false
+      expect(registration.reload.accepted?).to eq false
+      expect(registration.reload.deleted?).to eq true
 
       patch :update, id: registration.id, registration: { registration_competition_events_attributes: [ {id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0} ],
                                                           comments: "Registered again" }
@@ -186,7 +192,9 @@ RSpec.describe RegistrationsController do
 
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
 
-      delete :destroy, id: registration.id, user_is_deleting_theirself: true
+      expect do
+        delete :destroy, id: registration.id, user_is_deleting_theirself: true
+      end.to change { enqueued_jobs.size }.by(1)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(registration.id).deleted?).to eq true

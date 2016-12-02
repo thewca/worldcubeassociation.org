@@ -225,7 +225,7 @@ class RegistrationsController < ApplicationController
     params[:registration][:deleted_at] = nil
     params[:registration][:accepted_at] = nil
     if current_user.can_manage_competition?(competition_from_params)
-      permitted_params << [
+      permitted_params += [
         :accepted_by,
         :deleted_by,
       ]
