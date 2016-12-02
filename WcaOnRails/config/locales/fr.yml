@@ -441,8 +441,8 @@ fr:
       board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
       avatar_requires_wca_id: "requiert d'avoir un ID WCA"
     select_nearby_delegate:
-      select_delegate: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un Délégué confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
-      already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre Délégué local %{link_delegate}."
+      select_delegate_html: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un <a href='%{link_delegate}' target='_blank'>Délégué WCA</a> confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
+      already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre <a href='%{link_delegate}' target='_blank'>Délégué WCA</a> local."
       missing_dob_html: "L'ID WCA %{link_id} n'a pas de date de naissance associée. Merci de contacter la %{link_result_team} pour corriger le problème."
       unknown_wca_id_html: "L'ID WCA %{link_id} n'existe pas."
   registrations:

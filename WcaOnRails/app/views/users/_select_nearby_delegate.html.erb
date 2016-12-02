@@ -6,15 +6,15 @@
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    <%= t '.already_assigned_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_delegate:link_to("delegate", delegates_path) %>
+    <%= t '.already_assigned_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_delegate: delegates_path %>
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-  <%= t '.missing_dob_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_result_team:mail_to("results@worldcubeassociation.org", "Results team", target: "_blank") %>
+  <%= t '.missing_dob_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_result_team: mail_to("results@worldcubeassociation.org", "Results team", target: "_blank") %>
   </p>
 <% else %>
   <p>
-  <%= t '.select_delegate' %>
+  <%= t '.select_delegate_html', link_delegate: delegates_path %>
   </p>
 
   <div class="form-group radio_buttons optional">
