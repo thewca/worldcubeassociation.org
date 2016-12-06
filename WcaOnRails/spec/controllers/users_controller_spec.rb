@@ -131,8 +131,26 @@ describe UsersController do
       expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
     end
 
-    context "after registering for a competition" do
-      let!(:registration) { FactoryGirl.create(:registration, user: user) }
+    context "after creating a pending registration" do
+      let!(:registration) { FactoryGirl.create(:registration, :pending, user: user) }
+      it "user can change name" do
+        sign_in user
+        patch :update, id: user.id, user: { name: "Johnny 5" }
+        expect(user.reload.name).to eq "Johnny 5"
+      end
+    end
+
+    context "after having a registration deleted" do
+      let!(:registration) { FactoryGirl.create(:registration, :deleted, user: user) }
+      it "user can change name" do
+        sign_in user
+        patch :update, id: user.id, user: { name: "Johnny 5" }
+        expect(user.reload.name).to eq "Johnny 5"
+      end
+    end
+
+    context "after registration is accepted for a competition" do
+      let!(:registration) { FactoryGirl.create(:registration, :accepted, user: user) }
 
       it "user cannot change name" do
         sign_in user
