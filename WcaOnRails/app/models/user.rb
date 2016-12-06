@@ -400,7 +400,7 @@ class User < ActiveRecord::Base
   end
 
   def can_edit_registration?(registration)
-    can_manage_competition?(registration.competition) || (registration.pending? && registration.user_id == self.id)
+    can_manage_competition?(registration.competition) || (!registration.accepted? && registration.user_id == self.id)
   end
 
   def can_confirm_competition?(competition)
@@ -473,7 +473,7 @@ class User < ActiveRecord::Base
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.count > 0
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count > 0
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     if cannot_edit_reason

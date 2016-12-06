@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 class Registration < ActiveRecord::Base
-  scope :pending, -> { where(accepted_at: nil) }
-  scope :accepted, -> { where.not(accepted_at: nil) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil) }
+  scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
+  scope :deleted, -> { where.not(deleted_at: nil) }
 
   belongs_to :competition
   belongs_to :user
+  belongs_to :accepted_user, foreign_key: "accepted_by", class_name: "User"
+  belongs_to :deleted_user, foreign_key: "deleted_by", class_name: "User"
   has_many :registration_competition_events
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
@@ -24,12 +27,37 @@ class Registration < ActiveRecord::Base
     end
   end
 
-  def pending?
-    accepted_at.nil?
+  validate :registration_cannot_be_deleted_and_accepted_simultaneously
+  private def registration_cannot_be_deleted_and_accepted_simultaneously
+    if deleted? && accepted?
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.cannot_be_deleted_and_accepted'))
+    end
+  end
+
+  def deleted?
+    !deleted_at.nil?
   end
 
   def accepted?
-    !pending?
+    !accepted_at.nil? && !deleted?
+  end
+
+  def pending?
+    !accepted? && !deleted?
+  end
+
+  def checked_status
+    if accepted?
+      return :accepted
+    elsif pending?
+      return :pending
+    else
+      return :deleted
+    end
+  end
+
+  def new_or_deleted?
+    new_record? || deleted?
   end
 
   def name

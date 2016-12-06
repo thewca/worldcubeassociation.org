@@ -61,8 +61,9 @@ RSpec.feature "Registering for a competition" do
 
     scenario "deleting registration" do
       visit edit_registration_path(registration)
-      click_link "Delete"
-      expect(Registration.find_by_id(registration.id)).to eq nil
+      choose "Deleted"
+      click_button "Update Registration"
+      expect(Registration.find_by_id(registration.id).deleted?).to eq true
     end
   end
 end

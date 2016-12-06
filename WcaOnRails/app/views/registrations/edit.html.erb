@@ -5,20 +5,10 @@
     <%= hidden_field_tag :from_admin_view, "1" %>
     <%= f.hidden_field :updated_at %>
 
-    <% if @registration.user %>
-      <%= alert :info do %>
-        <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
-      <% end %>
-      <%= @registration.name %>
-    <% else %>
-      <%= alert :info, "This person did not register with an account. You can edit their personal information below." %>
-
-      <%# We can remove this code once competitions only have registrations with accounts. See https://github.com/thewca/worldcubeassociation.org/issues/275 %>
-      <%= f.input :name %>
-      <%= f.input :birthday, as: :date_picker %>
-      <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: "Male", f: "Female", o: "Other" }[g] } %>
-      <%= f.input :countryId, collection: Country.real, value_method: :id, label_method: :name %>
+    <%= alert :info do %>
+      <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
     <% end %>
+    <h4><%= @registration.name %></h4>
 
     <%= render "shared/associated_events_picker",
                form_builder: f,
@@ -33,14 +23,27 @@
 
     <%= f.input :comments %>
 
-    <%= f.input :status, as: :radio_buttons, collection: [:a, :p], checked: @registration.accepted? ? :a : :p, include_blank: false %>
+    <%= f.input :status, as: :radio_buttons, collection: [:accepted, :pending, :deleted], checked: @registration.checked_status, include_blank: false %>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <%= f.submit class: "btn btn-default" %>
-        <%= link_to t('registrations.delete'), registration_path(@registration), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.admin_delete_confirm', name: @registration.name), toggle: "tooltip" }, title: t('registrations.delete_tooltip', name: @registration.name, mail: @registration.email) %>
       </div>
     </div>
+    <hr />
+    <div>
+      <h4>Registration History</h4>
+      Created on <%= wca_local_time(@registration.created_at) %> by <%= @registration.user.name %>
+    </div>
+    <% if @registration.accepted_at %>
+      <div>
+        Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
+      </div>
+    <% end %>
+    <% if @registration.deleted_at %>
+      <div>
+        Deleted on <%= wca_local_time(@registration.deleted_at) %> by <%= @registration.deleted_user.name %>
+      </div>
+    <% end %>
   <% end %>
-
 <% end %>

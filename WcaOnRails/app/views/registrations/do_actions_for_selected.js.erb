@@ -13,8 +13,9 @@ $('#pending-registrations-count').removeClass("label-danger label-success")
 var $registrationsTable = $('.registrations-table:not(.floatThead-table)');
 var $pendingTable = $registrationsTable.filter('.pending');
 var $acceptedTable = $registrationsTable.filter('.accepted');
+var $deletedTable = $registrationsTable.filter('.deleted');
 
-var selectedRows = $pendingTable.bootstrapTable('getSelections').concat($acceptedTable.bootstrapTable('getSelections'));
+var selectedRows = $pendingTable.bootstrapTable('getSelections').concat($acceptedTable.bootstrapTable('getSelections')).concat($deletedTable.bootstrapTable('getSelections'));
 var selectedRowIds = selectedRows.map(function(row) { return row._id }); // row._id contains <tr> id
 
 $registrationsTable.each(function() {
@@ -29,18 +30,21 @@ $registrationsTable.each(function() {
   $acceptedTable.bootstrapTable('append', selectedRows);
 <% when "reject-selected" %>
   $pendingTable.bootstrapTable('append', selectedRows);
+<% when "delete-selected" %>
+  $deletedTable.bootstrapTable('append', selectedRows);
 <% end %>
 
 $('.registrations-table.floatThead').floatThead('reflow');
 
-$pendingTable.find('tbody tr').removeClass('registration-accepted').addClass('registration-pending');
-$acceptedTable.find('tbody tr').removeClass('registration-pending').addClass('registration-accepted');
+$pendingTable.find('tbody tr').removeClass('registration-accepted').removeClass('registration-deleted').addClass('registration-pending');
+$acceptedTable.find('tbody tr').removeClass('registration-pending').removeClass('registration-deleted').addClass('registration-accepted');
+$deletedTable.find('tbody tr').removeClass('registration-pending').removeClass('registration-accepted').addClass('registration-deleted');
 
 $registrationsTable.bootstrapTable('uncheckAll');
 $registrationsTable.find('tr.selected').removeClass('selected');
 
 // Update registration table footers with summary info
-<% [:pending, :accepted].each do |status| %>
+<% [:pending, :accepted, :deleted].each do |status| %>
   <% registrations = @competition.registrations.includes(:events, :user).send(status) %>
   $<%= status %>Table.find('tfoot').replaceWith('<%=j render "edit_registrations_table_footer", registrations: registrations %>');
 <% end %>

@@ -719,6 +719,7 @@ class Competition < ActiveRecord::Base
       users.name select_name,
       users.wca_id select_wca_id,
       registrations.accepted_at,
+      registrations.deleted_at,
       Countries.name select_country,
       registration_competition_events.competition_event_id,
       RanksAverage.worldRank average_rank,
