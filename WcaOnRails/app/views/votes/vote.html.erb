@@ -6,9 +6,9 @@
     <%= alert :danger do %>
       Poll is closed. Check out the <%= link_to "results", polls_results_path(@poll) %>.
     <% end %>
-  <% elsif @poll.confirmed || current_user.can_create_poll? %>
+  <% elsif @poll.confirmed? || current_user.can_create_poll? %>
 
-    <% if @poll.confirmed %>
+    <% if @poll.confirmed? %>
       <%= alert :info do %>
         Voting closes in <%= distance_of_time_in_words_to_now(@poll.deadline) %>, on <%= wca_local_time(@poll.deadline) %>.
       <% end %>
@@ -43,13 +43,13 @@
         </span>
       <% end %>
 
-      <% if @poll.confirmed %>
+      <% if @poll.confirmed? %>
         <%= f.input :comment, required: false %>
       <% end %>
 
       <%= link_to icon("undo", "Back to Polls"), polls_path, class: "btn btn-default" %>
 
-      <% if @poll.confirmed %>
+      <% if @poll.confirmed? %>
         <button type="submit" class="btn btn-success">
           <%= !@vote.new_record? ? "Update vote" : "Vote" %>
         </button>

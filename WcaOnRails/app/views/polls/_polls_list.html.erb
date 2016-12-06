@@ -1,6 +1,6 @@
 <table class="table polls-list">
   <% polls.each do |poll| %>
-    <tr class="<%= !poll.confirmed ? "danger" : "" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !poll.confirmed ? "This poll is not confirmed" : "" %>">
+    <tr class="<%= !poll.confirmed? ? "danger" : "" %>" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= !poll.confirmed? ? "This poll is not confirmed" : "" %>">
       <td><%=md poll.question %></td>
       <td>
         <% if poll.user_already_voted?(current_user) %>
@@ -21,6 +21,9 @@
       <% if current_user.can_create_poll? %>
         <td><%= link_to "Edit", edit_poll_path(poll), class: "btn btn-xs btn-success" %></td>
       <% end %>
+      <td>
+        <%= poll.over? ? "Voting closed on" : "Open until" %> <%= wca_local_time(poll.deadline) %>
+      </td>
     </tr>
   <% end %>
 </table>

@@ -37,7 +37,7 @@ class Vote < ActiveRecord::Base
 
   validate :poll_must_be_confirmed
   def poll_must_be_confirmed
-    if poll && !poll.confirmed
+    if poll && !poll.confirmed?
       errors.add(:poll_id, "poll is not confirmed")
     end
   end

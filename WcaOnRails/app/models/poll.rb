@@ -17,7 +17,7 @@ class Poll < ActiveRecord::Base
 
   validate :can_only_edit_deadline_after_confirming
   def can_only_edit_deadline_after_confirming
-    if confirmed_was && self.changed != ['deadline']
+    if confirmed_at_was && self.changed != ['deadline']
       errors.add(:deadline, "you can only change the deadline")
     end
   end
@@ -36,5 +36,9 @@ class Poll < ActiveRecord::Base
 
   def user_already_voted?(current_user)
     self.votes.find_by_user_id(current_user)
+  end
+
+  def confirmed?
+    confirmed_at != nil
   end
 end
