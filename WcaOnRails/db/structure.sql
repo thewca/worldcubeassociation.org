@@ -54,8 +54,8 @@ CREATE TABLE `Competitions` (
   `announced_at` datetime DEFAULT NULL,
   `base_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `endYear` smallint(6) NOT NULL DEFAULT '0',
   `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `endYear` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`)
@@ -777,9 +777,11 @@ CREATE TABLE `registration_payments` (
   `amount_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `stripe_charge_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `refunded_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

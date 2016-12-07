@@ -30,20 +30,39 @@
         <%= f.submit t('registrations.update'), class: "btn btn-default" %>
       </div>
     </div>
-    <hr />
+  <% end %>
+  <hr />
+  <div>
+    <h4>Payment History</h4>
+  <% if @registration.registration_payments.count > 0 %>
+      <% @registration.registration_payments.each do |payment| %>
+        <p>
+          <%= wca_local_time(payment.created_at) %>
+          <%= humanized_money_with_symbol payment.amount %>
+          <% if payment.refunded_at.nil? %>
+            <%= form_tag registration_payment_refund_path(@registration, payment), method: :post do %>
+              <%= submit_tag t('registrations.refund'), class: "btn btn-warning" %>
+            <% end %>
+          <% end %>
+        </p>
+      <% end %>
+  <% else %>
+      <p>No payments have been made</p>
+  <% end %>
+  </div>
+  <hr />
+  <div>
+    <h4>Registration History</h4>
+    Created on <%= wca_local_time(@registration.created_at) %> by <%= @registration.user.name %>
+  </div>
+  <% if @registration.accepted_at %>
     <div>
-      <h4>Registration History</h4>
-      Created on <%= wca_local_time(@registration.created_at) %> by <%= @registration.user.name %>
+      Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
     </div>
-    <% if @registration.accepted_at %>
-      <div>
-        Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
-      </div>
-    <% end %>
-    <% if @registration.deleted_at %>
-      <div>
-        Deleted on <%= wca_local_time(@registration.deleted_at) %> by <%= @registration.deleted_user.name %>
-      </div>
-    <% end %>
+  <% end %>
+  <% if @registration.deleted_at %>
+    <div>
+      Deleted on <%= wca_local_time(@registration.deleted_at) %> by <%= @registration.deleted_user.name %>
+    </div>
   <% end %>
 <% end %>

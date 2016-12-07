@@ -649,6 +649,7 @@ en:
     sign_in: "Sign in"
     profile: "profile"
     register: "Register!"
+    refund: "Refund Payment"
     update: "Update Registration"
     delete: "Delete"
     delete_confirm: "Are you sure you want to delete your registration?"

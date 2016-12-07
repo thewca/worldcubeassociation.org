@@ -23,7 +23,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment]
 
   def edit_registrations
     @competition = competition_from_params
@@ -231,6 +231,33 @@ class RegistrationsController < ApplicationController
     )
 
     redirect_to competition_register_path
+  end
+
+  def refund_payment
+    registration = Registration.find(params[:id])
+    payment = RegistrationPayment.find(params[:payment_id])
+
+    Stripe.api_key = ENVied.STRIPE_API_KEY
+    begin
+      refund = Stripe::Refund.create({
+        charge: payment.stripe_charge_id,
+        refund_application_fee: true,
+      }, stripe_account: registration.competition.connected_stripe_account_id)
+    rescue => e
+      flash[:danger] = 'Something went wrong with the refund: ' + e.message
+      redirect_to edit_registration_path(registration)
+      return
+    end
+
+    registration.record_refund(
+      refund.amount,
+      refund.currency,
+      refund.id,
+      refund.charge,
+    )
+
+    flash[:success] = 'Payment was refunded'
+    redirect_to edit_registration_path(registration)
   end
 
   def create

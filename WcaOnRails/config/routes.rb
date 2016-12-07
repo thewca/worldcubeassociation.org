@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         get :cancel
       end
   end
+  post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
 
