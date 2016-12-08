@@ -358,7 +358,7 @@ class User < ActiveRecord::Base
   end
 
   def can_edit_users?
-    organizes_comp_with_wca_registration = organized_competitions.present.exists?(use_wca_registration: true)
+    organizes_comp_with_wca_registration = organized_competitions.not_over.exists?(use_wca_registration: true)
     admin? || board_member? || results_team? || any_kind_of_delegate? || organizes_comp_with_wca_registration
   end
 
@@ -528,7 +528,7 @@ class User < ActiveRecord::Base
       fields << :remove_avatar
     end
     # If the user is a newcomer allow organizers of the competition that he is registered for to edit his name.
-    if user.wca_id.blank? && user.competitions_registered_for.present.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
+    if user.wca_id.blank? && user.competitions_registered_for.not_over.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
       fields << :name
     end
     fields
