@@ -76,7 +76,7 @@ class CompetitionsController < ApplicationController
     @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
-      @competitions = @competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today)
+      @competitions = @competitions.present
     elsif @recent_selected
       @competitions = @competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) between ? and ?", (Date.today - Competition::RECENT_DAYS), Date.today).reverse_order
     else
