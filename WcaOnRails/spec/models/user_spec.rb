@@ -545,4 +545,22 @@ RSpec.describe User, type: :model do
       user.notify_of_results_posted(competition)
     end
   end
+
+  describe "#can_edit_users?" do
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
+
+    it "returns true if a user is an organizer of an upcoming comp using registration system" do
+      expect(competition.organizers.first.can_edit_users?).to eq true
+    end
+  end
+
+  describe "#editable_fields_of_user" do
+    let(:competition) { FactoryGirl.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
+    let(:registration) { FactoryGirl.create(:registration, :newcomer, competition: competition) }
+
+    it "allows organizers of upcoming competitions to edit newcomer names" do
+      organizer = competition.organizers.first
+      expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
+    end
+  end
 end
