@@ -24,7 +24,7 @@ describe Vote do
 
   it "can't vote for unconfirmed polls" do
     expect(vote).to be_valid
-    poll.update_column(:confirmed, false)
+    poll.update_column(:confirmed_at, nil)
     expect(vote).to be_invalid
     expect(vote.errors[:poll_id]).to eq ["poll is not confirmed"]
   end

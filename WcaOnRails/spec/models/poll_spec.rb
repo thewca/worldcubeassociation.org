@@ -11,13 +11,13 @@ describe Poll do
       poll = FactoryGirl.create :poll
       FactoryGirl.create(:poll_option, poll_id: poll.id)
       FactoryGirl.create(:poll_option, poll_id: poll.id)
-      poll.confirmed = true
+      poll.confirmed_at = Time.now
       expect(poll).to be_valid
     end
 
     it "requires two options" do
       poll = FactoryGirl.create :poll
-      poll.confirmed = true
+      poll.confirmed_at = Time.now
       expect(poll).to be_invalid
       expect(poll.errors.keys).to eq [:poll_options]
 
