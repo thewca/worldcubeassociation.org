@@ -111,6 +111,7 @@ sql = "INSERT INTO `Countries` (`id`, `name`, `continentId`, `iso2`) VALUES
 ('Madagascar', 'Madagascar', '_Africa', 'MG'),
 ('Malawi', 'Malawi', '_Africa', 'MW'),
 ('Malaysia', 'Malaysia', '_Asia', 'MY'),
+('Maldives', 'Maldives', '_Asia', 'MV'),
 ('Mali', 'Mali', '_Africa', 'ML'),
 ('Malta', 'Malta', '_Europe', 'MT'),
 ('Marshall Islands', 'Marshall Islands', '_Oceania', 'MH'),
