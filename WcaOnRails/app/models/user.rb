@@ -496,35 +496,36 @@ class User < ActiveRecord::Base
       return fields
     end
     if user == self
-      fields << :current_password
-      fields << :password << :password_confirmation
-      fields << :email
-      fields << :preferred_events
+      fields += %i(
+        current_password password password_confirmation
+        email preferred_events results_notifications_enabled
+      )
       fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      fields << :results_notifications_enabled
     end
     if admin? || board_member?
-      fields << :delegate_status
-      fields << :senior_delegate_id
-      fields << :region
+      fields += %i(delegate_status senior_delegate_id region)
+    end
+    if user.any_kind_of_delegate? && (user == self || user.senior_delegate == self || admin? || board_member?)
+      fields += %i(location_description phone_number notes)
     end
     if admin? || any_kind_of_delegate?
-      fields << :wca_id << :unconfirmed_wca_id
-      fields << :avatar << :avatar_cache
+      fields += %i(
+        wca_id unconfirmed_wca_id
+        avatar avatar_cache
+      )
     end
     if user == self || admin? || any_kind_of_delegate?
       cannot_edit_data = !!cannot_edit_data_reason_html(user)
       if !cannot_edit_data
-        fields << :name
-        fields << :dob
-        fields << :gender
-        fields << :country_iso2
+        fields += %i(name dob gender country_iso2)
       end
       fields += CLAIM_WCA_ID_PARAMS
-      fields << :pending_avatar << :pending_avatar_cache << :remove_pending_avatar
-      fields << :avatar_crop_x << :avatar_crop_y << :avatar_crop_w << :avatar_crop_h
-      fields << :pending_avatar_crop_x << :pending_avatar_crop_y << :pending_avatar_crop_w << :pending_avatar_crop_h
-      fields << :remove_avatar
+      fields += %i(
+        pending_avatar pending_avatar_cache remove_pending_avatar
+        avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
+        pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
+        remove_avatar
+      )
     end
     fields
   end

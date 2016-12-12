@@ -116,6 +116,13 @@
           <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.input :region, disabled: !editable_fields.include?(:region) %>
+
+          <% if @user.any_kind_of_delegate? %>
+            <h3>Additional delegate information</h3>
+            <%= f.input :location_description, disabled: !editable_fields.include?(:location_description) %>
+            <%= f.input :phone_number, disabled: !editable_fields.include?(:phone_number) %>
+            <%= f.input :notes, as: :text, disabled: !editable_fields.include?(:notes) %>
+          <% end %>
         <% end %>
 
         <% unless @user.current_teams.empty? %>

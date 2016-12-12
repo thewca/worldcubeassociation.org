@@ -899,13 +899,16 @@ CREATE TABLE `users` (
   `gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `results_notifications_enabled` tinyint(1) DEFAULT '0',
+  `location_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `notes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
   KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
-) ENGINE=InnoDB AUTO_INCREMENT=6302 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6453 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1159,3 +1162,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161122162029');
 INSERT INTO schema_migrations (version) VALUES ('20161122014040');
 
 INSERT INTO schema_migrations (version) VALUES ('20161206204738');
+
+INSERT INTO schema_migrations (version) VALUES ('20161201211133');
