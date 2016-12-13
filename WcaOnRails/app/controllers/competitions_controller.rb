@@ -325,7 +325,7 @@ class CompetitionsController < ApplicationController
     if competition.save
       flash[:success] = t('competitions.messages.stripe_connected')
     else
-      flash[:success] = t('competitions.messages.stripe_not_connected')
+      flash[:danger] = t('competitions.messages.stripe_not_connected')
     end
     redirect_to competitions_payment_setup_path(competition)
   end

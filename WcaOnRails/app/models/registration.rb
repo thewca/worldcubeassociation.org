@@ -106,19 +106,15 @@ class Registration < ActiveRecord::Base
     competition.base_entry_fee
   end
 
-  def entry_fee_currency_code
-    competition.currency_code
-  end
-
   def paid_entry_fees
     Money.new(
       registration_payments.sum(:amount_lowest_denomination),
-      entry_fee_currency_code,
+      competition.currency_code,
     )
   end
 
   def outstanding_entry_fees
-    entry_fee.nil? ? nil : entry_fee - Money.new(paid_entry_fees, entry_fee_currency_code)
+    entry_fee.nil? ? nil : entry_fee - paid_entry_fees
   end
 
   def record_payment(amount, currency_code, stripe_charge_id)
@@ -138,7 +134,7 @@ class Registration < ActiveRecord::Base
     )
     payment = RegistrationPayment.find_by_stripe_charge_id(stripe_charge_id)
     payment.refunded_at = Time.now
-    payment.save
+    payment.save!
   end
 
   # Since Registration.events only includes saved events

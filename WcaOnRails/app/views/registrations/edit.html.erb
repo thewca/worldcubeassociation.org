@@ -34,7 +34,7 @@
   <hr />
   <div>
     <h4>Payment History</h4>
-  <% if @registration.registration_payments.count > 0 %>
+    <% if @registration.registration_payments.count > 0 %>
       <% @registration.registration_payments.each do |payment| %>
         <p>
           <%= wca_local_time(payment.created_at) %>
@@ -46,9 +46,9 @@
           <% end %>
         </p>
       <% end %>
-  <% else %>
+    <% else %>
       <p>No payments have been made</p>
-  <% end %>
+    <% end %>
   </div>
   <hr />
   <div>

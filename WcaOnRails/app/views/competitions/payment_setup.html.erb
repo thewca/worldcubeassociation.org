@@ -14,8 +14,8 @@
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
-      You can deauthorize this account by clicking the button below
+      You can deauthorize this account by clicking the button below.
     </p>
-    <%= link_to icon("cc-stripe", "Disconnect Your Stripe Account"), competitions_revoke_stripe_access_path, class: "btn btn-danger" %>
+    <%= link_to icon("cc-stripe", "Disconnect Your Stripe Account"), competitions_revoke_stripe_access_path, method: :post, class: "btn btn-danger" %>
   <% end %>
 <% end %>

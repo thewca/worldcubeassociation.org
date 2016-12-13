@@ -54,7 +54,7 @@ Rails.application.routes.draw do
 
   get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
-  get 'competitions/:id/revoke_stripe_access' => 'competitions#revoke_stripe_access', as: :competitions_revoke_stripe_access
+  post 'competitions/:id/revoke_stripe_access' => 'competitions#revoke_stripe_access', as: :competitions_revoke_stripe_access
   get 'stripe-connect' => 'competitions#stripe_connect'
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   patch 'competitions/:id/events' => 'competitions#update_events', as: :update_events

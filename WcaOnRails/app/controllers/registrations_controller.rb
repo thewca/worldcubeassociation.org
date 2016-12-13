@@ -205,24 +205,13 @@ class RegistrationsController < ApplicationController
     token = params[:stripeToken]
     Stripe.api_key = ENVied.STRIPE_API_KEY
 
-    begin
-      charge = Stripe::Charge.create({
-        amount: registration.outstanding_entry_fees.cents,
-        currency: registration.entry_fee_currency_code,
-        source: token,
-        description: "Registration payment",
-        metadata: registration.user.wca_id,
-        application_fee: 100,
-      }, stripe_account: competition.connected_stripe_account_id)
-    rescue Stripe::CardError => e
-      flash[:danger] = 'Unsuccessful payment: ' + e.message
-      redirect_to competition_register_path
-      return
-    rescue => e
-      flash[:danger] = 'Something went wrong: ' + e.message
-      redirect_to competition_register_path
-      return
-    end
+    charge = Stripe::Charge.create({
+      amount: registration.outstanding_entry_fees.cents,
+      currency: registration.outstanding_entry_fees.currency.iso_code,
+      source: token,
+      description: "Registration payment",
+      metadata: registration.user.wca_id,
+    }, stripe_account: competition.connected_stripe_account_id)
 
     registration.record_payment(
       charge.amount,
@@ -231,6 +220,14 @@ class RegistrationsController < ApplicationController
     )
 
     redirect_to competition_register_path
+  rescue Stripe::CardError => e
+    flash[:danger] = 'Unsuccessful payment: ' + e.message
+    redirect_to competition_register_path
+    return
+  rescue => e
+    flash[:danger] = 'Something went wrong: ' + e.message
+    redirect_to competition_register_path
+    return
   end
 
   def refund_payment
@@ -238,16 +235,9 @@ class RegistrationsController < ApplicationController
     payment = RegistrationPayment.find(params[:payment_id])
 
     Stripe.api_key = ENVied.STRIPE_API_KEY
-    begin
-      refund = Stripe::Refund.create({
-        charge: payment.stripe_charge_id,
-        refund_application_fee: true,
-      }, stripe_account: registration.competition.connected_stripe_account_id)
-    rescue => e
-      flash[:danger] = 'Something went wrong with the refund: ' + e.message
-      redirect_to edit_registration_path(registration)
-      return
-    end
+    refund = Stripe::Refund.create({
+      charge: payment.stripe_charge_id,
+    }, stripe_account: registration.competition.connected_stripe_account_id)
 
     registration.record_refund(
       refund.amount,
@@ -258,6 +248,10 @@ class RegistrationsController < ApplicationController
 
     flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(registration)
+  rescue => e
+    flash[:danger] = 'Something went wrong with the refund: ' + e.message
+    redirect_to edit_registration_path(registration)
+    return
   end
 
   def create
