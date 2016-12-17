@@ -3,7 +3,7 @@ class SubmitResultsNagJob < ActiveJob::Base
   queue_as :default
 
   def nag_needed(competition)
-    (competition.results_nag_sent_at || competition.end_date) <= 1.week.ago
+    (competition.results_nag_sent_at || competition.end_date) <= 8.days.ago
   end
 
   def perform
