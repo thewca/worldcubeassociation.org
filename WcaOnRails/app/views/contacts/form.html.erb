@@ -1,0 +1,16 @@
+<% provide(:title, 'WCA Website Contact Form') %>
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
+    <%= f.input :name, required: true %>
+    <%= f.input :your_email, required: true %>
+    <%= f.input :topic, priority: ['Competition'], collection: ['Competition', 'Regulations', 'Member Administration', 'Results Administration', ' Website', 'Other'], required: true %>
+    <%= f.input :message, as: :text, required: true %>
+    <%= recaptcha_tags %>
+    <div>
+      </br>
+      <%= f.button :submit, 'Send message', class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
