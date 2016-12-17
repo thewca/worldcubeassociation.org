@@ -38,8 +38,7 @@ class Result < ActiveRecord::Base
   end
 
   def self.search_by_competition(competitionId, params: {})
-    results = Result.select('pos', 'personId', 'personName', 'competitionId', 'eventId', 'roundId', 'formatId', 'value1', 'value2', 'value3', 'value4', 'value5', 'best', 'average', 'regionalSingleRecord', 'regionalAverageRecord')
-    .where(competitionId: competitionId)
+    results = Result.where(competitionId: competitionId)
 
     if params[:wca_id].present?
       results = results.where(personId: params[:wca_id])
@@ -49,10 +48,24 @@ class Result < ActiveRecord::Base
       results = results.where(eventId: params[:eventId])
     end
 
-    if params[:roundId].present?
-      results = results.where(roundId: params[:roundId])
-    end
+    events = results.distinct.pluck(:eventId)
 
-    results.group_by(&:eventId)
+    rounds = events.map{ |e| {
+      eventId: e,
+      rounds: results.where(eventId: e).distinct.pluck(:roundId).map{ |r| {
+          roundId: r,
+          formatId: results.where(eventId: e, roundId: r).distinct.pluck(:formatId)[0],
+          results: results.select(:pos, :personId, :personName, :countryId, :best, :average, :value1, :value2, :value3, :value4, :value5).where(eventId: e, roundId: r).map{ |result| {
+            personId: result.personId,
+            personName: result.personName,
+            results: [result.value1, result.value2, result.value3, result.value4, result.value5],
+            best: result.best,
+            average: result.average
+          }}
+        }
+      }
+    }}
+
+    rounds
   end
 end
