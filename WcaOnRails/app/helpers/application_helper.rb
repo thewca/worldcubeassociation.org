@@ -148,8 +148,8 @@ module ApplicationHelper
 
   def simple_form_for(resource, options = {}, &block)
     super do |f|
-      error_messages = render('shared/error_messages', object: f.object)
       form = capture(f, &block)
+      error_messages = render('shared/error_messages', f: f)
       error_messages + form
     end
   end

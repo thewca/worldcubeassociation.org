@@ -42,4 +42,34 @@ describe ApplicationHelper do
       expect(helper.wca_excerpt(text, %w(some match END))).to eq expected
     end
   end
+
+  describe "#simple_form_for" do
+    it "error messages link to attribute input field" do
+      user = FactoryGirl.create :user
+      user.wca_id = '1999FLEI01'
+      user.dob = 2.days.from_now
+      user.senior_delegate = FactoryGirl.create :senior_delegate
+      expect(user).to be_invalid
+      expect(user.errors.messages[:wca_id]).to eq ["not found"]
+      expect(user.errors.messages[:dob]).to eq ["must be in the past"]
+      expect(user.errors.messages[:senior_delegate]).to eq ["must not be present"]
+
+      form_html = helper.simple_form_for(user) do |f|
+        buf = ""
+        buf += f.input :name
+        buf += f.input :dob
+        buf += f.hidden_field :wca_id
+        buf
+      end
+
+      expect(form_html).to include "The form contains 3 errors"
+
+      # Test that our error messages internally link to the correct field to make user's lives easier.
+      # We cannot link to the appropriate field if the field does not exist, however.
+      expect(form_html).not_to include '<a href="#user_name">' # no error, so there should not be a link
+      expect(form_html).to include '<a href="#user_dob">' # there was an error with this field, and the field was created, so we should link directly to it
+      expect(form_html).not_to include '<a href="#user_senior_delegate">' # there was an error with this field, but we did not create this field, so we should not link to it
+      expect(form_html).not_to include '<a href="#user_wca_id">' # there was an error with this field, but the field was hidden, so we should not link to it
+    end
+  end
 end
