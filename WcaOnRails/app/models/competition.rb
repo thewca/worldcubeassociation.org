@@ -29,6 +29,8 @@ class Competition < ActiveRecord::Base
            allow_nil: true,
            with_model_currency: :currency_code
 
+  scope :not_over, -> { where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today) }
+
   CLONEABLE_ATTRIBUTES = %w(
     cityName
     countryId
