@@ -22,6 +22,7 @@ class Competition < ActiveRecord::Base
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
+  has_one :continent, foreign_key: :continentId, through: :country
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
@@ -31,6 +32,29 @@ class Competition < ActiveRecord::Base
            with_model_currency: :currency_code
 
   scope :not_over, -> { where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today) }
+  scope :belongs_to_region, lambda { |region_id|
+    joins(:country).where(
+      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+    )
+  }
+  scope :contains, lambda { |search_term|
+    joins(:delegates).where(
+      "Competitions.name like :search_term or
+      Competitions.cityName like :search_term or
+      users.name like :search_term or
+      Competitions.venue like :search_term or
+      Competitions.cellName like :search_term or
+      Competitions.countryId like :search_term or
+      MONTHNAME(STR_TO_DATE(Competitions.month, '%m')) like :search_term",
+      search_term: "%#{search_term}%"
+    )
+  }
+  scope :has_event, lambda { |event_id|
+    joins(
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
+      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id"
+    ).where("e#{event_id}.id = :event_id", event_id: event_id)
+  }
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
@@ -207,7 +231,8 @@ class Competition < ActiveRecord::Base
              'competition_organizers',
              'media',
              'scrambles',
-             'country'
+             'country',
+             'continent'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -368,14 +393,6 @@ class Competition < ActiveRecord::Base
     update_column :external_website, nil
   end
 
-  def continent
-    Continent.c_find(country.continentId)
-  end
-
-  def country
-    Country.c_find(countryId)
-  end
-
   def website
     generate_website ? internal_website : external_website
   end
@@ -479,18 +496,6 @@ class Competition < ActiveRecord::Base
 
   def has_event?(event)
     self.events.include?(event)
-  end
-
-  def belongs_to_region?(region)
-    self.countryId == region || self.continent.id == region
-  end
-
-  def contains?(search_param)
-    search_param.split.all? do |part|
-      [name, cityName, delegates.pluck(:name).join(','), venue, cellName, countryId, start_date.strftime('%B')].any? do |field|
-        field.downcase.include?(part.downcase)
-      end
-    end
   end
 
   def pending_results_or_report(days)
