@@ -211,7 +211,7 @@ function exportPublic ( $sources ) {
   echo '<p><b>Move new files to public directory</b></p>';
   mySystem( "mv $sqlZipFile $tsvZipFile ../../misc/" );
   mySystem( "rm -rf ../../misc/WCA_export.sql.zip && ln -s $sqlZipFile ../../misc/WCA_export.sql.zip" );
-  mySystem( "rm -rf ../../misc/WCA_export.tsv.zip && ln -s $sqlZipFile ../../misc/WCA_export.tsv.zip" );
+  mySystem( "rm -rf ../../misc/WCA_export.tsv.zip && ln -s $tsvZipFile ../../misc/WCA_export.tsv.zip" );
   mySystem( "mv export.html ../../misc/" );
 
   #------------------------------------------
