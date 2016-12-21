@@ -4,6 +4,7 @@ class Country < ActiveRecord::Base
   self.table_name = "Countries"
 
   belongs_to :continent, foreign_key: :continentId
+  has_many :competitions, foreign_key: :countryId
 
   scope :uncached_real, -> { where("name not like 'Multiple Countries%'") }
 

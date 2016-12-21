@@ -73,7 +73,7 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
-    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
+    @competitions = Competition.joins(:country, :delegates).where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.not_over
@@ -87,19 +87,41 @@ class CompetitionsController < ApplicationController
     end
 
     if @display == 'admin'
-      @competitions = @competitions.includes(:delegates, :delegate_report)
+      @competitions = @competitions.includes(:delegate_report)
     end
 
     unless params[:region] == "all"
-      @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
+      @competitions = @competitions.where("countryId = ? or continentId = ?", params[:region], params[:region])
     end
 
     if params[:search].present?
-      @competitions = @competitions.select { |competition| competition.contains?(params[:search]) }
+      params[:search].split.all? do |part|
+        @competitions = @competitions.where(
+          "Competitions.name like ? or
+          Competitions.cityName like ? or
+          users.name like ? or
+          Competitions.venue like ? or
+          Competitions.cellName like ? or
+          Competitions.countryId like ?",
+          "%#{part}%",
+          "%#{part}%",
+          "%#{part}%",
+          "%#{part}%",
+          "%#{part}%",
+          "%#{part}%",
+        )
+      end
     end
 
     unless params[:event_ids].empty?
-      @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
+      params[:event_ids].each do |event_id|
+        ce_alias = "competition_events" + event_id
+        e_alias = "Events" + event_id
+        @competitions = @competitions.joins(
+          "join competition_events " + ce_alias + " ON " + ce_alias + ".competition_id = Competitions.id " \
+          "join Events " + e_alias + " ON " + e_alias + ".id = " + ce_alias + ".event_id",
+        ).where(e_alias + ".id = ?", event_id)
+      end
     end
 
     unless params[:status] == "all"

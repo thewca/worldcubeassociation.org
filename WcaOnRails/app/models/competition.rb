@@ -21,6 +21,7 @@ class Competition < ActiveRecord::Base
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
+  belongs_to :country, foreign_key: :countryId
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
@@ -196,8 +197,17 @@ class Competition < ActiveRecord::Base
 
       Competition.reflections.keys.each do |association_name|
         case association_name
-        when 'registrations', 'results', 'competitors', 'competitor_users', 'delegate_report',
-             'competition_delegates', 'competition_events', 'competition_organizers', 'media', 'scrambles'
+        when 'registrations',
+             'results',
+             'competitors',
+             'competitor_users',
+             'delegate_report',
+             'competition_delegates',
+             'competition_events',
+             'competition_organizers',
+             'media',
+             'scrambles',
+             'country'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
