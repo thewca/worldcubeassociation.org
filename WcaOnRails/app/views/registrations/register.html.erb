@@ -80,12 +80,13 @@
                   <%= form_tag competition_process_payment_path do %>
                     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                       data-key="<%= ENVied.STRIPE_PUBLISHABLE_KEY %>"
+                      data-image="https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png"
                       data-name="World Cube Association"
                       data-description="Registration fee"
                       data-amount="<%= @registration.outstanding_entry_fees.cents %>"
                       data-currency="<%= @registration.outstanding_entry_fees.currency.iso_code %>"
                       data-email="<%= @registration.user.email %>"
-                      data-zip-code="false"
+                      data-zip-code="true"
                       data-label="<%= t('registrations.payment_button_text', entry_fee: outstanding_entry_fees) %>"
                       data-locale="auto">
                     </script>

@@ -564,14 +564,102 @@ RSpec.describe RegistrationsController do
   end
 
   describe 'POST #process_payment' do
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, events: Event.where(id: %w(222 333))) }
 
     context 'when not signed in' do
+      let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       sign_out
 
       it 'redirects to the sign in page' do
         post :process_payment, competition_id: competition.id
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'when signed in' do
+      let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { FactoryGirl.create(:user, :wca_id) }
+      let!(:registration) { FactoryGirl.create(:registration, competition: competition, user: user) }
+
+      before :each do
+        sign_in user
+      end
+
+      it 'processes payment with valid credit card' do
+        Stripe.api_key = ENVied.STRIPE_API_KEY
+        token_id = Stripe::Token.create(
+          card: {
+            number: "4242424242424242",
+            exp_month: 12,
+            exp_year: 2017,
+            cvc: "314",
+          },
+        ).id
+        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        expect(response).to redirect_to competition_register_path(competition)
+        expect(registration.reload.outstanding_entry_fees).to eq 0
+        expect(registration.paid_entry_fees).to eq competition.base_entry_fee
+        charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+        expect(charge.amount).to eq competition.base_entry_fee.cents
+        expect(charge.metadata.wca_id).to eq user.wca_id
+        expect(charge.metadata.email).to eq user.email
+        expect(charge.metadata.competition).to eq competition.name
+      end
+
+      it 'rejects payment with invalid credit card' do
+        Stripe.api_key = ENVied.STRIPE_API_KEY
+        token_id = Stripe::Token.create(
+          card: {
+            number: "4000000000000002",
+            exp_month: 12,
+            exp_year: 2017,
+            cvc: "314",
+        },
+        ).id
+        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        expect(response).to redirect_to competition_register_path(competition)
+        expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
+      end
+    end
+  end
+
+  describe 'POST #refund_payment' do
+
+    context 'when signed in as a competitor' do
+      let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { FactoryGirl.create(:user, :wca_id) }
+      let!(:registration) { FactoryGirl.create(:registration, competition: competition, user: user) }
+
+      it 'redirects to the sign in page' do
+        sign_in user
+        expect {
+          post :refund_payment, id: registration.id
+        }.to raise_error(ActionController::UrlGenerationError)
+      end
+    end
+
+    context 'when signed in as organizer' do
+      let(:organizer) { FactoryGirl.create(:user) }
+      let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+      let!(:registration) { FactoryGirl.create(:registration, competition: competition, user: organizer) }
+
+      it 'processes refund' do
+        sign_in organizer
+        Stripe.api_key = ENVied.STRIPE_API_KEY
+        token_id = Stripe::Token.create(
+          card: {
+            number: "4242424242424242",
+            exp_month: 12,
+            exp_year: 2017,
+            cvc: "314",
+          },
+        ).id
+        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        payment_id = registration.reload.registration_payments.first.id
+        post :refund_payment, id: registration.id, payment_id: payment_id
+        expect(response).to redirect_to edit_registration_path(registration)
+        refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+        expect(refund.amount).to eq competition.base_entry_fee.cents
+        expect(flash[:success]).to eq "Payment was refunded"
       end
     end
   end

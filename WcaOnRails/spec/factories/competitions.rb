@@ -76,5 +76,11 @@ FactoryGirl.define do
       with_delegate
       showAtAll true
     end
+
+    trait :entry_fee do
+      base_entry_fee_lowest_denomination 1000
+      currency_code "AUD"
+      connected_stripe_account_id "acct_19DWHXFMcKQilGkD"
+    end
   end
 end

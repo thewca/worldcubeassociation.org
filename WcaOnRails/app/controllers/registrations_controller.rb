@@ -209,8 +209,8 @@ class RegistrationsController < ApplicationController
       amount: registration.outstanding_entry_fees.cents,
       currency: registration.outstanding_entry_fees.currency.iso_code,
       source: token,
-      description: "Registration payment",
-      metadata: registration.user.wca_id,
+      description: "Registration payment for #{competition.name}",
+      metadata: {"Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name},
     }, stripe_account: competition.connected_stripe_account_id)
 
     registration.record_payment(
@@ -223,11 +223,9 @@ class RegistrationsController < ApplicationController
   rescue Stripe::CardError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
     redirect_to competition_register_path
-    return
   rescue => e
     flash[:danger] = 'Something went wrong: ' + e.message
     redirect_to competition_register_path
-    return
   end
 
   def refund_payment
@@ -251,7 +249,6 @@ class RegistrationsController < ApplicationController
   rescue => e
     flash[:danger] = 'Something went wrong with the refund: ' + e.message
     redirect_to edit_registration_path(registration)
-    return
   end
 
   def create
