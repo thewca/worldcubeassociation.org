@@ -203,7 +203,6 @@ class RegistrationsController < ApplicationController
       registration = registrations.find_by_user_id!(current_user.id)
     end
     token = params[:stripeToken]
-    Stripe.api_key = ENVied.STRIPE_API_KEY
 
     charge = Stripe::Charge.create({
       amount: registration.outstanding_entry_fees.cents,
@@ -219,6 +218,7 @@ class RegistrationsController < ApplicationController
       charge.id,
     )
 
+    flash[:success] = 'Your payment was successful.'
     redirect_to competition_register_path
   rescue Stripe::CardError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
@@ -232,7 +232,6 @@ class RegistrationsController < ApplicationController
     registration = Registration.find(params[:id])
     payment = RegistrationPayment.find(params[:payment_id])
 
-    Stripe.api_key = ENVied.STRIPE_API_KEY
     refund = Stripe::Refund.create({
       charge: payment.stripe_charge_id,
     }, stripe_account: registration.competition.connected_stripe_account_id)

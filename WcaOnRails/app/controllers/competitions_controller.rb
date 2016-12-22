@@ -301,7 +301,6 @@ class CompetitionsController < ApplicationController
   def revoke_stripe_access
     @competition = Competition.find(params[:id])
     if @competition.connected_stripe_account_id
-      Stripe.api_key = ENVied.STRIPE_API_KEY
       account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
       account.deauthorize(
         ENVied.STRIPE_CLIENT_ID,

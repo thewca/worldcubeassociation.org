@@ -585,7 +585,8 @@ RSpec.describe RegistrationsController do
       end
 
       it 'processes payment with valid credit card' do
-        Stripe.api_key = ENVied.STRIPE_API_KEY
+        expect(registration.outstanding_entry_fees).to be > 0
+        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
         token_id = Stripe::Token.create(
           card: {
             number: "4242424242424242",
@@ -595,6 +596,7 @@ RSpec.describe RegistrationsController do
           },
         ).id
         post :process_payment, competition_id: competition.id, stripeToken: token_id
+        expect(flash[:success]).to eq "Your payment was successful."
         expect(response).to redirect_to competition_register_path(competition)
         expect(registration.reload.outstanding_entry_fees).to eq 0
         expect(registration.paid_entry_fees).to eq competition.base_entry_fee
@@ -606,7 +608,6 @@ RSpec.describe RegistrationsController do
       end
 
       it 'rejects payment with invalid credit card' do
-        Stripe.api_key = ENVied.STRIPE_API_KEY
         token_id = Stripe::Token.create(
           card: {
             number: "4000000000000002",
@@ -616,8 +617,8 @@ RSpec.describe RegistrationsController do
         },
         ).id
         post :process_payment, competition_id: competition.id, stripeToken: token_id
-        expect(response).to redirect_to competition_register_path(competition)
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
+        expect(response).to redirect_to competition_register_path(competition)
       end
     end
   end
@@ -629,7 +630,7 @@ RSpec.describe RegistrationsController do
       let!(:user) { FactoryGirl.create(:user, :wca_id) }
       let!(:registration) { FactoryGirl.create(:registration, competition: competition, user: user) }
 
-      it 'redirects to the sign in page' do
+      it 'does not allow access and generates a URL error' do
         sign_in user
         expect {
           post :refund_payment, id: registration.id
@@ -642,9 +643,8 @@ RSpec.describe RegistrationsController do
       let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
       let!(:registration) { FactoryGirl.create(:registration, competition: competition, user: organizer) }
 
-      it 'processes refund' do
+      it 'processes a payment then issues a refund' do
         sign_in organizer
-        Stripe.api_key = ENVied.STRIPE_API_KEY
         token_id = Stripe::Token.create(
           card: {
             number: "4242424242424242",
@@ -658,6 +658,8 @@ RSpec.describe RegistrationsController do
         post :refund_payment, id: registration.id, payment_id: payment_id
         expect(response).to redirect_to edit_registration_path(registration)
         refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+        expect(competition.base_entry_fee).to be > 0
+        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
         expect(refund.amount).to eq competition.base_entry_fee.cents
         expect(flash[:success]).to eq "Payment was refunded"
       end
