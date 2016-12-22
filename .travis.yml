@@ -9,6 +9,7 @@ env:
     - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
     - PATH=$HOME/.local/bin:$PATH
 before_install:
+  - sudo apt-get update && sudo apt-get install --only-upgrade openssl
   - pip install --user wrc
   - git clone --depth=1 https://github.com/thewca/wca-regulations.git
   - wrc wca-regulations -o WcaOnRails/app/views/regulations --target=json
@@ -23,7 +24,7 @@ before_install:
   - cd WcaOnRails/
 before_script:
   - bundle exec rake db:reset RAILS_ENV=test
-sudo: false
+sudo: required
 script:
   - bundle exec pre-commit run git
   - bundle exec rubocop
