@@ -35,7 +35,8 @@
           fa_icon: "lock",
           children: [
             { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fa_icon: "lock" },
-            { text: t('.menu.event_view'), path: edit_events_path(@competition), fa_icon: "lock" },
+            { text: t('.menu.event_view'), path: edit_events_path(@competition), fa_icon: "cubes" },
+            { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), fa_icon: "cc-stripe" },
             { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), fa_icon: "lock" },
           ]
         }
