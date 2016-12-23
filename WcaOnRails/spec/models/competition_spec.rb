@@ -655,8 +655,9 @@ RSpec.describe Competition do
     let!(:search_comp) { FactoryGirl.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba", delegates: [delegate] }
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
+      expect(Competition.contains('awesome').contains('comp').first).to eq search_comp
       expect(Competition.contains('abc').contains('def').first).to eq nil
-      expect(Competition.contains('ped').contains('aci').first).to eq search_comp
+      expect(Competition.contains('ped').contains('aci').first).to eq nil
       expect(Competition.contains('wes').contains('blah').first).to eq nil
     end
   end

@@ -38,13 +38,9 @@ class Competition < ActiveRecord::Base
     )
   }
   scope :contains, lambda { |search_term|
-    joins(:delegates).where(
+    where(
       "Competitions.name like :search_term or
       Competitions.cityName like :search_term or
-      users.name like :search_term or
-      Competitions.venue like :search_term or
-      Competitions.cellName like :search_term or
-      Competitions.countryId like :search_term or
       MONTHNAME(STR_TO_DATE(Competitions.month, '%m')) like :search_term",
       search_term: "%#{search_term}%"
     )
