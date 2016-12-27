@@ -380,7 +380,7 @@ RSpec.describe RegistrationsController do
       competition.save!
 
       get :psych_sheet, competition_id: competition.id
-      expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "444")
+      expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "222")
     end
 
     it "does not show pending registrations" do
