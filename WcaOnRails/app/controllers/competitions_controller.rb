@@ -73,7 +73,7 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
-    @competitions = Competition.where(showAtAll: true).order(:year, :month, :day)
+    @competitions = Competition.includes(:country).where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.not_over
@@ -91,15 +91,19 @@ class CompetitionsController < ApplicationController
     end
 
     unless params[:region] == "all"
-      @competitions = @competitions.select { |competition| competition.belongs_to_region?(params[:region]) }
+      @competitions = @competitions.belongs_to_region(params[:region])
     end
 
     if params[:search].present?
-      @competitions = @competitions.select { |competition| competition.contains?(params[:search]) }
+      params[:search].split.each do |part|
+        @competitions = @competitions.contains(part)
+      end
     end
 
     unless params[:event_ids].empty?
-      @competitions = @competitions.select { |competition| competition.has_events_with_ids?(params[:event_ids]) }
+      params[:event_ids].each do |event_id|
+        @competitions = @competitions.has_event(event_id)
+      end
     end
 
     unless params[:status] == "all"

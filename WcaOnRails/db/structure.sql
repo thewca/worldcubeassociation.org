@@ -56,7 +56,8 @@ CREATE TABLE `Competitions` (
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `endYear` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `year_month_day` (`year`,`month`,`day`)
+  KEY `year_month_day` (`year`,`month`,`day`),
+  KEY `index_Competitions_on_countryId` (`countryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1168,3 +1169,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161206204738');
 INSERT INTO schema_migrations (version) VALUES ('20161212200704');
 
 INSERT INTO schema_migrations (version) VALUES ('20161226223701');
+
+INSERT INTO schema_migrations (version) VALUES ('20161221205552');
