@@ -172,9 +172,9 @@ bash "build nginx" do
   code <<-EOH
     set -e # exit on error
     cd /tmp
-    wget http://nginx.org/download/nginx-1.8.0.tar.gz
-    tar xvf nginx-1.8.0.tar.gz
-    cd nginx-1.8.0
+    wget http://nginx.org/download/nginx-1.11.8.tar.gz
+    tar xvf nginx-1.11.8.tar.gz
+    cd nginx-1.11.8
     ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
     make
     sudo make install
