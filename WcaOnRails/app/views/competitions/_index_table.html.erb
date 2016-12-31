@@ -8,14 +8,14 @@
       <span class="date">
         <% if competition.is_over? %>
           <% if competition.results_posted? %>
-            <%= icon('check-circle', title: t('.posted'), class: "results-posted-indicator", data: { toggle: "tooltip" }) %>
+            <%= icon('check-circle', title: t('competitions.index.tooltips.hourglass.posted'), class: "results-posted-indicator", data: { toggle: "tooltip" }) %>
           <% else %>
-            <%= icon('hourglass-end', title: t('.ended', days: t('common.days', count:(Date.today - competition.end_date).to_i)), data: { toggle: "tooltip" }) %>
+            <%= icon('hourglass-end', title: t('competitions.index.tooltips.hourglass.ended', days: t('common.days', count:(Date.today - competition.end_date).to_i)), data: { toggle: "tooltip" }) %>
           <% end %>
         <% elsif competition.in_progress? %>
-          <%= icon('hourglass-half', title: t('.in_progress'), data: { toggle: "tooltip" }) %>
+          <%= icon('hourglass-half', title: t('competitions.index.tooltips.hourglass.in_progress'), data: { toggle: "tooltip" }) %>
         <% else %>
-          <%= icon('hourglass-start', title: t('.starts_in', days: t('common.days', count:(competition.start_date - Date.today).to_i)), data: { toggle: "tooltip" }) %>
+          <%= icon('hourglass-start', title: t('competitions.index.tooltips.hourglass.starts_in', days: t('common.days', count:(competition.start_date - Date.today).to_i)), data: { toggle: "tooltip" }) %>
         <% end %>
         <%= wca_date_range(competition.start_date, competition.end_date) %>
       </span>

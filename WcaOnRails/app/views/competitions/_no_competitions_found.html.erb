@@ -1,9 +1,9 @@
 <div class="col-md-12">
   <%= alert :warning do
     if params[:event_ids].empty?
-      t '.no_found'
+      t 'competitions.index.no_comp_found'
     else
-      t '.no_match', events: t('common.these_events', count: params[:event_ids].count)
+      t 'competitions.index.no_comp_match', events: t('common.these_events', count: params[:event_ids].count)
     end
   end %>
 </div>
