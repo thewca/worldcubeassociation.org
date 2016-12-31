@@ -58,6 +58,7 @@ $styles->add('links.css');
 if(isset($is_admin) && $is_admin) {
   $styles->add('admin.css');
 }
+$styles->add('cubing-icons.css');
 
 if(isset($jQuery_chosen) && $jQuery_chosen) {
   $scripts->add('selectize.min.js');

@@ -33,7 +33,24 @@ echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>
 echo "<p></p>";
 
 #--- Define what to show in what order and with nice short names
-$whats = explode( ' ', '333:3x3 444:4x4 555:5x5 222:2x2 333bf:bld 333oh:hand 333fm:moves:1 333ft:feet minx:mega pyram:pyra sq1:sq1 clock:clock 666:6x6 777:7x7 magic:magic mmagic:master 444bf:4bld 555bf:5bld 333mbf:multi:1' );
+$events = dbQueryHandle("
+      SELECT id, name
+      FROM Events
+      WHERE rank < 900
+      ORDER BY rank
+    ");
+
+$whats = [];
+while($row = mysql_fetch_row($events)) {
+  list( $id, $name ) = $row;
+  $new_item = $id . ":" . $name;
+  if ($id == '333fm' || $id == '333mbf') {
+    $new_item .= ":1";
+  }
+  $whats[] = $new_item;
+}
+
+#$whats = explode( ' ', '333:3x3 444:4x4 555:5x5 222:2x2 333bf:bld 333oh:hand 333fm:moves:1 333ft:feet minx:mega pyram:pyra sq1:sq1 clock:clock 666:6x6 777:7x7 magic:magic mmagic:master 444bf:4bld 555bf:5bld 333mbf:multi:1' );
 #$whats = explode( ' ', '444:4x4 555:5x5 222:2x2' );
 #$whats = explode( ' ', '333fm:moves:1 444:4x4 magic:magic mmagic:master 333mbf:multi:1' );
 #$whats = explode( ' ', '333fm:moves:1 333mbf:multi:1' );
@@ -58,7 +75,7 @@ $tabLinks = $tabDivs = '';
 foreach ( $whats as $what ) {
   list( $eventId, $eventName, $divide ) = explode( ':', "$what:100" );
   #pretty("$eventId, $eventName, $divide");
-  $tabLinks .= "<li><a href=\"#container_$eventId\">$eventName</a></li>\n";
+  $tabLinks .= "<li><a href=\"#container_$eventId\"><span class='cubing-icon cubing-icon-2x event-$eventId' title='" . htmlentities($eventName, ENT_QUOTES) . "'></span></a></li>\n";
   $tabDivs  .= "<div id=\"container_$eventId\" style=\"xwidth: 95%; width: 940px; height: 600px; margin: auto; xborder: 1px solid red\"></div>\n";
   $eventChartsJs .= buildGraph( $eventName, $eventId, $divide ) . "\n";
 }
