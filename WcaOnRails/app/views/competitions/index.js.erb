@@ -1,4 +1,4 @@
-history.pushState(null, document.title, <%= current_url.to_json.html_safe %>);
+history.pushState(null, document.title, <%= current_path.to_json.html_safe %>);
 
 $('#competitions-list').html('<%=j render 'index_competitions_list', competitions: @competitions %>');
 

@@ -119,7 +119,7 @@ class CompetitionsController < ApplicationController
         # It's necessary because if the browser caches the response, the user will see a JavaScript response
         # when he clicks browser back/forward buttons.
         response.headers["Cache-Control"] = "no-cache, no-store"
-        render 'index', locals: { current_url: request.original_url }
+        render 'index', locals: { current_path: request.original_fullpath }
       end
     end
   end
