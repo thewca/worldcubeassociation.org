@@ -52,11 +52,16 @@ function formatValue( $value, $format='time' ) {
       $result = '?:??:??';
     } else {
       $result = "";
-      while( $time >= 60 ){
-        $result = sprintf( ":%02d$result", $time % 60 );
-        $time = intval( $time / 60 );
+      # show 2/2 0:XX instead of 2/2 XX
+      if ($time < 60) {
+        $result = "0:$time";
+      } else {
+        while( $time >= 60 ){
+          $result = sprintf( ":%02d$result", $time % 60 );
+          $time = intval( $time / 60 );
+        }
+        $result = "$time$result";
       }
-      $result = "$time$result";
     }
 
     #--- Alternative (throw out seconds).
