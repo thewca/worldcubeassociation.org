@@ -92,12 +92,12 @@ class UsersController < ApplicationController
         sign_in @user, bypass: true
       end
       flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
-                          I18n.t('wca.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
+                          I18n.t('users.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
                         else
-                          I18n.t('wca.successes.messages.account_updated')
+                          I18n.t('users.successes.messages.account_updated')
                         end
       if @user.claiming_wca_id
-        flash[:success] = I18n.t('wca.successes.messages.wca_id_claimed',
+        flash[:success] = I18n.t('users.successes.messages.wca_id_claimed',
                                  wca_id: @user.unconfirmed_wca_id,
                                  user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_later

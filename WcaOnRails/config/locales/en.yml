@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  #context: Special country name
   countries:
     XA: "Multiple Countries (Asia)"
     XE: "Multiple Countries (Europe)"
@@ -27,6 +28,7 @@ en:
     MO: "Macao"
     HK: "Hong Kong"
     KR: "Korea"
+  #context: Continent name
   continents:
     AfR: "Africa"
     AsR: "Asia"
@@ -34,6 +36,7 @@ en:
     NAR: "North America"
     OcR: "Oceania"
     SAR: "South America"
+  #context: Event name
   events:
     "333": "Rubik's Cube"
     "444": "4x4x4 Cube"
@@ -56,6 +59,7 @@ en:
     magic: "Rubik's Magic"
     mmagic: "Master Magic"
     333mbo: "Rubik's Cube: Multiple blind old style"
+  #context: Common word used in multiple places on the website
   common:
     continent: "Continent"
     country: "Country"
@@ -70,12 +74,15 @@ en:
     all_regions: "All regions"
     errors:
       invalid: "invalid"
+    #context: Key used for the pluralization of "x day(s)" in a sentence
     days:
       one: "1 day"
       other: "%{count} days"
+    #context: Key used for the pluralization of "x event(s)" in a sentence
     these_events:
       one: "this event"
       other: "these %{count} events"
+  #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
       your_apps: "Your OAuth Applications"
@@ -89,7 +96,9 @@ en:
       scopes: "Scopes"
       callback_urls: "Callback Urls"
   activerecord:
+    #context: This key is an attribute of
     attributes:
+      #context: a user
       user:
         name: "Full name"
         wca_id: "WCA ID"
@@ -112,6 +121,7 @@ en:
         location_description: "Location description"
         phone_number: "Phone number"
         notes: "Notes"
+      #context: a competition
       competition:
         id: "ID"
 
@@ -147,6 +157,7 @@ en:
         registration_close: "Registration close"
         remarks: "Remarks"
         clone_tabs: "I would like to clone all tabs with additional information as well"
+      #context: a registration to a competition
       registration:
         guests: "Guests"
         comments: "Comments"
@@ -154,9 +165,11 @@ en:
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
+      #context: a competition tab
       competition_tab:
         content: "Content"
         name: "Name"
+      #context: a delegate report
       delegate_report:
         discussion_url: "Discussion's url on the Google Group"
         schedule_url: "Schedule url"
@@ -165,24 +178,30 @@ en:
         organisation: "Organisation"
         incidents: "Incidents"
         remarks: "Remarks"
+      #context: a person
       person:
         wca_id: "Person"
         countryId: "Country"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
+      #context: a poll
       poll:
         question: "Question"
         deadline: "Deadline"
+      #context: a post
       post:
         title: "Title"
         body: "Body"
         sticky: "Sticky"
+      #context: a team
       team:
         name: "Name"
         description: "Description"
+      #context: a vote
       vote:
         comment: "Comment"
+  #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
     "no": "No"
@@ -194,12 +213,15 @@ en:
       html: ''
     error_notification:
       default_message: "Please review the problems below:"
+    #context: and a label of a field
     labels:
       contact:
         name: "Name"
         your_email: "Your email"
         message: "Message"
+    #context: and a hint given about a specific field
     hints:
+      #context: for a user
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
         name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
@@ -222,6 +244,7 @@ en:
         location_description: ""
         phone_number: ""
         notes: ""
+      #context: for a competition
       competition:
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
@@ -251,10 +274,12 @@ en:
         message: ""
         name: ""
         your_email: ""
+      #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
         sticky: ""
         title: ""
+      #context: for a delegate report
       delegate_report:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
@@ -263,9 +288,11 @@ en:
         incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
+      #context: for a competition tab
       competition_tab:
         name: "Examples: Travel, Payments, Awards, Accommodation"
         content: ""
+      #context: for a person
       person:
         dob: "Date of birth should have the format YYYY-MM-DD."
         countryId: ""
@@ -288,35 +315,37 @@ en:
         name: ""
       vote:
         comment: ""
+    #context: and a label for an option
     options:
+      #context: about registration
       registration:
         status:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
       competition:
+        #context: about guests
         guests_enabled:
           "true": "Ask about guests"
           "false": "Do NOT ask about guests"
   errors:
     #These are locales used in lib/ (ignored by configuration)
+    #context: Error message when submitting a profile picture
     messages:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+  #context: Key used in external code that the WCA use
   wca:
     # These are locales used in WCA's app relevant to external gems, but which are not present in the gem's default locale file.
     # Putting them under "wca" ensures we can check through i18n-tasks that we define and use them properly.
     errors:
       messages:
+        #context: Generic error message in forms
         form_error:
           one: "The form contains one error:"
           other: "The form contains %{count} errors:"
-    successes:
-      messages:
-        account_updated: "Account updated"
-        wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
-        account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
+    #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       authorizations:
         new:
@@ -326,7 +355,7 @@ en:
         dob: 'Access your date of birth'
         email: 'Access your email address'
 
-    # Views-related keys
+    #context: Key used for sign in/sign up
     devise:
       no_account: "No account?"
       sign_up: "Sign up"
@@ -340,6 +369,7 @@ en:
         female: "Female"
         other: "Other"
   layouts:
+    #context: This key belongs to the navigation bar
     navigation:
       information: "Information"
       about: "About the WCA"
@@ -384,7 +414,9 @@ en:
       api: "API"
       manage_app: "Manage your applications"
       manage_auth_app: "Manage authorized applications"
+  #context: Key used in the context of editing a user profile
   users:
+    #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"
       competition: "competition"
@@ -393,6 +425,7 @@ en:
       info_competed_before: "If you've competed before, you can request to have your WCA ID connected to your account."
       info_never_competed_html: "If you've never competed before, go to a %{comp}! A WCA ID will be created for you when the results from your first competition are uploaded."
       submit_value: "Claim WCA ID"
+    #context: related to editing the avatar thumbnail
     edit_avatar_thumbnail:
       current: "Current thumbnail:"
       new: "New thumbnail:"
@@ -434,6 +467,7 @@ en:
         5: "The avatar must not include texts other than regular background texts."
         6: "The avatar must be submitted in correct orientation."
 
+    #context: when an error occured during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -447,13 +481,21 @@ en:
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> with a photo of any legal document (ID card, driver license, etc) where your name and date of birth are visible."
       board_member_cannot_resign: "You cannot resign from your role as a board member! Find another board member to fire you."
       avatar_requires_wca_id: "requires a WCA ID to be assigned"
+    #context: when an action was successful
+    successes:
+      messages:
+        account_updated: "Account updated"
+        wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
+        account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
     select_nearby_delegate:
       select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA delegate</a> to confirm your identify. Please enter your birthdate and select the delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact the %{link_result_team} to fix this."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
+  #context: Key used when dealing with registration to a competition
   registrations:
     events: "Events"
+    #context: and when an error is found
     errors:
       need_name: "Need a name"
       need_gender: "Need a gender"
@@ -465,9 +507,11 @@ en:
       can_register: "User must be able to register for competition"
       must_register: "must register for at least one event"
     registration_info_people:
+      #context: pluralization of "x first-timer(s)"
       newcomer:
         one: "first-timer"
         other: "first-timers"
+      #context: pluralization of "x returner(s)"
       returner:
         one: "returner"
         other: "returners"
@@ -490,7 +534,9 @@ en:
       deleted: "Successfully deleted your registration for %{comp}"
       registered: "Successfully registered!"
     edit_registration:
+      #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+    #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
       country: "country"
@@ -530,7 +576,9 @@ en:
     waiting_list: "You are currently number %{i} of %{n} on the waiting list."
     accepted: "Your registration has been accepted!"
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
+  #context: Key used when managing competitions
   competitions:
+    #context: generic message
     messages:
       not_visible: "This competition is not visible to the public."
       name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
@@ -545,10 +593,12 @@ en:
       confirmed_not_visible: "This competition is confirmed but not visible"
       not_confirmed_visible: "This competition is not confirmed but visible"
       not_confirmed_not_visible: "This competition is not confirmed and not visible"
+    #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
       disclaimer: "Only competitions which use the WCA registration system will be shown here."
       past_competitions: "Past competitions"
+    #context: on the competition's information page
     competition_info:
       date: "Date"
       city: "City"
@@ -563,9 +613,9 @@ en:
       contact: "Contact"
       entry_fee: "Entry Fee"
       information: "Information"
+    #context: on the competition's index page
     index:
       title: "Competitions"
-    index_form:
       all: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -574,27 +624,32 @@ en:
       region: "Region"
       search: "Search"
       state: "State"
-      search_tooltip: "Name, city, venue, delegate(s), country or month"
       present: "Present"
       recent: "Recent"
-      recent_tooltip: "Last %{count} days"
       past: "Past"
       past_from: "Past from %{year}"
       past_all: "Past from all years"
-    index_competitions_list:
-      in_progress: "Competitions in progress"
-      past: "Past competitions from %{year}"
-      recent: "Recent competitions (last %{count} days)"
-      upcoming: "Upcoming competitions"
+      titles:
+        in_progress: "Competitions in progress"
+        past: "Past competitions from %{year}"
+        recent: "Recent competitions (last %{count} days)"
+        upcoming: "Upcoming competitions"
       no_access: "You don't have access to this page!"
-    index_table:
-      ended: "Ended %{days} ago"
-      in_progress: "In progress!"
-      posted: "Results are posted!"
-      starts_in: "Starts in %{days}"
-    no_competitions_found:
-      no_found: "No competitions found."
-      no_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
+      #context: tooltip displayed when hovering
+      tooltips:
+        #context: the hourglass icon
+        hourglass:
+          ended: "Ended %{days} ago"
+          in_progress: "In progress!"
+          posted: "Results are posted!"
+          starts_in: "Starts in %{days}"
+        #context: the "search" button
+        search: "Name, city, venue, delegate(s), country or month"
+        #context: the "recent" button
+        recent: "Last %{count} days"
+      no_comp_found: "No competitions found."
+      no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
+    #context: on the "My competitions" page
     my_competitions_table:
       edit: "Edit"
       registrations: "Registrations"
@@ -602,6 +657,7 @@ en:
       report: "Report"
       no_upcoming_competitions_html: "You currently have no upcoming competitions! Check out the %{link}."
       no_past_competitions: "You have no past competitions."
+    #context: in the competition edition form
     competition_form:
       supports_md_html: "Supports <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
       venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
@@ -621,6 +677,7 @@ en:
       submit_confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified."
       submit_delete: "Are you sure you want to delete this competition? There is no going back."
       coordinates: "Coordinates"
+    #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
@@ -645,6 +702,7 @@ en:
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."
+    #context: in the "nearby competitions" list
     nearby_competitions:
       comp: "competition"
       label: "Nearby competitions (within %{days} days and %{kms} km)"
@@ -655,7 +713,6 @@ en:
       no_location_yet: "You have not assigned a location for this competition yet."
       within: "Within %{days} days"
       show: "Show"
-    nearby_competitions_table:
       name: "Name"
       delegates: "Delegate(s)"
       date: "Date"
@@ -668,6 +725,7 @@ en:
     post_announcement: "Post competition announcement"
     show:
       general_info: "General info"
+    #context: entry of the left navigation menu
     nav:
       menu:
         results: "Results"
@@ -690,8 +748,10 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
+  #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+  #context: Person search page
   persons:
     index:
       name_or_wca_id: "Name parts or WCA ID"

@@ -301,11 +301,6 @@ fr:
         form_error:
           one: "Le formulaire contient une erreur :"
           other: "Le formulaire contient %{count} erreurs:"
-    successes:
-      messages:
-        account_updated: "Compte mis à jour"
-        wca_id_claimed: "Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos emails, et attendez que %{user} l'approuve."
-        account_updated_confirm: "Compte mis à jour, un email a été envoyé à %{email} pour confirmer votre nouvelle adresse email."
     doorkeeper:
       authorizations:
         new:
@@ -434,6 +429,11 @@ fr:
       already_have_id: "impossible à réclamer car vous avez déjà l'ID WCA %{wca_id}"
       board_member_cannot_resign: "Vous ne pouvez pas démissioner de votre poste de membre du Board ! Trouvez un autre membre pour vous rétrograder."
       avatar_requires_wca_id: "requiert d'avoir un ID WCA"
+    successes:
+      messages:
+        account_updated: "Compte mis à jour"
+        wca_id_claimed: "Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos emails, et attendez que %{user} l'approuve."
+        account_updated_confirm: "Compte mis à jour, un email a été envoyé à %{email} pour confirmer votre nouvelle adresse email."
     select_nearby_delegate:
       select_delegate_html: "Afin d'associer votre ID WCA à votre compte, nous avons besoin qu'un <a href='%{link_delegate}' target='_blank'>Délégué WCA</a> confirme votre identité. Merci de sélectionner le Délégué le plus adapté selon vous, et entrez votre date de naissance."
       already_assigned_html: "L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous pensez que c'est une erreur, merci de contacter votre <a href='%{link_delegate}' target='_blank'>Délégué WCA</a> local."
@@ -549,7 +549,6 @@ fr:
       information: "Information"
     index:
       title: "Compétitions"
-    index_form:
       all: "Toutes"
       all_years: "Toutes les années"
       clear: "Effacer"
@@ -558,27 +557,27 @@ fr:
       region: "Région"
       search: "Rechercher"
       state: "État"
-      search_tooltip: "Nom, ville, salle, délégué(s), pays (en Anglais), ou mois"
       present: "Courantes"
       recent: "Récentes"
-      recent_tooltip: "%{count} derniers jours"
       past: "Terminées"
       past_from: "Terminées en %{year}"
       past_all: "Terminées (toutes)"
-    index_competitions_list:
-      in_progress: "Compétitions en cours"
-      past: "Compétitions terminées en %{year}"
-      recent: "Compétitions récentes (%{count} derniers jours)"
-      upcoming: "Compétitions à venir"
+      titles:
+        in_progress: "Compétitions en cours"
+        past: "Compétitions terminées en %{year}"
+        recent: "Compétitions récentes (%{count} derniers jours)"
+        upcoming: "Compétitions à venir"
       no_access: "Vous n'avez pas accès à cette page !"
-    index_table:
-      ended: "Terminée il y a %{days}"
-      in_progress: "En cours !"
-      posted: "Résultats en ligne !"
-      starts_in: "Démarre dans %{days}"
-    no_competitions_found:
-      no_found: "Pas de compétition trouvée."
-      no_match: "Nous n'avons pas trouvé de compétition avec %{events} ! Essayez une recherche avec moins d'épreuves."
+      tooltips:
+        hourglass:
+          ended: "Terminée il y a %{days}"
+          in_progress: "En cours !"
+          posted: "Résultats en ligne !"
+          starts_in: "Démarre dans %{days}"
+        search: "Nom, ville, salle, délégué(s), pays (en Anglais), ou mois"
+        recent: "%{count} derniers jours"
+      no_comp_found: "Pas de compétition trouvée."
+      no_comp_match: "Nous n'avons pas trouvé de compétition avec %{events} ! Essayez une recherche avec moins d'épreuves."
     my_competitions_table:
       edit: "Éditer"
       registrations: "Inscriptions"
@@ -636,7 +635,6 @@ fr:
       no_location_yet: "Vous n'avez pas encore choisi de coordonnées pour cette compétition."
       within: "À %{days} jours près"
       show: "Afficher"
-    nearby_competitions_table:
       name: "Nom"
       delegates: "Délégué(s)"
       date: "Date"
