@@ -161,11 +161,16 @@ class SolveTime
       else
         result = EMPTY_STRING
         time_seconds = time_centiseconds / 100
-        while time_seconds >= 60
-          result = ":%02d#{result}" % ( time_seconds % 60 )
-          time_seconds = time_seconds / 60
+        # show 2/2 0:XX instead of 2/2 XX
+        if time_seconds < 60
+          result = "0:#{time_seconds}"
+        else
+          while time_seconds >= 60
+            result = ":%02d#{result}" % ( time_seconds % 60 )
+            time_seconds = time_seconds / 60
+          end
+          result = "#{time_seconds}#{result}"
         end
-        result = "#{time_seconds}#{result}"
       end
 
       "#{@solved}/#{@attempted} #{result}"

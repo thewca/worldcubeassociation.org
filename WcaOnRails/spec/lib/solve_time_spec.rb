@@ -91,6 +91,11 @@ describe "SolveTime" do
         solve_time = SolveTime.new('333mbf', :single, 580325400)
         expect(solve_time.clock_format).to eq "41/41 54:14"
       end
+
+      it "formats with time less than 60 seconds" do
+        solve_time = SolveTime.new('333mbf', :single, 970005900)
+        expect(solve_time.clock_format).to eq "2/2 0:59"
+      end
     end
 
     describe "333mbo" do
