@@ -89,7 +89,7 @@
                 <span class="badge"><%= notification_count %></span>
               <% end %>
             <% else %>
-              <%= t '.sign_in' %>
+              <%= t 'devise.shared.links.sign_in' %>
             <% end %>
             <span class="caret"></span>
           </a>
@@ -157,9 +157,9 @@
               <li class="divider"></li>
               <li><%= link_to(t('.sign_out'), destroy_user_session_path, :method => :delete) %></li>
             <% else %>
-              <li><%= link_to(t('.sign_in'), new_user_session_path, class: "top-nav") %></li>
+              <li><%= link_to(t('devise.shared.links.sign_in'), new_user_session_path, class: "top-nav") %></li>
               <li class="divider"></li>
-              <li><%= link_to(t('.sign_up'), new_user_registration_path) %></li>
+              <li><%= link_to(t('devise.shared.links.sign_up'), new_user_registration_path) %></li>
               <li><%= link_to(t('devise.shared.links.didn_t_receive_confirmation_instructions'), new_user_confirmation_path) %></li>
             <% end %>
           </ul>

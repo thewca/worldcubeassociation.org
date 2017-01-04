@@ -85,7 +85,11 @@ search:
 #   api_key: "AbC-dEf5"
 
 ## Do not consider these keys missing:
-# ignore_missing:
+ignore_missing:
+  # Kaminari's keys, they are not prefixed by "kaminari.".
+  - 'views.pagination.*'
+  # We override devise.failure.(...) without adding the "wca" scope, but we can safely ignore the others
+  - 'devise.{mailer,passwords,registrations,sessions,shared,confirmations,unlocks}.*'
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
 
@@ -112,7 +116,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,devise,kaminari,doorkeeper,mail_form}.*'
+  - '{time_will_tell,doorkeeper,mail_form}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should

@@ -295,6 +295,10 @@ fr:
       wrong_size: "n'est pas de la bonne taille (il devrait faire %{file_size})"
       size_too_small: "est trop petit (il devrait faire au moins %{file_size})"
       size_too_big: "est trop gros (il devrait faire au plus %{file_size})"
+  devise:
+    failure:
+      invalid: "Votre email, WCA ID, ou mot de passe est invalide"
+      not_found_in_database: "Votre email, WCA ID, ou mot de passe est invalide"
   wca:
     errors:
       messages:
@@ -302,9 +306,6 @@ fr:
           one: "Le formulaire contient une erreur :"
           other: "Le formulaire contient %{count} erreurs:"
     doorkeeper:
-      authorizations:
-        new:
-          title: "Autorisation requise"
       scopes:
         public: 'Accéder à vos données publiques (nom, ID WCA, genre, nationalité, et photo de profil)'
         dob: 'Accéder à votre date de naissance'
@@ -313,7 +314,6 @@ fr:
     # Views-related keys
     devise:
       no_account: "Pas de compte ?"
-      sign_up: "Inscrivez vous "
       have_competed: "J'ai déjà participé à une compétition de la WCA."
       have_never_competed: "Je n'ai jamais participé à une compétition de la WCA."
       let_us_know: "Merci de nous indiquer si vous avez déjà participé à une compétition de la WCA."
@@ -360,9 +360,7 @@ fr:
       results_phpmyadmin: "phpMyAdmin"
       new_post: "Nouveau post"
       team_leader: "Chef d'équipe"
-      sign_in: "Connexion"
       sign_out: "Déconnexion"
-      sign_up: "Inscription"
       notifications: "Notifications"
       edit_profile: "Editer votre profil"
       api: "API"
