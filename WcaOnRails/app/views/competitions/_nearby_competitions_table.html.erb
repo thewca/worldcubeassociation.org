@@ -5,11 +5,12 @@
     <td><%= t 'competitions.nearby_competitions.date' %></td>
     <td><%= t 'competitions.nearby_competitions.location' %></td>
     <td><%= t 'competitions.nearby_competitions.distance' %></td>
+    <td></td>
   </tr>
   <% nearby_competitions.each do |c| %>
     <tr class="<%= @competition.dangerously_close_to?(c) ? "danger" : "warning" %>">
       <td class="text-nowrap">
-        <%= link_to c.name, admin_edit_competition_path(c.id) %>
+        <%= link_to c.name, competition_path(c.id) %>
         <% unless c.isConfirmed? %>
           <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="top" data-container="body" title="This competition is not confirmed yet."></i>
         <% end %>
@@ -22,6 +23,11 @@
       <td><%= c.cityName %>, <%= c.countryId %></td>
       <td class="text-nowrap text-right">
         <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
+      </td>
+      <td>
+        <%= if current_user.admin? || current_user.board_member?
+          link_to "(admin)", admin_edit_competition_path(c.id), target: "_blank"
+        end %>
       </td>
     </tr>
   <% end %>
