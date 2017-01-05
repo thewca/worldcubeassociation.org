@@ -8,7 +8,7 @@ class PersonsController < ApplicationController
       format.js do
         persons = Person.order(:name, :countryId)
         if params[:region] != "all"
-          country_ids = Continent::c_all_by_id[params[:region]]&.countries&.map(&:id) || params[:region]
+          country_ids = Continent.c_all_by_id[params[:region]]&.countries&.map(&:id) || params[:region]
           persons = persons.where(countryId: country_ids)
         end
         params[:search]&.split&.each do |part|
