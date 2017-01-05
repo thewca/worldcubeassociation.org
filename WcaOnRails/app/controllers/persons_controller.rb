@@ -1,16 +1,10 @@
 # frozen_string_literal: true
 class PersonsController < ApplicationController
   def index
-    params[:region] ||= "all"
-
     respond_to do |format|
       format.html
       format.js do
-        persons = Person.order(:name, :countryId)
-        if params[:region] != "all"
-          country_ids = Continent.c_all_by_id[params[:region]]&.countries&.map(&:id) || params[:region]
-          persons = persons.where(countryId: country_ids)
-        end
+        persons = Person.in_region(params[:region]).order(:name, :countryId)
         params[:search]&.split&.each do |part|
           persons = persons.where("rails_persons.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
         end
