@@ -5,6 +5,10 @@ class Continent < ActiveRecord::Base
 
   has_many :countries, foreign_key: :continentId
 
+  def self.country_ids(continent_id)
+    self.c_all_by_id[continent_id]&.countries&.map(&:id)
+  end
+
   def name
     I18n.t(recordName, scope: :continents)
   end

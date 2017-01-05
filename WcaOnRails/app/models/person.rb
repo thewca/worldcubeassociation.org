@@ -11,10 +11,9 @@ class Person < ActiveRecord::Base
 
   scope :current, -> { where(subId: 1) }
 
-  scope :in_region, lambda { |region|
-    unless region.blank? || region == 'all'
-      country_ids = Continent.c_all_by_id[region]&.countries&.map(&:id) || region
-      where(countryId: country_ids)
+  scope :in_region, lambda { |region_id|
+    unless region_id.blank? || region_id == 'all'
+      where(countryId: (Continent.country_ids(region_id) || region_id))
     end
   }
 
