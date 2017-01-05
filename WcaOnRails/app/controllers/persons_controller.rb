@@ -6,16 +6,14 @@ class PersonsController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        persons = Person.joins("JOIN Countries ON countryId = Countries.id")
+        persons = Person.order(:name, :countryId)
         if params[:region] != "all"
-          persons = persons.where("countryId = :region OR continentId = :region", region: params[:region])
+          country_ids = Continent::c_all_by_id[params[:region]]&.countries&.map(&:id) || params[:region]
+          persons = persons.where(countryId: country_ids)
         end
-        if params[:search].present?
-          params[:search].split.each do |part|
-            persons = persons.where("rails_persons.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
-          end
+        params[:search]&.split&.each do |part|
+          persons = persons.where("rails_persons.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
         end
-        persons = persons.order(:name, :countryId)
 
         render json: {
           total: persons.count,
