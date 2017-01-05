@@ -31,7 +31,7 @@
       if current_user&.can_manage_competition?(@competition)
         nav_items << {
           text: t('.menu.edit'),
-          path: edit_competition_path(@competition),
+          path: current_user.can_admin_results? ? admin_edit_competition_path(@competition) : edit_competition_path(@competition),
           fa_icon: "lock",
           children: [
             { text: t('.menu.orga_view'), path: edit_competition_path(@competition), fa_icon: "lock" },
