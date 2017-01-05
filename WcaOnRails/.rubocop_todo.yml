@@ -234,6 +234,7 @@ Style/ClassAndModuleChildren:
     - 'app/controllers/accounts/registrations_controller.rb'
     - 'app/controllers/api/v0/api_controller.rb'
     - 'app/controllers/api/v0/competitions_controller.rb'
+    - 'app/controllers/api/v0/records_controller.rb'
     - 'app/controllers/oauth/applications_controller.rb'
     - 'lib/monkeypatch_json_renderer_to_pretty_print.rb'
 

@@ -1,12 +1,12 @@
+# frozen_string_literal: true
 class Api::V0::RecordsController < Api::V0::ApiController
   def regionCondition(countrySource)
     if params[:regionId]
       region = params[:regionId]
 
-
-      if /^(world)?$/i.match(region)
-        return ''
-      elsif /^_/.match(region)
+      if /^(world)?$/ =~ region
+        ''
+      elsif /^_/ =~ region
         return "AND continentId = \'#{region}\'"
       else
         if countrySource
@@ -17,27 +17,26 @@ class Api::V0::RecordsController < Api::V0::ApiController
       end
     end
 
-    return ''
+    ''
   end
 
   def eventCondition
     if params[:eventId]
-      return "AND eventId = '#{params[:eventId]}'"
+      "AND eventId = '#{params[:eventId]}'"
     else
-      return ''
+      ''
     end
   end
 
   def yearCondition
     if params[:tillYear]
-      return "AND year <= '#{params[:tillYear]}'"
+      "AND year <= '#{params[:tillYear]}'"
     elsif params[:inYear]
-      return "AND year = '#{params[:inYear]}'"
+      "AND year = '#{params[:inYear]}'"
     else
-      return ''
+      ''
     end
   end
-
 
   def regionsGetCurrentRecordsQuery(valueId, valueName)
     <<-ENDSQL
@@ -74,7 +73,7 @@ class Api::V0::RecordsController < Api::V0::ApiController
       Countries country,
       Competitions competition
     WHERE result.#{valueId} = value
-      #{regionCondition('result')} #{eventCondition()} #{yearCondition()}
+      #{regionCondition('result')} #{eventCondition} #{yearCondition}
 
       AND result.eventId = recordEventId
       AND event.id       = result.eventId
@@ -87,43 +86,47 @@ class Api::V0::RecordsController < Api::V0::ApiController
   def show
     resultQuery = <<-ENDSQL
       SELECT *
-        FROM (#{regionsGetCurrentRecordsQuery('best','Single')}
+        FROM (#{regionsGetCurrentRecordsQuery('best', 'Single')}
         UNION #{regionsGetCurrentRecordsQuery('average', 'Average')}) helper
         ORDER BY rank, type DESC, year, month, day, roundId, personName
     ENDSQL
 
     results = ActiveRecord::Base.connection.select_all(resultQuery)
 
-    records = results.group_by{ |row| row['eventId'] }
-    records.update(records) { |eventId, recs|
+    records = results.group_by { |row| row['eventId'] }
+    records.update(records) do |_eventId, recs|
       singles = recs.select { |rec| rec['type'] == 'Single'}
       averages = recs.select { |rec| rec['type'] == 'Average'}
 
       record = {
-        singles: singles.map { |s| {
-          competitionId: s['competitionId'],
-          personId: s['personId'],
-          personName: s['personName'],
-          countryId: s['countryId'],
-          value: s['value'],
-          regionalSingleRecord: s['regionalSingleRecord']
-        }},
+        singles: singles.map do |s|
+          {
+            competitionId: s['competitionId'],
+            personId: s['personId'],
+            personName: s['personName'],
+            countryId: s['countryId'],
+            value: s['value'],
+            regionalSingleRecord: s['regionalSingleRecord'],
+          }
+        end,
       }
 
       if recs[1]
-        record['average'] = averages.map { |a| {
-          competitionId: a['competitionId'],
-          personId: a['personId'],
-          personName: a['personName'],
-          countryId: a['countryId'],
-          value: a['value'],
-          average: a['formatId'] == 'a' ? [a['value1'], a['value2'], a['value3'], a['value4'], a['value5']] : [a['value1'], a['value2'], a['value3']],
-          regionalSingleRecord: a['regionalAverageRecord']
-        }}
+        record['average'] = averages.map do |a|
+          {
+            competitionId: a['competitionId'],
+            personId: a['personId'],
+            personName: a['personName'],
+            countryId: a['countryId'],
+            value: a['value'],
+            average: a['formatId'] == 'a' ? [a['value1'], a['value2'], a['value3'], a['value4'], a['value5']] : [a['value1'], a['value2'], a['value3']],
+            regionalSingleRecord: a['regionalAverageRecord'],
+          }
+        end
       end
 
       record
-    }
+    end
 
     render status: :ok, json: records
   end
