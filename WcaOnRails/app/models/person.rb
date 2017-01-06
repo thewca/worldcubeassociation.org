@@ -11,6 +11,12 @@ class Person < ActiveRecord::Base
 
   scope :current, -> { where(subId: 1) }
 
+  scope :in_region, lambda { |region_id|
+    unless region_id.blank? || region_id == 'all'
+      where(countryId: (Continent.country_ids(region_id) || region_id))
+    end
+  }
+
   validates :name, presence: true
   validates :countryId, presence: true
 
