@@ -1,5 +1,32 @@
-<% provide(:title, 'Frequently Asked Questions') %>
+<% provide(:title, t('faq.title')) %>
 
+<%
+faq_variables = {
+  profile_edit_path: profile_edit_path,
+  current_user_status: if current_user
+                         t('faq.already_logged_in')
+                       else
+                         t('faq.create_an_account', here: link_to(t('common.here'), new_user_registration_path))
+                       end,
+  current_user_claim: if current_user
+                        t('faq.claim_your_wca_id', here: link_to(t('common.here'), profile_claim_wca_id_path))
+                      else
+                        t('faq.create_an_account_and_claim', here: link_to(t('common.here'), new_user_registration_path))
+                      end,
+  comp_search_form: "<div>
+        %{search_competition}
+        <input id=\"competitions_search\" class=\"wca-autocomplete wca-autocomplete-only_one wca-autocomplete-competitions_search\"></input>
+        <script>
+          (function() {
+            $('#competitions_search').wcaAutocomplete();
+            $('#competitions_search')[0].selectize.on('change', function(competitionId) {
+              location.href = \"/competitions/\" + competitionId;
+            });
+          })();
+        </script>
+      </div>" % { search_competition: t('faq.search_for_competition') },
+}
+%>
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
@@ -13,103 +40,14 @@
   <% @answers_markup = capture do %>
     <ul id="faq-list" class="list-group">
 
-      <%= add_answer "How do I obtain a WCA ID and a WCA profile?" do %>
-        If you have never competed before, go to a <a href="/results/competitions.php">competition</a>!
-        A WCA ID and WCA profile will be created for you when the results from your first
-        competition are uploaded.
-      <% end %>
 
-      <%= add_answer "How can I find a WCA competition?" do %>
-        Check out our list of <%= link_to "competitions", "/results/competitions.php" %>!
-      <% end %>
-
-      <%= add_answer "How can I register for a competition? Who can I refer to if I have problems registering for a competition?" do %>
-        Many competitions do registration right here on the WCA website, but some use their
-        own systems. You should contact the organizers of the competition you want
-        to compete in for more details.
-
-        <div>
-          Search for a competition here:
-          <input id="competitions_search" class="wca-autocomplete wca-autocomplete-only_one wca-autocomplete-competitions_search"></input>
-          <script>
-            (function() {
-              $('#competitions_search').wcaAutocomplete();
-              $('#competitions_search')[0].selectize.on('change', function(competitionId) {
-                location.href = "/competitions/" + competitionId;
-              });
-            })();
-          </script>
-        </div>
-      <% end %>
-
-      <%= add_answer "What are the requirements for attending a WCA competition? What do I need to know before attending a WCA competition?" do %>
-        In general, there are not many requirements for a person to participate
-        at a WCA competition. However, all participants of a competition are expected
-        to have a good understanding of the
-        <a href="https://www.worldcubeassociation.org/regulations/">WCA regulations</a>.
-        In addition, we would recommend having a look at
-        <%= link_to "Cubing USA's competitor tutorial", "http://www.cubingusa.com/ctutorial.php", target: "_blank" %>, which gives several nice hints for newcomers.
-      <% end %>
-
-      <%= add_answer "How can I have a WCA Competition in my hometown?" do %>
-        <p>
-          If you are interested in organizing a competition, it's highly recommended to attend at least one or two competitions as a competitor to learn from the experience.
-        </p>
-        <p>
-          WCA Competitions must follow the <%= link_to "WCA Regulations", "https://www.worldcubeassociation.org/regulations/", target: "_blank" %>. The organization team doesn't have to know the regulations by heart, however, a deep knowledge of the basics of the regulations would definitely help in correctly organizing the competition.
-        </p>
-        <p>
-          After that, the organization team must contact a nearby <%= link_to "WCA Delegate", "https://www.worldcubeassociation.org/delegates", target: "_blank" %>. The supervision of a WCA Delegate is required in order to make a competition officially sanctioned by the WCA. The WCA Delegate will help guide the organization on how to host a successful competition.
-        </p>
-        <p>
-          Visit <%= link_to "this guide", "https://www.cubingusa.com/cguide.php", target: "_blank" %> for further information. (Any conflict between the information presented in this supplementary resource and the WCA Regulations is superseded by the WCA Regulations.)
-        </p>
-      <% end %>
-
-      <%= add_answer "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?" do %>
-        <p>
-          You are assigned a WCA ID when you first participate in a WCA
-          sanctioned competition. When the results from that competition are uploaded,
-          your WCA profile will be created, with results from every competition you have
-          been to.
-        </p>
-
-        <p>
-          WCA accounts allow you to prove to us who you are. This allows you
-          to add a picture to your WCA profile, and allows you
-          to register for competitions. This will protect you from
-          other people pretending to be you.
-        </p>
-
-        <p>
-          <% if current_user %>
-            You are already logged in with a WCA account.
-          <% else %>
-            You can create an account <%= link_to "here", new_user_registration_path %>.
+      <% t('faq.answers').values.each do |faq| %>
+        <%= add_answer faq[:title] do %>
+          <% faq[:content].values.each do |paragraph| %>
+            <p>
+              <%= raw paragraph % faq_variables %>
+            </p>
           <% end %>
-        </p>
-      <% end %>
-
-      <%= add_answer "How do I change my profile picture?" do %>
-        <p>
-          First, you need to
-          <a href="#how-do-i-connect-my-wca-account-with-my-wca-id">
-            create a WCA account and connect it to your WCA ID.
-          </a>
-        </p>
-        <p>
-          After you have connected your WCA account and your WCA ID, go to your
-          <%= link_to "edit profile page", profile_edit_path %> to change your
-          profile picture.
-        </p>
-      <% end %>
-
-      <%= add_answer "How do I connect my WCA account with my WCA ID?" do %>
-        <% if current_user %>
-          You can claim your WCA ID <%= link_to "here", profile_claim_wca_id_path %>.
-        <% else %>
-          Create an account <%= link_to "here", new_user_registration_path %>. After you log in with
-          your new account, you will be asked to claim your WCA ID.
         <% end %>
       <% end %>
     </ul>
@@ -124,6 +62,6 @@
   <%= @answers_markup %>
 
   <p>
-    If none of these answers helped, please <%= link_to "contact us", contact_path %>!
+    <%= t('faq.contact_html', contact_us: link_to(t('faq.contact_us'), contact_path)) %>
   </p>
 </div>
