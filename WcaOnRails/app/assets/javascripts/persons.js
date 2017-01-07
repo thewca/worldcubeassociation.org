@@ -15,11 +15,6 @@ onPage('persons#index', function() {
   var $table = $('.persons-table');
   var options = $table.bootstrapTable('getOptions');
 
-  // Set the table options from the url params.
-  options.pageNumber = parseInt($.getUrlParam('page')) || options.pageNumber;
-  // Load the data using the options set above.
-  $table.bootstrapTable('refresh');
-
   function reloadPersons() {
     $('#search-box i').removeClass('fa-search').addClass('fa-spinner fa-spin');
     options.pageNumber = 1;
