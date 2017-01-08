@@ -763,3 +763,62 @@ en:
       no_persons_found: "No person matches the given criteria."
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
+  #context: FAQ page
+  faq:
+    title: "Frequently Asked Questions"
+    contact_html: "If none of these answers helped, please %{contact_us}!"
+    contact_us: "contact us"
+    search_for_competition: "Search for a competition here:"
+    already_logged_in: "You are already logged in with a WCA account."
+    create_an_account: "You can create an account %{here}."
+    claim_your_wca_id: "You can claim your WCA ID %{here}."
+    create_an_account_and_claim: "Create an account %{here}. After you log in with your new account, you will be asked to claim your WCA ID."
+    answers:
+      1:
+        title: "How do I obtain a WCA ID and a WCA profile?"
+        #context: Answer to "How do I obtain a WCA ID..."
+        content:
+          1: "If you have never competed before, go to a <a href='/competitions'>competition</a>!  A WCA ID and WCA profile will be created for you when the results from your first competition are uploaded."
+      2:
+        #context: Answer to "How can I find a WCA competition"
+        title: "How can I find a WCA competition?"
+        content:
+          1: "Check out our list of <a href='/competitions'>competitions</a>"
+      3:
+        #context: Answer to "How can I register for a competition? ..."
+        title: "How can I register for a competition? Who can I refer to if I have problems registering for a competition?"
+        content:
+          1: "Many competitions do registration right here on the WCA website, but some use their own systems. You should contact the organizers of the competition you want to compete in for more details. %{comp_search_form}"
+      4:
+        title: "What are the requirements for attending a WCA competition? What do I need to know before attending a WCA competition?"
+        #context: Answer to "What are the requirements for attending a WCA competitions? ..."
+        content:
+          1: "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA regulations</a>. In addition, we would recommend having a look at <a target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's competitor tutorial</a>, which gives several nice hints for newcomers."
+      5:
+        title: "How can I have a WCA Competition in my hometown?"
+        #context: Paragraph of the answer to "How can I have a WCA competition in my hometown?"
+        content:
+          1: "If you are interested in organizing a competition, it's highly recommended to attend at least one or two competitions as a competitor to learn from the experience."
+          2: "WCA Competitions must follow the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. The organization team doesn't have to know the regulations by heart, however, a deep knowledge of the basics of the regulations would definitely help in correctly organizing the competition."
+          3: "After that, the organization team must contact a nearby <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>WCA Delegate</a>. The supervision of a WCA Delegate is required in order to make a competition officially sanctioned by the WCA. The WCA Delegate will help guide the organization on how to host a successful competition."
+          4: "Visit <a target='_blank' href='https://www.cubingusa.com/cguide.php'>this guide</a> for further information. (Any conflict between the information presented in this supplementary resource and the WCA Regulations is superseded by the WCA Regulations.)"
+      6:
+        title: "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?"
+        #context: Paragraph of the answer to "What are the WCA accounts for? ..."
+        content:
+          1: "You are assigned a WCA ID when you first participate in a WCA sanctioned competition. When the results from that competition are uploaded, your WCA profile will be created, with results from every competition you have been to."
+          2: "WCA accounts allow you to prove to us who you are. This allows you to add a picture to your WCA profile, and allows you to register for competitions. This will protect you from other people pretending to be you."
+          #context: Yup, nothing to translate here! Just hit "Use the original version"
+          3: "%{current_user_status}"
+      7:
+        title: "How do I change my profile picture?"
+        #context: Paragraph of the answer to "How do I change my profile picture?"
+        content:
+          1: "First, you need to <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>create a WCA account and connect it to your WCA ID.</a>"
+          2: "After you have connected your WCA account and your WCA ID, go to your <a href='%{profile_edit_path}'>edit profile page</a> to change your profile picture."
+      8:
+        title: "How do I connect my WCA account with my WCA ID?"
+        #context: Answer to "How do I connect my WCA account ...?"
+        content:
+          #context: Yup, nothing to translate here! Just hit "Use the original version"
+          1: "%{current_user_claim}"

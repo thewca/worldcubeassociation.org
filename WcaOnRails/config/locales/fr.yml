@@ -677,3 +677,51 @@ fr:
       no_persons_found: "Personne ne correspond aux critères donnés."
   posts:
     confirm_delete_post: "Êtes-vous sûr de vouloir supprimer ce post ? Cette action n'est pas réversible."
+  faq:
+    title: "Questions Fréqentes"
+    contact_html: "Si aucune de ces réponses ne vous a aidé, %{contact_us} !"
+    contact_us: "contactez nous"
+    search_for_competition: "Vous pouvez rechercher une compétition ici :"
+    already_logged_in: "Vous êtes déjà connecté avec votre compte WCA."
+    create_an_account: "Vous pouvez créer un compte %{here}."
+    claim_your_wca_id: "Vous pouvez réclamer votre ID WCA %{here}."
+    create_an_account_and_claim: "Créez un compte %{here}. Lors de la création du compte on vous demandera votre ID WCA."
+    answers:
+      1:
+        title: "Comment puis-je obtenir un ID WCA et un profil WCA ?"
+        content:
+          1: "Si vous n'avez encore jamais participé à une compétition, allez à une <a href='/competitions'>compétition</a> ! Un ID WCA et son profil seront créés pour vous lorsque les résultats de votre première compétition seront mis en ligne."
+      2:
+        title: "Comment puis-je trouver une compétition WCA ?"
+        content:
+          1: "Allez voir la liste des <a href='/competitions'>compétitions</a>"
+      3:
+        title: "Comment puis-je m'inscrire à une compétition ? À qui puis-je m'adresser si j'ai un problème lors de l'inscription à une compétition ?"
+        content:
+          1: "Pour beaucoup de compétitions l'inscription se fait ici sur le site de la WCA, mais certaines utilisent leur propre système. Vous devriez contacter les organisateurs de la compétition à laquelle vous voulez participer pour avoir plus de détails. %{comp_search_form}"
+      4:
+        title: "Quels sont les prérequis pour venir à une compétition WCA ? Que dois-je savoir avant de venir à une compétition WCA ?"
+        content:
+          1: "Il n'y a généralement pas beaucoup de prérequis pour qu'une personne puisse participer à une compétition WCA. Il est attendu que tous les participants aux compétitions aient une bonne compréhension du <a href='https://www.worldcubeassociation.org/regulations/translations/french'>Règlement WCA</a>. Additionnellement, il est recommandé de lire les tutoriels à destination des compétiteurs (en Français sur le <a target='_blank' href='http://www.speedcubingfrance.org/speedcubing/tutos/'>site de l'AFS</a>), qui contiennent des indications pour les nouveaux participants."
+      5:
+        title: "Comment puis-je organiser une compétition dans ma ville ?"
+        content:
+          1: "Si l'organisation de compétition vous intéresse, il est très fortement recommandé de participer à plusieurs compétitions comme un compétiteur, afin d'avoir un peu d'expérience."
+          2: "Les compétitions WCA doivent respecter le <a target='_blank' href='https://www.worldcubeassociation.org/regulations/translations/french'>Règlement WCA</a>. L'équipe d'organisation n'a pas besoin de connaître le Règlement par cœur, mais une connaissance approfondie des bases du Règlement aidera considérablement à l'organisation de la compétition."
+          3: "Après ça, l'équipe d'organisation doit contacter un <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>Délégué WCA</a>. La présence d'un Délégué WCA est obligatoire pour permettre à la compétition d'être reconnue par la WCA. Le Délégué WCA fournira de l'aide à l'équipe d'organisation pour assurer le succès de l'organisation de la compétition."
+          4: "Visitez <a target='_blank' href='https://docs.google.com/document/d/19Y66EYz4JYrcVmzE8zmnOHCppGJGDg0sBDQaUv54sJg/edit?usp=sharing'>ce document</a> pour plus d'informations. (En cas de conflit entre les informations présentes dans ce document et le Règlement WCA, les informations présente dans le Règlement WCA doivent être prises en compte."
+      6:
+        title: "À quoi servent les comptes WCA ? Quelle est la différence entre les comptes WCA et les profils WCA ?"
+        content:
+          1: "Lorsque vous participez à votre première compétition WCA, un ID WCA est créé pour vous. Lorsque les résultats de cette compétition seront mis en ligne, votre profil WCA sera créé, avec les résultats de chaque compétition à laquelle vous avez participé."
+          2: "Les comptes WCA vous permette de nous prouver qui vous êtes. Cela vous permet également d'ajouter une photo à votre profil WCA, et de vous inscrire à des compétitions. Cela empêche également d'autres gens de se faire passer pour vous."
+          3: "%{current_user_status}"
+      7:
+        title: "Comment puis-je changer ma photo de profil ?"
+        content:
+          1: "Tout d'abord, vous aurez besoin de <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>créer un compte WCA et de le lier à votre ID WCA</a>."
+          2: "Une fois votre compte WCA et votre ID WCA liés, allez sur la <a href='%{profile_edit_path}'>page d'édition de profil</a> pour changer votre photo de profil."
+      8:
+        title: "Comment puis-je lier mon compte WCA à mon ID WCA ?"
+        content:
+          1: "%{current_user_claim}"
