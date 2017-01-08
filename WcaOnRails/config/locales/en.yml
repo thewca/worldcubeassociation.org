@@ -371,7 +371,7 @@ en:
       gender:
         male: "Male"
         female: "Female"
-        other: "Other"
+        other_gender: "Other"
   layouts:
     #context: This key belongs to the navigation bar
     navigation:
