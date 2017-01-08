@@ -335,6 +335,11 @@ en:
       wrong_size: "is the wrong size (should be %{file_size})"
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
+  #context: Overriden key for sign in
+  devise:
+    failure:
+      invalid: "Invalid email, WCA ID, or password."
+      not_found_in_database: "Invalid email, WCA ID, or password."
   #context: Key used in external code that the WCA use
   wca:
     # These are locales used in WCA's app relevant to external gems, but which are not present in the gem's default locale file.
@@ -347,9 +352,9 @@ en:
           other: "The form contains %{count} errors:"
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
-      authorizations:
-        new:
-          title: "Authorization required"
+      applications:
+        help:
+          scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8" target="_blank">here</a> for a list of supported scopes.'
       scopes:
         public: 'Access your public data (name, WCA ID, gender, citizenship, and profile picture)'
         dob: 'Access your date of birth'
@@ -358,7 +363,6 @@ en:
     #context: Key used for sign in/sign up
     devise:
       no_account: "No account?"
-      sign_up: "Sign up"
       have_competed: "I have competed in a WCA competition."
       have_never_competed: "I have never competed in a WCA competition."
       let_us_know: "Please let us know if you have competed in a WCA competition before."
@@ -406,9 +410,7 @@ en:
       results_phpmyadmin: "phpMyAdmin"
       new_post: "New post"
       team_leader: "Team leader"
-      sign_in: "Sign in"
       sign_out: "Sign out"
-      sign_up: "Sign up"
       notifications: "Notifications"
       edit_profile: "Edit profile"
       api: "API"

@@ -17,7 +17,7 @@ describe "users" do
 
     post_via_redirect user_confirmation_path, 'user[email]' => user.email
     expect(response).to be_success
-    expect(response.body).to include("You will receive an email with instructions about how to confirm your account in a few minutes.")
+    expect(response.body).to include(I18n.t('devise.confirmations.send_instructions'))
   end
 
   it 'can change password' do

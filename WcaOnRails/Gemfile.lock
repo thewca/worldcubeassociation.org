@@ -21,6 +21,15 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
+  remote: git://github.com/svenfuchs/rails-i18n.git
+  revision: f8c83ec753439d7286b9168bbb246e354866cb9e
+  branch: rails-4-x
+  specs:
+    rails-i18n (4.0.9)
+      i18n (~> 0.7)
+      railties (~> 4.0)
+
+GIT
   remote: git://github.com/world-flags/world-flags.git
   revision: b6ea11dbec91d1ec07cc6808215a05d182e67d65
   specs:
@@ -156,10 +165,11 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise-bootstrap-views (0.0.4)
+    devise-bootstrap-views (0.0.10)
     diff-lcs (1.2.5)
     doorkeeper (3.1.0)
       railties (>= 3.2)
+    doorkeeper-i18n (4.0.0)
     dotenv (2.0.1)
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
@@ -230,6 +240,9 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    kaminari-i18n (0.4.0)
+      kaminari
+      rails
     kgio (2.9.3)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -471,6 +484,7 @@ DEPENDENCIES
   devise
   devise-bootstrap-views
   doorkeeper
+  doorkeeper-i18n
   dotenv-rails
   envied
   factory_girl_rails
@@ -483,6 +497,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   kaminari
+  kaminari-i18n
   launchy
   local_time
   lodash-rails
@@ -501,6 +516,7 @@ DEPENDENCIES
   rails (= 4.2.1)
   rails-assets-autosize!
   rails-assets-simplemde!
+  rails-i18n!
   rake
   recaptcha
   redcarpet (~> 3.3)
