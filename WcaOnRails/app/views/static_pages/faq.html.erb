@@ -13,18 +13,7 @@ faq_variables = {
                       else
                         t('faq.create_an_account_and_claim', here: link_to(t('common.here'), new_user_registration_path))
                       end,
-  comp_search_form: "<div>
-        %{search_competition}
-        <input id=\"competitions_search\" class=\"wca-autocomplete wca-autocomplete-only_one wca-autocomplete-competitions_search\"></input>
-        <script>
-          (function() {
-            $('#competitions_search').wcaAutocomplete();
-            $('#competitions_search')[0].selectize.on('change', function(competitionId) {
-              location.href = \"/competitions/\" + competitionId;
-            });
-          })();
-        </script>
-      </div>" % { search_competition: t('faq.search_for_competition') },
+  comp_search_form: render("faq_search_form", search_competition: t('faq.search_for_competition')),
 }
 %>
 <div class="container">
