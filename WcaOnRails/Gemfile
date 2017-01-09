@@ -77,6 +77,7 @@ group :development, :test do
   gem 'byebug'
   gem 'web-console'
   gem 'i18n-tasks', '~> 0.9.5'
+  gem 'i18n-spec'
 end
 
 group :development do

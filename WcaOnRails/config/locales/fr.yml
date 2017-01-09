@@ -322,7 +322,7 @@ fr:
       gender:
         male: "Homme"
         female: "Femme"
-        other: "Autre"
+        other_gender: "Autre"
   layouts:
     navigation:
       information: "Information"
