@@ -14,3 +14,13 @@ describe "Locale files content" do
     end
   end
 end
+
+describe "Momentjs activation" do
+  let(:file_content) { File.read(Rails.root.join('app', 'assets', 'javascripts', 'application.js')) }
+
+  (I18n.available_locales - [:en]).each do |locale|
+    context "for #{locale} the app/assets/javascripts/application.js file" do
+      it { expect(file_content).to include("//= require moment/#{locale}.js") }
+    end
+  end
+end
