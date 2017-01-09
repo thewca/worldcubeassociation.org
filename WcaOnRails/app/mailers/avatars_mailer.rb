@@ -6,7 +6,7 @@ class AvatarsMailer < ApplicationMailer
 
     mail(
       to: user.email,
-      reply_to: "notifications@worldcubeassociation.org",
+      reply_to: "results@worldcubeassociation.org",
       subject: "Your avatar has been rejected",
     )
   end

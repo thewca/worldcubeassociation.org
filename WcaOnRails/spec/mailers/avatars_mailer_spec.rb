@@ -10,7 +10,7 @@ RSpec.describe AvatarsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq "Your avatar has been rejected"
       expect(mail.to).to eq [user.email]
-      expect(mail.reply_to).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
     end
 
