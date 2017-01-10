@@ -49,8 +49,14 @@
               <% end %>
             </td>
             <td>
+              <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
+                <%= link_to icon('file-text-o'), delegate_report_path(competition), title: t('.report'), 'data-toggle': 'tooltip' %>
+              <% end %>
               <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
-                <%= link_to t('.report'), delegate_report_path(competition) %>
+                <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), 'data-toggle': 'tooltip' %>
+              <% end %>
+              <% if competition.is_over? && competition.delegates.include?(current_user) && !competition.delegate_report.posted? %>
+                <%= icon('warning', title: t('.missing_report'), 'data-toggle': 'tooltip') %>
               <% end %>
             </td>
             <td class="big-column"></td>

@@ -65,7 +65,11 @@
         nav_items << {
           text: t('.menu.delegate_report'),
           path: delegate_report_path(@competition),
-          fa_icon: "pencil-square-o"
+          fa_icon: if current_user.can_edit_delegate_report?(@competition.delegate_report)
+                     "pencil-square-o"
+                   else
+                     "file-text-o"
+                   end
         }
       end
       if current_user&.can_manage_competition?(@competition)
