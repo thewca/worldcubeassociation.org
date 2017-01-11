@@ -50,7 +50,7 @@ unless node.chef_environment.start_with?("development")
   cron "cronned results scripts" do
     minute '0'
     hour '4'
-    weekday '1,3,5'
+    weekday '*'
 
     path path
     mailto admin_email
