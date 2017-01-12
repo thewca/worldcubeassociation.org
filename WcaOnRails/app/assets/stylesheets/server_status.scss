@@ -1,0 +1,16 @@
+.panel-warning > .heading-as-link:hover {
+  @extend a.list-group-item-warning:hover;
+}
+
+.heading-as-link > .panel-title > a {
+  text-decoration: none;
+}
+
+ul.locale-list-keys {
+  margin: 0;
+  li {
+    @extend .text-center;
+    margin: 3px;
+    border-radius: 3px;
+  }
+}

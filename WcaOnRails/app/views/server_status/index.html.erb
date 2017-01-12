@@ -2,31 +2,131 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% if @everything_good %>
+  <% if @everything_good && @total_missing_outdated == 0 %>
     <%= alert :success, "We're fine. We're all fine here, now, thank you. How are you?" %>
+  <% elsif @everything_good %>
+    <%= alert :warning, "The server is alright, but some translations would enjoy an update." %>
   <% else %>
     <%= alert :danger, "Check below, something may be wrong." %>
   <% end %>
+<%
+    kind_class = if @oldest_job_that_should_have_run_by_now
+                   "danger"
+                 else
+                   "success"
+                 end
+%>
+    <div class="panel panel-<%= kind_class %>">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="label label-<%= kind_class %>">Jobs</span>
 
-  <ul>
-    <li>
-      <% if @oldest_job_that_should_have_run_by_now %>
-        <span class="label label-warning">Jobs</span>
+          <% if @oldest_job_that_should_have_run_by_now %>
+            Uh oh!
+            Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
+            <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
+            ago and still has not run.
+            <%= @jobs_that_should_have_run_by_now.count %>
+            <%= "job".pluralize(@jobs_that_should_have_run_by_now.count) %>
+            <%= "is".pluralize(@jobs_that_should_have_run_by_now.count) %>
+            waiting to run.
 
-        Uh oh!
-        Job <%= @oldest_job_that_should_have_run_by_now.id %> was created
-        <%= time_ago_in_words @oldest_job_that_should_have_run_by_now.created_at %>
-        ago and still has not run.
-        <%= @jobs_that_should_have_run_by_now.count %>
-        <%= "job".pluralize(@jobs_that_should_have_run_by_now.count) %>
-        <%= "is".pluralize(@jobs_that_should_have_run_by_now.count) %>
-        waiting to run.
-
-      <% else %>
-        <span class="label label-success">Jobs</span>
-
-        Looking good!
-      <% end %>
-    </li>
-  </ul>
+          <% else %>
+            Looking good!
+          <% end %>
+        </h3>
+      </div>
+    </div>
+  <% (I18n.available_locales - [:en]).each do |l| %>
+    <% missing = @status_locales[l][:missing] %>
+    <% outdated = @status_locales[l][:outdated] %>
+    <% all_empty = (missing.empty? && outdated.empty?) %>
+    <%
+       if all_empty
+         class_missing = class_outdated = class_panel = "success"
+         title = "All good, the translation is up to date!"
+       elsif missing.empty?
+         class_panel = "warning"
+         class_outdated = "warning"
+         class_missing = "success"
+         title = "Some items in the translation are outdated"
+       elsif outdated.empty?
+         class_panel = "warning"
+         class_outdated = "success"
+         class_missing = "danger"
+         title = "Some items in the translation are missing"
+       else
+         class_panel = "warning"
+         class_outdated = "warning"
+         class_missing = "danger"
+         title = "Some items in the translation are missing and some other are outdated"
+       end
+    %>
+    <div class="panel panel-<%= class_panel %>">
+      <div class="panel-heading heading-as-link">
+        <h3 class="panel-title">
+        <% unless all_empty %>
+          <a data-toggle="collapse" href="#collapse-<%= l.to_s %>">
+        <% else %>
+          <div>
+        <% end %>
+            <span class="label label-<%= class_panel %>">i18n</span>
+            <span class="label label-<%= class_panel %>"><%= "#{l}" %></span>
+            <span class="badge"><%= missing.size + outdated.size %></span>
+            <%= title %>
+            <% unless all_empty %>
+              <span class="collapse-indicator"></span>
+            <% end %>
+        <% unless all_empty %>
+          </a>
+        <% else %>
+          </div>
+        <% end %>
+        </h3>
+      </div>
+        <div id="collapse-<%= l.to_s %>" class="panel-collapse collapse panel-body row">
+          <div class="col-md-6">
+            <div class="panel panel-<%= class_missing %>">
+              <div class="panel-heading panel-title text-center">
+                Missing
+                <span class="badge"><%= missing.size %></span>
+              </div>
+              <% unless missing.empty? %>
+                <div class="panel-body">
+                  <ul class="list-group row locale-list-keys">
+                    <% missing.each do |key| %>
+                      <div class="col-md-6">
+                        <li class="list-group-item"><%= key %></li>
+                      </div>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-<%= class_outdated %>">
+              <div class="panel-heading panel-title text-center">
+                Outdated
+                <span class="badge"><%= outdated.size %></span>
+                <!--
+                  These keys are translated, but the English version has changed since the translation:
+                -->
+              </div>
+              <% unless outdated.empty? %>
+                <div class="panel-body">
+                  <ul class="list-group row locale-list-keys">
+                    <% outdated.each do |key| %>
+                      <div class="col-md-6">
+                        <li class="list-group-item"><%= key %></li>
+                      </div>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+    </div>
+  <% end %>
 </div>
