@@ -4,7 +4,7 @@ class PersonsController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        persons = Person.in_region(params[:region]).order(:name, :countryId)
+        persons = Person.in_region(params[:region]).order(:name)
         params[:search]&.split&.each do |part|
           persons = persons.where("rails_persons.name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
         end
