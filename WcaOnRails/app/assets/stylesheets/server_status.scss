@@ -1,5 +1,6 @@
 .panel-warning > .heading-as-link:hover {
   @extend a.list-group-item-warning:hover;
+  cursor: pointer;
 }
 
 .heading-as-link > .panel-title > a {

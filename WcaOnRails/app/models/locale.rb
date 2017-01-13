@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Locale < SimpleDelegator
-  SOME_CHARS = '[\s\S]*?'
+  include ActionView::Helpers::TextHelper
+  SOME_CHARS = '.*?'
   COMMENT_LINE_GROUP = '((?:\s*#.*\n)*)'
   KEY_MATCHER = "['\"]?%s['\"]?:"
   HASHTAG = "original_hash: "
@@ -32,16 +33,16 @@ class Locale < SimpleDelegator
       else
         text = decorate_with_hashes(text, value, "#{prefix}#{SOME_CHARS}#{KEY_MATCHER % key}")
       end
-      regexp = Regexp.new "(#{prefix}#{SOME_CHARS})#{COMMENT_LINE_GROUP}\\s*#{KEY_MATCHER % key}"
+      regexp = Regexp.new "(#{prefix}#{SOME_CHARS})#{COMMENT_LINE_GROUP}\\s*#{KEY_MATCHER % key}", Regexp::MULTILINE
       text = text.sub(regexp) do
         # $1 is everything before the comment and the key
         before = $1
-        # $2 is the hash(es) matched, or empty
-        hashes = $2
-        unless hashes.empty?
-          hash_lines = hashes.split('#').map(&:strip!)
-          if hash_lines
-            hash = hash_lines.select(&method(:line_filter)).map(&method(:line_cleaner))
+        # $2 contains the comments matched before the key
+        comments = $2
+        unless comments.empty?
+          comment_lines = comments.split('#').map(&:strip!)
+          if comment_lines
+            hash = comment_lines.select(&method(:line_filter)).map(&method(:line_cleaner))
             if hash.size >= 1
               node[key]["_hash"] = hash.first
             end
@@ -63,20 +64,17 @@ class Locale < SimpleDelegator
         if leaf?(value)
           missing_keys << fully_qualified_name(context, key)
         else
-          context.push(key)
-          missing_keys += get_all_recursive(value, context)
-          context.pop
+          missing_keys += get_all_recursive(value, [*context, key])
         end
         next
       end
       if leaf?(value)
+        # Please see this wiki page explaining why we do this: https://github.com/thewca/worldcubeassociation.org/wiki/Translating-the-website#translations-status-internals
         unless Digest::SHA1.hexdigest(value)[0..6] == translation[key]["_hash"]
           outdated_keys << fully_qualified_name(context, key)
         end
       else
-        context.push(key)
-        missing, outdated = compare_node_resursive(value, translation[key], context)
-        context.pop
+        missing, outdated = compare_node_resursive(value, translation[key], [*context, key])
         missing_keys += missing
         outdated_keys += outdated
       end
@@ -90,9 +88,7 @@ class Locale < SimpleDelegator
       if leaf?(value)
         leaves << fully_qualified_name(context, key)
       else
-        context.push(key)
-        leaves += get_all_recursive(value, context)
-        context.pop
+        leaves += get_all_recursive(value, [*context, key])
       end
     end
     leaves
@@ -101,11 +97,8 @@ class Locale < SimpleDelegator
   def fully_qualified_name(context, key)
     # Some keys are actually numbers
     key = key.to_s
-    # Some keys are too long and would overflow from the list-item, shrink it to an arbitrary length
-    if key.length > 20
-      key = key[0...19] + "..."
-    end
-    (context + [key]).join(" > ")
+    # Some keys are too long and would overflow from the list-item, truncate it to an arbitrary length
+    (context + [truncate(key, length: 20)]).join(" > ")
   end
 
   def line_filter(line)
