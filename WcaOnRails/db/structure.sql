@@ -782,7 +782,7 @@ CREATE TABLE `registration_payments` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1177,6 +1177,10 @@ INSERT INTO schema_migrations (version) VALUES ('20161026201019');
 
 INSERT INTO schema_migrations (version) VALUES ('20161031215932');
 
+INSERT INTO schema_migrations (version) VALUES ('20161108081416');
+
+INSERT INTO schema_migrations (version) VALUES ('20161108210423');
+
 INSERT INTO schema_migrations (version) VALUES ('20161117085757');
 
 INSERT INTO schema_migrations (version) VALUES ('20161118141833');
@@ -1198,9 +1202,3 @@ INSERT INTO schema_migrations (version) VALUES ('20161226223701');
 INSERT INTO schema_migrations (version) VALUES ('20161227202950');
 
 INSERT INTO schema_migrations (version) VALUES ('20170121202850');
-
-INSERT INTO schema_migrations (version) VALUES ('20161221205552');
-
-INSERT INTO schema_migrations (version) VALUES ('20161108081416');
-
-INSERT INTO schema_migrations (version) VALUES ('20161108210423');

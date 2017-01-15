@@ -80,6 +80,10 @@ FactoryGirl.define do
     trait :entry_fee do
       base_entry_fee_lowest_denomination 1000
       currency_code "AUD"
+      # This is an actual test stripe account set up
+      # for testing Stripe payments, and is connected
+      # to the WCA Stripe account. For more inforamtion, see
+      # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
       connected_stripe_account_id "acct_19ZQVmE2qoiROdto"
     end
   end

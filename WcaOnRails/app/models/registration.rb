@@ -114,7 +114,7 @@ class Registration < ActiveRecord::Base
   end
 
   def outstanding_entry_fees
-    entry_fee.nil? ? nil : entry_fee - paid_entry_fees
+    entry_fee.nil? ? 0 : entry_fee - paid_entry_fees
   end
 
   def record_payment(amount, currency_code, stripe_charge_id)

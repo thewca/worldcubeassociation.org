@@ -849,7 +849,6 @@ en:
         clone: "Clone"
         orga_view: "Organizer view"
         event_view: "Manage events"
-        payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"
         delegate_report: "Delegate report"

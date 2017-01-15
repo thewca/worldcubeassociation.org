@@ -614,7 +614,7 @@ RSpec.describe RegistrationsController do
             exp_month: 12,
             exp_year: 2017,
             cvc: "314",
-        },
+          },
         ).id
         post :process_payment, competition_id: competition.id, stripeToken: token_id
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."

@@ -4,10 +4,15 @@
   <h1>Accept Registration Payments</h1>
   <% if @competition.connected_stripe_account_id.nil? %>
     <p>
-      In order to accept payments from Stripe, you need to connect your
-      own Stripe account with the WCA Stripe account by clicking the button
-      below. If you don't already have your own Stripe account you can still
-      click on the button below and it will guide you through the process.
+      In order to accept payments for this competition, you need to connect
+      your own Stripe account with the WCA Stripe account by clicking the
+      button below. If you don't already have your own Stripe account you can
+      still click on the button below and it will guide you through the
+      process.
+    </p>
+    <p>
+      Connecting your Stripe account gives the WCA website the ability to
+      create charges, and issue refunds directly on your Stripe account.
     </p>
     <%= link_to icon("cc-stripe", "Connect with Stripe"), @authorize_url, class: "btn btn-primary" %>
 

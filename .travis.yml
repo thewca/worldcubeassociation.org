@@ -9,6 +9,7 @@ env:
     - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
     - PATH=$HOME/.local/bin:$PATH
 before_install:
+  # The Stripe API requires a newer version of openssl
   - sudo apt-get update && sudo apt-get install --only-upgrade openssl
   - pip install --user wrc
   - git clone --depth=1 https://github.com/thewca/wca-regulations.git
