@@ -716,6 +716,12 @@ fr:
           1: "Lorsque vous participez à votre première compétition WCA, un ID WCA est créé pour vous. Lorsque les résultats de cette compétition seront mis en ligne, votre profil WCA sera créé, avec les résultats de chaque compétition à laquelle vous avez participé."
           2: "Les comptes WCA vous permette de nous prouver qui vous êtes. Cela vous permet également d'ajouter une photo à votre profil WCA, et de vous inscrire à des compétitions. Cela empêche également d'autres gens de se faire passer pour vous."
           3: "%{current_user_status}"
+      'results':
+        title: "Quand est-ce que sont mis en ligne les résultats d'une compétition WCA sur le site de la WCA ?"
+        content:
+          '1': "Après qu'une compétition soit terminée, le Délégué WCA doit vérifier la saisie de toutes les feuilles de score ainsi que les informations des participants, afin d'éliminer d'éventuelles erreurs. Une fois cela fait, les résultats sont envoyés à la WCA Results Team (WRT), qui est en charge de mettre en ligne les résultats et de maintenir la base de données de la WCA. Enfin la WRT rentre les résultats dans la base de données de la WCA dès que possible."
+          '2': "En fonction de la taille de la compétition et de la disponibilité du Délégué, tout cela peut prendre entre un jour et une semaine. Merci d'être patient."
+          '3': "Si vous avez lié votre compte WCA à votre ID WCA, vous pouvez également activer les notifications par email concernant vos résultats <a href='%{preferences_edit_path}'>ici</a>."
       7:
         title: "Comment puis-je changer ma photo de profil ?"
         content:
