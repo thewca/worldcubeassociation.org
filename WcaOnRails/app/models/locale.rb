@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 class Locale < SimpleDelegator
   include ActionView::Helpers::TextHelper
-  SOME_CHARS = '.*?'
+  SOME_CHARS = '[\s\S]*?'
   COMMENT_LINE_GROUP = '((?:\s*#.*\n)*)'
   KEY_MATCHER = "['\"]?%s['\"]?:"
   HASHTAG = "original_hash: "
+  PLURALIZATION_KEYS = %w(zero one two few many other).freeze
 
   attr_accessor :locale
 
@@ -33,7 +34,7 @@ class Locale < SimpleDelegator
       else
         text = decorate_with_hashes(text, value, "#{prefix}#{SOME_CHARS}#{KEY_MATCHER % key}")
       end
-      regexp = Regexp.new "(#{prefix}#{SOME_CHARS})#{COMMENT_LINE_GROUP}\\s*#{KEY_MATCHER % key}", Regexp::MULTILINE
+      regexp = Regexp.new "(#{prefix}#{SOME_CHARS})#{COMMENT_LINE_GROUP}\\s*#{KEY_MATCHER % key}"
       text = text.sub(regexp) do
         # $1 is everything before the comment and the key
         before = $1
@@ -69,8 +70,10 @@ class Locale < SimpleDelegator
         next
       end
       if leaf?(value)
-        # Please see this wiki page explaining why we do this: https://github.com/thewca/worldcubeassociation.org/wiki/Translating-the-website#translations-status-internals
-        unless Digest::SHA1.hexdigest(value)[0..6] == translation[key]["_hash"]
+        # If the key is a pluralization, we use all the subkeys to compute the hash
+        # Please see this wiki page explaining why we do this: https://github.com/thewca/worldcubeassociation.org/wikigTranslating-the-website#translations-status-internals
+        original_str = pluralization?(value) ? JSON.generate(value) : value
+        unless Digest::SHA1.hexdigest(original_str)[0..6] == translation[key]["_hash"]
           outdated_keys << fully_qualified_name(context, key)
         end
       else
@@ -110,8 +113,11 @@ class Locale < SimpleDelegator
   end
 
   def leaf?(node)
-    # Note: this function is there anticipating support for pluralization,
-    # where a leaf may actually be a Hash.
-    node.is_a?(String)
+    # If the node is a pluralization it's also a leaf!
+    node.is_a?(String) || pluralization?(node)
+  end
+
+  def pluralization?(node)
+    node.is_a?(Hash) && (node.keys & PLURALIZATION_KEYS).any?
   end
 end
