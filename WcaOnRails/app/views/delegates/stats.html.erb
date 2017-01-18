@@ -26,7 +26,7 @@
           <td class="last"><%= competitions&.last&.start_date %></td>
           <td class="first"><%= competitions&.first&.start_date %></td>
           <td class="total"><%= competitions&.count %></td>
-          <td><%= link_to "History", competitions_path(display: "admin", years: "all", search: delegate.name), target: "_blank" %></td>
+          <td><%= link_to "History", competitions_path(display: "admin", years: "all", delegate: delegate.id), target: "_blank" %></td>
         </tr>
       <% end %>
     </tbody>

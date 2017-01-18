@@ -88,6 +88,10 @@ class CompetitionsController < ApplicationController
 
     if @display == 'admin'
       @competitions = @competitions.includes(:delegates, :delegate_report)
+
+      if params[:delegate].present?
+        @competitions = @competitions.select { |c| c.delegates.map(&:id).include?(params[:delegate].to_i) }
+      end
     end
 
     unless params[:region] == "all"
