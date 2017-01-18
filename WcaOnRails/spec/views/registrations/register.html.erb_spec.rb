@@ -13,7 +13,7 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match /You are currently number 2 of 3 on the waiting list/
+    expect(rendered).to match /Your registration is pending approval by the organizer./
   end
 
   it "shows message about registration being past" do
