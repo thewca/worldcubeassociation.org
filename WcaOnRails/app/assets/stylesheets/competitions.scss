@@ -159,6 +159,11 @@ $venue-map-wrapper-height: 400px;
   &.admin .admin-selectors {
     display: inline-block;
   }
+
+  .delegate-selector {
+    display: inline-block;
+    width: 300px;
+  }
 }
 
 .same-line {
