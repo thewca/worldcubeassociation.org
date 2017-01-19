@@ -425,7 +425,7 @@ en:
       already_have_html: "You already have WCA ID %{wca_id}."
       already_claimed_html: "You've claimed WCA ID %{wca_id}. Contact %{delegate} if you have any questions."
       info_competed_before: "If you've competed before, you can request to have your WCA ID connected to your account."
-      info_never_competed_html: "If you've never competed before, go to a %{comp}! A WCA ID will be created for you when the results from your first competition are uploaded."
+      info_never_competed_html: "If you've never competed before, go to a %{comp}! A WCA ID will be created for you when the results from your first competition are published."
       submit_value: "Claim WCA ID"
     #context: related to editing the avatar thumbnail
     edit_avatar_thumbnail:
@@ -778,7 +778,7 @@ en:
         title: "How do I obtain a WCA ID and a WCA profile?"
         #context: Answer to "How do I obtain a WCA ID..."
         content:
-          1: "If you have never competed before, go to a <a href='/competitions'>competition</a>!  A WCA ID and WCA profile will be created for you when the results from your first competition are uploaded."
+          1: "If you have never competed before, go to a <a href='/competitions'>competition</a>!  A WCA ID and WCA profile will be created for you when the results from your first competition are published."
       2:
         #context: Answer to "How can I find a WCA competition"
         title: "How can I find a WCA competition?"
@@ -806,7 +806,7 @@ en:
         title: "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?"
         #context: Paragraph of the answer to "What are the WCA accounts for? ..."
         content:
-          1: "You are assigned a WCA ID when you first participate in a WCA sanctioned competition. When the results from that competition are uploaded, your WCA profile will be created, with results from every competition you have been to."
+          1: "You are assigned a WCA ID when the results from your first WCA sanctioned competition are published."
           2: "WCA accounts allow you to prove to us who you are. This allows you to add a picture to your WCA profile, and allows you to register for competitions. This will protect you from other people pretending to be you."
           #context: Yup, nothing to translate here! Just hit "Use the original version"
           3: "%{current_user_status}"
