@@ -73,7 +73,14 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
 
     @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
-    @competitions = Competition.includes(:country).where(showAtAll: true).order(:year, :month, :day)
+
+    if params[:delegate].present?
+      delegate = User.find(params[:delegate])
+      @competitions = delegate.delegated_competitions
+    else
+      @competitions = Competition
+    end
+    @competitions = @competitions.includes(:country).where(showAtAll: true).order(:year, :month, :day)
 
     if @present_selected
       @competitions = @competitions.not_over
@@ -88,10 +95,6 @@ class CompetitionsController < ApplicationController
 
     if @display == 'admin'
       @competitions = @competitions.includes(:delegates, :delegate_report)
-
-      if params[:delegate].present?
-        @competitions = @competitions.select { |c| c.delegates.map(&:id).include?(params[:delegate].to_i) }
-      end
     end
 
     unless params[:region] == "all"
