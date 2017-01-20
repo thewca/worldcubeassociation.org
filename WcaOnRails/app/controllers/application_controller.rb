@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     # If the locale for the session is not set, we want to infer it from the following sources:
     #  - the current user preferred locale
     #  - the Accept-Language http header
-    session[:locale] ||= current_user&.preferred_locale || http_accept_language.preferred_language_from(I18n.available_locales)
+    session[:locale] ||= current_user&.preferred_locale
     I18n.locale = session[:locale] || I18n.default_locale
   end
 
