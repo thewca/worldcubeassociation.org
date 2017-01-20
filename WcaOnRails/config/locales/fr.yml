@@ -367,6 +367,10 @@ fr:
       manage_app: "Gérer vos applications"
       manage_auth_app: "Gérer vos applications authentifiées"
   users:
+    update_locale:
+      success: "Langue mise à jour."
+      failure: "Impossible de mettre à jour vos préférences."
+      unavailable: "La langue demandée n'est pas disponible."
     claim_wca_id:
       title: "Réclamer un ID WCA"
       competition: "compétition"

@@ -115,6 +115,8 @@ Rails.application.routes.draw do
 
   get '/render_markdown' => 'markdown_renderer#render_markdown'
 
+  patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

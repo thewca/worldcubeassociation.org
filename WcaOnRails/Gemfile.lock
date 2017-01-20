@@ -215,6 +215,7 @@ GEM
     highline (1.7.8)
     hitimes (1.2.2)
     htmlentities (4.3.4)
+    http_accept_language (2.1.0)
     i18n (0.7.0)
     i18n-country-translations (1.2.4)
       i18n (~> 0.5)
@@ -496,6 +497,7 @@ DEPENDENCIES
   font-awesome-sass
   guard-rspec
   high_voltage
+  http_accept_language
   i18n-country-translations
   i18n-spec
   i18n-tasks (~> 0.9.5)

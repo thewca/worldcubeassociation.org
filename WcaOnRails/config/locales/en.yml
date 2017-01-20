@@ -418,6 +418,11 @@ en:
       manage_auth_app: "Manage authorized applications"
   #context: Key used in the context of editing a user profile
   users:
+    #context: when updating their locale (language)
+    update_locale:
+      success: "Updated locale."
+      failure: "Unable to update your profile."
+      unavailable: "Requested locale is not available."
     #context: related to claiming a WCA ID
     claim_wca_id:
       title: "Claim WCA ID"

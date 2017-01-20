@@ -3,6 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require_relative '../lib/middlewares/fix_accept_header'
 require_relative '../lib/middlewares/warden_user_logger'
 require_relative '../lib/wca_exceptions'
+require_relative 'locales/locales'
 
 require 'rails/all'
 
@@ -61,7 +62,7 @@ module WcaOnRails
     end
 
     # Setup available locales
-    I18n.available_locales = [:en, :fr]
+    I18n.available_locales = Locales::AVAILABLE.keys
 
     config.middleware.use Middlewares::FixAcceptHeader
     config.middleware.use Middlewares::WardenUserLogger, logger: -> (s) { Rails.logger.info(s) }
