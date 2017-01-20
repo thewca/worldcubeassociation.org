@@ -903,6 +903,7 @@ CREATE TABLE `users` (
   `location_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `notes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `preferred_locale` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1171,3 +1172,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161212200704');
 INSERT INTO schema_migrations (version) VALUES ('20161226223701');
 
 INSERT INTO schema_migrations (version) VALUES ('20161221205552');
+
+INSERT INTO schema_migrations (version) VALUES ('20161227202950');

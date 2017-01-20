@@ -14,8 +14,28 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    # We set this to have access to the locale in controller
-    I18n.locale = params[:locale] || I18n.default_locale
+    # If the locale for the session is not set, we want to infer it from the following sources:
+    #  - the current user preferred locale
+    #  - the Accept-Language http header
+    session[:locale] ||= current_user&.preferred_locale || http_accept_language.preferred_language_from(I18n.available_locales)
+    I18n.locale = session[:locale] || I18n.default_locale
+  end
+
+  def update_locale
+    # Validate the requested locale by looking at those available
+    if params[:locale] && I18n.available_locales.include?(params[:locale].to_sym)
+      session[:locale] = params[:locale]
+
+      # Display the success message in the new language!
+      if current_user.nil? || current_user.update(preferred_locale: session[:locale])
+        flash[:success] = I18n.t('users.update_locale.success', locale: session[:locale])
+      else
+        flash[:danger] = I18n.t('users.update_locale.failure')
+      end
+    else
+      flash[:danger] = I18n.t('users.update_locale.unavailable')
+    end
+    redirect_to request.referer || root_path
   end
 
   def doorkeeper_unauthorized_render_options(error: nil)
@@ -35,6 +55,16 @@ class ApplicationController < ActionController::Base
     end
     devise_parameter_sanitizer.for(:sign_in) << :login
     devise_parameter_sanitizer.for(:account_update) << :name << :email
+  end
+
+  # This method is called by devise after a successful login to know the redirect path
+  # We override it to do some action after signing in, but we want to use the original path
+  protected def after_sign_in_path_for(resource)
+    # When the user signs in, 'session[:locale]' is not cleared, so we need to clear it
+    # and compute again the user's preferred_locale
+    session[:locale] = nil
+    set_locale
+    super
   end
 
   private def redirect_unless_user(action, *args)

@@ -59,6 +59,7 @@ gem 'api-pagination'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'i18n-country-translations'
+gem 'http_accept_language'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
