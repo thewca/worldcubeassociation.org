@@ -104,7 +104,7 @@ pl:
     these_events:
       zero: 0 konkurencji
       one: ta konkurencja
-      few: 'te ${count} konkurencje'
+      few: 'te %{count} konkurencje'
       many: 'te %{count} konkurencji'
       other: 'te %{count} konkurencji'
   oauth:
@@ -256,7 +256,8 @@ pl:
         discussion_url: Adres dyskusji na Grupach dyskusyjnych Google
         #original_hash: 65a9b28
         schedule_url: Adres do harmonogramu
-        equipment: Wyposarzenie
+        #original_hash: 36155d4
+        equipment: Wyposażenie
         #original_hash: 67cd406
         venue: Miejsce
         #original_hash: 6e99c1d
@@ -464,6 +465,7 @@ pl:
         schedule_url: >-
           Pełny adres do opublikowanego harmonogramu (np.
           mistrzostwapolski2016.kostkarubika.org#schedule)
+        #original_hash: 1a68719
         equipment: >-
           Liczba i rodzaj timerów oraz wyświetlaczy użytych na zawodach. Proszę
           usunąć te linie wyposażenia, które nie zostały użyte.
@@ -712,6 +714,13 @@ pl:
       #original_hash: 0e8b212
       manage_auth_app: Zarządzaj swoimi autoryzowanymi aplikacjami
   users:
+    update_locale:
+      #original_hash: 4cde9bc
+      success: Język zaktualizowany.
+      #original_hash: dcc2f49
+      failure: Aktualizacja profilu nie powiodła się.
+      #original_hash: c29870c
+      unavailable: Żądany język nie jest dostępny.
     claim_wca_id:
       #original_hash: f28bf87
       title: Podepnij WCA ID
