@@ -26,6 +26,7 @@
 //= require cocoon
 //= require moment
 //= require moment/fr.js
+//= require moment/pl.js
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
