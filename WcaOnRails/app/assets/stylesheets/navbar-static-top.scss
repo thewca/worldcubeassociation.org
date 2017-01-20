@@ -10,6 +10,13 @@
     margin-right: 10px;
   }
 
+  .dropdown-menu.countries {
+    min-width: 0;
+    li {
+      text-align: left;
+    }
+  }
+
   .navbar-brand {
     padding: 0;
     padding-top: 16px;
