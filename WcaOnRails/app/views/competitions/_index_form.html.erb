@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag "events" do %>
     <%= t 'competitions.competition_form.events' %>
-    <button type="button" id="select-all-events" class="btn btn-primary btn-xs"><%= t 'competitions.index.all' %></button>
+    <button type="button" id="select-all-events" class="btn btn-primary btn-xs"><%= t 'competitions.index.all_events' %></button>
     <button type="button" id="clear-all-events" class="btn btn-default btn-xs"><%= t 'competitions.index.clear' %></button>
   <% end %>
   <div id="events">
@@ -86,7 +86,7 @@
 
 
 <div id="delegate" class="form-group delegate-selector">
-  <%= label_tag(:delegate) %>
+  <%= label_tag(t('layouts.navigation.delegate')) %>
   <input id="delegate" name="delegate" class="wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_delegates wca-autocomplete-users_search"></input>
 </div>
 
