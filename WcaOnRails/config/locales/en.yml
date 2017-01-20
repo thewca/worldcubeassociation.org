@@ -626,7 +626,7 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      all: "All"
+      all_events: "All"
       all_years: "All Years"
       clear: "Clear"
       list: "List"

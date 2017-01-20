@@ -1125,7 +1125,7 @@ pt-BR:
       #original_hash: db98a68
       title: Competições
       #original_hash: 6a72085
-      all: Todas
+      all_events: Todos
       #original_hash: 6d76b81
       all_years: Todos os anos
       #original_hash: 719ea39
@@ -1211,7 +1211,7 @@ pt-BR:
       #original_hash: b727e58
       contact_html: >-
         Informação de contato opcional. Se você não preencher este campo, os
-        emails dos organizadores serão mostrados. %{md}. Example: [Texto
+        emails dos organizadores serão mostrados. %{md}. Exemplo: [Texto
         mostrado](mailto:alguem@email.com)
       #original_hash: c5497bc
       events: Eventos
