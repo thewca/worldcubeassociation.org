@@ -454,7 +454,7 @@ fr:
         one: "nouveau"
         other: "nouveaux"
       returner: "de retour"
-      people:
+      person:
         zero: "personne"
         one: "personne"
         other: "personnes"

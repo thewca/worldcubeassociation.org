@@ -517,7 +517,10 @@ en:
       returner:
         one: "returner"
         other: "returners"
-      people: "people"
+      #context: pluralization of "x person/people"
+      person:
+        one: "person"
+        other: "people"
     flash:
       not_using_wca: "This competition is not using WCA registration"
       accepted_and_mailed:
