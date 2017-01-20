@@ -13,5 +13,9 @@ module Locales
       "flag_id": "pl",
       "name": "Polski",
     },
+    "pt-BR": {
+      "flag_id": "br",
+      "name": "Português Brasileiro",
+    },
   }.freeze
 end

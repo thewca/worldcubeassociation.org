@@ -20,7 +20,7 @@ describe "Momentjs activation" do
 
   (I18n.available_locales - [:en]).each do |locale|
     context "for #{locale} the app/assets/javascripts/application.js file" do
-      it { expect(file_content).to include("//= require moment/#{locale}.js") }
+      it { expect(file_content).to include("//= require moment/#{locale.downcase}.js") }
     end
   end
 end
