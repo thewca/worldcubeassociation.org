@@ -810,6 +810,12 @@ en:
           2: "WCA accounts allow you to prove to us who you are. This allows you to add a picture to your WCA profile, and allows you to register for competitions. This will protect you from other people pretending to be you."
           #context: Yup, nothing to translate here! Just hit "Use the original version"
           3: "%{current_user_status}"
+      'results':
+        title: "When are the results of a WCA competition uploaded to the WCA website?"
+        content:
+          '1': "After a competition has ended, the WCA Delegate has to double-check all score sheets and person data to eliminate possible errors. Once this is done, the results are sent to the WCA Results Team (WRT), which is responsible for uploading competition results and maintaining the WCA database. The WRT finally uploads the results to the WCA database as soon as possible."
+          '2': "Depending on the size of the competition and the delegate's personal schedule, all this can take only a day or up to a week. Please be patient."
+          '3': "Additionally, if you have connected your WCA account with your WCA ID (see below), you can enable email notifications about your results submission <a href='%{preferences_edit_path}'>here</a>."
       7:
         title: "How do I change my profile picture?"
         #context: Paragraph of the answer to "How do I change my profile picture?"
