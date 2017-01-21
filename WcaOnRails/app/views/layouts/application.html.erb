@@ -2,7 +2,12 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <%= favicon_link_tag 'wca.ico' %>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" href='<%= asset_path("android-touch-icon.png") %>'/>
+  <link rel="apple-touch-icon" href='<%= asset_path("apple-touch-icon.png") %>'/>
+
   <title><%= full_title(yield(:title)) %></title>
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
