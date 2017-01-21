@@ -251,7 +251,7 @@ GEM
     kgio (2.9.3)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (3.16.14.7)
+    libv8 (3.16.14.17)
     listen (2.10.0)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -356,7 +356,7 @@ GEM
     rdoc (4.2.0)
     recaptcha (0.4.0)
     redcarpet (3.3.3)
-    ref (1.0.5)
+    ref (2.0.0)
     responders (2.1.1)
       railties (>= 4.2.0, < 5.1)
     rspec (3.2.0)
@@ -426,8 +426,8 @@ GEM
     terminal-table (1.5.2)
     test_after_commit (0.4.1)
       activerecord (>= 3.2)
-    therubyracer (0.12.2)
-      libv8 (~> 3.16.14.0)
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
       ref
     thor (0.19.1)
     thread (0.2.2)
@@ -548,4 +548,4 @@ DEPENDENCIES
   world-flags!
 
 BUNDLED WITH
-   1.12.5
+   1.14.0
