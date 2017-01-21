@@ -872,3 +872,22 @@ en:
       name: "Name"
       role: "Role"
       region: "Region"
+  national_organizations:
+    title: "National Organizations"
+    content: "The WCA acknowledges the following national organizations:"
+  contact:
+    title: "Contact Information"
+    info_alert: "Before contacting any of the teams on this page, please take a look at our %{link}!"
+    questions_and_comments: "For website questions, comments, and suggestions, use this <a href='/contact/website'>contact form</a>. For inquiries concerning a specific area or competition, please contact your local %{link}."
+    committees_and_teams: "<u>Committees and Teams</u>"
+    board:
+      name: "<strong>WCA Board</strong>"
+      info: "(WCA organisation, delegate reports, competition approval, general inquiries)"
+    wdc:
+      info: "(independent advice to WCA board, independent investigations, counselor for important personal matters)"
+    wrc:
+      info: "(maintenance of the WCA Regulations)"
+    results:
+      info: "(competition results, result corrections)"
+    software:
+      info: "(maintenance of software of WCA)"
