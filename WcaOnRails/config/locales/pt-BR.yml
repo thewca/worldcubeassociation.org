@@ -253,7 +253,7 @@ pt-BR:
         #original_hash: 67cd406
         venue: Local
         #original_hash: 6e99c1d
-        organisation: Organização
+        organization: Organização
         #original_hash: 5e326b1
         incidents: Incidentes
         #original_hash: d7020f4
@@ -469,7 +469,7 @@ pt-BR:
           exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
           irrelevantes.
         #original_hash: 5a80c42
-        organisation: >-
+        organization: >-
           Fale sobre a equipe de organização e como trabalharam durante a
           competição; se você se envolveu na organização; as experiências
           anteriores e se você observou progresso no trabalho deles; se foram
@@ -626,7 +626,7 @@ pt-BR:
       #original_hash: d8fd3e4
       delegates: Delegados da WCA
       #original_hash: ec81ece
-      organisations: Organizações Nacionais
+      organizations: Organizações Nacionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
       #original_hash: a34b69f

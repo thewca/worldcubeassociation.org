@@ -175,7 +175,7 @@ en:
         schedule_url: "Schedule url"
         equipment: "Equipment"
         venue: "Venue"
-        organisation: "Organisation"
+        organization: "Organization"
         incidents: "Incidents"
         remarks: "Remarks"
       #context: a person
@@ -284,7 +284,7 @@ en:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"
         equipment: "Number and type of timers and displays used in the competition. Please remove the line(s) of equipment which you didn't use."
         venue: "Talk about rooms, light, public access, distribution of the zones (solving, scrambling, waiting, score-taking), if you set up different solving stages, problems that arose (for example, noise) and how you solved them... Please, be concise and do not report irrelevant details."
-        organisation: "Talk about the organisation team and how they worked out the competition, if you got involved on it, their previous experience and if you noticed progress on their work, if they were professional and active the competition days, problems that arose (e.g., getting behind schedule) and how they solved them... Please, be concise and do not report irrelevant details."
+        organization: "Talk about the organization team and how they worked out the competition, if you got involved on it, their previous experience and if you noticed progress on their work, if they were professional and active the competition days, problems that arose (e.g., getting behind schedule) and how they solved them... Please, be concise and do not report irrelevant details."
         incidents: "Report any incidents that you consider worth mentioning. Number the incidents starting from 1., so that other delegates can comment referring to them by their numbers. Please make sure to mention only concrete cases, not generic events (e.g., regular +2 and DNF). Feel free to ask for delegates' or WRC's  feedback on any of them. If you'd like to have the WDC involved in some of them, make sure to state this request clearly."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
@@ -378,7 +378,7 @@ en:
       information: "Information"
       about: "About the WCA"
       delegates: "WCA Delegates"
-      organisations: "National Organisations"
+      organizations: "National Organizations"
       faq: "Frequently Asked Questions"
       contact: "Contact Information"
       forum: "Forum"
@@ -843,7 +843,7 @@ en:
       title: "Mission"
       paragraphs:
         '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
-        '2': "The World Cube Association organises competitions all over the world, supported by national organisations responsible for organising competitions in their countries."
+        '2': "The World Cube Association organises competitions all over the world, supported by national organizations responsible for organising competitions in their countries."
         '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
         '4': "The spirit of the World Cube Association is that<br />
              <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
@@ -883,7 +883,7 @@ en:
     committees_and_teams: "<u>Committees and Teams</u>"
     board:
       name: "<strong>WCA Board</strong>"
-      info: "(WCA organisation, delegate reports, competition approval, general inquiries)"
+      info: "(WCA organization, delegate reports, competition approval, general inquiries)"
     wdc:
       info: "(independent advice to WCA board, independent investigations, counselor for important personal matters)"
     wrc:

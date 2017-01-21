@@ -7,7 +7,7 @@ A little by-folder overview of our system.
 
 ### `/`
 The PHP scripts for the public pages, currently also containing password-protected
-access to competition organisation/administration pages.
+access to competition organization/administration pages.
 
 ### `/images`
 Just icons right now. Could be merged with `/style` maybe.

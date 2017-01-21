@@ -261,7 +261,7 @@ pl:
         #original_hash: 67cd406
         venue: Miejsce
         #original_hash: 6e99c1d
-        organisation: Organizacja
+        organization: Organizacja
         #original_hash: 5e326b1
         incidents: Incydenty
         #original_hash: d7020f4
@@ -478,7 +478,7 @@ pl:
           rozwiązałeś. Prosimy, bądź zwięzły i nie zgłaszaj nieistotnych
           szczegółów.
         #original_hash: 5a80c42
-        organisation: >-
+        organization: >-
           Opisz zespół organizacyjny oraz w jaki sposób pracował on podczas
           zawodów, ich doświadczenie i zauważalny postęp w ich pracy, jeżeli
           takowy miał miejsce, ponadto czy zachowywali się oni profesjonalnie i
@@ -638,7 +638,7 @@ pl:
       #original_hash: d8fd3e4
       delegates: Delegaci WCA
       #original_hash: ec81ece
-      organisations: Narodowe Organizacje
+      organizations: Narodowe Organizacje
       #original_hash: d790b40
       faq: Często Zadawane Pytania
       #original_hash: a34b69f

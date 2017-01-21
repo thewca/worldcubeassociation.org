@@ -255,7 +255,7 @@ fr:
         #original_hash: 67cd406
         venue: Salle
         #original_hash: 6e99c1d
-        organisation: Organisation
+        organization: Organisation
         #original_hash: 5e326b1
         incidents: Incidents
         #original_hash: d7020f4
@@ -478,7 +478,7 @@ fr:
           les avez résolus. Merci de rester concis et de ne pas rapporter des
           détails inutiles.
         #original_hash: 5a80c42
-        organisation: >-
+        organization: >-
           Parlez de l'équipe d'organisation et de comment elle a gérée la
           compétition, de si vous y étiez impliqué, de leurs précédentes
           expériences, de si vous avez constaté des progrès dans leur travail,
@@ -641,7 +641,7 @@ fr:
       #original_hash: d8fd3e4
       delegates: Délégués WCA
       #original_hash: ec81ece
-      organisations: Organisations Nationales
+      organizations: Organisations Nationales
       #original_hash: d790b40
       faq: Questions fréquentes
       #original_hash: a34b69f
