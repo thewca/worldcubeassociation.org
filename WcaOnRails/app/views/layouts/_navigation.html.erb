@@ -107,7 +107,7 @@
                 <% end %>
               </li>
               <li><%= link_to t('.edit_profile'), profile_edit_path %></li>
-              <% if current_user.can_edit_users? %>
+              <% if current_user.can_view_all_users? %>
                 <li class="divider"></li>
                 <li role="presentation" class="dropdown-header">
                   <%= t '.administration' %>

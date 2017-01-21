@@ -3,7 +3,7 @@
     <%= mail_to delegate.email, target: "_blank", class: "hide-new-window-icon" do %>
       <span class="glyphicon glyphicon-envelope"></span>
     <% end %>
-    <% if current_user&.can_edit_users? %>
+    <% if current_user&.can_edit_user?(delegate) %>
       <%= link_to edit_user_path(delegate.id) do %>
         <span class="glyphicon glyphicon-pencil"></span>
       <% end %>
