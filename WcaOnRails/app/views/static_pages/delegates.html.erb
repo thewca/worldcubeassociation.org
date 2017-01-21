@@ -1,11 +1,9 @@
-<% provide(:title, 'WCA Delegates') %>
+<% provide(:title, t('delegates_page.title')) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates.
-  </p>
-  <p>
-  The WCA acknowledges the following members as delegates for official WCA competitions:</p>
+  <p><%= raw t('delegates_page.description') %></p>
+  <p><%= raw t('delegates_page.acknowledges') %></p>
 
   <% delegate_sort_order = { region: :asc, delegate_status: :desc, name: :asc } %>
 
