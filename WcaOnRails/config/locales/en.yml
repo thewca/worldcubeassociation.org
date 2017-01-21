@@ -841,11 +841,12 @@ en:
     title: "About the WCA"
     mission:
       title: "Mission"
-      '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
-      '2': "The World Cube Association organises competitions all over the world, supported by national organisations responsible for organising competitions in their countries."
-      '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
-      '4': "The spirit of the World Cube Association is that<br />
-    <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
+      paragraphs:
+        '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
+        '2': "The World Cube Association organises competitions all over the world, supported by national organisations responsible for organising competitions in their countries."
+        '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
+        '4': "The spirit of the World Cube Association is that<br />
+             <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
     structure:
       title: "Structure"
       board: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
@@ -891,3 +892,17 @@ en:
       info: "(competition results, result corrections)"
     software:
       info: "(maintenance of software of WCA)"
+  score_tools:
+    title: "WCA Score Taking tools"
+    paragraphs:
+      '1': 'WCA highly recommends the use of <a href="http://cubecomps.com">Cube Comps</a> before and during a competition. Cube Comps is an online system with live scoring and many interesting features, like scorecard printing and a very efficient multi-user data entry system. Created by Luis J. Iáñez and now under Open Source.'
+      '2': "Score sheets and scrambles should be processed and checked for errors using the %{workbook_link} before sending them to the WCA Results Team."
+      '3': 'The latest version of the WCA competition Score sheet can be downloaded here:<br /><a href="/files/results.xls" target="_blank">WCA competition Score sheet</a>.'
+  logo:
+    title: 'WCA Logo'
+    paragraphs:
+      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a Rubik's Cube / 3x3x3 cube."
+      '2': 'We have three different versions of the logo: a <a href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068 px), a <a href="/files/WCAlogo.svg">vector version</a> and a <a href="/files/WCAlogo_notext.svg">vector version without text</a>.'
+      '3': '3D version of the logo, designed by Vu Minh Tan from Vietnam: <a href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).'
+      '4': 'All WCA competition organizers may use the WCA logo for websites, clothing, gifts or decorations, only for official WCA competitions.<br />
+  For all other persons and purposes using the WCA logo requires an approval by <a href="mailto:board@worldcubeassociation.org">WCA board</a>.'

@@ -5,9 +5,9 @@
 
   <h3><%= t('about.mission.title') %></h3>
 
-  <% t('about.mission').values.each do |paragraph| %>
+  <% t('about.mission.paragraphs').values.each do |paragraph| %>
     <p>
-      <%= raw paragraph unless paragraph == 'Mission' %>
+      <%= raw paragraph %>
     </p>
   <% end %>
 

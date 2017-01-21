@@ -1,9 +1,17 @@
-<% provide(:title, 'WCA Score Taking tools') %>
+<% provide(:title, t('score_tools.title')) %>
+
+<%
+tools_variables = {
+  workbook_link: link_to("WCA Workbook Assistant", wca_workbook_assistant_path)
+}
+%>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <p>WCA highly recommends the use of <a href="http://cubecomps.com">Cube Comps</a> before and during a competition. Cube Comps is an online system with live scoring and many interesting features, like scorecard printing and a very efficient multi-user data entry system. Created by Luis J. Iáñez and now under Open Source.</p>
-  <p>Score sheets and scrambles should be processed and checked for errors using the <%= link_to "WCA Workbook Assistant", wca_workbook_assistant_path %> before sending them to the WCA Results Team.</p>
-  <p>The latest version of the WCA competition Score sheet can be downloaded here:<br /><a href="/files/results.xls" target="_blank">WCA competition Score sheet</a>.</p>
+  <% t('score_tools.paragraphs').values.each do |paragraph| %>
+    <p>
+      <%= raw paragraph % tools_variables %>
+    </p>
+  <% end %>
 </div>
