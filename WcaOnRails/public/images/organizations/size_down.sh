@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 
 MAX_WIDTH=500
 MAX_HEIGHT=300
-for f in *.{jpg,png,svg}; do
+for f in *.{jpg,png}; do
   width_height=(`identify -format "%[fx:w] %[fx:h]" $f`)
   width=${width_height[0]}
   height=${width_height[1]}
