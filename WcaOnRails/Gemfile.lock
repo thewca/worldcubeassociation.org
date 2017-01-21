@@ -194,6 +194,7 @@ GEM
     font-awesome-sass (4.4.0)
       sass (>= 3.2)
     formatador (0.2.5)
+    get_process_mem (0.2.1)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
     guard (2.12.5)
@@ -448,6 +449,9 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    unicorn-worker-killer (0.4.4)
+      get_process_mem (~> 0)
+      unicorn (>= 4, < 6)
     uniform_notifier (1.9.0)
     valid_email (0.0.11)
       activemodel
@@ -543,9 +547,10 @@ DEPENDENCIES
   time_will_tell
   uglifier
   unicorn
+  unicorn-worker-killer
   valid_email
   web-console
   world-flags!
 
 BUNDLED WITH
-   1.12.5
+   1.13.1
