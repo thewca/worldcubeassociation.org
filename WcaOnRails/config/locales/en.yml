@@ -836,3 +836,31 @@ en:
         content:
           #context: Yup, nothing to translate here! Just hit "Use the original version"
           '1': "%{current_user_claim}"
+  #context: About the WCA
+  about:
+    title: "About the WCA"
+    mission:
+      title: "Mission"
+      '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
+      '2': "The World Cube Association organises competitions all over the world, supported by national organisations responsible for organising competitions in their countries."
+      '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
+      '4': "The spirit of the World Cube Association is that<br />
+    <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
+    structure:
+      title: "Structure"
+      board: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
+      committees: "The following committees are responsible for the operational activities of the WCA:"
+      wdc:
+        name: "<strong>WCA Disciplinary Committee (WDC)</strong>"
+        description: "This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions."
+      wrc:
+        name: "<strong>WCA Regulations Committee (WRC)</strong>"
+        description: "This committee is responsible for managing the WCA Regulations."
+      results:
+        name: "<strong>WCA Results team</strong>"
+        description: "This team is responsible for managing all competition results."
+      software:
+        name: "<strong>WCA Software team</strong>"
+        description: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
+      delegates: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see %{link}). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
+      members: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
