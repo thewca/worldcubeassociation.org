@@ -1,4 +1,4 @@
-en:
+zh-CN:
   errors:
     messages:
       carrierwave_processing_error: "处理失败"
