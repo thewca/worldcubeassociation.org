@@ -9,6 +9,10 @@ module Locales
       "flag_id": "fr",
       "name": "Français",
     },
+    "it": {
+      "flag_id": "it",
+      "name": "Italiano",
+    },
     "pl": {
       "flag_id": "pl",
       "name": "Polski",

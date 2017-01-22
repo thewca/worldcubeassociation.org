@@ -26,6 +26,7 @@
 //= require cocoon
 //= require moment
 //= require moment/fr.js
+//= require moment/it.js
 //= require moment/pl.js
 //= require moment/pt-br.js
 //= require moment/zh-cn.js
