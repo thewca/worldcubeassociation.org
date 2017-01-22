@@ -20,7 +20,7 @@ class Continent < ActiveRecord::Base
   ALL_CONTINENTS_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |l|
     [l, Continent.all.map do |c|
       # We want a localized continent name, but a constant id across languages
-      [c.name, c.id]
+      [c.name_in(l), c.id]
       # Now we want to sort continents according to their localized name
     end.sort!(&Country::COMPARE_LOCALIZED_NAMES)]
   end].freeze
