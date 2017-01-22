@@ -253,7 +253,7 @@ it:
         #original_hash: 67cd406
         venue: Posto
         #original_hash: 6e99c1d
-        organisation: Organizzazione
+        organization: Organizzazione
         #original_hash: 5e326b1
         incidents: Incidenti
         #original_hash: d7020f4
@@ -470,7 +470,7 @@ it:
           problemi incontrati (es. il rumore) e di come sono stati risolti...
           Sii conciso e non riportare dettagli irrilevanti.
         #original_hash: 5a80c42
-        organisation: >-
+        organization: >-
           Parla del team organizzativo e di come si sono comportati, della loro
           esperienza con gare passate e se hai notato progessi, se sono stati
           professionali e attivi durante i giorni della competizione, di come
@@ -628,7 +628,7 @@ it:
       #original_hash: d8fd3e4
       delegates: Delegati WCA
       #original_hash: ec81ece
-      organisations: Organizzazioni Nazionali
+      organizations: Organizzazioni Nazionali
       #original_hash: d790b40
       faq: Domande Frequenti
       #original_hash: a34b69f

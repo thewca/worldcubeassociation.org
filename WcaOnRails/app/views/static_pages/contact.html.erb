@@ -1,49 +1,45 @@
-<% provide(:title, 'Contact Information') %>
+<% provide(:title, t('contact.title')) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
   <%= alert :info do %>
-    Before contacting any of the teams on this page,
-    please take a look at our <%= link_to "frequently asked questions", faq_path %>!
+    <%= t 'contact.info_alert_html', link: link_to(t('layouts.navigation.faq'), faq_path) %>
   <% end %>
 
   <p>
-    For website questions, comments, and suggestions, use this
-    <a href="/contact/website">contact form</a>. For inquiries concerning a
-    specific area or competition, please contact your local <%= link_to "WCA
-    Delegate", delegates_path %>.
+    <%= t 'contact.questions_and_comments_html', link: link_to(t('competitions.competition_info.delegate', count: 1), delegates_path) %>
   </p>
 
-  <h2><u>Committees and Teams</u></h2>
+  <h2><%= t('contact.committees_and_teams_html') %></h2>
 
   <p>
-    <strong>WCA Board</strong> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
-    (WCA organisation, delegate reports, competition approval, general inquiries)<br />
+    <%= t('contact.board.name_html') %> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
+    <%= t('contact.board.info') %><br />
     <%= @board_members.order(:name).map(&:name).join(", ") %>
   </p>
 
   <p>
-    <strong>WCA Disciplinary Committee</strong> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
-    (independent advice to WCA board, independent investigations, counselor for important personal matters)<br />
+    <%= t('about.structure.wdc.name_html') %> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
+    <%= t('contact.wdc.info') %><br />
     <%= format_team_members('wdc') %>
   </p>
 
   <p>
-    <strong>WCA Results Team</strong> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
-    (competition results, result corrections)<br />
-    <%= format_team_members('results') %>
-  </p>
-
-  <p>
-    <strong>WCA Regulations Committee</strong> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
-    (maintenance of the WCA Regulations)<br />
+    <%= t('about.structure.wrc.name_html') %> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
+    <%= t('contact.wrc.info') %><br />
     <%= format_team_members('wrc') %>
   </p>
 
   <p>
-    <strong>WCA Software Team</strong> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
-    (maintenance of software of WCA)<br />
+    <%= t('about.structure.results.name_html') %> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
+    <%= t('contact.results.info') %><br />
+    <%= format_team_members('results') %>
+  </p>
+
+  <p>
+    <%= t('about.structure.software.name_html') %> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
+    <%= t('contact.software.info') %><br />
     <%= format_team_members('software') %>
   </p>
 </div>

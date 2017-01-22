@@ -1,50 +1,45 @@
-<% provide(:title, 'About the WCA') %>
+<% provide(:title, t('about.title')) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <h3>Mission</h3>
+  <h3><%= t('about.mission.title') %></h3>
 
-  <p>The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
+  <% t('about.mission.paragraphs').values.each do |paragraph| %>
+    <p>
+      <%= raw paragraph %>
+    </p>
+  <% end %>
 
-  <p>The World Cube Association organises competitions all over the world, supported by national organisations responsible for organising competitions in their countries.</p>
+  <br/ >
+  <h3><%= t('about.structure.title') %></h3>
 
-  <p>The goal of the World Cube Association is to have<br />
-    <strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>
-  </p>
+  <p><%= t('about.structure.board_html') %></p>
 
-  <p>The spirit of the World Cube Association is that<br />
-    <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>
-  </p>
-
-  <h3><br />Structure</h3>
-  <p>
-  The World Cube Association is led by the <b>WCA Board</b>, consisting of the following members:
-  </p>
   <ul>
     <% @board_members.order(:name).each do |board_member| %>
       <li><%= board_member.name %> - <%= board_member.region %></li>
     <% end %>
   </ul>
 
-  <p>The following committees are responsible for the operational activities of the WCA:</p>
+  <p><%= t('about.structure.committees') %>
   <ul>
-    <li><strong>WCA Disciplinary Committee (WDC)</strong>: <%= format_team_members('wdc') %> <br />
-  This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions.</li>
-    <li><strong>WCA Regulations Committee (WRC)</strong>: <%= format_team_members('wrc') %> <br />
-  This committee is responsible for managing the WCA Regulations.</li>
-    <li><strong>WCA Results team</strong>: <%= format_team_members('results') %> <br />
-  This team is responsible for managing all competition results.</li>
-    <li><strong>WCA Software team</strong>: <%= format_team_members('software') %> <br />
-    This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools).</li>
+    <li><%= t('about.structure.wdc.name_html') %>: <%= format_team_members('wdc') %> <br />
+      <%= t('about.structure.wdc.description') %></li>
+    <li><%= t('about.structure.wrc.name_html') %>: <%= format_team_members('wrc') %> <br />
+      <%= t('about.structure.wrc.description') %></li>
+    <li><%= t('about.structure.results.name_html') %>: <%= format_team_members('results') %> <br />
+      <%= t('about.structure.results.description') %></li>
+    <li><%= t('about.structure.software.name_html') %>: <%= format_team_members('software') %> <br />
+      <%= t('about.structure.software.description') %></li>
   </ul>
 
   <p>
-  <strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see <%= link_to "WCA Delegates", delegates_path %>). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates.
+    <%= t 'about.structure.delegates_html', link: link_to("WCA Delegates", delegates_path) %>
   </p>
 
   <p>
-  All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition.
+    <%= t('about.structure.members_html') %>
   </p>
 
 </div>

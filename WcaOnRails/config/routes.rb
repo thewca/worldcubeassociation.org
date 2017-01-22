@@ -90,7 +90,7 @@ Rails.application.routes.draw do
 
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'
-  get 'organisations' => 'static_pages#organisations'
+  get 'organizations' => 'static_pages#organizations'
   get 'contact' => 'static_pages#contact'
   get 'faq' => 'static_pages#faq'
   get 'score-tools' => 'static_pages#score_tools'

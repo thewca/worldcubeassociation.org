@@ -1,4 +1,4 @@
-$organisation-cell-width: 120px;
+$organization-cell-width: 120px;
 .organizations-list {
   display: flex;
   flex-wrap: wrap;
@@ -9,11 +9,11 @@ $organisation-cell-width: 120px;
     a {
       display: inline-block;
       position: relative;
-      height: $organisation-cell-width;
-      min-width: $organisation-cell-width;
+      height: $organization-cell-width;
+      min-width: $organization-cell-width;
       img {
         // Let the image take up whatever width it likes.
-        height: $organisation-cell-width;
+        height: $organization-cell-width;
       }
       .organization-info {
         position: absolute;

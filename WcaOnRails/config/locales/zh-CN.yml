@@ -249,7 +249,7 @@ zh-CN:
         #original_hash: 67cd406
         venue: 地点
         #original_hash: 6e99c1d
-        organisation: 组织情况
+        organization: 组织情况
         #original_hash: 5e326b1
         incidents: 事件
         #original_hash: d7020f4
@@ -430,7 +430,7 @@ zh-CN:
         venue: >-
           说一些关于赛场、光线、公众访问性、区域分割（比赛区、打乱区、等候区、录入区）、是否设置不同的比赛区、发生了什么问题（如吵闹）及你如何解决他们的。请简洁扼要勿说无关细节。
         #original_hash: 5a80c42
-        organisation: >-
+        organization: >-
           说一些关于主办团队的事。他们如何组织这个比赛、你是否参与、他们之前的经验、你是否留意他们的进度、比赛当天是否专业并积极、出现的问题（如赛程拖延）以及他们如何解决的。请简洁扼要勿说无关细节。
         #original_hash: 715f020
         incidents: >-
@@ -563,7 +563,7 @@ zh-CN:
       #original_hash: d8fd3e4
       delegates: WCA代表
       #original_hash: ec81ece
-      organisations: 地区组织
+      organizations: 地区组织
       #original_hash: d790b40
       faq: 常见问题
       #original_hash: a34b69f

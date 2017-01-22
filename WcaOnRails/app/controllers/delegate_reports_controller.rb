@@ -57,7 +57,7 @@ class DelegateReportsController < ApplicationController
       :schedule_url,
       :equipment,
       :venue,
-      :organisation,
+      :organization,
       :incidents,
       :remarks,
       :posted,

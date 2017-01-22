@@ -1,9 +1,9 @@
-<% provide(:title, 'National Organisations') %>
+<% provide(:title, t('national_organizations.title')) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <p>The WCA acknowledges the following national organisations:</p>
+  <p><%= t('national_organizations.content') %></p>
 
   <% organizations_info = [
        {

@@ -220,6 +220,12 @@ server {
     alias <%= @repo_root %>/WcaOnRails/app/views/regulations/$1;
   }
 
+  # Redirect /organisations to /organizations
+  location /organisations {
+
+    return 302 /organizations;
+  }
+
   #### New Rails sytem
   # From http://unicorn.bogomips.org/examples/nginx.conf
   # path for static files
