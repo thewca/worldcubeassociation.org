@@ -2,7 +2,7 @@
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <p><%= t('delegates_page.description_html') %></p>
+  <p><%= t('about.structure.delegates_html', see_link: "") %></p>
   <p><%= t('delegates_page.acknowledges') %></p>
 
   <% delegate_sort_order = { region: :asc, delegate_status: :desc, name: :asc } %>

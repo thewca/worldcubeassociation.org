@@ -851,23 +851,28 @@ en:
       title: "Structure"
       board_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
       committees: "The following committees are responsible for the operational activities of the WCA:"
+      #context: WDC
       wdc:
         name_html: "<strong>WCA Disciplinary Committee (WDC)</strong>"
         description: "This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions."
+      #context: WRC
       wrc:
         name_html: "<strong>WCA Regulations Committee (WRC)</strong>"
         description: "This committee is responsible for managing the WCA Regulations."
+      #context: WRT
       results:
         name_html: "<strong>WCA Results team</strong>"
         description: "This team is responsible for managing all competition results."
+      #context: WST
       software:
         name_html: "<strong>WCA Software team</strong>"
         description: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
-      delegates_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see %{link}). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
+      delegates_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>%{see_link}. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
+      see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
+  #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
-    description_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
     acknowledges: "The WCA acknowledges the following members as delegates for official WCA competitions:"
     table:
       name: "Name"
@@ -876,9 +881,12 @@ en:
   national_organizations:
     title: "National Organizations"
     content: "The WCA acknowledges the following national organizations:"
+  #context: Contact page
   contact:
     title: "Contact Information"
+    #context: The %{link} variable links to the FAQ.
     info_alert_html: "Before contacting any of the teams on this page, please take a look at our %{link}!"
+    #context: The %{link} variable links to the Delegates page
     questions_and_comments_html: "For website questions, comments, and suggestions, use this <a href='/contact/website'>contact form</a>. For inquiries concerning a specific area or competition, please contact your local %{link}."
     committees_and_teams_html: "<u>Committees and Teams</u>"
     board:
