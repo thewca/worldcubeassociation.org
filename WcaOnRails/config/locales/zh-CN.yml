@@ -1,0 +1,1356 @@
+zh-CN:
+  countries:
+    #original_hash: 3f8c9de
+    XA: 亚洲多地
+    #original_hash: 090f3ce
+    XE: 欧洲多地
+    #original_hash: 459f987
+    XS: 南美洲多地
+    #original_hash: 918c53a
+    MO: 澳门
+    #original_hash: 2f488ff
+    HK: 香港
+    #original_hash: 4e8bd04
+    KR: 韩国
+  continents:
+    #original_hash: 1d35114
+    AfR: 非洲
+    #original_hash: a173e72
+    AsR: 亚洲
+    #original_hash: 576347e
+    ER: 欧洲
+    #original_hash: 247ce5d
+    NAR: 北美洲
+    #original_hash: 3642950
+    OcR: 大洋洲
+    #original_hash: b1ffb4c
+    SAR: 南美洲
+  events:
+    #original_hash: 3732390
+    '222': 二阶
+    #original_hash: bfbe360
+    '333': 三阶
+    #original_hash: 2ee5b5a
+    '444': 四阶
+    #original_hash: b7a99fa
+    '555': 五阶
+    #original_hash: 4e3ea57
+    '666': 六阶
+    #original_hash: b567fc4
+    '777': 七阶
+    #original_hash: 29d5411
+    333bf: 三盲
+    #original_hash: 31ed23f
+    333oh: 单手
+    #original_hash: 0a5e7bf
+    333fm: 最少步
+    #original_hash: be41d70
+    333ft: 脚拧
+    #original_hash: d542376
+    minx: 五魔方
+    #original_hash: 8216a66
+    pyram: 金字塔
+    #original_hash: 1551a2c
+    sq1: Square-1
+    #original_hash: 23c2fdf
+    clock: 魔表
+    #original_hash: 64a56a2
+    skewb: 斜转
+    #original_hash: 5bae501
+    444bf: 四盲
+    #original_hash: aea5216
+    555bf: 五盲
+    #original_hash: cedbf87
+    333mbf: 多盲
+    #original_hash: 3988358
+    magic: 八板
+    #original_hash: c962425
+    mmagic: 十二板
+    #original_hash: c6ad2af
+    333mbo: 旧多盲
+  common:
+    #original_hash: 2513cf0
+    continent: 洲
+    #original_hash: d523ebb
+    country: 国家/地区
+    #original_hash: 0154c0d
+    here: 这里
+    #original_hash: 77003d0
+    best: 最好
+    #original_hash: dd11868
+    single: 单次
+    #original_hash: 15f86c0
+    average: 平均
+    #original_hash: e7f6fc5
+    solves: 复原
+    user:
+      #original_hash: 603a218
+      wca_id: WCA ID
+      #original_hash: e0f64f7
+      citizen_of: 地区
+    #original_hash: 3fc0ba1
+    all_regions: 所有地区
+    errors:
+      #original_hash: 81f344a
+      invalid: 不正确
+    #original_hash: 49d0140
+    days:
+      zero: 0天
+      other: '%{count}天'
+    #original_hash: 203e1b3
+    these_events:
+      zero: 没有项目
+      other: '这%{count}个项目'
+  oauth:
+    applications:
+      #original_hash: 0c4ea38
+      your_apps: 你的OAuth应用
+      #original_hash: 6403f2b
+      new: 新建
+      #original_hash: 709a232
+      name: 名字
+      #original_hash: f6f1389
+      callback_url: 回调地址
+      #original_hash: 89ff312
+      owner: 所有人
+      #original_hash: 557031c
+      application_id: 应用ID
+      #original_hash: c3cd636
+      actions: 操作
+      #original_hash: f4e7a87
+      secret: 密钥
+      #original_hash: c23540e
+      scopes: 权限
+      #original_hash: 3b0d449
+      callback_urls: 回调地址
+  activerecord:
+    attributes:
+      user:
+        #original_hash: eeb6920
+        name: 全名
+        #original_hash: 603a218
+        wca_id: WCA ID
+        #original_hash: cb77bea
+        unconfirmed_wca_id: 未确认的WCA ID
+        #original_hash: 8ed8874
+        login: 邮箱或WCA ID
+        #original_hash: 1528d10
+        country_iso2: 国家/地区
+        #original_hash: ab58155
+        dob: 生日
+        #original_hash: ab58155
+        dob_verification: 生日
+        #original_hash: 8a754c6
+        gender: 性别
+        #original_hash: 84add5b
+        email: 邮箱
+        #original_hash: 8be3c94
+        password: 密码
+        #original_hash: 19dff4d
+        current_password: 当前密码
+        #original_hash: 786b8af
+        password_confirmation: 确认密码
+        #original_hash: ced7b30
+        remember_me: 记住我
+        #original_hash: 102efae
+        pending_avatar: 上传新头像
+        #original_hash: 58e0c56
+        remove_avatar: 删除头像
+        #original_hash: 9af9099
+        results_notifications_enabled: 当我的（参赛）成绩公示时给我发邮件。
+        #original_hash: de60ab8
+        delegate_status: 代表状态
+        #original_hash: 0f21717
+        region: 国家/地区
+        #original_hash: a10b651
+        location_description: 地区描述
+        #original_hash: 8961d3b
+        phone_number: 手机号
+        #original_hash: 7044004
+        notes: 备注
+      competition:
+        #original_hash: 89f89c0
+        id: ID
+        #original_hash: 7f3d889
+        isConfirmed: 禁止主办方编辑本比赛
+        #original_hash: d493e6a
+        showAtAll: 公开比赛
+        #original_hash: 709a232
+        name: 名字
+        #original_hash: b649210
+        cellName: 比赛昵称
+        #original_hash: d523ebb
+        countryId: 国家/地区
+        #original_hash: 25b7b06
+        cityName: 城市
+        #original_hash: 67cd406
+        venue: 地点
+        #original_hash: 486f8fb
+        venueAddress: 地址
+        #original_hash: 08767af
+        venueDetails: 地点详情
+        #original_hash: ff99f5b
+        start_date: 开始日期
+        #original_hash: 89d10cd
+        end_date: 结束日期
+        #original_hash: 2e8a57c
+        external_website: 比赛官网
+        #original_hash: 692e1f9
+        generate_website: 我想使用WCA网站来显示额外信息。
+        #original_hash: 3d53469
+        base_entry_fee_lowest_denomination: 基础费（最低面值）
+        #original_hash: 28a6fbb
+        currency_code: 货币代码
+        #original_hash: 5b2fe69
+        delegate_ids: WCA代表
+        #original_hash: 958562e
+        organizer_ids: 主办方
+        #original_hash: b37456c
+        contact: 联系方式
+        #original_hash: 0eb5ed5
+        information: 基本信息
+        #original_hash: 87b7d5f
+        use_wca_registration: 我想使用WCA网站来报名
+        #original_hash: 3c23a67
+        guests_enabled: 随行人员
+        #original_hash: 089cbfd
+        receive_registration_emails: 当有人报名本次比赛时发邮件通知我
+        #original_hash: d4aeed9
+        registration_open: 报名开放时间
+        #original_hash: f8153a2
+        registration_close: 报名结束时间
+        #original_hash: d7020f4
+        remarks: 备注
+        #original_hash: c305010
+        clone_tabs: 我想复制所有tab，连同额外信息
+      registration:
+        #original_hash: 3c23a67
+        guests: 随行人员
+        #original_hash: fce06e2
+        comments: 备注
+        #original_hash: bae7d5b
+        status: 状态
+        #original_hash: 709a232
+        name: 名字
+        #original_hash: a6b9d69
+        birthday: 生日
+      competition_tab:
+        #original_hash: 4f9be05
+        content: 内容
+        #original_hash: 709a232
+        name: 名字
+      delegate_report:
+        #original_hash: 983d541
+        discussion_url: 在谷歌群组的讨论链接
+        #original_hash: 65a9b28
+        schedule_url: 赛程链接
+        #original_hash: 36155d4
+        equipment: 设备
+        #original_hash: 67cd406
+        venue: 地点
+        #original_hash: 6e99c1d
+        organisation: 组织情况
+        #original_hash: 5e326b1
+        incidents: 事件
+        #original_hash: d7020f4
+        remarks: 备注
+      person:
+        #original_hash: 8c41ae8
+        wca_id: 选手
+        #original_hash: d523ebb
+        countryId: 国家/地区
+        #original_hash: ab58155
+        dob: 生日
+        #original_hash: 8a754c6
+        gender: 性别
+        #original_hash: 709a232
+        name: 名字
+      poll:
+        #original_hash: 002ff59
+        question: 问题
+        #original_hash: 2b12f36
+        deadline: 截止日期
+      post:
+        #original_hash: 768e0c1
+        title: 标题
+        #original_hash: 718a7e8
+        body: 正文
+        #original_hash: 6f915a2
+        sticky: 置顶
+      team:
+        #original_hash: 709a232
+        name: 名字
+        #original_hash: 55f8ebc
+        description: 描述
+      vote:
+        #original_hash: 153d7a5
+        comment: 备注
+  simple_form:
+    #original_hash: 5397e05
+    'yes': 是
+    #original_hash: 816c52f
+    'no': 否
+    required:
+      #original_hash: 1a77d41
+      text: 必填
+      #original_hash: df58248
+      mark: '*'
+      #original_hash: da39a3e
+      html: ''
+    error_notification:
+      #original_hash: d70e9cb
+      default_message: 请查看下列问题：
+    labels:
+      contact:
+        #original_hash: 709a232
+        name: 名字
+        #original_hash: 3fa6f5f
+        your_email: 你的邮箱
+        #original_hash: 68f4145
+        message: 消息
+    hints:
+      user:
+        #original_hash: 87e1e6f
+        dob: 按“YYYY-MM-DD"格式输入你的生日。
+        #original_hash: 5106479
+        name: >-
+          正确输入你的全名，比如<strong>Baiqiang Dong (董百强)</strong>。别偷懒只输入<strong>Baiqiang
+          (百强)</strong>。
+        #original_hash: c03b949
+        email: 修改邮箱需要确认新邮箱。
+        #original_hash: bfd11f4
+        pending_avatar: 你需要等待董事会通过你上传的新头像。
+        #original_hash: da39a3e
+        country_iso2: ''
+        #original_hash: da39a3e
+        current_password: ''
+        #original_hash: da39a3e
+        delegate_status: ''
+        #original_hash: da39a3e
+        dob_verification: ''
+        #original_hash: da39a3e
+        gender: ''
+        #original_hash: da39a3e
+        login: ''
+        #original_hash: da39a3e
+        password: ''
+        #original_hash: da39a3e
+        password_confirmation: ''
+        #original_hash: da39a3e
+        region: ''
+        #original_hash: da39a3e
+        remember_me: ''
+        #original_hash: da39a3e
+        remove_avatar: ''
+        #original_hash: da39a3e
+        results_notifications_enabled: ''
+        #original_hash: da39a3e
+        unconfirmed_wca_id: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: da39a3e
+        location_description: ''
+        #original_hash: da39a3e
+        phone_number: ''
+        #original_hash: da39a3e
+        notes: ''
+      competition:
+        #original_hash: 2c812a0
+        name: '比赛全名徐在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:''）和空格。'
+        #original_hash: 525fcc8
+        cellName: 用于现实的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
+        #original_hash: bce4589
+        cityName: '比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。'
+        #original_hash: 17c8ff8
+        information: >-
+          一些描述比赛的文字信息（例：Euro 2006 is open to citizens of the European countries
+          and Israel）。
+        #original_hash: 0708400
+        delegate_ids: 比赛的WCA代表们。
+        #original_hash: 517d376
+        organizer_ids: 主办方（他们需要提前注册帐号）
+        #original_hash: cabe7fb
+        external_website: 比赛官网。必须是一个合法的http(s)地址。
+        #original_hash: 9965635
+        registration_open: 注意：报名开放和结束是UTC时间
+        #original_hash: f688881
+        remarks: 一些你想和董事会说的额外信息。比如为啥这个比赛没有在一个月之前申请之类的。
+        #original_hash: da39a3e
+        clone_tabs: ''
+        #original_hash: da39a3e
+        countryId: ''
+        #original_hash: da39a3e
+        end_date: ''
+        #original_hash: da39a3e
+        generate_website: ''
+        #original_hash: b61cbfa
+        base_entry_fee_lowest_denomination: >-
+          比赛的基础报名费。按指定货币的最小单位记录。例：对人民币来说是分。如果使用报名费，将在比赛信息页和报名页显示。注意WCA网站并没有实现支付功能。软件组正致力于此事，你可以在这里追踪进度：<a
+          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>。
+        #original_hash: 866bc05
+        currency_code: 报名费的货币代码。
+        #original_hash: da39a3e
+        guests_enabled: ''
+        #original_hash: da39a3e
+        id: ''
+        #original_hash: da39a3e
+        isConfirmed: ''
+        #original_hash: da39a3e
+        receive_registration_emails: ''
+        #original_hash: da39a3e
+        registration_close: ''
+        #original_hash: da39a3e
+        showAtAll: ''
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        use_wca_registration: ''
+        #original_hash: da39a3e
+        venueAddress: ''
+      contact:
+        #original_hash: da39a3e
+        message: ''
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+      post:
+        #original_hash: 53c16eb
+        body: 使用&lt;!-- break --&gt;标签来在首页展示预览。首页的所后文章会显示分隔符之前的文本。文章本身才会显示全文。
+        #original_hash: da39a3e
+        sticky: ''
+        #original_hash: da39a3e
+        title: ''
+      delegate_report:
+        #original_hash: 4eefb60
+        schedule_url: '公示的赛程链接（例：https://www.cubingusa.com/usnationals2016/schedule.php）'
+        #original_hash: 1a68719
+        equipment: 比赛使用的计时器和大显的类型和数量。请移除你没有使用的设备。
+        #original_hash: 4658dd9
+        venue: >-
+          说一些关于赛场、光线、公众访问性、区域分割（比赛区、打乱区、等候区、录入区）、是否设置不同的比赛区、发生了什么问题（如吵闹）及你如何解决他们的。请简洁扼要勿说无关细节。
+        #original_hash: 5a80c42
+        organisation: >-
+          说一些关于主办团队的事。他们如何组织这个比赛、你是否参与、他们之前的经验、你是否留意他们的进度、比赛当天是否专业并积极、出现的问题（如赛程拖延）以及他们如何解决的。请简洁扼要勿说无关细节。
+        #original_hash: 715f020
+        incidents: >-
+          汇报你觉得需要提及的任何事件。从1.开始给事件编号，这样其他代表在说对应事件时可以提及编号。请确保只提及具体情况，而不是通用的事件（常规的+2和DNF）。随便问其他代表或者WRC的意见。如果你想要WDC介入某些事件，请明确说明。
+        #original_hash: f30abdc
+        remarks: 说一些你想分享的其他细节（例：社群的提升，当地的未来计划）。如果为了所谓的简洁性你有一些之前部分没提及的，尽情在这里说。
+        #original_hash: da39a3e
+        discussion_url: ''
+      competition_tab:
+        #original_hash: e396d28
+        name: 例如：交通、支付、奖项、住宿
+        #original_hash: da39a3e
+        content: ''
+      person:
+        #original_hash: 498f4c5
+        dob: 生日必须是YYYY-MM-DD格式。
+        #original_hash: da39a3e
+        countryId: ''
+        #original_hash: da39a3e
+        gender: ''
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        person1_wca_id: ''
+        #original_hash: da39a3e
+        person2_wca_id: ''
+        #original_hash: da39a3e
+        wca_id: ''
+      poll:
+        #original_hash: da39a3e
+        comment: ''
+        #original_hash: da39a3e
+        multiple: ''
+        #original_hash: da39a3e
+        question: ''
+      registration:
+        #original_hash: da39a3e
+        comments: ''
+        #original_hash: da39a3e
+        guests: ''
+        #original_hash: da39a3e
+        status: ''
+      team:
+        #original_hash: da39a3e
+        description: ''
+        #original_hash: da39a3e
+        friendly_id: ''
+        #original_hash: da39a3e
+        name: ''
+      vote:
+        #original_hash: da39a3e
+        comment: ''
+    options:
+      registration:
+        status:
+          #original_hash: 61a0572
+          accepted: 已通过
+          #original_hash: a6b2452
+          pending: 候选列表
+          #original_hash: 441bda6
+          deleted: 已删除
+      competition:
+        guests_enabled:
+          #original_hash: cb8809d
+          'true': 询问随行人员
+          #original_hash: f8c2332
+          'false': 不询问随行人员
+  errors:
+    messages:
+      #original_hash: dc2367c
+      wrong_size: '尺寸不对（须是%{file_size}）'
+      #original_hash: 1531237
+      size_too_small: '太小了（至少%{file_size}）'
+      #original_hash: a2a43b3
+      size_too_big: '太大了（最多%{file_size}）'
+  devise:
+    failure:
+      #original_hash: 1186218
+      invalid: 邮件、WCA ID或密码不正确。
+      #original_hash: 1186218
+      not_found_in_database: 邮件、WCA ID或密码不正确。
+  wca:
+    errors:
+      messages:
+        #original_hash: e88f903
+        form_error:
+          zero: 没有错误
+          other: '表单有%{count}项错误：'
+    doorkeeper:
+      applications:
+        help:
+          #original_hash: 5545f6c
+          scopes_html: >-
+            将权限用空格分开。留空将使用默认权限。 <a
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            target="_blank">点击这里</a>查看支持的权限列表。
+      scopes:
+        #original_hash: 1920e95
+        public: 获取你的公开数据（姓名、WCA ID、性别、国家/地区以及头像）
+        #original_hash: d4003be
+        dob: 获取你的生日
+        #original_hash: 17aa24f
+        email: 获取你的电子邮件地址
+    devise:
+      #original_hash: 06184f5
+      no_account: 没有帐号？
+      #original_hash: a268696
+      have_competed: 我之前参加过WCA比赛。
+      #original_hash: dcd1d70
+      have_never_competed: 我从没参加过WCA比赛。
+      #original_hash: 86a60c9
+      let_us_know: 如果你之前参加过WCA比赛，请告知我们。
+      #original_hash: f9f512b
+      welcome_back: 欢迎回来！要创建一个WCA网站帐号，我们需要知道你参加比赛的WCA ID。
+      #original_hash: 669fb57
+      welcome: 欢迎！在你参加第一场WCA比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。
+      gender:
+        #original_hash: 3f3a489
+        male: 男
+        #original_hash: b7c17e9
+        female: 女
+        #original_hash: 6e6a6f2
+        other_gender: 其他
+  layouts:
+    navigation:
+      #original_hash: 0eb5ed5
+      information: 信息
+      #original_hash: 9ac918a
+      about: 关于WCA
+      #original_hash: d8fd3e4
+      delegates: WCA代表
+      #original_hash: ec81ece
+      organisations: 地区组织
+      #original_hash: d790b40
+      faq: 常见问题
+      #original_hash: a34b69f
+      contact: 联系信息
+      #original_hash: cf1d2c9
+      forum: 论坛
+      #original_hash: 4fa8cc8
+      tools: 工具
+      #original_hash: 83fce83
+      logo: Logo
+      #original_hash: db98a68
+      competitions: 比赛
+      #original_hash: 6a72085
+      all: 所有比赛
+      #original_hash: 775d458
+      my_competitions: 我的比赛
+      #original_hash: 32fde96
+      new_competition: 新建比赛
+      #original_hash: 612e12d
+      results: 成绩
+      #original_hash: f5fe73c
+      rankings: 排行
+      #original_hash: e51c552
+      records: 纪录
+      #original_hash: f3cf96e
+      persons: 选手
+      #original_hash: 5b72b5a
+      my_results: 我的成绩
+      #original_hash: 2086b21
+      statistics: 统计
+      #original_hash: 82dabd0
+      multimedia: 多媒体
+      #original_hash: 4fd2a7f
+      db_export: 数据导出
+      #original_hash: 1fa73f3
+      regulations: 规则
+      #original_hash: 141d1d7
+      guidelines: 指导
+      #original_hash: c4622c3
+      scrambles: 打乱
+      #original_hash: 90ccd64
+      history: 历史
+      #original_hash: 8ad8302
+      translations: 翻译
+      #original_hash: b8be3d1
+      administration: 管理
+      #original_hash: b7ee3c4
+      manage_users: 管理用户
+      #original_hash: 12ab214
+      delegate: 代表
+      #original_hash: 2f4bd74
+      panel: 面板
+      #original_hash: d3a928c
+      results_team: 成绩组
+      #original_hash: 4e7afeb
+      results_admin: 后台
+      #original_hash: f158a5a
+      results_phpmyadmin: phpMyAdmin
+      #original_hash: aee74b8
+      new_post: 新文章
+      #original_hash: 0d67445
+      team_leader: 组长
+      #original_hash: dc1649a
+      sign_out: 退出
+      #original_hash: 753a22b
+      notifications: 通知
+      #original_hash: 15141ea
+      edit_profile: 编辑资料
+      #original_hash: d93d10f
+      api: API
+      #original_hash: 5524aab
+      manage_app: 管理你的应用
+      #original_hash: 0e8b212
+      manage_auth_app: 管理授权的应用
+  users:
+    update_locale:
+      #original_hash: 4cde9bc
+      success: 语言已更新。
+      #original_hash: dcc2f49
+      failure: 无法更新你的资料。
+      #original_hash: c29870c
+      unavailable: 你选的语言不可用。
+    claim_wca_id:
+      #original_hash: f28bf87
+      title: 声明WCA ID
+      #original_hash: 1b44f6d
+      competition: 比赛
+      #original_hash: b396bfa
+      already_have_html: '你已经有WCA ID %{wca_id}了。'
+      #original_hash: 87f1062
+      already_claimed_html: '你已经声明了WCA ID %{wca_id}。如有问题请联系%{delegate}。'
+      #original_hash: 0660b5d
+      info_competed_before: 如果你之前参加过比赛，你可以请求将WCA ID关联到你的账户里。
+      #original_hash: 7d605f8
+      info_never_competed_html: '如果你从来没参加过比赛，那么去参加一场%{comp}吧！当成绩公示之后，会自动为你创建一个WCA ID。'
+      #original_hash: f28bf87
+      submit_value: 声明WCA ID
+    edit_avatar_thumbnail:
+      #original_hash: 79f14eb
+      current: 当前缩略图：
+      #original_hash: b42ba27
+      new: 新缩略图：
+      #original_hash: efc007a
+      save: 保存
+    edit:
+      #original_hash: 9239ee2
+      general: 一般信息
+      #original_hash: 84add5b
+      email: 邮箱
+      #original_hash: 9dfd349
+      preferences: 偏好
+      #original_hash: 8be3c94
+      password: 密码
+      #original_hash: 3fc6dbe
+      member_of: 成员：
+      #original_hash: 57eaf24
+      preferred_events: 首选项目
+      #original_hash: 42619dd
+      preferred_events_desc: 选择你的首选项目可以使你在报名比赛时更快。
+      #original_hash: b402e03
+      please_fix_profile: 要报名一个比赛，你需要修正下列问题：
+      #original_hash: cb77bea
+      unconfirmed_wca_id: 未确认的WCA ID
+      #original_hash: ff4fc02
+      profile: 资料
+      #original_hash: 7b2c7f1
+      approve: 通过
+      #original_hash: 85de4b8
+      unconfirmed_email: '这个帐号的邮件地址 (%{email})未确认。'
+      #original_hash: 8a770cf
+      pending_mail_confirmation: '这个帐号的新邮件地址%{email}正在等待确认。'
+      #original_hash: 0340b0b
+      pending_avatar_confirmation: 这个帐号的新头像正在等待确认。
+      #original_hash: 7b06f03
+      pending_claim_confirmation_html: '这个帐号声明的WCA ID %{wca_id}正在等待%{delegate}确认。'
+      #original_hash: fc7269a
+      pending_claim_mail_confirmation_html: '这个用户已声明WCA ID %{wca_id}。当这个帐号的邮件确认后将通知代表%{delegate}来处理。'
+      #original_hash: 1cde7e6
+      your_thumbnail: 你的帐号缩略图：
+      #original_hash: af18820
+      edit_thumbnail: 点击编辑缩略图
+      #original_hash: cf65c6e
+      manage_pending: 管理待定头像
+      #original_hash: 2d2ae5d
+      have_no_wca_id_html: '你还没有WCA ID。如果你之前参加过比赛，点击%{here}将你的WCA ID关联到你的帐号。'
+      #original_hash: 29e25b5
+      have_wca_id_html: '你的WCA ID是%{link_id}。'
+      cannot_edit:
+        #original_hash: b98c0cf
+        msg: >-
+          因为%{reason}你无法变更你的姓名、生日、性别以及地区。如有需要请联系你的<a
+          href='%{delegate_url}'>代表</a>。
+        reason:
+          #original_hash: 370ff12
+          assigned: 你有WCA ID了
+          #original_hash: 1c4670f
+          registered: 你报名了一个比赛
+      #original_hash: efc007a
+      save: 保存
+      #original_hash: 141d1d7
+      guidelines: 指南
+      avatar_guidelines:
+        #original_hash: 255f28c
+        '1': 头像必须是真人照片。
+        #original_hash: 9126b0c
+        '2': 上面的人必须是你自己。
+        #original_hash: de9b742
+        '3': 如果头像上有很多人，那么哪个是你必须很清楚。
+        #original_hash: 4083c00
+        '4': 你的头部要可见，不必全脸。
+        #original_hash: ebbbf8a
+        '5': 头像不能包含文字，除了正常的背景文字。
+        #original_hash: cc5f23a
+        '6': 头像必须以正常方向提交。
+    errors:
+      #original_hash: 094b763
+      not_found: 未找到
+      #original_hash: 49a6fe4
+      already_assigned: 已经关联到另一个帐号了
+      #original_hash: 4bef62b
+      dob_incorrect_html: >-
+        和我们的数据库不一致。如果你确认你提交的是正确的格式（YYYY-MM-DD)，请发送邮件到<a
+        href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>，说明这个错误并附带一张姓名和生日清楚的证件照片。
+      #original_hash: 0fbcefd
+      unique: 必须唯一
+      #original_hash: 26f70ed
+      dob_past: 必须是过去的时间
+      #original_hash: f599dc5
+      must_be_senior: 必须是一个高级代表
+      #original_hash: 2e582eb
+      must_not_be_present: 不能是当前时间
+      #original_hash: b2c4ecc
+      senior_has_delegate: 有下属代表时，无法撤消高级代表
+      #original_hash: 48653a9
+      already_have_id: '因为你有WCA ID %{wca_id}了，所以无法声明WCA ID'
+      #original_hash: eeb76a7
+      wca_id_no_birthdate_html: >-
+        这个WCA ID没有生日记录。请联系<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>，发送一个姓名和生日清楚的证件照片。
+      #original_hash: 49083d8
+      board_member_cannot_resign: 你不能以董事会成员身份辞职！找其他人来炒你鱿鱼。
+      #original_hash: d02c03b
+      avatar_requires_wca_id: 需要关联一个WCA ID
+    successes:
+      messages:
+        #original_hash: 31bd401
+        account_updated: 帐号已更新
+        #original_hash: 49e5851
+        wca_id_claimed: '成功声明WCA ID %{wca_id}。检查你的邮件并等待%{user}审核。'
+        #original_hash: dc89669
+        account_updated_confirm: '帐号已更新，已发送邮件到%{email}。'
+    select_nearby_delegate:
+      #original_hash: 2b11120
+      select_delegate_html: >-
+        我们需要<a href='%{link_delegate}' target='_blank'>WCA代表</a>确认你的身份以关联你的WCA
+        ID。请输入你的生日，并选择一个你认为对你最了解的代表。
+      #original_hash: d69cf94
+      already_assigned_html: >-
+        WCA ID %{link_id}已经关联到另一个帐号了。如果这有误，请联系你当地的 <a href='%{link_delegate}'
+        target='_blank'>WCA代表</a>。
+      #original_hash: 3391b0b
+      missing_dob_html: 'WCA ID %{link_id}还没有生日记录。请联系%{link_result_team}。'
+      #original_hash: 92aa857
+      unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
+  registrations:
+    #original_hash: c5497bc
+    events: 项目
+    errors:
+      #original_hash: 44ab952
+      need_name: 姓名必填
+      #original_hash: 6f64c57
+      need_gender: 性别必填
+      #original_hash: ebf1ecb
+      need_dob: 生日必填
+      #original_hash: d84a54f
+      need_country: 地区必填
+      #original_hash: cec28a0
+      comp_not_found: 比赛未找到
+      #original_hash: cb763b8
+      registration_closed: 报名已结束
+      #original_hash: e0bb243
+      cannot_be_deleted_and_accepted: 报名不能同时被删除和通过。
+      #original_hash: bf9a828
+      can_register: 用户必须能报名比赛
+      #original_hash: a38d024
+      must_register: 至少报名一个项目
+    registration_info_people:
+      #original_hash: bdf1f11
+      newcomer:
+        zero: 新人
+        other: 新人
+      #original_hash: bc010e3
+      returner:
+        zero: 老手
+        other: 老手
+      #original_hash: b7da17a
+      person:
+        zero: 选手
+        other: 选手
+    flash:
+      #original_hash: da7ec53
+      not_using_wca: 这个比赛没有使用WCA的报名系统
+      #original_hash: d528030
+      accepted_and_mailed:
+        zero: 报名已审核！邮件通知已发送！
+        other: 报名已审核！邮件通知已发送！
+      #original_hash: 42ea8de
+      rejected_and_mailed:
+        zero: 报名已移至候选列表
+        other: 报名已移至候选列表
+      #original_hash: a360b31
+      deleted_and_mailed:
+        zero: 报名已删除
+        other: 报名已删除
+      #original_hash: c3aa289
+      single_deletion_and_mail: '报名已删除并发邮件给%{mail}了'
+      #original_hash: d8f067f
+      cannot_delete: 你不能删除你的报名。
+      #original_hash: 82b3899
+      updated: 报名已更新
+      #original_hash: 856484a
+      failed: 无法更新报名
+      #original_hash: 016b4ae
+      deleted: '成功删除你报名的%{comp}'
+      #original_hash: 648424f
+      registered: 删除成功！
+    edit_registration:
+      #original_hash: 2d15eae
+      title: '%{person} for %{comp}'
+    list:
+      #original_hash: 8b7631c
+      title: '%{comp}的报名列表'
+      #original_hash: 8e68b3e
+      country: 国家/地区
+      #original_hash: 5301648
+      edit: 编辑
+      #original_hash: 1feee0e
+      export_csv: 导出到CSV
+      #original_hash: 84add5b
+      email: 发邮件
+      #original_hash: 7b2c7f1
+      approve: 通过
+      #original_hash: 2b03b59
+      reject: 拒绝
+      #original_hash: f6fdbe4
+      delete: 删除
+      #original_hash: 92d40dc
+      waiting_list: 候选列表
+      #original_hash: 06f7d1a
+      approved_registrations: 已通过的报名
+      #original_hash: bff04e8
+      deleted_registrations: 已删除的报名
+      #original_hash: a844fcf
+      registered: 所有
+      #original_hash: b25928c
+      total: 总计
+    new_registration:
+      #original_hash: 8b9f726
+      title: '报名%{comp}'
+    #original_hash: 7cae988
+    registered_with_account_html: '这个选手注册了账号报名。你可以在%{here}编辑他们的个人信息。'
+    #original_hash: ada2e9e
+    sign_in: 登录
+    #original_hash: 5d45a00
+    profile: 资料
+    #original_hash: c0063c3
+    register: 报名！
+    #original_hash: a9af643
+    update: 更新报名
+    #original_hash: f6fdbe4
+    delete: 删除
+    #original_hash: b72119a
+    delete_confirm: 你确定要删除你的报名吗？
+    #original_hash: cfc4865
+    delete_registration: 删除报名。
+    #original_hash: e9ddc6e
+    will_open_html: '报名将在<strong>%{days}</strong>天后的%{time}开放。'
+    #original_hash: 34eb009
+    will_close_html: '报名将在<strong>%{days}</strong>天后的%{time}结束。'
+    #original_hash: dc8a520
+    closed_html: '报名在<strong>%{days}</strong>天前的%{time}结束了。'
+    #original_hash: 2e7024d
+    please_sign_in_past_html: '%{sign_in}来查看你的报名。如果你没有WCA账号，可以在%{here}创建，但是现在已经太晚没法报名这个比赛了。'
+    #original_hash: 7753b2e
+    please_sign_in_not_yet_open_html: '%{sign_in}来查看你的报名。如果你没有WCA账号，可以在%{here}创建，只是现在报名还没开始。'
+    #original_hash: e1301c4
+    please_sign_in_html: '%{sign_in}来报名%{comp}。如果你没有WCA账号，可以在%{here}创建。'
+    #original_hash: 89b4e7f
+    greeting: '%{name}，你好！'
+    #original_hash: fb34a17
+    please_fix_profile_html: '要报名%{comp}，你得先解决你%{profile}的问题：'
+    #original_hash: 855ca9c
+    can_register: '你可以在下面报名%{comp}。'
+    #original_hash: ea2b586
+    have_registered: '你已经报名了%{comp}。可以在下面查看你的报名信息。'
+    #original_hash: 4d966e0
+    entry_fee: 报名费是
+    #original_hash: 3c9141f
+    contact_organizer: 如果你想变更报名信息请联系主办方。
+    #original_hash: 06d52b5
+    waiting_list: '当前候选列表有%{n}，你是第%{i}个。'
+    #original_hash: 58b1a3c
+    accepted: 你的报名已通过！
+    #original_hash: 4cf01a2
+    preferred_events_prompt_html: '你可以设置你的偏好项目来使以后报名更快：%{link}。'
+  competitions:
+    messages:
+      #original_hash: 7b80062
+      not_visible: 比赛尚未公示。
+      #original_hash: c1d4926
+      name_too_long: 比赛名超过32个字符了。如果你改短一点会更好。
+      #original_hash: 1a20fae
+      must_have_events: 请在确认比赛前至少添加一个项目。
+      #original_hash: e390250
+      create_success: 成功创建新比赛！
+      #original_hash: afe3a23
+      results_preview_alert: 你在浏览的是没公示的成绩。
+      #original_hash: 07de612
+      upload_results: 比赛已经结束了，我们会尽快公示成绩。
+      #original_hash: a0168ee
+      in_progress: '比赛正在进行中，在%{date}之后来看成绩吧！'
+      #original_hash: 3322400
+      tooltip_registered: 你已经报名了。
+      #original_hash: f2d092f
+      tooltip_waiting_list: 你当前在候选列表中。
+      #original_hash: 9ecd976
+      confirmed_visible: 这个比赛已经确认并公示了
+      #original_hash: fa186a9
+      confirmed_not_visible: 这个比赛已确认但未尚未公示
+      #original_hash: a66bbe3
+      not_confirmed_visible: 这个比赛尚未确认但是已公示
+      #original_hash: 0f44e45
+      not_confirmed_not_visible: 这个比赛尚未确认和公示
+    my_competitions:
+      #original_hash: 5c6d3ea
+      title: 我的比赛
+      #original_hash: 6e79aaf
+      disclaimer: 只有使用WCA报名系统的比赛会列在此处。
+      #original_hash: 94a2fc8
+      past_competitions: 以前的比赛
+    competition_info:
+      #original_hash: eb9a4bc
+      date: 日期
+      #original_hash: 4271627
+      city: 城市
+      #original_hash: 67cd406
+      venue: 地点
+      #original_hash: d70f93d
+      address: 地址
+      #original_hash: dc3decb
+      details: 详情
+      #original_hash: 2e8a57c
+      website: 网站
+      #original_hash: debd172
+      organizer: 主办方
+      #original_hash: 6afa61e
+      delegate:
+        zero: WCA代表
+        other: WCA代表
+      #original_hash: b37456c
+      contact: 联系方式
+      #original_hash: a428739
+      entry_fee: 报名费
+      #original_hash: 0eb5ed5
+      information: 补充信息
+    index:
+      #original_hash: db98a68
+      title: 比赛
+      #original_hash: 6a72085
+      all_events: 所有
+      #original_hash: 6d76b81
+      all_years: 所有
+      #original_hash: 719ea39
+      clear: 清除
+      #original_hash: a1fffaa
+      list: 列表
+      #original_hash: ab478f3
+      map: 地图
+      #original_hash: 0f21717
+      region: 地区
+      #original_hash: bce0641
+      search: 搜索
+      #original_hash: a725020
+      state: 时间
+      #original_hash: 4e9f7a3
+      present: 近期
+      #original_hash: 76eec76
+      recent: 过去
+      #original_hash: 405c12f
+      past: 以前
+      #original_hash: 52c30f8
+      past_from: '%{year}年'
+      #original_hash: 7cff459
+      past_all: 以前的所有比赛
+      titles:
+        #original_hash: 69447c9
+        in_progress: 进行中的比赛
+        #original_hash: 9e66032
+        past: '从%{year}年开始的比赛'
+        #original_hash: cbe8a54
+        recent: '过去%{count}天的比赛'
+        #original_hash: 914742f
+        upcoming: 近期比赛
+      #original_hash: 6684214
+      no_access: 你没有权限访问这个页面！
+      tooltips:
+        hourglass:
+          #original_hash: b5183e1
+          ended: '%{days}之前结束了'
+          #original_hash: 1dccb27
+          in_progress: 进行中！
+          #original_hash: 1157462
+          posted: 成绩已公示！
+          #original_hash: 89bcc37
+          starts_in: '%{days}后开始'
+        #original_hash: a418217
+        search: 名字、城市、地点、国家或者月份
+        #original_hash: 3bc8082
+        recent: '过去%{count}天'
+      #original_hash: 8b09d74
+      no_comp_found: 没有比赛。
+      #original_hash: 7008166
+      no_comp_match: '我们没找到任何有%{events}的比赛。试试减少项目来搜索。'
+    my_competitions_table:
+      #original_hash: 5301648
+      edit: 编辑
+      #original_hash: dddbe64
+      registrations: 报名
+      #original_hash: 4f98e6d
+      results_up: 成绩已公示
+      #original_hash: ee45c30
+      report: 报告
+      #original_hash: 7fc0b5f
+      no_upcoming_competitions_html: '你当前没有即将到来的比赛！看看%{link}吧。'
+      #original_hash: 9104a03
+      no_past_competitions: 你没有以前的比赛。
+    competition_form:
+      #original_hash: f957dcb
+      supports_md_html: >-
+        支持<a href='https://daringfireball.net/projects/markdown/basics'
+        target='_blank'>Markdown</a>
+      #original_hash: 9d9126e
+      venue_html: >-
+        比赛举办的地点。%{md}。比如[Cité des Sciences et de
+        l'Industrie](http://www.cite-sciences.fr)
+      #original_hash: 2651d1a
+      venue_details_html: '详细地点（例：教学楼一楼）。%{md}'
+      #original_hash: b727e58
+      contact_html: >-
+        可选的联系信息。如果你不填写此项，那么就显示主办方的邮件。%{md}。例：[Text to
+        display](mailto:some@email.com)
+      #original_hash: c5497bc
+      events: 项目
+      #original_hash: ae66391
+      unoff_events: 非官方项目
+      #original_hash: 815d5c3
+      locked_edit_html: '比赛已公示不能编辑。如果有需要，联系%{board}。'
+      #original_hash: ce33e21
+      confirmed_not_visible_html: '比赛已确认，请等待%{board}公示。'
+      #original_hash: e94cba8
+      is_visible: 比赛已公示，任何更改都会对公众展示。
+      #original_hash: 34862bb
+      awaiting_confirmation_html: '填写完整表单，当你准备好让%{board}审核比赛时点击确认。'
+      #original_hash: 7586b02
+      submit_modify_value: 修改项目
+      #original_hash: 8966fd0
+      submit_create_value: 创建比赛
+      #original_hash: 40b0dfd
+      submit_update_value: 更新比赛
+      #original_hash: 04a2122
+      submit_confirm_value: 确认
+      #original_hash: f6fdbe4
+      submit_delete_value: 删除
+      #original_hash: 1ca19b1
+      submit_confirm: 确保都填写好了吗？确认后，你将无法修改任何信息。提交后请检查邮件以确认董事会知晓此事。
+      #original_hash: 4c7deb7
+      submit_delete: 确认要删除比赛吗？这个操作无法撤消。
+      #original_hash: 8ebebca
+      coordinates: 坐标
+    errors:
+      #original_hash: 83795c3
+      invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、符号（-&.:''）和空格'
+      #original_hash: 8e8f765
+      cannot_manage: 无法管理比赛。
+      #original_hash: 0acc454
+      cannot_delete_public: 无法删除公示的比赛。
+      #original_hash: 3935fd6
+      cannot_delete_confirmed: 无法删除已确认的比赛。
+      #original_hash: 191df37
+      must_contain_event: 必须有至少一个项目
+      #original_hash: 112490b
+      must_contain_delegate: 必须有至少一个代表
+      #original_hash: 0b2b56b
+      not_all_delegates: 不是所有都是代表
+      #original_hash: 43a23c2
+      registration_close_after_open: 报名结束时间必须晚于报名开始时间
+      #original_hash: 43a83a9
+      end_date_before_start: 结束日期不能遭遇开始日期。
+      #original_hash: be3933b
+      span_too_many_days: '比赛不能持续超过%{max_days}天。'
+    #original_hash: f42a238
+    unscheduled: 不定期
+    new:
+      #original_hash: 1208df7
+      create_competition: 创建比赛
+      #original_hash: c02a415
+      note_clone: 请访问比赛页并点击“复制”来复制一个比赛。
+    update_events:
+      #original_hash: 00204fa
+      update_success: 比赛项目更新成功。
+    update:
+      #original_hash: 5fb2f57
+      save_success: 保存比赛成功。
+      #original_hash: 9d1649e
+      confirm_success: 确认比赛成功。查看你的邮箱并等待董事会公示。
+      #original_hash: 28567f0
+      delete_success: '删除比赛%{id}成功。'
+    time_until_competition:
+      #original_hash: b0f330f
+      competition_in: '%{n_days}天内的比赛。'
+      #original_hash: e6e096a
+      competition_was: '比赛是%{n_days}天前的。'
+    nearby_competitions:
+      #original_hash: 1b44f6d
+      comp: 比赛
+      #original_hash: e3528ec
+      label: '临近的比赛（%{days}天%{kms}千米内）'
+      #original_hash: 3446062
+      label_admin: '过去%{days}天'
+      #original_hash: 14276ae
+      nearby_admin: '%{comps} %{comp}在%{kms}千米%{days}天内。'
+      #original_hash: feefb46
+      no_comp_nearby: 没有临近比赛！
+      #original_hash: 7e76950
+      no_date_yet: 你还没设定当前比赛日期。
+      #original_hash: 82a95d2
+      no_location_yet: 你还没设定当前比赛地址。
+      #original_hash: 9eb8f46
+      within: '%{days}天内'
+      #original_hash: d97d1ee
+      show: 是否公示
+      #original_hash: 709a232
+      name: 名字
+      #original_hash: adc24b7
+      delegates: 代表
+      #original_hash: eb9a4bc
+      date: 日期
+      #original_hash: d219c68
+      location: 地点
+      #original_hash: 4232080
+      distance: 距离
+      #original_hash: 51de2b8
+      before: 之前
+      #original_hash: 405906c
+      after: 之后
+    #original_hash: 06b01c4
+    announcements: 公告
+    #original_hash: 5b9523f
+    upload_results: 上传成绩
+    #original_hash: 47dfd90
+    post_announcement: 发布比赛公告
+    show:
+      #original_hash: b0fe391
+      general_info: 基本信息
+    nav:
+      menu:
+        #original_hash: 612e12d
+        results: 成绩
+        #original_hash: 02ae2bd
+        podiums: 领奖台
+        #original_hash: 6a72085
+        all: 所有
+        #original_hash: aaefdb6
+        by_person: 按选手
+        #original_hash: 4b631f6
+        info: 信息
+        #original_hash: 5301648
+        edit: 编辑
+        #original_hash: d8cdb57
+        clone: 复制
+        #original_hash: 2b92094
+        orga_view: 主办方视角
+        #original_hash: c6171f8
+        event_view: 管理项目
+        #original_hash: 76bfdcf
+        admin_view: 管理员视角
+        #original_hash: a857eb4
+        tabs: 管理标签
+        #original_hash: 4c9f914
+        delegate_report: 报告
+        #original_hash: b233e77
+        registration: 报名
+        #original_hash: d672995
+        register: 报名
+        #original_hash: 855bd26
+        competitors: 选手
+    results_table:
+      #original_hash: 3e9a6b5
+      wca_profile: WCA资料
+      #original_hash: ad8919a
+      event: 项目
+      #original_hash: ec7b598
+      round: 轮次
+      #original_hash: 709a232
+      name: 姓名
+  notifications:
+    #original_hash: 10bcdbd
+    connect_wca_id: 关联WCA ID到账号！
+  persons:
+    index:
+      #original_hash: 5934b4c
+      name_or_wca_id: 姓名或者WCA ID
+      #original_hash: 709a232
+      name: 姓名
+      #original_hash: d523ebb
+      country: 国家/地区
+      #original_hash: 02ae2bd
+      podiums: 领奖台
+      #original_hash: 56656a0
+      no_persons_found: 给定条件找不到选手。
+  posts:
+    #original_hash: 2a7da42
+    confirm_delete_post: 确认要删除这个文章吗？该操作无法撤消。
+  faq:
+    #original_hash: d790b40
+    title: 常见问题
+    #original_hash: 3451241
+    contact_html: '如果这些问答一点帮助也没有，请%{contact_us}！'
+    #original_hash: 6cf2723
+    contact_us: 联系我们
+    #original_hash: 9100be3
+    search_for_competition: 在这里搜索比赛：
+    #original_hash: cba12bc
+    already_logged_in: 你已经登录了。
+    #original_hash: 5b7fa52
+    create_an_account: '可以在%{here}创建账号。'
+    #original_hash: f8c910c
+    claim_your_wca_id: '可以在%{here}声明你的WCA ID。'
+    #original_hash: 4dfb4c7
+    create_an_account_and_claim: '在%{here}创建账号并登录以声明WCA ID。'
+    answers:
+      '1':
+        #original_hash: f79b522
+        title: 如何获得WCA ID？
+        content:
+          #original_hash: b645fe1
+          '1': >-
+            如果你从来没参加过比赛，那么去参加一场<a
+            href='/competitions'>比赛</a>！当成绩公示之后，会自动为你创建一个WCA ID。
+      '2':
+        #original_hash: eb948e7
+        title: 如何找到WCA比赛？
+        content:
+          #original_hash: d195cec
+          '1': 查看<a href='/competitions'>比赛列表</a>
+      '3':
+        #original_hash: af6ad12
+        title: 如何报名比赛？如果报名时有问题我应该联系谁？
+        content:
+          #original_hash: 7b91db1
+          '1': '许多比赛使用WCA的报名系统，也有使用他们自己的系统的。你可以联系主办方咨询详细信息。%{comp_search_form}'
+      '4':
+        #original_hash: 9a5ae28
+        title: 参加WCA比赛有什么要求？参加之前我需要知晓哪些？
+        content:
+          #original_hash: 40aa9c0
+          '1': >-
+            通常来讲，参加WCA比赛并没有太多要求，所有选手都需要知悉<a
+            href='https://www.worldcubeassociation.org/regulations/'>WCA比赛规则</a>。此外，我们建议你看看<a
+            target='_blank'
+            href='http://www.cubingusa.com/ctutorial.php'>美国粗饼的选手教程</a>，上面有不少对新手有用的帮助。
+      '5':
+        #original_hash: 3b657aa
+        title: 我的家乡如何能有一场WCA比赛？
+        content:
+          #original_hash: 3d4eb1c
+          '1': 如果你对组织比赛感兴趣，请至少参加一两场比赛来学习经验。
+          #original_hash: be305b8
+          '2': >-
+            WCA比赛必须遵守<a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>WCA规则</a>。主办团队可以不必牢记于心，但是对基础规则的深入了解有助于组织比赛。
+          #original_hash: dbd72c2
+          '3': >-
+            主办团队必须联系一个就近的<a target='_blank'
+            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>来监督以保证比赛是WCA官方认证的。WCA代表会帮助主办团队如何组织一场成功的比赛。
+          #original_hash: 809f53a
+          '4': >-
+            可以参考<a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>这个教程</a>。（任何WCA规则和这个补充教程有冲突的地方，以规则为准。）
+      '6':
+        #original_hash: 8005a61
+        title: WCA帐号是做什么的？它和WCA资料有什么区别？
+        content:
+          #original_hash: 57a3767
+          '1': 当你的第一场比赛成绩公示时，你将会获得一个WCA ID。
+          #original_hash: c5ad7a3
+          '2': WCA帐号可以让你证实你的身份，并上传照片到你的WCA主页以及报名参加比赛。可以防止其他人冒充你。
+          #original_hash: 9ff083a
+          '3': '%{current_user_status}'
+      '7':
+        #original_hash: d7ee9bd
+        title: 如何修改我的WCA主页照片？
+        content:
+          #original_hash: e619524
+          '1': >-
+            首先，你需要<a
+            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>创建一个WCA帐号并关联你的WCA
+            ID</a>。
+          #original_hash: 56a8f26
+          '2': '其次，<a href=''%{profile_edit_path}''>点击这里</a>编辑你的照片。'
+      '8':
+        #original_hash: 1d61217
+        title: 如何关联我的WCA ID？
+        content:
+          #original_hash: 07bb6ec
+          '1': '%{current_user_claim}'
+      results:
+        #original_hash: 9aae576
+        title: WCA比赛的成绩什么时候公示到WCA官网？
+        content:
+          #original_hash: 890d879
+          '1': >-
+            比赛结束后，WCA代表将对成绩条和选手信息二次检查以减少可能的错误。然后他们会发送成绩到负责公示成绩和维护WCA数据库的WCA成绩组（WRT)。成绩组会尽快公示。
+          #original_hash: b6a68ab
+          '2': 公示时间取决于比赛规模和代表的个人日程，快则一天慢则一周。请耐心等待。
+          #original_hash: bf8adbe
+          '3': >-
+            此外，如果你已经关联了WCA ID（看下面），你可以在<a
+            href='%{preferences_edit_path}'>这里</a>启用成绩公示的邮件通知

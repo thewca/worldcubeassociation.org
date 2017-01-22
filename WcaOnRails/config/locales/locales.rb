@@ -17,5 +17,9 @@ module Locales
       "flag_id": "br",
       "name": "Português Brasileiro",
     },
+    "zh-CN": {
+      "flag_id": "cn",
+      "name": "简体中文",
+    },
   }.freeze
 end
