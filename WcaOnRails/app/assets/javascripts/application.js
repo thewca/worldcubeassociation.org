@@ -28,6 +28,7 @@
 //= require moment/fr.js
 //= require moment/pl.js
 //= require moment/pt-br.js
+//= require moment/zh-cn.js
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
