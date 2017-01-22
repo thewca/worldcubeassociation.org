@@ -849,25 +849,25 @@ en:
              <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
     structure:
       title: "Structure"
-      board: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
+      board_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
       committees: "The following committees are responsible for the operational activities of the WCA:"
       wdc:
-        name: "<strong>WCA Disciplinary Committee (WDC)</strong>"
+        name_html: "<strong>WCA Disciplinary Committee (WDC)</strong>"
         description: "This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions."
       wrc:
-        name: "<strong>WCA Regulations Committee (WRC)</strong>"
+        name_html: "<strong>WCA Regulations Committee (WRC)</strong>"
         description: "This committee is responsible for managing the WCA Regulations."
       results:
-        name: "<strong>WCA Results team</strong>"
+        name_html: "<strong>WCA Results team</strong>"
         description: "This team is responsible for managing all competition results."
       software:
-        name: "<strong>WCA Software team</strong>"
+        name_html: "<strong>WCA Software team</strong>"
         description: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
-      delegates: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see %{link}). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
-      members: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
+      delegates_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong> (see %{link}). Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
+      members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
   delegates_page:
     title: "WCA Delegates"
-    description: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
+    description_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
     acknowledges: "The WCA acknowledges the following members as delegates for official WCA competitions:"
     table:
       name: "Name"
@@ -878,11 +878,11 @@ en:
     content: "The WCA acknowledges the following national organizations:"
   contact:
     title: "Contact Information"
-    info_alert: "Before contacting any of the teams on this page, please take a look at our %{link}!"
-    questions_and_comments: "For website questions, comments, and suggestions, use this <a href='/contact/website'>contact form</a>. For inquiries concerning a specific area or competition, please contact your local %{link}."
-    committees_and_teams: "<u>Committees and Teams</u>"
+    info_alert_html: "Before contacting any of the teams on this page, please take a look at our %{link}!"
+    questions_and_comments_html: "For website questions, comments, and suggestions, use this <a href='/contact/website'>contact form</a>. For inquiries concerning a specific area or competition, please contact your local %{link}."
+    committees_and_teams_html: "<u>Committees and Teams</u>"
     board:
-      name: "<strong>WCA Board</strong>"
+      name_html: "<strong>WCA Board</strong>"
       info: "(WCA organization, delegate reports, competition approval, general inquiries)"
     wdc:
       info: "(independent advice to WCA board, independent investigations, counselor for important personal matters)"
@@ -908,38 +908,38 @@ en:
   For all other persons and purposes using the WCA logo requires an approval by <a href="mailto:board@worldcubeassociation.org">WCA board</a>.'
   workbook_assistant:
     title: "WCA Workbook Assistant"
-    download: "Download WCA Workbook Assistant v2.3"
+    download: "Download WCA Workbook Assistant"
     last_update: "Last update"
     version_history: "version history"
     header: "How to process results and scrambles before submitting them to the WCA"
     step1:
       title: "Step 1: Open the workbook with the results"
-      content: "Open the workbook using the <em>Open...</em> button or by dragging the workbook file and dropping it on the application window."
+      content_html: "Open the workbook using the <em>Open...</em> button or by dragging the workbook file and dropping it on the application window."
     step2:
       title: "Step 2: Add the TNoodle scrambles"
-      content: "Add the TNoodle scrambles using the <em>Add...</em> button or by dragging the TNoodle file and dropping it on the application window. Make sure you use either the .zip file  or the .json file generated by TNoodle."
-      content2: "You can add multiple scramble files in case the scrambles where generated in parts or extra scrambles had to be generated during the competition."
+      content_html: "Add the TNoodle scrambles using the <em>Add...</em> button or by dragging the TNoodle file and dropping it on the application window. Make sure you use either the .zip file  or the .json file generated by TNoodle."
+      content2_html: "You can add multiple scramble files in case the scrambles where generated in parts or extra scrambles had to be generated during the competition."
     step3:
       title: "Step 3: Match the scrambles with the results"
-      content: "The WCA Workbook Assistant automatically links the scrambles with the rounds that were held. In some cases, like when multiple scramble files were generated, the selection needs to be done manually because there are several possible options."
-      content2: "Manually selecting scrambles can be done by double clicking the <em>Scrambles</em> cell in the sheet overview panel."
-      content3: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round where generated as separate rounds in TNoodle, you can used the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
-      content4: "In this example, an extra set scrambles was generated to have two groups for the first round of skewb instead of one group."
-      content5: "The scrambles for the additional group can be dragged and dropped on the round that was generated originally. This moves the two groups together in one round."
+      content_html: "The WCA Workbook Assistant automatically links the scrambles with the rounds that were held. In some cases, like when multiple scramble files were generated, the selection needs to be done manually because there are several possible options."
+      content2_html: "Manually selecting scrambles can be done by double clicking the <em>Scrambles</em> cell in the sheet overview panel."
+      content3_html: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round where generated as separate rounds in TNoodle, you can used the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
+      content4_html: "In this example, an extra set scrambles was generated to have two groups for the first round of skewb instead of one group."
+      content5_html: "The scrambles for the additional group can be dragged and dropped on the round that was generated originally. This moves the two groups together in one round."
     step4:
       title: "Step 4: Fix any errors reported by the application"
-      content: "The results are checked for data entry mistakes. Rounds that have errors will be marked with a red icon in the sheet overview panel."
-      content2: "When selecting a sheet with errors in the sheet overview panel, the application will list the details in the validation errors panel on the bottom left."
-      content3: "Mistakes can be fixed by opening the workbook in a spreadsheet application and editing and saving it from there. The updated workbook can then be loaded again in the WCA Workbook Assistant by pressing the <em>Refresh</em> button. This will only reload the results but will leave all the other changes you made intact, like the scrambles that were added."
+      content_html: "The results are checked for data entry mistakes. Rounds that have errors will be marked with a red icon in the sheet overview panel."
+      content2_html: "When selecting a sheet with errors in the sheet overview panel, the application will list the details in the validation errors panel on the bottom left."
+      content3_html: "Mistakes can be fixed by opening the workbook in a spreadsheet application and editing and saving it from there. The updated workbook can then be loaded again in the WCA Workbook Assistant by pressing the <em>Refresh</em> button. This will only reload the results but will leave all the other changes you made intact, like the scrambles that were added."
     step5:
       title: "Step 5: Select the competition ID"
-      content: "Select the correct competition ID by clicking the <em>Select...</em> button next to the <em>Competition ID</em> field."
-      content2: "A dialog will show up with a list of competitions to choose from."
-      content3: "You can filter the list by typing a part of the name of the competition or the WCA Delegate."
-      content4: "To start off with, only competitions that took place less than one week ago or that will take place less than one week in the future will be shown. If you need to select a competition outside of this time window, deselect <em>Only show current competitions</em>."
+      content_html: "Select the correct competition ID by clicking the <em>Select...</em> button next to the <em>Competition ID</em> field."
+      content2_html: "A dialog will show up with a list of competitions to choose from."
+      content3_html: "You can filter the list by typing a part of the name of the competition or the WCA Delegate."
+      content4_html: "To start off with, only competitions that took place less than one week ago or that will take place less than one week in the future will be shown. If you need to select a competition outside of this time window, deselect <em>Only show current competitions</em>."
     step6:
       title: "Step 6: Export the results data to JSON"
-      content: "Save the results data to a JSON file using the <em>Export results JSON...</em> button on the bottom right."
+      content_html: "Save the results data to a JSON file using the <em>Export results JSON...</em> button on the bottom right."
     step7:
       title: "Step 7: Send the results JSON to the WCA"
-      content: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
+      content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'

@@ -4,41 +4,41 @@
   <h1><%= yield(:title) %></h1>
 
   <%= alert :info do %>
-    <%= raw t 'contact.info_alert', link: link_to(t('layouts.navigation.faq'), faq_path) %>
+    <%= t 'contact.info_alert_html', link: link_to(t('layouts.navigation.faq'), faq_path) %>
   <% end %>
 
   <p>
-    <%= raw t 'contact.questions_and_comments', link: link_to("WCA Delegate", delegates_path) %>
+    <%= t 'contact.questions_and_comments_html', link: link_to(t('competitions.competition_info.delegate', count: 1), delegates_path) %>
   </p>
 
-  <h2><%= raw t('contact.committees_and_teams') %></h2>
+  <h2><%= t('contact.committees_and_teams_html') %></h2>
 
   <p>
-    <%= raw t('contact.board.name') %> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
+    <%= t('contact.board.name_html') %> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
     <%= t('contact.board.info') %><br />
     <%= @board_members.order(:name).map(&:name).join(", ") %>
   </p>
 
   <p>
-    <%= raw t('about.structure.wdc.name') %> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
+    <%= t('about.structure.wdc.name_html') %> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
     <%= t('contact.wdc.info') %><br />
     <%= format_team_members('wdc') %>
   </p>
 
   <p>
-    <%= raw t('about.structure.wrc.name') %> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
+    <%= t('about.structure.wrc.name_html') %> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
     <%= t('contact.wrc.info') %><br />
     <%= format_team_members('wrc') %>
   </p>
 
   <p>
-    <%= raw t('about.structure.results.name') %> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
+    <%= t('about.structure.results.name_html') %> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
     <%= t('contact.results.info') %><br />
     <%= format_team_members('results') %>
   </p>
 
   <p>
-    <%= raw t('about.structure.software.name') %> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
+    <%= t('about.structure.software.name_html') %> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
     <%= t('contact.software.info') %><br />
     <%= format_team_members('software') %>
   </p>

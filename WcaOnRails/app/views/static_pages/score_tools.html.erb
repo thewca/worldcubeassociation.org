@@ -1,10 +1,8 @@
 <% provide(:title, t('score_tools.title')) %>
 
-<%
-tools_variables = {
+<% tools_variables = {
   workbook_link: link_to("WCA Workbook Assistant", wca_workbook_assistant_path)
-}
-%>
+} %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>

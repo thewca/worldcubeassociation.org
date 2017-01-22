@@ -11,62 +11,62 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
   <div class="text-center">
-    <a href="/files/wca-workbook-assistant-2.3.jar"><%= t('workbook_assistant.download') %></a><br/><br/>
-    <span><%= t('workbook_assistant.last_update') %>: April 7, 2015</span><br/>
+    <a href="/files/wca-workbook-assistant-2.3.jar"><%= t('workbook_assistant.download') %> v2.3</a><br/><br/>
+    <span><%= t('workbook_assistant.last_update') %>: <%=I18n.l Date.parse('2015-04-07'), format: :long %></span><br/>
     (<%= link_to t('workbook_assistant.version_history'), wca_workbook_assistant_versions_path %>)
   </div>
   <br/>
   <h2><%= t('workbook_assistant.header') %></h2>
   <br/>
   <h3><%= t('workbook_assistant.step1.title') %></h3>
-  <p><%= raw t('workbook_assistant.step1.content') %></p>
+  <p><%= t('workbook_assistant.step1.content_html') %></p>
   <%= image_tag "WA/open-workbook.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step2.title') %></h3>
-  <p><%= raw t('workbook_assistant.step2.content') %></p>
+  <p><%= t('workbook_assistant.step2.content_html') %></p>
   <%= image_tag "WA/add-scrambles.gif", class: "wa-howto-image" %>
-  <p><%= t('workbook_assistant.step2.content2') %></p>
+  <p><%= t('workbook_assistant.step2.content2_html') %></p>
   <%= image_tag "WA/scrambles-added.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step3.title') %></h3>
 
-  <p><%= raw t('workbook_assistant.step3.content') %></p>
-  <p><%= raw t('workbook_assistant.step3.content2') %></p>
+  <p><%= t('workbook_assistant.step3.content_html') %></p>
+  <p><%= t('workbook_assistant.step3.content2_html') %></p>
   <%= image_tag "WA/match-scrambles.gif", class: "wa-howto-image" %>
-  <p><%= raw t('workbook_assistant.step3.content3') %></p>
+  <p><%= t('workbook_assistant.step3.content3_html') %></p>
   <%= image_tag "WA/edit-groups.gif", class: "wa-howto-image" %>
-  <%= raw t('workbook_assistant.step3.content4') %>
+  <%= t('workbook_assistant.step3.content4_html') %>
   <%= image_tag "WA/extra-group.gif", class: "wa-howto-image" %>
-  <%= raw t('workbook_assistant.step3.content5') %>
+  <%= t('workbook_assistant.step3.content5_html') %>
   <%= image_tag "WA/group-moved.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step4.title') %></h3>
-  <p><%= raw t('workbook_assistant.step4.content') %></p>
+  <p><%= t('workbook_assistant.step4.content_html') %></p>
   <%= image_tag "WA/validation-errors.gif", class: "wa-howto-image" %>
 
-  <p><%= raw t('workbook_assistant.step4.content2') %></p>
+  <p><%= t('workbook_assistant.step4.content2_html') %></p>
   <%= image_tag "WA/validation-errors-detail.gif", class: "wa-howto-image" %>
 
-  <p><%= raw t('workbook_assistant.step4.content3') %></p>
+  <p><%= t('workbook_assistant.step4.content3_html') %></p>
   <%= image_tag "WA/refresh-workbook.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step5.title') %></h3>
-  <p><%= raw t('workbook_assistant.step5.content') %></p>
+  <p><%= t('workbook_assistant.step5.content_html') %></p>
   <%= image_tag "WA/select-competition-ID-button.gif", class: "wa-howto-image" %>
 
-  <p><%= raw t('workbook_assistant.step5.content2') %></p>
+  <p><%= t('workbook_assistant.step5.content2_html') %></p>
   <%= image_tag "WA/select-competition-ID-dialog.gif", class: "wa-howto-image" %>
 
-  <p><%= raw t('workbook_assistant.step5.content3') %></p>
+  <p><%= t('workbook_assistant.step5.content3_html') %></p>
   <%= image_tag "WA/select-competition-ID-filter.gif", class: "wa-howto-image" %>
 
-  <%= raw t('workbook_assistant.step5.content4') %>
+  <%= t('workbook_assistant.step5.content4_html') %>
   <%= image_tag "WA/select-competition-ID-show-all.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step6.title') %></h3>
-  <p><%= raw t('workbook_assistant.step6.content') %></p>
+  <p><%= t('workbook_assistant.step6.content_html') %></p>
   <%= image_tag "WA/export-JSON.gif", class: "wa-howto-image" %>
 
   <h3><%= t('workbook_assistant.step7.title') %></h3>
-  <p><%= raw t('workbook_assistant.step7.content') %></p>
+  <p><%= t('workbook_assistant.step7.content_html') %></p>
 </div>
