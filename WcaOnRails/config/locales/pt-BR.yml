@@ -252,7 +252,7 @@ pt-BR:
         equipment: Equipamento
         #original_hash: 67cd406
         venue: Local
-        #original_hash: 6e99c1d
+        #original_hash: 519255a
         organization: Organização
         #original_hash: 5e326b1
         incidents: Incidentes
@@ -468,7 +468,7 @@ pt-BR:
           diferentes de competição, problemas que ocorreram (barulho, por
           exemplo) e como foram resolvidos. Seja breve e não reporte detalhes
           irrelevantes.
-        #original_hash: 5a80c42
+        #original_hash: f8de509
         organization: >-
           Fale sobre a equipe de organização e como trabalharam durante a
           competição; se você se envolveu na organização; as experiências
@@ -625,7 +625,7 @@ pt-BR:
       about: Sobre a WCA
       #original_hash: d8fd3e4
       delegates: Delegados da WCA
-      #original_hash: ec81ece
+      #original_hash: 0ef06c8
       organizations: Organizações Nacionais
       #original_hash: d790b40
       faq: Perguntas Frequentes
@@ -726,7 +726,7 @@ pt-BR:
         conectado a sua conta.
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        Se você nunca competiu antes, participe de uma %{comp}! Uma ID da WCA
+        Se você nunca competiu antes, participe de uma <a href='/competitions'>competição</a>! Uma ID da WCA
         será criada para você quando os resultados de sua primeira competição
         forem publicados.
       #original_hash: f28bf87
@@ -924,9 +924,9 @@ pt-BR:
         other: regressantes
       #original_hash: b7da17a
       person:
-        other: pessoas
-        one: pessoa
         zero: pessoa
+        one: pessoa
+        other: pessoas
     flash:
       #original_hash: da7ec53
       not_using_wca: Esta competição não está usando o sistema de inscrição da WCA
@@ -1431,7 +1431,7 @@ pt-BR:
         content:
           #original_hash: b645fe1
           '1': >-
-            Se você nunca competiu antes, participe de uma <a href='/competitions'>competição</a>! Uma ID da
+            Se você nunca competiu antes, participe de uma %{comp}! Uma ID da
             WCA será criada para você quando os resultados de sua primeira
             competição forem publicados.
       '2':
@@ -1557,3 +1557,305 @@ pt-BR:
             (veja abaixo), você pode habilitar a opção de ser notificado por
             email quando os resultados forem publicados <a
             href='%{preferences_edit_path}'>aqui</a>.
+  about:
+    #original_hash: 9ac918a
+    title: Sobre a WCA
+    mission:
+      #original_hash: e4698d4
+      title: Missão
+      paragraphs:
+        #original_hash: 16ad45e
+        '1': >-
+          A World Cube Association regula competicões de todos os quebra-cabeças
+          chamados "Rubik", e outros quebra-cabeças que são jogados girando-se
+          os lados, os chamados "twisty puzzles'. O mais famoso deles é o
+          "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
+          professor Rubik, da Hungria. Alguns destes quebra-cabeças são eventos
+          oficiais da WCA.
+        #original_hash: c8ecd24
+        '2': >-
+          A World Cube Association organiza competições em todo o mundo, apoiada
+          por organizações nacionais, responsáveis por organizar competições em
+          seus países.
+        #original_hash: 20e0550
+        '3': >-
+          O objetivo da World Cube Association é ter <br /><strong>mais
+          competições em mais países, com mais pessoas e mais diversão, sob
+          condições iguais e justas.</strong>
+        #original_hash: bee3687
+        '4': >-
+          O espírito da World Cube Association é que <br /><strong>pessoas de
+          todo o mundo se divirtam juntas numa atmosfera amigável, ajudem umas
+          às outras e se comportem com espírtio esportivo.</strong>
+    structure:
+      #original_hash: 9482c5d
+      title: Estrutura
+      #original_hash: d855b50
+      board_html: >-
+        A World Cube Association é conduzida pelo <strong>WCA Board (Conselho da
+        WCA)</strong>, que consiste nos seguintes membros:
+      #original_hash: b0c72a9
+      committees: >-
+        Os seguintes comitês e equipes são responsáveis pelas atividades
+        operacionais da WCA:
+      wdc:
+        #original_hash: 853bffa
+        name_html: <strong>Comitê Disciplinar da WCA</strong>
+        #original_hash: 286fdf8
+        description: >-
+          Este comitê aconselha assessora o Conselho da WCA em casos especiais,
+          como supostas violações do Regulamento da WCA, e pode ser contactado
+          pelos membros da WCA em caso de algum assunto pessoal importante
+          referente a competições da WCA.
+      wrc:
+        #original_hash: 4aa147f
+        name_html: <strong>Comitê do Regulamento da WCA</strong>
+        #original_hash: 13ada5b
+        description: Este comitê é responsável por gerenciar o Regulamento da WCA.
+      results:
+        #original_hash: 3e819b8
+        name_html: <strong>Equipe de Resultados da WCA</strong>
+        #original_hash: 439ffae
+        description: Esta equipe é responsável por gerenciar os resultados das competições.
+      software:
+        #original_hash: ea7f654
+        name_html: <strong>Equipe de Software da WCA</strong>
+        #original_hash: ec961e4
+        description: >-
+          Esta equipe é responsável por gerenciar o software da WCA (website,
+          embaralhadores, ferramentas administrativas).
+      #original_hash: f2ceade
+      delegates_html: >-
+        <strong>Delegados da WCA</strong> são membros da WCA que são
+        responsáveis por garantir que todas as competições da WCA acontecem de
+        acordo com a missão, regulamento e espírito da WCA. Eles são
+        diferenciados entre <strong>Delegados Sênior</strong>,
+        <strong>Delegados</strong> e <strong>Delegados
+        Candidatos</strong>%{see_link}. Além das tarefas de um Delegado, um
+        Delegado Sênior é responsável por gerenciar os Delegados em sua área, e
+        também pode ser contactado pela comunidade para assunto pertinentes à
+        região. Novos Delegados são listados inicialmente como Delegados
+        Candidatos, e devem mostrar que são capazes de conduzir competições
+        adequadamente antes de serem considerados Delegados.
+      #original_hash: 27d18ac
+      see_link_html: '(veja %{link})'
+      #original_hash: 5b01fcc
+      members_html: >-
+        Todos os competidores automaticamente se tornam <strong>membros</strong>
+        da WCA em sua primeira competição oficial.
+  delegates_page:
+    #original_hash: d8fd3e4
+    title: Delegados da WCA
+    #original_hash: 0a89b0f
+    acknowledges: >-
+      A WCA reconhece os seguintes membros como delegados para competições
+      oficiais:
+    table:
+      #original_hash: 709a232
+      name: Nome
+      #original_hash: c3f104d
+      role: Posição
+      #original_hash: 0f21717
+      region: Região
+  national_organizations:
+    #original_hash: 0ef06c8
+    title: Organizações Nacionais
+    #original_hash: f9a7f4d
+    content: 'A WCA reconhece as seguintes organizações nacionais:'
+  contact:
+    #original_hash: a34b69f
+    title: Informações de Contato
+    #original_hash: b5c2eaa
+    info_alert_html: >-
+      Antes de contactar algum dos comitês ou equipes listados aqui, por favor
+      verifique nossas %{link}!
+    #original_hash: 2b023eb
+    questions_and_comments_html: >-
+      Para questões, comentários ou sugestões sobre o website, use este <a
+      href='/contact/website'>formulário</a>. Para dúvidas sobre uma área ou
+      competição específicas, por favor contact seu %{link} local.
+    #original_hash: 4a30d30
+    committees_and_teams_html: <u>Comitês e Equipes</u>
+    board:
+      #original_hash: ccad374
+      name_html: <strong>Conselho da WCA</strong>
+      #original_hash: 7ee8e36
+      info: >-
+        (Organização da WCA, relatórios de delegados, aprovação de competições,
+        dúvidas em geral)
+    wdc:
+      #original_hash: 562e197
+      info: >-
+        (assessoramento independente ao Conselho da WCA, investigações,
+        aconselhamento para assuntos pessoais importantes)
+    wrc:
+      #original_hash: 4a256f0
+      info: (manutenção do Regulamento da WCA)
+    results:
+      #original_hash: 899dc9c
+      info: '(resultados de competições, correções nos resultados)'
+    software:
+      #original_hash: 325ab0a
+      info: (manutenção do software da WCA)
+  score_tools:
+    #original_hash: ea9d41d
+    title: Ferramentas de Resultados da WCA
+    paragraphs:
+      #original_hash: ec3e0ab
+      '1': >-
+        A WCA recomenda o uso do <a href="http://cubecomps.com">Cube Comps</a>
+        antes e durante uma competição. Cube Comps é um sistema online com
+        resultados ao vivo e muitos recursos interessantes, como impressão de
+        súmulas e um sistema bastante eficiente de entrada de dados que suporta
+        vários usuários. Criado por Luis J. Iáñez e agora Open Source.
+      #original_hash: 7438b0d
+      '2': >-
+        Súmulas e embaralhamentos devem ser processados e verificados em busca
+        de erros usando o %{workbook_link} antes de serem enviados à Equipe de
+        Resultados.
+      #original_hash: 975e59b
+      '3': >-
+        A versão mais recente da Planilha de Resultados da WCA pode ser baixada
+        aqui: <br /><a href="/files/results.xls" target="_blank">Planilha de
+        Resultados da WCA</a>.
+  logo:
+    #original_hash: c72c969
+    title: Logotipo da WCA
+    paragraphs:
+      #original_hash: c092e13
+      '1': >-
+        O logotipo da WCA foi desenhado por Justin Eastman, num concurso em
+        Janeiro de 2005.<br />Nós gostamos do logotipo por causa do design, as
+        cores e o fato de que não mostra especificamente um Rubik's Cube / Cubo
+        3x3x3.
+      #original_hash: f228da2
+      '2': >-
+        Temos três versões do logotipo: uma <a
+        href="/files/WCAlogo_XL.jpg">versão grande</a> (46 KB, 1756 px by 1068
+        px), uma <a href="/files/WCAlogo.svg">versão vetorizada</a> e uma <a
+        href="/files/WCAlogo_notext.svg">versão vetorizada sem textos</a>.
+      #original_hash: dcb1ad6
+      '3': >-
+        Versão 3D do logotipo, desenhada por Vu Mihn Tan, do Vietnã: <a
+        href="/files/WCALogo3D.png">versão PNG</a> (2.1 MB), uma <a
+        href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0.25 MB).
+      #original_hash: 545fcd9
+      '4': >-
+        Todas os organizadores podem usar o logotipo da WCA em seus websites,
+        roupas, brindes ou decoração, somente para competições oficiais.<br />
+        Para as demais pessoas e/ou propósitos, o uso do logotipo requer
+        aprovação pelo <a href="mailto:board@worldcubeassociation.org">Conselho
+        da WCA</a>.
+  workbook_assistant:
+    #original_hash: e442ea4
+    title: Assistente de Planilha da WCA
+    #original_hash: a7c307f
+    download: Baixar o Assistente de Planilha
+    #original_hash: cf1b916
+    last_update: Última atualização
+    #original_hash: feece00
+    version_history: histórico de versões
+    #original_hash: 8f3f4c0
+    header: Como processar resultados e embaralhamentos antes de enviá-los para a WCA
+    step1:
+      #original_hash: c0450b1
+      title: 'Passo 1: Abra a planilha com os resultados'
+      #original_hash: 656d70d
+      content_html: >-
+        Abra a planilha usando o botão <em>Open...</em> ou arrastando o arquivo
+        da planilha até a janela do programa.
+    step2:
+      #original_hash: 3ad9881
+      title: 'Passo 2: Acrescente os embaralhamentos do TNoodle'
+      #original_hash: 080acc0
+      content_html: >-
+        Acrescente os embaralhamentos usando o botão <em>Add...</em> ou
+        arrastando o arquivo do TNoodle até a janela do programa. Certifique-se
+        de usar o arquivo .zip ou or arquivo .json gerado pelo TNoodle.
+      #original_hash: 6cc90b8
+      content2_html: >-
+        Você pode acrescentar vários arquivos de embaralhamento caso estes
+        tenham sido gerados em partes ou embaralhamentos adicionais tiveram que
+        ser gerados durante a competição.
+    step3:
+      #original_hash: b2d01b3
+      title: 'Passo 3: Combine os embaralhamentos e o resultados'
+      #original_hash: 36383b1
+      content_html: >-
+        O Assistente automaticamente liga os embaralhamentos com as rodadas que
+        ocorreram na competição. Em alguns casos, como quando múltiplos arquivos
+        de embaralhamento foram gerados, a seleção precisa ser feita manualmente
+        porque há várias opções possíveis.
+      #original_hash: e869c1e
+      content2_html: >-
+        A seleção manual pode ser feita dando um clique duplo na célula
+        <em>Scrambles</em> no painel geral da planilha.
+      #original_hash: a42bae2
+      content3_html: >-
+        Somente é possível selecionar uma rodada do arquivo de embaralhamento
+        para cada rodada de resultados. Se acontecer uma situação na qual
+        embaralhamentos para uma única rodada foram gerados como rodadas
+        separadas no TNoodle, você pode usar o botão <em>Edit groups...</em>
+        para editar os grupos nos arquivos de embaralhamento e movê-los de uma
+        rodada para outra ou excluí-los.
+      #original_hash: 94353f2
+      content4_html: >-
+        Neste exemplo, um conjunto extra de embaralhamentos foi gerado para se
+        obter dois grupos na primeira rodada do skewb ao invés de apenas um
+        grupo.
+      #original_hash: 68c5b18
+      content5_html: >-
+        Os embaralhamentos do grupo adicional podem ser arrastados para a rodada
+        que foi gerada originalmente. Isso junta os dois grupos em uma rodada.
+    step4:
+      #original_hash: ed940d2
+      title: 'Passo 4: Corrigir os erros apontados pelo programa'
+      #original_hash: df2cf58
+      content_html: >-
+        Os resultados são verificados em busca de erros. Rodadas que contenham
+        erros são marcadas com um ícone vermelho no painel geral da planilha.
+      #original_hash: 7fbf6b8
+      content2_html: >-
+        Ao selecionar uma planilha com erros no painel, o programa listará os
+        detalhes no painel de erros de validação, na parte inferior-esquerda.
+      #original_hash: 0600502
+      content3_html: >-
+        Os erros podem ser corrigidos abrindo a planilha num programa
+        apropriado, editando e salvando. A planilha atualizada pode então ser
+        recarregada no Assistente clicando no botão <em>Refresh</em>. Isso vai
+        recarregar somente os resultados, mas vai manter as outras mudanças que
+        você tenha feito, como embaralhamentos que foram adicionados.
+    step5:
+      #original_hash: 536ec4d
+      title: 'Passo 5: Selecionando a ID da competição'
+      #original_hash: 5aeb5bd
+      content_html: >-
+        Selecione a ID da competição correta clicando no botão
+        <em>Select...</em> próximo ao campo <em>Competition ID</em>.
+      #original_hash: 3acf7d0
+      content2_html: Uma caixa de diálogo mostrará uma lista de competições.
+      #original_hash: ceeb6fe
+      content3_html: >-
+        Você pode filtrar a lista digitando parte do nome de uma competição ou
+        do Delegado da WCA.
+      #original_hash: 5ca74eb
+      content4_html: >-
+        Inicialmente, somente competições que aconteceram há menos de uma semana
+        ou que acontecerão em no máximo uma semana serão mostradas. Se você
+        precisar selecionar uma competição fora dessa janela de tempo, desmarque
+        a opção <em>Only show current competitions</em>.
+    step6:
+      #original_hash: 52bb1f6
+      title: 'Passo 6: Exportar os dados dos resultados para JSON'
+      #original_hash: 6bfee23
+      content_html: >-
+        Salve os dados dos resultados em um arquivo JSON usando o botão
+        <em>Export results JSON...</em> na parte inferior-direita.
+    step7:
+      #original_hash: 09fa37d
+      title: 'Passo 7: Enviar o JSON dos resultados para a WCA'
+      #original_hash: 9be089f
+      content_html: >-
+        Envie o arquivo JSON exportado pelo Assistente de Planilha por email
+        para <a
+        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
