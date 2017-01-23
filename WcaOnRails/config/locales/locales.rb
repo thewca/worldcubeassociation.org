@@ -25,5 +25,9 @@ module Locales
       "flag_id": "cn",
       "name": "简体中文",
     },
+    "nl": {
+      "flag_id": "nl",
+      "name": "Nederlands",
+    },
   }.freeze
 end
