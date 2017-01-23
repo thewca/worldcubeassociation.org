@@ -49,8 +49,9 @@ data:
 # Find translate calls
 search:
   ## Paths or `File.find` patterns to search in:
-  # paths:
-  #  - app/
+  paths:
+    - app/
+    - lib/
 
   ## Root directories for relative keys resolution.
   # relative_roots:
@@ -120,7 +121,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,doorkeeper,mail_form}.*'
+  - '{doorkeeper,mail_form}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should

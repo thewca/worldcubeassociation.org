@@ -158,7 +158,7 @@ class CompetitionsController < ApplicationController
 
   def post_announcement
     comp = Competition.find(params[:id])
-    date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
+    date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long, locale: :en)
     title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
     body = "The [#{comp.name}](#{competition_url(comp)})"

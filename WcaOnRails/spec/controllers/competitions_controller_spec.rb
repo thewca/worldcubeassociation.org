@@ -503,6 +503,12 @@ describe CompetitionsController do
     context 'when signed in as results team member' do
       sign_in { FactoryGirl.create(:results_team) }
 
+      # Posts should always be in English, therefore we want to check using an English text,
+      # even if the user posting has a different locale
+      before :each do
+        session[:locale] = :fr
+      end
+
       it 'creates an announcement post' do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
         get :post_announcement, id: competition
@@ -523,6 +529,12 @@ describe CompetitionsController do
   describe 'GET #post_results' do
     context 'when signed in as results team member' do
       sign_in { FactoryGirl.create(:results_team) }
+
+      # Posts should always be in English, therefore we want to check using an English text,
+      # even if the user posting has a different locale
+      before :each do
+        session[:locale] = :fr
+      end
 
       it "creates a results post" do
         Result.create!(
