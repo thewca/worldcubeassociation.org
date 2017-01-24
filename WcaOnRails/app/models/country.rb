@@ -24,20 +24,27 @@ class Country < ActiveRecord::Base
     c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
 
-  COMPARE_LOCALIZED_NAMES = lambda do |a, b|
-    # We transliterate names so that country/continents starting with accent
-    # don't end up at the very bottom of the list because of the accents
-    I18n.transliterate(a.first) <=> I18n.transliterate(b.first)
+  # Comparison function may depend on the locale, so we use an array of lambdas,
+  # defaulting to the latin transliterate+compare
+  COMPARE_LOCALIZED_NAMES = lambda do |locale, a, b|
+    name_a, name_b = if locale == :"zh-CN"
+                       [a.first.encode(Encoding::GBK), b.first.encode(Encoding::GBK)]
+                     else
+                       # We transliterate names so that country/continents starting with accent
+                       # don't end up at the very bottom of the list because of the accents
+                       [I18n.transliterate(a.first), I18n.transliterate(b.first)]
+                     end
+    name_a <=> name_b
   end
 
-  ALL_COUNTRIES_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |l|
-    [l, Country.all.map do |e|
+  ALL_COUNTRIES_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
+    [locale, Country.all.map do |country|
       # We want a localized country name, but a constant id across languages
       # NOTE: it means "search" will behave weirdly as it still searches by English
       # name (eg: searching for "Tunisie" in French won't match competitions in
       # "Tunisia" even if the country displayed is actually "Tunisie"...)
-      [e.name_in(l), e.id]
+      [country.name_in(locale), country.id]
       # Now we want to sort countries according to their localized name
-    end.sort!(&COMPARE_LOCALIZED_NAMES)]
+    end.sort!(&COMPARE_LOCALIZED_NAMES.curry[locale])]
   end].freeze
 end
