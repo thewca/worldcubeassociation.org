@@ -22,18 +22,20 @@ faq_variables = {
 
   <%
     @questions = []
-    def add_answer(question, &block)
-      @questions << question
-      render layout: "faq_item", locals: { question: question }, &block
+    def add_answer(question_data, &block)
+      @questions << question_data
+      render layout: "faq_item", locals: question_data, &block
     end
   %>
   <% @answers_markup = capture do %>
     <ul id="faq-list" class="list-group">
 
 
-      <% t('faq.answers').values.each do |faq| %>
-        <%= add_answer faq[:title] do %>
-          <% faq[:content].values.each do |paragraph| %>
+      <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
+      <% t('faq.answers', locale: :en).each do |key, faq| %>
+        <% # We include the original question in English so that the anchors (and urls!) stay the same across languages. %>
+        <%= add_answer({ question: t("faq.answers.#{key}.title"), original_question: faq[:title] }) do %>
+          <% t("faq.answers.#{key}.content").values.each do |paragraph| %>
             <p>
               <%= raw paragraph % faq_variables %>
             </p>
@@ -44,8 +46,8 @@ faq_variables = {
   <% end %>
 
   <ul>
-    <% @questions.each do |question| %>
-       <li><%= link_to question, anchor: question.parameterize %></li>
+    <% @questions.each do |question_data| %>
+       <li><%= link_to question_data[:question], anchor: question_data[:original_question].parameterize %></li>
     <% end %>
   </ul>
 
