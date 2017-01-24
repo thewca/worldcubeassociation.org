@@ -35,7 +35,7 @@
                 <%= render "shared/wca_id", wca_id: registration.wca_id %>
               <% end %>
             </td>
-            <td class="country"><%= registration.countryId %></td>
+            <td class="country"><%= registration.country.name %></td>
 
             <% @competition.events.each do |event| %>
               <td class="<%= event.id %>">
@@ -64,7 +64,7 @@
           <td colspan="2">
             <%= render "registration_info_people", registrations: @registrations %>
           </td>
-          <% country_count = @registrations.map(&:countryId).uniq.length %>
+          <% country_count = @registrations.map(&:country).uniq.length %>
           <td><%= country_count %> <%= t('registrations.list.country').pluralize(country_count) %></td>
           <% @competition.events.each do |event| %>
             <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
