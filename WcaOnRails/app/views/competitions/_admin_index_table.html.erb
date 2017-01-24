@@ -39,7 +39,7 @@
               <%= users_to_sentence competition.delegates %>
             </td>
             <td class="admin-date">
-              <%= wca_date_range(competition.start_date, competition.end_date) %>
+              <%= wca_date_range(competition.start_date, competition.end_date, locale: :en) %>
             </td>
             <% if announced
                 days_announced = (competition.start_date - announced.to_date).to_i

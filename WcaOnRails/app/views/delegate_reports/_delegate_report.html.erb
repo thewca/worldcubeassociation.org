@@ -3,7 +3,7 @@
 <div class="delegate-report">
   <div>
     <strong>Date</strong>
-    <%= wca_date_range(competition.start_date, competition.end_date) %>
+    <%= wca_date_range(competition.start_date, competition.end_date, locale: :en) %>
     <% if delegate_report.schedule_url.present? %>
       (<%= link_to "Schedule", delegate_report.schedule_url %>)
     <% else %>
