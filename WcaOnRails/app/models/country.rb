@@ -24,9 +24,9 @@ class Country < ActiveRecord::Base
     c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
 
-  # Comparison function may depend on the locale, so we use an array of lambdas,
-  # defaulting to the latin transliterate+compare
   COMPARE_LOCALIZED_NAMES = lambda do |locale, a, b|
+    # We have transformations to apply on the names before we compare them,
+    # they depend on the locale, and the default is to transliterate them.
     name_a, name_b = if locale == :"zh-CN"
                        [a.first.encode(Encoding::GBK), b.first.encode(Encoding::GBK)]
                      else

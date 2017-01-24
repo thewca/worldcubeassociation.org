@@ -1,7 +1,7 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <% cache ["registrations_index", @competition.events, @registrations.pluck(:id), @registrations.maximum(:updated_at), @registrations.maximum(:'users.updated_at')] do %>
+  <% cache ["registrations_index", @competition.events, @registrations.pluck(:id), @registrations.maximum(:updated_at), @registrations.maximum(:'users.updated_at'), I18n.locale] do %>
     <%= wca_table data: { toggle: "table" } do %>
       <thead>
         <tr>
