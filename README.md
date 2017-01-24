@@ -1,5 +1,4 @@
-worldcubeassociation.org [![Build Status](https://travis-ci.org/thewca/worldcubeassociation.org.svg?branch=master)](https://travis-ci.org/thewca/worldcubeassociation.org)
-========================
+# worldcubeassociation.org [![Build Status](https://travis-ci.org/thewca/worldcubeassociation.org.svg?branch=master)](https://travis-ci.org/thewca/worldcubeassociation.org)
 
 This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
 
@@ -24,7 +23,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 ## Provision New VM
 - Provisioning relies upon SSH agent forwarding, so make sure you've set up an SSH
   key for cubing@worldcubeassociation.org in order to rsync secrets.
-- `time ssh -A user@example.com 'sudo wget https://raw.githubusercontent.com/thewca/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh staging/production'`
+- `time ssh -A user@example.com 'sudo wget https://raw.githubusercontent.com/thewca/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh <environment>' - Where `environment` is one of `staging` or `production``
 
 ## Deploy
 
