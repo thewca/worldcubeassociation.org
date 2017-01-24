@@ -73,11 +73,15 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
-      competition = FactoryGirl.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016")
+      competition = FactoryGirl.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 02, 01), ends: Date.new(2016, 02, 02))
       competition.delegate_report.update_attributes!(remarks: "This was a great competition")
       competition
     end
-    let(:mail) { CompetitionsMailer.notify_of_delegate_report_submission(competition) }
+    let(:mail) do
+      # Let's pick a foreign locale to make sure it's not localized
+      I18n.locale = :fr
+      CompetitionsMailer.notify_of_delegate_report_submission(competition)
+    end
 
     it "renders the headers" do
       expect(mail.subject).to eq "[wca-report] [Oceania] Comp of the Future 2016"
@@ -89,6 +93,11 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match(/This was a great competition/)
+    end
+
+    it "is sent in English" do
+      # Will fail if the date is localized, in French it will be "fév. 1"
+      expect(mail.body.encoded).to match(/Feb 1/)
     end
   end
 end
