@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 source 'https://rubygems.org'
 
+# From https://github.com/bundler/bundler/issues/4978#issuecomment-272248627
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
 gem 'rails', '4.2.1'
 gem 'rails-i18n', github: 'svenfuchs/rails-i18n', branch: 'rails-4-x'
 gem 'sass-rails'
@@ -8,7 +14,7 @@ gem 'uglifier'
 gem 'therubyracer'
 
 gem 'sdoc', group: :doc
-gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'envied'
 gem 'seedbank'
 
@@ -18,7 +24,7 @@ gem 'bootstrap-sass'
 gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
-gem 'recaptcha', :require => 'recaptcha/rails'
+gem 'recaptcha', require: 'recaptcha/rails'
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'local_time'
@@ -28,20 +34,20 @@ gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'
 gem 'redcarpet', '~> 3.3'
-gem 'world-flags', git: 'git://github.com/world-flags/world-flags.git'
+gem 'world-flags', github: 'world-flags/world-flags'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
 
-# Pointing to jfly/carrierwave-crop which has a workaround for
-#  https://github.com/brianreavis/selectize.js/issues/953
-gem 'selectize-rails', git: "git://github.com/jfly/selectize-rails.git"
+# Pointing to jfly/selectize-rails which has a workaround for
+#  https://github.com/selectize/selectize.js/issues/953
+gem 'selectize-rails', github: 'jfly/selectize-rails'
 
 gem 'high_voltage'
 gem 'carrierwave'
 
 # Pointing to jfly/carrierwave-crop which has a workaround for
 #  https://github.com/kirtithorat/carrierwave-crop/issues/17
-gem 'carrierwave-crop', git: "git://github.com/jfly/carrierwave-crop.git"
+gem 'carrierwave-crop', github: 'jfly/carrierwave-crop'
 
 gem 'mini_magick'
 gem 'mysql2'
@@ -50,7 +56,7 @@ gem 'nokogiri'
 gem 'font-awesome-sass'
 gem 'lodash-rails'
 gem 'cocoon'
-gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+gem 'momentjs-rails', '~> 2.9', github: 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
