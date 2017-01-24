@@ -24,16 +24,16 @@ gem 'bootstrap-sass'
 gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
-gem 'recaptcha', require: 'recaptcha/rails'
+gem 'recaptcha', '0.4.0', require: 'recaptcha/rails' # <<<
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'local_time'
-gem 'devise'
+gem 'devise', '3.5.10' # <<<
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'
-gem 'redcarpet', '~> 3.3'
+gem 'redcarpet'
 gem 'world-flags', github: 'world-flags/world-flags'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
@@ -54,9 +54,9 @@ gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
 gem 'font-awesome-sass'
-gem 'lodash-rails'
+gem 'lodash-rails', '3.10.1' # <<<
 gem 'cocoon'
-gem 'momentjs-rails', '~> 2.9', github: 'derekprior/momentjs-rails'
+gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
@@ -66,9 +66,12 @@ gem 'daemons'
 gem 'i18n-country-translations'
 gem 'http_accept_language'
 
+gem 'sprockets'
+gem 'sprockets-rails', '2.2.4' # <<<
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
-  gem 'rails-assets-simplemde'
+  gem 'rails-assets-simplemde', '1.10.1' # <<<
 end
 
 group :development, :test do
@@ -81,18 +84,18 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'web-console'
-  gem 'i18n-tasks', '~> 0.9.5'
+  gem 'i18n-tasks', '0.9.8' # <<<
   gem 'i18n-spec'
 end
 
 group :development do
   gem 'pre-commit'
-  gem 'rubocop', require: false
+  gem 'rubocop', '0.42.0', require: false # <<<
   gem 'scss_lint', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
+  gem 'web-console'
 end
 
 group :test do
