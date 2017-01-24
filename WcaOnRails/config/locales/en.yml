@@ -637,11 +637,15 @@ en:
       present: "Present"
       recent: "Recent"
       past: "Past"
+      #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
+        #context: when selecting a specific year ('year' is a number)
         past: "Past competitions from %{year}"
+        past_all: "Past competitions from all years"
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
       no_access: "You don't have access to this page!"
