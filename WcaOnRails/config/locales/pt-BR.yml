@@ -726,7 +726,7 @@ pt-BR:
         conectado a sua conta.
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        Se você nunca competiu antes, participe de uma <a href='/competitions'>competição</a>! Uma ID da WCA
+        Se você nunca competiu antes, participe de uma %{comp}! Uma ID da WCA
         será criada para você quando os resultados de sua primeira competição
         forem publicados.
       #original_hash: f28bf87
@@ -1431,7 +1431,7 @@ pt-BR:
         content:
           #original_hash: b645fe1
           '1': >-
-            Se você nunca competiu antes, participe de uma %{comp}! Uma ID da
+            Se você nunca competiu antes, participe de uma <a href='/competitions'>competição</a>! Uma ID da
             WCA será criada para você quando os resultados de sua primeira
             competição forem publicados.
       '2':
