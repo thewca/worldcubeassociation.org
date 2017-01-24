@@ -42,12 +42,8 @@ if username == "cubing"
   end
 
   ssh_known_hosts_entry 'github.com'
-  chef_env_to_branch = {
-    "staging" => "master",
-    "production" => "production",
-  }
   if !Dir.exists? repo_root
-    branch = chef_env_to_branch[node.chef_environment]
+    branch = "master"
     git repo_root do
       repository "https://github.com/thewca/worldcubeassociation.org.git"
       revision branch
