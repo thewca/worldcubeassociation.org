@@ -28,7 +28,7 @@ gem 'recaptcha', '0.4.0', require: 'recaptcha/rails' # <<<
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'local_time'
-gem 'devise', '3.5.10' # <<<
+gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
