@@ -5,7 +5,7 @@ require 'ostruct'
 describe Middlewares::WardenUserLogger do
   describe "call" do
     let(:app) { double(:app) }
-    let(:logger) { -> (s) { log_statements << s } }
+    let(:logger) { ->(s) { log_statements << s } }
     let(:log_statements) { [] }
     subject { described_class.new(app, logger: logger) }
 

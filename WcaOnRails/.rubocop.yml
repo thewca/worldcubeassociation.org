@@ -3,6 +3,18 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.3
 
+Bundler/OrderedGems:
+  Enabled: false
+
+Lint/EmptyWhen:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/SafeNavigation:
+  Enabled: false
+
 Style/StringLiterals:
   # EnforcedStyle: double_quotes
   Enabled: false
@@ -22,6 +34,9 @@ Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 
 Style/GuardClause:
+  Enabled: false
+
+Metrics/BlockLength:
   Enabled: false
 
 Metrics/ClassLength:

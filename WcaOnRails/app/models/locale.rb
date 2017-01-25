@@ -13,7 +13,7 @@ class Locale < SimpleDelegator
     self.locale = locale.to_s
     filename = Rails.root.join('config', 'locales', "#{locale}.yml")
     file_content = File.read(filename)
-    super(YAML.load(file_content))
+    super(YAML.safe_load(file_content))
     if is_translation
       decorate_with_hashes(file_content, self, "")
     end
