@@ -948,8 +948,6 @@ nl:
     list:
       #original_hash: 8b7631c
       title: 'Aanmeldingen voor %{comp}'
-      #original_hash: 8e68b3e
-      country: Landen
       #original_hash: 5301648
       edit: Bewerken
       #original_hash: 1feee0e
@@ -1093,8 +1091,6 @@ nl:
       details: Details
       #original_hash: 2e8a57c
       website: Website
-      #original_hash: debd172
-      organizer: Organisator
       #original_hash: 6afa61e
       delegate:
         zero: WCA delegates
@@ -1293,14 +1289,12 @@ nl:
       #original_hash: e6e096a
       competition_was: 'Wedstijd was %{n_days} geleden.'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: wedstrijd
       #original_hash: e3528ec
       label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Laatste %{days} dagen'
       #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp} binnen %{kms} km en %{days} dagen.'
+      nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
       #original_hash: feefb46
       no_comp_nearby: Geen nabije wedstrijden!
       #original_hash: 7e76950

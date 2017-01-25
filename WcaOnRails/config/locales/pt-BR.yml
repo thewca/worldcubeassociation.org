@@ -961,8 +961,6 @@ pt-BR:
     list:
       #original_hash: 8b7631c
       title: 'Inscrições do %{comp}'
-      #original_hash: 8e68b3e
-      country: país
       #original_hash: 5301648
       edit: Editar
       #original_hash: 1feee0e
@@ -1106,8 +1104,6 @@ pt-BR:
       details: Detalhes
       #original_hash: 2e8a57c
       website: Website
-      #original_hash: debd172
-      organizer: Organizador
       #original_hash: 6afa61e
       delegate:
         zero: Delegado da WCA
@@ -1303,14 +1299,12 @@ pt-BR:
       #original_hash: e6e096a
       competition_was: 'A competição aconteceu %{n_days} atrás.'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: competição
       #original_hash: e3528ec
       label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Últimos %{days} dias'
       #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp} num intervalo de %{kms} km e %{days} dias.'
+      nearby_admin: '%{x_competitions} num intervalo de %{kms} km e %{days} dias.'
       #original_hash: feefb46
       no_comp_nearby: Nenhuma competição próxima!
       #original_hash: 7e76950

@@ -855,8 +855,6 @@ zh-CN:
     list:
       #original_hash: 8b7631c
       title: '%{comp}的报名列表'
-      #original_hash: 8e68b3e
-      country: 国家/地区
       #original_hash: 5301648
       edit: 编辑
       #original_hash: 1feee0e
@@ -976,8 +974,6 @@ zh-CN:
       details: 详情
       #original_hash: 2e8a57c
       website: 网站
-      #original_hash: debd172
-      organizer: 主办方
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
@@ -1150,14 +1146,12 @@ zh-CN:
       #original_hash: e6e096a
       competition_was: '比赛是%{n_days}前的。'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: 比赛
       #original_hash: e3528ec
       label: '临近的比赛（%{days}天%{kms}千米内）'
       #original_hash: 3446062
       label_admin: '过去%{days}天'
       #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp}在%{kms}千米%{days}天内。'
+      nearby_admin: '%{x_competitions}在%{kms}千米%{days}天内。'
       #original_hash: feefb46
       no_comp_nearby: 没有临近比赛！
       #original_hash: 7e76950

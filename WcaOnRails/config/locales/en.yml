@@ -551,8 +551,11 @@ en:
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
-      country: "country"
       edit: "Edit"
+      #context: pluralization of "x country", used on its own, below registrations list
+      country_plural:
+        one: "1 country"
+        other: "%{count} countries"
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
@@ -618,7 +621,11 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
-      organizer: "Organizer"
+      #context: Pluralization of the "Organizer" label for a competition form
+      organizer_plural:
+        one: "Organizer"
+        other: "Organizers"
+      #context: Pluralization of the "Delegate" label for a competition form
       delegate:
         one: "WCA Delegate"
         other: "WCA Delegates"
@@ -722,10 +729,14 @@ en:
       competition_was: "Competition was %{n_days} ago."
     #context: in the "nearby competitions" list
     nearby_competitions:
-      comp: "competition"
+      #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
+      competitions:
+        zero: "No competitions"
+        one: "1 competition"
+        other: "%{count} competitions"
       label: "Nearby competitions (within %{days} days and %{kms} km)"
       label_admin: "Last %{days} days"
-      nearby_admin: "%{comps} %{comp} within %{kms} km and %{days} days."
+      nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
       no_comp_nearby: "No nearby competitions!"
       no_date_yet: "You have not assigned a date for this competition yet."
       no_location_yet: "You have not assigned a location for this competition yet."
