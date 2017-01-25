@@ -59,11 +59,11 @@ module WcaDateHelpers
       end
     end
 
-    without_year = I18n.t("#{scope}.#{template}", dates)
+    without_year = I18n.t("#{scope}.#{template}", dates.merge(locale: locale))
 
     if show_year && from_date.year == to_date.year
       # i18n-tasks-use t('time_will_tell.date_range.with_year')
-      I18n.t("#{scope}.with_year", date_range: without_year, year: from_year, default: without_year)
+      I18n.t("#{scope}.with_year", date_range: without_year, year: from_year, default: without_year, locale: locale)
     else
       without_year
     end
