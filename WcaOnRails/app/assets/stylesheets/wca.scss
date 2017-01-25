@@ -29,16 +29,16 @@ table.table {
       &:hover {
         cursor: pointer;
       }
-      &:after {
+      &::after {
         font-family: FontAwesome;
         content: $fa-var-sort;
         margin-left: 5px;
       }
-      &.asc:after {
+      &.asc::after {
         content: $fa-var-sort-asc;
         color: $blue;
       }
-      &.desc:after {
+      &.desc::after {
         content: $fa-var-sort-desc;
         color: $blue;
       }

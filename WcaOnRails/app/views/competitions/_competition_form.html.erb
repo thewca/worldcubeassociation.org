@@ -151,7 +151,7 @@
           wca._nearbyCompetitionById = {};
           wca.setNearbyCompetitions = function(nearbyCompetitions) {
             wca.addGoogleMapsLoadedListener(function() {
-              var desiredNearbyCompetitionById = _.indexBy(nearbyCompetitions, 'id');
+              var desiredNearbyCompetitionById = _.keyBy(nearbyCompetitions, 'id');
 
               var desiredIds = Object.keys(desiredNearbyCompetitionById);
               var currentIds = Object.keys(wca._nearbyCompetitionById);

@@ -7,3 +7,6 @@ chef/**
 .gitmodules
 
 *.pdf
+*.jpg
+*.png
+*.gif

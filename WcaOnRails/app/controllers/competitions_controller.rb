@@ -330,6 +330,9 @@ class CompetitionsController < ApplicationController
     @competition = Competition.find(params[:id])
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     @competition_organizer_view = !@competition_admin_view
+
+    comp_params_minus_id = competition_params
+    new_id = comp_params_minus_id.delete(:id)
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
       if cannot_delete_competition_reason
@@ -340,7 +343,17 @@ class CompetitionsController < ApplicationController
         flash[:success] = t('.delete_success', id: @competition.id)
         redirect_to root_url
       end
-    elsif @competition.update_attributes(competition_params)
+    elsif @competition.update_attributes(comp_params_minus_id)
+
+      if new_id && !@competition.update_attributes(id: new_id)
+        # Changing the competition id breaks all our associations, and our view
+        # code was not written to handle this. Rather than trying to update our view
+        # code, just revert the attempted id change. The user will have to deal with
+        # editing the ID text box manually. This will go away once we have proper
+        # immutable ids for competitions.
+        @competition = Competition.find(params[:id])
+      end
+
       if params[:commit] == "Confirm"
         CompetitionsMailer.notify_board_of_confirmed_competition(current_user, @competition).deliver_later
         flash[:success] = t('.confirm_success')
@@ -353,14 +366,6 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      # Changing the competition id breaks all our associations, and our view
-      # code was not written to handle this. Rather than trying to update our view
-      # code, just revert the attempted id change. The user will have to deal with
-      # editing the ID text box manually. This will go away once we have proper
-      # immutable ids for competitions.
-      if @competition.id_changed?
-        @competition.id = @competition.id_was
-      end
       @nearby_competitions = get_nearby_competitions(@competition)
       render :edit
     end

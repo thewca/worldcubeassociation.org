@@ -89,7 +89,7 @@ class UsersController < ApplicationController
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
         # Sign in the user by passing validation in case their password changed
-        sign_in @user, bypass: true
+        bypass_sign_in @user
       end
       flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at
                           I18n.t('users.successes.messages.account_updated_confirm', email: @user.unconfirmed_email)
