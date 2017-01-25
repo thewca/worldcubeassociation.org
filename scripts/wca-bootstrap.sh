@@ -11,12 +11,8 @@ if [ $# -gt 1 ]; then
 fi
 
 environment=$1
-if [ "$environment" == "development" ]; then
+if [ "$environment" == "development" ] || [ "$environment" == "staging" ] || [ "$environment" == "production" ]; then
   git_branch=master
-elif [ "$environment" == "staging" ]; then
-  git_branch=master
-elif [ "$environment" == "production" ]; then
-  git_branch=production
 else
   echo "Unrecognized environment: $environment"
   print_usage_and_exit
