@@ -1,5 +1,5 @@
-<% provide(:title, "New tab for #{@competition.name}") %>
+<% provide(:title, t('.new_tab_title', comp_name: @competition.name)) %>
 
 <%= render layout: 'competitions/nav' do %>
-  <%= render "competition_tab_form", submit_text: "Create", submit_url: competition_tabs_path %>
+  <%= render "competition_tab_form", submit_text: t('competition_tabs.form_elements.create_button'), submit_url: competition_tabs_path %>
 <% end %>

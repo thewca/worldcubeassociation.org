@@ -766,6 +766,27 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
+  #context: Competition's tabs management
+  competition_tabs:
+    headers:
+      tabs: "Tabs"
+      name: "Name"
+    form_elements:
+      create_button: "Create tab"
+      goto_button: "Go to %{tab_name} tab"
+      new_tab: "New tab"
+      edit: "Edit"
+      update: "Update"
+      delete: "Delete"
+      confirm_delete: "Are you sure you want to delete %{tab_name} tab?"
+      back_to_tabs: "Back to tabs"
+    new:
+      new_tab_title: "New tab for %{comp_name}"
+    index:
+      tabs_list_title: "Manage tabs"
+      tabs_introduction_text: "Here you can add and edit tabs which are shown on the competition info page."
+    edit:
+      edit_tab_title: "Edit %{tab_name} tab"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
