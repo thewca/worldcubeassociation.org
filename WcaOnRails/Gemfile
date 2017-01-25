@@ -66,9 +66,6 @@ gem 'daemons'
 gem 'i18n-country-translations'
 gem 'http_accept_language'
 
-gem 'sprockets'
-gem 'sprockets-rails', '2.2.4' # <<<
-
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
 
