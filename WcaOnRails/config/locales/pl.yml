@@ -771,8 +771,6 @@ pl:
       please_fix_profile: >-
         W celu zarejestrowania się na zawody musisz rozwiązać następujące
         problemy:
-      #original_hash: cb77bea
-      unconfirmed_wca_id: Niepotwierdzone WCA ID
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1

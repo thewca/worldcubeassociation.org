@@ -80,7 +80,7 @@
               <% if @user.unconfirmed_wca_id.present? %>
                 <div class="form-group wca_id optional user_unconfirmed_wca_id">
                   <label class="wca_id optional control-label" for="user_unconfirmed_wca_id">
-                    <%= t '.unconfirmed_wca_id' %>
+                    <%= t 'activerecord.attributes.user.unconfirmed_wca_id' %>
                   </label>
                   <div class="input-group">
                     <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
