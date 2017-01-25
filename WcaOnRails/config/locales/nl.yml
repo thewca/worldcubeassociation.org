@@ -87,7 +87,7 @@ nl:
       #original_hash: 603a218
       wca_id: WCA id
       #original_hash: e0f64f7
-      citizen_of: Uitkomend voor
+      citizen_of: Land
     #original_hash: 3fc0ba1
     all_regions: Alle regio's
     errors:
@@ -212,11 +212,11 @@ nl:
         #original_hash: 0eb5ed5
         information: Informatie
         #original_hash: 87b7d5f
-        use_wca_registration: Ik wil de WCA-website gebruiken voor registratie
+        use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
         #original_hash: 3c23a67
         guests_enabled: Gasten
         #original_hash: 089cbfd
-        receive_registration_emails: Stuur me een mail als iemand zich registreert
+        receive_registration_emails: Stuur me een mail als iemand zich aanmeldt
         #original_hash: d4aeed9
         registration_open: Aanmelding geopend
         #original_hash: f8153a2
@@ -238,7 +238,7 @@ nl:
         birthday: Geboortedatum
       competition_tab:
         #original_hash: 4f9be05
-        content: Content
+        content: Inhoud
         #original_hash: 709a232
         name: Naam
       delegate_report:
@@ -250,7 +250,7 @@ nl:
         equipment: Materiaal
         #original_hash: 67cd406
         venue: Wedstrijdlocatie
-        #original_hash: 6e99c1d
+        #original_hash: 519255a
         organization: Organisatie
         #original_hash: 5e326b1
         incidents: Incidenten
@@ -364,9 +364,8 @@ nl:
         #original_hash: 2c812a0
         name: >-
           De volledige wedstrijdnaam inclusief jaartal (bijv. Danish Open 2016).
-          Gebruik hoofdletters. De naam mag alleen letters en cijfers bevatten,
-          en verder - (minteken), & (apenstaartje), . (punt), : (dubbele punt),
-          ' (apostrof) en spaties.
+          Gebruik hoofdletters. De naam mag alleen letters, cijfers en spaties
+          bevatten, en verder -&.:'.
         #original_hash: 525fcc8
         cellName: >-
           Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
@@ -384,7 +383,7 @@ nl:
         #original_hash: cabe7fb
         external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
         #original_hash: 9965635
-        registration_open: 'Let op: de tijden van de registratie zijn in UTC tijdzone.'
+        registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone.'
         #original_hash: f688881
         remarks: >-
           Aanvullende informatie voor de Board. Bijv. een reden waarom de
@@ -402,12 +401,12 @@ nl:
         base_entry_fee_lowest_denomination: >-
           Het basisbedrag voor aanmelding voor de wedstrijd. Dit is opgenomen in
           de laagste eenheid, bijv. centen ingeval van dollars. Het bedrag wordt
-          getoond op de website en de registratiepagina. Let op: de WCA-website
-          ondersteunt nog geen betalingen. Het softwaretea, werkt hieraan en je
+          getoond op de website en de aanmeldingspagina. Let op: de WCA-website
+          ondersteunt nog geen betalingen. Het softwareteam werkt hieraan en je
           kunt de voortgang volgen op <a
           href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
         #original_hash: 866bc05
-        currency_code: Valutacode van het registratiebedrag.
+        currency_code: Valutacode van het aanmeldingsbedrag.
         #original_hash: da39a3e
         guests_enabled: ''
         #original_hash: da39a3e
@@ -458,7 +457,7 @@ nl:
           wedstrijdlocatie (oplossen, scramblen, wachtkamer, computers),
           verschillende podia, problemen die er waren (bijv. geluidsoverlast) en
           hoe je ze oploste. Wees beknopt ajb en noem geen irrelevante details.
-        #original_hash: 5a80c42
+        #original_hash: f8de509
         organization: >-
           Vertel over het organisatieteam en hoe er werd gewerkt tijdens de
           wedstrijd. Wat was jouw rol, wat was hun ervaring. Hoe werd er
@@ -535,9 +534,9 @@ nl:
       competition:
         guests_enabled:
           #original_hash: cb8809d
-          'true': Stel vraag over de gasten
+          'true': Vraag naar gasten
           #original_hash: f8c2332
-          'false': Stel geen vraag over de gasten
+          'false': Vraag niet naar gasten
   errors:
     messages:
       #original_hash: dc2367c
@@ -610,8 +609,8 @@ nl:
       #original_hash: 9ac918a
       about: Over WCA
       #original_hash: d8fd3e4
-      delegates: WCA Delegates
-      #original_hash: ec81ece
+      delegates: WCA delegates
+      #original_hash: 0ef06c8
       organizations: Nationale Organisaties
       #original_hash: d790b40
       faq: Veelgestelde vragen (FAQ)
@@ -680,11 +679,11 @@ nl:
       #original_hash: 753a22b
       notifications: Berichten
       #original_hash: 15141ea
-      edit_profile: Beheer profiel
+      edit_profile: Bewerken profiel
       #original_hash: d93d10f
       api: API
       #original_hash: 5524aab
-      manage_app: Beheer je applicaties
+      manage_app: Beheren applicaties
       #original_hash: 0e8b212
       manage_auth_app: Beheren geautoriseerde applicaties
   users:
@@ -902,19 +901,19 @@ nl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nul first-timers
-        one: één first-timer
-        other: '%{first-timers} first-timers'
+        other: '%{first-timers} nieuwkomers'
+        one: één nieuwkomer
+        zero: nul nieuwkomers
       #original_hash: bc010e3
       returner:
-        other: meerdere
-        one: één
-        zero: nul
+        zero: bestaande leden
+        one: bestaand lid
+        other: bestaande leden
       #original_hash: b7da17a
       person:
-        other: personen
-        one: persoon
         zero: personen
+        one: persoon
+        other: personen
     flash:
       #original_hash: da7ec53
       not_using_wca: Deze wedstrijd gebruikt niet de aanmeldingsprocedure van de WCA-website
@@ -922,17 +921,17 @@ nl:
       accepted_and_mailed:
         other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
         one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
-        zero: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
+        zero: Geen aanmelding geaccepteerd. Geen bevestigingsmail verzonden.
       #original_hash: 42ea8de
       rejected_and_mailed:
         other: Aanmeldingen verplaatst naar wachtlijst
         one: Aanmelding verplaatst naar wachtlijst
-        zero: Aanmelding verplaatst naar wachtlijst
+        zero: Geen aanmelding verplaatst naar wachtlijst
       #original_hash: a360b31
       deleted_and_mailed:
         other: Aanmeldingen verwijderd
         one: Aanmelding verwijderd
-        zero: Aanmelding verwijderd
+        zero: Geen aanmelding verwijderd
       #original_hash: c3aa289
       single_deletion_and_mail: 'Aanmelding verwijderd en mail verzonden naar %{mail}'
       #original_hash: d8f067f
@@ -954,7 +953,7 @@ nl:
       #original_hash: 8e68b3e
       country: land
       #original_hash: 5301648
-      edit: Beheren
+      edit: Bewerken
       #original_hash: 1feee0e
       export_csv: Exporteren naar CSV
       #original_hash: 84add5b
@@ -997,11 +996,11 @@ nl:
     #original_hash: cfc4865
     delete_registration: Verwijder aanmelding.
     #original_hash: e9ddc6e
-    will_open_html: 'Aanmelding gaat open over <strong>%{days}</strong> om %{time}.'
+    will_open_html: 'Aanmelding gaat open over <strong>%{days}</strong> op %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'Aanmelding sluit over <strong>%{days}</strong> om %{time}.'
+    will_close_html: 'Aanmelding sluit over <strong>%{days}</strong> op %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Aanmelding gesloten sinds <strong>%{days}</strong> om %{time}.'
+    closed_html: 'Aanmelding gesloten sinds <strong>%{days}</strong> op %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} om de status van je aanmelding te controleren. Als je nog geen
@@ -1100,9 +1099,9 @@ nl:
       organizer: Organisator
       #original_hash: 6afa61e
       delegate:
-        other: WCA Delegates
-        one: WCA Delegate
-        zero: WCA Delegates
+        other: WCA delegates
+        one: WCA delegate
+        zero: WCA delegates
       #original_hash: b37456c
       contact: Contact
       #original_hash: a428739
@@ -1127,7 +1126,7 @@ nl:
       #original_hash: bce0641
       search: Zoeken
       #original_hash: a725020
-      state: Provincie/Staat
+      state: Status
       #original_hash: 4e9f7a3
       present: Huidige
       #original_hash: 76eec76
@@ -1176,8 +1175,12 @@ nl:
       registrations: Aanmeldingen
       #original_hash: 4f98e6d
       results_up: Resultaten staat online!
-      #original_hash: ee45c30
-      report: Report
+      #original_hash: 87ab5db
+      report: Bekijken Delegate report
+      #original_hash: b4ca252
+      edit_report: Rapport bewerken
+      #original_hash: e590657
+      missing_report: Je report is nog niet gepost!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Je hebt momenteel geen aankomende wedstrijden! Kijk naar %{link}.'
       #original_hash: 9104a03
@@ -1243,14 +1246,13 @@ nl:
     errors:
       #original_hash: 83795c3
       invalid_name_message: >-
-        moet eindigen met een jaartal en mag alleen alfanumerieke tekens,
-        min-tekens (-), ampersands (&), punten, dubbele punten, apostrofs (') en
-        spaties bevatten
+        moet eindigen met een jaartal en mag alleen letters, cijfers en spaties
+        bevatten, en verder -&.:'.
       #original_hash: 8e8f765
-      cannot_manage: Kan de wedstrijd niet beheren
+      cannot_manage: Kan de wedstrijd niet beheren.
       #original_hash: 0acc454
       cannot_delete_public: >-
-        Kan een wedstrijd niet verwijderen als die zichtbaar is voor het
+        Kan een wedstrijd niet verwijderen als deze zichtbaar is voor het
         publiek.
       #original_hash: 3935fd6
       cannot_delete_confirmed: Kan een bevestigde wedstrijd niet verwijderen.
@@ -1270,7 +1272,7 @@ nl:
     unscheduled: ongepland
     new:
       #original_hash: 1208df7
-      create_competition: Maak wedstrijd aan
+      create_competition: Maak wedstrijd
       #original_hash: c02a415
       note_clone: >-
         Om een bestaande wedstrijd te klonen bezoek je de informatiepagina van
@@ -1330,7 +1332,7 @@ nl:
     #original_hash: 5b9523f
     upload_results: Resultaten uploaden
     #original_hash: 47dfd90
-    post_announcement: Wedstrijd annonceren
+    post_announcement: Wedstrijd aankondigen
     show:
       #original_hash: b0fe391
       general_info: Algemene informatie
@@ -1551,3 +1553,316 @@ nl:
             kun je je <a href='%{preferences_edit_path}'>hier</a> aanmelden om
             een bericht te krijgen van het beschikbaar komen van
             wedstrijdresultaten.
+  about:
+    #original_hash: 9ac918a
+    title: Over WCA
+    mission:
+      #original_hash: e4698d4
+      title: Missie
+      paragraphs:
+        #original_hash: 16ad45e
+        '1': >-
+          De World Cube Association bestuurt de wedstrijden voor alle puzzels in
+          de categorie Rubik puzzels, en alle andere puzzels die gespeeld worden
+          door het draaien van zijden, zogenoemde 'twisty puzzles'
+          (draaipuzzels). De beroemdste van deze puzzels is de Rubik's Kubus,
+          uitgevonden door professor Rubik uit Hongarije. Een selectie uit deze
+          puzzels is gekozen als officiële wedstrijdonderdelen van de WCA.
+        #original_hash: c8ecd24
+        '2': >-
+          De World Cube Association organiseert wedstrijden over de hele wereld,
+          ondersteund door nationale organisaties die verantwoordelijk zijn voor
+          het organiseren van wedstrijden in hun landen.
+        #original_hash: 20e0550
+        '3': >-
+          Het doel van de World Cube Association is <br /><strong>meer
+          wedstrijden in meer landen met meer mensen en meer plezier, onder
+          eerlijke en gelijke omstandigheden</strong>.
+        #original_hash: bee3687
+        '4': >-
+          De spirit van World Cube Association is that<br /> <strong>mensen van
+          over de hele wereld samen plezier hebben in een prettige atmosfeer,
+          elkaar helpen en zich sportief gedragen</strong>.
+    structure:
+      #original_hash: 9482c5d
+      title: Structuur
+      #original_hash: d855b50
+      board_html: >-
+        De World Cube Association wordt geleid door de <strong>WCA
+        Board</strong>, bestaande uit de volgende leden:
+      #original_hash: b0c72a9
+      committees: >-
+        De volgende commissies zijn verantwoordelijk voor de operationele
+        activiteiten van de WCA:
+      wdc:
+        #original_hash: 853bffa
+        name_html: <strong>WCA Disciplinaire Commissie (WDC)</strong>
+        #original_hash: 286fdf8
+        description: >-
+          Deze commissie adviseert de WCA Board in speciale gevallen, zoals
+          verdenkingen van schending van het WCA Wedstrijdreglement, and kan
+          worden gecontacteerd door WCA-leden ingeval van belangrijke
+          persoonlijke zaken betreffende WCA-wedstrijden.
+      wrc:
+        #original_hash: 4aa147f
+        name_html: <strong>WCA Reglement Commissie (WRC)</strong>
+        #original_hash: 13ada5b
+        description: >-
+          Deze commissie is verantwoordelijk voor het onderhouden van het WCA
+          Wedstrijdreglement.
+      results:
+        #original_hash: 3e819b8
+        name_html: <strong>WCA Resultaten team</strong>
+        #original_hash: 439ffae
+        description: >-
+          Dit team is verantwoordelijk voor het beheren van alle
+          wedstrijdresultaten.
+      software:
+        #original_hash: ea7f654
+        name_html: <strong>WCA Softwareteam</strong>
+        #original_hash: ec961e4
+        description: >-
+          Dit team is verantwoordelijk voor het beheren van de WCA-software
+          (website, scramblers, werkboeken en beheertools).
+      #original_hash: f2ceade
+      delegates_html: >-
+        <strong>WCA delegates</strong> zijn leden van de WCA die
+        verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
+        missie, reglementen en spirit van de WCA. De WCA onderscheidt
+        <strong>WCA Senior delegates</strong>, <strong>WCA delegates</strong> en
+        <strong>WCA kandidaat delegates</strong>%{see_link}. Naast de taken van
+        een WCA delegate is een WCA Senior delegate verantwoordelijk voor het
+        managen van de WCA delegates in hun regio en kan deze door de community
+        worden benaderd over regionale zaken. Nieuwe WCA delegates worden eerst
+        benoemd als WCA kandidaat delegates en moeten aantonen dat zij in staat
+        zijn om WCA-wedstrijden succesvol te laten verlopen, voordat ze worden
+        benoemd tot WCA delegate.
+      #original_hash: 27d18ac
+      see_link_html: '(zie%{link})'
+      #original_hash: 5b01fcc
+      members_html: >-
+        Alle deelnemers worden automatisch <strong>lid</strong> van WCA in hun
+        eerste WCA-wedstrijd.
+  delegates_page:
+    #original_hash: d8fd3e4
+    title: WCA delegates
+    #original_hash: 0a89b0f
+    acknowledges: >-
+      De WCA erkent de volgende leden als WCA delegates voor officiële
+      WCA-wedstrijden.
+    table:
+      #original_hash: 709a232
+      name: Naam
+      #original_hash: c3f104d
+      role: Rol
+      #original_hash: 0f21717
+      region: Regio
+  national_organizations:
+    #original_hash: 0ef06c8
+    title: Nationale Organisaties
+    #original_hash: f9a7f4d
+    content: 'De WCA erkent de volgende nationale organisaties:'
+  contact:
+    #original_hash: a34b69f
+    title: Contactinformatie
+    #original_hash: b5c2eaa
+    info_alert_html: >-
+      Bekijk, voordat je contact opneemt met een team op deze pagina, eerst deze
+      %{link}!
+    #original_hash: 2b023eb
+    questions_and_comments_html: >-
+      Voor vragen, opmerkingen en suggesties over de WCA-website, gebruik dit <a
+      href='/contact/website'>contactformulier</a>. Voor vragen over een
+      specifieke regio of competitie neem je contact op met je lokale %{link}.
+    #original_hash: 4a30d30
+    committees_and_teams_html: <u>Commissies en Teams</u>
+    board:
+      #original_hash: ccad374
+      name_html: <strong>WCA Board</strong>
+      #original_hash: 7ee8e36
+      info: >-
+        (WCA-organisatie, delegate reports, goedkeuring van competitions,
+        algemene vragen)
+    wdc:
+      #original_hash: 562e197
+      info: >-
+        (onafhankelijk advies aan WCA Board, onafhankelijke onderzoeken,
+        advisering voor belangrijke persoonlijke zaken)
+    wrc:
+      #original_hash: 4a256f0
+      info: (onderhoud van het WCA-wedstrijdreglement)
+    results:
+      #original_hash: 899dc9c
+      info: '(wedstrijdresultaten, resultaatcorrecties)'
+    software:
+      #original_hash: 325ab0a
+      info: (onderhoud van de WCA-software)
+  score_tools:
+    #original_hash: ea9d41d
+    title: WCA Score tools
+    paragraphs:
+      #original_hash: ec3e0ab
+      '1': >-
+        WCA beveelt sterkt het gebruik aan van <a
+        href="http://cubecomps.com">Cube Comps</a> voor en tijdens de wedstrijd.
+        Cube Comps is een online systeem met live scores en vele interessante
+        functionaliteiten, zoals het afdrukken van scorebriefjes en een
+        efficiënt multi-user resultaatinvoersysteem. Gemaakt door Luis J. Iáñez
+        en nu onder Open Source.
+      #original_hash: 7438b0d
+      '2': >-
+        Resultaatbestanden en scrambles moeten worden verwerkt en gecontroleerd
+        op fouten met de %{workbook_link} voordat deze naar het
+        WCA-resultatenteam worden verstuurd.
+      #original_hash: 975e59b
+      '3': >-
+        De nieuwste versie van het WCA-resultatenbestand kan worden gedownload
+        hier: <br /><a href="/files/results.xls"
+        target="_blank">WCA-resultatenbestand</a>.
+  logo:
+    #original_hash: c72c969
+    title: WCA-logo
+    paragraphs:
+      #original_hash: c092e13
+      '1': >-
+        Het WCA-logo is ontworpen door Justin Eastman in een ontwerpwedstrijd in
+        januari 2005.<br />We vonden het logo goed vanwege het ontwerp, de
+        kleuren en het feit dat het niet specifiek een Rubik's Kubus /
+        3x3x3-kubus uitbeeldt.
+      #original_hash: f228da2
+      '2': >-
+        We hebben drie verschillende versies van het logo: <a
+        href="/files/WCAlogo_XL.jpg">grote versie</a> (46 KB, 1756 px bij 1068
+        px), <a href="/files/WCAlogo.svg">vectorversie</a> en <a
+        href="/files/WCAlogo_notext.svg">vectorversie zonder tekst</a>.
+      #original_hash: dcb1ad6
+      '3': >-
+        3D-versie van het logo, ontworpen door Vu Minh Tan uit Vietnam: <a
+        href="/files/WCALogo3D.png">PNG-versie</a> (2.1 MB), <a
+        href="/files/WCALogo3Dsmall.png">kleine PNG-versie</a> (0.25 MB).
+      #original_hash: 545fcd9
+      '4': >-
+        Alle WCA-wedstrijdorganisatoren mogen het WCA-logo gebruiken voor
+        websites, kleding, kado's of decoraties, uitsluitend voor officiële
+        WCA-wedstrijden.<br /> Voor alle andere personen en doeleinden is
+        toestemming nodig van <a
+        href="mailto:board@worldcubeassociation.org">WCA Board</a> om het logo
+        the gebruiken.
+  workbook_assistant:
+    #original_hash: e442ea4
+    title: WCA Workbook Assistant
+    #original_hash: a7c307f
+    download: Download WCA Workbook Assistant
+    #original_hash: cf1b916
+    last_update: Laatst bijgewerkt
+    #original_hash: feece00
+    version_history: versiehistorie
+    #original_hash: 8f3f4c0
+    header: >-
+      Hoe resultaten en scrambles te verwerken voor deze op te sturen naar de
+      WCA
+    step1:
+      #original_hash: c0450b1
+      title: 'Stap 1: Open het werkboek met de resultaten'
+      #original_hash: 656d70d
+      content_html: >-
+        Open het werkboek met de <em>Open...</em>-knop of door het werkboek te
+        slepen naar het applicatiescherm.
+    step2:
+      #original_hash: 3ad9881
+      title: 'Stap 2: voeg de TNoodle scrambles toe'
+      #original_hash: 080acc0
+      content_html: >-
+        Voeg de TNoodle scrambles to met de <em>Toevoegen...</em> knop of door
+        het TNoodle-bestand te slepen naar het applicatiescherm. Zorg dat je het
+        zip-bestand of het json-bestand gebruikt dat door TNoodle is
+        gegenereerd.
+      #original_hash: 6cc90b8
+      content2_html: >-
+        Je kunt meerdere scramble-bestanden toevoegen als de scrambles in delen
+        zijn gegenereerd of extra scrambles zijn aangemaakt tijdens de
+        wedstrijd.
+    step3:
+      #original_hash: b2d01b3
+      title: 'Stap 3: koppel de scrambles aan de resultaten'
+      #original_hash: 36383b1
+      content_html: >-
+        De WCA Workbook Assistant verbindt automatisch de scrambles aan de
+        ronden die zijn gehouden. In sommige gevallen, zoals wanneer er meerdere
+        scramble-bestanden zijn gegenereerd moet de selectie handmatig worden
+        gedaan, omdat er dan meerdere mogelijkheden zijn.
+      #original_hash: e869c1e
+      content2_html: >-
+        Handmatig selecteren van scrambles kan worden gedaan door te
+        dubbelklikken op de cell <em>Scrambles</em> in het overzichtspaneel.
+      #original_hash: a42bae2
+      content3_html: >-
+        Het is alleen mogelijk om één ronde van de scramble-bestanden te
+        selecteren voor iedere ronde waarvoor er resultaten zijn. Als er
+        meerdere scramble-bestanden zijn voor een enkele ronde in TNoodle, kun
+        je met <em>Edit groups...</em> de groepen bewerken in de
+        scramble-bestanden en ze verplaatsen van ene ronde naar een andere, of
+        ze verwijderen.
+      #original_hash: 94353f2
+      content4_html: >-
+        In dit voorbeeld was een extra set scrambles gegenereerd voor twee
+        groepen van de eerste ronde van Skewb in plaats van één groep.
+      #original_hash: 68c5b18
+      content5_html: >-
+        De scrambles voor aanvullende groepen kunnen gesleept worden naar de
+        ronde die oorspronkelijk was gegenereerd. Zo worden de twee groepen naar
+        één ronde verplaatst.
+    step4:
+      #original_hash: ed940d2
+      title: 'Stap 4: Corrigeer fouten die de applicatie aangeeft'
+      #original_hash: df2cf58
+      content_html: >-
+        De resultaten worden gecontroleerd op fouten. Rondes die fouten hebben
+        worden gemarkeerd met een rood icon in het overzichtspaneel.
+      #original_hash: 7fbf6b8
+      content2_html: >-
+        Bij het selecteren van een regel met fouten in het overzichtspaneel, zal
+        de applicatie een overzicht geven van de geconstateerde fouten in het
+        paneel linksonder.
+      #original_hash: 0600502
+      content3_html: >-
+        Fouten kunnen worden hersteld door het werkboek te open in een
+        spreadsheet, het bestand te bewerken en op te slaan. Het bijgewerkte
+        werkboek kan opnieuw in de WCA Workbook Assistant worden geladen met de
+        <em>Refresh</em>-knop. Dit zal alleen de resultaten opnieuw laden maar
+        alle andere wijzigingen intact houden, zoals de scrambles die zijn
+        toegevoegd.
+    step5:
+      #original_hash: 536ec4d
+      title: 'Stap 5: Selecteer de id van de wedstrijd'
+      #original_hash: 5aeb5bd
+      content_html: >-
+        Selecteer de juiste id van de wedstrijd door op <em>Select</em> te
+        klikken naast het <em>Competition ID</em> veld.
+      #original_hash: 3acf7d0
+      content2_html: >-
+        In een pop-up verschijnt de lijst met wedstrijden waaruit kan worden
+        gekozen.
+      #original_hash: ceeb6fe
+      content3_html: >-
+        Je kunt de lijst filteren door een deel van de naam in te toetsen van de
+        wedstrijd of de WCA delegate.
+      #original_hash: 5ca74eb
+      content4_html: >-
+        Initieel worden alleen de wedstrijden van de laatste week getoond of die
+        de komende week plaatsvinden. Als je een wedstrijd buiten deze periode
+        wilt kiezen, vink dan <em>Only show current competitions</em> uit.
+    step6:
+      #original_hash: 52bb1f6
+      title: 'Stap 6: Exporteer de resultaten naar een json-bestand'
+      #original_hash: 6bfee23
+      content_html: >-
+        Sla de resultaten op als json-bestand door te klikken op <em>Export
+        results JSON...</em> rechtsonder.
+    step7:
+      #original_hash: 09fa37d
+      title: 'Stap 7: Stuur het json-bestand met de resultaten op naar WCA'
+      #original_hash: 9be089f
+      content_html: >-
+        Stuur het json-bestand uit WCA Workbook Assistant met e-mail op naar <a
+        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
