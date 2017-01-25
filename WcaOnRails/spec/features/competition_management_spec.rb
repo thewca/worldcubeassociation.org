@@ -67,6 +67,19 @@ RSpec.feature "Competition management" do
       expect(Competition.find("NewId2016")).not_to be_nil
     end
 
+    scenario "change competition id to invalid id" do
+      competition = FactoryGirl.create(:competition, :with_delegate, id: "OldId2016")
+      visit edit_competition_path(competition)
+      fill_in "ID", with: "NewId With Spaces"
+      click_button "Update Competition"
+
+      # When an invalid ID is specified, we silently ignore it. This behavior will
+      # get nicer once we have proper immutable ids for competitions.
+      expect(page).to have_text("Successfully saved competition.")
+      expect(Competition.find("OldId2016")).not_to be_nil
+      expect(Competition.find_by_id("NewId With Spaces")).to be_nil
+    end
+
     scenario "change competition id with validation error" do
       competition = FactoryGirl.create(:competition, :with_delegate, id: "OldId2016")
       visit edit_competition_path(competition)
