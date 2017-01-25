@@ -24,7 +24,7 @@ gem 'bootstrap-sass'
 gem 'mail_form'
 gem 'simple_form'
 gem 'valid_email'
-gem 'recaptcha', '0.4.0', require: 'recaptcha/rails' # <<<
+gem 'recaptcha', require: 'recaptcha/rails'
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'local_time'

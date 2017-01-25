@@ -362,7 +362,8 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     rdoc (4.3.0)
-    recaptcha (0.4.0)
+    recaptcha (4.0.1)
+      json
     redcarpet (3.4.0)
     ref (2.0.0)
     responders (2.3.0)
@@ -530,7 +531,7 @@ DEPENDENCIES
   rails-assets-simplemde (= 1.10.1)!
   rails-i18n!
   rake
-  recaptcha (= 0.4.0)
+  recaptcha
   redcarpet
   rspec-rails
   rubocop (= 0.42.0)
