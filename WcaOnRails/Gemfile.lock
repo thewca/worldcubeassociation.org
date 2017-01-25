@@ -219,7 +219,7 @@ GEM
       railties (>= 4.0)
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (0.9.8)
+    i18n-tasks (0.9.9)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       easy_translate (>= 0.5.0)
@@ -506,7 +506,7 @@ DEPENDENCIES
   http_accept_language
   i18n-country-translations
   i18n-spec
-  i18n-tasks (= 0.9.8)
+  i18n-tasks
   jbuilder
   jquery-rails
   kaminari
