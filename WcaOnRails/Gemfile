@@ -54,7 +54,7 @@ gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
 gem 'font-awesome-sass'
-gem 'lodash-rails', '3.10.1' # <<<
+gem 'lodash-rails'
 gem 'cocoon'
 gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true

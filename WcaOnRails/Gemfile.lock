@@ -265,7 +265,7 @@ GEM
       ruby_dep (~> 1.2)
     local_time (1.0.3)
       coffee-rails
-    lodash-rails (3.10.1)
+    lodash-rails (4.17.2)
       railties (>= 3.1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
@@ -513,7 +513,7 @@ DEPENDENCIES
   kaminari-i18n
   launchy
   local_time
-  lodash-rails (= 3.10.1)
+  lodash-rails
   mail_form
   mini_magick
   momentjs-rails!
