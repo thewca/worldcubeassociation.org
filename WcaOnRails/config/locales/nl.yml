@@ -95,14 +95,14 @@ nl:
       invalid: onjuist
     #original_hash: 49d0140
     days:
-      zero: nul dagen
-      one: één dag
       other: '%{count} dagen'
+      one: 1 dag
+      zero: 0 dagen
     #original_hash: 203e1b3
     these_events:
-      zero: nul wedstrijdonderdelen
-      one: één wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
+      one: dit wedstrijdonderdeel
+      zero: geen wedstrijdonderdelen
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -556,9 +556,9 @@ nl:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: nul fouten
-          one: één fout
-          other: '%{count} fouten'
+          other: 'Dit formulier bevat %{count} fouten:'
+          one: 'Dit formulier bevat één fout:'
+          zero: Dit formulier bevat geen fouten.
     doorkeeper:
       applications:
         help:
@@ -901,9 +901,9 @@ nl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: '%{first-timers} nieuwkomers'
-        one: één nieuwkomer
-        zero: nul nieuwkomers
+        other: nieuwkomers
+        one: nieuwkomer
+        zero: nieuwkomers
       #original_hash: bc010e3
       returner:
         zero: bestaande leden
@@ -919,19 +919,19 @@ nl:
       not_using_wca: Deze wedstrijd gebruikt niet de aanmeldingsprocedure van de WCA-website
       #original_hash: d528030
       accepted_and_mailed:
-        other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
-        one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
         zero: Geen aanmelding geaccepteerd. Geen bevestigingsmail verzonden.
+        one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
+        other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Aanmeldingen verplaatst naar wachtlijst
-        one: Aanmelding verplaatst naar wachtlijst
         zero: Geen aanmelding verplaatst naar wachtlijst
+        one: Aanmelding verplaatst naar wachtlijst
+        other: Aanmeldingen verplaatst naar wachtlijst
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Aanmeldingen verwijderd
-        one: Aanmelding verwijderd
         zero: Geen aanmelding verwijderd
+        one: Aanmelding verwijderd
+        other: Aanmeldingen verwijderd
       #original_hash: c3aa289
       single_deletion_and_mail: 'Aanmelding verwijderd en mail verzonden naar %{mail}'
       #original_hash: d8f067f
@@ -951,7 +951,7 @@ nl:
       #original_hash: 8b7631c
       title: 'Aanmeldingen voor %{comp}'
       #original_hash: 8e68b3e
-      country: land
+      country: Landen
       #original_hash: 5301648
       edit: Bewerken
       #original_hash: 1feee0e
@@ -1099,9 +1099,9 @@ nl:
       organizer: Organisator
       #original_hash: 6afa61e
       delegate:
-        other: WCA delegates
-        one: WCA delegate
         zero: WCA delegates
+        one: WCA delegate
+        other: WCA delegates
       #original_hash: b37456c
       contact: Contact
       #original_hash: a428739
