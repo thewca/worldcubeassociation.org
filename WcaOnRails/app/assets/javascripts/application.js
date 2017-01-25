@@ -25,6 +25,7 @@
 //= require jquery.floatThead.js
 //= require cocoon
 //= require moment
+//= require moment/es.js
 //= require moment/fr.js
 //= require moment/it.js
 //= require moment/pl.js

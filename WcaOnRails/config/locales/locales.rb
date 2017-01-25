@@ -5,6 +5,10 @@ module Locales
       "flag_id": "gb",
       "name": "English",
     },
+    "es": {
+      "flag_id": "es",
+      "name": "Español",
+    },
     "fr": {
       "flag_id": "fr",
       "name": "Français",
