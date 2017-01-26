@@ -260,7 +260,7 @@ pl:
         equipment: Wyposażenie
         #original_hash: 67cd406
         venue: Miejsce
-        #original_hash: 6e99c1d
+        #original_hash: 519255a
         organization: Organizacja
         #original_hash: 5e326b1
         incidents: Incydenty
@@ -335,7 +335,7 @@ pl:
         #original_hash: bfd11f4
         pending_avatar: >-
           Po przesłaniu nowego zdjęcia profilowego, będziesz musiał zaczekać, aż
-          Board go zaakceptuje.
+          Zarząd go zaakceptuje.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -403,7 +403,7 @@ pl:
         registration_open: 'Zauważ: Daty startowa i końcowa rejestracji są w czasie UTC.'
         #original_hash: f688881
         remarks: >-
-          Informacje które chcesz przesłać Board'owi. Na przykład powody, dla
+          Informacje które chcesz przesłać Zarządowi. Na przykład powody, dla
           których zawody zostały zgłoszone z mniejszym niż miesięczne
           wyprzedzeniem, jeśli tak było w tej sytuacji.
         #original_hash: da39a3e
@@ -477,7 +477,7 @@ pl:
           układania, problemy, które się pojawiły (np. hałas) i w jaki sposób je
           rozwiązałeś. Prosimy, bądź zwięzły i nie zgłaszaj nieistotnych
           szczegółów.
-        #original_hash: 5a80c42
+        #original_hash: f8de509
         organization: >-
           Opisz zespół organizacyjny oraz w jaki sposób pracował on podczas
           zawodów, ich doświadczenie i zauważalny postęp w ich pracy, jeżeli
@@ -637,8 +637,8 @@ pl:
       about: O WCA
       #original_hash: d8fd3e4
       delegates: Delegaci WCA
-      #original_hash: ec81ece
-      organizations: Narodowe Organizacje
+      #original_hash: 0ef06c8
+      organizations: Organizacje Narodowe
       #original_hash: d790b40
       faq: Często Zadawane Pytania
       #original_hash: a34b69f
@@ -847,7 +847,7 @@ pl:
         nie zgadza się z danymi w naszej bazie. Jeżeli jesteś pewien, że
         podajesz popraną datę we właściwym formacie (RRR-MM-DD), prosimy o
         wysłanie maila do <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>, zgłoszenie tego błędu oraz
+        target='_blank'>Zespołu do Spraw Wyników</a>, zgłoszenie tego błędu oraz
         wysłanie zdjęcia dowolnego legalnego dokumentu (dowód osobisty,
         paszport, prawo jazdy, legitymacja szkolna...), na którym twoje imię i
         data urodzin jest widoczna.
@@ -869,7 +869,7 @@ pl:
       wca_id_no_birthdate_html: >-
         Nie mamy zapisanej daty urodzin dla tego WCA ID. Prosimy o wysłanie
         maila do <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a>, zgłoszenie tego błędu oraz
+        target='_blank'>Zespołu do Spraw Wyników</a>, zgłoszenie tego błędu oraz
         wysłanie zdjęcia dowolnego legalnego dokumentu (dowód osobisty,
         paszport, prawo jazdy, legitymacja szkolna...), na którym twoje imię i
         data urodzin jest widoczna.
@@ -1136,7 +1136,7 @@ pl:
         Tylko zawody, które używają systemu rejestracji WCA, będą pokazane
         tutaj.
       #original_hash: 94a2fc8
-      past_competitions: Przeszłe zawody
+      past_competitions: Minione zawody
     competition_info:
       #original_hash: eb9a4bc
       date: Data
@@ -1189,16 +1189,16 @@ pl:
       #original_hash: 76eec76
       recent: Niedawne
       #original_hash: 405c12f
-      past: Przeszłe
+      past: Minione
       #original_hash: 52c30f8
-      past_from: 'Przeszłe z %{year}'
+      past_from: 'Minione z %{year}'
       #original_hash: 7cff459
-      past_all: Przeszłe ze wszystkich lat
+      past_all: Minione ze wszystkich lat
       titles:
         #original_hash: 69447c9
         in_progress: Zawody w trakcie
         #original_hash: 9e66032
-        past: 'Przeszłe zawody z %{year}'
+        past: 'Minione zawody z %{year}'
         #original_hash: cbe8a54
         recent: 'Niedawne zawody (ostatnie %{count} dni)'
         #original_hash: 914742f
@@ -1232,12 +1232,16 @@ pl:
       registrations: Zarejestrowani
       #original_hash: 4f98e6d
       results_up: Wyniki są przesłane!
-      #original_hash: ee45c30
-      report: Raport
+      #original_hash: 87ab5db
+      report: Zobacz Raport Delegata
+      #original_hash: b4ca252
+      edit_report: Edytuj raport
+      #original_hash: e590657
+      missing_report: Twój raport nie został jeszcze wysłany!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Nie masz obecnie nadchodzących zawodów! Sprawdź %{link}.'
       #original_hash: 9104a03
-      no_past_competitions: Nie masz przeszłych zawodów.
+      no_past_competitions: Nie masz minionych zawodów.
     competition_form:
       #original_hash: f957dcb
       supports_md_html: >-
@@ -1291,7 +1295,7 @@ pl:
       submit_confirm: >-
         Czy jesteś pewien, że jesteś godowy na potwierdzenie? Po potwierdzeniu,
         nie będziesz w stanie zmieniać żadnych informacji. Sprawdź swojego
-        emaila po wykonaniu tej czynności, w celu zweryfikowania, że Board
+        emaila po wykonaniu tej czynności, w celu zweryfikowania, że Zarząd
         został powiadomiony.
       #original_hash: 4c7deb7
       submit_delete: >-
@@ -1340,7 +1344,7 @@ pl:
       #original_hash: 9d1649e
       confirm_success: >-
         Pomyślnie potwierdzono zawody. Sprawdź swojego emaila i poczekaj, aż
-        Board je ogłosi!
+        Zarząd je ogłosi!
       #original_hash: 28567f0
       delete_success: 'Pomyślnie usunięto zawody %{id}.'
     time_until_competition:
@@ -1540,7 +1544,7 @@ pl:
           #original_hash: 809f53a
           '4': >-
             Odwiedź <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>ten poradnik<a> w celu
+            href='https://www.cubingusa.com/cguide.php'>ten poradnik</a> w celu
             uzyskania dalszych informacji. (W przypadku jakiegokolwiek konfliktu
             pomiędzy informacjami prezentowanymi w tym dodatkowym źródle wiedzy
             a regulaminem WCA, regulamin ma pierwszeństwo).
@@ -1593,7 +1597,7 @@ pl:
             Po zakończeniu zawodów, delegat WCA musi dokonać dokładnego
             sprawdzenia wszystkich kart z wynikami i danych osobowych w celu
             wyeliminowania potencjalnych błędów. Gdy to zostanie zrobione,
-            wyniki są wysyłane do WCA Results Team'u (WRT), który jest
+            wyniki są wysyłane do Zespołu do Spraw Wyników (WRT), który jest
             odpowiedzialny za upublicznianie wyników oraz utrzymywanie bazy
             danych WCA. Ostatecznie WRT przesyła wyniki do tej bazy tak szybko
             jak to możliwe.
@@ -1608,3 +1612,308 @@ pl:
             poniżej), masz możliwość włączyć powiadomienia drogą mailową o
             przesłaniu twoich wyników <a
             href='%{preferences_edit_path}'>tutaj</a>.
+  about:
+    #original_hash: 9ac918a
+    title: O WCA
+    mission:
+      #original_hash: e4698d4
+      title: Misja
+      paragraphs:
+        #original_hash: 16ad45e
+        '1': >-
+          World Cube Association zarządza zawodami w kostkach znanych jako
+          Kostka Rubika oraz wszystkich innych kostkach manipulowanych przez
+          obracanie ścianek, szerzej znanych jako 'twisty puzzles'.
+          Najsłynniejszą z nich jest Kostka Rubika, wymyśloną przez profesora
+          Rubika z Węgier. Określony zbiór tych kostek jest wybrany jako
+          oficjalne konkurencje WCA.
+        #original_hash: c8ecd24
+        '2': >-
+          World Cube Association organizuje zawody na całym świecie, przy
+          wsparciu narodowych organizacji odpowiedzialnych za organizację
+          zawodów swoich państwach.
+        #original_hash: 20e0550
+        '3': >-
+          Celem World Cube Association jest organizacja <br /><strong>większej
+          liczby zawodów, w większej ilości państw, z większą ilością osób i
+          zabawy, przy wzajemnej równości i uczciwości.</strong>
+        #original_hash: bee3687
+        '4': >-
+          W duchu World Cube Association jest, aby<br /> <strong>ludzie z całego
+          świata dobrze bawili się razem w przyjaznej atmosferze, pomagając
+          sobie wzajemnie i zachowując się jak prawdziwi sportowcy.</strong>
+    structure:
+      #original_hash: 9482c5d
+      title: Struktura
+      #original_hash: d855b50
+      board_html: >-
+        World Cube Association jest prowadzone przez <strong>Zarząd WCA (WCA
+        Board)</strong>, składający się z następujących członków:
+      #original_hash: b0c72a9
+      committees: 'Następujące komitety są odpowiedzialne za działalność WCA:'
+      wdc:
+        #original_hash: 853bffa
+        name_html: <strong>Komitet Dyscyplinarny WCA (WDC)</strong>
+        #original_hash: 286fdf8
+        description: >-
+          Ten komitet wspiera Zarząd WCA w szczególnych przypadkach, jak
+          domniemane naruszenie Regulaminu WCA. Mogą się z nim kontaktować
+          członkowie WCA w przypadkach ważnych osobistych spraw związanych z
+          zawodami WCA.
+      wrc:
+        #original_hash: 4aa147f
+        name_html: <strong>Komitet Regulacyjny WCA (WRC)</strong>
+        #original_hash: 13ada5b
+        description: Ten komitet jest odpowiedzialny za Regulamin WCA.
+      results:
+        #original_hash: 3e819b8
+        name_html: <strong>Zespół do Spraw Wyników WCA (WRT)</strong>
+        #original_hash: 439ffae
+        description: >-
+          Ten zespół jest odpowiedzialny za zarządzanie wszystkimi wynikami z
+          zawodów.
+      software:
+        #original_hash: ea7f654
+        name_html: <strong>Zespół Programistyczny WCA (WST)</strong>
+        #original_hash: ec961e4
+        description: >-
+          Ten zespół jest odpowiedzialny za zarządzanie oprogramowaniem WCA
+          (stroną internetową, programami generującymi algorytmy mieszające,
+          narzędziami administracyjnymi).
+      #original_hash: f2ceade
+      delegates_html: >-
+        <strong>Delegaci WCA</strong> są członkami WCA, którzy są odpowiedzialni
+        za upewnianie się za prawidłowy przebieg zawodów, zgodnie z misją,
+        regulaminem i duchem WCA. WCA rozróżnia <strong>Starszych Delegatów
+        WCA</strong>, <strong>Delegatów WCA</strong> oraz <strong>Kandydatów na
+        Delegata WCA</strong>%{see_link}. Poza obowiązkami Delegata WCA, Starszy
+        Delegat WCA jest odpowiedzialny za nadzór nad Delegatami na swoim
+        obszarze. Społeczność może kontaktować się z nim w regionalnych
+        sprawach. Nowi Delegaci uzyskują początkowo status Kandyda na Delegata
+        WCA i muszą wykazać swoją zdolność pomyślnego zarządzania zawodami,
+        zanim otrzymają status Delegata WCA.
+      #original_hash: 27d18ac
+      see_link_html: '(zobacz %{link})'
+      #original_hash: 5b01fcc
+      members_html: >-
+        Wszyscy zawodnicy stają się automatycznie <strong>członkami</strong> WCA
+        na swoich pierwszych zawodach.
+  delegates_page:
+    #original_hash: d8fd3e4
+    title: Delegaci WCA
+    #original_hash: 0a89b0f
+    acknowledges: 'WCA uznaje następujących członków za delegatów oficjalnych zawodów WCA:'
+    table:
+      #original_hash: 709a232
+      name: Imię
+      #original_hash: c3f104d
+      role: Rola
+      #original_hash: 0f21717
+      region: Region
+  national_organizations:
+    #original_hash: 0ef06c8
+    title: Organizacje narodowe
+    #original_hash: f9a7f4d
+    content: 'WCA uznaje następujące organizacje narodowe:'
+  contact:
+    #original_hash: a34b69f
+    title: Informacje kontaktowe
+    #original_hash: b5c2eaa
+    info_alert_html: >-
+      Przed skontaktowaniem się z którymkolwiek zespołem z tej strony, prosimy o
+      spojrzenie na %{link}!
+    #original_hash: 2b023eb
+    questions_and_comments_html: >-
+      W razie pytań, komentarzy i sugestii dotyczących strony, użyj tego <a
+      href='/contact/website'>formularza kontaktowego</a>. Na zapytania
+      dotyczące określonego obszaru lub zawodów odpowiedzi udzieli ci lokalny
+      %{link}, po skontaktowaniu się z nim.
+    #original_hash: 4a30d30
+    committees_and_teams_html: <u>Komitety i Zespoły</u>
+    board:
+      #original_hash: ccad374
+      name_html: <strong>Zarząd WCA</strong>
+      #original_hash: 7ee8e36
+      info: >-
+        (organizacja WCA, raporty delegatów, akceptacja zawodów, ogólne
+        zapytania)
+    wdc:
+      #original_hash: 562e197
+      info: >-
+        (niezależne doradztwo dla Zarządu WCA, niezawisłe dochodzenia, doradztwo
+        w ważnych sprawach osobistych)
+    wrc:
+      #original_hash: 4a256f0
+      info: (odpowiedzialność za Regulamin WCA)
+    results:
+      #original_hash: 899dc9c
+      info: '(wyniki zawodów, korekty rezultatów)'
+    software:
+      #original_hash: 325ab0a
+      info: (odpowiedzialność za oprogramowanie WCA)
+  score_tools:
+    #original_hash: ea9d41d
+    title: Narzędzia Operujące na Wynikach WCA
+    paragraphs:
+      #original_hash: ec3e0ab
+      '1': >-
+        WCA wysoce poleca używanie <a href="http://cubecomps.com">Cube Comps</a>
+        zarówno przed, jak i w trakcie zawodów. Jest to system online,
+        posiadający możliwość wprowadzania wyników na żywo oraz wiele
+        interesujących funkcjonalności, takich jak drukowanie kart startowych i
+        bardzo efektywny system wprowadzania danych. Jego twórcą jest Luis J.
+        Iáñez i obecnie projekt jest otwartym oprogramowaniem (Open Source).
+      #original_hash: 7438b0d
+      '2': >-
+        Arkusze wyników oraz algorytmy mieszające powinny być przetworzone i
+        sprawdzone pod względem poprawności przy użyciu %{workbook_link} przed
+        wysłaniem ich do Zespołu do Spraw Wyników.
+      #original_hash: 975e59b
+      '3': >-
+        Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <br
+        /><a href="/files/results.xls" target="_blank">tutaj</a>.
+  logo:
+    #original_hash: c72c969
+    title: Logo WCA
+    paragraphs:
+      #original_hash: c092e13
+      '1': >-
+        Logo WCA zaprojektował Justin Eastman podczas konkursu w styczniu 2005
+        roku.<br />Spodobał nam się jego pomysł ze względu na swój design,
+        kolorystykę i fakt, że nie ukazuje konkretnie Kostki Rubika 3x3x3.
+      #original_hash: f228da2
+      '2': >-
+        Posiadamy trzy różne wersje loga: <a href="/files/WCAlogo_XL.jpg">dużą
+        wersję</a> (46 KB, 1756 x 1068 pikseli), <a
+        href="/files/WCAlogo.svg">wersję wektorową</a> oraz <a
+        href="/files/WCAlogo_notext.svg">wersję wektorową bez tekstu</a>.
+      #original_hash: dcb1ad6
+      '3': >-
+        Trójwymiarową wersję loga stworzył Vu Minh Tan z Vietnamu: <a
+        href="/files/WCALogo3D.png">wersja PNG</a> (2.1 MB),  <a
+        href="/files/WCALogo3Dsmall.png">mała wersja PNG</a> (0.25 MB).
+      #original_hash: 545fcd9
+      '4': >-
+        Wszyscy organizatorzy zawodów mogą używać loga WCA na stronach, odzieży,
+        upominkach i dekoracjach (dotyczy tylko oficjalnych zawodów WCA). <br />
+        Wykorzystanie przez inne osoby i w innych celach wymaga zgody <a
+        href="mailto:board@worldcubeassociation.org">Zarządu WCA</a>.
+  workbook_assistant:
+    #original_hash: e442ea4
+    title: WCA Workbook Assistant
+    #original_hash: a7c307f
+    download: Pobierz WCA Workbook Assistant
+    #original_hash: cf1b916
+    last_update: Ostatnia aktualizacja
+    #original_hash: feece00
+    version_history: historia wersji
+    #original_hash: 8f3f4c0
+    header: Jak przetworzyć wyniki i algorytmy mieszające przed wysłaniem ich do WCA
+    step1:
+      #original_hash: c0450b1
+      title: 'Krok 1: Otwórz arkusz z wynikami'
+      #original_hash: 656d70d
+      content_html: >-
+        Otwórz arkusz za pomocą przycisku <em>Open...</em> lub pociągnij
+        odpowiedni plik, upuszczając go na oknie aplikacji.
+    step2:
+      #original_hash: 3ad9881
+      title: 'Krok 2: Dodaj algorytmy mieszające TNoodle'
+      #original_hash: 080acc0
+      content_html: >-
+        Dodaj algorytmy mieszające TNoodle za pomocą przycisku <em>Add...</em>
+        lub przeciągnij odpowiedni plik TNoodle i upuść go na oknie aplikacji.
+        Upewnij się, że używasz pliku .zip lub .json wygenerowanego przez
+        TNoodle.
+      #original_hash: 6cc90b8
+      content2_html: >-
+        Możesz dodać wiele plików z algorytmami mieszającymi, w przypadku gdy
+        zostały wygenerowane fragmentarycznie lub musiano wygenerować dodatkowe
+        algorytmy mieszające podczas zawodów.
+    step3:
+      #original_hash: b2d01b3
+      title: 'Krok 3: Dopasuj algorytmy mieszające do wyników'
+      #original_hash: 36383b1
+      content_html: >-
+        WCA Workbook Assistant automatycznie dopasowuje algorytmy mieszające do
+        rund, które się odbyły. W niektórych przypadkach, na przykład gdy wiele
+        plików z algorytmami mieszającymi zostało wygenerowanych, selekcja musi
+        być dokonana ręcznie ponieważ istnieje kilka możliwości.
+      #original_hash: e869c1e
+      content2_html: >-
+        Ręczny wybór algorytmów mieszających może być dokonany poprzez podwójne
+        kliknięcie komórki <em>Scrambles</em> w panelu przeglądu arkusza.
+      #original_hash: a42bae2
+      content3_html: >-
+        Możliwym jest wybranie tylko jednej rundy spośród plików z algorytmami
+        mieszającymi dla każdej rundy, w której są wyniki. Jeżeli pojawi się
+        sytuacja, w której algorytmy mieszające dla pojedynczej rundy zostały
+        wygenerowane jako oddzielne rundy w TNoodle, możesz użyć przycisku
+        <em>Edit groups...</em>, aby edytować grupy w plikach z algorytmami
+        mieszającymi i przenieść je z jednej rundy do innej lub usunąć je.
+      #original_hash: 94353f2
+      content4_html: >-
+        W tym przykładzie, dodatkowy zbiór algorytmów mieszających został
+        wygenerowany, aby w pierwszej rundzie skewba były dwie grupy zamiast
+        jednej.
+      #original_hash: 68c5b18
+      content5_html: >-
+        Algorytmy mieszające dla dodatkowej grupy mogę być przeciągnięte i
+        upuszczone na rundzie, która była wygenerowana początkowo. To powoduje
+        umieszczenie obu grup w jednej rundzie.
+    step4:
+      #original_hash: ed940d2
+      title: 'Krok 4: Popraw błędy zgłoszone przez aplikację'
+      #original_hash: df2cf58
+      content_html: >-
+        Wyniki są sprawdzane pod kątem błędów we wprowadzaniu danych. Rundy,
+        które będą posiadały błędy, zostaną zaznaczone czerwoną ikoną w panelu
+        przeglądu arkusza.
+      #original_hash: 7fbf6b8
+      content2_html: >-
+        Po wybraniu wiersza z błędami w panelu przeglądu arkusza, aplikacja
+        wyświetli szczegóły w panelu błędów walidacji w lewym dolnym roku.
+      #original_hash: 0600502
+      content3_html: >-
+        Błędy mogą zostać poprawione poprzez otwarcie arkusza w arkuszu
+        kalkulacyjnym, jego edycję i zapisanie. Zaktualizowany arkusz może być
+        następnie załadowany ponownie do WCA Workbook Assistant poprzez
+        kliknięcie przycisku <em>Refresh</em>. Spowoduje to jedynie
+        przeładowanie wyników, pozostawiając wszystkie inne wprowadzone zmiany
+        nietknięte, na przykład algorytmy mieszające, które zostały dodane.
+    step5:
+      #original_hash: 536ec4d
+      title: 'Krok 5: Wybierz ID zawodów'
+      #original_hash: 5aeb5bd
+      content_html: >-
+        Wybierz poprawne ID zawodów poprzez kliknięcie przycisku
+        <em>Select...</em> obok pola <em>Competition ID</em>.
+      #original_hash: 3acf7d0
+      content2_html: >-
+        Pokaże się okno dialogowe z listą zawodów spośród których należy dokonać
+        wyboru.
+      #original_hash: ceeb6fe
+      content3_html: >-
+        Możesz filtrować listę poprzez wprowadzenie części nazwy danych zawodów
+        lub Delegata WCA.
+      #original_hash: 5ca74eb
+      content4_html: >-
+        Początkowo jedynie zawody, które miały miejsce mniej niż tydzień temu
+        lub odbędą się w czasie nadchodzącego tygodnia, zostaną wyświetlone.
+        Jeżeli masz potrzebę wybrania zawodów spoza tego przedziału czasowego,
+        odznacz <em>Only show current competitions</em>.
+    step6:
+      #original_hash: 52bb1f6
+      title: 'Krok 6: Eksportuj wyniki jako JSON'
+      #original_hash: 6bfee23
+      content_html: >-
+        Zapisz wyniki do pliku JSON klikając przycisk <em>Export results
+        JSON...</em> w prawym dolnym roku.
+    step7:
+      #original_hash: 09fa37d
+      title: 'Krok 7: Wyślij wyniki w formacie JSON do WCA'
+      #original_hash: 9be089f
+      content_html: >-
+        Wyślij maila, dołączając plik JSON wyeksportowany przez WCA Workbook
+        Assistant, na adres <a
+        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
