@@ -436,7 +436,7 @@ $(function() {
     var data = $(this).data();
     var date = new Date(data.utcTime);
     var formatted = new Intl.DateTimeFormat(data.locale, {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric'
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'
     }).format(date);
     $(this).text(formatted);
   });
