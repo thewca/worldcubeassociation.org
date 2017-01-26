@@ -204,6 +204,7 @@ en:
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
+        registration_competition_events: "Events"
       #context: a competition tab
       competition_tab:
         content: "Content"
