@@ -668,7 +668,7 @@ en:
           posted: "Results are posted!"
           starts_in: "Starts in %{days}"
         #context: the "search" button
-        search: "Name, city, or month"
+        search: "Name or city"
         #context: the "recent" button
         recent: "Last %{count} days"
       no_comp_found: "No competitions found."

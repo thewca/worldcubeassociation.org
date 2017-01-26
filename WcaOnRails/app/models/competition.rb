@@ -40,8 +40,7 @@ class Competition < ActiveRecord::Base
   scope :contains, lambda { |search_term|
     where(
       "Competitions.name like :search_term or
-      Competitions.cityName like :search_term or
-      MONTHNAME(STR_TO_DATE(Competitions.month, '%m')) like :search_term",
+      Competitions.cityName like :search_term",
       search_term: "%#{search_term}%"
     )
   }
