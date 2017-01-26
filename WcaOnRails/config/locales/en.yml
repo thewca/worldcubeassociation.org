@@ -63,7 +63,7 @@ en:
   common:
     continent: "Continent"
     country: "Country"
-    #context: "here" as used in html links such as "You can create an account here".
+    #context: "here" is used in html links such as "You can create an account here".
     here: "here"
     best: "Best"
     single: "Single"
