@@ -81,7 +81,7 @@ module ApplicationHelper
   end
 
   def wca_local_time(time)
-    local_time(time, "%B %e, %Y %l:%M%P %Z")
+    content_tag :span, "", class: "wca-local-time", data: { utc_time: time.in_time_zone.utc.iso8601, locale: I18n.locale }
   end
 
   def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {})

@@ -431,3 +431,14 @@ function onPage(controllersWithActions, fun) {
     }
   });
 }
+
+$(function() {
+  $('.wca-local-time').each(function() {
+    var data = $(this).data();
+    var date = new Date(data.utcTime);
+    var formatted = new Intl.DateTimeFormat(data.locale, {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric'
+    }).format(date);
+    $(this).text(formatted);
+  });
+});
