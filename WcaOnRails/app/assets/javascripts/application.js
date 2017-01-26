@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
-//= require local_time
 //= require jquery.are-you-sure
 //= require locationpicker.jquery
 //= require selectize
