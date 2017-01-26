@@ -461,8 +461,9 @@ en:
       manage_pending: "Manage pending avatars"
       have_no_wca_id_html: "You do not have a WCA ID assigned yet. If you have competed before, request to have your WCA ID connected to your account %{here}!"
       have_wca_id_html: "Your WCA ID is %{link_id}."
+      #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country because %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
