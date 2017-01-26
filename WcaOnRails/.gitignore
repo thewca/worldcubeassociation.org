@@ -24,3 +24,5 @@ public/assets/**
 
 # Unicorn pid
 pids/*.pid
+
+.byebug_history
