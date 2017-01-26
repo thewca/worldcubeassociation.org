@@ -4,12 +4,13 @@ require "rails_helper"
 RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_board_of_confirmed_competition" do
     let(:delegate) { FactoryGirl.create :delegate }
-    let(:competition) { FactoryGirl.create :competition, delegates: [delegate] }
+    let(:second_delegate) { FactoryGirl.create :delegate }
+    let(:competition) { FactoryGirl.create :competition, delegates: [delegate, second_delegate] }
     let(:mail) { CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
       expect(mail.to).to eq(["board@worldcubeassociation.org"])
-      expect(mail.cc).to eq([delegate.email])
+      expect(mail.cc).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 
@@ -20,7 +21,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_users_of_results_presence" do
-    let(:competition) { FactoryGirl.create :competition }
+    let(:competition) { FactoryGirl.create :competition, :with_delegate }
     let(:competitor_user) { FactoryGirl.create :user, :wca_id }
     let(:mail) { CompetitionsMailer.notify_users_of_results_presence(competitor_user, competition) }
 
@@ -28,6 +29,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.subject).to eq "The results of #{competition.name} are posted"
       expect(mail.to).to eq [competitor_user.email]
       expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
     end
 
     it "renders the body" do

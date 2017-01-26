@@ -19,6 +19,7 @@ class CompetitionsMailer < ApplicationMailer
     mail(
       to: user.email,
       subject: "The results of #{competition.name} are posted",
+      reply_to: competition.delegates.pluck(:email),
     )
   end
 
