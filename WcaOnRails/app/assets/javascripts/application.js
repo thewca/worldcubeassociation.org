@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
-//= require local_time
 //= require jquery.are-you-sure
 //= require locationpicker.jquery
 //= require selectize
@@ -431,3 +430,14 @@ function onPage(controllersWithActions, fun) {
     }
   });
 }
+
+$(function() {
+  $('.wca-local-time').each(function() {
+    var data = $(this).data();
+    var date = new Date(data.utcTime);
+    var formatted = new Intl.DateTimeFormat(data.locale, {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'
+    }).format(date);
+    $(this).text(formatted);
+  });
+});
