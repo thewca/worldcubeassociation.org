@@ -40,8 +40,7 @@ class Competition < ActiveRecord::Base
   scope :contains, lambda { |search_term|
     where(
       "Competitions.name like :search_term or
-      Competitions.cityName like :search_term or
-      MONTHNAME(STR_TO_DATE(Competitions.month, '%m')) like :search_term",
+      Competitions.cityName like :search_term",
       search_term: "%#{search_term}%"
     )
   }
@@ -650,7 +649,7 @@ class Competition < ActiveRecord::Base
 
   def result_cache_key(view)
     results_updated_at = results.order('updated_at desc').limit(1).pluck(:updated_at).first
-    [id, view, results_updated_at.try(:iso8601) || ""]
+    [id, view, results_updated_at&.iso8601 || "", I18n.locale]
   end
 
   def events_with_podium_results

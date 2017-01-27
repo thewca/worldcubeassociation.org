@@ -17,11 +17,11 @@ class Continent < ActiveRecord::Base
     I18n.t(recordName, scope: :continents, locale: locale)
   end
 
-  ALL_CONTINENTS_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |l|
-    [l, Continent.all.map do |c|
+  ALL_CONTINENTS_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
+    [locale, Continent.all.map do |country|
       # We want a localized continent name, but a constant id across languages
-      [c.name_in(l), c.id]
+      [country.name_in(locale), country.id]
       # Now we want to sort continents according to their localized name
-    end.sort!(&Country::COMPARE_LOCALIZED_NAMES)]
+    end.sort!(&Country::COMPARE_LOCALIZED_NAMES.curry[locale])]
   end].freeze
 end

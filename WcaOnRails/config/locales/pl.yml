@@ -771,8 +771,6 @@ pl:
       please_fix_profile: >-
         W celu zarejestrowania się na zawody musisz rozwiązać następujące
         problemy:
-      #original_hash: cb77bea
-      unconfirmed_wca_id: Niepotwierdzone WCA ID
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1
@@ -1005,8 +1003,6 @@ pl:
     list:
       #original_hash: 8b7631c
       title: 'Rejestracje na %{comp}'
-      #original_hash: 8e68b3e
-      country: państwo
       #original_hash: 5301648
       edit: Edytuj
       #original_hash: 1feee0e
@@ -1150,8 +1146,6 @@ pl:
       details: Szczegóły
       #original_hash: 2e8a57c
       website: Strona internetowa
-      #original_hash: debd172
-      organizer: Organizator
       #original_hash: 6afa61e
       delegate:
         zero: Delegatów WCA
@@ -1353,14 +1347,12 @@ pl:
       #original_hash: e6e096a
       competition_was: 'Zawody były %{n_days} temu.'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: zawody
       #original_hash: e3528ec
       label: 'Pobliskie zawody (w ciągu %{days} dni i w obrębie %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Ostatnie %{days} dni'
       #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp} w obrębie %{kms} km i %{days} dni.'
+      nearby_admin: '%{x_competitions} w obrębie %{kms} km i %{days} dni.'
       #original_hash: feefb46
       no_comp_nearby: Nie ma pobliskich zawodów!
       #original_hash: 7e76950

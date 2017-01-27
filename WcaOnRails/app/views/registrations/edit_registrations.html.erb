@@ -58,7 +58,7 @@
               </td>
 
               <td class="name"><%= registration.name %></td>
-              <td class="countryId"><%= registration.countryId %></td>
+              <td class="countryId"><%= registration.country.name %></td>
               <td class="birthday"><%= registration.birthday %></td>
               <% @competition.events.each do |event| %>
                 <td>

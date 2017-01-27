@@ -1,14 +1,14 @@
-<% provide(:title, "Edit #{@competition_tab.name} tab") %>
+<% provide(:title, t('.edit_tab_title', tab_name: @competition_tab.name)) %>
 
 <%= render layout: 'competitions/nav' do %>
   <% buttons = capture do %>
-    <%= link_to icon("eye", "Go to #{@competition_tab.name} tab"),
+    <%= link_to icon("eye", t('competition_tabs.form_elements.goto_button', tab_name: @competition_tab.name)),
                 competition_path(@competition, anchor: @competition_tab.slug),
                 target: "_blnk", class: "btn btn-info" %>
-    <%= link_to icon("trash", "Delete"), competition_tab_path(@competition, @competition_tab),
+    <%= link_to icon("trash", t('competition_tabs.form_elements.delete')), competition_tab_path(@competition, @competition_tab),
                 method: :delete, class: "btn btn-danger",
-                data: { confirm: "Are you sure you want to delete #{@competition_tab.name} tab?" } %>
+                data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: @competition_tab.name) } %>
   <% end %>
 
-  <%= render "competition_tab_form", submit_text: "Update", submit_url: competition_tab_path(@competition, @competition_tab), buttons: buttons %>
+  <%= render "competition_tab_form", submit_text: t('competition_tabs.form_elements.update'), submit_url: competition_tab_path(@competition, @competition_tab), buttons: buttons %>
 <% end %>

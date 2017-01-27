@@ -24,4 +24,8 @@ module CompetitionsHelper
     level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days > d}.count
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
+
+  def year_is_a_number?(year)
+    year.is_a?(Integer) || year =~ /\A\d+\z/
+  end
 end

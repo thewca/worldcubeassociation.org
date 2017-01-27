@@ -759,8 +759,6 @@ it:
       please_fix_profile: >-
         Per poterti registrare a una competizione, devi risolvere i seguenti
         problemi:
-      #original_hash: cb77bea
-      unconfirmed_wca_id: WCA ID non confermato
       #original_hash: ff4fc02
       profile: Profilo
       #original_hash: 7b2c7f1
@@ -976,8 +974,6 @@ it:
     list:
       #original_hash: 8b7631c
       title: 'Registrazioni per la competizione %{comp}'
-      #original_hash: 8e68b3e
-      country: nazione
       #original_hash: 5301648
       edit: Modifica
       #original_hash: 1feee0e
@@ -1124,8 +1120,6 @@ it:
       details: Dettagli
       #original_hash: 2e8a57c
       website: Sito Web
-      #original_hash: debd172
-      organizer: Organizzatore
       #original_hash: 6afa61e
       delegate:
         zero: Delegati WCA
@@ -1322,14 +1316,12 @@ it:
       #original_hash: e6e096a
       competition_was: 'La competizione era %{n_days} fa.'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: competizione
       #original_hash: e3528ec
       label: 'Competizioni vicine (entro %{days} giorni e %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Ultimi %{days} giorni'
       #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp} entro %{kms} km e %{days} giorni.'
+      nearby_admin: '%{x_competitions} entro %{kms} km e %{days} giorni.'
       #original_hash: feefb46
       no_comp_nearby: Nessuna competizione vicina!
       #original_hash: 7e76950

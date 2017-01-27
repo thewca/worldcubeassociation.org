@@ -758,8 +758,6 @@ es:
       please_fix_profile: >-
         Para poder registrarte en competiciones, necesitas resolver los
         siguientes problemas:
-      #original_hash: cb77bea
-      unconfirmed_wca_id: WCA ID sin confirmar
       #original_hash: ff4fc02
       profile: Perfil
       #original_hash: 7b2c7f1
@@ -971,8 +969,6 @@ es:
     list:
       #original_hash: 8b7631c
       title: 'Registros para %{comp}'
-      #original_hash: 8e68b3e
-      country: país
       #original_hash: 5301648
       edit: Editar
       #original_hash: 1feee0e
@@ -1118,8 +1114,6 @@ es:
       details: Detalles
       #original_hash: 2e8a57c
       website: Web
-      #original_hash: debd172
-      organizer: Organizador
       #original_hash: 6afa61e
       delegate:
         zero: Delegados de la WCA
@@ -1318,8 +1312,6 @@ es:
       #original_hash: e6e096a
       competition_was: 'La competición fue hace %{n_days}.'
     nearby_competitions:
-      #original_hash: 1b44f6d
-      comp: competición
       #original_hash: e3528ec
       label: 'Competiciones cercanas (en %{days} días y %{kms} km)'
       #original_hash: 3446062

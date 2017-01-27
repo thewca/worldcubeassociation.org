@@ -48,7 +48,7 @@
     <ul class="dropdown-menu years">
       <%= hidden_field_tag "year", params[:year] %>
       <% @years.each do |year| %>
-        <% year_label = year.is_a?(Integer) ? year.to_s : t('competitions.index.all_years') %>
+        <% year_label = year_is_a_number?(year) ? year.to_s : t('competitions.index.all_years') %>
         <li class="year"><%= link_to year_label, "#", data: { year: year } %></li>
       <% end %>
     </ul>
@@ -57,7 +57,7 @@
       <span class="caption">
         <% if @past_selected %>
           <% #Here params[:year] is a string, so we need regexp %>
-          <%= params[:year] =~ /\A\d+\z/ ? t('competitions.index.past_from', year: params[:year]) : t('competitions.index.past_all') %>
+          <%= year_is_a_number?(params[:year]) ? t('competitions.index.past_from', year: params[:year]) : t('competitions.index.past_all') %>
         <% else %>
           <%= t 'competitions.index.past' %>
         <% end %>

@@ -22,7 +22,7 @@
       <dd><%= link_to "#{competition.name} website", competition.website, target: "_blank" %></dd>
 
       <% if competition.organizers.length > 0 %>
-        <dt><%= t('.organizer').pluralize(competition.organizers.length) %></dt>
+        <dt><%= t('.organizer_plural', count: competition.organizers.length) %></dt>
         <dd>
           <%# If the contact field is present, don't show organizers' emails. %>
           <%= users_to_sentence competition.organizers, include_email: competition.contact.blank? %>

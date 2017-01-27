@@ -7,7 +7,7 @@
       <%= f.submit submit_text, class: "btn btn-primary" %>
     </div>
     <div class="buttons-right">
-      <%= link_to icon("undo", "Back to tabs"), competition_tabs_path, class: "btn btn-default" %>
+      <%= link_to icon("undo", t('competition_tabs.form_elements.back_to_tabs')), competition_tabs_path, class: "btn btn-default" %>
       <%= buttons if defined?(buttons) %>
     </div>
   </div>

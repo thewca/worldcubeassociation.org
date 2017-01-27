@@ -1,15 +1,15 @@
-<% provide(:title, "Manage tabs") %>
+<% provide(:title, t(".tabs_list_title")) %>
 <% provide(:include_gmaps, true) %>
 
 <%= render layout: 'competitions/nav' do %>
-  Here you can add and edit tabs which are shown on the competition info page.
+  <%= t 'competition_tabs.index.tabs_introduction_text' %>
 
-  <h3>Tabs</h3>
+  <h3><%= t 'competition_tabs.headers.tabs' %></h3>
   <% unless @competition_tabs.empty? %>
     <table id="competition-tabs" class="table">
       <thead>
         <tr>
-          <th>Name</th>
+          <th><%= t 'competition_tabs.headers.name' %></th>
           <th></th>
           <th></th>
           <th></th>
@@ -21,11 +21,11 @@
           <tr>
             <th><%= tab.name %></th>
             <th>
-              <%= link_to icon("pencil", "Edit"), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %>
+              <%= link_to icon("pencil", t('competition_tabs.form_elements.edit')), edit_competition_tab_path(@competition, tab), class: "btn btn-xs btn-success" %>
             </th>
             <th>
-              <%= link_to icon("trash", "Delete"), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger",
-                                                   data: { confirm: "Are you sure you want to delete #{tab.name} tab?" } %>
+              <%= link_to icon("trash", t('competition_tabs.form_elements.delete')), competition_tab_path(@competition, tab), method: :delete, class: "btn btn-xs btn-danger",
+                                                   data: { confirm: t('competition_tabs.form_elements.confirm_delete', tab_name: tab.name) } %>
             </th>
             <th><%= link_to icon("arrow-circle-up"), competition_tab_reorder_path(@competition, tab, direction: "up"), remote: true, class: "reorder-up" %></th>
             <th><%= link_to icon("arrow-circle-down"), competition_tab_reorder_path(@competition, tab, direction: "down"), remote: true, class: "reorder-down" %></th>
@@ -35,5 +35,5 @@
     </table>
   <% end %>
 
-  <%= link_to icon(:plus, "New tab"), new_competition_tab_path, class: "btn btn-primary" %>
+  <%= link_to icon(:plus, t('competition_tabs.form_elements.new_tab')), new_competition_tab_path, class: "btn btn-primary" %>
 <% end %>

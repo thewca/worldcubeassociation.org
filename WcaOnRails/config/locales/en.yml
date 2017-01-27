@@ -63,6 +63,7 @@ en:
   common:
     continent: "Continent"
     country: "Country"
+    #context: "here" is used in html links such as "You can create an account here".
     here: "here"
     best: "Best"
     single: "Single"
@@ -74,11 +75,11 @@ en:
     all_regions: "All regions"
     errors:
       invalid: "invalid"
-    #context: Key used for the pluralization of "x day(s)" in a sentence
+    #context: Key used for the pluralization of "x day(s)" in a sentence like "Stars in x days".
     days:
       one: "1 day"
       other: "%{count} days"
-    #context: Key used for the pluralization of "x event(s)" in a sentence
+    #context: Key used for the pluralization of "x event(s)" in a sentence like "Couldn't find a competition with these x events"
     these_events:
       one: "this event"
       other: "these %{count} events"
@@ -96,7 +97,7 @@ en:
       scopes: "Scopes"
       callback_urls: "Callback Urls"
   activerecord:
-    #context: This key is an attribute of
+    #context: This key is used as a label for forms regarding
     attributes:
       #context: a user
       user:
@@ -319,6 +320,7 @@ en:
     options:
       #context: about registration
       registration:
+        #context: This is one of the status a registration can have (used in a bullet list)
         status:
           accepted: "Accepted"
           pending: "Waiting list"
@@ -355,6 +357,7 @@ en:
       applications:
         help:
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8" target="_blank">here</a> for a list of supported scopes.'
+      #context: and asking the user "The application will be able to"
       scopes:
         public: 'Access your public data (name, WCA ID, gender, citizenship, and profile picture)'
         dob: 'Access your date of birth'
@@ -446,7 +449,6 @@ en:
       preferred_events: "Preferred events"
       preferred_events_desc: "Selecting your preferred events makes registration for competitions quicker."
       please_fix_profile: "In order to register for competitions, you need to fix the following problems:"
-      unconfirmed_wca_id: "Unconfirmed WCA ID"
       profile: "Profile"
       approve: "Approve"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
@@ -459,8 +461,9 @@ en:
       manage_pending: "Manage pending avatars"
       have_no_wca_id_html: "You do not have a WCA ID assigned yet. If you have competed before, request to have your WCA ID connected to your account %{here}!"
       have_wca_id_html: "Your WCA ID is %{link_id}."
+      #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country because %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -549,8 +552,11 @@ en:
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
-      country: "country"
       edit: "Edit"
+      #context: pluralization of "x country", used on its own, below registrations list
+      country_plural:
+        one: "1 country"
+        other: "%{count} countries"
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
@@ -616,7 +622,11 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
-      organizer: "Organizer"
+      #context: Pluralization of the "Organizer" label for a competition form
+      organizer_plural:
+        one: "Organizer"
+        other: "Organizers"
+      #context: Pluralization of the "Delegate" label for a competition form
       delegate:
         one: "WCA Delegate"
         other: "WCA Delegates"
@@ -637,11 +647,15 @@ en:
       present: "Present"
       recent: "Recent"
       past: "Past"
+      #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
+        #context: when selecting a specific year ('year' is a number)
         past: "Past competitions from %{year}"
+        past_all: "Past competitions from all years"
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
       no_access: "You don't have access to this page!"
@@ -654,7 +668,7 @@ en:
           posted: "Results are posted!"
           starts_in: "Starts in %{days}"
         #context: the "search" button
-        search: "Name, city, venue, country or month"
+        search: "Name or city"
         #context: the "recent" button
         recent: "Last %{count} days"
       no_comp_found: "No competitions found."
@@ -716,10 +730,14 @@ en:
       competition_was: "Competition was %{n_days} ago."
     #context: in the "nearby competitions" list
     nearby_competitions:
-      comp: "competition"
+      #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
+      competitions:
+        zero: "No competitions"
+        one: "1 competition"
+        other: "%{count} competitions"
       label: "Nearby competitions (within %{days} days and %{kms} km)"
       label_admin: "Last %{days} days"
-      nearby_admin: "%{comps} %{comp} within %{kms} km and %{days} days."
+      nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
       no_comp_nearby: "No nearby competitions!"
       no_date_yet: "You have not assigned a date for this competition yet."
       no_location_yet: "You have not assigned a location for this competition yet."
@@ -760,6 +778,27 @@ en:
       event: "Event"
       round: "Round"
       name: "Name"
+  #context: Competition's tabs management
+  competition_tabs:
+    headers:
+      tabs: "Tabs"
+      name: "Name"
+    form_elements:
+      create_button: "Create tab"
+      goto_button: "Go to %{tab_name} tab"
+      new_tab: "New tab"
+      edit: "Edit"
+      update: "Update"
+      delete: "Delete"
+      confirm_delete: "Are you sure you want to delete %{tab_name} tab?"
+      back_to_tabs: "Back to tabs"
+    new:
+      new_tab_title: "New tab for %{comp_name}"
+    index:
+      tabs_list_title: "Manage tabs"
+      tabs_introduction_text: "Here you can add and edit tabs which are shown on the competition info page."
+    edit:
+      edit_tab_title: "Edit %{tab_name} tab"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"

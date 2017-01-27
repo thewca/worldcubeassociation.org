@@ -35,7 +35,7 @@
     <div class="col-sm-9">
       <% nearby_competitions_info = @competition.nearby_competitions(Competition::NEARBY_DAYS_INFO, Competition::NEARBY_DISTANCE_KM_INFO).sort_by(&:start_date) %>
       <% nearby_count = nearby_competitions_info.count %>
-      <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= t '.nearby_admin', comps: nearby_count, comp: t('.comp').pluralize(nearby_count), kms: Competition::NEARBY_DISTANCE_KM_INFO, days: Competition::NEARBY_DAYS_INFO %>
+      <div class="alert <%= nearby_count < Competition::NEARBY_INFO_COUNT ? "alert-success" : "alert-danger" %>" role="alert"><%= t '.nearby_admin', x_competitions: t('.competitions', count: nearby_count), kms: Competition::NEARBY_DISTANCE_KM_INFO, days: Competition::NEARBY_DAYS_INFO %>
       <button type="button" class="btn" data-toggle="modal" data-target="#competitions-last-year-modal"><%= t '.show' %></button>
       </div>
     </div>

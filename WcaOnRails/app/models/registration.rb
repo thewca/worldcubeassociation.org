@@ -75,8 +75,8 @@ class Registration < ActiveRecord::Base
     user.gender
   end
 
-  def countryId
-    user.country&.id
+  def country
+    user.country
   end
 
   def email
