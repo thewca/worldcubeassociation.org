@@ -791,11 +791,11 @@ pt-BR:
       #original_hash: 29e25b5
       have_wca_id_html: 'Sua ID da WCA é %{link_id}.'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
-          Você não pode alterar seu nome, data de nascimento, gênero ou país
-          porque %{reason}. Entre em contato com seu <a
-          href='%{delegate_url}'>delegate</a> para fazer alguma dessas mudanças.
+          Você não pode alterar seu nome, data de nascimento, gênero ou país.
+          Motivo: %{reason}. Entre em contato com seu <a
+          href='%{delegate_url}'>delegado</a> para fazer alguma dessas mudanças.
         reason:
           #original_hash: 370ff12
           assigned: você tem uma ID da WCA associada
@@ -963,6 +963,11 @@ pt-BR:
       title: 'Inscrições do %{comp}'
       #original_hash: 5301648
       edit: Editar
+      #original_hash: 0ab725c
+      country_plural:
+        zero: país
+        one: país
+        other: países
       #original_hash: 1feee0e
       export_csv: Exportar em CSV
       #original_hash: 84add5b
@@ -1104,6 +1109,11 @@ pt-BR:
       details: Detalhes
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 680567f
+      organizer_plural:
+        zero: Organizador
+        one: Organizador
+        other: Organizadores
       #original_hash: 6afa61e
       delegate:
         zero: Delegado da WCA
@@ -1149,6 +1159,8 @@ pt-BR:
         in_progress: Competições em andamento
         #original_hash: 9e66032
         past: 'Competições passadas - %{year}'
+        #original_hash: f628f0e
+        past_all: Competições passadas - todos os anos
         #original_hash: cbe8a54
         recent: 'Competições recentes (últimos %{count} dias)'
         #original_hash: 914742f
@@ -1165,8 +1177,8 @@ pt-BR:
           posted: Resultados publicados!
           #original_hash: 89bcc37
           starts_in: 'Começa em %{days}'
-        #original_hash: a418217
-        search: 'Nome, cidade, local, país ou mês'
+        #original_hash: ccd2db9
+        search: Nome ou cidade
         #original_hash: 3bc8082
         recent: 'Últimos %{count} dias'
       #original_hash: 8b09d74
@@ -1182,8 +1194,12 @@ pt-BR:
       registrations: Inscrições
       #original_hash: 4f98e6d
       results_up: Resultados publicados!
-      #original_hash: ee45c30
-      report: Relatório
+      #original_hash: 87ab5db
+      report: Ver o Relatório do Delegado
+      #original_hash: b4ca252
+      edit_report: Editar o Relatório
+      #original_hash: e590657
+      missing_report: Seu relatório ainda não foi postado!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Você não tem nenhuma competição futura! Veja %{link}.'
       #original_hash: 9104a03
@@ -1249,7 +1265,7 @@ pt-BR:
       #original_hash: 8ebebca
       coordinates: Coordenadas
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: >-
         deve terminar com um ano e conter somente caracteres alfanuméricos,
         traços (-), "e comercial" (&), pontos (.), dois-pontos (:), apóstrofos
@@ -1299,11 +1315,16 @@ pt-BR:
       #original_hash: e6e096a
       competition_was: 'A competição aconteceu %{n_days} atrás.'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        zero: Nenhuma competição
+        one: 1 competição
+        other: '%{count} competições'
       #original_hash: e3528ec
       label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Últimos %{days} dias'
-      #original_hash: 14276ae
+      #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} num intervalo de %{kms} km e %{days} dias.'
       #original_hash: feefb46
       no_comp_nearby: Nenhuma competição próxima!
@@ -1379,6 +1400,42 @@ pt-BR:
       round: Rodada
       #original_hash: 709a232
       name: Nome
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: Abas
+      #original_hash: 709a232
+      name: Nome
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: Criar aba
+      #original_hash: 8d5b6f9
+      goto_button: 'Ir para aba %{tab_name}'
+      #original_hash: 6f23a36
+      new_tab: Nova aba
+      #original_hash: 5301648
+      edit: Editar
+      #original_hash: fb91e24
+      update: Atualizar
+      #original_hash: f6fdbe4
+      delete: Excluir
+      #original_hash: 14e49c1
+      confirm_delete: 'Tem certeza que deseja excluir a aba %{tab_name}?'
+      #original_hash: ce1bf0b
+      back_to_tabs: Voltar para Abas
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: 'Nova aba para %{comp_name}'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: Gerenciar abas
+      #original_hash: 40f9491
+      tabs_introduction_text: >-
+        Aqui você pode criar e editar abas que serão exibidas na página de
+        informações da competição.
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: 'Editar aba %{tab_name}'
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Vincular sua ID da WCA à sua conta!
