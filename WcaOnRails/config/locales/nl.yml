@@ -76,7 +76,7 @@ nl:
     #original_hash: 0154c0d
     here: hier
     #original_hash: 77003d0
-    best: Beste tijd
+    best: Beste resultaat
     #original_hash: dd11868
     single: Single
     #original_hash: 15f86c0
@@ -95,14 +95,14 @@ nl:
       invalid: onjuist
     #original_hash: 49d0140
     days:
-      other: '%{count} dagen'
-      one: 1 dag
       zero: 0 dagen
+      one: 1 dag
+      other: '%{count} dagen'
     #original_hash: 203e1b3
     these_events:
-      other: 'deze %{count} wedstrijdonderdelen'
-      one: dit wedstrijdonderdeel
       zero: geen wedstrijdonderdelen
+      one: dit wedstrijdonderdeel
+      other: 'deze %{count} wedstrijdonderdelen'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -124,7 +124,7 @@ nl:
       #original_hash: c23540e
       scopes: Scope
       #original_hash: 3b0d449
-      callback_urls: Callback Url's
+      callback_urls: Callback url's
   activerecord:
     attributes:
       user:
@@ -151,7 +151,7 @@ nl:
         #original_hash: 19dff4d
         current_password: Huidig wachtwoord
         #original_hash: 786b8af
-        password_confirmation: Wachtwoord herhaling
+        password_confirmation: Wachtwoord (herhaling)
         #original_hash: ced7b30
         remember_me: Onthoud mij
         #original_hash: 102efae
@@ -174,7 +174,7 @@ nl:
         #original_hash: 89f89c0
         id: id
         #original_hash: 7f3d889
-        isConfirmed: Laat organisatoren deze wedstrijd niet beheren
+        isConfirmed: Laat organisatoren deze wedstrijd niet bewerken
         #original_hash: d493e6a
         showAtAll: Maak deze wedstrijd zichtbaar voor publiek
         #original_hash: 709a232
@@ -224,7 +224,7 @@ nl:
         #original_hash: d7020f4
         remarks: Opmerkingen
         #original_hash: c305010
-        clone_tabs: Ik wil de tabbladen klonen inclusief aanvullende informatie
+        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -247,7 +247,7 @@ nl:
         #original_hash: 65a9b28
         schedule_url: Link naar tijdschema
         #original_hash: 36155d4
-        equipment: Materiaal
+        equipment: Wedstrijdmateriaal
         #original_hash: 67cd406
         venue: Wedstrijdlocatie
         #original_hash: 519255a
@@ -316,7 +316,7 @@ nl:
         dob: Voer je geboortedatum in met formaat jjjj-mm-dd.
         #original_hash: 5106479
         name: >-
-          Voer je volledig en juist in, bijvoorbeeld <strong>Stefan
+          Voer je naam volledig en juist in, bijvoorbeeld <strong>Stefan
           Pochmann</strong>. Met hoofdletters en volledig uitgeschreven.
         #original_hash: c03b949
         email: >-
@@ -324,7 +324,7 @@ nl:
           e-mailadres.
         #original_hash: bfd11f4
         pending_avatar: >-
-          Na het uploaden van je profielfoto, wordt je foto binnen enkele dagen
+          Na het uploaden van je profielfoto, wordt deze binnen enkele dagen
           beoordeeld.
         #original_hash: da39a3e
         country_iso2: ''
@@ -363,27 +363,31 @@ nl:
       competition:
         #original_hash: 2c812a0
         name: >-
-          De volledige wedstrijdnaam inclusief jaartal (bijv. Danish Open 2016).
-          Gebruik hoofdletters. De naam mag alleen letters, cijfers en spaties
-          bevatten, en verder -&.:'.
+          De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish Open
+          2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers en
+          spaties bevatten, en verder -&.:'.
         #original_hash: 525fcc8
         cellName: >-
           Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
           gebruiken (bijv. Euro 2006).
         #original_hash: bce4589
-        cityName: 'Naam van de stad en provincie, zonder land.'
+        cityName: >-
+          Naam van de stad, zonder provincie of land. (voor sommige landen laten
+          we de staat zien)
         #original_hash: 17c8ff8
         information: >-
           Extra informatie over de wedstrijd, bijv. De wedstrijd is open voor
           alle deelnemers ongeacht hun oplossnelheid.
         #original_hash: 0708400
-        delegate_ids: WCA delegates van de wedstrijd
+        delegate_ids: WCA delegates van de wedstrijd.
         #original_hash: 517d376
-        organizer_ids: Organisatoren (ze hebben een account nodig om hier toe te voegen).
+        organizer_ids: >-
+          Organisatoren (ze hebben een account nodig om op de lijst zichtbaar te
+          worden).
         #original_hash: cabe7fb
         external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
         #original_hash: 9965635
-        registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone.'
+        registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
         #original_hash: f688881
         remarks: >-
           Aanvullende informatie voor de Board. Bijv. een reden waarom de
@@ -454,7 +458,7 @@ nl:
         #original_hash: 4658dd9
         venue: >-
           Vertel over de ruimte, het licht, ruimte voor publiek, indeling van de
-          wedstrijdlocatie (oplossen, scramblen, wachtkamer, computers),
+          wedstrijdlocatie (oplossen, scramblen, wachtruimte, computers),
           verschillende podia, problemen die er waren (bijv. geluidsoverlast) en
           hoe je ze oploste. Wees beknopt ajb en noem geen irrelevante details.
         #original_hash: f8de509
@@ -466,11 +470,11 @@ nl:
           Wees beknopt en rapporteer geen irrelevante details.
         #original_hash: 715f020
         incidents: >-
-          Rapport alle incidenten die de moeite waard zijn. Nummer de incidenten
-          zodat bij commentaren naar de incidenten kan worden verwezen. Houd het
-          concreet, geen algemene opmerkingen. Voel je vrij om andere delegates
-          of de WRC om feedback te vragen. Als je een uitspraak van WRC
-          verwacht, maak dat dan duidelijk.
+          Rapporteer alle incidenten die de moeite waard zijn. Nummer de
+          incidenten zodat bij commentaren naar de incidenten kan worden
+          verwezen. Houd het concreet, geen algemene opmerkingen. Voel je vrij
+          om andere delegates of de WRC om feedback te vragen. Als je een
+          uitspraak van WRC verwacht, maak dat dan duidelijk.
         #original_hash: f30abdc
         remarks: >-
           Vermeld overige punten die je wilt delen (bijv. ontwikkeling in de
@@ -556,9 +560,9 @@ nl:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Dit formulier bevat %{count} fouten:'
-          one: 'Dit formulier bevat één fout:'
           zero: Dit formulier bevat geen fouten.
+          one: 'Dit formulier bevat één fout:'
+          other: 'Dit formulier bevat %{count} fouten:'
     doorkeeper:
       applications:
         help:
@@ -689,11 +693,11 @@ nl:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Locale bijgewerkt.
+      success: Landinstellingen bijgewerkt.
       #original_hash: dcc2f49
       failure: Profiel bijwerken mislukt.
       #original_hash: c29870c
-      unavailable: Gevraagde locale niet beschikbaar.
+      unavailable: Gevraagde landinstellingen niet beschikbaar.
     claim_wca_id:
       #original_hash: f28bf87
       title: Claim je WCA id
@@ -703,15 +707,15 @@ nl:
       already_have_html: 'Je hebt al een WCA id %{wca_id}.'
       #original_hash: 87f1062
       already_claimed_html: >-
-        Je hebt WCA %{wca_id} geclaimd,. Neem contact op met %{delegate} als je
-        nog vragen hebt.
+        Je hebt WCA id %{wca_id} geclaimd. Neem contact op met %{delegate} als
+        je nog vragen hebt.
       #original_hash: 0660b5d
       info_competed_before: >-
         Als je al eens aan een WCA-wedstijd hebt deelgenomen, kun je verzoeken
-        om je WCA id aan je account te koppelen.
+        om je WCA id aan je WCA-account te koppelen.
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        Als je nog nooit aan een WCA-wedstrijd hebt meegedaan, ga dan naar
+        Als je nog nooit aan een WCA-wedstrijd hebt meegedaan, ga dan naar een
         %{comp}! Je WCA id wordt aangemaakt zodra de resultaten van je eerste
         wedstrijd zijn gepubliceerd.
       #original_hash: f28bf87
@@ -756,7 +760,7 @@ nl:
       pending_avatar_confirmation: Dit account wacht op bevestiging van een nieuwe profielfoto.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
-        Dit account wacht op %{delegate} om het geclaimde WCA id %{wca_id} te
+        Dit account wacht op %{delegate} om de geclaimde WCA id %{wca_id} te
         bevestigen.
       #original_hash: fc7269a
       pending_claim_mail_confirmation_html: >-
@@ -777,11 +781,11 @@ nl:
       #original_hash: 29e25b5
       have_wca_id_html: 'Je WCA id is %{link_id}.'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
-          Naam, geboortedatum of land kan niet worden gewijzigd omdat %{reason}.
-          Neem contact op met je a href='%{delegate_url}'>delegate</a> als je
-          iets wilt wijzigen,
+          Naam, geboortedatum of land kan niet worden gewijzigd. Reden:
+          %{reason}. Neem contact op met je a
+          href='%{delegate_url}'>delegate</a> als je iets wilt wijzigen,
         reason:
           #original_hash: 370ff12
           assigned: je hebt al een toegekende WCA id
@@ -790,16 +794,16 @@ nl:
       #original_hash: efc007a
       save: Opslaan
       #original_hash: 141d1d7
-      guidelines: Overige richtlijnen
+      guidelines: Aanvullende richtlijnen
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Profielfoto's moeten foto's zijn van echte personen.
         #original_hash: 9126b0c
-        '2': De persoon op de foto moet jijzelf zijn.
+        '2': De persoon op de foto moet jij zelf zijn.
         #original_hash: de9b742
         '3': >-
           Als er meer dan één persoon op de profielfoto staat, moet duidelijk
-          zijn welke jij bent.
+          zijn welke persoon jij bent.
         #original_hash: 4083c00
         '4': 'Je hoofd moet zichtbaar zijn, niet noodzakelijkerwijs je hele gezicht.'
         #original_hash: ebbbf8a
@@ -874,7 +878,7 @@ nl:
       unknown_wca_id_html: 'WCA id %{link_id} bestaat niet.'
   registrations:
     #original_hash: c5497bc
-    events: Onderdelen
+    events: Wedstrijdonderdelen
     errors:
       #original_hash: 44ab952
       need_name: Voer een naam in
@@ -899,9 +903,9 @@ nl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: nieuwkomers
-        one: nieuwkomer
         zero: nieuwkomers
+        one: nieuwkomer
+        other: nieuwkomers
       #original_hash: bc010e3
       returner:
         zero: bestaande leden
@@ -939,7 +943,7 @@ nl:
       #original_hash: 856484a
       failed: Aanmelding bijwerken mislukt
       #original_hash: 016b4ae
-      deleted: 'Jouw aanmelding voor %{comp} is verwijderd.'
+      deleted: 'Jouw aanmelding voor %{comp} is verwijderd'
       #original_hash: 648424f
       registered: Aanmelding gelukt!
     edit_registration:
@@ -950,6 +954,11 @@ nl:
       title: 'Aanmeldingen voor %{comp}'
       #original_hash: 5301648
       edit: Bewerken
+      #original_hash: 0ab725c
+      country_plural:
+        zero: 0 landen
+        one: 1 land
+        other: '%{count} landen'
       #original_hash: 1feee0e
       export_csv: Exporteren naar CSV
       #original_hash: 84add5b
@@ -975,8 +984,8 @@ nl:
       title: 'Aanmelden voor %{comp}'
     #original_hash: 7cae988
     registered_with_account_html: >-
-      Deze persoon heeft zich met een account aangemeld. Je kunt de persoonlijke
-      informatie hier beheren %{here}.
+      Deze persoon heeft zich met een WCA-account aangemeld. Je kunt de
+      persoonlijke informatie %{here} bewerken.
     #original_hash: ada2e9e
     sign_in: Inloggen
     #original_hash: 5d45a00
@@ -988,7 +997,7 @@ nl:
     #original_hash: f6fdbe4
     delete: Verwijderen
     #original_hash: b72119a
-    delete_confirm: Weet je zeker dat je de aanmelding wilt verwijderen?
+    delete_confirm: Weet je zeker dat je je aanmelding wilt verwijderen?
     #original_hash: cfc4865
     delete_registration: Verwijder aanmelding.
     #original_hash: e9ddc6e
@@ -1000,12 +1009,12 @@ nl:
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} om de status van je aanmelding te controleren. Als je nog geen
-      WCA-account hebt, kun je deze aanmaken %{here}, maar het is al te laat om
+      WCA-account hebt, kun je deze %{here} aanmaken, maar het is al te laat om
       je voor deze wedstrijd aan te melden.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
       %{sign_in} om de status van je aanmelding te controleren. Als je nog geen
-      WCA-account hebt, kun je deze aanmaken %{here}, maar de aanmelding is nog
+      WCA-account hebt, kun je deze %{here} aanmaken, maar de aanmelding is nog
       niet geopend.
     #original_hash: e1301c4
     please_sign_in_html: >-
@@ -1033,8 +1042,8 @@ nl:
     accepted: Je aanmelding is geaccepteerd!
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
-      Om in de toekomst makkelijker aan te melden, kun je je voorkeuren voor de
-      onderdelen opgeven %{link}.
+      Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
+      de onderdelen opgeven %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1091,6 +1100,11 @@ nl:
       details: Details
       #original_hash: 2e8a57c
       website: Website
+      #original_hash: 680567f
+      organizer_plural:
+        zero: Organisatoren
+        one: Organisator
+        other: Organisatoren
       #original_hash: 6afa61e
       delegate:
         zero: WCA delegates
@@ -1128,14 +1142,16 @@ nl:
       #original_hash: 405c12f
       past: Verleden
       #original_hash: 52c30f8
-      past_from: 'Verleden van %{year}'
+      past_from: 'Afgelopen wedstrijd van %{year}'
       #original_hash: 7cff459
-      past_all: Verleden van alle jaren
+      past_all: Afgelopen wedstrijden van alle jaren
       titles:
         #original_hash: 69447c9
         in_progress: Lopende wedstrijden
         #original_hash: 9e66032
-        past: 'Verleden wedstrijden van %{year}'
+        past: 'Afgelopen wedstrijden van %{year}'
+        #original_hash: f628f0e
+        past_all: Afgelopen wedstrijden over alle jaren
         #original_hash: cbe8a54
         recent: 'Recente wedstrijden (laatste %{count} dagen)'
         #original_hash: 914742f
@@ -1152,7 +1168,7 @@ nl:
           posted: Resultaten zijn gepost!
           #original_hash: 89bcc37
           starts_in: 'Start in %{days}'
-        #original_hash: a418217
+        #original_hash: ccd2db9
         search: 'Naam, stad, wedstrijdlocatie, land of maand'
         #original_hash: 3bc8082
         recent: 'Laatste %{count} dagen'
@@ -1172,9 +1188,9 @@ nl:
       #original_hash: 87ab5db
       report: Bekijken Delegate report
       #original_hash: b4ca252
-      edit_report: Rapport bewerken
+      edit_report: Bewerken Delegate report
       #original_hash: e590657
-      missing_report: Je report is nog niet gepost!
+      missing_report: Je Delegate report is nog niet gepost!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Je hebt momenteel geen aankomende wedstrijden! Kijk naar %{link}.'
       #original_hash: 9104a03
@@ -1238,7 +1254,7 @@ nl:
       #original_hash: 8ebebca
       coordinates: Coördinaten
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: >-
         moet eindigen met een jaartal en mag alleen letters, cijfers en spaties
         bevatten, en verder -&.:'.
@@ -1289,11 +1305,16 @@ nl:
       #original_hash: e6e096a
       competition_was: 'Wedstijd was %{n_days} geleden.'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        zero: Geen wedstrijden
+        one: 1 wedstrijd
+        other: '%{count} wedstrijden'
       #original_hash: e3528ec
       label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Laatste %{days} dagen'
-      #original_hash: 14276ae
+      #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
       #original_hash: feefb46
       no_comp_nearby: Geen nabije wedstrijden!
@@ -1351,11 +1372,11 @@ nl:
         #original_hash: 76bfdcf
         admin_view: Overzicht Admin
         #original_hash: a857eb4
-        tabs: Beheren tabbladen
+        tabs: Tabbladen
         #original_hash: 4c9f914
         delegate_report: Report
         #original_hash: b233e77
-        registration: Aanmelding
+        registration: Aanmeldingen
         #original_hash: d672995
         register: Aanmelden
         #original_hash: 855bd26
@@ -1369,6 +1390,42 @@ nl:
       round: Ronde
       #original_hash: 709a232
       name: Naam
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: Tabbladen
+      #original_hash: 709a232
+      name: Naam
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: Aanmaken tabblad
+      #original_hash: 8d5b6f9
+      goto_button: 'Ga naar tabblad %{tab_name}'
+      #original_hash: 6f23a36
+      new_tab: Nieuw tabblad
+      #original_hash: 5301648
+      edit: Bewerken
+      #original_hash: fb91e24
+      update: Bijwerken
+      #original_hash: f6fdbe4
+      delete: Verwijderen
+      #original_hash: 14e49c1
+      confirm_delete: 'Weet je zeker dat je tabblad %{tab_name} wilt verwijderen?'
+      #original_hash: ce1bf0b
+      back_to_tabs: Terug naar Tabbladen
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: 'Nieuw tabblad voor %{comp_name}'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: Beheren tabbladen
+      #original_hash: 40f9491
+      tabs_introduction_text: >-
+        Here kun je tabbladen toevoegen en bewerken die op de wedstrijdpagina
+        worden getoond.
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: 'Bewerken tabblad %{tab_name}'
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Verbind je WCA id met je WCA-account!
@@ -1411,12 +1468,12 @@ nl:
     answers:
       '1':
         #original_hash: f79b522
-        title: Hoe krijg ik een WCA id en een WCA-profiel?
+        title: Hoe krijg ik een WCA id en een WCA-account?
         content:
           #original_hash: b645fe1
           '1': >-
             Als je nooit aan een wedstrijd hebt meegedaan, ga dan naar <a
-            href='/competitions'>wedstrijd</a>! Een WCA id en WCA-profiel worden
+            href='/competitions'>wedstrijd</a>! Een WCA id en WCA-account worden
             voor je aangemaakt als de resultaten van je eerste wedstrijd worden
             gepost.
       '2':
@@ -1554,12 +1611,13 @@ nl:
       paragraphs:
         #original_hash: 16ad45e
         '1': >-
-          De World Cube Association bestuurt de wedstrijden voor alle puzzels in
-          de categorie Rubik puzzels, en alle andere puzzels die gespeeld worden
-          door het draaien van zijden, zogenoemde 'twisty puzzles'
-          (draaipuzzels). De beroemdste van deze puzzels is de Rubik's Kubus,
-          uitgevonden door professor Rubik uit Hongarije. Een selectie uit deze
-          puzzels is gekozen als officiële wedstrijdonderdelen van de WCA.
+          De World Cube Association is de internationale organisatie voor
+          wedstrijden voor alle puzzels in de categorie Rubik puzzels, en alle
+          andere puzzels die gespeeld worden door het draaien van zijden,
+          zogenoemde 'twisty puzzles' (draaipuzzels). De beroemdste van deze
+          puzzels is de Rubik's Kubus, uitgevonden door professor Rubik uit
+          Hongarije. Een selectie uit deze puzzels is gekozen als officiële
+          wedstrijdonderdelen van de WCA.
         #original_hash: c8ecd24
         '2': >-
           De World Cube Association organiseert wedstrijden over de hele wereld,
@@ -1604,7 +1662,7 @@ nl:
           Wedstrijdreglement.
       results:
         #original_hash: 3e819b8
-        name_html: <strong>WCA Resultaten team</strong>
+        name_html: <strong>WCA Resultatenteam</strong>
         #original_hash: 439ffae
         description: >-
           Dit team is verantwoordelijk voor het beheren van alle
@@ -1641,7 +1699,7 @@ nl:
     #original_hash: 0a89b0f
     acknowledges: >-
       De WCA erkent de volgende leden als WCA delegates voor officiële
-      WCA-wedstrijden.
+      WCA-wedstrijden:
     table:
       #original_hash: 709a232
       name: Naam
@@ -1653,14 +1711,14 @@ nl:
     #original_hash: 0ef06c8
     title: Nationale Organisaties
     #original_hash: f9a7f4d
-    content: 'De WCA erkent de volgende nationale organisaties:'
+    content: 'De WCA erkent de volgende Nationale Organisaties:'
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
     #original_hash: b5c2eaa
     info_alert_html: >-
-      Bekijk, voordat je contact opneemt met een team op deze pagina, eerst deze
-      %{link}!
+      Bekijk eerst deze %{link}, voordat je contact opneemt met een team op deze
+      pagina!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
       Voor vragen, opmerkingen en suggesties over de WCA-website, gebruik dit <a
@@ -1695,7 +1753,7 @@ nl:
     paragraphs:
       #original_hash: ec3e0ab
       '1': >-
-        WCA beveelt sterkt het gebruik aan van <a
+        WCA beveelt sterk het gebruik aan van <a
         href="http://cubecomps.com">Cube Comps</a> voor en tijdens de wedstrijd.
         Cube Comps is een online systeem met live scores en vele interessante
         functionaliteiten, zoals het afdrukken van scorebriefjes en een
