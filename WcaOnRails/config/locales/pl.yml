@@ -803,10 +803,10 @@ pl:
       #original_hash: 29e25b5
       have_wca_id_html: 'Twoje WCA ID to %{link_id}.'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
-          Nie możesz zmienić swojego imienia, daty urodzin, płci lub państwa
-          ponieważ %{reason}. Skontaktuj się z twoim <a
+          Nie możesz zmienić swojego imienia, daty urodzin, płci lub państwa.
+          Powód: %{reason}. Skontaktuj się z twoim <a
           href='%{delegate_url}'>delegatem</a>, jeżeli potrzebujesz zmienić
           którekolwiek z nich.
         reason:
@@ -1005,6 +1005,13 @@ pl:
       title: 'Rejestracje na %{comp}'
       #original_hash: 5301648
       edit: Edytuj
+      #original_hash: 0ab725c
+      country_plural:
+        other: '%{count} państw'
+        many: '%{count} państw'
+        few: '%{count} państwa'
+        one: 1 państwo
+        zero: 0 państw
       #original_hash: 1feee0e
       export_csv: Eksportuj jako CSV
       #original_hash: 84add5b
@@ -1146,6 +1153,13 @@ pl:
       details: Szczegóły
       #original_hash: 2e8a57c
       website: Strona internetowa
+      #original_hash: 680567f
+      organizer_plural:
+        other: Organizatorzy
+        many: Organizatorzy
+        few: Organizatorzy
+        one: Organizator
+        zero: Organizatorzy
       #original_hash: 6afa61e
       delegate:
         zero: Delegatów WCA
@@ -1193,6 +1207,8 @@ pl:
         in_progress: Zawody w trakcie
         #original_hash: 9e66032
         past: 'Minione zawody z %{year}'
+        #original_hash: f628f0e
+        past_all: Minione zawody z wszystkich lat
         #original_hash: cbe8a54
         recent: 'Niedawne zawody (ostatnie %{count} dni)'
         #original_hash: 914742f
@@ -1209,8 +1225,8 @@ pl:
           posted: Wyniki są przesłane!
           #original_hash: 89bcc37
           starts_in: 'Zaczyna się w ciągu %{days}'
-        #original_hash: a418217
-        search: 'Nazwa, miasto, miejsce, państwo lub miesiąc'
+        #original_hash: ccd2db9
+        search: Nazwa lub miasto
         #original_hash: 3bc8082
         recent: 'Ostatnie %{count} dni'
       #original_hash: 8b09d74
@@ -1298,7 +1314,7 @@ pl:
       #original_hash: 8ebebca
       coordinates: Koordynaty
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: >-
         może zawierać tylko znaki alfanumeryczne, myślniki (-), ampersandy (&),
         kropki (.), dwukropki (:), apostrofy (') i spacje ( )
@@ -1347,11 +1363,18 @@ pl:
       #original_hash: e6e096a
       competition_was: 'Zawody były %{n_days} temu.'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        other: '%{count} zawodów'
+        many: '%{count} zawodów'
+        few: '%{count} zawodów'
+        one: 1 zawody
+        zero: Brak zawodów
       #original_hash: e3528ec
       label: 'Pobliskie zawody (w ciągu %{days} dni i w obrębie %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Ostatnie %{days} dni'
-      #original_hash: 14276ae
+      #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} w obrębie %{kms} km i %{days} dni.'
       #original_hash: feefb46
       no_comp_nearby: Nie ma pobliskich zawodów!
@@ -1427,6 +1450,42 @@ pl:
       round: Runda
       #original_hash: 709a232
       name: Imię
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: Zakładki
+      #original_hash: 709a232
+      name: Nazwa
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: Utwórz zakładkę
+      #original_hash: 8d5b6f9
+      goto_button: 'Przejdź do zakładki %{tab_name}'
+      #original_hash: 6f23a36
+      new_tab: Nowa zakładka
+      #original_hash: 5301648
+      edit: Edytuj
+      #original_hash: fb91e24
+      update: Zaktualizuj
+      #original_hash: f6fdbe4
+      delete: Usuń
+      #original_hash: 14e49c1
+      confirm_delete: 'Jesteś pewien, że chcesz usunąć zakładkę %{tab_name}?'
+      #original_hash: ce1bf0b
+      back_to_tabs: Powrót do zakładek
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: 'Nowa zakładka dla %{comp_name}'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: Zarządzaj zakładkami
+      #original_hash: 40f9491
+      tabs_introduction_text: >-
+        Tutaj możesz dodawać i edytować zakładki, które są pokazywane na stronie
+        informacyjnej zawodów.
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: 'Edytuj zakładkę %{tab_name}'
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Połącz swoje WCA ID ze swoim kontem!
