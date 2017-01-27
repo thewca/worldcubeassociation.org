@@ -85,7 +85,7 @@ RSpec.describe Competition do
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
     expect(competition).to be_invalid
-    expect(competition.errors.messages[:name]).to eq ["must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"]
+    expect(competition.errors.messages[:name]).to eq ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"]
   end
 
   it "requires that cellName end in a year" do

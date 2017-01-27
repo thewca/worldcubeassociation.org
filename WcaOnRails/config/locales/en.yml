@@ -691,7 +691,7 @@ en:
       coordinates: "Coordinates"
     #context: and when an error occured
     errors:
-      invalid_name_message: "must end with a year and must contain only alphnumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
+      invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
