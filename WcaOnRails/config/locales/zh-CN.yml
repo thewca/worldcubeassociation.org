@@ -710,9 +710,9 @@ zh-CN:
       #original_hash: 29e25b5
       have_wca_id_html: '你的WCA ID是%{link_id}。'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
-          由于%{reason}你无法变更你的姓名、生日、性别以及地区。如有需要请联系你的<a
+          你无法变更你的姓名、生日、性别以及地区。原因如下：%{reason}。如有需要请联系你的<a
           href='%{delegate_url}'>代表</a>。
         reason:
           #original_hash: 370ff12
@@ -857,6 +857,10 @@ zh-CN:
       title: '%{comp}的报名列表'
       #original_hash: 5301648
       edit: 编辑
+      #original_hash: 0ab725c
+      country_plural:
+        zero: '0'
+        other: '%{count}个国家/地区'
       #original_hash: 1feee0e
       export_csv: 导出到CSV
       #original_hash: 84add5b
@@ -974,6 +978,10 @@ zh-CN:
       details: 详情
       #original_hash: 2e8a57c
       website: 网站
+      #original_hash: 680567f
+      organizer_plural:
+        zero: 主办方
+        other: 主办方
       #original_hash: 6afa61e
       delegate:
         zero: WCA代表
@@ -1018,6 +1026,8 @@ zh-CN:
         in_progress: 进行中的比赛
         #original_hash: 9e66032
         past: '%{year}年的比赛'
+        #original_hash: f628f0e
+        past_all: 所有比赛
         #original_hash: cbe8a54
         recent: '过去%{count}天的比赛'
         #original_hash: 914742f
@@ -1034,8 +1044,8 @@ zh-CN:
           posted: 成绩已公示！
           #original_hash: 89bcc37
           starts_in: '%{days}后开始'
-        #original_hash: a418217
-        search: 名字、城市、地点、国家或者月份
+        #original_hash: ccd2db9
+        search: 名字或者城市
         #original_hash: 3bc8082
         recent: '过去%{count}天'
       #original_hash: 8b09d74
@@ -1103,7 +1113,7 @@ zh-CN:
       #original_hash: 8ebebca
       coordinates: 坐标
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、标点（-&.:''）和空格'
       #original_hash: 8e8f765
       cannot_manage: 无法管理比赛。
@@ -1146,11 +1156,15 @@ zh-CN:
       #original_hash: e6e096a
       competition_was: '比赛是%{n_days}前的。'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        zero: 没有比赛
+        other: '%{count}场比赛'
       #original_hash: e3528ec
       label: '临近的比赛（%{days}天%{kms}千米内）'
       #original_hash: 3446062
       label_admin: '过去%{days}天'
-      #original_hash: 14276ae
+      #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions}在%{kms}千米%{days}天内。'
       #original_hash: feefb46
       no_comp_nearby: 没有临近比赛！
@@ -1196,7 +1210,7 @@ zh-CN:
         #original_hash: aaefdb6
         by_person: 按选手
         #original_hash: 4b631f6
-        info: 信息
+        info: 基本信息
         #original_hash: 5301648
         edit: 编辑
         #original_hash: d8cdb57
@@ -1226,6 +1240,40 @@ zh-CN:
       round: 轮次
       #original_hash: 709a232
       name: 姓名
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: 标签
+      #original_hash: 709a232
+      name: 名字
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: 创建标签
+      #original_hash: 8d5b6f9
+      goto_button: '前往%{tab_name}标签'
+      #original_hash: 6f23a36
+      new_tab: 新标签
+      #original_hash: 5301648
+      edit: 编辑
+      #original_hash: fb91e24
+      update: 更新
+      #original_hash: f6fdbe4
+      delete: 删除
+      #original_hash: 14e49c1
+      confirm_delete: '确定要删除%{tab_name}标签吗？'
+      #original_hash: ce1bf0b
+      back_to_tabs: 返回标签管理
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: '为%{comp_name}创建新标签'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: 管理标签
+      #original_hash: 40f9491
+      tabs_introduction_text: 可以在此处增改标签，他们将显示在比赛基本信息页。
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: '编辑%{tab_name}标签'
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 关联WCA ID到你的账号！
