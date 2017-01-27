@@ -972,7 +972,7 @@ en:
       title: "Step 3: Match the scrambles with the results"
       content_html: "The WCA Workbook Assistant automatically links the scrambles with the rounds that were held. In some cases, like when multiple scramble files were generated, the selection needs to be done manually because there are several possible options."
       content2_html: "Manually selecting scrambles can be done by double clicking the <em>Scrambles</em> cell in the sheet overview panel."
-      content3_html: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round where generated as separate rounds in TNoodle, you can use the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
+      content3_html: "It is only possible to select one round from the scramble files for each round for which there are results. If a situation arises where scrambles for a single round were generated as separate rounds in TNoodle, you can use the <em>Edit groups...</em> button to edit the groups in the scramble files and move them from one round to another or delete them."
       content4_html: "In this example, an extra set scrambles was generated to have two groups for the first round of skewb instead of one group."
       content5_html: "The scrambles for the additional group can be dragged and dropped on the round that was generated originally. This moves the two groups together in one round."
     step4:
