@@ -228,10 +228,10 @@ class CompetitionsController < ApplicationController
               event = Event.c_find(result.eventId)
               record_strs = []
               if result.regionalSingleRecord == code
-                record_strs << "#{event.cellName} #{result.to_s :best} (single)"
+                record_strs << "#{event.name_in(:en)} #{result.to_s :best} (single)"
               end
               if result.regionalAverageRecord == code
-                record_strs << "#{event.cellName} #{result.to_s :average} (average)"
+                record_strs << "#{event.name_in(:en)} #{result.to_s :average} (average)"
               end
               record_strs
             end.flatten
