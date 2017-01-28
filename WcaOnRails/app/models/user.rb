@@ -167,6 +167,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  validate :person_must_have_dob
+  def person_must_have_dob
+    p = person || unconfirmed_person
+    if p && p.dob.nil?
+      errors.add(:wca_id, I18n.t('users.errors.wca_id_no_birthdate_html'))
+    end
+  end
+
   # To handle profile pictures that predate our user account system, we created
   # a bunch of dummy accounts (accounts with no password). When someone finally
   # claims their WCA ID, we want to delete the dummy account and copy over their

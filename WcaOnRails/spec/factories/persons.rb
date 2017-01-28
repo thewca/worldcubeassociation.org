@@ -15,6 +15,12 @@ FactoryGirl.define do
     month 4
     day 4
 
+    trait :missing_dob do
+      year 0
+      month 0
+      day 0
+    end
+
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
         person.update_using_sub_id!(name: "new #{person.name}")
