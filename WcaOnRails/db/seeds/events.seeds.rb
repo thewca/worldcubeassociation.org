@@ -20,6 +20,6 @@ sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
 ('333mbf', '3x3x3 Multi-Blind', 180, 'multi', '3x3x3 Multi-Blind'),
 ('magic', 'Rubik''s Magic', 997, 'time', 'Rubik''s Magic'),
 ('mmagic', 'Master Magic', 998, 'time', 'Master Magic'),
-('333mbo', 'Rubik''s Cube: Multi blind old style', 999, 'multi', '3x3 multi blind old');"
+('333mbo', 'Rubik''s Cube: Multi blind old style', 999, 'multi', 'Rubik''s Cube: Multi blind old style');"
 
 ActiveRecord::Base.connection.execute(sql)
