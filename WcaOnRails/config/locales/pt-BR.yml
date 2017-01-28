@@ -68,6 +68,62 @@ pt-BR:
     mmagic: Master Magic
     #original_hash: c6ad2af
     333mbo: 3x3x3 Multi Vendado Antigo
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Rodada de qualificação
+      #original_hash: 2ffe44e
+      cellName: Qualificação
+    '1':
+      #original_hash: 1e725b6
+      name: Primeira rodada
+      #original_hash: 916a78d
+      cellName: Primeira
+    '2':
+      #original_hash: 985c8d0
+      name: Segunda rodada
+      #original_hash: 2a4bcae
+      cellName: Segunda
+    '3':
+      #original_hash: e2f74d2
+      name: Semifinal
+      #original_hash: e2f74d2
+      cellName: Semifinal
+    b:
+      #original_hash: 327c999
+      name: Final B
+      #original_hash: 327c999
+      cellName: Final B
+    c:
+      #original_hash: b2d26f4
+      name: Final Combinada
+      #original_hash: b2d26f4
+      cellName: Final Combinada
+    d:
+      #original_hash: c6136b1
+      name: Primeira rodada combinada
+      #original_hash: dffa9ea
+      cellName: Primeira (combinada)
+    e:
+      #original_hash: 659c53f
+      name: Segunda rodada combinada
+      #original_hash: b6e1e1c
+      cellName: Segunda (combinada)
+    f:
+      #original_hash: 672b22c
+      name: Final
+      #original_hash: 672b22c
+      cellName: Final
+    g:
+      #original_hash: e861dcf
+      #original_hash: 4c66ad0
+      name: Terceira rodada combinada
+      #original_hash: 86f4b05
+      #original_hash: 4c66ad0
+      cellName: Terceira (combinada)
+    h:
+      name: Qualificação combinada
+      cellName: Qualificação combinada
   common:
     #original_hash: 2513cf0
     continent: Continente
@@ -1012,7 +1068,7 @@ pt-BR:
     #original_hash: e9ddc6e
     will_open_html: 'As inscrições começam em <strong>%{days}</strong> às %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'As inscrições terminam em <strong>%{days} às %{time}.'
+    will_close_html: 'As inscrições terminam em <strong>%{days}, no dia %{time}.'
     #original_hash: dc8a520
     closed_html: 'As inscrições terminaram <strong>%{days}</strong> atrás, às %{time}.'
     #original_hash: 2e7024d
@@ -1037,14 +1093,21 @@ pt-BR:
       com seu %{profile}:
     #original_hash: 855ca9c
     can_register: 'Você pode se inscrever no %{comp} abaixo.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Por favor verifique as informações sobre inscrição para ver se você deve
+      fazer algo mais, como pagar uma taxa de inscrição.
     #original_hash: ea2b586
     have_registered: 'Você se inscreveu no %{comp}. Veja suas informações abaixo.'
     #original_hash: 4d966e0
     entry_fee: A taxa de inscrição é
     #original_hash: 3c9141f
     contact_organizer: Contacte os organizadores se você quer fazer alguma mudança.
-    #original_hash: 06d52b5
-    waiting_list: 'Você é o número %{i} de %{n} na lista de espera/não confirmados.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Sua inscrição está pendente. Para ser aprovada, pode ser que você precise
+      pagar uma taxa de inscrição. Verifique o webiste da competição para mais
+      detalhes.
     #original_hash: 58b1a3c
     accepted: Sua inscrição foi aprovada!
     #original_hash: 4cf01a2
@@ -1073,7 +1136,7 @@ pt-BR:
         resultados o mais rápido possível!
       #original_hash: a0168ee
       in_progress: >-
-        Esta competição está em andamanto. Volte após %{date} para ver os
+        Esta competição está em andamento. Volte após %{date} para ver os
         resultados!
       #original_hash: 3322400
       tooltip_registered: Você está inscrito.
@@ -1472,7 +1535,7 @@ pt-BR:
     #original_hash: 4dfb4c7
     create_an_account_and_claim: >-
       Crie uma conta %{here}. Depois de entrar com sua nova conta, será
-      solicitado que você conect sua ID da WCA.
+      solicitado que você conecte sua ID da WCA.
     answers:
       '1':
         #original_hash: f79b522
@@ -1480,9 +1543,10 @@ pt-BR:
         content:
           #original_hash: b645fe1
           '1': >-
-            Se você nunca competiu antes, participe de uma <a href='/competitions'>competição</a>! Uma ID da
-            WCA será criada para você quando os resultados de sua primeira
-            competição forem publicados.
+            Se você nunca competiu antes, participe de uma <a
+            href='/competitions'>competição</a>! Uma ID da WCA será criada para
+            você quando os resultados de sua primeira competição forem
+            publicados.
       '2':
         #original_hash: eb948e7
         title: Como posso encontrar uma competição da WCA?
@@ -1497,8 +1561,8 @@ pt-BR:
         content:
           #original_hash: 7b91db1
           '1': >-
-            Muitas competições usam o sistema da inscrições da WCA, mas outras
-            usam um sistema próprio. Você deve contactar os organizadores da
+            Muitas competições usam o sistema de inscrições da WCA, mas outras
+            usam um sistema próprio. Você deve contatar os organizadores da
             competição da qual deseja participar para obter mais detalhes.
             %{comp_search_form}
       '4':
@@ -1617,7 +1681,7 @@ pt-BR:
         '1': >-
           A World Cube Association regula competicões de todos os quebra-cabeças
           chamados "Rubik", e outros quebra-cabeças que são jogados girando-se
-          os lados, os chamados "twisty puzzles'. O mais famoso deles é o
+          os lados, os chamados "twisty puzzles". O mais famoso deles é o
           "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
           professor Rubik, da Hungria. Alguns destes quebra-cabeças são eventos
           oficiais da WCA.
@@ -1635,7 +1699,7 @@ pt-BR:
         '4': >-
           O espírito da World Cube Association é que <br /><strong>pessoas de
           todo o mundo se divirtam juntas numa atmosfera amigável, ajudem umas
-          às outras e se comportem com espírtio esportivo.</strong>
+          às outras e se comportem com espírito esportivo.</strong>
     structure:
       #original_hash: 9482c5d
       title: Estrutura
@@ -1652,10 +1716,10 @@ pt-BR:
         name_html: <strong>Comitê Disciplinar da WCA</strong>
         #original_hash: 286fdf8
         description: >-
-          Este comitê aconselha assessora o Conselho da WCA em casos especiais,
-          como supostas violações do Regulamento da WCA, e pode ser contactado
-          pelos membros da WCA em caso de algum assunto pessoal importante
-          referente a competições da WCA.
+          Este comitê assessora o Conselho da WCA em casos especiais, como
+          supostas violações do Regulamento da WCA, e pode ser contactado pelos
+          membros da WCA em caso de algum assunto pessoal importante referente a
+          competições da WCA.
       wrc:
         #original_hash: 4aa147f
         name_html: <strong>Comitê do Regulamento da WCA</strong>
@@ -1676,16 +1740,16 @@ pt-BR:
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegados da WCA</strong> são membros da WCA que são
-        responsáveis por garantir que todas as competições da WCA acontecem de
+        responsáveis por garantir que todas as competições da WCA aconteçam de
         acordo com a missão, regulamento e espírito da WCA. Eles são
         diferenciados entre <strong>Delegados Sênior</strong>,
-        <strong>Delegados</strong> e <strong>Delegados
-        Candidatos</strong>%{see_link}. Além das tarefas de um Delegado, um
-        Delegado Sênior é responsável por gerenciar os Delegados em sua área, e
-        também pode ser contactado pela comunidade para assunto pertinentes à
-        região. Novos Delegados são listados inicialmente como Delegados
-        Candidatos, e devem mostrar que são capazes de conduzir competições
-        adequadamente antes de serem considerados Delegados.
+        <strong>Delegados</strong> e <strong>Delegados Candidatos
+        </strong>%{see_link}. Além das tarefas de um Delegado, um Delegado
+        Sênior é responsável por gerenciar os Delegados em sua área, e também
+        pode ser contatado pela comunidade para assuntos pertinentes à região.
+        Novos Delegados são listados inicialmente como Delegados Candidatos, e
+        devem mostrar que são capazes de conduzir competições adequadamente
+        antes de serem considerados Delegados.
       #original_hash: 27d18ac
       see_link_html: '(veja %{link})'
       #original_hash: 5b01fcc
@@ -1716,13 +1780,13 @@ pt-BR:
     title: Informações de Contato
     #original_hash: b5c2eaa
     info_alert_html: >-
-      Antes de contactar algum dos comitês ou equipes listados aqui, por favor
+      Antes de contatar algum dos comitês ou equipes listados aqui, por favor
       verifique nossas %{link}!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
       Para questões, comentários ou sugestões sobre o website, use este <a
       href='/contact/website'>formulário</a>. Para dúvidas sobre uma área ou
-      competição específicas, por favor contact seu %{link} local.
+      competição específicas, por favor contate seu %{link} local.
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comitês e Equipes</u>
     board:
@@ -1756,7 +1820,8 @@ pt-BR:
         antes e durante uma competição. Cube Comps é um sistema online com
         resultados ao vivo e muitos recursos interessantes, como impressão de
         súmulas e um sistema bastante eficiente de entrada de dados que suporta
-        vários usuários. Criado por Luis J. Iáñez e agora Open Source.
+        vários usuários. Criado por Luis J. Iáñez e agora em código aberto (Open
+        Source).
       #original_hash: 7438b0d
       '2': >-
         Súmulas e embaralhamentos devem ser processados e verificados em busca
@@ -1775,7 +1840,7 @@ pt-BR:
       '1': >-
         O logotipo da WCA foi desenhado por Justin Eastman, num concurso em
         Janeiro de 2005.<br />Nós gostamos do logotipo por causa do design, as
-        cores e o fato de que não mostra especificamente um Rubik's Cube / Cubo
+        cores e o fato de que não mostra especificamente um Cubo Mágico / Cubo
         3x3x3.
       #original_hash: f228da2
       '2': >-
@@ -1786,8 +1851,8 @@ pt-BR:
       #original_hash: dcb1ad6
       '3': >-
         Versão 3D do logotipo, desenhada por Vu Mihn Tan, do Vietnã: <a
-        href="/files/WCALogo3D.png">versão PNG</a> (2.1 MB), uma <a
-        href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0.25 MB).
+        href="/files/WCALogo3D.png">versão PNG</a> (2,1 MB), uma <a
+        href="/files/WCALogo3Dsmall.png">versão PNG pequena</a> (0,25 MB).
       #original_hash: 545fcd9
       '4': >-
         Todas os organizadores podem usar o logotipo da WCA em seus websites,
@@ -1839,7 +1904,7 @@ pt-BR:
       content2_html: >-
         A seleção manual pode ser feita dando um clique duplo na célula
         <em>Scrambles</em> no painel geral da planilha.
-      #original_hash: a42bae2
+      #original_hash: 8f4fdfd
       content3_html: >-
         Somente é possível selecionar uma rodada do arquivo de embaralhamento
         para cada rodada de resultados. Se acontecer uma situação na qual
