@@ -74,7 +74,7 @@
         <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: lambda { |g| { m: t('wca.devise.gender.male'), f: t('wca.devise.gender.female'), o: t('wca.devise.gender.other_gender') }[g] }, disabled: !editable_fields.include?(:gender) %>
         <%= f.input :country_iso2, collection: Country.real, value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name }, disabled: !editable_fields.include?(:country_iso2) %>
 
-        <% if current_user.can_edit_users? %>
+        <% if current_user.can_view_all_users? %>
           <div class="row" id="wca_id">
             <div class="col-xs-6">
               <% if @user.unconfirmed_wca_id.present? %>
@@ -112,7 +112,7 @@
           </p>
         <% end %>
 
-        <% if current_user.can_edit_users? %>
+        <% if current_user.can_view_all_users? %>
           <%= f.input :delegate_status, collection: User.delegate_statuses.keys, label_method: lambda { |k| k.titleize }, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.input :region, disabled: !editable_fields.include?(:region) %>

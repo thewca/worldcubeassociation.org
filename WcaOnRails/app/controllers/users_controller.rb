@@ -9,8 +9,8 @@ class UsersController < ApplicationController
   def index
     params[:order] = params[:order] == "asc" ? "asc" : "desc"
 
-    unless current_user&.can_edit_users?
-      flash[:danger] = "You cannot edit users"
+    unless current_user&.can_view_all_users?
+      flash[:danger] = "You cannot view users"
       redirect_to root_url
     end
 
@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   end
 
   private def redirect_if_cannot_edit_user(user)
-    unless current_user && (current_user.can_edit_users? || current_user == user)
+    unless current_user&.can_edit_user?(user)
       flash[:danger] = "You cannot edit this user"
       redirect_to root_url
       return true

@@ -130,7 +130,7 @@ class User < ActiveRecord::Base
       end
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
-      if unconfirmed_person && (!current_user || !current_user.can_edit_users?)
+      if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         if !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html').html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
@@ -365,9 +365,17 @@ class User < ActiveRecord::Base
     delegate_status.present?
   end
 
-  def can_edit_users?
-    organizes_comp_with_wca_registration = organized_competitions.not_over.exists?(use_wca_registration: true)
-    admin? || board_member? || results_team? || any_kind_of_delegate? || organizes_comp_with_wca_registration
+  def can_view_all_users?
+    admin? || board_member? || results_team? || any_kind_of_delegate?
+  end
+
+  def can_edit_user?(user)
+    self == user || can_view_all_users? || organizer_for?(user)
+  end
+
+  def organizer_for?(user)
+    # If the user is a newcomer, allow organizers of the competition that the user is registered for to edit that user's name.
+    user.competitions_registered_for.not_over.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
   end
 
   def can_admin_results?
@@ -536,8 +544,7 @@ class User < ActiveRecord::Base
         remove_avatar
       )
     end
-    # If the user is a newcomer allow organizers of the competition that he is registered for to edit his name.
-    if user.wca_id.blank? && user.competitions_registered_for.not_over.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
+    if user.wca_id.blank? && organizer_for?(user)
       fields << :name
     end
     fields
