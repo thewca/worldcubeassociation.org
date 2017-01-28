@@ -59,6 +59,41 @@ en:
     magic: "Rubik's Magic"
     mmagic: "Master Magic"
     333mbo: "Rubik's Cube: Multiple blind old style"
+  #context: Round name
+  rounds:
+    "0":
+      name: "Qualification round"
+      cellName: "Qualification"
+    "1":
+      name: "First round"
+      cellName: "First"
+    "2":
+      name: "Second round"
+      cellName: "Second"
+    "3":
+      name: "Semi Final"
+      cellName: "Semi Final"
+    "b":
+      name: "B Final"
+      cellName: "B Final"
+    "c":
+      name: "Combined Final"
+      cellName: "Combined Final"
+    "d":
+      name: "Combined First round"
+      cellName: "Combined First"
+    "e":
+      name: "Combined Second round"
+      cellName: "Combined Second"
+    "f":
+      name: "Final"
+      cellName: "Final"
+    "g":
+      name: "Combined Third round"
+      cellName: "Combined Third"
+    "h":
+      name: "Combined qualification"
+      cellName: "Combined qualification"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"
