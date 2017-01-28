@@ -33,13 +33,15 @@ class CompetitionsMailer < ApplicationMailer
   end
 
   def notify_of_delegate_report_submission(competition)
-    @competition = competition
-    mail(
-      to: "delegates@worldcubeassociation.org",
-      cc: competition.delegates.pluck(:email),
-      reply_to: competition.delegates.pluck(:email),
-      subject: "[wca-report] [#{competition.continent.name_in(:en)}] #{competition.name}",
-    )
+    I18n.with_locale :en do
+      @competition = competition
+      mail(
+        to: "delegates@worldcubeassociation.org",
+        cc: competition.delegates.pluck(:email),
+        reply_to: competition.delegates.pluck(:email),
+        subject: "[wca-report] [#{competition.continent.name}] #{competition.name}",
+      )
+    end
   end
 
   def submit_results_nag(competition)
