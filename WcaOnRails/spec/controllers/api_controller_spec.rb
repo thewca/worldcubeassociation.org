@@ -146,9 +146,9 @@ describe Api::V0::ApiController do
   end
 
   describe 'GET #omni_search' do
-    let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015") }
-    let!(:post) { FactoryGirl.create(:post, title: "jeremy post title", body: "post body") }
     let!(:user) { FactoryGirl.create(:user_with_wca_id, name: "Jeremy Fleischman") }
+    let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
+    let!(:post) { FactoryGirl.create(:post, title: "jeremy post title", body: "post body", author: user) }
 
     it 'requires query parameter' do
       get :omni_search
