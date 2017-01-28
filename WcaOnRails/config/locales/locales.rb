@@ -17,6 +17,10 @@ module Locales
       "flag_id": "it",
       "name": "Italiano",
     },
+    "ja": {
+      "flag_id": "jp",
+      "name": "日本語",
+    },
     "pl": {
       "flag_id": "pl",
       "name": "Polski",
