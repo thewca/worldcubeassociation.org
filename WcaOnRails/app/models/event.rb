@@ -22,6 +22,10 @@ class Event < ActiveRecord::Base
     I18n.t(id, scope: :events, locale: locale)
   end
 
+  def cellName
+    fail "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
+  end
+
   scope :official, -> { where("rank < 990") }
   scope :deprecated, -> { where("rank between 990 and 999") }
 
