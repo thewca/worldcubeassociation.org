@@ -53,6 +53,7 @@
         <div>
           <% if @registration.new_or_deleted? %>
             <%= t 'registrations.can_register', comp: @competition.name %>
+            <%= alert :danger, t('registrations.check_registration_information') %>
           <% else %>
             <%= t 'registrations.have_registered', comp: @competition.name %>
 

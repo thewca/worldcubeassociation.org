@@ -621,10 +621,11 @@ en:
     greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for this %{comp}, you must fix the following problems with your %{profile}:"
     can_register: "You can register for %{comp} below."
+    check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
     have_registered: "You have registered for %{comp}. You can see your registration information below."
     entry_fee: "The entry fee is "
     contact_organizer: "Contact the organizer if you wish to make a change."
-    waiting_list: "You are currently number %{i} of %{n} on the waiting list."
+    waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
     accepted: "Your registration has been accepted!"
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
   #context: Key used when managing competitions
