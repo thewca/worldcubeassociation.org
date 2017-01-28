@@ -31,16 +31,16 @@
       </h3>
     </div>
   </div>
-  <% (I18n.available_locales - [:en]).each do |l| %>
-    <% missing = @status_locales[l][:missing] %>
-    <% outdated = @status_locales[l][:outdated] %>
+  <% (I18n.available_locales - [:en]).each do |locale| %>
+    <% missing = @status_locales[locale][:missing] %>
+    <% outdated = @status_locales[locale][:outdated] %>
     <% all_empty = (missing.empty? && outdated.empty?) %>
     <% class_heading, class_panel, class_missing, class_outdated, title = css_classes(missing.empty?, outdated.empty?) %>
     <div class="panel panel-<%= class_panel %>">
-      <div class="panel-heading <%= class_heading %>" data-toggle="collapse" data-target="#collapse-<%= l %>">
+      <div class="panel-heading <%= class_heading %>" data-toggle="collapse" data-target="#collapse-<%= locale %>">
         <h3 class="panel-title">
           <span class="label label-<%= class_panel %>">i18n</span>
-          <span class="label label-<%= class_panel %>"><%= l %></span>
+          <span class="label label-<%= class_panel %>"><i class="flag f16 <%= Locales::AVAILABLE[locale][:flag_id] %>"></i> <%= locale %></span> <%# this is all on one line for a reason. See http://stackoverflow.com/a/25879479 %>
           <span class="badge"><%= missing.size + outdated.size %></span>
           <%= title %>
           <% unless all_empty %>
@@ -49,7 +49,7 @@
         </h3>
       </div>
       <% unless all_empty %>
-        <div id="collapse-<%= l.to_s %>" class="panel-collapse collapse panel-body row">
+        <div id="collapse-<%= locale.to_s %>" class="panel-collapse collapse panel-body row">
           <div class="col-md-6">
             <div class="panel panel-<%= class_missing %>">
               <div class="panel-heading panel-title text-center">
