@@ -68,6 +68,62 @@ zh-CN:
     mmagic: 十二板
     #original_hash: c6ad2af
     333mbo: 旧多盲
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: 资格赛
+      #original_hash: 2ffe44e
+      cellName: 资格赛
+    '1':
+      #original_hash: 1e725b6
+      name: 初赛
+      #original_hash: 916a78d
+      cellName: 初赛
+    '2':
+      #original_hash: 985c8d0
+      name: 复赛
+      #original_hash: 2a4bcae
+      cellName: 复赛
+    '3':
+      #original_hash: e2f74d2
+      name: 半决赛
+      #original_hash: e2f74d2
+      cellName: 半决赛
+    b:
+      #original_hash: 327c999
+      name: B组决赛
+      #original_hash: 327c999
+      cellName: B组决赛
+    c:
+      #original_hash: b2d26f4
+      name: 组合制决赛
+      #original_hash: b2d26f4
+      cellName: 组合制决赛
+    d:
+      #original_hash: c6136b1
+      name: 组合制初赛
+      #original_hash: dffa9ea
+      cellName: 组合制初赛
+    e:
+      #original_hash: 659c53f
+      name: 组合制复赛
+      #original_hash: b6e1e1c
+      cellName: 组合制复赛
+    f:
+      #original_hash: 672b22c
+      name: 决赛
+      #original_hash: 672b22c
+      cellName: 决赛
+    g:
+      #original_hash: e861dcf
+      #original_hash: 4c66ad0
+      name: 组合制半决赛
+      #original_hash: 86f4b05
+      #original_hash: 4c66ad0
+      cellName: 组合制半决赛
+    h:
+      name: 组合制资格赛
+      cellName: 组合制资格赛
   common:
     #original_hash: 2513cf0
     continent: 洲
@@ -918,14 +974,16 @@ zh-CN:
     please_fix_profile_html: '要报名%{comp}，首先得解决你%{profile}的问题：'
     #original_hash: 855ca9c
     can_register: '你可以在下面报名%{comp}。'
+    #original_hash: 4167ed7
+    check_registration_information: 请查看比赛信息页的报名部分，你可能需要支付报名费以通过审核。
     #original_hash: ea2b586
     have_registered: '你已经报名了%{comp}。可以在下面查看你的报名信息。'
     #original_hash: 4d966e0
     entry_fee: 报名费是
     #original_hash: 3c9141f
     contact_organizer: 如果你想变更报名信息请联系主办方。
-    #original_hash: 06d52b5
-    waiting_list: '当前候选列表有%{n}个，你是第%{i}个。'
+    #original_hash: 59354fd
+    waiting_list: 你的报名正等待审核。请查看比赛官网详情以确认是否需要支付报名费等流程。
     #original_hash: 58b1a3c
     accepted: 你的报名已通过！
     #original_hash: 4cf01a2
@@ -1558,7 +1616,7 @@ zh-CN:
       content_html: WCA成绩表助手会自动将打乱和对应的轮次关联。有些情况下需要手动关联，比如有多份打乱时。
       #original_hash: e869c1e
       content2_html: 双击<em>Scrambles</em>格来手动选择打乱。
-      #original_hash: a42bae2
+      #original_hash: 8f4fdfd
       content3_html: >-
         一个轮次只能有一轮的打乱。如果某个轮次生成了多分打乱，你可以使用<em>Edit
         groups...</em>按钮来编辑打乱分组，将涉及的打乱移动到一个轮次里。
