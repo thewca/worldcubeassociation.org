@@ -1137,6 +1137,10 @@ pl:
       problemy z twoim %{profile}:
     #original_hash: 855ca9c
     can_register: 'Możesz się zarejestrować na %{comp} poniżej.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Prosimy o sprawdzenie informacji na temat rejestracji, w celu dowiedzenia
+      się czy należy zrobić coś jeszcze, na przykład wpłacić wpisowe.
     #original_hash: ea2b586
     have_registered: >-
       Zarejestrowałeś się na %{comp}. Możesz zobaczyć dane swojej rejestracji
@@ -1145,8 +1149,11 @@ pl:
     entry_fee: Wpisowe to
     #original_hash: 3c9141f
     contact_organizer: 'Skontaktuj się z organizatorem, jeżeli chciałbyś wprowadzić jakąś zmianę.'
-    #original_hash: 06d52b5
-    waiting_list: 'Jesteś obecnie numerem %{i} z %{n} na liście oczekujących.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Aby twoja rejestracja została zaakceptowana, może być konieczne zapłacenie
+      wpisowego. Sprawdź stronę zawodów w celu uzyskania szczegółowych
+      informacji.
     #original_hash: 58b1a3c
     accepted: Twoja rejestracja została zaakceptowana!
     #original_hash: 4cf01a2
