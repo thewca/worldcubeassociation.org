@@ -116,13 +116,13 @@ ja:
       cellName: 決勝
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: 複合 3 回戦
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: 複合 3 回戦
     h:
+      #original_hash: 4c66ad0
       name: 複合予選
+      #original_hash: 4c66ad0
       cellName: 複合予選
   common:
     #original_hash: 2513cf0
@@ -370,8 +370,8 @@ ja:
         dob: '生年月日をすべて半角で記入してください。 (2000年1月23日生の場合: 2000-01-23)'
         #original_hash: 5106479
         name: >-
-          氏名 (英字) を「名姓」の順に記入してください。姓名ともに頭文字のみ大文字にしてください (中島 悠 の場合: Yu
-          Nakajima)  。
+          氏名 (英字) を「名姓」の順に記入してください。姓名ともに頭文字のみ大文字にしてください。例: 中島 悠 の場合: <strong>Yu
+          Nakajima</strong>
         #original_hash: c03b949
         email: メールアドレスを変更する場合は、確認メールによる認証が必要となります。
         #original_hash: bfd11f4
@@ -442,7 +442,7 @@ ja:
         #original_hash: da39a3e
         generate_website: ''
         #original_hash: b61cbfa
-        base_entry_fee_lowest_denomination: '基本参加費 (1000)'
+        base_entry_fee_lowest_denomination: 基本参加費 (1000)
         #original_hash: 866bc05
         currency_code: 通貨単位
         #original_hash: da39a3e
@@ -491,8 +491,8 @@ ja:
         organization: 運営チームに関する事項 (運営にあたっての働きや問題点、運営能力の成長等)
         #original_hash: 715f020
         incidents: >-
-          インシデントに関する事項 (1. や 2.
-          など番号をつけて箇条書きにしてください。通常の +2 や DNF などは除きます。フィードバックを求める記述も可。WDC の裁定を求める場合それを明記してください)
+          インシデントに関する事項 (1. や 2. など番号をつけて箇条書きにしてください。通常の +2 や DNF
+          などは除きます。フィードバックを求める記述も可。WDC の裁定を求める場合それを明記してください)
         #original_hash: f30abdc
         remarks: その他報告事項 (コミュニティーの変化、地域的の今後の計画等ほか、前項までで省いた軽微な事項も構いません)
         #original_hash: da39a3e
@@ -607,7 +607,7 @@ ja:
       #original_hash: f9f512b
       welcome_back: こんにちは！WCA アカウントの作成には WCA ID が必要です。
       #original_hash: 669fb57
-      welcome: 'こんにちは！はじめに、個人情報収集についてご確認ください。生年月日は本人の許可なく公開されることはありません。'
+      welcome: こんにちは！はじめに、個人情報収集についてご確認ください。生年月日は本人の許可なく公開されることはありません。
       gender:
         #original_hash: 3f3a489
         male: 男性
@@ -759,7 +759,9 @@ ja:
       #original_hash: 7b06f03
       pending_claim_confirmation_html: '%{delegate} による WCA ID %{wca_id} の確認待ちです。'
       #original_hash: fc7269a
-      pending_claim_mail_confirmation_html: 'WCA ID %{wca_id} の連携をリクエストしました。メールアドレスが確認でき次第、WCA 代理人 %{delegate} に通知されます。'
+      pending_claim_mail_confirmation_html: >-
+        WCA ID %{wca_id} の連携をリクエストしました。メールアドレスが確認でき次第、WCA 代理人 %{delegate}
+        に通知されます。
       #original_hash: 1cde7e6
       your_thumbnail: 'サムネイル:'
       #original_hash: af18820
@@ -826,8 +828,7 @@ ja:
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Team</a> にメールしてください。
       #original_hash: 49083d8
-      board_member_cannot_resign: >-
-        WCA 理事登録を自分自身で解除することはできません。他の理事に依頼してください。
+      board_member_cannot_resign: WCA 理事登録を自分自身で解除することはできません。他の理事に依頼してください。
       #original_hash: d02c03b
       avatar_requires_wca_id: WCA ID の連携が必要です
     successes:
@@ -841,8 +842,8 @@ ja:
     select_nearby_delegate:
       #original_hash: 2b11120
       select_delegate_html: >-
-        WCA IDの登録には、<a href='%{link_delegate}'
-        target='_blank'>WCA 代理人</a>による本人確認が必要です。生年月日を入力し、最も身近な WCA 代理人を選択してください。
+        WCA IDの登録には、<a href='%{link_delegate}' target='_blank'>WCA
+        代理人</a>による本人確認が必要です。生年月日を入力し、最も身近な WCA 代理人を選択してください。
       #original_hash: d69cf94
       already_assigned_html: >-
         WCA ID %{link_id} は既に別のアカウントと連携されています。これが誤りと思われる場合は <a
@@ -979,23 +980,23 @@ ja:
       申し込み状況の確認には%{sign_in}が必要です。WCA アカウントをを持っていない場合は %{here}
       で作成できますが、この大会の申し込みはまだ開始していません。
     #original_hash: e1301c4
-    please_sign_in_html: >-
-      %{comp} の参加申し込みには%{sign_in}が必要です。WCA アカウントをを持っていない場合は %{here}
-      で作成できます。
+    please_sign_in_html: '%{comp} の参加申し込みには%{sign_in}が必要です。WCA アカウントをを持っていない場合は %{here} で作成できます。'
     #original_hash: 89b4e7f
     greeting: 'こんにちは、%{name} さん！'
     #original_hash: fb34a17
     please_fix_profile_html: '%{comp} に参加申し込みするには、%{profile} 中の次の問題を解消してください:'
     #original_hash: 855ca9c
     can_register: 'この下で %{comp} に参加申し込みできます。'
+    #original_hash: 4167ed7
+    check_registration_information: 申し込み手順を確認して、参加費を支払う必要がある場合等は手順に従ってください。
     #original_hash: ea2b586
     have_registered: '%{comp} に参加申し込み済みです。申し込み情報は下部に記載されています。'
     #original_hash: 4d966e0
     entry_fee: '基本参加費:'
     #original_hash: 3c9141f
     contact_organizer: 変更が必要な場合は運営チームにお尋ねください。
-    #original_hash: 06d52b5
-    waiting_list: 'あなたはキャンセル待ちリスト %{n} 人中 %{i} 番目です。'
+    #original_hash: 59354fd
+    waiting_list: 申し込みは承認待ち状態です。参加費を支払う必要がある場合は支払ってください。詳しくは大会ウェブサイトをご覧ください。
     #original_hash: 58b1a3c
     accepted: 参加申し込みが完了しました！
     #original_hash: 4cf01a2
@@ -1685,8 +1686,8 @@ ja:
       content3_html: >-
         It is only possible to select one round from the scramble files for each
         round for which there are results. If a situation arises where scrambles
-        for a single round were generated as separate rounds in TNoodle, you
-        can use the <em>Edit groups...</em> button to edit the groups in the
+        for a single round were generated as separate rounds in TNoodle, you can
+        use the <em>Edit groups...</em> button to edit the groups in the
         scramble files and move them from one round to another or delete them.
       #original_hash: 94353f2
       content4_html: >-
