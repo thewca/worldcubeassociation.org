@@ -93,6 +93,9 @@ ignore_missing:
   - 'devise.{mailer,passwords,registrations,sessions,shared,confirmations,unlocks}.*'
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
+  # We don't want to translate these.
+  - 'simple_form.hints.git_hub.*'
+  - 'activerecord.attributes.git_hub.*'
 
 ## Consider these keys used:
 ignore_unused:
