@@ -87,8 +87,8 @@ Rails.application.routes.draw do
 
   get 'robots' => 'static_pages#robots'
   get 'server-status' => 'server_status#index'
-  get 'edit_translation' => 'git_hub#edit_translation', as: :edit_translation
-  patch 'update_translation' => 'git_hub#update_translation', as: :update_translation
+  get 'edit-translation' => 'git_hub#edit_translation', as: :edit_translation
+  patch 'update-translation' => 'git_hub#update_translation', as: :update_translation
 
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'

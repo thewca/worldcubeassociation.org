@@ -12,7 +12,7 @@ class GitHubController < ApplicationController
     file_path = "WcaOnRails/config/locales/#{locale}.yml"
     message = "Update #{locale} translation."
     content_digest = Digest::SHA1.hexdigest(content)
-    branch_name = "translation-#{content_digest}"
+    branch_name = "translation-#{locale}-#{content_digest}"
     upstream_sha = Octokit.ref(upstream_repo, "heads/master")[:object][:sha]
     Octokit.create_ref(origin_repo, "heads/#{branch_name}", upstream_sha)
     current_content_sha = Octokit.content(origin_repo, path: file_path, ref: branch_name)[:sha]
