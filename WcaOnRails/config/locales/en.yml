@@ -552,7 +552,6 @@ en:
       comp_not_found: "Competition not found"
       registration_closed: "Competition registration is closed"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
-      can_register: "User must be able to register for competition"
       must_register: "must register for at least one event"
     registration_info_people:
       #context: pluralization of "x first-timer(s)"

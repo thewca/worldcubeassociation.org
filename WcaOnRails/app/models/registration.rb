@@ -123,7 +123,7 @@ class Registration < ActiveRecord::Base
   validate :user_can_register_for_competition
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
-      errors.add(:user_id, I18n.t('registrations.errors.can_register'))
+      errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
     end
   end
 
