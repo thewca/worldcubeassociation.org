@@ -4,11 +4,16 @@ class GitHubController < ApplicationController
   end
 
   def update_translation
+    content = params[:translation][:content].delete("\r") # We don't want \r characters, but browsers add them automatically.
+    locale = params[:translation][:locale]
+    if [locale, content].any?(&:blank?)
+      flash[:danger] = "Both locale and content must be present."
+      render :edit_translation
+      return
+    end
     user_login = Octokit.user.login
     origin_repo = "#{user_login}/worldcubeassociation.org"
     upstream_repo = "thewca/worldcubeassociation.org"
-    content = params[:translation][:content].delete("\r") # We don't want \r characters, but browsers add them automatically.
-    locale = params[:translation][:locale]
     file_path = "WcaOnRails/config/locales/#{locale}.yml"
     message = "Update #{locale} translation."
     content_digest = Digest::SHA1.hexdigest(content)
