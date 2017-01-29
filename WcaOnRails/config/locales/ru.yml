@@ -1,0 +1,1974 @@
+ru:
+  countries:
+    #original_hash: 3f8c9de
+    XA: Несколько стран (Азия)
+    #original_hash: 090f3ce
+    XE: Несколько стран (Европа)
+    #original_hash: 459f987
+    XS: Несколько стран (Южная Америка)
+    #original_hash: 918c53a
+    MO: Макао
+    #original_hash: 2f488ff
+    HK: Гонконг
+    #original_hash: 4e8bd04
+    KR: Корея
+  continents:
+    #original_hash: 1d35114
+    AfR: Африка
+    #original_hash: a173e72
+    AsR: Азия
+    #original_hash: 576347e
+    ER: Европа
+    #original_hash: 247ce5d
+    NAR: Северная Америка
+    #original_hash: 3642950
+    OcR: Океания
+    #original_hash: b1ffb4c
+    SAR: Южная Америка
+  events:
+    #original_hash: 3732390
+    '222': Кубик 2x2x2
+    #original_hash: bfbe360
+    '333': Кубик Рубика
+    #original_hash: 2ee5b5a
+    '444': Кубик 4x4x4
+    #original_hash: b7a99fa
+    '555': Кубик 5x5x5
+    #original_hash: 4e3ea57
+    '666': Кубик 6x6x6
+    #original_hash: b567fc4
+    '777': Кубик 7x7x7
+    #original_hash: 29d5411
+    333bf: 3x3x3 вслепую
+    #original_hash: 31ed23f
+    333oh: 3x3x3 одной рукой
+    #original_hash: 0a5e7bf
+    333fm: Сборка 3x3x3 на количество ходов
+    #original_hash: be41d70
+    333ft: 3x3x3 ногами
+    #original_hash: d542376
+    minx: Мегаминкс
+    #original_hash: 8216a66
+    pyram: Пираминкс
+    #original_hash: 1551a2c
+    sq1: Square-1
+    #original_hash: 23c2fdf
+    clock: Clock
+    #original_hash: 64a56a2
+    skewb: Скьюб
+    #original_hash: 5bae501
+    444bf: 4x4x4 вслепую
+    #original_hash: aea5216
+    555bf: 5x5x5 вслепую
+    #original_hash: cedbf87
+    333mbf: Мульти-блайнд
+    #original_hash: 3988358
+    magic: Rubik's Magic
+    #original_hash: c962425
+    mmagic: Master Magic
+    #original_hash: c6ad2af
+    333mbo: Мульти-блайнд по старым правилам
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Квалификационных раунд
+      #original_hash: 2ffe44e
+      cellName: Квалификация
+    '1':
+      #original_hash: 1e725b6
+      name: Первый раунд
+      #original_hash: 916a78d
+      cellName: Первый
+    '2':
+      #original_hash: 985c8d0
+      name: Второй раунд
+      #original_hash: 2a4bcae
+      cellName: Второй
+    '3':
+      #original_hash: e2f74d2
+      name: Полуфинал
+      #original_hash: e2f74d2
+      cellName: Полуфинал
+    b:
+      #original_hash: 327c999
+      name: B Финал
+      #original_hash: 327c999
+      cellName: B Финал
+    c:
+      #original_hash: b2d26f4
+      name: Комбинированный Первый
+      #original_hash: b2d26f4
+      cellName: Комбинированный Первый
+    d:
+      #original_hash: c6136b1
+      name: Комбинированный Первый раунд
+      #original_hash: dffa9ea
+      cellName: Комбинированный Первый
+    e:
+      #original_hash: 659c53f
+      name: Комбинированный Второй раунд
+      #original_hash: b6e1e1c
+      cellName: Комбинированный Второй
+    f:
+      #original_hash: 672b22c
+      name: Финал
+      #original_hash: 672b22c
+      cellName: Финал
+    g:
+      #original_hash: e861dcf
+      #original_hash: 4c66ad0
+      name: Комбинированный Третий раунд
+      #original_hash: 86f4b05
+      #original_hash: 4c66ad0
+      cellName: Комбинированный Третий
+    h:
+      name: Комбинированная квалификация
+      cellName: Комбинированная квалификация
+  common:
+    #original_hash: 2513cf0
+    continent: Континент
+    #original_hash: d523ebb
+    country: Страна
+    #original_hash: 0154c0d
+    here: здесь
+    #original_hash: 77003d0
+    best: Лучшая
+    #original_hash: dd11868
+    single: Лучшая
+    #original_hash: 15f86c0
+    average: Среднее
+    #original_hash: e7f6fc5
+    solves: Сборки
+    user:
+      #original_hash: 603a218
+      wca_id: WCA ID
+      #original_hash: e0f64f7
+      citizen_of: Страна
+    #original_hash: 3fc0ba1
+    all_regions: Все страны
+    errors:
+      #original_hash: 81f344a
+      invalid: invalid
+    #original_hash: 49d0140
+    days:
+      zero: 0 дней
+      one: '%{count} день'
+      few: '%{count} дня'
+      many: '%{count} дней'
+      other: '%{count} WTF'
+    #original_hash: 203e1b3
+    these_events:
+      zero: 0 дисциплинами
+      one: 'этой %{count} дисциплиной'
+      few: 'этими %{count} дисциплинами'
+      many: 'этими %{count} дисциплинами'
+      other: 'WTF %{count}'
+  oauth:
+    applications:
+      #original_hash: 0c4ea38
+      your_apps: Ваши OAuth приложения
+      #original_hash: 6403f2b
+      new: Создать
+      #original_hash: 709a232
+      name: Название
+      #original_hash: f6f1389
+      callback_url: Callback Url
+      #original_hash: 89ff312
+      owner: Владелец
+      #original_hash: 557031c
+      application_id: ID приложения
+      #original_hash: c3cd636
+      actions: Действия
+      #original_hash: f4e7a87
+      secret: Ключ (secret)
+      #original_hash: c23540e
+      scopes: Scopes
+      #original_hash: 3b0d449
+      callback_urls: Callback Urls
+  activerecord:
+    attributes:
+      user:
+        #original_hash: eeb6920
+        name: Полное имя
+        #original_hash: 603a218
+        wca_id: WCA ID
+        #original_hash: cb77bea
+        unconfirmed_wca_id: Неподтверждённый WCA ID
+        #original_hash: 8ed8874
+        login: Email или WCA ID
+        #original_hash: 1528d10
+        country_iso2: Гражданство
+        #original_hash: ab58155
+        dob: День рождения
+        #original_hash: ab58155
+        dob_verification: Подтверждение дня рождения
+        #original_hash: 8a754c6
+        gender: Пол
+        #original_hash: 84add5b
+        email: Email
+        #original_hash: 8be3c94
+        password: Пароль
+        #original_hash: 19dff4d
+        current_password: Текущий пароль
+        #original_hash: 786b8af
+        password_confirmation: Подтверждение пароля
+        #original_hash: ced7b30
+        remember_me: Запомнить меня
+        #original_hash: 102efae
+        pending_avatar: Загрузить новую аватарку
+        #original_hash: 58e0c56
+        remove_avatar: Удалить аватарку
+        #original_hash: 9af9099
+        results_notifications_enabled: 'Отправлять мне Email, когда мои результаты будут опубликованы.'
+        #original_hash: de60ab8
+        delegate_status: Статус делегата
+        #original_hash: 0f21717
+        region: Регион
+        #original_hash: a10b651
+        location_description: Описание местности
+        #original_hash: 8961d3b
+        phone_number: Телефонный номер
+        #original_hash: 7044004
+        notes: Заметки
+      competition:
+        #original_hash: 89f89c0
+        id: ID
+        #original_hash: 7f3d889
+        isConfirmed: Не разрешать организаторам редактировать это соревнование
+        #original_hash: d493e6a
+        showAtAll: Сделать соревнование видимым для всех
+        #original_hash: 709a232
+        name: Имя
+        #original_hash: b649210
+        cellName: Короткое имя
+        #original_hash: d523ebb
+        countryId: Страна
+        #original_hash: 25b7b06
+        cityName: Город
+        #original_hash: 67cd406
+        venue: Помещение
+        #original_hash: 486f8fb
+        venueAddress: Адрес помещения
+        #original_hash: 08767af
+        venueDetails: Подробности
+        #original_hash: ff99f5b
+        start_date: Дата начала
+        #original_hash: 89d10cd
+        end_date: Дата окончания
+        #original_hash: 2e8a57c
+        external_website: Сайт
+        #original_hash: 692e1f9
+        generate_website: >-
+          Я хочу использовать сайт WCA для размещения информации вместо внешнего
+          сайта.
+        #original_hash: 3d53469
+        base_entry_fee_lowest_denomination: Взнос за участие в наименьшей валютной единице
+        #original_hash: 28a6fbb
+        currency_code: Код валюты
+        #original_hash: 5b2fe69
+        delegate_ids: WCA Делегат(ы)
+        #original_hash: 958562e
+        organizer_ids: Организатор(ы)
+        #original_hash: b37456c
+        contact: Контактная информация
+        #original_hash: 0eb5ed5
+        information: Информация
+        #original_hash: 87b7d5f
+        use_wca_registration: Использовать сайт WCA для регистрации
+        #original_hash: 3c23a67
+        guests_enabled: Гости
+        #original_hash: 089cbfd
+        receive_registration_emails: 'Отправлять мне Email, когда кто-то регистрируется на соревнование.'
+        #original_hash: d4aeed9
+        registration_open: Открытие регистрации
+        #original_hash: f8153a2
+        registration_close: Закрытие регистрации
+        #original_hash: d7020f4
+        remarks: Заметки
+        #original_hash: c305010
+        clone_tabs: Скопировать также все вкладки с дополнительной информацией
+      registration:
+        #original_hash: 3c23a67
+        guests: Гости
+        #original_hash: fce06e2
+        comments: Комментарии
+        #original_hash: bae7d5b
+        status: Статус
+        #original_hash: 709a232
+        name: Имя
+        #original_hash: a6b9d69
+        birthday: День Рождения
+      competition_tab:
+        #original_hash: 4f9be05
+        content: Заметки
+        #original_hash: 709a232
+        name: Название
+      delegate_report:
+        #original_hash: 983d541
+        discussion_url: Ссылка на обсуждение в Google Groups
+        #original_hash: 65a9b28
+        schedule_url: Ссылка на расписание
+        #original_hash: 36155d4
+        equipment: Оборудование
+        #original_hash: 67cd406
+        venue: Помещение
+        #original_hash: 519255a
+        organization: Организация
+        #original_hash: 5e326b1
+        incidents: Инциденты
+        #original_hash: d7020f4
+        remarks: Замечания
+      person:
+        #original_hash: 8c41ae8
+        wca_id: Участник
+        #original_hash: d523ebb
+        countryId: Страна
+        #original_hash: ab58155
+        dob: День рождения
+        #original_hash: 8a754c6
+        gender: Пол
+        #original_hash: 709a232
+        name: Имя
+      poll:
+        #original_hash: 002ff59
+        question: Вопрос
+        #original_hash: 2b12f36
+        deadline: Конец голосования
+      post:
+        #original_hash: 768e0c1
+        title: Название
+        #original_hash: 718a7e8
+        body: Сообщение
+        #original_hash: 6f915a2
+        sticky: Закрепить
+      team:
+        #original_hash: 709a232
+        name: Название
+        #original_hash: 55f8ebc
+        description: Описание
+      vote:
+        #original_hash: 153d7a5
+        comment: Комментарий
+  simple_form:
+    #original_hash: 5397e05
+    'yes': Да
+    #original_hash: 816c52f
+    'no': Нет
+    required:
+      #original_hash: 1a77d41
+      text: обязательное поле
+      #original_hash: df58248
+      mark: '*'
+      #original_hash: da39a3e
+      html: ''
+    error_notification:
+      #original_hash: d70e9cb
+      default_message: 'Возникли следующие проблемы:'
+    labels:
+      contact:
+        #original_hash: 709a232
+        name: Имя
+        #original_hash: 3fa6f5f
+        your_email: Ваш email
+        #original_hash: 68f4145
+        message: Сообщение
+    hints:
+      user:
+        #original_hash: 87e1e6f
+        dob: Введите ваш день рождения в формате ГГГГ-ММ-ДД.
+        #original_hash: 5106479
+        name: >-
+          Введите ваше имя и фамилию полностью по-английски, например,
+          <strong>Anton Rostovikov</strong>. Неправильные варианты: <strong>a
+          rostovikov</strong>, <strong>Антон Ростовиков</strong>,
+          <strong>Antoshka Rostovikov</strong>, <strong>ANTON
+          ROSTOVIKOV</strong>. Если у вас есть заграничный паспорт, введите имя
+          в соответствии с ним.
+        #original_hash: c03b949
+        email: Изменение email-адреса потребует подтверждения нового адреса.
+        #original_hash: bfd11f4
+        pending_avatar: >-
+          После загрузки новой аватарки вам придётся подождать, пока её одобрит
+          Руководство WCA.
+        #original_hash: da39a3e
+        country_iso2: ''
+        #original_hash: da39a3e
+        current_password: ''
+        #original_hash: da39a3e
+        delegate_status: ''
+        #original_hash: da39a3e
+        dob_verification: ''
+        #original_hash: da39a3e
+        gender: ''
+        #original_hash: da39a3e
+        login: ''
+        #original_hash: da39a3e
+        password: ''
+        #original_hash: da39a3e
+        password_confirmation: ''
+        #original_hash: da39a3e
+        region: ''
+        #original_hash: da39a3e
+        remember_me: ''
+        #original_hash: da39a3e
+        remove_avatar: ''
+        #original_hash: da39a3e
+        results_notifications_enabled: ''
+        #original_hash: da39a3e
+        unconfirmed_wca_id: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: da39a3e
+        location_description: ''
+        #original_hash: da39a3e
+        phone_number: ''
+        #original_hash: da39a3e
+        notes: ''
+      competition:
+        #original_hash: 2c812a0
+        name: >-
+          Полное название соревнования, включая год в конце (например, Moscow
+          North-West Open 2011). Слова лучше писать с большой буквы. Название
+          должно содержать только английские буквы, цифры, дефисы (-),
+          амперсанды (&), точки (.), двоеточия (:), апострофы (') и пробелы ( ).
+        #original_hash: 525fcc8
+        cellName: >-
+          Короткое название для отображения (например, MNW Open 2011 вместо
+          Moscow North-West Open 2011). Если обычное название уже довольно
+          короткое, можете использовать его и здесь.
+        #original_hash: bce4589
+        cityName: >-
+          Название города, и штат (если применимо), где будет проходить
+          соревнование. Не пишите здесь страну. Например,
+          <strong>Moscow</strong>, или <strong>San Francisco,
+          California</strong>. <br/>Это поле, а также все поля в этой форме
+          заполняются по-английски.
+        #original_hash: 17c8ff8
+        information: >-
+          Информация об этих соревнованиях. Пример:<br/>Registration will be
+          closed on January 16 or when we reach 40 competitors. Registration fee
+          is 300 RUB for 7 events or less, 400 RUB for 8 events or more.
+        #original_hash: 0708400
+        delegate_ids: WCA Делегат(ы) для этого соревнования.
+        #original_hash: 517d376
+        organizer_ids: >-
+          Организатор(ы) этого соревнования (они должны иметь аккаунт, чтобы вы
+          могли их здесь перечислить).
+        #original_hash: cabe7fb
+        external_website: Сайт соревнования. Должен быть правильный http(s) URL.
+        #original_hash: 9965635
+        registration_open: Время открытия и закрытия регистрации указаны в часовом поясе UTC.
+        #original_hash: f688881
+        remarks: >-
+          Дополнительная информация, которую вы хотите передать Руководству WCA.
+          Например, почему это соревнование объявляется меньше, чем за месяц,
+          если применимо.
+        #original_hash: da39a3e
+        clone_tabs: ''
+        #original_hash: da39a3e
+        countryId: ''
+        #original_hash: da39a3e
+        end_date: ''
+        #original_hash: da39a3e
+        generate_website: ''
+        #original_hash: b61cbfa
+        base_entry_fee_lowest_denomination: >-
+          Наименьший взнос за участие на соревнованиях. Указывается в наименьшей
+          валютной единице, например, в копейках для RUB. Взнос за участие будет
+          отображаться на странице соревнований, а также на странице
+          регистрации, если она используется. Обратите внимание, что сайт WCA
+          пока не поддерживает платежи. Команда работает над этим, и вы можете
+          наблюдать за прогрессом <a
+          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">здесь</a>.
+        #original_hash: 866bc05
+        currency_code: Код валюты для взноса за участие.
+        #original_hash: da39a3e
+        guests_enabled: ''
+        #original_hash: da39a3e
+        id: ''
+        #original_hash: da39a3e
+        isConfirmed: ''
+        #original_hash: da39a3e
+        receive_registration_emails: ''
+        #original_hash: da39a3e
+        registration_close: ''
+        #original_hash: da39a3e
+        showAtAll: ''
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        use_wca_registration: ''
+        #original_hash: da39a3e
+        venueAddress: ''
+      contact:
+        #original_hash: da39a3e
+        message: ''
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+      post:
+        #original_hash: 53c16eb
+        body: >-
+          Используйте &lt;!-- break --&gt; для разбивки больших текстов. На
+          главной странице будут отображаться посты с текстами до этих
+          разделителей. Весь текст будет показан при просмотре данного поста.
+        #original_hash: da39a3e
+        sticky: ''
+        #original_hash: da39a3e
+        title: ''
+      delegate_report:
+        #original_hash: 4eefb60
+        schedule_url: >-
+          Полная ссылка на опубликованное расписание (например,
+          http://speedcubing.mpei.ru/timetable.html)
+        #original_hash: 1a68719
+        equipment: >-
+          Количество и типы таймеров и дисплеев, использованных на соревновании.
+          Пожалуйста, удалите строки с оборудованием, которое вы не
+          использовали.
+        #original_hash: 4658dd9
+        venue: >-
+          Напишите о помещении, освещении, распределении зон (для сборки,
+          скрамблинга, ожидания, введения результатов), возникавших проблемах
+          (например, шум) и как вы их решали... Будьте краткими и не пишите не
+          относящихся к делу деталей. Обратите внимание, что это поле, и все
+          остальные в этой форме заполняются по-английски.
+        #original_hash: f8de509
+        organization: >-
+          Напишите о команде организаторов, как они работали над соревнованием,
+          приходилось ли вам вмешиваться, был ли у них уже опыт, заметили ли вы
+          прогресс, были ли они активными во время соревнования, возникали ли
+          проблемы (например, отставание от расписания) и как они их решали...
+          Будьте краткими и не пишите не относящихся к делу деталей.
+        #original_hash: 715f020
+        incidents: >-
+          Напишите об инцидентах, которые вы считаете важными. Нумеруйте их,
+          начиная с 1, чтобы другие делегаты могли ссылаться на них по номерам.
+          Не стоит писать про общие штрафы +2 и DNF. Если надо, можете спросить
+          мнения у делегатов или WRC насчёт каких-либо инцидентов. Если хотите
+          обратить внимание WDC на какие-либо инциденты, чётко напишите об этом.
+        #original_hash: f30abdc
+        remarks: >-
+          Напишите какие-либо остальные подробности, если хотите (например,
+          улучшения/ухудшения в сообществе, планы на будущее в этом регионе).
+          Если ради краткости вы не написали чего-либо в предыдущих полях,
+          можете написать это здесь.
+        #original_hash: da39a3e
+        discussion_url: ''
+      competition_tab:
+        #original_hash: e396d28
+        name: 'Например: как добраться, оплата, проживание.'
+        #original_hash: da39a3e
+        content: ''
+      person:
+        #original_hash: 498f4c5
+        dob: День рождения должен быть в формате ГГГГ-ММ-ДД.
+        #original_hash: da39a3e
+        countryId: ''
+        #original_hash: da39a3e
+        gender: ''
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        person1_wca_id: ''
+        #original_hash: da39a3e
+        person2_wca_id: ''
+        #original_hash: da39a3e
+        wca_id: ''
+      poll:
+        #original_hash: da39a3e
+        comment: ''
+        #original_hash: da39a3e
+        multiple: ''
+        #original_hash: da39a3e
+        question: ''
+      registration:
+        #original_hash: da39a3e
+        comments: ''
+        #original_hash: da39a3e
+        guests: ''
+        #original_hash: da39a3e
+        status: ''
+      team:
+        #original_hash: da39a3e
+        description: ''
+        #original_hash: da39a3e
+        friendly_id: ''
+        #original_hash: da39a3e
+        name: ''
+      vote:
+        #original_hash: da39a3e
+        comment: ''
+    options:
+      registration:
+        status:
+          #original_hash: 61a0572
+          accepted: Принято
+          #original_hash: a6b2452
+          pending: Список ожидания
+          #original_hash: 441bda6
+          deleted: Удалено
+      competition:
+        guests_enabled:
+          #original_hash: cb8809d
+          'true': Спрашивать о гостях
+          #original_hash: f8c2332
+          'false': Не спрашивать о гостях
+  errors:
+    messages:
+      #original_hash: dc2367c
+      wrong_size: 'неправильный размер файла (может быть %{file_size})'
+      #original_hash: 1531237
+      size_too_small: 'слишком маленький размер файла (должен быть как минимум %{file_size})'
+      #original_hash: a2a43b3
+      size_too_big: 'слишком большой размер файла (может быть %{file_size})'
+  devise:
+    failure:
+      #original_hash: 1186218
+      invalid: 'Неправильный email, WCA ID или пароль.'
+      #original_hash: 1186218
+      not_found_in_database: 'Неправильный email, WCA ID или пароль.'
+  wca:
+    errors:
+      messages:
+        #original_hash: e88f903
+        form_error:
+          zero: Ошибок нет.
+          one: 'Форма содержит %{count} ошибку:'
+          few: 'Форма содержит %{count} ошибки:'
+          many: 'Форма содержит %{count} ошибок:'
+          other: 'WTF %{count}'
+    doorkeeper:
+      applications:
+        help:
+          #original_hash: 5545f6c
+          scopes_html: >-
+            Scopes разделяются пробелами. Оставьте пустым, чтобы использовать
+            scope по умолчанию. Смотрите <a
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            target="_blank">здесь</a> список поддерживаемых scopes.
+      scopes:
+        #original_hash: 1920e95
+        public: >-
+          получить доступ к вашей информации, доступной общественности (имя, WCA
+          ID, пол, гражданство и аватарка)
+        #original_hash: d4003be
+        dob: узнать ваш день рождения
+        #original_hash: 17aa24f
+        email: узнать ваш email адрес
+    devise:
+      #original_hash: 06184f5
+      no_account: Нет аккаунта?
+      #original_hash: a268696
+      have_competed: Я уже участвовал(а) в WCA соревновании.
+      #original_hash: dcd1d70
+      have_never_competed: Я никогда не участвовал(а) в WCA соревновании.
+      #original_hash: 86a60c9
+      let_us_know: Участвовали ли вы в WCA соревнованиях раньше?
+      #original_hash: f9f512b
+      welcome_back: >-
+        Чтобы создать WCA аккаунт, нам нужно знать ваш WCA ID, с которым вы
+        участвовали.
+      #original_hash: 669fb57
+      welcome: >-
+        Прежде чем вы сможете участвовать в первом WCA соревновании, нам нужна
+        дополнительная информация. Обратите внимание, что ваш день рождения
+        никогда не будет раскрыт без вашего разрешения.
+      gender:
+        #original_hash: 3f3a489
+        male: Мужской
+        #original_hash: b7c17e9
+        female: Женский
+        #original_hash: 6e6a6f2
+        other_gender: Иное
+  layouts:
+    navigation:
+      #original_hash: 0eb5ed5
+      information: Информация
+      #original_hash: 9ac918a
+      about: О WCA
+      #original_hash: d8fd3e4
+      delegates: WCA Делегаты
+      #original_hash: 0ef06c8
+      organizations: Национальные организации
+      #original_hash: d790b40
+      faq: Часто Задаваемые Вопросы
+      #original_hash: a34b69f
+      contact: Контактная информация
+      #original_hash: cf1d2c9
+      forum: Форум
+      #original_hash: 4fa8cc8
+      tools: Программы
+      #original_hash: 83fce83
+      logo: Логотип
+      #original_hash: db98a68
+      competitions: Соревнования
+      #original_hash: 6a72085
+      all: Все
+      #original_hash: 775d458
+      my_competitions: Мои соревнования
+      #original_hash: 32fde96
+      new_competition: Новое соревнование
+      #original_hash: 612e12d
+      results: Результаты
+      #original_hash: f5fe73c
+      rankings: Рейтинги
+      #original_hash: e51c552
+      records: Рекорды
+      #original_hash: f3cf96e
+      persons: Участники
+      #original_hash: 5b72b5a
+      my_results: Мои результаты
+      #original_hash: 2086b21
+      statistics: Статистика
+      #original_hash: 82dabd0
+      multimedia: Медиа
+      #original_hash: 4fd2a7f
+      db_export: Экспорт базы данных
+      #original_hash: 1fa73f3
+      regulations: Положения WCA
+      #original_hash: 141d1d7
+      guidelines: Дополнения
+      #original_hash: c4622c3
+      scrambles: Скрамблы
+      #original_hash: 90ccd64
+      history: История
+      #original_hash: 8ad8302
+      translations: Переводы
+      #original_hash: b8be3d1
+      administration: Управление
+      #original_hash: b7ee3c4
+      manage_users: Управление пользователями
+      #original_hash: 12ab214
+      delegate: Делегат
+      #original_hash: 2f4bd74
+      panel: Панель
+      #original_hash: d3a928c
+      results_team: Results team
+      #original_hash: 4e7afeb
+      results_admin: Администратор
+      #original_hash: f158a5a
+      results_phpmyadmin: phpMyAdmin
+      #original_hash: aee74b8
+      new_post: Создать пост
+      #original_hash: 0d67445
+      team_leader: Лидер команды
+      #original_hash: dc1649a
+      sign_out: Выйти
+      #original_hash: 753a22b
+      notifications: Уведомления
+      #original_hash: 15141ea
+      edit_profile: Редактировать профиль
+      #original_hash: d93d10f
+      api: API
+      #original_hash: 5524aab
+      manage_app: Управление вашими приложениями
+      #original_hash: 0e8b212
+      manage_auth_app: Управление авторизованными приложениями
+  users:
+    update_locale:
+      #original_hash: 4cde9bc
+      success: Язык обновлён.
+      #original_hash: dcc2f49
+      failure: Невозможно обновить профиль.
+      #original_hash: c29870c
+      unavailable: Запрашиваемый язык недоступен.
+    claim_wca_id:
+      #original_hash: f28bf87
+      title: Затребовать WCA ID
+      #original_hash: 1b44f6d
+      competition: соревнование
+      #original_hash: b396bfa
+      already_have_html: 'У вас уже есть WCA ID %{wca_id}.'
+      #original_hash: 87f1062
+      already_claimed_html: >-
+        Вы затребовали WCA ID %{wca_id}. Свяжитесь с Делегатом %{delegate} в
+        случае возникновения вопросов.
+      #original_hash: 0660b5d
+      info_competed_before: >-
+        Если вы уже участвовали в соревнованиях раньше, вы можете привязать WCA
+        ID к вашему аккаунту.
+      #original_hash: 7d605f8
+      info_never_competed_html: >-
+        Если вы никогда не участвовали в соревнованиях, приходите на %{comp}!
+        Когда результаты будут выложены, ваш WCA ID будет создан.
+      #original_hash: f28bf87
+      submit_value: Затребовать WCA ID
+    edit_avatar_thumbnail:
+      #original_hash: 79f14eb
+      current: 'Миниатюра аватарки:'
+      #original_hash: b42ba27
+      new: 'Новая миниатюра:'
+      #original_hash: efc007a
+      save: Сохранить
+    edit:
+      #original_hash: 9239ee2
+      general: Общее
+      #original_hash: 84add5b
+      email: Email
+      #original_hash: 9dfd349
+      preferences: Предпочтения
+      #original_hash: 8be3c94
+      password: Пароль
+      #original_hash: 3fc6dbe
+      member_of: Состоит в командах
+      #original_hash: 57eaf24
+      preferred_events: Предпочитаемые дисциплины
+      #original_hash: 42619dd
+      preferred_events_desc: >-
+        Укажите ваши любимые дисциплины, чтобы регистрироваться на соревнования
+        быстрее.
+      #original_hash: b402e03
+      please_fix_profile: >-
+        Чтобы зарегистрироваться на соревнования, вам нужно исправить следующие
+        ошибки:
+      #original_hash: ff4fc02
+      profile: Профиль
+      #original_hash: 7b2c7f1
+      approve: Подтвердить
+      #original_hash: 85de4b8
+      unconfirmed_email: 'Email-адрес этого аккаунта (%{email}) не подтверждён.'
+      #original_hash: 8a770cf
+      pending_mail_confirmation: 'Этот аккаунт ожидает подтверждения нового email-адреса %{email}.'
+      #original_hash: 0340b0b
+      pending_avatar_confirmation: Этот аккаунт ожидает подтверждения новой аватарки.
+      #original_hash: 7b06f03
+      pending_claim_confirmation_html: 'Этот аккаунт ожидает подтверждения WCA ID %{wca_id} от %{delegate}.'
+      #original_hash: fc7269a
+      pending_claim_mail_confirmation_html: >-
+        Этот пользователь затребовал WCA ID %{wca_id}. Делегат %{delegate} будет
+        уведомлён, как только email-адрес будет подтверждён.
+      #original_hash: 1cde7e6
+      your_thumbnail: 'Текущая миниатюра аватарки:'
+      #original_hash: af18820
+      edit_thumbnail: Нажмите для редактирования миниатюры
+      #original_hash: cf65c6e
+      manage_pending: 'Аватарки, ожидающие подтверждения'
+      #original_hash: 2d2ae5d
+      have_no_wca_id_html: >-
+        У вас пока нет привязанного WCA ID. Если вы уже участвовали в
+        соревнованиях, запросите привязку WCA ID к вашему аккаунту %{here}!
+      #original_hash: 29e25b5
+      have_wca_id_html: 'Ваш WCA ID %{link_id}.'
+      cannot_edit:
+        #original_hash: 8501c74
+        msg: >-
+          Вы не можете изменить своё имя, день рождения, пол или страну, потому
+          что %{reason}. Свяжитесь с вашим <a
+          href='%{delegate_url}'>Делегатом</a>, если хотите внести изменения.
+        reason:
+          #original_hash: 370ff12
+          assigned: вы уже привязали WCA ID
+          #original_hash: 1c4670f
+          registered: вы уже участвовали в соревновании
+      #original_hash: efc007a
+      save: Сохранить
+      #original_hash: 141d1d7
+      guidelines: Указания
+      avatar_guidelines:
+        #original_hash: 255f28c
+        '1': На аватарках должны быть существующие люди.
+        #original_hash: 9126b0c
+        '2': На аватарке должны быть вы.
+        #original_hash: de9b742
+        '3': >-
+          Если на аватарке больше одного человека, должно быть понятно, кто из
+          них вы.
+        #original_hash: 4083c00
+        '4': 'Ваша голова, но необязательно всё лицо, должна быть видна.'
+        #original_hash: ebbbf8a
+        '5': На аватарке не должно быть добавленных надписей.
+        #original_hash: cc5f23a
+        '6': Аватарка должна быть правильно ориентирована.
+    errors:
+      #original_hash: 094b763
+      not_found: не найдено
+      #original_hash: 49a6fe4
+      already_assigned: уже привязан к другому пользователю
+      #original_hash: 4bef62b
+      dob_incorrect_html: >-
+        не такой, как в нашей базе данных. Если вы уверены, что правильно ввели
+        день рождения (ГГГГ-ММ-ДД), пожалуйста пришлите <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> фотографию любого документа (паспорт, водительское
+        удостоверение итд.), где видны ваши имя и день рождения.
+      #original_hash: 0fbcefd
+      unique: должен быть уникальным
+      #original_hash: 26f70ed
+      dob_past: должен быть в прошлом
+      #original_hash: f599dc5
+      must_be_senior: должен быть старшим делегатом
+      #original_hash: 2e582eb
+      must_not_be_present: должен отсутствовать
+      #original_hash: b2c4ecc
+      senior_has_delegate: >-
+        невозможно убрать статус старшего делегата, так как есть подчинённые
+        делегаты
+      #original_hash: 48653a9
+      already_have_id: >-
+        невозможно затребовать WCA ID, потому что у вас уже есть WCA ID
+        %{wca_id}
+      #original_hash: eeb76a7
+      wca_id_no_birthdate_html: >-
+        День рождения для этого WCA ID нам неизвестен. Пожалуйста, пришлите <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> фотографию любого документа (паспорт, водительское
+        удостоверение итд.), где видны ваши имя и день рождения.
+      #original_hash: 49083d8
+      board_member_cannot_resign: >-
+        Вы не можете уволиться с поста Руководства WCA! Найдите другого из
+        Руководства WCA, кто вас уволит.
+      #original_hash: d02c03b
+      avatar_requires_wca_id: требуется привязать WCA ID
+    successes:
+      messages:
+        #original_hash: 31bd401
+        account_updated: Аккаунт обновлён
+        #original_hash: 49e5851
+        wca_id_claimed: >-
+          Вы успешно затребовали WCA ID %{wca_id}. Ждите, пока %{user}
+          подтвердит его! Вас уведомят по email.
+        #original_hash: dc89669
+        account_updated_confirm: >-
+          Аккаунт обновлён, мы отправили email на %{email}, чтобы подтвердить
+          ваш новый адрес.
+    select_nearby_delegate:
+      #original_hash: 2b11120
+      select_delegate_html: >-
+        Чтобы привязать к вам ваш WCA ID, нам нужен <a href='%{link_delegate}'
+        target='_blank'>WCA Деленат</a>, чтобы подтвердить вашу личность.
+        Пожалуйста, введите ваш день рождения и выберите Делегата, который знает
+        вас лучше всего.
+      #original_hash: d69cf94
+      already_assigned_html: >-
+        WCA ID %{link_id} уже привязан к другому аккаунту. Если вы думаете, что
+        это было сделано по ошибке, свяжитесь с вашим <a href='%{link_delegate}'
+        target='_blank'>WCA Делегатом</a>.
+      #original_hash: 3391b0b
+      missing_dob_html: >-
+        У WCA ID %{link_id} не установлен день рождения. Пожалуйста, свяжитесь с
+        %{link_result_team}, чтобы исправить это.
+      #original_hash: 92aa857
+      unknown_wca_id_html: 'WCA ID %{link_id} не существует.'
+  registrations:
+    #original_hash: c5497bc
+    events: Дисциплины
+    errors:
+      #original_hash: 44ab952
+      need_name: Нужно ввести имя
+      #original_hash: 6f64c57
+      need_gender: Нужно выбрать пол
+      #original_hash: ebf1ecb
+      need_dob: Нужно ввести день рождения
+      #original_hash: d84a54f
+      need_country: Нужно выбрать страну
+      #original_hash: cec28a0
+      comp_not_found: Соревнование не найдено
+      #original_hash: cb763b8
+      registration_closed: Регистрация закрыта
+      #original_hash: e0bb243
+      cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
+      #original_hash: bf9a828
+      can_register: Пользователь должен мочь зарегистрироваться на соревнование.
+      #original_hash: a38d024
+      must_register: нужно выбрать хотя бы одну дисциплину
+    registration_info_people:
+      #original_hash: bdf1f11
+      newcomer:
+        zero: новичков
+        one: новичок
+        few: новичка
+        many: новичков
+        other: WTF
+      #original_hash: bc010e3
+      returner:
+        zero: ветеранов
+        one: ветеран
+        few: ветерана
+        many: ветеранов
+        other: WTF
+      #original_hash: b7da17a
+      person:
+        zero: участников
+        one: участник
+        few: участника
+        many: участников
+        other: WTF
+    flash:
+      #original_hash: da7ec53
+      not_using_wca: Для этого соревнования не используется регистрация на WCA
+      #original_hash: d528030
+      accepted_and_mailed:
+        zero: Регистрации приняты! Участники уведомлены по email.
+        one: Регистрация принята! Участник уведомлён по email.
+        few: Регистрации приняты! Участники уведомлены по email.
+        many: Регистрации приняты! Участники уведомлены по email.
+        other: WTF
+      #original_hash: 42ea8de
+      rejected_and_mailed:
+        zero: Участники отправлены в список ожидания
+        one: Участник отправлен в список ожидания
+        few: Участники отправлены в список ожидания
+        many: Участники отправлены в список ожидания
+        other: WTF
+      #original_hash: a360b31
+      deleted_and_mailed:
+        zero: Регистрации удалены
+        one: Регистрация удалена
+        few: Регистрации удалены
+        many: Регистрации удалены
+        other: WTF
+      #original_hash: c3aa289
+      single_deletion_and_mail: 'Регистрация удалена, отправлен email %{mail}'
+      #original_hash: d8f067f
+      cannot_delete: Вы не можете удалить вашу регистрацию
+      #original_hash: 82b3899
+      updated: Регистрация обновлена
+      #original_hash: 856484a
+      failed: Не получилось обновить регистрацию
+      #original_hash: 016b4ae
+      deleted: 'Регистрация на %{comp} успешно удалена'
+      #original_hash: 648424f
+      registered: Вы успешно зарегистрировались!
+    edit_registration:
+      #original_hash: 2d15eae
+      title: '%{person} на %{comp}'
+    list:
+      #original_hash: 8b7631c
+      title: 'Регистрации на %{comp}'
+      #original_hash: 5301648
+      edit: Редактировать
+      #original_hash: 0ab725c
+      country_plural:
+        other: '%{count} WTF'
+        many: '%{count} стран'
+        few: '%{count} страны'
+        one: '%{count} страна'
+        zero: ноль стран
+      #original_hash: 1feee0e
+      export_csv: Экспорт в CSV
+      #original_hash: 84add5b
+      email: Email
+      #original_hash: 7b2c7f1
+      approve: Подтвердить
+      #original_hash: 2b03b59
+      reject: Отклонить
+      #original_hash: f6fdbe4
+      delete: Удалить
+      #original_hash: 92d40dc
+      waiting_list: Список ожидания
+      #original_hash: 06f7d1a
+      approved_registrations: Подтверждённые регистрации
+      #original_hash: bff04e8
+      deleted_registrations: Удалённые регистрации
+      #original_hash: a844fcf
+      registered: Дата реги
+      #original_hash: b25928c
+      total: Всего
+    new_registration:
+      #original_hash: 8b9f726
+      title: 'Зарегистрироваться на %{comp}'
+    #original_hash: 7cae988
+    registered_with_account_html: >-
+      Этот человек зарегистрировался с аккаунта. Вы можете редактировать его
+      информацию %{here}.
+    #original_hash: ada2e9e
+    sign_in: Войти
+    #original_hash: 5d45a00
+    profile: профиле
+    #original_hash: c0063c3
+    register: Зарегистрироваться!
+    #original_hash: a9af643
+    update: Обновить регистрацию
+    #original_hash: f6fdbe4
+    delete: Удалить
+    #original_hash: b72119a
+    delete_confirm: 'Вы уверены, что хотите удалить свою регистрацию?'
+    #original_hash: cfc4865
+    delete_registration: Удалить регистрацию.
+    #original_hash: e9ddc6e
+    will_open_html: 'Регистрация откроется через <strong>%{days}</strong> в %{time}.'
+    #original_hash: 34eb009
+    will_close_html: 'Регистрация закроется через <strong>%{days}</strong> в %{time}.'
+    #original_hash: dc8a520
+    closed_html: 'Регистрация закрылась <strong>%{days}</strong> назад в %{time}.'
+    #original_hash: 2e7024d
+    please_sign_in_past_html: >-
+      %{sign_in}, чтобы проверить статус своей регистрации. Если у вас нет WCA
+      аккаунта, вы можете создать его %{here}, но уже слишком поздно
+      регистрироваться на это соревнование.
+    #original_hash: 7753b2e
+    please_sign_in_not_yet_open_html: >-
+      %{sign_in}, чтобы проверить статус своей регистрации. Если у вас нет WCA
+      аккаунта, вы можете создать его %{here}, но регистрация на это
+      соревнование ещё не открыта.
+    #original_hash: e1301c4
+    please_sign_in_html: >-
+      %{sign_in}, чтобы зарегистрироваться на %{comp}. Если у вас нет WCA
+      аккаунта, вы можете создать его %{here}.
+    #original_hash: 89b4e7f
+    greeting: 'Здравствуйте, %{name}!'
+    #original_hash: fb34a17
+    please_fix_profile_html: >-
+      Чтобы зарегистрироваться на %{comp}, вам нужно исправить следующие ошибки
+      в своём %{profile}:
+    #original_hash: 855ca9c
+    can_register: 'Вы можете зарегистрироваться на %{comp} ниже.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Пожалуйста, проверьте на сайте, не нужно ли вам сделать что-либо ещё,
+      например, заплатить взнос за участие.
+    #original_hash: ea2b586
+    have_registered: >-
+      Вы зарегистрировались на %{comp}. Вы можете просмотреть свою регистрацию
+      ниже.
+    #original_hash: 4d966e0
+    entry_fee: Взнос за участие
+    #original_hash: 3c9141f
+    contact_organizer: 'Свяжитесь с организаторам, если хотите что-то изменить.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Ваша регистрация ещё не одобрена. Возможно, вам надо сначала заплатить
+      взнос за участие, если об этом написано на сайте соревнования.
+    #original_hash: 58b1a3c
+    accepted: Ваша регистрация принята!
+    #original_hash: 4cf01a2
+    preferred_events_prompt_html: >-
+      Чтобы в будущем ускорить регистрацию, вы можете настроить ваши любимые
+      дисциплины %{link}.
+  competitions:
+    messages:
+      #original_hash: 7b80062
+      not_visible: Это соревнование недоступно широким массам.
+      #original_hash: c1d4926
+      name_too_long: >-
+        Название соревнования больше 32 символов. Мы предпочитаем названия
+        покороче и будем рады, если вы его измените.
+      #original_hash: 1a20fae
+      must_have_events: >-
+        Пожалуйста добавьте хотя бы одну дисциплину, прежде чем подтверждать
+        соревнование.
+      #original_hash: e390250
+      create_success: Соревнование успешно создано!
+      #original_hash: afe3a23
+      results_preview_alert: Эти результаты ещё не опубликованы.
+      #original_hash: 07de612
+      upload_results: 'Соревнование закончено, мы скоро выложим результаты!'
+      #original_hash: a0168ee
+      in_progress: >-
+        Соревнование ещё не закончилось. Результаты будут выложены не ранее
+        %{date}.
+      #original_hash: 3322400
+      tooltip_registered: Вы зарегистрированы.
+      #original_hash: f2d092f
+      tooltip_waiting_list: Вы сейчас в списке ожидания.
+      #original_hash: 9ecd976
+      confirmed_visible: Соревнование подтверждено и доступно широким массам
+      #original_hash: fa186a9
+      confirmed_not_visible: 'Соревнование подтверждено, но невидимо.'
+      #original_hash: a66bbe3
+      not_confirmed_visible: 'Соревнование не подтверждено, но доступно широким массам.'
+      #original_hash: 0f44e45
+      not_confirmed_not_visible: Соревнование не подтверждено и невидимо широким массам
+    my_competitions:
+      #original_hash: 5c6d3ea
+      title: Мои соревнования
+      #original_hash: 6e79aaf
+      disclaimer: >-
+        Только соревнования, использующие регистрацию на сайте WCA, будут
+        показаны здесь.
+      #original_hash: 94a2fc8
+      past_competitions: Прошедшие соревнования
+    competition_info:
+      #original_hash: eb9a4bc
+      date: Дата
+      #original_hash: 4271627
+      city: Город
+      #original_hash: 67cd406
+      venue: Помещение
+      #original_hash: d70f93d
+      address: Адрес
+      #original_hash: dc3decb
+      details: Подробности
+      #original_hash: 2e8a57c
+      website: Сайт
+      #original_hash: 680567f
+      organizer_plural:
+        other: WTF
+        many: Организаторы
+        few: Организаторы
+        one: Организатор
+        zero: Организаторов
+      #original_hash: 6afa61e
+      delegate:
+        zero: WCA Делегаты
+        one: WCA Делегат
+        few: WCA Делегаты
+        many: WCA Делегаты
+        other: WTF
+      #original_hash: b37456c
+      contact: Контакты
+      #original_hash: a428739
+      entry_fee: Взнос за участие
+      #original_hash: 0eb5ed5
+      information: Информация
+    index:
+      #original_hash: db98a68
+      title: Соревнования
+      #original_hash: 6a72085
+      all_events: Все
+      #original_hash: 6d76b81
+      all_years: Всё время
+      #original_hash: 719ea39
+      clear: Сбросить
+      #original_hash: a1fffaa
+      list: Список
+      #original_hash: ab478f3
+      map: Карта
+      #original_hash: 0f21717
+      region: Регион
+      #original_hash: bce0641
+      search: Поиск
+      #original_hash: a725020
+      state: Когда
+      #original_hash: 4e9f7a3
+      present: Предстоящие
+      #original_hash: 76eec76
+      recent: Недавние
+      #original_hash: 405c12f
+      past: Прошедшие
+      #original_hash: 52c30f8
+      past_from: 'В %{year} году'
+      #original_hash: 7cff459
+      past_all: Все прошедшие
+      titles:
+        #original_hash: 69447c9
+        in_progress: Текущие соревнования
+        #original_hash: 9e66032
+        past: 'Прошедшие соревнования %{year} года'
+        #original_hash: f628f0e
+        past_all: Все прошедшие соревнования
+        #original_hash: cbe8a54
+        recent: 'Недавние соревнования (последние %{count} дней)'
+        #original_hash: 914742f
+        upcoming: Предстоящие соревнования
+      #original_hash: 6684214
+      no_access: У вас нет доступа к этой странице!
+      tooltips:
+        hourglass:
+          #original_hash: b5183e1
+          ended: 'Закончилось %{days} назад'
+          #original_hash: 1dccb27
+          in_progress: Идёт в настоящий момент!
+          #original_hash: 1157462
+          posted: Результаты выложены!
+          #original_hash: 89bcc37
+          starts_in: 'Начинается через %{days}'
+        #original_hash: ccd2db9
+        search: Название или город
+        #original_hash: 3bc8082
+        recent: 'Последние %{count} дней'
+      #original_hash: 8b09d74
+      no_comp_found: Соревнований не найдено.
+      #original_hash: 7008166
+      no_comp_match: >-
+        Мы не нашли никаких соревнований с %{events}! Попробуйте искать меньше
+        дисциплин.
+    my_competitions_table:
+      #original_hash: 5301648
+      edit: Редактировать
+      #original_hash: dddbe64
+      registrations: Регистрации
+      #original_hash: 4f98e6d
+      results_up: Результаты выложены!
+      #original_hash: 87ab5db
+      report: Просмотреть отчёт Делегата
+      #original_hash: b4ca252
+      edit_report: Редактировать отчёт
+      #original_hash: e590657
+      missing_report: Ваш отчёт ещё не отправлен!
+      #original_hash: 7fc0b5f
+      no_upcoming_competitions_html: 'У вас нет предстоящих соревнований! Полный список соревнований %{link}.'
+      #original_hash: 9104a03
+      no_past_competitions: У вас нет прошедших соревнований.
+    competition_form:
+      #original_hash: f957dcb
+      supports_md_html: >-
+        Поддерживает <a
+        href='https://daringfireball.net/projects/markdown/basics'
+        target='_blank'>Markdown</a>
+      #original_hash: 9d9126e
+      venue_html: >-
+        Помещение, где будет проходить соревнование. %{md}. Например: [Moscow
+        Aviation Institute](http://intstudy.mai.ru/)
+      #original_hash: 2651d1a
+      venue_details_html: >-
+        Детали помещения (например, главный вход, второй этаж, следуйте
+        указателям). %{md}
+      #original_hash: b727e58
+      contact_html: >-
+        Контактный email. Если вы его не заполните, email'ы организаторов будут
+        обнародованы. %{md}. Например: [Вася Пупкин](mailto:vasya@pupkin.ru)
+      #original_hash: c5497bc
+      events: Дисциплины
+      #original_hash: ae66391
+      unoff_events: Более не официальные дисциплины
+      #original_hash: 815d5c3
+      locked_edit_html: >-
+        Соревнование доступно массам, его нельзя отредактировать. Если вам надо
+        внести изменения, свяжитесь с %{board}.
+      #original_hash: ce33e21
+      confirmed_not_visible_html: >-
+        Вы подтвердили это соревнование, но оно ещё невидимо для широкой
+        публики. Подождите, пока %{board} одобрит соревнование.
+      #original_hash: e94cba8
+      is_visible: >-
+        Соревнование доступно массам, и любое изменение, которое вы сделаете,
+        все сразу увидят.
+      #original_hash: 34862bb
+      awaiting_confirmation_html: >-
+        Заполните все поля и нажмите "Подтвердить", чтобы %{board} одобрило это
+        соревнование.
+      #original_hash: 7586b02
+      submit_modify_value: Изменить дисциплины
+      #original_hash: 8966fd0
+      submit_create_value: Создать соревнование
+      #original_hash: 40b0dfd
+      submit_update_value: Обновить соревнование
+      #original_hash: 04a2122
+      submit_confirm_value: Подтвердить
+      #original_hash: f6fdbe4
+      submit_delete_value: Удалить
+      #original_hash: 1ca19b1
+      submit_confirm: >-
+        Вы уверены, что хотите подтвердить соревнование? Потом вы уже не сможете
+        ничего редактировать. После нажатия проверьте свою почту, чтобы
+        убедиться, что Руководство WCA было уведомлено.
+      #original_hash: 4c7deb7
+      submit_delete: 'Вы уверены, что хотите удалить соревнование? Пути назад не будет.'
+      #original_hash: 8ebebca
+      coordinates: Координаты
+    errors:
+      #original_hash: f7ef9f6
+      invalid_name_message: >-
+        должно заканчиваться на год (пример: Euro 2016) и может содержать только
+        английские буквы, цифры, дефисы (-), амперсанды (&), точки (.),
+        двоеточия (:), апострофы (') и пробелы ( ).
+      #original_hash: 8e8f765
+      cannot_manage: Нельзя управлять соревнованием.
+      #original_hash: 0acc454
+      cannot_delete_public: 'Нельзя удалить соревнование, видимое публике.'
+      #original_hash: 3935fd6
+      cannot_delete_confirmed: Нельзя удалить подтверждённое соревнование.
+      #original_hash: 191df37
+      must_contain_event: должна быть хотя бы одна дисциплина
+      #original_hash: 112490b
+      must_contain_delegate: должен быть хотя бы один WCA Делегат
+      #original_hash: 0b2b56b
+      not_all_delegates: не все являются делегатами
+      #original_hash: 43a23c2
+      registration_close_after_open: закрытие регистрации должно быть после открытия
+      #original_hash: 43a83a9
+      end_date_before_start: Дата окончания не может быть до даты начала.
+      #original_hash: be3933b
+      span_too_many_days: 'Соревнование не может длиться более %{max_days} дней.'
+    #original_hash: f42a238
+    unscheduled: незапланированные
+    new:
+      #original_hash: 1208df7
+      create_competition: Создать соревнование
+      #original_hash: c02a415
+      note_clone: >-
+        Чтобы скопировать существующее соревнование, откройте его страницу и
+        нажмите "Скопировать" в меню.
+    update_events:
+      #original_hash: 00204fa
+      update_success: Дисциплины успешно обновлены.
+    update:
+      #original_hash: 5fb2f57
+      save_success: Соревнование успешно сохранено.
+      #original_hash: 9d1649e
+      confirm_success: >-
+        Соревнование успешно подтверждено. Проверьте email и ждите, пока
+        Руководство WCA не одобрит соревнование!
+      #original_hash: 28567f0
+      delete_success: 'Успешно удалено соревнование %{id}.'
+    time_until_competition:
+      #original_hash: b0f330f
+      competition_in: 'Соревнование через %{n_days}.'
+      #original_hash: e6e096a
+      competition_was: 'Соревнование было %{n_days} назад.'
+    nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        other: '%{count} WTF'
+        many: '%{count} соревнований'
+        few: '%{count} соревнования'
+        one: '%{count} соревнование'
+        zero: Нет соревнований
+      #original_hash: e3528ec
+      label: 'Близкие соревнования (в пределах %{days} дней и %{kms} км)'
+      #original_hash: 3446062
+      label_admin: 'Последние %{days} дней'
+      #original_hash: 07a1cf0
+      nearby_admin: '%{x_competitions} в пределах %{kms} км и %{days} дней.'
+      #original_hash: feefb46
+      no_comp_nearby: Нет близких соревнований!
+      #original_hash: 7e76950
+      no_date_yet: Вы ещё не выбрали дату соревнования.
+      #original_hash: 82a95d2
+      no_location_yet: Вы ещё не выбрали место соревнования.
+      #original_hash: 9eb8f46
+      within: 'В пределах %{days} дней'
+      #original_hash: d97d1ee
+      show: Показать
+      #original_hash: 709a232
+      name: Название
+      #original_hash: adc24b7
+      delegates: Делегат(ы)
+      #original_hash: eb9a4bc
+      date: Дата
+      #original_hash: d219c68
+      location: Место
+      #original_hash: 4232080
+      distance: Расстояние
+      #original_hash: 51de2b8
+      before: до
+      #original_hash: 405906c
+      after: после
+    #original_hash: 06b01c4
+    announcements: Объявления
+    #original_hash: 5b9523f
+    upload_results: Загрузить результаты
+    #original_hash: 47dfd90
+    post_announcement: Опубликовать объявление о соревновании
+    show:
+      #original_hash: b0fe391
+      general_info: Общая информация
+    nav:
+      menu:
+        #original_hash: 612e12d
+        results: Результаты
+        #original_hash: 02ae2bd
+        podiums: Подиумы
+        #original_hash: 6a72085
+        all: Все
+        #original_hash: aaefdb6
+        by_person: По участникам
+        #original_hash: 4b631f6
+        info: Информация
+        #original_hash: 5301648
+        edit: Редактировать
+        #original_hash: d8cdb57
+        clone: Скопировать
+        #original_hash: 2b92094
+        orga_view: Редактировать как организатор
+        #original_hash: c6171f8
+        event_view: Управление дисциплинами
+        #original_hash: 76bfdcf
+        admin_view: Редактировать как администратор
+        #original_hash: a857eb4
+        tabs: Управление вкладками
+        #original_hash: 4c9f914
+        delegate_report: Отчёт Делегата
+        #original_hash: b233e77
+        registration: Регистрация
+        #original_hash: d672995
+        register: Зарегистрироваться
+        #original_hash: 855bd26
+        competitors: Участники
+    results_table:
+      #original_hash: 3e9a6b5
+      wca_profile: Профиль WCA
+      #original_hash: ad8919a
+      event: Дисциплина
+      #original_hash: ec7b598
+      round: Раунд
+      #original_hash: 709a232
+      name: Имя
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: Вкладки
+      #original_hash: 709a232
+      name: Название
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: Создать вкладку
+      #original_hash: 8d5b6f9
+      goto_button: 'Открыть вкладку %{tab_name}'
+      #original_hash: 6f23a36
+      new_tab: Новая вкладка
+      #original_hash: 5301648
+      edit: Редактировать
+      #original_hash: fb91e24
+      update: Обновить
+      #original_hash: f6fdbe4
+      delete: Удалить
+      #original_hash: 14e49c1
+      confirm_delete: 'Вы уверены, что хотите удалить вкладку %{tab_name}?'
+      #original_hash: ce1bf0b
+      back_to_tabs: Назад к вкладкам
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: 'Новая вкладка для %{comp_name}'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: Управление вкладками
+      #original_hash: 40f9491
+      tabs_introduction_text: >-
+        Здесь вы можете добавить и отредактировать вкладки, которые будут
+        показаны на странице соревнования.
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: 'Редактировать вкладку %{tab_name}'
+  notifications:
+    #original_hash: 10bcdbd
+    connect_wca_id: Привяжите ваш WCA ID к вашему аккаунту!
+  persons:
+    index:
+      #original_hash: 5934b4c
+      name_or_wca_id: 'Имя, его часть или WCA ID'
+      #original_hash: 709a232
+      name: Имя
+      #original_hash: d523ebb
+      country: Страна
+      #original_hash: 02ae2bd
+      podiums: Подиумы
+      #original_hash: 56656a0
+      no_persons_found: Такому критерию не удовлетворяет ни один участник.
+  posts:
+    #original_hash: 2a7da42
+    confirm_delete_post: 'Вы уверены, что хотите удалить этот пост? Назад пути не будет.'
+  faq:
+    #original_hash: d790b40
+    title: Часто Задаваемые Вопросы
+    #original_hash: 3451241
+    contact_html: 'Если эти ответы не помогли, %{contact_us}%!'
+    #original_hash: 6cf2723
+    contact_us: свяжитесь с нами
+    #original_hash: 9100be3
+    search_for_competition: 'Поискать соревнования можно здесь:'
+    #original_hash: cba12bc
+    already_logged_in: Вы уже зашли под WCA аккаунтом.
+    #original_hash: 5b7fa52
+    create_an_account: 'Вы можете создать аккаунт %{here}.'
+    #original_hash: f8c910c
+    claim_your_wca_id: 'Вы можете затребовать свой WCA ID %{here}.'
+    #original_hash: 4dfb4c7
+    create_an_account_and_claim: >-
+      Создайте аккаунт %{here}. После того, как вы залогинитесь, вы сможете
+      затребовать свой WCA ID.
+    answers:
+      '1':
+        #original_hash: f79b522
+        title: Как мне получить WCA ID и WCA профиль?
+        content:
+          #original_hash: b645fe1
+          '1': >-
+            Если вы никогда не участвовали в соревнованиях, <a
+            href='/competitions'>поучаствуйте</a>! Когда результаты соревнования
+            опубликуют, ваши WCA ID и WCA профиль будут созданы автоматически.
+      '2':
+        #original_hash: eb948e7
+        title: Как мне найти WCA соревнование?
+        content:
+          #original_hash: d195cec
+          '1': <a href='/competitions'>Здесь</a> список соревнований
+      '3':
+        #original_hash: af6ad12
+        title: >-
+          Как мне зарегистрироваться на соревнование? К кому мне обращаться,
+          если у меня возникнут с этим проблемы?
+        content:
+          #original_hash: 7b91db1
+          '1': >-
+            Многие соревнования используют систему регистрации этого сайта WCA,
+            но некоторые используют свою систему. Чтобы узнать подробности, вы
+            можете связаться с организаторами соревнований, в которых вы хотите
+            принять участие. %{comp_search_form}
+      '4':
+        #original_hash: 9a5ae28
+        title: Какие требования для участия в WCA соревновании? Что мне нужно знать?
+        content:
+          #original_hash: 40aa9c0
+          '1': >-
+            Требований для участия не так много. Однако, стоит ознакомиться с <a
+            href='https://www.worldcubeassociation.org/regulations/translations/russian'>Положениями
+            WCA</a>. Кроме того, есть более короткое <a target='_blank'
+            href='http://www.cubingusa.com/ctutorial.php'>руководство</a> (на
+            английском).
+      '5':
+        #original_hash: 3b657aa
+        title: Как мне организовать WCA соревнование в своём городе?
+        content:
+          #original_hash: 3d4eb1c
+          '1': >-
+            Если вы хотите организовать соревнование, рекомендуется для начала
+            посетить хотя бы одно или два соревнования, чтобы понимать, что на
+            них происходит.
+          #original_hash: be305b8
+          '2': >-
+            На всех WCA соревнованиях должны соблюдаться <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Положения
+            WCA</a>. Команда организаторов не обязана знать их наизусть, однако
+            понимание основ поможет организовать соревнования правильно.
+          #original_hash: dbd72c2
+          '3': >-
+            Команда организаторов должна связаться с ближайшим <a
+            target='_blank'
+            href='https://www.worldcubeassociation.org/delegates'>WCA
+            Делегатом</a>. На официальном соревновании должен быть хотя бы один
+            WCA Делегат. Делегат поможет команде организаторов сделать успешное
+            соревнование.
+          #original_hash: 809f53a
+          '4': >-
+            Больше информации (на английском) можно прочитать <a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>здесь</a>. (Если
+            информация на сторонних сайтах противоречит Положениям WCA,
+            Положения имеют приоритет.)
+      '6':
+        #original_hash: 8005a61
+        title: Для чего нужны аккаунты WCA? В чём разница между аккаунтом и профилем?
+        content:
+          #original_hash: 57a3767
+          '1': >-
+            После того, как вы поучаствовали в первом вашем соревновании, и его
+            результаты выложили, у вас появляется WCA ID.
+          #original_hash: c5ad7a3
+          '2': >-
+            Аккаунт WCA нужен для того, чтобы мы знали, что вы это вы. Аккаунт
+            позволяет вам добавить аватарку в ваш профиль WCA, а также
+            регистрироваться на соревнования. Благодаря аккаунтам никто не
+            сможет притворяться вами, регистрируя вас на соревнования, на
+            которые вы не собираетесь идти.
+          #original_hash: 9ff083a
+          '3': '%{current_user_status}'
+      '7':
+        #original_hash: d7ee9bd
+        title: Как мне поменять аватарку?
+        content:
+          #original_hash: e619524
+          '1': >-
+            Сначала вам нужно <a
+            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>создать WCA
+            аккаунт и привязать его к WCA ID</a>.
+          #original_hash: 56a8f26
+          '2': >-
+            Затем откройте <a href='%{profile_edit_path}'>ваш профиль</a>, чтобы
+            поменять аватарку.
+      '8':
+        #original_hash: 1d61217
+        title: Как мне привязать аккаунт WCA к моему WCA ID?
+        content:
+          #original_hash: 07bb6ec
+          '1': '%{current_user_claim}'
+      results:
+        #original_hash: 9aae576
+        title: Когда выложат результаты соревнования?
+        content:
+          #original_hash: 890d879
+          '1': >-
+            После окончания соревнования WCA делегат обычно проверяет все
+            карточки, чтобы избежать ошибок. После проверки результаты
+            посылаются WCA Results Team (WRT), ответственной за выкладывание
+            результатов и обслуживание базы данных WCA. WRT выкладывает
+            результаты довольно быстро.
+          #original_hash: b6a68ab
+          '2': >-
+            В зависимости от числа участников и личного времени Делегата этот
+            процесс может занять до недели. Пожалуйста, имейте терпение.
+          #original_hash: bf8adbe
+          '3': >-
+            Кроме того, если вы привязали ваш WCA аккаунт к WCA ID (см. ниже),
+            вы можете включить уведомление о выкладывании результатов <a
+            href='%{preferences_edit_path}'>здесь</a>.
+  about:
+    #original_hash: 9ac918a
+    title: О WCA
+    mission:
+      #original_hash: e4698d4
+      title: Миссия
+      paragraphs:
+        #original_hash: 16ad45e
+        '1': >-
+          Всемирная Ассоциация Кубика (WCA) проводит соревнования по
+          головоломкам Рубика, а также по некоторым другим шарнирным
+          головоломкам. Наиболее известная из них &mdash; кубик Рубика,
+          изобретённый профессором Рубиком из Венгрии.
+        #original_hash: c8ecd24
+        '2': >-
+          WCA организовывает соревнования по всему миру, при поддержке
+          национальных организаций, ответственных за проведение соревнований в
+          своих странах.
+        #original_hash: 20e0550
+        '3': >-
+          Цель WCA<br /><strong>больше соревнований в большем количестве стран,
+          больше участников и больше веселья, на справедливых и равных
+          условиях.</strong>
+        #original_hash: bee3687
+        '4': >-
+          Дух WCA<br /> <strong>люди по всему миру весело проводят время вместе
+          в дружеской атмосфере, помогают друг другу и ведут себя
+          честно.</strong>
+    structure:
+      #original_hash: 9482c5d
+      title: Структура
+      #original_hash: d855b50
+      board_html: >-
+        WCA возглавляет <strong>Руководство WCA</strong> (WCA Board), состоящее
+        из следующих лиц:
+      #original_hash: b0c72a9
+      committees: >-
+        Следующие комитеты ответственны за различную операционную деятельность
+        WCA:
+      wdc:
+        #original_hash: 853bffa
+        name_html: >-
+          <strong>Дисциплинарный комитет WCA</strong> (WCA Disciplinary
+          Committee, WDC)
+        #original_hash: 286fdf8
+        description: >-
+          Этот комитет даёт советы Руководству WCA в специальных случаях,
+          например, предположительные нарушения Положений WCA. С ним могут
+          связаться участники WCA в случае важных личных дел, связанных с WCA
+          соревнованиями.
+      wrc:
+        #original_hash: 4aa147f
+        name_html: >-
+          <strong>Комитет Положений WCA</strong> (WCA Regulations Committee,
+          WRC)
+        #original_hash: 13ada5b
+        description: Этот комитет занимается Положениями WCA.
+      results:
+        #original_hash: 3e819b8
+        name_html: <strong>Команда результатов WCA</strong> (WCA Results team)
+        #original_hash: 439ffae
+        description: Эта команда занимается результатами всех соревнований.
+      software:
+        #original_hash: ea7f654
+        name_html: <strong>Команда разработки WCA</strong> (WCA Software team)
+        #original_hash: ec961e4
+        description: >-
+          Эта команда разрабатывает программное обеспечение (сайт, программа
+          скрамблов, другие утилиты).
+      #original_hash: f2ceade
+      delegates_html: >-
+        <strong>WCA Делегаты</strong> &mdash; участники WCA, отвечающие за то,
+        чтобы соревнования проходили в соответствии с миссией, Положениями и
+        духом WCA. Существуют <strong>Старшие WCA Делегаты</strong>, <strong>WCA
+        Делегаты</strong> и <strong>WCA Кандидаты</strong>%{see_link}. Старший
+        Делегат, помимо обязанностей обычного Делегата, ещё и управляет
+        Делегатами в своём регионе, к нему сообщества также могут обращаться по
+        региональным вопросам. Новые Делегаты становятся сначала Кандидатами, им
+        нужно показать, что они способны успешно управлять соревнованиями,
+        прежде чем они станут полноценными Делегатами.
+      #original_hash: 27d18ac
+      see_link_html: '(см. %{link})'
+      #original_hash: 5b01fcc
+      members_html: >-
+        Все участники соревнований автоматически становятся <strong>участниками
+        WCA</strong> во время их первого соревнования.
+  delegates_page:
+    #original_hash: d8fd3e4
+    title: WCA Делегаты
+    #original_hash: 0a89b0f
+    acknowledges: >-
+      WCA признаёт следующих участников как Делегатов для официальных WCA
+      соревнований:
+    table:
+      #original_hash: 709a232
+      name: Имя
+      #original_hash: c3f104d
+      role: Роль
+      #original_hash: 0f21717
+      region: Регион
+  national_organizations:
+    #original_hash: 0ef06c8
+    title: Национальные организации
+    #original_hash: f9a7f4d
+    content: 'WCA признаёт следующие национальные организации:'
+  contact:
+    #original_hash: a34b69f
+    title: Контактная информация
+    #original_hash: b5c2eaa
+    info_alert_html: >-
+      Перед тем, как вы свяжетесь с какой-либо командой на этой странице,
+      пожалуйста, посмотрите на %{link}!
+    #original_hash: 2b023eb
+    questions_and_comments_html: >-
+      Для вопросов, комментариев и предложений, связанных с сайтом, используйте
+      эту <a href='/contact/website'>контактную форму</a> (пишите по-английски).
+      Вопросы, связанные с конкретным регионом или соревнованием, пожалуйста,
+      задавайте вашему местному %{link}у.
+    #original_hash: 4a30d30
+    committees_and_teams_html: <u>Комитеты и команды</u>
+    board:
+      #original_hash: ccad374
+      name_html: <strong>Руководство WCA</strong> (WCA Board)
+      #original_hash: 7ee8e36
+      info: >-
+        (Организация WCA, отчёты Делегатов, подтверждение соревнований, общие
+        вопросы)
+    wdc:
+      #original_hash: 562e197
+      info: >-
+        (независимая консультация Руководству WCA, независимые расследования,
+        советник по важным личным делам)
+    wrc:
+      #original_hash: 4a256f0
+      info: (управление Положениями WCA)
+    results:
+      #original_hash: 899dc9c
+      info: '(результаты соревнований, их исправления)'
+    software:
+      #original_hash: 325ab0a
+      info: (разработка программного обеспечения WCA)
+  score_tools:
+    #original_hash: ea9d41d
+    title: Утилиты для ввода результатов
+    paragraphs:
+      #original_hash: ec3e0ab
+      '1': >-
+        WCA очень рекомендует использовать <a href="http://cubecomps.com">Cube
+        Comps</a> до и во время соревнования. Cube Comps &mdash; это онлайн
+        система для ввода результатов, с интересными возможностями, например,
+        печать карточек и результатов. Создана Luis J. Iáñez, имеет открытый
+        исходный код.
+      #original_hash: 7438b0d
+      '2': >-
+        Карточки с результатами должны быть проверены, а затем, вместе со
+        скрамблами, обработаны %{workbook_link} и посланы WCA Results Team.
+      #original_hash: 975e59b
+      '3': >-
+        Последняя версия файла для ввода результатов WCA соревнований может быть
+        скачана <a href="/files/results.xls" target="_blank">здесь</a>.
+  logo:
+    #original_hash: c72c969
+    title: Логотип WCA
+    paragraphs:
+      #original_hash: c092e13
+      '1': >-
+        Логотип WCA был разработан Джастином Истманом (Justin Eastman) на
+        дизайн-контесте в январе 2005 г.<br />Нам понравился этот логотип из-за
+        его дизайна, цветов и того, что он не связан напрямую с кубиком Рубика.
+      #original_hash: f228da2
+      '2': >-
+        У нас есть три разные версии логотипа: <a
+        href="/files/WCAlogo_XL.jpg">большой размер</a> (46 KB, 1756x1068 px),
+        <a href="/files/WCAlogo.svg">векторная версия</a> и <a
+        href="/files/WCAlogo_notext.svg">векторная версия без текста</a>.
+      #original_hash: dcb1ad6
+      '3': "3D версия логотипа, сделанная Ву Мин Таном (Vu Minh Tan) из Вьетнама: <a href=\"/files/WCALogo3D.png\">PNG \_версия</a> (2.1 MB), <a href=\"/files/WCALogo3Dsmall.png\">PNG версия поменьше</a> (0.25 MB)."
+      #original_hash: 545fcd9
+      '4': >-
+        Все организаторы WCA соревнований могут использовать логотип WCA для
+        сайтов, одежды, подарков или декораций, но только для официальных WCA
+        соревнований.<br /> Для всех остальных людей и целей использование
+        логотипа WCA требует разрешения <a
+        href="mailto:board@worldcubeassociation.org">Руководства WCA</a>.
+  workbook_assistant:
+    #original_hash: e442ea4
+    title: WCA Workbook Assistant
+    #original_hash: a7c307f
+    download: Скачать WCA Workbook Assistant
+    #original_hash: cf1b916
+    last_update: Последнее обновление
+    #original_hash: feece00
+    version_history: История версий
+    #original_hash: 8f3f4c0
+    header: 'Как обрабатывать результаты и скрамблы перед тем, как отправлять их на WCA'
+    step1:
+      #original_hash: c0450b1
+      title: 'Шаг 1: Откройте файл с результатами'
+      #original_hash: 656d70d
+      content_html: Откройте файл с результатами с помощью кнопки <em>Open...</em>.
+    step2:
+      #original_hash: 3ad9881
+      title: 'Шаг 2: Добавьте скрамблы'
+      #original_hash: 080acc0
+      content_html: >-
+        Добавьте скрамблы с помощью кнопки <em>Add...</em>. Выберите файл с
+        расширением либо .zip, либо .json.
+      #original_hash: 6cc90b8
+      content2_html: >-
+        Можете добавить несколько файлов, если скрамблы были сгенерированы по
+        частям, либо во время соревнования пришлось генерировать новые скрамблы.
+    step3:
+      #original_hash: b2d01b3
+      title: 'Шаг 3: Соотнесите скрамблы с результатами'
+      #original_hash: 36383b1
+      content_html: >-
+        WCA Workbook Assistant автоматически свяжет скрамблы с их раундами. В
+        некоторых случаях, например, если было сгенерировано несколько файлов,
+        вы должны выбрать правильные скрамблы вручную.
+      #original_hash: e869c1e
+      content2_html: >-
+        Выбор скрамблов вручную может быть сделан двойным кликом на ячейку в
+        колонне <em>Scrambles</em>:
+      #original_hash: 8f4fdfd
+      content3_html: >-
+        Здесь для одного раунда можно выбрать только скрамблы из одного раунда
+        TNoodle. Если же на соревновании в каком-либо раунде использовались
+        скрамблы от нескольких раундов файлов TNoodle, вы можете их
+        редактировать, нажав на <em>Edit groups...</em> и передвинув скрамблы из
+        одной группы в другую или удалив их.
+      #original_hash: 94353f2
+      content4_html: >-
+        В этом примере были использованы скрамблы из двух файлов для двух групп
+        одного раунда скьюба.
+      #original_hash: 68c5b18
+      content5_html: >-
+        Скрамблы второй группы можно передвинуть к скрамблам первой в один
+        раунд.
+    step4:
+      #original_hash: ed940d2
+      title: 'Шаг 4: Исправьте все ошибки, на которые жалуется приложение'
+      #original_hash: df2cf58
+      content_html: >-
+        Результаты проверяются на наличие ошибок. Если есть ошибки, появится
+        красная иконка в таблице слева:
+      #original_hash: 7fbf6b8
+      content2_html: >-
+        Если выбрать строку с ошибкой, приложение перечислит все подробности
+        ошибки в панели внизу слева.
+      #original_hash: 0600502
+      content3_html: >-
+        Ошибки можно исправить, открыв файл с результатами, отредактировав и
+        сохранив его. Затем нажмите в приложении WCA Workbook Assistant кнопку
+        <em>Refresh</em>. Она только перезагрузит результаты. Другие изменения,
+        которые вы уже внесли, останутся, например, отредактированные группы
+        скрамблов.
+    step5:
+      #original_hash: 536ec4d
+      title: 'Шаг 5: Выберите ID соревнования'
+      #original_hash: 5aeb5bd
+      content_html: >-
+        Выберите правильный ID соревнования, нажав на кнопку <em>Select...</em>
+        рядом с полем <em>Competition ID</em>.
+      #original_hash: 3acf7d0
+      content2_html: Откроется диалоговое окно со списком соревнований.
+      #original_hash: ceeb6fe
+      content3_html: >-
+        Вы можете отфильтровать соревнования, введя часть названия соревнований
+        или имя WCA Делегата.
+      #original_hash: 5ca74eb
+      content4_html: >-
+        По умолчанию показаны соревнования, прошедшие в последнюю неделю, или
+        которые пройдут в ближайшую неделю. Если вы хотите просмотреть все
+        соревнования, снимите галочку с <em>Only show current competitions</em>.
+    step6:
+      #original_hash: 52bb1f6
+      title: 'Шаг 6: Экспорт результатов в JSON'
+      #original_hash: 6bfee23
+      content_html: >-
+        Сохраните данные с результатами в файл JSON, нажав на кнопку <em>Export
+        results JSON...</em> снизу справа.
+    step7:
+      #original_hash: 09fa37d
+      title: 'Шаг 7: Отправьте файл JSON с результатами на WCA'
+      #original_hash: 9be089f
+      content_html: >-
+        Отправьте полученный файл JSON по email: <a
+        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>

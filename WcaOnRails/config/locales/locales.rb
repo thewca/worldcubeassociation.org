@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+﻿# frozen_string_literal: true
 module Locales
   AVAILABLE = {
     "en": {
@@ -36,6 +36,10 @@ module Locales
     "nl": {
       "flag_id": "nl",
       "name": "Nederlands",
+    },
+    "ru": {
+      "flag_id": "ru",
+      "name": "Русский",
     },
   }.freeze
 end
