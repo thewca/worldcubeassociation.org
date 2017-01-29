@@ -116,13 +116,13 @@ it:
       cellName: Finale
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: Terzo turno Combinato
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: Terzo turno Combinato
     h:
+      #original_hash: 4c66ad0
       name: Qualificazione combinata
+      #original_hash: 4c66ad0
       cellName: Qualificazione combinata
   common:
     #original_hash: 2513cf0
@@ -143,7 +143,7 @@ it:
       #original_hash: 603a218
       wca_id: WCA ID
       #original_hash: e0f64f7
-      citizen_of: Cittadino di
+      citizen_of: Cittadinanza
     #original_hash: 3fc0ba1
     all_regions: Tutte le regioni
     errors:
@@ -151,8 +151,8 @@ it:
       invalid: non valido
     #original_hash: 49d0140
     days:
-      zero: zero giorni
-      one: un giorno
+      zero: 0 giorni
+      one: 1 giorno
       other: '%{count} giorni'
     #original_hash: 203e1b3
     these_events:
@@ -255,7 +255,8 @@ it:
         external_website: Sito web
         #original_hash: 692e1f9
         generate_website: >-
-          Voglio utilizzare il sito WCA per le informazioni
+          Voglio utilizzare il sito WCA per le informazioni (al posto di un sito
+          esterno)
         #original_hash: 3d53469
         base_entry_fee_lowest_denomination: Tassa d'iscrizione base espressa con la valuta minore
         #original_hash: 28a6fbb
@@ -663,7 +664,7 @@ it:
         il WCA ID con cui hai gareggiato.
       #original_hash: 669fb57
       welcome: >-
-        Bentornato! Prima che tu possa partecipare alla tua prima competizione
+        Benvenuto! Prima che tu possa partecipare alla tua prima competizione
         WCA, ci servono alcune informazioni necessare per il mantenimento dei
         record e delle statistiche. Nota: la tua data di nascita non sarà mai
         divulgata senza il tuo consenso.
@@ -1078,9 +1079,9 @@ it:
     #original_hash: cfc4865
     delete_registration: Cancella registrazione.
     #original_hash: e9ddc6e
-    will_open_html: 'La registrazione aprirà in <strong>%{days}</strong> il %{time}.'
+    will_open_html: 'La registrazione aprirà in <strong>%{days}</strong> %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'La registrazione chiuderà in <strong>%{days}</strong> il %{time}.'
+    will_close_html: 'La registrazione chiuderà in <strong>%{days}</strong> %{time}.'
     #original_hash: dc8a520
     closed_html: 'Registrazioni chiuse <strong>%{days}</strong> fa il %{time}.'
     #original_hash: 2e7024d
@@ -1115,7 +1116,7 @@ it:
       Ti sei registrato alla competizione %{comp}. Qui puoi vedere le
       informazioni della tua registrazione.
     #original_hash: 4d966e0
-    entry_fee: La tassa d'iscrizione è
+    entry_fee: '"La tassa d''iscrizione è "'
     #original_hash: 3c9141f
     contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
     #original_hash: 59354fd
@@ -1219,7 +1220,7 @@ it:
       #original_hash: bce0641
       search: Cerca
       #original_hash: a725020
-      state: Stato
+      state: Periodo
       #original_hash: 4e9f7a3
       present: Presente
       #original_hash: 76eec76
@@ -1459,7 +1460,7 @@ it:
         #original_hash: 76bfdcf
         admin_view: Admin
         #original_hash: a857eb4
-        tabs: Gestisci Tab
+        tabs: Gestisci Schede
         #original_hash: 4c9f914
         delegate_report: Report
         #original_hash: b233e77
@@ -1724,7 +1725,7 @@ it:
       title: Struttura
       #original_hash: d855b50
       board_html: >-
-        La World Cube Association è guidata dal <strong WCA Board</strong>,
+        La World Cube Association è guidata dal <strong> WCA Board</strong>,
         composto dai seguenti membri:
       #original_hash: b0c72a9
       committees: 'Le seguenti commissioni sono responsabili delle attività della WCA:'
