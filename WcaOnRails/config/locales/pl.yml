@@ -68,6 +68,62 @@ pl:
     mmagic: Master Magic
     #original_hash: c6ad2af
     333mbo: 'Kostka Rubika: Liczba kostek bez patrzenia stary styl'
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Runda kwalifikacyjna
+      #original_hash: 2ffe44e
+      cellName: Kwalifikacje
+    '1':
+      #original_hash: 1e725b6
+      name: Pierwsza runda
+      #original_hash: 916a78d
+      cellName: Pierwsza
+    '2':
+      #original_hash: 985c8d0
+      name: Druga runda
+      #original_hash: 2a4bcae
+      cellName: Druga
+    '3':
+      #original_hash: e2f74d2
+      name: Półfinał
+      #original_hash: e2f74d2
+      cellName: Półfinał
+    b:
+      #original_hash: 327c999
+      name: Finał B
+      #original_hash: 327c999
+      cellName: Finał B
+    c:
+      #original_hash: b2d26f4
+      name: Finał Kombinowany
+      #original_hash: b2d26f4
+      cellName: Finał Kombinowany
+    d:
+      #original_hash: c6136b1
+      name: Pierwsza Runda Kombinowana
+      #original_hash: dffa9ea
+      cellName: Pierwsza Kombinowana
+    e:
+      #original_hash: 659c53f
+      name: Druga Runda Kombinowana
+      #original_hash: b6e1e1c
+      cellName: Druga Kombinowana
+    f:
+      #original_hash: 672b22c
+      name: Finał
+      #original_hash: 672b22c
+      cellName: Finał
+    g:
+      #original_hash: e861dcf
+      name: Trzecia Runda Kombinowana
+      #original_hash: 86f4b05
+      cellName: Trzecia Kombinowana
+    h:
+      #original_hash: 4c66ad0
+      name: Kwalifikacje Kombinowane
+      #original_hash: 4c66ad0
+      cellName: Kwalifikacje Kombinowane
   common:
     #original_hash: 2513cf0
     continent: Kontynent
@@ -1007,11 +1063,11 @@ pl:
       edit: Edytuj
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} państw'
-        many: '%{count} państw'
-        few: '%{count} państwa'
-        one: 1 państwo
         zero: 0 państw
+        one: 1 państwo
+        few: '%{count} państwa'
+        many: '%{count} państw'
+        other: '%{count} państw'
       #original_hash: 1feee0e
       export_csv: Eksportuj jako CSV
       #original_hash: 84add5b
@@ -1155,11 +1211,11 @@ pl:
       website: Strona internetowa
       #original_hash: 680567f
       organizer_plural:
-        other: Organizatorzy
-        many: Organizatorzy
-        few: Organizatorzy
-        one: Organizator
         zero: Organizatorzy
+        one: Organizator
+        few: Organizatorzy
+        many: Organizatorzy
+        other: Organizatorzy
       #original_hash: 6afa61e
       delegate:
         zero: Delegatów WCA
@@ -1365,11 +1421,11 @@ pl:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} zawodów'
-        many: '%{count} zawodów'
-        few: '%{count} zawodów'
-        one: 1 zawody
         zero: Brak zawodów
+        one: 1 zawody
+        few: '%{count} zawodów'
+        many: '%{count} zawodów'
+        other: '%{count} zawodów'
       #original_hash: e3528ec
       label: 'Pobliskie zawody (w ciągu %{days} dni i w obrębie %{kms} km)'
       #original_hash: 3446062
@@ -1894,7 +1950,7 @@ pl:
       content2_html: >-
         Ręczny wybór algorytmów mieszających może być dokonany poprzez podwójne
         kliknięcie komórki <em>Scrambles</em> w panelu przeglądu arkusza.
-      #original_hash: a42bae2
+      #original_hash: 8f4fdfd
       content3_html: >-
         Możliwym jest wybranie tylko jednej rundy spośród plików z algorytmami
         mieszającymi dla każdej rundy, w której są wyniki. Jeżeli pojawi się
