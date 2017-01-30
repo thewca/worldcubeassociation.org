@@ -55,7 +55,7 @@
               <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
                 <%= link_to icon('pencil-square-o'), delegate_report_edit_path(competition), title: t('.edit_report'), 'data-toggle': 'tooltip' %>
               <% end %>
-              <% if competition.is_over? && competition.delegates.include?(current_user) && !competition.delegate_report.posted? %>
+              <% if competition.user_should_post_delegate_report?(current_user) %>
                 <%= icon('warning', title: t('.missing_report'), 'data-toggle': 'tooltip') %>
               <% end %>
             </td>

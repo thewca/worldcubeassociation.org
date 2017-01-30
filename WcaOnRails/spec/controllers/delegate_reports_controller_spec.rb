@@ -54,7 +54,7 @@ describe DelegateReportsController do
       expect(comp.delegate_report.remarks).to eq "My new remarks"
     end
 
-    it "can edit report before comp is over, but cannot post report" do
+    it "can edit report before comp is over, and can post report" do
       # Update comp to be in the future.
       comp.start_date = 1.day.from_now.strftime("%F")
       comp.end_date = 1.day.from_now.strftime("%F")
@@ -67,8 +67,8 @@ describe DelegateReportsController do
 
       post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true }
       comp.reload
-      expect(comp.delegate_report.remarks).to eq "My new remarks"
-      expect(comp.delegate_report.posted?).to eq false
+      expect(comp.delegate_report.remarks).to eq "My newer remarks"
+      expect(comp.delegate_report.posted?).to eq true
     end
 
     it "can post report and cannot edit report if it's posted" do
