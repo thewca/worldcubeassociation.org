@@ -329,6 +329,10 @@ class User < ActiveRecord::Base
     Country.find_by_iso2(country_iso2)
   end
 
+  def locale
+    preferred_locale || I18n.default_locale
+  end
+
   def software_team?
     team_member?('software')
   end

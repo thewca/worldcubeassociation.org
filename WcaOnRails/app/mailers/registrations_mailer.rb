@@ -33,37 +33,45 @@ class RegistrationsMailer < ApplicationMailer
 
   def notify_registrant_of_new_registration(registration)
     @registration = registration
-    mail(
-      to: registration.email,
-      reply_to: registration.competition.organizers_or_delegates.map(&:email),
-      subject: "You have registered for #{registration.competition.name}",
-    )
+    I18n.with_locale @registration.user.locale do
+      mail(
+        to: registration.email,
+        reply_to: registration.competition.organizers_or_delegates.map(&:email),
+        subject: I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name),
+      )
+    end
   end
 
   def notify_registrant_of_accepted_registration(registration)
     @registration = registration
-    mail(
-      to: registration.email,
-      reply_to: registration.competition.organizers_or_delegates.map(&:email),
-      subject: "Your registration for #{registration.competition.name} has been accepted",
-    )
+    I18n.with_locale @registration.user.locale do
+      mail(
+        to: registration.email,
+        reply_to: registration.competition.organizers_or_delegates.map(&:email),
+        subject: I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name),
+      )
+    end
   end
 
   def notify_registrant_of_pending_registration(registration)
     @registration = registration
-    mail(
-      to: registration.email,
-      reply_to: registration.competition.organizers_or_delegates.map(&:email),
-      subject: "You have been moved to the waiting list for #{registration.competition.name}",
-    )
+    I18n.with_locale @registration.user.locale do
+      mail(
+        to: registration.email,
+        reply_to: registration.competition.organizers_or_delegates.map(&:email),
+        subject: I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name),
+      )
+    end
   end
 
   def notify_registrant_of_deleted_registration(registration)
     @registration = registration
-    mail(
-      to: registration.email,
-      reply_to: registration.competition.organizers_or_delegates.map(&:email),
-      subject: "Your registration for #{registration.competition.name} has been deleted",
-    )
+    I18n.with_locale @registration.user.locale do
+      mail(
+        to: registration.email,
+        reply_to: registration.competition.organizers_or_delegates.map(&:email),
+        subject: I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name),
+      )
+    end
   end
 end

@@ -982,6 +982,32 @@ fr:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} pour %{comp}'
+    mailer:
+      regards: "Cordialement, %{people}."
+      new:
+        mail_subject: "Vous êtes inscrit à la compétition %{comp_name}"
+        registered_html: "Vous venez juste de vous inscrire à la compétition %{comp_name}."
+        on_waiting_list: "Votre inscription est en attente, il y a actuellement %{n_total} %{people} en attente."
+        approval_info_html: "Un email vous sera envoyé lorsque votre inscription sera acceptée. Les inscriptions sont approuvées manuellement. Pour voir les conditions d'acceptation des inscriptions, visitez le site internet de la compétition ou contactez les organisateurs. Vous pouvez visualiser l'état de votre inscription %{here}."
+      accepted:
+        mail_subject: "Votre inscription à la compétition %{comp_name} a été acceptée"
+        message_html: "Votre inscription à la compétition %{comp_name} a été acceptée. Comme toujours, vous pouvez vérifier le statut de votre inscription %{here}."
+        see_you_soon: "À bientôt pour le %{comp_name} !"
+      pending:
+        mail_subject: "Votre inscription pour la compétition %{comp_name} a été placée sur liste d'attente"
+        moved_html: "Votre inscription pour la compétition %{comp_name} a été placée sur liste d'attente. Voici une liste de raisons possibles :"
+        causes:
+          accepted: "Votre inscription a été accidentellement acceptée"
+          withdrawal: "Vous avez demandé a être retiré"
+        email_if_error: "Si vous pensez que c'est une erreur, merci de répondre à cet email."
+      deleted:
+        mail_subject: "Votre inscription à la compétition %{comp_name} a été supprimée"
+        message_html: "Votre inscription à la compétition %{comp_name} a été supprimée. Voici une liste de raisons possibles :"
+        causes:
+          missing_info: "Vous n'avez pas indiqué tous les détails demandés"
+          incomplete: "Vous n'avez pas rempli tous les critères d'inscription (comme par exemple payer les frais d'inscription)"
+          registrations_full: "La limite du nombre de compétiteurs a été atteinte et il n'y a plus de place disponible"
+          multiple_registrations: "Vous vous êtes inscrits plusieurs fois"
     list:
       #original_hash: 8b7631c
       title: 'Inscriptions pour %{comp}'

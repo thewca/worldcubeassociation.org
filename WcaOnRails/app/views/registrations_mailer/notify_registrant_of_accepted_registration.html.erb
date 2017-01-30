@@ -1,12 +1,11 @@
 <% @competition = @registration.competition %>
 
 <p>
-  Your registration for <%= link_to @competition.name, competition_url(@competition) %> has been accepted.
-  As always, you can check the status of your registration <%= link_to "here", competition_register_url(@competition) %>.
+  <%= t 'registrations.mailer.accepted.message_html', comp_name: link_to(@competition.name, competition_url(@competition)), here: link_to(t('common.here'), competition_register_url(@competition)) %>
 </p>
 
 <p>
-  We look forward to seeing you at <%= @competition.name %>!
+  <%= t 'registrations.mailer.accepted.see_you_soon', comp_name: @competition.name %>
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>
