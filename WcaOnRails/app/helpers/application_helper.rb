@@ -119,7 +119,7 @@ module ApplicationHelper
     if from_date && to_date
       WcaDateHelpers.date_range(from_date, to_date, options)
     else
-      t "competitions.unscheduled", locale: locale
+      t "common.date.no_date", locale: locale
     end
   end
 

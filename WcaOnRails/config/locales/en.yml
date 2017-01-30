@@ -104,6 +104,9 @@ en:
     single: "Single"
     average: "Average"
     solves: "Solves"
+    #context: Key used when we want to show a date, but the date is missing. For example, a competition that has been created, but has not had a start and end date assigned yet.
+    date:
+      no_date: "No date"
     user:
       wca_id: "WCA ID"
       citizen_of: "Citizen of"
@@ -751,7 +754,6 @@ en:
       registration_close_after_open: "registration close must be after registration open"
       end_date_before_start: "End date cannot be before start date."
       span_too_many_days: "Competition cannot last more than %{max_days} days."
-    unscheduled: "unscheduled"
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
