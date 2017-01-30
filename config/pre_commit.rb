@@ -1,6 +1,6 @@
 failed = false
 
-illegal_strs = [ "<" * 3, "\t" ]
+illegal_strs = [ "<" * 3, "\t", "\r" ]
 ARGV.each do |file|
   File.foreach(file).with_index do |line, line_num|
     illegal_strs.each do |illegal_str|
