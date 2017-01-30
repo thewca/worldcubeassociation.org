@@ -1114,7 +1114,7 @@ it:
       Ti sei registrato alla competizione %{comp}. Qui puoi vedere le
       informazioni della tua registrazione.
     #original_hash: 4d966e0
-    entry_fee: La tassa d'iscrizione è
+    entry_fee: La tassa d'iscrizione è %{fee}
     #original_hash: 3c9141f
     contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
     #original_hash: 59354fd
