@@ -984,8 +984,6 @@ pl:
       registration_closed: Rejestracja na zawody jest zamknięta
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Rejestracja nie może zostać usunięta i zaakceptowania na raz.
-      #original_hash: bf9a828
-      can_register: Użytkownik musi mieć możliwość rejestracji na zawody
       #original_hash: a38d024
       must_register: musisz się zarejestrować na co najmniej jedną konkurencję
     registration_info_people:
@@ -1148,8 +1146,8 @@ pl:
     have_registered: >-
       Zarejestrowałeś się na %{comp}. Możesz zobaczyć dane swojej rejestracji
       poniżej.
-    #original_hash: 4d966e0
-    entry_fee: Wpisowe to
+    #original_hash: fa52a9b
+    entry_fee: 'Wpisowe wynosi %{fee}'
     #original_hash: 3c9141f
     contact_organizer: 'Skontaktuj się z organizatorem, jeżeli chciałbyś wprowadzić jakąś zmianę.'
     #original_hash: 59354fd
