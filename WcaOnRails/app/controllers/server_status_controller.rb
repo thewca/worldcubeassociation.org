@@ -10,12 +10,12 @@ class ServerStatusController < ApplicationController
 
     @ref_english = Locale.new('en')
     @status_locales = {}
-    @total_missing_outdated = 0
+    @total_missing_outdated_unused = 0
     (I18n.available_locales - [:en]).each do |l|
       ref_locale = Locale.new(l, true)
-      missing, outdated = ref_locale.compare_to(@ref_english)
-      @total_missing_outdated += missing.size + outdated.size
-      @status_locales[l] = { missing: missing, outdated: outdated }
+      missing, unused, outdated = ref_locale.compare_to(@ref_english)
+      @total_missing_outdated_unused += missing.size + unused.size + outdated.size
+      @status_locales[l] = { missing: missing, unused: unused, outdated: outdated }
     end
 
     if !@everything_good

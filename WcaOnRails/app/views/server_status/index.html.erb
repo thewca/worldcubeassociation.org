@@ -2,7 +2,7 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% if @everything_good && @total_missing_outdated == 0 %>
+  <% if @everything_good && @total_missing_outdated_unused == 0 %>
     <%= alert :success, "We're fine. We're all fine here, now, thank you. How are you?" %>
   <% elsif @everything_good %>
     <%= alert :warning, "The server is alright, but some translations would enjoy an update." %>
@@ -33,15 +33,16 @@
   </div>
   <% (I18n.available_locales - [:en]).each do |locale| %>
     <% missing = @status_locales[locale][:missing] %>
+    <% unused = @status_locales[locale][:unused] %>
     <% outdated = @status_locales[locale][:outdated] %>
-    <% all_empty = (missing.empty? && outdated.empty?) %>
-    <% class_heading, class_panel, class_missing, class_outdated, title = css_classes(missing.empty?, outdated.empty?) %>
+    <% all_empty = (missing.empty? && unused.empty? && outdated.empty?) %>
+    <% class_heading, class_panel, class_missing, class_unused, class_outdated, title = css_classes(missing.empty?, unused.empty?, outdated.empty?) %>
     <div class="panel panel-<%= class_panel %>">
       <div class="panel-heading <%= class_heading %>" data-toggle="collapse" data-target="#collapse-<%= locale %>">
         <h3 class="panel-title">
           <span class="label label-<%= class_panel %>">i18n</span>
           <span class="label label-<%= class_panel %>"><i class="flag f16 <%= Locales::AVAILABLE[locale][:flag_id] %>"></i> <%= locale %></span> <%# this is all on one line for a reason. See http://stackoverflow.com/a/25879479 %>
-          <span class="badge"><%= missing.size + outdated.size %></span>
+          <span class="badge"><%= missing.size + unused.size + outdated.size %></span>
           <%= title %>
           <% unless all_empty %>
             <span class="collapse-indicator"></span>
@@ -60,6 +61,25 @@
                 <div class="panel-body">
                   <ul class="list-group row locale-list-keys">
                     <% missing.each do |key| %>
+                      <div class="col-md-6">
+                        <li class="list-group-item"><%= key %></li>
+                      </div>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-<%= class_unused %>">
+              <div class="panel-heading panel-title text-center">
+                Unused
+                <span class="badge"><%= unused.size %></span>
+              </div>
+              <% unless unused.empty? %>
+                <div class="panel-body">
+                  <ul class="list-group row locale-list-keys">
+                    <% unused.each do |key| %>
                       <div class="col-md-6">
                         <li class="list-group-item"><%= key %></li>
                       </div>

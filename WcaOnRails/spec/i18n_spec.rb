@@ -4,7 +4,7 @@ require 'i18n/tasks'
 RSpec.describe 'I18n' do
   let(:i18n) { I18n::Tasks::BaseTask.new }
   let(:missing_keys) { i18n.missing_keys(locales: [:en]) }
-  let(:unused_keys) { i18n.unused_keys }
+  let(:unused_keys) { i18n.unused_keys(locales: [:en]) }
 
   it 'does not have missing keys' do
     expect(missing_keys).to be_empty, "Missing #{missing_keys.leaves.count} i18n keys\n#{missing_keys.inspect}\nYou can also run `i18n-tasks missing' to show them"

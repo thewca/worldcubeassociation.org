@@ -20,7 +20,9 @@ class Locale < SimpleDelegator
   end
 
   def compare_to(base)
-    compare_node_resursive(base[base.locale], self[locale], [])
+    missing, outdated = compare_node_resursive(base[base.locale], self[locale], [])
+    unused = find_unused_recursive(base[base.locale], self[locale], [])
+    [missing, unused, outdated]
   end
 
   private
@@ -55,6 +57,29 @@ class Locale < SimpleDelegator
       end
     end
     text
+  end
+
+  def find_unused_recursive(base, translation, context)
+    unused_keys = []
+    translation.each do |key, value|
+      if value.key?("_translated")
+        value = value["_translated"]
+      end
+
+      unless base.key?(key)
+        if leaf?(value)
+          unused_keys << fully_qualified_name(context, key)
+        else
+          unused_keys += get_all_recursive(value, [*context, key])
+        end
+        next
+      end
+
+      unless leaf?(value)
+        unused_keys += find_unused_recursive(base[key], value, [*context, key])
+      end
+    end
+    unused_keys
   end
 
   def compare_node_resursive(base, translation, context)
