@@ -139,6 +139,9 @@ hu:
     average: Átlag
     #original_hash: e7f6fc5
     solves: Kirakások
+    date:
+      #original_hash: acb6273
+      no_date: Nincs dátum
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -155,8 +158,8 @@ hu:
       other: 1 nap
     #original_hash: 203e1b3
     these_events:
-      other: 'ez a %{count} versenyszám'
       zero: ez a versenyszám
+      other: 'ez a %{count} versenyszám'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -373,8 +376,8 @@ hu:
         #original_hash: 5106479
         name: >-
           Add meg a teljes nevedet angol szórendnek megfelelően, ékezetekkel,
-          például: <strong>Stefan Pochmann</strong>. Nem pedig hanyagul, mint
-          <strong>s pochman</strong>.
+          például: <strong>Péter Példa</strong>. Nem pedig hanyagul, mint
+          <strong>pelda peter</strong>.
         #original_hash: c03b949
         email: >-
           Az e-mail címed megváltoztatásához szükséges az új e-mail címed
@@ -626,8 +629,8 @@ hu:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Az űrlap %{count} hibát tartalmaz.'
           zero: Az űrlap 1 hibát tartalmaz.
+          other: 'Az űrlap %{count} hibát tartalmaz.'
     doorkeeper:
       applications:
         help:
@@ -978,31 +981,31 @@ hu:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: újonc
         zero: újonc
+        other: újonc
       #original_hash: bc010e3
       returner:
-        other: visszatérő
         zero: visszatérő
+        other: visszatérő
       #original_hash: b7da17a
       person:
-        other: versenyző
         zero: versenyző
+        other: versenyző
     flash:
       #original_hash: da7ec53
       not_using_wca: Ez a verseny nem WCA regisztrációt használ.
       #original_hash: d528030
       accepted_and_mailed:
-        other: Regisztrációk elfogadva! Értesítések kiküldve e-mailben.
         zero: Regisztráció elfogadva! Értesítés kiküldve e-mailben.
+        other: Regisztrációk elfogadva! Értesítések kiküldve e-mailben.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Regisztrációk áthelyezve a várólistára
         zero: Regisztráció áthelyezve a várólistára
+        other: Regisztrációk áthelyezve a várólistára
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Regisztrációk törölve
         zero: Regisztráció törölve
+        other: Regisztrációk törölve
       #original_hash: c3aa289
       single_deletion_and_mail: 'Regisztráció törölve és e-mail értesítés kiküldve (%{mail})'
       #original_hash: d8f067f
@@ -1025,8 +1028,8 @@ hu:
       edit: Szerkesztés
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} ország'
         zero: 1 ország
+        other: '%{count} ország'
       #original_hash: 1feee0e
       export_csv: Exportálás CSV-be
       #original_hash: 84add5b
@@ -1100,6 +1103,10 @@ hu:
       következő problémákat a %{profile}oddal:
     #original_hash: 855ca9c
     can_register: 'A(z) %{comp} versenyre alább tudsz regisztrálni.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Kérlek olvasd el az információkat a regisztrációról, hogy megtudd kell-e
+      még valami mást is tenned - például befizetni a regisztrációs díjat.
     #original_hash: ea2b586
     have_registered: >-
       Regisztráltál a(z) %{comp} versenyre. A regisztrációdról információkat
@@ -1108,8 +1115,11 @@ hu:
     entry_fee: A regisztrációs díj
     #original_hash: 3c9141f
     contact_organizer: 'Lépj kapcsolatba a szervezővel, ha változtatni szeretnél.'
-    #original_hash: 06d52b5
-    waiting_list: 'Jelenleg a %{n} versenyzőből a %{i}. vagy a várólistán.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      A regisztrációd függőben van. A jóváhagyáshoz lehetséges, hogy be kell
+      fizetned a regisztrációs díjat. A részletekért keresd fel a verseny
+      honlapját.
     #original_hash: 58b1a3c
     accepted: A regisztrációd el lett fogadva!
     #original_hash: 4cf01a2
@@ -1176,12 +1186,12 @@ hu:
       website: Weboldal
       #original_hash: 680567f
       organizer_plural:
-        other: Szervezők
         zero: Szervező
+        other: Szervezők
       #original_hash: 6afa61e
       delegate:
-        other: WCA delegáltak
         zero: WCA delegált
+        other: WCA delegáltak
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: a428739
@@ -1349,8 +1359,6 @@ hu:
       end_date_before_start: A záró dátum nem lehet a nyitó dátum előtt.
       #original_hash: be3933b
       span_too_many_days: 'A verseny nem tarthat %{max_days} napnál több ideig.'
-    #original_hash: f42a238
-    unscheduled: nem tervezett
     new:
       #original_hash: 1208df7
       create_competition: Verseny létrehozása
@@ -1378,8 +1386,8 @@ hu:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} verseny'
         zero: nincs verseny
+        other: '%{count} verseny'
       #original_hash: e3528ec
       label: 'Közeli versenyek (%{days} napon és %{kms} km-en belül)'
       #original_hash: 3446062
