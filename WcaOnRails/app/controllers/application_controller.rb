@@ -2,6 +2,7 @@
 require "newrelic_rpm"
 
 class ApplicationController < ActionController::Base
+  include TimeWillTell::Helpers::DateRangeHelper
   protect_from_forgery with: :exception
 
   before_action :add_new_relic_headers, :set_locale
