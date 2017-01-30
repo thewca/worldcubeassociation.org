@@ -13,6 +13,10 @@ module Locales
       "flag_id": "fr",
       "name": "Français",
     },
+    "hu": {
+      "flag_id": "hu",
+      "name": "Magyar",
+    },
     "it": {
       "flag_id": "it",
       "name": "Italiano",
