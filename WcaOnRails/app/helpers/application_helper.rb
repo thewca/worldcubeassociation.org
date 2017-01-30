@@ -115,11 +115,11 @@ module ApplicationHelper
   end
 
   def wca_date_range(from_date, to_date, options={})
-    locale = options.fetch(:locale, I18n.locale)
     if from_date && to_date
-      WcaDateHelpers.date_range(from_date, to_date, options)
+      options[:separator] = '-'
+      date_range(from_date, to_date, options)
     else
-      t "competitions.unscheduled", locale: locale
+      t "common.date.no_date", locale: locale
     end
   end
 

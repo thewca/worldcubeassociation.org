@@ -68,6 +68,62 @@ nl:
     mmagic: Master Magic
     #original_hash: c6ad2af
     333mbo: 'Rubik''s Cube: meervoudig geblinddoekt, oude regels'
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Kwalificatieronde
+      #original_hash: 2ffe44e
+      cellName: Kwalificatie
+    '1':
+      #original_hash: 1e725b6
+      name: Eerste ronde
+      #original_hash: 916a78d
+      cellName: Eerste
+    '2':
+      #original_hash: 985c8d0
+      name: Tweede ronde
+      #original_hash: 2a4bcae
+      cellName: Tweede
+    '3':
+      #original_hash: e2f74d2
+      name: Halve finale
+      #original_hash: e2f74d2
+      cellName: Halve finale
+    b:
+      #original_hash: 327c999
+      name: B finale
+      #original_hash: 327c999
+      cellName: B finale
+    c:
+      #original_hash: b2d26f4
+      name: Gecombineerde finale
+      #original_hash: b2d26f4
+      cellName: Gecombineerde finale
+    d:
+      #original_hash: c6136b1
+      name: Gecombineerde eerste ronde
+      #original_hash: dffa9ea
+      cellName: Gecombineerde eerste
+    e:
+      #original_hash: 659c53f
+      name: Gecombineerde tweede ronde
+      #original_hash: b6e1e1c
+      cellName: Gecombineerde tweede
+    f:
+      #original_hash: 672b22c
+      name: Finale
+      #original_hash: 672b22c
+      cellName: Finale
+    g:
+      #original_hash: e861dcf
+      name: Gecombineerde derde ronde
+      #original_hash: 86f4b05
+      cellName: Gecombineerde derde
+    h:
+      #original_hash: 4c66ad0
+      name: Gecombineerde kwalificatie
+      #original_hash: 4c66ad0
+      cellName: Gecombineerde kwalificatie
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -1028,6 +1084,10 @@ nl:
       %{profile} oplossen:
     #original_hash: 855ca9c
     can_register: 'Je kunt je hieronder aanmelden voor %{comp}.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Controleer ajb de informatie over de aanmelding om te bepalen of je nog
+      iets extra's moet doen, zoals een aanmeldingsbedrag betalen.
     #original_hash: ea2b586
     have_registered: >-
       Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
@@ -1036,8 +1096,11 @@ nl:
     entry_fee: Deelname kost
     #original_hash: 3c9141f
     contact_organizer: Neem contact op met de organisator als je een wijziging wilt doen.
-    #original_hash: 06d52b5
-    waiting_list: 'Je bent momenteel nummer %{i} van %{n} op de wachtlijst.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Je aanmelding is in behandeling. Voor goedkeuring kan het zijn dat je
+      eerst online een aanmeldingsbedrag moet betalen. Zie de wedstrijdpagina
+      voor details.
     #original_hash: 58b1a3c
     accepted: Je aanmelding is geaccepteerd!
     #original_hash: 4cf01a2
@@ -1235,11 +1298,11 @@ nl:
         Vul alle velden in en klik op Bevestigen als je klaar bent om de
         %{board} de wedstrijd te laten goedkeuren.
       #original_hash: 7586b02
-      submit_modify_value: Bewerken wedstrijdonderdelen
+      submit_modify_value: Opslaan wedstrijdonderdelen
       #original_hash: 8966fd0
       submit_create_value: Aanmaken wedstrijd
       #original_hash: 40b0dfd
-      submit_update_value: Bijwerken wedstrijd
+      submit_update_value: Opslaan wedstrijd
       #original_hash: 04a2122
       submit_confirm_value: Bevestigen
       #original_hash: f6fdbe4
@@ -1845,12 +1908,12 @@ nl:
       content2_html: >-
         Handmatig selecteren van scrambles kan worden gedaan door te
         dubbelklikken op de cell <em>Scrambles</em> in het overzichtspaneel.
-      #original_hash: a42bae2
+      #original_hash: 8f4fdfd
       content3_html: >-
         Het is alleen mogelijk om één ronde van de scramble-bestanden te
-        selecteren voor iedere ronde waarvoor er resultaten zijn. Als er
-        meerdere scramble-bestanden zijn voor een enkele ronde in TNoodle, kun
-        je met <em>Edit groups...</em> de groepen bewerken in de
+        selecteren voor iedere ronde waarvoor er resultaten zijn. In geval de
+        scrambles voor één ronde zijn gebruikt van meerdere rondes in TNoodle,
+        kun je met <em>Edit groups...</em> de groepen bewerken in de
         scramble-bestanden en ze verplaatsen van ene ronde naar een andere, of
         ze verwijderen.
       #original_hash: 94353f2

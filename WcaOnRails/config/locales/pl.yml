@@ -139,6 +139,9 @@ pl:
     average: Średnia
     #original_hash: e7f6fc5
     solves: Ułożenia
+    date:
+      #original_hash: acb6273
+      no_date: Brak daty
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -1399,8 +1402,6 @@ pl:
       end_date_before_start: Data końcowa nie może być przed datą początkową.
       #original_hash: be3933b
       span_too_many_days: 'Zawody nie mogą trwać więcej niż %{max_days} dni.'
-    #original_hash: f42a238
-    unscheduled: o nieokreślonej dacie
     new:
       #original_hash: 1208df7
       create_competition: Utwórz zawody

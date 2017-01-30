@@ -521,7 +521,7 @@ describe CompetitionsController do
         competition.update_attributes(start_date: "", end_date: "")
         get :post_announcement, id: competition
         post = assigns(:post)
-        expect(post.title).to match /unscheduled/
+        expect(post.title).to match /No date/
       end
     end
   end

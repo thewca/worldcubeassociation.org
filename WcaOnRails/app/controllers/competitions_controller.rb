@@ -157,94 +157,98 @@ class CompetitionsController < ApplicationController
   end
 
   def post_announcement
-    comp = Competition.find(params[:id])
-    date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long, locale: :en)
-    title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
+    I18n.with_locale :en do
+      comp = Competition.find(params[:id])
+      date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
+      title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
 
-    body = "The [#{comp.name}](#{competition_url(comp)})"
-    body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
-    unless comp.website.blank?
-      body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
+      body = "The [#{comp.name}](#{competition_url(comp)})"
+      body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
+      unless comp.website.blank?
+        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
+      end
+      create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+
+      comp.update!(announced_at: Time.now)
     end
-    create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
-
-    comp.update!(announced_at: Time.now)
   end
 
   def post_results
-    comp = Competition.find(params[:id])
-    unless comp.results
-      render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
-      return
-    end
-
-    top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
-    if top333.empty? # If there was no 3x3x3 event.
-      title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
-      body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
-    elsif top333.length < 3
-      render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
-      return
-    else
-      title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
-
-      body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
-      body += " won the [#{comp.name}](#{competition_url(comp)})"
-      body += " with an average of #{top333.first.to_s :average} seconds."
-
-      body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
-
-      body += " and [#{top333.third.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
-    end
-
-    [
-      { code: "WR",  name: "World" },
-      { code: "AfR", name: "African" },
-      { code: "AsR", name: "Asian" },
-      { code: "OcR", name: "Oceanian" },
-      { code: "ER",  name: "European" },
-      { code: "NAR", name: "North American" },
-      { code: "SAR", name: "South American" },
-    ].each do |code_name|
-      code = code_name[:code]
-      region_name = code_name[:name]
-      comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', { code: code })
-      unless comp_records.empty?
-        body += "#{region_name} records: "
-        record_strs = comp_records.group_by(&:personName).sort.map do |personName, results|
-          results_by_personId = results.group_by(&:personId).sort
-          results_by_personId.map do |personId, results|
-            if results_by_personId.length > 1
-              # Two or more people with the same name set records at this competition!
-              # Append their WCA IDs to distinguish between them.
-              uniqueName = "#{personName} (#{personId})"
-            else
-              uniqueName = personName
-            end
-            record_strs = results.sort_by do |r|
-              round = Round.c_find(r.roundId)
-              [Event.c_find(r.eventId).rank, round.rank]
-            end.map do |result|
-              event = Event.c_find(result.eventId)
-              record_strs = []
-              if result.regionalSingleRecord == code
-                record_strs << "#{event.name_in(:en)} #{result.to_s :best} (single)"
-              end
-              if result.regionalAverageRecord == code
-                record_strs << "#{event.name_in(:en)} #{result.to_s :average} (average)"
-              end
-              record_strs
-            end.flatten
-            "#{uniqueName} #{record_strs.join(", ")}"
-          end
-        end
-        body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
+    I18n.with_locale :en do
+      comp = Competition.find(params[:id])
+      unless comp.results
+        render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
+        return
       end
+
+      top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
+      if top333.empty? # If there was no 3x3x3 event.
+        title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
+        body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
+      elsif top333.length < 3
+        render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
+        return
+      else
+        title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
+
+        body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
+        body += " won the [#{comp.name}](#{competition_url(comp)})"
+        body += " with an average of #{top333.first.to_s :average} seconds."
+
+        body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
+
+        body += " and [#{top333.third.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
+      end
+
+      [
+        { code: "WR",  name: "World" },
+        { code: "AfR", name: "African" },
+        { code: "AsR", name: "Asian" },
+        { code: "OcR", name: "Oceanian" },
+        { code: "ER",  name: "European" },
+        { code: "NAR", name: "North American" },
+        { code: "SAR", name: "South American" },
+      ].each do |code_name|
+        code = code_name[:code]
+        region_name = code_name[:name]
+        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', { code: code })
+        unless comp_records.empty?
+          body += "#{region_name} records: "
+          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results|
+            results_by_personId = results.group_by(&:personId).sort
+            results_by_personId.map do |personId, results|
+              if results_by_personId.length > 1
+                # Two or more people with the same name set records at this competition!
+                # Append their WCA IDs to distinguish between them.
+                uniqueName = "#{personName} (#{personId})"
+              else
+                uniqueName = personName
+              end
+              record_strs = results.sort_by do |r|
+                round = Round.c_find(r.roundId)
+                [Event.c_find(r.eventId).rank, round.rank]
+              end.map do |result|
+                event = Event.c_find(result.eventId)
+                record_strs = []
+                if result.regionalSingleRecord == code
+                  record_strs << "#{event.name} #{result.to_s :best} (single)"
+                end
+                if result.regionalAverageRecord == code
+                  record_strs << "#{event.name} #{result.to_s :average} (average)"
+                end
+                record_strs
+              end.flatten
+              "#{uniqueName} #{record_strs.join(", ")}"
+            end
+          end
+          body += "#{record_strs.join(", ")}.  \n" # Trailing spaces for markdown give us a <br>
+        end
+      end
+      comp.update!(results_posted_at: Time.now)
+      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
+      comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
+      create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
     end
-    comp.update!(results_posted_at: Time.now)
-    comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
-    comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
-    create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
   end
 
   def edit_events

@@ -28,6 +28,7 @@
 //= require moment/fr.js
 //= require moment/it.js
 //= require moment/ja.js
+//= require moment/hu.js
 //= require moment/pl.js
 //= require moment/pt-br.js
 //= require moment/zh-cn.js
@@ -408,7 +409,7 @@ $(function() {
 
 // Setting up autosize
 $(function() {
-  autosize($('textarea'));
+  autosize($('textarea:not(.no-autosize)'));
 });
 
 // Helpers
