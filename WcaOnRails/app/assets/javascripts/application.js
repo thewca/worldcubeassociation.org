@@ -408,7 +408,7 @@ $(function() {
 
 // Setting up autosize
 $(function() {
-  autosize($('textarea'));
+  autosize($('textarea:not(.no-autosize)'));
 });
 
 // Helpers

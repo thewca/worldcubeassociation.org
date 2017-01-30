@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>Update website translation</h4>
+    </div>
+    <div class="panel-body">
+      <%= simple_form_for :translation, url: update_translation_path, method: :patch do |f| %>
+        <%= f.input :locale, collection: Locales::AVAILABLE.keys %>
+        <%= f.input :content, as: :text, input_html: { class: "no-autosize" } %>
+        <%= f.submit "Create Pull Request", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>
