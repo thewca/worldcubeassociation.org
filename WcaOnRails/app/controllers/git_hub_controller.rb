@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class GitHubController < ApplicationController
+  before_action :authenticate_user!
+
   def edit_translation
   end
 
@@ -22,6 +24,7 @@ class GitHubController < ApplicationController
     Octokit.create_ref(origin_repo, "heads/#{branch_name}", upstream_sha)
     current_content_sha = Octokit.content(origin_repo, path: file_path, ref: branch_name)[:sha]
     Octokit.update_content(origin_repo, file_path, message, current_content_sha, content, branch: branch_name)
-    @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}", message)[:html_url]
+    @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}",
+                                          message, "Submitted by #{current_user.name}.")[:html_url]
   end
 end
