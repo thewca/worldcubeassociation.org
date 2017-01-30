@@ -116,13 +116,13 @@ nl:
       cellName: Finale
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: Gecombineerde derde ronde
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: Gecombineerde derde
     h:
+      #original_hash: 4c66ad0
       name: Gecombineerde kwalificatie
+      #original_hash: 4c66ad0
       cellName: Gecombineerde kwalificatie
   common:
     #original_hash: 2513cf0
@@ -1298,11 +1298,11 @@ nl:
         Vul alle velden in en klik op Bevestigen als je klaar bent om de
         %{board} de wedstrijd te laten goedkeuren.
       #original_hash: 7586b02
-      submit_modify_value: Bewerken wedstrijdonderdelen
+      submit_modify_value: Opslaan wedstrijdonderdelen
       #original_hash: 8966fd0
       submit_create_value: Aanmaken wedstrijd
       #original_hash: 40b0dfd
-      submit_update_value: Bijwerken wedstrijd
+      submit_update_value: Opslaan wedstrijd
       #original_hash: 04a2122
       submit_confirm_value: Bevestigen
       #original_hash: f6fdbe4
