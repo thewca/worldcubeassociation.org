@@ -2,7 +2,7 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <% if @everything_good && @total_missing_outdated == 0 %>
+  <% if @everything_good && @all_translations_perfect %>
     <%= alert :success, "We're fine. We're all fine here, now, thank you. How are you?" %>
   <% elsif @everything_good %>
     <%= alert :warning, "The server is alright, but some translations would enjoy an update." %>
@@ -32,67 +32,52 @@
     </div>
   </div>
   <% (I18n.available_locales - [:en]).each do |locale| %>
-    <% missing = @status_locales[locale][:missing] %>
-    <% outdated = @status_locales[locale][:outdated] %>
-    <% all_empty = (missing.empty? && outdated.empty?) %>
-    <% class_heading, class_panel, class_missing, class_outdated, title = css_classes(missing.empty?, outdated.empty?) %>
+    <%
+      bad_keys_by_type = @bad_keys_by_type_by_locale[locale]
+      bad_keys_for_locale = bad_keys_by_type.values.flatten
+      class_heading = bad_keys_for_locale.empty? ? "" : "heading-as-link"
+      class_panel = bad_keys_for_locale.empty? ? "success" : "warning"
+    %>
+
     <div class="panel panel-<%= class_panel %>">
       <div class="panel-heading <%= class_heading %>" data-toggle="collapse" data-target="#collapse-<%= locale %>">
         <h3 class="panel-title">
           <span class="label label-<%= class_panel %>">i18n</span>
           <span class="label label-<%= class_panel %>"><i class="flag f16 <%= Locales::AVAILABLE[locale][:flag_id] %>"></i> <%= locale %></span> <%# this is all on one line for a reason. See http://stackoverflow.com/a/25879479 %>
-          <span class="badge"><%= missing.size + outdated.size %></span>
-          <%= title %>
-          <% unless all_empty %>
+          <span class="badge"><%= bad_keys_for_locale.size %></span>
+          <%= bad_keys_for_locale.empty? ? "All good" : "Needs attention" %>
+          <% unless bad_keys_for_locale.empty? %>
             <span class="collapse-indicator"></span>
           <% end %>
         </h3>
       </div>
-      <% unless all_empty %>
+
+      <% unless bad_keys_for_locale.empty? %>
         <div id="collapse-<%= locale.to_s %>" class="panel-collapse collapse panel-body row">
-          <div class="col-md-6">
-            <div class="panel panel-<%= class_missing %>">
-              <div class="panel-heading panel-title text-center">
-                Missing
-                <span class="badge"><%= missing.size %></span>
-              </div>
-              <% unless missing.empty? %>
-                <div class="panel-body">
-                  <ul class="list-group row locale-list-keys">
-                    <% missing.each do |key| %>
-                      <div class="col-md-6">
-                        <li class="list-group-item"><%= key %></li>
-                      </div>
-                    <% end %>
-                  </ul>
+          <% bad_keys_by_type.each do |type_of_bad_keys, bad_keys| %>
+            <div class="col-md-6">
+              <div class="panel panel-<%= bad_keys.empty? ? "success" : "danger" %>">
+                <div class="panel-heading panel-title text-center">
+                  <%= type_of_bad_keys.capitalize %>
+                  <span class="badge"><%= bad_keys.size %></span>
                 </div>
-              <% end %>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-<%= class_outdated %>">
-              <div class="panel-heading panel-title text-center">
-                Outdated
-                <span class="badge"><%= outdated.size %></span>
-                <!--
-                  These keys are translated, but the English version has changed since the translation:
-                -->
+                <% unless bad_keys.empty? %>
+                  <div class="panel-body">
+                    <ul class="list-group row locale-list-keys">
+                      <% bad_keys.each do |key| %>
+                        <div class="col-md-6">
+                          <li class="list-group-item"><%= key %></li>
+                        </div>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
               </div>
-              <% unless outdated.empty? %>
-                <div class="panel-body">
-                  <ul class="list-group row locale-list-keys">
-                    <% outdated.each do |key| %>
-                      <div class="col-md-6">
-                        <li class="list-group-item"><%= key %></li>
-                      </div>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
             </div>
-          </div>
+          <% end %>
         </div>
       <% end %>
+
     </div>
   <% end %>
   <%= link_to "Update Translation", edit_translation_path, class: "btn btn-default" %>
