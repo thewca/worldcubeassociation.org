@@ -24,7 +24,12 @@ class GitHubController < ApplicationController
     Octokit.create_ref(origin_repo, "heads/#{branch_name}", upstream_sha)
     current_content_sha = Octokit.content(origin_repo, path: file_path, ref: branch_name)[:sha]
     Octokit.update_content(origin_repo, file_path, message, current_content_sha, content, branch: branch_name)
-    @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}",
-                                          message, "Submitted by #{current_user.name}.")[:html_url]
+    @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}", message, pr_description_for(current_user))[:html_url]
+  end
+
+  private def pr_description_for(user)
+    info = ["WCA Account ID: *#{user.id}*"]
+    info.unshift("WCA ID: *#{user.wca_id}*") if user.wca_id
+    "Submitted by #{user.name} (#{info.join(', ')})."
   end
 end
