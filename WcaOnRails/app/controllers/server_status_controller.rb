@@ -9,14 +9,15 @@ class ServerStatusController < ApplicationController
     @everything_good = @oldest_job_that_should_have_run_by_now.nil?
 
     @ref_english = Locale.new('en')
-    @status_locales = {}
-    @total_missing_outdated_unused = 0
+    @bad_keys_by_type_by_locale = {}
+    bad_keys_count = 0
     (I18n.available_locales - [:en]).each do |l|
       ref_locale = Locale.new(l, true)
       missing, unused, outdated = ref_locale.compare_to(@ref_english)
-      @total_missing_outdated_unused += missing.size + unused.size + outdated.size
-      @status_locales[l] = { missing: missing, unused: unused, outdated: outdated }
+      @bad_keys_by_type_by_locale[l] = { missing: missing, unused: unused, outdated: outdated }
+      bad_keys_count += @bad_keys_by_type_by_locale.values.flatten.size
     end
+    @all_translations_perfect = bad_keys_count == 0
 
     if !@everything_good
       render status: 503
