@@ -160,13 +160,12 @@ en:
         location_description: "Location description"
         phone_number: "Phone number"
         notes: "Notes"
+        user_preferred_events: "Preferred events"
       #context: a competition
       competition:
         id: "ID"
-
         isConfirmed: "Do not let organizers edit this competition"
         showAtAll: "Make competition visible to the public"
-
         name: "Name"
         cellName: "Competition nickname"
         countryId: "Country"
@@ -174,21 +173,16 @@ en:
         venue: "Venue"
         venueAddress: "Venue address"
         venueDetails: "Venue details"
-
         start_date: "Start date"
         end_date: "End date"
-
         external_website: "Website"
         generate_website: "I would like to use WCA website instead of an external one for additional information."
-
         base_entry_fee_lowest_denomination: "Base entry fee in the lowest denomination"
         currency_code: "Currency code"
-
         delegate_ids: "WCA delegate(s)"
         organizer_ids: "Organizer(s)"
         contact: "Contact"
         information: "Information"
-
         use_wca_registration: "I would like to use the WCA website for registration"
         guests_enabled: "Guests"
         receive_registration_emails: "Notify me by email when someone registers for this competition"
@@ -196,6 +190,7 @@ en:
         registration_close: "Registration close"
         remarks: "Remarks"
         clone_tabs: "I would like to clone all tabs with additional information as well"
+        competition_events: "Events"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -485,7 +480,6 @@ en:
       preferences: "Preferences"
       password: "Password"
       member_of: "Member of"
-      preferred_events: "Preferred events"
       preferred_events_desc: "Selecting your preferred events makes registration for competitions quicker."
       please_fix_profile: "In order to register for competitions, you need to fix the following problems:"
       profile: "Profile"
@@ -543,7 +537,6 @@ en:
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   #context: Key used when dealing with registration to a competition
   registrations:
-    events: "Events"
     #context: and when an error is found
     errors:
       need_name: "Need a name"
@@ -670,7 +663,7 @@ en:
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
     have_registered: "You have registered for %{comp}. You can see your registration information below."
-    entry_fee: "The entry fee is %{fee}" 
+    entry_fee: "The entry fee is %{fee}"
     contact_organizer: "Contact the organizer if you wish to make a change."
     waiting_list: "Your registration is pending. For approval, you may need to pay a registration fee. Check the competition website for details."
     accepted: "Your registration has been accepted!"

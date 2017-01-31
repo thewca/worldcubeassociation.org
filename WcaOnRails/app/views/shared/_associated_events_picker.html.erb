@@ -1,7 +1,6 @@
 <%#
 Variables:
  - form_builder
- - label
  - disabled
  - events_association_name -> name of the associated events relation
  - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
@@ -11,10 +10,10 @@ Note: form_builder.object is the object having associated events.
 %>
 
 <%
-  label ||= t('registrations.events')
   disabled ||= false
   allowed_events ||= Event.official
 
+  label = I18n.t("activerecord.attributes.#{form_builder.object.class.name.underscore}.#{events_association_name}")
   using_competition_events = events_association_name == :registration_competition_events
   all_events = form_builder.object.events_to_associated_events(allowed_events)
   errors = form_builder.object.errors.messages[events_association_name] || []
