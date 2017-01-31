@@ -235,6 +235,8 @@ pl:
         phone_number: Numer telefonu
         #original_hash: 7044004
         notes: Uwagi
+        #original_hash: 57eaf24
+        user_preferred_events: Preferowane konkurencje
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -294,6 +296,8 @@ pl:
         clone_tabs: >-
           Chciałbym również sklonować wszystkie zakładki z dodatkowymi
           informacjami
+        #original_hash: c5497bc
+        competition_events: Konkurencje
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -822,8 +826,6 @@ pl:
       password: Hasło
       #original_hash: 3fc6dbe
       member_of: Członek
-      #original_hash: 57eaf24
-      preferred_events: Preferowane konkurencje
       #original_hash: 42619dd
       preferred_events_desc: >-
         Wybór twoich preferowanych konkurencji przyspiesza rejestracje na
@@ -969,8 +971,6 @@ pl:
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} nie istnieje.'
   registrations:
-    #original_hash: c5497bc
-    events: Konkurencje
     errors:
       #original_hash: 44ab952
       need_name: Wymaga imienia
@@ -1061,7 +1061,7 @@ pl:
       title: '%{person} na %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards: 'Z poważaniem, %{people}.'
+      regards_html: 'Z poważaniem, %{people}.'
       new:
         #original_hash: 6fb638c
         mail_subject: 'Zarejestrowałeś się na %{comp_name}'
