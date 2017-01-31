@@ -1,4 +1,4 @@
-﻿en:
+ru:
   time_will_tell:
     date_range:
       different_months_same_year: "%{from_day} %{from_month} %{sep} %{to_day} %{to_month}"

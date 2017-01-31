@@ -1,4 +1,4 @@
-﻿ru:
+ru:
   errors:
     messages:
       carrierwave_processing_error: Невозможно обработать изображение
