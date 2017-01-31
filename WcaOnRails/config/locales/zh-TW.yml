@@ -921,6 +921,52 @@ zh-TW:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person}的%{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards: '致上我的問候，%{people}。'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: '您已經報名了%{comp_name}'
+        #original_hash: 8374583
+        registered_html: '您剛剛報名了%{comp_name}。'
+        #original_hash: 9238412
+        on_waiting_list: '您的報名正在等候補位，目前有%{n_total}個%{people}等候中。'
+        #original_hash: f5b00be
+        approval_info_html: >-
+          當您的報名成功時，您會收到電子郵件。請注意報名並不是自動成功的，請至比賽網站或聯絡主辦人以了解報名的規則。您可以在%{here}檢查您的報名狀態。
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: '您已經成功報名%{comp_name}'
+        #original_hash: 24d2883
+        message_html: '您已經成功報名%{comp_name}。您可以在%{here}檢查您的報名狀態。'
+        #original_hash: 1852cbf
+        see_you_soon: '我們很期待在%{comp_name}與您相會!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: '您%{comp_name}的報名已經被移至等待候補中。'
+        #original_hash: 6fd0a8e
+        moved_html: '您%{comp_name}的報名已經被移至等待候補中。可能的原因為:'
+        causes:
+          #original_hash: eadfc0d
+          accepted: 您的報名發生意外
+          #original_hash: 2ac6d84
+          withdrawal: 您要求取消報名
+        #original_hash: 8f7358f
+        email_if_error: 若您認為這是錯誤，請回覆這篇電子郵件。
+      deleted:
+        #original_hash: 268e248
+        mail_subject: '您已經取消報名%{comp_name}'
+        #original_hash: f66ae63
+        message_html: '您已經取消報名%{comp_name}。可能的原因為:'
+        causes:
+          #original_hash: 978944c
+          missing_info: null
+          #original_hash: 788f2ec
+          incomplete: '您沒有符合報名的規則(例如: 預先支付報名費)'
+          #original_hash: 1e225f0
+          registrations_full: 比賽限制人數已經額滿且沒有其他空缺
+          #original_hash: 0d4cce9
+          multiple_registrations: 您報名了兩次或多次
     list:
       #original_hash: 8b7631c
       title: '報名%{comp}'
