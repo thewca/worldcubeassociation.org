@@ -30,7 +30,10 @@ class Locale < SimpleDelegator
   # Adapted from https://github.com/jonatanklosko/internationalize/blob/7090c90d4d8e4571025c3be4484b5f668cbb6501/client/app/services/translation-utils.service.js#L195-L221
   def decorate_with_hashes(text, node, prefix)
     node.each do |key, value|
-      if leaf?(value)
+      if value.nil?
+        node.delete(key)
+        next
+      elsif leaf?(value)
         # We want leaves to have at least "_translated", and maybe later "_hash"
         node[key] = { "_translated" => value }
       else
@@ -139,7 +142,7 @@ class Locale < SimpleDelegator
 
   def leaf?(node)
     # If the node is a pluralization it's also a leaf!
-    node.is_a?(String) || pluralization?(node)
+    node.nil? || node.is_a?(String) || pluralization?(node)
   end
 
   def pluralization?(node)
