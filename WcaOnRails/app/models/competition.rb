@@ -167,7 +167,7 @@ class Competition < ActiveRecord::Base
   # See https://github.com/thewca/worldcubeassociation.org/issues/185#issuecomment-168402252
   # for a discussion about tracking delegate history so we could tighten up
   # this validation.
-  validate :delegates_must_be_delegates, unless: :is_over?
+  validate :delegates_must_be_delegates, unless: :is_probably_over?
   def delegates_must_be_delegates
     if !self.delegates.all?(&:any_kind_of_delegate?)
       errors.add(:delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
@@ -175,7 +175,7 @@ class Competition < ActiveRecord::Base
   end
 
   def user_should_post_delegate_report?(user)
-    persisted? && is_over? && !delegate_report.posted? && delegates.include?(user)
+    persisted? && is_probably_over? && !delegate_report.posted? && delegates.include?(user)
   end
 
   def warnings_for(user)
@@ -197,7 +197,7 @@ class Competition < ActiveRecord::Base
 
   def info_for(user)
     info = {}
-    if !self.results_posted? && self.is_over?
+    if !self.results_posted? && self.is_probably_over?
       info[:upload_results] = I18n.t('competitions.messages.upload_results')
     end
     if self.in_progress?
@@ -640,7 +640,11 @@ class Competition < ActiveRecord::Base
     !results_posted? && (start_date..end_date).cover?(Date.today)
   end
 
-  def is_over?
+  # The name `is_probably_over` is meant to be surprising.
+  # We don't actually know when competitions are over, because we don't know their schedules, nor
+  # do we know their timezones.
+  # See discussion here: https://github.com/thewca/worldcubeassociation.org/pull/1206/files#r98485399.
+  def is_probably_over?
     !end_date.nil? && end_date < Date.today
   end
 

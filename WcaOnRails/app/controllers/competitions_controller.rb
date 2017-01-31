@@ -439,7 +439,7 @@ class CompetitionsController < ApplicationController
       competitions += current_user.person.competitions
     end
     competitions = competitions.uniq.sort_by { |comp| comp.start_date || Date.today + 20.year }.reverse
-    @past_competitions, @not_past_competitions = competitions.partition(&:is_over?)
+    @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
   end
 
   private def competition_params

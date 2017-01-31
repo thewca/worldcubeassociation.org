@@ -43,7 +43,7 @@ RSpec.describe Competition do
   it "handles missing start/end_date" do
     competition = FactoryGirl.build :competition, start_date: nil, end_date: nil
     competition2 = FactoryGirl.build :competition, start_date: nil, end_date: nil
-    expect(competition.is_over?).to be false
+    expect(competition.is_probably_over?).to be false
     expect(competition.started?).to be false
     expect(competition.in_progress?).to be false
     expect(competition.dangerously_close_to?(competition2)).to be false
@@ -213,7 +213,7 @@ RSpec.describe Competition do
     it "displays info if competition is finished but results aren't posted" do
       competition = FactoryGirl.build :competition, starts: 1.month.ago
       expect(competition).to be_valid
-      expect(competition.is_over?).to be true
+      expect(competition.is_probably_over?).to be true
       expect(competition.results_posted?).to be false
       expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over, we are working to upload the results as soon as possible!"
     end
