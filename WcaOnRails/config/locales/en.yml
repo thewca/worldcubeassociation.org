@@ -583,7 +583,7 @@ en:
     #context: text appearing in mails sent to competitors during registration
     mailer:
       #context: "people" is replaced by the organizers and Delegates' names
-      regards: "Regards, %{people}."
+      regards_html: "Regards, %{people}."
       #context: for a new registration
       new:
         #context: "comp_name" contains the competition's name
