@@ -305,6 +305,8 @@ pl:
         name: Imię
         #original_hash: a6b9d69
         birthday: Data urodzenia
+        #original_hash: c5497bc
+        registration_competition_events: Konkurencje
       competition_tab:
         #original_hash: 4f9be05
         content: Zawartość
@@ -1057,6 +1059,66 @@ pl:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} na %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards: 'Z poważaniem, %{people}.'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: 'Zarejestrowałeś się na %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Właśnie zarejestrowałeś się na %{comp_name}.'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          Twoja rejestracja jest na liście oczekujących, na której znajduje się
+          obecnie %{n_total} %{people}.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Zostaniesz poinformowany drogą mailową, gdy twoja rejestracja zostanie
+          zaakceptowana. Rejestracje nie są akceptowane automatycznie. Aby
+          zobaczyć kryteria akceptacji odwiedź stronę zawodów lub skontaktuj się
+          z ich organizatorami. Możesz również sprawdzić status swojej
+          rejestracji %{here}.
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: 'Twoja rejestracja na %{comp_name} została zaakceptowana.'
+        #original_hash: 24d2883
+        message_html: >-
+          Twoja rejestracja na %{comp_name} została zaakceptowana. Jak zwykle
+          możesz sprawdzić jej status %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: 'Nie możemy doczekać się zobaczenia cię na %{comp_name}!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: 'Zostałeś przeniesiony na listę oczekujących na %{comp_name}'
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          Twoja rejestracja na %{comp_name} została przeniesiona na listę
+          oczekujących. Możliwe powody:
+        causes:
+          #original_hash: eadfc0d
+          accepted: Twoja rejestracja została zaakceptowana przypadkowo
+          #original_hash: 2ac6d84
+          withdrawal: Poprosiłeś o jej wycofanie
+        #original_hash: 8f7358f
+        email_if_error: >-
+          Jeżeli uważasz, że jest to błąd, prosimy o odpowiedzenie na tego
+          maila.
+      deleted:
+        #original_hash: 268e248
+        mail_subject: 'Twoja rejestracja na %{comp_name} została usunięta.'
+        #original_hash: f66ae63
+        message_html: 'Twoja rejestracja na %{comp_name} została usunięta. Możliwe przyczyny:'
+        causes:
+          #original_hash: 978944c
+          missing_info: Nie wysłałeś wszystkich wymaganych danych
+          #original_hash: 788f2ec
+          incomplete: >-
+            Nie spełniłeś wymagań rejestracyjnych (na przykład nie zapłaciłeś
+            wpisowego)
+          #original_hash: 1e225f0
+          registrations_full: Limit zawodników został osiągnięty i nie ma więcej dostępnych miejsc
+          #original_hash: 0d4cce9
+          multiple_registrations: Zarejestrowałeś się dwa lub więcej razy
     list:
       #original_hash: 8b7631c
       title: 'Rejestracje na %{comp}'
