@@ -5,7 +5,7 @@
       <ul>
         <% f.object.errors.each do |attribute, msg| %>
           <li>
-            <% if f.generated_attribute_inputs.include?(attribute) %>
+            <% if f.generated_attribute_inputs&.include?(attribute) %>
               <a href="#<%= f.id_for(attribute) %>"><strong><%= f.object.class.human_attribute_name(attribute) %></strong></a>
             <% else %>
               <strong><%= f.object.class.human_attribute_name(attribute) %></strong>

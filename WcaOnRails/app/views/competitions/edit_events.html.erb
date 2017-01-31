@@ -21,7 +21,6 @@
       <% if always_show || !selected_events.empty? %>
         <%= render "shared/associated_events_picker",
           form_builder: f,
-          label: label,
           disabled: disable_form,
           events_association_name: :competition_events, allowed_events: allowed_events,
           selected_events: selected_events %>
