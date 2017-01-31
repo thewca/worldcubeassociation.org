@@ -52,9 +52,9 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
   # One can activate/test the fallback to English using :
-  # config.i18n.fallbacks = true
+  config.i18n.fallbacks = true
   # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
+  # config.action_view.raise_on_missing_translations = true
 
   config.after_initialize do
     Bullet.enable = true

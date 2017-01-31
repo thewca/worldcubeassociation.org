@@ -1,29 +1,29 @@
 <% @competition = @registration.competition %>
 
 <p>
-  Your registration for <%= link_to @competition.name, competition_url(@competition) %> has been deleted. Possible causes are:
+  <%= t 'registrations.mailer.deleted.message_html', comp_name: link_to(@competition.name, competition_url(@competition)) %>
 </p>
 
 <ul>
   <li>
-    You did not submit all the required details
+    <%= t 'registrations.mailer.deleted.causes.missing_info' %>
   </li>
   <li>
-    You asked for withdrawal
+    <%= t 'registrations.mailer.pending.causes.withdrawal' %>
   </li>
   <li>
-    You didn't meet the registration criteria (for example, paying the registration fee in advance)
+    <%= t 'registrations.mailer.deleted.causes.incomplete' %>
   </li>
   <li>
-    The competitor limit has been reached and there are no more spots available
+    <%= t 'registrations.mailer.deleted.causes.registrations_full' %>
   </li>
   <li>
-    You registered twice or more times
+    <%= t 'registrations.mailer.deleted.causes.multiple_registrations' %>
   </li>
 </ul>
 
 <p>
-  If you think this is an error, please reply to this email.
+  <%= t 'registrations.mailer.pending.email_if_error' %>
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>

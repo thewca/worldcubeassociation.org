@@ -1,19 +1,15 @@
 <% @competition = @registration.competition %>
 
 <p>
-  You just registered for <%= link_to @competition.name, competition_url(@competition) %>.
+  <%= t 'registrations.mailer.new.registered_html', comp_name: link_to(@competition.name, competition_url(@competition)) %>
 </p>
 
 <p>
-  Your registration is on the waiting list, which currently has <%= @competition.registrations.pending.count %> <%= "person".pluralize(@competition.registrations.pending.count) %> on it.
+  <%= t 'registrations.mailer.new.on_waiting_list', n_total: @competition.registrations.pending.count, people: t('registrations.registration_info_people.person', count: @competition.registrations.pending.count) %>
 </p>
 
 <p>
-  You will be emailed when your registration is approved.
-  Please note that registrations are not automatically approved.
-  To see the approval criteria visit the competition website or contact the organisers.
-  You can also check the status of your registration
-  <%= link_to "here", competition_register_url(@competition) %>.
+  <%= t 'registrations.mailer.new.approval_info_html', here: link_to(t('common.here'), competition_register_url(@competition)) %>
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>

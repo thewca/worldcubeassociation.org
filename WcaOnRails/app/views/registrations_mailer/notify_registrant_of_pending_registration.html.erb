@@ -1,20 +1,20 @@
 <% @competition = @registration.competition %>
 
 <p>
-  Your registration for <%= link_to @competition.name, competition_url(@competition) %> has been moved to the waiting list. Possible causes are:
+  <%= t 'registrations.mailer.pending.moved_html', comp_name: link_to(@competition.name, competition_url(@competition)) %>
 </p>
 
 <ul>
   <li>
-    Your registration was accidentally accepted
+    <%= t 'registrations.mailer.pending.causes.accepted' %>
   </li>
   <li>
-    You asked for withdrawal
+    <%= t 'registrations.mailer.pending.causes.withdrawal' %>
   </li>
 </ul>
 
 <p>
-  If you think this is an error, please reply to this email.
+  <%= t 'registrations.mailer.pending.email_if_error' %>
 </p>
 
 <%= render partial: 'organizers_or_delegates_signature' %>

@@ -587,6 +587,50 @@ en:
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+    #context: text appearing in mails sent to competitors during registration
+    mailer:
+      #context: "people" is replaced by the organizers and Delegates' names
+      regards: "Regards, %{people}."
+      #context: for a new registration
+      new:
+        #context: "comp_name" contains the competition's name
+        mail_subject: "You have registered for %{comp_name}"
+        #context: "comp_name" contains the competition's name
+        registered_html: "You just registered for %{comp_name}."
+        #context: "n_total" will be replaced by the total number of registrations on waiting list, and "people" by the pluralization of "person" in your language (key registrations.registration_info_people.person)
+        on_waiting_list: "Your registration is on the waiting list, which currently has %{n_total} %{people} on it."
+        #context: "here" is replaced by a link to view the registration
+        approval_info_html: "You will be emailed when your registration is approved. Please note that registrations are not automatically approved. To see the approval criteria visit the competition website or contact the organisers. You can also check the status of your registration %{here}."
+      #context: when registration is accepted
+      accepted:
+        #context: "comp_name" contains the competition's name
+        mail_subject: "Your registration for %{comp_name} has been accepted"
+        #context: "comp_name" contains the competition's name, and "here" is replaced by a link to edit the registration
+        message_html: "Your registration for %{comp_name} has been accepted. As always, you can check the status of your registration %{here}."
+        #context: "comp_name" contains the competition's name
+        see_you_soon: "We look forward to seeing you at %{comp_name}!"
+      #context: when registration is moved to waiting list
+      pending:
+        #context: "comp_name" contains the competition's name
+        mail_subject: "You have been moved to the waiting list for %{comp_name}"
+        #context: "comp_name" contains the competition's name
+        moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
+        #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
+        causes:
+          accepted: "Your registration was accidentally accepted"
+          withdrawal: "You asked for withdrawal"
+        email_if_error: "If you think this is an error, please reply to this email."
+      #context: when registration is deleted
+      deleted:
+        #context: "comp_name" contains the competition's name
+        mail_subject: "Your registration for %{comp_name} has been deleted"
+        message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
+        #context: this key is one of the reasons explaining why a registration could be deleted
+        causes:
+          missing_info: "You did not submit all the required details"
+          incomplete: "You didn't meet the registration criteria (for example, paying the registration fee in advance)"
+          registrations_full: "The competitor limit has been reached and there are no more spots available"
+          multiple_registrations: "You registered twice or more times"
     #context: on the registrations list
     list:
       title: "Registrations for %{comp}"
