@@ -116,13 +116,13 @@ ru:
       cellName: Финал
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: Комбинированный Третий раунд
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: Комбинированный Третий
     h:
+      #original_hash: 4c66ad0
       name: Комбинированная квалификация
+      #original_hash: 4c66ad0
       cellName: Комбинированная квалификация
   common:
     #original_hash: 2513cf0
@@ -139,6 +139,9 @@ ru:
     average: Среднее
     #original_hash: e7f6fc5
     solves: Сборки
+    date:
+      #original_hash: acb6273
+      no_date: Нет даты
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -298,6 +301,8 @@ ru:
         name: Имя
         #original_hash: a6b9d69
         birthday: День Рождения
+        #original_hash: c5497bc
+        registration_competition_events: Дисциплины
       competition_tab:
         #original_hash: 4f9be05
         content: Заметки
@@ -969,8 +974,6 @@ ru:
       registration_closed: Регистрация закрыта
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Невозможно одновременно принять и удалить регистрацию.
-      #original_hash: bf9a828
-      can_register: Пользователь должен мочь зарегистрироваться на соревнование.
       #original_hash: a38d024
       must_register: нужно выбрать хотя бы одну дисциплину
     registration_info_people:
@@ -1041,11 +1044,11 @@ ru:
       edit: Редактировать
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} WTF'
-        many: '%{count} стран'
-        few: '%{count} страны'
-        one: '%{count} страна'
         zero: ноль стран
+        one: '%{count} страна'
+        few: '%{count} страны'
+        many: '%{count} стран'
+        other: '%{count} WTF'
       #original_hash: 1feee0e
       export_csv: Экспорт в CSV
       #original_hash: 84add5b
@@ -1123,8 +1126,8 @@ ru:
     have_registered: >-
       Вы зарегистрировались на %{comp}. Вы можете просмотреть свою регистрацию
       ниже.
-    #original_hash: 4d966e0
-    entry_fee: Взнос за участие
+    #original_hash: fa52a9b
+    entry_fee: 'Взнос за участие %{fee}'
     #original_hash: 3c9141f
     contact_organizer: 'Свяжитесь с организаторам, если хотите что-то изменить.'
     #original_hash: 59354fd
@@ -1195,11 +1198,11 @@ ru:
       website: Сайт
       #original_hash: 680567f
       organizer_plural:
-        other: WTF
-        many: Организаторы
-        few: Организаторы
-        one: Организатор
         zero: Организаторов
+        one: Организатор
+        few: Организаторы
+        many: Организаторы
+        other: WTF
       #original_hash: 6afa61e
       delegate:
         zero: WCA Делегаты
@@ -1373,8 +1376,6 @@ ru:
       end_date_before_start: Дата окончания не может быть до даты начала.
       #original_hash: be3933b
       span_too_many_days: 'Соревнование не может длиться более %{max_days} дней.'
-    #original_hash: f42a238
-    unscheduled: незапланированные
     new:
       #original_hash: 1208df7
       create_competition: Создать соревнование
@@ -1402,11 +1403,11 @@ ru:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} WTF'
-        many: '%{count} соревнований'
-        few: '%{count} соревнования'
-        one: '%{count} соревнование'
         zero: Нет соревнований
+        one: '%{count} соревнование'
+        few: '%{count} соревнования'
+        many: '%{count} соревнований'
+        other: '%{count} WTF'
       #original_hash: e3528ec
       label: 'Близкие соревнования (в пределах %{days} дней и %{kms} км)'
       #original_hash: 3446062
