@@ -57,17 +57,73 @@ fr:
     #original_hash: 64a56a2
     skewb: Skewb
     #original_hash: 5bae501
-    444bf: 'Cube 4x4 : à l''aveugle'
+    444bf: Cube 4x4x4 à l'aveugle
     #original_hash: aea5216
-    555bf: 'Cube 5x5 : à l''aveugle'
+    555bf: Cube 5x5x5 à l'aveugle
     #original_hash: cedbf87
-    333mbf: 'Rubik''s Cube : résolution multiple à l''aveugle'
+    333mbf: 3x3x3 résolution multiple à l'aveugle
     #original_hash: 3988358
     magic: Rubik's Magic
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: c6ad2af
     333mbo: 'Rubik''s Cube : résolution multiple à l''aveugle (à l''ancienne)'
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Tour de qualification
+      #original_hash: 2ffe44e
+      cellName: Qualification
+    '1':
+      #original_hash: 1e725b6
+      name: Premier tour
+      #original_hash: 916a78d
+      cellName: Premier
+    '2':
+      #original_hash: 985c8d0
+      name: Deuxième tour
+      #original_hash: 2a4bcae
+      cellName: Deuxième
+    '3':
+      #original_hash: e2f74d2
+      name: Demi Finale
+      #original_hash: e2f74d2
+      cellName: null
+    b:
+      #original_hash: 327c999
+      name: null
+      #original_hash: 327c999
+      cellName: null
+    c:
+      #original_hash: b2d26f4
+      name: null
+      #original_hash: b2d26f4
+      cellName: null
+    d:
+      #original_hash: c6136b1
+      name: null
+      #original_hash: dffa9ea
+      cellName: null
+    e:
+      #original_hash: 659c53f
+      name: null
+      #original_hash: b6e1e1c
+      cellName: null
+    f:
+      #original_hash: 672b22c
+      name: null
+      #original_hash: 672b22c
+      cellName: null
+    g:
+      #original_hash: e861dcf
+      name: null
+      #original_hash: 86f4b05
+      cellName: null
+    h:
+      #original_hash: 4c66ad0
+      name: null
+      #original_hash: 4c66ad0
+      cellName: null
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -83,6 +139,9 @@ fr:
     average: Moyenne
     #original_hash: e7f6fc5
     solves: Résolutions
+    date:
+      #original_hash: acb6273
+      no_date: null
     user:
       #original_hash: 603a218
       wca_id: ID WCA
@@ -240,6 +299,8 @@ fr:
         name: Nom
         #original_hash: a6b9d69
         birthday: Date de naissance
+        #original_hash: c5497bc
+        registration_competition_events: null
       competition_tab:
         #original_hash: 4f9be05
         content: Contenu
@@ -254,7 +315,7 @@ fr:
         equipment: Équipement
         #original_hash: 67cd406
         venue: Salle
-        #original_hash: 6e99c1d
+        #original_hash: 519255a
         organization: Organisation
         #original_hash: 5e326b1
         incidents: Incidents
@@ -477,7 +538,7 @@ fr:
           problèmes qui sont survenus (le bruit par exemple) et de comment vous
           les avez résolus. Merci de rester concis et de ne pas rapporter des
           détails inutiles.
-        #original_hash: 5a80c42
+        #original_hash: f8de509
         organization: >-
           Parlez de l'équipe d'organisation et de comment elle a gérée la
           compétition, de si vous y étiez impliqué, de leurs précédentes
@@ -640,7 +701,7 @@ fr:
       about: À propos de la WCA
       #original_hash: d8fd3e4
       delegates: Délégués WCA
-      #original_hash: ec81ece
+      #original_hash: 0ef06c8
       organizations: Organisations Nationales
       #original_hash: d790b40
       faq: Questions fréquentes
@@ -809,10 +870,10 @@ fr:
       #original_hash: 29e25b5
       have_wca_id_html: 'Votre ID WCA est %{link_id}.'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
           Vous ne pouvez pas changer votre nom, date de naissance, genre, ou
-          pays car %{reason}. Contactez votre <a
+          pays. Raison : %{reason}. Contactez votre <a
           href='%{delegate_url}'>Délégué</a> si vous devez changer l'une de ces
           informations.
         reason:
@@ -929,8 +990,6 @@ fr:
       registration_closed: Les inscriptions pour la compétition sont fermées
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Une inscription ne peut pas être à la fois supprimée et acceptée.
-      #original_hash: bf9a828
-      can_register: L'utilisateur doit pouvoir s'inscrire à la compétition
       #original_hash: a38d024
       must_register: doit s'inscrire à au moins une épreuve
     registration_info_people:
@@ -983,36 +1042,79 @@ fr:
       #original_hash: 2d15eae
       title: '%{person} pour %{comp}'
     mailer:
-      regards: "Cordialement, %{people}."
+      #original_hash: 72e2180
+      regards: 'Cordialement, %{people}.'
       new:
-        mail_subject: "Vous êtes inscrit à la compétition %{comp_name}"
-        registered_html: "Vous venez juste de vous inscrire à la compétition %{comp_name}."
-        on_waiting_list: "Votre inscription est en attente, il y a actuellement %{n_total} %{people} en attente."
-        approval_info_html: "Un email vous sera envoyé lorsque votre inscription sera acceptée. Les inscriptions sont approuvées manuellement. Pour voir les conditions d'acceptation des inscriptions, visitez le site internet de la compétition ou contactez les organisateurs. Vous pouvez visualiser l'état de votre inscription %{here}."
+        #original_hash: 6fb638c
+        mail_subject: 'Vous êtes inscrit à la compétition %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Vous venez juste de vous inscrire à la compétition %{comp_name}.'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          Votre inscription est en attente, il y a actuellement %{n_total}
+          %{people} en attente.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Un email vous sera envoyé lorsque votre inscription sera acceptée. Les
+          inscriptions sont approuvées manuellement. Pour voir les conditions
+          d'acceptation des inscriptions, visitez le site internet de la
+          compétition ou contactez les organisateurs. Vous pouvez visualiser
+          l'état de votre inscription %{here}.
       accepted:
-        mail_subject: "Votre inscription à la compétition %{comp_name} a été acceptée"
-        message_html: "Votre inscription à la compétition %{comp_name} a été acceptée. Comme toujours, vous pouvez vérifier le statut de votre inscription %{here}."
-        see_you_soon: "À bientôt pour le %{comp_name} !"
+        #original_hash: 34515b5
+        mail_subject: 'Votre inscription à la compétition %{comp_name} a été acceptée'
+        #original_hash: 24d2883
+        message_html: >-
+          Votre inscription à la compétition %{comp_name} a été acceptée. Comme
+          toujours, vous pouvez vérifier le statut de votre inscription %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: 'À bientôt pour le %{comp_name} !'
       pending:
-        mail_subject: "Votre inscription pour la compétition %{comp_name} a été placée sur liste d'attente"
-        moved_html: "Votre inscription pour la compétition %{comp_name} a été placée sur liste d'attente. Voici une liste de raisons possibles :"
+        #original_hash: e48d8bd
+        mail_subject: >-
+          Votre inscription pour la compétition %{comp_name} a été placée sur
+          liste d'attente
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          Votre inscription pour la compétition %{comp_name} a été placée sur
+          liste d'attente. Voici une liste de raisons possibles :
         causes:
-          accepted: "Votre inscription a été accidentellement acceptée"
-          withdrawal: "Vous avez demandé a être retiré"
-        email_if_error: "Si vous pensez que c'est une erreur, merci de répondre à cet email."
+          #original_hash: eadfc0d
+          accepted: Votre inscription a été accidentellement acceptée
+          #original_hash: 2ac6d84
+          withdrawal: Vous avez demandé a être retiré
+        #original_hash: 8f7358f
+        email_if_error: 'Si vous pensez que c''est une erreur, merci de répondre à cet email.'
       deleted:
-        mail_subject: "Votre inscription à la compétition %{comp_name} a été supprimée"
-        message_html: "Votre inscription à la compétition %{comp_name} a été supprimée. Voici une liste de raisons possibles :"
+        #original_hash: 268e248
+        mail_subject: 'Votre inscription à la compétition %{comp_name} a été supprimée'
+        #original_hash: f66ae63
+        message_html: >-
+          Votre inscription à la compétition %{comp_name} a été supprimée. Voici
+          une liste de raisons possibles :
         causes:
-          missing_info: "Vous n'avez pas indiqué tous les détails demandés"
-          incomplete: "Vous n'avez pas rempli tous les critères d'inscription (comme par exemple payer les frais d'inscription)"
-          registrations_full: "La limite du nombre de compétiteurs a été atteinte et il n'y a plus de place disponible"
-          multiple_registrations: "Vous vous êtes inscrits plusieurs fois"
+          #original_hash: 978944c
+          missing_info: Vous n'avez pas indiqué tous les détails demandés
+          #original_hash: 788f2ec
+          incomplete: >-
+            Vous n'avez pas rempli tous les critères d'inscription (comme par
+            exemple payer les frais d'inscription)
+          #original_hash: 1e225f0
+          registrations_full: >-
+            La limite du nombre de compétiteurs a été atteinte et il n'y a plus
+            de place disponible
+          #original_hash: 0d4cce9
+          multiple_registrations: Vous vous êtes inscrits plusieurs fois
     list:
       #original_hash: 8b7631c
       title: 'Inscriptions pour %{comp}'
       #original_hash: 5301648
       edit: Éditer
+      #original_hash: 0ab725c
+      country_plural:
+        zero: null
+        one: null
+        other: null
       #original_hash: 1feee0e
       export_csv: Exporter en CSV
       #original_hash: 84add5b
@@ -1082,16 +1184,22 @@ fr:
       problèmes suivant dans votre %{profile} :
     #original_hash: 855ca9c
     can_register: 'Vous pouvez vous inscrire au %{comp} ci-dessous.'
+    #original_hash: 4167ed7
+    check_registration_information: null
     #original_hash: ea2b586
     have_registered: >-
       Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre
       inscription ci-dessous.
-    #original_hash: 4d966e0
-    entry_fee: Le coût de l'inscription est
+    #original_hash: fa52a9b
+    entry_fee: 'Le coût de l''inscription est %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Contactez l'organisateur si vous souhaitez effectuer des changements.
-    #original_hash: 06d52b5
-    waiting_list: 'Votre inscription est en attente, vous êtes en position %{i} sur %{n}.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Votre inscription est en attente. Pour qu'elle soit acceptée et si la
+      compétition est payante, vous devez peut être payer les frais
+      d'inscriptions. Les détails concernant l'inscription sont sur le site
+      internet de la compétition.
     #original_hash: 58b1a3c
     accepted: Votre inscription a été effectuée !
     #original_hash: 4cf01a2
@@ -1154,6 +1262,11 @@ fr:
       details: Détails
       #original_hash: 2e8a57c
       website: Site internet
+      #original_hash: 680567f
+      organizer_plural:
+        zero: null
+        one: null
+        other: null
       #original_hash: 6afa61e
       delegate:
         zero: Délégués WCA
@@ -1199,6 +1312,8 @@ fr:
         in_progress: Compétitions en cours
         #original_hash: 9e66032
         past: 'Compétitions terminées en %{year}'
+        #original_hash: f628f0e
+        past_all: null
         #original_hash: cbe8a54
         recent: 'Compétitions récentes (%{count} derniers jours)'
         #original_hash: 914742f
@@ -1215,8 +1330,8 @@ fr:
           posted: Résultats en ligne !
           #original_hash: 89bcc37
           starts_in: 'Démarre dans %{days}'
-        #original_hash: a418217
-        search: 'Nom, ville, salle, pays (en Anglais), ou mois'
+        #original_hash: ccd2db9
+        search: Nom ou ville
         #original_hash: 3bc8082
         recent: '%{count} derniers jours'
       #original_hash: 8b09d74
@@ -1232,8 +1347,12 @@ fr:
       registrations: Inscriptions
       #original_hash: 4f98e6d
       results_up: Les résultats sont en ligne !
-      #original_hash: ee45c30
-      report: Rapport
+      #original_hash: 87ab5db
+      report: Voir le rapport du Délégué
+      #original_hash: b4ca252
+      edit_report: null
+      #original_hash: e590657
+      missing_report: null
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Vous n''avez pas de compétitions à venir! Allez voir la %{link}.'
       #original_hash: 9104a03
@@ -1301,7 +1420,7 @@ fr:
       #original_hash: 8ebebca
       coordinates: Coordonnées GPS
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: >-
         doit se terminer par une année, et doit contenir uniquement des
         caractères alphanumériques, ainsi que des tirets(-), esperluettes(&),
@@ -1324,8 +1443,6 @@ fr:
       end_date_before_start: ne peut pas être avant la date de début.
       #original_hash: be3933b
       span_too_many_days: 'La compétition ne peut pas durer plus de %{max_days} jours.'
-    #original_hash: f42a238
-    unscheduled: non prévue
     new:
       #original_hash: 1208df7
       create_competition: Créer une compétition
@@ -1351,13 +1468,18 @@ fr:
       #original_hash: e6e096a
       competition_was: 'La compétition a eu lieu il y a %{n_days}.'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        zero: null
+        one: null
+        other: null
       #original_hash: e3528ec
       label: >-
         Compétitions à proximité (à %{days} jours près et dans un rayon de
         %{kms} km)
       #original_hash: 3446062
       label_admin: 'Depuis %{days} jours'
-      #original_hash: 14276ae
+      #original_hash: 07a1cf0
       nearby_admin: '%{x_competitions} dans un rayon de %{kms} km et à %{days} jours près.'
       #original_hash: feefb46
       no_comp_nearby: Pas de compétition à proximité
@@ -1433,6 +1555,40 @@ fr:
       round: Tour
       #original_hash: 709a232
       name: Nom
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: null
+      #original_hash: 709a232
+      name: null
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: null
+      #original_hash: 8d5b6f9
+      goto_button: null
+      #original_hash: 6f23a36
+      new_tab: null
+      #original_hash: 5301648
+      edit: null
+      #original_hash: fb91e24
+      update: null
+      #original_hash: f6fdbe4
+      delete: null
+      #original_hash: 14e49c1
+      confirm_delete: null
+      #original_hash: ce1bf0b
+      back_to_tabs: null
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: null
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: null
+      #original_hash: 40f9491
+      tabs_introduction_text: null
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: null
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
@@ -1618,3 +1774,234 @@ fr:
             Si vous avez lié votre compte WCA à votre ID WCA, vous pouvez
             également activer les notifications par email concernant vos
             résultats <a href='%{preferences_edit_path}'>ici</a>.
+  about:
+    #original_hash: 9ac918a
+    title: À propos de la WCA
+    mission:
+      #original_hash: e4698d4
+      title: Mission
+      paragraphs:
+        #original_hash: 16ad45e
+        '1': >-
+          La World Cube Association gouverne les compétitions pour tous les
+          casse-tête de type Rubik, et tous les autres casse-tête que l'on
+          manipule en tournant des faces. Le plus connu de ces casse-tête est le
+          Rubik's cube, inventé par le professeur hongrois Erno Rubik. Une
+          sélection de ces casse-tête a été choisie comme épreuves officielles
+          de la WCA.
+        #original_hash: c8ecd24
+        '2': >-
+          La World Cube Association organise des compétitions à travers le
+          monde, et est supportée par des organisations nationales responsables
+          de l'organisation des compétitions dans leur pays.
+        #original_hash: 20e0550
+        '3': >-
+          Le but de la World Cube Association est d'avoir<br /><strong>plus de
+          compétitions dans plus de pays avec plus de personnes et d'amusement,
+          dans des conditions égales et équitables.</strong>
+        #original_hash: bee3687
+        '4': >-
+          L'esprit de la World Cube Association est que <br /> <strong>des
+          personnes venant de tout le globe puissent s'amuser ensemble dans une
+          atmosphère conviviale, s'entraider, et se comporter de manière
+          sportive.</strong>
+    structure:
+      #original_hash: 9482c5d
+      title: Structure
+      #original_hash: d855b50
+      board_html: >-
+        La World Cube Association est dirigée par le <strong>WCA Board</strong>
+        (bureau de la WCA), constitué des membres suivant:
+      #original_hash: b0c72a9
+      committees: >-
+        Les comités suivant sont responsables des activités opérationnelles de
+        la WCA :
+      wdc:
+        #original_hash: 853bffa
+        name_html: >-
+          <strong>WCA Disciplinary Committee (WDC, comité
+          disciplinaire)</strong>
+        #original_hash: 286fdf8
+        description: >-
+          Ce comité conseille le bureau de la WCA dans des cas spéciaux, tels
+          que des violations présumées du Règlement WCA, et il peut être
+          contacté par les membres de la WCA en cas d'affaires personnelles
+          importantes concernant les compétitions WCA.
+      wrc:
+        #original_hash: 4aa147f
+        name_html: '<strong>WCA Regulations Committee (WRC, comité réglementaire)</strong>'
+        #original_hash: 13ada5b
+        description: Ce comité est responsable de la gestion du règlement WCA.
+      results:
+        #original_hash: 3e819b8
+        name_html: <strong>WCA Results team (équipe des résultats)</strong>
+        #original_hash: 439ffae
+        description: >-
+          Cette équipe est responsable de la gestion de tous les résultats de
+          compétitions.
+      software:
+        #original_hash: ea7f654
+        name_html: <strong>WCA Software team (équipe logicielle)</strong>
+        #original_hash: ec961e4
+        description: >-
+          Cette équipe est responsable de la gestion des logiciels de la WCA
+          (site internet, programme de mélanges, outils d'administration).
+      #original_hash: f2ceade
+      delegates_html: >-
+        Les <strong>Délégués WCA</strong> sont des membres de la WCA
+        responsables de s'assurer que les compétitions WCA se déroulent selon la
+        mission, le règlement, et l'esprit de la WCA. La WCA distingue les
+        statuts suivant : <strong>Délégués WCA Senior</strong>, <strong>Délégués
+        WCA</strong>, et <strong>Candidat Délégué WCA</strong>%{see_link}. En
+        plus des devoirs d'un Délégué WCA, un Délégué WCA Senior est
+        responsables de la gestion des Délégués dans sa zone, et peut également
+        être contacté par la communauté pour des affaires régionales. Les
+        nouveaux Délégués sont d'abord listés en tant que Candidat Délégués WCA,
+        et doivent montrer qu'ils sont capables de gérer des compétitions avec
+        succès avant d'être listés comme Délégué WCA.
+      #original_hash: 27d18ac
+      see_link_html: '(voir %{link})'
+      #original_hash: 5b01fcc
+      members_html: >-
+        Tous les compétiteurs deviennent automatiquement des
+        <strong>membres</strong> de la WCA pendant leur première compétition
+        WCA.
+  delegates_page:
+    #original_hash: d8fd3e4
+    title: Délégués WCA
+    #original_hash: 0a89b0f
+    acknowledges: >-
+      La WCA reconnaît les membres suivant comme Délégués pour des compétitions
+      officielles de la WCA :
+    table:
+      #original_hash: 709a232
+      name: Nom
+      #original_hash: c3f104d
+      role: Rôle
+      #original_hash: 0f21717
+      region: Région
+  national_organizations:
+    #original_hash: 0ef06c8
+    title: Organisations Nationales
+    #original_hash: f9a7f4d
+    content: 'La WCA reconnaît les organisations nationales suivantes :'
+  contact:
+    #original_hash: a34b69f
+    title: Information de contact
+    #original_hash: b5c2eaa
+    info_alert_html: >-
+      Avant de contacter l'une des équipes sur cette page, merci de jeter un œil
+      à notre %{link} !
+    #original_hash: 2b023eb
+    questions_and_comments_html: >-
+      Pour les questions, commentaires, et suggestions à propos du site
+      internet, utilisez ce <a href='/contact/website'>formulaire de
+      contact</a>. Pour des demandes concernant une zone spécifique ou une
+      compétition, merci de contacter votre %{link} local.
+    #original_hash: 4a30d30
+    committees_and_teams_html: <u>Comités et Équipes</u>
+    board:
+      #original_hash: ccad374
+      name_html: <strong>WCA Board</strong>
+      #original_hash: 7ee8e36
+      info: null
+    wdc:
+      #original_hash: 562e197
+      info: null
+    wrc:
+      #original_hash: 4a256f0
+      info: null
+    results:
+      #original_hash: 899dc9c
+      info: null
+    software:
+      #original_hash: 325ab0a
+      info: null
+  score_tools:
+    #original_hash: ea9d41d
+    title: null
+    paragraphs:
+      #original_hash: ec3e0ab
+      '1': null
+      #original_hash: 7438b0d
+      '2': null
+      #original_hash: 975e59b
+      '3': null
+  logo:
+    #original_hash: c72c969
+    title: null
+    paragraphs:
+      #original_hash: c092e13
+      '1': null
+      #original_hash: f228da2
+      '2': null
+      #original_hash: dcb1ad6
+      '3': null
+      #original_hash: 545fcd9
+      '4': null
+  workbook_assistant:
+    #original_hash: e442ea4
+    title: null
+    #original_hash: a7c307f
+    download: null
+    #original_hash: cf1b916
+    last_update: null
+    #original_hash: feece00
+    version_history: null
+    #original_hash: 8f3f4c0
+    header: null
+    step1:
+      #original_hash: c0450b1
+      title: null
+      #original_hash: 656d70d
+      content_html: null
+    step2:
+      #original_hash: 3ad9881
+      title: null
+      #original_hash: 080acc0
+      content_html: null
+      #original_hash: 6cc90b8
+      content2_html: null
+    step3:
+      #original_hash: b2d01b3
+      title: null
+      #original_hash: 36383b1
+      content_html: null
+      #original_hash: e869c1e
+      content2_html: null
+      #original_hash: 8f4fdfd
+      content3_html: null
+      #original_hash: 94353f2
+      content4_html: null
+      #original_hash: 68c5b18
+      content5_html: null
+    step4:
+      #original_hash: ed940d2
+      title: null
+      #original_hash: df2cf58
+      content_html: null
+      #original_hash: 7fbf6b8
+      content2_html: null
+      #original_hash: 0600502
+      content3_html: null
+    step5:
+      #original_hash: 536ec4d
+      title: null
+      #original_hash: 5aeb5bd
+      content_html: null
+      #original_hash: 3acf7d0
+      content2_html: null
+      #original_hash: ceeb6fe
+      content3_html: null
+      #original_hash: 5ca74eb
+      content4_html: null
+    step6:
+      #original_hash: 52bb1f6
+      title: null
+      #original_hash: 6bfee23
+      content_html: null
+    step7:
+      #original_hash: 09fa37d
+      title: null
+      #original_hash: 9be089f
+      content_html: null
