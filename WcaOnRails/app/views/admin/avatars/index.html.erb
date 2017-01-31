@@ -20,7 +20,7 @@
       <% @users.each do |user| %>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title"><%= link_to "#{user.name} (#{user.wca_id})", "/results/p.php?i=#{user.wca_id}" %></h3>
+            <h3 class="panel-title"><%= link_to user.name, edit_user_path(user) %></h3>
           </div>
           <div class="panel-body">
             <div class="row">
