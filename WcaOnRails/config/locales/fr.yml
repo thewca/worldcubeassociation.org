@@ -229,6 +229,8 @@ fr:
         phone_number: Numéro de téléphone
         #original_hash: 7044004
         notes: Notes
+        #original_hash: 57eaf24
+        user_preferred_events: Épreuves préférées
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -288,6 +290,8 @@ fr:
         clone_tabs: >-
           Je souhaite cloner les onglets ainsi que les informations
           additionnelles également.
+        #original_hash: c5497bc
+        competition_events: Épreuves
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -825,8 +829,6 @@ fr:
       password: Mot de passe
       #original_hash: 3fc6dbe
       member_of: Membre de
-      #original_hash: 57eaf24
-      preferred_events: Épreuves de préférence
       #original_hash: 42619dd
       preferred_events_desc: >-
         Sélectionner vos épreuves de préférence rendront les inscriptions aux
@@ -973,8 +975,6 @@ fr:
       #original_hash: 92aa857
       unknown_wca_id_html: 'L''ID WCA %{link_id} n''existe pas.'
   registrations:
-    #original_hash: c5497bc
-    events: Épreuves
     errors:
       #original_hash: 44ab952
       need_name: Nom obligatoire
@@ -1043,7 +1043,7 @@ fr:
       title: '%{person} pour %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards: 'Cordialement, %{people}.'
+      regards_html: 'Cordialement, %{people}.'
       new:
         #original_hash: 6fb638c
         mail_subject: 'Vous êtes inscrit à la compétition %{comp_name}'
@@ -1112,9 +1112,9 @@ fr:
       edit: Éditer
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} pays'
-        one: 1 pays
         zero: pas de pays
+        one: 1 pays
+        other: '%{count} pays'
       #original_hash: 1feee0e
       export_csv: Exporter en CSV
       #original_hash: 84add5b
@@ -1267,9 +1267,9 @@ fr:
       website: Site internet
       #original_hash: 680567f
       organizer_plural:
-        other: Organisateurs
-        one: Organisateur
         zero: Organisateur
+        one: Organisateur
+        other: Organisateurs
       #original_hash: 6afa61e
       delegate:
         zero: Délégués WCA
@@ -1473,9 +1473,9 @@ fr:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} compétitions'
-        one: 1 compétition
         zero: Pas de compétition
+        one: 1 compétition
+        other: '%{count} compétitions'
       #original_hash: e3528ec
       label: >-
         Compétitions à proximité (à %{days} jours près et dans un rayon de
