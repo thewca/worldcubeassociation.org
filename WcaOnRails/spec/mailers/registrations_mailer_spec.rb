@@ -92,8 +92,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "displays organizer names in the signature" do
-      names = competition_with_organizers.organizers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
 
@@ -122,8 +121,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "displays organizer names in the signature" do
-      names = competition_with_organizers.organizers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
 
@@ -141,8 +139,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the body" do
       expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been moved to the waiting list")
       expect(mail.body.encoded).to match("If you think this is an error, please reply to this email.")
-      names = competition_without_organizers.delegates.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_without_organizers.organizers_or_delegates)}.")
     end
   end
 
@@ -155,8 +152,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "displays organizer names in the signature" do
-      names = competition_with_organizers.organizers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
 
@@ -173,8 +169,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match("Your registration for .{1,200}#{registration.competition.name}.{1,200} has been deleted")
-      names = competition_without_organizers.delegates.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_without_organizers.organizers_or_delegates)}.")
     end
   end
 
@@ -187,8 +182,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      names = competition_with_organizers.organizers.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
 end
