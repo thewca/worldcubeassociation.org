@@ -139,6 +139,9 @@ nl:
     average: Gemiddelde
     #original_hash: e7f6fc5
     solves: Pogingen
+    date:
+      #original_hash: acb6273
+      no_date: Geen datum
     user:
       #original_hash: 603a218
       wca_id: WCA id
@@ -292,6 +295,8 @@ nl:
         name: Naam
         #original_hash: a6b9d69
         birthday: Geboortedatum
+        #original_hash: c5497bc
+        registration_competition_events: Wedstrijdonderdelen
       competition_tab:
         #original_hash: 4f9be05
         content: Inhoud
@@ -952,8 +957,6 @@ nl:
       cannot_be_deleted_and_accepted: >-
         Een aanmelding kan niet tegelijkertijd worden verwijderd en
         geaccepteerd.
-      #original_hash: bf9a828
-      can_register: Gebruiker moet zich voor wedstrijd kunnen aanmelden
       #original_hash: a38d024
       must_register: moet zich voor minimaal één onderdeel aanmelden
     registration_info_people:
@@ -1092,8 +1095,8 @@ nl:
     have_registered: >-
       Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
       aanmelding vinden.
-    #original_hash: 4d966e0
-    entry_fee: Deelname kost
+    #original_hash: fa52a9b
+    entry_fee: 'Deelname kost %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Neem contact op met de organisator als je een wijziging wilt doen.
     #original_hash: 59354fd
@@ -1341,8 +1344,6 @@ nl:
       end_date_before_start: Einddatum kan niet voor startdatum liggen.
       #original_hash: be3933b
       span_too_many_days: 'Wedstrijd kan niet langer duren dan %{max_days} dagen.'
-    #original_hash: f42a238
-    unscheduled: ongepland
     new:
       #original_hash: 1208df7
       create_competition: Maak wedstrijd
