@@ -116,13 +116,13 @@ zh-CN:
       cellName: 决赛
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: 组合制半决赛
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: 组合制半决赛
     h:
+      #original_hash: 4c66ad0
       name: 组合制资格赛
+      #original_hash: 4c66ad0
       cellName: 组合制资格赛
   common:
     #original_hash: 2513cf0
@@ -139,6 +139,9 @@ zh-CN:
     average: 平均
     #original_hash: e7f6fc5
     solves: 详情
+    date:
+      #original_hash: acb6273
+      no_date: 待定
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -290,6 +293,8 @@ zh-CN:
         name: 名字
         #original_hash: a6b9d69
         birthday: 生日
+        #original_hash: c5497bc
+        registration_competition_events: 项目
       competition_tab:
         #original_hash: 4f9be05
         content: 内容
@@ -861,8 +866,6 @@ zh-CN:
       registration_closed: 报名已结束
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: 报名不能同时被删除和通过。
-      #original_hash: bf9a828
-      can_register: 用户必须能报名比赛
       #original_hash: a38d024
       must_register: 至少选择一个项目
     registration_info_people:
@@ -908,6 +911,51 @@ zh-CN:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} for %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards: '祝好，%{people}。'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: '你已报名%{comp_name}'
+        #original_hash: 8374583
+        registered_html: '你刚报名了%{comp_name}。'
+        #original_hash: 9238412
+        on_waiting_list: '你的报名进入候选列表，当前共有%{n_total}%{people}在等待。'
+        #original_hash: f5b00be
+        approval_info_html: '报名审核时会发邮件通知你。请注意你的报名并不会被自动审核。联系主办方或者登录比赛官网以查看审核条件。你也可以在%{here}查看报名状态。'
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: '你报名的%{comp_name}已通过审核'
+        #original_hash: 24d2883
+        message_html: '你报名的%{comp_name}已通过审核。可以在%{here}查看报名状态。'
+        #original_hash: 1852cbf
+        see_you_soon: '期待在%{comp_name}与你相见！'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: '你报名的%{comp_name}已被移至候选列表'
+        #original_hash: 6fd0a8e
+        moved_html: '你报名的%{comp_name}已移至候选列表。可能原因是：'
+        causes:
+          #original_hash: eadfc0d
+          accepted: 你的报名被误审核
+          #original_hash: 2ac6d84
+          withdrawal: 你已申请退款
+        #original_hash: 8f7358f
+        email_if_error: 如果你认为有问题，请回复本邮件。
+      deleted:
+        #original_hash: 268e248
+        mail_subject: '你报名的%{comp_name}已被删除'
+        #original_hash: f66ae63
+        message_html: '你报名的%{comp_name}已被删除。可能的原因是：'
+        causes:
+          #original_hash: 978944c
+          missing_info: 你没有提交所有需要的资料
+          #original_hash: 788f2ec
+          incomplete: 你不满足报名条件（例如提前支付报名费）
+          #original_hash: 1e225f0
+          registrations_full: 选手数量已经达到限制
+          #original_hash: 0d4cce9
+          multiple_registrations: 你多次报名
     list:
       #original_hash: 8b7631c
       title: '%{comp}的报名列表'
@@ -978,8 +1026,8 @@ zh-CN:
     check_registration_information: 请查看比赛信息页的报名部分，你可能需要支付报名费以通过审核。
     #original_hash: ea2b586
     have_registered: '你已经报名了%{comp}。可以在下面查看你的报名信息。'
-    #original_hash: 4d966e0
-    entry_fee: 报名费是
+    #original_hash: fa52a9b
+    entry_fee: '报名费是%{fee}'
     #original_hash: 3c9141f
     contact_organizer: 如果你想变更报名信息请联系主办方。
     #original_hash: 59354fd
@@ -1191,8 +1239,6 @@ zh-CN:
       end_date_before_start: 结束日期不能早于开始日期。
       #original_hash: be3933b
       span_too_many_days: '比赛不能持续超过%{max_days}天。'
-    #original_hash: f42a238
-    unscheduled: 不定期
     new:
       #original_hash: 1208df7
       create_competition: 创建比赛
