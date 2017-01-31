@@ -116,13 +116,13 @@ pt-BR:
       cellName: Final
     g:
       #original_hash: e861dcf
-      #original_hash: 4c66ad0
       name: Terceira rodada combinada
       #original_hash: 86f4b05
-      #original_hash: 4c66ad0
       cellName: Terceira (combinada)
     h:
+      #original_hash: 4c66ad0
       name: Qualificação combinada
+      #original_hash: 4c66ad0
       cellName: Qualificação combinada
   common:
     #original_hash: 2513cf0
@@ -139,6 +139,9 @@ pt-BR:
     average: Média
     #original_hash: e7f6fc5
     solves: Resoluções
+    date:
+      #original_hash: acb6273
+      no_date: Nenhuma data
     user:
       #original_hash: 603a218
       wca_id: ID da WCA
@@ -1351,8 +1354,6 @@ pt-BR:
       end_date_before_start: A data de término não pode ser anterior à data de início.
       #original_hash: be3933b
       span_too_many_days: 'A competição não pode durar mais que %{max_days} dias.'
-    #original_hash: f42a238
-    unscheduled: Não agendada
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
