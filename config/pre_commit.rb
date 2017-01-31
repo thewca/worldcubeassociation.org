@@ -5,6 +5,7 @@ illegal_strs = {
   "\t" => "tab",
   "\r" => "carriage return",
   "\uFEFF" => "byte order marker (BOM)",
+  ("WCA " + "id") => "We prefer 'WCA ID', see https://github.com/thewca/worldcubeassociation.org/issues/268",
 }
 ARGV.each do |file|
   File.foreach(file).with_index do |line, line_num|
