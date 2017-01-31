@@ -119,7 +119,7 @@ module ApplicationHelper
       options[:separator] = '-'
       date_range(from_date, to_date, options)
     else
-      t "common.date.no_date", locale: locale
+      t "common.date.no_date"
     end
   end
 
