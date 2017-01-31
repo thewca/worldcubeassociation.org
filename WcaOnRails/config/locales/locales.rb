@@ -37,6 +37,10 @@ module Locales
       "flag_id": "cn",
       "name": "简体中文",
     },
+    "zh-TW": {
+      "flag_id": "tw",
+      "name": "繁體中文",
+    },
     "nl": {
       "flag_id": "nl",
       "name": "Nederlands",

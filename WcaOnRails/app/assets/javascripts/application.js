@@ -32,6 +32,7 @@
 //= require moment/pl.js
 //= require moment/pt-br.js
 //= require moment/zh-cn.js
+//= require moment/zh-tw.js
 //= require moment/nl.js
 //= require moment/ru.js
 //= require bootstrap-datetimepicker
