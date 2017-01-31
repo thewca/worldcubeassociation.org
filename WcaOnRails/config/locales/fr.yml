@@ -704,7 +704,7 @@ fr:
       #original_hash: 0ef06c8
       organizations: Organisations Nationales
       #original_hash: d790b40
-      faq: Questions fréquentes
+      faq: Questions Fréquentes
       #original_hash: a34b69f
       contact: Informations de Contact
       #original_hash: cf1d2c9
@@ -1112,9 +1112,9 @@ fr:
       edit: Éditer
       #original_hash: 0ab725c
       country_plural:
-        zero: pas de pays
-        one: 1 pays
         other: '%{count} pays'
+        one: 1 pays
+        zero: pas de pays
       #original_hash: 1feee0e
       export_csv: Exporter en CSV
       #original_hash: 84add5b
@@ -1267,9 +1267,9 @@ fr:
       website: Site internet
       #original_hash: 680567f
       organizer_plural:
-        zero: Organisateur
-        one: Organisateur
         other: Organisateurs
+        one: Organisateur
+        zero: Organisateur
       #original_hash: 6afa61e
       delegate:
         zero: Délégués WCA
@@ -1473,9 +1473,9 @@ fr:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Pas de compétition
-        one: 1 compétition
         other: '%{count} compétitions'
+        one: 1 compétition
+        zero: Pas de compétition
       #original_hash: e3528ec
       label: >-
         Compétitions à proximité (à %{days} jours près et dans un rayon de
@@ -1649,7 +1649,7 @@ fr:
         title: Comment puis-je trouver une compétition WCA ?
         content:
           #original_hash: d195cec
-          '1': Allez voir la liste des <a href='/competitions'>compétitions</a>
+          '1': Allez voir la liste des <a href='/competitions'>compétitions</a>.
       '3':
         #original_hash: af6ad12
         title: >-
@@ -1689,8 +1689,8 @@ fr:
           #original_hash: 3d4eb1c
           '1': >-
             Si l'organisation de compétition vous intéresse, il est très
-            fortement recommandé de participer à plusieurs compétitions comme un
-            compétiteur, afin d'avoir un peu d'expérience.
+            fortement recommandé de participer à plusieurs compétitions en tant
+            que compétiteur, afin d'avoir un peu d'expérience.
           #original_hash: be305b8
           '2': >-
             Les compétitions WCA doivent respecter le <a target='_blank'
@@ -1715,7 +1715,7 @@ fr:
             document</a> pour plus d'informations. (En cas de conflit entre les
             informations présentes dans ce document et le Règlement WCA, les
             informations présente dans le Règlement WCA doivent être prises en
-            compte.
+            compte.)
       '6':
         #original_hash: 8005a61
         title: >-
@@ -1728,10 +1728,10 @@ fr:
             compétition WCA sont mis en ligne.
           #original_hash: c5ad7a3
           '2': >-
-            Les comptes WCA vous permette de nous prouver qui vous êtes. Cela
+            Les comptes WCA vous permettent de nous prouver qui vous êtes. Cela
             vous permet également d'ajouter une photo à votre profil WCA, et de
-            vous inscrire à des compétitions. Cela empêche également d'autres
-            gens de se faire passer pour vous.
+            vous inscrire à des compétitions. Cela empêche enfin d'autres gens
+            de se faire passer pour vous.
           #original_hash: 9ff083a
           '3': '%{current_user_status}'
       '7':
@@ -1791,7 +1791,7 @@ fr:
           La World Cube Association gouverne les compétitions pour tous les
           casse-tête de type Rubik, et tous les autres casse-tête que l'on
           manipule en tournant des faces. Le plus connu de ces casse-tête est le
-          Rubik's cube, inventé par le professeur hongrois Erno Rubik. Une
+          Rubik's cube, inventé par le professeur hongrois Ernő Rubik. Une
           sélection de ces casse-tête a été choisie comme épreuves officielles
           de la WCA.
         #original_hash: c8ecd24
@@ -1816,10 +1816,10 @@ fr:
       #original_hash: d855b50
       board_html: >-
         La World Cube Association est dirigée par le <strong>WCA Board</strong>
-        (bureau de la WCA), constitué des membres suivant:
+        (bureau de la WCA), constitué des membres suivants :
       #original_hash: b0c72a9
       committees: >-
-        Les comités suivant sont responsables des activités opérationnelles de
+        Les comités suivants sont responsables des activités opérationnelles de
         la WCA :
       wdc:
         #original_hash: 853bffa
@@ -1856,14 +1856,15 @@ fr:
         Les <strong>Délégués WCA</strong> sont des membres de la WCA
         responsables de s'assurer que les compétitions WCA se déroulent selon la
         mission, le règlement, et l'esprit de la WCA. La WCA distingue les
-        statuts suivant : <strong>Délégués WCA Senior</strong>, <strong>Délégués
-        WCA</strong>, et <strong>Candidat Délégué WCA</strong>%{see_link}. En
-        plus des devoirs d'un Délégué WCA, un Délégué WCA Senior est
-        responsables de la gestion des Délégués dans sa zone, et peut également
-        être contacté par la communauté pour des affaires régionales. Les
-        nouveaux Délégués sont d'abord listés en tant que Candidat Délégués WCA,
-        et doivent montrer qu'ils sont capables de gérer des compétitions avec
-        succès avant d'être listés comme Délégué WCA.
+        statuts suivants : <strong>Délégués WCA Senior</strong>,
+        <strong>Délégués WCA</strong>, et <strong>Candidats Délégués
+        WCA</strong> %{see_link}. En plus des devoirs d'un Délégué WCA, un
+        Délégué WCA Senior est responsable de la gestion des Délégués dans sa
+        zone, et peut également être contacté par la communauté pour des
+        affaires régionales. Les nouveaux Délégués sont d'abord listés en tant
+        que Candidats Délégués WCA, et doivent montrer qu'ils sont capables de
+        gérer des compétitions avec succès avant d'être listés comme Délégués
+        WCA.
       #original_hash: 27d18ac
       see_link_html: '(voir %{link})'
       #original_hash: 5b01fcc
@@ -1896,7 +1897,7 @@ fr:
     #original_hash: b5c2eaa
     info_alert_html: >-
       Avant de contacter l'une des équipes sur cette page, merci de jeter un œil
-      à notre %{link} !
+      à nos %{link} !
     #original_hash: 2b023eb
     questions_and_comments_html: >-
       Pour les questions, commentaires, et suggestions à propos du site
