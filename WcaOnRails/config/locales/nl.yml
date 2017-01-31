@@ -1008,6 +1008,70 @@ nl:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} voor %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards: 'Met kubusvormige groeten, %{people}'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: 'Je hebt je aangemeld voor %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Je hebt je zojuist aangemeld voor %{comp_name}.'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          Je aanmelding staat op de wachtlijst. Op de wachtlijst staan momenteel
+          %{n_total} %{people}.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Je ontvangt een e-mail als je aanmelding is geaccepteerd. Let op dat
+          aanmeldingen niet automatisch worden geaccepteerd. Om te zien wat de
+          voorwaarden zijn voor aanmeldingen, kun je op de website kijken of de
+          organisatoren een e-mail sturen. De status van je aanmelding staat
+          %{here}.
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: 'Je aanmelding voor %{comp_name} is geaccepteerd.'
+        #original_hash: 24d2883
+        message_html: >-
+          Je aanmelding voor %{comp_name} is geaccepteerd. De status van je
+          aanmelding staat %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: 'We kijken ernaar uit om je te zien tijdens %{comp_name}!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: 'Je aanmelding is op de wachtlijst geplaatst voor %{comp_name}'
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          Je aanmelding voor %{comp_name} is op de wachtlijst geplaatst.
+          Mogelijke redenen hiervoor zijn:
+        causes:
+          #original_hash: eadfc0d
+          accepted: Je aanmelding was per abuis geaccepteerd
+          #original_hash: 2ac6d84
+          withdrawal: Je hebt gevraagd om terugtrekking
+        #original_hash: 8f7358f
+        email_if_error: >-
+          Als je denkt dat er een fout is gemaakt, stuur dan een antwoord op
+          deze mail.
+      deleted:
+        #original_hash: 268e248
+        mail_subject: 'Je aanmelding voor %{comp_name} is verwijderd'
+        #original_hash: f66ae63
+        message_html: >-
+          Je aanmelding voor %{comp_name} is verwijderd. Mogelijke oorzaken
+          zijn:
+        causes:
+          #original_hash: 978944c
+          missing_info: Je hebt niet alle vereiste gegevens ingestuurd
+          #original_hash: 788f2ec
+          incomplete: >-
+            Je hebt niet aan de aanmeldingsvoorwaarden voldaan (bijv. het van
+            tevoren betalen van het aanmeldingsbedrag)
+          #original_hash: 1e225f0
+          registrations_full: >-
+            Het maximumaantal deelnemers is bereikt en er zijn op dit moment
+            geen plekken meer vrij
+          #original_hash: 0d4cce9
+          multiple_registrations: Je hebt je twee of meer keer aangemeld
     list:
       #original_hash: 8b7631c
       title: 'Aanmeldingen voor %{comp}'
@@ -1485,7 +1549,7 @@ nl:
       tabs_list_title: Beheren tabbladen
       #original_hash: 40f9491
       tabs_introduction_text: >-
-        Here kun je tabbladen toevoegen en bewerken die op de wedstrijdpagina
+        Hier kun je tabbladen toevoegen en bewerken die op de wedstrijdpagina
         worden getoond.
     edit:
       #original_hash: 5f1f5b8
