@@ -1,0 +1,8 @@
+ru:
+  time_will_tell:
+    date_range:
+      different_months_same_year: "%{from_day} %{from_month} %{sep} %{to_day} %{to_month}"
+      different_years: "%{from_day} %{from_month} %{from_year} %{sep} %{to_day} %{to_month} %{to_year}"
+      same_month: "%{from_day} %{sep} %{to_day} %{month}"
+      same_date: "%{from_day} %{month}"
+      with_year: "%{date_range}, %{year}"

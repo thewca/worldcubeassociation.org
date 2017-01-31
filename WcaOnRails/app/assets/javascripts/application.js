@@ -33,6 +33,7 @@
 //= require moment/pt-br.js
 //= require moment/zh-cn.js
 //= require moment/nl.js
+//= require moment/ru.js
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table
