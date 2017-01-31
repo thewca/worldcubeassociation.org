@@ -72,8 +72,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the body" do
       expect(mail.body.encoded).to match("Your registration is on the waiting list, which currently has 2 people on it.")
       expect(mail.body.encoded).to match(competition_register_url(registration.competition))
-      names = competition_without_organizers.delegates.map(&:name).map { |n| ERB::Util.html_escape(n) }.sort
-      expect(mail.body.encoded).to match("Regards, #{names.to_sentence}\\.")
+      expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_without_organizers.organizers_or_delegates)}.")
     end
 
     it "pluralizes correctly" do
