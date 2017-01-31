@@ -103,12 +103,12 @@ it:
       #original_hash: c6136b1
       name: Primo turno Combinato
       #original_hash: dffa9ea
-      cellName: Primo turno Combinato
+      cellName: Primo Combinato
     e:
       #original_hash: 659c53f
-      name: Secondo Turno Combinato
+      name: Secondo turno Combinato
       #original_hash: b6e1e1c
-      cellName: Secondo turno Combinato
+      cellName: Secondo Combinato
     f:
       #original_hash: 672b22c
       name: Finale
@@ -118,7 +118,7 @@ it:
       #original_hash: e861dcf
       name: Terzo turno Combinato
       #original_hash: 86f4b05
-      cellName: Terzo turno Combinato
+      cellName: Terzo Combinato
     h:
       #original_hash: 4c66ad0
       name: Qualificazione combinata
@@ -139,6 +139,9 @@ it:
     average: Media
     #original_hash: e7f6fc5
     solves: Risoluzioni
+    date:
+      #original_hash: acb6273
+      no_date: Nessuna data
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -151,9 +154,9 @@ it:
       invalid: non valido
     #original_hash: 49d0140
     days:
-      other: '%{count} giorni'
-      one: un giorno
       zero: zero giorni
+      one: un giorno
+      other: '%{count} giorni'
     #original_hash: 203e1b3
     these_events:
       zero: nessun evento
@@ -226,6 +229,8 @@ it:
         phone_number: Numero di telefono
         #original_hash: 7044004
         notes: Note
+        #original_hash: 57eaf24
+        user_preferred_events: Eventi preferiti
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -281,6 +286,8 @@ it:
         remarks: Note
         #original_hash: c305010
         clone_tabs: Vorrei clonare tutte le schede e il loro contenuto
+        #original_hash: c5497bc
+        competition_events: Eventi
       registration:
         #original_hash: 3c23a67
         guests: Accompagnatori
@@ -292,6 +299,8 @@ it:
         name: Nome
         #original_hash: a6b9d69
         birthday: Data di nascita
+        #original_hash: c5497bc
+        registration_competition_events: Eventi
       competition_tab:
         #original_hash: 4f9be05
         content: Contenuto
@@ -803,8 +812,6 @@ it:
       password: Password
       #original_hash: 3fc6dbe
       member_of: Membro di
-      #original_hash: 57eaf24
-      preferred_events: Eventi preferiti
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selezionare gli eventi preferiti velocizza il processo di registrazione
@@ -953,8 +960,6 @@ it:
       #original_hash: 92aa857
       unknown_wca_id_html: 'Il WCA ID %{link_id} non esiste.'
   registrations:
-    #original_hash: c5497bc
-    events: Eventi
     errors:
       #original_hash: 44ab952
       need_name: Serve un nome
@@ -972,8 +977,6 @@ it:
       cannot_be_deleted_and_accepted: >-
         Non è possibile contemporaneamente accettare e cancellare una
         registrazione.
-      #original_hash: bf9a828
-      can_register: L'utente deve essere in grado di registrarsi per la competizione
       #original_hash: a38d024
       must_register: è necessario registrarsi almeno a un evento
     registration_info_people:
@@ -1025,6 +1028,72 @@ it:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} per la competizione %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards_html: 'A presto, %{people}'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: 'Ti sei registrato per la competizione %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Ti sei registrato per la competizione %{comp_name}'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          La tua registrazione è in attesa di approvazione, al momento ci sono
+          %{n_total} %{people} in attesa. In caso non fosse ancora stato
+          raggiunto il limite partecipanti, a breve sarai accettato.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Ti sarà inviata una email appena la tua registrazione sarà accettata.
+          Nota che le registrazioni non sono approvate automaticamente, ma a
+          mano. Per vedere i criteri di approvazione visita il sito web della
+          competizione o contatta un organizzatore. Puoi controllare lo stato
+          della tua registrazione %{here}.
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: >-
+          La tua registrazione per la competizione %{comp_name} è stata
+          accettata
+        #original_hash: 24d2883
+        message_html: >-
+          La tua registrazione per la competizione %{comp_name} è stata
+          accettata. Come sempre, puoi controllare lo stato della tua
+          registrazione %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: 'Speriamo di vederti al %{comp_name}!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: 'Sei stato spostato in lista d''attesa per il %{comp_name}'
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          La tua registrazione per il %{comp_name} è stata spostata in lista
+          d'attesa. Possibili cause:
+        causes:
+          #original_hash: eadfc0d
+          accepted: La tua registrazione è stata accettata per sbaglio
+          #original_hash: 2ac6d84
+          withdrawal: Hai chiesto di essere rimosso
+        #original_hash: 8f7358f
+        email_if_error: 'Se credi sia un errore, rispondi a questa email.'
+      deleted:
+        #original_hash: 268e248
+        mail_subject: 'La tua registrazione per il %{comp_name} è stata cancellata'
+        #original_hash: f66ae63
+        message_html: >-
+          La tua registrazione per %{comp_name} è stata cancellata. Possibili
+          cause:
+        causes:
+          #original_hash: 978944c
+          missing_info: Non hai fornito tutti i dettagli richiesti
+          #original_hash: 788f2ec
+          incomplete: >-
+            Non hai rispettato i criteri di registrazione (per esempio, il
+            pagamento della tassa d'iscrizione in anticipo)
+          #original_hash: 1e225f0
+          registrations_full: >-
+            Il limite di partecipanti è stato raggiunto e non ci sono più posti
+            disponibili
+          #original_hash: 0d4cce9
+          multiple_registrations: Ti sei registrato due o più volte
     list:
       #original_hash: 8b7631c
       title: 'Registrazioni per la competizione %{comp}'
@@ -1032,9 +1101,9 @@ it:
       edit: Modifica
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} nazioni'
-        one: Una nazione
         zero: Nessuna nazione
+        one: Una nazione
+        other: '%{count} nazioni'
       #original_hash: 1feee0e
       export_csv: Esporta in CSV
       #original_hash: 84add5b
@@ -1094,16 +1163,16 @@ it:
       sono ancora aperte.
     #original_hash: e1301c4
     please_sign_in_html: >-
-      %{sign_in} per registrarti per la competizione %{comp}. Se non hai ancora
-      un account WCA, puoi crearne uno %{here}
+      %{sign_in} per registrarti per il %{comp}. Se non hai ancora un account
+      WCA, puoi crearne uno %{here}
     #original_hash: 89b4e7f
     greeting: 'Ciao, %{name}!'
     #original_hash: fb34a17
     please_fix_profile_html: >-
-      Per poterti registrare alla competizione %{comp}, devi risolvere i
-      seguenti problemi con il tuo %{profile}:
+      Per poterti registrare al %{comp}, devi risolvere i seguenti problemi con
+      il tuo %{profile}:
     #original_hash: 855ca9c
-    can_register: 'Qui puoi registrarti per la competizione %{comp}.'
+    can_register: 'Qui puoi registrarti per il %{comp}.'
     #original_hash: 4167ed7
     check_registration_information: >-
       Controlla le informazioni di registrazione per verificare se è necessario
@@ -1111,10 +1180,10 @@ it:
       d'iscrizione.
     #original_hash: ea2b586
     have_registered: >-
-      Ti sei registrato alla competizione %{comp}. Qui puoi vedere le
-      informazioni della tua registrazione.
-    #original_hash: 4d966e0
-    entry_fee: La tassa d'iscrizione è %{fee}
+      Ti sei registrato al %{comp}. Qui puoi vedere le informazioni della tua
+      registrazione.
+    #original_hash: fa52a9b
+    entry_fee: 'La tassa d''iscrizione è %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
     #original_hash: 59354fd
@@ -1186,12 +1255,12 @@ it:
       website: Sito Web
       #original_hash: 680567f
       organizer_plural:
-        other: Organizzatori
-        one: Organizzatore
         zero: Nessun organizzatore
+        one: Organizzatore
+        other: Organizzatori
       #original_hash: 6afa61e
       delegate:
-        zero: Delegati WCA
+        zero: Nessun Delegato WCA
         one: Delegato WCA
         other: Delegati WCA
       #original_hash: b37456c
@@ -1239,7 +1308,7 @@ it:
         #original_hash: cbe8a54
         recent: 'Competizioni recenti (ultimi %{count} giorni)'
         #original_hash: 914742f
-        upcoming: Competizioni imminenti
+        upcoming: Competizioni future
       #original_hash: 6684214
       no_access: Non hai accesso a questa pagina!
       tooltips:
@@ -1364,8 +1433,6 @@ it:
       end_date_before_start: La data di fine competizione deve essere successiva alla data di inizio
       #original_hash: be3933b
       span_too_many_days: 'La competizione non può durare più di %{max_days} giorni.'
-    #original_hash: f42a238
-    unscheduled: non programmata
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -1393,9 +1460,9 @@ it:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} competizioni'
-        one: Una competizione
         zero: Nessuna competizione
+        one: Una competizione
+        other: '%{count} competizioni'
       #original_hash: e3528ec
       label: 'Competizioni vicine (entro %{days} giorni e %{kms} km)'
       #original_hash: 3446062
@@ -1462,7 +1529,7 @@ it:
         #original_hash: 4c9f914
         delegate_report: Report
         #original_hash: b233e77
-        registration: Registrazione
+        registration: Registrazioni
         #original_hash: d672995
         register: Registrati
         #original_hash: 855bd26
