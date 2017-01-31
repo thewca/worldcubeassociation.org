@@ -192,4 +192,24 @@
       </div>
     <% end %>
   </div>
+
+  <h2><%= t('national_organizations.how_to.title') %></h2>
+  <p><%= t('national_organizations.how_to.description') %></p>
+
+  <h3><%= t('national_organizations.requirements.title') %></h3>
+  <ol>
+    <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
+    <% t('national_organizations.requirements.list', locale: :en).each do |key, en_value| %>
+      <li><%= t("national_organizations.requirements.list.#{key}") %></li>
+    <% end %>
+  </ol>
+
+  <h3><%= t('national_organizations.application_instructions.title') %></h3>
+  <p><%= t('national_organizations.application_instructions.description') %></p>
+  <ol>
+    <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
+    <% t('national_organizations.application_instructions.list', locale: :en).each do |key, en_value| %>
+      <li><%= t("national_organizations.application_instructions.list.#{key}") %></li>
+    <% end %>
+  </ol>
 </div>
