@@ -295,6 +295,8 @@ hu:
         name: Név
         #original_hash: a6b9d69
         birthday: Születési dátum
+        #original_hash: c5497bc
+        registration_competition_events: Versenyszámok
       competition_tab:
         #original_hash: 4f9be05
         content: Tartalom
@@ -974,8 +976,6 @@ hu:
       registration_closed: A versenyre való regisztráció lezárult
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: A regisztráció egyidejű törlése és elfogadása nem lehetséges.
-      #original_hash: bf9a828
-      can_register: A felhasználónak képesnek kell lennie regisztrálni versenyekre.
       #original_hash: a38d024
       must_register: legalább egy versenyszámra regisztrálni kell
     registration_info_people:
@@ -1111,8 +1111,8 @@ hu:
     have_registered: >-
       Regisztráltál a(z) %{comp} versenyre. A regisztrációdról információkat
       alább találsz.
-    #original_hash: 4d966e0
-    entry_fee: A regisztrációs díj
+    #original_hash: fa52a9b
+    entry_fee: 'A regisztrációs díj: %{fee}'
     #original_hash: 3c9141f
     contact_organizer: 'Lépj kapcsolatba a szervezővel, ha változtatni szeretnél.'
     #original_hash: 59354fd
