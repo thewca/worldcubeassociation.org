@@ -7,7 +7,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   [VirtualBox](https://www.virtualbox.org/).
 - `git clone https://github.com/thewca/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
-- `echo "{}" > WcaOnRails/app/views/regulations/wca-regulations.json` - Set up an empty wca-regulations.json file to ensure api tests pass. Alternatively, you can build the Regulations locally by following [this guide](https://github.com/thewca/worldcubeassociation.org/wiki/Building-Regulations-locally).
 
 ## Run in Vagrant (easier and gets everything working)
 - `vagrant up all` - Once the VM finishes initializing (which can take some time),
