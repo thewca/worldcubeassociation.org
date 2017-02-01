@@ -229,6 +229,8 @@ pt-BR:
         phone_number: Número de telefone
         #original_hash: 7044004
         notes: Detalhes
+        #original_hash: 57eaf24
+        user_preferred_events: Eventos favoritos
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -286,17 +288,23 @@ pt-BR:
         remarks: Observações
         #original_hash: c305010
         clone_tabs: Eu quero copiar todas as abas também
+        #original_hash: c5497bc
+        competition_events: Eventos
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
         #original_hash: fce06e2
         comments: Comentários
+        #original_hash: dc9d458
+        paid_entry_fees: Pago
         #original_hash: bae7d5b
         status: Status
         #original_hash: 709a232
         name: Nome
         #original_hash: a6b9d69
         birthday: Data de nascimento
+        #original_hash: c5497bc
+        registration_competition_events: Eventos
       competition_tab:
         #original_hash: 4f9be05
         content: Conteúdo
@@ -808,8 +816,6 @@ pt-BR:
       password: Senha
       #original_hash: 3fc6dbe
       member_of: Membro de
-      #original_hash: 57eaf24
-      preferred_events: Eventos favoritos
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selecionar seus eventos favoritos agiliza o processo de inscrição em
@@ -947,8 +953,6 @@ pt-BR:
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID da WCA %{link_id} não existe.'
   registrations:
-    #original_hash: c5497bc
-    events: Eventos
     errors:
       #original_hash: 44ab952
       need_name: precisa ter um nome
@@ -964,8 +968,6 @@ pt-BR:
       registration_closed: As inscrições estão encerradas
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceita e excluída ao mesmo tempo.
-      #original_hash: bf9a828
-      can_register: O usuário deve estar apto a se inscrever em competições
       #original_hash: a38d024
       must_register: deve se inscrever em pelo menos um evento
     registration_info_people:
@@ -1017,6 +1019,68 @@ pt-BR:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} - %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards_html: 'Saudações, %{people}.'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: 'Sua inscrição em %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Você se inscreveu em %{comp_name}.'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          Sua inscrição está na lista de pendências, que tem atualmente
+          %{n_total} %{people}.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Você receberá um email quando sua inscrição for aprovada. As
+          inscrições não são aprovadas automaticamente. Para ver os critérios
+          necessários, visite o website da competição ou contate os
+          organizadores. Você pode verificar a situação de sua inscrição
+          %{here}.
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: 'Sua inscrição em %{comp_name} foi aprovada'
+        #original_hash: 24d2883
+        message_html: >-
+          Sua inscrição em %{comp_name} foi aprovada. Você pode verificar a
+          situação de sua inscrição %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: 'Esperamos vê-lo(a) em %{comp_name}!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: 'Você foi movido para a lista de pendências de %{comp_name}'
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          Sua inscrição em %{comp_name} foi movida para a lista de pendências.
+          As possíveis causas são:
+        causes:
+          #original_hash: eadfc0d
+          accepted: Sua inscrição foi aprovada acidentalmente
+          #original_hash: 2ac6d84
+          withdrawal: Você pediu para ser removido
+        #original_hash: 8f7358f
+        email_if_error: >-
+          Se você acredita que isso seja um erro, por favor responda a este
+          email.
+      deleted:
+        #original_hash: 268e248
+        mail_subject: 'Sua inscrição em %{comp_name} foi excluída'
+        #original_hash: f66ae63
+        message_html: 'Sua inscrição em %{comp_name} foi excluída. As possíveis causas são:'
+        causes:
+          #original_hash: 978944c
+          missing_info: Você não preencheu todos as informações necessárias
+          #original_hash: 788f2ec
+          incomplete: >-
+            Você não preencheu os critérios para inscrição (por exemplo, pagar a
+            taxa de inscrição antecipadamente)
+          #original_hash: 1e225f0
+          registrations_full: >-
+            O limite de competidores foi atingido e não há mais vagas
+            disponíveis
+          #original_hash: 0d4cce9
+          multiple_registrations: Você se inscreveu mais de uma vez
     list:
       #original_hash: 8b7631c
       title: 'Inscrições do %{comp}'
@@ -1060,6 +1124,8 @@ pt-BR:
     profile: perfil
     #original_hash: c0063c3
     register: Inscrever!
+    #original_hash: f484f15
+    refund: Devolver pagamento
     #original_hash: a9af643
     update: Atualizar Inscrição
     #original_hash: f6fdbe4
@@ -1102,8 +1168,8 @@ pt-BR:
       fazer algo mais, como pagar uma taxa de inscrição.
     #original_hash: ea2b586
     have_registered: 'Você se inscreveu no %{comp}. Veja suas informações abaixo.'
-    #original_hash: 4d966e0
-    entry_fee: A taxa de inscrição é
+    #original_hash: fa52a9b
+    entry_fee: 'A taxa de inscrição é %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Contacte os organizadores se você quer fazer alguma mudança.
     #original_hash: 59354fd
@@ -1113,6 +1179,12 @@ pt-BR:
       detalhes.
     #original_hash: 58b1a3c
     accepted: Sua inscrição foi aprovada!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: 'Você já pagou %{paid} do total de %{total_entry_fee} de sua inscrição.'
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Você já pagou totalmente a taxa de inscrição de %{paid}.'
+    #original_hash: 05495d6
+    payment_button_text: 'Pague sua taxa de inscrição de %{entry_fee} com cartão de crédito'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para agilizar a inscrição no futuro, você pode escolher seus eventos
@@ -1153,6 +1225,12 @@ pt-BR:
       not_confirmed_visible: Esta competição não está confirmada mas está visível
       #original_hash: 0f44e45
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
+      #original_hash: a821396
+      stripe_connected: >-
+        Você conectou sua conta do Stripe e já pode receber pagamentos para esta
+        competição.
+      #original_hash: 0a4bb53
+      stripe_not_connected: Houve um problema e não foi possível conectar sua conta do Stripe.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
