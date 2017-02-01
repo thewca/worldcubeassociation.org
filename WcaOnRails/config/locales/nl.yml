@@ -116,13 +116,13 @@ nl:
       cellName: Finale
     g:
       #original_hash: e861dcf
+      #original_hash: 4c66ad0
       name: Gecombineerde derde ronde
       #original_hash: 86f4b05
+      #original_hash: 4c66ad0
       cellName: Gecombineerde derde
     h:
-      #original_hash: 4c66ad0
       name: Gecombineerde kwalificatie
-      #original_hash: 4c66ad0
       cellName: Gecombineerde kwalificatie
   common:
     #original_hash: 2513cf0
@@ -144,7 +144,7 @@ nl:
       no_date: Geen datum
     user:
       #original_hash: 603a218
-      wca_id: WCA ID
+      wca_id: WCA id
       #original_hash: e0f64f7
       citizen_of: Land
     #original_hash: 3fc0ba1
@@ -190,11 +190,11 @@ nl:
         #original_hash: eeb6920
         name: Volledige naam
         #original_hash: 603a218
-        wca_id: WCA ID
+        wca_id: WCA id
         #original_hash: cb77bea
-        unconfirmed_wca_id: Onbevestigde WCA ID
+        unconfirmed_wca_id: Onbevestigde WCA id
         #original_hash: 8ed8874
-        login: E-mailadres of WCA ID
+        login: E-mailadres of WCA id
         #original_hash: 1528d10
         country_iso2: Land
         #original_hash: ab58155
@@ -229,6 +229,8 @@ nl:
         phone_number: Telefoonnummer
         #original_hash: 7044004
         notes: Opmerkingen
+        #original_hash: 57eaf24
+        user_preferred_events: Voorkeur wedstrijdonderdelen
       competition:
         #original_hash: 89f89c0
         id: id
@@ -284,11 +286,15 @@ nl:
         remarks: Opmerkingen
         #original_hash: c305010
         clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
+        #original_hash: c5497bc
+        competition_events: Wedstrijdonderdelen
       registration:
         #original_hash: 3c23a67
         guests: Gasten
         #original_hash: fce06e2
         comments: Opmerkingen
+        #original_hash: dc9d458
+        paid_entry_fees: Betaald
         #original_hash: bae7d5b
         status: Status
         #original_hash: 709a232
@@ -613,9 +619,9 @@ nl:
   devise:
     failure:
       #original_hash: 1186218
-      invalid: 'Onjuist e-mailadres, WCA ID of wachtwoord.'
+      invalid: 'Onjuist e-mailadres, WCA id of wachtwoord.'
       #original_hash: 1186218
-      not_found_in_database: 'Onjuist e-mailadres, WCA ID of wachtwoord.'
+      not_found_in_database: 'Onjuist e-mailadres, WCA id of wachtwoord.'
   wca:
     errors:
       messages:
@@ -636,7 +642,7 @@ nl:
       scopes:
         #original_hash: 1920e95
         public: >-
-          Toegang tot je publieke gegevens (naam, WCA ID, geslacht, land en
+          Toegang tot je publieke gegevens (naam, WCA id, geslacht, land en
           profielfoto)
         #original_hash: d4003be
         dob: Toegang tot je geboortedatum
@@ -761,26 +767,26 @@ nl:
       unavailable: Gevraagde landinstellingen niet beschikbaar.
     claim_wca_id:
       #original_hash: f28bf87
-      title: Claim je WCA ID
+      title: Claim je WCA id
       #original_hash: 1b44f6d
       competition: wedstrijd
       #original_hash: b396bfa
-      already_have_html: 'Je hebt al een WCA ID %{wca_id}.'
+      already_have_html: 'Je hebt al een WCA id %{wca_id}.'
       #original_hash: 87f1062
       already_claimed_html: >-
-        Je hebt WCA ID %{wca_id} geclaimd. Neem contact op met %{delegate} als
+        Je hebt WCA id %{wca_id} geclaimd. Neem contact op met %{delegate} als
         je nog vragen hebt.
       #original_hash: 0660b5d
       info_competed_before: >-
         Als je al eens aan een WCA-wedstijd hebt deelgenomen, kun je verzoeken
-        om je WCA ID aan je WCA-account te koppelen.
+        om je WCA id aan je WCA-account te koppelen.
       #original_hash: 7d605f8
       info_never_competed_html: >-
         Als je nog nooit aan een WCA-wedstrijd hebt meegedaan, ga dan naar een
-        %{comp}! Je WCA ID wordt aangemaakt zodra de resultaten van je eerste
+        %{comp}! Je WCA id wordt aangemaakt zodra de resultaten van je eerste
         wedstrijd zijn gepubliceerd.
       #original_hash: f28bf87
-      submit_value: Claim WCA ID
+      submit_value: Claim WCA id
     edit_avatar_thumbnail:
       #original_hash: 79f14eb
       current: 'Huidige thumbnail:'
@@ -799,8 +805,6 @@ nl:
       password: Wachtwoord
       #original_hash: 3fc6dbe
       member_of: Lid van
-      #original_hash: 57eaf24
-      preferred_events: Voorkeursonderdelen
       #original_hash: 42619dd
       preferred_events_desc: >-
         Door je voorkeursonderdelen aan te geven wordt het makkelijker om je aan
@@ -821,11 +825,11 @@ nl:
       pending_avatar_confirmation: Dit account wacht op bevestiging van een nieuwe profielfoto.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
-        Dit account wacht op %{delegate} om de geclaimde WCA ID %{wca_id} te
+        Dit account wacht op %{delegate} om de geclaimde WCA id %{wca_id} te
         bevestigen.
       #original_hash: fc7269a
       pending_claim_mail_confirmation_html: >-
-        De gebruiker heeft de WCA ID %{wca_id} geclaimd. De gedelegeerde
+        De gebruiker heeft de WCA id %{wca_id} geclaimd. De gedelegeerde
         %{delegate} krijgt een bericht hiervan zodra het e-mailadres is
         bevestigd.
       #original_hash: 1cde7e6
@@ -836,11 +840,11 @@ nl:
       manage_pending: Beoordelen profielfoto's
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
-        Je hebt nog geen WCA ID. Als je al eens aan een WCA-wedstrijd hebt
-        deelgenomen, verzoek dan om je WCA ID te verbinden aan je WCA-account
+        Je hebt nog geen WCA id. Als je al eens aan een WCA-wedstrijd hebt
+        deelgenomen, verzoek dan om je WCA id te verbinden aan je WCA-account
         %{here}!
       #original_hash: 29e25b5
-      have_wca_id_html: 'Je WCA ID is %{link_id}.'
+      have_wca_id_html: 'Je WCA id is %{link_id}.'
       cannot_edit:
         #original_hash: 8501c74
         msg: >-
@@ -849,7 +853,7 @@ nl:
           href='%{delegate_url}'>delegate</a> als je iets wilt wijzigen,
         reason:
           #original_hash: 370ff12
-          assigned: je hebt al een toegekende WCA ID
+          assigned: je hebt al een toegekende WCA id
           #original_hash: 1c4670f
           registered: je hebt je aangemeld voor een wedstrijd
       #original_hash: efc007a
@@ -896,7 +900,7 @@ nl:
       #original_hash: b2c4ecc
       senior_has_delegate: kan senior delegate niet demoveren als deze nog delegates heeft
       #original_hash: 48653a9
-      already_have_id: 'kan WCA ID niet claimen omdat je al een WCA ID %{wca_id} hebt'
+      already_have_id: 'kan WCA id niet claimen omdat je al een WCA id %{wca_id} hebt'
       #original_hash: eeb76a7
       wca_id_no_birthdate_html: >-
         We hebben jouw geboortedatum nog niet. Stuur een e-mail naar <a
@@ -907,14 +911,14 @@ nl:
         Je kunt je rol als board member niet opgeven. Vraag het aan een andere
         board member.
       #original_hash: d02c03b
-      avatar_requires_wca_id: vereist een toegekend WCA ID
+      avatar_requires_wca_id: vereist een toegekend WCA id
     successes:
       messages:
         #original_hash: 31bd401
         account_updated: Account bijgewerkt
         #original_hash: 49e5851
         wca_id_claimed: >-
-          WCA ID %{wca_id} geclaimd! Houd je mail in de gaten en wacht tot
+          WCA id %{wca_id} geclaimd! Houd je mail in de gaten en wacht tot
           %{user} deze heeft goedgekeurd.
         #original_hash: dc89669
         account_updated_confirm: >-
@@ -923,23 +927,21 @@ nl:
     select_nearby_delegate:
       #original_hash: 2b11120
       select_delegate_html: >-
-        Om je je WCA ID toe te kennen, moet een <a href='%{link_delegate}'
+        Om je je WCA id toe te kennen, moet een <a href='%{link_delegate}'
         target='_blank'>WCA delegate</a> jouw identiteit bevestigen. Voer je
         geboortedatum in en selecteer de WCA delegate die jou het beste kent.
       #original_hash: d69cf94
       already_assigned_html: >-
-        WCA ID %{link_id} is al verbonden aan een andere account. Als jij denkt
+        WCA id %{link_id} is al verbonden aan een andere account. Als jij denkt
         dat dit fout is, neem dan contact op met je lokale <a
         href='%{link_delegate}' target='_blank'>WCA delegate</a>.
       #original_hash: 3391b0b
       missing_dob_html: >-
-        WCA ID %{link_id} heeft nog geen geboortedatum ingevuld. Neem ajb
+        WCA id %{link_id} heeft nog geen geboortedatum ingevuld. Neem ajb
         contact op met het %{link_result_team} om dit op te lossen.
       #original_hash: 92aa857
-      unknown_wca_id_html: 'WCA ID %{link_id} bestaat niet.'
+      unknown_wca_id_html: 'WCA id %{link_id} bestaat niet.'
   registrations:
-    #original_hash: c5497bc
-    events: Wedstrijdonderdelen
     errors:
       #original_hash: 44ab952
       need_name: Voer een naam in
@@ -1010,7 +1012,7 @@ nl:
       title: '%{person} voor %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards: 'Met kubusvormige groeten, %{people}'
+      regards_html: 'Kubusvormige groeten, %{people}.'
       new:
         #original_hash: 6fb638c
         mail_subject: 'Je hebt je aangemeld voor %{comp_name}'
@@ -1115,6 +1117,8 @@ nl:
     profile: profiel
     #original_hash: c0063c3
     register: Aanmelden!
+    #original_hash: f484f15
+    refund: Verzoek om terugbetaling
     #original_hash: a9af643
     update: Bijwerken aanmelding
     #original_hash: f6fdbe4
@@ -1170,6 +1174,14 @@ nl:
       voor details.
     #original_hash: 58b1a3c
     accepted: Je aanmelding is geaccepteerd!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: >-
+      Je hebt nu %{paid} betaald van het totale aanmeldingsbedrag van
+      %{total_entry_fee}.
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Je hebt het aanmeldingsbedrag van %{paid} volledig betaald.'
+    #original_hash: 05495d6
+    payment_button_text: 'Betaal het aanmeldingsbedrag %{entry_fee} met kaart'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
@@ -1208,6 +1220,12 @@ nl:
       not_confirmed_visible: De wedstrijd is niet bevestigd maar wel zichtbaar.
       #original_hash: 0f44e45
       not_confirmed_not_visible: De wedstrijd is niet bevestigd en niet zichtbaar.
+      #original_hash: a821396
+      stripe_connected: >-
+        Je hebt nu je Stripe-account verbonden en kunt betalingen ontvangen voor
+        deze competitie.
+      #original_hash: 0a4bb53
+      stripe_not_connected: Er was een probleem waardoor we je Stripe-account niet konden verbinden.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mijn wedstrijden
@@ -1469,7 +1487,7 @@ nl:
       #original_hash: 405906c
       after: na
     #original_hash: 06b01c4
-    announcements: Aankondigingen
+    announcements: Competitie aankondigen
     #original_hash: 5b9523f
     upload_results: Resultaten uploaden
     #original_hash: 47dfd90
@@ -1556,11 +1574,11 @@ nl:
       edit_tab_title: 'Bewerken tabblad %{tab_name}'
   notifications:
     #original_hash: 10bcdbd
-    connect_wca_id: Verbind je WCA ID met je WCA-account!
+    connect_wca_id: Verbind je WCA id met je WCA-account!
   persons:
     index:
       #original_hash: 5934b4c
-      name_or_wca_id: Deel van naam of WCA ID
+      name_or_wca_id: Deel van naam of WCA id
       #original_hash: 709a232
       name: Naam
       #original_hash: d523ebb
@@ -1588,20 +1606,20 @@ nl:
     #original_hash: 5b7fa52
     create_an_account: 'Je kunt %{here} een account aanmaken.'
     #original_hash: f8c910c
-    claim_your_wca_id: 'Je kunt %{here} een WCA ID claimen.'
+    claim_your_wca_id: 'Je kunt %{here} een WCA id claimen.'
     #original_hash: 4dfb4c7
     create_an_account_and_claim: >-
       Maak %{here} een WCA-account aan. Nadat je bent ingelogd met je nieuwe
-      account, wordt aan je gevraagd om je WCA ID te claimen.
+      account, wordt aan je gevraagd om je WCA id te claimen.
     answers:
       '1':
         #original_hash: f79b522
-        title: Hoe krijg ik een WCA ID en een WCA-account?
+        title: Hoe krijg ik een WCA id en een WCA-account?
         content:
           #original_hash: b645fe1
           '1': >-
             Als je nooit aan een wedstrijd hebt meegedaan, ga dan naar <a
-            href='/competitions'>wedstrijd</a>! Een WCA ID en WCA-account worden
+            href='/competitions'>wedstrijd</a>! Een WCA id en WCA-account worden
             voor je aangemaakt als de resultaten van je eerste wedstrijd worden
             gepost.
       '2':
@@ -1675,7 +1693,7 @@ nl:
         content:
           #original_hash: 57a3767
           '1': >-
-            Je krijgt een WCA ID als de resultaten van je eerste WCA-wedstrijd
+            Je krijgt een WCA id als de resultaten van je eerste WCA-wedstrijd
             zijn gepost.
           #original_hash: c5ad7a3
           '2': >-
@@ -1693,15 +1711,15 @@ nl:
           '1': >-
             Eerst moet je <a
             href='#how-do-i-connect-my-wca-account-with-my-wca-id'>een
-            WCA-account aanmaken en verbinden met je WCA ID</a>.
+            WCA-account aanmaken en verbinden met je WCA id</a>.
           #original_hash: 56a8f26
           '2': >-
-            Nadat je WCA-account is verbonden met je WCA ID, ga je naar <a
+            Nadat je WCA-account is verbonden met je WCA id, ga je naar <a
             href='%{profile_edit_path}'>Aanpassen profielfoto</a> om je
             profielfoto aan te passen
       '8':
         #original_hash: 1d61217
-        title: Hoe verbind ik mijn WCA-account met mijn WCA ID?
+        title: Hoe verbind ik mijn WCA-account met mijn WCA id?
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
@@ -1726,7 +1744,7 @@ nl:
             geduld.
           #original_hash: bf8adbe
           '3': >-
-            Als je je WCA-account hebt verbonden met je WCA ID (zie hieronder),
+            Als je je WCA-account hebt verbonden met je WCA id (zie hieronder),
             kun je je <a href='%{preferences_edit_path}'>hier</a> aanmelden om
             een bericht te krijgen van het beschikbaar komen van
             wedstrijdresultaten.
