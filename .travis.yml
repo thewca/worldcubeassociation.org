@@ -11,9 +11,6 @@ env:
 before_install:
   # The Stripe API requires a newer version of openssl
   - sudo apt-get update && sudo apt-get install --only-upgrade openssl
-  - pip install --user wrc
-  - git clone --depth=1 https://github.com/thewca/wca-regulations.git
-  - wrc wca-regulations -o WcaOnRails/app/views/regulations --target=json
   # Travis has an old install of PhantomJS without .bind() support, here we upgrade to
   # version 2.0.0
   # From https://mediocre.com/forum/topics/phantomjs-2-and-travis-ci-we-beat-our-heads-against-a-wall-so-you-dont-have-to

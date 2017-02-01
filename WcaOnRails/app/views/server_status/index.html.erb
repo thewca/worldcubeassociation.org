@@ -9,6 +9,7 @@
   <% else %>
     <%= alert :danger, "Check below, something may be wrong." %>
   <% end %>
+
   <% kind_class = @oldest_job_that_should_have_run_by_now ? "danger" : "success" %>
   <div class="panel panel-<%= kind_class %>">
     <div class="panel-heading">
@@ -31,6 +32,21 @@
       </h3>
     </div>
   </div>
+
+  <% kind_class = @regulations_load_error ? "danger" : "success" %>
+  <div class="panel panel-<%= kind_class %>">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <span class="label label-<%= kind_class %>">Regulations</span>
+        <% if @regulations_load_error %>
+          Error while loading regulations: <%= @regulations_load_error %>.
+        <% else %>
+          Looking good!
+        <% end %>
+      </h3>
+    </div>
+  </div>
+
   <% (I18n.available_locales - [:en]).each do |locale| %>
     <%
       bad_keys_by_type = @bad_keys_by_type_by_locale[locale]

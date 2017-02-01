@@ -3,10 +3,14 @@ class ServerStatusController < ApplicationController
   MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING = 5
 
   def index
+    @everything_good = true
+
     @jobs_that_should_have_run_by_now = Delayed::Job.where(attempts: 0).where('created_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
     @oldest_job_that_should_have_run_by_now = @jobs_that_should_have_run_by_now.order(:created_at).first
+    @everything_good &&= @oldest_job_that_should_have_run_by_now.blank?
 
-    @everything_good = @oldest_job_that_should_have_run_by_now.nil?
+    @regulations_load_error = Regulation.regulations_load_error
+    @everything_good &&= @regulations_load_error.blank?
 
     @ref_english = Locale.new('en')
     @bad_keys_by_type_by_locale = {}
