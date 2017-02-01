@@ -227,6 +227,8 @@ zh-TW:
         phone_number: 電話號碼
         #original_hash: 7044004
         notes: 備註
+        #original_hash: 57eaf24
+        user_preferred_events: 喜好項目
       competition:
         #original_hash: 89f89c0
         id: 比賽ID
@@ -282,6 +284,8 @@ zh-TW:
         remarks: 評論
         #original_hash: c305010
         clone_tabs: 我想要複製所有標籤以及其資訊
+        #original_hash: c5497bc
+        competition_events: 項目
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -750,10 +754,8 @@ zh-TW:
       password: 密碼
       #original_hash: 3fc6dbe
       member_of: 成員
-      #original_hash: 57eaf24
-      preferred_events: 喜好項目
       #original_hash: 42619dd
-      preferred_events_desc: 選取您偏好的項目，讓報名比賽更加快速。
+      preferred_events_desc: 選取您喜好的項目，讓報名比賽更加快速。
       #original_hash: b402e03
       please_fix_profile: '您必須修改以下問題，才能報名報名比賽:'
       #original_hash: ff4fc02
@@ -859,8 +861,6 @@ zh-TW:
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
   registrations:
-    #original_hash: c5497bc
-    events: 項目
     errors:
       #original_hash: 44ab952
       need_name: 需要填寫姓名
@@ -923,7 +923,7 @@ zh-TW:
       title: '%{person}的%{comp}'
     mailer:
       #original_hash: 72e2180
-      regards: '致上我的問候，%{people}。'
+      regards_html: '致上我的問候，%{people}。'
       new:
         #original_hash: 6fb638c
         mail_subject: '您已經報名了%{comp_name}'
@@ -960,7 +960,7 @@ zh-TW:
         message_html: '您已經取消報名%{comp_name}。可能的原因為:'
         causes:
           #original_hash: 978944c
-          missing_info: null
+          missing_info: 您沒有輸入所有必填的資料。
           #original_hash: 788f2ec
           incomplete: '您沒有符合報名的規則(例如: 預先支付報名費)'
           #original_hash: 1e225f0
@@ -1046,7 +1046,7 @@ zh-TW:
     #original_hash: 58b1a3c
     accepted: 您的報名已經被成功了!
     #original_hash: 4cf01a2
-    preferred_events_prompt_html: '為了加速報名流程，您可以設定偏好的參賽項目%{link}。'
+    preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
   competitions:
     messages:
       #original_hash: 7b80062
