@@ -641,7 +641,11 @@ class Competition < ActiveRecord::Base
   end
 
   def is_over?
-    !end_date.nil? && end_date < Date.today
+    # We treat "today == last day of competition" as the competition is over.
+    # Once we know the schedules and timezones of competitions, we'll be able
+    # to do something more accurate here.
+    # See https://github.com/thewca/worldcubeassociation.org/issues/737
+    !end_date.nil? && end_date <= Date.today
   end
 
   def city_and_country
