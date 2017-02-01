@@ -54,6 +54,7 @@ CREATE TABLE `Competitions` (
   `announced_at` datetime DEFAULT NULL,
   `base_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `endYear` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
@@ -764,6 +765,27 @@ CREATE TABLE `registration_competition_events` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `registration_payments`
+--
+
+DROP TABLE IF EXISTS `registration_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registration_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `registration_id` int(11) DEFAULT NULL,
+  `amount_lowest_denomination` int(11) DEFAULT NULL,
+  `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `stripe_charge_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `refunded_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `registrations`
 --
 
@@ -1154,6 +1176,10 @@ INSERT INTO schema_migrations (version) VALUES ('20161018220122');
 INSERT INTO schema_migrations (version) VALUES ('20161026201019');
 
 INSERT INTO schema_migrations (version) VALUES ('20161031215932');
+
+INSERT INTO schema_migrations (version) VALUES ('20161108081416');
+
+INSERT INTO schema_migrations (version) VALUES ('20161108210423');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117085757');
 

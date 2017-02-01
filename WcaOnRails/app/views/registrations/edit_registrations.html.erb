@@ -35,6 +35,7 @@
             <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
+            <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
             <th></th>
 
             <!-- Extra column for .table-greedy-last-column -->
@@ -85,6 +86,11 @@
               <td class="comments">
                 <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
                   <%= registration.comments %>
+                </span>
+              </td>
+              <td class="entry_fee">
+                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.paid_entry_fees %>">
+                  <%= humanized_money_with_symbol registration.paid_entry_fees %>
                 </span>
               </td>
               <td>

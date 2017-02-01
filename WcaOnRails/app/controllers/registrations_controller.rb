@@ -23,7 +23,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit]
+  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment]
 
   def edit_registrations
     @competition = competition_from_params
@@ -194,6 +194,60 @@ class RegistrationsController < ApplicationController
     if current_user
       @registration = Registration.find_by(user_id: current_user.id, competition_id: @competition.id) || @competition.registrations.build(user_id: current_user.id)
     end
+  end
+
+  def process_payment
+    competition = competition_from_params
+    if current_user
+      registrations = competition.registrations
+      registration = registrations.find_by_user_id!(current_user.id)
+    end
+    token = params[:stripeToken]
+
+    charge = Stripe::Charge.create({
+      amount: registration.outstanding_entry_fees.cents,
+      currency: registration.outstanding_entry_fees.currency.iso_code,
+      source: token,
+      description: "Registration payment for #{competition.name}",
+      metadata: {"Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name},
+    }, stripe_account: competition.connected_stripe_account_id)
+
+    registration.record_payment(
+      charge.amount,
+      charge.currency,
+      charge.id,
+    )
+
+    flash[:success] = 'Your payment was successful.'
+    redirect_to competition_register_path
+  rescue Stripe::CardError => e
+    flash[:danger] = 'Unsuccessful payment: ' + e.message
+    redirect_to competition_register_path
+  rescue => e
+    flash[:danger] = 'Something went wrong: ' + e.message
+    redirect_to competition_register_path
+  end
+
+  def refund_payment
+    registration = Registration.find(params[:id])
+    payment = RegistrationPayment.find(params[:payment_id])
+
+    refund = Stripe::Refund.create({
+      charge: payment.stripe_charge_id,
+    }, stripe_account: registration.competition.connected_stripe_account_id)
+
+    registration.record_refund(
+      refund.amount,
+      refund.currency,
+      refund.id,
+      refund.charge,
+    )
+
+    flash[:success] = 'Payment was refunded'
+    redirect_to edit_registration_path(registration)
+  rescue => e
+    flash[:danger] = 'Something went wrong with the refund: ' + e.message
+    redirect_to edit_registration_path(registration)
   end
 
   def create

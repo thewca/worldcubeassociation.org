@@ -51,9 +51,13 @@
         <% end %>
       <% else %>
         <div>
+          <% entry_fee = humanized_money_with_symbol @registration.entry_fee %>
+          <% paid_entry_fees = humanized_money_with_symbol @registration.paid_entry_fees %>
+          <% outstanding_entry_fees = humanized_money_with_symbol @registration.outstanding_entry_fees %>
           <% if @registration.new_or_deleted? %>
             <%= t 'registrations.can_register', comp: @competition.name %>
             <%= alert :danger, t('registrations.check_registration_information') %>
+            <%= render 'entry_fee', entry_fee: entry_fee %>
           <% else %>
             <%= t 'registrations.have_registered', comp: @competition.name %>
 
@@ -67,14 +71,37 @@
             <% else %>
               <%= alert :success, t('registrations.accepted') %>
             <% end %>
+            <div>
+              <% if @competition.connected_stripe_account_id %>
+                <% if @registration.outstanding_entry_fees > 0 %>
+                  <% if @registration.paid_entry_fees > 0 %>
+                    <%= alert :info, t('registrations.entry_fees_partially_paid', paid: paid_entry_fees, total_entry_fee: entry_fee) %>
+                  <% end %>
+                  <%= form_tag competition_process_payment_path do %>
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="<%= ENVied.STRIPE_PUBLISHABLE_KEY %>"
+                      data-image="https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png"
+                      data-name="World Cube Association"
+                      data-description="Registration fee"
+                      data-amount="<%= @registration.outstanding_entry_fees.cents %>"
+                      data-currency="<%= @registration.outstanding_entry_fees.currency.iso_code %>"
+                      data-email="<%= @registration.user.email %>"
+                      data-zip-code="true"
+                      data-label="<%= t('registrations.payment_button_text', entry_fee: outstanding_entry_fees) %>"
+                      data-locale="auto">
+                    </script>
+                  <% end %>
+                <% else %>
+                  <%= alert :success, t('registrations.entry_fees_fully_paid', paid: paid_entry_fees) %>
+                <% end %>
+              <% else %>
+                <%= render 'entry_fee', entry_fee: entry_fee %>
+              <% end %>
+              <hr />
+            </div>
           <% end %>
         </div>
 
-        <% if @competition.base_entry_fee %>
-          <%= alert :info do %>
-            <%= t 'registrations.entry_fee', fee: humanized_money_with_symbol(@competition.base_entry_fee) %>
-          <% end %>
-        <% end %>
 
         <% url = @registration.new_record? ? competition_registrations_path(@competition)
                                            : registration_path(@registration) %>

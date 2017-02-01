@@ -38,6 +38,8 @@ gem 'world-flags', github: 'world-flags/world-flags'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
 gem 'octokit'
+gem 'stripe'
+gem 'oauth2'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953

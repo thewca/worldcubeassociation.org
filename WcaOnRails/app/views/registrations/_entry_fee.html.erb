@@ -1,0 +1,5 @@
+<% if @registration.entry_fee %>
+  <%= alert :info do %>
+    <%= t 'registrations.entry_fee', fee: entry_fee %>
+  <% end %>
+<% end %>
