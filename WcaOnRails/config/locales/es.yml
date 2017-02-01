@@ -68,6 +68,62 @@ es:
     mmagic: Master Magic
     #original_hash: c6ad2af
     333mbo: 'Rubik''s Cube: Multiple blind old style'
+  rounds:
+    '0':
+      #original_hash: 4d618bb
+      name: Ronda de cualificación
+      #original_hash: 2ffe44e
+      cellName: Cualificación
+    '1':
+      #original_hash: 1e725b6
+      name: Primera ronda
+      #original_hash: 916a78d
+      cellName: Primera
+    '2':
+      #original_hash: 985c8d0
+      name: Segunda ronda
+      #original_hash: 2a4bcae
+      cellName: Segunda
+    '3':
+      #original_hash: e2f74d2
+      name: Semifinal
+      #original_hash: e2f74d2
+      cellName: Semifinal
+    b:
+      #original_hash: 327c999
+      name: Final B
+      #original_hash: 327c999
+      cellName: Final B
+    c:
+      #original_hash: b2d26f4
+      name: Final Combinada
+      #original_hash: b2d26f4
+      cellName: Final Combinada
+    d:
+      #original_hash: c6136b1
+      name: Primera ronda combinada
+      #original_hash: dffa9ea
+      cellName: Primera combinada
+    e:
+      #original_hash: 659c53f
+      name: Segunda ronda combinada
+      #original_hash: b6e1e1c
+      cellName: Segunda combinada
+    f:
+      #original_hash: 672b22c
+      name: Final
+      #original_hash: 672b22c
+      cellName: Final
+    g:
+      #original_hash: e861dcf
+      name: Tercera ronda combinada
+      #original_hash: 86f4b05
+      cellName: Tercera combinada
+    h:
+      #original_hash: 4c66ad0
+      name: Cualificación combinada
+      #original_hash: 4c66ad0
+      cellName: Cualificación combinada
   common:
     #original_hash: 2513cf0
     continent: Continente
@@ -83,6 +139,9 @@ es:
     average: Media
     #original_hash: e7f6fc5
     solves: Soluciones
+    date:
+      #original_hash: acb6273
+      no_date: Sin fecha
     user:
       #original_hash: 603a218
       wca_id: WCA ID
@@ -172,6 +231,8 @@ es:
         phone_number: Número de teléfono
         #original_hash: 7044004
         notes: Notas
+        #original_hash: 57eaf24
+        user_preferred_events: Pruebas favoritas
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -227,17 +288,23 @@ es:
         remarks: Comentarios para la Junta Directiva
         #original_hash: c305010
         clone_tabs: Clonar también todas las pestañas con información adicional
+        #original_hash: c5497bc
+        competition_events: Pruebas
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
         #original_hash: fce06e2
         comments: Comentarios
+        #original_hash: dc9d458
+        paid_entry_fees: Pagado
         #original_hash: bae7d5b
         status: Estado
         #original_hash: 709a232
         name: Nombre
         #original_hash: a6b9d69
         birthday: Nacimiento
+        #original_hash: c5497bc
+        registration_competition_events: Pruebas
       competition_tab:
         #original_hash: 4f9be05
         content: Contenido
@@ -748,8 +815,6 @@ es:
       password: Clave
       #original_hash: 3fc6dbe
       member_of: Miembro de
-      #original_hash: 57eaf24
-      preferred_events: Pruebas favoritas
       #original_hash: 42619dd
       preferred_events_desc: >-
         Simplifica tu registro en competiciones seleccionando tus pruebas
@@ -792,10 +857,10 @@ es:
       #original_hash: 29e25b5
       have_wca_id_html: 'Tu WCA ID es %{link_id}.'
       cannot_edit:
-        #original_hash: b98c0cf
+        #original_hash: 8501c74
         msg: >-
-          No puedes modificar tu nombre, fecha de nacimiento, sexo ni país
-          porque %{reason}. Ponte en contacto con tu <a
+          No puedes modificar tu nombre, fecha de nacimiento, sexo ni país.
+          Motivo: %{reason}. Ponte en contacto con tu <a
           href='%{delegate_url}'>delegado</a> si necesitas cambiar alguno de
           estos campos.
         reason:
@@ -896,8 +961,6 @@ es:
       #original_hash: 92aa857
       unknown_wca_id_html: 'El WCA ID %{link_id} no existe.'
   registrations:
-    #original_hash: c5497bc
-    events: Pruebas
     errors:
       #original_hash: 44ab952
       need_name: Necesita un nombre
@@ -913,8 +976,6 @@ es:
       registration_closed: El registro para esta competición está cerrado
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Un registro no puede ser aceptado y borrado a la vez.
-      #original_hash: bf9a828
-      can_register: El usuario debería ser capaz de registrarse en una competición
       #original_hash: a38d024
       must_register: debes registrarte al menos para una prueba
     registration_info_people:
@@ -966,11 +1027,78 @@ es:
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} para %{comp}'
+    mailer:
+      #original_hash: 72e2180
+      regards_html: 'Atentamente, %{people}.'
+      new:
+        #original_hash: 6fb638c
+        mail_subject: 'Te has registrado en %{comp_name}'
+        #original_hash: 8374583
+        registered_html: 'Te acabas de registrar en %{comp_name}.'
+        #original_hash: 9238412
+        on_waiting_list: >-
+          Tu registro está en la lista de espera, que actualmente está formada
+          por %{n_total} %{people}.
+        #original_hash: f5b00be
+        approval_info_html: >-
+          Se te enviará un correo electrónico cuando tu registro se apruebe. Por
+          favor, ten presente que los registros no se aprueban automáticamente.
+          Para ver las condiciones de aprobación, visita la página web de la
+          competición o ponte en contacto con los organizadores. Puedes
+          comprobar el estado de tu registro %{here}.
+      accepted:
+        #original_hash: 34515b5
+        mail_subject: 'Tu registro en %{comp_name} ha sido aceptado.'
+        #original_hash: 24d2883
+        message_html: >-
+          Tu registro en %{comp_name} ha sido aceptado. Como es habitual, puedes
+          comprobar el estado de tu registro %{here}.
+        #original_hash: 1852cbf
+        see_you_soon: '¡Nos vemos en %{comp_name}!'
+      pending:
+        #original_hash: e48d8bd
+        mail_subject: 'Has sido movido a la lista de espera para %{comp_name}'
+        #original_hash: 6fd0a8e
+        moved_html: >-
+          Tu registro para %{comp_name} ha sido movido a la lista de espera. Los
+          posibles motivos de esto son:
+        causes:
+          #original_hash: eadfc0d
+          accepted: Tu registro fue erróneamente aceptado
+          #original_hash: 2ac6d84
+          withdrawal: Solicitaste tu baja
+        #original_hash: 8f7358f
+        email_if_error: 'Si crees que esto se debe a un error, por favor, contesta este correo.'
+      deleted:
+        #original_hash: 268e248
+        mail_subject: 'Tu registro en %{comp_name} has sido dado de baja'
+        #original_hash: f66ae63
+        message_html: >-
+          Tu registro en %{comp_name} ha sido dado de baja. Los posibles motivos
+          son:
+        causes:
+          #original_hash: 978944c
+          missing_info: No suministraste todos tus detalles o lo hiciste de forma incorrecta
+          #original_hash: 788f2ec
+          incomplete: >-
+            No has cumplido todo los requisitos del registro (por ejemplo, pagar
+            el registro por adelantado)
+          #original_hash: 1e225f0
+          registrations_full: >-
+            El límite de competidores se ha alcanzado y no hay más plazas
+            disponibles
+          #original_hash: 0d4cce9
+          multiple_registrations: Te registraste más de una vez
     list:
       #original_hash: 8b7631c
       title: 'Registros para %{comp}'
       #original_hash: 5301648
       edit: Editar
+      #original_hash: 0ab725c
+      country_plural:
+        zero: Ningún país
+        one: 1 país
+        other: '%{count} países'
       #original_hash: 1feee0e
       export_csv: Exportar a CSV
       #original_hash: 84add5b
@@ -1004,6 +1132,8 @@ es:
     profile: perfil
     #original_hash: c0063c3
     register: ¡Regístrate!
+    #original_hash: f484f15
+    refund: Reembolsar el Pago
     #original_hash: a9af643
     update: Actualizar Registro
     #original_hash: f6fdbe4
@@ -1040,18 +1170,34 @@ es:
       problemas de tu %{profile}:
     #original_hash: 855ca9c
     can_register: 'Puedes registrarte en %{comp} abajo.'
+    #original_hash: 4167ed7
+    check_registration_information: >-
+      Por favor, comprueba la información sobre el registro para asegurarte si
+      tienes que hacer algo más, como pagar por adelantado el importe del
+      registro.
     #original_hash: ea2b586
     have_registered: >-
       Te has registrado en %{comp}. Puedes ver la información de tu registro
       abajo.
-    #original_hash: 4d966e0
-    entry_fee: El precio del registro es
+    #original_hash: fa52a9b
+    entry_fee: 'El precio del registro es %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Ponte en contacto con el organizador si quieres realizar algún cambio.
-    #original_hash: 06d52b5
-    waiting_list: 'Actualmente eres el %{i} de %{n} en la lista de espera.'
+    #original_hash: 59354fd
+    waiting_list: >-
+      Tu registro está pendiente. En algunos casos, puede que tengas que pagar
+      tu registro en línea antes de ser aprobado. Comprueba las condiciones en
+      la página web del campeonato.
     #original_hash: 58b1a3c
     accepted: ¡Tu registro ha sido aceptado!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: >-
+      De momento has pagado %{paid} del total de %{total_entry_fee} del
+      registro.
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Has pagado la totalidad de tu registro (%{paid}).'
+    #original_hash: 05495d6
+    payment_button_text: 'Paga %{entry_fee} de tu registro con tarjeta'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para facilitar tus registros en el futuro, puedes seleccionar tus pruebas
@@ -1092,6 +1238,12 @@ es:
       not_confirmed_visible: Esta competición no está confirmada pero es visible
       #original_hash: 0f44e45
       not_confirmed_not_visible: Esta competición ni está confirmada ni es visible
+      #original_hash: a821396
+      stripe_connected: >-
+        Has conectado satisfactoriamente tu cuenta Stripe y ya puedes recibir
+        pagos de registro para esta competición.
+      #original_hash: 0a4bb53
+      stripe_not_connected: Ha habido problemas y no hemos podido conectar con tu cuenta Stripe.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -1114,6 +1266,11 @@ es:
       details: Detalles
       #original_hash: 2e8a57c
       website: Web
+      #original_hash: 680567f
+      organizer_plural:
+        zero: Organizadores
+        one: Organizador
+        other: Organizadores
       #original_hash: 6afa61e
       delegate:
         zero: Delegados de la WCA
@@ -1159,6 +1316,8 @@ es:
         in_progress: Competiciones en curso
         #original_hash: 9e66032
         past: 'Competiciones anteriores del %{year}'
+        #original_hash: f628f0e
+        past_all: Competiciones anteriores de todos los años
         #original_hash: cbe8a54
         recent: 'Competiciones recientes (últimos %{count} días)'
         #original_hash: 914742f
@@ -1175,8 +1334,8 @@ es:
           posted: ¡Los resultados están publicados!
           #original_hash: 89bcc37
           starts_in: 'Comienza dentro de %{days}'
-        #original_hash: a418217
-        search: 'Nombre, ciudad, local, país, mes...'
+        #original_hash: ccd2db9
+        search: Nombre o ciudad
         #original_hash: 3bc8082
         recent: 'Últimos %{count} días'
       #original_hash: 8b09d74
@@ -1262,7 +1421,7 @@ es:
       #original_hash: 8ebebca
       coordinates: Coordenadas
     errors:
-      #original_hash: 83795c3
+      #original_hash: f7ef9f6
       invalid_name_message: >-
         debe terminar en un año y contener sólo caracteres alfanuméricos,
         guiones (-), ampersands (&), puntos (.), dos puntos (:), apóstrofos (')
@@ -1285,8 +1444,6 @@ es:
       end_date_before_start: La fecha final no puede ser anterior a la de inicio.
       #original_hash: be3933b
       span_too_many_days: 'La competición no puede durar más de %{max_days} días.'
-    #original_hash: f42a238
-    unscheduled: no programado
     new:
       #original_hash: 1208df7
       create_competition: Crear competición
@@ -1312,12 +1469,17 @@ es:
       #original_hash: e6e096a
       competition_was: 'La competición fue hace %{n_days}.'
     nearby_competitions:
+      #original_hash: 241801a
+      competitions:
+        zero: Ninguna competición
+        one: 1 competición
+        other: '%{count} competiciones'
       #original_hash: e3528ec
       label: 'Competiciones cercanas (en %{days} días y %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Últimos %{days} días'
-      #original_hash: 14276ae
-      nearby_admin: '%{comps} %{comp} en %{kms} km y %{days} días.'
+      #original_hash: 07a1cf0
+      nearby_admin: '%{x_competitions} en %{kms} km y %{days} días.'
       #original_hash: feefb46
       no_comp_nearby: No hay competiciones cercanas.
       #original_hash: 7e76950
@@ -1392,6 +1554,42 @@ es:
       round: Ronda
       #original_hash: 709a232
       name: Nombre
+  competition_tabs:
+    headers:
+      #original_hash: 2a4d562
+      tabs: Pestañas
+      #original_hash: 709a232
+      name: Nombre
+    form_elements:
+      #original_hash: 90f8dcb
+      create_button: Crear pestaña
+      #original_hash: 8d5b6f9
+      goto_button: 'Ir a la pestaña %{tab_name}'
+      #original_hash: 6f23a36
+      new_tab: Nueva pestaña
+      #original_hash: 5301648
+      edit: Editar
+      #original_hash: fb91e24
+      update: Actualizar
+      #original_hash: f6fdbe4
+      delete: Eliminar
+      #original_hash: 14e49c1
+      confirm_delete: '¿Estás seguro de querer eliminar la pestaña %{tab_name}?'
+      #original_hash: ce1bf0b
+      back_to_tabs: Volver a pestañas
+    new:
+      #original_hash: 73ed8c2
+      new_tab_title: 'Nueva pestaña para %{comp_name}'
+    index:
+      #original_hash: a857eb4
+      tabs_list_title: Administrar pestañas
+      #original_hash: 40f9491
+      tabs_introduction_text: >-
+        Aquí puedes añadir y editar pestañas que se mostrarán en la página de
+        información de la competición.
+    edit:
+      #original_hash: 5f1f5b8
+      edit_tab_title: 'Editar la pestaña %{tab_name}'
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: ¡Vincula tu WCA ID a tu cuenta!
@@ -1817,7 +2015,7 @@ es:
       content2_html: >-
         La selección manual de las mezclas puede realizarse haciendo doble clic
         en la celda <em>Scrambles</em> de la rejilla de rondas.
-      #original_hash: a42bae2
+      #original_hash: 8f4fdfd
       content3_html: >-
         La selección de mezclas para cada una de las rondas afecta a todos los
         grupos de mezclas para esa ronda. Si tienes una situación en la que
