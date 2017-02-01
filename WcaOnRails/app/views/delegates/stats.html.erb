@@ -18,7 +18,7 @@
     </thead>
     <tbody>
       <% @delegates.each do |delegate| %>
-        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select(&:is_over?) %>
+        <% competitions = delegate.delegated_competitions.order(:year, :month, :day).select(&:is_probably_over?) %>
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate"><%= delegate.name %></td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>

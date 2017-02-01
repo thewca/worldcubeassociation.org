@@ -20,7 +20,7 @@
 
     <%= f.button :submit, class: "btn-primary" %>
     <% is_actually_posted = DelegateReport.find(@delegate_report).posted? %>
-    <% if @delegate_report.can_be_posted? && !is_actually_posted %>
+    <% if !is_actually_posted %>
       <%= button_tag(type: 'submit',
                      name: "delegate_report[posted]",
                      value: true,

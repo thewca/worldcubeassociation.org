@@ -91,7 +91,7 @@ wca.competitionsToMarkers = function(map, competitions) {
       content: contentString
     });
 
-    if (c.is_over) {
+    if (c.is_probably_over) {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
     } else {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/red.png';
