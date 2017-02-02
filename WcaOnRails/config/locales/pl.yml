@@ -303,6 +303,8 @@ pl:
         guests: Goście
         #original_hash: fce06e2
         comments: Komentarze
+        #original_hash: dc9d458
+        paid_entry_fees: Zapłacono
         #original_hash: bae7d5b
         status: Status
         #original_hash: 709a232
@@ -828,7 +830,7 @@ pl:
       member_of: Członek
       #original_hash: 42619dd
       preferred_events_desc: >-
-        Wybór twoich preferowanych konkurencji przyspiesza rejestracje na
+        Wybór twoich preferowanych konkurencji przyspiesza rejestrację na
         zawody.
       #original_hash: b402e03
       please_fix_profile: >-
@@ -868,7 +870,7 @@ pl:
       cannot_edit:
         #original_hash: 8501c74
         msg: >-
-          Nie możesz zmienić swojego imienia, daty urodzin, płci lub państwa.
+          Nie możesz zmienić swojego imienia, daty urodzin, płci oraz państwa.
           Powód: %{reason}. Skontaktuj się z twoim <a
           href='%{delegate_url}'>delegatem</a>, jeżeli potrzebujesz zmienić
           którekolwiek z nich.
@@ -883,7 +885,7 @@ pl:
       guidelines: Wytyczne
       avatar_guidelines:
         #original_hash: 255f28c
-        '1': Wszystkie zdjęcie profilowe powinny być obrazami prawdziwych osób.
+        '1': Wszystkie zdjęcia profilowe powinny być obrazami prawdziwych osób.
         #original_hash: 9126b0c
         '2': Osoba na zdjęciu powinna przedstawiać ciebie.
         #original_hash: de9b742
@@ -894,7 +896,7 @@ pl:
         '4': 'Twoja głowa, ale niekoniecznie cała twarz, powinna być widoczna.'
         #original_hash: ebbbf8a
         '5': >-
-          Zdjęcie profilowe nie może zawierać tekstu innego niż regularny tekst
+          Zdjęcie profilowe nie może zawierać tekstu innego niż zwyczajny tekst
           znajdujący się w tle.
         #original_hash: cc5f23a
         '6': Zdjęcie profilowe musi być wysłane w popranej orientacji.
@@ -1164,6 +1166,8 @@ pl:
     profile: profil
     #original_hash: c0063c3
     register: Zarejestruj się!
+    #original_hash: f484f15
+    refund: Zwrot Płatności
     #original_hash: a9af643
     update: Zaktualizuj Rejestrację
     #original_hash: f6fdbe4
@@ -1219,6 +1223,12 @@ pl:
       informacji.
     #original_hash: 58b1a3c
     accepted: Twoja rejestracja została zaakceptowana!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: 'Obecnie wpłaciłeś %{paid} z całkowitej kwoty %{total_entry_fee} wpisowego.'
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Zapłaciłeś wpisowe w wysokości %{paid} w całości.'
+    #original_hash: 05495d6
+    payment_button_text: 'Zapłać %{entry_fee} wpisowego za pomocą karty.'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Aby przyspieszyć rejestrację w przyszłości, możesz ustawić swoje
@@ -1257,6 +1267,12 @@ pl:
       not_confirmed_visible: 'Te zawody nie są potwierdzone, ale są widoczne publicznie'
       #original_hash: 0f44e45
       not_confirmed_not_visible: Te zawody nie są potwierdzone oraz nie są widoczne publicznie
+      #original_hash: a821396
+      stripe_connected: >-
+        Pomyślnie podłączono twoje konto Stripe i możesz teraz otrzymywać opłaty
+        wpisowego na te zawody.
+      #original_hash: 0a4bb53
+      stripe_not_connected: Wystąpił problem i nie mogliśmy podłączyć twojego konta Stripe.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moje zawody
@@ -1376,14 +1392,16 @@ pl:
       missing_report: Twój raport nie został jeszcze wysłany!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Nie masz obecnie nadchodzących zawodów! Sprawdź %{link}.'
+      #original_hash: e0f66bb
+      competitions_list: listę zawodów
       #original_hash: 9104a03
       no_past_competitions: Nie masz minionych zawodów.
     competition_form:
       #original_hash: f957dcb
       supports_md_html: >-
-        Możliwe jest używanie <a
+        Możliwe jest używanie języka <a
         href='https://daringfireball.net/projects/markdown/basics'
-        target='_blank'>Markdown</a>'a
+        target='_blank'>Markdown</a>
       #original_hash: 9d9126e
       venue_html: >-
         Miejsce, gdzie odbywają się zawody. %{md}. Na przykład:
@@ -1391,10 +1409,10 @@ pl:
       #original_hash: 2651d1a
       venue_details_html: >-
         Szczegóły na temat miejsca (np. Na pierwszym piętrze, podążaj za
-        znakami). %{md}
+        znakami). %{md}.
       #original_hash: b727e58
       contact_html: >-
-        Opcjonalne informacje kontaktowe. Jeżeli nie wypełnisz tego, adresy
+        Opcjonalne informacje kontaktowe. Jeżeli nie wypełnisz tego pola, adresy
         email organizatorów zostaną wyświetlone publicznie. %{md}. Przykład:
         [Tekst do wyświetlenia](mailto:ktoś@email.com)
       #original_hash: c5497bc
@@ -1636,7 +1654,7 @@ pl:
     #original_hash: 6cf2723
     contact_us: skontaktuj się z nami
     #original_hash: 9100be3
-    search_for_competition: 'Wyszukaj zawodów tutaj:'
+    search_for_competition: 'Wyszukaj zawody tutaj:'
     #original_hash: cba12bc
     already_logged_in: Masz już konto WCA i jesteś obecnie zalogowany.
     #original_hash: 5b7fa52
@@ -1655,15 +1673,15 @@ pl:
           #original_hash: b645fe1
           '1': >-
             Jeżeli nigdy wcześniej nie uczestniczyłeś, udaj się na <a
-            href='/competitions'>zawody</a>! WCA ID i profil WCA zostanie
-            stworzony dla ciebie, kiedy wyniki z twoich pierwszych zawodów
+            href='/competitions'>zawody</a>! WCA ID i profil WCA zostaną
+            stworzone dla ciebie, kiedy wyniki z twoich pierwszych zawodów
             zostaną opublikowane.
       '2':
         #original_hash: eb948e7
         title: Jak mam znaleźć zawody WCA?
         content:
           #original_hash: d195cec
-          '1': Sprawdź naszą listę <a href='/competitions'>zawodów</a>
+          '1': Sprawdź naszą listę <a href='/competitions'>zawodów</a>.
       '3':
         #original_hash: af6ad12
         title: >-
@@ -1680,15 +1698,15 @@ pl:
         #original_hash: 9a5ae28
         title: >-
           Jakie wymagania należy spełniać, aby móc wciąć udział w zawodach WCA?
-          Co muszę wiedzieć przed startowaniem w takich zawodach?
+          Co muszę wiedzieć przed startowaniem w nich?
         content:
           #original_hash: 40aa9c0
           '1': >-
-            Ogólnie, nie ma wielu wymagań stawianych osobie, aby mogła brać
+            Generalnie, nie ma wielu wymagań stawianych osobie, która chce brać
             udział w zawodach WCA. Jednak od wszystkich uczestników zawodów
             oczekuje się dobrego zrozumienia <a
             href='https://www.worldcubeassociation.org/regulations/'>regulaminu
-            WCA</a>. Dodatkowo chcielibyśmy polecić spojrzenie na <a
+            WCA</a>. Dodatkowo pragniemy polecić spojrzenie na <a
             target='_blank' href='http://www.cubingusa.com/ctutorial.php'>kurs
             zawodnika stworzony przez Cubing USA</a>, który daje kila bardzo
             dobrych wskazówek dla nowicjuszy.
@@ -1699,11 +1717,11 @@ pl:
           #original_hash: 3d4eb1c
           '1': >-
             Jeżeli jesteś zainteresowany organizacją zawodów, jest wysoce
-            wskazanym uczestniczyć w co najmniej jednych lub dwóch zawodach jako
-            zawodnik, w celu zdobycia doświadczenia.
+            wskazanym wciąć udział w co najmniej jednych lub dwóch zawodach jako
+            uczestnik, w celu zdobycia doświadczenia.
           #original_hash: be305b8
           '2': >-
-            Zawody WCA muszą stosować się do <a target='_blank'
+            Zawody WCA muszą być dostosowane do <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>regulaminu
             WCA</a>. Zespół organizacyjny nie musi znać go na pamięć, jednak
             głęboka wiedza na temat regulaminowych podstaw zdecydowanie byłaby
@@ -1714,11 +1732,11 @@ pl:
             target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>Delegatem
             WCA</a>. Nadzór WCA jest wymagany, w celu uczynienia zawodów
-            oficjalnie zatwierdzonymi przez WCA. Delegat WCA pomoże w pomyślnej
-            organizacji zawodów.
+            oficjalnie zatwierdzonymi przez organizację. Delegat pomoże w
+            pomyślnej organizacji zawodów.
           #original_hash: 809f53a
           '4': >-
-            Odwiedź <a target='_blank'
+            Spójrz na <a target='_blank'
             href='https://www.cubingusa.com/cguide.php'>ten poradnik</a> w celu
             uzyskania dalszych informacji. (W przypadku jakiegokolwiek konfliktu
             pomiędzy informacjami prezentowanymi w tym dodatkowym źródle wiedzy
@@ -1726,20 +1744,20 @@ pl:
       '6':
         #original_hash: 8005a61
         title: >-
-          Po co są konta WCA? Jaka jest różnica pomiędzy kontami WCA a profilami
-          WCA?
+          Do czego służą konta WCA? Jaka jest różnica pomiędzy kontami WCA a
+          profilami WCA?
         content:
           #original_hash: 57a3767
           '1': >-
             Masz przypisane WCA ID, kiedy uczestniczysz po raz pierwszy w
-            zawodach oficjalnie uznawanych przez WCA. Kiedy wyniki z tych
-            zawodów są opublikowane, twój profil WCA zostaje stworzony, z
-            wynikami z każdych zawodów na których byłeś.
+            zawodach oficjalnie uznawanych przez WCA. Kiedy wyniki z nich są
+            opublikowane, twój profil WCA zostaje stworzony, z wynikami z
+            każdych zawodów na których byłeś.
           #original_hash: c5ad7a3
           '2': >-
-            Konta WCA pozwalają ci na udowodnienie nam kim jesteś. To pozwala ci
-            na dodanie zdjęcia do twojego profilu WCA, jak również na
-            rejestrowanie się na zawody. To ochroni cię przed innymi ludźmi
+            Konto WCA pozwalaja ci na udowodnienie nam kim jesteś. Umożliwia
+            między innymi dodanie zdjęcia do twojego profilu WCA, jak również na
+            rejestrowanie się na zawody. Chroni cię przed innymi ludźmi
             próbującymi podszyć się pod ciebie.
           #original_hash: 9ff083a
           '3': '%{current_user_status}'
@@ -1857,16 +1875,16 @@ pl:
           narzędziami administracyjnymi).
       #original_hash: f2ceade
       delegates_html: >-
-        <strong>Delegaci WCA</strong> są członkami WCA, którzy są odpowiedzialni
-        za upewnianie się za prawidłowy przebieg zawodów, zgodnie z misją,
-        regulaminem i duchem WCA. WCA rozróżnia <strong>Starszych Delegatów
-        WCA</strong>, <strong>Delegatów WCA</strong> oraz <strong>Kandydatów na
-        Delegata WCA</strong>%{see_link}. Poza obowiązkami Delegata WCA, Starszy
-        Delegat WCA jest odpowiedzialny za nadzór nad Delegatami na swoim
-        obszarze. Społeczność może kontaktować się z nim w regionalnych
-        sprawach. Nowi Delegaci uzyskują początkowo status Kandyda na Delegata
-        WCA i muszą wykazać swoją zdolność pomyślnego zarządzania zawodami,
-        zanim otrzymają status Delegata WCA.
+        <strong>Delegaci WCA</strong> to członkowie WCA, którzy są
+        odpowiedzialni za prawidłowy przebieg zawodów, zgodnie z opisaną
+        wcześniej misją, regulaminem i duchem WCA. WCA rozróżnia
+        <strong>Starszych Delegatów WCA</strong>, <strong>Delegatów WCA</strong>
+        oraz <strong>Kandydatów na Delegata WCA</strong> %{see_link}. Poza
+        obowiązkami Delegata WCA, Starszy Delegat WCA jest odpowiedzialny za
+        nadzór nad Delegatami na swoim obszarze. Społeczność może kontaktować
+        się z nim w regionalnych sprawach. Nowi Delegaci uzyskują początkowo
+        status Kandyda na Delegata WCA i muszą wykazać swoją zdolność pomyślnego
+        zarządzania zawodami, zanim otrzymają status Delegata WCA.
       #original_hash: 27d18ac
       see_link_html: '(zobacz %{link})'
       #original_hash: 5b01fcc
@@ -1889,7 +1907,7 @@ pl:
     #original_hash: 0ef06c8
     title: Organizacje narodowe
     #original_hash: f9a7f4d
-    content: 'WCA uznaje następujące organizacje narodowe:'
+    content: 'WCA rozpoznaje następujące organizacje narodowe:'
   contact:
     #original_hash: a34b69f
     title: Informacje kontaktowe
@@ -1907,7 +1925,7 @@ pl:
     committees_and_teams_html: <u>Komitety i Zespoły</u>
     board:
       #original_hash: ccad374
-      name_html: <strong>Zarząd WCA</strong>
+      name_html: <strong>Zarząd WCA (WCA Board)</strong>
       #original_hash: 7ee8e36
       info: >-
         (organizacja WCA, raporty delegatów, akceptacja zawodów, ogólne
@@ -1915,8 +1933,8 @@ pl:
     wdc:
       #original_hash: 562e197
       info: >-
-        (niezależne doradztwo dla Zarządu WCA, niezawisłe dochodzenia, doradztwo
-        w ważnych sprawach osobistych)
+        (niezależne doradztwo dla Zarządu WCA, niezawisłe dochodzenia,
+        udzielanie rad w ważnych sprawach osobistych)
     wrc:
       #original_hash: 4a256f0
       info: (odpowiedzialność za Regulamin WCA)
@@ -1945,8 +1963,8 @@ pl:
         wysłaniem ich do Zespołu do Spraw Wyników.
       #original_hash: 975e59b
       '3': >-
-        Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <br
-        /><a href="/files/results.xls" target="_blank">tutaj</a>.
+        Najnowsza wersja arkusza wyników z zawodów WCA może zostać pobrana <a
+        href="/files/results.xls" target="_blank">tutaj</a>.
   logo:
     #original_hash: c72c969
     title: Logo WCA
