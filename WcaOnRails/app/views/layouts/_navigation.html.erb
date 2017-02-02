@@ -82,6 +82,24 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
+            <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
+            <i class="flag f16 <%= active_locale_info[:flag_id] %>"></i> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu countries" role="menu">
+            <% Locales::AVAILABLE.each do |l, data| %>
+              <% unless l == I18n.locale %>
+                <li>
+                  <%= link_to update_locale_path(l), method: :patch do %>
+                    <i class="flag f16 <%= data[:flag_id] %>"></i> <%= data[:name] %>
+                  <% end %>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <% if current_user %>
               <% notification_count = notifications_for_user(current_user).length %>
               <%= render "shared/user_avatar", user: current_user, do_not_show_full_image_on_hover: true %>
