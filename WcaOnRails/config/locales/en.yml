@@ -765,6 +765,7 @@ en:
       edit_report: "Edit the report"
       missing_report: "Your report is not posted yet!"
       no_upcoming_competitions_html: "You currently have no upcoming competitions! Check out the %{link}."
+      competitions_list: "competitions list"
       no_past_competitions: "You have no past competitions."
     #context: in the competition edition form
     competition_form:
