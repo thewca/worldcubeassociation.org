@@ -293,6 +293,8 @@ it:
         guests: Accompagnatori
         #original_hash: fce06e2
         comments: Commenti
+        #original_hash: dc9d458
+        paid_entry_fees: Pagato
         #original_hash: bae7d5b
         status: Stato
         #original_hash: 709a232
@@ -1137,6 +1139,8 @@ it:
     profile: profilo
     #original_hash: c0063c3
     register: Registrati!
+    #original_hash: f484f15
+    refund: Restituisci Pagamento
     #original_hash: a9af643
     update: Aggiorna Registrazione
     #original_hash: f6fdbe4
@@ -1193,6 +1197,14 @@ it:
       della competizione per i dettagli.
     #original_hash: 58b1a3c
     accepted: La tua registrazione è stata accettata!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: >-
+      Al momento hai pagato %{paid} su %{total_entry_fee} della tassa
+      d'iscrizione.
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Hai pagato l''intera tassa d''iscrizione di %{paid}.'
+    #original_hash: 05495d6
+    payment_button_text: 'Paga la tassa di iscrizione di %{entry_fee} con la carta di credito'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Per velocizzare il processo di registrazione, puoi impostare i tuoi eventi
@@ -1231,6 +1243,14 @@ it:
       not_confirmed_visible: Questa competizione non è confermata ma è visibile
       #original_hash: 0f44e45
       not_confirmed_not_visible: Questa competizione non è confermata e non è visibile
+      #original_hash: a821396
+      stripe_connected: >-
+        Hai collegato il tuo account Stripe e pertanto ora puoi ricevere i
+        pagamenti delle registrazioni per questa competizione.
+      #original_hash: 0a4bb53
+      stripe_not_connected: >-
+        A causa di un problema non è stato possibile collegare il tuo account
+        Stripe.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
@@ -1348,6 +1368,8 @@ it:
       no_upcoming_competitions_html: >-
         Non hai nessuna competizione programmata in futuro! Controlla la
         %{link}.
+      #original_hash: e0f66bb
+      competitions_list: lista competizioni
       #original_hash: 9104a03
       no_past_competitions: Non hai competizioni passate.
     competition_form:
