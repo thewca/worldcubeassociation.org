@@ -291,6 +291,8 @@ zh-TW:
         guests: 訪客
         #original_hash: fce06e2
         comments: 意見
+        #original_hash: dc9d458
+        paid_entry_fees: 付報名費
         #original_hash: bae7d5b
         status: 狀態
         #original_hash: 709a232
@@ -1007,6 +1009,8 @@ zh-TW:
     profile: 個人頁面
     #original_hash: c0063c3
     register: 報名!
+    #original_hash: f484f15
+    refund: 退款
     #original_hash: a9af643
     update: 更新報名
     #original_hash: f6fdbe4
@@ -1045,6 +1049,12 @@ zh-TW:
     waiting_list: 您的報名正在等候補位中。您也許需要先付報名費才能成功報名。詳情請至比賽網站查詢。
     #original_hash: 58b1a3c
     accepted: 您的報名已經被成功了!
+    #original_hash: 69cf660
+    entry_fees_partially_paid: '您已經支付總報名費%{total_entry_fee}元中的%{paid}元。'
+    #original_hash: 9153695
+    entry_fees_fully_paid: '您已經支付報名費全額%{paid}元。'
+    #original_hash: 05495d6
+    payment_button_text: '用卡片支付您的報名費%{entry_fee}元'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
   competitions:
@@ -1075,6 +1085,10 @@ zh-TW:
       not_confirmed_visible: 這場比賽尚未確認但已經公開了。
       #original_hash: 0f44e45
       not_confirmed_not_visible: 這場比賽尚未確認且尚未公開。
+      #original_hash: a821396
+      stripe_connected: 您已經成功將您的Stripe帳號綁定，您現在可以收取這場比賽的報名費了。
+      #original_hash: 0a4bb53
+      stripe_not_connected: 發生了一些問題，我們無法將您的Stripe帳號綁定。
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我參加過的比賽
