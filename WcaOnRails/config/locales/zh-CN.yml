@@ -227,6 +227,8 @@ zh-CN:
         phone_number: 手机号
         #original_hash: 7044004
         notes: 备注
+        #original_hash: 57eaf24
+        user_preferred_events: 首选项目
       competition:
         #original_hash: 89f89c0
         id: ID
@@ -282,11 +284,15 @@ zh-CN:
         remarks: 备注
         #original_hash: c305010
         clone_tabs: 我想复制所有tab，连同额外信息
+        #original_hash: c5497bc
+        competition_events: 项目
       registration:
         #original_hash: 3c23a67
         guests: 随行人员
         #original_hash: fce06e2
         comments: 备注
+        #original_hash: dc9d458
+        paid_entry_fees: 已支付
         #original_hash: bae7d5b
         status: 状态
         #original_hash: 709a232
@@ -740,8 +746,6 @@ zh-CN:
       password: 密码
       #original_hash: 3fc6dbe
       member_of: 成员：
-      #original_hash: 57eaf24
-      preferred_events: 首选项目
       #original_hash: 42619dd
       preferred_events_desc: 选择你的首选项目可以使你更快完成比赛报名。
       #original_hash: b402e03
@@ -849,8 +853,6 @@ zh-CN:
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
   registrations:
-    #original_hash: c5497bc
-    events: 项目
     errors:
       #original_hash: 44ab952
       need_name: 姓名必填
@@ -913,7 +915,7 @@ zh-CN:
       title: '%{person} for %{comp}'
     mailer:
       #original_hash: 72e2180
-      regards: '祝好，%{people}。'
+      regards_html: '祝好，%{people}。'
       new:
         #original_hash: 6fb638c
         mail_subject: '你已报名%{comp_name}'
@@ -996,6 +998,8 @@ zh-CN:
     profile: 资料
     #original_hash: c0063c3
     register: 报名！
+    #original_hash: f484f15
+    refund: 退款
     #original_hash: a9af643
     update: 更新报名信息
     #original_hash: f6fdbe4
@@ -1034,6 +1038,12 @@ zh-CN:
     waiting_list: 你的报名正等待审核。请查看比赛官网详情以确认是否需要支付报名费等流程。
     #original_hash: 58b1a3c
     accepted: 你的报名已通过！
+    #original_hash: 69cf660
+    entry_fees_partially_paid: '你当前已支付报名费%{paid}，总应付%{total_entry_fee}。'
+    #original_hash: 9153695
+    entry_fees_fully_paid: '你已支付所有报名费，共计%{paid}。'
+    #original_hash: 05495d6
+    payment_button_text: '使用银行卡支付报名费%{entry_fee}'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '你可以在%{link}设置你的偏好项目来使以后报名更快。'
   competitions:
@@ -1064,6 +1074,10 @@ zh-CN:
       not_confirmed_visible: 该个比赛尚未确认但是已公示
       #original_hash: 0f44e45
       not_confirmed_not_visible: 该比赛尚未确认和公示
+      #original_hash: a821396
+      stripe_connected: 你已成功关联到Stripe帐号，现在可以为该比赛支付报名费。
+      #original_hash: 0a4bb53
+      stripe_not_connected: 由于某些问题当前无法关联你的Stripe帐号。
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我的比赛
