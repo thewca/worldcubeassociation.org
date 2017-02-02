@@ -297,6 +297,8 @@ fr:
         guests: Accompagnateurs
         #original_hash: fce06e2
         comments: Commentaires
+        #original_hash: dc9d458
+        paid_entry_fees: Payé
         #original_hash: bae7d5b
         status: Statut
         #original_hash: 709a232
@@ -1148,6 +1150,8 @@ fr:
     profile: profil
     #original_hash: c0063c3
     register: Je m'inscris !
+    #original_hash: f484f15
+    refund: Rembourser le paiement
     #original_hash: a9af643
     update: Mettre à jour
     #original_hash: f6fdbe4
@@ -1205,6 +1209,12 @@ fr:
       internet de la compétition.
     #original_hash: 58b1a3c
     accepted: Votre inscription a été effectuée !
+    #original_hash: 69cf660
+    entry_fees_partially_paid: 'Vous avez payé %{paid} des %{total_entry_fee} de frais d''inscription.'
+    #original_hash: 9153695
+    entry_fees_fully_paid: 'Vous avez payé la totalité des frais d''inscriptions (%{paid}).'
+    #original_hash: 05495d6
+    payment_button_text: 'Payer les %{entry_fee} de frais d''inscription par carte'
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Pour accélérer vos prochaines inscriptions, vous pouvez définir vos
@@ -1243,6 +1253,14 @@ fr:
       not_confirmed_visible: Cette compétition n'est pas confirmée mais est visible
       #original_hash: 0f44e45
       not_confirmed_not_visible: Cette compétition n'est pas confirmée ni visible
+      #original_hash: a821396
+      stripe_connected: >-
+        Vous avez connecté votre compte Stripe avec succès, et vous pouvez
+        maintenant recevoir les frais d'inscription pour cette compétition.
+      #original_hash: 0a4bb53
+      stripe_not_connected: >-
+        Il y a eu un problème et nous n'avons pas pu connecter votre compte
+        Stripe.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
