@@ -49,7 +49,7 @@
 
   <% (I18n.available_locales - [:en]).each do |locale| %>
     <%
-      bad_keys_by_type = @bad_keys_by_type_by_locale[locale]
+      bad_keys_by_type = @bad_i18n_keys[locale]
       bad_keys_for_locale = bad_keys_by_type.values.flatten
       class_heading = bad_keys_for_locale.empty? ? "" : "heading-as-link"
       class_panel = bad_keys_for_locale.empty? ? "success" : "warning"
