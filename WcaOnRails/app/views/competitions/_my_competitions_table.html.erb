@@ -1,7 +1,7 @@
 <% if competitions.length < 1 %>
   <%= alert :info do %>
     <% if !past %>
-      <%= t '.no_upcoming_competitions_html', link: link_to('competitions list', competitions_path) %>
+      <%= t '.no_upcoming_competitions_html', link: link_to(t('.competitions_list'), competitions_path) %>
     <% else %>
       <%= t '.no_past_competitions' %>
     <% end %>
