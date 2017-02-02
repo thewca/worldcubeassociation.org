@@ -154,12 +154,12 @@ ja:
       invalid: 無効
     #original_hash: 49d0140
     days:
-      one: '1 日'
-      other: "%{count} 日"
+      zero: 0 日
+      other: '%{count} 日'
     #original_hash: 203e1b3
     these_events:
-      one: "この種目"
-      other: "これら %{count} 種目"
+      zero: 指定された種目
+      other: '指定された %{count} 種目'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -186,7 +186,7 @@ ja:
     attributes:
       user:
         #original_hash: eeb6920
-        name: フルネーム
+        name: 氏名
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
@@ -216,7 +216,7 @@ ja:
         #original_hash: 58e0c56
         remove_avatar: プロフィール画像を削除する
         #original_hash: 9af9099
-        results_notifications_enabled: 自分の結果が反映されたらメール通知を受信する。
+        results_notifications_enabled: 自分の競技結果が反映されたら電子メールで通知を受け取る。
         #original_hash: de60ab8
         delegate_status: 代理人ステータス
         #original_hash: 0f21717
@@ -378,7 +378,7 @@ ja:
     hints:
       user:
         #original_hash: 87e1e6f
-        dob: '生年月日をすべて半角で記入してください。 (2000年1月23日生の場合: 2000-01-23)'
+        dob: '生年月日をすべて半角で記入してください。 例: 2000年1月23日生の場合: 2000-01-23'
         #original_hash: 5106479
         name: >-
           氏名 (英字) を「名姓」の順に記入してください。姓名ともに頭文字のみ大文字にしてください。例: 中島 悠 の場合: <strong>Yu
@@ -586,8 +586,8 @@ ja:
       messages:
         #original_hash: e88f903
         form_error:
-          one: "1 件の誤りがあります。"
-          other: "%{count} 件の誤りがあります。"
+          zero: 誤りはありません。
+          other: '%{count} 件の誤りがあります。'
     doorkeeper:
       applications:
         help:
@@ -653,7 +653,7 @@ ja:
       #original_hash: 775d458
       my_competitions: 自分の大会
       #original_hash: 32fde96
-      new_competition: 新着
+      new_competition: 大会新規作成
       #original_hash: 612e12d
       results: 大会結果
       #original_hash: f5fe73c
@@ -788,7 +788,7 @@ ja:
           href='%{delegate_url}'>WCA 代理人</a>に連絡してください。
         reason:
           #original_hash: 370ff12
-          assigned: WCA ID が連携されています
+          assigned: 既に WCA ID が連携されています
           #original_hash: 1c4670f
           registered: 大会に参加申し込み済みです
       #original_hash: efc007a
@@ -882,30 +882,30 @@ ja:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        one: 人 (初参加者)
+        zero: 人 (初参加者)
         other: 人 (初参加者)
       #original_hash: bc010e3
       returner:
-        one: 人 (大会経験者)
+        zero: 人 (大会経験者)
         other: 人 (大会経験者)
       #original_hash: b7da17a
       person:
-        one: 人
+        zero: 人
         other: 人
     flash:
       #original_hash: da7ec53
       not_using_wca: この大会は WCA 大会申し込みシステムを利用していません
       #original_hash: d528030
       accepted_and_mailed:
-        one: 参加申し込みが完了しました。メールをご確認ください。
+        zero: 参加申し込みが完了しました。メールをご確認ください。
         other: 参加申し込みが完了しました。メールをご確認ください。
       #original_hash: 42ea8de
       rejected_and_mailed:
-        one: 申し込みはキャンセル待ちに登録されました。
+        zero: 申し込みはキャンセル待ちに登録されました。
         other: 申し込みはキャンセル待ちに登録されました。
       #original_hash: a360b31
       deleted_and_mailed:
-        one: 参加申し込みが削除されました。
+        zero: 参加申し込みが削除されました。
         other: 参加申し込みが削除されました。
       #original_hash: c3aa289
       single_deletion_and_mail: '参加申し込みが削除されました。%{mail} にメールを送信しました。'
@@ -976,8 +976,8 @@ ja:
       edit: 編集
       #original_hash: 0ab725c
       country_plural:
-        one: "1 か国"
-        other: "%{count} か国"
+        zero: 0 か国
+        other: '%{count} か国'
       #original_hash: 1feee0e
       export_csv: CSV に出力
       #original_hash: 84add5b
@@ -1040,7 +1040,7 @@ ja:
     #original_hash: fb34a17
     please_fix_profile_html: '%{comp} に参加申し込みするには、%{profile} 中の次の問題を解消してください:'
     #original_hash: 855ca9c
-    can_register: 'この下で %{comp} に参加申し込みできます。'
+    can_register: '以下のフォームで %{comp} に参加申し込みできます。'
     #original_hash: 4167ed7
     check_registration_information: 申し込み手順を確認して、参加費を支払う必要がある場合等は手順に従ってください。
     #original_hash: ea2b586
@@ -1078,7 +1078,7 @@ ja:
       #original_hash: a0168ee
       in_progress: 'この大会は開催中です。%{date} より後に結果が表示されます。'
       #original_hash: 3322400
-      tooltip_registered: すでに申し込み済みです。
+      tooltip_registered: 既に申し込み済みです。
       #original_hash: f2d092f
       tooltip_waiting_list: 現在キャンセル待ちです。
       #original_hash: 9ecd976
@@ -1115,11 +1115,11 @@ ja:
       website: ウェブサイト
       #original_hash: 680567f
       organizer_plural:
-        one: 主催者
+        zero: 主催者
         other: 主催者
       #original_hash: 6afa61e
       delegate:
-        one: WCA 代理人
+        zero: WCA 代理人
         other: WCA 代理人
       #original_hash: b37456c
       contact: お問い合わせ
@@ -1293,9 +1293,8 @@ ja:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: "そのような大会はありません"
-        one: "1 つの大会"
-        other: "%{count} 個の大会"
+        zero: そのような大会はありません
+        other: '%{count} 個の大会'
       #original_hash: e3528ec
       label: '周辺で開催される大会 (%{days} 以内かつ %{kms} km 以内)'
       #original_hash: 3446062
@@ -1438,7 +1437,7 @@ ja:
     #original_hash: 9100be3
     search_for_competition: '大会の検索はこちらから:'
     #original_hash: cba12bc
-    already_logged_in: すでに WCA アカウントにログインしています。
+    already_logged_in: 既に WCA アカウントにログインしています。
     #original_hash: 5b7fa52
     create_an_account: 'ここからアカウントを作成できます: %{here}'
     #original_hash: f8c910c
