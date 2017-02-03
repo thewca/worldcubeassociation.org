@@ -88,7 +88,7 @@ class Registration < ActiveRecord::Base
     user.wca_id
   end
 
-  alias_method :personId, :wca_id
+  alias personId wca_id
 
   def person
     Person.find_by_wca_id(personId)
