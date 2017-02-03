@@ -166,7 +166,7 @@ class SolveTime
           result = "0:#{time_seconds}"
         else
           while time_seconds >= 60
-            result = ":%02d#{result}" % ( time_seconds % 60 )
+            result = format(":%02d#{result}", time_seconds % 60)
             time_seconds = time_seconds / 60
           end
           result = "#{time_seconds}#{result}"
@@ -180,7 +180,7 @@ class SolveTime
       seconds = (time_centiseconds % 6000) / 100
       centis = time_centiseconds % 100
 
-      clock_format = (CLOCK_FORMAT % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, EMPTY_STRING)
+      clock_format = format(CLOCK_FORMAT, hours, minutes, seconds, centis).sub(/^[0:]*/, EMPTY_STRING)
       if clock_format.start_with? DOT_STRING
         clock_format = ZERO_STRING + clock_format
       end
