@@ -49,30 +49,6 @@ Style/RedundantSelf:
 ###
 ###
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/models/person.rb'
-    - 'config/initializers/doorkeeper.rb'
-    - 'config/unicorn.rb'
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'app/controllers/accounts/registrations_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/person.rb'
-    - 'app/models/post.rb'
-    - 'app/models/user.rb'
-    - 'app/uploaders/avatar_uploader_base.rb'
-
 # Offense count: 7
 # Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
 # NamePrefix: is_, has_, have_
