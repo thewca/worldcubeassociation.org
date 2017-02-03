@@ -30,11 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 9
-# Configuration parameters: CountComments.
-Metrics/ClassLength:
-  Max: 1853
-
 # Offense count: 864
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
