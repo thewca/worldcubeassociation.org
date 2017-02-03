@@ -14,6 +14,13 @@ restart_app() {
   kill -SIGQUIT $pid
 }
 
+commit_hash() {
+  REMOTE_URL=$1
+  REMOTE_BRANCHNAME=$2
+
+  echo $(git ls-remote https://github.com/thewca/wca-regulations-translations.git HEAD | sed 's/\(.\{7\}\).*/\1/')
+}
+
 rebuild_regs() {
   # Build WCA regulations
   # Uses wrc, see here: https://github.com/thewca/wca-regulations-compiler
@@ -33,9 +40,9 @@ rebuild_regs() {
   #  - The WCA Regulations
   #  - The WCA Regulations translations
   #  - The 'regulations-data' branch of this repo, which contains data such as TNoodle binaries
-  git_reg_hash=`git ls-remote https://github.com/thewca/wca-regulations.git official | sed 's/\(.\{7\}\).*/\1/'`
-  git_translations_hash=`git ls-remote https://github.com/thewca/wca-regulations-translations.git HEAD | sed 's/\(.\{7\}\).*/\1/'`
-  git_reg_data_hash=`git rev-parse --short origin/regulations-data`
+  git_reg_hash=`commit_hash https://github.com/thewca/wca-regulations.git official`
+  git_translations_hash=`commit_hash https://github.com/thewca/wca-regulations-translations.git HEAD`
+  git_reg_data_hash=`commit_hash https://github.com/thewca/worldcubeassociation.org.git regulations-data`
 
   rebuild_regulations=1
   rebuild_regulations_data=1
@@ -64,7 +71,8 @@ rebuild_regs() {
 
   # Checkout data (scramble programs, history)
   # Assuming we ran pull_latest, this automatically checks out the latest regulations-data
-  git checkout origin/regulations-data $build_folder
+  git fetch https://github.com/thewca/worldcubeassociation.org.git regulations-data
+  git checkout FETCH_HEAD $build_folder
   git reset HEAD $build_folder
 
   if [ $rebuild_translations -eq 1 ]; then
