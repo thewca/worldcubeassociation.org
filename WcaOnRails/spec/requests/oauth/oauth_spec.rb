@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "oauth api" do
+RSpec.describe "oauth api" do
   include Capybara::DSL
 
   let(:user) { FactoryGirl.create :user_with_wca_id }

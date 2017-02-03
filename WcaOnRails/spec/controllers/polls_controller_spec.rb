@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe PollsController do
+RSpec.describe PollsController do
 
   context "not logged in" do
     it "redirects to sign in" do

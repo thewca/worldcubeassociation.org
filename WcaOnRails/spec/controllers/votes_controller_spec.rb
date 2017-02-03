@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe VotesController do
+RSpec.describe VotesController do
   let(:poll) { FactoryGirl.create(:poll, :confirmed) }
 
   context "not logged in" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe PostsController do
+RSpec.describe PostsController do
   let(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
   let(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
   let(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }

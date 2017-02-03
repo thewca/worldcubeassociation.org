@@ -2,7 +2,7 @@
 require 'rails_helper'
 require 'i18n-spec'
 
-describe "Locale files content" do
+RSpec.describe "Locale files content" do
   Dir.glob(Rails.root.join('config', 'locales', '*.yml')).each do |locale_file|
     describe locale_file.to_s do
       it { is_expected.to be_parseable }
@@ -15,7 +15,7 @@ describe "Locale files content" do
   end
 end
 
-describe "Momentjs activation" do
+RSpec.describe "Momentjs activation" do
   let(:file_content) { File.read(Rails.root.join('app', 'assets', 'javascripts', 'application.js')) }
 
   (I18n.available_locales - [:en]).each do |locale|

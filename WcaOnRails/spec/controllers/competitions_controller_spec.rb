@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe CompetitionsController do
+RSpec.describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
   let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
 

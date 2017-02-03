@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe TeamsController do
+RSpec.describe TeamsController do
   let(:team) { FactoryGirl.create :team }
 
   describe "GET #index" do

@@ -13,7 +13,7 @@ class FailingJob < ActiveJob::Base
   end
 end
 
-describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
+RSpec.describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
   describe "call" do
     around(:each) do |example|
       old_delay_jobs = Delayed::Worker.delay_jobs

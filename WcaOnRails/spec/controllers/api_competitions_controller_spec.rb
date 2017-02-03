@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Api::V0::CompetitionsController do
+RSpec.describe Api::V0::CompetitionsController do
   let(:competition) {
     FactoryGirl.create(
       :competition,

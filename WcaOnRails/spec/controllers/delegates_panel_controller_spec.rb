@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe DelegatesPanelController do
+RSpec.describe DelegatesPanelController do
   describe "signed in as results team member" do
     let(:results_team_user) { FactoryGirl.create :results_team }
     before :each do

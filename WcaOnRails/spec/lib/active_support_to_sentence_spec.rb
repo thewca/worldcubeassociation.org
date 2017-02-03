@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-describe "Array.xss_aware_to_sentence" do
+RSpec.describe "Array.xss_aware_to_sentence" do
   let(:safe_str) { ">".html_safe }
 
   it "has 0 elements" do

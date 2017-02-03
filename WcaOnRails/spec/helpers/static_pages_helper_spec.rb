@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe StaticPagesHelper do
+RSpec.describe StaticPagesHelper do
   describe "#format_team_members" do
     it "returns the team structure" do
       team = FactoryGirl.create(:team)

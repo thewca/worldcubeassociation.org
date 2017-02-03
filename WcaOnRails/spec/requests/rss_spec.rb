@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "rss" do
+RSpec.describe "rss" do
   include Rack::Test::Methods
 
   let!(:post_1) { FactoryGirl.create :post,

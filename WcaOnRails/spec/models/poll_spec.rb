@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Poll do
+RSpec.describe Poll do
   it "has a valid factory" do
     expect(FactoryGirl.create :poll).to be_valid
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe DelegateReport do
+RSpec.describe DelegateReport do
   it "factory makes a valid delegate report" do
     dr = FactoryGirl.create :delegate_report
     expect(dr).to be_valid

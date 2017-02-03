@@ -7,7 +7,7 @@ def api_sign_in_as(user, scopes: nil)
   allow(controller).to receive(:doorkeeper_token) { token }
 end
 
-describe Api::V0::ApiController do
+RSpec.describe Api::V0::ApiController do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 

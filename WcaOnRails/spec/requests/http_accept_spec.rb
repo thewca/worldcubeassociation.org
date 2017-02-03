@@ -4,7 +4,7 @@ require "rails_helper"
 # In production, we see lots of requests that correspond to an HTTP_ACCEPT
 # header of "*/*;", which causes Rails to complain about a missing template.
 # curl -v -H "Accept: */*;" http://localhost:3000
-describe "HTTP_ACCEPT" do
+RSpec.describe "HTTP_ACCEPT" do
   include Capybara::DSL
 
   it 'handles malformed HTTP_ACCEPT' do

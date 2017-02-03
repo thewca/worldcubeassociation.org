@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Vote do
+RSpec.describe Vote do
   let(:poll) { FactoryGirl.create(:poll, :confirmed) }
   let(:delegate) { FactoryGirl.create(:delegate) }
   let(:vote) { FactoryGirl.create(:vote, user: delegate, poll: poll, poll_options: [ poll.poll_options.first ]) }

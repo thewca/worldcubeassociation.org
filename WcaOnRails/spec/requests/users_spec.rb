@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "users" do
+RSpec.describe "users" do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do

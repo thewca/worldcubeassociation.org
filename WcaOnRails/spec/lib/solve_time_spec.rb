@@ -5,7 +5,7 @@ def solve_time(centis)
   SolveTime.new('333', :single, centis)
 end
 
-describe "SolveTime" do
+RSpec.describe "SolveTime" do
   it "DNF" do
     expect(solve_time(-1).clock_format).to eq "DNF"
   end

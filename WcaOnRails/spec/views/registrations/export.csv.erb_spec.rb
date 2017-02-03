@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "registrations/export.csv.erb" do
+RSpec.describe "registrations/export.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition, :registration_open
     user = FactoryGirl.create(

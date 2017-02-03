@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe ApplicationController do
+RSpec.describe ApplicationController do
   describe "GET #update_locale" do
     let(:user) { FactoryGirl.create(:user) }
 

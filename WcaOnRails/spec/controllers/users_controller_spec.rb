@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe UsersController do
+RSpec.describe UsersController do
 
   describe "GET #edit" do
     let(:user) { FactoryGirl.create(:user_with_wca_id) }

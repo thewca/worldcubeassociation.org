@@ -2,7 +2,7 @@
 require 'middlewares/warden_user_logger'
 require 'ostruct'
 
-describe Middlewares::WardenUserLogger do
+RSpec.describe Middlewares::WardenUserLogger do
   describe "call" do
     let(:app) { double(:app) }
     let(:logger) { ->(s) { log_statements << s } }

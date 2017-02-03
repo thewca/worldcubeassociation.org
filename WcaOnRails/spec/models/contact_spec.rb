@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Contact do
+RSpec.describe Contact do
   it "should be valid" do
     expect(FactoryGirl.build :contact).to be_valid
   end
