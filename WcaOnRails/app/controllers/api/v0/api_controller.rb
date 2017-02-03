@@ -62,7 +62,7 @@ class Api::V0::ApiController < ApplicationController
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-    result = models.map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }.flatten(1)
+    result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
     render status: :ok, json: { result: result }
   end
 

@@ -30,13 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnabledForFlattenWithoutParams.
-Performance/FlatMap:
-  Exclude:
-    - 'app/controllers/api/v0/api_controller.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Performance/RedundantMatch:
