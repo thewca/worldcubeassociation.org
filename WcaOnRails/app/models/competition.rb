@@ -290,9 +290,11 @@ class Competition < ActiveRecord::Base
   def delegate_ids
     @delegate_ids || delegates.map(&:id).join(",")
   end
+
   def organizer_ids
     @organizer_ids || organizers.map(&:id).join(",")
   end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
