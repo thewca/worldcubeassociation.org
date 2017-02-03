@@ -34,24 +34,24 @@ class SolveTime
     elsif multi_blind?
       mb_value = wca_value
       # Extract wca_value parts.
-      old = mb_value / 1000000000 != 0
+      old = mb_value / 1_000_000_000 != 0
       if old
-        time_seconds = mb_value % 100000
-        mb_value /= 100000
+        time_seconds = mb_value % 100_000
+        mb_value /= 100_000
         @attempted = mb_value % 100
         mb_value /= 100
         @solved = 99 - mb_value % 100
       else
         missed = mb_value % 100
         mb_value /= 100
-        time_seconds = mb_value % 100000
-        mb_value /= 100000
+        time_seconds = mb_value % 100_000
+        mb_value /= 100_000
         difference = 99 - (mb_value % 100)
         @solved = difference + missed
         @attempted = @solved + missed
       end
 
-      @time_centiseconds = time_seconds == 99999 ? nil : time_seconds * 100
+      @time_centiseconds = time_seconds == 99_999 ? nil : time_seconds * 100
     else
       @time_centiseconds = wca_value
     end
@@ -175,8 +175,8 @@ class SolveTime
 
       "#{@solved}/#{@attempted} #{result}"
     else
-      hours = time_centiseconds / 360000
-      minutes = (time_centiseconds % 360000) / 6000
+      hours = time_centiseconds / 360_000
+      minutes = (time_centiseconds % 360_000) / 6000
       seconds = (time_centiseconds % 6000) / 100
       centis = time_centiseconds % 100
 

@@ -7,7 +7,7 @@ after "development:users" do
     end
 
     def random_wca_value
-      r = rand(5000..100000)
+      r = rand(5000..100_000)
 
       # Solves over 10 minutes must be rounded to the nearest second.
       if r > 10 * 60 * 100

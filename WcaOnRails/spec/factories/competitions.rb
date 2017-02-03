@@ -6,8 +6,8 @@ FactoryGirl.define do
     cityName "San Francisco"
     countryId "USA"
     information "Information!"
-    latitude { rand(-90000000..90000000) }
-    longitude { rand(-180000000..180000000) }
+    latitude { rand(-90_000_000..90_000_000) }
+    longitude { rand(-180_000_000..180_000_000) }
 
     transient do
       starts 1.year.ago

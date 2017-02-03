@@ -56,11 +56,6 @@ Style/NestedParenthesizedCalls:
     - 'spec/models/result_spec.rb'
     - 'spec/models/user_spec.rb'
 
-# Offense count: 67
-# Cop supports --auto-correct.
-Style/NumericLiterals:
-  MinDigits: 11
-
 # Offense count: 7
 # Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
 # NamePrefix: is_, has_, have_
