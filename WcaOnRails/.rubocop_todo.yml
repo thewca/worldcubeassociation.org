@@ -41,20 +41,6 @@ Style/MethodName:
     - 'app/models/round.rb'
     - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: aligned, indented
-Style/MultilineMethodCallIndentation:
-  Enabled: false
-
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: aligned, indented
-Style/MultilineOperationIndentation:
-  Enabled: false
-
 # Offense count: 5
 # Cop supports --auto-correct.
 Style/MutableConstant:

@@ -578,10 +578,9 @@ class Competition < ActiveRecord::Base
   end
 
   def nearby_competitions(days, distance)
-    Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id
-    ).select { |c| kilometers_to(c) <= distance }
-     .sort_by { |c| kilometers_to(c) }
+    Competition.where("ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
+               .select { |c| kilometers_to(c) <= distance }
+               .sort_by { |c| kilometers_to(c) }
   end
 
   private def to_radians(degrees)
@@ -692,9 +691,9 @@ class Competition < ActiveRecord::Base
       .sort_by { |event, _results| event.rank }
       .map do |event, results_for_event|
         rounds_with_results = results_for_event
-          .group_by(&:round)
-          .sort_by { |format, _results| format.rank }
-          .map { |round, results| [ round, results.sort_by { |r| [r.pos, r.personName] } ] }
+                              .group_by(&:round)
+                              .sort_by { |format, _results| format.rank }
+                              .map { |round, results| [ round, results.sort_by { |r| [r.pos, r.personName] } ] }
 
         [ event, rounds_with_results ]
       end
@@ -707,8 +706,10 @@ class Competition < ActiveRecord::Base
   # to a 40% performance improvement.
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
-      .execute(relation.to_sql)
-      .each(as: :hash).map { |r| LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"])) }
+                      .execute(relation.to_sql)
+                      .each(as: :hash).map { |r|
+                        LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"]))
+                      }
   end
 
   def started?
@@ -746,11 +747,11 @@ class Competition < ActiveRecord::Base
     sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
     registrations = self.registrations
-      .accepted
-      .joins(joinsql)
-      .where("registration_competition_events.competition_event_id=?", competition_event.id)
-      .order(sort_clause)
-      .select(selectsql)
+                        .accepted
+                        .joins(joinsql)
+                        .where("registration_competition_events.competition_event_id=?", competition_event.id)
+                        .order(sort_clause)
+                        .select(selectsql)
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|

@@ -3,13 +3,11 @@ class DatetimePickerInput < DatePickerInput
   private
 
   def display_pattern
-    I18n.t('datepicker.dformat') + ' ' +
-        I18n.t('timepicker.dformat')
+    I18n.t('datepicker.dformat') + ' ' + I18n.t('timepicker.dformat')
   end
 
   def picker_pattern
-    I18n.t('datepicker.pformat') + ' ' +
-        I18n.t('timepicker.pformat')
+    I18n.t('datepicker.pformat') + ' ' + I18n.t('timepicker.pformat')
   end
 
   def utc_addon

@@ -15,20 +15,20 @@ namespace :db do
 
       error_count = 0
       ActiveRecord::Base.subclasses
-        .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
-        .each do |type|
-          begin
-            type.find_each do |record|
-              unless record.valid?
-                puts "#<#{ type } id: #{ record.id }, errors: #{ record.errors.full_messages }>"
-                error_count += 1
-              end
-            end
-          rescue StandardError => e
-            puts "An exception occurred: #{ e.message }"
-            error_count += 1
-          end
-        end
+                        .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
+                        .each do |type|
+                          begin
+                            type.find_each do |record|
+                              unless record.valid?
+                                puts "#<#{ type } id: #{ record.id }, errors: #{ record.errors.full_messages }>"
+                                error_count += 1
+                              end
+                            end
+                          rescue StandardError => e
+                            puts "An exception occurred: #{ e.message }"
+                            error_count += 1
+                          end
+                        end
 
       ActiveRecord::Base.logger.level = original_log_level
 
