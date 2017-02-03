@@ -99,13 +99,6 @@ Style/SignalException:
     - 'lib/file_size_validator.rb'
     - 'lib/solve_time.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
-
 # Offense count: 36
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment.

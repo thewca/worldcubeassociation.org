@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module ApplicationHelper
-  def full_title(page_title='')
+  def full_title(page_title = '')
     base_title = WcaOnRails::Application.config.site_name
     if page_title.empty?
       base_title
@@ -42,7 +42,7 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text, id=nil)
+  def anchorable(pretty_text, id = nil)
     id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='glyphicon glyphicon-link'></span></a> #{pretty_text}</span>".html_safe
   end
@@ -114,7 +114,7 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, options={})
+  def wca_date_range(from_date, to_date, options = {})
     if from_date && to_date
       options[:separator] = '-'
       date_range(from_date, to_date, options)
@@ -123,7 +123,7 @@ module ApplicationHelper
     end
   end
 
-  def alert(type, content=nil, note: false, &block)
+  def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
     if note
       content = content_tag(:strong, "Note:") + " " + content

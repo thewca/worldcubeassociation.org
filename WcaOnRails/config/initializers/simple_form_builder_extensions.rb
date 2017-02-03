@@ -5,7 +5,7 @@
 
 module SimpleForm
   class FormBuilder
-    def id_for(method, options={})
+    def id_for(method, options = {})
       InstanceTagWithIdFor.new(object_name, method, self, options).id_for(options)
     end
 
