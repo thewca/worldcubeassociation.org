@@ -30,21 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'spec/controllers/polls_controller_spec.rb'
-    - 'spec/controllers/registrations_controller_spec.rb'
-    - 'spec/controllers/search_results_controller_spec.rb'
-    - 'spec/controllers/users_controller_spec.rb'
-    - 'spec/factories/team_members.rb'
-    - 'spec/factories/teams.rb'
-    - 'spec/factories/votes.rb'
-    - 'spec/models/poll_spec.rb'
-
 # Offense count: 14
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

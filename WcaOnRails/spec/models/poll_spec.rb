@@ -40,5 +40,4 @@ RSpec.describe Poll do
       expect(poll.deadline).to eq Date.new(2014, 2, 11)
     end
   end
-
 end

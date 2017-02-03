@@ -282,7 +282,6 @@ RSpec.describe RegistrationsController do
       patch :update, id: registration.id, registration: { accepted_at: Time.now }
       expect(registration.reload.accepted?).to eq false
     end
-
   end
 
   context "register" do
@@ -562,7 +561,6 @@ RSpec.describe RegistrationsController do
   end
 
   describe 'POST #process_payment' do
-
     context 'when not signed in' do
       let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       sign_out
@@ -622,7 +620,6 @@ RSpec.describe RegistrationsController do
   end
 
   describe 'POST #refund_payment' do
-
     context 'when signed in as a competitor' do
       let(:competition) { FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryGirl.create(:user, :wca_id) }

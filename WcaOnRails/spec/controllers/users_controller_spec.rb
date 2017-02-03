@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe UsersController do
-
   describe "GET #edit" do
     let(:user) { FactoryGirl.create(:user_with_wca_id) }
 

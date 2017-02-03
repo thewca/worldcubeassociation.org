@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe PollsController do
-
   context "not logged in" do
     it "redirects to sign in" do
       post :create
