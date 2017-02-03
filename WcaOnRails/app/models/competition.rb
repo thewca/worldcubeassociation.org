@@ -593,8 +593,8 @@ class Competition < ActiveRecord::Base
   # Source http://www.movable-type.co.uk/scripts/latlong.html
   def kilometers_to(c)
     6371 *
-      Math::sqrt(
-        ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 +
+      Math.sqrt(
+        ( (c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians  + latitude_radians)/2)) ** 2 +
         (c.latitude_radians - latitude_radians) ** 2
       )
   end

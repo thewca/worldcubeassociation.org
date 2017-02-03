@@ -30,13 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'app/models/competition.rb'
-    - 'spec/controllers/registrations_controller_spec.rb'
-
 # Offense count: 5
 # Cop supports --auto-correct.
 # Configuration parameters: Keywords.
