@@ -6,14 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 7
-Lint/AmbiguousRegexpLiteral:
-  Exclude:
-    - 'spec/controllers/api_controller_spec.rb'
-    - 'spec/controllers/competitions_controller_spec.rb'
-    - 'spec/views/layouts/application.html.erb_spec.rb'
-    - 'spec/views/registrations/register.html.erb_spec.rb'
-
 # Offense count: 3
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:

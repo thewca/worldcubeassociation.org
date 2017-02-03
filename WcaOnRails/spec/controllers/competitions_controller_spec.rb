@@ -514,14 +514,14 @@ describe CompetitionsController do
         get :post_announcement, id: competition
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
-        expect(post.body).to match /in #{competition.cityName}, #{competition.countryId}\./
+        expect(post.body).to match(/in #{competition.cityName}, #{competition.countryId}\./)
       end
 
       it 'handles nil start date' do
         competition.update_attributes(start_date: "", end_date: "")
         get :post_announcement, id: competition
         post = assigns(:post)
-        expect(post.title).to match /No date/
+        expect(post.title).to match(/No date/)
       end
     end
   end

@@ -446,7 +446,7 @@ describe Api::V0::ApiController do
         expect(json['me']['name']).to eq(user.name)
 
         # Verify that avatar url is a full url (starts with http(s))
-        expect(json['me']['avatar']['url']).to match /^https?/
+        expect(json['me']['avatar']['url']).to match(/^https?/)
 
         expect(json['me']['country_iso2']).to eq("US")
         expect(json['me']['gender']).to eq("m")
