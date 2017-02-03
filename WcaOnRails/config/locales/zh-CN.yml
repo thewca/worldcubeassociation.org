@@ -1187,6 +1187,8 @@ zh-CN:
       missing_report: 你还没提交报告！
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: '你当前没有即将到来的比赛！看看%{link}吧。'
+      #original_hash: e0f66bb
+      competitions_list: 比赛列表
       #original_hash: 9104a03
       no_past_competitions: 你没有以前的比赛。
     competition_form:
