@@ -261,7 +261,7 @@ describe CompetitionsController do
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
-        expect(new_comp.delegates.sort_by(&:id)).to eq (competition.delegates + [delegate]).sort_by(&:id)
+        expect(new_comp.delegates.sort_by(&:id)).to eq((competition.delegates + [delegate]).sort_by(&:id))
       end
 
       it 'clones a competition that they delegated' do
