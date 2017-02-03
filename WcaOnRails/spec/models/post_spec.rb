@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Post do
   it "has a valid factory" do
-    expect(FactoryGirl.create :post).to be_valid
+    expect(FactoryGirl.create(:post)).to be_valid
   end
 
   it "delegates crash course post is not world_readable" do

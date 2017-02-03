@@ -202,7 +202,7 @@ RSpec.describe User, type: :model do
 
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
-      expect(user.reload.read_attribute :avatar).to eq avatar
+      expect(user.reload.read_attribute(:avatar)).to eq avatar
       expect(File).to exist("public/uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
     end
 
@@ -224,7 +224,7 @@ RSpec.describe User, type: :model do
     user.update_attributes!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
     )
-    expect(user.read_attribute :pending_avatar).not_to be_nil
+    expect(user.read_attribute(:pending_avatar)).not_to be_nil
 
     user.update_attributes!(
       pending_avatar_crop_x: 40,
@@ -268,8 +268,8 @@ RSpec.describe User, type: :model do
     user.remove_avatar = true
     user.remove_pending_avatar = true
     user.save!
-    expect(user.read_attribute :avatar).to be_nil
-    expect(user.read_attribute :pending_avatar).to be_nil
+    expect(user.read_attribute(:avatar)).to be_nil
+    expect(user.read_attribute(:pending_avatar)).to be_nil
     expect(user.saved_avatar_crop_x).to be_nil
     expect(user.saved_avatar_crop_y).to be_nil
     expect(user.saved_avatar_crop_w).to be_nil
@@ -290,13 +290,13 @@ RSpec.describe User, type: :model do
       pending_avatar_crop_h: 70,
     )
     user.approve_pending_avatar!
-    expect(user.read_attribute :avatar).not_to be_nil
+    expect(user.read_attribute(:avatar)).not_to be_nil
     expect(user.saved_avatar_crop_x).to eq 40
     expect(user.saved_avatar_crop_y).to eq 50
     expect(user.saved_avatar_crop_w).to eq 60
     expect(user.saved_avatar_crop_h).to eq 70
 
-    expect(user.read_attribute :pending_avatar).to be_nil
+    expect(user.read_attribute(:pending_avatar)).to be_nil
     expect(user.saved_pending_avatar_crop_x).to eq nil
     expect(user.saved_pending_avatar_crop_y).to eq nil
     expect(user.saved_pending_avatar_crop_w).to eq nil
