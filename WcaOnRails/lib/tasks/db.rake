@@ -24,7 +24,7 @@ namespace :db do
                 error_count += 1
               end
             end
-          rescue Exception => e
+          rescue StandardError => e
             puts "An exception occurred: #{ e.message }"
             error_count += 1
           end
