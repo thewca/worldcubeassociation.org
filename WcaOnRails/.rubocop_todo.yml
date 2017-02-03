@@ -41,15 +41,6 @@ Style/MethodName:
     - 'app/models/round.rb'
     - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-Style/MultilineBlockLayout:
-  Exclude:
-    - 'spec/controllers/admin_controller_spec.rb'
-    - 'spec/controllers/api_competitions_controller_spec.rb'
-    - 'spec/models/merge_people_spec.rb'
-    - 'spec/requests/rss_spec.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
