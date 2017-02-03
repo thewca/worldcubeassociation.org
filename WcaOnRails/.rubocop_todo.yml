@@ -30,15 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'config/application.rb'
-    - 'config/environments/production.rb'
-    - 'db/migrate/20150504022234_devise_create_devise_users.rb'
-    - 'spec/controllers/registrations_controller_spec.rb'
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

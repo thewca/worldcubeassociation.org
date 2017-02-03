@@ -69,7 +69,6 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
 
-
       expect do
         xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
                                               selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
@@ -373,7 +372,6 @@ RSpec.describe RegistrationsController do
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to match "not using WCA registration"
     end
-
 
     it "redirects psych sheet to highest ranked event if no 333" do
       competition.events = [Event.find("222"), Event.find("444")]
