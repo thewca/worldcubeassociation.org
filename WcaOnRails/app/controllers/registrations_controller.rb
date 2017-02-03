@@ -204,13 +204,16 @@ class RegistrationsController < ApplicationController
     end
     token = params[:stripeToken]
 
-    charge = Stripe::Charge.create({
-      amount: registration.outstanding_entry_fees.cents,
-      currency: registration.outstanding_entry_fees.currency.iso_code,
-      source: token,
-      description: "Registration payment for #{competition.name}",
-      metadata: {"Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name},
-    }, stripe_account: competition.connected_stripe_account_id)
+    charge = Stripe::Charge.create(
+      {
+        amount: registration.outstanding_entry_fees.cents,
+        currency: registration.outstanding_entry_fees.currency.iso_code,
+        source: token,
+        description: "Registration payment for #{competition.name}",
+        metadata: {"Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name},
+      },
+      stripe_account: competition.connected_stripe_account_id,
+    )
 
     registration.record_payment(
       charge.amount,
@@ -232,9 +235,12 @@ class RegistrationsController < ApplicationController
     registration = Registration.find(params[:id])
     payment = RegistrationPayment.find(params[:payment_id])
 
-    refund = Stripe::Refund.create({
-      charge: payment.stripe_charge_id,
-    }, stripe_account: registration.competition.connected_stripe_account_id)
+    refund = Stripe::Refund.create(
+      {
+        charge: payment.stripe_charge_id,
+      },
+      stripe_account: registration.competition.connected_stripe_account_id,
+    )
 
     registration.record_refund(
       refund.amount,
