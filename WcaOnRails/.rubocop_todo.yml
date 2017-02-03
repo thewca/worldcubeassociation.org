@@ -30,23 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
-# SupportedStyles: line_count_based, semantic, braces_for_chaining
-# ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
-# FunctionalMethods: let, let!, subject, watch
-# IgnoredMethods: lambda, proc, it
-Style/BlockDelimiters:
-  Exclude:
-    - 'app/controllers/registrations_controller.rb'
-    - 'spec/controllers/admin_controller_spec.rb'
-    - 'spec/controllers/api_competitions_controller_spec.rb'
-    - 'spec/controllers/competitions_controller_spec.rb'
-    - 'spec/controllers/registrations_controller_spec.rb'
-    - 'spec/models/merge_people_spec.rb'
-    - 'spec/requests/rss_spec.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/BlockEndNewline:

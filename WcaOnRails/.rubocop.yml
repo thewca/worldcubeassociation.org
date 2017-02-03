@@ -58,9 +58,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 23
 
-Style/DoubleNegation:
-  Enabled: false
-
 Metrics/LineLength:
   Max: 245
 
@@ -76,13 +73,22 @@ Performance/RedundantMatch:
 Style/NegatedIf:
   Enabled: false
 
-Style/PerlBackrefs:
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/NegatedIf:
   Enabled: false
 
 Style/Next:
   Enabled: false
 
 Style/NumericPredicate:
+  Enabled: false
+
+Style/PerlBackrefs:
   Enabled: false
 
 Style/SignalException:
