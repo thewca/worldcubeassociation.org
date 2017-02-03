@@ -41,6 +41,12 @@ Style/MethodName:
     - 'app/models/round.rb'
     - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
 
+# Offense count: 16
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: snake_case, camelCase
+Style/VariableName:
+  Enabled: false
+
 # Offense count: 22
 Style/NestedParenthesizedCalls:
   Exclude:
@@ -107,12 +113,6 @@ Style/SymbolProc:
   Exclude:
     - 'db/migrate/20151222013017_add_timestamps_to_preregs.rb'
     - 'spec/factories/users.rb'
-
-# Offense count: 16
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/VariableName:
-  Enabled: false
 
 # Offense count: 3
 # Cop supports --auto-correct.
