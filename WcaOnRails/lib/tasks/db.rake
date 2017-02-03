@@ -20,12 +20,12 @@ namespace :db do
                           begin
                             type.find_each do |record|
                               unless record.valid?
-                                puts "#<#{ type } id: #{ record.id }, errors: #{ record.errors.full_messages }>"
+                                puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
                                 error_count += 1
                               end
                             end
                           rescue StandardError => e
-                            puts "An exception occurred: #{ e.message }"
+                            puts "An exception occurred: #{e.message}"
                             error_count += 1
                           end
                         end
