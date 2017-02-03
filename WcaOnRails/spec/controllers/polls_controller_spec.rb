@@ -33,7 +33,7 @@ RSpec.describe PollsController do
 
       it "edits a poll" do
         poll = FactoryGirl.create(:poll)
-        post :update, id: poll.id, poll: { question: "Pedro" , multiple: true, deadline: '2016-03-15' }
+        post :update, id: poll.id, poll: { question: "Pedro", multiple: true, deadline: '2016-03-15' }
         poll.reload
         expect(poll.question).to eq "Pedro"
         expect(poll.multiple?).to eq true
