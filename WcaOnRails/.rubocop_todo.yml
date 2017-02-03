@@ -30,11 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 54
-# Configuration parameters: CountComments.
-Metrics/MethodLength:
-  Max: 124
-
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:

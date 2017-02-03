@@ -64,6 +64,9 @@ Style/DoubleNegation:
 Metrics/LineLength:
   Max: 245
 
+Metrics/MethodLength:
+  Enabled: false
+
 Style/NegatedIf:
   Enabled: false
 
