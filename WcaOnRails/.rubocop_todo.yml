@@ -29,6 +29,26 @@ Style/VariableName:
 ### End camelCase stuff
 ###
 
+###
+### See https://github.com/thewca/worldcubeassociation.org/issues/1285
+###
+# Offense count: 61
+# Cop supports --auto-correct.
+Style/RedundantSelf:
+  Exclude:
+    - 'app/models/competition.rb'
+    - 'app/models/contact.rb'
+    - 'app/models/person.rb'
+    - 'app/models/poll.rb'
+    - 'app/models/poll_option.rb'
+    - 'app/models/registration.rb'
+    - 'app/models/round.rb'
+    - 'app/models/team_member.rb'
+    - 'app/models/user.rb'
+###
+###
+###
+
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks.
@@ -71,20 +91,6 @@ Style/PredicateName:
   Exclude:
     - 'app/models/competition.rb'
     - 'app/models/post.rb'
-
-# Offense count: 61
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'app/models/competition.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/person.rb'
-    - 'app/models/poll.rb'
-    - 'app/models/poll_option.rb'
-    - 'app/models/registration.rb'
-    - 'app/models/round.rb'
-    - 'app/models/team_member.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
