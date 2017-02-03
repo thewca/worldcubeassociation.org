@@ -129,7 +129,7 @@ Style/RedundantParentheses:
   Enabled: false
 
 Style/SignalException:
-  EnforcedStyle: semantic
+  EnforcedStyle: only_raise
 
 Style/SpaceAroundOperators:
   Enabled: false

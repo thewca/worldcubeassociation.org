@@ -85,26 +85,6 @@ Style/RedundantSelf:
     - 'app/models/team_member.rb'
     - 'app/models/user.rb'
 
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: only_raise, only_fail, semantic
-Style/SignalException:
-  Exclude:
-    - 'app/controllers/admin/avatars_controller.rb'
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/controllers/oauth/applications_controller.rb'
-    - 'app/controllers/posts_controller.rb'
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/country.rb'
-    - 'app/models/event.rb'
-    - 'app/models/person.rb'
-    - 'app/models/round.rb'
-    - 'config/unicorn.rb'
-    - 'lib/file_size_validator.rb'
-    - 'lib/solve_time.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoredMethods.

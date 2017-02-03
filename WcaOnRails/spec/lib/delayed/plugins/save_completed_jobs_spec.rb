@@ -9,7 +9,7 @@ end
 
 class FailingJob < ActiveJob::Base
   def perform
-    fail "Failure!"
+    raise "Failure!"
   end
 end
 
