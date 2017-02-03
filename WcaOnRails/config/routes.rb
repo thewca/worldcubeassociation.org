@@ -9,13 +9,13 @@ Rails.application.routes.draw do
   devise_for :users, skip: :registrations
   devise_scope :user do
     resource :registration,
-      only: [:new, :create],
-      path: 'users',
-      path_names: { new: 'sign_up' },
-      controller: 'accounts/registrations',
-      as: :user_registration do
-        get :cancel
-      end
+             only: [:new, :create],
+             path: 'users',
+             path_names: { new: 'sign_up' },
+             controller: 'accounts/registrations',
+             as: :user_registration do
+               get :cancel
+             end
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   resources :users, only: [:index, :edit, :update]
