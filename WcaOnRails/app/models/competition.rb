@@ -409,7 +409,7 @@ class Competition < ActiveRecord::Base
       return true
     end
 
-    return false
+    false
   end
 
   def can_receive_registration_emails?(user_id)
@@ -422,7 +422,7 @@ class Competition < ActiveRecord::Base
       return true
     end
 
-    return false
+    false
   end
 
   after_save :update_receive_registration_emails

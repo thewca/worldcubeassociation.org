@@ -118,7 +118,7 @@ class UsersController < ApplicationController
       redirect_to root_url
       return true
     end
-    return false
+    false
   end
 
   private def user_params

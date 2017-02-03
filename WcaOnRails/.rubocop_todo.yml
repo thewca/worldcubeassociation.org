@@ -65,19 +65,6 @@ Style/PredicateName:
     - 'app/models/competition.rb'
     - 'app/models/post.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Exclude:
-    - 'app/controllers/polls_controller.rb'
-    - 'app/controllers/teams_controller.rb'
-    - 'app/controllers/users_controller.rb'
-    - 'app/controllers/votes_controller.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/merge_people.rb'
-    - 'app/models/user.rb'
-
 # Offense count: 61
 # Cop supports --auto-correct.
 Style/RedundantSelf:

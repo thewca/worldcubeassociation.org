@@ -65,6 +65,6 @@ class PollsController < ApplicationController
     if params[:commit] == "Confirm" && current_user.can_create_poll?
       poll_params[:confirmed_at] = Time.now
     end
-    return poll_params
+    poll_params
   end
 end
