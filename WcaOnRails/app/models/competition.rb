@@ -692,8 +692,8 @@ class Competition < ActiveRecord::Base
     light_results_from_relation(results)
       .group_by(&:event)
       .sort_by { |event, _results| event.rank }
-      .map do |event, results|
-        rounds_with_results = results
+      .map do |event, results_for_event|
+        rounds_with_results = results_for_event
           .group_by(&:round)
           .sort_by { |format, _results| format.rank }
           .map { |round, results| [ round, results.sort_by { |r| [r.pos, r.personName] } ] }

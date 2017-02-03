@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/models/competition.rb'
-    - 'db/seeds/development/competitions.seeds.rb'
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks.

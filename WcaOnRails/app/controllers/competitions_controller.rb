@@ -214,8 +214,8 @@ class CompetitionsController < ApplicationController
         comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', { code: code })
         unless comp_records.empty?
           body += "#{region_name} records: "
-          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results|
-            results_by_personId = results.group_by(&:personId).sort
+          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
+            results_by_personId = results_for_name.group_by(&:personId).sort
             results_by_personId.map do |personId, results|
               if results_by_personId.length > 1
                 # Two or more people with the same name set records at this competition!
