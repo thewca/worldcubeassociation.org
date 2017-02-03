@@ -139,3 +139,6 @@ Style/StringLiteralsInInterpolation:
 
 Style/WordArray:
   Enabled: false
+
+Style/SymbolProc:
+  Enabled: false

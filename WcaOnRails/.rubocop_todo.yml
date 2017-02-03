@@ -91,12 +91,3 @@ Style/PredicateName:
   Exclude:
     - 'app/models/competition.rb'
     - 'app/models/post.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: respond_to
-Style/SymbolProc:
-  Exclude:
-    - 'db/migrate/20151222013017_add_timestamps_to_preregs.rb'
-    - 'spec/factories/users.rb'
