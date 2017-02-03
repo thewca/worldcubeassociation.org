@@ -37,15 +37,15 @@ class SolveTime
       old = mb_value / 1000000000 != 0
       if old
         time_seconds = mb_value % 100000
-        mb_value = mb_value / 100000
+        mb_value /= 100000
         @attempted = mb_value % 100
-        mb_value = mb_value / 100
+        mb_value /= 100
         @solved = 99 - mb_value % 100
       else
         missed = mb_value % 100
-        mb_value = mb_value / 100
+        mb_value /= 100
         time_seconds = mb_value % 100000
-        mb_value = mb_value / 100000
+        mb_value /= 100000
         difference = 99 - ( mb_value % 100 )
         @solved = difference + missed
         @attempted = @solved + missed
@@ -167,7 +167,7 @@ class SolveTime
         else
           while time_seconds >= 60
             result = format(":%02d#{result}", time_seconds % 60)
-            time_seconds = time_seconds / 60
+            time_seconds /= 60
           end
           result = "#{time_seconds}#{result}"
         end
