@@ -65,12 +65,6 @@ Style/PredicateName:
     - 'app/models/competition.rb'
     - 'app/models/post.rb'
 
-# Offense count: 4
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, exploded
-Style/RaiseArgs:
-  Enabled: false
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/RedundantParentheses:

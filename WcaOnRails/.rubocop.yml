@@ -112,6 +112,9 @@ Style/NumericPredicate:
 Style/PerlBackrefs:
   Enabled: false
 
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
 Style/SignalException:
   EnforcedStyle: semantic
 

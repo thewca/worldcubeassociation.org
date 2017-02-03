@@ -12,7 +12,7 @@ class FileSizeValidator < ActiveModel::EachValidator
   def initialize(options)
     range = (options.delete(:in) || options.delete(:within))
     if range
-      raise ArgumentError, ":in and :within must be a Range" unless range.is_a?(Range)
+      raise ArgumentError.new(":in and :within must be a Range") unless range.is_a?(Range)
       options[:minimum] = range.begin
       options[:maximum] = range.end
       options[:maximum] -= 1 if range.exclude_end?
@@ -25,20 +25,20 @@ class FileSizeValidator < ActiveModel::EachValidator
     keys = CHECKS.keys & options.keys
 
     if keys.empty?
-      raise ArgumentError, 'Range unspecified. Specify the :within, :maximum, :minimum, or :is option.'
+      raise ArgumentError.new('Range unspecified. Specify the :within, :maximum, :minimum, or :is option.')
     end
 
     keys.each do |key|
       value = options[key]
 
       unless value.is_a?(Integer) && value >= 0
-        raise ArgumentError, ":#{key} must be a nonnegative Integer"
+        raise ArgumentError.new(":#{key} must be a nonnegative Integer")
       end
     end
   end
 
   def validate_each(record, attribute, value)
-    raise(ArgumentError, "A CarrierWave::Uploader::Base object was expected") unless value.is_a? CarrierWave::Uploader::Base
+    raise ArgumentError.new("A CarrierWave::Uploader::Base object was expected") unless value.is_a? CarrierWave::Uploader::Base
 
     value = (options[:tokenizer] || DEFAULT_TOKENIZER).call(value) if value.is_a?(String)
 
