@@ -41,23 +41,6 @@ Style/MethodName:
     - 'app/models/round.rb'
     - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
 
-# Offense count: 24
-# Cop supports --auto-correct.
-Style/NegatedIf:
-  Exclude:
-    - 'app/controllers/api/v0/api_controller.rb'
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/contact.rb'
-    - 'app/models/merge_people.rb'
-    - 'app/models/registration.rb'
-    - 'app/models/user.rb'
-    - 'app/models/vote.rb'
-    - 'config/initializers/doorkeeper.rb'
-    - 'config/unicorn.rb'
-    - 'db/migrate/20150521005227_no_more_drupal.rb'
-
 # Offense count: 22
 Style/NestedParenthesizedCalls:
   Exclude:
