@@ -30,17 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 2
-Style/ClassVars:
-  Exclude:
-    - 'app/models/round.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ClosingParenthesisIndentation:
-  Exclude:
-    - 'app/inputs/events_picker_input.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/ColonMethodCall:
