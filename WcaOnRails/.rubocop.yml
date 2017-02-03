@@ -73,6 +73,9 @@ Performance/RedundantMatch:
 Style/NegatedIf:
   Enabled: false
 
+Style/AsciiComments:
+  Enabled: false
+
 Style/BlockDelimiters:
   Enabled: false
 
@@ -82,6 +85,10 @@ Style/ClassAndModuleChildren:
 Style/ConditionalAssignment:
   Enabled: false
 
+Style/ClassVars:
+  Exclude:
+    - app/models/country.rb
+
 Style/Documentation:
   Enabled: false
 
@@ -90,6 +97,9 @@ Style/DoubleNegation:
 
 Style/EmptyElse:
   EnforcedStyle: empty
+
+Style/IfInsideElse:
+  Enabled: false
 
 Style/IfUnlessModifier:
   Enabled: false
@@ -121,12 +131,5 @@ Style/RedundantParentheses:
 Style/SignalException:
   EnforcedStyle: semantic
 
-Style/ClassVars:
-  Exclude:
-    - app/models/country.rb
-
-Style/IfInsideElse:
-  Enabled: false
-
-Style/AsciiComments:
+Style/SpaceAroundOperators:
   Enabled: false

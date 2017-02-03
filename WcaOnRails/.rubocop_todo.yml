@@ -99,19 +99,6 @@ Style/SignalException:
     - 'lib/file_size_validator.rb'
     - 'lib/solve_time.rb'
 
-# Offense count: 36
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'app/models/competition.rb'
-    - 'db/seeds/development/competitions.seeds.rb'
-    - 'spec/controllers/teams_controller_spec.rb'
-    - 'spec/helpers/static_pages_helper_spec.rb'
-    - 'spec/models/competition_spec.rb'
-    - 'spec/models/merge_people_spec.rb'
-    - 'spec/models/result_spec.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/SpaceBeforeComma:
