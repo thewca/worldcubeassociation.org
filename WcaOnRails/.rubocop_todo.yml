@@ -30,9 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-Metrics/ParameterLists:
-  Enabled: false
-
 # Offense count: 57
 Metrics/AbcSize:
   Max: 125

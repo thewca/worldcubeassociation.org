@@ -45,6 +45,10 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 23
 
+Metrics/ParameterLists:
+  Max: 5
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Max: 23
 
