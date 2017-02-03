@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
   end
 
   def claim_wca_id
@@ -69,20 +69,20 @@ class UsersController < ApplicationController
 
   def edit_avatar_thumbnail
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
   end
 
   def edit_pending_avatar_thumbnail
     @user = user_to_edit
     @pending_avatar = true
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
     render :edit_avatar_thumbnail
   end
 
   def update
     @user = user_to_edit
     @user.current_user = current_user
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }

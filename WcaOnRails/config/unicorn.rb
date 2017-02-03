@@ -29,12 +29,14 @@ timeout 30
 
 preload_app true
 
-before_fork do |server, worker|
-  defined?(ActiveRecord::Base) and
+before_fork do |_server, _worker|
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
+  end
 end
 
-after_fork do |server, worker|
-  defined?(ActiveRecord::Base) and
+after_fork do |_server, _worker|
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
+  end
 end

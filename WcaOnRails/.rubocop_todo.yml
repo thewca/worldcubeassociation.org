@@ -30,22 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: always, conditionals
-Style/AndOr:
-  Exclude:
-    - 'app/controllers/users_controller.rb'
-    - 'app/models/country.rb'
-    - 'app/models/event.rb'
-    - 'app/models/format.rb'
-    - 'app/models/round.rb'
-    - 'app/models/user.rb'
-    - 'app/uploaders/avatar_uploader_base.rb'
-    - 'config/initializers/carrierwave.rb'
-    - 'config/unicorn.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/BlockComments:

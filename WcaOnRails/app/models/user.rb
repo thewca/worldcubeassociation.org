@@ -269,7 +269,7 @@ class User < ActiveRecord::Base
 
   validate :senior_delegate_presence
   def senior_delegate_presence
-    if !User.delegate_status_allows_senior_delegate(delegate_status) and senior_delegate
+    if !User.delegate_status_allows_senior_delegate(delegate_status) && senior_delegate
       errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
     end
   end
@@ -603,7 +603,7 @@ class User < ActiveRecord::Base
   end
 
   attr_accessor :doorkeeper_token
-  def serializable_hash(options = nil)
+  def serializable_hash(_options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",
