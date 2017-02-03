@@ -100,7 +100,7 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
+  validates :external_website, format: { with: %r{\Ahttps?://.*\z} }, allow_blank: true
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200

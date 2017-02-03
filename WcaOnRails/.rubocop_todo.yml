@@ -79,14 +79,6 @@ Style/RedundantSelf:
     - 'app/models/team_member.rb'
     - 'app/models/user.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Exclude:
-    - 'app/models/competition.rb'
-
 # Offense count: 6
 # Cop supports --auto-correct.
 Style/SelfAssignment:
