@@ -74,7 +74,7 @@ RSpec.describe Api::V0::ApiController do
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].select { |u| u["name"] == "Jeremy"}[0]).not_to be_nil
+      expect(json["result"].select { |u| u["name"] == "Jeremy" }[0]).not_to be_nil
     end
 
     it 'does not find dummy accounts' do
@@ -499,7 +499,7 @@ RSpec.describe Api::V0::ApiController do
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
-        allow(controller).to receive(:doorkeeper_token) {token}
+        allow(controller).to receive(:doorkeeper_token) { token }
       end
 
       it 'works' do
@@ -526,7 +526,7 @@ RSpec.describe Api::V0::ApiController do
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
-        allow(controller).to receive(:doorkeeper_token) {token}
+        allow(controller).to receive(:doorkeeper_token) { token }
       end
 
       it 'works' do

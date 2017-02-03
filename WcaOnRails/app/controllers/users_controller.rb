@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { }
+      format.html {}
       format.json do
         @users = User.joins("INNER JOIN Countries ON iso2 = country_iso2")
         params[:search]&.split&.each do |part|

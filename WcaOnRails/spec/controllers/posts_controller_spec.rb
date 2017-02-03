@@ -42,7 +42,7 @@ RSpec.describe PostsController do
       end
 
       it "cannot find not worldreadable posts" do
-        expect {get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
