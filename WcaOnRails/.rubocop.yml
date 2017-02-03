@@ -18,6 +18,9 @@ Lint/UnusedMethodArgument:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
+Style/RedundantSelf:
+  Enabled: false
+
 Style/SafeNavigation:
   Enabled: false
 
