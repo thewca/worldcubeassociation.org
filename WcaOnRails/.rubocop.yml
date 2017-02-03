@@ -88,6 +88,9 @@ Style/Documentation:
 Style/DoubleNegation:
   Enabled: false
 
+Style/EmptyElse:
+  EnforcedStyle: empty
+
 Style/NegatedIf:
   Enabled: false
 
