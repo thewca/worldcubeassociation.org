@@ -4,7 +4,7 @@
 namespace :db do
   namespace :data do
     desc 'Validates all records in the database'
-    task :validate => :environment do
+    task validate: :environment do
       original_log_level = ActiveRecord::Base.logger.level
       ActiveRecord::Base.logger.level = 1
 

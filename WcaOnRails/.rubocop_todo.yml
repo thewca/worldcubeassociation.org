@@ -30,13 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues.
-# SupportedStyles: ruby19, ruby19_no_mixed_keys, hash_rockets
-Style/HashSyntax:
-  Enabled: false
-
 # Offense count: 2
 Style/IfInsideElse:
   Exclude:
