@@ -6,6 +6,29 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+###
+### We can't get rid of all the camelCase until we've done database migrations.
+###
+# Offense count: 4
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: snake_case, camelCase
+Style/MethodName:
+  Exclude:
+    - 'app/controllers/users_controller.rb'
+    - 'app/models/light_result.rb'
+    - 'app/models/event.rb'
+    - 'app/models/round.rb'
+    - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
+
+# Offense count: 16
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: snake_case, camelCase
+Style/VariableName:
+  Enabled: false
+###
+### End camelCase stuff
+###
+
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks.
@@ -29,23 +52,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/post.rb'
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
-
-# Offense count: 4
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/MethodName:
-  Exclude:
-    - 'app/controllers/users_controller.rb'
-    - 'app/models/light_result.rb'
-    - 'app/models/event.rb'
-    - 'app/models/round.rb'
-    - 'db/migrate/20160109070723_convert_process_links_format_to_markdown.rb'
-
-# Offense count: 16
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: snake_case, camelCase
-Style/VariableName:
-  Enabled: false
 
 # Offense count: 22
 Style/NestedParenthesizedCalls:
