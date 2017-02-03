@@ -10,8 +10,8 @@ class PollsController < ApplicationController
     else
       @polls = Poll.where.not(confirmed_at: nil)
     end
-    @open_polls = @polls.reject &:over?
-    @closed_polls = @polls.select &:over?
+    @open_polls = @polls.reject(&:over?)
+    @closed_polls = @polls.select(&:over?)
   end
 
   def new

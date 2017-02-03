@@ -6,15 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 8
-Lint/AmbiguousOperator:
-  Exclude:
-    - 'app/controllers/polls_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/event.rb'
-    - 'app/models/registration.rb'
-
 # Offense count: 7
 Lint/AmbiguousRegexpLiteral:
   Exclude:
