@@ -31,7 +31,7 @@ class RegistrationsController < ApplicationController
 
   def psych_sheet
     @competition = competition_from_params
-    most_main_event = @competition.events.min_by { |e| e.rank }
+    most_main_event = @competition.events.min_by(&:rank)
     redirect_to competition_psych_sheet_event_url(@competition.id, most_main_event.id)
   end
 

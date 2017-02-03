@@ -105,7 +105,6 @@ Style/SignalException:
 # IgnoredMethods: respond_to
 Style/SymbolProc:
   Exclude:
-    - 'app/controllers/registrations_controller.rb'
     - 'db/migrate/20151222013017_add_timestamps_to_preregs.rb'
     - 'spec/factories/users.rb'
 
