@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   # signing up for an account.
   attr_accessor :sign_up_panel_to_show
 
-  ALLOWABLE_GENDERS = [:m, :f, :o]
+  ALLOWABLE_GENDERS = [:m, :f, :o].freeze
   enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
 
   enum delegate_status: {
@@ -196,8 +196,8 @@ class User < ActiveRecord::Base
   AVATAR_PARAMETERS = {
     file_size: {
       maximum: 2.megabytes.to_i,
-    },
-  }
+    }.freeze,
+  }.freeze
 
   mount_uploader :pending_avatar, PendingAvatarUploader
   crop_uploaded :pending_avatar
@@ -503,7 +503,7 @@ class User < ActiveRecord::Base
     :unconfirmed_wca_id,
     :delegate_id_to_handle_wca_id_claim,
     :dob_verification,
-  ]
+  ].freeze
 
   def editable_fields_of_user(user)
     fields = Set.new
