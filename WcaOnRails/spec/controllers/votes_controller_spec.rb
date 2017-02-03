@@ -41,7 +41,7 @@ RSpec.describe VotesController do
       it "creates and updates multiple votes" do
         multiple_poll = FactoryGirl.create(:poll, :confirmed, :multiple)
 
-        post :create, vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id}
+        post :create, vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id }
         vote = Vote.find_by_user_id(delegate.id)
         expect(vote.poll_options.pluck(:id).sort).to eq multiple_poll.poll_options.pluck(:id).sort
 

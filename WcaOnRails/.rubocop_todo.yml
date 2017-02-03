@@ -104,13 +104,6 @@ Style/SignalException:
 Style/SpaceInsideBrackets:
   Enabled: false
 
-# Offense count: 29
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/SpaceInsideParens:

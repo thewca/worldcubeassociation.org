@@ -360,8 +360,8 @@ RSpec.describe Competition do
       competition.update_attributes!(
         id: "MyerComp2016",
         competition_events_attributes: [
-          {"id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0"},
-          {"id"=> comp_events[1].id, "event_id"=>comp_events[1].event_id, "_destroy"=>"0"},
+          { "id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0" },
+          { "id"=> comp_events[1].id, "event_id"=>comp_events[1].event_id, "_destroy"=>"0" },
         ],
       )
       new_events = competition.events

@@ -25,7 +25,7 @@ RSpec.describe PollsController do
 
     describe "POSTS" do
       it "creates a poll" do
-        post :create, poll: { question: "Hello?"}
+        post :create, poll: { question: "Hello?" }
         poll = assigns(:poll)
         expect(response).to redirect_to edit_poll_path(poll.id)
         expect(poll.question).to eq "Hello?"
@@ -42,7 +42,7 @@ RSpec.describe PollsController do
 
       it "add two options and confirm" do
         poll = FactoryGirl.create(:poll)
-        post :update, id: poll.id, poll: { poll_options_attributes: { "1" => {description: "Yes"}, "2" => {description: "No"} } }
+        post :update, id: poll.id, poll: { poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } }
         poll.reload
         expect(poll.poll_options.length).to eq 2
         expect(poll.poll_options[0].description).to eq "Yes"
@@ -55,10 +55,10 @@ RSpec.describe PollsController do
 
       it "removes an option and try to confirm" do
         poll = FactoryGirl.create(:poll)
-        post :update, id: poll.id, poll: { poll_options_attributes: { "1" => {description: "Yes"}, "2" => {description: "No"} } }
+        post :update, id: poll.id, poll: { poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } }
         poll.reload
         second_option_id = poll.poll_options[1].id
-        post :update, id: poll.id, poll: { poll_options_attributes: { "3" => {id: poll.poll_options.first.id, _destroy: true} } }
+        post :update, id: poll.id, poll: { poll_options_attributes: { "3" => { id: poll.poll_options.first.id, _destroy: true } } }
         poll.reload
         expect(poll.poll_options.length).to eq 1
         expect(poll.poll_options.first.id).to eq second_option_id
@@ -100,7 +100,7 @@ RSpec.describe PollsController do
 
       it "deadline defaults to now if you don't change it" do
         poll = FactoryGirl.create(:poll)
-        post :update, id: poll.id, poll: { deadline: poll.deadline, poll_options_attributes: { "1" => {description: "Yes"}, "2" => {description: "No"} } }
+        post :update, id: poll.id, poll: { deadline: poll.deadline, poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } }
         new_poll = assigns :poll
         poll.reload
         expect(new_poll.deadline).to eq poll.deadline

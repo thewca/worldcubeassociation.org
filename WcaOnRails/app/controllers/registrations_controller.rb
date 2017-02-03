@@ -210,7 +210,7 @@ class RegistrationsController < ApplicationController
         currency: registration.outstanding_entry_fees.currency.iso_code,
         source: token,
         description: "Registration payment for #{competition.name}",
-        metadata: {"Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name},
+        metadata: { "Name" => registration.user.name, "wca_id" => registration.user.wca_id, "email" => registration.user.email, "competition" => competition.name },
       },
       stripe_account: competition.connected_stripe_account_id,
     )

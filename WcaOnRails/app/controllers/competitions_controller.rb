@@ -320,7 +320,7 @@ class CompetitionsController < ApplicationController
       raise ActionController::RoutingError.new('Not Found')
     end
     client = create_stripe_oauth_client
-    resp = client.auth_code.get_token(code, params: {scope: 'read_write'})
+    resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
     competition.connected_stripe_account_id = resp.params['stripe_user_id']
     if competition.save
       flash[:success] = t('competitions.messages.stripe_connected')
