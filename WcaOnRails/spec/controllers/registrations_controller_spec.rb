@@ -21,7 +21,7 @@ RSpec.describe RegistrationsController do
       three_by_three = Event.find("333")
       competition.events = [three_by_three]
 
-      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [ { competition_event_id: competition.competition_events.first.id }, { competition_event_id: -2342 } ] }
+      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first.id }, { competition_event_id: -2342 }] }
       registration = assigns(:registration)
       expect(registration.events).to match_array [three_by_three]
     end
@@ -141,7 +141,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ { competition_event_id: competition.competition_events.first } ], guests: 1, comments: "" }
+        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" }
       end.to change { enqueued_jobs.size }.by(2)
 
       expect(organizer.registrations).to eq competition.registrations
@@ -162,7 +162,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ { competition_event_id: threes_comp_event.id } ], guests: 1, comments: "" }
+        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "" }
       end.to change { enqueued_jobs.size }.by(2)
 
       registration = Registration.find_by_user_id(user.id)
@@ -176,7 +176,7 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.accepted?).to eq false
       expect(registration.reload.deleted?).to eq true
 
-      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [ { id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0 } ],
+      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [{ id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0 }],
                                                           comments: "Registered again" }
       expect(registration.reload.comments).to eq "Registered again"
       expect(registration.reload.pending?).to eq true
@@ -221,7 +221,7 @@ RSpec.describe RegistrationsController do
     end
 
     it "cannot create accepted registration" do
-      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ { competition_event_id: threes_comp_event.id } ], guests: 0, comments: "", accepted_at: Time.now }
+      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 0, comments: "", accepted_at: Time.now }
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
@@ -230,7 +230,7 @@ RSpec.describe RegistrationsController do
       competition.update_column(:showAtAll, false)
 
       expect {
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ { competition_event_id: threes_comp_event.id } ], guests: 1, comments: "", status: :accepted }
+        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted }
       }.to raise_error(ActionController::RoutingError)
     end
 
@@ -239,7 +239,7 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [ { competition_event_id: threes_comp_event.id } ], guests: 1, comments: "", accepted_at: Time.now }
+      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", accepted_at: Time.now }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end
@@ -415,15 +415,15 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration3.id, registration2.id, registration1.id, registration4.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, 2, 2, 4 ]
-      expect(registrations.map(&:tied_previous)).to eq [ false, false, true, false ]
+      expect(registrations.map(&:id)).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
+      expect(registrations.map(&:pos)).to eq [1, 2, 2, 4]
+      expect(registrations.map(&:tied_previous)).to eq [false, false, true, false]
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444", sort_by: :single
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id, registration3.id, registration4.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, 2, nil, nil ]
-      expect(registrations.map(&:tied_previous)).to eq [ false, false, nil, nil ]
+      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
+      expect(registrations.map(&:pos)).to eq [1, 2, nil, nil]
+      expect(registrations.map(&:tied_previous)).to eq [false, false, nil, nil]
     end
 
     it "handles missing average" do
@@ -440,8 +440,8 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id, registration3.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, nil, nil ]
+      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id]
+      expect(registrations.map(&:pos)).to eq [1, nil, nil]
     end
 
     it "handles 1 registration" do
@@ -457,8 +457,8 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration.id ]
-      expect(registrations.map(&:pos)).to eq [ 1 ]
+      expect(registrations.map(&:id)).to eq [registration.id]
+      expect(registrations.map(&:pos)).to eq [1]
     end
 
     it "sorts 333bf by single" do
@@ -500,13 +500,13 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration1.id, registration2.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, 2 ]
+      expect(registrations.map(&:id)).to eq [registration1.id, registration2.id]
+      expect(registrations.map(&:pos)).to eq [1, 2]
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf", sort_by: :average
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration2.id, registration1.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, 2 ]
+      expect(registrations.map(&:id)).to eq [registration2.id, registration1.id]
+      expect(registrations.map(&:pos)).to eq [1, 2]
     end
 
     it "shows first timers on bottom" do
@@ -538,8 +538,8 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration1.id, registration3.id, registration2.id ]
-      expect(registrations.map(&:pos)).to eq [ 1, nil, nil ]
+      expect(registrations.map(&:id)).to eq [registration1.id, registration3.id, registration2.id]
+      expect(registrations.map(&:pos)).to eq [1, nil, nil]
     end
 
     it "handles 1 registration" do
@@ -555,8 +555,8 @@ RSpec.describe RegistrationsController do
 
       get :psych_sheet_event, competition_id: competition.id, event_id: "444"
       registrations = assigns(:registrations)
-      expect(registrations.map(&:id)).to eq [ registration.id ]
-      expect(registrations.map(&:pos)).to eq [ 1 ]
+      expect(registrations.map(&:id)).to eq [registration.id]
+      expect(registrations.map(&:pos)).to eq [1]
     end
   end
 

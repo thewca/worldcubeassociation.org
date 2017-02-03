@@ -153,13 +153,13 @@ RSpec.describe User, type: :model do
     it "does not allow assigning a birthdateless WCA ID to a user" do
       user.wca_id = birthdayless_person.wca_id
       expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq [ I18n.t('users.errors.wca_id_no_birthdate_html') ]
+      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html')]
     end
 
     it "does not allow assigning a genderless WCA ID to a user" do
       user.wca_id = genderless_person.wca_id
       expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq [ I18n.t('users.errors.wca_id_no_gender_html') ]
+      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_gender_html')]
     end
 
     it "nullifies empty WCA IDs" do
@@ -359,7 +359,7 @@ RSpec.describe User, type: :model do
       other_person = FactoryGirl.create :person, year: 1980, month: 2, day: 1
       user.unconfirmed_wca_id = other_person.wca_id
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [ I18n.t('users.errors.dob_incorrect_html') ]
+      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
     end
 
     it "requires fields when claiming_wca_id" do
@@ -380,14 +380,14 @@ RSpec.describe User, type: :model do
     it "requires dob verification" do
       user.dob_verification = nil
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [ I18n.t('users.errors.dob_incorrect_html') ]
+      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
     end
 
     it "does not allow claiming wca id Person without dob" do
       user.unconfirmed_wca_id = person_without_dob.wca_id
       user.dob_verification = "1234-04-03"
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [ I18n.t('users.errors.wca_id_no_birthdate_html') ]
+      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html')]
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do
@@ -400,7 +400,7 @@ RSpec.describe User, type: :model do
     it "requires correct dob verification" do
       user.dob_verification = '2016-01-02'
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [ I18n.t('users.errors.dob_incorrect_html') ]
+      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
     end
 
     it "requires delegate_id_to_handle_wca_id_claim" do

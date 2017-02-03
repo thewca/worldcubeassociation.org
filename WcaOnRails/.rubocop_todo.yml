@@ -99,11 +99,6 @@ Style/SignalException:
     - 'lib/file_size_validator.rb'
     - 'lib/solve_time.rb'
 
-# Offense count: 94
-# Cop supports --auto-correct.
-Style/SpaceInsideBrackets:
-  Enabled: false
-
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/SpaceInsideParens:

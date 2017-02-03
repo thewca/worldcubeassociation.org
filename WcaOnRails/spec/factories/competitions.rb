@@ -44,11 +44,11 @@ FactoryGirl.define do
     guests_enabled true
 
     trait :with_delegate do
-      delegates { [ FactoryGirl.create(:delegate) ] }
+      delegates { [FactoryGirl.create(:delegate)] }
     end
 
     trait :with_organizer do
-      organizers { [ FactoryGirl.create(:user) ] }
+      organizers { [FactoryGirl.create(:user)] }
     end
 
     trait :with_delegate_report do

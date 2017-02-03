@@ -312,7 +312,7 @@ RSpec.describe Competition do
   describe "adding/removing events" do
     let(:two_by_two) { Event.find "222" }
     let(:three_by_three) { Event.find "333" }
-    let(:competition) { FactoryGirl.create(:competition, use_wca_registration: true, events: [ two_by_two, three_by_three ]) }
+    let(:competition) { FactoryGirl.create(:competition, use_wca_registration: true, events: [two_by_two, three_by_three]) }
 
     it "removes registrations when event is removed" do
       r = FactoryGirl.create(:registration, competition: competition, competition_events: competition.competition_events)

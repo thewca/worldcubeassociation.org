@@ -21,7 +21,7 @@ RSpec.describe LightResult do
   describe "trimmed_indices" do
     it "trims best and worst for format: average" do
       result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => 40, "value5" => 50, "formatId" => "a"
-      expect(result.trimmed_indices).to eq [ 1, 2 ]
+      expect(result.trimmed_indices).to eq [1, 2]
     end
 
     it "does not trim anything for format: mean" do

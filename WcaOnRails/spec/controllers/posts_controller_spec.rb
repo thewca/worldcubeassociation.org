@@ -10,14 +10,14 @@ RSpec.describe PostsController do
     describe "GET #index" do
       it "populates an array of posts with sticky posts first" do
         get :index
-        expect(assigns(:posts)).to eq [ sticky_post, post1 ]
+        expect(assigns(:posts)).to eq [sticky_post, post1]
       end
     end
 
     describe "GET #rss" do
       it "populates an array of posts ignoring sticky bit" do
         get :rss, format: :xml
-        expect(assigns(:posts)).to eq [ post1, sticky_post ]
+        expect(assigns(:posts)).to eq [post1, sticky_post]
       end
     end
 

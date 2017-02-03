@@ -121,7 +121,7 @@ class Person < ActiveRecord::Base
     most_frequent_delegate, _count = counts_by_delegate.max_by { |delegate, count| count }
     most_recent_delegate = all_delegates.last
 
-    [ most_frequent_delegate, most_recent_delegate ].uniq
+    [most_frequent_delegate, most_recent_delegate].uniq
   end
 
   def sub_ids

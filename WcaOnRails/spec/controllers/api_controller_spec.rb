@@ -276,19 +276,19 @@ RSpec.describe Api::V0::ApiController do
 
       get :competitions, start: "2015-02-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :competitions, end: "2016-03-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :competitions, start: "2015-02-01", end: "2016-02-15"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [feb_comp.id, last_feb_comp.id]
 
       get :competitions, start: "2015-02-01", end: "2015-02-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
     end
 
     it 'paginates' do

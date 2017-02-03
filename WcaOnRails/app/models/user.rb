@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   attr_accessor :sign_up_panel_to_show
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
-  enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
+  enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
 
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
