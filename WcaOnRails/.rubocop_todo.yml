@@ -31,12 +31,6 @@ Lint/UnusedMethodArgument:
     - 'app/uploaders/avatar_uploader_base.rb'
 
 # Offense count: 3
-Style/DoubleNegation:
-  Exclude:
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/models/user.rb'
-
-# Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: empty, nil, both
