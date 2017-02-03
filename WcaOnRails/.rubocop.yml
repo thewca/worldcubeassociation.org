@@ -76,6 +76,9 @@ Style/NegatedIf:
 Style/BlockDelimiters:
   Enabled: false
 
+Style/ClassAndModuleChildren:
+  Enabled: false
+
 Style/DoubleNegation:
   Enabled: false
 

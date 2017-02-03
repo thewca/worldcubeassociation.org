@@ -7,10 +7,10 @@ class ApplicationController < ActionController::Base
 
   before_action :add_new_relic_headers, :set_locale
   protected def add_new_relic_headers
-    ::NewRelic::Agent.add_custom_attributes({ user_id: current_user ? current_user.id : nil })
-    ::NewRelic::Agent.add_custom_attributes({ HTTP_REFERER: request.headers['HTTP_REFERER'] })
-    ::NewRelic::Agent.add_custom_attributes({ HTTP_ACCEPT: request.headers['HTTP_ACCEPT'] })
-    ::NewRelic::Agent.add_custom_attributes({ HTTP_USER_AGENT: request.user_agent })
+    ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
+    ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
+    ::NewRelic::Agent.add_custom_attributes(HTTP_ACCEPT: request.headers['HTTP_ACCEPT'])
+    ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
   end
 
   def set_locale
@@ -38,6 +38,7 @@ class ApplicationController < ActionController::Base
     redirect_to request.referer || root_path
   end
 
+  # https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-the-response-body-when-unauthorized
   def doorkeeper_unauthorized_render_options(error: nil)
     { json: { error: "Not authorized" } }
   end

@@ -211,7 +211,7 @@ class CompetitionsController < ApplicationController
       ].each do |code_name|
         code = code_name[:code]
         region_name = code_name[:name]
-        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', { code: code })
+        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
         unless comp_records.empty?
           body += "#{region_name} records: "
           record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
@@ -305,7 +305,7 @@ class CompetitionsController < ApplicationController
       account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
       account.deauthorize(
         ENVied.STRIPE_CLIENT_ID,
-        { stripe_user_id: @competition.connected_stripe_account_id},
+        stripe_user_id: @competition.connected_stripe_account_id,
       )
       @competition.connected_stripe_account_id = nil
       @competition.save!

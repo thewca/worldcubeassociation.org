@@ -30,17 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 5
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'app/controllers/accounts/registrations_controller.rb'
-    - 'app/controllers/api/v0/api_controller.rb'
-    - 'app/controllers/api/v0/competitions_controller.rb'
-    - 'app/controllers/oauth/applications_controller.rb'
-    - 'lib/monkeypatch_json_renderer_to_pretty_print.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

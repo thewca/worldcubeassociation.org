@@ -22,7 +22,7 @@ class UsersController < ApplicationController
           like_query = %w(users.name wca_id email Countries.name).map do |column|
             column + " LIKE :part"
           end.join(" OR ")
-          @users = @users.where(like_query, { part: "%#{part}%" })
+          @users = @users.where(like_query, part: "%#{part}%")
         end
         if params[:sort] == "country"
           @users = @users.order("Countries.name #{params[:order]}")
