@@ -108,18 +108,6 @@ Style/SymbolProc:
     - 'db/migrate/20151222013017_add_timestamps_to_preregs.rb'
     - 'spec/factories/users.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-# SupportedStyles: comma, consistent_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'app/mailers/competitions_mailer.rb'
-    - 'app/mailers/registrations_mailer.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/user.rb'
-    - 'spec/controllers/api_controller_spec.rb'
-
 # Offense count: 16
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

@@ -12,7 +12,7 @@ class RegistrationsMailer < ApplicationMailer
       mail(
         to: to,
         reply_to: [registration.user.email],
-        subject: "#{registration.name} just registered for #{registration.competition.name}"
+        subject: "#{registration.name} just registered for #{registration.competition.name}",
       )
     end
   end
@@ -27,7 +27,7 @@ class RegistrationsMailer < ApplicationMailer
       mail(
         to: to,
         reply_to: registration.competition.managers.map(&:email),
-        subject: "#{registration.name} just deleted their registration for #{registration.competition.name}"
+        subject: "#{registration.name} just deleted their registration for #{registration.competition.name}",
       )
     end
   end

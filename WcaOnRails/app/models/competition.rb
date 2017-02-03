@@ -37,13 +37,13 @@ class Competition < ActiveRecord::Base
     where(
       "Competitions.name like :search_term or
       Competitions.cityName like :search_term",
-      search_term: "%#{search_term}%"
+      search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
       "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
-      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id"
+      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
 
@@ -592,7 +592,7 @@ class Competition < ActiveRecord::Base
     6371 *
       Math.sqrt(
         ((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2 +
-        (c.latitude_radians - latitude_radians) ** 2
+        (c.latitude_radians - latitude_radians) ** 2,
       )
   end
 
@@ -656,14 +656,14 @@ class Competition < ActiveRecord::Base
 
   def events_with_podium_results
     light_results_from_relation(
-      results.podium.order(:pos)
+      results.podium.order(:pos),
     ).group_by(&:event)
       .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
     light_results_from_relation(
-      results.winners
+      results.winners,
     )
   end
 
