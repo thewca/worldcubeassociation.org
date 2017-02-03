@@ -99,16 +99,6 @@ Style/SignalException:
     - 'lib/file_size_validator.rb'
     - 'lib/solve_time.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/SpaceInsideParens:
-  Exclude:
-    - 'app/inputs/events_picker_input.rb'
-    - 'app/models/competition.rb'
-    - 'app/models/post.rb'
-    - 'app/models/user.rb'
-    - 'lib/solve_time.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

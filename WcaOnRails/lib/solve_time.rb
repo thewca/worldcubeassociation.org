@@ -30,7 +30,7 @@ class SolveTime
       # The average field for 333fm is pretty weird. It's the sum
       # of the solves, multiplied by 100.
       # Otherwise, wca_value is simply the number of moves.
-      @move_count = @field == :average ? ( wca_value / 100.0 ) : wca_value
+      @move_count = @field == :average ? (wca_value / 100.0) : wca_value
     elsif multi_blind?
       mb_value = wca_value
       # Extract wca_value parts.
@@ -46,7 +46,7 @@ class SolveTime
         mb_value /= 100
         time_seconds = mb_value % 100000
         mb_value /= 100000
-        difference = 99 - ( mb_value % 100 )
+        difference = 99 - (mb_value % 100)
         @solved = difference + missed
         @attempted = @solved + missed
       end
@@ -62,7 +62,7 @@ class SolveTime
       @wca_value = @move_count
     elsif multi_blind?
       missed = @attempted - @solved
-      dd = 99 - ( @solved - missed )
+      dd = 99 - (@solved - missed)
       ttttt = time_centiseconds / 100
 
       if @event_id == "333mbf"

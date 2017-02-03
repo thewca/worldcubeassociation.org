@@ -29,8 +29,8 @@ class Post < ActiveRecord::Base
   CRASH_COURSE_POST_SLUG = "delegate-crash-course"
 
   def self.crash_course_post
-    post = ( Post.find_by_slug(CRASH_COURSE_POST_SLUG) ||
-             Post.create!(slug: CRASH_COURSE_POST_SLUG, title: "Delegate crash course", body: "Nothing here yet") )
+    post = (Post.find_by_slug(CRASH_COURSE_POST_SLUG) ||
+            Post.create!(slug: CRASH_COURSE_POST_SLUG, title: "Delegate crash course", body: "Nothing here yet"))
     post
   end
 
