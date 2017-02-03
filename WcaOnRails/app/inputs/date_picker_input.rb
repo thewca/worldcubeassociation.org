@@ -67,5 +67,4 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     custom_options = input_html_options[:data][:date_options] || {}
     date_options_base.merge!(custom_options)
   end
-
 end

@@ -30,23 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 14
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'app/controllers/oauth/applications_controller.rb'
-    - 'app/inputs/date_picker_input.rb'
-    - 'app/mailers/registrations_mailer.rb'
-    - 'app/models/poll.rb'
-    - 'app/models/poll_option.rb'
-    - 'app/models/vote.rb'
-    - 'app/models/vote_option.rb'
-    - 'db/migrate/20150521005227_no_more_drupal.rb'
-    - 'spec/mailers/previews/competitions_mailer_preview.rb'
-    - 'spec/mailers/previews/wca_id_claim_mailer_preview.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/EvenOdd:

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class PollOption < ActiveRecord::Base
-
   belongs_to :poll
 
   has_many :vote_options, dependent: :destroy
