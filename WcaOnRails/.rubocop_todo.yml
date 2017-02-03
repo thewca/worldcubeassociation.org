@@ -55,18 +55,6 @@ Style/NestedParenthesizedCalls:
 Style/NumericLiterals:
   MinDigits: 11
 
-# Offense count: 2
-Style/OpMethod:
-  Exclude:
-    - 'app/models/country.rb'
-    - 'app/models/event.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ParallelAssignment:
-  Exclude:
-    - 'lib/file_size_validator.rb'
-
 # Offense count: 7
 # Configuration parameters: NamePrefix, NamePrefixBlacklist, NameWhitelist.
 # NamePrefix: is_, has_, have_
