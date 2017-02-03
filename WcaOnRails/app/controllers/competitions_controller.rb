@@ -165,7 +165,7 @@ class CompetitionsController < ApplicationController
       body = "The [#{comp.name}](#{competition_url(comp)})"
       body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
       unless comp.website.blank?
-        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
+        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
       create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
 

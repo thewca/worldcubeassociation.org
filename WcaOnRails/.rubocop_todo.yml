@@ -79,14 +79,6 @@ Style/RedundantSelf:
     - 'app/models/team_member.rb'
     - 'app/models/user.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'app/controllers/competitions_controller.rb'
-    - 'spec/controllers/api_competitions_controller_spec.rb'
-
 # Offense count: 21
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

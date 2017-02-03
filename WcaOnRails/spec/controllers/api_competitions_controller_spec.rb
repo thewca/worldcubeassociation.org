@@ -23,7 +23,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it '404s on hidden competition' do
-      competition.update_column(:showAtAll, false);
+      competition.update_column(:showAtAll, false)
       get :show, id: competition.id
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)
