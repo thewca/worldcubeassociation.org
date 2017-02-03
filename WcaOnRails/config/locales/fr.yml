@@ -1376,6 +1376,8 @@ fr:
       missing_report: Votre rapport n'a pas encore été envoyé !
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Vous n''avez pas de compétitions à venir! Allez voir la %{link}.'
+      #original_hash: e0f66bb
+      competitions_list: liste des compétitions
       #original_hash: 9104a03
       no_past_competitions: Vous n'avez participé à aucune compétition.
     competition_form:
@@ -1634,7 +1636,7 @@ fr:
       réversible.
   faq:
     #original_hash: d790b40
-    title: Questions Fréqentes
+    title: Questions Fréquentes
     #original_hash: 3451241
     contact_html: 'Si aucune de ces réponses ne vous a aidé, %{contact_us} !'
     #original_hash: 6cf2723
