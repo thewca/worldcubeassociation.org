@@ -67,6 +67,9 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Enabled: false
 
+Metrics/ModuleLength:
+  Enabled: false
+
 Style/NegatedIf:
   Enabled: false
 
