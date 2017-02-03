@@ -91,6 +91,9 @@ Style/DoubleNegation:
 Style/EmptyElse:
   EnforcedStyle: empty
 
+Style/IfUnlessModifier:
+  Enabled: false
+
 Style/NegatedIf:
   Enabled: false
 
