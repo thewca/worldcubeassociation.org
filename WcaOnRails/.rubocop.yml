@@ -61,6 +61,9 @@ Metrics/PerceivedComplexity:
 Style/DoubleNegation:
   Enabled: false
 
+Metrics/LineLength:
+  Max: 245
+
 Style/NegatedIf:
   Enabled: false
 
