@@ -133,7 +133,7 @@ logrotate_app 'delayed_job-wca' do
   options LOGROTATE_OPTIONS
 
   # According to https://groups.google.com/forum/#!topic/railsmachine-moonshine/vrfNwrqmzOA,
-  # it looks like we have to restart delayed job after after logrotate.
+  # it looks like we have to restart delayed job after logrotate.
   postrotate "#{repo_root}/scripts/deploy.sh restart_dj"
 end
 
