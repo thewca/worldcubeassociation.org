@@ -30,12 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/Lambda:
-  Exclude:
-    - 'lib/file_size_validator.rb'
-
 # Offense count: 4
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase

@@ -94,6 +94,9 @@ Style/EmptyElse:
 Style/IfUnlessModifier:
   Enabled: false
 
+Style/Lambda:
+  Enabled: false
+
 Style/NegatedIf:
   Enabled: false
 
