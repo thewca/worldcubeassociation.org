@@ -2,10 +2,6 @@
 
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
-  # FIXME Tests fail with "Unknown primary key for table Competitions in model Competition."
-  #       when not setting the primary key explicitly. I have
-  #       no clue why... (th, 2015-09-19)
-  self.primary_key = "id"
 
   has_many :competition_events, dependent: :destroy
   has_many :events, through: :competition_events

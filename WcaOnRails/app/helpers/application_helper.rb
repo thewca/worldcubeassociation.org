@@ -50,7 +50,7 @@ module ApplicationHelper
   WCA_EXCERPT_RADIUS = 50
 
   def wca_excerpt(html, phrases)
-    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/thewca/worldcubeassociation.org/issues/238
+    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO: https://github.com/thewca/worldcubeassociation.org/issues/238
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
     text_downcase = text.downcase
     first = phrases.map { |phrase| text_downcase.index(phrase.downcase) }.compact.min
@@ -69,7 +69,7 @@ module ApplicationHelper
 
   def wca_highlight(html, phrases, do_not_transliterate: false)
     text = if !do_not_transliterate
-             ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/thewca/worldcubeassociation.org/issues/238
+             ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO: https://github.com/thewca/worldcubeassociation.org/issues/238
            else
              strip_tags(html)
            end

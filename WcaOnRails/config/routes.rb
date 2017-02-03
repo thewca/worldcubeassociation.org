@@ -72,7 +72,7 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :update]
 
-  # TODO - these are vulnerable to CSRF. We should be able to change these to
+  # TODO: These are vulnerable to CSRF. We should be able to change these to
   # POSTs once check_comp_data.php has been ported to Rails.
   # See https://github.com/thewca/worldcubeassociation.org/issues/161
   get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement

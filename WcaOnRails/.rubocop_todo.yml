@@ -30,17 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: Keywords.
-# Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
-Style/CommentAnnotation:
-  Exclude:
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/models/competition.rb'
-    - 'config/routes.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: SingleLineConditionsOnly.
