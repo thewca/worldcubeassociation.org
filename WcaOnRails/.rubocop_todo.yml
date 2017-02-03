@@ -52,20 +52,6 @@ Style/NestedParenthesizedCalls:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'app/controllers/competitions_controller.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/NilComparison:
-  Exclude:
-    - 'app/models/team_member.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 # Configuration parameters: IncludeSemanticChanges.
 Style/NonNilCheck:
   Exclude:
