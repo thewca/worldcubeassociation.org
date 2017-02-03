@@ -36,6 +36,9 @@ Style/TrailingCommaInLiteral:
 Style/GuardClause:
   Enabled: false
 
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/BlockLength:
   Enabled: false
 
