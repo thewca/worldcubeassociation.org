@@ -30,22 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 14
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/controllers/users_controller.rb'
-    - 'spec/controllers/api_controller_spec.rb'
-    - 'spec/requests/competitions_spec.rb'
-    - 'spec/requests/http_accept_spec.rb'
-    - 'spec/requests/oauth/oauth_spec.rb'
-    - 'spec/requests/users_spec.rb'
-    - 'spec/support/controller_macros.rb'
-
 # Offense count: 5
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact

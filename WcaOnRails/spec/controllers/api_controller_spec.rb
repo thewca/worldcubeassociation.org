@@ -419,19 +419,21 @@ RSpec.describe Api::V0::ApiController do
 
     context 'signed in with valid wca id' do
       let(:person) do
-        FactoryGirl.create(:person, {
+        FactoryGirl.create(
+          :person,
           countryId: "USA",
           gender: "m",
           year: 1987,
           month: 12,
           day: 4,
-        })
+        )
       end
       let(:user) do
-        FactoryGirl.create :user, {
+        FactoryGirl.create(
+          :user,
           avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
           wca_id: person.wca_id,
-        }
+        )
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       before :each do

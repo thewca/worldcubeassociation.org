@@ -74,7 +74,7 @@ RSpec.describe "oauth api" do
 
   def verify_access_token(access_token)
     integration_session.reset! # posting to oauth_token_path littered our state
-    get api_v0_me_path, nil, { "Authorization" => "Bearer #{access_token}" }
+    get api_v0_me_path, nil, "Authorization" => "Bearer #{access_token}"
     expect(response).to be_success
     json = JSON.parse(response.body)
     # We just do a sanity check of the /me route here. There is a more
