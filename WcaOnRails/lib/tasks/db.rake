@@ -14,9 +14,9 @@ namespace :db do
       Rails.application.eager_load!
 
       error_count = 0
-      ActiveRecord::Base.subclasses.
-        reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }.
-        each do |type|
+      ActiveRecord::Base.subclasses
+        .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
+        .each do |type|
           begin
             type.find_each do |record|
               unless record.valid?

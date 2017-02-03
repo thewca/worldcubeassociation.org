@@ -143,12 +143,12 @@ class Registration < ActiveRecord::Base
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    registration_competition_events.
-      joins(:competition_event).
-      joins(:event).
-      reject(&:marked_for_destruction?).
-      map(&:event).
-      sort_by(&:rank)
+    registration_competition_events
+      .joins(:competition_event)
+      .joins(:event)
+      .reject(&:marked_for_destruction?)
+      .map(&:event)
+      .sort_by(&:rank)
   end
 
   def waiting_list_info

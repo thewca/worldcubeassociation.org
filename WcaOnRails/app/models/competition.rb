@@ -743,12 +743,12 @@ class Competition < ActiveRecord::Base
 
     sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
-    registrations = self.registrations.
-                         accepted.
-                         joins(joinsql).
-                         where("registration_competition_events.competition_event_id=?", competition_event.id).
-                         order(sort_clause).
-                         select(selectsql)
+    registrations = self.registrations
+      .accepted
+      .joins(joinsql)
+      .where("registration_competition_events.competition_event_id=?", competition_event.id)
+      .order(sort_clause)
+      .select(selectsql)
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
