@@ -29,6 +29,10 @@ module Locales
       "flag_id": "pl",
       "name": "Polski",
     },
+    "pt": {
+      "flag_id": "pt",
+      "name": "Português Europeu",
+    },
     "pt-BR": {
       "flag_id": "br",
       "name": "Português Brasileiro",

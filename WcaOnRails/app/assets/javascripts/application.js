@@ -30,6 +30,7 @@
 //= require moment/ja.js
 //= require moment/hu.js
 //= require moment/pl.js
+//= require moment/pt.js
 //= require moment/pt-br.js
 //= require moment/zh-cn.js
 //= require moment/zh-tw.js
