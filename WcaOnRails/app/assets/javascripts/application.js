@@ -35,6 +35,7 @@
 //= require moment/zh-tw.js
 //= require moment/nl.js
 //= require moment/ru.js
+//= require moment/da.js
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table

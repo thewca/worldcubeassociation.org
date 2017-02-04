@@ -49,5 +49,9 @@ module Locales
       "flag_id": "ru",
       "name": "Русский",
     },
+    "da": {
+      "flag_id": "da",
+      "name": "Dansk",
+    },
   }.freeze
 end
