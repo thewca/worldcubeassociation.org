@@ -50,7 +50,7 @@ module Locales
       "name": "Русский",
     },
     "da": {
-      "flag_id": "da",
+      "flag_id": "dk",
       "name": "Dansk",
     },
   }.freeze
