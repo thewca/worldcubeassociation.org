@@ -241,7 +241,7 @@ zh-TW:
         #original_hash: b649210
         cellName: 比賽簡稱
         #original_hash: d523ebb
-        countryId: 城市
+        countryId: 國家
         #original_hash: 25b7b06
         cityName: 城市名稱
         #original_hash: 67cd406
@@ -1048,7 +1048,7 @@ zh-TW:
     #original_hash: 59354fd
     waiting_list: 您的報名正在等候補位中。您也許需要先付報名費才能成功報名。詳情請至比賽網站查詢。
     #original_hash: 58b1a3c
-    accepted: 您的報名已經被成功了!
+    accepted: 您的報名已經成功了!
     #original_hash: 69cf660
     entry_fees_partially_paid: '您已經支付總報名費%{total_entry_fee}元中的%{paid}元。'
     #original_hash: 9153695
@@ -1198,6 +1198,8 @@ zh-TW:
       missing_report: 您的比賽報告尚未上傳!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: '您沒有即將舉行的比賽! 請參考%{link}.'
+      #original_hash: e0f66bb
+      competitions_list: 比賽列表
       #original_hash: 9104a03
       no_past_competitions: 您沒有過去的比賽。
     competition_form:
