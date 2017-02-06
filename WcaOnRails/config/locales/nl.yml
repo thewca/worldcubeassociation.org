@@ -1341,6 +1341,8 @@ nl:
       missing_report: Je Delegate report is nog niet gepost!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Je hebt momenteel geen aankomende wedstrijden! Kijk naar %{link}.'
+      #original_hash: e0f66bb
+      competitions_list: Wedstrijdlijst
       #original_hash: 9104a03
       no_past_competitions: Je hebt geen wedstrijden in het verleden.
     competition_form:
