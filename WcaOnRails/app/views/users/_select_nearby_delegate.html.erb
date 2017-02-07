@@ -10,11 +10,12 @@
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-  <%= t '.missing_dob_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_result_team: mail_to("results@worldcubeassociation.org", "Results team", target: "_blank") %>
+    <%= t '.missing_dob_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank") %>
+    <%= t '.contact_results_team_html' %>
   </p>
 <% else %>
   <p>
-  <%= t '.select_delegate_html', link_delegate: delegates_path %>
+    <%= t '.select_delegate_html', link_delegate: delegates_path %>
   </p>
 
   <div class="form-group radio_buttons optional">

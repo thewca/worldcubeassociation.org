@@ -21,6 +21,10 @@ FactoryGirl.define do
       day 0
     end
 
+    trait :missing_gender do
+      gender ""
+    end
+
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
         person.update_using_sub_id!(name: "new #{person.name}")
