@@ -154,12 +154,12 @@ hu:
       invalid: érvénytelen
     #original_hash: 49d0140
     days:
-      other: '%{count} nap'
       zero: 0 nap
+      other: '%{count} nap'
     #original_hash: 203e1b3
     these_events:
-      other: 'ez a(z) %{count} versenyszám'
       zero: ez a 0 versenyszám
+      other: 'ez a(z) %{count} versenyszám'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -637,8 +637,8 @@ hu:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Az űrlap %{count} hibát tartalmaz.'
           zero: Az űrlap 0 hibát tartalmaz.
+          other: 'Az űrlap %{count} hibát tartalmaz.'
     doorkeeper:
       applications:
         help:
@@ -998,16 +998,16 @@ hu:
       not_using_wca: Ez a verseny nem WCA regisztrációt használ.
       #original_hash: d528030
       accepted_and_mailed:
-        other: Regisztráció(k) elfogadva! Értesítés(ek) kiküldve e-mailben.
         zero: 0 regisztráció elfogadva! 0 értesítés kiküldve e-mailben.
+        other: Regisztráció(k) elfogadva! Értesítés(ek) kiküldve e-mailben.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Regisztráció(k) áthelyezve a várólistára
         zero: 0 regisztráció áthelyezve a várólistára
+        other: Regisztráció(k) áthelyezve a várólistára
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Regisztráció(k) törölve
         zero: 0 regisztráció törölve
+        other: Regisztráció(k) törölve
       #original_hash: c3aa289
       single_deletion_and_mail: 'Regisztráció törölve és e-mail értesítés kiküldve (%{mail})'
       #original_hash: d8f067f
@@ -1092,8 +1092,8 @@ hu:
       edit: Szerkesztés
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} ország'
         zero: 0 ország
+        other: '%{count} ország'
       #original_hash: 1feee0e
       export_csv: Exportálás CSV-be
       #original_hash: 84add5b
@@ -1266,12 +1266,12 @@ hu:
       website: Weboldal
       #original_hash: 680567f
       organizer_plural:
-        other: Szervező(k)
         zero: Szervező
+        other: Szervező(k)
       #original_hash: 6afa61e
       delegate:
-        other: WCA delegált(ak)
         zero: WCA delegált
+        other: WCA delegált(ak)
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: a428739
@@ -1355,6 +1355,8 @@ hu:
       missing_report: A riportod még nem lett közzétéve!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'Nincs jövőbeli versenyed! Nézd meg a linket: %{link}.'
+      #original_hash: e0f66bb
+      competitions_list: versenyek listája
       #original_hash: 9104a03
       no_past_competitions: Nincs múltbéli versenyed.
     competition_form:
