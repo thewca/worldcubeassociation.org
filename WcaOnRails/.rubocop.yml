@@ -133,3 +133,6 @@ Style/SignalException:
 
 Style/SpaceAroundOperators:
   Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
