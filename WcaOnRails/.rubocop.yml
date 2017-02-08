@@ -136,3 +136,6 @@ Style/SpaceAroundOperators:
 
 Style/StringLiteralsInInterpolation:
   Enabled: false
+
+Style/WordArray:
+  Enabled: false

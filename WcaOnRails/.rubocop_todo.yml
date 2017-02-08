@@ -113,11 +113,3 @@ Style/SymbolProc:
   Exclude:
     - 'db/migrate/20151222013017_add_timestamps_to_preregs.rb'
     - 'spec/factories/users.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles, WordRegex.
-# SupportedStyles: percent, brackets
-Style/WordArray:
-  EnforcedStyle: percent
-  MinSize: 3
