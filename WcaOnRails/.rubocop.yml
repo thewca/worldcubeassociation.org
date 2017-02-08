@@ -151,3 +151,6 @@ Style/WordArray:
 
 Style/SymbolProc:
   Enabled: false
+
+Style/PredicateName:
+  Enabled: false
