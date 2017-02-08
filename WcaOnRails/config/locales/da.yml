@@ -146,7 +146,7 @@ da:
       #original_hash: 603a218
       wca_id: WCA ID
       #original_hash: e0f64f7
-      citizen_of: Statsborgerskab
+      citizen_of: Nationalitet
     #original_hash: 3fc0ba1
     all_regions: Alle regioner
     errors:
@@ -159,9 +159,9 @@ da:
       other: '%{count} dage'
     #original_hash: 203e1b3
     these_events:
-      other: disse discipliner
-      one: denne disciplin
       zero: ingen discipliner
+      one: denne disciplin
+      other: disse discipliner
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -196,7 +196,7 @@ da:
         #original_hash: 8ed8874
         login: Email eller WCA ID
         #original_hash: 1528d10
-        country_iso2: Statsborgerskab
+        country_iso2: Nationalitet
         #original_hash: ab58155
         dob: Fødselsdag
         #original_hash: ab58155
@@ -635,9 +635,9 @@ da:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Formularen indeholder %{count} fejl:'
-          one: 'Formularen indeholder en fejl:'
           zero: 'Formularen indeholder ingen fejl:'
+          one: 'Formularen indeholder en fejl:'
+          other: 'Formularen indeholder %{count} fejl:'
     doorkeeper:
       applications:
         help:
@@ -726,13 +726,13 @@ da:
       #original_hash: 4fd2a7f
       db_export: Database Eksport
       #original_hash: 1fa73f3
-      regulations: Regler
+      regulations: Reglsæt
       #original_hash: 141d1d7
       guidelines: Retningslinjer
       #original_hash: c4622c3
       scrambles: Blandinger
       #original_hash: 90ccd64
-      history: Historie
+      history: Historik
       #original_hash: 8ad8302
       translations: Oversættelser
       #original_hash: b8be3d1
@@ -768,7 +768,7 @@ da:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Opdateret lokal.
+      success: Opdateret lokalt.
       #original_hash: dcc2f49
       failure: Ude af stand til at opdatere din profil.
       #original_hash: c29870c
@@ -1014,7 +1014,7 @@ da:
       #original_hash: 016b4ae
       deleted: 'Succesfyldt slettet din registrering fra %{comp}'
       #original_hash: 648424f
-      registered: Succesfyldt registreret!
+      registered: Succesfyldt tilmeldt!
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} for %{comp}'
@@ -1527,9 +1527,9 @@ da:
         #original_hash: b233e77
         registration: Tilmelding
         #original_hash: d672995
-        register: Tilmeld
+        register: Tilmelding
         #original_hash: 855bd26
-        competitors: Konkurrencer
+        competitors: Deltagere
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profil
@@ -1670,14 +1670,14 @@ da:
           '2': >-
             WCA Konkurrencer skal følge <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCA
-            Regulations</a>. Arrangør holdet behøver ikke nødvendigvis at kende
+            Regulations</a>. Arrangørholdet behøver ikke nødvendigvis at kende
             dem alle, men det er meget vigtigt at kunne basisen af reglerne, det
             ville hjælpe meget med at arrangere en konkurrence ordentligt.
           #original_hash: dbd72c2
           '3': >-
             Efter det skal arrangørholdet kontakte et <a target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>WCA
-            Delegate</a> i nærheden. Opsynet af et delgat er behøvet for at
+            Delegate</a> i nærheden. Opsynet af et delgat er nødvendigt for at
             konkurrencen officielt skal anderkendes af WCA. WCA Delegaten vil
             hjælpe med at arrangere konkurrencen succesfyldt.
           #original_hash: 809f53a
