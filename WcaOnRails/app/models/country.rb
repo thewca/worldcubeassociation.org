@@ -17,7 +17,7 @@ class Country < ActiveRecord::Base
   end
 
   def self.real
-    @@real_countries ||= Country.uncached_real
+    @real_countries ||= Country.uncached_real
   end
 
   def self.find_by_iso2(iso2)

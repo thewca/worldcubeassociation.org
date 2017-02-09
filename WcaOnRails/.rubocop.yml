@@ -94,10 +94,6 @@ Style/ClassAndModuleChildren:
 Style/ConditionalAssignment:
   Enabled: false
 
-Style/ClassVars:
-  Exclude:
-    - app/models/country.rb
-
 Style/Documentation:
   Enabled: false
 
