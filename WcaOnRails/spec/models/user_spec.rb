@@ -121,6 +121,7 @@ RSpec.describe User, type: :model do
   describe "WCA ID" do
     let(:user) { FactoryGirl.create :user_with_wca_id }
     let(:birthdayless_person) { FactoryGirl.create :person, :missing_dob }
+    let(:genderless_person) { FactoryGirl.create :person, :missing_gender }
 
     it "validates WCA ID" do
       user = FactoryGirl.build :user, wca_id: "2005FLEI02"
@@ -153,6 +154,12 @@ RSpec.describe User, type: :model do
       user.wca_id = birthdayless_person.wca_id
       expect(user).to be_invalid
       expect(user.errors.messages[:wca_id]).to eq [ I18n.t('users.errors.wca_id_no_birthdate_html') ]
+    end
+
+    it "does not allow assigning a genderless WCA ID to a user" do
+      user.wca_id = genderless_person.wca_id
+      expect(user).to be_invalid
+      expect(user.errors.messages[:wca_id]).to eq [ I18n.t('users.errors.wca_id_no_gender_html') ]
     end
 
     it "nullifies empty WCA IDs" do

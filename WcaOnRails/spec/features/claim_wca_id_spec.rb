@@ -62,7 +62,7 @@ RSpec.feature "Claim WCA ID" do
       # Select item with selectize.
       page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
 
-      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact the Results team to fix this."
+      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact the WCA Results Team to resolve this."
     end
   end
 end

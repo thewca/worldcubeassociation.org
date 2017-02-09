@@ -167,11 +167,14 @@ class User < ActiveRecord::Base
     end
   end
 
-  validate :person_must_have_dob
-  def person_must_have_dob
+  validate :wca_id_prereqs
+  def wca_id_prereqs
     p = person || unconfirmed_person
-    if p && p.dob.nil?
-      errors.add(:wca_id, I18n.t('users.errors.wca_id_no_birthdate_html'))
+    if p
+      cannot_be_assigned_reasons = p.cannot_be_assigned_to_user_reasons
+      unless cannot_be_assigned_reasons.empty?
+        errors.add(:wca_id, cannot_be_assigned_reasons.to_sentence)
+      end
     end
   end
 
@@ -467,23 +470,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Note this is very similar to the cannot_be_assigned_to_user_reasons method in person.rb.
   def cannot_register_for_competition_reasons
-    reasons = []
-
-    if name.blank?
-      reasons << I18n.t('registrations.errors.need_name')
+    [].tap do |reasons|
+      reasons << I18n.t('registrations.errors.need_name') if name.blank?
+      reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
+      reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
+      reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
     end
-    if gender.blank?
-      reasons << I18n.t('registrations.errors.need_gender')
-    end
-    if dob.blank?
-      reasons << I18n.t('registrations.errors.need_dob')
-    end
-    if country_iso2.blank?
-      reasons << I18n.t('registrations.errors.need_country')
-    end
-
-    reasons
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
