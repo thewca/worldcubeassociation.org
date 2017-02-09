@@ -53,6 +53,12 @@ FactoryGirl.define do
       end
     end
 
+    trait :french_locale do
+      after(:create) do |user|
+        user.preferred_locale = :fr
+      end
+    end
+
     wca_id { person&.wca_id }
 
     factory :user_with_wca_id, traits: [:wca_id]

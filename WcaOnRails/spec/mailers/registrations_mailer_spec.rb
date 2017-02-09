@@ -9,6 +9,42 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   let(:competition_without_organizers) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
   let(:competition_with_organizers) { FactoryGirl.create(:competition, :registration_open, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2]) }
 
+  describe "notify registrants in their language" do
+    let(:french_user) { FactoryGirl.create :user, :wca_id, :french_locale }
+    let(:registration) { FactoryGirl.create(:registration, user: french_user, competition: competition_with_organizers) }
+    let(:mail_new) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
+    let(:mail_accepted) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
+    let(:mail_pending) { RegistrationsMailer.notify_registrant_of_pending_registration(registration) }
+    let(:mail_deleted) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
+
+    it "renders the headers in foreign locale" do
+      # We expect the locale rendering the mail to be different from the registrant's
+      expect(I18n.locale).to eq(:en)
+      # Note that we cannot use 'with_locale' for the expects here: the mail
+      # rendering is triggered only when we call 'mail_xx.subject', so we must not
+      # scope this call, but rather compare the result to the expected locale.
+      expect(mail_new.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_accepted.subject).to eq(I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_pending.subject).to eq(I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name, locale: :fr))
+      expect(mail_deleted.subject).to eq(I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name, locale: :fr))
+    end
+
+    it "renders the body in foreign locale" do
+      # We expect the locale rendering the mail to be different from the registrant's
+      expect(I18n.locale).to eq(:en)
+      # We use 'with_locale' here because of 'users_to_sentence' which needs the locale to be
+      # set to correctly translate names enumaration (eg: to not have a "John Doe and Paul Smith"
+      # pop in a French sentence instead of "John Doe et Paul Smith").
+      regards_in_french = I18n.with_locale :fr do
+        I18n.t('registrations.mailer.regards_html', people: users_to_sentence(competition_with_organizers.organizers_or_delegates))
+      end
+      expect(mail_new.body.encoded).to match(regards_in_french)
+      expect(mail_accepted.body.encoded).to match(regards_in_french)
+      expect(mail_pending.body.encoded).to match(regards_in_french)
+      expect(mail_deleted.body.encoded).to match(regards_in_french)
+    end
+  end
+
   describe "notify_organizers_of_new_registration" do
     let(:registration) { FactoryGirl.create(:registration, competition: competition_without_organizers) }
     let(:mail) { RegistrationsMailer.notify_organizers_of_new_registration(registration) }
