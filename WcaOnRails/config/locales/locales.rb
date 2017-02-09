@@ -57,5 +57,9 @@ module Locales
       "flag_id": "dk",
       "name": "Dansk",
     },
+    "hr": {
+      "flag_id": "hr",
+      "name": "Hrvatski",
+    },
   }.freeze
 end
