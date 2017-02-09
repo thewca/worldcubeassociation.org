@@ -35,32 +35,32 @@ class RegistrationsMailer < ApplicationMailer
   def notify_registrant_of_new_registration(registration)
     @registration = registration
     localized_mail @registration.user.locale,
+                   -> { I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name) },
                    to: registration.email,
-                   reply_to: registration.competition.organizers_or_delegates.map(&:email),
-                   subject: I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name)
+                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
 
   def notify_registrant_of_accepted_registration(registration)
     @registration = registration
     localized_mail @registration.user.locale,
+                   -> { I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name) },
                    to: registration.email,
-                   reply_to: registration.competition.organizers_or_delegates.map(&:email),
-                   subject: I18n.t('registrations.mailer.accepted.mail_subject', comp_name: registration.competition.name)
+                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
 
   def notify_registrant_of_pending_registration(registration)
     @registration = registration
     localized_mail @registration.user.locale,
+                   -> { I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name) },
                    to: registration.email,
-                   reply_to: registration.competition.organizers_or_delegates.map(&:email),
-                   subject: I18n.t('registrations.mailer.pending.mail_subject', comp_name: registration.competition.name)
+                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
 
   def notify_registrant_of_deleted_registration(registration)
     @registration = registration
     localized_mail @registration.user.locale,
+                   -> { I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name) },
                    to: registration.email,
-                   reply_to: registration.competition.organizers_or_delegates.map(&:email),
-                   subject: I18n.t('registrations.mailer.deleted.mail_subject', comp_name: registration.competition.name)
+                   reply_to: registration.competition.organizers_or_delegates.map(&:email)
   end
 end
