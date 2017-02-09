@@ -71,17 +71,17 @@ hr:
   rounds:
     '0':
       #original_hash: 4d618bb
-      name: Kvalifikacijska runda
+      name: Kvalifikacijska Runda
       #original_hash: 2ffe44e
       cellName: Kvalifikacije
     '1':
       #original_hash: 1e725b6
-      name: Prva runda
+      name: Prva Runda
       #original_hash: 916a78d
       cellName: Prva
     '2':
       #original_hash: 985c8d0
-      name: Druga runda
+      name: Druga Runda
       #original_hash: 2a4bcae
       cellName: Druga
     '3':
@@ -91,24 +91,24 @@ hr:
       cellName: Polufinale
     b:
       #original_hash: 327c999
-      name: B finale
+      name: B Finale
       #original_hash: 327c999
-      cellName: B finale
+      cellName: B Finale
     c:
       #original_hash: b2d26f4
-      name: Kombinirano finale
+      name: Kombinirano Finale
       #original_hash: b2d26f4
-      cellName: Kombinirano finale
+      cellName: Kombinirano Finale
     d:
       #original_hash: c6136b1
-      name: Kombinirana prva runda
+      name: Kombinirana Prva Runda
       #original_hash: dffa9ea
-      cellName: Kombinirana prva
+      cellName: Kombinirana Prva
     e:
       #original_hash: 659c53f
-      name: Kombinirana druga runda
+      name: Kombinirana Druga Runda
       #original_hash: b6e1e1c
-      cellName: Kombinirana druga
+      cellName: Kombinirana Druga
     f:
       #original_hash: 672b22c
       name: Finale
@@ -116,9 +116,9 @@ hr:
       cellName: Finale
     g:
       #original_hash: e861dcf
-      name: Kombinirana treća runda
+      name: Kombinirana Treća Runda
       #original_hash: 86f4b05
-      cellName: Kombinirana treća
+      cellName: Kombinirana Treća
     h:
       #original_hash: 4c66ad0
       name: Kombinirane kvalifikacije
@@ -156,9 +156,9 @@ hr:
     days:
       zero: 0 dana
       one: 1 dan
-      few: nekoliko dana
-      many: nekoliko dana
-      other: '%{count} dana'
+      few: '%{count} dan(a)'
+      many: '%{count} dan(a)'
+      other: '%{count} dan(a)'
     #original_hash: 203e1b3
     these_events:
       zero: 0 disciplina
@@ -386,13 +386,13 @@ hr:
     hints:
       user:
         #original_hash: 87e1e6f
-        dob: Unesite svoj datum rođenja u formatu GODINA-MJESEC-DAN.
+        dob: Unesite svoj datum rođenja u formatu YYYY-MM-DD.
         #original_hash: 5106479
         name: >-
           Unesite svoje puno ime točno, primjerice <strong>Pero Perić</strong>.
           Ne aljkavo kao <strong>p perić</strong>.
         #original_hash: c03b949
-        email: Promjena Vaše e-mail će zahtijevati potvrdu nove e-mail adrese.
+        email: Promjena Vaše e-mail adrese će zahtijevati potvrdu nove e-mail adrese.
         #original_hash: bfd11f4
         pending_avatar: 'Nakon prijenosa novog avatara, morate čekati potvrdu Board-a.'
         #original_hash: da39a3e
@@ -568,7 +568,7 @@ hr:
         content: ''
       person:
         #original_hash: 498f4c5
-        dob: Datum rođenja mora imati format GODINA-MJESEC-DAN.
+        dob: Datum rođenja mora imati format YYYY-MM-DD.
         #original_hash: da39a3e
         countryId: ''
         #original_hash: da39a3e
@@ -639,19 +639,19 @@ hr:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Prijavnica sadrži %{count} grešaka.'
-          many: 'Prijavnica sadrži %{count} grešaka.'
-          few: 'Prijavnica sadrži %{count} grešaka.'
-          one: Prijavnica sadrži jednu grešku.
           zero: 'Prijavnica sadrži %{count} grešaka.'
+          one: Prijavnica sadrži jednu grešku.
+          few: 'Prijavnica sadrži %{count} grešaka.'
+          many: 'Prijavnica sadrži %{count} grešaka.'
+          other: 'Prijavnica sadrži %{count} grešaka.'
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">here</a> for a list of supported scopes.
       scopes:
         #original_hash: 1920e95
@@ -788,7 +788,7 @@ hr:
       already_have_html: 'Već imate WCA ID %{wca_id}.'
       #original_hash: 87f1062
       already_claimed_html: >-
-        Zatažili ste WCA ID %{wca_id}. Kontaktirajte %{delegate} ukoliko imate
+        Zatražili ste WCA ID %{wca_id}. Kontaktirajte %{delegate} ukoliko imate
         pitanja.
       #original_hash: 0660b5d
       info_competed_before: >-
@@ -879,10 +879,10 @@ hr:
         '2': Na prikazanoj slici morate biti Vi.
         #original_hash: de9b742
         '3': >-
-          Ukoliko je na avataru više osoba, mora biti jasno koja ste Vi osoba od
-          te dvije.
+          Ukoliko je na avataru više osoba, mora biti jasno koja ste osoba od te
+          dvije.
         #original_hash: 4083c00
-        '4': 'Vaša glava (ne mora cijelo lice), mora biti vidljiva.'
+        '4': 'Vaša glava (nije potrebno cijelo lice), mora biti vidljiva.'
         #original_hash: ebbbf8a
         '5': Avatar ne smije sadržavati nikakav tekst osim teksta u pozadini.
         #original_hash: cc5f23a
@@ -895,11 +895,11 @@ hr:
       #original_hash: 4bef62b
       dob_incorrect_html: >-
         ne podudara se s našom bazom podataka. Ukoliko ste sigurni da pišete
-        točan datum u točnom formatu (GODINA-MJESEC-DAN) molimo Vas pošaljite
-        e-mail <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team-u</a>, prijavite pogrešku i pošaljite
-        sliku bilo koje isprave (osobna iskaznica, vozačka dozvola...) gdje su
-        Vaše ime i datum rođenja vidljivi.
+        točan datum u točnom formatu (YYYY-MM-DD) molimo Vas pošaljite e-mail <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team-u</a>, prijavite pogrešku i pošaljite sliku bilo koje
+        isprave (osobna iskaznica, vozačka dozvola...) gdje su Vaše ime i datum
+        rođenja vidljivi.
       #original_hash: 0fbcefd
       unique: mora biti unikatno
       #original_hash: 26f70ed
@@ -919,6 +919,12 @@ hr:
         target='_blank'>WCA Results Team-u</a> s fotografijom neke isprave
         (osobne iskaznice, vozačke dozvole itd.) gdje je Vaše ime i datum
         rođenja vidljiv.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: null
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: null
+      #original_hash: c3839bc
+      wca_id_no_name_html: null
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Ne možete dati otkaz s uloge Board Member-a! Nađite drugog Board
@@ -949,10 +955,10 @@ hr:
         WCA ID %{link_id}  je već dodijeljen drugom računu. Ukoliko mislite da
         je to greška, kontaktirajte svog lokalnog <a href='%{link_delegate}'
         target='_blank'>WCA delegata</a>.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        WCA ID %{link_id} nema spojen datum rođenja. Molimo Vas kontaktirajte
-        %{link_result_team} za popravak greške.
+      #original_hash: d26bfdc
+      missing_dob_html: 'WCA ID %{link_id} nema spojen datum rođenja.'
+      #original_hash: 5be6803
+      contact_results_team_html: null
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} ne postoji.'
   registrations:
@@ -976,49 +982,49 @@ hr:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: first-timer(a)
-        many: first-timer(a)
-        few: first-timer(a)
-        one: first-timer
         zero: first-timer(a)
+        one: first-timer
+        few: first-timer(a)
+        many: first-timer(a)
+        other: first-timer(a)
       #original_hash: bc010e3
       returner:
-        other: returner(a)
-        many: returner(a)
-        few: returner(a)
-        one: returner(a)
         zero: returner(a)
+        one: returner(a)
+        few: returner(a)
+        many: returner(a)
+        other: returner(a)
       #original_hash: b7da17a
       person:
-        other: osoba
-        many: osoba
-        few: osoba
-        one: osoba
         zero: osoba
+        one: osoba
+        few: osoba
+        many: osoba
+        other: osoba
     flash:
       #original_hash: da7ec53
       not_using_wca: Ovo natjecanje ne koristi WCA registracije
       #original_hash: d528030
       accepted_and_mailed:
-        other: Registracija prihvaćenih! E-mail obavijesti poslane.
-        many: Registracija prihvaćenih! E-mail obavijesti poslane.
-        few: Registracija prihvaćenih! E-mail obavijesti poslane.
-        one: Registracija prihvaćena! E-mail obavijest poslana.
         zero: Nijedna registracija nije prihvaćena! E-mail obavijest nije poslana.
+        one: Registracija prihvaćena! E-mail obavijest poslana.
+        few: Registracija prihvaćenih! E-mail obavijesti poslane.
+        many: Registracija prihvaćenih! E-mail obavijesti poslane.
+        other: Registracija prihvaćenih! E-mail obavijesti poslane.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Registracija pomaknuto na listu čekanja
-        many: Registracija pomaknuto na listu čekanja
-        few: Registracija pomaknuto na listu čekanja
-        one: Registracija pomaknuta na listu čekanja
         zero: Registracija pomaknuto na listu čekanja
+        one: Registracija pomaknuta na listu čekanja
+        few: Registracija pomaknuto na listu čekanja
+        many: Registracija pomaknuto na listu čekanja
+        other: Registracija pomaknuto na listu čekanja
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Registracija obrisano
-        many: Registracija obrisano
-        few: Registracija obrisano
-        one: Registracija obrisana
         zero: Registracija obrisano
+        one: Registracija obrisana
+        few: Registracija obrisano
+        many: Registracija obrisano
+        other: Registracija obrisano
       #original_hash: c3aa289
       single_deletion_and_mail: 'Obrisana registracija i e-mail poslan %{mail}'
       #original_hash: d8f067f
@@ -1099,11 +1105,11 @@ hr:
       edit: Uredi
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} država'
-        many: nekoliko država
-        few: nekoliko država
+        zero: 0 država
         one: 1 država
-        zero: država
+        few: '%{count} država/e'
+        many: '%{count} država/e'
+        other: '%{count} država/e'
       #original_hash: 1feee0e
       export_csv: Izvezi u .csv datoteku
       #original_hash: 84add5b
@@ -1126,7 +1132,7 @@ hr:
       total: Ukupno
     new_registration:
       #original_hash: 8b9f726
-      title: 'Regitriran za %{comp}'
+      title: 'Registriran za %{comp}'
     #original_hash: 7cae988
     registered_with_account_html: >-
       Ova osoba se registrirala s korisničkim računom. Možete urediti njihove
@@ -1265,18 +1271,18 @@ hr:
       website: Web-stranica
       #original_hash: 680567f
       organizer_plural:
-        other: Organizatora
-        many: Organizatora
-        few: Organizatora
-        one: Organizator
         zero: Organizatora
+        one: Organizator
+        few: Organizator(i)
+        many: Organizator(i)
+        other: Organizator(i)
       #original_hash: 6afa61e
       delegate:
-        other: WCA Delegata
-        many: WCA Delegata
-        few: WCA Delegata
-        one: WCA Delegat
         zero: WCA Delegata
+        one: WCA Delegat
+        few: WCA Delegat(i)
+        many: WCA Delegat(i)
+        other: WCA Delegat(i)
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: a428739
@@ -1470,11 +1476,11 @@ hr:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} natjecanja'
-        many: nekoliko natjecanja
-        few: nekoliko natjecanja
-        one: jedno natjecanje
         zero: nula natjecanja
+        one: jedno natjecanje
+        few: nekoliko natjecanja
+        many: nekoliko natjecanja
+        other: '%{count} natjecanja'
       #original_hash: e3528ec
       label: 'Natjecanja u blizini (unutar %{days}dana i %{kms} km)'
       #original_hash: 3446062
@@ -1694,7 +1700,7 @@ hr:
             Nakon toga, organizacijski tim mora kontaktirati najbližeg <a
             target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>WCA
-            Delegata</a>. Nadgledanje od strane WCA Delegata je potrebno kako mi
+            Delegata</a>. Nadgledanje od strane WCA Delegata je potrebno kako bi
             se natjecanje uspješno prihvatilo kao WCA natjecanje. WCA Delegat će
             Vam pomoći u koordinaciji i organizaciji samog natjecanja.
           #original_hash: 809f53a
@@ -1727,13 +1733,13 @@ hr:
         content:
           #original_hash: e619524
           '1': >-
-            Prvo, trebate a
+            Prvo, trebate <a
             href='#how-do-i-connect-my-wca-account-with-my-wca-id'>napraviti WCA
             korisnički račun i spojiti ga s Vašim WCA ID-om.</a>
           #original_hash: 56a8f26
           '2': >-
             Nakon što ste spojili Vaš WCA korisnički račun i WCA ID, odite na <a
-            href='%{profile_edit_path}'>stranicu Uredite profil/a> kako biste
+            href='%{profile_edit_path}'>stranicu Uredite profil</a> kako biste
             promijenili svoju profilnu fotografiju.
       '8':
         #original_hash: 1d61217
@@ -1771,25 +1777,24 @@ hr:
       paragraphs:
         #original_hash: 16ad45e
         '1': >-
-          The World Cube Association upravlja natjecanjima za sve mozgalice
-          označene kao Rubik mozgalice i za sve ostale mozgalice koje se
-          rješavaju okretanjem stranica, tzv. "twisty puzzles". Najpoznatija
-          mozgalica jest Rubikova kocka, izum profesora Rubika iz Mađarske. Samo
-          su određene mozgalice izabrane kao službene discipline WCA
-          organizacije.
+          World Cube Association upravlja natjecanjima za sve mozgalice označene
+          kao Rubik mozgalice i za sve ostale mozgalice koje se rješavaju
+          okretanjem stranica, tzv. "twisty puzzles". Najpoznatija mozgalica
+          jest Rubikova kocka, izum profesora Rubika iz Mađarske. Samo su
+          određene mozgalice izabrane kao službene discipline WCA organizacije.
         #original_hash: c8ecd24
         '2': >-
-          The World Cube Association organizira natjecanja u čitavom svijetu,
+          World Cube Association organizira natjecanja u čitavom svijetu,
           podržana od strane nacionalnih organizacija odgovornih za
           organiziranje natjecanja u njihovim državama.
         #original_hash: 20e0550
         '3': >-
-          Cilj the World Cube Association jest imati <br /><strong>više
-          natjecanja u više država s više ljudi i s više zabave, pod pravednim i
-          jednakim uvjetima.</strong>
+          Cilj World Cube Association jest imati <br /><strong>više natjecanja u
+          više država s više ljudi i s više zabave, pod pravednim i jednakim
+          uvjetima.</strong>
         #original_hash: bee3687
         '4': >-
-          Duh the World Cube Association jest <br /> <strong>da ljudi iz svih
+          Duh World Cube Association jest <br /> <strong>da ljudi iz svih
           zemalja svijeta imaju zabavu u prijateljskoj atmosferi, da pomažu
           jedni drugima i da se ponašaju sportski.</strong>
     structure:
@@ -1797,8 +1802,8 @@ hr:
       title: Struktura
       #original_hash: d855b50
       board_html: >-
-        The World Cube Association vodi <strong>WCA Board</strong, sastojući se
-        od slijedećih članova:
+        World Cube Association vodi <strong>WCA Board</strong, sastojući se od
+        slijedećih članova:
       #original_hash: b0c72a9
       committees: 'Slijedeći odbori su odgovorni za operacijske aktivnosti WCA:'
       wdc:
@@ -1865,7 +1870,7 @@ hr:
     title: Kontakt informacije
     #original_hash: b5c2eaa
     info_alert_html: >-
-      Prije nego što kontaktirate bilo koji tim sa stranice, pogledajte naš
+      Prije nego što kontaktirate bilo koji tim sa stranice, pogledajte naša
       %{link}!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
