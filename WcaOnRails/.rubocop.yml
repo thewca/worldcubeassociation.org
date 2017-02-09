@@ -70,6 +70,9 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+Performance/RedundantMatch:
+  Enabled: false
+
 Style/NegatedIf:
   Enabled: false
 
