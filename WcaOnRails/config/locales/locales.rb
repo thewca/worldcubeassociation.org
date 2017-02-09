@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 module Locales
   AVAILABLE = {
+    "de": {
+      "flag_id": "de",
+      "name": "Deutsch",
+    },
     "en": {
       "flag_id": "gb",
       "name": "English",

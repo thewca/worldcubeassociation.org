@@ -1,0 +1,1030 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+de:
+  #context: Special country name
+  countries:
+    XA: "Mehrere Länder (Asien)"
+    XE: "Mehrere Länder (Europa)"
+    XS: "Mehrere Länder (Südamerika)"
+    MO: "Macau"
+    HK: "Hongkong"
+    KR: "Korea"
+  #context: Continent name
+  continents:
+    AfR: "Afrika"
+    AsR: "Asien"
+    ER: "Europa"
+    NAR: "Nordamerika"
+    OcR: "Ozeanien"
+    SAR: "Südamerika"
+  #context: Event name
+  events:
+    "333": "Rubik's Cube"
+    "444": "4x4x4 Würfel"
+    "555": "5x5x5 Würfel"
+    "222": "2x2x2 Würfel"
+    333bf: "3x3x3 Blind"
+    333oh: "3x3x3 Einhändig"
+    333fm: "3x3x3 Fewest Moves"
+    333ft: "3x3x3 Mit Füßen"
+    minx: "Megaminx"
+    pyram: "Pyraminx"
+    sq1: "Square-1"
+    clock: "Rubik's Clock"
+    skewb: "Skewb"
+    "666": "6x6x6 Würfel"
+    "777": "7x7x7 Würfel"
+    444bf: "4x4x4 Blind"
+    555bf: "5x5x5 Blind"
+    333mbf: "3x3x3 Mehrfach Blind"
+    magic: "Rubik's Magic"
+    mmagic: "Master Magic"
+    333mbo: "3x3x3 Mehrfach Blind alter Stil"
+  #context: Round name
+  rounds:
+    "0":
+      name: "Qualifikationsrunde"
+      cellName: "Qualifikation"
+    "1":
+      name: "Erste Runde"
+      cellName: "Erste"
+    "2":
+      name: "Zweite Runde"
+      cellName: "Zweite"
+    "3":
+      name: "Halbfinale"
+      cellName: "Halbfinale"
+    "b":
+      name: "B-Finale"
+      cellName: "B-Finale"
+    "c":
+      name: "Combined Finale"
+      cellName: "Combined Finale"
+    "d":
+      name: "Combined Erste Runde"
+      cellName: "Combined Erste"
+    "e":
+      name: "Combined Zweite Runde"
+      cellName: "Combined Zweite"
+    "f":
+      name: "Finale"
+      cellName: "Finale"
+    "g":
+      name: "Combined Dritte Runde"
+      cellName: "Combined Dritte"
+    "h":
+      name: "Combined Qualifikation"
+      cellName: "Combined Qualifikation"
+  #context: Common word used in multiple places on the website
+  common:
+    continent: "Kontinent"
+    country: "Land"
+    #context: "here" is used in html links such as "You can create an account here".
+    here: "hier"
+    best: "Bestleistung"
+    single: "Einzelzeit"
+    average: "Schnitt"
+    solves: "Lösungen"
+    user:
+      wca_id: "WCA-ID"
+      citizen_of: "Staatsbürger von"
+    all_regions: "Alle Gebiete"
+    errors:
+      invalid: "ungültig"
+    #context: Key used for the pluralization of "x day(s)" in a sentence like "Stars in x days".
+    days:
+      one: "1 Tag"
+      other: "%{count} Tage"
+    #context: Key used for the pluralization of "x event(s)" in a sentence like "Couldn't find a competition with these x events"
+    these_events:
+      one: "Diese Disziplin"
+      other: "Diese %{count} Disziplinen"
+  #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
+  oauth:
+    applications:
+      your_apps: "Deine OAuth-Anwendungen"
+      new: "Neu"
+      name: "Name"
+      callback_url: "Callback-URL"
+      owner: "Eigentümer"
+      application_id: "Anwendungs-ID"
+      actions: "Aktionen"
+      secret: "Geheim"
+      scopes: "Scopes"
+      callback_urls: "Callback-URLs"
+  activerecord:
+    #context: This key is used as a label for forms regarding
+    attributes:
+      #context: a user
+      user:
+        name: "Voller Name"
+        wca_id: "WCA-ID"
+        unconfirmed_wca_id: "Unbestätigte WCA-ID"
+        login: "E-Mail oder WCA-ID"
+        country_iso2: "Staatsbürgerschaft"
+        dob: "Geburtsdatum"
+        dob_verification: "Geburtsdatum"
+        gender: "Geschlecht"
+        email: "E-Mail"
+        password: "Passwort"
+        current_password: "Aktuelles Passwort"
+        password_confirmation: "Passwort bestätigen"
+        remember_me: "Angemeldet bleiben"
+        pending_avatar: "Neues Profilbild hochladen"
+        remove_avatar: "Profilbild entfernen"
+        results_notifications_enabled: "Benachrichtige mich, wenn Ergebnisse von mir veröffentlicht werden."
+        delegate_status: "Delegierten-Status"
+        region: "Region"
+        location_description: "Wegbeschreibung"
+        phone_number: "Telefonnummer"
+        notes: "Anmerkungen"
+      #context: a competition
+      competition:
+        id: "ID"
+
+        isConfirmed: "Organisatoren diesen Wettbewerb nicht bearbeiten lassen"
+        showAtAll: "Wettbewerb öffentlich sichtbar machen"
+
+        name: "Name"
+        cellName: "Spitzname"
+        countryId: "Land"
+        cityName: "Name der Stadt"
+        venue: "Veranstaltungsort"
+        venueAddress: "Adresse des Veranstaltungsortes"
+        venueDetails: "Details zum Veranstaltungsort"
+
+        start_date: "Startdatum"
+        end_date: "Enddatum"
+
+        external_website: "Website"
+        generate_website: "Ich würde gerne die WCA-Website statt einer externen Seite für zusätzliche Informationen verwenden."
+
+        base_entry_fee_lowest_denomination: "Eintrittsgebühr in kleinstmöglicher Stückelung"
+        currency_code: "Währungscode"
+
+        delegate_ids: "WCA-Delegierte(r)"
+        organizer_ids: "Organisator(en)"
+        contact: "Kontakt"
+        information: "Informationen"
+
+        use_wca_registration: "Ich würde gerne die WCA-Website für die Registrierung benutzen"
+        guests_enabled: "Gäste"
+        receive_registration_emails: "Benachrichtige mich per E-Mail, wenn sich jemand für diesen Wettbewerb anmeldet"
+        registration_open: "Anmeldung offen"
+        registration_close: "Anmeldung geschlossen"
+        remarks: "Bemerkungen"
+        clone_tabs: "Ich möchte auch alle Registerkarten mit zusätzlichen Informationen kopieren"
+      #context: a registration to a competition
+      registration:
+        guests: "Gäste"
+        comments: "Kommentare"
+        status: "Status"
+        # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
+        name: "Name"
+        birthday: "Geburtsdatum"
+      #context: a competition tab
+      competition_tab:
+        content: "Inhalt"
+        name: "Name"
+      #context: a delegate report
+      delegate_report:
+        discussion_url: "URL zur Diskussion in der Google Group"
+        schedule_url: "URL zum Zeitplan"
+        equipment: "Equipment"
+        venue: "Veranstaltungsort"
+        organization: "Organisation"
+        incidents: "Zwischenfälle"
+        remarks: "Bemerkungen"
+      #context: a person
+      person:
+        wca_id: "Person"
+        countryId: "Land"
+        dob: "Geburtsdatum"
+        gender: "Geschlecht"
+        name: "Name"
+      #context: a poll
+      poll:
+        question: "Frage"
+        deadline: "Frist"
+      #context: a post
+      post:
+        title: "Titel"
+        body: "Inhalt"
+        sticky: "Fixiert"
+      #context: a team
+      team:
+        name: "Name"
+        description: "Beschreibung"
+      #context: a vote
+      vote:
+        comment: "Kommentar"
+  #context: This key is an element of a form on the website
+  simple_form:
+    "yes": "Ja"
+    "no": "Nein"
+    required:
+      text: 'benötigt'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      html: ''
+    error_notification:
+      default_message: "Bitte die folgenden Probleme klären:"
+    #context: and a label of a field
+    labels:
+      contact:
+        name: "Name"
+        your_email: "Deine E-Mail-Adresse"
+        message: "Nachricht"
+    #context: and a hint given about a specific field
+    hints:
+      #context: for a user
+      user:
+        dob: "Trage dein Geburtsdatum im Format JJJJ-MM-TT ein."
+        name: "Trage deinen vollen Namen sorgfältig ein, zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam wie etwa <strong>s pochman</strong>."
+        email: "Wenn Du deine E-Mail änderst, musst Du die neue Adresse erneut bestätigen"
+        pending_avatar: "Nachdem Du ein neues Profilbild hochgeladen hast, muss dieses erst vom Board bestätigt werden."
+        country_iso2: ""
+        current_password: ""
+        delegate_status: ""
+        dob_verification: ""
+        gender: ""
+        login: ""
+        password: ""
+        password_confirmation: ""
+        region: ""
+        remember_me: ""
+        remove_avatar: ""
+        results_notifications_enabled: ""
+        unconfirmed_wca_id: ""
+        wca_id: ""
+        location_description: ""
+        phone_number: ""
+        notes: ""
+      #context: for a competition
+      competition:
+        name: "Der volle Name eines Wettbewerbs, inklusive Jahreszahl am Ende (z.B. Danish Open 2016). Achte auf Großschreibung. Der Name darf nur alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.), Doppelpunkte(:), Appostrophe(') und Leerzeichen( ) enthalten."
+        cellName: "Ein Spitzname für die Anzeige. Wenn der volle Name bereits kurz ist, kannst Du ihn wiederverwenden (z.B. Europe 2006)."
+        cityName: "Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem der Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER San Francisco, Kalifornien)."
+        information: "Informationen über den Wettbewerb (z.B. Euro 2006 ist offen für Staatsbürger der Europäischen Länder sowie Israel)."
+        delegate_ids: "WCA-Delegierte für den Wettbewerb."
+        organizer_ids: "Organisatoren (Account zum Eintragen benötigt)."
+        external_website: "Die Website des Wettbewerbs. Muss als gültige http(s)-URL vorliegen."
+        registration_open: "Anmerkung: Anmeldebeginn und -schluss sind in UTC anzugeben"
+        remarks: "Zusätzliche Informationen, die an das Board gehen sollen. Zum Beispiel Gründe, weshalb der Wettbewerb nicht innerhalb eines Monats angefragt wurde, falls relevant."
+        clone_tabs: ""
+        countryId: ""
+        end_date: ""
+        generate_website: ""
+        base_entry_fee_lowest_denomination: 'Eintrittsgebühr für den Wettbewerb. Die Gebühr wird in der kleinstmöglichen Stückelung der jeweiligen gegebenen Währung aufgefasst. Zum Beispiel Cent für USD. Die Eintrittsgebühr wird auf der Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt) angezeigt. Anmerkung: Die WCA-Website unterstützt noch keine Bezahlvorgänge. Das Software-Team arbeitet darauf hin, der Fortschritt kann unter <a href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a> mitverfolgt werden.'
+        currency_code: "Der Währungscode für Eintrittsgebühren."
+        guests_enabled: ""
+        id: ""
+        isConfirmed: ""
+        receive_registration_emails: ""
+        registration_close: ""
+        showAtAll: ""
+        start_date: ""
+        use_wca_registration: ""
+        venueAddress: ""
+      contact:
+        message: ""
+        name: ""
+        your_email: ""
+      #context: for a post
+      post:
+        body: "Benutze den &lt;!-- break --&gt;-Tag um eine Vorschau auf der Homepage anzuzeigen. Jeder Post auf der Website wird sämtlichen Text vor diesen Tag anzeigen. Der tatsächliche Post umfasst dann den vollen Inhalt."
+        sticky: ""
+        title: ""
+      #context: for a delegate report
+      delegate_report:
+        schedule_url: "Vollständiger Link zum öffentlichen Zeitplan (z.B. https://www.cubingusa.com/usnationals2016/schedule.php)"
+        equipment: "Nummer und Art der für den Wettbewerb verwendeten Timer und Displays. Bitte die Zeilen mit dem nicht verwendeten Equipment entsprechend entfernen."
+        venue: "Berichte über den Raum, das Licht, öffentlichen Zugang, Verteilung der Bereiche (Lösen, Scrambeln, Warten, Ergebniserfassung), darüber ob verschiedene Bühnen zum Lösen aufgestellt wurden, über Probleme die auftraten (zum Beispiel Lärm) und darüber wie sie gelöst wurden... Bitte kürz und bündig schreiben und keine unnötigen Details berichten."
+        organization: "Berichte über das Organisationsteam und darüber, wie sie den Wettbewerb bewältigt haben, ob und wie Du dabei involviert warst, deren Vorerfahrung und ob Du Fortschritte feststellen konntest, ob sie sich den Tag über professionell und aktiv verhalten haben, über Probleme, die auftraten (z.B. hinter den Zeitplan zurückzufallen) und wie sie gelöst wurden... Bitte kurz und bündig schreiben und keine unnötigen Details berichten."
+        incidents: "Berichte über alle Vorfälle die Du als nennenswert erachtest. Nummeriere die Vorfälle beginnend bei 1., sodass andere Delegierte über diese Nummerierung darauf Bezug nehmen können. Bitte zähle nur konrete Vorkomnisse auf, keine gewöhnlichen Abläufe (z.B. reguläre +2 und DNFs). Zögere dabei nicht, andere Delegierte oder die WRC um Feedack zu bitten. Wenn Du die Mitarbeit der WDC wünschst, so äußere dies im betroffenen Fall klar und deutlich."
+        remarks: "Rede über alle anderen Details die Du gerne teilen möchtest (z.B. Verbesserung/Verschlechterung innerhalb der Gemeinschaft, zukünftige Pläne für diese Region). Alles was in den vorherigen Bereichen im Sinne der klaren und präzisen Ausdrucksweise ausgelassen wurde, kann hier erscheinen."
+        discussion_url: ""
+      #context: for a competition tab
+      competition_tab:
+        name: "Beispiele: Anreise, Zahlung, Preise/Auszeichnungen, Unterkunft"
+        content: ""
+      #context: for a person
+      person:
+        dob: "Geburtsdaten sollten dem Format JJJJ-MM-TT folgen."
+        countryId: ""
+        gender: ""
+        name: ""
+        person1_wca_id: ""
+        person2_wca_id: ""
+        wca_id: ""
+      poll:
+        comment: ""
+        multiple: ""
+        question: ""
+      registration:
+        comments: ""
+        guests: ""
+        status: ""
+      team:
+        description: ""
+        friendly_id: ""
+        name: ""
+      vote:
+        comment: ""
+    #context: and a label for an option
+    options:
+      #context: about registration
+      registration:
+        #context: This is one of the status a registration can have (used in a bullet list)
+        status:
+          accepted: "Akzeptiert"
+          pending: "Warteliste"
+          deleted: "Gelöscht"
+      competition:
+        #context: about guests
+        guests_enabled:
+          "true": "Nach Gästen fragen"
+          "false": "NICHT nach Gästen fragen"
+  errors:
+    #These are locales used in lib/ (ignored by configuration)
+    #context: Error message when submitting a profile picture
+    messages:
+      wrong_size: "hat die falsche Größe (erwartet: %{file_size})"
+      size_too_small: "ist zu klein (erwartet: mindestens %{file_size})"
+      size_too_big: "ist zu groß (erwartet: höchstens %{file_size})"
+  #context: Overriden key for sign in
+  devise:
+    failure:
+      invalid: "Ungültige E-Mail, WCA-ID oder Passwort."
+      not_found_in_database: "Ungültige E-Mail, WCA-ID oder Passwort."
+  #context: Key used in external code that the WCA use
+  wca:
+    # These are locales used in WCA's app relevant to external gems, but which are not present in the gem's default locale file.
+    # Putting them under "wca" ensures we can check through i18n-tasks that we define and use them properly.
+    errors:
+      messages:
+        #context: Generic error message in forms
+        form_error:
+          one: "Das Formular enthält einen Fehler:"
+          other: "Das Formular enthält %{count} Fehler:"
+    #context: Key used when an external OAuth app is willing to access a WCA user's data
+    doorkeeper:
+      applications:
+        help:
+          scopes_html: 'Trenne Scopes mit Leerzeichen. Lasse den Standard Scope leer. Siehe <a href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8" target="_blank">hier</a> für eine Liste unterstützter Scopes.'
+      #context: and asking the user "The application will be able to"
+      scopes:
+        public: 'Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht, Staatsbürgerschaft und Profilbild)'
+        dob: 'Zugriff auf das Geburtsdatum'
+        email: 'Zugriff auf die E-Mail-Adresse'
+
+    #context: Key used for sign in/sign up
+    devise:
+      no_account: "Kein Benutzerkonto?"
+      have_competed: "Ich habe bereits an einem WCA-Wettbewerb teilgenommen."
+      have_never_competed: "Ich habe noch nie an einem WCA-Wettbewerb teilgenommen."
+      let_us_know: "Bitte teile uns mit, ob Du bereits an einem WCA-Wettbewerb teilgenommen hast."
+      welcome_back: "Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir die WCA-ID kennen, mit der Du teilgenommen hast."
+      welcome: "Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst, brauchen wir ein paar zusätzliche Informationen zur Verwaltung der Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein Einverständnis weitergereicht wird."
+      gender:
+        male: "Männlich"
+        female: "Weiblich"
+        other_gender: "Andere"
+  layouts:
+    #context: This key belongs to the navigation bar
+    navigation:
+      information: "Informationen"
+      about: "Über die WCA"
+      delegates: "WCA-Delegierte"
+      organizations: "Nationale Organisationen"
+      faq: "Häufig gestellte Fragen (FAQ)"
+      contact: "Kontakt"
+      forum: "Forum"
+      tools: "Werkzeuge"
+      logo: "Logo"
+      competitions: "Wettbewerbe"
+      all: "Alle"
+      my_competitions: "Meine Wettbewerbe"
+      new_competition: "Neuer Wettbewerb"
+      results: "Ergebnisse"
+      rankings: "Ranglisten"
+      records: "Rekorde"
+      persons: "Personen"
+      my_results: "Meine Ergebnisse"
+      statistics: "Statistiken"
+      multimedia: "Multimedia"
+      db_export: "Datenbank-Export"
+      regulations: "Regeln"
+      guidelines: "Richtlinien"
+      scrambles: "Scrambles"
+      history: "Verlauf"
+      translations: "Übersetzungen"
+      administration: "Verwaltung"
+      manage_users: "Nutzer verwalten"
+      delegate: "Delegierte(r)"
+      panel: "Gremien"
+      results_team: "Results-Team"
+      results_admin: "Administrator"
+      results_phpmyadmin: "phpMyAdmin"
+      new_post: "Neuer Post"
+      team_leader: "Teamleiter"
+      sign_out: "Abmelden"
+      notifications: "Benachrichtigungen"
+      edit_profile: "Benutzerkonto bearbeiten"
+      api: "API"
+      manage_app: "Anwendungen verwalten"
+      manage_auth_app: "Autorisierte Anwendungen verwalten"
+  #context: Key used in the context of editing a user profile
+  users:
+    #context: when updating their locale (language)
+    update_locale:
+      success: "Aktualisierte Locale."
+      failure: "Nicht im Stande, dein Benutzerkonto zu aktualisieren."
+      unavailable: "Angeforderte Locale ist nicht verfügbar."
+    #context: related to claiming a WCA ID
+    claim_wca_id:
+      title: "WCA-ID anfordern"
+      competition: "Wettbewerb"
+      already_have_html: "Du hast bereits die WCA-ID %{wca_id}."
+      already_claimed_html: "Du hast die WCA-ID %{wca_id} angefordert. Kontaktiere %{delegate} falls Du Fragen hast."
+      info_competed_before: "Wenn Du zuvor an einem Wettbewerb teilgenommen hast, kannst Du eine Anfrage senden, um deine WCA-ID mit deinem Benutzerkonto zu verbinden."
+      info_never_competed_html: "Wenn Du noch nie zuvor bei einem Wettbewerb warst, besuche einen %{comp}! Eine WCA-ID wird für dich erstellt sobald die Ergebnisse deines ersten Wettbewerbs veröffentlicht sind."
+      submit_value: "WCA-ID anfordern"
+    #context: related to editing the avatar thumbnail
+    edit_avatar_thumbnail:
+      current: "Aktuelles Vorschaubild:"
+      new: "Neues Vorschaubild:"
+      save: "Speichern"
+    edit:
+      general: "Allgemein"
+      email: "E-Mail"
+      preferences: "Einstellungen"
+      password: "Passwort"
+      member_of: "Mitglied von"
+      preferred_events: "Bevorzugte Disziplinen"
+      preferred_events_desc: "Das Auswählen deiner Lieblingsdisziplinen ermöglicht eine schnellere Anmeldung bei Wettbewerben."
+      please_fix_profile: "Um dich für Wettbewerbe anmelden zu können, musst Du die folgenden Probleme beheben:"
+      profile: "Benutzerkonto"
+      approve: "Zustimmen"
+      unconfirmed_email: "Die E-Mail-Adresse dieses Benutzerkontos (%{email}) ist nicht bestätigt."
+      pending_mail_confirmation: "Die Bestätigung der neuen E-Mail-Adresse %{email} für diesen Acccount ist im Gang."
+      pending_avatar_confirmation: "Die Bestätigung eines neuen Profilbildes für dieses Benutzerkonto ist im Gang."
+      pending_claim_confirmation_html: "Dieses Benutzerkonto wartet darauf, dass %{delegate} die angeforderte WCA-ID %{wca_id} bestätigt."
+      pending_claim_mail_confirmation_html: "Dieser Nutzer hat die WCA-ID %{wca_id} angefordert. Der zuständige Delegierte %{delegate} wird davon benachrichtigt sobald die E-Mail-Adresse des Benutzerkontos bestätigt wurde."
+      your_thumbnail: "Vorschaubild deines Benutzerkontos:"
+      edit_thumbnail: "Klicken um Vorschaubild zu bearbeiten"
+      manage_pending: "Profilbild-Anfragen verwalten"
+      have_no_wca_id_html: "Du hast noch keine dir zugeordnete WCA-ID. Wenn Du bereits auf einem Wettbewerb warst, fordere die Verbindung zwischen deiner WCA-ID und deinem Benutzerkonto %{here} an!"
+      have_wca_id_html: "Deine WCA-ID lautet %{link_id}."
+      #context: used in the error message when a user can't edit some part of their profile
+      cannot_edit:
+        msg: "Du kannst deinen Namen, dein Geburtsdatum, Geschlecht oder Land nicht bearbeiten. Grund: %{reason}. Kontaktiere deinen <a href='%{delegate_url}'>Delegierten</a> wenn Du etwas davon ändern musst."
+        reason:
+          assigned: "Du hast eine verknüpfte WCA-ID"
+          registered: "Du hast dich für einen Wettbewerb angemeldet"
+      save: "Speichern"
+      guidelines: "Richtlinien"
+      avatar_guidelines:
+        '1': "Alle Profilbilder sollen Bilder echter Personen sein."
+        '2': "Die abgebildete Person musst Du sein."
+        '3': "Wenn mehrere Personen auf dem Bild auftauchen, muss klar sein, wer davon Du bist."
+        '4': "Dein Kopf, aber nicht notwendigerweise das komplette Gesicht, sollte sichtbar sein."
+        '5': "Das Bild darf nur gewöhnliche Hintergrund-Texte enthalten."
+        '6': "Das Bild muss in korrekter Ausrichtung eingeschickt werden."
+
+    #context: when an error occured during the edition
+    errors:
+      not_found: "nicht gefunden"
+      already_assigned: "bereits mit einem anderen Nutzer verknüpft"
+      dob_incorrect_html: "stimmt nicht mit unserer Datenbank überein. Wenn Du absolut sicher bist, dass das Datum korrekt und im richtigen Format (YYYY-MM-DD) ist, schreibe bitte eine E-Mail an das <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>, benachrichtige sie von diesem Fehler und sende ihnen ein Foto eines amtlichen Ausweisdokuments (Personalausweis, Führerschein,...) aus dem dein Name sowie dein Geburtsdatum ersichtlich sind."
+      unique: "muss eindeutig sein"
+      dob_past: "muss in der Vergangenheit liegen"
+      must_be_senior: "muss ein Senior-Delegierter sein"
+      must_not_be_present: "darf nicht vorhanden sein"
+      senior_has_delegate: "kann keinen Senior-Delegierten mit untergebenen Delegierten zurückstufen"
+      already_have_id: "kann keine WCA-ID anfordern da Du bereits mit der WCA-ID %{wca_id} verknüpft bist"
+      wca_id_no_birthdate_html: "Wir haben kein Geburtsdatum für diese WCA-ID hinterlegt. Bitte kontaktiere das <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> mit einem Foto eines amtlichen Ausweisdokuments (Personalausweis, Führerschein,...) aus dem dein Name sowie dein Geburtsdatum ersichtlich sind."
+      board_member_cannot_resign: "Du kannst nicht von deiner Rolle als Board-Mitglied zurücktreten! Finde ein anderes Board-Mitglied das dich feuert."
+      avatar_requires_wca_id: "erfordert die Verknüpfung mit einer WCA-ID"
+    #context: when an action was successful
+    successes:
+      messages:
+        account_updated: "Benutzerkonto aktualisiert"
+        wca_id_claimed: "Erfolgreich WCA-ID %{wca_id} angefordert. Lies deine E-Mails und warte darauf dass %{user} die Verknüpfung bestätigt!"
+        account_updated_confirm: "Benutzerkonto aktualisiert und E-Mail an %{email} gesendet um deine neue E-Mail-Adresse zu bestätigen"
+    select_nearby_delegate:
+      select_delegate_html: "Um dich mit deiner WCA-ID zu verknüpfen, brauchen wir einen <a href='%{link_delegate}' target='_blank'>WCA-Delegierten</a> um deine Identität zu bestätigen. Bitte gib dein Geburtsdatum ein und wähle den Delegierten aus von dem Du glaubst, dass er Dich am besten kennt."
+      already_assigned_html: "Die WCA-ID %{link_id} ist bereits mit einem anderen Benutzerkonto verknüpft. Wenn Du glaubst dass hier ein Fehler vorliegt, kontaktiere deinen lokalen <a href='%{link_delegate}' target='_blank'>WCA-Delegierten</a>."
+      missing_dob_html: "Die WCA-ID %{link_id} hat kein hinterlegtes Geburtsdatum. Bitte kontaktiere das %{link_result_team} um das zu beheben."
+      unknown_wca_id_html: "Die WCA-ID %{link_id} existiert nicht."
+  #context: Key used when dealing with registration to a competition
+  registrations:
+    events: "Disziplinen"
+    #context: and when an error is found
+    errors:
+      need_name: "Name benötigt"
+      need_gender: "Geschlecht benötigt"
+      need_dob: "Geburtsdatum benötigt"
+      need_country: "Land benötigt"
+      comp_not_found: "Wettbewerb nicht gefunden"
+      registration_closed: "Anmeldung zum Wettbewerb geschlossen"
+      cannot_be_deleted_and_accepted: "Eine Anmeldung kann nicht gleichzeitig akzeptiert und gelöscht werden."
+      can_register: "Nutzer muss sich für den Wettbewerb anmelden können"
+      must_register: "muss sich für mindestens eine Disziplin anmelden"
+    registration_info_people:
+      #context: pluralization of "x first-timer(s)"
+      newcomer:
+        one: "Neuling"
+        other: "Neulinge"
+      #context: pluralization of "x returner(s)"
+      returner:
+        one: "Wiederkehrer"
+        other: "Wiederkehrer"
+      #context: pluralization of "x person/people"
+      person:
+        one: "Person"
+        other: "Personen"
+    flash:
+      not_using_wca: "Dieser Wettbewerb nutzt die Anmeldung auf der WCA-Website nicht"
+      accepted_and_mailed:
+        one: "Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet."
+        other: "Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet."
+      rejected_and_mailed:
+        one: "Anmeldung auf Warteliste gesetzt!"
+        other: "Anmeldungen auf Warteliste gesetzt!"
+      deleted_and_mailed:
+        one: "Anmeldung gelöscht"
+        other: "Anmeldungen gelöscht"
+      single_deletion_and_mail: "Anmeldung gelöscht und Nachricht an %{mail} gesendet"
+      cannot_delete: "Du kannst deine Anmeldung nicht löschen."
+      updated: "Aktualisierte Anmeldung"
+      failed: "Konnte Anmeldung nicht aktualisieren"
+      deleted: "Deine Anmeldung für %{comp} erfolgreich gelöscht"
+      registered: "Erfolgreich angemeldet!"
+    edit_registration:
+      #context: the title for a specific registration to a competition
+      title: "%{person} für %{comp}"
+    #context: on the registrations list
+    list:
+      title: "Anmeldung für %{comp}"
+      edit: "Bearbeiten"
+      #context: pluralization of "x country", used on its own, below registrations list
+      country_plural:
+        one: "1 Land"
+        other: "%{count} Länder"
+      export_csv: "Als CSV exportieren"
+      email: "E-Mail"
+      approve: "Bestätigen"
+      reject: "Ablehnen"
+      delete: "Löschen"
+      waiting_list: "Warteliste"
+      approved_registrations: "Bestätigte Anmeldungen"
+      deleted_registrations: "Gelöschte Anmeldungen"
+      registered: "Angemeldet"
+      total: "Gesamt"
+    new_registration:
+      title: "Für %{comp} anmelden"
+    registered_with_account_html: "Diese Person hat sich mit einem Benutzerkonto angemeldet. Du kannst die persönlichen Informationen %{here} bearbeiten."
+    sign_in: "Einloggen"
+    profile: "Benutzerkonto"
+    register: "Neu anmelden!"
+    update: "Anmeldung aktualisieren"
+    delete: "Löschen"
+    delete_confirm: "Bist Du sicher, dass Du Deine Anmeldung löschen willst?"
+    delete_registration: "Anmeldung löschen."
+    will_open_html: "Die Anmeldung öffnet in <strong>%{days}</strong> um %{time}."
+    will_close_html: "Die Anmeldung schließt in <strong>%{days}</strong> um %{time}."
+    closed_html: "Die Anmeldung wurde vor <strong>%{days}</strong> um %{time} geschlossen."
+    please_sign_in_past_html: "%{sign_in} um den Status deiner Anmeldung zu überprüfen. Wenn Du noch kein WCA-Benutzerkonto hast, kannst Du dir %{here} eines anlegen. Es ist aber zu spät um sich für diesen Wettbewerb anzumelden."
+    please_sign_in_not_yet_open_html: "%{sign_in} um den Status deiner Anmeldung zu überprüfen. Wenn Du noch kein WCA-Benutzerkonto hast, kannst Du dir %{here} einen anlegen. Die Anmeldung ist aber noch nicht geöffnet."
+    please_sign_in_html: "%{sign_in} um dich für %{comp} anzumelden. Wenn Du noch kein WCA-Benutzerkonto hast, kannst Du dir %{here} einen anlegen."
+    greeting: "Hallo, %{name}!"
+    please_fix_profile_html: "Für die Anmeldung für %{comp} musst Du die folgenden Probleme mit deinem %{profile} beheben:"
+    can_register: "Du kannst dich weiter unten für %{comp} anmelden."
+    check_registration_information: "Bitte überprüfe die Informationen zur Registrierung, um herauszufinden, ob noch weitere Schritte, wie zum Beispiel die Zahlung einer Teilnahmegebühr, notwendig sind."
+    have_registered: "Du hast dich für %{comp} angemeldet. Du kannst die Informationen zu deiner Anmeldung unten sehen."
+    entry_fee: "Die Teilnahmegebühr beträgt "
+    contact_organizer: "Kontaktiere den Organisator wenn Du Änderungen vornehmen willst."
+    waiting_list: "Deine Anmeldung ist im Gang. Zur Bestätigung kann es notwendig sein eine Teilnahmegebühr zu zahlen. Überprüfe hierfür die Website des Wettbewerbs."
+    accepted: "Deine Anmeldung wurde bestätigt!"
+    preferred_events_prompt_html: "Um weitere Anmeldungen in der Zukunft zu beschleunigen, kannst Du deine bevorzugten Disziplinen %{link} festlegen."
+  #context: Key used when managing competitions
+  competitions:
+    #context: generic message
+    messages:
+      not_visible: "Dieser Wettbewerb ist nicht öffentlich sichtbar."
+      name_too_long: "Der Name des Wettbewerbs ist länger als 32 Zeichen. Wir bevorzugen kurze Namen und würden uns sehr freuen, wenn Du ihn anpasst."
+      must_have_events: "Bitte füge mindestens eine Disziplin hinzu, bevor Du den Wettbewerb bestätigst."
+      create_success: "Neuen Wettbewerb erfolgreich erstellt!"
+      results_preview_alert: "Du siehst dir Ergebnisse an, die noch nicht veröffentlicht wurden."
+      upload_results: "Dieser Wettbewerb ist vorbei, wir arbeiten daran die Ergebnisse schnellstmöglich zu veröffentlichen!"
+      in_progress: "Dieser Wettbewerb läuft gerade. Komme nach dem %{date} zurück um die Ergebnisse zu sehen!"
+      tooltip_registered: "Du bist angemeldet."
+      tooltip_waiting_list: "Du bist momentan auf der Warteliste."
+      confirmed_visible: "Dieser Wettbewerb ist bestätigt und sichtbar"
+      confirmed_not_visible: "Dieser Wettbewerb ist bestätigt aber nicht sichtbar"
+      not_confirmed_visible: "Dieser Wettbewerb ist nicht bestätigt aber sichtbar"
+      not_confirmed_not_visible: "Dieser Wettbewerb ist nicht bestätigt und nicht sichtbar"
+    #context: on the "My competitions" page
+    my_competitions:
+      title: "Meine Wettbewerbe"
+      disclaimer: "Nur Wettbewerbe die das Anmeldesystem der WCA-Website verwenden werden hier angezeigt."
+      past_competitions: "Vergangene Wettbewerbe"
+    #context: on the competition's information page
+    competition_info:
+      date: "Datum"
+      city: "Stadt"
+      venue: "Veranstaltungsort"
+      address: "Addresse"
+      details: "Details"
+      website: "Website"
+      #context: Pluralization of the "Organizer" label for a competition form
+      organizer_plural:
+        one: "Organisator"
+        other: "Organisatoren"
+      #context: Pluralization of the "Delegate" label for a competition form
+      delegate:
+        one: "WCA-Delegierte(r)"
+        other: "WCA-Delegierte"
+      contact: "Kontakt"
+      entry_fee: "Teilnahmegebühr"
+      information: "Informationen"
+    #context: on the competition's index page
+    index:
+      title: "Wettbewerbe"
+      all_events: "Alle"
+      all_years: "Alle Jahre"
+      clear: "Löschen"
+      list: "Liste"
+      map: "Karte"
+      region: "Region"
+      search: "Suche"
+      state: "(Bundes-) Staat"
+      present: "Gegenwärtig"
+      recent: "Aktuell"
+      past: "Vergangenheit"
+      #context: selecting a specific year ('year' is a number)
+      past_from: "Vergangene aus %{year}"
+      past_all: "Vergangene aus allen Jahren"
+      #context: titles for the competitions list
+      titles:
+        in_progress: "Laufende Wettbewerbe"
+        #context: when selecting a specific year ('year' is a number)
+        past: "Vergangene Wettbewerbe aus %{year}"
+        past_all: "Vergangene Wettbewerbe aus allen Jahren"
+        recent: "Aktuelle Wettbewerbe (letzte %{count} Tage)"
+        upcoming: "Kommende Wettbewerbe"
+      no_access: "Du hast keinen Zugriff auf diese Seite!"
+      #context: tooltip displayed when hovering
+      tooltips:
+        #context: the hourglass icon
+        hourglass:
+          ended: "Vor %{days} beendet"
+          in_progress: "Läuft gerade!"
+          posted: "Ergebnisse veröffentlicht!"
+          starts_in: "Beginnt in %{days}"
+        #context: the "search" button
+        search: "Name oder Stadt"
+        #context: the "recent" button
+        recent: "Letzte %{count} Tage"
+      no_comp_found: "Keine Wettbewerbe gefunden."
+      no_comp_match: "Wir haben keine Wettbewerbe mit %{events} gefunden! Versuche, nach weniger Disziplinen zu suchen."
+    #context: on the "My competitions" page
+    my_competitions_table:
+      edit: "Bearbeiten"
+      registrations: "Anmeldungen"
+      results_up: "Ergebnisse sind da!"
+      report: "Bericht des Delegierten ansehen"
+      edit_report: "Bericht bearbeiten"
+      missing_report: "Dein Bericht ist noch nicht veröffentlicht!"
+      no_upcoming_competitions_html: "Du hast keine kommenden Wettbewerbe! Schau doch mal unter %{link} vorbei."
+      no_past_competitions: "Du hast keine vergangenen Wettbewerbe."
+    #context: in the competition edition form
+    competition_form:
+      supports_md_html: "Unterstützt <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
+      venue_html: "Der Veranstaltungsort an dem der Wettbewerb stattfindet. %{md}. Zum Beispiel: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
+      venue_details_html: "Details über den Veranstaltungsort (z.B. Im hinteren Teil des ersten Stocks, Beschilderung folgen). %{md}"
+      contact_html: "Optionale Kontaktinformationen. Wenn Du das nicht ausfüllst, werden die E-Mail-Adressen der Organisatoren veröffentlicht. %{md}. Beispiel: [Text zum Anzeigen](mailto:some@email.com)"
+      events: "Disziplinen"
+      unoff_events: "Disziplinen die nicht mehr offiziell anerkannt werden"
+      locked_edit_html: "Dieser Wettbewerb ist öffentlich sichtbar und für die Bearbeitung gesperrt. Wenn Du etwas ändern musst, kontaktiere das %{board}."
+      confirmed_not_visible_html: "Du hast diesen Wettbewerb bestätigt, er is aber noch nicht öffentlich sichtbar. Warte, bis das %{board} ihn sichtbar macht."
+      is_visible: "Dieser Wettbewerb ist öffentlich sichtbar, alle Änderungen die Du vornimmst werden es ebenso sein!"
+      awaiting_confirmation_html: "Fülle alle Felder aus und drücke auf Bestätigen wenn Du bereit bist, dass das %{board} den Wettbewerb überprüft."
+      submit_modify_value: "Disziplinen bearbeiten"
+      submit_create_value: "Wettbewerb erstellen"
+      submit_update_value: "Wettbewerb aktualisieren"
+      submit_confirm_value: "Bestätigen"
+      submit_delete_value: "Löschen"
+      submit_confirm: "Bist Du sicher, dass alles zur Bestätigung bereit ist? Danach wirst Du nicht mehr in der Lage sein, Informationen zu bearbeiten. Lies im Anschluss deine E-Mails um sicherzustellen, dass das Board benachrichtigt wurde."
+      submit_delete: "Bist Du sicher, dass Du diesen Wettbewerb löschen möchtest? Danach gibt es kein Zurück"
+      coordinates: "Koordinaten"
+    #context: and when an error occured
+    errors:
+      invalid_name_message: "muss mit einem Jahr enden und darf nur alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.), Doppelpunkte(:), Appostrophe(') und Leerzeichen( ) enthalten"
+      cannot_manage: "Kann Wettbewerb nicht verwalten."
+      cannot_delete_public: "Kann einen öffentlich sichtbaren Wettbewerb nicht löschen."
+      cannot_delete_confirmed: "Kann einen bestätigten Wettbewerb nicht löschen."
+      must_contain_event: "muss mindestens eine Disziplin für diesen Wettbewerb beinhalten"
+      must_contain_delegate: "muss mindestens einen WCA-Delegierten beinhalten"
+      not_all_delegates: "sind nicht alle Delegierte"
+      registration_close_after_open: "Anmeldeschluss muss vor Anmeldestart liegen"
+      end_date_before_start: "Ende des Wettbewerbs kann nicht vor Anfang des Wettbewerbs liegen."
+      span_too_many_days: "Wettbewerb darf nicht länger als %{max_days} Tage dauern."
+    unscheduled: "ungeplant"
+    new:
+      create_competition: "Wettbewerb erstellen"
+      note_clone: "Um einen bestehenden Wettbewerb zu kopieren, die Informationsseite für diesen Wettbewerb aufrufen und im Menü auf \"Clone\" drücken"
+    update_events:
+      update_success: "Disziplinen des Wettbewerbs erfolgreich aktualisiert."
+    update:
+      save_success: "Wettbewerb erfolgreich gespeichert."
+      confirm_success: "Wettbewerb erfolgreich bestätigt. Lies deine E-Mails und warte auf die Ankündigung vom Board!"
+      delete_success: "Wettbewerb %{id} erfolgreich gelöscht."
+    time_until_competition:
+      competition_in: "Wettbewerb findet in %{n_days} statt."
+      competition_was: "Wettbewerb fand vor %{n_days} statt."
+    #context: in the "nearby competitions" list
+    nearby_competitions:
+      #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
+      competitions:
+        zero: "Keine Wettbewerbe"
+        one: "1 Wettbewerb"
+        other: "%{count} Wettbewerbe"
+      label: "Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)"
+      label_admin: "Letzte %{days} Tage"
+      nearby_admin: "%{x_competitions} innerhalb %{kms} km und %{days} Tage."
+      no_comp_nearby: "Keine nahe gelegenen Wettbewerbe!"
+      no_date_yet: "Du hast diesem Wettbewerb noch keinen Termin zugeordnet."
+      no_location_yet: "Du hast diesem Wettbewerb noch keinen Ort zugeordnet."
+      within: "innerhalb von %{days} Tagen"
+      show: "Zeigen"
+      name: "Name"
+      delegates: "Delegierte"
+      date: "Datum"
+      location: "Ort"
+      distance: "Abstand"
+      before: "davor"
+      after: "danach"
+    announcements: "Ankündigungen"
+    upload_results: "Ergebnisse hochladen"
+    post_announcement: "Wettbewerbsankündigung veröffentlichen"
+    show:
+      general_info: "Allgemeine Info"
+    #context: entry of the left navigation menu
+    nav:
+      menu:
+        results: "Ergebnisse"
+        podiums: "Podien"
+        all: "Alle"
+        by_person: "Nach Person"
+        info: "Info"
+        edit: "Bearbeiten"
+        clone: "Kopieren"
+        orga_view: "Organisatoren-Ansicht"
+        event_view: "Disziplinen verwalten"
+        admin_view: "Admin-Ansicht"
+        tabs: "Tabs verwalten"
+        delegate_report: "Bericht des/der Delegierten"
+        registration: "Anmeldung"
+        register: "Anmelden"
+        competitors: "Teilnehmer"
+    results_table:
+      wca_profile: "WCA-Profil"
+      event: "Disziplin"
+      round: "Runde"
+      name: "Name"
+  #context: Competition's tabs management
+  competition_tabs:
+    headers:
+      tabs: "Tabs"
+      name: "Name"
+    form_elements:
+      create_button: "Tab erstellen"
+      goto_button: "Gehe zum %{tab_name}-Tab"
+      new_tab: "Neuer Tab"
+      edit: "Bearbeiten"
+      update: "Aktualisieren"
+      delete: "Löschen"
+      confirm_delete: "Bist Du dir sicher, dass Du den %{tab_name}-Tab löschen willst?"
+      back_to_tabs: "Zurück zu Tabs"
+    new:
+      new_tab_title: "Neuer Tab für %{comp_name}"
+    index:
+      tabs_list_title: "Tabs verwalten"
+      tabs_introduction_text: "Hier kannst Du Tabs hinzufügen und bearbeiten, die auf der Informationsseite des Wettbewerbs angezeigt werden."
+    edit:
+      edit_tab_title: "Bearbeite %{tab_name}-Tab"
+  #context: User notifications
+  notifications:
+    connect_wca_id: "Verknüpfe deine WCA-ID mit deinem Benutzerkonto!"
+  #context: Person search page
+  persons:
+    index:
+      name_or_wca_id: "Teile des Namens oder WCA-ID"
+      name: "Name"
+      country: "Land"
+      podiums: "Podien"
+      no_persons_found: "Keine Person entspricht den gegebenen Kriterien."
+  posts:
+    confirm_delete_post: "Bist Du dir sicher, dass Du diesen Post löschen willst? Diese Aktion lässt sich nicht rückgängig machen."
+  #context: FAQ page
+  faq:
+    title: "Häufig gestellte Fragen (FAQ)"
+    contact_html: "Wenn keine der Antworten geholfen hat, bitte %{contact_us}!"
+    contact_us: "kontaktiere uns"
+    search_for_competition: "Suche hier nach einem Wettbewerb:"
+    already_logged_in: "Du bist bereits mit einem WCA-Benutzerkonto angemeldet."
+    create_an_account: "Du kannst %{here} ein Benutzerkonto erstellen."
+    claim_your_wca_id: "Du kannst deine WCA-ID %{here} anfordern."
+    create_an_account_and_claim: "Erstelle %{here} ein Benutzerkonto. Nachdem Du dich mit deinem neuen Benutzerkonto anmeldest, wirst Du gebeten deine WCA-ID anzufordern."
+    answers:
+      '1':
+        title: "Wie erhalte ich eine WCA-ID und eine WCA-Profilseite?"
+        #context: Answer to "How do I obtain a WCA ID..."
+        content:
+          '1': "Wenn Du noch nie zuvor an einem Wettbewerb teilgenommen hast, gehe zu <a href='/competitions'>Wettbewerbe</a>!  Eine WCA-ID sowie eine WCA-Profilseite werden für dich erstellt sobald die Ergebnisse deines ersten Wettbewerbs veröffentlicht werden."
+      '2':
+        #context: Answer to "How can I find a WCA competition"
+        title: "Wie kann ich einen WCA-Wettbewerb finden?"
+        content:
+          '1': "Sieh dir unsere Liste von <a href='/competitions'>Wettbewerben</a> an"
+      '3':
+        #context: Answer to "How can I register for a competition? ..."
+        title: "Wie kann ich mich für einen Wettbewerb anmelden? Bei wem kann ich mich melden wenn ich Probleme bei der Anmeldung habe?"
+        content:
+          '1': "Die meisten Wettbewerbe verwalten ihre Anmeldungen direkt hier auf der WCA-Website, manche nutzen aber auch ein eigenes System. Du solltest die Organisatoren des Wettbewerbs an dem Du teilnehmen möchtest kontaktieren, um Näheres zu erfahren. %{comp_search_form}"
+      '4':
+        title: "Was sind die Voraussetzungen um an einem WCA-Wettbewerb teilnehmen zu können? Was muss ich vor der Teilnahme alles wissen?"
+        #context: Answer to "What are the requirements for attending a WCA competitions? ..."
+        content:
+          '1': "Im Allgemeinen gibt es kaum Voraussetzungen um an einem Wettbewerb teilzunehmen. Es wird jedoch von jedem Teilnehmer ein gutes Verständnis der <a href='https://www.worldcubeassociation.org/regulations/'>WCA-Regeln</a> erwartet. Zusätzlich empfehlen wir einen Blick auf das <a target='_blank' href='http://cube.hackvalue.de/tutorials/competitor.php'>Deutsche Teilnehmertutorial</a>, welches einige wichtige Hinweise für Wettbewerbsneulinge umfasst."
+      '5':
+        title: "Wie kann ich einen Wettbewerb in meinem Heimatort ermöglichen?"
+        #context: Paragraph of the answer to "How can I have a WCA competition in my hometown?"
+        content:
+          '1': "Wenn Du gerne einen Wettbewerb organisieren möchtest, solltest Du auf jeden Fall an mindestens zwei Wettbewerben teilgenommen haben um die Erfahrung als Teilnehmer zu sammeln."
+          '2': "WCA-Wettbewerbe müssen sich nach den <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA-Regeln</a> richten. Das Organisationsteam muss diese zwar nicht wortgetreu auswendig beherrschen, ein vertieftes Verständnis der Regelgrundlagen hilft jedoch definitiv beim Organisieren des Wettbewerbs."
+          '3': "Hiernach muss das Organisationsteam Kontakt mit einem lokalen <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>WCA-Delegierten</a> aufnehmen. Die Aufsicht eines WCA-Delegierten ist notwendig damit der Wettbewerb offiziell von der WCA zugelassen und anerkannt wird. Der WCA-Delegerte unterstützt das Organisationsteam auch bei der erfolgreichen Organisation des Wettbewerbs."
+          '4': "Besuche den <a target='_blank' href='http://cube.hackvalue.de/tutorials/competition.php'>Deutschen Organisations-Ratgeber</a> für weitere Informationen. (Bei jedwedem Konflikt zwischen Daten und Informationen aus dieser Ressource und den WCA-Regeln hat das WCA-Regelwerk stets Vorrang.)"
+      '6':
+        title: "Wofür sind die WCA-Benutzerkonten da? Was ist der Unterschied zwischen einem WCA-Benutzerkonto und einer WCA-Profilseite?"
+        #context: Paragraph of the answer to "What are the WCA accounts for? ..."
+        content:
+          '1': "Du erhältst automatisch eine WCA-ID sobald die Ergebnisse deines ersten offiziellen WCA-Wettbewerbs veröffentlicht werden."
+          '2': "WCA-Benutzerkonten dienen uns als Nachweis Deiner Identität. Sie ermöglichen es Dir, ein Profilfoto zu deiner WCA-Profilseite hinzuzufügen, sowie dich für Wettbewerbe anzumelden. Dies schützt dich vor anderen Menschen, die sich als Du ausgeben wollen."
+          #context: Yup, nothing to translate here! Just hit "Use the original version"
+          '3': "%{current_user_status}"
+      'results':
+        title: "Wann werden die Ergebnisse eines WCA-Wettbewerbs auf die WCA-Website hochgeladen?"
+        content:
+          '1': "Nachdem ein Wettbewerb vorbei ist, muss der WCA-Delegierte alle Ergebniszettel und Personendaten gegenlesen, um mögliche Fehler zu korrigieren. Sobald dies erledigt ist, werden die Ergebnisse an das WCA Results-Team (WRT) übersendet, welches für das Hochladen der Ergebnisse sowie die Verwaltung der WCA-Datenbank verantwortlich ist. Das WRT lädt die Ergebnisse dann so schnell wie möglich hoch."
+          '2': "Abhängig von der Größe des Wettbewerbs und dem persönlichen Terminkalender des WCA-Delegierten, kann dies zwischen ein und zwei Tagen bis hin zu einer ganzen Woche in Anspruch nehmen. Bitte übe dich in Geduld."
+          '3': "Zusätzlich kannst Du, sofern dein WCA-Benutzerkonto mit deiner WCA-ID verbunden ist (siehe unten), <a href='%{preferences_edit_path}'>hier</a> automatische E-Mail-Benachrichtigungen über deine Ergebnisse aktivieren."
+      '7':
+        title: "Wie kann ich mein Profilbild ändern?"
+        #context: Paragraph of the answer to "How do I change my profile picture?"
+        content:
+          '1': "Zuerst musst Du <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>ein WCA-Benutzerkonto erstellen und es mit deiner WCA-ID verknüpfen.</a>"
+          '2': "Nachdem Du deine WCA-ID mit deinem WCA-Benutzerkonto verknüpft hast, gehst Du auf deine <a href='%{profile_edit_path}'>Benutzerkonto-bearbeiten-Seite</a> um dein Profilbild zu ändern."
+      '8':
+        title: "Wie verknüpfe ich meine WCA-ID mit meinem WCA-Benutzerkonto?"
+        #context: Answer to "How do I connect my WCA account ...?"
+        content:
+          #context: Yup, nothing to translate here! Just hit "Use the original version"
+          '1': "%{current_user_claim}"
+  #context: About the WCA
+  about:
+    title: "Über die WCA"
+    mission:
+      title: "Mission"
+      paragraphs:
+        '1': "Die World Cube Association überwacht Wettbewerbe für alle Puzzles, bezeichet als \"Rubik's Puzzles\", sowie alle anderen Puzzles die man durch Drehen der Seiten bedient, sogenannte 'Drehpuzzle'. Das berühmteste dieser Puzzle ist der Rubik's Cube, erfunden von Professor Rubik aus Ungarn. Eine Auswahl dieser Puzzles werden als offiziele Disziplinen der WCA anerkannt."
+        '2': "Die World Cube Association organisiert Wettbewerbe auf der ganzen Welt, unterstützt von nationalen Organisationen die verantwortlich für die Organisation von Wettbewerben im jeweiligen Land sind."
+        '3': "Das Ziel der World Cube Association ist es, <br /><strong>mehr Wettbewerbe in mehr Ländern mit mehr Menschen und mehr Spaß auszurichten, unter fairen und gleichen Bedingungen.</strong>"
+        '4': "Der Geist der World Cube Association ist es, dass <br />
+             <strong>Menschen aus der ganzen Welt gemeinsam in einer freundlichen Atmosphäre Spaß miteinander haben, sich gegenseitig helfen und sportlich verhalten.</strong>"
+    structure:
+      title: "Zusammensetzung"
+      board_html: "Die World Cube Association wird vom <strong>WCA Board</strong> angeführt, bestehend aus den folgenden Mitgliedern:"
+      committees: "Die folgenden Kommittees sind für die operationellen Aktivitäten der WCA verantwortlich:"
+      #context: WDC
+      wdc:
+        name_html: "<strong>WCA Disciplinary Committee (WDC)</strong>"
+        description: "Dieses Kommittee berät das WCA Board in besonderen Fällen, wie etwa mutmaßlichem Verstoß gegen die WCA-Regeln, und kann von Mitgliedern der WCA in dringenden persönlichen Angelegenheiten bezüglich WCA-Wettbewerben kontaktiert werden."
+      #context: WRC
+      wrc:
+        name_html: "<strong>WCA Regulations Committee (WRC)</strong>"
+        description: "Dieses Kommittee ist dafür verantwortlich, die WCA-Regeln zu verwalten."
+      #context: WRT
+      results:
+        name_html: "<strong>WCA Results team (WRT)</strong>"
+        description: "Dieses Team ist dafür verantwortlich, alle Ergebnisse sämtlicher WCA-Wettbewerbe zu verwalten."
+      #context: WST
+      software:
+        name_html: "<strong>WCA Software team (WST)</strong>"
+        description: "Dieses Team ist verantwortlich für die Verwaltung der Software der WCA (Webseite, Scrambler, Workbooks, Admin-Werkzeuge)."
+      delegates_html: "<strong>WCA-Delegierte</strong> sind Mitglieder der WCA die die Verantwortung dafür tragen, dass alle WCA-Wettbewerbe gemäß der Mission, den Regeln und dem Geiste der WCA ablaufen. Die WCA unterscheidet dabei zwischen <strong>WCA Senior-Delegierten</strong>, <strong>WCA-Delegierten</strong> und <strong>WCA-Delegiertenkandidaten</strong>%{see_link}. Zusätzlich zu den Pflichten eines WCA-Delegierten ist ein WCA Senior-Delegierter auch verantwortlich für die Verwaltungsstruktur seiner Region und kann darüber hinaus von der Gemeinschaft in regionalen Angelegenheiten kontaktiert werden. Neue Delegierte werden zunächst als Delegiertenkandidat aufgeführt und müssen zeigen, dass sie in der Lage sind, Wettbewerbe erfolgreich zu betreuen bevor sie als WCA-Delegierte gelistet werden."
+      see_link_html: " (siehe %{link})"
+      members_html: "Alle Turnierteilnehmer werden automatisch zu <strong>Mitgliedern</strong> der WCA während ihres ersten WCA-Wettbewerbs."
+  #context: Delegates page
+  delegates_page:
+    title: "WCA-Delegierte"
+    acknowledges: "Die WCA erkennt die folgenden Mitglieder als Delegierte für offizielle WCA-Wettbewerbe an:"
+    table:
+      name: "Name"
+      role: "Rolle"
+      region: "Region"
+  national_organizations:
+    title: "Nationale Organisationen"
+    content: "Die WCA erkennt die folgenden nationalen Organisationen an:"
+  #context: Contact page
+  contact:
+    title: "Kontaktinformationen"
+    #context: The %{link} variable links to the FAQ.
+    info_alert_html: "Bevor Du mit einem Team von dieser Seite Kontakt aufnimmst, lies bitte unsere %{link}!"
+    #context: The %{link} variable links to the Delegates page
+    questions_and_comments_html: "Für Fragen zur Website, Kommentare und Vorschläge, nutze bitte dieses <a href='/contact/website'>Kontaktformular</a>. Für Anfragen bezüglich eines spezifischen Gebiets oder Wettbewerbs, kontaktiere bitte deinen lokalen %{link}."
+    committees_and_teams_html: "<u>Kommittees und Teams</u>"
+    board:
+      name_html: "<strong>WCA Board</strong>"
+      info: "(Organisation der WCA, Berichte von Delegierten, Zulassung von Wettbewerben, allgemeine Anfragen)"
+    wdc:
+      info: "(unabhängige Beratung des WCA Boards, unabhängige Untersuchungen, Berater in wichtigen persönlichen Angelegenheiten)"
+    wrc:
+      info: "(Instandhaltung der WCA-Regeln)"
+    results:
+      info: "(Wettbewerbsergebnisse, Korrektur von Ergebnissen, Personendaten)"
+    software:
+      info: "(Instandhaltung der Software der WCA)"
+  score_tools:
+    title: "WCA-Werkzeuge zur Ergebniserfassung"
+    paragraphs:
+      '1': 'Die WCA empfiehlt dringend die Nutzung von <a href="http://cubecomps.com">Cube Comps</a> vor und während eines Wettbewerbs. Cube Comps ist ein Online-System mit Echtzeit-Ergebniserfassung und vielen interessanten Funktionen, wie z.B. dem Drucken von Ergebniszetteln und einem sehr effizienten Dateneingabe-System für mehrere Nutzer gleichzeitig. Erstellt von Luis J. Iáñez und jetzt als Open Source verfügbar.'
+      '2': "Ergebnistabellen und Scrambles sollten unter Zuhilfenahme des %{workbook_link} verarbeitet und auf Fehler geprüft werden bevor sie an das WCA Results Team gesendet werden."
+      '3': 'Die aktuellste Version der Ergebnistabelle für WCA-Wettbewerbe kann hier heruntergeladen werden:<br /><a href="/files/results.xls" target="_blank">WCA-Wettbewerbs-Ergebnistabelle</a>.'
+  logo:
+    title: 'WCA-Logo'
+    paragraphs:
+      '1': "Das WCA-Logo wurde von Justin Eastman im Rahmen eines Design-Wettbewerbs in January 2005 entworfen.<br />Uns gefiel das Logo aufgrund seines Designs, der Farben, und der Tatsache, dass es nicht spezifisch einen Rubik's Cube / 3x3x3 cube zeigt."
+      '2': 'Wir bieten drei verschiedene Varianten des Logos an: Eine <a href="/files/WCAlogo_XL.jpg">große Version</a> (46 KB, 1756 px by 1068 px), eine <a href="/files/WCAlogo.svg">Vektorgrafik</a> und eine <a href="/files/WCAlogo_notext.svg">Vektorgrafik ohne Text</a>.'
+      '3': '3D-Version des Logos, entworfen von Vu Minh Tan aus Vietnam: <a href="/files/WCALogo3D.png">PNG-Version</a> (2.1 MB), eine <a href="/files/WCALogo3Dsmall.png">kleine PNG-Version</a> (0.25 MB).'
+      '4': 'Alle Organisatoren von WCA-Wettbewerben dürfen das WCA-Logo für Webseiten, Kleidung, Geschenke oder Dekorationen verwenden, solange diese unmittelbar mit dem Wettbewerb in Verbindung stehen.<br />
+  Für alle anderen Personen und Verwendungszwecke bedarf es einer expliziten Zustimmung des <a href="mailto:board@worldcubeassociation.org">WCA-Boards</a>.'
+  workbook_assistant:
+    title: "WCA Workbook Assistant"
+    download: "Den WCA Workbook Assistant herunterladen"
+    last_update: "Letztes Update"
+    version_history: "Versionsverlauf"
+    header: "Verarbeiten der Ergebnisse und Scrambles vor Einsendung an die WCA"
+    step1:
+      title: "Schritt 1: Öffne das Tabellenblatt mit den Ergebnissen"
+      content_html: "Öffne das Tabellenblatt mittels des <em>Open...</em>-Knopfes oder per \"Drag and Drop\" der Tabellenblatt-Datei in das Anwendungsfenster."
+    step2:
+      title: "Schritt 2: Füge die TNoodle-Scramble hinzu"
+      content_html: "Füge die Scrambles aus TNoodle mittels des <em>Add...</em>-Knopfes oder per \"Drag and Drop\" der TNoodle-Scrambledateien in das Anwendungsfenster hinzu. Stelle sicher, dass Du hierfür entweder die von TNoodle generierte .zip- oder .json-Datei verwendest."
+      content2_html: "Du kannst mehrere Scramble-Dateien hinzuzufügen, falls die Scrambles getrennt voneinander in Teilen generiert wurden oder Extra-Scrambles während des Wettbewerbs erzeugt werden mussten."
+    step3:
+      title: "Schritt 3: Verbinde die Scrambles mit den Ergebnissen"
+      content_html: "Der WCA Workbook Assistant verbindet die Scrambles automatisch mit den abgehaltenen Runden. In manchen Fällen, wie etwa wenn mehrere Scramble-Dateien erzeugt wurden, kann es sein, dass die Auswahl aufgrund der mehreren Auswahlmöglichkeiten manuell vorgenommen werden muss."
+      content2_html: "Scrambles können manuell ausgewählt werden, indem die <em>Scrambles</em>-Zelle in der Seitenübersichts-Leiste doppelt angeklickt wird."
+      content3_html: "Es ist nur möglich, eine einzige Runde aus den Scramble-Dateien je Runde mit Ergebnissen auszuwählen. Falls eine Situation auftritt, in der Scrambles für eine einzelne Runde als getrennte Runden in TNoodle generiert wurden, kannst Du den <em>Edit groups...</em>-Knopf benutzen, um die Gruppierung in den Scramble-Dateien entsprechend anzupassen und sie von einer Runde in die andere zu verschieben oder zu löschen."
+      content4_html: "In diesem Beispiel wurde ein zusätzlicher Satz Scrambles generiert, um in der ersten Runde Skewb zwei Gruppen statt einer zu haben."
+      content5_html: "Die Scrambles für die zusätzliche Gruppe können per \"Drag and Drop\" auf die ursprünglich generierte Gruppe verschoben werden. Das fasst die beiden Gruppen in einer Runde zusammen."
+    step4:
+      title: "Schritt 4: Behebe sämtliche von der Anwendungen angezeigte Fehler"
+      content_html: "Die Ergebnisse werden auf Fehler bei der Dateneingabe hin überprüft. Runden mit Fehlern werden mit einem roten Symbol in der Seitenübersicht markiert."
+      content2_html: "Bei der Auswahl einer Seite mit Fehlern in der Seitenübersicht, wird die Anwendung die Details in der \"validation errors\"-Leiste unten links anzeigen."
+      content3_html: "Fehler können korrigiert werden, indem das Tabellenblatt in einer entsprechenden Anwendung geöffnet, die Felder bearbeitet und dort gespeichert werden. Das aktualisierte Tabellenblatt kann dann durch Druck auf den <em>Refresh</em>-Knopf erneut vom WCA Workbook Assistant geladen werden. Dies wird nur die Ergebnisse neu laden und beeinflusst andere vorgenommene Änderungen, wie etwa die hinzugefügten Scrambles, nicht."
+    step5:
+      title: "Schritt 5: Wähle die Wettbewerbs-ID aus"
+      content_html: "Wähle die korrekte Wettbewerbs-ID durch Klick auf den <em>Select...</em>-Knopf neben dem <em>Competition ID</em>-Feld aus."
+      content2_html: "Ein Dialog mit einer Liste von zur Auswahl stehenden Wettbewerben wird angezeigt."
+      content3_html: "Du kannst die Liste filtern, indem Du einen Teil des Namens des Wettbewerbs oder des WCA-Delegierten eintippst."
+      content4_html: "Zu Beginn werden nur Wettbewerbe die vor weniger als einer Woche stattgefunden haben, beziehungsweise in weniger als einer Woche stattfinden werden, angezeigt. Wenn Du einen Wettbewerb außerhalb dieses Zeitfensters auswählen musst, entferne die Markierung bei <em>Only show current competitions</em>."
+    step6:
+      title: "Schritt 6: Exportiere die Ergebnisdaten in JSON"
+      content_html: "Speichere die Ergebnisdaten in einer JSON-Datei mittels des <em>Export results JSON...</em>-Knopfes unten rechts."
+    step7:
+      title: "Schritt 7: Sende das Ergebnis-JSON an die WCA"
+      content_html: 'Schicke die vom WCA Workbook Assistant erzeugte JSON-Datei per E-Mail an <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
