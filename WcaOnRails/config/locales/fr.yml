@@ -656,11 +656,11 @@ fr:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Scopes séparés avec des espaces. Laisser vide pour utiliser le(s)
             scope(s) par défaut. Voir <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">ici</a> pour une liste des scopes supportés.
       scopes:
         #original_hash: 1920e95
@@ -940,6 +940,22 @@ fr:
         target='_blank'>WCA Results Team</a> avec une photo d'un document légal
         (carte d'identité, permis de conduire, etc) où vos noms et date de
         naissance sont visibles.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Nous n'avons pas de genre enregistré pour cet ID WCA. Merci de contacter
+        la <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> (en Anglais) pour résoudre ce problème.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Nous n'avons pas de nationalité enregistrée pour cet ID WCA. Merci de
+        contacter la <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Results Team</a> (en Anglais) pour résoudre ce
+        problème.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Nous n'avons pas de nom enregistré pour cet ID WCA. Merci de contacter
+        la <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> (en Anglais) pour résoudre ce problème.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Vous ne pouvez pas démissioner de votre poste de membre du Board !
@@ -970,10 +986,13 @@ fr:
         L'ID WCA %{link_id} est déjà associé à un compte différent. Si vous
         pensez que c'est une erreur, merci de contacter votre <a
         href='%{link_delegate}' target='_blank'>Délégué WCA</a> local.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        L'ID WCA %{link_id} n'a pas de date de naissance associée. Merci de
-        contacter la %{link_result_team} pour corriger le problème.
+      #original_hash: d26bfdc
+      missing_dob_html: 'L''ID WCA %{link_id} n''a pas de date de naissance associée.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Merci de contacter la <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Results Team</a> (en Anglais) pour résoudre ce
+        problème.
       #original_hash: 92aa857
       unknown_wca_id_html: 'L''ID WCA %{link_id} n''existe pas.'
   registrations:
