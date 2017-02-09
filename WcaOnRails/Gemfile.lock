@@ -116,6 +116,7 @@ GEM
     byebug (9.0.6)
     call_with_params (0.0.2)
       activesupport (>= 3.0.0)
+    camertron-eprun (1.1.1)
     capybara (2.12.0)
       addressable
       mime-types (>= 1.16)
@@ -131,6 +132,7 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+    cldr-plurals-runtime-rb (1.0.1)
     cliver (0.3.2)
     cocoon (1.2.9)
     coderay (1.1.1)
@@ -467,6 +469,10 @@ GEM
     time_will_tell (0.1.0)
       railties (>= 3.2)
     tins (1.13.2)
+    twitter_cldr (4.2.0)
+      camertron-eprun
+      cldr-plurals-runtime-rb (~> 1.0)
+      tzinfo
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (3.0.4)
@@ -572,6 +578,7 @@ DEPENDENCIES
   test_after_commit
   therubyracer
   time_will_tell
+  twitter_cldr
   uglifier
   unicorn
   valid_email
