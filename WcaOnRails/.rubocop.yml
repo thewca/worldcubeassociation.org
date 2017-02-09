@@ -79,6 +79,9 @@ Style/BlockDelimiters:
 Style/ClassAndModuleChildren:
   Enabled: false
 
+Style/ConditionalAssignment:
+  Enabled: false
+
 Style/DoubleNegation:
   Enabled: false
 

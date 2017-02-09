@@ -30,15 +30,6 @@ Lint/UnusedMethodArgument:
     - 'app/models/user.rb'
     - 'app/uploaders/avatar_uploader_base.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: SingleLineConditionsOnly.
-Style/ConditionalAssignment:
-  Exclude:
-    - 'app/controllers/competitions_controller.rb'
-    - 'app/controllers/polls_controller.rb'
-    - 'app/controllers/registrations_controller.rb'
-
 # Offense count: 134
 Style/Documentation:
   Enabled: false
