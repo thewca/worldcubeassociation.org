@@ -641,12 +641,12 @@ da:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Opdel scopes med mellemrum. Lad den være tom for at bruge standard
             scopes. Se <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
-            target="_blank">here</a> for en liste at brugte scopes.
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            target="_blank">her</a> for en liste at brugte scopes.
       scopes:
         #original_hash: 1920e95
         public: >-
@@ -915,6 +915,21 @@ da:
         til <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA Resultat Holdet</a> med noget dokumentation (ID
         kort, kørekort, osv) hvor dit navn og din fødselsdag er synligt.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Vi har ikke et køn tilknyttet til dette WCA ID. Email <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Resultat Holdet</a> for at løse det.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Vi har ikke en nationalitet tilknyttet til dette WCA ID. Email <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Resultat Holdet</a> for at løse det.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Vi har ikke et navn tilknyttet til dette WCA ID. Email <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Resultat Holdet</a> for at løse det.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Du kan ikke fratræde fra din rolle som kommision medlem! Find et andet
@@ -945,10 +960,12 @@ da:
         WCA ID %{link_id} er allerede tildelt til en anden konto. Hvis du tror
         det var en fejl så kontakt dit lokale <a href='%{link_delegate}'
         target='_blank'>WCA delegate</a>.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        WCA ID %{link_id} behøver ikke at have fødselsdag tilknyttet. Kontakt
-        venligst %{link_result_team} for at fikse det.
+      #original_hash: d26bfdc
+      missing_dob_html: 'WCA ID %{link_id} har ikke en fødselsdag tilknyttet.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Kontakt <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Resultat Holdet</a> for at løse det.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} eksisterer ikke.'
   registrations:
@@ -964,9 +981,9 @@ da:
       #original_hash: cec28a0
       comp_not_found: Konkurrence ikke fundet
       #original_hash: cb763b8
-      registration_closed: Konkurrence tilmelding er lukket
+      registration_closed: Konkurrencens tilmelding er lukket
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: En registrering kan ikke blive slettet og accepteret på sammetid.
+      cannot_be_deleted_and_accepted: En registrering kan ikke blive slettet og accepteret på samme tid.
       #original_hash: a38d024
       must_register: skal tilmelde sig til mindst en disciplin
     registration_info_people:
@@ -1136,7 +1153,7 @@ da:
     #original_hash: 34eb009
     will_close_html: 'Tilmelding lukker om <strong>%{days}</strong> on %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Tilmeldingen lukkede <strong>%{days}</strong> siden på %{time}.'
+    closed_html: 'Tilmeldingen lukkede <strong>%{days}</strong> siden %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} for at tjekke statusen af din tilmelding. Hvis du ikke har en
@@ -1282,17 +1299,17 @@ da:
       #original_hash: bce0641
       search: Søg
       #original_hash: a725020
-      state: Stat
+      state: Status
       #original_hash: 4e9f7a3
-      present: Nuværende
+      present: Kommende
       #original_hash: 76eec76
-      recent: Nylige
+      recent: Seneste
       #original_hash: 405c12f
-      past: Forrige
+      past: Tidligere
       #original_hash: 52c30f8
-      past_from: 'Forrige fra %{year}'
+      past_from: 'Tidligere fra %{year}'
       #original_hash: 7cff459
-      past_all: Forrige fra alle år
+      past_all: Tidligere fra alle år
       titles:
         #original_hash: 69447c9
         in_progress: Konkurrencer i gang
@@ -1301,7 +1318,7 @@ da:
         #original_hash: f628f0e
         past_all: Tidligere konkurrencer fra alle år
         #original_hash: cbe8a54
-        recent: 'Nylige konkurrencer (sidste %{count} dage)'
+        recent: 'Seneste konkurrencer (sidste %{count} dage)'
         #original_hash: 914742f
         upcoming: Kommende konkurrencer
       #original_hash: 6684214
