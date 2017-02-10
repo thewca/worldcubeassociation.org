@@ -138,7 +138,7 @@ es:
     #original_hash: 15f86c0
     average: Media
     #original_hash: e7f6fc5
-    solves: Soluciones
+    solves: Marcas
     date:
       #original_hash: acb6273
       no_date: Sin fecha
@@ -385,12 +385,12 @@ es:
         dob: Introduce tu fecha de nacimiento con el formato AAAA-MM-DD.
         #original_hash: 5106479
         name: >-
-          Introduce tu nombre completo y con correción, por ejemplo
+          Introduce tu nombre completo y con corrección, por ejemplo
           <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
         #original_hash: c03b949
         email: >-
-          Para modificar tu correo electrónico tendrás que confirmar la nueva
-          dirección de correo.
+          Esta dirección tendrá que ser validada siguiendo las instrucciones en
+          un correo que te enviaremos.
         #original_hash: bfd11f4
         pending_avatar: >-
           Después de subir un nuevo avatar, tendrás que esperar que el Equipo de
@@ -644,11 +644,11 @@ es:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Separa los ámbitos con espacios. Deja en blanco para usar los
             ámbitos por omisión. Consulta <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">here</a> la lista de ámbitos soportados.
       scopes:
         #original_hash: 1920e95
@@ -924,6 +924,21 @@ es:
         target='_blank'>Equipo de Resultados</a> anexando una foto de algún
         documento (DNI, carnet de conducir, pasaporte, carnet de estudiante...)
         donde tu nombre y tu fecha de nacimiento sean visibles.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Este WCA ID no tiene registrado el sexo. Por favor, escribe al <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+        Resultados de la WCA</a> para resolver esto.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Este WCA ID no tiene registrada la nacionalidad. Por favor, escribe al
+        <a href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo
+        de Resultados de la WCA</a> para resolver esto.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Este WCA ID no tiene registrado el nombre. Por favor, escribe al <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+        Resultados de la WCA</a> para resolver esto.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         ¡No puedes abandonar tu puesto como miembro de la Junta Directiva!
@@ -954,10 +969,13 @@ es:
         El WCA ID %{link_id} ya está asignado a otra cuenta. Si crees que esto
         se debe a un error, ponte en contacto con algún <a
         href='%{link_delegate}' target='_blank'>Delegado</a> de tu zona o país.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        El WCA ID %{link_id} no tiene asociada una fecha de nacimiento. Ponte en
-        contacto con el %{link_result_team} para solventar este problema.
+      #original_hash: d26bfdc
+      missing_dob_html: 'El WCA ID %{link_id} no tiene asociada una fecha de nacimiento.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Por favor, ponte en contacto con el <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+        Resultados de la WCA</a> para resolver esto.
       #original_hash: 92aa857
       unknown_wca_id_html: 'El WCA ID %{link_id} no existe.'
   registrations:
@@ -1359,6 +1377,8 @@ es:
       missing_report: ¡Tu informe no se ha publicado aún!
       #original_hash: 7fc0b5f
       no_upcoming_competitions_html: 'No tienes próximas competiciones. Prueba %{link}.'
+      #original_hash: e0f66bb
+      competitions_list: lista de competiciones
       #original_hash: 9104a03
       no_past_competitions: No tienes competiciones anteriores.
     competition_form:
@@ -1687,7 +1707,7 @@ es:
           #original_hash: be305b8
           '2': >-
             Las competiciones de la WCA deben seguir nuestro <a
-            href='https://www.worldcubeassociation.org/regulations/translations/spanish-european/'>Reglamento/a>.
+            href='https://www.worldcubeassociation.org/regulations/translations/spanish-european/'>Reglamento</a>.
             El equipo organizador no tiene que conocer el reglamento de memoria,
             pero un profundo conocimiento de sus rudimentos ayudará mucho a
             organizar correctamente la competición.
@@ -1911,7 +1931,7 @@ es:
         Delegados sobre competiciones)
     results:
       #original_hash: 899dc9c
-      info: '(resultados de competiciones, correción de errores en los resultados)'
+      info: '(resultados de competiciones, corrección de errores en los resultados)'
     software:
       #original_hash: 325ab0a
       info: (mantenimiento del software de la WCA)
