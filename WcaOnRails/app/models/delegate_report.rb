@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DelegateReport < ActiveRecord::Base
+class DelegateReport < ApplicationRecord
   belongs_to :competition, required: true
   belongs_to :posted_by_user, class_name: "User"
 

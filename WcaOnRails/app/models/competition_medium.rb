@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CompetitionMedium < ActiveRecord::Base
+class CompetitionMedium < ApplicationRecord
   self.table_name = "CompetitionsMedia"
   # Work around the fact that the CompetitionsMedia has a type field.
   #  https://github.com/thewca/worldcubeassociation.org/issues/91#issuecomment-170194667

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Competition < ActiveRecord::Base
+class Competition < ApplicationRecord
   self.table_name = "Competitions"
 
   has_many :competition_events, dependent: :destroy

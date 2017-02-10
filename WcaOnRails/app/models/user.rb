@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "fileutils"
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :competition_delegates, foreign_key: "delegate_id"
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id"

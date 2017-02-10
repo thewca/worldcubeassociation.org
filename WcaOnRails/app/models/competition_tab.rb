@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CompetitionTab < ActiveRecord::Base
+class CompetitionTab < ApplicationRecord
   belongs_to :competition, required: true
 
   validates :name, presence: true

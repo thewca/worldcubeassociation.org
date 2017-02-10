@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RanksSingle < ActiveRecord::Base
+class RanksSingle < ApplicationRecord
   self.table_name = "RanksSingle"
 
   def to_s(field)

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   include Cachable
   self.table_name = "Events"
 

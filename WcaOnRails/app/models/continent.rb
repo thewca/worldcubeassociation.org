@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Continent < ActiveRecord::Base
+class Continent < ApplicationRecord
   include Cachable
   self.table_name = "Continents"
 
