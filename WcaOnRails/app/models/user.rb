@@ -666,4 +666,11 @@ class User < ActiveRecord::Base
     clean_up_passwords
     result
   end
+
+  # This is subtle. We don't want to leak birthdate when users claim a WCA ID that is not theirs.
+  # See "does not leak birthdate information" test in spec/features/sign_up_spec.rb.
+  def clean_up_passwords
+    self.dob = nil
+    super
+  end
 end
