@@ -2,7 +2,7 @@
 module ApplicationHelper
   include MarkdownHelper
 
-  def full_title(page_title='')
+  def full_title(page_title = '')
     base_title = WcaOnRails::Application.config.site_name
     if page_title.empty?
       base_title
