@@ -64,7 +64,7 @@ class CompetitionsController < ApplicationController
 
     # Facebook adds indices to the params automatically when redirecting.
     # See: https://github.com/thewca/worldcubeassociation.org/issues/472
-    if params[:event_ids].is_a?(Hash)
+    if params[:event_ids].is_a?(ActionController::Parameters)
       params[:event_ids] = params[:event_ids].values
     end
 

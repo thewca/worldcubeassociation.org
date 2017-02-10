@@ -49,13 +49,13 @@ RSpec.describe AdminController, type: :controller do
     let(:person) { FactoryGirl.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
 
     it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
-      patch :update_person, method: "fix", person: { wca_id: person.wca_id, countryId: "New Zealand" }
+      patch :update_person, params: { method: "fix", person: { wca_id: person.wca_id, countryId: "New Zealand" } }
       expect(flash[:warning]).to include "check_regional_record_markers"
       expect(response).to render_template :edit_person
     end
 
     it "shows a successful message when the person has been changed" do
-      patch :update_person, method: "fix", person: { wca_id: person.wca_id, name: "New Name" }
+      patch :update_person, params: { method: "fix", person: { wca_id: person.wca_id, name: "New Name" } }
       expect(response.status).to eq 200
       expect(response).to render_template :edit_person
       expect(flash[:success]).to eq "Successfully fixed New Name."

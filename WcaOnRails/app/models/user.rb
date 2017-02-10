@@ -92,7 +92,7 @@ class User < ApplicationRecord
 
   attr_accessor :claiming_wca_id
   def claiming_wca_id=(claiming_wca_id)
-    @claiming_wca_id = ActiveRecord::Type::Boolean.new.type_cast_from_database(claiming_wca_id)
+    @claiming_wca_id = ActiveRecord::Type::Boolean.new.cast(claiming_wca_id)
   end
 
   before_validation :maybe_clear_claimed_wca_id
@@ -221,7 +221,7 @@ class User < ApplicationRecord
 
   before_save :stash_rejected_avatar
   def stash_rejected_avatar
-    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_pending_avatar) && pending_avatar_was
+    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
       avatar_uploader = AvatarUploader.new(self)
       store_dir = "public/#{avatar_uploader.store_dir}"
       filename = "#{store_dir}/#{pending_avatar_was}"
@@ -246,13 +246,13 @@ class User < ApplicationRecord
 
   before_validation :maybe_clear_crop_coordinates
   def maybe_clear_crop_coordinates
-    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_avatar)
+    if ActiveRecord::Type::Boolean.new.cast(remove_avatar)
       self.saved_avatar_crop_x = nil
       self.saved_avatar_crop_y = nil
       self.saved_avatar_crop_w = nil
       self.saved_avatar_crop_h = nil
     end
-    if ActiveRecord::Type::Boolean.new.type_cast_from_database(remove_pending_avatar)
+    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar)
       self.saved_pending_avatar_crop_x = nil
       self.saved_pending_avatar_crop_y = nil
       self.saved_pending_avatar_crop_w = nil
@@ -583,14 +583,14 @@ class User < ApplicationRecord
 
   def self.search(query, params: {})
     users = Person.includes(:user)
-    unless ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:persons_table])
+    unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
       users = User.where.not(confirmed_at: nil).not_dummy_account
 
-      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_delegates])
+      if ActiveRecord::Type::Boolean.new.cast(params[:only_delegates])
         users = users.where.not(delegate_status: nil)
       end
 
-      if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:only_with_wca_ids])
+      if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
         users = users.where.not(wca_id: nil)
       end
     end

@@ -39,6 +39,7 @@ Gen 3 Display: 0"
   end
 
   def posted=(new_posted)
+    new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
   end

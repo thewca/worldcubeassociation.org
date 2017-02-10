@@ -379,7 +379,7 @@ class Competition < ApplicationRecord
 
   attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
-    @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
+    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
   end
 
   after_save :clear_external_website, if: :generate_website?

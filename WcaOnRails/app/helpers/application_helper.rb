@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module ApplicationHelper
-  def full_title(page_title = '')
+  include MarkdownHelper
+
+  def full_title(page_title='')
     base_title = WcaOnRails::Application.config.site_name
     if page_title.empty?
       base_title

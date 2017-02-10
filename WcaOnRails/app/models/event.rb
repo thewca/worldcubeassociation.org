@@ -3,7 +3,7 @@ class Event < ApplicationRecord
   include Cachable
   self.table_name = "Events"
 
-  has_many :competitions_events
+  has_many :competition_events
   has_many :competitions, through: :competition_events
   has_many :registration_competition_events, through: :competition_events
   has_many :registrations, through: :registration_competition_events

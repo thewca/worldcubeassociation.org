@@ -61,12 +61,12 @@ RSpec.describe DelegateReportsController do
       comp.save!
       expect(comp.is_probably_over?).to eq false
 
-      post :update, competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
       expect(comp.delegate_report.posted?).to eq false
 
-      post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
       expect(comp.delegate_report.posted?).to eq true
