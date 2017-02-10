@@ -177,4 +177,26 @@ RSpec.feature "Sign up" do
       expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
     end
   end
+
+  context "changing have competed and noobie", js: true do
+    it "does not leak birthdate information" do
+      visit "/users/sign_up"
+
+      fill_in "Email", with: "jack@example.com"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+
+      click_on "I have competed in a WCA competition."
+      selectize_input = page.find("div.user_unconfirmed_wca_id .selectize-control input")
+      selectize_input.native.send_key(person.wca_id)
+      # Wait for selectize popup to appear.
+      expect(page).to have_selector("div.selectize-dropdown", visible: true)
+      # Select item with selectize.
+      page.find("div.user_unconfirmed_wca_id input").native.send_key(:return)
+
+      click_button "Sign up"
+      click_on "I have never competed in a WCA competition."
+      expect(page.find("#user_dob").value).to eq ""
+    end
+  end
 end
