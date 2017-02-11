@@ -9,13 +9,13 @@ Rails.application.routes.draw do
   devise_for :users, skip: :registrations
   devise_scope :user do
     resource :registration,
-      only: [:new, :create],
-      path: 'users',
-      path_names: { new: 'sign_up' },
-      controller: 'accounts/registrations',
-      as: :user_registration do
-        get :cancel
-      end
+             only: [:new, :create],
+             path: 'users',
+             path_names: { new: 'sign_up' },
+             controller: 'accounts/registrations',
+             as: :user_registration do
+               get :cancel
+             end
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   resources :users, only: [:index, :edit, :update]
@@ -72,7 +72,7 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :update]
 
-  # TODO - these are vulnerable to CSRF. We should be able to change these to
+  # TODO: These are vulnerable to CSRF. We should be able to change these to
   # POSTs once check_comp_data.php has been ported to Rails.
   # See https://github.com/thewca/worldcubeassociation.org/issues/161
   get 'competitions/:id/post/announcement' => 'competitions#post_announcement', as: :competition_post_announcement

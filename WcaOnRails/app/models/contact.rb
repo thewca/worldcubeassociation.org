@@ -26,7 +26,7 @@ class Contact < MailForm::Base
   def headers
     {
       subject: subject,
-      to: [ your_email, to_email ],
+      to: [your_email, to_email],
       reply_to: your_email,
       from: WcaOnRails::Application.config.default_from_address,
     }

@@ -8,7 +8,7 @@ class TeamMember < ActiveRecord::Base
   attr_accessor :current_user
 
   def current_member?
-    end_date == nil || end_date > Date.today
+    end_date.nil? || end_date > Date.today
   end
 
   validate :start_date_must_be_earlier_than_end_date

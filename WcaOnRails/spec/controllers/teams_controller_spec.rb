@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe TeamsController do
+RSpec.describe TeamsController do
   let(:team) { FactoryGirl.create :team }
 
   describe "GET #index" do
@@ -147,7 +147,7 @@ describe TeamsController do
 
       it 'can add a member' do
         member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, team_leader: false } } }
+        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
         expect(team.team_members.first.user.id).to eq member.id
@@ -155,33 +155,33 @@ describe TeamsController do
 
       it 'can deactivate a member' do
         other_member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false} } }
+        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
         new_member = team.team_members.first
-        patch :update, id: team, team: { team_members_attributes: {"0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
+        patch :update, id: team, team: { team_members_attributes: { "0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } }
         team.reload
         expect(team.team_members.first.current_member?).to be false
       end
 
       it 'cannot demote oneself' do
         admin_team = admin.teams.first
-        patch :update, id: admin_team.id, team: { team_members_attributes: {"0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } }
+        patch :update, id: admin_team.id, team: { team_members_attributes: { "0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } }
         admin_team.reload
         expect(admin_team.team_members.first.end_date).to eq nil
       end
 
       it 'cannot set start_date < end_date' do
         member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } }
+        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end
 
       it 'cannot add overlapping membership periods for the same user' do
         member = FactoryGirl.create :user
-        patch :update, id: team, team: { team_members_attributes: {"0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
-                                                                   "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false } } }
+        patch :update, id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
+                                                                    "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end

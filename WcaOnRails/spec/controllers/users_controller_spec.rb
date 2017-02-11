@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe UsersController do
-
+RSpec.describe UsersController do
   describe "GET #edit" do
     let(:user) { FactoryGirl.create(:user_with_wca_id) }
 
@@ -127,7 +126,7 @@ describe UsersController do
 
     it "user can change his preferred events" do
       sign_in user
-      patch :update, id: user.id, user: { user_preferred_events_attributes: [ {event_id: "333"}, {event_id: "444"}, {event_id: "clock"} ] }
+      patch :update, id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] }
       expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
     end
 

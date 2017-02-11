@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe MergePeople do
+RSpec.describe MergePeople do
   let(:person1) { FactoryGirl.create(:person, countryId: "USA") }
-  let(:person2) { FactoryGirl.create(:person, person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day))
+  let(:person2) {
+    FactoryGirl.create(
+      :person,
+      person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day),
+    )
   }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
@@ -41,7 +45,7 @@ describe MergePeople do
   end
 
   it "requires same gender" do
-    person2.update_attribute(:gender, {"m"=>"f", "f"=>"m"}[person1.gender])
+    person2.update_attribute(:gender, { "m"=>"f", "f"=>"m" }[person1.gender])
     expect(merge_people).to be_invalid
     expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Genders don't match"]
   end

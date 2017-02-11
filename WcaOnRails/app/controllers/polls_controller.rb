@@ -5,13 +5,8 @@ class PollsController < ApplicationController
   before_action -> { redirect_unless_user(:can_vote_in_poll?) }, only: [:index, :vote, :results]
 
   def index
-    if current_user.can_create_poll?
-      @polls = Poll.all
-    else
-      @polls = Poll.where.not(confirmed_at: nil)
-    end
-    @open_polls = @polls.reject &:over?
-    @closed_polls = @polls.select &:over?
+    @polls = current_user.can_create_poll? ? Poll.all : Poll.confirmed
+    @open_polls, @closed_polls = @polls.partition(&:over?)
   end
 
   def new
@@ -70,6 +65,6 @@ class PollsController < ApplicationController
     if params[:commit] == "Confirm" && current_user.can_create_poll?
       poll_params[:confirmed_at] = Time.now
     end
-    return poll_params
+    poll_params
   end
 end

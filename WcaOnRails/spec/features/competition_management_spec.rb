@@ -155,7 +155,7 @@ RSpec.feature "Competition management" do
         uncheck "competition_events_444"
         click_button "Modify Events"
 
-        expect(comp_with_fours.reload.events).to match_array [ threes ]
+        expect(comp_with_fours.reload.events).to match_array [threes]
       end
     end
   end

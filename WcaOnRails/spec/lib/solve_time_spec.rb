@@ -5,7 +5,7 @@ def solve_time(centis)
   SolveTime.new('333', :single, centis)
 end
 
-describe "SolveTime" do
+RSpec.describe "SolveTime" do
   it "DNF" do
     expect(solve_time(-1).clock_format).to eq "DNF"
   end
@@ -88,24 +88,24 @@ describe "SolveTime" do
 
     describe "333mbf" do
       it "formats best" do
-        solve_time = SolveTime.new('333mbf', :single, 580325400)
+        solve_time = SolveTime.new('333mbf', :single, 580_325_400)
         expect(solve_time.clock_format).to eq "41/41 54:14"
       end
 
       it "formats with time less than 60 seconds" do
-        solve_time = SolveTime.new('333mbf', :single, 970005900)
+        solve_time = SolveTime.new('333mbf', :single, 970_005_900)
         expect(solve_time.clock_format).to eq "2/2 0:59"
       end
     end
 
     describe "333mbo" do
       it "formats best" do
-        solve_time = SolveTime.new('333mbo', :single, 1960706900)
+        solve_time = SolveTime.new('333mbo', :single, 1_960_706_900)
         expect(solve_time.clock_format).to eq "3/7 1:55:00"
       end
 
       it "handles missing times" do
-        solve_time = SolveTime.new('333mbo', :single, 969999900)
+        solve_time = SolveTime.new('333mbo', :single, 969_999_900)
         expect(solve_time.clock_format).to eq "3/3 ?:??:??"
       end
     end

@@ -74,6 +74,6 @@ class MergePeople
       person2.destroy!
     end
 
-    return true
+    true
   end
 end

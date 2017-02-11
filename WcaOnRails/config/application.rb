@@ -35,13 +35,15 @@ module WcaOnRails
     config.active_job.queue_adapter = :delayed_job
 
     config.generators do |g|
-      g.test_framework :rspec,
+      g.test_framework(
+        :rspec,
         fixtures: true,
         view_specs: false,
         helper_specs: false,
         routing_specs: false,
         controller_specs: true,
-        request_specs: true
+        request_specs: true,
+      )
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
 
@@ -52,12 +54,14 @@ module WcaOnRails
       allow do
         origins '*'
 
-        resource '/api/*',
+        resource(
+          '/api/*',
           headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
           methods: [:get, :post, :delete, :put, :patch, :options, :head],
           expose: ['Total', 'Per-Page', 'Link'],
           max_age: 0,
-          credentials: false
+          credentials: false,
+        )
       end
     end
 

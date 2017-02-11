@@ -30,28 +30,28 @@ class SolveTime
       # The average field for 333fm is pretty weird. It's the sum
       # of the solves, multiplied by 100.
       # Otherwise, wca_value is simply the number of moves.
-      @move_count = @field == :average ? ( wca_value / 100.0 ) : wca_value
+      @move_count = @field == :average ? (wca_value / 100.0) : wca_value
     elsif multi_blind?
       mb_value = wca_value
       # Extract wca_value parts.
-      old = mb_value / 1000000000 != 0
+      old = mb_value / 1_000_000_000 != 0
       if old
-        time_seconds = mb_value % 100000
-        mb_value = mb_value / 100000
+        time_seconds = mb_value % 100_000
+        mb_value /= 100_000
         @attempted = mb_value % 100
-        mb_value = mb_value / 100
+        mb_value /= 100
         @solved = 99 - mb_value % 100
       else
         missed = mb_value % 100
-        mb_value = mb_value / 100
-        time_seconds = mb_value % 100000
-        mb_value = mb_value / 100000
-        difference = 99 - ( mb_value % 100 )
+        mb_value /= 100
+        time_seconds = mb_value % 100_000
+        mb_value /= 100_000
+        difference = 99 - (mb_value % 100)
         @solved = difference + missed
         @attempted = @solved + missed
       end
 
-      @time_centiseconds = time_seconds == 99999 ? nil : time_seconds * 100
+      @time_centiseconds = time_seconds == 99_999 ? nil : time_seconds * 100
     else
       @time_centiseconds = wca_value
     end
@@ -62,7 +62,7 @@ class SolveTime
       @wca_value = @move_count
     elsif multi_blind?
       missed = @attempted - @solved
-      dd = 99 - ( @solved - missed )
+      dd = 99 - (@solved - missed)
       ttttt = time_centiseconds / 100
 
       if @event_id == "333mbf"
@@ -166,8 +166,8 @@ class SolveTime
           result = "0:#{time_seconds}"
         else
           while time_seconds >= 60
-            result = ":%02d#{result}" % ( time_seconds % 60 )
-            time_seconds = time_seconds / 60
+            result = format(":%02d#{result}", time_seconds % 60)
+            time_seconds /= 60
           end
           result = "#{time_seconds}#{result}"
         end
@@ -175,12 +175,12 @@ class SolveTime
 
       "#{@solved}/#{@attempted} #{result}"
     else
-      hours = time_centiseconds / 360000
-      minutes = (time_centiseconds % 360000) / 6000
+      hours = time_centiseconds / 360_000
+      minutes = (time_centiseconds % 360_000) / 6000
       seconds = (time_centiseconds % 6000) / 100
       centis = time_centiseconds % 100
 
-      clock_format = (CLOCK_FORMAT % [ hours, minutes, seconds, centis ]).sub(/^[0:]*/, EMPTY_STRING)
+      clock_format = format(CLOCK_FORMAT, hours, minutes, seconds, centis).sub(/^[0:]*/, EMPTY_STRING)
       if clock_format.start_with? DOT_STRING
         clock_format = ZERO_STRING + clock_format
       end
@@ -200,7 +200,7 @@ class SolveTime
   def multiblind_time_limit
     return unless @event_id == "333mbf"
 
-    time_limit_minutes = [ 60, @attempted * 10 ].min
+    time_limit_minutes = [60, @attempted * 10].min
     if time_minutes > time_limit_minutes
       errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
     end

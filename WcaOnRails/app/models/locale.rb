@@ -9,7 +9,7 @@ class Locale < SimpleDelegator
 
   attr_accessor :locale
 
-  def initialize(locale, is_translation=false)
+  def initialize(locale, is_translation = false)
     self.locale = locale.to_s
     filename = Rails.root.join('config', 'locales', "#{locale}.yml")
     file_content = File.read(filename)

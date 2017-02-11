@@ -3,7 +3,7 @@ class Api::V0::ApiController < ApplicationController
   before_filter :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::BadApiParameter, with: :bad_api_parameter
   def bad_api_parameter(e)
-    render status: :unprocessable_entity, json: { errors: [ e.to_s ] }
+    render status: :unprocessable_entity, json: { errors: [e.to_s] }
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
@@ -62,7 +62,7 @@ class Api::V0::ApiController < ApplicationController
       render status: :bad_request, json: { error: "No query specified" }
       return
     end
-    result = models.map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }.flatten(1)
+    result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
     render status: :ok, json: { result: result }
   end
 

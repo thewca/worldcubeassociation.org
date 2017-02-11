@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe PostsController do
+RSpec.describe PostsController do
   let(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
   let(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
   let(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
@@ -10,14 +10,14 @@ describe PostsController do
     describe "GET #index" do
       it "populates an array of posts with sticky posts first" do
         get :index
-        expect(assigns(:posts)).to eq [ sticky_post, post1 ]
+        expect(assigns(:posts)).to eq [sticky_post, post1]
       end
     end
 
     describe "GET #rss" do
       it "populates an array of posts ignoring sticky bit" do
         get :rss, format: :xml
-        expect(assigns(:posts)).to eq [ post1, sticky_post ]
+        expect(assigns(:posts)).to eq [post1, sticky_post]
       end
     end
 
@@ -42,7 +42,7 @@ describe PostsController do
       end
 
       it "cannot find not worldreadable posts" do
-        expect {get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Vote < ActiveRecord::Base
-
   belongs_to :user
   belongs_to :poll
 
@@ -48,5 +47,4 @@ class Vote < ActiveRecord::Base
       errors.add(:poll_id, "poll is closed")
     end
   end
-
 end

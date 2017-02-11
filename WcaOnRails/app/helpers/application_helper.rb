@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module ApplicationHelper
-  def full_title(page_title='')
+  def full_title(page_title = '')
     base_title = WcaOnRails::Application.config.site_name
     if page_title.empty?
       base_title
@@ -42,7 +42,7 @@ module ApplicationHelper
     "/" + Pathname.new(File.absolute_path(filename)).relative_path_from(Rails.public_path).to_path
   end
 
-  def anchorable(pretty_text, id=nil)
+  def anchorable(pretty_text, id = nil)
     id ||= pretty_text.parameterize
     "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='glyphicon glyphicon-link'></span></a> #{pretty_text}</span>".html_safe
   end
@@ -50,7 +50,7 @@ module ApplicationHelper
   WCA_EXCERPT_RADIUS = 50
 
   def wca_excerpt(html, phrases)
-    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/thewca/worldcubeassociation.org/issues/238
+    text = ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO: https://github.com/thewca/worldcubeassociation.org/issues/238
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
     text_downcase = text.downcase
     first = phrases.map { |phrase| text_downcase.index(phrase.downcase) }.compact.min
@@ -69,7 +69,7 @@ module ApplicationHelper
 
   def wca_highlight(html, phrases, do_not_transliterate: false)
     text = if !do_not_transliterate
-             ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO https://github.com/thewca/worldcubeassociation.org/issues/238
+             ActiveSupport::Inflector.transliterate(strip_tags(html)) # TODO: https://github.com/thewca/worldcubeassociation.org/issues/238
            else
              strip_tags(html)
            end
@@ -114,7 +114,7 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, options={})
+  def wca_date_range(from_date, to_date, options = {})
     if from_date && to_date
       options[:separator] = '-'
       date_range(from_date, to_date, options)
@@ -123,7 +123,7 @@ module ApplicationHelper
     end
   end
 
-  def alert(type, content=nil, note: false, &block)
+  def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
     if note
       content = content_tag(:strong, "Note:") + " " + content

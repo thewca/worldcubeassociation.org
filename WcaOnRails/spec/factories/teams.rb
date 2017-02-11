@@ -5,5 +5,4 @@ FactoryGirl.define do
     name 'Foo Team'
     description "Just a fake team."
   end
-
 end

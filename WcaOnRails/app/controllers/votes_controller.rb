@@ -33,6 +33,6 @@ class VotesController < ApplicationController
   def vote_params
     vote_params = params.require(:vote).permit(:poll_id, :comment, poll_option_ids: [])
     vote_params[:user_id] = current_user.id
-    return vote_params
+    vote_params
   end
 end

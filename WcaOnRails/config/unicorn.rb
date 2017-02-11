@@ -19,7 +19,7 @@ else
   stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
   stdout_path "#{dir}/log/unicorn-#{rack_env}.log"
 
-  worker_processes (Etc.nprocessors * 3).ceil
+  worker_processes((Etc.nprocessors * 3).ceil)
 end
 
 listen "/tmp/unicorn.wca.sock"
@@ -29,12 +29,14 @@ timeout 30
 
 preload_app true
 
-before_fork do |server, worker|
-  defined?(ActiveRecord::Base) and
+before_fork do |_server, _worker|
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
+  end
 end
 
-after_fork do |server, worker|
-  defined?(ActiveRecord::Base) and
+after_fork do |_server, _worker|
+  if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
+  end
 end

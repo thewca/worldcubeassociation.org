@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class Poll < ActiveRecord::Base
-
   has_many :poll_options, dependent: :destroy
   has_many :votes
+
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
 
   validates :question, presence: true
   validate :deadline_cannot_be_in_the_past, on: [:create]

@@ -10,7 +10,7 @@ CarrierWave.configure do |config|
     # nginx inside of Vagrant will work.
     config.asset_host = "http://example.com"
   end
-  if Rails.env.test? or Rails.env.cucumber?
+  if Rails.env.test? || Rails.env.cucumber?
     config.enable_processing = false
   end
 end

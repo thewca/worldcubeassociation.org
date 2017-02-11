@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class NoMoreDrupal < ActiveRecord::Migration
-
   class DeviseUser < ActiveRecord::Base
   end
   class User < ActiveRecord::Base

@@ -7,7 +7,7 @@ class TestDbManager
   end
 end
 
-describe TestDbManager do
+RSpec.describe TestDbManager do
   it "CONSTANT_TABLES includes all tables filled in the files inside /db/seeds/ directory" do
     expected_files = TestDbManager::CONSTANT_TABLES.map do |table_name|
       "db/seeds/#{table_name.underscore}.seeds.rb"

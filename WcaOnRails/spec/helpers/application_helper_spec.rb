@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe ApplicationHelper do
+RSpec.describe ApplicationHelper do
   describe "#alert" do
     it "escapes note" do
       string = helper.alert(:warning, "good job", note: true)

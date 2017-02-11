@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe NotificationsHelper do
+RSpec.describe NotificationsHelper do
   describe "#notifications_for_user" do
     context "when delegate" do
       let(:delegate) { FactoryGirl.create :delegate }

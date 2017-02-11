@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "users" do
+RSpec.describe "users" do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do
     user = FactoryGirl.build :user
 
-    post_via_redirect user_registration_path, {
+    post_via_redirect(
+      user_registration_path,
       'user[email]' => user.email,
       'user[name]' => user.name,
       'user[password]' => user.password,
       'user[password_confirmation]' => user.password,
-    }
+    )
     expect(response).to be_success
 
     post_via_redirect user_confirmation_path, 'user[email]' => user.email

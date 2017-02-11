@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id"
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person"
-  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil ) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -46,8 +46,8 @@ class User < ActiveRecord::Base
   # signing up for an account.
   attr_accessor :sign_up_panel_to_show
 
-  ALLOWABLE_GENDERS = [:m, :f, :o]
-  enum gender: (ALLOWABLE_GENDERS.map { |g| [ g, g.to_s ] }.to_h)
+  ALLOWABLE_GENDERS = [:m, :f, :o].freeze
+  enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
 
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
@@ -196,8 +196,8 @@ class User < ActiveRecord::Base
   AVATAR_PARAMETERS = {
     file_size: {
       maximum: 2.megabytes.to_i,
-    },
-  }
+    }.freeze,
+  }.freeze
 
   mount_uploader :pending_avatar, PendingAvatarUploader
   crop_uploaded :pending_avatar
@@ -269,7 +269,7 @@ class User < ActiveRecord::Base
 
   validate :senior_delegate_presence
   def senior_delegate_presence
-    if !User.delegate_status_allows_senior_delegate(delegate_status) and senior_delegate
+    if !User.delegate_status_allows_senior_delegate(delegate_status) && senior_delegate
       errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
     end
   end
@@ -503,7 +503,7 @@ class User < ActiveRecord::Base
     :unconfirmed_wca_id,
     :delegate_id_to_handle_wca_id_claim,
     :dob_verification,
-  ]
+  ].freeze
 
   def editable_fields_of_user(user)
     fields = Set.new
@@ -562,7 +562,8 @@ class User < ActiveRecord::Base
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
-    if login = conditions.delete(:login)
+    login = conditions.delete(:login)
+    if login
       where(conditions).where(["email = :email OR wca_id = :wca_id", { email: login.downcase, wca_id: login.upcase }]).first
     else
       where(conditions.to_hash).first
@@ -576,7 +577,7 @@ class User < ActiveRecord::Base
       avatar: self.read_attribute(:pending_avatar),
       saved_avatar_crop_x: self.saved_pending_avatar_crop_x, saved_avatar_crop_y: self.saved_pending_avatar_crop_y, saved_avatar_crop_w: self.saved_pending_avatar_crop_w, saved_avatar_crop_h: self.saved_pending_avatar_crop_h,
       pending_avatar: nil,
-      saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil,
+      saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil
     )
   end
 
@@ -602,7 +603,7 @@ class User < ActiveRecord::Base
   end
 
   attr_accessor :doorkeeper_token
-  def serializable_hash(options = nil)
+  def serializable_hash(_options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",

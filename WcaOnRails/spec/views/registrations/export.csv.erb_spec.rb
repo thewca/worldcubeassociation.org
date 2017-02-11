@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "registrations/export.csv.erb" do
+RSpec.describe "registrations/export.csv.erb" do
   it "renders valid csv" do
     competition = FactoryGirl.create :competition, :registration_open
     user = FactoryGirl.create(
@@ -17,7 +17,7 @@ describe "registrations/export.csv.erb" do
       competition: competition,
       accepted_at: Time.now,
       user: user,
-      competition_events: [ competition.competition_events.find_by!(event_id: "333") ],
+      competition_events: [competition.competition_events.find_by!(event_id: "333")],
       guests: 1,
     )
     assign(:competition, competition)

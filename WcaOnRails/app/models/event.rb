@@ -23,7 +23,7 @@ class Event < ActiveRecord::Base
   end
 
   def cellName
-    fail "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
+    raise "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
   end
 
   scope :official, -> { where("rank < 990") }

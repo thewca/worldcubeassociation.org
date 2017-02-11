@@ -60,8 +60,8 @@ es:
 
   it "#compare_to works" do
     missing, unused, outdated = @es.compare_to(@en)
-    expect(missing).to match_array [ "layer1 > just_added", "cubes" ]
-    expect(unused).to match_array [ "layer1 > please_remove_me", "magics" ]
-    expect(outdated).to match_array [ "layer1 > recently_changed" ]
+    expect(missing).to match_array ["layer1 > just_added", "cubes"]
+    expect(unused).to match_array ["layer1 > please_remove_me", "magics"]
+    expect(outdated).to match_array ["layer1 > recently_changed"]
   end
 end

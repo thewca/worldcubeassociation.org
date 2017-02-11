@@ -7,7 +7,7 @@ after "development:users" do
     end
 
     def random_wca_value
-      r = rand(5000..100000)
+      r = rand(5000..100_000)
 
       # Solves over 10 minutes must be rounded to the nearest second.
       if r > 10 * 60 * 100
@@ -54,10 +54,10 @@ after "development:users" do
 
     competition.events.each do |event|
       %w(1 2 f).each do |roundId|
-        users.each_with_index do |competitor, i|
+        users.each_with_index do |competitor, j|
           person = competitor.person
           result = Result.new(
-            pos: i+1,
+            pos: j+1,
             personId: person.wca_id,
             personName: person.name,
             countryId: person.countryId,
@@ -70,8 +70,8 @@ after "development:users" do
             value3: random_wca_value,
             value4: random_wca_value,
             value5: random_wca_value,
-            regionalSingleRecord: i == 0 ? "WR" : "",
-            regionalAverageRecord: i == 0 ? "WR" : "",
+            regionalSingleRecord: j == 0 ? "WR" : "",
+            regionalAverageRecord: j == 0 ? "WR" : "",
           )
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
@@ -167,8 +167,8 @@ after "development:users" do
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
-    users.each_with_index do |user, i|
-      accepted_at = i % 4 == 0 ? Time.now : nil
+    users.each_with_index do |user, j|
+      accepted_at = j % 4 == 0 ? Time.now : nil
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
       FactoryGirl.create(:registration, user: user, competition: competition, accepted_at: accepted_at, competition_events: registration_competition_events)
     end

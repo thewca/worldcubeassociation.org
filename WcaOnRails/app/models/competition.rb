@@ -2,10 +2,6 @@
 
 class Competition < ActiveRecord::Base
   self.table_name = "Competitions"
-  # FIXME Tests fail with "Unknown primary key for table Competitions in model Competition."
-  #       when not setting the primary key explicitly. I have
-  #       no clue why... (th, 2015-09-19)
-  self.primary_key = "id"
 
   has_many :competition_events, dependent: :destroy
   has_many :events, through: :competition_events
@@ -41,13 +37,13 @@ class Competition < ActiveRecord::Base
     where(
       "Competitions.name like :search_term or
       Competitions.cityName like :search_term",
-      search_term: "%#{search_term}%"
+      search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
       "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
-      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id"
+      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
 
@@ -104,7 +100,7 @@ class Competition < ActiveRecord::Base
   validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
-  validates :external_website, format: { with: /\Ahttps?:\/\/.*\z/ }, allow_blank: true
+  validates :external_website, format: { with: %r{\Ahttps?://.*\z} }, allow_blank: true
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
@@ -294,9 +290,11 @@ class Competition < ActiveRecord::Base
   def delegate_ids
     @delegate_ids || delegates.map(&:id).join(",")
   end
+
   def organizer_ids
     @organizer_ids || organizers.map(&:id).join(",")
   end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
@@ -411,7 +409,7 @@ class Competition < ActiveRecord::Base
       return true
     end
 
-    return false
+    false
   end
 
   def can_receive_registration_emails?(user_id)
@@ -424,7 +422,7 @@ class Competition < ActiveRecord::Base
       return true
     end
 
-    return false
+    false
   end
 
   after_save :update_receive_registration_emails
@@ -580,10 +578,9 @@ class Competition < ActiveRecord::Base
   end
 
   def nearby_competitions(days, distance)
-    Competition.where(
-      "ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id
-    ).select { |c| kilometers_to(c) <= distance }
-     .sort_by { |c| kilometers_to(c) }
+    Competition.where("ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
+               .select { |c| kilometers_to(c) <= distance }
+               .sort_by { |c| kilometers_to(c) }
   end
 
   private def to_radians(degrees)
@@ -593,9 +590,9 @@ class Competition < ActiveRecord::Base
   # Source http://www.movable-type.co.uk/scripts/latlong.html
   def kilometers_to(c)
     6371 *
-      Math::sqrt(
-        ( (c.longitude_radians - longitude_radians) * Math::cos((c.latitude_radians  + latitude_radians)/2)) ** 2 +
-        (c.latitude_radians - latitude_radians) ** 2
+      Math.sqrt(
+        ((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2 +
+        (c.latitude_radians - latitude_radians) ** 2,
       )
   end
 
@@ -659,14 +656,14 @@ class Competition < ActiveRecord::Base
 
   def events_with_podium_results
     light_results_from_relation(
-      results.podium.order(:pos)
+      results.podium.order(:pos),
     ).group_by(&:event)
       .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
     light_results_from_relation(
-      results.winners
+      results.winners,
     )
   end
 
@@ -675,7 +672,7 @@ class Competition < ActiveRecord::Base
       .group_by(&:personId)
       .sort_by { |_personId, results| results.first.personName }
       .map do |personId, results|
-        results.sort_by! { |r| [ r.event.rank, -r.round.rank ] }
+        results.sort_by! { |r| [r.event.rank, -r.round.rank] }
 
         # Mute (soften) each result that wasn't the competitor's last for the event.
         last_event = nil
@@ -684,7 +681,7 @@ class Competition < ActiveRecord::Base
           last_event = result.event
         end
 
-        [ personId, results.sort_by { |r| [ r.event.rank, -r.round.rank ] } ]
+        [personId, results.sort_by { |r| [r.event.rank, -r.round.rank] }]
       end
   end
 
@@ -692,13 +689,13 @@ class Competition < ActiveRecord::Base
     light_results_from_relation(results)
       .group_by(&:event)
       .sort_by { |event, _results| event.rank }
-      .map do |event, results|
-        rounds_with_results = results
-          .group_by(&:round)
-          .sort_by { |format, _results| format.rank }
-          .map { |round, results| [ round, results.sort_by { |r| [r.pos, r.personName] } ] }
+      .map do |event, results_for_event|
+        rounds_with_results = results_for_event
+                              .group_by(&:round)
+                              .sort_by { |format, _results| format.rank }
+                              .map { |round, results| [round, results.sort_by { |r| [r.pos, r.personName] }] }
 
-        [ event, rounds_with_results ]
+        [event, rounds_with_results]
       end
   end
 
@@ -709,8 +706,10 @@ class Competition < ActiveRecord::Base
   # to a 40% performance improvement.
   private def light_results_from_relation(relation)
     ActiveRecord::Base.connection
-      .execute(relation.to_sql)
-      .each(as: :hash).map { |r| LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"])) }
+                      .execute(relation.to_sql)
+                      .each(as: :hash).map { |r|
+                        LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"]))
+                      }
   end
 
   def started?
@@ -747,12 +746,12 @@ class Competition < ActiveRecord::Base
 
     sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
-    registrations = self.registrations.
-                         accepted.
-                         joins(joinsql).
-                         where("registration_competition_events.competition_event_id=?", competition_event.id).
-                         order(sort_clause).
-                         select(selectsql)
+    registrations = self.registrations
+                        .accepted
+                        .joins(joinsql)
+                        .where("registration_competition_events.competition_event_id=?", competition_event.id)
+                        .order(sort_clause)
+                        .select(selectsql)
 
     prev_registration = nil
     registrations.each_with_index do |registration, i|
@@ -784,7 +783,7 @@ class Competition < ActiveRecord::Base
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])
       if !country
-        raise WcaExceptions::BadApiParameter, "Invalid country_iso2: '#{params[:country_iso2]}'"
+        raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
       competitions = competitions.where(countryId: country.id)
     end
@@ -792,7 +791,7 @@ class Competition < ActiveRecord::Base
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
       if !start_date
-        raise WcaExceptions::BadApiParameter, "Invalid start: '#{params[:start]}'"
+        raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
       end
       competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Date) >= ?", start_date)
     end
@@ -800,7 +799,7 @@ class Competition < ActiveRecord::Base
     if params[:end].present?
       end_date = Date.safe_parse(params[:end])
       if !end_date
-        raise WcaExceptions::BadApiParameter, "Invalid end: '#{params[:end]}'"
+        raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
       end
       competitions = competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
     end

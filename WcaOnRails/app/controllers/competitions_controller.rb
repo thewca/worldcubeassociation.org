@@ -165,7 +165,7 @@ class CompetitionsController < ApplicationController
       body = "The [#{comp.name}](#{competition_url(comp)})"
       body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
       unless comp.website.blank?
-        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration.";
+        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
       create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
 
@@ -211,11 +211,11 @@ class CompetitionsController < ApplicationController
       ].each do |code_name|
         code = code_name[:code]
         region_name = code_name[:name]
-        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', { code: code })
+        comp_records = comp.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
         unless comp_records.empty?
           body += "#{region_name} records: "
-          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results|
-            results_by_personId = results.group_by(&:personId).sort
+          record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
+            results_by_personId = results_for_name.group_by(&:personId).sort
             results_by_personId.map do |personId, results|
               if results_by_personId.length > 1
                 # Two or more people with the same name set records at this competition!
@@ -305,7 +305,7 @@ class CompetitionsController < ApplicationController
       account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
       account.deauthorize(
         ENVied.STRIPE_CLIENT_ID,
-        { stripe_user_id: @competition.connected_stripe_account_id},
+        stripe_user_id: @competition.connected_stripe_account_id,
       )
       @competition.connected_stripe_account_id = nil
       @competition.save!
@@ -320,7 +320,7 @@ class CompetitionsController < ApplicationController
       raise ActionController::RoutingError.new('Not Found')
     end
     client = create_stripe_oauth_client
-    resp = client.auth_code.get_token(code, params: {scope: 'read_write'})
+    resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
     competition.connected_stripe_account_id = resp.params['stripe_user_id']
     if competition.save
       flash[:success] = t('competitions.messages.stripe_connected')

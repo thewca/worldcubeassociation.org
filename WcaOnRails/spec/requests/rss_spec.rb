@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe "rss" do
+RSpec.describe "rss" do
   include Rack::Test::Methods
 
-  let!(:post_1) { FactoryGirl.create :post,
-                                     body: 'foo **a**',
-                                     title: 'bar',
-                                     created_at: DateTime.new(2014, 3, 12, 12, 32, 42) }
-  let!(:post_2) { FactoryGirl.create :sticky_post,
-                                     body: '[link](http://google.de)',
-                                     title: 'sticky post',
-                                     created_at: DateTime.new(2014, 3, 14, 11, 18, 0) }
+  let!(:post_1) do
+    FactoryGirl.create :post,
+                       body: 'foo **a**',
+                       title: 'bar',
+                       created_at: DateTime.new(2014, 3, 12, 12, 32, 42)
+  end
+
+  let!(:post_2) do
+    FactoryGirl.create :sticky_post,
+                       body: '[link](http://google.de)',
+                       title: 'sticky post',
+                       created_at: DateTime.new(2014, 3, 14, 11, 18, 0)
+  end
 
   describe "posts" do
     before do

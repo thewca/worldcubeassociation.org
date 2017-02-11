@@ -9,11 +9,11 @@ end
 
 class FailingJob < ActiveJob::Base
   def perform
-    fail "Failure!"
+    raise "Failure!"
   end
 end
 
-describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
+RSpec.describe Delayed::Plugins::SaveCompletedJobs, type: :feature do
   describe "call" do
     around(:each) do |example|
       old_delay_jobs = Delayed::Worker.delay_jobs

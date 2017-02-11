@@ -2,7 +2,7 @@
 require 'middlewares/warden_user_logger'
 require 'ostruct'
 
-describe Middlewares::WardenUserLogger do
+RSpec.describe Middlewares::WardenUserLogger do
   describe "call" do
     let(:app) { double(:app) }
     let(:logger) { ->(s) { log_statements << s } }
@@ -18,7 +18,7 @@ describe Middlewares::WardenUserLogger do
       end
 
       context "env filled with warden session information" do
-        let(:env) { {'warden' => OpenStruct.new(user: OpenStruct.new(id: 42)) } }
+        let(:env) { { 'warden' => OpenStruct.new(user: OpenStruct.new(id: 42)) } }
 
         it "logs the correct user id" do
           expect(log_statements).to eq ["[User Id] Request was made by user id: 42"]
@@ -26,7 +26,7 @@ describe Middlewares::WardenUserLogger do
       end
 
       context "env not filled with warden session information" do
-        let(:env) { {'warden' => OpenStruct.new } }
+        let(:env) { { 'warden' => OpenStruct.new } }
 
         it "logs the absence of a logged in user" do
           expect(log_statements).to eq ["[User Id] Request was made by user id: <not logged in>"]
@@ -44,7 +44,7 @@ describe Middlewares::WardenUserLogger do
       end
 
       context "env filled with warden session information" do
-        let(:env) { {'warden' => OpenStruct.new(user: OpenStruct.new(id: 42)) } }
+        let(:env) { { 'warden' => OpenStruct.new(user: OpenStruct.new(id: 42)) } }
 
         it "logs the correct user id" do
           expect(log_statements).to eq ["[User Id] Request was made by user id: 42"]
@@ -52,7 +52,7 @@ describe Middlewares::WardenUserLogger do
       end
 
       context "env not filled with warden session information" do
-        let(:env) { {'warden' => OpenStruct.new } }
+        let(:env) { { 'warden' => OpenStruct.new } }
 
         it "logs the absence of a logged in user" do
           expect(log_statements).to eq ["[User Id] Request was made by user id: <not logged in>"]

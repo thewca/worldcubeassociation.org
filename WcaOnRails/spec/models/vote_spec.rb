@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Vote do
+RSpec.describe Vote do
   let(:poll) { FactoryGirl.create(:poll, :confirmed) }
   let(:delegate) { FactoryGirl.create(:delegate) }
-  let(:vote) { FactoryGirl.create(:vote, user: delegate, poll: poll, poll_options: [ poll.poll_options.first ]) }
+  let(:vote) { FactoryGirl.create(:vote, user: delegate, poll: poll, poll_options: [poll.poll_options.first]) }
 
   it "is valid" do
     expect(vote).to be_valid
@@ -17,7 +17,7 @@ describe Vote do
   end
 
   it "can't vote for multiple options on single-answer polls" do
-    vote.poll_options = [ poll.poll_options[0], poll.poll_options[1] ]
+    vote.poll_options = [poll.poll_options[0], poll.poll_options[1]]
     expect(vote).to be_invalid
     expect(vote.errors[:poll_options]).to eq ["you must choose just one option"]
   end
@@ -49,7 +49,7 @@ describe Vote do
 
   it "can't vote with poll_option_id for different poll" do
     other_poll = FactoryGirl.create(:poll, :confirmed)
-    vote.poll_option_ids = [ other_poll.poll_options.first.id ]
+    vote.poll_option_ids = [other_poll.poll_options.first.id]
     expect(vote).to be_invalid
     expect(vote.errors[:poll_options]).to eq ["One or more poll_options don't match the poll"]
   end

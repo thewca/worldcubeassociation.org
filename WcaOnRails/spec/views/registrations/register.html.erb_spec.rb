@@ -13,7 +13,7 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match /Your registration is pending./
+    expect(rendered).to match(/Your registration is pending./)
   end
 
   it "shows message about registration being past" do
@@ -22,7 +22,7 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match /Registration closed <strong>[^>]*<.strong> ago/
+    expect(rendered).to match(/Registration closed <strong>[^>]*<.strong> ago/)
   end
 
   it "shows message about registration not yet being open" do
@@ -31,6 +31,6 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match /Registration will open in <strong>[^>]*<.strong>/
+    expect(rendered).to match(/Registration will open in <strong>[^>]*<.strong>/)
   end
 end

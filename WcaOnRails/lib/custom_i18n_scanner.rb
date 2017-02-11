@@ -32,9 +32,7 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     text.scan(/^\s*<%= f.(input|label|input_field) :(\w+)(?!.*hidden)(.*)%>/) do |_, attribute, input_params|
       # 'absolute_key' returns something that we assume looks like model.(.*).attribute
       abskey = absolute_key(".#{attribute}", path)
-      occurrence = occurrence_from_position(
-        path, text, Regexp.last_match.offset(0).first
-      )
+      occurrence = occurrence_from_position(path, text, Regexp.last_match.offset(0).first)
       model = extract_model_name(abskey)
       # Mark the hint as used if we don't use custom hint
       if !input_params.include?("hint:")
@@ -56,9 +54,7 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     # Then scan for possible radio choices
     text.scan(/^\s*<%= f.input :(\w+), as: :radio_buttons, collection: \[(.*)\](.*)%>/) do |attribute, collection|
       abskey = absolute_key(".#{attribute}", path)
-      occurrence = occurrence_from_position(
-        path, text, Regexp.last_match.offset(0).first
-      )
+      occurrence = occurrence_from_position(path, text, Regexp.last_match.offset(0).first)
       model = extract_model_name(abskey)
       # Get all choices from the f.input
       options = collection.gsub(/[: ]/, '').split(',')
@@ -71,9 +67,7 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     # Scan for uses of our custom associated_events_picker
     text.scan(/^\s*<%= render .shared.associated_events_picker..*?(events_association_name): :([^ ,]*).*%>/m) do |_, events_association_name|
       abskey = absolute_key(".#{events_association_name}", path)
-      occurrence = occurrence_from_position(
-        path, text, Regexp.last_match.offset(0).first
-      )
+      occurrence = occurrence_from_position(path, text, Regexp.last_match.offset(0).first)
       model = extract_model_name(abskey)
       retval << ["activerecord.attributes.#{model}.#{events_association_name}", occurrence]
     end

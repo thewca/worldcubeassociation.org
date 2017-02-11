@@ -16,12 +16,12 @@ module CompetitionsHelper
   end
 
   def announced_class(days_announced)
-    level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select {|d| days_announced > d}.count
+    level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced > d }.count
     ["alert-danger", "alert-orange", "alert-green"][level]
   end
 
   def report_and_results_class(days)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select {|d| days > d}.count
+    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select { |d| days > d }.count
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 

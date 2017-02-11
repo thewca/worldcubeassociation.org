@@ -43,7 +43,7 @@ class TeamsController < ApplicationController
         member.second.merge!(current_user: current_user.id)
       end
     end
-    return team_params
+    team_params
   end
 
   private def team_from_params

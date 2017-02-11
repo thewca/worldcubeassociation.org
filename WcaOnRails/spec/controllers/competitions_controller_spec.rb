@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe CompetitionsController do
+RSpec.describe CompetitionsController do
   let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
   let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
 
@@ -261,7 +261,7 @@ describe CompetitionsController do
         expect(new_comp.organizers.sort_by(&:id)).to eq competition.organizers.sort_by(&:id)
         # When a delegate clones a competition, it should clone its organizers, and add
         # the delegate doing the cloning.
-        expect(new_comp.delegates.sort_by(&:id)).to eq (competition.delegates + [delegate]).sort_by(&:id)
+        expect(new_comp.delegates.sort_by(&:id)).to eq((competition.delegates + [delegate]).sort_by(&:id))
       end
 
       it 'clones a competition that they delegated' do
@@ -514,14 +514,14 @@ describe CompetitionsController do
         get :post_announcement, id: competition
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
-        expect(post.body).to match /in #{competition.cityName}, #{competition.countryId}\./
+        expect(post.body).to match(/in #{competition.cityName}, #{competition.countryId}\./)
       end
 
       it 'handles nil start date' do
         competition.update_attributes(start_date: "", end_date: "")
         get :post_announcement, id: competition
         post = assigns(:post)
-        expect(post.title).to match /No date/
+        expect(post.title).to match(/No date/)
       end
     end
   end

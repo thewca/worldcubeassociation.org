@@ -7,7 +7,7 @@ def api_sign_in_as(user, scopes: nil)
   allow(controller).to receive(:doorkeeper_token) { token }
 end
 
-describe Api::V0::ApiController do
+RSpec.describe Api::V0::ApiController do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 
@@ -74,7 +74,7 @@ describe Api::V0::ApiController do
       get :users_search, q: "erem"
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["result"].select { |u| u["name"] == "Jeremy"}[0]).not_to be_nil
+      expect(json["result"].select { |u| u["name"] == "Jeremy" }[0]).not_to be_nil
     end
 
     it 'does not find dummy accounts' do
@@ -276,19 +276,19 @@ describe Api::V0::ApiController do
 
       get :competitions, start: "2015-02-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :competitions, end: "2016-03-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ march_comp.id, feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :competitions, start: "2015-02-01", end: "2016-02-15"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ feb_comp.id, last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [feb_comp.id, last_feb_comp.id]
 
       get :competitions, start: "2015-02-01", end: "2015-02-01"
       json = JSON.parse(response.body)
-      expect(json.map { |c| c["id"] }).to eq [ last_feb_comp.id ]
+      expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
     end
 
     it 'paginates' do
@@ -419,19 +419,21 @@ describe Api::V0::ApiController do
 
     context 'signed in with valid wca id' do
       let(:person) do
-        FactoryGirl.create(:person, {
+        FactoryGirl.create(
+          :person,
           countryId: "USA",
           gender: "m",
           year: 1987,
           month: 12,
           day: 4,
-        })
+        )
       end
       let(:user) do
-        FactoryGirl.create :user, {
+        FactoryGirl.create(
+          :user,
           avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
           wca_id: person.wca_id,
-        }
+        )
       end
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       before :each do
@@ -446,7 +448,7 @@ describe Api::V0::ApiController do
         expect(json['me']['name']).to eq(user.name)
 
         # Verify that avatar url is a full url (starts with http(s))
-        expect(json['me']['avatar']['url']).to match /^https?/
+        expect(json['me']['avatar']['url']).to match(/^https?/)
 
         expect(json['me']['country_iso2']).to eq("US")
         expect(json['me']['gender']).to eq("m")
@@ -497,7 +499,7 @@ describe Api::V0::ApiController do
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
-        allow(controller).to receive(:doorkeeper_token) {token}
+        allow(controller).to receive(:doorkeeper_token) { token }
       end
 
       it 'works' do
@@ -524,7 +526,7 @@ describe Api::V0::ApiController do
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, resource_owner_id: user.id, scopes: scopes }
       before :each do
-        allow(controller).to receive(:doorkeeper_token) {token}
+        allow(controller).to receive(:doorkeeper_token) { token }
       end
 
       it 'works' do

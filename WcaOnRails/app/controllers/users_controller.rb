@@ -15,14 +15,14 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { }
+      format.html {}
       format.json do
         @users = User.joins("INNER JOIN Countries ON iso2 = country_iso2")
         params[:search]&.split&.each do |part|
           like_query = %w(users.name wca_id email Countries.name).map do |column|
             column + " LIKE :part"
           end.join(" OR ")
-          @users = @users.where(like_query, { part: "%#{part}%" })
+          @users = @users.where(like_query, part: "%#{part}%")
         end
         if params[:sort] == "country"
           @users = @users.order("Countries.name #{params[:order]}")
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
   end
 
   def claim_wca_id
@@ -69,20 +69,20 @@ class UsersController < ApplicationController
 
   def edit_avatar_thumbnail
     @user = user_to_edit
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
   end
 
   def edit_pending_avatar_thumbnail
     @user = user_to_edit
     @pending_avatar = true
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
     render :edit_avatar_thumbnail
   end
 
   def update
     @user = user_to_edit
     @user.current_user = current_user
-    redirect_if_cannot_edit_user(@user) and return
+    return if redirect_if_cannot_edit_user(@user)
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
@@ -118,7 +118,7 @@ class UsersController < ApplicationController
       redirect_to root_url
       return true
     end
-    return false
+    false
   end
 
   private def user_params

@@ -6,8 +6,8 @@ FactoryGirl.define do
     cityName "San Francisco"
     countryId "USA"
     information "Information!"
-    latitude { rand(-90000000..90000000) }
-    longitude { rand(-180000000..180000000) }
+    latitude { rand(-90_000_000..90_000_000) }
+    longitude { rand(-180_000_000..180_000_000) }
 
     transient do
       starts 1.year.ago
@@ -44,11 +44,11 @@ FactoryGirl.define do
     guests_enabled true
 
     trait :with_delegate do
-      delegates { [ FactoryGirl.create(:delegate) ] }
+      delegates { [FactoryGirl.create(:delegate)] }
     end
 
     trait :with_organizer do
-      organizers { [ FactoryGirl.create(:user) ] }
+      organizers { [FactoryGirl.create(:user)] }
     end
 
     trait :with_delegate_report do

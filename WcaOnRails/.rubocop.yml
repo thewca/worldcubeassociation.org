@@ -9,8 +9,17 @@ Bundler/OrderedGems:
 Lint/EmptyWhen:
   Enabled: false
 
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+Style/RedundantSelf:
+  Enabled: false
 
 Style/SafeNavigation:
   Enabled: false
@@ -36,7 +45,13 @@ Style/TrailingCommaInLiteral:
 Style/GuardClause:
   Enabled: false
 
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/BlockLength:
+  Enabled: false
+
+Metrics/BlockNesting:
   Enabled: false
 
 Metrics/ClassLength:
@@ -45,16 +60,62 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 23
 
+Metrics/ParameterLists:
+  Max: 5
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Max: 23
 
-Style/DoubleNegation:
+Metrics/LineLength:
+  Max: 245
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Performance/RedundantMatch:
   Enabled: false
 
 Style/NegatedIf:
   Enabled: false
 
-Style/PerlBackrefs:
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Style/IfInsideElse:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/NegatedIf:
   Enabled: false
 
 Style/Next:
@@ -63,15 +124,29 @@ Style/Next:
 Style/NumericPredicate:
   Enabled: false
 
-Style/SignalException:
-  EnforcedStyle: semantic
-
-Style/ClassVars:
-  Exclude:
-    - app/models/country.rb
-
-Style/IfInsideElse:
+Style/PerlBackrefs:
   Enabled: false
 
-Style/AsciiComments:
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/RedundantParentheses:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/SpaceAroundOperators:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+Style/PredicateName:
   Enabled: false

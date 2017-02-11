@@ -21,14 +21,14 @@ after :teams do
   5.times do
     senior_delegate = FactoryGirl.create(:senior_delegate)
     rand(10).times do
-      FactoryGirl.create([ :delegate, :candidate_delegate ].sample,
+      FactoryGirl.create([:delegate, :candidate_delegate].sample,
                          senior_delegate: senior_delegate)
     end
   end
 
   # Create some delegates without a senior delegate
   5.times do
-    FactoryGirl.create([ :delegate, :candidate_delegate ].sample)
+    FactoryGirl.create([:delegate, :candidate_delegate].sample)
   end
 
   # Create members and leaders for every WCA team
