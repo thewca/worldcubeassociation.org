@@ -589,10 +589,10 @@ zh-CN:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             将权限用空格分开。留空将使用默认权限。 <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">点击这里</a>查看支持的权限列表。
       scopes:
         #original_hash: 1920e95
@@ -827,6 +827,18 @@ zh-CN:
       wca_id_no_birthdate_html: >-
         我们当前没有该WCA ID的生日信息。请联系<a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA成绩组</a>，发送一个姓名和生日清楚的证件照片。
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        该WCA ID没有性别记录。请联系<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>解决此问题。
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        该WCA ID没有地区记录。请联系<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>解决此问题。
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        该WCA ID没有姓名记录。请联系<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>解决此问题。
       #original_hash: 49083d8
       board_member_cannot_resign: 你不能以董事会成员身份辞职！找其他人来炒你鱿鱼。
       #original_hash: d02c03b
@@ -848,8 +860,12 @@ zh-CN:
       already_assigned_html: >-
         WCA ID %{link_id}已关联到另一个帐号。如果你确信该情况有误，请联系你当地的 <a href='%{link_delegate}'
         target='_blank'>WCA代表</a>。
-      #original_hash: 3391b0b
-      missing_dob_html: 'WCA ID %{link_id}还没有生日记录。请联系%{link_result_team}。'
+      #original_hash: d26bfdc
+      missing_dob_html: 'WCA ID %{link_id}还没有生日记录。'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        请联系<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成绩组</a>解决此问题。
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
   registrations:
@@ -1134,20 +1150,20 @@ zh-CN:
       #original_hash: 4e9f7a3
       present: 近期
       #original_hash: 76eec76
-      recent: 过去
+      recent: 刚结束
       #original_hash: 405c12f
       past: 以前
       #original_hash: 52c30f8
       past_from: '%{year}年'
       #original_hash: 7cff459
-      past_all: 所有比赛
+      past_all: 所有以前的比赛
       titles:
         #original_hash: 69447c9
         in_progress: 进行中的比赛
         #original_hash: 9e66032
-        past: '%{year}年的比赛'
+        past: '%{year}年已结束的比赛'
         #original_hash: f628f0e
-        past_all: 所有比赛
+        past_all: 已结束的所有比赛
         #original_hash: cbe8a54
         recent: '过去%{count}天的比赛'
         #original_hash: 914742f
