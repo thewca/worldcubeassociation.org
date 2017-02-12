@@ -596,11 +596,11 @@ zh-TW:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">here</a> for a list of supported scopes.
       scopes:
         #original_hash: 1920e95
@@ -837,6 +837,18 @@ zh-TW:
       wca_id_no_birthdate_html: >-
         我們沒有記錄到此WCA ID的生日。請寄信至<a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA成績組</a>，並且附上一張有您的姓名和生日的合法證件之照片(身份證、駕照等)。
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        我們沒有記錄到此WCA ID的性別。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成績組</a>處理。
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        我們沒有記錄到此WCA ID的國籍。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成績組</a>處理。
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        我們沒有記錄到此WCA ID的姓名。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成績組</a>處理。
       #original_hash: 49083d8
       board_member_cannot_resign: WCA董事成員無法自行辭職! 請找其他WCA董事成員解雇您。
       #original_hash: d02c03b
@@ -858,8 +870,12 @@ zh-TW:
       already_assigned_html: >-
         WCA ID %{link_id}已經被其他帳號使用了。如果您認為有錯誤，請聯絡您當地的<a href='%{link_delegate}'
         target='_blank'>WCA代表</a>。
-      #original_hash: 3391b0b
-      missing_dob_html: 'WCA ID %{link_id}沒有生日，請聯絡%{link_result_team}修改。'
+      #original_hash: d26bfdc
+      missing_dob_html: 'WCA ID %{link_id}沒有生日。'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        請寄信至<a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA成績組</a>處理。
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
   registrations:
