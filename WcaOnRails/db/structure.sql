@@ -777,12 +777,13 @@ CREATE TABLE `registration_payments` (
   `amount_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `stripe_charge_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `refunded_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `refunded_registration_payment_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`),
+  KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1202,3 +1203,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161226223701');
 INSERT INTO schema_migrations (version) VALUES ('20161227202950');
 
 INSERT INTO schema_migrations (version) VALUES ('20170121202850');
+
+INSERT INTO schema_migrations (version) VALUES ('20170212005142');
