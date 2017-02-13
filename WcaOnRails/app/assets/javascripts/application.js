@@ -39,6 +39,7 @@
 //= require moment/ru.js
 //= require moment/da.js
 //= require moment/hr.js
+//= require moment/sl.js
 //= require bootstrap-datetimepicker
 //= require markerclusterer
 //= require bootstrap-table

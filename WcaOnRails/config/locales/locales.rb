@@ -65,5 +65,9 @@ module Locales
       "flag_id": "hr",
       "name": "Hrvatski",
     },
+    "sl": {
+      "flag_id": "si",
+      "name": "Slovensko",
+    },
   }.freeze
 end
