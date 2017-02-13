@@ -633,11 +633,11 @@ nl:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Verschillende scopes met spaties scheiden. Laat leeg om de default
             scope te gebruiken. Zie <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">hier</a> voor een lijst met mogelijke scopes.
       scopes:
         #original_hash: 1920e95
@@ -906,6 +906,21 @@ nl:
         We hebben jouw geboortedatum nog niet. Stuur een e-mail naar <a
         href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
         Results Team</a> met een foto van je legitimatiebewijs.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Voor deze WCA-id hebben we nog geen geslacht. Stuur een e-mail aan <a
+        href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan 
+        <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Voor deze WCA-id hebben wij nog geen naam gevuld. Stuur een e-mail aan
+        <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Je kunt je rol als board member niet opgeven. Vraag het aan een andere
@@ -935,10 +950,12 @@ nl:
         WCA-id %{link_id} is al verbonden aan een andere account. Als jij denkt
         dat dit fout is, neem dan contact op met je lokale <a
         href='%{link_delegate}' target='_blank'>WCA delegate</a>.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        WCA-id %{link_id} heeft nog geen geboortedatum ingevuld. Neem ajb
-        contact op met het %{link_result_team} om dit op te lossen.
+      #original_hash: d26bfdc
+      missing_dob_html: 'WCA-id %{link_id} heeft nog geen geboortedatum ingevuld.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Stuur een e-mail aan <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA-id %{link_id} bestaat niet.'
   registrations:
