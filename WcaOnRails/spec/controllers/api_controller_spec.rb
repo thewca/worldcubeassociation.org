@@ -19,14 +19,14 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it "finds competition" do
-      get :competitions_search, q: "competition"
+      get :competitions_search, params: { q: "competition" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
     end
 
     it "works well with multiple parts" do
-      get :competitions_search, q: "Jfly Comp 15"
+      get :competitions_search, params: { q: "Jfly Comp 15" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -44,7 +44,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it "finds post" do
-      get :posts_search, q: "post title"
+      get :posts_search, params: { q: "post title" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -52,7 +52,7 @@ RSpec.describe Api::V0::ApiController do
 
     it "does not find non world readable post" do
       post.update_column(:world_readable, false)
-      get :posts_search, q: "post title"
+      get :posts_search, params: { q: "post title" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 0
@@ -71,7 +71,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it 'finds Jeremy' do
-      get :users_search, q: "erem"
+      get :users_search, params: { q: "erem" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].select { |u| u["name"] == "Jeremy" }[0]).not_to be_nil
@@ -79,7 +79,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'does not find dummy accounts' do
       FactoryGirl.create :dummy_user, name: "Aaron"
-      get :users_search, q: "aaron"
+      get :users_search, params: { q: "aaron" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 0
@@ -87,7 +87,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'can find dummy accounts' do
       user.update_column(:encrypted_password, "")
-      get :users_search, q: "erem", include_dummy_accounts: true
+      get :users_search, params: { q: "erem", include_dummy_accounts: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -95,7 +95,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it 'can find by wca_id' do
-      get :users_search, q: user.wca_id
+      get :users_search, params: { q: user.wca_id }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -106,7 +106,7 @@ RSpec.describe Api::V0::ApiController do
       let!(:userless_person) { FactoryGirl.create(:person, name: "Bob") }
 
       it "can find by wca_id" do
-        get :users_search, q: userless_person.wca_id, persons_table: true
+        get :users_search, params: { q: userless_person.wca_id, persons_table: true }
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
@@ -118,7 +118,7 @@ RSpec.describe Api::V0::ApiController do
       end
 
       it "can find by name" do
-        get :users_search, q: "bo", persons_table: true
+        get :users_search, params: { q: "bo", persons_table: true }
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
         expect(json["result"].length).to eq 1
@@ -129,7 +129,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'does not find unconfirmed accounts' do
       user.update_column(:confirmed_at, nil)
-      get :users_search, q: "erem"
+      get :users_search, params: { q: "erem" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 0
@@ -137,7 +137,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'can only find delegates' do
       delegate = FactoryGirl.create(:delegate, name: "Jeremy")
-      get :users_search, q: "erem", only_delegates: true
+      get :users_search, params: { q: "erem", only_delegates: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -158,7 +158,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it "finds all the things!" do
-      get :omni_search, q: "jeremy"
+      get :omni_search, params: { q: "jeremy" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 2
@@ -169,7 +169,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it "works well when parts of the name are given" do
-      get :omni_search, q: "Flei Jer"
+      get :omni_search, params: { q: "Flei Jer" }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -180,7 +180,7 @@ RSpec.describe Api::V0::ApiController do
   describe 'show_user_*' do
     it 'can query by id' do
       user = FactoryGirl.create(:user, name: "Jeremy")
-      get :show_user_by_id, id: user.id
+      get :show_user_by_id, params: { id: user.id }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["user"]["name"]).to eq "Jeremy"
@@ -189,7 +189,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'can query by wca id' do
       user = FactoryGirl.create(:user_with_wca_id)
-      get :show_user_by_wca_id, wca_id: user.wca_id
+      get :show_user_by_wca_id, params: { wca_id: user.wca_id }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["user"]["name"]).to eq user.name
@@ -197,7 +197,7 @@ RSpec.describe Api::V0::ApiController do
     end
 
     it '404s nicely' do
-      get :show_user_by_wca_id, wca_id: "foo"
+      get :show_user_by_wca_id, params: { wca_id: "foo" }
       expect(response.status).to eq 404
       json = JSON.parse(response.body)
       expect(json["user"]).to be nil
@@ -221,12 +221,12 @@ RSpec.describe Api::V0::ApiController do
       vietnam_comp = FactoryGirl.create(:competition, :confirmed, :visible, countryId: "Vietnam")
       usa_comp = FactoryGirl.create(:competition, :confirmed, :visible, countryId: "USA")
 
-      get :competitions, country_iso2: "US"
+      get :competitions, params: { country_iso2: "US" }
       json = JSON.parse(response.body)
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq usa_comp.id
 
-      get :competitions, country_iso2: "VN"
+      get :competitions, params: { country_iso2: "VN" }
       json = JSON.parse(response.body)
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq vietnam_comp.id
@@ -236,34 +236,34 @@ RSpec.describe Api::V0::ApiController do
       terrible_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", countryId: "USA")
       awesome_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", countryId: "France")
 
-      get :competitions, q: "AWES"
+      get :competitions, params: { q: "AWES" }
       json = JSON.parse(response.body)
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq awesome_comp.id
 
       # Check that composing a plaintext query and a country query works.
-      get :competitions, q: "competition", country_iso2: "US"
+      get :competitions, params: { q: "competition", country_iso2: "US" }
       json = JSON.parse(response.body)
       expect(json.length).to eq 1
       expect(json[0]["id"]).to eq terrible_comp.id
     end
 
     it 'validates start' do
-      get :competitions, start: "2015"
+      get :competitions, params: { start: "2015" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
       expect(json["errors"]).to eq ["Invalid start: '2015'"]
     end
 
     it 'validates end' do
-      get :competitions, end: "2014"
+      get :competitions, params: { end: "2014" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
       expect(json["errors"]).to eq ["Invalid end: '2014'"]
     end
 
     it 'validates country_iso2' do
-      get :competitions, country_iso2: "this is not a country"
+      get :competitions, params: { country_iso2: "this is not a country" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
       expect(json["errors"]).to eq ["Invalid country_iso2: 'this is not a country'"]
@@ -274,19 +274,19 @@ RSpec.describe Api::V0::ApiController do
       feb_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1))
       march_comp = FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.new(2016, 3, 1))
 
-      get :competitions, start: "2015-02-01"
+      get :competitions, params: { start: "2015-02-01" }
       json = JSON.parse(response.body)
       expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
-      get :competitions, end: "2016-03-01"
+      get :competitions, params: { end: "2016-03-01" }
       json = JSON.parse(response.body)
       expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
-      get :competitions, start: "2015-02-01", end: "2016-02-15"
+      get :competitions, params: { start: "2015-02-01", end: "2016-02-15" }
       json = JSON.parse(response.body)
       expect(json.map { |c| c["id"] }).to eq [feb_comp.id, last_feb_comp.id]
 
-      get :competitions, start: "2015-02-01", end: "2015-02-01"
+      get :competitions, params: { start: "2015-02-01", end: "2015-02-01" }
       json = JSON.parse(response.body)
       expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
     end
@@ -309,7 +309,7 @@ RSpec.describe Api::V0::ApiController do
       url = url[1...-1]
       expect(rel).to eq 'rel="next"'
 
-      get :competitions, Rack::Utils.parse_query(URI(url).query)
+      get :competitions, params: Rack::Utils.parse_query(URI(url).query)
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json.length).to eq Competition.count - 25

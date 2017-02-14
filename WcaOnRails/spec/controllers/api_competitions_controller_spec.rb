@@ -16,7 +16,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
   describe 'GET #show' do
     it '404s on invalid competition' do
-      get :show, id: "FakeId2014"
+      get :show, params: { id: "FakeId2014" }
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
@@ -24,14 +24,14 @@ RSpec.describe Api::V0::CompetitionsController do
 
     it '404s on hidden competition' do
       competition.update_column(:showAtAll, false)
-      get :show, id: competition.id
+      get :show, params: { id: competition.id }
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
     it 'finds competition' do
-      get :show, id: competition.id
+      get :show, params: { id: competition.id }
       expect(response.status).to eq 200
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["id"]).to eq "TestComp2014"

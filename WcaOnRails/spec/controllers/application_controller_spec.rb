@@ -9,7 +9,7 @@ RSpec.describe ApplicationController do
       sign_in user
       expect(user.preferred_locale).to be_nil
       expect(session[:locale]).not_to eq "fr"
-      patch :update_locale, locale: :fr
+      patch :update_locale, params: { locale: :fr }
       user.reload
       expect(user.preferred_locale).to eq "fr"
       expect(session[:locale]).to eq "fr"

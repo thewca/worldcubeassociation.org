@@ -21,18 +21,18 @@ RSpec.describe CompetitionsController do
 
       context "when events are selected" do
         it "only competitions matching all of the selected events are shown" do
-          get :index, event_ids: %w(333 pyram clock)
+          get :index, params: { event_ids: %w(333 pyram clock) }
           expect(assigns(:competitions)).to eq [competition2, competition4]
         end
 
         it "competitions are still sorted by start date" do
-          get :index, event_ids: ["333"]
+          get :index, params: { event_ids: ["333"] }
           expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
         end
 
         # See: https://github.com/thewca/worldcubeassociation.org/issues/472
         it "works when event_ids are passed as a hash instead of an array (facebook redirection)" do
-          get :index, event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" }
+          get :index, params: { event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" } }
           expect(assigns(:competitions)).to eq [competition2, competition4]
         end
       end
@@ -48,7 +48,7 @@ RSpec.describe CompetitionsController do
 
       context "when present is selected" do
         before do
-          get :index, state: :present
+          get :index, params: { state: :present }
         end
 
         it "shows only competitions being in progress or upcoming" do
@@ -62,17 +62,17 @@ RSpec.describe CompetitionsController do
 
       context "when past is selected" do
         it "when all years are selected, shows all past competitions" do
-          get :index, state: :past, year: "all years"
+          get :index, params: { state: :past, year: "all years" }
           expect(assigns(:competitions)).to match [past_comp1, past_comp2]
         end
 
         it "when a single year is selected, shows past competitions from this year" do
-          get :index, state: :past, year: past_comp1.year
+          get :index, params: { state: :past, year: past_comp1.year }
           expect(assigns(:competitions)).to eq [past_comp1]
         end
 
         it "competitions are sorted descending by date" do
-          get :index, state: :past, year: "all years"
+          get :index, params: { state: :past, year: "all years" }
           expect(assigns(:competitions)).to eq [past_comp1, past_comp2]
         end
       end
@@ -85,7 +85,7 @@ RSpec.describe CompetitionsController do
 
       it 'redirects to the old php page' do
         competition.update_column(:showAtAll, true)
-        get :show, id: competition.id
+        get :show, params: { id: competition.id }
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition
       end
@@ -94,7 +94,7 @@ RSpec.describe CompetitionsController do
         competition.update_column(:showAtAll, false)
 
         expect {
-          get :show, id: competition.id
+          get :show, params: { id: competition.id }
         }.to raise_error(ActionController::RoutingError)
       end
     end
@@ -150,11 +150,11 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot see unconfirmed nearby competitions' do
-        get :edit, id: my_competition
+        get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq []
         other_competition.isConfirmed = true
         other_competition.save!
-        get :edit, id: my_competition
+        get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end
@@ -165,7 +165,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can see unconfirmed nearby competitions" do
-        get :edit, id: my_competition
+        get :edit, params: { id: my_competition }
         expect(assigns(:nearby_competitions)).to eq [other_competition]
       end
     end
@@ -174,7 +174,7 @@ RSpec.describe CompetitionsController do
   describe 'POST #create' do
     context 'when not signed in' do
       it 'redirects to the sign in page' do
-        post :create, competition: { name: "Test2015" }
+        post :create, params: { competition: { name: "Test2015" } }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -182,7 +182,7 @@ RSpec.describe CompetitionsController do
     context 'when signed in as a regular user' do
       sign_in { FactoryGirl.create :user }
       it 'does not allow creation' do
-        post :create, competition: { name: "Test2015" }
+        post :create, params: { competition: { name: "Test2015" } }
         expect(response).to redirect_to root_url
       end
     end
@@ -191,7 +191,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'creates a new competition' do
-        post :create, competition: { name: "FatBoyXPC 2015" }
+        post :create, params: { competition: { name: "FatBoyXPC 2015" } }
         expect(response).to redirect_to edit_competition_path("FatBoyXPC2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "FatBoyXPC2015"
@@ -200,7 +200,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "creates a competition with correct website when using WCA as competition's website" do
-        post :create, competition: { name: "Awesome Competition 2016", external_website: nil, generate_website: "1" }
+        post :create, params: { competition: { name: "Awesome Competition 2016", external_website: nil, generate_website: "1" } }
         competition = assigns(:competition)
         expect(competition.website).to eq competition_url(competition)
       end
@@ -213,7 +213,7 @@ RSpec.describe CompetitionsController do
       end
 
       it 'creates a new competition' do
-        post :create, competition: { name: "Test 2015", delegate_ids: delegate.id }
+        post :create, params: { competition: { name: "Test 2015", delegate_ids: delegate.id } }
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq "Test2015"
@@ -223,7 +223,7 @@ RSpec.describe CompetitionsController do
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
         competition = FactoryGirl.create :competition, :with_delegate
-        post :create, competition: { name: competition.name }
+        post :create, params: { competition: { name: competition.name } }
         expect(response).to render_template(:new)
         new_comp = assigns(:competition)
         expect(new_comp.errors.messages[:name]).to eq ["has already been taken"]
@@ -240,7 +240,7 @@ RSpec.describe CompetitionsController do
         competition.delegates << user1
         competition.organizers << user2
         competition.organizers << user3
-        get :clone_competition, id: competition
+        get :clone_competition, params: { id: competition }
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq ""
         expect(new_comp.name).to eq ""
@@ -267,7 +267,7 @@ RSpec.describe CompetitionsController do
       it 'clones a competition that they delegated' do
         # First, make ourselves the delegate of the competition we're going to clone.
         competition.delegates = [delegate]
-        get :clone_competition, id: competition
+        get :clone_competition, params: { id: competition }
         new_comp = assigns(:competition)
         expect(new_comp.id).to eq ""
 
@@ -285,24 +285,24 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'redirects organizer view to organizer view' do
-        patch :update, id: competition, competition: { name: competition.name }
+        patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(response).to redirect_to edit_competition_path(competition)
       end
 
       it 'redirects admin view to admin view' do
-        patch :update, id: competition, competition: { name: competition.name }, competition_admin_view: true
+        patch :update, params: { id: competition, competition: { name: competition.name }, competition_admin_view: true }
         expect(response).to redirect_to admin_edit_competition_path(competition)
       end
 
       it 'renders admin view when failing to save admin view' do
-        patch :update, id: competition, competition: { name: "fooo" }, competition_admin_view: true
+        patch :update, params: { id: competition, competition: { name: "fooo" }, competition_admin_view: true }
         expect(response).to render_template :edit
         competition_admin_view = assigns(:competition_admin_view)
         expect(competition_admin_view).to be true
       end
 
       it 'can confirm competition' do
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response).to redirect_to edit_competition_path(competition)
         expect(competition.reload.isConfirmed?).to eq true
       end
@@ -312,21 +312,21 @@ RSpec.describe CompetitionsController do
         delegate2 = FactoryGirl.create(:delegate)
         delegates = [delegate1, delegate2]
         delegate_ids = delegates.map(&:id).join(",")
-        patch :update, id: competition, competition: { delegate_ids: delegate_ids }
+        patch :update, params: { id: competition, competition: { delegate_ids: delegate_ids } }
         expect(competition.reload.delegates).to eq delegates
       end
 
       it "saving removes nonexistent delegates" do
         invalid_competition_delegate = CompetitionDelegate.new(competition_id: competition.id, delegate_id: -1)
         invalid_competition_delegate.save(validate: false)
-        patch :update, id: competition, competition: { name: competition.name }
+        patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
         invalid_competition_organizer = CompetitionOrganizer.new(competition_id: competition.id, organizer_id: -1)
         invalid_competition_organizer.save(validate: false)
-        patch :update, id: competition, competition: { name: competition.name }
+        patch :update, params: { id: competition, competition: { name: competition.name } }
         expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
       end
 
@@ -335,7 +335,7 @@ RSpec.describe CompetitionsController do
         cos = competition.competition_organizers.to_a
 
         old_id = competition.id
-        patch :update, id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") }
+        patch :update, params: { id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") } }
 
         expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
         expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
@@ -355,7 +355,7 @@ RSpec.describe CompetitionsController do
       it 'cannot pass a non-delegate as delegate' do
         delegate_ids_old = future_competition.delegate_ids
         fake_delegate = FactoryGirl.create(:user)
-        post :update, id: future_competition, competition: { delegate_ids: fake_delegate.id }
+        post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
         future_competition.reload
@@ -364,13 +364,13 @@ RSpec.describe CompetitionsController do
 
       it 'can change the delegate' do
         new_delegate = FactoryGirl.create(:delegate)
-        post :update, id: competition, competition: { delegate_ids: new_delegate.id }
+        post :update, params: { id: competition, competition: { delegate_ids: new_delegate.id } }
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
       end
 
       it 'cannot confirm competition' do
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response.status).to redirect_to edit_competition_path(competition)
         expect(competition.reload.isConfirmed?).to eq false
       end
@@ -382,7 +382,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: organizer.id }
+        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: organizer.id } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -390,7 +390,7 @@ RSpec.describe CompetitionsController do
       it "organizer cannot demote oneself" do
         # Attempt to remove ourself as an organizer. This should not be allowed, because
         # we would not be allowed to access the page anymore.
-        patch :update, id: competition, competition: { organizer_ids: "" }
+        patch :update, params: { id: competition, competition: { organizer_ids: "" } }
         invalid_competition = assigns(:competition)
         expect(invalid_competition).to be_invalid
         expect(invalid_competition.organizer_ids).to eq ""
@@ -413,20 +413,20 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        patch :update, id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true }
+        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
       end
 
       it "board member can delete a non-visible competition" do
         competition.update_attributes(showAtAll: false)
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(Competition.find_by_id(competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
         competition.update_attributes(showAtAll: true)
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -440,7 +440,7 @@ RSpec.describe CompetitionsController do
       end
 
       it 'can confirm competition' do
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Confirm"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
         expect(response).to redirect_to edit_competition_path(competition)
         expect(competition.reload.isConfirmed?).to eq true
       end
@@ -449,7 +449,7 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(isConfirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -458,7 +458,7 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(isConfirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(flash[:danger]).to eq "Cannot delete a confirmed competition."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
@@ -467,7 +467,7 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(isConfirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(Competition.find_by_id(competition.id)).to be_nil
         expect(response).to redirect_to root_url
       end
@@ -477,7 +477,7 @@ RSpec.describe CompetitionsController do
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
-        patch :update, id: competition, competition: { registration_open: new_open, registration_close: new_close }
+        patch :update, params: { id: competition, competition: { registration_open: new_open, registration_close: new_close } }
         expect(competition.reload.registration_open).to eq new_open
         expect(competition.reload.registration_close).to eq new_close
       end
@@ -493,7 +493,7 @@ RSpec.describe CompetitionsController do
         competition.update_attributes(isConfirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
-        patch :update, id: competition, competition: { name: competition.name }, commit: "Delete"
+        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
     end
@@ -511,7 +511,7 @@ RSpec.describe CompetitionsController do
 
       it 'creates an announcement post' do
         competition.update_attributes(start_date: "2011-12-04", end_date: "2011-12-05")
-        get :post_announcement, id: competition
+        get :post_announcement, params: { id: competition }
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
         expect(post.body).to match(/in #{competition.cityName}, #{competition.countryId}\./)
@@ -519,7 +519,7 @@ RSpec.describe CompetitionsController do
 
       it 'handles nil start date' do
         competition.update_attributes(start_date: "", end_date: "")
-        get :post_announcement, id: competition
+        get :post_announcement, params: { id: competition }
         post = assigns(:post)
         expect(post.title).to match(/No date/)
       end
@@ -607,7 +607,7 @@ RSpec.describe CompetitionsController do
           regionalAverageRecord: "",
         )
         expect(competition.results_posted_at).to be nil
-        get :post_results, id: competition
+        get :post_results, params: { id: competition }
         post = assigns(:post)
         expect(post.body).to include "World records: Jeremy Fleischman 3x3x3 One-Handed 50.00 (average), " \
           "Vincent Sheu (2006SHEU01) 3x3x3 Fewest Moves 25 (single), 3x3x3 Fewest Moves 26.00 (average), " \
@@ -624,7 +624,7 @@ RSpec.describe CompetitionsController do
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
-        get :post_results, id: competition
+        get :post_results, params: { id: competition }
         assert_enqueued_jobs 4
       end
 
@@ -635,7 +635,7 @@ RSpec.describe CompetitionsController do
         FactoryGirl.create_list(:registration, 4, :accepted, competition: competition)
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
-        get :post_results, id: competition
+        get :post_results, params: { id: competition }
         assert_enqueued_jobs 2
       end
     end
@@ -724,7 +724,7 @@ RSpec.describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        get :edit_events, id: competition.id
+        get :edit_events, params: { id: competition.id }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -733,7 +733,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'shows the edit competition events form' do
-        get :edit_events, id: competition.id
+        get :edit_events, params: { id: competition.id }
         expect(response).to render_template :edit_events
       end
     end
@@ -743,7 +743,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          get :edit_events, id: competition.id
+          get :edit_events, params: { id: competition.id }
         }.to raise_error(ActionController::RoutingError)
       end
     end
@@ -754,7 +754,7 @@ RSpec.describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        patch :update_events, id: competition, competition: { name: competition.name }
+        patch :update_events, params: { id: competition, competition: { name: competition.name } }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -763,7 +763,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'updates the competition events' do
-        patch :update_events, id: competition, competition: { name: competition.name }
+        patch :update_events, params: { id: competition, competition: { name: competition.name } }
         expect(response).to redirect_to edit_events_path(competition)
       end
     end
@@ -773,7 +773,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          patch :update_events, id: competition, competition: { name: competition.name }
+          patch :update_events, params: { id: competition, competition: { name: competition.name } }
         }.to raise_error(ActionController::RoutingError)
       end
     end
@@ -784,7 +784,7 @@ RSpec.describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        get :payment_setup, id: competition
+        get :payment_setup, params: { id: competition }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -793,7 +793,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'displays payment setup status' do
-        get :payment_setup, id: competition
+        get :payment_setup, params: { id: competition }
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition
       end
@@ -804,7 +804,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          get :payment_setup, id: competition
+          get :payment_setup, params: { id: competition }
         }.to raise_error(ActionController::RoutingError)
       end
     end
@@ -815,7 +815,7 @@ RSpec.describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        post :revoke_stripe_access, id: competition
+        post :revoke_stripe_access, params: { id: competition }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -824,7 +824,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryGirl.create :admin }
 
       it 'redirects to competition payment setup' do
-        post :revoke_stripe_access, id: competition
+        post :revoke_stripe_access, params: { id: competition }
         expect(response).to redirect_to competitions_payment_setup_path(competition)
       end
     end
@@ -834,7 +834,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          post :revoke_stripe_access, id: competition
+          post :revoke_stripe_access, params: { id: competition }
         }.to raise_error(ActionController::RoutingError)
       end
     end
@@ -845,7 +845,7 @@ RSpec.describe CompetitionsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        get :stripe_connect, state: competition
+        get :stripe_connect, params: { state: competition }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -855,7 +855,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          get :stripe_connect, state: competition
+          get :stripe_connect, params: { state: competition }
         }.to raise_error(ActionController::RoutingError)
       end
     end

@@ -8,12 +8,12 @@ RSpec.describe "HTTP_ACCEPT" do
   include Capybara::DSL
 
   it 'handles malformed HTTP_ACCEPT' do
-    get root_url, nil, "HTTP_ACCEPT" => "*/*;"
+    get root_url, params: { "HTTP_ACCEPT" => "*/*;" }
     expect(response).to be_success
   end
 
   it 'rss' do
-    get rss_url, nil, "HTTP_ACCEPT" => "text/plain"
+    get rss_url, params: { "HTTP_ACCEPT" => "text/plain" }
     expect(response).to be_success
   end
 end

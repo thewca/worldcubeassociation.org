@@ -15,7 +15,7 @@ RSpec.describe PersonsController, type: :controller do
       let!(:result) { FactoryGirl.create(:result, pos: 1, roundId: "f", competitionId: competition.id, person: person1) }
 
       it "responds with correct JSON when region and search are specified" do
-        xhr :get, :index, search: "Jennifer", region: "USA"
+        get :index, params: { search: "Jennifer", region: "USA" }, xhr: true
         json = JSON.parse(response.body)
         expect(json['total']).to eq 1
         json_person = json['rows'][0]
@@ -27,21 +27,21 @@ RSpec.describe PersonsController, type: :controller do
       end
 
       it "selecting continent works" do
-        xhr :get, :index, region: "_Europe"
+        get :index, params: { region: "_Europe" }, xhr: true
         json = JSON.parse(response.body)
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1
       end
 
       it "searching by WCA ID works" do
-        xhr :get, :index, search: "2016"
+        get :index, params: { search: "2016" }, xhr: true
         json = JSON.parse(response.body)
         expect(json['total']).to eq 2
         expect(json['rows'].count).to eq 2
       end
 
       it "works well when parts of the name are given" do
-        xhr :get, :index, search: "Law Jenn"
+        get :index, params: { search: "Law Jenn" }, xhr: true
         json = JSON.parse(response.body)
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1

@@ -8,7 +8,7 @@ RSpec.describe DelegateReportsController do
 
   context "not logged in" do
     it "redirects to sign in" do
-      get :show, competition_id: comp.id
+      get :show, params: { competition_id: comp.id }
       expect(response).to redirect_to(new_user_session_path)
     end
   end
@@ -17,7 +17,7 @@ RSpec.describe DelegateReportsController do
     sign_in { FactoryGirl.create(:user) }
 
     it "redirects to home page" do
-      get :show, competition_id: comp.id
+      get :show, params: { competition_id: comp.id }
       expect(response).to redirect_to(root_url)
     end
   end
@@ -26,12 +26,12 @@ RSpec.describe DelegateReportsController do
     sign_in { FactoryGirl.create(:delegate) }
 
     it "redirects to home page" do
-      get :edit, competition_id: comp.id
+      get :edit, params: { competition_id: comp.id }
       expect(response).to redirect_to(root_url)
     end
 
     it "redirects to home page" do
-      patch :update, competition_id: comp.id
+      patch :update, params: { competition_id: comp.id }
       expect(response).to redirect_to(root_url)
     end
   end
@@ -43,12 +43,12 @@ RSpec.describe DelegateReportsController do
     end
 
     it "can view edit page" do
-      get :edit, competition_id: comp.id
+      get :edit, params: { competition_id: comp.id }
       expect(response.status).to eq 200
     end
 
     it "can edit report" do
-      post :update, competition_id: comp.id, delegate_report: { remarks: "My new remarks" }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks" } }
       expect(response).to redirect_to delegate_report_edit_path(comp)
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
@@ -75,7 +75,7 @@ RSpec.describe DelegateReportsController do
     it "can post report and cannot edit report if it's posted" do
       # Update the remarks *and* set posted to true for next test.
       expect(CompetitionsMailer).to receive(:notify_of_delegate_report_submission).with(comp).and_call_original
-      post :update, competition_id: comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true } }
       expect(response).to redirect_to(delegate_report_path(comp))
       assert_enqueued_jobs 1
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
@@ -85,14 +85,14 @@ RSpec.describe DelegateReportsController do
       expect(comp.delegate_report.posted_by_user_id).to eq user.id
 
       # Try to update the report when it's posted.
-      post :update, competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" }
+      post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newerer remarks" } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
     end
 
     it "posting report for an ancient competition doesn't send email notification" do
       # Update the remarks *and* set posted to true for next test.
-      post :update, competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true }
+      post :update, params: { competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", schedule_url: "http://example.com", posted: true } }
       expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
       expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
       assert_enqueued_jobs 0

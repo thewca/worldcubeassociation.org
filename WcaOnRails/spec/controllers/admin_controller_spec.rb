@@ -36,7 +36,7 @@ RSpec.describe AdminController, type: :controller do
     let(:person2) { FactoryGirl.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :year, :month, :day)) }
 
     it 'can merge people' do
-      post :do_merge_people, merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id }
+      post :do_merge_people, params: { merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id } }
       expect(response.status).to eq 200
       expect(response).to render_template :merge_people
       expect(flash.now[:success]).to eq "Successfully merged #{person2.wca_id} into #{person1.wca_id}!"

@@ -23,7 +23,7 @@ RSpec.describe PostsController do
 
     describe "GET #show" do
       it "finds a post by slug" do
-        get :show, id: post1.slug
+        get :show, params: { id: post1.slug }
         expect(assigns(:post)).to eq post1
       end
 
@@ -34,15 +34,15 @@ RSpec.describe PostsController do
         post1 = FactoryGirl.create(:post)
         post1.update_attribute(:slug, "#{post2.id}-foo")
 
-        get :show, id: post2.slug
+        get :show, params: { id: post2.slug }
         expect(assigns(:post)).to eq post2
 
-        get :show, id: post1.slug
+        get :show, params: { id: post1.slug }
         expect(assigns(:post)).to eq post1
       end
 
       it "cannot find not worldreadable posts" do
-        expect { get :show, id: hidden_post.slug }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { get :show, params: { id: hidden_post.slug } }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe PostsController do
 
     describe "POST #create" do
       it "creates a post" do
-        post :create, post: { title: "Title", body: "body" }
+        post :create, params: { post: { title: "Title", body: "body" } }
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"

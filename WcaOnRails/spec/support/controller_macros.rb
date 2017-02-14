@@ -18,11 +18,11 @@ module RequestMacros
   def sign_in
     before :each do
       user = yield
-      post_via_redirect(
-        new_user_session_path,
+      post new_user_session_path, params: {
         'user[login]' => user.email,
         'user[password]' => user.password,
-      )
+      }
+      follow_redirect!
     end
   end
 end

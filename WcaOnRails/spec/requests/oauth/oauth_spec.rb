@@ -7,7 +7,7 @@ RSpec.describe "oauth api" do
   let(:user) { FactoryGirl.create :user_with_wca_id }
 
   it 'can authenticate with grant_type password' do
-    post oauth_token_path, grant_type: "password", username: user.email, password: user.password, scope: "public email"
+    post oauth_token_path, params: { grant_type: "password", username: user.email, password: user.password, scope: "public email" }
     expect(response).to be_success
     json = JSON.parse(response.body)
     expect(json['error']).to eq(nil)
@@ -40,7 +40,7 @@ RSpec.describe "oauth api" do
 
     # We've now received an authorization_code from the user, lets request an
     # access_token.
-    post oauth_token_path, grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_app.redirect_uri
+    post oauth_token_path, params: { grant_type: "authorization_code", client_id: oauth_app.uid, client_secret: oauth_app.secret, code: authorization_code, redirect_uri: oauth_app.redirect_uri }
     expect(response).to be_success
     json = JSON.parse(response.body)
     expect(json['error']).to eq(nil)
@@ -74,7 +74,7 @@ RSpec.describe "oauth api" do
 
   def verify_access_token(access_token)
     integration_session.reset! # posting to oauth_token_path littered our state
-    get api_v0_me_path, nil, "Authorization" => "Bearer #{access_token}"
+    get api_v0_me_path, headers: { "Authorization" => "Bearer #{access_token}" }
     expect(response).to be_success
     json = JSON.parse(response.body)
     # We just do a sanity check of the /me route here. There is a more
