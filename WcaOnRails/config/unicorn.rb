@@ -19,7 +19,7 @@ else
   stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
   stdout_path "#{dir}/log/unicorn-#{rack_env}.log"
 
-  worker_processes((Etc.nprocessors * 3).ceil)
+  worker_processes((Etc.nprocessors * 2).ceil)
 end
 
 listen "/tmp/unicorn.wca.sock"
