@@ -9,7 +9,7 @@ class VotesController < ApplicationController
   end
 
   def create
-    @vote = Vote.new(vote_params)
+    @vote = current_user.votes.build(vote_params)
     if @vote.save
       flash[:success] = "Vote saved"
       redirect_to polls_vote_path(@vote.poll.id)
@@ -31,8 +31,6 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    vote_params = params.require(:vote).permit(:poll_id, :comment, poll_option_ids: [])
-    vote_params[:user_id] = current_user.id
-    vote_params
+    params.require(:vote).permit(:poll_id, :comment, poll_option_ids: [])
   end
 end

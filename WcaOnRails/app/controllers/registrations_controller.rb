@@ -3,13 +3,12 @@ class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
 
   private def competition_from_params
-    if params[:competition_id]
-      competition = Competition.find(params[:competition_id])
-    else
-      registration = Registration.find(params[:id])
-      competition = registration.competition
-    end
-    if !competition.user_can_view?(current_user)
+    competition = if params[:competition_id]
+                    Competition.find(params[:competition_id])
+                  else
+                    Registration.find(params[:id]).competition
+                  end
+    unless competition.user_can_view?(current_user)
       raise ActionController::RoutingError.new('Not Found')
     end
     competition
@@ -289,18 +288,14 @@ class RegistrationsController < ApplicationController
         :accepted_by,
         :deleted_by,
       ]
-      status = params[:registration][:status]
-      if status == "accepted"
-        params[:registration][:accepted_at] = Time.now
-        params[:registration][:accepted_by] = current_user.id
-        params[:registration][:deleted_at] = nil
-      elsif status == "deleted"
-        params[:registration][:deleted_at] = Time.now
-        params[:registration][:deleted_by] = current_user.id
-      else
-        params[:registration][:accepted_at] = nil
-        params[:registration][:deleted_at] = nil
-      end
+      params[:registration].merge! case params[:registration][:status]
+                                   when "accepted"
+                                     { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
+                                   when "deleted"
+                                     { deleted_at: Time.now, deleted_by: current_user.id }
+                                   else
+                                     { accepted_at: nil, deleted_at: nil }
+                                   end
     end
     params.require(:registration).permit(*permitted_params)
   end

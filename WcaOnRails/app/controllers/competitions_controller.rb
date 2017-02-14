@@ -17,11 +17,11 @@ class CompetitionsController < ApplicationController
   ]
 
   private def competition_from_params
-    competition = Competition.find(params[:competition_id] || params[:id])
-    if !competition.user_can_view?(current_user)
-      raise ActionController::RoutingError.new('Not Found')
+    Competition.find(params[:competition_id] || params[:id]).tap do |competition|
+      unless competition.user_can_view?(current_user)
+        raise ActionController::RoutingError.new('Not Found')
+      end
     end
-    competition
   end
 
   before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
@@ -487,11 +487,11 @@ class CompetitionsController < ApplicationController
       end
     end
 
-    competition_params = params.require(:competition).permit(*permitted_competition_params)
-    if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
-      competition_params[:isConfirmed] = true
+    params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
+      if params[:commit] == "Confirm" && current_user.can_confirm_competition?(@competition)
+        competition_params[:isConfirmed] = true
+      end
+      competition_params[:editing_user_id] = current_user.id
     end
-    competition_params[:editing_user_id] = current_user.id
-    competition_params
   end
 end
