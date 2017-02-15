@@ -122,13 +122,13 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    user_params = params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a)
-    if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
-      user_params["senior_delegate_id"] = nil
+    params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
+      if user_params.key?(:delegate_status) && !User.delegate_status_allows_senior_delegate(user_params[:delegate_status])
+        user_params["senior_delegate_id"] = nil
+      end
+      if user_params.key?(:wca_id)
+        user_params[:wca_id] = user_params[:wca_id].upcase
+      end
     end
-    if user_params.key?(:wca_id)
-      user_params[:wca_id] = user_params[:wca_id].upcase
-    end
-    user_params
   end
 end
