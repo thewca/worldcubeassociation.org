@@ -91,9 +91,12 @@ Rails.application.routes.draw do
   get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
 
   get 'robots' => 'static_pages#robots'
+
   get 'server-status' => 'server_status#index'
-  get 'edit-translation' => 'git_hub#edit_translation', as: :edit_translation
-  patch 'update-translation' => 'git_hub#update_translation', as: :update_translation
+
+  get 'translations/status' => 'translations_status#index'
+  get 'translations/edit' => 'git_hub#edit_translation', as: :edit_translation
+  patch 'translations/update' => 'git_hub#update_translation', as: :update_translation
 
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'
