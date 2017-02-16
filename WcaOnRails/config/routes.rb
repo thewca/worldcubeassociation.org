@@ -94,9 +94,10 @@ Rails.application.routes.draw do
 
   get 'server-status' => 'server_status#index'
 
-  get 'translations/status' => 'translations_status#index'
-  get 'translations/edit' => 'git_hub#edit_translation', as: :edit_translation
-  patch 'translations/update' => 'git_hub#update_translation', as: :update_translation
+  get 'translations', to: redirect('translations/status', status: 302)
+  get 'translations/status' => 'translations#index'
+  get 'translations/edit' => 'translations#edit'
+  patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
   get 'delegates' => 'static_pages#delegates'
