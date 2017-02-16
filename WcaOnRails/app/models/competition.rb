@@ -27,7 +27,7 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
-  scope :not_over, -> { where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Datetime) >= ?", Date.today) }
+  scope :not_over, -> { where("end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
@@ -545,7 +545,7 @@ class Competition < ApplicationRecord
   end
 
   def nearby_competitions(days, distance)
-    Competition.where("ABS(DATEDIFF(?, CONCAT(year, '-', month, '-', day))) <= ? AND id <> ?", start_date, days, id)
+    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
@@ -760,7 +760,7 @@ class Competition < ApplicationRecord
       if !start_date
         raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
       end
-      competitions = competitions.where("CAST(CONCAT(year,'-',month,'-',day) as Date) >= ?", start_date)
+      competitions = competitions.where("start_date >= ?", start_date)
     end
 
     if params[:end].present?
@@ -768,7 +768,7 @@ class Competition < ApplicationRecord
       if !end_date
         raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
       end
-      competitions = competitions.where("CAST(CONCAT(endYear,'-',endMonth,'-',endDay) as Date) <= ?", end_date)
+      competitions = competitions.where("end_date <= ?", end_date)
     end
 
     query&.split&.each do |part|

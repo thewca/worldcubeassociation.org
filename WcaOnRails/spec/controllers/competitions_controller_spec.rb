@@ -38,7 +38,7 @@ RSpec.describe CompetitionsController do
       end
     end
 
-    describe "selecting present/past competitions" do
+    describe "selecting present/past/recent competitions" do
       let!(:past_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
       let!(:past_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
       let!(:in_progress_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
@@ -74,6 +74,16 @@ RSpec.describe CompetitionsController do
         it "competitions are sorted descending by date" do
           get :index, params: { state: :past, year: "all years" }
           expect(assigns(:competitions)).to eq [past_comp1, past_comp2]
+        end
+      end
+
+      context "when recent is selected" do
+        before do
+          get :index, state: :recent
+        end
+
+        it "shows in progress competition that ends today" do
+          expect(assigns(:competitions)).to match_array [in_progress_comp2]
         end
       end
     end
