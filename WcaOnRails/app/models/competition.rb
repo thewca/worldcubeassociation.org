@@ -67,6 +67,8 @@ class Competition < ApplicationRecord
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
+    start_date
+    end_date
     name
     year
     month
@@ -257,7 +259,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report
 
-  attr_writer :start_date, :end_date
   before_validation :unpack_dates
   validate :dates_must_be_valid
 
@@ -496,75 +497,41 @@ class Competition < ApplicationRecord
     self.end_date < (Date.today - days) && (self.delegate_report.posted_at.nil? || results_posted_at.nil?)
   end
 
-  def start_date
-    year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
-  end
-
-  def end_date
-    endYear == 0 || endMonth == 0 || endDay == 0 ? nil : Date.new(endYear, endMonth, endDay)
-  end
-
   private def unpack_dates
-    if @start_date.nil? && !start_date.blank?
-      @start_date = start_date.strftime("%F")
-    end
-    if @start_date.blank?
+    if start_date
+      self.year = start_date.year
+      self.month = start_date.month
+      self.day = start_date.day
+    else
       self.year = self.month = self.day = 0
+    end
+
+    if end_date
+      self.endYear = end_date.year
+      self.endMonth = end_date.month
+      self.endDay = end_date.day
     else
-      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
-        errors.add(:start_date, I18n.t('common.errors.invalid'))
-        return
-      end
-      self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
-      unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:start_date, I18n.t('common.errors.invalid'))
-        return
-      end
-    end
-    if @end_date.nil? && !end_date.blank?
-      @end_date = end_date.strftime("%F")
-    end
-    if @end_date.blank?
       self.endYear = self.endMonth = self.endDay = 0
-    else
-      unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
-        errors.add(:end_date, I18n.t('common.errors.invalid'))
-        return
-      end
-      self.endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
-      unless Date.valid_date? self.endYear, self.endMonth, self.endDay
-        errors.add(:end_date, I18n.t('common.errors.invalid'))
-        return
-      end
     end
   end
 
   private def dates_must_be_valid
-    if !confirmed_or_visible? && [year, month, day, endYear, endMonth, endDay].all? { |n| n == 0 }
-      # If the user left both dates empty, that's a-okay.
+    if start_date.nil? && end_date.nil?
+      if confirmed_or_visible?
+        errors.add(:start_date, I18n.t('common.errors.invalid'))
+        errors.add(:end_date, I18n.t('common.errors.invalid'))
+      end
       return
     end
 
-    valid_dates = true
-    unless Date.valid_date? year, month, day
-      valid_dates = false
-      errors.add(:start_date, I18n.t('common.errors.invalid'))
-    end
-    unless Date.valid_date? endYear, endMonth, endDay
-      valid_dates = false
-      errors.add(:end_date, I18n.t('common.errors.invalid'))
-    end
-    unless valid_dates
-      # There's no use continuing validation at this point.
-      return
-    end
+    return errors.add(:start_date, I18n.t('common.errors.invalid')) unless start_date.present?
+    return errors.add(:end_date, I18n.t('common.errors.invalid')) unless end_date.present?
 
     if end_date < start_date
       errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
     end
 
-    span_in_days = (end_date - start_date).to_i
-    if span_in_days > MAX_SPAN_DAYS
+    if (end_date - start_date).to_i > MAX_SPAN_DAYS
       errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
     end
   end
