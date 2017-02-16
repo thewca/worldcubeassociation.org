@@ -23,7 +23,7 @@ class TranslationsController < ApplicationController
     content = params[:translation][:content].delete("\r") # We don't want \r characters, but browsers add them automatically.
     locale = params[:translation][:locale]
     if [locale, content].any?(&:blank?)
-      flash[:danger] = "Both locale and content must be present."
+      flash.now[:danger] = "Both locale and content must be present."
       render :edit
       return
     end
