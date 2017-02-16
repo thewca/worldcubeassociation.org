@@ -91,6 +91,9 @@ Style/BlockDelimiters:
 Style/ClassAndModuleChildren:
   Enabled: false
 
+Style/ClassVars:
+  Enabled: false
+
 Style/ConditionalAssignment:
   Enabled: false
 

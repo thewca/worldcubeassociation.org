@@ -13,12 +13,19 @@ class ApplicationController < ActionController::Base
     ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
   end
 
+  def self.locale_counts
+    @@locale_counts
+  end
+
   def set_locale
     # If the locale for the session is not set, we want to infer it from the following sources:
     #  - the current user preferred locale
     #  - the Accept-Language http header
     session[:locale] ||= current_user&.preferred_locale || http_accept_language.preferred_language_from(I18n.available_locales)
     I18n.locale = session[:locale] || I18n.default_locale
+
+    @@locale_counts ||= Hash.new(0)
+    @@locale_counts[I18n.locale] += 1
   end
 
   def update_locale
