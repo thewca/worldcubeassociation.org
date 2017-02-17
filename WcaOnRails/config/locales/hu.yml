@@ -642,12 +642,12 @@ hu:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Válaszd el a scope-okat szőközökkel. Hagyj üres helyet az default
             scope-(ok)nak. Lásd <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
-            target="_blank">here</a> a támogatott scope-ok listjáért.
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            target="_blank">itt</a> a támogatott scope-ok listjáért.
       scopes:
         #original_hash: 1920e95
         public: >-
@@ -924,6 +924,23 @@ hu:
         target='_blank'>WCA Results Team-nek</a> és csatolj egy fényképet egy
         hivatalos dokumentumról (személyigazolvány, jogosítvány, stb.), ahol a
         neved és a születési dátumod is látszik.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Ehhez a WCA ID-hez nincs megadva nem. Kérlek, hogy a probléma
+        megoldásához lépj kapcsolatba a <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a>-mel.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Ezzeh a WCA ID-hez nincs megadva nemzetiség. Kérlek, hogy ennek a
+        megoldásához lépj kapcsolatba a <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a>-mel.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Ezzeh a WCA ID-hez nincs megadva név. Kérlek, hogy ennek a megoldásához
+        lépj kapcsolatba a <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Results Team</a>-mel.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Nem tudsz lemondani a Board tag beosztásodról, egy másik Board tagnak
@@ -956,10 +973,13 @@ hu:
         felhasználóhoz. Ha úgy gondolod, hogy ez hibásan történt, lépj
         kapcsolatba a helyi <a href='%{link_delegate}' target='_blank'>WCA
         delegáltaddal</a>.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        A WCA ID-hez (%{link_id}) nincs hozzárendelve születési dátum. Kérlek
-        lépj kapcsolatba a %{link_result_team}-mel, hogy ezt javítani tudják.
+      #original_hash: d26bfdc
+      missing_dob_html: 'A WCA ID-hez (%{link_id}) nincs hozzárendelve születési dátum.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Kérlek, hogy ennek a megoldásához lépj kapcsolatba a <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a>-mel.
       #original_hash: 92aa857
       unknown_wca_id_html: 'A WCA ID (%{link_id}) nem létezik.'
   registrations:
@@ -1792,7 +1812,7 @@ hu:
         '4': >-
           A World Cube Association alapeszméje, hogy <br /> <strong>emberek a
           világ minden tájáról közösen jól érezzék magukat egy barátságos
-          környezetben, segítség egymást és sportszerűen
+          környezetben, segítsék egymást és sportszerűen
           viselkedejenek.</strong>
     structure:
       #original_hash: 9482c5d
