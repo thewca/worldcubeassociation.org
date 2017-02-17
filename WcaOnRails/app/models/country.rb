@@ -56,7 +56,10 @@ class Country < ActiveRecord::Base
       'pt-BR': 'pt',
       'zh-CN': 'zh',
       'zh-TW': 'zh-Hant',
+      # See https://github.com/thewca/worldcubeassociation.org/issues/1339
+      'sl': 'hr',
     }.fetch(wca_locale, wca_locale)
+
     collator = TwitterCldr::Collation::Collator.new(cldr_locale)
 
     array.sort_by! { |element| collator.get_sort_key(block.call(element)) }
