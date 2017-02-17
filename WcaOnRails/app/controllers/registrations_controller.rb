@@ -245,7 +245,7 @@ class RegistrationsController < ApplicationController
       refund.amount,
       refund.currency,
       refund.id,
-      refund.charge,
+      payment.id,
     )
 
     flash[:success] = 'Payment was refunded'

@@ -649,14 +649,15 @@ RSpec.describe RegistrationsController do
           },
         ).id
         post :process_payment, competition_id: competition.id, stripeToken: token_id
-        payment_id = registration.reload.registration_payments.first.id
-        post :refund_payment, id: registration.id, payment_id: payment_id
+        payment = registration.reload.registration_payments.first
+        post :refund_payment, id: registration.id, payment_id: payment.id
         expect(response).to redirect_to edit_registration_path(registration)
         refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
         expect(competition.base_entry_fee).to be > 0
         expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
         expect(refund.amount).to eq competition.base_entry_fee.cents
         expect(flash[:success]).to eq "Payment was refunded"
+        expect(payment.reload.amount_available_for_refund).to eq 0
       end
     end
   end

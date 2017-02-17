@@ -126,16 +126,18 @@ class Registration < ActiveRecord::Base
     )
   end
 
-  def record_refund(amount, currency_code, stripe_refund_id, stripe_charge_id)
+  def record_refund(
+    amount,
+    currency_code,
+    stripe_refund_id,
+    refunded_registration_payment_id
+  )
     registration_payments.create!(
       amount_lowest_denomination: amount * -1,
       currency_code: currency_code,
       stripe_charge_id: stripe_refund_id,
-      refunded_at: Time.now,
+      refunded_registration_payment_id: refunded_registration_payment_id,
     )
-    payment = RegistrationPayment.find_by_stripe_charge_id(stripe_charge_id)
-    payment.refunded_at = Time.now
-    payment.save!
   end
 
   # Since Registration.events only includes saved events
