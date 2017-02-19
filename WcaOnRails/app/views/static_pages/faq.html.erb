@@ -29,13 +29,13 @@ faq_variables = {
   %>
   <% @answers_markup = capture do %>
     <ul id="faq-list" class="list-group">
-
-
+      <% answers_in_english = t("faq.answers", locale: :en) %>
+      <% localized_answers = t("faq.answers") %>
       <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
-      <% t('faq.answers', locale: :en).each do |key, faq| %>
+      <% answers_in_english.deep_merge(localized_answers).each do |key, value| %>
         <% # We include the original question in English so that the anchors (and urls!) stay the same across languages. %>
-        <%= add_answer({ question: t("faq.answers.#{key}.title"), original_question: faq[:title] }) do %>
-          <% t("faq.answers.#{key}.content").values.each do |paragraph| %>
+        <%= add_answer({ question: value[:title], original_question: answers_in_english[key][:title] }) do %>
+          <% value[:content].values.each do |paragraph| %>
             <p>
               <%= raw paragraph % faq_variables %>
             </p>
