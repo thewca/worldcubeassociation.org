@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RegistrationPayment < ActiveRecord::Base
+class RegistrationPayment < ApplicationRecord
   belongs_to :registration
 
   monetize :amount_lowest_denomination,

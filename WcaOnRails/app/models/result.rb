@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Result < ActiveRecord::Base
+class Result < ApplicationRecord
   include ResultMethods
 
   self.table_name = "Results"

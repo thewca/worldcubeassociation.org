@@ -1,4 +1,4 @@
 # frozen_string_literal: true
-class CompetitionsMedia < ActiveRecord::Base
+class CompetitionsMedia < ApplicationRecord
   self.table_name = "CompetitionsMedia"
 end

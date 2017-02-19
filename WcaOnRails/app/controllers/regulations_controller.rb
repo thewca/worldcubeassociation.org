@@ -2,7 +2,7 @@
 class RegulationsController < ApplicationController
   include HighVoltage::StaticPage
 
-  before_filter :ensure_trailing_slash
+  before_action :ensure_trailing_slash
 
   private def page_finder_factory
     IndexPageFinder

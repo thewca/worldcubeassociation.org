@@ -9,7 +9,7 @@ RSpec.describe DelegatesPanelController do
     end
 
     it "can edit" do
-      patch :update_crash_course, post: { body: "a new body!" }
+      patch :update_crash_course, params: { post: { body: "a new body!" } }
       expect(Post.crash_course_post.body).to eq "a new body!"
     end
 
@@ -26,7 +26,7 @@ RSpec.describe DelegatesPanelController do
     end
 
     it "can't edit" do
-      patch :update_crash_course, post: { body: "a new body!" }
+      patch :update_crash_course, params: { post: { body: "a new body!" } }
       expect(response).to redirect_to root_path
     end
 

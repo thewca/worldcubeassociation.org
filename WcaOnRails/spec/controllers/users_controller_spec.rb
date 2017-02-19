@@ -8,7 +8,7 @@ RSpec.describe UsersController do
     sign_in { FactoryGirl.create :admin }
 
     it "populates user" do
-      get :edit, id: user.id
+      get :edit, params: { id: user.id }
       expect(assigns(:user)).to eq user
     end
   end
@@ -25,7 +25,7 @@ RSpec.describe UsersController do
     it "works" do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(user).and_call_original
       expect do
-        patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") }
+        patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") } }
       end.to change { enqueued_jobs.size }.by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
@@ -38,7 +38,7 @@ RSpec.describe UsersController do
       other_user = FactoryGirl.create :user
 
       old_unconfirmed_wca_id = other_user.unconfirmed_wca_id
-      patch :update, id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      patch :update, params: { id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
       expect(other_user.unconfirmed_wca_id).to eq old_unconfirmed_wca_id
     end
 
@@ -47,7 +47,7 @@ RSpec.describe UsersController do
       user.wca_id = other_person.wca_id
       user.save!
 
-      patch :update, id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id }
+      patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
       new_user = assigns(:user)
       expect(new_user).to be_invalid
       expect(user.reload.unconfirmed_wca_id).to be_nil
@@ -64,7 +64,7 @@ RSpec.describe UsersController do
     end
 
     it "works when not explicitly clearing unconfirmed_wca_id" do
-      patch :update, id: user, user: { wca_id: user.unconfirmed_wca_id }
+      patch :update, params: { id: user, user: { wca_id: user.unconfirmed_wca_id } }
       user.reload
       expect(user.wca_id).to eq person.wca_id
       expect(user.unconfirmed_wca_id).to be_nil
@@ -72,7 +72,7 @@ RSpec.describe UsersController do
     end
 
     it "works when explicitly clearing unconfirmed_wca_id" do
-      patch :update, id: user, user: { wca_id: user.unconfirmed_wca_id, unconfirmed_wca_id: "" }
+      patch :update, params: { id: user, user: { wca_id: user.unconfirmed_wca_id, unconfirmed_wca_id: "" } }
       user.reload
       expect(user.wca_id).to eq person.wca_id
       expect(user.unconfirmed_wca_id).to be_nil
@@ -81,7 +81,7 @@ RSpec.describe UsersController do
 
     it "can set id to something not claimed" do
       person2 = FactoryGirl.create :person
-      patch :update, id: user, user: { wca_id: person2.wca_id }
+      patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload
       expect(user.wca_id).to eq person2.wca_id
       expect(user.unconfirmed_wca_id).to eq person.wca_id
@@ -90,7 +90,7 @@ RSpec.describe UsersController do
 
     it "can change claimed id" do
       person2 = FactoryGirl.create :person
-      patch :update, id: user, user: { unconfirmed_wca_id: person2.wca_id }
+      patch :update, params: { id: user, user: { unconfirmed_wca_id: person2.wca_id } }
       user.reload
       expect(user.unconfirmed_wca_id).to eq person2.wca_id
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
@@ -98,7 +98,7 @@ RSpec.describe UsersController do
 
     it "can clear claimed id" do
       FactoryGirl.create :person
-      patch :update, id: user, user: { unconfirmed_wca_id: "" }
+      patch :update, params: { id: user, user: { unconfirmed_wca_id: "" } }
       user.reload
       expect(user.unconfirmed_wca_id).to be_nil
       expect(user.delegate_to_handle_wca_id_claim).to be_nil
@@ -112,7 +112,7 @@ RSpec.describe UsersController do
     it "user can change email" do
       sign_in user
       expect(user.confirmation_sent_at).to eq nil
-      patch :update, id: user.id, user: { email: "newEmail@newEmail.com", current_password: "wca" }
+      patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com", current_password: "wca" } }
       user.reload
       expect(user.unconfirmed_email).to eq "newemail@newemail.com"
       expect(user.confirmation_sent_at).not_to eq nil
@@ -120,13 +120,13 @@ RSpec.describe UsersController do
 
     it "user can change name" do
       sign_in user
-      patch :update, id: user.id, user: { name: "Johnny 5" }
+      patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
       expect(user.reload.name).to eq "Johnny 5"
     end
 
     it "user can change his preferred events" do
       sign_in user
-      patch :update, id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] }
+      patch :update, params: { id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] } }
       expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
     end
 
@@ -134,7 +134,7 @@ RSpec.describe UsersController do
       let!(:registration) { FactoryGirl.create(:registration, :pending, user: user) }
       it "user can change name" do
         sign_in user
-        patch :update, id: user.id, user: { name: "Johnny 5" }
+        patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
         expect(user.reload.name).to eq "Johnny 5"
       end
     end
@@ -143,7 +143,7 @@ RSpec.describe UsersController do
       let!(:registration) { FactoryGirl.create(:registration, :deleted, user: user) }
       it "user can change name" do
         sign_in user
-        patch :update, id: user.id, user: { name: "Johnny 5" }
+        patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
         expect(user.reload.name).to eq "Johnny 5"
       end
     end
@@ -154,13 +154,13 @@ RSpec.describe UsersController do
       it "user cannot change name" do
         sign_in user
         old_name = user.name
-        patch :update, id: user.id, user: { name: "Johnny 5" }
+        patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
         expect(user.reload.name).to eq old_name
       end
 
       it "delegate can still change name" do
         sign_in delegate
-        patch :update, id: user.id, user: { name: "Johnny 5" }
+        patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
         expect(user.reload.name).to eq "Johnny 5"
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe UsersController do
     sign_in { FactoryGirl.create :admin }
 
     it "is injection safe" do
-      get :index, format: :json, sort: "country", order: "ASC -- HMM"
+      get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }
       users = assigns(:users)
       sql = users.to_sql
       expect(sql).to_not match "HMM"

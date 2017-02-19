@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CompetitionOrganizer < ActiveRecord::Base
+class CompetitionOrganizer < ApplicationRecord
   belongs_to :organizer, class_name: "User"
   validates_presence_of :organizer
 

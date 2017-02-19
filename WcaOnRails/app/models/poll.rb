@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Poll < ActiveRecord::Base
+class Poll < ApplicationRecord
   has_many :poll_options, dependent: :destroy
   has_many :votes
 

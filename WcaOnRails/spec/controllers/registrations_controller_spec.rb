@@ -13,7 +13,7 @@ RSpec.describe RegistrationsController do
     end
 
     it 'allows access to competition organizer' do
-      get :index, competition_id: competition
+      get :index, params: { competition_id: competition }
       expect(response.status).to eq 200
     end
 
@@ -21,7 +21,7 @@ RSpec.describe RegistrationsController do
       three_by_three = Event.find("333")
       competition.events = [three_by_three]
 
-      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first.id }, { competition_event_id: -2342 }] }
+      patch :update, params: { id: registration.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first.id }, { competition_event_id: -2342 }] } }
       registration = assigns(:registration)
       expect(registration.events).to match_array [three_by_three]
     end
@@ -30,7 +30,7 @@ RSpec.describe RegistrationsController do
       other_competition = FactoryGirl.create(:competition, :confirmed, :visible, :registration_open)
       other_registration = FactoryGirl.create(:registration, competition: other_competition)
 
-      patch :update, id: other_registration.id, registration: { accepted_at: Time.now }
+      patch :update, params: { id: other_registration.id, registration: { accepted_at: Time.now } }
       expect(other_registration.reload.pending?).to eq true
       expect(flash[:danger]).to eq "Could not update registration"
     end
@@ -38,7 +38,7 @@ RSpec.describe RegistrationsController do
     it "accepts a pending registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_accepted_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { status: 'accepted' }
+        patch :update, params: { id: registration.id, registration: { status: 'accepted' } }
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.accepted?).to be true
     end
@@ -48,7 +48,7 @@ RSpec.describe RegistrationsController do
 
       expect(RegistrationsMailer).to receive(:notify_registrant_of_pending_registration).with(registration).and_call_original
       expect do
-        patch :update, id: registration.id, registration: { accepted_at: nil, updated_at: registration.updated_at }, from_admin_view: true
+        patch :update, params: { id: registration.id, registration: { accepted_at: nil, updated_at: registration.updated_at }, from_admin_view: true }
       end.to change { enqueued_jobs.size }.by(1)
       expect(registration.reload.pending?).to be true
       expect(response).to redirect_to edit_registration_path(registration)
@@ -57,7 +57,7 @@ RSpec.describe RegistrationsController do
     it "can delete registration" do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration).and_call_original
 
-      delete :destroy, id: registration.id
+      delete :destroy, params: { id: registration.id }
 
       expect(flash[:success]).to eq "Deleted registration and emailed #{registration.email}"
       expect(Registration.find_by_id(registration.id).deleted?).to eq true
@@ -70,8 +70,11 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_registrant_of_deleted_registration).with(registration2).and_call_original
 
       expect do
-        xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "delete-selected",
-                                              selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"]
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "delete-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}"],
+        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
 
       expect(Registration.find_by_id(registration.id).deleted?).to eq true
@@ -89,8 +92,11 @@ RSpec.describe RegistrationsController do
       # still on the waiting list.
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_pending_registration).with(pending_registration).and_call_original
       expect do
-        xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "reject-selected",
-                                              selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"]
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "reject-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{pending_registration.id}"],
+        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.pending?).to be true
       expect(registration2.reload.pending?).to be true
@@ -107,8 +113,11 @@ RSpec.describe RegistrationsController do
       # still accepted.
       expect(RegistrationsMailer).not_to receive(:notify_registrant_of_accepted_registration).with(accepted_registration).and_call_original
       expect do
-        xhr :patch, :do_actions_for_selected, competition_id: competition.id, registrations_action: "accept-selected",
-                                              selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"]
+        patch :do_actions_for_selected, params: {
+          competition_id: competition.id,
+          registrations_action: "accept-selected",
+          selected_registrations: ["registration-#{registration.id}", "registration-#{registration2.id}", "registration-#{accepted_registration.id}"],
+        }, xhr: true
       end.to change { enqueued_jobs.size }.by(2)
       expect(registration.reload.accepted?).to be true
       expect(registration2.reload.accepted?).to be true
@@ -123,7 +132,7 @@ RSpec.describe RegistrationsController do
         registration.guests = 4
         registration.save!
 
-        patch :update, id: registration.id, registration: { accepted_at: Time.now, updated_at: 1.day.ago }, from_admin_view: true
+        patch :update, params: { id: registration.id, registration: { accepted_at: Time.now, updated_at: 1.day.ago }, from_admin_view: true }
         expect(registration.reload.accepted?).to be false
         expect(response.status).to eq 200
       end
@@ -132,7 +141,7 @@ RSpec.describe RegistrationsController do
     it "can accept own registration" do
       registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: organizer.id
 
-      patch :update, id: registration.id, registration: { status: 'accepted' }
+      patch :update, params: { id: registration.id, registration: { status: 'accepted' } }
       expect(registration.reload.accepted?).to eq true
     end
 
@@ -141,7 +150,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" }
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "" } }
       end.to change { enqueued_jobs.size }.by(2)
 
       expect(organizer.registrations).to eq competition.registrations
@@ -162,7 +171,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "" }
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "" } }
       end.to change { enqueued_jobs.size }.by(2)
 
       registration = Registration.find_by_user_id(user.id)
@@ -176,8 +185,13 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.accepted?).to eq false
       expect(registration.reload.deleted?).to eq true
 
-      patch :update, id: registration.id, registration: { registration_competition_events_attributes: [{ id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0 }],
-                                                          comments: "Registered again" }
+      patch :update, params: {
+        id: registration.id,
+        registration: {
+          registration_competition_events_attributes: [{ id: registration_competition_event.id, registration_id: registration.id, competition_event_id: threes_comp_event.id, _destroy: 0 }],
+          comments: "Registered again",
+        },
+      }
       expect(registration.reload.comments).to eq "Registered again"
       expect(registration.reload.pending?).to eq true
       expect(registration.reload.accepted?).to eq false
@@ -192,7 +206,7 @@ RSpec.describe RegistrationsController do
       expect(RegistrationsMailer).to receive(:notify_organizers_of_deleted_registration).and_call_original
 
       expect do
-        delete :destroy, id: registration.id, user_is_deleting_theirself: true
+        delete :destroy, params: { id: registration.id, user_is_deleting_theirself: true }
       end.to change { enqueued_jobs.size }.by(1)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
@@ -204,7 +218,7 @@ RSpec.describe RegistrationsController do
       registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
 
       expect do
-        delete :destroy, id: registration.id, user_is_deleting_theirself: true
+        delete :destroy, params: { id: registration.id, user_is_deleting_theirself: true }
       end.to change { enqueued_jobs.size }.by(0)
 
       expect(response).to redirect_to competition_path(competition) + '/register'
@@ -215,13 +229,13 @@ RSpec.describe RegistrationsController do
     it "cannnot delete other people's registrations" do
       FactoryGirl.create :registration, competition: competition, user_id: user.id
       other_registration = FactoryGirl.create :registration, competition: competition
-      delete :destroy, id: other_registration.id, user_is_deleting_theirself: true
+      delete :destroy, params: { id: other_registration.id, user_is_deleting_theirself: true }
       expect(response).to redirect_to competition_path(competition) + '/register'
       expect(Registration.find_by_id(other_registration.id)).to eq other_registration
     end
 
     it "cannot create accepted registration" do
-      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 0, comments: "", accepted_at: Time.now }
+      post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 0, comments: "", accepted_at: Time.now } }
       registration = Registration.find_by_user_id(user.id)
       expect(registration.pending?).to be true
     end
@@ -230,7 +244,7 @@ RSpec.describe RegistrationsController do
       competition.update_column(:showAtAll, false)
 
       expect {
-        post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted }
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted } }
       }.to raise_error(ActionController::RoutingError)
     end
 
@@ -239,7 +253,7 @@ RSpec.describe RegistrationsController do
       competition.registration_close = 1.week.ago
       competition.save!
 
-      post :create, competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", accepted_at: Time.now }
+      post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", accepted_at: Time.now } }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to eq "You cannot register for this competition, registration is closed"
     end
@@ -247,7 +261,7 @@ RSpec.describe RegistrationsController do
     it "can edit registration when pending" do
       registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
-      patch :update, id: registration.id, registration: { comments: "new comment" }
+      patch :update, params: { id: registration.id, registration: { comments: "new comment" } }
       expect(registration.reload.comments).to eq "new comment"
       expect(flash[:success]).to eq "Updated registration"
       expect(response).to redirect_to competition_register_path(competition)
@@ -256,14 +270,14 @@ RSpec.describe RegistrationsController do
     it "cannot edit registration when approved" do
       registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
 
-      patch :update, id: registration.id, registration: { comments: "new comment" }
+      patch :update, params: { id: registration.id, registration: { comments: "new comment" } }
       expect(registration.reload.comments).to eq ""
       expect(flash.now[:danger]).to eq "Could not update registration"
     end
 
     it "cannot access edit page" do
       registration = FactoryGirl.create :registration, :accepted, competition: competition, user_id: user.id
-      get :edit, id: registration.id
+      get :edit, params: { id: registration.id }
       expect(response).to redirect_to root_path
     end
 
@@ -272,14 +286,14 @@ RSpec.describe RegistrationsController do
       other_user = FactoryGirl.create(:user, :wca_id)
       other_registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: other_user.id
 
-      patch :update, id: other_registration.id, registration: { comments: "new comment" }
+      patch :update, params: { id: other_registration.id, registration: { comments: "new comment" } }
       expect(other_registration.reload.comments).to eq ""
     end
 
     it "cannot accept own registration" do
       registration = FactoryGirl.create :registration, :pending, competition: competition, user_id: user.id
 
-      patch :update, id: registration.id, registration: { accepted_at: Time.now }
+      patch :update, params: { id: registration.id, registration: { accepted_at: Time.now } }
       expect(registration.reload.accepted?).to eq false
     end
   end
@@ -291,13 +305,13 @@ RSpec.describe RegistrationsController do
       competition.use_wca_registration = false
       competition.save!
 
-      get :register, competition_id: competition.id
+      get :register, params: { competition_id: competition.id }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to match "not using WCA registration"
     end
 
     it "works when not logged in" do
-      get :register, competition_id: competition.id
+      get :register, params: { competition_id: competition.id }
       expect(assigns(:registration)).to eq nil
     end
 
@@ -305,7 +319,7 @@ RSpec.describe RegistrationsController do
       registration = FactoryGirl.create(:registration, competition: competition)
       sign_in registration.user
 
-      get :register, competition_id: competition.id
+      get :register, params: { competition_id: competition.id }
       expect(assigns(:registration)).to eq registration
     end
 
@@ -313,7 +327,7 @@ RSpec.describe RegistrationsController do
       user = FactoryGirl.create :user
       sign_in user
 
-      get :register, competition_id: competition.id
+      get :register, params: { competition_id: competition.id }
       registration = assigns(:registration)
       expect(registration.new_record?).to eq true
       expect(registration.user_id).to eq user.id
@@ -326,14 +340,14 @@ RSpec.describe RegistrationsController do
 
     it "404s when competition is not visible to public" do
       expect {
-        get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+        get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       }.to raise_error(ActionController::RoutingError)
     end
 
     it "organizer can access psych sheet" do
       sign_in organizer
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       expect(response.status).to eq 200
     end
   end
@@ -342,7 +356,7 @@ RSpec.describe RegistrationsController do
     let(:competition) { FactoryGirl.create(:competition, :visible, :past, :results_posted, use_wca_registration: true, events: Event.where(id: "333")) }
 
     it "renders psych_results_posted" do
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       expect(subject).to render_template(:psych_results_posted)
     end
   end
@@ -351,7 +365,7 @@ RSpec.describe RegistrationsController do
     let!(:competition) { FactoryGirl.create(:competition, :confirmed, :visible, :registration_open, events: Event.where(id: %w(333 444 333bf))) }
 
     it "redirects psych sheet to 333" do
-      get :psych_sheet, competition_id: competition.id
+      get :psych_sheet, params: { competition_id: competition.id }
       expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "333")
     end
 
@@ -359,15 +373,15 @@ RSpec.describe RegistrationsController do
       competition.use_wca_registration = false
       competition.save!
 
-      get :psych_sheet, competition_id: competition.id
+      get :psych_sheet, params: { competition_id: competition.id }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to match "not using WCA registration"
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to match "not using WCA registration"
 
-      get :index, competition_id: competition.id
+      get :index, params: { competition_id: competition.id }
       expect(response).to redirect_to competition_path(competition)
       expect(flash[:danger]).to match "not using WCA registration"
     end
@@ -376,7 +390,7 @@ RSpec.describe RegistrationsController do
       competition.events = [Event.find("222"), Event.find("444")]
       competition.save!
 
-      get :psych_sheet, competition_id: competition.id
+      get :psych_sheet, params: { competition_id: competition.id }
       expect(response).to redirect_to competition_psych_sheet_event_url(competition.id, "222")
     end
 
@@ -385,7 +399,7 @@ RSpec.describe RegistrationsController do
       FactoryGirl.create :ranks_average, rank: 10, best: 4242, eventId: "333", personId: pending_registration.personId
       FactoryGirl.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.personId
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:accepted?).all?).to be true
     end
@@ -393,7 +407,7 @@ RSpec.describe RegistrationsController do
     it "handles user without average" do
       FactoryGirl.create(:registration, :accepted, competition: competition)
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:accepted?).all?).to be true
     end
@@ -413,13 +427,13 @@ RSpec.describe RegistrationsController do
       registration4 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       FactoryGirl.create :ranks_average, rank: 11, best: 4545, eventId: "444", personId: registration4.personId
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
       expect(registrations.map(&:pos)).to eq [1, 2, 2, 4]
       expect(registrations.map(&:tied_previous)).to eq [false, false, true, false]
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "444", sort_by: :single
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444", sort_by: :single }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
       expect(registrations.map(&:pos)).to eq [1, 2, nil, nil]
@@ -438,7 +452,7 @@ RSpec.describe RegistrationsController do
       # Never competed
       registration3 = FactoryGirl.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration2.id, registration1.id, registration3.id]
       expect(registrations.map(&:pos)).to eq [1, nil, nil]
@@ -455,7 +469,7 @@ RSpec.describe RegistrationsController do
         countryRank: 10,
       )
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration.id]
       expect(registrations.map(&:pos)).to eq [1]
@@ -498,12 +512,12 @@ RSpec.describe RegistrationsController do
         countryRank: 2,
       )
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration1.id, registration2.id]
       expect(registrations.map(&:pos)).to eq [1, 2]
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf", sort_by: :average
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf", sort_by: :average }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration2.id, registration1.id]
       expect(registrations.map(&:pos)).to eq [1, 2]
@@ -536,7 +550,7 @@ RSpec.describe RegistrationsController do
       user3 = FactoryGirl.create(:user, :wca_id, name: "Aaron")
       registration3 = FactoryGirl.create(:registration, :accepted, user: user3, competition: competition, events: [Event.find("333bf")])
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "333bf"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration1.id, registration3.id, registration2.id]
       expect(registrations.map(&:pos)).to eq [1, nil, nil]
@@ -553,7 +567,7 @@ RSpec.describe RegistrationsController do
         countryRank: 10,
       )
 
-      get :psych_sheet_event, competition_id: competition.id, event_id: "444"
+      get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       registrations = assigns(:registrations)
       expect(registrations.map(&:id)).to eq [registration.id]
       expect(registrations.map(&:pos)).to eq [1]
@@ -566,7 +580,7 @@ RSpec.describe RegistrationsController do
       sign_out
 
       it 'redirects to the sign in page' do
-        post :process_payment, competition_id: competition.id
+        post :process_payment, params: { competition_id: competition.id }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -591,7 +605,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
         expect(flash[:success]).to eq "Your payment was successful."
         expect(response).to redirect_to competition_register_path(competition)
         expect(registration.reload.outstanding_entry_fees).to eq 0
@@ -612,7 +626,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
       end
@@ -628,7 +642,7 @@ RSpec.describe RegistrationsController do
       it 'does not allow access and generates a URL error' do
         sign_in user
         expect {
-          post :refund_payment, id: registration.id
+          post :refund_payment, params: { id: registration.id }
         }.to raise_error(ActionController::UrlGenerationError)
       end
     end
@@ -648,9 +662,9 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, competition_id: competition.id, stripeToken: token_id
+        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
         payment = registration.reload.registration_payments.first
-        post :refund_payment, id: registration.id, payment_id: payment.id
+        post :refund_payment, params: { id: registration.id, payment_id: payment.id }
         expect(response).to redirect_to edit_registration_path(registration)
         refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
         expect(competition.base_entry_fee).to be > 0

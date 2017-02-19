@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Competition < ActiveRecord::Base
+class Competition < ApplicationRecord
   self.table_name = "Competitions"
 
   has_many :competition_events, dependent: :destroy
@@ -379,7 +379,7 @@ class Competition < ActiveRecord::Base
 
   attr_reader :receive_registration_emails
   def receive_registration_emails=(r)
-    @receive_registration_emails = ActiveRecord::Type::Boolean.new.type_cast_from_database(r)
+    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
   end
 
   after_save :clear_external_website, if: :generate_website?
@@ -513,12 +513,12 @@ class Competition < ActiveRecord::Base
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@start_date)
         errors.add(:start_date, I18n.t('common.errors.invalid'))
-        return false
+        return
       end
       self.year, self.month, self.day = @start_date.split("-").map(&:to_i)
       unless Date.valid_date? self.year, self.month, self.day
         errors.add(:start_date, I18n.t('common.errors.invalid'))
-        return false
+        return
       end
     end
     if @end_date.nil? && !end_date.blank?
@@ -529,12 +529,12 @@ class Competition < ActiveRecord::Base
     else
       unless /\A\d{4}-\d{2}-\d{2}\z/.match(@end_date)
         errors.add(:end_date, I18n.t('common.errors.invalid'))
-        return false
+        return
       end
       self.endYear, self.endMonth, self.endDay = @end_date.split("-").map(&:to_i)
       unless Date.valid_date? self.endYear, self.endMonth, self.endDay
         errors.add(:end_date, I18n.t('common.errors.invalid'))
-        return false
+        return
       end
     end
   end

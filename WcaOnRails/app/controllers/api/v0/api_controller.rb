@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Api::V0::ApiController < ApplicationController
-  before_filter :doorkeeper_authorize!, only: [:me]
+  include Rails::Pagination
+  before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::BadApiParameter, with: :bad_api_parameter
   def bad_api_parameter(e)
     render status: :unprocessable_entity, json: { errors: [e.to_s] }

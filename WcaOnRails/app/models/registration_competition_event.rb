@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RegistrationCompetitionEvent < ActiveRecord::Base
+class RegistrationCompetitionEvent < ApplicationRecord
   belongs_to :registration
 
   belongs_to :competition_event

@@ -7,17 +7,19 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '4.2.7.1'
-gem 'rails-i18n', github: 'svenfuchs/rails-i18n', branch: 'rails-4-x'
+gem 'rails', '5.0.1'
+gem 'rails-i18n', '~> 5.0.0'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'therubyracer'
 
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'envied'
-gem 'seedbank'
 
+# Contains workaround for https://github.com/eval/envied/issues/27
+gem 'envied', github: 'monterail/envied', branch: 'master'
+
+gem 'seedbank'
 gem 'jquery-rails'
 gem 'jbuilder'
 gem 'bootstrap-sass'
@@ -111,11 +113,7 @@ group :test do
   gem 'capybara'
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
-
-  # Rails 4 apparently doesn't run after_commit handlers in tests. We need
-  # to test carrierwave's file deletion code, which runs inside of an
-  # after_commit callback, so we have this gem to get it to run in tests.
-  gem 'test_after_commit'
+  gem 'rails-controller-testing'
 end
 
 group :production do

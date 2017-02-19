@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-class SuccessfulJob < ActiveJob::Base
+class SuccessfulJob < ApplicationJob
   def perform
     puts "Succeeding!"
   end
 end
 
-class FailingJob < ActiveJob::Base
+class FailingJob < ApplicationJob
   def perform
     raise "Failure!"
   end

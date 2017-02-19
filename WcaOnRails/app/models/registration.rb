@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Registration < ActiveRecord::Base
+class Registration < ApplicationRecord
   scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }

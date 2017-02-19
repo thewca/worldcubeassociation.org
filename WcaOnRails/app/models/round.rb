@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Round < ActiveRecord::Base
+class Round < ApplicationRecord
   include Cachable
   self.table_name = "Rounds"
 

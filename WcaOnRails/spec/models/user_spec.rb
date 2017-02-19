@@ -394,7 +394,7 @@ RSpec.describe User, type: :model do
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
       expect(user).to be_invalid
       expect(user.errors.messages[:unconfirmed_wca_id]).to eq ["already assigned to a different user"]
-      expect(user.errors.messages[:dob_verification]).to eq nil
+      expect(user.errors.messages[:dob_verification]).to eq []
     end
 
     it "requires correct dob verification" do

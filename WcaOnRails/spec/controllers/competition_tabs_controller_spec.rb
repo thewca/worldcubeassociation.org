@@ -11,15 +11,17 @@ RSpec.describe CompetitionTabsController, type: :controller do
     end
 
     it "can view the tabs index for his competition" do
-      get :index, competition_id: competition.id
+      get :index, params: { competition_id: competition.id }
       expect(response.status).to eq 200
       expect(response).to render_template :index
     end
 
     it "can create a new tab" do
       expect do
-        get :create, competition_id: competition.id,
-                     competition_tab: { name: "Accommodation", content: "On your own." }
+        get :create, params: {
+          competition_id: competition.id,
+          competition_tab: { name: "Accommodation", content: "On your own." },
+        }
       end.to change { competition.tabs.count }.by(1)
       tab = competition.tabs.last
       expect(tab.name).to eq "Accommodation"
@@ -28,8 +30,11 @@ RSpec.describe CompetitionTabsController, type: :controller do
 
     it "can update an existing tab" do
       tab = FactoryGirl.create(:competition_tab, competition: competition)
-      patch :update, competition_id: competition.id, id: tab.id,
-                     competition_tab: { name: "Accommodation", content: "On your own." }
+      patch :update, params: {
+        competition_id: competition.id,
+        id: tab.id,
+        competition_tab: { name: "Accommodation", content: "On your own." },
+      }
       tab.reload
       expect(tab.name).to eq "Accommodation"
     end
@@ -37,7 +42,7 @@ RSpec.describe CompetitionTabsController, type: :controller do
     it "can destroy an existing tab" do
       tab = FactoryGirl.create(:competition_tab, competition: competition)
       expect do
-        delete :destroy, competition_id: competition.id, id: tab.id
+        delete :destroy, params: { competition_id: competition.id, id: tab.id }
       end.to change { competition.tabs.count }.by(-1)
     end
   end

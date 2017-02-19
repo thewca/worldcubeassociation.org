@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SubmitResultsNagJob < ActiveJob::Base
+class SubmitResultsNagJob < ApplicationJob
   queue_as :default
 
   def nag_needed(competition)
