@@ -18,7 +18,7 @@ commit_hash() {
   REMOTE_URL=$1
   REMOTE_BRANCHNAME=$2
 
-  echo $(git ls-remote https://github.com/thewca/wca-regulations-translations.git HEAD | sed 's/\(.\{7\}\).*/\1/')
+  echo $(git ls-remote $REMOTE_URL $REMOTE_BRANCHNAME | sed 's/\(.\{7\}\).*/\1/')
 }
 
 rebuild_regs() {
