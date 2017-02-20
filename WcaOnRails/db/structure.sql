@@ -54,11 +54,15 @@ CREATE TABLE `Competitions` (
   `announced_at` datetime DEFAULT NULL,
   `base_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `endYear` smallint(6) NOT NULL DEFAULT '0',
+  `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
-  KEY `index_Competitions_on_countryId` (`countryId`)
+  KEY `index_Competitions_on_countryId` (`countryId`),
+  KEY `index_Competitions_on_start_date` (`start_date`),
+  KEY `index_Competitions_on_end_date` (`end_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1206,3 +1210,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161227202950');
 INSERT INTO schema_migrations (version) VALUES ('20170121202850');
 
 INSERT INTO schema_migrations (version) VALUES ('20170212005142');
+
+INSERT INTO schema_migrations (version) VALUES ('20170215221832');

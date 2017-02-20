@@ -106,29 +106,26 @@ RSpec.describe Competition do
     expect(competition.endDay).to eq 1
   end
 
-  describe "validates date formats" do
-    let(:competition) do
-      c = FactoryGirl.create :competition
-      # Clear any instance variables the Competition may have from being created.
-      Competition.find(c.id)
-    end
+  describe "invalid date formats become nil" do
+    let(:competition) { FactoryGirl.create :competition }
 
     it "start_date" do
-      competition.start_date = "1987-12-04f"
-      expect(competition).to be_invalid
-      expect(competition.errors.messages[:start_date]).to eq ["invalid"]
+      competition.start_date = "i am not a date"
+      expect(competition.start_date).to eq nil
     end
 
     it "end_date" do
-      competition.end_date = "1987-12-04f"
-      expect(competition).to be_invalid
-      expect(competition.errors.messages[:end_date]).to eq ["invalid"]
+      competition.end_date = "i am also not a date"
+      expect(competition.end_date).to eq nil
     end
   end
 
   it "requires that both dates are empty or both are valid" do
     competition = FactoryGirl.create :competition
+    expect(competition).to be_valid
+
     competition.start_date = "1987-12-04"
+    competition.end_date = ""
     expect(competition).to be_invalid
 
     competition.end_date = "1987-12-05"
@@ -233,12 +230,7 @@ RSpec.describe Competition do
   it "knows the calendar" do
     competition = FactoryGirl.create :competition
     competition.start_date = "1987-0-04"
-    competition.end_date = "1987-12-05"
-    expect(competition).to be_invalid
-
-    competition.start_date = "1987-4-04"
-    competition.end_date = "1987-33-05"
-    expect(competition).to be_invalid
+    expect(competition.start_date).to eq nil
   end
 
   it "gracefully handles multiyear competitions" do
