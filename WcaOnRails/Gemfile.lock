@@ -31,6 +31,12 @@ GIT
       thor (~> 0.15)
 
 GIT
+  remote: https://github.com/tleish/swagger_engine.git
+  revision: 90c4f04117e64c5162aed1c0a90a98f9173d1b5b
+  specs:
+    swagger_engine (0.0.4)
+
+GIT
   remote: https://github.com/world-flags/world-flags.git
   revision: b6ea11dbec91d1ec07cc6808215a05d182e67d65
   specs:
@@ -569,6 +575,7 @@ DEPENDENCIES
   spring-commands-rspec
   strip_attributes
   stripe
+  swagger_engine!
   therubyracer
   time_will_tell
   twitter_cldr

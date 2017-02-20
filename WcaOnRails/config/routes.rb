@@ -146,4 +146,5 @@ Rails.application.routes.draw do
       resources :competitions, only: [:show]
     end
   end
+  mount SwaggerEngine::Engine, at: "/api"
 end
