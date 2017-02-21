@@ -37,7 +37,7 @@ module ApplicationHelper
   end
 
   def mail_to_wca_board
-    mail_to "board@worldcubeassociation.org", "Board", target: "_blank"
+    mail_to "board@worldcubeassociation.org", I18n.t("competitions.competition_form.board"), target: "_blank"
   end
 
   def filename_to_url(filename)
