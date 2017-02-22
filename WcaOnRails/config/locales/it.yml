@@ -247,7 +247,7 @@ it:
         #original_hash: 25b7b06
         cityName: Città
         #original_hash: 67cd406
-        venue: Venue
+        venue: Location
         #original_hash: 486f8fb
         venueAddress: Indirizzo
         #original_hash: 08767af
@@ -643,7 +643,7 @@ it:
     doorkeeper:
       applications:
         help:
-          #original_hash: 5545f6c
+          #original_hash: eb5567a
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
@@ -925,6 +925,21 @@ it:
         target='_blank'>WCA Results Team</a> (in inglese) con allegata una foto
         e un qualsiasi documento (carta d'identità, patente di guida, ...) in
         cui siano visibili il tuo nome e la tua data di nascita.
+      #original_hash: 51fa5a4
+      wca_id_no_gender_html: >-
+        Nessun genere è stato assegnato a questo WCA ID. Contatta il <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> per risolvere il problema.
+      #original_hash: 87ee245
+      wca_id_no_citizenship_html: >-
+        Nessuna cittadinanza è stata assegnata a questo WCA ID. Contatta il <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> per risolvere il problema.
+      #original_hash: c3839bc
+      wca_id_no_name_html: >-
+        Nessun nome è stato assegnato a questo WCA ID.  Contatta il <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> per risolvere il problema.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Non puoi rimuoverti da membro del board! Cerca un altro membro del board
@@ -955,10 +970,12 @@ it:
         Il WCA ID %{link_id} è già assegnato a un altro account. Se credi sia
         stato assegnato erroneamente, contatta il <a href='%{link_delegate}'
         target='_blank'>delegato WCA</a> della tua zona.
-      #original_hash: 3391b0b
-      missing_dob_html: >-
-        Il WCA ID %{link_id} non ha alcuna data di nascita assegnata. Contatta
-        il %{link_result_team} per correggere il problema.
+      #original_hash: d26bfdc
+      missing_dob_html: 'Il WCA ID %{link_id} non ha alcuna data di nascita assegnata.'
+      #original_hash: 5be6803
+      contact_results_team_html: >-
+        Contatta il <a href='mailto:results@worldcubeassociation.org'
+        target='_blank'>WCA Results Team</a> per risolvere il problema.
       #original_hash: 92aa857
       unknown_wca_id_html: 'Il WCA ID %{link_id} non esiste.'
   registrations:
@@ -1179,9 +1196,9 @@ it:
     can_register: 'Qui puoi registrarti per il %{comp}.'
     #original_hash: 4167ed7
     check_registration_information: >-
-      Controlla le informazioni di registrazione per verificare se è necessario
-      eseguire ulteriori passaggi, per esempio il pagamento della tassa
-      d'iscrizione.
+      Controlla le informazioni sulla registrazione per verificare se è
+      necessario eseguire ulteriori passaggi, per esempio il pagamento della
+      tassa d'iscrizione.
     #original_hash: ea2b586
     have_registered: >-
       Ti sei registrato al %{comp}. Qui puoi vedere le informazioni della tua
@@ -1193,8 +1210,9 @@ it:
     #original_hash: 59354fd
     waiting_list: >-
       La tua registrazione è in attesa di approvazione. Per l'approvazione
-      potrebbe essere necessario pagare la tassa d'iscrizione. Controlla il sito
-      della competizione per i dettagli.
+      potrebbero essere richiesti ulteriori passaggi, come il pagamento della
+      tassa d'iscrizione. Controlla il sito della competizione per verificare la
+      presenza di eventuali passaggi aggiuntivi.
     #original_hash: 58b1a3c
     accepted: La tua registrazione è stata accettata!
     #original_hash: 69cf660
@@ -1373,6 +1391,8 @@ it:
       #original_hash: 9104a03
       no_past_competitions: Non hai competizioni passate.
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Supporta i <a href='https://daringfireball.net/projects/markdown/basics'
