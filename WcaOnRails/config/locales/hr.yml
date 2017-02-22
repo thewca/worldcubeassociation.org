@@ -920,11 +920,20 @@ hr:
         (osobne iskaznice, vozačke dozvole itd.) gdje je Vaše ime i datum
         rođenja vidljiv.
       #original_hash: 51fa5a4
-      wca_id_no_gender_html: null
+      wca_id_no_gender_html: >-
+        Nemamo zapisan spol za ovaj WCA ID. Molimo pošaljite e-mail na <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> kako bi se to riješilo.
       #original_hash: 87ee245
-      wca_id_no_citizenship_html: null
+      wca_id_no_citizenship_html: >-
+        Nemamo zabilježeno državljanstvo za ovaj WCA ID. Molimo pošaljite e-mail
+        na <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> kako bismo riješili to.
       #original_hash: c3839bc
-      wca_id_no_name_html: null
+      wca_id_no_name_html: >-
+        Nemamo zapisano ime za ovaj WCA ID. Molimo pošaljite e-mail na <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> kako bi se to riješilo.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
         Ne možete dati otkaz s uloge Board Member-a! Nađite drugog Board
@@ -958,7 +967,10 @@ hr:
       #original_hash: d26bfdc
       missing_dob_html: 'WCA ID %{link_id} nema spojen datum rođenja.'
       #original_hash: 5be6803
-      contact_results_team_html: null
+      contact_results_team_html: >-
+        Molimo Vas kontaktirajte <a
+        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+        Results Team</a> kako bismo riješili ovo.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} ne postoji.'
   registrations:
@@ -1371,6 +1383,8 @@ hr:
       #original_hash: 9104a03
       no_past_competitions: Nemate prijašnjih natjecanja.
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
