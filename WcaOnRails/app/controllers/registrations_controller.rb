@@ -201,11 +201,20 @@ class RegistrationsController < ApplicationController
       registrations = competition.registrations
       registration = registrations.find_by_user_id!(current_user.id)
     end
-    token = params[:stripeToken]
+    token, amount_param = params.require(:payment).require([:stripeToken, :total_amount])
+    amount = amount_param.to_i
+
+    # 'amount' has not been check by anyone, and could be user-crafted; validate it!
+    # if 'token' is wrong, it's Stripe which will complain
+    if amount < registration.outstanding_entry_fees.cents
+      flash[:danger] = "Charge was cancelled because the amount to be charged was lower than the registration fees to pay"
+      redirect_to competition_register_path
+      return
+    end
 
     charge = Stripe::Charge.create(
       {
-        amount: registration.outstanding_entry_fees.cents,
+        amount: amount,
         currency: registration.outstanding_entry_fees.currency.iso_code,
         source: token,
         description: "Registration payment for #{competition.name}",

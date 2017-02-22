@@ -77,23 +77,65 @@
                   <% if @registration.paid_entry_fees > 0 %>
                     <%= alert :info, t('registrations.entry_fees_partially_paid', paid: paid_entry_fees, total_entry_fee: entry_fee) %>
                   <% end %>
-                  <%= form_tag competition_process_payment_path do %>
-                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="<%= ENVied.STRIPE_PUBLISHABLE_KEY %>"
-                      data-image="https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png"
-                      data-name="World Cube Association"
-                      data-description="Registration fee"
-                      data-amount="<%= @registration.outstanding_entry_fees.cents %>"
-                      data-currency="<%= @registration.outstanding_entry_fees.currency.iso_code %>"
-                      data-email="<%= @registration.user.email %>"
-                      data-zip-code="true"
-                      data-label="<%= t('registrations.payment_button_text', entry_fee: outstanding_entry_fees) %>"
-                      data-locale="auto">
+                  <hr />
+                  <%= horizontal_simple_form_for :payment, url: competition_process_payment_path, html: { id: :form_payment } do |f| %>
+                    <%= f.input :stripeToken, as: :hidden, input_html: { id: :stripeToken } %>
+                    <%= f.input :total_amount, as: :hidden, input_html: { id: :total_amount } %>
+                    <%= f.input :outstanding_entry_fees, disabled: true, input_html: { value: @registration.outstanding_entry_fees.cents, id: :outstanding_entry_fees } %>
+                    <%= f.input :donation, input_html: { value: 0, id: :donation } %>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <%= f.button :submit, value: "Pay registration fees by card", id: :donateButton, class: 'btn btn-primary' %>
+                      </div>
+                    </div>
+                    <script src="https://checkout.stripe.com/checkout.js"></script>
+                    <script>
+                    // As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
+                      var handler = StripeCheckout.configure({
+                        key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
+                        locale: 'auto',
+                        image: 'https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png',
+                        name: 'World Cube Association',
+                        description: 'Registration fee',
+                        currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
+                        zipCode: true,
+                        token: function(token) {
+                          $('input#stripeToken').val(token.id);
+                          $('#form_payment').submit();
+                        }
+                      });
+                      // Setup the currency mask on the fee field
+                      $(function() {
+                        var currency_code = "<%= @registration.outstanding_entry_fees.currency.iso_code %>";
+                        wca.applyCurrencyMask('init',
+                                              '#outstanding_entry_fees',
+                                              currency_code);
+                        wca.applyCurrencyMask('init',
+                                              '#donation',
+                                              currency_code);
+                      });
+
+                      $('#donateButton').on('click', function(e) {
+                        e.preventDefault();
+                        var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
+                        var donation = wca.getValueInCurrency('#donation');
+                        var amount = parseFloat(registration_fees_to_pay+donation);
+                        if (isNaN(amount)) {
+                          alert('Please enter a valid amount in USD ($).');
+                        } else if (amount < registration_fees_to_pay) {
+                          alert('Amount must be be at least the registration fees to pay.');
+                        } else {
+                          $('#total_amount').val(amount);
+                          handler.open({
+                            amount: Math.round(amount)
+                          })
+                        }
+                      });
                     </script>
-                  <% end %>
+                  <% end %><%# end of simple_form %>
                 <% else %>
                   <%= alert :success, t('registrations.entry_fees_fully_paid', paid: paid_entry_fees) %>
-                <% end %>
+                <% end %><%# end of @registration.outstanding_entry_fees > 0 %>
               <% else %>
                 <%= render 'entry_fee', entry_fee: entry_fee %>
               <% end %>
