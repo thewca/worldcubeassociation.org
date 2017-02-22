@@ -1418,6 +1418,8 @@ pl:
       #original_hash: 9104a03
       no_past_competitions: Nie masz minionych zawodów.
     competition_form:
+      #original_hash: e879b0b
+      board: Zarząd
       #original_hash: f957dcb
       supports_md_html: >-
         Możliwe jest używanie języka <a
