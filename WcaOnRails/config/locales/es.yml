@@ -138,7 +138,7 @@ es:
     #original_hash: 15f86c0
     average: Media
     #original_hash: e7f6fc5
-    solves: Marcas
+    solves: Resultados
     date:
       #original_hash: acb6273
       no_date: Sin fecha
@@ -999,9 +999,9 @@ es:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: primerizos
-        one: primerizo
-        other: primerizos
+        zero: nuevos
+        one: nuevo
+        other: nuevos
       #original_hash: bc010e3
       returner:
         zero: repetidores
@@ -1382,6 +1382,8 @@ es:
       #original_hash: 9104a03
       no_past_competitions: No tienes competiciones anteriores.
     competition_form:
+      #original_hash: e879b0b
+      board: Junta Directiva
       #original_hash: f957dcb
       supports_md_html: >-
         Admite <a href='https://daringfireball.net/projects/markdown/basics'
