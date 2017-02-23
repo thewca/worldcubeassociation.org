@@ -21,16 +21,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/monterail/envied.git
-  revision: 227a2a1b798032578e02aeac7420c53aa088d721
-  branch: master
-  specs:
-    envied (0.8.1)
-      coercible (~> 1.0)
-      rack (>= 1.4, < 3)
-      thor (~> 0.15)
-
-GIT
   remote: https://github.com/world-flags/world-flags.git
   revision: b6ea11dbec91d1ec07cc6808215a05d182e67d65
   specs:
@@ -173,6 +163,10 @@ GEM
       json
       thread
       thread_safe
+    envied (0.8.2)
+      coercible (~> 1.0)
+      rack (>= 1.4, < 3)
+      thor (~> 0.15)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
@@ -519,7 +513,7 @@ DEPENDENCIES
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
-  envied!
+  envied
   factory_girl_rails
   faker
   font-awesome-sass

@@ -15,10 +15,7 @@ gem 'therubyracer'
 
 gem 'sdoc', group: :doc
 gem 'dotenv-rails', require: 'dotenv/rails-now'
-
-# Contains workaround for https://github.com/eval/envied/issues/27
-gem 'envied', github: 'monterail/envied', branch: 'master'
-
+gem 'envied'
 gem 'seedbank'
 gem 'jquery-rails'
 gem 'jbuilder'
