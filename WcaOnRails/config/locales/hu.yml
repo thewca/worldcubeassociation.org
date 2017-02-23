@@ -1380,6 +1380,8 @@ hu:
       #original_hash: 9104a03
       no_past_competitions: Nincs múltbéli versenyed.
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Támogatja  a <a
