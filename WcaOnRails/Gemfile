@@ -72,6 +72,10 @@ gem 'i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 
+# Pointing to tleish/swagger_engine because batdevis/swagger_engine is currently
+# unmaintained: https://github.com/batdevis/swagger_engine/issues/14.
+gem 'swagger_engine', github: 'tleish/swagger_engine'
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
 

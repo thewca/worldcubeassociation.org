@@ -1,0 +1,99 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: WCA REST API
+  version: 0.0.1
+# the domain of the service
+host: www.worldcubeassociation.org
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /api/v0
+produces:
+  - application/json
+paths:
+  /competitions:
+    get:
+      summary: Competition List
+      description: |
+        This grabs all future competitions
+      parameters:
+        - name: delegate
+          in: query
+          description: Grabs competitions where the delegate matches the this WCA ID
+          required: false
+          type: string
+      tags:
+        - Competitions
+      responses:
+        200:
+          description: An array of competitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Competition'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /me:
+    get:
+      summary: User Profile
+      description: The User Profile endpoint returns information about the Uber user that has authorized with the application.
+      tags:
+        - User
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Competition:
+    type: object
+    properties:
+      class:
+        type: string
+        description: String set as "competition"
+      url:
+        type: string
+      id:
+        type: string
+
+  User:
+    type: object
+    properties:
+      class:
+        type: string
+        description: String set as "User"
+      id:
+        type: integer
+        description: WCA User ID
+      name:
+        type: string
+        description: first and last name of the user.
+      gender:
+        type: string
+        enum: ['m', 'f']
+      country_iso2:
+        type: string
+        description: iso2 country id for user.
+      avatar:
+        type: object
+        description: Object containing url and thumb_url of avatar
+
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
