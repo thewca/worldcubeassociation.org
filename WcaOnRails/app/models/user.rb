@@ -380,6 +380,10 @@ class User < ApplicationRecord
     self == user || can_view_all_users? || organizer_for?(user)
   end
 
+  def can_change_users_avatar?(user)
+    user.wca_id.present? && self.editable_fields_of_user(user).include?(:pending_avatar)
+  end
+
   def organizer_for?(user)
     # If the user is a newcomer, allow organizers of the competition that the user is registered for to edit that user's name.
     user.competitions_registered_for.not_over.joins(:competition_organizers).pluck("competition_organizers.organizer_id").include?(self.id)
