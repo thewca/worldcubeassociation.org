@@ -59,7 +59,7 @@
       <li><a href="#preferences" data-toggle="tab"><%= t '.preferences' %></a></li>
       <li><a href="#password" data-toggle="tab"><%= t '.password' %></a></li>
     <% end %>
-    <% if @user.wca_id.present? %>
+    <% if current_user.can_change_users_avatar?(@user) %>
       <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
     <% end %>
   </ul>
@@ -180,7 +180,7 @@
       </div>
     <% end %>
 
-    <% if @user.wca_id.present? %>
+    <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
         <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
           <%= hidden_field_tag "section", "avatar" %>

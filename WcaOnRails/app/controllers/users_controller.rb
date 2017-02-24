@@ -69,13 +69,13 @@ class UsersController < ApplicationController
 
   def edit_avatar_thumbnail
     @user = user_to_edit
-    return if redirect_if_cannot_edit_user(@user)
+    return if redirect_unless_user(:can_change_users_avatar?, @user)
   end
 
   def edit_pending_avatar_thumbnail
     @user = user_to_edit
     @pending_avatar = true
-    return if redirect_if_cannot_edit_user(@user)
+    return if redirect_unless_user(:can_change_users_avatar?, @user)
     render :edit_avatar_thumbnail
   end
 
