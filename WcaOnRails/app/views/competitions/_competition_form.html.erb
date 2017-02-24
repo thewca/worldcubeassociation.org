@@ -233,6 +233,8 @@
     <%= f.input :use_wca_registration %>
 
     <div class="wca-registration-options">
+      <%= f.input :enable_donations %>
+
       <%= f.input :guests_enabled, as: :radio_buttons, collection: [ :true, :false ] %>
 
       <% if @competition.can_receive_registration_emails?(current_user.id) %>

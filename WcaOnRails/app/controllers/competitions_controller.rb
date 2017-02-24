@@ -444,6 +444,7 @@ class CompetitionsController < ApplicationController
       :registration_open,
       :registration_close,
       :guests_enabled,
+      :enable_donations,
       :being_cloned_from_id,
       :clone_tabs,
       :base_entry_fee_lowest_denomination,

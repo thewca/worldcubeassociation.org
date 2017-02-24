@@ -605,7 +605,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:success]).to eq "Your payment was successful."
         expect(response).to redirect_to competition_register_path(competition)
         expect(registration.reload.outstanding_entry_fees).to eq 0
@@ -626,7 +626,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
       end
@@ -662,7 +662,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         payment = registration.reload.registration_payments.first
         post :refund_payment, params: { id: registration.id, payment_id: payment.id }
         expect(response).to redirect_to edit_registration_path(registration)

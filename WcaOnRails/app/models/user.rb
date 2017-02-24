@@ -428,7 +428,7 @@ class User < ApplicationRecord
   end
 
   def can_edit_registration?(registration)
-    can_manage_competition?(registration.competition) || (!registration.accepted? && registration.user_id == self.id)
+    can_manage_competition?(registration.competition) || (!registration.accepted? && !registration.competition.registration_past? && registration.user_id == self.id)
   end
 
   def can_confirm_competition?(competition)

@@ -58,6 +58,7 @@ CREATE TABLE `Competitions` (
   `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
+  `enable_donations` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -400,6 +401,22 @@ CREATE TABLE `Scrambles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ar_internal_metadata`
+--
+
+DROP TABLE IF EXISTS `ar_internal_metadata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ar_internal_metadata` (
+  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `competition_delegates`
 --
 
@@ -730,25 +747,24 @@ CREATE TABLE `preferred_formats` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary table structure for view `rails_persons`
+-- Temporary view structure for view `rails_persons`
 --
 
 DROP TABLE IF EXISTS `rails_persons`;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `rails_persons` (
-  `id` tinyint NOT NULL,
-  `wca_id` tinyint NOT NULL,
-  `subId` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `countryId` tinyint NOT NULL,
-  `gender` tinyint NOT NULL,
-  `year` tinyint NOT NULL,
-  `month` tinyint NOT NULL,
-  `day` tinyint NOT NULL,
-  `comments` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `rails_persons` AS SELECT
+ 1 AS `id`,
+ 1 AS `wca_id`,
+ 1 AS `subId`,
+ 1 AS `name`,
+ 1 AS `countryId`,
+ 1 AS `gender`,
+ 1 AS `year`,
+ 1 AS `month`,
+ 1 AS `day`,
+ 1 AS `comments`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -975,10 +991,13 @@ CREATE TABLE `votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping routines for database 'wca_test'
+--
+
+--
 -- Final view structure for view `rails_persons`
 --
 
-/*!50001 DROP TABLE IF EXISTS `rails_persons`*/;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -1001,213 +1020,113 @@ CREATE TABLE `votes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-13 14:33:17
-INSERT INTO schema_migrations (version) VALUES ('20150501004846');
+-- Dump completed on 2017-02-23 15:51:23
+INSERT INTO schema_migrations (version) VALUES
+('20150501004846'),
+('20150504022234'),
+('20150504163657'),
+('20150520080634'),
+('20150521000833'),
+('20150521001340'),
+('20150521005227'),
+('20150521225109'),
+('20150526035517'),
+('20150601061358'),
+('20150601224750'),
+('20150602044759'),
+('20150602062127'),
+('20150602233220'),
+('20150603015039'),
+('20150718020058'),
+('20150718020123'),
+('20150806172310'),
+('20150812014543'),
+('20150819064257'),
+('20150821164902'),
+('20150826003626'),
+('20150831195312'),
+('20150903083847'),
+('20150904062512'),
+('20150908183742'),
+('20150924011143'),
+('20150924011919'),
+('20150924155057'),
+('20151001191340'),
+('20151008211834'),
+('20151014220307'),
+('20151116195414'),
+('20151117183214'),
+('20151119063335'),
+('20151119072940'),
+('20151207230222'),
+('20151209003851'),
+('20151213232440'),
+('20151214000352'),
+('20151215193124'),
+('20151217001125'),
+('20151217054555'),
+('20151217062612'),
+('20151222013017'),
+('20151230174411'),
+('20160109070723'),
+('20160120071503'),
+('20160128023834'),
+('20160218135313'),
+('20160218234447'),
+('20160223204831'),
+('20160224013453'),
+('20160303144700'),
+('20160305170821'),
+('20160406192349'),
+('20160407005537'),
+('20160407210623'),
+('20160504170758'),
+('20160504230105'),
+('20160505231300'),
+('20160513162613'),
+('20160514124545'),
+('20160514141051'),
+('20160517140653'),
+('20160518020433'),
+('20160518045741'),
+('20160520230353'),
+('20160528071910'),
+('20160531124049'),
+('20160602105428'),
+('20160610191605'),
+('20160616183719'),
+('20160627215744'),
+('20160701034833'),
+('20160705120632'),
+('20160705121551'),
+('20160727000015'),
+('20160731181145'),
+('20160811013347'),
+('20160825124202'),
+('20160831212003'),
+('20160901120254'),
+('20160902230822'),
+('20160914122252'),
+('20160930213354'),
+('20161011005956'),
+('20161018220122'),
+('20161026201019'),
+('20161031215932'),
+('20161108081416'),
+('20161108210423'),
+('20161117085757'),
+('20161118141833'),
+('20161122014040'),
+('20161122162029'),
+('20161201211133'),
+('20161206204738'),
+('20161212200704'),
+('20161221205552'),
+('20161226223701'),
+('20161227202950'),
+('20170121202850'),
+('20170212005142'),
+('20170215221832'),
+('20170223153915');
 
-INSERT INTO schema_migrations (version) VALUES ('20150504022234');
 
-INSERT INTO schema_migrations (version) VALUES ('20150504163657');
-
-INSERT INTO schema_migrations (version) VALUES ('20150520080634');
-
-INSERT INTO schema_migrations (version) VALUES ('20150521000833');
-
-INSERT INTO schema_migrations (version) VALUES ('20150521001340');
-
-INSERT INTO schema_migrations (version) VALUES ('20150521005227');
-
-INSERT INTO schema_migrations (version) VALUES ('20150521225109');
-
-INSERT INTO schema_migrations (version) VALUES ('20150526035517');
-
-INSERT INTO schema_migrations (version) VALUES ('20150601061358');
-
-INSERT INTO schema_migrations (version) VALUES ('20150601224750');
-
-INSERT INTO schema_migrations (version) VALUES ('20150602044759');
-
-INSERT INTO schema_migrations (version) VALUES ('20150602062127');
-
-INSERT INTO schema_migrations (version) VALUES ('20150602233220');
-
-INSERT INTO schema_migrations (version) VALUES ('20150603015039');
-
-INSERT INTO schema_migrations (version) VALUES ('20150718020058');
-
-INSERT INTO schema_migrations (version) VALUES ('20150718020123');
-
-INSERT INTO schema_migrations (version) VALUES ('20150806172310');
-
-INSERT INTO schema_migrations (version) VALUES ('20150812014543');
-
-INSERT INTO schema_migrations (version) VALUES ('20150819064257');
-
-INSERT INTO schema_migrations (version) VALUES ('20150821164902');
-
-INSERT INTO schema_migrations (version) VALUES ('20150826003626');
-
-INSERT INTO schema_migrations (version) VALUES ('20150831195312');
-
-INSERT INTO schema_migrations (version) VALUES ('20150903083847');
-
-INSERT INTO schema_migrations (version) VALUES ('20150904062512');
-
-INSERT INTO schema_migrations (version) VALUES ('20150908183742');
-
-INSERT INTO schema_migrations (version) VALUES ('20150924011143');
-
-INSERT INTO schema_migrations (version) VALUES ('20150924011919');
-
-INSERT INTO schema_migrations (version) VALUES ('20150924155057');
-
-INSERT INTO schema_migrations (version) VALUES ('20151001191340');
-
-INSERT INTO schema_migrations (version) VALUES ('20151008211834');
-
-INSERT INTO schema_migrations (version) VALUES ('20151014220307');
-
-INSERT INTO schema_migrations (version) VALUES ('20151116195414');
-
-INSERT INTO schema_migrations (version) VALUES ('20151117183214');
-
-INSERT INTO schema_migrations (version) VALUES ('20151119063335');
-
-INSERT INTO schema_migrations (version) VALUES ('20151119072940');
-
-INSERT INTO schema_migrations (version) VALUES ('20151207230222');
-
-INSERT INTO schema_migrations (version) VALUES ('20151209003851');
-
-INSERT INTO schema_migrations (version) VALUES ('20151213232440');
-
-INSERT INTO schema_migrations (version) VALUES ('20151214000352');
-
-INSERT INTO schema_migrations (version) VALUES ('20151215193124');
-
-INSERT INTO schema_migrations (version) VALUES ('20151217001125');
-
-INSERT INTO schema_migrations (version) VALUES ('20151217054555');
-
-INSERT INTO schema_migrations (version) VALUES ('20151217062612');
-
-INSERT INTO schema_migrations (version) VALUES ('20151222013017');
-
-INSERT INTO schema_migrations (version) VALUES ('20151230174411');
-
-INSERT INTO schema_migrations (version) VALUES ('20160109070723');
-
-INSERT INTO schema_migrations (version) VALUES ('20160120071503');
-
-INSERT INTO schema_migrations (version) VALUES ('20160128023834');
-
-INSERT INTO schema_migrations (version) VALUES ('20160218135313');
-
-INSERT INTO schema_migrations (version) VALUES ('20160218234447');
-
-INSERT INTO schema_migrations (version) VALUES ('20160223204831');
-
-INSERT INTO schema_migrations (version) VALUES ('20160224013453');
-
-INSERT INTO schema_migrations (version) VALUES ('20160303144700');
-
-INSERT INTO schema_migrations (version) VALUES ('20160305170821');
-
-INSERT INTO schema_migrations (version) VALUES ('20160406192349');
-
-INSERT INTO schema_migrations (version) VALUES ('20160407005537');
-
-INSERT INTO schema_migrations (version) VALUES ('20160407210623');
-
-INSERT INTO schema_migrations (version) VALUES ('20160504170758');
-
-INSERT INTO schema_migrations (version) VALUES ('20160504230105');
-
-INSERT INTO schema_migrations (version) VALUES ('20160505231300');
-
-INSERT INTO schema_migrations (version) VALUES ('20160513162613');
-
-INSERT INTO schema_migrations (version) VALUES ('20160514124545');
-
-INSERT INTO schema_migrations (version) VALUES ('20160514141051');
-
-INSERT INTO schema_migrations (version) VALUES ('20160517140653');
-
-INSERT INTO schema_migrations (version) VALUES ('20160518020433');
-
-INSERT INTO schema_migrations (version) VALUES ('20160518045741');
-
-INSERT INTO schema_migrations (version) VALUES ('20160520230353');
-
-INSERT INTO schema_migrations (version) VALUES ('20160528071910');
-
-INSERT INTO schema_migrations (version) VALUES ('20160531124049');
-
-INSERT INTO schema_migrations (version) VALUES ('20160602105428');
-
-INSERT INTO schema_migrations (version) VALUES ('20160610191605');
-
-INSERT INTO schema_migrations (version) VALUES ('20160616183719');
-
-INSERT INTO schema_migrations (version) VALUES ('20160627215744');
-
-INSERT INTO schema_migrations (version) VALUES ('20160701034833');
-
-INSERT INTO schema_migrations (version) VALUES ('20160705120632');
-
-INSERT INTO schema_migrations (version) VALUES ('20160705121551');
-
-INSERT INTO schema_migrations (version) VALUES ('20160727000015');
-
-INSERT INTO schema_migrations (version) VALUES ('20160731181145');
-
-INSERT INTO schema_migrations (version) VALUES ('20160811013347');
-
-INSERT INTO schema_migrations (version) VALUES ('20160825124202');
-
-INSERT INTO schema_migrations (version) VALUES ('20160831212003');
-
-INSERT INTO schema_migrations (version) VALUES ('20160901120254');
-
-INSERT INTO schema_migrations (version) VALUES ('20160902230822');
-
-INSERT INTO schema_migrations (version) VALUES ('20160914122252');
-
-INSERT INTO schema_migrations (version) VALUES ('20160930213354');
-
-INSERT INTO schema_migrations (version) VALUES ('20161011005956');
-
-INSERT INTO schema_migrations (version) VALUES ('20161018220122');
-
-INSERT INTO schema_migrations (version) VALUES ('20161026201019');
-
-INSERT INTO schema_migrations (version) VALUES ('20161031215932');
-
-INSERT INTO schema_migrations (version) VALUES ('20161108081416');
-
-INSERT INTO schema_migrations (version) VALUES ('20161108210423');
-
-INSERT INTO schema_migrations (version) VALUES ('20161117085757');
-
-INSERT INTO schema_migrations (version) VALUES ('20161118141833');
-
-INSERT INTO schema_migrations (version) VALUES ('20161122014040');
-
-INSERT INTO schema_migrations (version) VALUES ('20161122162029');
-
-INSERT INTO schema_migrations (version) VALUES ('20161201211133');
-
-INSERT INTO schema_migrations (version) VALUES ('20161206204738');
-
-INSERT INTO schema_migrations (version) VALUES ('20161212200704');
-
-INSERT INTO schema_migrations (version) VALUES ('20161221205552');
-
-INSERT INTO schema_migrations (version) VALUES ('20161226223701');
-
-INSERT INTO schema_migrations (version) VALUES ('20161227202950');
-
-INSERT INTO schema_migrations (version) VALUES ('20170121202850');
-
-INSERT INTO schema_migrations (version) VALUES ('20170212005142');
-
-INSERT INTO schema_migrations (version) VALUES ('20170215221832');

@@ -118,6 +118,14 @@ class Registration < ApplicationRecord
     entry_fee.nil? ? 0 : entry_fee - paid_entry_fees
   end
 
+  def has_to_pay_fee_here?
+    (pending? || accepted?) && competition.connected_stripe_account_id && outstanding_entry_fees > 0
+  end
+
+  def show_details?
+    competition.registration_opened? || !(new_record? || deleted?)
+  end
+
   def record_payment(amount, currency_code, stripe_charge_id)
     registration_payments.create!(
       amount_lowest_denomination: amount,

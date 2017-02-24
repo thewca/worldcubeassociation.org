@@ -1,5 +1,19 @@
+<% label ||= t('registrations.payment_form.labels.entry_fees') %>
+<% money_amount ||= @registration.entry_fee %>
+<% hint ||= false %>
+<% hint_context ||= false %>
+<% hint_context_attribute = hint_context ? "class=\"text-#{hint_context} bg-#{hint_context}\"" : "" %>
+
 <% if @registration.entry_fee %>
-  <%= alert :info do %>
-    <%= t 'registrations.entry_fee', fee: entry_fee %>
-  <% end %>
+  <div class="simple_form form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
+      <div class="col-sm-9">
+        <p class="form-control-static"><%= humanized_money_with_symbol(money_amount) %></p>
+      <% if hint %>
+        <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
+      <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>
