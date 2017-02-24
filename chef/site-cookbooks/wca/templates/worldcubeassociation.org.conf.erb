@@ -37,6 +37,11 @@ server {
     deny all;
   }
 
+  # Override above rule for HTTPS certificate renewal.
+  location ^~ /.well-known/ {
+    allow all;
+  }
+
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
   # user logs in.
