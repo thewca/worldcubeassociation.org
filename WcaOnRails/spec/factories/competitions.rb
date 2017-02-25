@@ -72,6 +72,10 @@ FactoryGirl.define do
       isConfirmed true
     end
 
+    trait :not_visible do
+      showAtAll false
+    end
+
     trait :visible do
       with_delegate
       showAtAll true

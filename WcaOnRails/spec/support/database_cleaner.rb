@@ -9,8 +9,16 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, js: true) do
+  def set_truncation_strategy
     DatabaseCleaner.strategy = :truncation, { except: TestDbManager::CONSTANT_TABLES }
+  end
+
+  config.before(:each, clean_db_with_truncation: true) do
+    set_truncation_strategy
+  end
+
+  config.before(:each, js: true) do
+    set_truncation_strategy
   end
 
   config.before(:each) do
