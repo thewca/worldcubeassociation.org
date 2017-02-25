@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CompetitionTabsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }
 
   def index
     @competition = competition_from_params

@@ -73,14 +73,12 @@ class ApplicationController < ActionController::Base
     super
   end
 
-  private def redirect_unless_user(action, *args)
-    redirected = false
-    unless current_user && current_user.send(action, *args)
+  private def redirect_to_root_unless_user(action, *args)
+    redirecting = !current_user&.send(action, *args)
+    if redirecting
       flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
       redirect_to root_url
-      redirected = true
     end
-
-    redirected
+    redirecting
   end
 end

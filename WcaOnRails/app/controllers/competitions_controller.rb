@@ -10,7 +10,7 @@ class CompetitionsController < ApplicationController
     :show_all_results,
     :show_results_by_person,
   ]
-  before_action -> { redirect_unless_user(:can_admin_results?) }, only: [
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_announcement,
     :post_results,
     :admin_edit,
@@ -24,9 +24,9 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
 
-  before_action -> { redirect_unless_user(:can_create_competitions?) }, only: [:new, :create]
+  before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   def new
     @competition = Competition.new
