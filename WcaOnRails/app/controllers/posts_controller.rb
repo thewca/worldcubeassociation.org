@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :rss, :show]
-  before_action -> { redirect_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
+  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
 
   def index
     @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])

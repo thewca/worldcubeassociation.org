@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class PollsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_create_poll?) }, only: [:new, :create, :update, :destroy]
-  before_action -> { redirect_unless_user(:can_vote_in_poll?) }, only: [:index, :vote, :results]
+  before_action -> { redirect_to_root_unless_user(:can_create_poll?) }, only: [:new, :create, :update, :destroy]
+  before_action -> { redirect_to_root_unless_user(:can_vote_in_poll?) }, only: [:index, :vote, :results]
 
   def index
     @polls = current_user.can_create_poll? ? Poll.all : Poll.confirmed

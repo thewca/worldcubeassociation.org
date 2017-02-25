@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class DelegatesPanelController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_unless_user(:can_view_crash_course?) }
-  before_action -> { redirect_unless_user(:can_update_crash_course?) }, only: [:edit_crash_course, :update_crash_course]
+  before_action -> { redirect_to_root_unless_user(:can_view_crash_course?) }
+  before_action -> { redirect_to_root_unless_user(:can_update_crash_course?) }, only: [:edit_crash_course, :update_crash_course]
 
   def index
   end
