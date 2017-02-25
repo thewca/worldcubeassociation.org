@@ -78,11 +78,9 @@ namespace :db do
           end
 
           default_password = 'wca'
+          default_encrypted_password = User.new(password: default_password).encrypted_password
           LogTask.log_task "Setting all user passwords to '#{default_password}'" do
-            User.find_each do |user|
-              user.password = default_password
-              user.save(validate: false) # Lots of users in the real database do not pass validations.
-            end
+            User.update_all encrypted_password: default_encrypted_password
           end
         end
       end
