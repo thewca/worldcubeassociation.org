@@ -32,8 +32,6 @@
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
     "recipe[wca]",
-    "recipe[wca::forum]",
-    "recipe[wca::phpMyAdmin]",
     "recipe[wca::regulations]",
     "recipe[wca::email]",
     "recipe[wca::cronjobs]",

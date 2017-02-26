@@ -63,25 +63,40 @@ rails_root = "#{repo_root}/WcaOnRails"
 
 
 #### Mysql
-mysql_service 'default' do
-  version '5.6'
-  initial_root_password secrets['mysql_password']
-  # Force default socket to make rails happy
-  socket "/var/run/mysqld/mysqld.sock"
-  action [:create, :start]
+db = {
+  'user' => 'root',
+}
+if node.chef_environment == "production"
+  # In production mode, we use Amazon RDS.
+  db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+else
+  # If not in production, then we run a local mysql instance.
+  socket = "/var/run/mysqld/mysqld.sock"
+  db['host'] = 'localhost'
+  db['socket'] = socket
+  mysql_service 'default' do
+    version '5.6'
+    initial_root_password secrets['mysql_password']
+    # Force default socket to make rails happy
+    socket socket
+    action [:create, :start]
+  end
+  mysql_config 'default' do
+    source 'mysql-wca.cnf.erb'
+    notifies :restart, 'mysql_service[default]'
+    action :create
+  end
 end
-mysql_config 'default' do
-  source 'mysql-wca.cnf.erb'
-  notifies :restart, 'mysql_service[default]'
-  action :create
-end
+db_url = "mysql2://#{db['user']}:#{secrets['mysql_password']}@#{db['host']}/cubing"
+
 template "/etc/my.cnf" do
   source "my.cnf.erb"
   mode 0644
   owner 'root'
   group 'root'
   variables({
-    secrets: secrets
+    secrets: secrets,
+    db: db,
   })
 end
 
@@ -262,7 +277,6 @@ end
 
 
 #### Rails secrets
-db_url = "mysql2://root:#{secrets['mysql_password']}@localhost/cubing"
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
@@ -271,6 +285,24 @@ template "#{rails_root}/.env.production" do
   variables({
     secrets: secrets,
     db_url: db_url,
+  })
+end
+
+#### PHP Forum
+template "#{repo_root}/webroot/forum/config.php" do
+  source "forum_config.php.erb"
+  variables({
+    secrets: secrets,
+    db: db,
+  })
+end
+
+#### phpMyAdmin
+template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
+  source "phpMyAdmin_config.inc.php.erb"
+  variables({
+    secrets: secrets,
+    db: db,
   })
 end
 
@@ -318,6 +350,7 @@ template "#{repo_root}/webroot/results/includes/_config.php" do
   group username
   variables({
     secrets: secrets,
+    db: db,
   })
 end
 
@@ -343,9 +376,19 @@ if node.chef_environment.start_with?("development")
   file db_setup_lockfile do
     action :create_if_missing
   end
-else
-  db_dump_folder = "#{repo_root}/secrets/wca_db"
-  execute "#{repo_root}/scripts/db.sh import #{db_dump_folder}"
+elsif node.chef_environment == "staging"
+  db_setup_lockfile = '/tmp/db-development-loaded'
+  execute "bundle exec rake db:load:development" do
+    cwd rails_root
+    environment({
+      "DATABASE_URL" => db_url,
+      "RACK_ENV" => rails_env,
+    })
+    not_if { ::File.exists?(db_setup_lockfile) }
+  end
+  file db_setup_lockfile do
+    action :create_if_missing
+  end
 end
 
 #### Screen
