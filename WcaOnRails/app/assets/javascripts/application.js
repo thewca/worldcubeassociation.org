@@ -47,6 +47,9 @@
 //= require autosize
 //= require simplemde
 //= require jquery_plugins
+//= require autoNumeric
+//= require currencies-data
+//= require currencies
 //= require_self
 //= require_tree .
 
@@ -232,6 +235,10 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
+
+  // Activate currency masks for the relevant fields
+  $('input.wca-currency-mask').wcaSetupCurrencyMask();
+
   $('.markdown-editor').each(function() {
     var editor = new SimpleMDE({
       element: this,
