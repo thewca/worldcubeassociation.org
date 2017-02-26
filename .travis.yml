@@ -11,14 +11,6 @@ env:
 before_install:
   # The Stripe API requires a newer version of openssl
   - sudo apt-get update && sudo apt-get install --only-upgrade openssl
-  # Travis has an old install of PhantomJS without .bind() support, here we upgrade to
-  # version 2.0.0
-  # From https://mediocre.com/forum/topics/phantomjs-2-and-travis-ci-we-beat-our-heads-against-a-wall-so-you-dont-have-to
-  - mkdir travis-phantomjs
-  - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
-  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
-  - export PATH=$PWD/travis-phantomjs:$PATH
-
   - cd WcaOnRails/
 before_script:
   - bundle exec rake db:reset RAILS_ENV=test
