@@ -316,7 +316,7 @@ it:
         #original_hash: 36155d4
         equipment: Equipaggiamento
         #original_hash: 67cd406
-        venue: Posto
+        venue: Location
         #original_hash: 519255a
         organization: Organizzazione
         #original_hash: 5e326b1
@@ -1284,7 +1284,7 @@ it:
       #original_hash: 4271627
       city: Città
       #original_hash: 67cd406
-      venue: Posto
+      venue: Location
       #original_hash: d70f93d
       address: Indirizzo
       #original_hash: dc3decb
