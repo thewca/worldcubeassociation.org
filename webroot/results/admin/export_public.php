@@ -15,13 +15,10 @@ if( $chosenExport ){
   exportPublic( array(
     'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
                                 best, average,
-                                personName, personId, result.countryId AS personCountryId,
+                                personName, personId, countryId AS personCountryId,
                                 formatId, value1, value2, value3, value4, value5,
                                 regionalSingleRecord, regionalAverageRecord
-                       FROM     Results result, Competitions competition, Events event, Rounds round
-                       WHERE    competition.id=competitionId AND event.id=eventId AND round.id=roundId
-                       ORDER BY competition.year, competition.month, competition.day, competition.id,
-                                event.rank, round.rank, pos, average, best, personName',
+                       FROM     Results',
     'RanksSingle'  => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksSingle',
     'RanksAverage' => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksAverage',
     'Rounds'       => '*',
