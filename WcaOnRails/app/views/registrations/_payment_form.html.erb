@@ -1,4 +1,4 @@
-<%= horizontal_simple_form_for :payment, url: competition_process_payment_path, html: { id: :form_payment } do |f| %>
+<%= horizontal_simple_form_for :payment, url: competition_process_payment_path(@competition), html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= f.input :stripeToken, as: :hidden, input_html: { id: :stripeToken } %>
   <%= f.input :total_amount, as: :hidden, input_html: { id: :total_amount } %>

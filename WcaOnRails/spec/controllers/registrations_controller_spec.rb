@@ -601,7 +601,7 @@ RSpec.describe RegistrationsController do
           card: {
             number: "4242424242424242",
             exp_month: 12,
-            exp_year: 2017,
+            exp_year: 1.year.from_now.year,
             cvc: "314",
           },
         ).id
@@ -615,6 +615,45 @@ RSpec.describe RegistrationsController do
         expect(charge.metadata.wca_id).to eq user.wca_id
         expect(charge.metadata.email).to eq user.email
         expect(charge.metadata.competition).to eq competition.name
+      end
+
+      it 'processes payment with donation and valid credit card' do
+        expect(registration.outstanding_entry_fees).to be > 0
+        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+        token_id = Stripe::Token.create(
+          card: {
+            number: "4242424242424242",
+            exp_month: 12,
+            exp_year: 1.year.from_now.year,
+            cvc: "314",
+          },
+        ).id
+        donation_lowest_denomination = 100
+        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents + donation_lowest_denomination } }
+        expect(flash[:success]).to eq "Your payment was successful."
+        expect(response).to redirect_to competition_register_path(competition)
+        expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
+        expect(registration.paid_entry_fees.cents).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
+        charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+        expect(charge.amount).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
+        expect(charge.metadata.wca_id).to eq user.wca_id
+        expect(charge.metadata.email).to eq user.email
+        expect(charge.metadata.competition).to eq competition.name
+      end
+
+      it 'rejects insufficient payment with valid credit card' do
+        expect(registration.outstanding_entry_fees).to be > 0
+        token_id = Stripe::Token.create(
+          card: {
+            number: "4242424242424242",
+            exp_month: 12,
+            exp_year: 1.year.from_now.year,
+            cvc: "314",
+          },
+        ).id
+        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: 500 } }
+        expect(flash[:danger]).to match "the amount to be charged was lower than the registration fees to pay"
+        expect(response).to redirect_to competition_register_path(competition)
       end
 
       it 'rejects payment with invalid credit card' do
