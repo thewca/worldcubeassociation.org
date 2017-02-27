@@ -2,8 +2,8 @@
 // THIS FILE CAME FROM webroot/results/includes/_config.php.template
 // data here is loaded into configuration class.  Should be accessed by via configuration object (global $config in _framework file).
 
-$config['database']['host'] = 'localhost';
-$config['database']['user'] = 'root';
+$config['database']['host'] = '<%= @db['host'] %>';
+$config['database']['user'] = '<%= @db['user'] %>';
 $config['database']['pass'] = '<%= @secrets['mysql_password'] %>';
 $config['database']['name'] = 'cubing';
 $config['database']['port'] = 3306;

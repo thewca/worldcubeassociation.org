@@ -2,10 +2,10 @@
 // phpBB 3.0.x auto-generated configuration file
 // Do not change anything in this file!
 $dbms = 'mysqli';
-$dbhost = 'localhost';
+$dbhost = '<%= @db['host'] %>';
 $dbport = '';
 $dbname = 'cubing_phpbb';
-$dbuser = 'root';
+$dbuser = '<%= @db['user'] %>';
 $dbpasswd = '<%= @secrets['mysql_password'] %>';
 $table_prefix = 'phpbb3_';
 $acm_type = 'file';
