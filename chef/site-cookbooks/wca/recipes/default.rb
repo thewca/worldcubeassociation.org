@@ -69,6 +69,7 @@ db = {
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  package 'mysql-client'
 else
   # If not in production, then we run a local mysql instance.
   socket = "/var/run/mysqld/mysqld.sock"
