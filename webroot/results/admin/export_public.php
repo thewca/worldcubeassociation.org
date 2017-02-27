@@ -154,6 +154,10 @@ function exportPublic ( $sources ) {
         echo '.';  # shows both Apache and the user that the script is doing stuff and not hanging
       }
     }
+    //Check if any errors while fetching data
+    if (($error = mysql_error()) !== '') {
+      die( '<p>An error occurred while fetching data.<br/>\n(' . $error . ')</p>\n' );
+    }
     //Check if any sql need to be exported
     if ($sqlInserts !== array()) {
       $sql = $sqlStart . "\n" . implode( ",\n", $sqlInserts ) . ";\n";
