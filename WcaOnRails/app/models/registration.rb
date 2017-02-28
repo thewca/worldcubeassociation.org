@@ -109,8 +109,7 @@ class Registration < ApplicationRecord
   def paid_entry_fees
     Money.new(
       registration_payments.sum(:amount_lowest_denomination),
-      # FIXME: see https://github.com/thewca/worldcubeassociation.org/issues/1257
-      (competition.currency_code.blank? ? Money.default_currency : competition.currency_code),
+      competition.currency_code,
     )
   end
 

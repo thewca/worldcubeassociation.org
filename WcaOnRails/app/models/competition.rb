@@ -105,6 +105,8 @@ class Competition < ApplicationRecord
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: %r{\Ahttps?://.*\z} }, allow_blank: true
 
+  validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
+
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
   NEARBY_DISTANCE_KM_INFO = 200
