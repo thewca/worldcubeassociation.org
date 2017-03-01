@@ -1025,7 +1025,7 @@ zh-CN:
     #original_hash: cfc4865
     delete_registration: 删除报名。
     #original_hash: e9ddc6e
-    will_open_html: '报名将在<strong>%{days}</strong>天后的%{time}开放。'
+    will_open_html: '报名将在<strong>%{days}</strong>后的%{time}开放。'
     #original_hash: 34eb009
     will_close_html: '报名将在<strong>%{days}</strong>后的%{time}结束。'
     #original_hash: dc8a520
@@ -1033,7 +1033,7 @@ zh-CN:
     #original_hash: 2e7024d
     please_sign_in_past_html: '%{sign_in}以查看你的报名。如果你没有WCA账号，可以在%{here}注册，但是现在已经太晚没法报名这个比赛了。'
     #original_hash: 7753b2e
-    please_sign_in_not_yet_open_html: '%{sign_in}来查看你的报名。如果你没有WCA账号，可以在%{here}注册，只是现在报名还没开始。'
+    please_sign_in_not_yet_open_html: '%{sign_in}以查看你的报名。如果你没有WCA账号，可以在%{here}注册，只是现在报名还没开始。'
     #original_hash: e1301c4
     please_sign_in_html: '%{sign_in}来报名%{comp}。如果你没有WCA账号，可以在%{here}注册。'
     #original_hash: 89b4e7f
@@ -1208,6 +1208,8 @@ zh-CN:
       #original_hash: 9104a03
       no_past_competitions: 你没有以前的比赛。
     competition_form:
+      #original_hash: e879b0b
+      board: 董事会
       #original_hash: f957dcb
       supports_md_html: >-
         支持<a href='https://daringfireball.net/projects/markdown/basics'
@@ -1311,7 +1313,7 @@ zh-CN:
       #original_hash: 9eb8f46
       within: '%{days}天内'
       #original_hash: d97d1ee
-      show: 是否公示
+      show: 查看
       #original_hash: 709a232
       name: 名字
       #original_hash: adc24b7
