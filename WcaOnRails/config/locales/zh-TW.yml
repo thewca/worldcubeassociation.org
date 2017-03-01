@@ -826,11 +826,11 @@ zh-TW:
       #original_hash: 26f70ed
       dob_past: 必須為過去
       #original_hash: f599dc5
-      must_be_senior: 必須為地區代表
+      must_be_senior: 必須為高級代表
       #original_hash: 2e582eb
       must_not_be_present: 不得為現任
       #original_hash: b2c4ecc
-      senior_has_delegate: 一般代表無法將地區代表降職
+      senior_has_delegate: 一般代表無法將高級代表降職
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
       #original_hash: eeb76a7
@@ -1219,6 +1219,8 @@ zh-TW:
       #original_hash: 9104a03
       no_past_competitions: 您沒有過去的比賽。
     competition_form:
+      #original_hash: e879b0b
+      board: WCA董事會
       #original_hash: f957dcb
       supports_md_html: >-
         支援<a href='https://daringfireball.net/projects/markdown/basics'
@@ -1592,7 +1594,7 @@ zh-TW:
         description: 該團隊負責管理WCA軟體(網站、轉亂程式、工作簿、管理工具)。
       #original_hash: f2ceade
       delegates_html: >-
-        <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA地區代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA地區代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
+        <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
       #original_hash: 27d18ac
       see_link_html: '(見%{link})'
       #original_hash: 5b01fcc
