@@ -454,12 +454,12 @@ GEM
       ref
     thor (0.19.4)
     thread (0.2.2)
-    thread_safe (0.3.5)
+    thread_safe (0.3.6)
     tilt (2.0.6)
     time_will_tell (0.1.0)
       railties (>= 3.2)
     tins (1.13.2)
-    twitter_cldr (4.2.0)
+    twitter_cldr (4.3.0)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
       tzinfo
