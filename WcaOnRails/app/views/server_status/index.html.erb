@@ -62,7 +62,9 @@
     <span>PID:</span> <%= Process.pid %>
     <%= icon "circle" %>
     <span>Uptime:</span> <%= duration_to_s(Time.now - WcaOnRails::BOOTED_AT) %>
-  <% end %>
+    <%= icon "circle" %>
+    <a href="https://github.com/thewca/worldcubeassociation.org/commit/#{`git rev-parse HEAD`}">Git commit</a>
+<% end %>
 
   <%= link_to icon("language", "Translations status"), translations_status_path, class: "btn btn-primary" %>
 </div>

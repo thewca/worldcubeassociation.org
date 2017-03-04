@@ -402,11 +402,11 @@ class Competition < ApplicationRecord
 
   def receiving_registration_emails?(user_id)
     competition_delegate = competition_delegates.find_by_delegate_id(user_id)
-    if competition_delegate && competition_delegate.receive_registration_emails
+    if competition_delegate&.receive_registration_emails
       return true
     end
     competition_organizer = competition_organizers.find_by_organizer_id(user_id)
-    if competition_organizer && competition_organizer.receive_registration_emails
+    if competition_organizer&.receive_registration_emails
       return true
     end
 
@@ -568,7 +568,7 @@ class Competition < ApplicationRecord
   end
 
   def has_location?
-    !latitude.nil? && !longitude.nil?
+    latitude.present? && longitude.present?
   end
 
   def days_until
@@ -680,7 +680,7 @@ class Competition < ApplicationRecord
   end
 
   def started?
-    !start_date.nil? && start_date < Date.today
+    start_date.present? && start_date < Date.today
   end
 
   def organizers_or_delegates
@@ -776,11 +776,11 @@ class Competition < ApplicationRecord
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    competitions.includes(:delegates, :organizers).order(year: :desc, month: :desc, day: :desc)
+    competitions.includes(:delegates, :organizers).order(start_date: :desc)
   end
 
   def serializable_hash(options = nil)
-    json = {
+    {
       class: self.class.to_s.downcase,
       url: Rails.application.routes.url_helpers.competition_path(self),
 
@@ -795,6 +795,5 @@ class Competition < ApplicationRecord
       delegates: delegates,
       organizers: organizers,
     }
-    json
   end
 end
