@@ -1369,6 +1369,8 @@ pt-BR:
       #original_hash: 9104a03
       no_past_competitions: Você não tem nenhuma competição passada.
     competition_form:
+      #original_hash: e879b0b
+      board: Conselho
       #original_hash: f957dcb
       supports_md_html: >-
         Você pode usar <a

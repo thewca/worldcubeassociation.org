@@ -77,6 +77,7 @@ source 'https://rails-assets.org' do
   # https://github.com/NextStepWebs/simplemde-markdown-editor/issues/407 and
   # https://github.com/tenex/rails-assets/issues/367.
   gem 'rails-assets-simplemde', '1.10.1'
+  gem 'rails-assets-autoNumeric'
 end
 
 group :development, :test do

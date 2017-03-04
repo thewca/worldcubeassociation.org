@@ -1365,6 +1365,8 @@ pt:
       #original_hash: 9104a03
       no_past_competitions: Não tem nenhuma competição passada.
     competition_form:
+      #original_hash: e879b0b
+      board: Conselho
       #original_hash: f957dcb
       supports_md_html: >-
         Suporta <a href='https://daringfireball.net/projects/markdown/basics'

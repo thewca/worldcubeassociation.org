@@ -1267,9 +1267,9 @@ da:
       website: Hjemmeside
       #original_hash: 680567f
       organizer_plural:
-        zero: Arrangøre
+        zero: Arrangører
         one: Arrangør
-        other: Arrangøre
+        other: Arrangører
       #original_hash: 6afa61e
       delegate:
         zero: WCA Delegater
@@ -1363,6 +1363,8 @@ da:
       #original_hash: 9104a03
       no_past_competitions: Du har ingen tidligere konkurrencer.
     competition_form:
+      #original_hash: e879b0b
+      board: Tavle
       #original_hash: f957dcb
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'

@@ -1,5 +1,8 @@
 [client]
 default-character-set          = utf8
-socket                         = /var/run/mysqld/mysqld.sock
+host                           = <%= @db['host'] %>
+<% if @db['socket'] %>
+socket                         = <%= @db['socket'] %>
+<% end %>
 user                           = root
 password                       = <%= @secrets['mysql_password'] %>
