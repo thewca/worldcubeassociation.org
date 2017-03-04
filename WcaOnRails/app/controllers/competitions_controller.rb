@@ -80,7 +80,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = Competition
     end
-    @competitions = @competitions.includes(:country).where(showAtAll: true).order(:year, :month, :day)
+    @competitions = @competitions.includes(:country).where(showAtAll: true).order(:start_date)
 
     if @present_selected
       @competitions = @competitions.not_over
@@ -316,7 +316,7 @@ class CompetitionsController < ApplicationController
   def stripe_connect
     code = params[:code]
     competition = Competition.find(params[:state])
-    unless current_user && current_user.can_manage_competition?(competition)
+    unless current_user&.can_manage_competition?(competition)
       raise ActionController::RoutingError.new('Not Found')
     end
     client = create_stripe_oauth_client
@@ -337,12 +337,7 @@ class CompetitionsController < ApplicationController
       token_url: '/oauth/token',
     }
 
-    client = OAuth2::Client.new(
-      ENVied.STRIPE_CLIENT_ID,
-      ENVied.STRIPE_API_KEY,
-      options,
-    )
-    client
+    OAuth2::Client.new(ENVied.STRIPE_CLIENT_ID, ENVied.STRIPE_API_KEY, options)
   end
 
   def clone_competition
@@ -454,7 +449,7 @@ class CompetitionsController < ApplicationController
       :base_entry_fee_lowest_denomination,
       :currency_code,
     ]
-    if @competition && @competition.isConfirmed? && !current_user.can_admin_results?
+    if @competition&.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else
       permitted_competition_params += [
