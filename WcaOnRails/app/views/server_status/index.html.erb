@@ -58,13 +58,14 @@
     </div>
   </div>
 
-  <%= alert :info do %>
-    <span>PID:</span> <%= Process.pid %>
-    <%= icon "circle" %>
-    <span>Uptime:</span> <%= duration_to_s(Time.now - WcaOnRails::BOOTED_AT) %>
-    <%= icon "circle" %>
-    <a href="https://github.com/thewca/worldcubeassociation.org/commit/#{`git rev-parse HEAD`}">Git commit</a>
-  <% end %>
+  <%= alert :info do
+    sha1 = `git rev-parse HEAD`
+    {
+        "PID": Process.pid,
+        "Uptime": duration_to_s(Time.now - WcaOnRails::BOOTED_AT),
+        "Git commit": link_to(sha1.first(7), "https://github.com/thewca/worldcubeassociation.org/commit/#{sha1}")
+    }.map { |key, value| "#{key}: #{value}" }.join(" #{icon "circle"} ").html_safe
+  end %>
 
   <%= link_to icon("language", "Translations status"), translations_status_path, class: "btn btn-primary" %>
 </div>
