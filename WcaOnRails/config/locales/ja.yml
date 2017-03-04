@@ -154,12 +154,12 @@ ja:
       invalid: 無効
     #original_hash: 49d0140
     days:
-      zero: 0 日
       other: '%{count} 日'
+      zero: 0 日
     #original_hash: 203e1b3
     these_events:
-      zero: 指定された種目
       other: '指定された %{count} 種目'
+      zero: 指定された種目
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -558,7 +558,7 @@ ja:
           #original_hash: 61a0572
           accepted: 登録済
           #original_hash: a6b2452
-          pending: キャンセル待ちリスト
+          pending: 承認待ちリスト
           #original_hash: 441bda6
           deleted: 削除
       competition:
@@ -586,8 +586,8 @@ ja:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 誤りはありません。
           other: '%{count} 件の誤りがあります。'
+          zero: 誤りはありません。
     doorkeeper:
       applications:
         help:
@@ -882,31 +882,31 @@ ja:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 人 (初参加者)
         other: 人 (初参加者)
+        zero: 人 (初参加者)
       #original_hash: bc010e3
       returner:
-        zero: 人 (大会経験者)
         other: 人 (大会経験者)
+        zero: 人 (大会経験者)
       #original_hash: b7da17a
       person:
-        zero: 人
         other: 人
+        zero: 人
     flash:
       #original_hash: da7ec53
       not_using_wca: この大会は WCA 大会申し込みシステムを利用していません
       #original_hash: d528030
       accepted_and_mailed:
-        zero: 参加申し込みが完了しました。メールをご確認ください。
         other: 参加申し込みが完了しました。メールをご確認ください。
+        zero: 参加申し込みが完了しました。メールをご確認ください。
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: 申し込みはキャンセル待ちに登録されました。
-        other: 申し込みはキャンセル待ちに登録されました。
+        other: 申し込みは承認待ちに登録されました。
+        zero: 申し込みは承認待ちに登録されました。
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: 参加申し込みが削除されました。
         other: 参加申し込みが削除されました。
+        zero: 参加申し込みが削除されました。
       #original_hash: c3aa289
       single_deletion_and_mail: '参加申し込みが削除されました。%{mail} にメールを送信しました。'
       #original_hash: d8f067f
@@ -931,7 +931,7 @@ ja:
         #original_hash: 8374583
         registered_html: '%{comp_name} に申し込みました。'
         #original_hash: 9238412
-        on_waiting_list: '申し込みはキャンセル待ちです。現在、%{n_total} %{people} 待ちです。'
+        on_waiting_list: '申し込みは承認待ちです。現在、%{n_total} %{people} 待ちです。'
         #original_hash: f5b00be
         approval_info_html: >-
           参加申し込みが受理された場合、メールでお知らせします。 申し込みは自動受理にはなりませんのでご注意ください。
@@ -945,9 +945,9 @@ ja:
         see_you_soon: '%{comp_name} でお会いできることを楽しみにしております。'
       pending:
         #original_hash: e48d8bd
-        mail_subject: '%{comp_name} の参加申し込みがキャンセル待ちになりました。'
+        mail_subject: '%{comp_name} の参加申し込みが承認待ちになりました。'
         #original_hash: 6fd0a8e
-        moved_html: '%{comp_name} の参加申し込みがキャンセル待ちになりました。 考えられる理由は次のとおりです。'
+        moved_html: '%{comp_name} の参加申し込みが承認待ちになりました。 考えられる理由は次のとおりです。'
         causes:
           #original_hash: eadfc0d
           accepted: 誤って申し込みが受理されたため。
@@ -976,8 +976,8 @@ ja:
       edit: 編集
       #original_hash: 0ab725c
       country_plural:
-        zero: 0 か国
         other: '%{count} か国'
+        zero: 0 か国
       #original_hash: 1feee0e
       export_csv: CSV に出力
       #original_hash: 84add5b
@@ -989,7 +989,7 @@ ja:
       #original_hash: f6fdbe4
       delete: 削除
       #original_hash: 92d40dc
-      waiting_list: キャンセル待ちリスト
+      waiting_list: 承認待ちリスト
       #original_hash: 06f7d1a
       approved_registrations: 承認済み参加申し込み
       #original_hash: bff04e8
@@ -1080,7 +1080,7 @@ ja:
       #original_hash: 3322400
       tooltip_registered: 既に申し込み済みです。
       #original_hash: f2d092f
-      tooltip_waiting_list: 現在キャンセル待ちです。
+      tooltip_waiting_list: 現在承認待ちです。
       #original_hash: 9ecd976
       confirmed_visible: この大会は承認済みで公開されています。
       #original_hash: fa186a9
@@ -1115,12 +1115,12 @@ ja:
       website: ウェブサイト
       #original_hash: 680567f
       organizer_plural:
-        zero: 主催者
         other: 主催者
+        zero: 主催者
       #original_hash: 6afa61e
       delegate:
-        zero: WCA 代理人
         other: WCA 代理人
+        zero: WCA 代理人
       #original_hash: b37456c
       contact: お問い合わせ
       #original_hash: a428739
