@@ -154,18 +154,18 @@ sl:
       invalid: neveljaven
     #original_hash: 49d0140
     days:
-      other: '%{count} dni'
-      few: '%{count} dni'
-      two: 2 dni
-      one: 1 dan
       zero: 0 dni
+      one: 1 dan
+      two: 2 dni
+      few: '%{count} dni'
+      other: '%{count} dni'
     #original_hash: 203e1b3
     these_events:
-      other: 'te %{count} disipline'
-      few: 'te %{count} discipline'
-      two: ti disciplini
-      one: to disciplino
       zero: 0 disciplin
+      one: to disciplino
+      two: ti disciplini
+      few: 'te %{count} discipline'
+      other: 'te %{count} disipline'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -640,11 +640,11 @@ sl:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Obraze vsebuje %{count} napake:'
-          few: 'Obrazec vsebuje %{count} napake:'
-          two: 'Obrazec vsebuje dve napaki:'
-          one: 'Obrazec vsebuje eno napako:'
           zero: 'Obrazec vsebuje %{count} napake:'
+          one: 'Obrazec vsebuje eno napako:'
+          two: 'Obrazec vsebuje dve napaki:'
+          few: 'Obrazec vsebuje %{count} napake:'
+          other: 'Obraze vsebuje %{count} napake:'
     doorkeeper:
       applications:
         help:
@@ -734,11 +734,11 @@ sl:
       #original_hash: 4fd2a7f
       db_export: Izvoz Baze Podatkov
       #original_hash: 1fa73f3
-      regulations: Pravila
+      regulations: Pravilnik
       #original_hash: 141d1d7
-      guidelines: Vodila
+      guidelines: Smernice
       #original_hash: c4622c3
-      scrambles: Scrambli
+      scrambles: Mešalni algoritmi
       #original_hash: 90ccd64
       history: Zgodovina
       #original_hash: 8ad8302
@@ -996,49 +996,49 @@ sl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: novincev
-        few: novinci
-        two: novinca
-        one: novinec
         zero: novincev
+        one: novinec
+        two: novinca
+        few: novinci
+        other: novincev
       #original_hash: bc010e3
       returner:
-        other: povratnikov
-        few: povratniki
-        two: povratnika
-        one: povratnik
         zero: povratnikov
+        one: povratnik
+        two: povratnika
+        few: povratniki
+        other: povratnikov
       #original_hash: b7da17a
       person:
-        other: oseb
-        few: osebe
-        two: osebi
-        one: oseba
         zero: oseb
+        one: oseba
+        two: osebi
+        few: osebe
+        other: oseb
     flash:
       #original_hash: da7ec53
       not_using_wca: To tekmovanje ne uporablja WCA registracije
       #original_hash: d528030
       accepted_and_mailed:
-        other: Registracij sprejetih! Obvestilo poslano preko E-pošte.
-        few: Registracije sprejete! Obvestilo poslano preko E-pošte.
-        two: Registraciji sprejeti! Obvestilo poslano preko E-pošte.
-        one: Registracija sprejeta! Obvestilo poslano preko E-pošte.
         zero: Nič registracij sprejetih! Obvestilo poslano preko E-pošte.
+        one: Registracija sprejeta! Obvestilo poslano preko E-pošte.
+        two: Registraciji sprejeti! Obvestilo poslano preko E-pošte.
+        few: Registracije sprejete! Obvestilo poslano preko E-pošte.
+        other: Registracij sprejetih! Obvestilo poslano preko E-pošte.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Registracij premaknjenih na čakalno listo
-        few: Registracije premaknjene na čakalno listo
-        two: Registraciji premaknjeni na čakalno listo
-        one: Registracija premaknjena na čakalno list
         zero: Registracij premaknjenih na čakalno listo
+        one: Registracija premaknjena na čakalno list
+        two: Registraciji premaknjeni na čakalno listo
+        few: Registracije premaknjene na čakalno listo
+        other: Registracij premaknjenih na čakalno listo
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Registracij izbrisanih
-        few: Registracije izbrisane
-        two: Registraciji izbrisani
-        one: Registracija izbrisana
         zero: Registracij izbrisanih
+        one: Registracija izbrisana
+        two: Registraciji izbrisani
+        few: Registracije izbrisane
+        other: Registracij izbrisanih
       #original_hash: c3aa289
       single_deletion_and_mail: 'Registracija izbrisana, E-pošta poslana na %{mail}'
       #original_hash: d8f067f
@@ -1121,11 +1121,11 @@ sl:
       edit: Uredi
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} držav'
-        few: '%{count} države'
-        two: '%{count} državi'
-        one: 1 država
         zero: 0 držav
+        one: 1 država
+        two: '%{count} državi'
+        few: '%{count} države'
+        other: '%{count} držav'
       #original_hash: 1feee0e
       export_csv: Izvozi v CSV
       #original_hash: 84add5b
@@ -1268,7 +1268,7 @@ sl:
       title: Moja tekmovanja
       #original_hash: 6e79aaf
       disclaimer: >-
-        Tukaj bodo prikazana samo tekmovanje, ki uporabljajo WCA sistem za
+        Prikazana bodo samo tekmovanja, ki uporabljajo WCA sistem za
         registriranje.
       #original_hash: 94a2fc8
       past_competitions: Pretekla tekmovanja
@@ -1287,18 +1287,18 @@ sl:
       website: Spletna stran
       #original_hash: 680567f
       organizer_plural:
-        other: Organizatorji
-        few: Organizatorji
-        two: Organizatorja
-        one: Organizator
         zero: Organizator
+        one: Organizator
+        two: Organizatorja
+        few: Organizatorji
+        other: Organizatorji
       #original_hash: 6afa61e
       delegate:
-        other: WCA Delegati
-        few: WCA Delegati
-        two: WCA Delegata
-        one: WCA Delegat
         zero: WCA Delegat
+        one: WCA Delegat
+        two: WCA Delegata
+        few: WCA Delegati
+        other: WCA Delegati
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: a428739
@@ -1387,6 +1387,8 @@ sl:
       #original_hash: 9104a03
       no_past_competitions: Nimate preteklih tekmovanj.
     competition_form:
+      #original_hash: e879b0b
+      board: Odbor
       #original_hash: f957dcb
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
@@ -1496,11 +1498,11 @@ sl:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} tekmovanj'
-        few: Par tekmovanj
-        two: Dva tekmovanja
-        one: Eno tekmovanje
         zero: Nič tekmovanj
+        one: Eno tekmovanje
+        two: Dva tekmovanja
+        few: Par tekmovanj
+        other: '%{count} tekmovanj'
       #original_hash: e3528ec
       label: 'Tekmovanja v bližini (znotraj %{days} dni in %{kms} km)'
       #original_hash: 3446062
@@ -1804,7 +1806,7 @@ sl:
           Madžarske. Selekcija teh ugank so izbrane kot uradne WCA discipline.
         #original_hash: c8ecd24
         '2': >-
-          Worl Cube Association organizira tekmovanja po celem svetu, državne
+          World Cube Association organizira tekmovanja po celem svetu, državne
           organizacije pa podpirajo organizacijo v njihovih državah.
         #original_hash: 20e0550
         '3': >-
@@ -1861,8 +1863,8 @@ sl:
         tekmovanja potekajo v skladu z misijo, pravili in duhom WCA. WCA
         razlikuje med <strong>Senior Delegati</strong>, <strong>WCA
         Delegati</strong> in <strong> WCA kandidati za delegata</strong>
-        %{see_link}. Zraven obveznosti WCA Delegata je Senior Delegat zadolžen
-        za vodenje delegatov svojega področja in je lahko kontaktiran s strani
+        %{see_link}. Poleg obveznosti WCA Delegata je Senior Delegat zadolžen za
+        vodenje delegatov svojega področja in je lahko kontaktiran s strani
         skupnosti za regionalne težave. Novi delegati so navedeni kot WCA
         kandidati za delegata in se morajo dokazati, da so sposobni uspešno
         voditi tekmovanje preden se vnesejo kot WCA delegati.
