@@ -20,6 +20,10 @@ class Country < ApplicationRecord
     @real_countries ||= Country.uncached_real
   end
 
+  def real?
+    !read_attribute(:name).include?('Multiple Countries')
+  end
+
   def self.find_by_iso2(iso2)
     c_all_by_id.values.select { |c| c.iso2 == iso2 }.first
   end
@@ -65,16 +69,8 @@ class Country < ApplicationRecord
     array.sort_by! { |element| collator.get_sort_key(block.call(element)) }
   end
 
-  ALL_COUNTRIES_WITH_NAME_AND_ID_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
-    countries = localized_sort_by!(locale, Country.all.map do |country|
-      # We want a localized country name, but a constant id across languages
-      # NOTE: it means "search" will behave weirdly as it still searches by English
-      # name (eg: searching for "Tunisie" in French won't match competitions in
-      # "Tunisia" even if the country displayed is actually "Tunisie"...)
-      [country.name_in(locale), country.id]
-      # Now we want to sort countries according to their localized name
-    end) { |localized_name, _id| localized_name }
-
+  ALL_COUNTRIES_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
+    countries = localized_sort_by!(locale, Country.all.to_a) { |country| country.name_in(locale) }
     [locale, countries]
   end].freeze
 end
