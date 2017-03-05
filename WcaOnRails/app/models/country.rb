@@ -69,8 +69,12 @@ class Country < ApplicationRecord
     array.sort_by! { |element| collator.get_sort_key(block.call(element)) }
   end
 
-  ALL_COUNTRIES_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
+  ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
     countries = localized_sort_by!(locale, Country.all.to_a) { |country| country.name_in(locale) }
     [locale, countries]
   end].freeze
+
+  def self.all_sorted_by(locale, real: false)
+    real ? ALL_SORTED_BY_LOCALE[locale].select(&:real?) : ALL_SORTED_BY_LOCALE[locale]
+  end
 end
