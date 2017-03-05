@@ -1,23 +1,19 @@
-<% provide(:title, 'WCA Website DOB Form') %>
+<% provide(:title, t('.title')) %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <p>
-    Use this form if your birthdate stored in our database is different from the real one.
-    <%= link_to "Other inquiries", contact_path %> should be sent to the
-    appropriate party.
-  </p>
+  <p><%= t('.description') %></p>
 
   <%= simple_form_for @contact, url: contact_dob_path, html: { multipart: true, class: 'form-horizontal' } do |f| %>
-    <%= f.input :name %>
-    <%= f.input :your_email %>
-    <%= f.input :wca_id %>
-    <%= f.input :dob, as: :date_picker %>
+    <%= f.input :name, label: t('simple_form.labels.contact.name') %>
+    <%= f.input :your_email, label: t('simple_form.labels.contact.your_email') %>
+    <%= f.input :wca_id, label: t('common.user.wca_id') %>
+    <%= f.input :dob, as: :date_picker, label: t('activerecord.attributes.person.dob') %>
     <%= f.input :document, as: :file %>
     <%= recaptcha_tags %>
     <div>
       </br>
-      <%= f.button :submit, 'Send message', class: "btn btn-primary" %>
+      <%= f.button :submit, t('.submit'), class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>

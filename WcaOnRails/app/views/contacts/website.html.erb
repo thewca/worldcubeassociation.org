@@ -1,21 +1,17 @@
-<% provide(:title, 'WCA Website Contact Form') %>
+<% provide(:title, t('.title')) %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <p>
-    Use this form for website questions, comments, and suggestions only.
-    <%= link_to "Other inquiries", contact_path %> should be sent to the
-    appropriate party.
-  </p>
+  <p><%= t('.description_html', contact_path: contact_path) %></p>
 
   <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
-    <%= f.input :name %>
-    <%= f.input :your_email %>
+  <%= f.input :name, label: t('simple_form.labels.contact.name') %>
+  <%= f.input :your_email, label: t('simple_form.labels.contact.your_email') %>
     <%= f.input :message, as: :text %>
     <%= recaptcha_tags %>
     <div>
       </br>
-      <%= f.button :submit, 'Send message', class: "btn btn-primary" %>
+      <%= f.button :submit, t('.submit'), class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>
