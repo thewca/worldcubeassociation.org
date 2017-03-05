@@ -111,6 +111,8 @@ Rails.application.routes.draw do
 
   get 'contact/website' => 'contacts#website'
   post 'contact/website' => 'contacts#website_create'
+  get 'contact/dob' => 'contacts#dob'
+  post 'contact/dob' => 'contacts#dob_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/*id' => 'regulations#show'

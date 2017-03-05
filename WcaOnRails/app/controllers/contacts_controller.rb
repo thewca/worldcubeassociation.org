@@ -1,15 +1,27 @@
 # frozen_string_literal: true
 class ContactsController < ApplicationController
   def website
-    @contact = Contact.new
+    @contact = WebsiteContact.new
   end
 
   def website_create
-    @contact = Contact.new(params[:contact])
+    @contact = WebsiteContact.new(params[:website_contact])
     @contact.request = request
     @contact.to_email = "contact@worldcubeassociation.org"
     @contact.subject = DateTime.now.strftime("WCA Website Comments by #{@contact.name} on %d %b %Y at %R")
     maybe_send_email success_url: contact_website_url, fail_view: :website
+  end
+
+  def dob
+    @contact = DobContact.new
+  end
+
+  def dob_create
+    @contact = DobContact.new(params[:dob_contact])
+    @contact.request = request
+    @contact.to_email = "results@worldcubeassociation.org"
+    @contact.subject = "WCA DOB change request by #{@contact.name}"
+    maybe_send_email success_url: contact_dob_url, fail_view: :dob
   end
 
   private def maybe_send_email(success_url: nil, fail_view: nil)

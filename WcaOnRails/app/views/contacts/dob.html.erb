@@ -1,17 +1,19 @@
-<% provide(:title, 'WCA Website Contact Form') %>
+<% provide(:title, 'WCA Website DOB Form') %>
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
   <p>
-    Use this form for website questions, comments, and suggestions only.
+    Use this form if your birthdate stored in our database is different from the real one.
     <%= link_to "Other inquiries", contact_path %> should be sent to the
     appropriate party.
   </p>
 
-  <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
+  <%= simple_form_for @contact, url: contact_dob_path, html: { multipart: true, class: 'form-horizontal' } do |f| %>
     <%= f.input :name %>
     <%= f.input :your_email %>
-    <%= f.input :message, as: :text %>
+    <%= f.input :wca_id %>
+    <%= f.input :dob, as: :date_picker %>
+    <%= f.input :document, as: :file %>
     <%= recaptcha_tags %>
     <div>
       </br>
