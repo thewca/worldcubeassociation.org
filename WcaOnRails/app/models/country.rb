@@ -3,10 +3,12 @@ class Country < ApplicationRecord
   include Cachable
   self.table_name = "Countries"
 
+  MULTIPLE_COUNTRIES_IDS = %w(XA XE XS).freeze
+
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
 
-  scope :uncached_real, -> { where.not(id: %w(XA XE XS)) }
+  scope :uncached_real, -> { where.not(id: MULTIPLE_COUNTRIES_IDS) }
 
   def name
     I18n.t(iso2, scope: :countries)
@@ -21,7 +23,7 @@ class Country < ApplicationRecord
   end
 
   def real?
-    !%w(XA XE XS).include?(id)
+    !MULTIPLE_COUNTRIES_IDS.include?(id)
   end
 
   def self.find_by_iso2(iso2)
