@@ -18,7 +18,7 @@ class Continent < ApplicationRecord
   end
 
   ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
-    continents = Country.localized_sort_by!(locale, Continent.all.to_a) { |continent| continent.name_in(locale) }
+    continents = I18nUtils.localized_sort_by!(locale, Continent.all.to_a) { |continent| continent.name_in(locale) }
     [locale, continents]
   end].freeze
 end
