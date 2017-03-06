@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DobContact < ContactForm
   attribute :dob, validate: true
   attribute :wca_id, validate: :validate_wca_id
