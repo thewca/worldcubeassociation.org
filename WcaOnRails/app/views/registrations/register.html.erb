@@ -15,18 +15,14 @@
   <% unless current_user %>
     <%= alert :info do %>
       <% if @competition.registration_past? %>
-        <%= t 'registrations.please_sign_in_past_html',
-          sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
-          here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_past_html') %>
+        <%= please_sign_in('registrations.please_sign_in_past_html', @competition) %>
       <% elsif @competition.registration_not_yet_opened? %>
-        <%= t 'registrations.please_sign_in_not_yet_open_html',
-          sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
-          here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_not_yet_open_html') %>
+        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html', @competition) %>
       <% else %>
-        <%= t 'registrations.please_sign_in_html',
-          sign_in: link_to(t('registrations.sign_in'), competition_register_require_sign_in_path(@competition)),
-          comp: @competition.name,
-          here: link_to(t('common.here'), new_user_registration_path, target: "_blank") %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_html') %>
+        <%= please_sign_in('registrations.please_sign_in_html', @competition, comp: @competition.name) %>
       <% end %>
     <% end %>
   <% else %>
@@ -80,7 +76,6 @@
     <% should_collapse = @registration.has_to_pay_fee_here? %>
     <% if user_may_register && @registration.show_details? %>
       <div class="panel panel-primary">
-        <% panel_body_collapse = should_collapse ? "collapse" : "" %>
         <div class="panel-heading">
           <h4 class="panel-title">
             <%= render "register_panel_title", foldable: should_collapse do %>
@@ -88,7 +83,7 @@
             <% end %>
           </h4>
         </div>
-        <div id="register-panel" class="panel-body <%= panel_body_collapse %>">
+        <div id="register-panel" class="panel-body <%= "collapse" if should_collapse %>">
           <p>
             <% if @registration.new_or_deleted? %>
               <%= t('registrations.check_registration_information') %>

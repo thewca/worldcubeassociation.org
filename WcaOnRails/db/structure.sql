@@ -401,22 +401,6 @@ CREATE TABLE `Scrambles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `ar_internal_metadata`
---
-
-DROP TABLE IF EXISTS `ar_internal_metadata`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ar_internal_metadata` (
-  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `competition_delegates`
 --
 
@@ -747,24 +731,25 @@ CREATE TABLE `preferred_formats` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary view structure for view `rails_persons`
+-- Temporary table structure for view `rails_persons`
 --
 
 DROP TABLE IF EXISTS `rails_persons`;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `rails_persons` AS SELECT
- 1 AS `id`,
- 1 AS `wca_id`,
- 1 AS `subId`,
- 1 AS `name`,
- 1 AS `countryId`,
- 1 AS `gender`,
- 1 AS `year`,
- 1 AS `month`,
- 1 AS `day`,
- 1 AS `comments`*/;
+/*!50001 CREATE TABLE `rails_persons` (
+  `id` tinyint NOT NULL,
+  `wca_id` tinyint NOT NULL,
+  `subId` tinyint NOT NULL,
+  `name` tinyint NOT NULL,
+  `countryId` tinyint NOT NULL,
+  `gender` tinyint NOT NULL,
+  `year` tinyint NOT NULL,
+  `month` tinyint NOT NULL,
+  `day` tinyint NOT NULL,
+  `comments` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -991,13 +976,10 @@ CREATE TABLE `votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'wca_test'
---
-
---
 -- Final view structure for view `rails_persons`
 --
 
+/*!50001 DROP TABLE IF EXISTS `rails_persons`*/;
 /*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;

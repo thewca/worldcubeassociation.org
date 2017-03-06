@@ -190,11 +190,11 @@ class RegistrationsController < ApplicationController
   def register
     @competition = competition_from_params
     @registration = nil
+    @selected_events ||= []
     if current_user
       @registration = Registration.find_by(user_id: current_user.id, competition_id: @competition.id) || @competition.registrations.build(user_id: current_user.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
     end
-    @selected_events ||= []
   end
 
   def process_payment

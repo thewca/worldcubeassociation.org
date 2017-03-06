@@ -13,36 +13,36 @@
   </div>
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <script>
-// As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
-var handler = StripeCheckout.configure({
-  key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
-  locale: 'auto',
-  image: 'https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png',
-  name: 'World Cube Association',
-  description: 'Registration fee',
-  currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
-  zipCode: true,
-  token: function(token) {
-    $('input#stripeToken').val(token.id);
-    $('#form_payment').submit();
-  }
-});
+    // As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
+    var handler = StripeCheckout.configure({
+      key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
+      locale: 'auto',
+      image: 'https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png',
+      name: 'World Cube Association',
+      description: 'Registration fee',
+      currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
+      zipCode: true,
+      token: function(token) {
+        $('input#stripeToken').val(token.id);
+        $('#form_payment').submit();
+      }
+    });
 
-$('#donateButton').on('click', function(e) {
-  e.preventDefault();
-  var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
-  var donation = parseFloat($('#payment_donation').val());
-  var amount = parseFloat(registration_fees_to_pay+donation);
-  if (isNaN(amount)) {
-    alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
-  } else if (amount < registration_fees_to_pay) {
-    alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
-  } else {
-    $('#total_amount').val(amount);
-    handler.open({
-      amount: Math.round(amount)
-    })
-  }
-});
+    $('#donateButton').on('click', function(e) {
+      e.preventDefault();
+      var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
+      var donation = parseFloat($('#payment_donation').val());
+      var amount = parseFloat(registration_fees_to_pay+donation);
+      if (isNaN(amount)) {
+        alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
+      } else if (amount < registration_fees_to_pay) {
+        alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
+      } else {
+        $('#total_amount').val(amount);
+        handler.open({
+          amount: Math.round(amount)
+        })
+      }
+    });
   </script>
 <% end %>

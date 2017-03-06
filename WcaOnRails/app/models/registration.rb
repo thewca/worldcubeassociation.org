@@ -122,7 +122,7 @@ class Registration < ApplicationRecord
   end
 
   def show_details?
-    competition.registration_opened? || !(new_record? || deleted?)
+    competition.registration_opened? || !(new_or_deleted?)
   end
 
   def record_payment(amount, currency_code, stripe_charge_id)

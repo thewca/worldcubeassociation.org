@@ -49,7 +49,7 @@ Note: form_builder.object is the object having associated events.
         <%= error %>
       </span>
     <% end %>
-    <% if hint %>
+    <% unless hint.blank? %>
       <p class="help-block"><%= hint %></p>
     <% end %>
   </div>

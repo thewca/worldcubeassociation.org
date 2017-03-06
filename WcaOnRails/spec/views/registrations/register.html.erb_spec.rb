@@ -35,31 +35,23 @@ RSpec.describe "registrations/register" do
     expect(rendered).to match(/Registration will open in <strong>[^>]*<.strong>/)
   end
 
-  it "renders paid registrations" do
+  def setup(payment_status)
     competition = FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open)
-    registration = FactoryGirl.create(:registration, :paid, competition: competition)
-
+    registration = FactoryGirl.create(:registration, payment_status, competition: competition)
     allow(view).to receive(:current_user) { registration.user }
-
     assign(:competition, competition)
     assign(:registration, registration)
     assign(:selected_events, [])
-
     render
+  end
+
+  it "renders paid registrations" do
+    setup :paid
     expect(rendered).to match(/which fully covers the entry fees/)
   end
 
   it "renders unpaid registrations and ask for payment" do
-    competition = FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open)
-    registration = FactoryGirl.create(:registration, :unpaid, competition: competition)
-
-    allow(view).to receive(:current_user) { registration.user }
-
-    assign(:competition, competition)
-    assign(:registration, registration)
-    assign(:selected_events, [])
-
-    render
+    setup :unpaid
     expect(rendered).to match(/Pay your fees with card/)
   end
 end
