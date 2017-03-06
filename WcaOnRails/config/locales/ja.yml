@@ -154,12 +154,12 @@ ja:
       invalid: 無効
     #original_hash: 49d0140
     days:
-      other: '%{count} 日'
       zero: 0 日
+      other: '%{count} 日'
     #original_hash: 203e1b3
     these_events:
-      other: '指定された %{count} 種目'
       zero: 指定された種目
+      other: '指定された %{count} 種目'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -273,7 +273,7 @@ ja:
         #original_hash: 87b7d5f
         use_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
         #original_hash: 3c23a67
-        guests_enabled: ゲスト
+        guests_enabled: 同伴者人数
         #original_hash: 089cbfd
         receive_registration_emails: 大会に参加申し込みがあったとき電子メールで通知する
         #original_hash: d4aeed9
@@ -288,7 +288,7 @@ ja:
         competition_events: 競技種目
       registration:
         #original_hash: 3c23a67
-        guests: ゲスト
+        guests: 同伴者人数
         #original_hash: fce06e2
         comments: コメント
         #original_hash: dc9d458
@@ -300,7 +300,7 @@ ja:
         #original_hash: a6b9d69
         birthday: 生年月日
         #original_hash: c5497bc
-        registration_competition_events: 競技種目
+        registration_competition_events: 参加競技種目
       competition_tab:
         #original_hash: 4f9be05
         content: 内容
@@ -381,8 +381,8 @@ ja:
         dob: '生年月日をすべて半角で記入してください。 例: 2000年1月23日生の場合: 2000-01-23'
         #original_hash: 5106479
         name: >-
-          氏名 (英字) を「名姓」の順に記入してください。姓名ともに頭文字のみ大文字にしてください。例: 中島 悠 の場合: <strong>Yu
-          Nakajima</strong>
+          氏名を「ローマ字名姓 (漢字名)」の形で記入してください。スペースなど、記入方法にご注意ください。例: 中島 悠 の場合:
+          <strong>Yu Nakajima (中島悠)</strong>
         #original_hash: c03b949
         email: メールアドレスを変更する場合は、確認メールによる認証が必要となります。
         #original_hash: bfd11f4
@@ -586,8 +586,8 @@ ja:
       messages:
         #original_hash: e88f903
         form_error:
-          other: '%{count} 件の誤りがあります。'
           zero: 誤りはありません。
+          other: '%{count} 件の誤りがあります。'
     doorkeeper:
       applications:
         help:
@@ -901,31 +901,31 @@ ja:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: 人 (初参加者)
         zero: 人 (初参加者)
+        other: 人 (初参加者)
       #original_hash: bc010e3
       returner:
-        other: 人 (大会経験者)
         zero: 人 (大会経験者)
+        other: 人 (大会経験者)
       #original_hash: b7da17a
       person:
-        other: 人
         zero: 人
+        other: 人
     flash:
       #original_hash: da7ec53
       not_using_wca: この大会は WCA 大会申し込みシステムを利用していません
       #original_hash: d528030
       accepted_and_mailed:
-        other: 参加申し込みが完了しました。メールをご確認ください。
         zero: 参加申し込みが完了しました。メールをご確認ください。
+        other: 参加申し込みが完了しました。メールをご確認ください。
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: 申し込みは承認待ちに登録されました。
         zero: 申し込みは承認待ちに登録されました。
+        other: 申し込みは承認待ちに登録されました。
       #original_hash: a360b31
       deleted_and_mailed:
-        other: 参加申し込みが削除されました。
         zero: 参加申し込みが削除されました。
+        other: 参加申し込みが削除されました。
       #original_hash: c3aa289
       single_deletion_and_mail: '参加申し込みが削除されました。%{mail} にメールを送信しました。'
       #original_hash: d8f067f
@@ -995,8 +995,8 @@ ja:
       edit: 編集
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} か国'
         zero: 0 か国
+        other: '%{count} か国'
       #original_hash: 1feee0e
       export_csv: CSV に出力
       #original_hash: 84add5b
@@ -1027,7 +1027,7 @@ ja:
     #original_hash: 5d45a00
     profile: プロフィール
     #original_hash: c0063c3
-    register: 申し込み実行
+    register: 申し込む
     #original_hash: f484f15
     refund: 参加費の払い戻し
     #original_hash: a9af643
@@ -1134,12 +1134,12 @@ ja:
       website: ウェブサイト
       #original_hash: 680567f
       organizer_plural:
-        other: 主催者
         zero: 主催者
+        other: 主催者
       #original_hash: 6afa61e
       delegate:
-        other: WCA 代理人
         zero: WCA 代理人
+        other: WCA 代理人
       #original_hash: b37456c
       contact: お問い合わせ
       #original_hash: a428739
