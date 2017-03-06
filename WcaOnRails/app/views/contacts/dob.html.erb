@@ -5,10 +5,10 @@
   <p><%= t('.description') %></p>
 
   <%= simple_form_for @contact, url: contact_dob_path, html: { multipart: true, class: 'form-horizontal' } do |f| %>
-    <%= f.input :name, label: t('simple_form.labels.contact.name') %>
-    <%= f.input :your_email, label: t('simple_form.labels.contact.your_email') %>
-    <%= f.input :wca_id, label: t('common.user.wca_id') %>
-    <%= f.input :dob, as: :date_picker, label: t('activerecord.attributes.person.dob') %>
+    <%= f.input :name %>
+    <%= f.input :your_email %>
+    <%= f.input :wca_id %>
+    <%= f.input :dob, as: :date_picker %>
     <%= f.input :document, as: :file %>
     <%= recaptcha_tags %>
     <div>

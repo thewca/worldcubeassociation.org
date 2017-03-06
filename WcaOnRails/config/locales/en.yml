@@ -249,15 +249,6 @@ en:
       html: ''
     error_notification:
       default_message: "Please review the problems below:"
-    #context: and a label of a field
-    labels:
-      contact:
-        name: "Name"
-        your_email: "Your email"
-      website_contact:
-        message: "Message"
-      contact_contact:
-        document: "Document"
     #context: and a hint given about a specific field
     hints:
       #context: for a user
@@ -374,6 +365,18 @@ en:
         guests_enabled:
           "true": "Ask about guests"
           "false": "Do NOT ask about guests"
+  mail_form:
+    #context: This key is used as a label for contact form attributes
+    attributes:
+      contact_form:
+        name: "Name"
+        your_email: "Your email"
+      website_contact:
+        message: "Message"
+      dob_contact:
+        wca_id: "Your WCA ID"
+        dob: "Correct birthdate"
+        document: "Document"
   errors:
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
