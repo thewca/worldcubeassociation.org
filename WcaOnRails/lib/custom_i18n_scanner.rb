@@ -6,7 +6,7 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
 
   def active_record?(model)
     # FIXME: Find a way to determine this dynamically ?
-    model != "contact"
+    !%w(website_contact dob_contact).include?(model)
   end
 
   def extract_model_name(key)
@@ -52,12 +52,9 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
       if !input_params.include?("label:")
         # Simple form can fetch its labels from activerecord.attributes,
         # Mark it as used ... Except if the model is not an ActiveRecord ;)
-        # if not we mark the label as used!
-        retval << if active_record?(model)
-                    ["activerecord.attributes.#{model}.#{attribute}", occurrence]
-                  else
-                    ["simple_form.labels.#{model}.#{attribute}", occurrence]
-                  end
+        if active_record?(model)
+          retval << ["activerecord.attributes.#{model}.#{attribute}", occurrence]
+        end
       end
     end
 
