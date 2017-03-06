@@ -919,6 +919,9 @@ en:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
       submit: "Request change"
+    messages:
+      success: "Thank you for your message. We will contact you soon!"
+      delivery_error: "Error sending message."
 
   #context: FAQ page
   faq:
