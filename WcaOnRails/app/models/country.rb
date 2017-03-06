@@ -6,7 +6,7 @@ class Country < ApplicationRecord
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
 
-  scope :uncached_real, -> { where("name not like 'Multiple Countries%'") }
+  scope :uncached_real, -> { where.not(id: %w(XA XE XS)) }
 
   def name
     I18n.t(iso2, scope: :countries)
@@ -21,7 +21,7 @@ class Country < ApplicationRecord
   end
 
   def real?
-    !read_attribute(:name).include?('Multiple Countries')
+    !%w(XA XE XS).include?(id)
   end
 
   def self.find_by_iso2(iso2)
