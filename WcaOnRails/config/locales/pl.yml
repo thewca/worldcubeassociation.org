@@ -379,14 +379,6 @@ pl:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Proszę przejrzeć problemy poniżej:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Imię
-        #original_hash: 3fa6f5f
-        your_email: Twój adres email
-        #original_hash: 68f4145
-        message: Wiadomość
     hints:
       user:
         #original_hash: 87e1e6f
@@ -509,13 +501,30 @@ pl:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Twoja poprawna data urodzenia w formacie RRRR-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          Aby potwierdzić swoją tożsamość i poprawną datę urodzenia, musisz
+          załączyć zdjęcie jakiegokolwiek legalnego dokumentu (dowodu
+          osobistego, prawa jazdy, legitymacji studenckiej lub szkolnej
+          paszportu, aktu urodzenia, ...), na którym zarówno twoje imię jak i
+          data urodzenia są widoczne i zrozumiałe dla osoby posługującej się
+          językiem angielskim.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -628,6 +637,23 @@ pl:
           'true': Pytaj o gości
           #original_hash: f8c2332
           'false': NIE pytaj o gości
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Imię
+        #original_hash: 3fa6f5f
+        your_email: Twój adres email
+      website_contact:
+        #original_hash: 68f4145
+        message: Wiadomość
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Twoje WCA ID
+        #original_hash: 51d0597
+        dob: Poprawna data urodzenia
+        #original_hash: e214b8a
+        document: Dokument
   errors:
     messages:
       #original_hash: dc2367c
@@ -904,15 +930,12 @@ pl:
       not_found: nie znaleziono
       #original_hash: 49a6fe4
       already_assigned: już przypisane do innego użytkownika
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         nie zgadza się z danymi w naszej bazie. Jeżeli jesteś pewien, że
         podajesz popraną datę we właściwym formacie (RRR-MM-DD), prosimy o
-        wysłanie maila do <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Zespołu do Spraw Wyników</a>, zgłoszenie tego błędu oraz
-        wysłanie zdjęcia dowolnego legalnego dokumentu (dowód osobisty,
-        paszport, prawo jazdy, legitymacja szkolna...), na którym twoje imię i
-        data urodzin jest widoczna.
+        kontakt z Zespołem do Spraw Wyników przy użyciu <a
+        href="%{dob_form_path}">tego specjalnego formularza</a>.
       #original_hash: 0fbcefd
       unique: nie może się powtarzać
       #original_hash: 26f70ed
@@ -1668,6 +1691,31 @@ pl:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 'Czy jesteś pewien, że chcesz usunąć ten post? Ta akcja jest nieodwracalna.'
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: Formularz Kontaktowy Strony WCA
+      #original_hash: 9039572
+      description_html: >-
+        Używaj tego formularza wyłącznie w calu wysyłania pytań, komentarzy i
+        sugestii dotyczących strony. <a href="%{contact_path}">Inne
+        zapytania</a> powinny być kierowane do odpowiednich zespołów.
+      #original_hash: c70a890
+      submit: Wyślij wiadomość
+    dob:
+      #original_hash: 907ac6c
+      title: Formularz Prośby o Zmianę Daty Urodzenia
+      #original_hash: 8a4ced5
+      description: >-
+        Używaj tego formularza, jeżeli twoja data urodzenia w naszej bazie
+        danych różni się od prawdziwej.
+      #original_hash: 19c17ec
+      submit: Poproś o zmianę
+    messages:
+      #original_hash: 41948b9
+      success: Dziękujemy za twoją wiadomość. Skontaktujemy się z tobą niedługo!
+      #original_hash: 8e3a9da
+      delivery_error: Błąd podczas wysyłania wiadomości.
   faq:
     #original_hash: d790b40
     title: Często Zadawane Pytania
