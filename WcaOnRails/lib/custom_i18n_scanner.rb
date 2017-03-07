@@ -6,7 +6,7 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
 
   def active_record?(model)
     # FIXME: Find a way to determine this dynamically ?
-    model != "contact"
+    !%w(website_contact dob_contact).include?(model)
   end
 
   def extract_model_name(key)
@@ -19,6 +19,16 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     when "devise" then "user"
     when "admin" then "person"
     when "oauth" then "doorkeeper/application"
+    when "contact"
+      # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
+      # We need to determine which one does the key refer to.
+      if key.start_with?("contacts.website")
+        "website_contact"
+      elsif key.start_with?("contacts.dob")
+        "dob_contact"
+      else
+        throw "Unrecognized contact model. Key: #{key}"
+      end
     else model_key
     end
   end
@@ -42,12 +52,9 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
       if !input_params.include?("label:")
         # Simple form can fetch its labels from activerecord.attributes,
         # Mark it as used ... Except if the model is not an ActiveRecord ;)
-        # if not we mark the label as used!
-        retval << if active_record?(model)
-                    ["activerecord.attributes.#{model}.#{attribute}", occurrence]
-                  else
-                    ["simple_form.labels.#{model}.#{attribute}", occurrence]
-                  end
+        if active_record?(model)
+          retval << ["activerecord.attributes.#{model}.#{attribute}", occurrence]
+        end
       end
     end
 

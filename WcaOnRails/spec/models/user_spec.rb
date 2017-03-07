@@ -359,7 +359,7 @@ RSpec.describe User, type: :model do
       other_person = FactoryGirl.create :person, year: 1980, month: 2, day: 1
       user.unconfirmed_wca_id = other_person.wca_id
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
+      expect(user.errors.messages[:dob_verification]).to be_present
     end
 
     it "requires fields when claiming_wca_id" do
@@ -380,7 +380,7 @@ RSpec.describe User, type: :model do
     it "requires dob verification" do
       user.dob_verification = nil
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
+      expect(user.errors.messages[:dob_verification]).to be_present
     end
 
     it "does not allow claiming wca id Person without dob" do
@@ -400,7 +400,7 @@ RSpec.describe User, type: :model do
     it "requires correct dob verification" do
       user.dob_verification = '2016-01-02'
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.dob_incorrect_html')]
+      expect(user.errors.messages[:dob_verification]).to be_present
     end
 
     it "requires delegate_id_to_handle_wca_id_claim" do

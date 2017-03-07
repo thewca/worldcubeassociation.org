@@ -249,12 +249,6 @@ en:
       html: ''
     error_notification:
       default_message: "Please review the problems below:"
-    #context: and a label of a field
-    labels:
-      contact:
-        name: "Name"
-        your_email: "Your email"
-        message: "Message"
     #context: and a hint given about a specific field
     hints:
       #context: for a user
@@ -306,10 +300,16 @@ en:
         start_date: ""
         use_wca_registration: ""
         venueAddress: ""
-      contact:
+      website_contact:
         message: ""
         name: ""
         your_email: ""
+      dob_contact:
+        name: ""
+        your_email: ""
+        wca_id: ""
+        dob: "Your correct day of birth in the format YYYY-MM-DD"
+        document: "To proof your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker."
       #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
@@ -365,6 +365,18 @@ en:
         guests_enabled:
           "true": "Ask about guests"
           "false": "Do NOT ask about guests"
+  mail_form:
+    #context: This key is used as a label for contact form attributes
+    attributes:
+      contact_form:
+        name: "Name"
+        your_email: "Your email"
+      website_contact:
+        message: "Message"
+      dob_contact:
+        wca_id: "Your WCA ID"
+        dob: "Correct birthdate"
+        document: "Document"
   errors:
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
@@ -515,7 +527,7 @@ en:
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
-      dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>, report this error and send a picture of any legal document (identity card, driver license,...) where your name and date of birth are visible."
+      dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unique: "must be unique"
       dob_past: "must be in the past"
       must_be_senior: "must be a senior delegate"
@@ -900,6 +912,20 @@ en:
       no_persons_found: "No person matches the given criteria."
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
+  #context: Contact forms
+  contacts:
+    website:
+      title: "WCA Website Contact Form"
+      description_html: "Use this form for website questions, comments, and suggestions only. <a href=\"%{contact_path}\">Other inquiries</a> should be sent to the appropriate party."
+      submit: "Send message"
+    dob:
+      title: "Birthdate Change Request Form"
+      description: "Use this form if your birthdate stored in our database is different from the real one."
+      submit: "Request change"
+    messages:
+      success: "Thank you for your message. We will contact you soon!"
+      delivery_error: "Error sending message."
+
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
