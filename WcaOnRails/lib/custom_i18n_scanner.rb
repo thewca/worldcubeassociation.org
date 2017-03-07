@@ -20,11 +20,11 @@ class WCAFileScanner < I18n::Tasks::Scanners::FileScanner
     when "admin" then "person"
     when "oauth" then "doorkeeper/application"
     when "contact"
-      # ContactsController uses WebsiteContact or DobCotact (which are much like extended models).
+      # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
       # We need to determine which one does the key refer to.
-      if key.include?("website")
+      if key.start_with?("contacts.website")
         "website_contact"
-      elsif key.include?("dob")
+      elsif key.start_with?("contacts.dob")
         "dob_contact"
       else
         throw "Unrecognized contact model. Key: #{key}"

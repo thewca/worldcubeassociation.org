@@ -5,8 +5,8 @@
   <p><%= t('.description_html', contact_path: contact_path) %></p>
 
   <%= simple_form_for @contact, url: contact_website_path, html: { class: 'form-horizontal' } do |f| %>
-  <%= f.input :name %>
-  <%= f.input :your_email %>
+    <%= f.input :name %>
+    <%= f.input :your_email %>
     <%= f.input :message, as: :text %>
     <%= recaptcha_tags %>
     <div>
