@@ -268,8 +268,8 @@ pl:
         generate_website: >-
           Chciałbym używać strony WCA zamiast zewnętrznej w celu zapewnienia
           dodatkowych informacji.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Podstawowa wysokość wpisowego w najmniejszym nominale
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Podstawowa wysokość wpisowego
         #original_hash: 28a6fbb
         currency_code: Kod waluty
         #original_hash: 5b2fe69
@@ -481,14 +481,13 @@ pl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          Bazowe wpisowe na zawody. Jest zapisane w najmniejszym nominale dla
-          danej waluty. Np. grosze dla PLN. To wpisowe będzie wyświetlane na
-          stronie informacyjnej zawodów i stronie rejestracji, jeżeli jest
-          używana. Zauważ, że strona WCA nie posiada jeszcze możliwości
-          dokonywania wpłat. Zespół programistów pracuje w kierunku uczynienia
-          tego możliwym. Możesz śledzić postęp na <a
+          Bazowe wpisowe na zawody. To wpisowe będzie wyświetlane na stronie
+          informacyjnej zawodów i stronie rejestracji, jeżeli jest używana.
+          Zauważ, że strona WCA nie posiada jeszcze możliwości dokonywania
+          wpłat. Zespół programistów pracuje w kierunku uczynienia tego
+          możliwym. Możesz śledzić postęp na <a
           href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>'ie.
         #original_hash: 866bc05
         currency_code: Kod waluty w której wyrażone jest wpisowe.
