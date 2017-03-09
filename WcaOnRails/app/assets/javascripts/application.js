@@ -41,7 +41,6 @@
 //= require moment/hr.js
 //= require moment/sl.js
 //= require bootstrap-datetimepicker
-//= require markerclusterer
 //= require bootstrap-table
 //= require extensions/bootstrap-table-mobile
 //= require autosize
@@ -93,12 +92,6 @@ wca.competitionsToMarkers = function(map, competitions) {
 
   competitions.forEach(function(c) {
 
-    var contentString = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
-
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-
     if (c.is_probably_over) {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
     } else {
@@ -115,9 +108,7 @@ wca.competitionsToMarkers = function(map, competitions) {
       icon: iconImage
     });
 
-    c.marker.addListener('click', function() {
-      infowindow.open(map, c.marker);
-    });
+    c.marker.desc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
 
     markers.push(c.marker);
   });

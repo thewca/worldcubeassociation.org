@@ -43,8 +43,15 @@
 
       wca.addGoogleMapsLoadedListener(function() {
         var competitionMarkers = wca.competitionsToMarkers(getCompetitionsMap(), competitions);
-        wca.competitionsMarkerCluster.clearMarkers();
-        wca.competitionsMarkerCluster.addMarkers(competitionMarkers);
+
+        wca.competitionsOverlappingMarkerSpiderfier.getMarkers().forEach(function(marker) {
+          marker.setMap(null);
+        });
+        wca.competitionsOverlappingMarkerSpiderfier.clearMarkers();
+
+        competitionMarkers.forEach(function(marker) {
+          wca.competitionsOverlappingMarkerSpiderfier.addMarker(marker);
+        });
       });
     });
   </script>
