@@ -19,10 +19,13 @@ function getCompetitionsMap() {
       scrollwheel: true,
     });
 
-    wca.competitionsMarkerCluster = new MarkerClusterer(wca.competitionsMap, [], {
-      maxZoom: 10,
-      clusterSize: 30,
+    wca.competitionsOverlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(wca.competitionsMap);
+    var infowindow = new google.maps.InfoWindow();
+    wca.competitionsOverlappingMarkerSpiderfier.addListener('click', function(marker) {
+      infowindow.setContent(marker.desc);
+      infowindow.open(wca.competitionsMap, marker);
     });
+
   }
 
   return wca.competitionsMap;
