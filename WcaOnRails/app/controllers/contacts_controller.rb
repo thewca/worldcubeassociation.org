@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class ContactsController < ApplicationController
   def website
-    @contact = WebsiteContact.new
+    @contact = WebsiteContact.new(your_email: current_user&.email)
   end
 
   def website_create
@@ -13,7 +13,7 @@ class ContactsController < ApplicationController
   end
 
   def dob
-    @contact = DobContact.new
+    @contact = DobContact.new(your_email: current_user&.email)
   end
 
   def dob_create
