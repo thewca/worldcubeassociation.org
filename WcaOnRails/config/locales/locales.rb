@@ -53,6 +53,10 @@ module Locales
       "flag_id": "nl",
       "name": "Nederlands",
     },
+    "ro": {
+      "flag_id": "ro",
+      "name": "Română",
+    },
     "ru": {
       "flag_id": "ru",
       "name": "Русский",
