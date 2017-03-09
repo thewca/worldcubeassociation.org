@@ -40,6 +40,7 @@
 //= require moment/da.js
 //= require moment/hr.js
 //= require moment/sl.js
+//= require moment/ro.js
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
 //= require extensions/bootstrap-table-mobile
