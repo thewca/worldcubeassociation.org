@@ -67,7 +67,7 @@ namespace :db do
           dump_filename = "wca-developer-database-dump.sql"
           zip_filename = "wca-developer-database-dump.zip"
 
-          LogTask.log_task("Downloading #{dev_db_dump_url}") { `wget --show-progress #{dev_db_dump_url}` }
+          LogTask.log_task("Downloading #{dev_db_dump_url}") { `wget #{dev_db_dump_url}` }
           LogTask.log_task("Unzipping #{zip_filename}") { `unzip #{zip_filename}` }
 
           config = ActiveRecord::Base.connection_config
