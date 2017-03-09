@@ -12,9 +12,9 @@
       <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
       <div class="col-sm-9">
         <p class="form-control-static"><%= humanized_money_with_symbol(money_amount) %></p>
-      <% unless hint.blank? %>
-        <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
-      <% end %>
+        <% unless hint.blank? %>
+          <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
+        <% end %>
       </div>
     </div>
   </div>

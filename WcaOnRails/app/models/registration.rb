@@ -118,7 +118,7 @@ class Registration < ApplicationRecord
   end
 
   def has_to_pay_fee_here?
-    (pending? || accepted?) && competition.connected_stripe_account_id && outstanding_entry_fees > 0
+    (pending? || accepted?) && competition.using_stripe_payments? && outstanding_entry_fees > 0
   end
 
   def show_details?

@@ -443,6 +443,10 @@ class Competition < ApplicationRecord
     end
   end
 
+  def using_stripe_payments?
+    connected_stripe_account_id
+  end
+
   def registration_opened?
     use_wca_registration? && !registration_not_yet_opened? && !registration_past?
   end

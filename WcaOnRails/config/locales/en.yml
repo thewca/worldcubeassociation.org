@@ -703,6 +703,7 @@ en:
         amount_too_low: "The total amount must be be at least the registration fees to be paid."
     payment_button_text: "Pay your fees with card"
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
+    preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
   #context: Key used when managing competitions
   competitions:
     #context: generic message

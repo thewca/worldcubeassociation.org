@@ -611,7 +611,7 @@ RSpec.describe RegistrationsController do
         expect(registration.outstanding_entry_fees).to be > 0
         expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
         token_id = stripe_token_id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:success]).to eq "Your payment was successful."
         expect(response).to redirect_to competition_register_path(competition)
         expect(registration.reload.outstanding_entry_fees).to eq 0
@@ -628,7 +628,7 @@ RSpec.describe RegistrationsController do
         expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
         token_id = stripe_token_id
         donation_lowest_denomination = 100
-        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents + donation_lowest_denomination } }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents + donation_lowest_denomination } }
         expect(flash[:success]).to eq "Your payment was successful."
         expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
         expect(registration.paid_entry_fees.cents).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
@@ -639,14 +639,14 @@ RSpec.describe RegistrationsController do
       it 'rejects insufficient payment with valid credit card' do
         expect(registration.outstanding_entry_fees).to be > 0
         token_id = stripe_token_id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: 500 } }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: 500 } }
         expect(flash[:danger]).to match "the amount to be charged was lower than the registration fees to pay"
         expect(response).to redirect_to competition_register_path(competition)
       end
 
       it 'rejects payment with invalid credit card' do
         token_id = stripe_token_id(number: "4000000000000002")
-        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
       end
@@ -682,7 +682,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, params: { competition_id: competition.id, payment: { stripeToken: token_id, total_amount: registration.outstanding_entry_fees.cents } }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         payment = registration.reload.registration_payments.first
         post :refund_payment, params: { id: registration.id, payment_id: payment.id }
         expect(response).to redirect_to edit_registration_path(registration)

@@ -203,7 +203,7 @@ class RegistrationsController < ApplicationController
       registrations = competition.registrations
       registration = registrations.find_by_user_id!(current_user.id)
     end
-    token, amount_param = params.require(:payment).require([:stripeToken, :total_amount])
+    token, amount_param = params.require(:payment).require([:stripe_token, :total_amount])
     amount = amount_param.to_i
 
     # 'amount' has not been check by anyone, and could be user-crafted; validate it!

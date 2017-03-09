@@ -1,6 +1,6 @@
 <%= horizontal_simple_form_for :payment, url: competition_process_payment_path(@competition), html: { id: :form_payment } do |f| %>
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
-  <%= f.input :stripeToken, as: :hidden, input_html: { id: :stripeToken } %>
+  <%= f.input :stripe_token, as: :hidden, input_html: { id: :stripe_token } %>
   <%= f.input :total_amount, as: :hidden, input_html: { id: :total_amount } %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
   <% if @competition.enable_donations %>
@@ -8,41 +8,43 @@
   <% end %>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <%= f.button :submit, value: t('registrations.payment_button_text'), id: :donateButton, class: 'btn btn-primary' %>
+      <%= f.button :submit, value: t('registrations.payment_button_text'), id: :donate_button, class: 'btn btn-primary' %>
     </div>
   </div>
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <script>
-    // As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
-    var handler = StripeCheckout.configure({
-      key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
-      locale: 'auto',
-      image: 'https://www.worldcubeassociation.org/files/WCALogo3Dsmall.png',
-      name: 'World Cube Association',
-      description: 'Registration fee',
-      currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
-      zipCode: true,
-      token: function(token) {
-        $('input#stripeToken').val(token.id);
-        $('#form_payment').submit();
-      }
-    });
+    (function () {
+      // As per the javascript suggested here: https://stripe.com/docs/recipes/variable-amount-checkout#javascript
+      var handler = StripeCheckout.configure({
+        key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
+        locale: 'auto',
+        image: '<%= image_url("/files/WCALogo3Dsmall.png") %>',
+        name: 'World Cube Association',
+        description: 'Registration fee',
+        currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
+        zipCode: true,
+        token: function(token) {
+          $('input#stripe_token').val(token.id);
+          $('#form_payment').submit();
+        }
+      });
 
-    $('#donateButton').on('click', function(e) {
-      e.preventDefault();
-      var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
-      var donation = parseFloat($('#payment_donation').val());
-      var amount = parseFloat(registration_fees_to_pay+donation);
-      if (isNaN(amount)) {
-        alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
-      } else if (amount < registration_fees_to_pay) {
-        alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
-      } else {
-        $('#total_amount').val(amount);
-        handler.open({
-          amount: Math.round(amount)
-        })
-      }
-    });
+      $('#donate_button').on('click', function(e) {
+        e.preventDefault();
+        var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
+        var donation = parseFloat($('#payment_donation').val());
+        var amount = parseFloat(registration_fees_to_pay+donation);
+        if (isNaN(amount)) {
+          alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
+        } else if (amount < registration_fees_to_pay) {
+          alert('<%= t("registrations.payment_form.alerts.amount_too_low") %>');
+        } else {
+          $('#total_amount').val(amount);
+          handler.open({
+            amount: Math.round(amount)
+          })
+        }
+      });
+    })();
   </script>
 <% end %>

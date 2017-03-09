@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module RegistrationsHelper
-  def fees_hint_and_context(connected_stripe_account_id, registration)
-    if connected_stripe_account_id
+  def fees_hint_and_context(registration)
+    if registration.competition.using_stripe_payments?
       if registration.outstanding_entry_fees <= 0
         [t('registrations.entry_fees_fully_paid', paid: registration.paid_entry_fees), "success"]
       else
@@ -16,7 +16,7 @@ module RegistrationsHelper
     if preferred_events.empty?
       t('registrations.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences)))
     else
-      ""
+      t('registrations.preferred_events_populated_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences)))
     end
   end
 
