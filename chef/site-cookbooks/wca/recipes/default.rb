@@ -110,15 +110,6 @@ package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
 
-# We need PhantomJS 2.0 to run some of our tests
-remote_file '/usr/bin/phantomjs' do
-  source 'http://github.com/Pyppe/phantomjs2.0-ubuntu14.04x64/raw/master/bin/phantomjs'
-  owner 'root'
-  group 'root'
-  mode '0777'
-  action :create_if_missing
-end
-
 node.default['brightbox-ruby']['version'] = "2.3"
 include_recipe "brightbox-ruby"
 gem_package "rails" do

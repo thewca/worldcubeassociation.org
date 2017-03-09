@@ -86,7 +86,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'poltergeist'
   gem 'capybara-screenshot'
 
   gem 'byebug'
@@ -112,6 +111,8 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
+  gem 'poltergeist'
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
 end
 
 group :production do
