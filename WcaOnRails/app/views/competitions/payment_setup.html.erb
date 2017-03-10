@@ -2,6 +2,13 @@
 
 <%= render layout: 'nav' do %>
   <h1>Accept Registration Payments</h1>
+
+  <%= alert :warning do %>
+    Please make sure the currency you have selected is supported by your Stripe
+    account! The supported currencies depends on the country where the Stripe
+    account is based, you can check them <%= link_to "here", "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies", target: '_blank' %>.
+  <% end %>
+
   <% if @competition.connected_stripe_account_id.nil? %>
     <p>
       In order to accept payments for this competition, you need to connect
