@@ -260,8 +260,8 @@ nl:
         external_website: Website
         #original_hash: 692e1f9
         generate_website: Ik wil de WCA-website gebruiken in plaats van een externe website.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Basisbedrag in laagste eenheid
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Basisbedrag voor aanmelding
         #original_hash: 28a6fbb
         currency_code: Valutacode
         #original_hash: 5b2fe69
@@ -369,14 +369,6 @@ nl:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Los de onderstaande problemen op:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Naam
-        #original_hash: 3fa6f5f
-        your_email: Jouw e-mailadres
-        #original_hash: 68f4145
-        message: Bericht
     hints:
       user:
         #original_hash: 87e1e6f
@@ -468,10 +460,9 @@ nl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          Het basisbedrag voor aanmelding voor de wedstrijd. Dit is opgenomen in
-          de laagste eenheid, bijv. centen ingeval van dollars. Het bedrag wordt
+          Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
           getoond op de website en de aanmeldingspagina. Let op: de WCA-website
           ondersteunt nog geen betalingen. Het softwareteam werkt hieraan en je
           kunt de voortgang volgen op <a
@@ -496,13 +487,28 @@ nl:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Je correcte geboortedatum in het formaat jjjj-mm-dd
+        #original_hash: 059d2ed
+        document: >-
+          Om je identiteit en je geboortedatum aan te tonen, kun je een foto 
+          opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
+          studentenkaart, paspoort, geboortecertificaat) met je naam en
+          geboortedatum zichtbaar en begrijpbaar voor iemand die Engels spreekt.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -608,6 +614,23 @@ nl:
           'true': Vraag naar gasten
           #original_hash: f8c2332
           'false': Vraag niet naar gasten
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Naam
+        #original_hash: 3fa6f5f
+        your_email: E-mailadres
+      website_contact:
+        #original_hash: 68f4145
+        message: Bericht
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Je WCA-id
+        #original_hash: 51d0597
+        dob: Juiste geboortedatum
+        #original_hash: e214b8a
+        document: Document
   errors:
     messages:
       #original_hash: dc2367c
@@ -734,7 +757,7 @@ nl:
       #original_hash: 12ab214
       delegate: Delegate
       #original_hash: 2f4bd74
-      panel: Beheermenu
+      panel: Panel
       #original_hash: d3a928c
       results_team: Results team
       #original_hash: 4e7afeb
@@ -882,13 +905,12 @@ nl:
       not_found: niet gevonden
       #original_hash: 49a6fe4
       already_assigned: al toegekend aan een andere gebruiker
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
-        komt niet overeen met onze administratie.  Weet je zeker dat je de datum
-        in het juiste formaat (jjjj-mm-dd) hebt ingevoerd? Stuur een e-mail aan
-        <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> als er iets fout is. Stuur een foto mee van je
-        legitimatiebewijs.
+        komt niet overeen met onze administratie.  Als je zeker weet je dat je
+        de juiste datum in het juiste formaat (jjjj-mm-dd) hebt ingevoerd, neem
+        dan contact op met het WCA Resultaten-team via <a
+        href="%{dob_form_path}">dit formulier</a>.
       #original_hash: 0fbcefd
       unique: moet uniek zijn
       #original_hash: 26f70ed
@@ -1363,6 +1385,8 @@ nl:
       #original_hash: 9104a03
       no_past_competitions: Je hebt geen wedstrijden in het verleden.
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Ondersteunt <a
@@ -1611,6 +1635,31 @@ nl:
     confirm_delete_post: >-
       Weet je zeker dat je deze post wilt verwijderen? Deze actie kan niet
       worden teruggedraaid.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA-website contactformulier
+      #original_hash: 9039572
+      description_html: >-
+        Gebruik dit formulier alleen voor vragen, opmerkingen en suggesties over
+        de website. <a href="%{contact_path}">Andere zaken</a> moeten worden
+        verstuurd aan de juiste contactpersonen.
+      #original_hash: c70a890
+      submit: Verstuur bericht
+    dob:
+      #original_hash: 907ac6c
+      title: Formulier voor verandering geboortedatum
+      #original_hash: 8a4ced5
+      description: >-
+        Gebruik dit formulier als je geregisteerde geboortedatum anders is dan
+        je werkelijke.
+      #original_hash: 19c17ec
+      submit: Verzoek wijziging
+    messages:
+      #original_hash: 41948b9
+      success: Bedankt voor je bericht. We nemen snel contact met je op!
+      #original_hash: 8e3a9da
+      delivery_error: Fout bij versturen van bericht.
   faq:
     #original_hash: d790b40
     title: Veelgestelde vragen (FAQ)
