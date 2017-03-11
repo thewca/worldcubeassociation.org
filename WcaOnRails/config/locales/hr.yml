@@ -514,8 +514,8 @@ hr:
         document: >-
           Da biste potvrdili svoj identitet i Vaš točan datum rođenja, morate
           nam priložiti fotografiju bilo kojeg valjanog dokumenta (osobna
-          iskaznica, vozaćka dozvola, studenstska iskaznica, putovnica, izvadak
-          iz matice rođenih, ...) gdje je Vaš datum rođenja i Vaše ime vidiljivo
+          iskaznica, vozačka dozvola, studentska iskaznica, putovnica, izvadak
+          iz matice rođenih, ...) gdje je Vaš datum rođenja i Vaše ime vidljivo
           i razumljivo govorniku engleskog jezika.
       post:
         #original_hash: 53c16eb
