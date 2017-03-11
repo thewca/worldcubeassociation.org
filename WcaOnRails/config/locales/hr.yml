@@ -375,14 +375,6 @@ hr:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Molimo pogledajte probleme ispod:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Ime
-        #original_hash: 3fa6f5f
-        your_email: Vaša e-mail adresa
-        #original_hash: 68f4145
-        message: Poruka
     hints:
       user:
         #original_hash: 87e1e6f
@@ -502,13 +494,29 @@ hr:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Vaš točan datum rođenja u formatu YYYY-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          Da biste potvrdili svoj identitet i Vaš točan datum rođenja, morate
+          nam priložiti fotografiju bilo kojeg valjanog dokumenta (osobna
+          iskaznica, vozaćka dozvola, studenstska iskaznica, putovnica, izvadak
+          iz matice rođenih, ...) gdje je Vaš datum rođenja i Vaše ime vidiljivo
+          i razumljivo govorniku engleskog jezika.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -619,6 +627,23 @@ hr:
           'true': Pitaj u vezi gostiju
           #original_hash: f8c2332
           'false': Ne pitaj u vezi gostiju
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Ime
+        #original_hash: 3fa6f5f
+        your_email: Vaš e-mail
+      website_contact:
+        #original_hash: 68f4145
+        message: Poruka
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Vaš WCA ID
+        #original_hash: 51d0597
+        dob: Točan datum rođenja
+        #original_hash: e214b8a
+        document: Dokument
   errors:
     messages:
       #original_hash: dc2367c
@@ -891,14 +916,11 @@ hr:
       not_found: nije pronađeno
       #original_hash: 49a6fe4
       already_assigned: već dodijeljeno drugom korisniku
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         ne podudara se s našom bazom podataka. Ukoliko ste sigurni da pišete
-        točan datum u točnom formatu (YYYY-MM-DD) molimo Vas pošaljite e-mail <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team-u</a>, prijavite pogrešku i pošaljite sliku bilo koje
-        isprave (osobna iskaznica, vozačka dozvola...) gdje su Vaše ime i datum
-        rođenja vidljivi.
+        točan datum u točnom formatu (YYYY-MM-DD) molimo Vas kontaktirajte WCA
+        Results Team koristeći <a href="%{dob_form_path}">ovaj obrazac</a>
       #original_hash: 0fbcefd
       unique: mora biti unikatno
       #original_hash: 26f70ed
@@ -1630,6 +1652,31 @@ hr:
     confirm_delete_post: >-
       Jeste li sigurni da želite obrisati ovu objavu? Ova radnja se ne može
       vratiti.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA Website obrazac za kontakt
+      #original_hash: 9039572
+      description_html: >-
+        Rabite ovaj obrazac isključivo za pitanja, komentare i prijedloge za
+        web-stranicu. <a href="%{contact_path}">Ostali upiti</a> moraju biti
+        poslani određenoj skupini.
+      #original_hash: c70a890
+      submit: Pošalji poruku
+    dob:
+      #original_hash: 907ac6c
+      title: Obrazac za zahtjev o promjeni datuma rođenja
+      #original_hash: 8a4ced5
+      description: >-
+        Rabite ovaj obrazac ukoliko je Vaš datum rođenja u našoj bazi podataka
+        drugačiji od stvarnoga.
+      #original_hash: 19c17ec
+      submit: Zatraži promjenu
+    messages:
+      #original_hash: 41948b9
+      success: Hvala Vam za vašu poruku. Kontaktirat ćemo Vas uskoro!
+      #original_hash: 8e3a9da
+      delivery_error: Greška prilikom slanja poruke.
   faq:
     #original_hash: d790b40
     title: Često postavljena pitanja
