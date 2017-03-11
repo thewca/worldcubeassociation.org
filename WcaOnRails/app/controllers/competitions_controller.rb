@@ -447,9 +447,15 @@ class CompetitionsController < ApplicationController
       :enable_donations,
       :being_cloned_from_id,
       :clone_tabs,
-      :base_entry_fee_lowest_denomination,
-      :currency_code,
     ]
+
+    if @competition.nil? || @competition.can_edit_registration_fees?
+      permitted_competition_params += [
+        :base_entry_fee_lowest_denomination,
+        :currency_code,
+      ]
+    end
+
     if @competition&.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else

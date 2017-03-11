@@ -447,6 +447,10 @@ class Competition < ApplicationRecord
     connected_stripe_account_id
   end
 
+  def can_edit_registration_fees?
+    registrations.with_payments.empty?
+  end
+
   def registration_opened?
     use_wca_registration? && !registration_not_yet_opened? && !registration_past?
   end

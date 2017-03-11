@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
+  let(:competition) { FactoryGirl.create(:competition, :with_delegate, :entry_fee, :registration_open) }
   let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -407,6 +407,24 @@ RSpec.describe CompetitionsController do
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
         expect(competition.reload.organizers).to eq [organizer]
+      end
+
+      it "can update the registration fees when there is no payment" do
+        previous_fees = competition.base_entry_fee_lowest_denomination
+        patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
+        competition.reload
+        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees + 10
+        expect(competition.currency_code).to eq "EUR"
+      end
+
+      it "cannot update the registration fees when there is any payment" do
+        previous_fees = competition.base_entry_fee_lowest_denomination
+        previous_currency = competition.currency_code
+        FactoryGirl.create(:registration, :paid, competition: competition)
+        patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
+        competition.reload
+        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees
+        expect(competition.currency_code).to eq previous_currency
       end
     end
 

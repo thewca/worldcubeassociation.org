@@ -218,9 +218,9 @@
       <hr>
 
     <% end %>
-
-    <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }  %>
-    <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code %>
+    <% disable_money_input = !@competition.can_edit_registration_fees? %>
+    <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
+    <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input %>
     <script>
       // Setup currency onchange callback
       $('#competition_currency_code').change(function() {
