@@ -27,7 +27,9 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
-  scope :not_over, -> { where("end_date >= ?", Date.today) }
+  # Remember to keep this in sync with `def is_probably_over`!
+  scope :not_over, -> { where("end_date = NULL OR (end_date >= ? AND results_posted_at IS NULL)", Date.today) }
+
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
@@ -619,8 +621,9 @@ class Competition < ApplicationRecord
   # We don't actually know when competitions are over, because we don't know their schedules, nor
   # do we know their timezones.
   # See discussion here: https://github.com/thewca/worldcubeassociation.org/pull/1206/files#r98485399.
+  # Remember to keep this in sync with `scope :not_over`!
   def is_probably_over?
-    !end_date.nil? && end_date < Date.today
+    (!end_date.nil? && end_date < Date.today) || results_posted?
   end
 
   def city_and_country
