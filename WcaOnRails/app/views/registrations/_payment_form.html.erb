@@ -32,7 +32,7 @@
       $('#donate_button').on('click', function(e) {
         e.preventDefault();
         var registration_fees_to_pay = <%= @registration.outstanding_entry_fees.cents %>;
-        var donation = parseFloat($('#payment_donation').val());
+        var donation = parseFloat($('#payment_donation').val() || 0);
         var amount = parseFloat(registration_fees_to_pay+donation);
         if (isNaN(amount)) {
           alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
