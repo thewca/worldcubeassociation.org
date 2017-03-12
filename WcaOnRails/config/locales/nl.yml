@@ -288,6 +288,10 @@ nl:
         clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
         #original_hash: c5497bc
         competition_events: Wedstrijdonderdelen
+        #original_hash: 71c8461
+        enable_donations: >-
+          Ik wil naast de aanmeldingsbedragen ook de mogelijkheid bieden om
+          donaties te doen
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -471,6 +475,8 @@ nl:
         currency_code: Valutacode van het aanmeldingsbedrag.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -1154,6 +1160,8 @@ nl:
     sign_in: Inloggen
     #original_hash: 5d45a00
     profile: profiel
+    #original_hash: 801b3e9
+    panel_title: Aanmeldingsgegevens
     #original_hash: c0063c3
     register: Aanmelden!
     #original_hash: f484f15
@@ -1182,10 +1190,10 @@ nl:
       %{sign_in} om de status van je aanmelding te controleren. Als je nog geen
       WCA-account hebt, kun je deze %{here} aanmaken, maar de aanmelding is nog
       niet geopend.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} om je voor %{comp} aan te melden. Als je nog geen WCA-account
-      hebt, kun je deze aanmaken %{here}
+      hebt, kun je deze  %{here} aanmaken.
     #original_hash: 89b4e7f
     greeting: 'Hoi, %{name}!'
     #original_hash: fb34a17
@@ -1202,8 +1210,6 @@ nl:
     have_registered: >-
       Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
       aanmelding vinden.
-    #original_hash: fa52a9b
-    entry_fee: 'Deelname kost %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Neem contact op met de organisator als je een wijziging wilt doen.
     #original_hash: 59354fd
@@ -1213,18 +1219,40 @@ nl:
       voor details.
     #original_hash: 58b1a3c
     accepted: Je aanmelding is geaccepteerd!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      Je hebt nu %{paid} betaald van het totale aanmeldingsbedrag van
-      %{total_entry_fee}.
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Je hebt het aanmeldingsbedrag van %{paid} volledig betaald.'
-    #original_hash: 05495d6
-    payment_button_text: 'Betaal het aanmeldingsbedrag %{entry_fee} met kaart'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Je hebt %{paid} betaald, wat het volledige bedrag voor de aanmelding is.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Je zult het aanmeldingsbedrag hier betalen na je aanmelding
+    #original_hash: b7ef562
+    wont_pay_here: Controleer de wedstrijdinformatie voor instructies over hoe te belaten
+    payment_form:
+      #original_hash: 4de825f
+      title: Aanmeldingsbedrag
+      hints:
+        #original_hash: bf3a39e
+        donation: Optionele donatie voor het organisatieteam
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Aanmeldingsbedrag
+        #original_hash: 2c09302
+        donation: Donatie
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Voer een juist bedrag in.
+        #original_hash: 707b9ca
+        amount_too_low: >-
+          Het totaalbedag moet minimaal gelijk zijn aan het te betalen
+          aanmeldingsbedrag.
+    #original_hash: 8607a87
+    payment_button_text: Betaal het aanmeldingsbedrag met kaart
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
       de onderdelen opgeven %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      We hebben je voorkeursonderdelen ingevuld, die je kunt bewerken via
+      %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1469,6 +1497,8 @@ nl:
       end_date_before_start: Einddatum kan niet voor startdatum liggen.
       #original_hash: be3933b
       span_too_many_days: 'Wedstrijd kan niet langer duren dan %{max_days} dagen.'
+      #original_hash: cdcd288
+      invalid_currency_code: De geselecteerde valutacode is onjuist
     new:
       #original_hash: 1208df7
       create_competition: Maak wedstrijd
@@ -1558,6 +1588,8 @@ nl:
         orga_view: Overzicht Organisatoren
         #original_hash: c6171f8
         event_view: Wedstrijdonderdelen beheren
+        #original_hash: 6f7aef9
+        payment_view: Instellen betalingen
         #original_hash: 76bfdcf
         admin_view: Overzicht Admin
         #original_hash: a857eb4
