@@ -298,6 +298,10 @@ pl:
           informacjami
         #original_hash: c5497bc
         competition_events: Konkurencje
+        #original_hash: 71c8461
+        enable_donations: >-
+          Chcę włączyć możliwość przekazywania darowizn jako dodatek do
+          wpisowego podczas rejestracji
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -485,6 +489,8 @@ pl:
         currency_code: Kod waluty w której wyrażone jest wpisowe.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -1207,6 +1213,8 @@ pl:
     sign_in: Zaloguj
     #original_hash: 5d45a00
     profile: profil
+    #original_hash: 801b3e9
+    panel_title: Szczegóły dotyczące rejestracji
     #original_hash: c0063c3
     register: Zarejestruj się!
     #original_hash: f484f15
@@ -1220,7 +1228,7 @@ pl:
     #original_hash: cfc4865
     delete_registration: Usuń rejestrację.
     #original_hash: e9ddc6e
-    will_open_html: 'Rejestracja zostanie otwarta <strong>%{days}</strong> o %{time}.'
+    will_open_html: 'Rejestracja zostanie otwarta za <strong>%{days}</strong> w %{time}.'
     #original_hash: 34eb009
     will_close_html: 'Rejestracja zostanie zamknięta <strong>%{days}</strong> o %{time}.'
     #original_hash: dc8a520
@@ -1235,7 +1243,7 @@ pl:
       %{sign_in}, aby sprawdzić status swojej rejestracji. Jeżeli nie masz
       jeszcze konta WCA, możesz założyć je %{here}, ale rejestracja na te zawody
       nie jest jeszcze otwarta.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in}, aby zarejestrować się na %{comp}. Jeżeli nie masz jeszcze
       konta WCA, możesz założyć je %{here}.
@@ -1255,8 +1263,6 @@ pl:
     have_registered: >-
       Zarejestrowałeś się na %{comp}. Możesz zobaczyć dane swojej rejestracji
       poniżej.
-    #original_hash: fa52a9b
-    entry_fee: 'Wpisowe wynosi %{fee}'
     #original_hash: 3c9141f
     contact_organizer: 'Skontaktuj się z organizatorem, jeżeli chciałbyś wprowadzić jakąś zmianę.'
     #original_hash: 59354fd
@@ -1266,16 +1272,40 @@ pl:
       informacji.
     #original_hash: 58b1a3c
     accepted: Twoja rejestracja została zaakceptowana!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: 'Obecnie wpłaciłeś %{paid} z całkowitej kwoty %{total_entry_fee} wpisowego.'
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Zapłaciłeś wpisowe w wysokości %{paid} w całości.'
-    #original_hash: 05495d6
-    payment_button_text: 'Zapłać %{entry_fee} wpisowego za pomocą karty.'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Zapłaciłeś %{paid}, co w pełni pogrywa koszty wpisowego.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Zapłacisz je po wysłaniu swojej rejestracji
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Sprawdź informacje dotyczące zawodów w celu uzyskania instrukcji o
+      sposobie płatności
+    payment_form:
+      #original_hash: 4de825f
+      title: Wpisowe
+      hints:
+        #original_hash: bf3a39e
+        donation: 'Opcjonalna darowizna, która trafi wyłącznie do zespołu organizacyjnego'
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Wpisowe
+        #original_hash: 2c09302
+        donation: Darowizna
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Prosimy o wprowadzenie poprawnej kwoty.
+        #original_hash: 707b9ca
+        amount_too_low: Całkowita kwota nie może być mniejsza niż wymagana opłata wpisowa.
+    #original_hash: 8607a87
+    payment_button_text: Zapłać swoje wpisowe za pomocą karty
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Aby przyspieszyć rejestrację w przyszłości, możesz ustawić swoje
       preferowane konkurencje %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Automatycznie zaznaczyliśmy twoje preferowane konkurencje, które możesz
+      edytować %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1525,6 +1555,8 @@ pl:
       end_date_before_start: Data końcowa nie może być przed datą początkową.
       #original_hash: be3933b
       span_too_many_days: 'Zawody nie mogą trwać więcej niż %{max_days} dni.'
+      #original_hash: cdcd288
+      invalid_currency_code: Wybrany kod waluty jest nieprawidłowy
     new:
       #original_hash: 1208df7
       create_competition: Utwórz zawody
@@ -1616,6 +1648,8 @@ pl:
         orga_view: Widok organizatora
         #original_hash: c6171f8
         event_view: Zarządzaj konkurencjami
+        #original_hash: 6f7aef9
+        payment_view: Konfiguracja płatności
         #original_hash: 76bfdcf
         admin_view: Widok administratora
         #original_hash: a857eb4
