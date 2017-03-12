@@ -122,6 +122,10 @@ class Registration < ApplicationRecord
     (pending? || accepted?) && competition.using_stripe_payments? && outstanding_entry_fees > 0
   end
 
+  def show_payment_form?
+    competition.registration_opened? && has_to_pay_fee_here?
+  end
+
   def show_details?
     competition.registration_opened? || !(new_or_deleted?)
   end
