@@ -316,6 +316,47 @@ RSpec.describe Api::V0::ApiController do
     end
   end
 
+  describe 'GET #delegates' do
+    it 'includes emails and regions' do
+      senior_delegate = FactoryGirl.create :senior_delegate
+      delegate = FactoryGirl.create :delegate, region: "SF bay area, USA", senior_delegate: senior_delegate
+
+      get :delegates
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 2
+
+      delegate_json = json.find { |user| user["id"] == delegate.id }
+      expect(delegate_json["email"]).to eq delegate.email
+      expect(delegate_json["region"]).to eq "SF bay area, USA"
+      expect(delegate_json["senior_delegate_id"]).to eq senior_delegate.id
+    end
+
+    it 'paginates' do
+      30.times do
+        FactoryGirl.create :delegate
+      end
+
+      get :delegates
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq 25
+
+      # Parse HTTP Link header mess
+      link = response.headers["Link"]
+      links = link.split(/, */)
+      next_link = links[1]
+      url, rel = next_link.split(/; */)
+      url = url[1...-1]
+      expect(rel).to eq 'rel="next"'
+
+      get :delegates, params: Rack::Utils.parse_query(URI(url).query)
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json.length).to eq User.delegates.count - 25
+    end
+  end
+
   describe 'GET #scramble_program' do
     it 'works' do
       get :scramble_program

@@ -115,4 +115,8 @@ class Api::V0::ApiController < ApplicationController
 
     paginate json: competitions
   end
+
+  def delegates
+    paginate json: User.delegates
+  end
 end
