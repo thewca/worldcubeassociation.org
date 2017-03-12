@@ -24,7 +24,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -297,20 +297,6 @@ class CompetitionsController < ApplicationController
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
-  end
-
-  def revoke_stripe_access
-    @competition = Competition.find(params[:id])
-    if @competition.connected_stripe_account_id
-      account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
-      account.deauthorize(
-        ENVied.STRIPE_CLIENT_ID,
-        stripe_user_id: @competition.connected_stripe_account_id,
-      )
-      @competition.connected_stripe_account_id = nil
-      @competition.save!
-    end
-    redirect_to competitions_payment_setup_path
   end
 
   def stripe_connect
