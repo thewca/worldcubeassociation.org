@@ -3,6 +3,7 @@ class Registration < ApplicationRecord
   scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :with_payments, -> { joins(:registration_payments).distinct }
 
   belongs_to :competition
   belongs_to :user
@@ -109,13 +110,20 @@ class Registration < ApplicationRecord
   def paid_entry_fees
     Money.new(
       registration_payments.sum(:amount_lowest_denomination),
-      # FIXME: see https://github.com/thewca/worldcubeassociation.org/issues/1257
-      (competition.currency_code.blank? ? Money.default_currency : competition.currency_code),
+      competition.currency_code,
     )
   end
 
   def outstanding_entry_fees
     entry_fee.nil? ? 0 : entry_fee - paid_entry_fees
+  end
+
+  def has_to_pay_fee_here?
+    (pending? || accepted?) && competition.using_stripe_payments? && outstanding_entry_fees > 0
+  end
+
+  def show_details?
+    competition.registration_opened? || !(new_or_deleted?)
   end
 
   def record_payment(amount, currency_code, stripe_charge_id)

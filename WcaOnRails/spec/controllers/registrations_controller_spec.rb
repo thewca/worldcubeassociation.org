@@ -2,6 +2,19 @@
 require 'rails_helper'
 
 RSpec.describe RegistrationsController do
+  def stripe_token_id(options = {})
+    default_card = {
+      number: "4242424242424242",
+      exp_month: 12,
+      exp_year: Time.now.year + 1,
+      cvc: "314",
+    }
+    default_card.merge!(options)
+    Stripe::Token.create(
+      card: default_card,
+    ).id
+  end
+
   context "signed in as organizer" do
     let(:organizer) { FactoryGirl.create(:user) }
     let(:competition) { FactoryGirl.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
@@ -597,15 +610,8 @@ RSpec.describe RegistrationsController do
       it 'processes payment with valid credit card' do
         expect(registration.outstanding_entry_fees).to be > 0
         expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
-        token_id = Stripe::Token.create(
-          card: {
-            number: "4242424242424242",
-            exp_month: 12,
-            exp_year: 2017,
-            cvc: "314",
-          },
-        ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        token_id = stripe_token_id
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:success]).to eq "Your payment was successful."
         expect(response).to redirect_to competition_register_path(competition)
         expect(registration.reload.outstanding_entry_fees).to eq 0
@@ -617,16 +623,30 @@ RSpec.describe RegistrationsController do
         expect(charge.metadata.competition).to eq competition.name
       end
 
+      it 'processes payment with donation and valid credit card' do
+        expect(registration.outstanding_entry_fees).to be > 0
+        expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+        token_id = stripe_token_id
+        donation_lowest_denomination = 100
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents + donation_lowest_denomination } }
+        expect(flash[:success]).to eq "Your payment was successful."
+        expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
+        expect(registration.paid_entry_fees.cents).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
+        charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+        expect(charge.amount).to eq(competition.base_entry_fee.cents + donation_lowest_denomination)
+      end
+
+      it 'rejects insufficient payment with valid credit card' do
+        expect(registration.outstanding_entry_fees).to be > 0
+        token_id = stripe_token_id
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: 500 } }
+        expect(flash[:danger]).to match "the amount to be charged was lower than the registration fees to pay"
+        expect(response).to redirect_to competition_register_path(competition)
+      end
+
       it 'rejects payment with invalid credit card' do
-        token_id = Stripe::Token.create(
-          card: {
-            number: "4000000000000002",
-            exp_month: 12,
-            exp_year: 2017,
-            cvc: "314",
-          },
-        ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        token_id = stripe_token_id(number: "4000000000000002")
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         expect(flash[:danger]).to eq "Unsuccessful payment: Your card was declined."
         expect(response).to redirect_to competition_register_path(competition)
       end
@@ -662,7 +682,7 @@ RSpec.describe RegistrationsController do
             cvc: "314",
           },
         ).id
-        post :process_payment, params: { competition_id: competition.id, stripeToken: token_id }
+        post :process_payment, params: { competition_id: competition.id, payment: { stripe_token: token_id, total_amount: registration.outstanding_entry_fees.cents } }
         payment = registration.reload.registration_payments.first
         post :refund_payment, params: { id: registration.id, payment_id: payment.id }
         expect(response).to redirect_to edit_registration_path(registration)

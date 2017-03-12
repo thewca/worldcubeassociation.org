@@ -1,0 +1,32 @@
+<% disabled = !current_user.can_edit_registration?(@registration) %>
+<% url = @registration.new_record? ? competition_registrations_path(@competition)
+                                   : registration_path(@registration) %>
+<%= horizontal_simple_form_for @registration, url: url, html: { class: 'are-you-sure no-submit-on-enter' } do |f| %>
+  <%= render "shared/associated_events_picker", form_builder: f, disabled: disabled,
+              events_association_name: :registration_competition_events, allowed_events: @competition.events, selected_events: @selected_events, hint: notify_of_preferred_events(current_user.preferred_events) %>
+
+  <% if @competition.guests_enabled? %>
+    <%= f.input :guests, disabled: disabled %>
+  <% end %>
+
+  <%= f.input :comments, disabled: disabled %>
+
+  <%# If the user has to pay fee here, this information will already be in the payment form %>
+  <% unless @registration.has_to_pay_fee_here? %>
+    <% fees_hint, hint_context = fees_hint_and_context(@registration) %>
+    <%= render 'entry_fee', hint: fees_hint, hint_context: hint_context %>
+  <% end %>
+
+  <% unless disabled %>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <% if @registration.new_or_deleted? %>
+          <%= f.submit t('registrations.register'), class: "btn btn-success" %>
+        <% else %>
+          <%= link_to t('registrations.delete'), registration_path(@registration, user_is_deleting_theirself: true), method: :delete, class: "btn btn-danger", data: { confirm: t('registrations.delete_confirm'), toggle: "tooltip" }, title: t('registrations.delete_registration') %>
+          <%= f.submit t('registrations.update'), class: "btn btn-success" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

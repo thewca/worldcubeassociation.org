@@ -24,7 +24,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup, :revoke_stripe_access]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -299,20 +299,6 @@ class CompetitionsController < ApplicationController
     @authorize_url = client.auth_code.authorize_url(oauth_params)
   end
 
-  def revoke_stripe_access
-    @competition = Competition.find(params[:id])
-    if @competition.connected_stripe_account_id
-      account = Stripe::Account.retrieve(@competition.connected_stripe_account_id)
-      account.deauthorize(
-        ENVied.STRIPE_CLIENT_ID,
-        stripe_user_id: @competition.connected_stripe_account_id,
-      )
-      @competition.connected_stripe_account_id = nil
-      @competition.save!
-    end
-    redirect_to competitions_payment_setup_path
-  end
-
   def stripe_connect
     code = params[:code]
     competition = Competition.find(params[:state])
@@ -444,11 +430,18 @@ class CompetitionsController < ApplicationController
       :registration_open,
       :registration_close,
       :guests_enabled,
+      :enable_donations,
       :being_cloned_from_id,
       :clone_tabs,
-      :base_entry_fee_lowest_denomination,
-      :currency_code,
     ]
+
+    if @competition.nil? || @competition.can_edit_registration_fees?
+      permitted_competition_params += [
+        :base_entry_fee_lowest_denomination,
+        :currency_code,
+      ]
+    end
+
     if @competition&.isConfirmed? && !current_user.can_admin_results?
       # If the competition is confirmed, non admins are not allowed to change anything.
     else

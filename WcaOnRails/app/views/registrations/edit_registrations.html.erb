@@ -11,7 +11,7 @@
       <% else %>
         <h2><%= t 'registrations.list.deleted_registrations' %></h2>
       <% end %>
-      <% registrations = @competition.registrations.public_send(status).includes(:user, :events) %>
+      <% registrations = @competition.registrations.public_send(status).includes(:user, :events, :competition) %>
       <%= wca_table table_class: "registrations-table #{status}",
                     data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>

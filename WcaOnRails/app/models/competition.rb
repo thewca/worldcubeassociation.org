@@ -64,6 +64,7 @@ class Competition < ApplicationRecord
     guests_enabled
     base_entry_fee_lowest_denomination
     currency_code
+    enable_donations
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -103,6 +104,8 @@ class Competition < ApplicationRecord
                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: %r{\Ahttps?://.*\z} }, allow_blank: true
+
+  validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   NEARBY_DISTANCE_KM_WARNING = 500
   NEARBY_DISTANCE_KM_DANGER = 200
@@ -438,6 +441,14 @@ class Competition < ApplicationRecord
         competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
       end
     end
+  end
+
+  def using_stripe_payments?
+    connected_stripe_account_id
+  end
+
+  def can_edit_registration_fees?
+    registrations.with_payments.empty?
   end
 
   def registration_opened?

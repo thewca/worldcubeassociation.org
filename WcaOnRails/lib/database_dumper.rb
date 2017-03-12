@@ -52,6 +52,7 @@ module DatabaseDumper
           contact
           registration_open
           registration_close
+          enable_donations
           use_wca_registration
           guests_enabled
           results_posted_at

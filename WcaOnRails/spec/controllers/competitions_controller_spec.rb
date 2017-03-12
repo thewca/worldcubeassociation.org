@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryGirl.create(:competition, :with_delegate) }
+  let(:competition) { FactoryGirl.create(:competition, :with_delegate, :entry_fee, :registration_open) }
   let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -407,6 +407,24 @@ RSpec.describe CompetitionsController do
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
         expect(competition.reload.organizers).to eq [organizer]
+      end
+
+      it "can update the registration fees when there is no payment" do
+        previous_fees = competition.base_entry_fee_lowest_denomination
+        patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
+        competition.reload
+        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees + 10
+        expect(competition.currency_code).to eq "EUR"
+      end
+
+      it "cannot update the registration fees when there is any payment" do
+        previous_fees = competition.base_entry_fee_lowest_denomination
+        previous_currency = competition.currency_code
+        FactoryGirl.create(:registration, :paid, competition: competition)
+        patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
+        competition.reload
+        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees
+        expect(competition.currency_code).to eq previous_currency
       end
     end
 
@@ -815,36 +833,6 @@ RSpec.describe CompetitionsController do
       it 'does not allow access' do
         expect {
           get :payment_setup, params: { id: competition }
-        }.to raise_error(ActionController::RoutingError)
-      end
-    end
-  end
-
-  describe 'POST #revoke_stripe_access' do
-    context 'when not signed in' do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        post :revoke_stripe_access, params: { id: competition }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
-
-      it 'redirects to competition payment setup' do
-        post :revoke_stripe_access, params: { id: competition }
-        expect(response).to redirect_to competitions_payment_setup_path(competition)
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
-
-      it 'does not allow access' do
-        expect {
-          post :revoke_stripe_access, params: { id: competition }
         }.to raise_error(ActionController::RoutingError)
       end
     end

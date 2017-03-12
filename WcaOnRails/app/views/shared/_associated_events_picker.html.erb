@@ -5,12 +5,14 @@ Variables:
  - events_association_name -> name of the associated events relation
  - allowed_events -> a relation or an Array of Event objects that should be shown (all by default)
  - selected_events -> a relation or an Array of Event objects that whould be marked as selected
+ - hint -> a hint to be displayed under the picker
 
 Note: form_builder.object is the object having associated events.
 %>
 
 <%
   disabled ||= false
+  hint ||= false
   allowed_events ||= Event.official
 
   label = I18n.t("activerecord.attributes.#{form_builder.object.class.name.underscore}.#{events_association_name}")
@@ -46,6 +48,9 @@ Note: form_builder.object is the object having associated events.
       <span class="help-block">
         <%= error %>
       </span>
+    <% end %>
+    <% unless hint.blank? %>
+      <p class="help-block"><%= hint %></p>
     <% end %>
   </div>
 </div>

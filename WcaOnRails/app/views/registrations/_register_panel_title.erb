@@ -1,0 +1,8 @@
+<% if foldable %>
+  <a data-toggle="collapse" href="#register-panel" class="collapsed">
+    <%= yield %>
+    <span class="collapse-indicator collapse-register"></span>
+  </a>
+<% else %>
+  <%= yield %>
+<% end %>
