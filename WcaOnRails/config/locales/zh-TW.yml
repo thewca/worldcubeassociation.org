@@ -138,7 +138,7 @@ zh-TW:
     #original_hash: 15f86c0
     average: 平均
     #original_hash: e7f6fc5
-    solves: 轉
+    solves: 成績
     date:
       #original_hash: acb6273
       no_date: 尚無日期
@@ -257,9 +257,9 @@ zh-TW:
         #original_hash: 2e8a57c
         external_website: 外部網站
         #original_hash: 692e1f9
-        generate_website: 我要使用WCA網站公佈資訊，而非外部網站。
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: 基礎報名費的最低面額
+        generate_website: 我要使用WCA網站公布資訊，而非外部網站。
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: 基礎報名費
         #original_hash: 28a6fbb
         currency_code: 貨幣代碼
         #original_hash: 5b2fe69
@@ -286,6 +286,8 @@ zh-TW:
         clone_tabs: 我想要複製所有標籤以及其資訊
         #original_hash: c5497bc
         competition_events: 項目
+        #original_hash: 71c8461
+        enable_donations: null
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -367,14 +369,6 @@ zh-TW:
     error_notification:
       #original_hash: d70e9cb
       default_message: '請預覽以下問題:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: 姓名
-        #original_hash: 3fa6f5f
-        your_email: 您的電子郵件
-        #original_hash: 68f4145
-        message: 訊息
     hints:
       user:
         #original_hash: 87e1e6f
@@ -450,15 +444,16 @@ zh-TW:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          這場比賽的基礎報名費。請以該貨幣的最低面額為單位，例如:
-          台幣一元。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。請特別注意WCA尚未支援付款功能，WCA軟體組正在努力完工，您可以在<a
+          這場比賽的基礎報名費。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。請特別注意WCA尚未支援付款功能，WCA軟體組正在努力完工，您可以在<a
           href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>追蹤進度。
         #original_hash: 866bc05
         currency_code: 基礎報名費的貨幣代碼。
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -475,13 +470,24 @@ zh-TW:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: 將您的生日填成YYYY-MM-DD的格式
+        #original_hash: 059d2ed
+        document: 為了證明您的身份和您正確的生日，您必須附上一張有您的姓名和生日的合法證件之照片以供辨識(身份證、駕照、學生證、護照等)。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -572,6 +578,23 @@ zh-TW:
           'true': 詢問是否有訪客
           #original_hash: f8c2332
           'false': 不要詢問是否有訪客
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: 姓名
+        #original_hash: 3fa6f5f
+        your_email: 您的電子郵件
+      website_contact:
+        #original_hash: 68f4145
+        message: 訊息
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: 您的WCA ID
+        #original_hash: 51d0597
+        dob: 正確的生日
+        #original_hash: e214b8a
+        document: 文件
   errors:
     messages:
       #original_hash: dc2367c
@@ -735,7 +758,7 @@ zh-TW:
       #original_hash: 0660b5d
       info_competed_before: 如果您曾經參加過比賽，您可以要求WCA帳號與您的WCA ID綁定。
       #original_hash: 7d605f8
-      info_never_competed_html: '如果您還沒參加過任何比賽，去參加一場%{comp}吧! 當您參加的第一場比賽成績公佈後，您就會有WCA ID了。'
+      info_never_competed_html: '如果您還沒參加過任何比賽，去參加一場%{comp}吧! 當您參加的第一場比賽成績公布後，您就會有WCA ID了。'
       #original_hash: f28bf87
       submit_value: 取得WCA ID
     edit_avatar_thumbnail:
@@ -816,11 +839,10 @@ zh-TW:
       not_found: 找不到
       #original_hash: 49a6fe4
       already_assigned: 已經被其他使用者使用了
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
-        與WCA資料庫不相符。如果您確認您提供的日期格式(YYYY-MM-DD)是正確的，請寄信至<a
-        href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA成績組</a>提出問題，並且附上一張有您的姓名和生日的合法證件之照片(身份證、駕照等)。
+        與WCA資料庫不相符。如果您確認您提供的日期格式(YYYY-MM-DD)是正確的，請使用<a
+        href="%{dob_form_path}">此表單</a>聯絡WCA成績組。
       #original_hash: 0fbcefd
       unique: 必須唯一
       #original_hash: 26f70ed
@@ -1023,6 +1045,8 @@ zh-TW:
     sign_in: 登入
     #original_hash: 5d45a00
     profile: 個人頁面
+    #original_hash: 801b3e9
+    panel_title: null
     #original_hash: c0063c3
     register: 報名!
     #original_hash: f484f15
@@ -1045,7 +1069,7 @@ zh-TW:
     please_sign_in_past_html: '確認報名進度前請先%{sign_in}。如果您還沒有WCA帳號，您可以在%{here}申請一個，但是比賽報名已經結束。'
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: '確認報名進度前請先%{sign_in}。如果您還沒有WCA帳號，您可以在%{here}申請一個，但是比賽報名尚未開始。'
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: '報名%{comp}前請先%{sign_in}。如果您還沒有WCA帳號，您可以在%{here}申請一個。'
     #original_hash: 89b4e7f
     greeting: '嗨，%{name}!'
@@ -1057,22 +1081,40 @@ zh-TW:
     check_registration_information: 請檢查報名資訊以確認您是否需要完成其他事項，例如支付報名費。
     #original_hash: ea2b586
     have_registered: '您已經報名了%{comp}。您可以在底下看到您的報名資料。'
-    #original_hash: fa52a9b
-    entry_fee: '報名費總額一共是%{fee}'
     #original_hash: 3c9141f
     contact_organizer: 如果您想更改內容的話，請聯絡主辦人。
     #original_hash: 59354fd
     waiting_list: 您的報名正在等候補位中。您也許需要先付報名費才能成功報名。詳情請至比賽網站查詢。
     #original_hash: 58b1a3c
     accepted: 您的報名已經成功了!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: '您已經支付總報名費%{total_entry_fee}元中的%{paid}元。'
-    #original_hash: 9153695
+    #original_hash: 70de60f
     entry_fees_fully_paid: '您已經支付報名費全額%{paid}元。'
-    #original_hash: 05495d6
-    payment_button_text: '用卡片支付您的報名費%{entry_fee}元'
+    #original_hash: 2e5d1b9
+    will_pay_here: null
+    #original_hash: b7ef562
+    wont_pay_here: null
+    payment_form:
+      #original_hash: 4de825f
+      title: null
+      hints:
+        #original_hash: bf3a39e
+        donation: null
+      labels:
+        #original_hash: 948ec72
+        entry_fees: null
+        #original_hash: 2c09302
+        donation: null
+      alerts:
+        #original_hash: a34940e
+        not_a_number: null
+        #original_hash: 707b9ca
+        amount_too_low: null
+    #original_hash: 8607a87
+    payment_button_text: 用卡片支付報名費
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
+    #original_hash: 67d8734
+    preferred_events_populated_html: null
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1084,7 +1126,7 @@ zh-TW:
       #original_hash: e390250
       create_success: 成功申請一場新的比賽!
       #original_hash: afe3a23
-      results_preview_alert: 您正在瀏覽尚未公佈的成績。
+      results_preview_alert: 您正在瀏覽尚未公布的成績。
       #original_hash: 07de612
       upload_results: 比賽已經結束了，我們正盡快地上傳成績!
       #original_hash: a0168ee
@@ -1282,6 +1324,8 @@ zh-TW:
       end_date_before_start: 結束日期不得早於開始日期。
       #original_hash: be3933b
       span_too_many_days: '比賽不得多於%{max_days}天。'
+      #original_hash: cdcd288
+      invalid_currency_code: null
     new:
       #original_hash: 1208df7
       create_competition: 申請比賽
@@ -1366,6 +1410,8 @@ zh-TW:
         orga_view: 主辦人模式
         #original_hash: c6171f8
         event_view: 管理項目
+        #original_hash: 6f7aef9
+        payment_view: null
         #original_hash: 76bfdcf
         admin_view: 管理員模式
         #original_hash: a857eb4
@@ -1439,6 +1485,26 @@ zh-TW:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 您確定要刪除這篇文章嗎?這個動作是不可逆的。
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA網站聯絡表單
+      #original_hash: 9039572
+      description_html: null
+      #original_hash: c70a890
+      submit: 傳送訊息
+    dob:
+      #original_hash: 907ac6c
+      title: 請求更改生日表單
+      #original_hash: 8a4ced5
+      description: 若您的生日與我們記錄當中的資料不符時，請使用此表單。
+      #original_hash: 19c17ec
+      submit: 請求更改
+    messages:
+      #original_hash: 41948b9
+      success: 感謝您的訊息，我們會盡快連絡您!
+      #original_hash: 8e3a9da
+      delivery_error: 傳送錯誤訊息。
   faq:
     #original_hash: d790b40
     title: 常見問題
@@ -1464,7 +1530,7 @@ zh-TW:
           #original_hash: b645fe1
           '1': >-
             如果您還沒參加過任何比賽，去參加一場<a href='/competitions'>比賽</a>吧!
-            當您參加的第一場比賽成績公佈後，您就會有WCA ID和WCA個人頁面了。
+            當您參加的第一場比賽成績公布後，您就會有WCA ID和WCA個人頁面了。
       '2':
         #original_hash: eb948e7
         title: 我該如何搜尋WCA比賽呢?
@@ -1512,7 +1578,7 @@ zh-TW:
         title: WCA帳號的用途是什麼? WCA帳號和WCA個人頁面的差異何在?
         content:
           #original_hash: 57a3767
-          '1': 當您參加第一場WCA認證比賽的成績公佈後，您就會有WCA ID了。
+          '1': 當您參加第一場WCA認證比賽的成績公布後，您就會有WCA ID了。
           #original_hash: c5ad7a3
           '2': WCA帳號可以證明您的身份。您可以透過WCA帳號更新您WCA個人頁面的頭像、報名比賽，並且防止其他人盜用身份。
           #original_hash: 9ff083a
@@ -1683,115 +1749,75 @@ zh-TW:
         href="mailto:board@worldcubeassociation.org">WCA董事會</a>審核。
   workbook_assistant:
     #original_hash: e442ea4
-    title: WCA Workbook Assistant
+    title: WCA成績小幫手
     #original_hash: a7c307f
-    download: Download WCA Workbook Assistant
+    download: 下載WCA成績小幫手
     #original_hash: cf1b916
-    last_update: Last update
+    last_update: 最後更新
     #original_hash: feece00
-    version_history: version history
+    version_history: 歷史版本
     #original_hash: 8f3f4c0
-    header: How to process results and scrambles before submitting them to the WCA
+    header: 在向WCA遞出成績之前，如何處理成績和轉亂步驟
     step1:
       #original_hash: c0450b1
-      title: 'Step 1: Open the workbook with the results'
+      title: '步驟一: 打開成績小幫手'
       #original_hash: 656d70d
-      content_html: >-
-        Open the workbook using the <em>Open...</em> button or by dragging the
-        workbook file and dropping it on the application window.
+      content_html: 按下<em>Open...</em>按鈕打開成績小幫手或著直接拖曳成績檔案到成績小幫手視窗。
     step2:
       #original_hash: 3ad9881
-      title: 'Step 2: Add the TNoodle scrambles'
+      title: 步驟二：載入TNoodle轉亂步驟
       #original_hash: 080acc0
       content_html: >-
-        Add the TNoodle scrambles using the <em>Add...</em> button or by
-        dragging the TNoodle file and dropping it on the application window.
-        Make sure you use either the .zip file  or the .json file generated by
-        TNoodle.
+        按下<em>Add...</em>按鈕以載入TNoodle轉亂步驟或著拖曳TNoodle檔案到成績小幫手視窗。請確認您使用的是TNoodle產生的.zip檔或是.json檔。
       #original_hash: 6cc90b8
-      content2_html: >-
-        You can add multiple scramble files in case the scrambles where
-        generated in parts or extra scrambles had to be generated during the
-        competition.
+      content2_html: 若轉亂步驟分多次產生，或著在比賽中產生了多的轉亂步驟，您可以同時載入多個轉亂步驟檔案。
     step3:
       #original_hash: b2d01b3
-      title: 'Step 3: Match the scrambles with the results'
+      title: 步驟三：配對轉亂步驟和成績
       #original_hash: 36383b1
-      content_html: >-
-        The WCA Workbook Assistant automatically links the scrambles with the
-        rounds that were held. In some cases, like when multiple scramble files
-        were generated, the selection needs to be done manually because there
-        are several possible options.
+      content_html: WCA成績小幫手會自動將轉亂步驟和對應的分組配對。有一些情況下需要手動處理，例如有多份轉亂步驟時。
       #original_hash: e869c1e
-      content2_html: >-
-        Manually selecting scrambles can be done by double clicking the
-        <em>Scrambles</em> cell in the sheet overview panel.
+      content2_html: 雙擊<em>Scrambles</em>格來手動選擇轉亂步驟。
       #original_hash: 8f4fdfd
       content3_html: >-
-        It is only possible to select one round from the scramble files for each
-        round for which there are results. If a situation arises where scrambles
-        for a single round were generated as separate rounds in TNoodle, you can
-        use the <em>Edit groups...</em> button to edit the groups in the
-        scramble files and move them from one round to another or delete them.
+        每一輪只能對應一輪的轉亂步驟。如果某一輪透過TNoodle產生多份轉亂步驟，您可以使用<em>Edit
+        groups...</em>按鈕來編輯轉亂步驟的分組，並將它們移到另一組或是刪除。
       #original_hash: 94353f2
-      content4_html: >-
-        In this example, an extra set scrambles was generated to have two groups
-        for the first round of skewb instead of one group.
+      content4_html: 這個範例當中，Skewb第一輪產生了額外的一份轉亂步驟，讓比賽有兩組而非一組。
       #original_hash: 68c5b18
-      content5_html: >-
-        The scrambles for the additional group can be dragged and dropped on the
-        round that was generated originally. This moves the two groups together
-        in one round.
+      content5_html: 將額外產生的轉亂步驟拖曳並放置在原先產生的該輪，使得兩組合併在同一輪。
     step4:
       #original_hash: ed940d2
-      title: 'Step 4: Fix any errors reported by the application'
+      title: 步驟四：修正小幫手出現的任何錯誤
       #original_hash: df2cf58
-      content_html: >-
-        The results are checked for data entry mistakes. Rounds that have errors
-        will be marked with a red icon in the sheet overview panel.
+      content_html: 成績若有輸入錯誤將會被檢查出來，出現問題的該輪則會有紅色標誌顯示。
       #original_hash: 7fbf6b8
-      content2_html: >-
-        When selecting a sheet with errors in the sheet overview panel, the
-        application will list the details in the validation errors panel on the
-        bottom left.
+      content2_html: 當選取錯誤清單時，所有錯誤細節會被列在左下角。
       #original_hash: 0600502
       content3_html: >-
-        Mistakes can be fixed by opening the workbook in a spreadsheet
-        application and editing and saving it from there. The updated workbook
-        can then be loaded again in the WCA Workbook Assistant by pressing the
-        <em>Refresh</em> button. This will only reload the results but will
-        leave all the other changes you made intact, like the scrambles that
-        were added.
+        你可以開啟成績檔案來修正錯誤，編輯之後並且儲存。接著在WCA成績小幫手按下<em>Refresh</em>按鈕以重新載入成績檔案。此操作僅重新讀取成績，不影響已經載入的轉亂步驟。
     step5:
       #original_hash: 536ec4d
-      title: 'Step 5: Select the competition ID'
+      title: 步驟五：選取比賽ID
       #original_hash: 5aeb5bd
-      content_html: >-
-        Select the correct competition ID by clicking the <em>Select...</em>
-        button next to the <em>Competition ID</em> field.
+      content_html: 點擊<em>Competition ID</em>旁邊的<em>Select...</em>按鈕以選取正確的比賽ID。
       #original_hash: 3acf7d0
-      content2_html: A dialog will show up with a list of competitions to choose from.
+      content2_html: 比賽列表將會在顯示出來，請從裡面選取比賽。
       #original_hash: ceeb6fe
-      content3_html: >-
-        You can filter the list by typing a part of the name of the competition
-        or the WCA Delegate.
+      content3_html: 您可以輸入比賽的部分名稱或是比賽的WCA代表以篩選比賽。
       #original_hash: 5ca74eb
       content4_html: >-
-        To start off with, only competitions that took place less than one week
-        ago or that will take place less than one week in the future will be
-        shown. If you need to select a competition outside of this time window,
-        deselect <em>Only show current competitions</em>.
+        系統只會顯示過去或是未來一週之內的比賽，如果您需要選擇此時間範圍以外的比賽，請取消勾選<em>Only show current
+        competitions</em>。
     step6:
       #original_hash: 52bb1f6
-      title: 'Step 6: Export the results data to JSON'
+      title: 步驟六：下載JSON成績檔
       #original_hash: 6bfee23
-      content_html: >-
-        Save the results data to a JSON file using the <em>Export results
-        JSON...</em> button on the bottom right.
+      content_html: 使用右下角的<em>Export results JSON...</em>按鈕將成績儲存到JSON檔。
     step7:
       #original_hash: 09fa37d
-      title: 'Step 7: Send the results JSON to the WCA'
+      title: 步驟七：將JSON檔傳送給WCA
       #original_hash: 9be089f
       content_html: >-
-        E-mail the JSON file exported by the WCA Workbook Assistant to <a
-        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
+        透過電子郵件將WCA小幫手產生的JSON檔傳送至<a
+        href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
