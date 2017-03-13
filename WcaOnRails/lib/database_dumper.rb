@@ -328,7 +328,28 @@ module DatabaseDumper
     }.freeze,
     "completed_jobs" => :skip_all_rows,
     "delayed_jobs" => :skip_all_rows,
-    "delegate_reports" => :skip_all_rows,
+    "delegate_reports" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          created_at
+          updated_at
+        ),
+        db_default: %w(
+          equipment
+          venue
+          organization
+          schedule_url
+          incidents
+          remarks
+          discussion_url
+          posted_by_user_id
+          posted_at
+        ),
+      ),
+    }.freeze,
     "oauth_access_grants" => :skip_all_rows,
     "oauth_access_tokens" => :skip_all_rows,
     "oauth_applications" => :skip_all_rows,
