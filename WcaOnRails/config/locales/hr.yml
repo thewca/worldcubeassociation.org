@@ -294,6 +294,8 @@ hr:
         clone_tabs: Htio bih klonirati sve kartice s dodatnim informacijama
         #original_hash: c5497bc
         competition_events: Discipline
+        #original_hash: 71c8461
+        enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -478,6 +480,8 @@ hr:
         currency_code: Kod valute za kotizaciju.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -1174,6 +1178,8 @@ hr:
     sign_in: Prijavite se
     #original_hash: 5d45a00
     profile: profil
+    #original_hash: 801b3e9
+    panel_title: Detalji registracije
     #original_hash: c0063c3
     register: Registriraj se!
     #original_hash: f484f15
@@ -1202,10 +1208,10 @@ hr:
       %{sign_in} kako biste provjerili status Vaše registracije. Ukoliko nemate
       još WCA korisnički račun, možete napraviti jedan %{here}, ali registracije
       se još nisu otvorile.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} kako biste se registrirali za %{comp}. Ukoliko nemate još WCA
-      korisnički račun, napravite jedan %{here}
+      korisnički račun, napravite jedan %{here}.
     #original_hash: 89b4e7f
     greeting: 'Pozdrav, %{name}!'
     #original_hash: fb34a17
@@ -1222,8 +1228,6 @@ hr:
     have_registered: >-
       Registrirali ste se za %{comp}. Informacije o registraciji možete vidjeti
       ispod.
-    #original_hash: fa52a9b
-    entry_fee: 'Kotizacija je %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Kontaktirajte organizatora ukoliko želite napraviti promjenu.
     #original_hash: 59354fd
@@ -1232,16 +1236,40 @@ hr:
       kotizaciju unaprijed. Provjerite web-stranicu natjecanja za detalje.
     #original_hash: 58b1a3c
     accepted: Vaša registracija je prihvaćena!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: 'Trenutno ste platili %{paid} od ukupne %{total_entry_fee} kotizacije.'
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Platili ste kotizaciju od %{paid} u potpunosti.'
-    #original_hash: 05495d6
-    payment_button_text: 'Platite svoju %{entry_fee} kotizaciju s karticom'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Platili ste %{paid}, što pokriva troškove kotizacije.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Platit ćete nakon priloženja Vaše registracije
+    #original_hash: b7ef562
+    wont_pay_here: Molimo Vas provjerite informacije o natjecanju oko uputa kako platiti
+    payment_form:
+      #original_hash: 4de825f
+      title: Kotizacije
+      hints:
+        #original_hash: bf3a39e
+        donation: Neobavezna donacija koja će ići direktno organizacijskom timu
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Kotizacije
+        #original_hash: 2c09302
+        donation: Donacija
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Molimo Vas unesite valjan iznos.
+        #original_hash: 707b9ca
+        amount_too_low: >-
+          Ukupan iznos mora biti barem u visini kotizacije kako bi se mogao
+          platiti.
+    #original_hash: 8607a87
+    payment_button_text: Platite svoju kotizaciju s karticom
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Kako biste ubrzali buduće registracije, možete namjestiti preferirane
       discipline %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Automatski smo dodali Vašim preferiranim disciplinama, koje možete urediti
+      %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1484,6 +1512,8 @@ hr:
       end_date_before_start: Datum kraja ne može biti prije datuma početka.
       #original_hash: be3933b
       span_too_many_days: 'Natjecanje ne može trajati duže od %{max_days} dana.'
+      #original_hash: cdcd288
+      invalid_currency_code: Odabrana valuta nije važeća
     new:
       #original_hash: 1208df7
       create_competition: Kreiraj natjecanje
@@ -1575,6 +1605,8 @@ hr:
         orga_view: Organizacijski pogled
         #original_hash: c6171f8
         event_view: Uredi discipline
+        #original_hash: 6f7aef9
+        payment_view: Postavi načine plaćanja
         #original_hash: 76bfdcf
         admin_view: Administratorski pogled
         #original_hash: a857eb4
