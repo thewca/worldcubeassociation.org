@@ -635,7 +635,7 @@ class User < ApplicationRecord
       },
     }
 
-    if doorkeeper_token
+    if doorkeeper_token && doorkeeper_token.resource_owner_id == self.id
       if doorkeeper_token.scopes.exists?("dob")
         json[:dob] = self.dob
       end
@@ -643,6 +643,13 @@ class User < ApplicationRecord
       if doorkeeper_token.scopes.exists?("email")
         json[:email] = self.email
       end
+    end
+
+    # Delegates's emails and regions are public information.
+    if self.any_kind_of_delegate?
+      json[:email] = self.email
+      json[:region] = self.region
+      json[:senior_delegate_id] = self.senior_delegate_id
     end
 
     json
