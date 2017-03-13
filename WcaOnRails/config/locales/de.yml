@@ -154,14 +154,14 @@ de:
       invalid: ungültig
     #original_hash: 49d0140
     days:
-      other: '%{count} Tage'
-      one: 1 Tag
       zero: kein Tag
+      one: 1 Tag
+      other: '%{count} Tage'
     #original_hash: 203e1b3
     these_events:
-      other: 'Diese %{count} Disziplinen'
-      one: Diese Disziplin
       zero: Keine Disziplin
+      one: Diese Disziplin
+      other: 'Diese %{count} Disziplinen'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -262,8 +262,8 @@ de:
         generate_website: >-
           Ich würde gerne die WCA-Website statt einer externen Seite für
           zusätzliche Informationen verwenden.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Eintrittsgebühr in kleinstmöglicher Stückelung
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Eintrittsgebühr
         #original_hash: 28a6fbb
         currency_code: Währungscode
         #original_hash: 5b2fe69
@@ -294,6 +294,8 @@ de:
           kopieren
         #original_hash: c5497bc
         competition_events: Disziplinen
+        #original_hash: 71c8461
+        enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -375,14 +377,6 @@ de:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Bitte die folgenden Probleme klären:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Name
-        #original_hash: 3fa6f5f
-        your_email: Deine E-Mail-Adresse
-        #original_hash: 68f4145
-        message: Nachricht
     hints:
       user:
         #original_hash: 87e1e6f
@@ -475,12 +469,10 @@ de:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          Eintrittsgebühr für den Wettbewerb. Die Gebühr wird in der
-          kleinstmöglichen Stückelung der jeweiligen gegebenen Währung
-          aufgefasst. Zum Beispiel Cent für USD. Die Eintrittsgebühr wird auf
-          der Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
+          Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
+          Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
           angezeigt. Anmerkung: Die WCA-Website unterstützt noch keine
           Bezahlvorgänge. Das Software-Team arbeitet darauf hin, der Fortschritt
           kann unter <a
@@ -490,6 +482,8 @@ de:
         currency_code: Der Währungscode für Eintrittsgebühren.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -506,13 +500,29 @@ de:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Dein korrektes Geburtsdatum im Format YYYY-MM-DD (Jahr - Monat - Tag)
+        #original_hash: 059d2ed
+        document: >-
+          Um deine Identität und dein korrektes Geburtsdatum nachzuweisen, musst
+          du ein Bild eines Ausweisdokumentes anhängen. Dies kann ein Ausweis,
+          ein Führerschein, ein Schülerausweis oder ähnliches sein, auf dem dein
+          Name und dein Geburtsdatum klar ersichtlich und für einen
+          Englischsprachler verständlich ist.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -626,6 +636,23 @@ de:
           'true': Nach Gästen fragen
           #original_hash: f8c2332
           'false': NICHT nach Gästen fragen
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Name
+        #original_hash: 3fa6f5f
+        your_email: Deine E-Mail-Adresse
+      website_contact:
+        #original_hash: 68f4145
+        message: Nachricht
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Deine WCA ID
+        #original_hash: 51d0597
+        dob: Korrektes Geburtsdatum
+        #original_hash: e214b8a
+        document: Dokument
   errors:
     messages:
       #original_hash: dc2367c
@@ -908,16 +935,12 @@ de:
       not_found: nicht gefunden
       #original_hash: 49a6fe4
       already_assigned: bereits mit einem anderen Nutzer verknüpft
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         stimmt nicht mit unserer Datenbank überein. Wenn Du absolut sicher bist,
         dass das Datum korrekt und im richtigen Format (YYYY-MM-DD) ist,
-        schreibe bitte eine E-Mail an das <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a>, benachrichtige sie von diesem Fehler und sende ihnen
-        ein Foto eines amtlichen Ausweisdokuments (Personalausweis,
-        Führerschein,...) aus dem dein Name sowie dein Geburtsdatum ersichtlich
-        sind.
+        kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
+        Formular</a>.
       #original_hash: 0fbcefd
       unique: muss eindeutig sein
       #original_hash: 26f70ed
@@ -1035,19 +1058,19 @@ de:
       not_using_wca: Dieser Wettbewerb nutzt die Anmeldung auf der WCA-Website nicht
       #original_hash: d528030
       accepted_and_mailed:
-        other: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
-        one: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
         zero: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
+        one: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
+        other: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Anmeldungen auf Warteliste gesetzt!
-        one: Anmeldung auf Warteliste gesetzt!
         zero: Anmeldungen auf Warteliste gesetzt!
+        one: Anmeldung auf Warteliste gesetzt!
+        other: Anmeldungen auf Warteliste gesetzt!
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Anmeldungen gelöscht
-        one: Anmeldung gelöscht
         zero: Anmeldungen gelöscht
+        one: Anmeldung gelöscht
+        other: Anmeldungen gelöscht
       #original_hash: c3aa289
       single_deletion_and_mail: 'Anmeldung gelöscht und Nachricht an %{mail} gesendet'
       #original_hash: d8f067f
@@ -1134,9 +1157,9 @@ de:
       edit: Bearbeiten
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} Länder'
-        one: 1 Land
         zero: '%{count} Länder'
+        one: 1 Land
+        other: '%{count} Länder'
       #original_hash: 1feee0e
       export_csv: Als CSV exportieren
       #original_hash: 84add5b
@@ -1168,6 +1191,8 @@ de:
     sign_in: Einloggen
     #original_hash: 5d45a00
     profile: Benutzerkonto
+    #original_hash: 801b3e9
+    panel_title: Details der Anmeldung
     #original_hash: c0063c3
     register: Neu anmelden!
     #original_hash: f484f15
@@ -1196,7 +1221,7 @@ de:
       %{sign_in} um den Status deiner Anmeldung zu überprüfen. Wenn Du noch kein
       WCA-Benutzerkonto hast, kannst Du dir %{here} einen anlegen. Die Anmeldung
       ist aber noch nicht geöffnet.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} um dich für %{comp} anzumelden. Wenn Du noch kein
       WCA-Benutzerkonto hast, kannst Du dir %{here} einen anlegen.
@@ -1217,8 +1242,6 @@ de:
     have_registered: >-
       Du hast dich für %{comp} angemeldet. Du kannst die Informationen zu deiner
       Anmeldung unten sehen.
-    #original_hash: fa52a9b
-    entry_fee: 'Die Teilnahmegebühr beträgt '
     #original_hash: 3c9141f
     contact_organizer: Kontaktiere den Organisator wenn Du Änderungen vornehmen willst.
     #original_hash: 59354fd
@@ -1227,16 +1250,42 @@ de:
       Teilnahmegebühr zu zahlen. Überprüfe hierfür die Website des Wettbewerbs.
     #original_hash: 58b1a3c
     accepted: Deine Anmeldung wurde bestätigt!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: 'Du hast aktuell %{paid} von %{total_entry_fee} Eintrittsgeld bezahlt.'
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Du hast dein Eintrittsgeld von %{paid} ganz bezahlt.'
-    #original_hash: 05495d6
-    payment_button_text: 'Bezahl dein Eintrittsgeld von %{entry_fee} mit Karte'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: >-
+      Du hast dein Eintrittsgeld von %{paid} bezahlt, was dem vollständig Betrag
+      entspricht.
+    #original_hash: 2e5d1b9
+    will_pay_here: Du wirst diese nach Abschicken der Registrierung zahlen
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Bitte lies die Informationen zur Competition, um mehr darüber zu erfahren,
+      wie du bezahlen kannst
+    payment_form:
+      #original_hash: 4de825f
+      title: Eintrittsgebühren
+      hints:
+        #original_hash: bf3a39e
+        donation: Zusätzliche Spenden gehen nur an das Organisationsteam
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Eintrittsgebühren
+        #original_hash: 2c09302
+        donation: Spende
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Bitte gebe einen gültigen Betrag ein
+        #original_hash: 707b9ca
+        amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende Eintrittsgebühr sein
+    #original_hash: 8607a87
+    payment_button_text: Bezahl dein Eintrittsgeld mit Karte
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Um weitere Anmeldungen in der Zukunft zu beschleunigen, kannst Du deine
       bevorzugten Disziplinen %{link} festlegen.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Wir haben dies mit deinen Lieblingsevents ausgefüllt, die du hier ändern
+      kannst %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1305,14 +1354,14 @@ de:
       website: Website
       #original_hash: 680567f
       organizer_plural:
-        other: Organisatoren
-        one: Organisator
         zero: Organisatoren
+        one: Organisator
+        other: Organisatoren
       #original_hash: 6afa61e
       delegate:
-        other: WCA-Delegierte
-        one: WCA-Delegierter
         zero: WCA-Delegierte
+        one: WCA-Delegierter
+        other: WCA-Delegierte
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: a428739
@@ -1403,6 +1452,8 @@ de:
       #original_hash: 9104a03
       no_past_competitions: Du hast keine vergangenen Wettbewerbe.
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Unterstützt <a
@@ -1488,6 +1539,8 @@ de:
       end_date_before_start: Ende des Wettbewerbs kann nicht vor Anfang des Wettbewerbs liegen.
       #original_hash: be3933b
       span_too_many_days: 'Wettbewerb darf nicht länger als %{max_days} Tage dauern.'
+      #original_hash: cdcd288
+      invalid_currency_code: Der ausgewählte Währungscode ist ungültig
     new:
       #original_hash: 1208df7
       create_competition: Wettbewerb erstellen
@@ -1577,6 +1630,8 @@ de:
         orga_view: Organisatoren-Ansicht
         #original_hash: c6171f8
         event_view: Disziplinen verwalten
+        #original_hash: 6f7aef9
+        payment_view: Zahlungen einrichten
         #original_hash: 76bfdcf
         admin_view: Admin-Ansicht
         #original_hash: a857eb4
@@ -1654,6 +1709,31 @@ de:
     confirm_delete_post: >-
       Bist Du dir sicher, dass Du diesen Post löschen willst? Diese Aktion lässt
       sich nicht rückgängig machen.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA Website Kontaktformular
+      #original_hash: 9039572
+      description_html: >-
+        Benutze dieses Formular nur für Fragen zur Webseite, Kommentar und
+        Vorschläge. <a href="%{contact_path}">Andere Anfragen</a> sollten an
+        entsprechende Adressaten gerichtet werden.
+      #original_hash: c70a890
+      submit: Nachricht verschicken
+    dob:
+      #original_hash: 907ac6c
+      title: Formular zur Änderung des Geburtsdatums
+      #original_hash: 8a4ced5
+      description: >-
+        Benutze dieses Formular falls das Geburtsdatum, das in unserer Datenbank
+        gespeichert ist, nicht deinem Geburtsdatum entspricht.
+      #original_hash: 19c17ec
+      submit: Änderung anfragen
+    messages:
+      #original_hash: 41948b9
+      success: Danke für deine Nachricht. Wir werden uns bald bei dir melden!
+      #original_hash: 8e3a9da
+      delivery_error: Fehler beim Senden der Nachricht
   faq:
     #original_hash: d790b40
     title: Häufig gestellte Fragen (FAQ)
