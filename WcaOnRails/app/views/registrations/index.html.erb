@@ -1,7 +1,11 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <% cache ["registrations_index", @competition.events.map(&:id).sort, @registrations.map(&:id).sort, @registrations.map(&:updated_at).max, @registrations.map { |r| r.user.updated_at }.max, I18n.locale] do %>
+  <%# Simplified cache key to see if this helps us with performance issues.
+    # See https://github.com/thewca/worldcubeassociation.org/issues/1434.
+  %>
+  <% cache ["registrations_index", @competition.id, I18n.locale], expires_in: 2.minutes do %>
+    (<%= t 'common.last_updated_html', last_updated: wca_local_time(Time.now) %>)
     <%= wca_table data: { toggle: "table" } do %>
       <thead>
         <tr>

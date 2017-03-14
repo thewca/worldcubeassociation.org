@@ -121,6 +121,7 @@ en:
     these_events:
       one: "this event"
       other: "these %{count} events"
+    last_updated_html: "last updated %{last_updated}"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
