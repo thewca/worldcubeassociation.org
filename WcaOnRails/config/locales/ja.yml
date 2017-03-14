@@ -258,7 +258,7 @@ ja:
         external_website: ウェブサイト
         #original_hash: 692e1f9
         generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する
-        #original_hash: 3d53469
+        #original_hash: dd88e47
         base_entry_fee_lowest_denomination: 基本参加費
         #original_hash: 28a6fbb
         currency_code: 通貨コード
@@ -286,6 +286,8 @@ ja:
         clone_tabs: すべてのタブを追加情報とともに複製する
         #original_hash: c5497bc
         competition_events: 競技種目
+        #original_hash: 71c8461
+        enable_donations: 寄付金の受け入れを有効にする
       registration:
         #original_hash: 3c23a67
         guests: 同伴者人数
@@ -367,14 +369,6 @@ ja:
     error_notification:
       #original_hash: d70e9cb
       default_message: '以下のエラー内容をご確認ください:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: 氏名
-        #original_hash: 3fa6f5f
-        your_email: メールアドレス
-        #original_hash: 68f4145
-        message: 備考
     hints:
       user:
         #original_hash: 87e1e6f
@@ -452,12 +446,18 @@ ja:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
-        base_entry_fee_lowest_denomination: 基本参加費 (1000)
+        #original_hash: a7bd540
+        base_entry_fee_lowest_denomination: >-
+          基本参加費。参加費は大会情報ページ (と大会申し込みページ) に表示されています。WCA
+          ウェブサイトは支払いシステムを準備中です。ソフトウェアチームが現在開発を進めており、進捗は <a
+          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>
+          で見ることができます。
         #original_hash: 866bc05
         currency_code: 通貨単位
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -474,13 +474,24 @@ ja:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: 生年月日を YYYY-MM-DD の形式で入力してください
+        #original_hash: 059d2ed
+        document: 本人確認と生年月日確認のために、氏名と生年月日を確認できる英語で書かれた身分証明書 (パスポート等) の写しを添付してください。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -567,6 +578,23 @@ ja:
           'true': Ask about guests
           #original_hash: f8c2332
           'false': Do NOT ask about guests
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: 名前
+        #original_hash: 3fa6f5f
+        your_email: メールアドレス
+      website_contact:
+        #original_hash: 68f4145
+        message: メッセージ
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: WCA ID
+        #original_hash: 51d0597
+        dob: 生年月日
+        #original_hash: e214b8a
+        document: ドキュメント
   errors:
     messages:
       #original_hash: dc2367c
@@ -813,12 +841,10 @@ ja:
       not_found: not found
       #original_hash: 49a6fe4
       already_assigned: 既に他のユーザーに連携されています
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
-        データベースと一致しません。正しい日付を正しい形式 (YYYY-MM-DD) で入力したにもかかわらずこのエラーが出る場合は、<a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> に電子メールでお問い合わせください。その際、氏名と生年月日を確認できる身分証明書 (運転免許証など)
-        の写真を添付してください。
+        データベースと一致しません。正しい日付を正しい形式 (YYYY-MM-DD) で入力したにもかかわらずこのエラーが出る場合は、WCA
+        Results Team に <a href="%{dob_form_path}">専用フォーム</a> よりお問い合わせください。
       #original_hash: 0fbcefd
       unique: ユニークな値を入力してください
       #original_hash: 26f70ed
@@ -946,7 +972,7 @@ ja:
       regards_html: '%{people}'
       new:
         #original_hash: 6fb638c
-        mail_subject: '%{comp_name} に申し込み済みです。'
+        mail_subject: '%{comp_name} に参加申し込みました'
         #original_hash: 8374583
         registered_html: '%{comp_name} に申し込みました。'
         #original_hash: 9238412
@@ -1026,14 +1052,16 @@ ja:
     sign_in: ログイン
     #original_hash: 5d45a00
     profile: プロフィール
+    #original_hash: 801b3e9
+    panel_title: 申し込み詳細
     #original_hash: c0063c3
     register: 申し込む
     #original_hash: f484f15
     refund: 参加費の払い戻し
     #original_hash: a9af643
-    update: 申し込みが更新されました
+    update: 申し込み情報を更新する
     #original_hash: f6fdbe4
-    delete: 削除
+    delete: 削除する
     #original_hash: b72119a
     delete_confirm: 本当に参加申し込みを削除してよろしいですか？
     #original_hash: cfc4865
@@ -1052,7 +1080,7 @@ ja:
     please_sign_in_not_yet_open_html: >-
       申し込み状況の確認には%{sign_in}が必要です。WCA アカウントを持っていない場合は %{here}
       で作成できますが、この大会の申し込みはまだ開始していません。
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: '%{comp} の参加申し込みには%{sign_in}が必要です。WCA アカウントを持っていない場合は %{here} で作成できます。'
     #original_hash: 89b4e7f
     greeting: 'こんにちは、%{name} さん！'
@@ -1061,25 +1089,43 @@ ja:
     #original_hash: 855ca9c
     can_register: '以下のフォームで %{comp} に参加申し込みできます。'
     #original_hash: 4167ed7
-    check_registration_information: 申し込み手順を確認して、参加費を支払う必要がある場合等は手順に従ってください。
+    check_registration_information: 申し込み手順を確認して、登録料を支払う必要がある場合等は手順に従ってください。
     #original_hash: ea2b586
     have_registered: '%{comp} に参加申し込み済みです。申し込み情報は下部に記載されています。'
-    #original_hash: fa52a9b
-    entry_fee: '基本参加費は %{fee} です。'
     #original_hash: 3c9141f
     contact_organizer: 変更が必要な場合は運営チームにお尋ねください。
     #original_hash: 59354fd
-    waiting_list: 申し込みは承認待ち状態です。参加費を支払う必要がある場合は支払ってください。詳しくは大会ウェブサイトをご覧ください。
+    waiting_list: 申し込みは承認待ち状態です。登録料を支払う必要がある場合は支払ってください。詳しくは大会ウェブサイトをご覧ください。
     #original_hash: 58b1a3c
     accepted: 参加申し込みが完了しました！
-    #original_hash: 69cf660
-    entry_fees_partially_paid: '現在、参加費 %{total_entry_fee} 中、%{paid} を支払い済みです。'
-    #original_hash: 9153695
+    #original_hash: 70de60f
     entry_fees_fully_paid: '参加費 %{paid} を全額支払い済みです。'
-    #original_hash: 05495d6
-    payment_button_text: '参加費 %{entry_fee} をクレジットカードで支払う'
+    #original_hash: 2e5d1b9
+    will_pay_here: 申し込み申請後にこのウェブサイトで支払います
+    #original_hash: b7ef562
+    wont_pay_here: 支払い方法については大会情報を確認してください。
+    payment_form:
+      #original_hash: 4de825f
+      title: 参加費
+      hints:
+        #original_hash: bf3a39e
+        donation: 寄付金 (任意) は大会運営チームへのみ寄付されます
+      labels:
+        #original_hash: 948ec72
+        entry_fees: 参加費
+        #original_hash: 2c09302
+        donation: 寄付金
+      alerts:
+        #original_hash: a34940e
+        not_a_number: 正しい金額を入力してください
+        #original_hash: 707b9ca
+        amount_too_low: 合計金額は登録料の金額以上である必要があります。
+    #original_hash: 8607a87
+    payment_button_text: 参加費をクレジットカードで支払う
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '参加申し込みを簡単にするため、お気に入り種目を設定できます %{link}。'
+    #original_hash: 67d8734
+    preferred_events_populated_html: '競技種目はお気に入り種目を設定しておくと自動選択されます。お気に入り種目の設定: %{link}'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1293,6 +1339,8 @@ ja:
       end_date_before_start: 終了日は開始日より後である必要があります
       #original_hash: be3933b
       span_too_many_days: '%{max_days} 間を超える大会は開催できません。'
+      #original_hash: cdcd288
+      invalid_currency_code: 通貨コードが不適切です
     new:
       #original_hash: 1208df7
       create_competition: 大会新規作成
@@ -1377,6 +1425,8 @@ ja:
         orga_view: 主催者モード
         #original_hash: c6171f8
         event_view: 競技種目を編集
+        #original_hash: 6f7aef9
+        payment_view: 支払い設定
         #original_hash: 76bfdcf
         admin_view: 管理者モード
         #original_hash: a857eb4
@@ -1450,6 +1500,28 @@ ja:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: この投稿を削除してよいですか？削除は元に戻せません。
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA ウェブサイトお問い合わせフォーム
+      #original_hash: 9039572
+      description_html: >-
+        ウェブサイトに関する質問・提案専用のフォームです。<a href="%{contact_path}">それ以外のお問い合わせ</a>
+        は担当の委員会・チームへお問い合わせください。
+      #original_hash: c70a890
+      submit: 送信する
+    dob:
+      #original_hash: 907ac6c
+      title: 生年月日変更申請フォーム
+      #original_hash: 8a4ced5
+      description: WCA データベースに登録されている生年月日と正しい生年月日が異なる場合にこのフォームをご利用ください。
+      #original_hash: 19c17ec
+      submit: 申請する
+    messages:
+      #original_hash: 41948b9
+      success: お問い合わせありがとうございます。近日中に回答をご連絡します。
+      #original_hash: 8e3a9da
+      delivery_error: 送信エラー。
   faq:
     #original_hash: d790b40
     title: よくある質問
