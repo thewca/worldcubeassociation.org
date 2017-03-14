@@ -640,9 +640,9 @@ fr:
       competition:
         guests_enabled:
           #original_hash: cb8809d
-          'true': Ne PAS demander de renseigner les accompagnateurs
+          'true': Demander de renseigner les accompagnateurs
           #original_hash: f8c2332
-          'false': Demander de renseigner les accompagnateurs
+          'false': Ne PAS demander de renseigner les accompagnateurs
   mail_form:
     attributes:
       contact_form:
@@ -1277,7 +1277,7 @@ fr:
       alerts:
         #original_hash: a34940e
         not_a_number: Merci d'entrer un montant valide
-        #original_hash: 1c3d371
+        #original_hash: 707b9ca
         amount_too_low: >-
           Le montant total doit être supérieur ou égal au montant de
           l'inscription à payer
