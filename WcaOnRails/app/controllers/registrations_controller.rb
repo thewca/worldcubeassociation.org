@@ -58,13 +58,6 @@ class RegistrationsController < ApplicationController
   def index
     @competition = competition_from_params
     @registrations = @competition.registrations.accepted.includes(:user, :events, :competition_events).order("users.name")
-
-    # Temporary hack to see if this helps us with performance issues.
-    # See https://github.com/thewca/worldcubeassociation.org/issues/1434.
-    I18n.with_locale :en do
-      flash[:warning] = "Due to high server load this page is temporarily in English only."
-      render :index
-    end
   end
 
   def edit
