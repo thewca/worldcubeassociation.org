@@ -47,11 +47,7 @@
               <td class="<%= event.id %>">
                 <% if registration.events.include?(event) %>
                   <% @count_by_event[event.id] += 1 %>
-                  <span title="<%= event.name %>"
-                        class="cubing-icon event-<%= event.id %>"
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        data-container="body">
+                  <span class="cubing-icon event-<%= event.id %>">
                   </span>
                 <% end %>
               </td>
