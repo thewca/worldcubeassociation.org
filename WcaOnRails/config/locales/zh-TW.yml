@@ -160,6 +160,8 @@ zh-TW:
     these_events:
       zero: 這個項目
       other: '這%{count}個項目'
+    #original_hash: 1301886
+    last_updated_html: '最後更新%{last_updated}'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -287,7 +289,7 @@ zh-TW:
         #original_hash: c5497bc
         competition_events: 項目
         #original_hash: 71c8461
-        enable_donations: null
+        enable_donations: 我想要開啟捐款以增加報名費收入
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -509,7 +511,7 @@ zh-TW:
           噪音)並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: f8de509
         organization: >-
-          簡述比賽的主辦團隊以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題(例如:
+          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題(例如:
           賽程延誤)和怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: 715f020
         incidents: >-
@@ -713,7 +715,7 @@ zh-TW:
       #original_hash: b7ee3c4
       manage_users: 管理用戶
       #original_hash: 12ab214
-      delegate: 代表
+      delegate: 代表相關
       #original_hash: 2f4bd74
       panel: 佈告欄
       #original_hash: d3a928c
@@ -1046,7 +1048,7 @@ zh-TW:
     #original_hash: 5d45a00
     profile: 個人頁面
     #original_hash: 801b3e9
-    panel_title: null
+    panel_title: 報名細節
     #original_hash: c0063c3
     register: 報名!
     #original_hash: f484f15
@@ -1090,31 +1092,31 @@ zh-TW:
     #original_hash: 70de60f
     entry_fees_fully_paid: '您已經支付報名費全額%{paid}元。'
     #original_hash: 2e5d1b9
-    will_pay_here: null
+    will_pay_here: 您需要在提交報名以後繳交報名費
     #original_hash: b7ef562
-    wont_pay_here: null
+    wont_pay_here: 請瀏覽比賽資訊以確認如何繳交報名費
     payment_form:
       #original_hash: 4de825f
-      title: null
+      title: 報名費
       hints:
         #original_hash: bf3a39e
-        donation: null
+        donation: 額外的捐款僅限給主辦單位使用
       labels:
         #original_hash: 948ec72
-        entry_fees: null
+        entry_fees: 入場費
         #original_hash: 2c09302
-        donation: null
+        donation: 捐款
       alerts:
         #original_hash: a34940e
-        not_a_number: null
+        not_a_number: 請輸入一個合理的金額。
         #original_hash: 707b9ca
-        amount_too_low: null
+        amount_too_low: 總金額必須至少大於報名費。
     #original_hash: 8607a87
     payment_button_text: 用卡片支付報名費
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
     #original_hash: 67d8734
-    preferred_events_populated_html: null
+    preferred_events_populated_html: '我們自動填入您的偏好項目，您可以在%{link}編輯。'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1325,7 +1327,7 @@ zh-TW:
       #original_hash: be3933b
       span_too_many_days: '比賽不得多於%{max_days}天。'
       #original_hash: cdcd288
-      invalid_currency_code: null
+      invalid_currency_code: 選取的貨幣代碼無效
     new:
       #original_hash: 1208df7
       create_competition: 申請比賽
@@ -1411,7 +1413,7 @@ zh-TW:
         #original_hash: c6171f8
         event_view: 管理項目
         #original_hash: 6f7aef9
-        payment_view: null
+        payment_view: 建立付款
         #original_hash: 76bfdcf
         admin_view: 管理員模式
         #original_hash: a857eb4
@@ -1490,7 +1492,7 @@ zh-TW:
       #original_hash: ac2ac3d
       title: WCA網站聯絡表單
       #original_hash: 9039572
-      description_html: null
+      description_html: '此表單僅限於詢問關於WCA網站的問題、意見和建議。<a href="%{contact_path}">其他問題</a>請聯絡相關單位。'
       #original_hash: c70a890
       submit: 傳送訊息
     dob:
@@ -1502,7 +1504,7 @@ zh-TW:
       submit: 請求更改
     messages:
       #original_hash: 41948b9
-      success: 感謝您的訊息，我們會盡快連絡您!
+      success: 感謝您的訊息，我們會盡快聯絡您!
       #original_hash: 8e3a9da
       delivery_error: 傳送錯誤訊息。
   faq:
@@ -1690,7 +1692,7 @@ zh-TW:
     #original_hash: 2b023eb
     questions_and_comments_html: >-
       任何關於網站的問題、意見或是建議，請使用<a
-      href='/contact/website'>聯絡表單</a>。若是詢問關於特定地區或是比賽的問題，請聯繫您當地的%{link}。
+      href='/contact/website'>聯絡表單</a>。若是詢問關於特定地區或是比賽的問題，請聯絡您當地的%{link}。
     #original_hash: 4a30d30
     committees_and_teams_html: <u>委員會和團隊<u>
     board:
