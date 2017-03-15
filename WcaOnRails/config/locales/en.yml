@@ -726,7 +726,7 @@ en:
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
-      disclaimer: "Only competitions which use the WCA registration system will be shown here."
+      disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
     #context: on the competition's information page
     competition_info:
