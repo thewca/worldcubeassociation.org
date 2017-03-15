@@ -138,7 +138,7 @@ da:
     #original_hash: 15f86c0
     average: Gennemsnit
     #original_hash: e7f6fc5
-    solves: Løsninger
+    solves: Tider
     date:
       #original_hash: acb6273
       no_date: Ingen dato
@@ -262,8 +262,8 @@ da:
         generate_website: >-
           Jeg vil gerne bruge WCA hjemmesiden i stedet for at bruge en anden
           hjemmeside.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Basis deltagergebyret er den laveste værdi
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Basis deltagergebyr
         #original_hash: 28a6fbb
         currency_code: Valuta kode
         #original_hash: 5b2fe69
@@ -290,6 +290,10 @@ da:
         clone_tabs: Jeg vil gerne kopiere alle tabs med yderligere informationer
         #original_hash: c5497bc
         competition_events: Discipliner
+        #original_hash: 71c8461
+        enable_donations: >-
+          Jeg vil give mulighed for donationer oven i at indsamle
+          deltagergebyrene
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -371,14 +375,6 @@ da:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Gennemgå venligst problemerne nedenfor:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Navn
-        #original_hash: 3fa6f5f
-        your_email: Din email
-        #original_hash: 68f4145
-        message: Besked
     hints:
       user:
         #original_hash: 87e1e6f
@@ -470,19 +466,21 @@ da:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          Basis deltagergebyret for konkurrencen. Det er opgjort i den laveste
-          værdi af den valgte valuta. Eksempel cents for USD. Deltagergebyret
-          vil blive vist på konkurrencens informationside og tilmeldingsiden
-          hvis den bliver brugt. Noter at WCA siden ikke har betalingsmuligheder
-          endnu. Software holdet arbejder på det, og du kan holde øje med deres
-          process på <a
+          Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
+          på konkurrencens informations side og tilmeldings siden for det bliver
+          brugt. Deltagergebyret vil blive vist på konkurrencens informationside
+          og tilmeldingsiden hvis den bliver brugt. Noter at WCA siden ikke har
+          betalingsmuligheder endnu. Software holdet arbejder på det, og du kan
+          holde øje med deres process på <a
           href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
         #original_hash: 866bc05
         currency_code: Valuta koden for indgangs gebyrer.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -499,13 +497,28 @@ da:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Din korrekte fødselsdag i formaten ÅÅÅÅ-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          For at bevise din identitet og din korrekte fødselsdag for os, du skal
+          vise et billed fra et hvert officielt dokument(ID kort, kørekort,
+          studiekort, pas, fødselsattest, ...) hvor dit navn er synligt og
+          forståeligt for en engelsk talende person.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -616,6 +629,23 @@ da:
           'true': Spørg om gæster
           #original_hash: f8c2332
           'false': Spørg IKKE om gæster
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Navn
+        #original_hash: 3fa6f5f
+        your_email: Din email
+      website_contact:
+        #original_hash: 68f4145
+        message: Besked
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Dit WCA ID
+        #original_hash: 51d0597
+        dob: Korrekt fødselsdag
+        #original_hash: e214b8a
+        document: Dokument
   errors:
     messages:
       #original_hash: dc2367c
@@ -887,14 +917,11 @@ da:
       not_found: ikke fundet
       #original_hash: 49a6fe4
       already_assigned: allerede tilknyttet til en anden bruger
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         matcher ikke vores database. Hvis du er sikker på at du giver den
-        rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så send venligst en email
-        til <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Resultat Holdet</a>, reporter denne fejl og send et
-        billede af noget dokumentation (ID kort, kørekort,...) hvor dit navn og
-        din fødselsdag er synlig.
+        rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA Resultat
+        Holdet med <a href="%{dob_form_path}">med denne formel</a>.
       #original_hash: 0fbcefd
       unique: skal være unik
       #original_hash: 26f70ed
@@ -1136,6 +1163,8 @@ da:
     sign_in: Log ind
     #original_hash: 5d45a00
     profile: profil
+    #original_hash: 801b3e9
+    panel_title: Tilmeldings detaljer
     #original_hash: c0063c3
     register: Tilmeld!
     #original_hash: f484f15
@@ -1163,10 +1192,10 @@ da:
     please_sign_in_not_yet_open_html: >-
       %{sign_in} for at tjekke statusen af din tilmelding. Hvis du ikke har en
       WCA konto, kan du oprette en %{here}, men tilmeldingen er ikke åben endnu.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} for at tilmelde dig til %{comp}. Hvis du ikke har en WCA konto
-      endnu kan du oprette en %{here}
+      endnu kan du oprette en %{here}.
     #original_hash: 89b4e7f
     greeting: 'Hej %{name}!'
     #original_hash: fb34a17
@@ -1183,8 +1212,6 @@ da:
     have_registered: >-
       Du har tilmeldt dig til %{comp}. Du kan se din tilmeldings information
       nedenunder.
-    #original_hash: fa52a9b
-    entry_fee: 'Betalingsgebyret er %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Kontakt arrangøren hvis du gerne vil lave en ændring.
     #original_hash: 59354fd
@@ -1193,18 +1220,38 @@ da:
       betale et deltagergebyr. Tjek konkurrencens hjemmeside for flere detaljer.
     #original_hash: 58b1a3c
     accepted: Din tilmelding er blevet accepteret!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      Du har aktuelt betalt %{paid} af det fulde %{total_entry_fee}
-      betalingsgebyr.
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Du har betalt det fulde betalingsgebyr på %{paid}.'
-    #original_hash: 05495d6
-    payment_button_text: 'Betal dit %{entry_fee} deltagergebyr med kort'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker deltagergebyret.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
+    #original_hash: b7ef562
+    wont_pay_here: Tjek konkurrencens information for instruktion om hvordan man betaler
+    payment_form:
+      #original_hash: 4de825f
+      title: Deltagergebyrer
+      hints:
+        #original_hash: bf3a39e
+        donation: Valgfri donation der vil gå til arrangørholdet
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Deltagergebyre
+        #original_hash: 2c09302
+        donation: Donation
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Skriv en gyldig mængde
+        #original_hash: 707b9ca
+        amount_too_low: Den totale mængde skal mindst betale tilmeldingsgebyret.
+    #original_hash: 8607a87
+    payment_button_text: Betal deltagergebyret med kort
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       For at tilmelde dig hurtigere i fremtiden kan du sætte dine foretrukne
       discipliner %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Vi opdateret det med dine foretrukne discipliner, som du kan ændre
+      %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1448,6 +1495,8 @@ da:
       end_date_before_start: Slut dato kan ikke være før start dato.
       #original_hash: be3933b
       span_too_many_days: 'Konkurrencer kan ikke vare mere end %{max_days} dage.'
+      #original_hash: cdcd288
+      invalid_currency_code: Valgte valuta kode er ikke gyldig
     new:
       #original_hash: 1208df7
       create_competition: Opret konkurrence
@@ -1537,6 +1586,8 @@ da:
         orga_view: Arrangørs synsvinkel
         #original_hash: c6171f8
         event_view: Rediger discipliner
+        #original_hash: 6f7aef9
+        payment_view: Betalings setup
         #original_hash: 76bfdcf
         admin_view: Administrators synsvinkel
         #original_hash: a857eb4
@@ -1614,6 +1665,31 @@ da:
     confirm_delete_post: >-
       Er du sikker på at du vil slette dette opslag? Denne handling kan ikke
       gøres om.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA Website Contact Form
+      #original_hash: 9039572
+      description_html: >-
+        Brug denne formular for spørgsmål om hjemmesiden, kommentarer, og
+        foresprøgelser kun.  <a href="%{contact_path}">Andre spørgsmål</a> burde
+        blive sent til det passende hold.
+      #original_hash: c70a890
+      submit: Send besked
+    dob:
+      #original_hash: 907ac6c
+      title: Ændre fødselsdags foresprøgelses formular
+      #original_hash: 8a4ced5
+      description: >-
+        Brug denne formular hvis din fødselsdag in vores database er anderledes
+        end din rigtige.
+      #original_hash: 19c17ec
+      submit: Foresprøgelse ændring
+    messages:
+      #original_hash: 41948b9
+      success: Tak for din besked. Vi vil kontakte dig snart!
+      #original_hash: 8e3a9da
+      delivery_error: Fejl med at sende besked.
   faq:
     #original_hash: d790b40
     title: Ofte Stillede Spørgsmål
