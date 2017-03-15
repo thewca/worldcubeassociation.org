@@ -10,7 +10,6 @@
       <thead>
         <tr>
           <th class="name" data-sortable="true" data-field="name"><%= t 'activerecord.attributes.registration.name' %></th>
-          <th class="wca-id" data-sortable="true"><%= t 'common.user.wca_id' %></th>
           <th class="country" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
 
           <% @competition.events.each do |event| %>
@@ -33,10 +32,13 @@
       <tbody>
         <% @registrations.each do |registration| %>
           <tr>
-            <td class="name"><%= registration.name %></td>
-            <td class="wca-id">
+            <td class="name">
               <% if registration.wca_id.present? %>
-                <%= render "shared/wca_id", wca_id: registration.wca_id %>
+                <% @returners += 1 %>
+                <%= link_to registration.name, "#{root_url}results/p.php?i=#{registration.wca_id}" %>
+              <% else %>
+                <% @newcomers += 1 %>
+                <%= registration.name %>
               <% end %>
             </td>
             <td class="country"><%= registration.country.name %></td>
@@ -44,6 +46,7 @@
             <% @competition.events.each do |event| %>
               <td class="<%= event.id %>">
                 <% if registration.events.include?(event) %>
+                  <% @count_by_event[event.id] += 1 %>
                   <span title="<%= event.name %>"
                         class="cubing-icon event-<%= event.id %>"
                         data-toggle="tooltip"
@@ -65,13 +68,15 @@
 
       <tfoot>
         <tr>
-          <td colspan="2">
-            <%= render "registration_info_people", registrations: @registrations %>
+          <td>
+            <%= @newcomers %> <%= t('.newcomer', count: @newcomers) %> +
+            <%= @newcomers %> <%= t('.returner', count: @newcomers) %> =
+            <%= @newcomers + @returners %> <%= t('.person', count: @newcomers + @returners) %>
           </td>
           <% country_count = @registrations.map(&:country).uniq.length %>
           <td><%= t('registrations.list.country_plural', count: country_count) %></td>
           <% @competition.events.each do |event| %>
-            <td><%= @registrations.select { |r| r.events.include?(event) }.length %></td>
+            <td><%= @count_by_event[event.id] %></td>
           <% end %>
 
           <!-- Extra column for .table-greedy-last-column -->

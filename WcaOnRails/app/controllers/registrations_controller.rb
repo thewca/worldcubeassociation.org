@@ -58,6 +58,8 @@ class RegistrationsController < ApplicationController
   def index
     @competition = competition_from_params
     @registrations = @competition.registrations.accepted.includes(:user, :events).order("users.name")
+    @count_by_event = Hash.new(0)
+    @newcomers = @returners = 0
   end
 
   def edit
