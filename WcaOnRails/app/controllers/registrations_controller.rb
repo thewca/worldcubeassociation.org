@@ -4,7 +4,7 @@ class RegistrationsController < ApplicationController
 
   private def competition_from_params
     competition = if params[:competition_id]
-                    Competition.includes(:events).find(params[:competition_id])
+                    Competition.find(params[:competition_id])
                   else
                     Registration.find(params[:id]).competition
                   end
