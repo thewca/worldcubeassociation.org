@@ -4,6 +4,15 @@
   <%# Simplified cache key to see if this helps us with performance issues.
     # See https://github.com/thewca/worldcubeassociation.org/issues/1434.
   %>
+  <% if @competition.id == "WC2017" %>
+    <%= alert :warning do %>
+      The WCA website is currently experiencing performance isssues on this page.
+      <br/>
+      It has been temporarily deactivated to keep the rest of the website live for everyone, until we figure something out.
+      <br/>
+      If you want to have a quick view at who is registered, you can still use the psych-sheets accessible through the left menu!
+    <% end %>
+  <% else %>
   <% cache ["registrations_index", @competition.id, I18n.locale], expires_in: 5.minutes do %>
     (<%= t 'common.last_updated_html', last_updated: wca_local_time(Time.now) %>)
     <%= wca_table data: { toggle: "table" } do %>
@@ -79,5 +88,6 @@
         </tr>
       </tfoot>
     <% end %>
+  <% end %>
   <% end %>
 <% end %>
