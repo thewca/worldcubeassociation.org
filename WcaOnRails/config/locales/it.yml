@@ -260,8 +260,8 @@ it:
         external_website: Sito web
         #original_hash: 692e1f9
         generate_website: Voglio utilizzare il sito WCA per le informazioni
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Tassa d'iscrizione base espressa con la valuta minore
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Tassa d'iscrizione base
         #original_hash: 28a6fbb
         currency_code: Codice valuta
         #original_hash: 5b2fe69
@@ -288,6 +288,8 @@ it:
         clone_tabs: Vorrei clonare tutte le schede e il loro contenuto
         #original_hash: c5497bc
         competition_events: Eventi
+        #original_hash: 71c8461
+        enable_donations: Voglio abilitare le donazioni addizionali alle tasse di iscrizione
       registration:
         #original_hash: 3c23a67
         guests: Accompagnatori
@@ -369,14 +371,6 @@ it:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Correggi i seguenti problemi:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: 3fa6f5f
-        your_email: Email
-        #original_hash: 68f4145
-        message: Messaggio
     hints:
       user:
         #original_hash: 87e1e6f
@@ -471,20 +465,20 @@ it:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
+        #original_hash: a7bd540
         base_entry_fee_lowest_denomination: >-
-          Tassa d'iscrizione base espressa nella valuta minore. Il dato deve
-          essere espresso nella valuta più bassa possibile. Es in centesim per
-          gli Euro (5€ = 500). La tassa d'iscrizione sarà mostrata nelle pagine
-          di registrazione e di informazioni della competizione. Nota che il
-          sito WCA non supporta ancora il pagamento online. Il Software Team sta
-          lavorando su questa funzionalità. Puoi tener traccia dei progressi su
-          <a
+          Tassa d'iscrizione per la competizine. La tassa d'iscrizione sarà
+          mostrata nelle pagine di registrazione e di informazioni della
+          competizione. Nota che il sito WCA non supporta ancora il pagamento
+          online. Il Software Team sta lavorando a questa funzionalità. Puoi
+          tener traccia dei progressi su <a
           href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
         #original_hash: 866bc05
         currency_code: La valuta delle tasse di iscrizione
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -501,13 +495,29 @@ it:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: La tua data di nascita nel formato AAAA-MM-GG
+        #original_hash: 059d2ed
+        document: >-
+          Per verificare la tua identità e la correttezza della data di nascita,
+          devi allegare una foto di un documento legale (carta d'identità,
+          patente di guida, tessera studente, passaporto, certificato di
+          nascita, ...) in cui il tuo nome e data di nascita siano visibili e
+          riconoscibili da una persona che parli inglese.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -618,6 +628,23 @@ it:
           'true': Chiedi degli accompagnatori
           #original_hash: f8c2332
           'false': NON chiedere degli accompagnatori
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: 3fa6f5f
+        your_email: Email
+      website_contact:
+        #original_hash: 68f4145
+        message: Messaggio
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: WCA ID
+        #original_hash: 51d0597
+        dob: Data di nascita corretta
+        #original_hash: e214b8a
+        document: Documento
   errors:
     messages:
       #original_hash: dc2367c
@@ -896,14 +923,11 @@ it:
       not_found: non trovato
       #original_hash: 49a6fe4
       already_assigned: già assegnato a un altro utente
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         non combacia con il valore presente nel database. Se sei sicuro di aver
-        inserito la data di nascita nel formato corretto (AAAA-MM-GG), invia una
-        email al <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> (in inglese), riporta questo errore
-        e invia qualsiasi documento legale (carta d'identità, patente di
-        guida,...) in cui siano visibili il tuo nome e la tua data di nascita.
+        inserito la data di nascita nel formato corretto (AAAA-MM-GG), contatta
+        il WCA Results Team usando <a href="%{dob_form_path}">questo form</a>.
       #original_hash: 0fbcefd
       unique: deve essere unico
       #original_hash: 26f70ed
@@ -1154,6 +1178,8 @@ it:
     sign_in: Accedi
     #original_hash: 5d45a00
     profile: profilo
+    #original_hash: 801b3e9
+    panel_title: Dettagli registrazione
     #original_hash: c0063c3
     register: Registrati!
     #original_hash: f484f15
@@ -1182,10 +1208,10 @@ it:
       %{sign_in} per controllare lo stato della tua registrazione. Se non hai
       ancora un account WCA, puoi crearne uno %{here}, ma le registrazioni non
       sono ancora aperte.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} per registrarti per il %{comp}. Se non hai ancora un account
-      WCA, puoi crearne uno %{here}
+      WCA, puoi crearne uno %{here}.
     #original_hash: 89b4e7f
     greeting: 'Ciao, %{name}!'
     #original_hash: fb34a17
@@ -1203,8 +1229,6 @@ it:
     have_registered: >-
       Ti sei registrato al %{comp}. Qui puoi vedere le informazioni della tua
       registrazione.
-    #original_hash: fa52a9b
-    entry_fee: 'La tassa d''iscrizione è %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
     #original_hash: 59354fd
@@ -1215,18 +1239,42 @@ it:
       presenza di eventuali passaggi aggiuntivi.
     #original_hash: 58b1a3c
     accepted: La tua registrazione è stata accettata!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      Al momento hai pagato %{paid} su %{total_entry_fee} della tassa
-      d'iscrizione.
-    #original_hash: 9153695
+    #original_hash: 70de60f
     entry_fees_fully_paid: 'Hai pagato l''intera tassa d''iscrizione di %{paid}.'
-    #original_hash: 05495d6
-    payment_button_text: 'Paga la tassa di iscrizione di %{entry_fee} con la carta di credito'
+    #original_hash: 2e5d1b9
+    will_pay_here: Pagherai qui dopo aver inviato la registrazione
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Controlla le informazioni della competizione riguardo il metodo di
+      pagamento
+    payment_form:
+      #original_hash: 4de825f
+      title: Tasse d'iscrizione
+      hints:
+        #original_hash: bf3a39e
+        donation: Donazioni opzionali che andranno direttamente al team organizzativo
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Tassa d'iscrizione
+        #original_hash: 2c09302
+        donation: Donazione
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Inserisci una quantità valida.
+        #original_hash: 707b9ca
+        amount_too_low: >-
+          L'importo totale deve essere almeno del valore della tassa di
+          registrazione da pagare.
+    #original_hash: 8607a87
+    payment_button_text: Paga la tassa di iscrizione con la carta di credito
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Per velocizzare il processo di registrazione, puoi impostare i tuoi eventi
       preferiti %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Abbiamo selezionato automaticamente i tuoi eventi preferiti, puoi
+      modificare le preferenze %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1475,6 +1523,8 @@ it:
       end_date_before_start: La data di fine competizione deve essere successiva alla data di inizio
       #original_hash: be3933b
       span_too_many_days: 'La competizione non può durare più di %{max_days} giorni.'
+      #original_hash: cdcd288
+      invalid_currency_code: La valuta selezionata non è valida
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -1564,6 +1614,8 @@ it:
         orga_view: Organizzatore
         #original_hash: c6171f8
         event_view: Eventi
+        #original_hash: 6f7aef9
+        payment_view: Configura pagamenti
         #original_hash: 76bfdcf
         admin_view: Admin
         #original_hash: a857eb4
@@ -1639,6 +1691,31 @@ it:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Sei sicuro di voler eliminare questo post? L'azione non è reversibile.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: Form di contatto del sito WCA
+      #original_hash: 9039572
+      description_html: >-
+        Usa questo form solamente per domande, commenti e suggerimenti riguardo
+        il sito WCA. Per altre domande, seleziona <a href="%{contact_path}">il
+        team specifico</a>.
+      #original_hash: c70a890
+      submit: Invia messaggio
+    dob:
+      #original_hash: 907ac6c
+      title: Form per richiesta cambio data di nascita
+      #original_hash: 8a4ced5
+      description: >-
+        Usa questo form se la tua data di nascita inserita nel database è
+        diversa da quella reale.
+      #original_hash: 19c17ec
+      submit: Richiedi cambiamento
+    messages:
+      #original_hash: 41948b9
+      success: Ti rigraziamo per averci contattato. Ti ricontatteremo a breve!
+      #original_hash: 8e3a9da
+      delivery_error: Errore durante l'invio del messaggio.
   faq:
     #original_hash: d790b40
     title: Domande Frequenti
