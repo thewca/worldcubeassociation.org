@@ -57,7 +57,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.includes(:user, :events, :competition_events).order("users.name")
+    @registrations = @competition.registrations.accepted.includes(:user, :events).order("users.name")
   end
 
   def edit
