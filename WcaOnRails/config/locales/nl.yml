@@ -162,6 +162,8 @@ nl:
       zero: geen wedstrijdonderdelen
       one: dit wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
+    #original_hash: 1301886
+    last_updated_html: 'laatst bijgewerkt op %{last_updated}'
   oauth:
     applications:
       #original_hash: 0c4ea38
