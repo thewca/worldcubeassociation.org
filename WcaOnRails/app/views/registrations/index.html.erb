@@ -7,7 +7,6 @@
     @competition.registrations.accepted.joins(:user).order(:id).pluck(:id, :updated_at, :"users.updated_at"),
     I18n.locale
   ] do %>
-    (<%= t 'common.last_updated_html', last_updated: wca_local_time(Time.now) %>)
     <%= wca_table data: { toggle: "table" } do %>
       <thead>
         <tr>
@@ -15,7 +14,7 @@
           <th class="country" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
 
           <% @competition.events.each do |event| %>
-            <th class="<%= event.id %>">
+            <th>
               <span title="<%= event.name %>"
                     class="cubing-icon event-<%= event.id %>"
                     data-toggle="tooltip"
@@ -37,7 +36,7 @@
             <td class="name">
               <% if registration.wca_id.present? %>
                 <% @returners += 1 %>
-                <%= link_to registration.name, "#{root_url}results/p.php?i=#{registration.wca_id}" %>
+                <%= link_to registration.name, "/results/p.php?i=#{registration.wca_id}" %>
               <% else %>
                 <% @newcomers += 1 %>
                 <%= registration.name %>
@@ -46,7 +45,7 @@
             <td class="country"><%= registration.country.name %></td>
 
             <% @competition.events.each do |event| %>
-              <td class="<%= event.id %>">
+              <td>
                 <% if registration.events.include?(event) %>
                   <% @count_by_event[event.id] += 1 %>
                   <span class="cubing-icon event-<%= event.id %>">
@@ -68,7 +67,7 @@
         <tr>
           <td>
             <%= @newcomers %> <%= t('registrations.registration_info_people.newcomer', count: @newcomers) %> +
-            <%= @newcomers %> <%= t('registrations.registration_info_people.returner', count: @newcomers) %> =
+            <%= @returners %> <%= t('registrations.registration_info_people.returner', count: @returners) %> =
             <%= @newcomers + @returners %> <%= t('registrations.registration_info_people.person', count: @newcomers + @returners) %>
           </td>
           <% country_count = @registrations.map(&:country).uniq.length %>
