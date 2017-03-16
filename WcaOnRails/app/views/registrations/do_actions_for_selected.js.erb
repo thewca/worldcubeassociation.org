@@ -45,6 +45,6 @@ $registrationsTable.find('tr.selected').removeClass('selected');
 
 // Update registration table footers with summary info
 <% [:pending, :accepted, :deleted].each do |status| %>
-  <% registrations = @competition.registrations.includes(:events, :user).send(status) %>
+  <% registrations = @competition.registrations.includes(:user).public_send(status) %>
   $<%= status %>Table.find('tfoot').replaceWith('<%=j render "edit_registrations_table_footer", registrations: registrations %>');
 <% end %>

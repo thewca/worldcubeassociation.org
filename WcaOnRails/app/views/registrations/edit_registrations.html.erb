@@ -11,7 +11,7 @@
       <% else %>
         <h2><%= t 'registrations.list.deleted_registrations' %></h2>
       <% end %>
-      <% registrations = @competition.registrations.public_send(status).includes(:user, :events, :competition) %>
+      <% registrations = @competition.registrations.public_send(status).includes(:user, :registration_payments) %>
       <%= wca_table table_class: "registrations-table #{status}",
                     data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
@@ -22,16 +22,6 @@
             <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
             <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
             <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
-            <% @competition.events.each do |event| %>
-              <th>
-                <span title="<%= event.name %>"
-                      class="cubing-icon event-<%= event.id %>"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-container="body">
-                </span>
-              </th>
-            <% end %>
             <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
@@ -54,34 +44,20 @@
 
               <td class="wca-id">
                 <% if registration.wca_id %>
-                  <%= render "shared/wca_id", wca_id: registration.wca_id %>
+                  <%= link_to registration.wca_id, "/results/p.php?i=#{registration.wca_id}" %>
                 <% end %>
               </td>
 
               <td class="name"><%= registration.name %></td>
               <td class="countryId"><%= registration.country.name %></td>
               <td class="birthday"><%= registration.birthday %></td>
-              <% @competition.events.each do |event| %>
-                <td>
-                  <% if registration.events.include?(event) %>
-                    <span title="<%= event.name %>"
-                          class="cubing-icon event-<%= event.id %>"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          data-container="body">
-                    </span>
-                  <% end %>
-                </td>
-              <% end %>
               <td>
                 <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
                   <%= registration.created_at.to_date %>
                 </span>
               </td>
               <td class="guests">
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.guests %>">
-                  <%= registration.guests %>
-                </span>
+                <%= registration.guests %>
               </td>
               <td class="comments">
                 <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.comments %>">
@@ -89,9 +65,7 @@
                 </span>
               </td>
               <td class="entry_fee">
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.paid_entry_fees %>">
-                  <%= humanized_money_with_symbol registration.paid_entry_fees %>
-                </span>
+                <%= humanized_money_with_symbol registration.paid_entry_fees %>
               </td>
               <td>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>

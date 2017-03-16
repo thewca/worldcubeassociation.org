@@ -109,7 +109,7 @@ class Registration < ApplicationRecord
 
   def paid_entry_fees
     Money.new(
-      registration_payments.sum(:amount_lowest_denomination),
+      registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
