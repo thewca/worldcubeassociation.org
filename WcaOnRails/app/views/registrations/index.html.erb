@@ -67,7 +67,7 @@
         <tr>
           <td>
             <%= @newcomers %> <%= t('registrations.registration_info_people.newcomer', count: @newcomers) %> +
-            <%= @newcomers %> <%= t('registrations.registration_info_people.returner', count: @newcomers) %> =
+            <%= @returners %> <%= t('registrations.registration_info_people.returner', count: @returners) %> =
             <%= @newcomers + @returners %> <%= t('registrations.registration_info_people.person', count: @newcomers + @returners) %>
           </td>
           <% country_count = @registrations.map(&:country).uniq.length %>
