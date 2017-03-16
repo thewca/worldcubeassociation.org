@@ -177,4 +177,12 @@ module ApplicationHelper
 
     [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
+
+  def wca_id_link(wca_id, options = {})
+    if wca_id
+      content_tag :span, class: "wca-id" do
+        link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}", options
+      end
+    end
+  end
 end

@@ -7,11 +7,11 @@
   <% end %>
   <% if @user.unconfirmed_wca_id.present? %>
     <% mail_to_delegate = mail_to(@user.delegate_to_handle_wca_id_claim.email, @user.delegate_to_handle_wca_id_claim.name, target: "_blank") %>
-    <% wca_id_partial = render("shared/wca_id", wca_id: @user.unconfirmed_wca_id) %>
+    <% link_id = wca_id_link(@user.unconfirmed_wca_id) %>
     <% message = @user.confirmed_at ? '.pending_claim_confirmation_html' : '.pending_claim_mail_confirmation_html' %>
     <% # i18n-tasks-use t('.pending_claim_confirmation_html') #<- useful because the previous line tricks i18n-tasks %>
     <% # i18n-tasks-use t('.pending_claim_mail_confirmation_html') %>
-    <%= alert :warning, t(message, delegate: mail_to_delegate, wca_id: wca_id_partial) %>
+    <%= alert :warning, t(message, delegate: mail_to_delegate, wca_id: link_id) %>
   <% end %>
   <% if @user.unconfirmed_email %>
     <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
@@ -107,7 +107,7 @@
             <% if @user.wca_id.blank? %>
               <%= t '.have_no_wca_id_html', here: link_to(t('common.here'), profile_claim_wca_id_path) %>
             <% else %>
-              <%= t '.have_wca_id_html', link_id: render("shared/wca_id", wca_id: @user.wca_id) %>
+              <%= t '.have_wca_id_html', link_id: wca_id_link(@user.wca_id) %>
             <% end %>
           </p>
         <% end %>

@@ -72,4 +72,10 @@ RSpec.describe ApplicationHelper do
       expect(form_html).not_to include '<a href="#user_wca_id">' # there was an error with this field, but the field was hidden, so we should not link to it
     end
   end
+
+  describe "#wca_id_link" do
+    it "links to a person's WCA profile page" do
+      expect(wca_id_link("2005FLEI01")).to eq '<span class="wca-id"><a href="http://test.host/results/p.php?i=2005FLEI01">2005FLEI01</a></span>'
+    end
+  end
 end

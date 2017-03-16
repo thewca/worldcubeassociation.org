@@ -43,9 +43,7 @@
               </td>
 
               <td class="wca-id">
-                <% if registration.wca_id %>
-                  <%= link_to registration.wca_id, "/results/p.php?i=#{registration.wca_id}" %>
-                <% end %>
+                <%= wca_id_link registration.wca_id %>
               </td>
 
               <td class="name"><%= registration.name %></td>

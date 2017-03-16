@@ -36,7 +36,7 @@
           <td class="name"><%= registration.select_name %></td>
           <td class="wca-id">
             <% if registration.select_wca_id %>
-              <%= render "shared/wca_id", wca_id: registration.select_wca_id %>
+              <%= wca_id_link registration.select_wca_id %>
             <% end %>
           </td>
           <td class="country"><%= registration.select_country %></td>
