@@ -71,6 +71,10 @@ Rails.application.configure do
     Bullet.bullet_logger = true
     Bullet.console = true
     Bullet.rails_logger = true
+
+    # See https://github.com/thewca/worldcubeassociation.org/pull/1452. This seems to be something
+    # Bullet asks us to include, but isn't necessary, and including it causes a huge performance problem.
+    Bullet.add_whitelist type: :n_plus_one_query, class_name: "Registration", association: :competition_events
   end
 
   # Use an evented file watcher to asynchronously detect changes in source code,
