@@ -7,7 +7,6 @@
     @competition.registrations.accepted.joins(:user).order(:id).pluck(:id, :updated_at, :"users.updated_at"),
     I18n.locale
   ] do %>
-    (<%= t 'common.last_updated_html', last_updated: wca_local_time(Time.now) %>)
     <%= wca_table data: { toggle: "table" } do %>
       <thead>
         <tr>
