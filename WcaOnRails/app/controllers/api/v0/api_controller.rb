@@ -108,14 +108,6 @@ class Api::V0::ApiController < ApplicationController
     show_user(user)
   end
 
-  def competitions
-    params[:sort] ||= "-start_date"
-    competitions = Competition.search(params[:q], params: params)
-    competitions = competitions.includes(:delegates).includes(:organizers)
-
-    paginate json: competitions
-  end
-
   def delegates
     paginate json: User.delegates
   end
