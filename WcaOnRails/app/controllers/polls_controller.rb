@@ -6,7 +6,7 @@ class PollsController < ApplicationController
 
   def index
     @polls = current_user.can_create_poll? ? Poll.all : Poll.confirmed
-    @open_polls, @closed_polls = @polls.partition(&:over?)
+    @closed_polls, @open_polls = @polls.partition(&:over?)
   end
 
   def new
