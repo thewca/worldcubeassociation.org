@@ -468,6 +468,11 @@ hr:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Osnovna kotizacija za natjecanje. Kotizacija će biti prikazana na
+          stranici informacija o natjecanju i na stranici za registraciju,
+          ukoliko se koristi.
         #original_hash: 866bc05
         currency_code: Kod valute za kotizaciju.
         #original_hash: da39a3e
