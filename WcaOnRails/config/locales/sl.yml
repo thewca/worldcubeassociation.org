@@ -476,14 +476,6 @@ sl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: b61cbfa
-        base_entry_fee_lowest_denomination: >-
-          Osnovna vstopnina za tekmovanje. Zapisana je najnižja vrednost za
-          določeno valuto, na primer centi za Evro. Vstopnina bo prikazana na
-          zavihku informacije na strani tekmovanja in po potrebi tudi na zavihku
-          registracije. Upoštevati je potrebno, da WCA stran trenutno ne podpira
-          plačila, vendar je zadeva v izdelavi. Napredek se lahko sledi na <a
-          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
         #original_hash: 866bc05
         currency_code: Koda valute za vstopnine.
         #original_hash: da39a3e
@@ -2024,7 +2016,7 @@ sl:
       content3_html: >-
         Iz scramble datoteke je možna izbira le enega kroga za vsak krog z
         rezultati. Če nastane situacija, kjer so scrambli za en krog bili
-        zgenerirani kot več krogov v TNoodlu, potem lahko uporabite gumb 
+        zgenerirani kot več krogov v TNoodlu, potem lahko uporabite gumb
         <em>Uredi skupine...</em>  za urejanje skupin v scramble datoteki in jih
         prestavite iz enega kroga v drugega ali pa izbrišete.
       #original_hash: 94353f2

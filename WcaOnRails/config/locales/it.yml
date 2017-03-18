@@ -465,14 +465,6 @@ it:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: a7bd540
-        base_entry_fee_lowest_denomination: >-
-          Tassa d'iscrizione per la competizine. La tassa d'iscrizione sarà
-          mostrata nelle pagine di registrazione e di informazioni della
-          competizione. Nota che il sito WCA non supporta ancora il pagamento
-          online. Il Software Team sta lavorando a questa funzionalità. Puoi
-          tener traccia dei progressi su <a
-          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>.
         #original_hash: 866bc05
         currency_code: La valuta delle tasse di iscrizione
         #original_hash: da39a3e
