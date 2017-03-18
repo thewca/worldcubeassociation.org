@@ -446,10 +446,6 @@ zh-TW:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: a7bd540
-        base_entry_fee_lowest_denomination: >-
-          這場比賽的基礎報名費。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。請特別注意WCA尚未支援付款功能，WCA軟體組正在努力完工，您可以在<a
-          href="https://github.com/thewca/worldcubeassociation.org/issues?q=is%3Aopen+is%3Aissue+label%3Apayments">GitHub</a>追蹤進度。
         #original_hash: 866bc05
         currency_code: 基礎報名費的貨幣代碼。
         #original_hash: da39a3e
