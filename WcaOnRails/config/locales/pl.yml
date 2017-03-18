@@ -477,6 +477,10 @@ pl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Bazowe wpisowe na zawody. To wpisowe będzie wyświetlane na stronie
+          informacyjnej zawodów i stronie rejestracji, jeżeli jest używana.
         #original_hash: 866bc05
         currency_code: Kod waluty w której wyrażone jest wpisowe.
         #original_hash: da39a3e
