@@ -260,8 +260,8 @@ hu:
         generate_website: >-
           A WCA honlapot szeretném használni külső honlap helyett a további
           információkhoz.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Alap regisztrációs díj a legkisebb használt címletben
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Alap regisztrációs díj
         #original_hash: 28a6fbb
         currency_code: Pénznem kód
         #original_hash: 5b2fe69
@@ -288,6 +288,10 @@ hu:
         clone_tabs: Szeretnék minden fület klónozni a hozzáadott információkkal együtt
         #original_hash: c5497bc
         competition_events: Versenyszámok
+        #original_hash: 71c8461
+        enable_donations: >-
+          Engedélyezni akarom az adományok befizetését a regisztrációs díjak
+          mellett
       registration:
         #original_hash: 3c23a67
         guests: Nézők
@@ -369,14 +373,6 @@ hu:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Kérlek nézd át a problémát alul:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Név
-        #original_hash: 3fa6f5f
-        your_email: Te e-mail címed
-        #original_hash: 68f4145
-        message: Üzenet
     hints:
       user:
         #original_hash: 87e1e6f
@@ -471,10 +467,17 @@ hu:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Az alap regisztrációs díj a versenyre. A regisztrációs díj az
+          információs lapon és a regisztrációs lapon fog megjelenni, amennyiben
+          létezik.
         #original_hash: 866bc05
         currency_code: A regisztrációs díj pénzneme.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -491,13 +494,29 @@ hu:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: 'A helyes születési dátum forma: ÉÉÉÉ-HH-NN'
+        #original_hash: 059d2ed
+        document: >-
+          A személyiséged és a helyes születési dátumod igazolásához csatolnod
+          kell egy képet valamilyen hivatalos dokumentumról (személyi
+          igazolvány, jogosítvány, diákigazolvány, útlevél, születési anyakönyvi
+          kivonat, ...), amin a neved és a születési dátumod is egyértelműen
+          szerepel.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -609,6 +628,23 @@ hu:
           'true': Kérdezz a vendégekről
           #original_hash: f8c2332
           'false': NE kérdezz a vendégekről
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Név
+        #original_hash: 3fa6f5f
+        your_email: E-mail címed
+      website_contact:
+        #original_hash: 68f4145
+        message: Üzenet
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: WCA ID-d
+        #original_hash: 51d0597
+        dob: Helyes születési dátum
+        #original_hash: e214b8a
+        document: Dokumentum
   errors:
     messages:
       #original_hash: dc2367c
@@ -886,14 +922,12 @@ hu:
       not_found: nem található
       #original_hash: 49a6fe4
       already_assigned: másik felhasználóhoz van hozzárendelve
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         nem egyezik az adatbázisunkkal. Ha biztos vagy benne, hogy a helyes
         adatokat adtad meg helyes formátumban (ÉÉÉÉ-HH-NN) kérlek, hogy lépj
-        kapcsolatba a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team-mel</a>, jelentsd ezt a problémát és
-        küldj egy képet egy hivatalos dokumentumról (személyigazolvány,
-        jogosítvány), amin a neved és a születési dátumod is megtalálható.
+        kapcsolatba a WCA Results Team-mel az <a href="%{dob_form_path}">erre
+        kijelölt felületen </a>.
       #original_hash: 0fbcefd
       unique: egyedinek kell lennie
       #original_hash: 26f70ed
@@ -1136,6 +1170,8 @@ hu:
     sign_in: Bejelentkezés
     #original_hash: 5d45a00
     profile: profil
+    #original_hash: 801b3e9
+    panel_title: Regisztráció részletei
     #original_hash: c0063c3
     register: Regisztrálj!
     #original_hash: f484f15
@@ -1168,7 +1204,7 @@ hu:
       %{sign_in} szükséges hozzá, hogy lásd a regisztrációd státuszát. Ha még
       nincs WCA felhasználód, akkor %{here} tudsz létrehozni egyet, de erre a
       versenyre még nem lehet regisztrálni.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} szükséges, hogy regisztrálni tudj a %{comp} versenyre. Ha még
       nincs WCA felhasználód, akkor %{here} tudsz létrehozni egyet.
@@ -1188,8 +1224,6 @@ hu:
     have_registered: >-
       Regisztráltál a(z) %{comp} versenyre. A regisztrációdról információkat
       alább találsz.
-    #original_hash: fa52a9b
-    entry_fee: 'A regisztrációs díj: %{fee}'
     #original_hash: 3c9141f
     contact_organizer: 'Lépj kapcsolatba a szervezővel, ha változtatni szeretnél!'
     #original_hash: 59354fd
@@ -1199,18 +1233,40 @@ hu:
       honlapját!
     #original_hash: 58b1a3c
     accepted: A regisztrációd el lett fogadva!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      Jelenleg %{paid} összeget fizettél be a(z) %{total_entry_fee} értékű
-      regisztrációs díjadból.
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'A(z) %{paid} összegű regisztrációs díjadat befizetted.'
-    #original_hash: 05495d6
-    payment_button_text: 'A(z) %{entry_fee} összegű regisztrációs díjad befizetése bankkártyával'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: >-
+      A(z) %{paid} összeget fizettél be, ami teljesen fedezi a regisztrációs
+      díjadat.
+    #original_hash: 2e5d1b9
+    will_pay_here: Itt fogod befizetni a regisztrációd elküldését követően
+    #original_hash: b7ef562
+    wont_pay_here: Kérlek nézd meg a versenyinformációkat a fizetés menetéről
+    payment_form:
+      #original_hash: 4de825f
+      title: Regisztrációs díj
+      hints:
+        #original_hash: bf3a39e
+        donation: 'Szabadon hozzáadható adomány, ami a szervezőkhöz kerül'
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Regisztrációs díjak
+        #original_hash: 2c09302
+        donation: Adomány
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Kérlek írj be egy érvényes összeget.
+        #original_hash: 707b9ca
+        amount_too_low: Legalább a regisztrációs díj összegét be kell fizetned.
+    #original_hash: 8607a87
+    payment_button_text: A regisztrációs díjad befizetése bankkártyával
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       A regisztráció jövőbeli felgyorsítása érdekében beállíthatod a preferált
       versenyszámaidat: %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Automatikusan kitöltöttük a preferált versenyszámaiddal, amit %{link}
+      tudsz módosítani.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1454,6 +1510,8 @@ hu:
       end_date_before_start: A záró dátum nem lehet a nyitó dátum előtt.
       #original_hash: be3933b
       span_too_many_days: 'A verseny nem tarthat %{max_days} napnál több ideig.'
+      #original_hash: cdcd288
+      invalid_currency_code: A kiválasztott pénznem érvénytelen
     new:
       #original_hash: 1208df7
       create_competition: Verseny létrehozása
@@ -1542,6 +1600,8 @@ hu:
         orga_view: Szervezői nézet
         #original_hash: c6171f8
         event_view: Versenyszámok szerkesztése
+        #original_hash: 6f7aef9
+        payment_view: Fizetések beállítása
         #original_hash: 76bfdcf
         admin_view: Admin nézet
         #original_hash: a857eb4
@@ -1617,6 +1677,31 @@ hu:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Biztosan törölni szeretnéd ezt a posztot? Ez az akció nem visszavonható.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA weboldal kontakt felülete
+      #original_hash: 9039572
+      description_html: >-
+        Ezt a felületet csak a honlappal kapcsolatos kérdések, hozzászólások és
+        javaslatok közzétételére használd! <a href="%{contact_path}">Más
+        témákkal</a> a megfelelő személyeket keresd meg!
+      #original_hash: c70a890
+      submit: Üzenet küldése
+    dob:
+      #original_hash: 907ac6c
+      title: Születési dátum megváltoztatására szolgáló felület
+      #original_hash: 8a4ced5
+      description: >-
+        Akkor használd ezt a felületet, ha az adatbázisban szereplő születési
+        dátumod eltér a valóstól.
+      #original_hash: 19c17ec
+      submit: Változtatás kérése
+    messages:
+      #original_hash: 41948b9
+      success: Köszönjük az üzenetedet! Hamarosan felvesszük veled a kapcsolatot!
+      #original_hash: 8e3a9da
+      delivery_error: Hiba történt az üzenet küldése során.
   faq:
     #original_hash: d790b40
     title: Gyakran Ismételt Kérdések
