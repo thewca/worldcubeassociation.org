@@ -79,7 +79,7 @@ RSpec.describe CompetitionsController do
 
       context "when recent is selected" do
         before do
-          get :index, state: :recent
+          get :index, params: { state: :recent }
         end
 
         it "shows in progress competition that ends today" do
