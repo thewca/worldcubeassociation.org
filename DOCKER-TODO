@@ -1,0 +1,24 @@
+- set up dev and test databases
+- stdin for debugging rails
+
+- tests?
+  - install phantomjs on test
+
+- travis to autobuild and push?
+
+# Rebuild Docker image
+- docker-compose build
+  - docker build -t worldcubeassociation/worldcubeassociation.org:WcaOnRails-reqs -f WcaOnRails/reqs.Dockerfile WcaOnRails
+
+# Run docker compose
+- docker-compose up
+
+# Push to Docker Hub
+- docker push worldcubeassociation/worldcubeassociation.org:WcaOnRails-reqs
+  - docker login first
+
+
+## Notes
+- I was able to tweak the mysql:latest image? we ran "docker rmi -f mysql" to nuke it, but then we had to redownload it from the internet when running "docker-compose up" next.
+- mysql max_packet_size? http://dba.stackexchange.com/questions/19135/mysql-error-reading-communication-packets
+  - looks like 4194304 bytes is good enough now? (show variables like '%max_allowed_packet%';)
