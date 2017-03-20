@@ -113,9 +113,6 @@ package 'imagemagick'
 ruby_version = File.read("#{repo_root}/WcaOnRails/.ruby-version").match(/\d+\.\d+/)[0]
 node.default['brightbox-ruby']['version'] = ruby_version
 include_recipe "brightbox-ruby"
-gem_package "rails" do
-  version "4.2.1"
-end
 chef_env_to_rails_env = {
   "development" => "development",
   "staging" => "production",
