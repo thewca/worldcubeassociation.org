@@ -110,7 +110,8 @@ package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
 
-node.default['brightbox-ruby']['version'] = "2.3"
+ruby_version = File.read("#{repo_root}/WcaOnRails/.ruby-version").match(/\d+\.\d+/)[0]
+node.default['brightbox-ruby']['version'] = ruby_version
 include_recipe "brightbox-ruby"
 gem_package "rails" do
   version "4.2.1"
