@@ -162,8 +162,6 @@ nl:
       zero: geen wedstrijdonderdelen
       one: dit wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
-    #original_hash: 1301886
-    last_updated_html: 'laatst bijgewerkt op %{last_updated}'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -466,6 +464,10 @@ nl:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
+          getoond op de wedstrijdinformatiepagina en aanmeldingspagina.
         #original_hash: 866bc05
         currency_code: Valutacode van het aanmeldingsbedrag.
         #original_hash: da39a3e
@@ -506,7 +508,7 @@ nl:
         dob: Je correcte geboortedatum in het formaat jjjj-mm-dd
         #original_hash: 059d2ed
         document: >-
-          Om je identiteit en je geboortedatum aan te tonen, kun je een foto
+          Om je identiteit en je geboortedatum aan te tonen, kun je een foto 
           opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
           studentenkaart, paspoort, geboortecertificaat) met je naam en
           geboortedatum zichtbaar en begrijpbaar voor iemand die Engels spreekt.
@@ -936,7 +938,7 @@ nl:
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
-        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan
+        Voor deze WCA-id hebben wij nog geen land gevuld. Stuur een e-mail aan 
         <a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: c3839bc
