@@ -22,9 +22,9 @@ class Competition < ApplicationRecord
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
+  validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0
   monetize :base_entry_fee_lowest_denomination,
            as: "base_entry_fee",
-           allow_nil: true,
            with_model_currency: :currency_code
 
   scope :not_over, -> { where("end_date >= ?", Date.today) }
@@ -502,6 +502,10 @@ class Competition < ApplicationRecord
 
   def has_event?(event)
     self.events.include?(event)
+  end
+
+  def has_entry_fee?
+    base_entry_fee.nonzero?
   end
 
   def pending_results_or_report(days)

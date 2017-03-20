@@ -115,15 +115,15 @@ class Registration < ApplicationRecord
   end
 
   def outstanding_entry_fees
-    entry_fee.nil? ? 0 : entry_fee - paid_entry_fees
+    entry_fee - paid_entry_fees
   end
 
-  def has_to_pay_fee_here?
+  def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_stripe_payments? && outstanding_entry_fees > 0
   end
 
   def show_payment_form?
-    competition.registration_opened? && has_to_pay_fee_here?
+    competition.registration_opened? && to_be_paid_through_wca?
   end
 
   def show_details?
