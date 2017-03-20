@@ -262,8 +262,8 @@ pt-BR:
         generate_website: >-
           Eu quero usar o site da WCA ao invés de um site externo para mais
           informações.
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Taxa base de inscrição (na menor unidade - centavos)
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Taxa base de inscrição
         #original_hash: 28a6fbb
         currency_code: Código da moeda do país
         #original_hash: 5b2fe69
@@ -290,6 +290,8 @@ pt-BR:
         clone_tabs: Eu quero copiar todas as abas também
         #original_hash: c5497bc
         competition_events: Eventos
+        #original_hash: 71c8461
+        enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -371,14 +373,6 @@ pt-BR:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Por favor verifique os problemas abaixo:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: 3fa6f5f
-        your_email: Seu email
-        #original_hash: 68f4145
-        message: Mensagem
     hints:
       user:
         #original_hash: 87e1e6f
@@ -472,10 +466,16 @@ pt-BR:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          A taxa base de inscrição para a competição. A taxa base será mostrada
+          nas informações da competição e na página de inscrição.
         #original_hash: 866bc05
         currency_code: O código da moeda da taxa de inscrição.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -492,13 +492,29 @@ pt-BR:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Sua data de nascimento no formato AAAA-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          Para provar sua identidade e sua data de nascimento correta para nós,
+          anexe uma foto de algum documento legal (carteira de identidade, CNH,
+          carteira de estudante, passaporte, certidão de nascimento, ...) no
+          qual seu nome e data de nascimento esteja visíveis e compreensíveis
+          para alguém que fale inglês.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -610,6 +626,23 @@ pt-BR:
           'true': Perguntar sobre acompanhantes
           #original_hash: f8c2332
           'false': NÃO perguntar sobre acompanhantes
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: 3fa6f5f
+        your_email: Seu email
+      website_contact:
+        #original_hash: 68f4145
+        message: Mensagem
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Sua ID da WCA
+        #original_hash: 51d0597
+        dob: Data de nascimento correta
+        #original_hash: e214b8a
+        document: Documento
   errors:
     messages:
       #original_hash: dc2367c
@@ -879,14 +912,11 @@ pt-BR:
       not_found: não encontrado
       #original_hash: 49a6fe4
       already_assigned: já associado a outro usário
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         não corresponde ao nosso banco de dados. Se você informou a data de
-        nascimento no formato correto (AAAA-MM-DD), por favor envie um email
-        para <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> informando este erro e envie uma
-        foto de algum documento legal (carteira de identidade, de motorista) no
-        qual seu nome e data de nascimento estejam visíveis.
+        nascimento no formato correto (AAAA-MM-DD), por favor contate a Equipe
+        de Resultados usando <a href="%{dob_form_path}">este formulário</a>.
       #original_hash: 0fbcefd
       unique: deve ser único
       #original_hash: 26f70ed
@@ -1131,6 +1161,8 @@ pt-BR:
     sign_in: Entrar
     #original_hash: 5d45a00
     profile: perfil
+    #original_hash: 801b3e9
+    panel_title: Detalhes da inscrição
     #original_hash: c0063c3
     register: Inscrever!
     #original_hash: f484f15
@@ -1159,9 +1191,9 @@ pt-BR:
       %{sign_in} para ver o status da sua inscrição. Se você ainda não tem uma
       conta no site da WCA, você pode criar uma %{here}, mas as inscrições para
       esta competição ainda não estão abertas.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
-      %{sign_in} para se inscrever no %{comp}. Se você ainda não tem uma conta
+      %{sign_in} para se inscrever em %{comp}. Se você ainda não tem uma conta
       no site da WCA, você pode criar uma %{here}
     #original_hash: 89b4e7f
     greeting: 'Olá, %{name}!'
@@ -1177,8 +1209,6 @@ pt-BR:
       fazer algo mais, como pagar uma taxa de inscrição.
     #original_hash: ea2b586
     have_registered: 'Você se inscreveu no %{comp}. Veja suas informações abaixo.'
-    #original_hash: fa52a9b
-    entry_fee: 'A taxa de inscrição é %{fee}'
     #original_hash: 3c9141f
     contact_organizer: Contacte os organizadores se você quer fazer alguma mudança.
     #original_hash: 59354fd
@@ -1188,16 +1218,42 @@ pt-BR:
       detalhes.
     #original_hash: 58b1a3c
     accepted: Sua inscrição foi aprovada!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: 'Você já pagou %{paid} do total de %{total_entry_fee} de sua inscrição.'
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Você já pagou totalmente a taxa de inscrição de %{paid}.'
-    #original_hash: 05495d6
-    payment_button_text: 'Pague sua taxa de inscrição de %{entry_fee} com cartão de crédito'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Você já pagou %{paid}, que cobre totalmente a taxa de inscrição.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Você irá pagar após enviar sua inscrição
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Por favor verifique as informações da competição para instruções sobre
+      como pagar
+    payment_form:
+      #original_hash: 4de825f
+      title: Taxas de inscrição
+      hints:
+        #original_hash: bf3a39e
+        donation: Doação opcional que irá para a equipe de organização
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Taxas de inscrição
+        #original_hash: 2c09302
+        donation: Doação
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Por favor entre uma quantia válida.
+        #original_hash: 707b9ca
+        amount_too_low: >-
+          A quantia total deve ser pelo menos igual às taxas de inscrição a
+          serem pagas.
+    #original_hash: 8607a87
+    payment_button_text: Pague sua taxa de inscrição com cartão de crédito
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para agilizar a inscrição no futuro, você pode escolher seus eventos
       favoritos em %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Preenchemos automaticamente seus eventos favoritos, que você pode editar
+      %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1445,6 +1501,8 @@ pt-BR:
       end_date_before_start: A data de término não pode ser anterior à data de início.
       #original_hash: be3933b
       span_too_many_days: 'A competição não pode durar mais que %{max_days} dias.'
+      #original_hash: cdcd288
+      invalid_currency_code: A moeda selecionada é inválida
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
@@ -1534,6 +1592,8 @@ pt-BR:
         orga_view: Visão do organizador
         #original_hash: c6171f8
         event_view: Gerenciar eventos
+        #original_hash: 6f7aef9
+        payment_view: Configurar pagamentos
         #original_hash: 76bfdcf
         admin_view: Visão do administrador
         #original_hash: a857eb4
@@ -1609,6 +1669,31 @@ pt-BR:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Você tem certeza que quer excluir este post? Esta ação não é reversível.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: Formulário de Contato do Website da WCA
+      #original_hash: 9039572
+      description_html: >-
+        Use este formulário somente para questões sobre o website, comentários e
+        sugestões. <a href="%{contact_path}">Outras solicitações</a> devem ser
+        enviadas às pessoas apropriadas.
+      #original_hash: c70a890
+      submit: Enviar mensagem
+    dob:
+      #original_hash: 907ac6c
+      title: Formulário de Solicitação de Alteração de Data de Nascimento
+      #original_hash: 8a4ced5
+      description: >-
+        Use este formulário se a data de nascimento registrada em nosso banco de
+        dados está diferente da data real.
+      #original_hash: 19c17ec
+      submit: Solicitar alteração
+    messages:
+      #original_hash: 41948b9
+      success: Obrigado por sua mensagem. Entraremos em contato em breve!
+      #original_hash: 8e3a9da
+      delivery_error: Erro ao enviar mensagem.
   faq:
     #original_hash: d790b40
     title: Perguntas Frequentes
