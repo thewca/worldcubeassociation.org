@@ -549,10 +549,14 @@ module DatabaseDumper
   end
 
   def self.mysql(command, database = nil)
-    `mysql #{self.mysql_cli_creds} #{database} -e '#{command}'`
+    `mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}`
   end
 
   def self.mysqldump(db_name, dest_filename)
-    `mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename}`
+    `mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}`
+  end
+
+  def self.filter_out_mysql_warning
+    '2>&1 | grep -v "[Warning] Using a password on the command line interface can be insecure."'
   end
 end
