@@ -18,27 +18,29 @@ def with_database(db_name)
 end
 
 RSpec.describe "DatabaseDumper" do
-  it "defines sanitizers for precisely the tables and columns that exist" do
+  it "defines sanitizers for precisely the tables that exist" do
     expect(DatabaseDumper::TABLE_SANITIZERS.keys).to match_array ActiveRecord::Base.connection.data_sources
-    DatabaseDumper::TABLE_SANITIZERS.each do |table_name, table_sanitizer|
-      next if table_sanitizer == :skip_all_rows
-      puts "Checking for table sanitizer of table '#{table_name}'"
-      where_clause = table_sanitizer[:where_clause]
-      expect(where_clause).to_not be_nil
-      column_sanitizers = table_sanitizer[:column_sanitizers]
-      column_names = ActiveRecord::Base.connection.columns(table_name).map(&:name)
+  end
 
-      expect(column_sanitizers.keys).to match_array(column_names)
+  DatabaseDumper::TABLE_SANITIZERS.each do |table_name, table_sanitizer|
+    it "defines a sanitizer of table '#{table_name}'" do
+      unless table_sanitizer == :skip_all_rows
+        where_clause = table_sanitizer[:where_clause]
+        expect(where_clause).to_not be_nil
+        column_sanitizers = table_sanitizer[:column_sanitizers]
+        column_names = ActiveRecord::Base.connection.columns(table_name).map(&:name)
+        expect(column_sanitizers.keys).to match_array(column_names)
+      end
     end
   end
 
   # The default database cleaning method of transation does not work for this test
   # because we close and recreate our database connection inside of the test. Use
   # truncation so we don't leave a dirty database behind.
-  it "works", clean_db_with_truncation: true do
+  it "dumps the database according to sanitizers", clean_db_with_truncation: true do
     not_visible_competition = FactoryGirl.create :competition, :not_visible, :with_delegate
     visible_competition = FactoryGirl.create :competition, :visible, remarks: "Super secret message to the Board"
-    user = FactoryGirl.create :user
+    user = FactoryGirl.create :user, dob: Date.new(1989, 1, 1)
 
     dump_file = Tempfile.new
     DatabaseDumper.development_dump(dump_file.path)
@@ -55,13 +57,9 @@ RSpec.describe "DatabaseDumper" do
       ActiveRecord::Base.connection.reconnect!
 
       expect(Competition.count).to eq 1
-      visible_competition = Competition.find(visible_competition.id)
-      expect(visible_competition.remarks).to eq "remarks to the board here"
-
+      expect(visible_competition.reload.remarks).to eq "remarks to the board here"
       expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to eq nil
-
-      user = User.find(user.id)
-      expect(user.dob).to eq Date.new(1954, 12, 4)
+      expect(user.reload.dob).to eq Date.new(1954, 12, 4)
     end
   end
 end
