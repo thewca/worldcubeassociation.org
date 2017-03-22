@@ -258,8 +258,8 @@ zh-CN:
         external_website: 比赛官网
         #original_hash: 692e1f9
         generate_website: 我想使用WCA网站来显示更多信息。
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: 基础费（最低面值）
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: 基础报名费
         #original_hash: 28a6fbb
         currency_code: 货币代码
         #original_hash: 5b2fe69
@@ -286,6 +286,8 @@ zh-CN:
         clone_tabs: 我想复制所有tab，连同额外信息
         #original_hash: c5497bc
         competition_events: 项目
+        #original_hash: 71c8461
+        enable_donations: 除了报名费之外，我想要开启捐赠功能
       registration:
         #original_hash: 3c23a67
         guests: 随行人员
@@ -367,14 +369,6 @@ zh-CN:
     error_notification:
       #original_hash: d70e9cb
       default_message: 请查看下列问题：
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: 名字
-        #original_hash: 3fa6f5f
-        your_email: 你的邮箱
-        #original_hash: 68f4145
-        message: 消息
     hints:
       user:
         #original_hash: 87e1e6f
@@ -450,10 +444,14 @@ zh-CN:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: 比赛的基础报名费。如果填写报名费，将在比赛信息页和报名页显示。
         #original_hash: 866bc05
         currency_code: 报名费的货币代码。
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -470,13 +468,25 @@ zh-CN:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: 你正确的出生日期，格式为YYYY-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          你需要附上一张任意合法证件的照片（身份证、驾驶证、学生卡、护照、出生证明等）以证明你的身份和出生日期。请确保照片中你的名字和生日对于一个说英语的人清晰可见并能理解。
       post:
         #original_hash: 53c16eb
         body: 使用&lt;!-- break --&gt;标签以在首页展示预览。首页的所有文章会显示分隔符之前的文本。点进文章链接才会显示全文。
@@ -561,6 +571,23 @@ zh-CN:
           'true': 询问随行人员
           #original_hash: f8c2332
           'false': 不询问随行人员
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: 姓名
+        #original_hash: 3fa6f5f
+        your_email: 邮箱
+      website_contact:
+        #original_hash: 68f4145
+        message: 留言
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: 你的WCA ID
+        #original_hash: 51d0597
+        dob: 正确的生日
+        #original_hash: e214b8a
+        document: 证件
   errors:
     messages:
       #original_hash: dc2367c
@@ -802,11 +829,10 @@ zh-CN:
       not_found: 未找到
       #original_hash: 49a6fe4
       already_assigned: 已经关联到另一个帐号
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
-        和我们的数据库不一致。如果确认你提交的格式（YYYY-MM-DD）正确，请发送邮件到<a
-        href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA成绩组</a>说明这个情况并附带一张姓名和生日清楚的证件照片。
+        和我们的数据库不一致。如果你确认提交的生日正确，并且格式（YYYY-MM-DD）无误，请通过<a
+        href="%{dob_form_path}">此专用表格</a>联系WCA成绩组。
       #original_hash: 0fbcefd
       unique: 必须唯一
       #original_hash: 26f70ed
@@ -1008,6 +1034,8 @@ zh-CN:
     sign_in: 登录
     #original_hash: 5d45a00
     profile: 资料
+    #original_hash: 801b3e9
+    panel_title: 报名信息
     #original_hash: c0063c3
     register: 报名！
     #original_hash: f484f15
@@ -1030,7 +1058,7 @@ zh-CN:
     please_sign_in_past_html: '%{sign_in}以查看你的报名。如果你没有WCA账号，可以在%{here}注册，但是现在已经太晚没法报名这个比赛了。'
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: '%{sign_in}以查看你的报名。如果你没有WCA账号，可以在%{here}注册，只是现在报名还没开始。'
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: '%{sign_in}来报名%{comp}。如果你没有WCA账号，可以在%{here}注册。'
     #original_hash: 89b4e7f
     greeting: '%{name}，你好！'
@@ -1042,22 +1070,40 @@ zh-CN:
     check_registration_information: 请查看比赛信息页的报名部分，你可能需要支付报名费以通过审核。
     #original_hash: ea2b586
     have_registered: '你已经报名了%{comp}。可以在下面查看你的报名信息。'
-    #original_hash: fa52a9b
-    entry_fee: '报名费是%{fee}'
     #original_hash: 3c9141f
     contact_organizer: 如果你想变更报名信息请联系主办方。
     #original_hash: 59354fd
     waiting_list: 你的报名正等待审核。请查看比赛官网详情以确认是否需要支付报名费等流程。
     #original_hash: 58b1a3c
     accepted: 你的报名已通过！
-    #original_hash: 69cf660
-    entry_fees_partially_paid: '你当前已支付报名费%{paid}，总应付%{total_entry_fee}。'
-    #original_hash: 9153695
-    entry_fees_fully_paid: '你已支付所有报名费，共计%{paid}。'
-    #original_hash: 05495d6
-    payment_button_text: '使用银行卡支付报名费%{entry_fee}'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: '你已支付入场费用，共计%{paid}。'
+    #original_hash: 2e5d1b9
+    will_pay_here: 报名之后请在此处支付报名费
+    #original_hash: b7ef562
+    wont_pay_here: 请查看比赛信息以获取支付方式
+    payment_form:
+      #original_hash: 4de825f
+      title: 报名费
+      hints:
+        #original_hash: bf3a39e
+        donation: 可选捐赠，只会给主办团队
+      labels:
+        #original_hash: 948ec72
+        entry_fees: 基础报名费
+        #original_hash: 2c09302
+        donation: 捐赠
+      alerts:
+        #original_hash: a34940e
+        not_a_number: 请输入一个正确的数值。
+        #original_hash: 707b9ca
+        amount_too_low: 总数不能低于应支付的报名费。
+    #original_hash: 8607a87
+    payment_button_text: 使用银行卡支付报名费
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '你可以在%{link}设置你的偏好项目来使以后报名更快。'
+    #original_hash: 67d8734
+    preferred_events_populated_html: '将自动选择你的首选项目，可以在%{link}编辑。'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1093,8 +1139,8 @@ zh-CN:
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我的比赛
-      #original_hash: 6e79aaf
-      disclaimer: 只有使用WCA报名系统的比赛会列在此处。
+      #original_hash: 1fa5a4b
+      disclaimer: 只有使用WCA报名系统的比赛会列在此处。如果你的比赛没有列在下方，请查阅比赛官网的选手列表。
       #original_hash: 94a2fc8
       past_competitions: 以前的比赛
     competition_info:
@@ -1269,6 +1315,8 @@ zh-CN:
       end_date_before_start: 结束日期不能早于开始日期。
       #original_hash: be3933b
       span_too_many_days: '比赛不能持续超过%{max_days}天。'
+      #original_hash: cdcd288
+      invalid_currency_code: 所选货币符号不正确
     new:
       #original_hash: 1208df7
       create_competition: 创建比赛
@@ -1353,6 +1401,8 @@ zh-CN:
         orga_view: 主办方视角
         #original_hash: c6171f8
         event_view: 管理项目
+        #original_hash: 6f7aef9
+        payment_view: 支付信息
         #original_hash: 76bfdcf
         admin_view: 管理员视角
         #original_hash: a857eb4
@@ -1426,6 +1476,26 @@ zh-CN:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 确认要删除这篇文章吗？该操作无法撤消。
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: WCA网站联系表单
+      #original_hash: 9039572
+      description_html: '该表单仅供网站问题、留言和建议。<a href="%{contact_path}">其他咨询</a>请发送到相应的组委会。'
+      #original_hash: c70a890
+      submit: 发送
+    dob:
+      #original_hash: 907ac6c
+      title: 生日修改请求表单
+      #original_hash: 8a4ced5
+      description: 如果记录在数据库的生日和你的真实生日不一致，请使用该表单。
+      #original_hash: 19c17ec
+      submit: 提交
+    messages:
+      #original_hash: 41948b9
+      success: 感谢你的留言。我们将会尽快联系你！
+      #original_hash: 8e3a9da
+      delivery_error: 发送失败。
   faq:
     #original_hash: d790b40
     title: 常见问题
