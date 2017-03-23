@@ -141,7 +141,7 @@ de:
     solves: Lösungen
     date:
       #original_hash: acb6273
-      no_date: Kein Daturm
+      no_date: Kein Datum
     user:
       #original_hash: 603a218
       wca_id: WCA-ID
@@ -156,7 +156,7 @@ de:
     days:
       zero: kein Tag
       one: 1 Tag
-      other: '%{count} Tage'
+      other: '%{count} Tagen'
     #original_hash: 203e1b3
     these_events:
       zero: Keine Disziplin
@@ -469,6 +469,11 @@ de:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
+          Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
+          angezeigt.
         #original_hash: 866bc05
         currency_code: Der Währungscode für Eintrittsgebühren.
         #original_hash: da39a3e
@@ -1199,9 +1204,11 @@ de:
     #original_hash: e9ddc6e
     will_open_html: 'Die Anmeldung öffnet in <strong>%{days}</strong> um %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'Die Anmeldung schließt in <strong>%{days}</strong> um %{time}.'
+    will_close_html: >-
+      Es dauert noch <strong>%{days}</strong> (am %{time}) bis die Anmeldung
+      schließt.
     #original_hash: dc8a520
-    closed_html: 'Die Anmeldung wurde vor <strong>%{days}</strong> um %{time} geschlossen.'
+    closed_html: 'Die Anmeldung wurde vor <strong>%{days}</strong> (%{time}) geschlossen.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} um den Status deiner Anmeldung zu überprüfen. Wenn Du noch kein
@@ -1234,7 +1241,7 @@ de:
       Du hast dich für %{comp} angemeldet. Du kannst die Informationen zu deiner
       Anmeldung unten sehen.
     #original_hash: 3c9141f
-    contact_organizer: Kontaktiere den Organisator wenn Du Änderungen vornehmen willst.
+    contact_organizer: 'Kontaktiere den Organisator, wenn Du Änderungen vornehmen willst.'
     #original_hash: 59354fd
     waiting_list: >-
       Deine Anmeldung ist im Gang. Zur Bestätigung kann es notwendig sein eine
@@ -1266,7 +1273,7 @@ de:
         #original_hash: a34940e
         not_a_number: Bitte gebe einen gültigen Betrag ein
         #original_hash: 707b9ca
-        amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende Eintrittsgebühr sein
+        amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende Eintrittsgebühr sein.
     #original_hash: 8607a87
     payment_button_text: Bezahl dein Eintrittsgeld mit Karte
     #original_hash: 4cf01a2
@@ -1324,10 +1331,11 @@ de:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Meine Wettbewerbe
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Nur Wettbewerbe, die das Anmeldesystem der WCA-Website verwenden werden
-        hier angezeigt.
+        hier angezeigt. Falls dein Wettbewerb hier nicht aufgelistet ist,
+        besuche die Website des Wettbewerbs um die Teilnehmerliste zu sehen.
       #original_hash: 94a2fc8
       past_competitions: Vergangene Wettbewerbe
     competition_info:
@@ -1820,9 +1828,9 @@ de:
             erfolgreichen Organisation des Wettbewerbs.
           #original_hash: 809f53a
           '4': >-
-            Besuche den <a target='_blank'
-            href='http://cube.hackvalue.de/tutorials/competition.php'>Deutschen
-            Organisations-Ratgeber</a> für weitere Informationen. (Bei jedwedem
+            Besuche das <a target='_blank'
+            href='http://cube.hackvalue.de/tutorials/competition.php'>deutsche
+            Organisations-Tutorial</a> für weitere Informationen. (Bei jedwedem
             Konflikt zwischen Daten und Informationen aus dieser Ressource und
             den WCA-Regeln hat das WCA-Regelwerk stets Vorrang.)
       '6':
@@ -1881,9 +1889,8 @@ de:
           #original_hash: b6a68ab
           '2': >-
             Abhängig von der Größe des Wettbewerbs und dem persönlichen
-            Terminkalender des WCA-Delegierten, kann dies zwischen ein und zwei
-            Tagen bis hin zu einer ganzen Woche in Anspruch nehmen. Bitte übe
-            dich in Geduld.
+            Terminkalender des WCA-Delegierten, kann dies nur einen Tage oder
+            bis zu einer Woche in Anspruch nehmen. Bitte übe dich in Geduld.
           #original_hash: bf8adbe
           '3': >-
             Zusätzlich kannst Du, sofern dein WCA-Benutzerkonto mit deiner
@@ -1965,7 +1972,7 @@ de:
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA-Delegierte</strong> sind Mitglieder der WCA, die die
-        Verantwortung dafür tragen, dass alle WCA-Wettbewerbe gemäß der Mission,
+        Verantwortung dafür tragen, dass alle WCA-Wettbewerbe gemäß des Ziels,
         den Regeln und dem Geiste der WCA ablaufen. Die WCA unterscheidet dabei
         zwischen <strong>WCA Senior-Delegierten</strong>,
         <strong>WCA-Delegierten</strong> und
