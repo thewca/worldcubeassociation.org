@@ -1308,10 +1308,11 @@ hr:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moja natjecanja
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Biti će prikazana samo ona natjecanja koja koriste WCA registracijski
-        sistem.
+        sistem. Ukoliko Vaše natjecanje nije prikazano, provjerite listu
+        natjecatelja na web-stranici natjecanja.
       #original_hash: 94a2fc8
       past_competitions: Prošla natjecanja
     competition_info:
