@@ -69,6 +69,10 @@ module Locales
       "flag_id": "hr",
       "name": "Hrvatski",
     },
+    "sk": {
+      "flag_id": "sk",
+      "name": "Slovenský",
+    },
     "sl": {
       "flag_id": "si",
       "name": "Slovensko",
