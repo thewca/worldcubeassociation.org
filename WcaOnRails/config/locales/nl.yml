@@ -1203,7 +1203,7 @@ nl:
     check_registration_information: >-
       Controleer ajb de informatie over de aanmelding om te bepalen of je nog
       iets extra's moet doen, zoals een aanmeldingsbedrag betalen.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
       Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
       aanmelding vinden.
@@ -1293,10 +1293,11 @@ nl:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mijn wedstrijden
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
-        Alleen wedstrijden die de aanmelding via de WCA-website gebruiken zijn
-        hier zichtbaar.
+        Hier zijn alleen wedstrijden zichtbaar die de aanmeldingen via de
+        WCA-website verwerken. Als je competitie hier niet bij staat, kijk dan
+        op de website van de competitie of er een aanmeldingenlijst is.
       #original_hash: 94a2fc8
       past_competitions: Wedstrijden uit het verleden
     competition_info:
