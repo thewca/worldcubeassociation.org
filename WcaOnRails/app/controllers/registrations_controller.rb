@@ -25,7 +25,10 @@ class RegistrationsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit_registrations, :do_actions_for_selected, :edit, :refund_payment]
 
   def edit_registrations
+    @show_events = params[:show_events] == "true"
     @competition = competition_from_params
+    @registrations = @competition.registrations.includes(:user, :registration_payments)
+    @registrations = @registrations.includes(:events) if @show_events
   end
 
   def psych_sheet
@@ -107,6 +110,7 @@ class RegistrationsController < ApplicationController
   end
 
   def do_actions_for_selected
+    @show_events = params[:show_events] == "true"
     @competition = competition_from_params
     registrations = selected_registrations_from_params
 

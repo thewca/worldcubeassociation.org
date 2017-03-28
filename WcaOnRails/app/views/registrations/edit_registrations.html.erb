@@ -1,6 +1,7 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
+  <%= link_to icon("plus", "Show events for each registration"), competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted, :deleted].each do |status| %>
@@ -11,7 +12,7 @@
       <% else %>
         <h2><%= t 'registrations.list.deleted_registrations' %></h2>
       <% end %>
-      <% registrations = @competition.registrations.public_send(status).includes(:user, :registration_payments) %>
+      <% registrations = @registrations.public_send(status) %>
       <%= wca_table table_class: "registrations-table #{status}",
                     data: { toggle: "table", sort_name: "registration-date", select_item_name: "selected_registrations[]", click_to_select: "true" } do %>
         <thead>
@@ -22,6 +23,18 @@
             <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
             <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
             <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
+            <% if @show_events %>
+              <% @competition.events.each do |event| %>
+                <th>
+                  <span title="<%= event.name %>"
+                        class="cubing-icon event-<%= event.id %>"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        data-container="body">
+                  </span>
+                </th>
+              <% end %>
+            <% end %>
             <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
@@ -49,6 +62,20 @@
               <td class="name"><%= registration.name %></td>
               <td class="countryId"><%= registration.country.name %></td>
               <td class="birthday"><%= registration.birthday %></td>
+              <% if @show_events %>
+                <% @competition.events.each do |event| %>
+                  <td>
+                    <% if registration.events.include?(event) %>
+                      <span title="<%= event.name %>"
+                            class="cubing-icon event-<%= event.id %>"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            data-container="body">
+                      </span>
+                    <% end %>
+                  </td>
+                <% end %>
+              <% end %>
               <td>
                 <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
                   <%= registration.created_at.to_date %>
