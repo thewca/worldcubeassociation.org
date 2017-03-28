@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-def api_sign_in_as(user, scopes: nil)
-  scopes = Doorkeeper::OAuth::Scopes.new if scopes.nil?
-  token = double acceptable?: true, resource_owner_id: user.id, scopes: scopes
-  allow(controller).to receive(:doorkeeper_token) { token }
-end
-
 RSpec.describe Api::V0::ApiController do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryGirl.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }

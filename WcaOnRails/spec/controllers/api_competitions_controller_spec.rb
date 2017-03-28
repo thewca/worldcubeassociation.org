@@ -69,6 +69,41 @@ RSpec.describe Api::V0::CompetitionsController do
       expect(json[0]["id"]).to eq vietnam_comp.id
     end
 
+    context 'managed_by' do
+      let(:delegate1) { FactoryGirl.create(:delegate) }
+      let(:delegate2) { FactoryGirl.create(:delegate) }
+      let(:organizer1) { FactoryGirl.create(:user) }
+      let(:organizer2) { FactoryGirl.create(:user) }
+      let!(:competition) {
+        FactoryGirl.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
+      }
+      let!(:other_comp) { FactoryGirl.create(:competition) }
+
+      it 'managed_by includes delegate' do
+        scopes = Doorkeeper::OAuth::Scopes.new
+        scopes.add("manage_competitions")
+        api_sign_in_as(delegate1, scopes: scopes)
+
+        get :index, params: { managed_by_me: "true" }
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json.length).to eq 1
+        expect(json[0]["id"]).to eq competition.id
+      end
+
+      it 'managed_by includes organizer' do
+        scopes = Doorkeeper::OAuth::Scopes.new
+        scopes.add("manage_competitions")
+        api_sign_in_as(organizer1, scopes: scopes)
+
+        get :index, params: { managed_by_me: "true" }
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        expect(json.length).to eq 1
+        expect(json[0]["id"]).to eq competition.id
+      end
+    end
+
     it 'can do a plaintext query' do
       terrible_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", countryId: "USA")
       awesome_comp = FactoryGirl.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", countryId: "France")
@@ -89,21 +124,21 @@ RSpec.describe Api::V0::CompetitionsController do
       get :index, params: { start: "2015" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
-      expect(json["errors"]).to eq ["Invalid start: '2015'"]
+      expect(json["error"]).to eq "Invalid start: '2015'"
     end
 
     it 'validates end' do
       get :index, params: { end: "2014" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
-      expect(json["errors"]).to eq ["Invalid end: '2014'"]
+      expect(json["error"]).to eq "Invalid end: '2014'"
     end
 
     it 'validates country_iso2' do
       get :index, params: { country_iso2: "this is not a country" }
       expect(response.status).to eq 422
       json = JSON.parse(response.body)
-      expect(json["errors"]).to eq ["Invalid country_iso2: 'this is not a country'"]
+      expect(json["error"]).to eq "Invalid country_iso2: 'this is not a country'"
     end
 
     it 'can query by date' do
@@ -129,14 +164,14 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'paginates' do
-      30.times do
+      7.times do
         FactoryGirl.create :competition, :confirmed, :visible
       end
 
-      get :index
+      get :index, params: { per_page: 5 }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json.length).to eq 25
+      expect(json.length).to eq 5
 
       # Parse HTTP Link header mess
       link = response.headers["Link"]
@@ -149,8 +184,90 @@ RSpec.describe Api::V0::CompetitionsController do
       get :index, params: Rack::Utils.parse_query(URI(url).query)
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json.length).to eq Competition.count - 25
+      expect(json.length).to eq 2
     end
   end
 
+  describe 'wcif' do
+    let!(:competition) {
+      FactoryGirl.create(
+        :competition,
+        :with_delegate,
+        id: "TestComp2014",
+        start_date: "2014-02-03",
+        end_date: "2014-02-05",
+        external_website: "http://example.com",
+        showAtAll: true,
+      )
+    }
+    let(:hidden_competition) {
+      FactoryGirl.create(
+        :competition,
+        :not_visible,
+        id: "HiddenComp2014",
+        delegates: competition.delegates,
+      )
+    }
+
+    it '404s on invalid competition' do
+      get :show_wcif, params: { competition_id: "FakeId2014" }
+      expect(response.status).to eq 404
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["error"]).to eq "Competition with id FakeId2014 not found"
+    end
+
+    it '404s on hidden competition' do
+      competition.update_column(:showAtAll, false)
+      get :show_wcif, params: { competition_id: "TestComp2014" }
+      expect(response.status).to eq 404
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
+    end
+
+    context 'signed in without manage_competitions scope' do
+      let(:delegate) { competition.delegates.first }
+
+      before :each do
+        api_sign_in_as(delegate)
+      end
+
+      it '404s on hidden competition' do
+        get :show_wcif, params: { competition_id: hidden_competition.id }
+        expect(response.status).to eq 404
+      end
+
+      it 'get wcif' do
+        get :show_wcif, params: { competition_id: "TestComp2014" }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'signed in as delegate' do
+      let(:delegate) { competition.delegates.first }
+      let(:wcif) { competition.wcif }
+
+      before :each do
+        scopes = Doorkeeper::OAuth::Scopes.new
+        scopes.add("manage_competitions")
+        api_sign_in_as(delegate, scopes: scopes)
+      end
+
+      it 'does not 404 on their own hidden competition' do
+        get :show_wcif, params: { competition_id: hidden_competition.id }
+        expect(response.status).to eq 200
+        parsed_body = JSON.parse(response.body)
+        expect(parsed_body["id"]).to eq "HiddenComp2014"
+      end
+
+      it 'get wcif' do
+        get :show_wcif, params: { competition_id: "TestComp2014" }
+        expect(response.status).to eq 200
+        parsed_body = JSON.parse(response.body)
+        expect(parsed_body).to eq(
+          "formatVersion" => "1.0",
+          "id" => "TestComp2014",
+        )
+      end
+    end
+  end
 end

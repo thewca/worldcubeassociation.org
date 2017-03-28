@@ -608,8 +608,7 @@ class User < ApplicationRecord
     users.order(:name)
   end
 
-  attr_accessor :doorkeeper_token
-  def serializable_hash(_options = nil)
+  def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
       url: "/results/p.php?i=#{self.wca_id}",
@@ -635,14 +634,14 @@ class User < ApplicationRecord
       },
     }
 
-    if doorkeeper_token && doorkeeper_token.resource_owner_id == self.id
-      if doorkeeper_token.scopes.exists?("dob")
-        json[:dob] = self.dob
-      end
+    # Private attributes to include.
+    private_attributes = options&.fetch(:private_attributes, []) || []
+    if private_attributes.include?("dob")
+      json[:dob] = self.dob
+    end
 
-      if doorkeeper_token.scopes.exists?("email")
-        json[:email] = self.email
-      end
+    if private_attributes.include?("email")
+      json[:email] = self.email
     end
 
     # Delegates's emails and regions are public information.

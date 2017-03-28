@@ -27,6 +27,7 @@ class Competition < ApplicationRecord
            as: "base_entry_fee",
            with_model_currency: :currency_code
 
+  scope :visible, -> { where(showAtAll: true) }
   scope :not_over, -> { where("end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
@@ -45,6 +46,12 @@ class Competition < ApplicationRecord
       "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
       join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
+  }
+  scope :managed_by, lambda { |user_id|
+    joins(:competition_organizers, :competition_delegates).where(
+      "delegate_id = :user_id OR organizer_id = :user_id",
+      user_id: user_id,
+    ).group(:id)
   }
 
   CLONEABLE_ATTRIBUTES = %w(
@@ -260,7 +267,11 @@ class Competition < ApplicationRecord
     end
   end
 
-  after_create :create_delegate_report
+  after_create :create_delegate_report!
+
+  def wcif
+    Wcif.new(competition: self)
+  end
 
   before_validation :unpack_dates
   validate :dates_must_be_valid
@@ -759,8 +770,12 @@ class Competition < ApplicationRecord
     end
   end
 
-  def self.search(query, params: {})
-    competitions = Competition.where(showAtAll: true)
+  def self.search(query, params: {}, managed_by_user: nil)
+    if managed_by_user
+      competitions = Competition.managed_by(managed_by_user.id)
+    else
+      competitions = Competition.visible
+    end
 
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])

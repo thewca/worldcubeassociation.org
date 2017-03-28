@@ -144,7 +144,9 @@ Rails.application.routes.draw do
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
       get '/delegates' => 'api#delegates'
-      resources :competitions, only: [:index, :show]
+      resources :competitions, only: [:index, :show] do
+        get '/wcif' => 'competitions#show_wcif'
+      end
     end
   end
 end
