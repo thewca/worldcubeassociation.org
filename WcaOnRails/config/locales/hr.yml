@@ -1221,7 +1221,7 @@ hr:
     check_registration_information: >-
       Provjerite informacije o registraciji kako biste saznali trebate li
       napraviti još nešto, kao možda platiti kotizaciju unaprijed.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
       Registrirali ste se za %{comp}. Informacije o registraciji možete vidjeti
       ispod.
