@@ -52,7 +52,7 @@ CREATE TABLE `Competitions` (
   `results_nag_sent_at` datetime DEFAULT NULL,
   `generate_website` tinyint(1) DEFAULT NULL,
   `announced_at` datetime DEFAULT NULL,
-  `base_entry_fee_lowest_denomination` int(11) DEFAULT NULL,
+  `base_entry_fee_lowest_denomination` int(11) NOT NULL DEFAULT '0',
   `currency_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'USD',
   `endYear` smallint(6) NOT NULL DEFAULT '0',
   `connected_stripe_account_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1110,6 +1110,7 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170212005142'),
 ('20170215221832'),
 ('20170223153915'),
-('20170228140556');
+('20170228140556'),
+('20170320222511');
 
 
