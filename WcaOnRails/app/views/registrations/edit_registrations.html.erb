@@ -1,7 +1,11 @@
 <% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
 
 <%= render layout: 'nav' do %>
-  <%= link_to icon("plus", "Show events for each registration"), competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" %>
+  <% if @show_events %>
+    <%= link_to icon("minus", "Hide events"), competition_edit_registrations_path(@competition), class: "btn btn-primary" %>
+  <% else %>
+    <%= link_to icon("plus", "Show events"), competition_edit_registrations_path(@competition, show_events: "true"), class: "btn btn-primary" %>
+  <% end %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
     <% [:pending, :accepted, :deleted].each do |status| %>
