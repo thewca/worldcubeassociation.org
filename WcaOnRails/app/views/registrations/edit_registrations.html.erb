@@ -39,7 +39,9 @@
                 </th>
               <% end %>
             <% end %>
-            <th class="registration-date" data-sortable="true" data-field="registration-date"><%= t 'registrations.list.registered' %></th>
+            <th class="registration-date" data-sortable="true" data-sorter="comparePaymentDate" data-field="registration-date">
+              <%= @competition.using_stripe_payments? ? t('registrations.list.registered.with_stripe') : t('registrations.list.registered.without_stripe') %>
+            </th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
             <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
@@ -80,9 +82,10 @@
                   </td>
                 <% end %>
               <% end %>
-              <td>
-                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.created_at %>">
-                  <%= registration.created_at.to_date %>
+              <td class="text-center">
+                <% registered_date, date_tooltip = registration_date_and_tooltip(@competition, registration) %>
+                <span data-toggle="tooltip" data-placement="left" title="<%= date_tooltip %>" data-paid-date="<%= registration.last_payment_date %>" data-registered-at="<%= registration.created_at %>">
+                  <%= registered_date %>
                 </span>
               </td>
               <td class="guests">
@@ -94,7 +97,9 @@
                 </span>
               </td>
               <td class="entry_fee">
-                <%= humanized_money_with_symbol registration.paid_entry_fees %>
+                <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">
+                  <%= humanized_money_with_symbol registration.paid_entry_fees %>
+                </span>
               </td>
               <td>
                 <%= mail_to registration.email, target: "_blank", class: "hide-new-window-icon" do %>
