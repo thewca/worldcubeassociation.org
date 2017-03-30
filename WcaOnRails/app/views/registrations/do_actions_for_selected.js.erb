@@ -47,6 +47,5 @@ $registrationsTable.find('tr.selected').removeClass('selected');
 <% registrations = @competition.registrations.includes(:user)
    registrations = registrations.includes(:events) if @show_events %>
 <% [:pending, :accepted, :deleted].each do |status| %>
-  <% registrations = registrations.public_send(status) %>
-  $<%= status %>Table.find('tfoot').replaceWith('<%=j render "edit_registrations_table_footer", registrations: registrations %>');
+  $<%= status %>Table.find('tfoot').replaceWith('<%=j render "edit_registrations_table_footer", registrations: registrations.public_send(status) %>');
 <% end %>
