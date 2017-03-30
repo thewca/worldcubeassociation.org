@@ -128,10 +128,17 @@ $venue-map-wrapper-height: 400px;
   margin: 20px 0;
 
   #region,
-  #search-field {
+  #search-field,
+  #from-date-field,
+  #to-date-field {
     font-size: 12px;
     font-weight: normal;
     display: block;
+  }
+
+  #from-date-field,
+  #to-date-field {
+    width: 100px;
   }
 
   #clear-all-events,

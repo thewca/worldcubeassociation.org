@@ -757,10 +757,13 @@ en:
       map: "Map"
       region: "Region"
       search: "Search"
-      state: "State"
+      state: "When"
       present: "Present"
       recent: "Recent"
       past: "Past"
+      custom: "Custom"
+      from_date: "From"
+      to_date: "To"
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
@@ -772,6 +775,7 @@ en:
         past_all: "Past competitions from all years"
         recent: "Recent competitions (last %{count} days)"
         upcoming: "Upcoming competitions"
+        custom: "Competitions in the selected period of time"
       no_access: "You don't have access to this page!"
       #context: tooltip displayed when hovering
       tooltips:
