@@ -9,7 +9,7 @@
       Please create one
       <%= link_to "here", new_user_registration_path %>, where you will be able to
       claim your WCA ID
-      (<%= render "shared/wca_id", wca_id: wca_id %>).
+      (<%= wca_id_link wca_id %>).
       <% conversion_shown = true %>
     <% end %>
   <% end %>

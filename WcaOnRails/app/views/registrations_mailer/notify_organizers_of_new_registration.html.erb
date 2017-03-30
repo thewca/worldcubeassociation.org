@@ -1,7 +1,7 @@
 <p>
   <%= @registration.name %>
   <% if @registration.user.wca_id %>
-    (<%= render "shared/wca_id", wca_id: @registration.user.wca_id -%>)
+    (<%= wca_id_link @registration.user.wca_id -%>)
   <% end %>
   just registered for <%= @registration.competition.name %>.
 </p>

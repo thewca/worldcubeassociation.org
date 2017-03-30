@@ -1,16 +1,17 @@
+<% link_id = wca_id_link(@user.unconfirmed_wca_id, target: "_blank") %>
 <% if !@user.unconfirmed_person %>
   <p>
     <% if @user.unconfirmed_wca_id.present? %>
-      <%= t '.unknown_wca_id_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank") %>
+      <%= t '.unknown_wca_id_html', link_id: link_id %>
     <% end %>
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    <%= t '.already_assigned_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank"), link_delegate: delegates_path %>
+    <%= t '.already_assigned_html', link_id: link_id, link_delegate: delegates_path %>
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
-    <%= t '.missing_dob_html', link_id: render("shared/wca_id", wca_id: @user.unconfirmed_wca_id, target: "_blank") %>
+    <%= t '.missing_dob_html', link_id: link_id %>
     <%= t '.contact_results_team_html' %>
   </p>
 <% else %>
