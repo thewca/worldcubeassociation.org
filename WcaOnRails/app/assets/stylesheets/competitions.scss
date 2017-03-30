@@ -134,6 +134,13 @@ $venue-map-wrapper-height: 400px;
     display: block;
   }
 
+  .custom-control {
+    width: 100px;
+    @media (max-width: $screen-sm) {
+      display: inline-block;
+    }
+  }
+
   #clear-all-events,
   #select-all-events {
     width: 100px;

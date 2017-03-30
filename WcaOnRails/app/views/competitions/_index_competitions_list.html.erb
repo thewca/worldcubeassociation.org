@@ -11,6 +11,10 @@
       <div class="col-md-12" id="past-comps">
         <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.recent', count: Competition::RECENT_DAYS) %>
       </div>
+    <% elsif @custom_selected %>
+      <div class="col-md-12" id="past-comps">
+        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.custom') %>
+      </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
