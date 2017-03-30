@@ -73,13 +73,13 @@
 <!-- These fields should be shown when "Custom" state is selected. -->
 <div class="form-group custom-control">
   <%= label_tag(t('competitions.index.from_date')) %>
-  <div id="from-date-field" class="input-group date datetimepicker">
+  <div class="input-group date datetimepicker">
     <%= text_field_tag "from_date", params[:from_date], class: "form-control date_picker", data: { date_options: DatePickerInput.date_options_base } %>
   </div>
 </div>
 <div class="form-group custom-control">
   <%= label_tag(t('competitions.index.to_date')) %>
-  <div id="to-date-field" class="input-group date datetimepicker">
+  <div class="input-group date datetimepicker">
     <%= text_field_tag "to_date", params[:to_date], class: "form-control date_picker", data: { date_options: DatePickerInput.date_options_base } %>
   </div>
 </div>
