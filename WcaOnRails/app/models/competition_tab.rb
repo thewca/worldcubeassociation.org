@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CompetitionTab < ApplicationRecord
-  belongs_to :competition, required: true
+  belongs_to :competition
 
   validates :name, presence: true
   validates :display_order, uniqueness: { scope: :competition_id }
