@@ -1255,10 +1255,10 @@ pl:
     check_registration_information: >-
       Prosimy o sprawdzenie informacji na temat rejestracji, w celu dowiedzenia
       się czy należy zrobić coś jeszcze, na przykład wpłacić wpisowe.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Zarejestrowałeś się na %{comp}. Możesz zobaczyć dane swojej rejestracji
-      poniżej.
+      Wysłałeś zgłoszenie rejestracyjne na %{comp}. Możesz zobaczyć dane swojej
+      rejestracji poniżej.
     #original_hash: 3c9141f
     contact_organizer: 'Skontaktuj się z organizatorem, jeżeli chciałbyś wprowadzić jakąś zmianę.'
     #original_hash: 59354fd
@@ -1402,14 +1402,20 @@ pl:
       region: Region
       #original_hash: bce0641
       search: Wyszukaj
-      #original_hash: a725020
-      state: Stan
+      #original_hash: 769bb19
+      state: Kiedy
       #original_hash: 4e9f7a3
       present: Obecne
       #original_hash: 76eec76
       recent: Niedawne
       #original_hash: 405c12f
       past: Minione
+      #original_hash: 081ae3f
+      custom: W przedziale
+      #original_hash: 3f66052
+      from_date: Od
+      #original_hash: ae79ea1
+      to_date: Do
       #original_hash: 52c30f8
       past_from: 'Minione z %{year}'
       #original_hash: 7cff459
@@ -1425,6 +1431,8 @@ pl:
         recent: 'Niedawne zawody (ostatnie %{count} dni)'
         #original_hash: 914742f
         upcoming: Nadchodzące zawody
+        #original_hash: 8b57693
+        custom: Zawody w wybranym przedziale czasowym
       #original_hash: 6684214
       no_access: Nie masz dostępu do tej strony!
       tooltips:
