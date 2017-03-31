@@ -1220,7 +1220,7 @@ hu:
     check_registration_information: >-
       Kérlek olvasd el az információkat a regisztrációról, hogy megtudd kell-e
       még valami mást is tenned - például befizetni a regisztrációs díjat!
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
       Regisztráltál a(z) %{comp} versenyre. A regisztrációdról információkat
       alább találsz.
@@ -1312,10 +1312,11 @@ hu:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Versenyeim
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Csak azok a versenyek jelennek meg itt, melyek a WCA regisztrációs
-        rendszerét használnak.
+        rendszerét használnak. Ha a versenyed nem szerepel a listában, akkor
+        keresd fel a verseny honlapját.
       #original_hash: 94a2fc8
       past_competitions: Korábbi versenyek
     competition_info:
@@ -1362,14 +1363,20 @@ hu:
       region: Régió
       #original_hash: bce0641
       search: Keresés
-      #original_hash: a725020
-      state: Státusz
+      #original_hash: 769bb19
+      state: Amikor
       #original_hash: 4e9f7a3
       present: Jelenlegi
       #original_hash: 76eec76
       recent: Korábbi
       #original_hash: 405c12f
       past: Régebbi
+      #original_hash: 081ae3f
+      custom: Egyedi
+      #original_hash: 3f66052
+      from_date: From
+      #original_hash: ae79ea1
+      to_date: To
       #original_hash: 52c30f8
       past_from: 'Régebbi, %{year} évből'
       #original_hash: 7cff459
@@ -1385,6 +1392,8 @@ hu:
         recent: 'Korábbi versenyek (elmúlt %{count} nap)'
         #original_hash: 914742f
         upcoming: Jövőbeli versenyek
+        #original_hash: 8b57693
+        custom: Versenyek a kiválasztott időintervallumban
       #original_hash: 6684214
       no_access: Nincs hozzáférésed ehhez az oldalhoz!
       tooltips:
