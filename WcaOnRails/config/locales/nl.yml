@@ -1346,14 +1346,20 @@ nl:
       region: Regio
       #original_hash: bce0641
       search: Zoeken
-      #original_hash: a725020
-      state: Status
+      #original_hash: 769bb19
+      state: Wanneer
       #original_hash: 4e9f7a3
       present: Huidige
       #original_hash: 76eec76
       recent: Recente
       #original_hash: 405c12f
       past: Verleden
+      #original_hash: 081ae3f
+      custom: Maatwerk
+      #original_hash: 3f66052
+      from_date: Vanaf
+      #original_hash: ae79ea1
+      to_date: Tot
       #original_hash: 52c30f8
       past_from: 'Afgelopen wedstrijd van %{year}'
       #original_hash: 7cff459
@@ -1369,6 +1375,8 @@ nl:
         recent: 'Recente wedstrijden (laatste %{count} dagen)'
         #original_hash: 914742f
         upcoming: Aankomende wedstrijden
+        #original_hash: 8b57693
+        custom: Wedstrijden in de geselecteerde tijdsperiode
       #original_hash: 6684214
       no_access: Je hebt geen toegang tot deze pagina!
       tooltips:
