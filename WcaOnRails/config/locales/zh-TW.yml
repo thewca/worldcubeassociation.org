@@ -160,8 +160,6 @@ zh-TW:
     these_events:
       zero: 這個項目
       other: '這%{count}個項目'
-    #original_hash: 1301886
-    last_updated_html: '最後更新%{last_updated}'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -446,6 +444,8 @@ zh-TW:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: 這場比賽的基礎報名費。如果有使用WCA報名系統，基礎報名費將會被顯示在比賽資訊頁面以及報名頁面。
         #original_hash: 866bc05
         currency_code: 基礎報名費的貨幣代碼。
         #original_hash: da39a3e
@@ -1058,9 +1058,9 @@ zh-TW:
     #original_hash: cfc4865
     delete_registration: 取消報名。
     #original_hash: e9ddc6e
-    will_open_html: '報名將在<strong>%{days}</strong>的%{time}開始。'
+    will_open_html: '報名將在<strong>%{days}</strong>後的%{time}開始。'
     #original_hash: 34eb009
-    will_close_html: '報名將在<strong>%{days}</strong>的%{time}截止。'
+    will_close_html: '報名將在<strong>%{days}</strong>後的%{time}截止。'
     #original_hash: dc8a520
     closed_html: '報名在 <strong>%{days}</strong>天前的%{time}已經截止。'
     #original_hash: 2e7024d
@@ -1077,8 +1077,8 @@ zh-TW:
     can_register: '您可以在底下報名%{comp}。'
     #original_hash: 4167ed7
     check_registration_information: 請檢查報名資訊以確認您是否需要完成其他事項，例如支付報名費。
-    #original_hash: ea2b586
-    have_registered: '您已經報名了%{comp}。您可以在底下看到您的報名資料。'
+    #original_hash: 88ac7c3
+    have_registered: '您已經提交%{comp}的報名了。您可以在底下看到您的報名資料。'
     #original_hash: 3c9141f
     contact_organizer: 如果您想更改內容的話，請聯絡主辦人。
     #original_hash: 59354fd
@@ -1148,8 +1148,8 @@ zh-TW:
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我參加過的比賽
-      #original_hash: 6e79aaf
-      disclaimer: 只有使用過WCA報名系統的比賽才會顯示在這。
+      #original_hash: 1fa5a4b
+      disclaimer: 只有使用WCA報名系統的比賽才會顯示在這。如果您的比賽沒有顯示在此，請檢查比賽網站的參賽者名單。
       #original_hash: 94a2fc8
       past_competitions: 過去的比賽
     competition_info:
@@ -1196,7 +1196,7 @@ zh-TW:
       region: 地區
       #original_hash: bce0641
       search: 搜尋
-      #original_hash: a725020
+      #original_hash: 769bb19
       state: 時間
       #original_hash: 4e9f7a3
       present: 近期
@@ -1204,6 +1204,12 @@ zh-TW:
       recent: 剛結束
       #original_hash: 405c12f
       past: 過去
+      #original_hash: 081ae3f
+      custom: 自訂
+      #original_hash: 3f66052
+      from_date: 從
+      #original_hash: ae79ea1
+      to_date: 到
       #original_hash: 52c30f8
       past_from: '過去%{year}年'
       #original_hash: 7cff459
@@ -1219,6 +1225,8 @@ zh-TW:
         recent: '剛結束的比賽(過去%{count}天)'
         #original_hash: 914742f
         upcoming: 即將舉行的比賽
+        #original_hash: 8b57693
+        custom: 選取時間內的比賽
       #original_hash: 6684214
       no_access: 您沒有此網頁的權限!
       tooltips:
@@ -1758,7 +1766,7 @@ zh-TW:
     header: 在向WCA遞出成績之前，如何處理成績和轉亂步驟
     step1:
       #original_hash: c0450b1
-      title: '步驟一: 打開成績小幫手'
+      title: '步驟一 : 打開成績小幫手'
       #original_hash: 656d70d
       content_html: 按下<em>Open...</em>按鈕打開成績小幫手或著直接拖曳成績檔案到成績小幫手視窗。
     step2:
