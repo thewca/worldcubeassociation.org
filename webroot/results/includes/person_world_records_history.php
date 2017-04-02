@@ -13,18 +13,18 @@ function showHistoryOfWorldRecords () {
       event.format         valueFormat,
       event.cellName       eventCellName,
       competition.cellName competitionCellName,
-      round.cellName       roundCellName
+      roundType.cellName roundCellName
     FROM
       Results      result,
       Competitions competition,
       Events       event,
-      Rounds       round
+      RoundTypes   roundType
     WHERE " . randomDebug() . "
       AND result.personId = '$chosenPersonId'
       AND (result.regionalSingleRecord='WR' OR result.regionalAverageRecord='WR')
       AND event.id = result.eventId
       AND competition.id = result.competitionId
-      AND round.id = result.roundId
+      AND roundType.id = result.roundId
       AND event.rank < 1000
     ORDER BY
       event.rank, year DESC, month DESC, day DESC, roundId DESC

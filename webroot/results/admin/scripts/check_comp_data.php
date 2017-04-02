@@ -56,7 +56,7 @@ $results_view = $wcadb_conn->boundQuery(
         e.cellName as eventCellName
     FROM InboxResults AS r
       LEFT JOIN Events AS e ON e.id = r.eventId
-      LEFT JOIN Rounds AS d ON d.id = r.roundId
+      LEFT JOIN RoundTypes AS d ON d.id = r.roundId
       LEFT JOIN InboxPersons AS p ON p.id = r.personId
     WHERE r.competitionId = ?
     AND r.pos >= 1
@@ -169,7 +169,7 @@ $checks_table = $wcadb_conn->boundQuery(
         ON (s.eventId=r.eventId AND s.roundId=r.roundId)
     ) AS c
     LEFT JOIN Events as e ON e.id=c.event
-    LEFT JOIN Rounds as d ON d.id=c.round
+    LEFT JOIN RoundTypes as d ON d.id=c.round
     ORDER BY e.rank, d.rank",  // no full outer joins in mysql?!
     array('ssss', &$compId, &$compId, &$compId, &$compId)
   );

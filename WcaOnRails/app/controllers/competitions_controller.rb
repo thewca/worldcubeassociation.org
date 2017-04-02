@@ -235,8 +235,8 @@ class CompetitionsController < ApplicationController
                 uniqueName = personName
               end
               record_strs = results.sort_by do |r|
-                round = Round.c_find(r.roundId)
-                [Event.c_find(r.eventId).rank, round.rank]
+                round_type = RoundType.c_find(r.roundId)
+                [Event.c_find(r.eventId).rank, round_type.rank]
               end.map do |result|
                 event = Event.c_find(result.eventId)
                 record_strs = []

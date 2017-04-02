@@ -359,17 +359,17 @@ CREATE TABLE `Results` (
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`),
   KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=863293 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=1448123 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Rounds`
+-- Table structure for table `RoundTypes`
 --
 
-DROP TABLE IF EXISTS `Rounds`;
+DROP TABLE IF EXISTS `RoundTypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Rounds` (
+CREATE TABLE `RoundTypes` (
   `id` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `rank` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -1111,6 +1111,7 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170215221832'),
 ('20170223153915'),
 ('20170228140556'),
-('20170320222511');
+('20170320222511'),
+('20170402223714');
 
 

@@ -690,7 +690,7 @@ class Competition < ApplicationRecord
     ActiveRecord::Base.connection
                       .execute(relation.to_sql)
                       .each(as: :hash).map { |r|
-                        LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), Round.c_find(r["roundId"]), Event.c_find(r["eventId"]))
+                        LightResult.new(r, Country.c_find(r["countryId"]), Format.c_find(r["formatId"]), RoundType.c_find(r["roundId"]), Event.c_find(r["eventId"]))
                       }
   end
 

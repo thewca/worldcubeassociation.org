@@ -1,6 +1,6 @@
 <?php
 
-# TODO: order by Rounds.rank instead of roundId?
+# TODO: order by RoundTypes.rank instead of roundId?
 # TODO idea: If single and average in same round by same person, show them on same row?
 # TODO idea: show round? Maybe as number like "Competition (round)"?
 

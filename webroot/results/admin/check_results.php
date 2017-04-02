@@ -104,7 +104,7 @@ function checkIndividually () {
   $competitionIdSet = array_flip( getAllIDs( dbQuery( "SELECT id FROM Competitions" )));
   $eventIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Events" )));
   $formatIdSet      = array_flip( getAllIDs( dbQuery( "SELECT id FROM Formats" )));
-  $roundIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Rounds" )));
+  $roundIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM RoundTypes" )));
 
   #--- Process the results.
   $badIds = array();

@@ -44,12 +44,12 @@ function showResults () {
       event.name           eventName,
       competition.cellName competitionCellName,
       event.format         valueFormat,
-      round.cellName       roundCellName
+      roundType.cellName   roundCellName
     FROM
       Results result,
       Events  event,
       Competitions competition,
-      Rounds round
+      RoundTypes roundType
     WHERE ".randomDebug()."
       AND result.personName = '$chosenNameMysql'
       AND result.countryId  = '$chosenCountryIdMysql'
@@ -57,9 +57,9 @@ function showResults () {
       AND event.id = eventId
       AND event.rank < 990
       AND competition.id = competitionId
-      AND round.id = roundId
+      AND roundType.id = roundId
     ORDER BY
-      event.rank, year DESC, month DESC, day DESC, competitionCellName, round.rank DESC
+      event.rank, year DESC, month DESC, day DESC, competitionCellName, roundType.rank DESC
   ");
 
   tableBegin( 'results', 8 );

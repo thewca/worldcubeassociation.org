@@ -21,7 +21,7 @@ if( $chosenExport ){
                        FROM     Results',
     'RanksSingle'  => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksSingle',
     'RanksAverage' => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksAverage',
-    'Rounds'       => '*',
+    'RoundTypes'   => '*',
     'Events'       => '*',
     'Formats'      => '*',
     # This should be set back to '*' after https://github.com/thewca/wca-workbook-assistant/pull/115

@@ -60,14 +60,14 @@ function checkRounds () {
   $roundRows = dbQuery("
     SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundId, round.cellName, result.formatId,
              CASE result.formatId WHEN '2' THEN BIT_AND( IF( result.value2,1,0)) WHEN '3' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'm' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'a' THEN BIT_AND( IF( result.value5 <> 0,1,0)) ELSE 1 END isNotCombined
-    FROM     Results result, Competitions competition, Rounds round
+    FROM     Results result, Competitions competition, RoundTypes roundType
     WHERE    competition.id = competitionId
       $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
       AND    result.roundId <> 'b'
-      AND    result.roundId = round.id
+      AND    result.roundId = roundType.id
     GROUP BY competitionId, eventId, roundId
-    ORDER BY year desc, month desc, day desc, competitionId, eventId, round.rank
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundType.rank
   ");
 
   #--- Get the number of competitors per event
@@ -474,13 +474,13 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
   #--- Get rounds of the event
   $roundRows = dbQuery("
     SELECT   roundId, round.cellName
-    FROM     Results result, Rounds round
+    FROM     Results result, RoundTypes roundType
     WHERE    result.competitionId = '$competitionId'
       AND    result.eventId = '$eventId'
-      AND    result.roundId = round.id
+      AND    result.roundId = roundType.id
       AND    result.roundId <> 'b'
     GROUP BY competitionId, eventId, roundId
-    ORDER BY round.rank
+    ORDER BY roundType.rank
   ");
 
   tableBegin( 'results', 3 );
@@ -547,7 +547,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
     FROM
       Results      result,
       Events       event,
-      Rounds       round,
+      RoundTypes   roundType,
       Formats      format,
       Countries    country,
       Competitions competition

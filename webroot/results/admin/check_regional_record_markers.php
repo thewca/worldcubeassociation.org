@@ -196,15 +196,15 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       Countries    country,
       Continents   continent,
       Events       event,
-      Rounds       round
+      RoundTypes   roundType
     WHERE 1
       AND result.id      = relevantIds.id
       AND competition.id = result.competitionId
-      AND round.id       = result.roundId
+      AND roundType.id   = result.roundId
       AND country.id     = result.countryId
       AND continent.id   = country.continentId
       AND event.id       = result.eventId
-    ORDER BY event.rank, startDate, competitionId, round.rank, $valueId
+    ORDER BY event.rank, startDate, competitionId, roundType.rank, $valueId
   ");
 
   #--- For displaying the dates, fetch all competitions

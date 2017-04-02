@@ -13,20 +13,20 @@ function showResultsByEvents () {
       event.name           eventName,
       competition.cellName competitionCellName,
       event.format         valueFormat,
-      round.cellName       roundCellName
+      roundType.cellName       roundCellName
     FROM
       Results result,
       Events  event,
       Competitions competition,
-      Rounds round
+      RoundTypes roundType
     WHERE ".randomDebug()."
       AND personId = '$chosenPersonId'
       AND event.id = eventId
       AND event.rank < 1000
       AND competition.id = competitionId
-      AND round.id = roundId
+      AND roundType.id = roundId
     ORDER BY
-      event.rank, year DESC, month DESC, day DESC, competitionCellName, round.rank DESC
+      event.rank, year DESC, month DESC, day DESC, competitionCellName, roundType.rank DESC
   ");
 
   tableBegin( 'results', 8 );

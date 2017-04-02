@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class Round < ApplicationRecord
+class RoundType < ApplicationRecord
   include Cachable
-  self.table_name = "Rounds"
+  self.table_name = "RoundTypes"
 
   has_many :results, foreign_key: :roundId
 

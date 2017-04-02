@@ -179,10 +179,10 @@ if (getFix()) { // fix data
 
     if (!$roundId) {
         $result = pdo_query(
-            'SELECT Rounds.id, Rounds.name FROM '.
+            'SELECT RoundTypes.id, RoundTypes.name FROM '.
             '(SELECT DISTINCT roundId FROM Results WHERE competitionId=? AND eventId=? AND personId=?) AS t '.
-            'JOIN Rounds ON Rounds.id=t.roundId '.
-            'ORDER BY Rounds.rank',
+            'JOIN RoundTypes ON RoundTypes.id=t.roundId '.
+            'ORDER BY RoundTypes.rank',
             array($defaultCompetition,$defaultEvent,$personId)
         );
         if (!count($result)) error('Event without rounds (!?)');

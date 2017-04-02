@@ -548,13 +548,13 @@ RSpec.describe Competition do
       results = competition.events_with_rounds_with_results
       expect(results.size).to eq 2
       expect(results[0].first).to eq three_by_three
-      expect(results[0].second.first.first).to eq Round.find("1")
+      expect(results[0].second.first.first).to eq RoundType.find("1")
       expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 4
       expect(results[0].second.first.last.map(&:eventId)).to eq ["333"] * 4
       expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 3
 
       expect(results[1].first).to eq two_by_two
-      expect(results[1].second.first.first).to eq Round.find("c")
+      expect(results[1].second.first.first).to eq RoundType.find("c")
       expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
 
       # Orders results which tied by person name.

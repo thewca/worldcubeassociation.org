@@ -7,12 +7,12 @@ class Result < ApplicationRecord
   belongs_to :competition, foreign_key: :competitionId
   belongs_to :country, foreign_key: :countryId
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
-  belongs_to :round, foreign_key: :roundId
+  belongs_to :round_type, foreign_key: :roundId
   belongs_to :event, foreign_key: :eventId
   belongs_to :format, foreign_key: :formatId
 
-  scope :podium, -> { joins(:round).merge(Round.final_rounds).where(pos: [1..3]).where("best > 0") }
-  scope :winners, -> { joins(:round, :event).merge(Round.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
+  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0") }
+  scope :winners, -> { joins(:round_type, :event).merge(RoundType.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
 
   validate :validate_each_solve
   def validate_each_solve
@@ -26,13 +26,13 @@ class Result < ApplicationRecord
   validates :competition, presence: true
   validates :country, presence: true
   validates :event, presence: true
-  validates :round, presence: true
+  validates :round_type, presence: true
   validates :format, presence: true
 
   validate :validate_solve_count
   def validate_solve_count
-    # We need to know the round and the format in order to validate the number of solves.
-    if round && format
+    # We need to know the round_type and the format in order to validate the number of solves.
+    if round_type && format
       errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
   end
@@ -53,7 +53,7 @@ class Result < ApplicationRecord
 
   def invalid_solve_count_reason
     return "Invalid format" unless format
-    return "Invalid round" unless round
+    return "Invalid round_type" unless round_type
     return "Cannot skip all solves." if solve_times.all?(&:skipped?)
 
     unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
@@ -61,7 +61,7 @@ class Result < ApplicationRecord
     end
 
     unskipped_count = solve_times.count(&:unskipped?)
-    if round.combined?
+    if round_type.combined?
       if unskipped_count > format.expected_solve_count
         return "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
       end
