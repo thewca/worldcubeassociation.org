@@ -27,4 +27,13 @@ module RegistrationsHelper
                sign_in: link_to(sign_in, competition_register_require_sign_in_path(comp)),
                here: link_to(here, new_user_registration_path, target: "_blank")))
   end
+
+  def registration_date_and_tooltip(competition, registration)
+    if @competition.using_stripe_payments?
+      [registration.last_payment_date&.to_date || I18n.t('registrations.list.not_paid'),
+       I18n.t('registrations.list.payment_requested_on', date: registration.created_at)]
+    else
+      [registration.created_at.to_date, registration.created_at]
+    end
+  end
 end

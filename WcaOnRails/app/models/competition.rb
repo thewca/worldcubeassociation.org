@@ -444,7 +444,7 @@ class Competition < ApplicationRecord
   end
 
   def using_stripe_payments?
-    connected_stripe_account_id
+    connected_stripe_account_id && has_entry_fee?
   end
 
   def can_edit_registration_fees?

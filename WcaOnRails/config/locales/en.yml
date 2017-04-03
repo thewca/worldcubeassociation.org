@@ -659,7 +659,12 @@ en:
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
       deleted_registrations: "Deleted registrations"
-      registered: "Registered"
+      not_paid: "Not paid"
+      registered:
+        without_stripe: "Registered on"
+        with_stripe: "Paid on"
+      #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
+      payment_requested_on: "Payment requested on: %{date}"
       total: "Total"
     new_registration:
       title: "Register for %{comp}"

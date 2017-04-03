@@ -36,3 +36,19 @@ onPage('registrations#index', function() {
   // This makes the interface resemble the order.
   $('.name .sortable').addClass('asc');
 });
+
+function comparePaymentDate(a, b) {
+  var elemA = $(a);
+  var elemB = $(b);
+  var paidA = elemA.data("paidDate");
+  var paidB = elemB.data("paidDate");
+  if (paidA !== "" && paidB !== "") {
+    // Both have paid, compare their last payment dates
+    return paidA.localeCompare(paidB);
+  } else if (paidA === "" && paidB === "") {
+    // None have paid, compare their registration dates
+    return elemA.data("registeredAt").localeCompare(elemB.data("registeredAt"));
+  } else {
+    return paidA === "" ? 1 : -1;
+  }
+}
