@@ -7,7 +7,7 @@ class Result < ApplicationRecord
   belongs_to :competition, foreign_key: :competitionId
   belongs_to :country, foreign_key: :countryId
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
-  belongs_to :round_type, foreign_key: :roundId
+  belongs_to :round_type, foreign_key: :roundTypeId
   belongs_to :event, foreign_key: :eventId
   belongs_to :format, foreign_key: :formatId
 

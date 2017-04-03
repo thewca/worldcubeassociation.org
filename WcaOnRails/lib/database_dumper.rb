@@ -240,7 +240,7 @@ module DatabaseDumper
           pos
           regionalAverageRecord
           regionalSingleRecord
-          roundId
+          roundTypeId
           updated_at
           value1
           value2
@@ -270,7 +270,7 @@ module DatabaseDumper
           eventId
           groupId
           isExtra
-          roundId
+          roundTypeId
           scramble
           scrambleId
           scrambleNum

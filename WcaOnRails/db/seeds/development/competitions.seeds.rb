@@ -53,7 +53,7 @@ after "development:users" do
     competition.save!
 
     competition.events.each do |event|
-      %w(1 2 f).each do |roundId|
+      %w(1 2 f).each do |roundTypeId|
         users.each_with_index do |competitor, j|
           person = competitor.person
           result = Result.new(
@@ -63,7 +63,7 @@ after "development:users" do
             countryId: person.countryId,
             competitionId: competition.id,
             eventId: event.id,
-            roundId: roundId,
+            roundTypeId: roundTypeId,
             formatId: "a",
             value1: random_wca_value,
             value2: random_wca_value,

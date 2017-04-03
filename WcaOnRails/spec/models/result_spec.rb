@@ -28,8 +28,8 @@ RSpec.describe Result do
       expect(result).to be_invalid
     end
 
-    it "validates roundId" do
-      result = FactoryGirl.build :result, roundId: "foo"
+    it "validates roundTypeId" do
+      result = FactoryGirl.build :result, roundTypeId: "foo"
       expect(result).to be_invalid
     end
 
@@ -76,10 +76,10 @@ RSpec.describe Result do
         let(:formatId) { "a" }
 
         context "combined round" do
-          let(:roundId) { "c" }
+          let(:roundTypeId) { "c" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
             expect(result).to be_valid
 
             result.average = 33
@@ -89,7 +89,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
             expect(result.average_is_not_computable_reason).to eq nil
             expect(result.compute_correct_average).to eq 0
             expect(result).to be_invalid
@@ -98,10 +98,10 @@ RSpec.describe Result do
         end
 
         context "uncombined round" do
-          let(:roundId) { "1" }
+          let(:roundTypeId) { "1" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
             expect(result).to be_valid
 
             result.average = 33
@@ -111,7 +111,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
             expect(result.average_is_not_computable_reason).to be_truthy
           end
         end
@@ -121,10 +121,10 @@ RSpec.describe Result do
         let(:formatId) { "m" }
 
         context "combined round" do
-          let(:roundId) { "c" }
+          let(:roundTypeId) { "c" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
             expect(result).to be_valid
 
             result.average = 33
@@ -134,7 +134,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
             expect(result).to be_valid
 
             result.average = 33
@@ -144,7 +144,7 @@ RSpec.describe Result do
           end
 
           it "too many solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
             expect(result.average_is_not_computable_reason).to be_truthy
             expect(result).to be_invalid
             expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 5."]
@@ -152,10 +152,10 @@ RSpec.describe Result do
         end
 
         context "uncombined round" do
-          let(:roundId) { "1" }
+          let(:roundTypeId) { "1" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
             expect(result).to be_valid
 
             result.average = 33
@@ -165,14 +165,14 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
             expect(result.average_is_not_computable_reason).to be_truthy
             expect(result).to be_invalid
             expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 1."]
           end
 
           it "too many solves" do
-            result = FactoryGirl.build :result, roundId: roundId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
+            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
             expect(result.average_is_not_computable_reason).to be_truthy
             expect(result).to be_invalid
             expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 5."]
@@ -202,31 +202,31 @@ RSpec.describe Result do
 
       context "non-combined rounds" do
         it "format 1" do
-          result = result_with_n_solves(2, roundId: "1", formatId: "1")
+          result = result_with_n_solves(2, roundTypeId: "1", formatId: "1")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected 1 solve, but found 2."]
         end
 
         it "format 2" do
-          result = result_with_n_solves(3, roundId: "1", formatId: "2")
+          result = result_with_n_solves(3, roundTypeId: "1", formatId: "2")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected 2 solves, but found 3."]
         end
 
         it "format 3" do
-          result = result_with_n_solves(2, roundId: "1", formatId: "3")
+          result = result_with_n_solves(2, roundTypeId: "1", formatId: "3")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 2."]
         end
 
         it "format m" do
-          result = result_with_n_solves(2, roundId: "1", formatId: "m")
+          result = result_with_n_solves(2, roundTypeId: "1", formatId: "m")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 2."]
         end
 
         it "format a" do
-          result = result_with_n_solves(2, roundId: "1", formatId: "a")
+          result = result_with_n_solves(2, roundTypeId: "1", formatId: "a")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected 5 solves, but found 2."]
         end
@@ -234,19 +234,19 @@ RSpec.describe Result do
 
       context "combined rounds" do
         it "format 2" do
-          result = result_with_n_solves(3, roundId: "c", formatId: "2")
+          result = result_with_n_solves(3, roundTypeId: "c", formatId: "2")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected at most 2 solves, but found 3."]
         end
 
         it "format 3" do
-          result = result_with_n_solves(4, roundId: "c", formatId: "3")
+          result = result_with_n_solves(4, roundTypeId: "c", formatId: "3")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 4."]
         end
 
         it "format m" do
-          result = result_with_n_solves(4, roundId: "c", formatId: "m")
+          result = result_with_n_solves(4, roundTypeId: "c", formatId: "m")
           expect(result).to be_invalid
           expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 4."]
         end

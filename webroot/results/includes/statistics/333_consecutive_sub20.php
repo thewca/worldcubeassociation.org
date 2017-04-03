@@ -12,7 +12,7 @@ function add_333_consecutive_sub20 () {
     $WHERE 1
       AND eventId = '333'
       AND competition.id = competitionId
-    ORDER BY personId, year, month, day, roundId
+    ORDER BY personId, year, month, day, roundTypeId
   ");
   
   foreach( structureBy( $results, 'personId' ) as $personResults ){

@@ -57,7 +57,7 @@ function showResults () {
       AND event.id = eventId
       AND event.rank < 990
       AND competition.id = competitionId
-      AND roundType.id = roundId
+      AND roundType.id = roundTypeId
     ORDER BY
       event.rank, year DESC, month DESC, day DESC, competitionCellName, roundType.rank DESC
   ");

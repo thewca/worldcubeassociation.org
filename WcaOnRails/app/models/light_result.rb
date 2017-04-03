@@ -49,7 +49,7 @@ class LightResult
     event.id
   end
 
-  def roundId
+  def roundTypeId
     round.id
   end
 end

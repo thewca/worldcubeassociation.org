@@ -237,7 +237,7 @@ CREATE TABLE `InboxResults` (
   `pos` smallint(6) NOT NULL DEFAULT '0',
   `competitionId` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `eventId` varchar(6) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `roundId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `roundTypeId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `formatId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `value1` int(11) NOT NULL DEFAULT '0',
   `value2` int(11) NOT NULL DEFAULT '0',
@@ -249,7 +249,7 @@ CREATE TABLE `InboxResults` (
   KEY `InboxResults_fk_tournament` (`competitionId`),
   KEY `InboxResults_fk_event` (`eventId`),
   KEY `InboxResults_fk_format` (`formatId`),
-  KEY `InboxResults_fk_round` (`roundId`)
+  KEY `InboxResults_fk_round` (`roundTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=0;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -336,7 +336,7 @@ CREATE TABLE `Results` (
   `countryId` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `competitionId` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `eventId` varchar(6) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `roundId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `roundTypeId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `formatId` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `value1` int(11) NOT NULL DEFAULT '0',
   `value2` int(11) NOT NULL DEFAULT '0',
@@ -352,11 +352,11 @@ CREATE TABLE `Results` (
   KEY `Results_fk_tournament` (`competitionId`),
   KEY `Results_fk_event` (`eventId`),
   KEY `Results_fk_format` (`formatId`),
-  KEY `Results_fk_round` (`roundId`),
+  KEY `Results_fk_round` (`roundTypeId`),
   KEY `Results_eventAndAverage` (`eventId`,`average`),
   KEY `Results_eventAndBest` (`eventId`,`best`),
-  KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`average`),
-  KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundId`,`countryId`,`best`),
+  KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundTypeId`,`countryId`,`average`),
+  KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundTypeId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`),
   KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1448123 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci PACK_KEYS=1;
@@ -390,7 +390,7 @@ CREATE TABLE `Scrambles` (
   `scrambleId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `competitionId` varchar(32) COLLATE utf8_unicode_ci NOT NULL COMMENT 'matches Competitions.id',
   `eventId` varchar(6) COLLATE utf8_unicode_ci NOT NULL COMMENT 'matches Events.id',
-  `roundId` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'matches Rounds.id',
+  `roundTypeId` char(1) COLLATE utf8_unicode_ci NOT NULL,
   `groupId` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT 'from A to ZZZ',
   `isExtra` tinyint(1) NOT NULL,
   `scrambleNum` int(11) NOT NULL,

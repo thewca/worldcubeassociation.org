@@ -128,8 +128,8 @@ function moveOldMulti () {
 
     if( $oneGood ){
       extract( $result );
-      dbCommand(" INSERT INTO Results (pos, personId, personName, countryId, competitionId, eventId, roundId, formatId, value1, value2, value3, value4, value5, best, average, regionalSingleRecord, regionalAverageRecord)
-                  VALUES ('$pos', '$personId', '$personName', '$countryId', '$competitionId', '333mbf', '$roundId', '$formatId', '$values[1]', '$values[2]', '$values[3]', '0', '0', '$theBest', '$average', '$regionalSingleRecord', '$regionalAverageRecord')" );
+      dbCommand(" INSERT INTO Results (pos, personId, personName, countryId, competitionId, eventId, roundTypeId, formatId, value1, value2, value3, value4, value5, best, average, regionalSingleRecord, regionalAverageRecord)
+                  VALUES ('$pos', '$personId', '$personName', '$countryId', '$competitionId', '333mbf', '$roundTypeId', '$formatId', '$values[1]', '$values[2]', '$values[3]', '0', '0', '$theBest', '$average', '$regionalSingleRecord', '$regionalAverageRecord')" );
     }
 
   }

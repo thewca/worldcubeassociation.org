@@ -155,12 +155,12 @@ if($form->submitted()) {
 
       // cycle through rounds
       foreach ($event->rounds as $round) {
-        $roundId = property_exists($round, 'roundId') ? ($round->roundId) : false;
+        $roundTypeId = property_exists($round, 'roundTypeId') ? ($round->roundTypeId) : false;
         $formatId = property_exists($round, 'formatId') ? ($round->formatId) : false;
 
         // check to make sure results exist for round
         if(!property_exists($round, 'results')) {
-          $round_errors[] = "Round has no result data: `".o($eventId)."`:`".o($roundId)."`.";
+          $round_errors[] = "Round has no result data: `".o($eventId)."`:`".o($roundTypeId)."`.";
           $round->results = array();
         }
 
@@ -179,13 +179,13 @@ if($form->submitted()) {
           $average = property_exists($result, 'average') ? ($result->average) : false;
 
           // all values are required; results can be '0' though
-          if($eventId !== false && $roundId !== false && $formatId !== false && $personId !== false && $position !== false && $results !== false && $best !== false && $average !== false) {
+          if($eventId !== false && $roundTypeId !== false && $formatId !== false && $personId !== false && $position !== false && $results !== false && $best !== false && $average !== false) {
             // submit data
             $wcadb_conn->boundCommand("INSERT INTO InboxResults
-                    (competitionId, eventId, roundId, formatId, personId,
+                    (competitionId, eventId, roundTypeId, formatId, personId,
                       pos, value1, value2, value3, value4, value5, best, average)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                  array('sssssiiiiiiii', &$compId, &$eventId, &$roundId, &$formatId, &$personId,
+                  array('sssssiiiiiiii', &$compId, &$eventId, &$roundTypeId, &$formatId, &$personId,
                     &$position, &$value1, &$value2, &$value3, &$value4, &$value5, &$best, &$average)
                 );
           } else {
@@ -197,7 +197,7 @@ if($form->submitted()) {
 
         // check to make sure groups exist for round
         if(!property_exists($round, 'groups')) {
-          $round_errors[] = "Round has no group/scramble data: `".o($roundId)."`.";
+          $round_errors[] = "Round has no group/scramble data: `".o($roundTypeId)."`.";
           $round->groups = array();
         }
 
@@ -207,15 +207,15 @@ if($form->submitted()) {
 
           // Store normal scrambles
           if(!property_exists($group, 'scrambles')) {
-            $round_errors[] = "Group has no scramble data: `".o($eventId)."`:`".o($roundId)."`:`".o($groupId)."`.";
+            $round_errors[] = "Group has no scramble data: `".o($eventId)."`:`".o($roundTypeId)."`:`".o($groupId)."`.";
             $group->scrambles = array();
           }
           $num = 1;
           foreach($group->scrambles as $scramble) {
             $wcadb_conn->boundCommand("INSERT INTO Scrambles
-                  (competitionId, eventId, roundId, groupId, isExtra, scrambleNum, scramble)
+                  (competitionId, eventId, roundTypeId, groupId, isExtra, scrambleNum, scramble)
                   VALUES (?, ?, ?, ?, 0, ?, ?)",
-                array('ssssis', &$compId, &$eventId, &$roundId, &$groupId, &$num, &$scramble)
+                array('ssssis', &$compId, &$eventId, &$roundTypeId, &$groupId, &$num, &$scramble)
               );
             $num++;
           }
@@ -226,9 +226,9 @@ if($form->submitted()) {
             $num = 1;
             foreach($group->extraScrambles as $scramble) {
               $wcadb_conn->boundCommand("INSERT INTO Scrambles
-                    (competitionId, eventId, roundId, groupId, isExtra, scrambleNum, scramble)
+                    (competitionId, eventId, roundTypeId, groupId, isExtra, scrambleNum, scramble)
                     VALUES (?, ?, ?, ?, 1, ?, ?)",
-                  array('ssssis', &$compId, &$eventId, &$roundId, &$groupId, &$num, &$scramble)
+                  array('ssssis', &$compId, &$eventId, &$roundTypeId, &$groupId, &$num, &$scramble)
                 );
               $num++;
             }

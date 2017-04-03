@@ -12,7 +12,7 @@ FactoryGirl.define do
     competitionId { competition.id }
     pos 1
     eventId "333oh"
-    roundId "f"
+    roundTypeId "f"
     formatId "a"
     value1 3000
     value2 4000

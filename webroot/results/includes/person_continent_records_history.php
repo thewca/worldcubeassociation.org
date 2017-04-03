@@ -25,9 +25,9 @@ function showHistoryOfContinentalRecords () {
       AND event.id = result.eventId
       AND event.rank < 1000
       AND competition.id = result.competitionId
-      AND roundType.id = result.roundId
+      AND roundType.id = result.roundTypeId
     ORDER BY
-      event.rank, year DESC, month DESC, day DESC, roundId DESC
+      event.rank, year DESC, month DESC, day DESC, roundTypeId DESC
   ");
 
   if( ! count( $results ))

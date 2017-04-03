@@ -51,7 +51,7 @@ function showDescription () {
 
   echo "<li><p>Find persons in <strong>Results</strong> who have ids but who don't appear in <strong>Persons</strong>. Can be caused by organizers telling you incorrect persons. I show similar persons from <strong>Persons</strong> and offer you to adopt their data. Can also be caused by a person really changing name or countryId, in this case please add this person to the <strong>Persons</strong> table with new subId.</p></li>\n";
   
-  echo "<li><p>Find persons in <strong>Results</strong> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundIds are wrong. <b>Warning:</b> Currently this is only checks the last three months, to prevent a timeout problem.</p></li>\n";
+  echo "<li><p>Find persons in <strong>Results</strong> that appear more than once in the same round, event and competition. This is the most easily detected case of where an organizer should've added numbers to otherwise equal persons but didn't. Or for example when like in CaltechWinter2007, the roundTypeIds are wrong. <b>Warning:</b> Currently this is only checks the last three months, to prevent a timeout problem.</p></li>\n";
   
   echo "</ul>";
   
@@ -243,27 +243,27 @@ function checkDuplicatesInCompetition () {
   $dateCondition = "AND (year*10000+month*100+day >= CURDATE() - INTERVAL 3 MONTH)";
 
   $duplicates = dbQuery("
-    SELECT personId, personName, Results.countryId, competitionId, eventId, roundId, count(*) AS occurances
+    SELECT personId, personName, Results.countryId, competitionId, eventId, roundTypeId, count(*) AS occurances
     FROM Results INNER JOIN Competitions WHERE Competitions.id = competitionId $dateCondition
-    GROUP BY competitionId, personId, eventId, roundId, personName, countryId
+    GROUP BY competitionId, personId, eventId, roundTypeId, personName, countryId
     HAVING occurances > 1
   ");
   
   #--- If all OK, say so and return.
   if( ! $duplicates ){
-    echo "<p style='color:#6C6'><strong>OK!</strong> There are no personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <strong>Results</strong>.</p>";
+    echo "<p style='color:#6C6'><strong>OK!</strong> There are no personId/personName/countryId/competitionId/eventId/roundTypeIdAll duplicates in <strong>Results</strong>.</p>";
     return;
   }
 
   #--- Otherwise, show the errors
-  echo "<p style='color:#F00'><strong>BAD!</strong> There are personId/personName/countryId/competitionId/eventId/roundIdAll duplicates in <strong>Results</strong>.</p>";
+  echo "<p style='color:#F00'><strong>BAD!</strong> There are personId/personName/countryId/competitionId/eventId/roundTypeIdAll duplicates in <strong>Results</strong>.</p>";
   tableBegin( 'results', 7 );
-  tableHeader( explode( '|', 'personId|personName|countryId|competitionId|eventId|roundId|#Occurances' ),
+  tableHeader( explode( '|', 'personId|personName|countryId|competitionId|eventId|roundTypeId|#Occurances' ),
                array( 6=>'class="f"' ));
   foreach( $duplicates as $duplicate ){
     extract( $duplicate );
     tableRow( visualize( array(
-      $personId, $personName, $countryId, $competitionId, $eventId, $roundId, $occurances
+      $personId, $personName, $countryId, $competitionId, $eventId, $roundTypeId, $occurances
     )));
   }
   tableEnd();

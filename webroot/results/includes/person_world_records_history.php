@@ -24,10 +24,10 @@ function showHistoryOfWorldRecords () {
       AND (result.regionalSingleRecord='WR' OR result.regionalAverageRecord='WR')
       AND event.id = result.eventId
       AND competition.id = result.competitionId
-      AND roundType.id = result.roundId
+      AND roundType.id = result.roundTypeId
       AND event.rank < 1000
     ORDER BY
-      event.rank, year DESC, month DESC, day DESC, roundId DESC
+      event.rank, year DESC, month DESC, day DESC, roundTypeId DESC
   ");
 
   if( ! count( $results ))

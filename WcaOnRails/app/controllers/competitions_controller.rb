@@ -191,7 +191,7 @@ class CompetitionsController < ApplicationController
         return
       end
 
-      top333 = comp.results.where(eventId: '333', roundId: ['f', 'c']).order(:pos).limit(3)
+      top333 = comp.results.where(eventId: '333', roundTypeId: ['f', 'c']).order(:pos).limit(3)
       if top333.empty? # If there was no 3x3x3 event.
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
@@ -235,7 +235,7 @@ class CompetitionsController < ApplicationController
                 uniqueName = personName
               end
               record_strs = results.sort_by do |r|
-                round_type = RoundType.c_find(r.roundId)
+                round_type = RoundType.c_find(r.roundTypeId)
                 [Event.c_find(r.eventId).rank, round_type.rank]
               end.map do |result|
                 event = Event.c_find(result.eventId)

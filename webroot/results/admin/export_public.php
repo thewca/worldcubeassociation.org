@@ -13,7 +13,7 @@ showChoices();
 if( $chosenExport ){
 
   exportPublic( array(
-    'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
+    'Results'      => 'SELECT   competitionId, eventId, roundTypeId, pos,
                                 best, average,
                                 personName, personId, countryId AS personCountryId,
                                 formatId, value1, value2, value3, value4, value5,

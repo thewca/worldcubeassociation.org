@@ -497,17 +497,17 @@ RSpec.describe Competition do
     let(:person_three) { FactoryGirl.create :person, name: "Three" }
     let(:person_four) { FactoryGirl.create :person, name: "Four" }
 
-    let!(:r_333_1_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 1, person: person_one }
-    let!(:r_333_1_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 2, person: person_two }
-    let!(:r_333_1_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 3, person: person_three }
-    let!(:r_333_1_fourth) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "1", pos: 4, person: person_four }
+    let!(:r_333_1_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 1, person: person_one }
+    let!(:r_333_1_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 2, person: person_two }
+    let!(:r_333_1_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 3, person: person_three }
+    let!(:r_333_1_fourth) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 4, person: person_four }
 
-    let!(:r_333_f_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 1, person: person_one }
-    let!(:r_333_f_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 2, person: person_two }
-    let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundId: "f", pos: 3, person: person_three }
+    let!(:r_333_f_first) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 1, person: person_one }
+    let!(:r_333_f_second) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 2, person: person_two }
+    let!(:r_333_f_third) { FactoryGirl.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 3, person: person_three }
 
-    let!(:r_222_c_second_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_two }
-    let!(:r_222_c_first_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundId: "c", pos: 1, person: person_one }
+    let!(:r_222_c_second_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_two }
+    let!(:r_222_c_first_tied) { FactoryGirl.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_one }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -524,18 +524,18 @@ RSpec.describe Competition do
       expect(result.size).to eq 3
       expect(result.first.eventId).to eq "333"
       expect(result.first.best).to eq 3000
-      expect(result.first.roundId).to eq "f"
+      expect(result.first.roundTypeId).to eq "f"
 
       expect(result.last.eventId).to eq "222"
       expect(result.last.best).to eq 3000
-      expect(result.last.roundId).to eq "c"
+      expect(result.last.roundTypeId).to eq "c"
     end
 
     it "person_ids_with_results" do
       result = competition.person_ids_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
-      expect(result.second.last.map(&:roundId)).to eq %w(f 1 c)
+      expect(result.second.last.map(&:roundTypeId)).to eq %w(f 1 c)
 
       expect(result[1][1][1].muted).to eq true
       expect(result[1][1][2].muted).to eq false
