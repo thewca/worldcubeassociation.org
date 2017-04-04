@@ -45,7 +45,7 @@ elif [ "$COMMAND" == "import" ] || [ "$COMMAND" == "drop_and_import" ]; then
   for sql_file in $FOLDER/*.sql; do
     db_name=`basename $sql_file .sql`
     echo "Importing $db_name database..."
-    mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;"
+    mysql "$@" -e "CREATE DATABASE IF NOT EXISTS $db_name DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;"
     mysql "$@" $db_name -e "SOURCE $sql_file"
   done
 fi

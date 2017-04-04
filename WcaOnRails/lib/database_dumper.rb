@@ -515,7 +515,7 @@ module DatabaseDumper
 
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
       ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
-      ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci")
+      ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
       self.mysql("SOURCE #{Rails.root.join('db', 'structure.sql')}", dump_db_name)
     end
 
