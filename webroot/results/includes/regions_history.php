@@ -1,6 +1,6 @@
 <?php
 
-# TODO: order by Rounds.rank instead of roundId?
+# TODO: order by RoundTypes.rank instead of roundTypeId?
 # TODO idea: If single and average in same round by same person, show them on same row?
 # TODO idea: show round? Maybe as number like "Competition (round)"?
 
@@ -26,8 +26,8 @@ function showRegionalRecordsHistory () {
 
   #--- Order: normal history or mixed?
   $order = $chosenHistory
-           ? 'event.rank, type, value, year desc, month desc, day desc, roundId desc'
-           : 'year desc, month desc, day desc, roundId desc, event.rank, type, value';
+           ? 'event.rank, type, value, year desc, month desc, day desc, roundTypeId desc'
+           : 'year desc, month desc, day desc, roundTypeId desc, event.rank, type, value';
 
   #--- Get the results.
   $results = dbQuery("

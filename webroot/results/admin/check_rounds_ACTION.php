@@ -22,14 +22,14 @@ function showUpdateSQL () {
     if( preg_match( '/^setround(\w*)\/(\w*)\/(\w*)$/', $key, $match )){
       $competitionId = $match[1];
       $eventId = $match[2];
-      $roundId = $match[3];
-      $updateRounds[$competitionId][$eventId][$roundId] = $value;
+      $roundTypeId = $match[3];
+      $updateRounds[$competitionId][$eventId][$roundTypeId] = $value;
     }
 
     if( preg_match( '/^confirmround(\w*)\/(\w*)$/', $key, $match )){
       $competitionId = $match[1];
       $eventId = $match[2];
-      $updateRounds[$competitionId][$eventId]['confirm'] = 1; // 'confirm' should not be a valid roundId
+      $updateRounds[$competitionId][$eventId]['confirm'] = 1; // 'confirm' should not be a valid roundTypeId
     }
 
     if( preg_match( '/^deleteres([1-9]\d*)$/', $key, $match )){
@@ -41,49 +41,49 @@ function showUpdateSQL () {
   }
  
   foreach( $updateRounds as $competitionId => $eventIds ){
-    foreach( $eventIds as $eventId => $roundIds ){
-      if( $roundIds['confirm'] != 1 ) continue;
-      unset( $roundIds['confirm'] );
+    foreach( $eventIds as $eventId => $roundTypeIds ){
+      if( $roundTypeIds['confirm'] != 1 ) continue;
+      unset( $roundTypeIds['confirm'] );
 
       // We have to make the replacement in the right order
 
       // Remove trivial replacements
-      foreach( $roundIds as $roundIdOld => $roundIdNew )
-        if( $roundIdOld == $roundIdNew )
-          unset( $roundIds[$roundIdOld] );
+      foreach( $roundTypeIds as $roundTypeIdOld => $roundTypeIdNew )
+        if( $roundTypeIdOld == $roundTypeIdNew )
+          unset( $roundTypeIds[$roundTypeIdOld] );
 
       // Delete rounds
-      foreach( $roundIds as $roundIdOld => $roundIdNew )
-        if( $roundIdNew == 'del' ){
+      foreach( $roundTypeIds as $roundTypeIdOld => $roundTypeIdNew )
+        if( $roundTypeIdNew == 'del' ){
           $command = "DELETE FROM Results
                       WHERE competitionId='$competitionId'
                         AND eventId='$eventId'
-                        AND roundId='$roundIdOld'";
+                        AND roundTypeId='$roundTypeIdOld'";
           echo "$command\n";
           dbCommand( $command );
 
-          unset( $roundIds[$roundIdOld] );
+          unset( $roundTypeIds[$roundTypeIdOld] );
         }
 
       foreach( range(0, 5) as $i ){ // Safer to use a for statement
 
-        if( count( $roundIds ) == 0 ) break;
+        if( count( $roundTypeIds ) == 0 ) break;
 
-        foreach( $roundIds as $roundIdOld => $roundIdNew ){
+        foreach( $roundTypeIds as $roundTypeIdOld => $roundTypeIdNew ){
 
-          // We can replace a roundId with another one if the new one will not be replaced again
-          if( ! in_array( $roundIdNew, array_keys( $roundIds ))){ 
+          // We can replace a roundTypeId with another one if the new one will not be replaced again
+          if( ! in_array( $roundTypeIdNew, array_keys( $roundTypeIds ))){ 
 
             // Replace
             $command = "UPDATE Results
-                        SET roundId='$roundIdNew'
+                        SET roundTypeId='$roundTypeIdNew'
                         WHERE competitionId='$competitionId'
                           AND eventId='$eventId'
-                          AND roundId='$roundIdOld'";
+                          AND roundTypeId='$roundTypeIdOld'";
             echo "$command\n";
             dbCommand( $command );
 
-            unset( $roundIds[$roundIdOld] ); // Remove from the list of replacements
+            unset( $roundTypeIds[$roundTypeIdOld] ); // Remove from the list of replacements
           }
         }
       }

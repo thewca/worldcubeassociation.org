@@ -7,7 +7,7 @@ $results = dbQuery("
     UNION
     " . regionsGetCurrentRecordsQuery( 'average', 'Average' ) . ") helper
   ORDER BY
-    rank, type DESC, year, month, day, roundId, personName
+    rank, type DESC, year, month, day, roundTypeId, personName
 ");
 
 function regionsGetCurrentRecordsQuery ( $valueId, $valueName ) {

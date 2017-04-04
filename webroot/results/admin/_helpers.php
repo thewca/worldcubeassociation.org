@@ -33,8 +33,8 @@ function computeCachedDatabase ( $cacheFile ) {
     'Events' =>
       'SELECT * FROM Events WHERE rank<990 ORDER BY rank',
 
-    'Rounds' =>
-      'SELECT * FROM Rounds ORDER BY rank',
+    'RoundTypes' =>
+      'SELECT * FROM RoundTypes ORDER BY rank',
 
     // order these with 'nearby' competitions listed first; helps with ordering select lists.
     'Competitions' =>

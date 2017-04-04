@@ -13,7 +13,7 @@ showChoices();
 if( $chosenExport ){
 
   exportPublic( array(
-    'Results'      => 'SELECT   competitionId, eventId, roundId, pos,
+    'Results'      => 'SELECT   competitionId, eventId, roundTypeId, pos,
                                 best, average,
                                 personName, personId, countryId AS personCountryId,
                                 formatId, value1, value2, value3, value4, value5,
@@ -21,7 +21,8 @@ if( $chosenExport ){
                        FROM     Results',
     'RanksSingle'  => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksSingle',
     'RanksAverage' => 'SELECT personId, eventId, best, worldRank, continentRank, countryRank FROM RanksAverage',
-    'Rounds'       => '*',
+    'Rounds'       => 'SELECT "Sorry for changing the database schema again. Please sign up for https://groups.google.com/forum/#!forum/wca-software-public to receive updates about these sorts of things." as sorry_message',
+    'RoundTypes'   => '*',
     'Events'       => '*',
     'Formats'      => '*',
     # This should be set back to '*' after https://github.com/thewca/wca-workbook-assistant/pull/115

@@ -93,14 +93,14 @@ function getCompetition ( $id ) {
       return $competition;
 }
 
-function roundCellName ( $roundId ) {
-  $round = getRound( $roundId );
+function roundCellName ( $roundTypeId ) {
+  $round = getRound( $roundTypeId );
   return $round['cellName'];
 }
 
-function getRound ( $roundId ) {
+function getRound ( $roundTypeId ) {
   foreach( getAllRounds() as $round )
-    if( $round['id'] == $roundId )
+    if( $round['id'] == $roundTypeId )
       return $round;
 }
 

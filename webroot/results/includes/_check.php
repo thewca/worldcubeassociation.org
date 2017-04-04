@@ -1,7 +1,7 @@
 <?php
 
 #----------------------------------------------------------------------
-function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet, &$formatIdSet, &$roundIdSet ) {  # pass-by-reference just for speed
+function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet, &$formatIdSet, &$roundTypeIdSet ) {  # pass-by-reference just for speed
 #----------------------------------------------------------------------
 
   #--- 1) Check the ids (except persons cause they're a bigger beast checked elsewhere)
@@ -9,7 +9,7 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
   if( ! isset( $competitionIdSet[$result['competitionId']] )) return "bad competitionId " . $result['competitionId'];
   if( ! isset( $eventIdSet[$result['eventId']] ))             return "bad eventId " . $result['eventId'];
   if( ! isset( $formatIdSet[$result['formatId']] ))           return "bad formatId " . $result['formatId'];
-  if( ! isset( $roundIdSet[$result['roundId']] ))             return "bad roundId " . $result['roundId'];
+  if( ! isset( $roundTypeIdSet[$result['roundTypeId']] ))             return "bad roundTypeId " . $result['roundTypeId'];
 
   #--- 2) Let dns, dnf, zer, suc be the number of values of each kind.
   $dns = $dnf = $zer = $suc = 0;
@@ -65,7 +65,7 @@ function checkResult ( $result, &$countryIdSet, &$competitionIdSet, &$eventIdSet
   if( $result['average'] != $average ) return "'average' should be $average";
 
   #--- 10) check number of zero-values for non-combined rounds
-  $round = $result['roundId'];
+  $round = $result['roundTypeId'];
   if( $round != 'c'  &&  $round != 'd'  &&  $round != 'e'  &&  $round != 'g' && $round != 'h' ){
     if( $format == '1'  &&  $zer != 4 ) return "should have one non-zero value";
     if( $format == '2'  &&  $zer != 3 ) return "should have two non-zero values";

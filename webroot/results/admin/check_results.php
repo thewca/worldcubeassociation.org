@@ -90,12 +90,12 @@ function checkIndividually () {
   #--- Get all results (id, values, format, round).
   $dbResult = mysql_query("
     SELECT
-      result.id, formatId, roundId, personId, competitionId, eventId, result.countryId,
+      result.id, formatId, roundTypeId, personId, competitionId, eventId, result.countryId,
       value1, value2, value3, value4, value5, best, average
     FROM Results result, Competitions competition
     WHERE competition.id = competitionId
       $competitionCondition
-    ORDER BY formatId, competitionId, eventId, roundId, result.id
+    ORDER BY formatId, competitionId, eventId, roundTypeId, result.id
   ")
     or die("<p>Unable to perform database query.<br/>\n(" . mysql_error() . ")</p>\n");
 
@@ -104,15 +104,15 @@ function checkIndividually () {
   $competitionIdSet = array_flip( getAllIDs( dbQuery( "SELECT id FROM Competitions" )));
   $eventIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Events" )));
   $formatIdSet      = array_flip( getAllIDs( dbQuery( "SELECT id FROM Formats" )));
-  $roundIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM Rounds" )));
+  $roundTypeIdSet       = array_flip( getAllIDs( dbQuery( "SELECT id FROM RoundTypes" )));
 
   #--- Process the results.
   $badIds = array();
   echo "<pre>\n";
   while( $result = mysql_fetch_array( $dbResult )){
-    if( $error = checkResult( $result, $countryIdSet, $competitionIdSet, $eventIdSet, $formatIdSet, $roundIdSet )){
+    if( $error = checkResult( $result, $countryIdSet, $competitionIdSet, $eventIdSet, $formatIdSet, $roundTypeIdSet )){
       extract( $result );
-      echo "Error: $error\nid:$id format:$formatId round:$roundId";
+      echo "Error: $error\nid:$id format:$formatId round:$roundTypeId";
       echo " ($value1,$value2,$value3,$value4,$value5) best+average($best,$average)\n";
       echo "$personId   $countryId   $competitionId   $eventId\n\n";
       $badIds[] = $id;
@@ -140,12 +140,12 @@ function checkRelatively () {
 
   #--- Get all results (except the trick-duplicated (old) multiblind)
   $rows = dbQueryHandle("
-    SELECT   result.id, competitionId, eventId, roundId, formatId, average, best, pos, personName
+    SELECT   result.id, competitionId, eventId, roundTypeId, formatId, average, best, pos, personName
     FROM     Results result, Competitions competition
     WHERE    competition.id = competitionId
       $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
-    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundId, IF(formatId IN ('a','m') AND average>0, average, 2147483647), if(best>0, best, 2147483647), pos
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundTypeId, IF(formatId IN ('a','m') AND average>0, average, 2147483647), if(best>0, best, 2147483647), pos
   ");
 
   #--- Begin the form
@@ -156,8 +156,8 @@ function checkRelatively () {
   $wrongs = $wrongRounds = 0;
   $wrongComp = array();
   while( $row = mysql_fetch_row( $rows ) ) {
-    list( $resultId, $competitionId, $eventId, $roundId, $formatId, $average, $best, $storedPos, $personName ) = $row;
-    $round = "$competitionId|$eventId|$roundId";
+    list( $resultId, $competitionId, $eventId, $roundTypeId, $formatId, $average, $best, $storedPos, $personName ) = $row;
+    $round = "$competitionId|$eventId|$roundTypeId";
     if($formatId == 'm' || $formatId == 'a') {
       $result = "$average|$best";
     } else {
@@ -173,8 +173,8 @@ function checkRelatively () {
       if ( $round != $shownRound ) {
         $wrongRounds++;
         $wrongComp[$competitionId] = true;
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
-        showCompetitionResults( $competitionId, $eventId, $roundId );
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $backRoundId</a></p>";
+        showCompetitionResults( $competitionId, $eventId, $roundTypeId );
         $shownRound = $round;
 
         #--- Show a check all and a check none button.
@@ -218,13 +218,13 @@ function checkRelatively () {
 }
 
 #----------------------------------------------------------------------
-function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
+function showCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 #----------------------------------------------------------------------
 
   # NOTE: This is mostly a copy of the same function in competition_results.php
 
   #--- Get the results.
-  $competitionResults = getCompetitionResults( $competitionId, $eventId, $roundId );
+  $competitionResults = getCompetitionResults( $competitionId, $eventId, $roundTypeId );
 
   tableBegin( 'results', 8 );
 
@@ -233,12 +233,12 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
     extract( $result );
 
     $isNewEvent = ($eventId != $prevEventId);
-    $isNewRound = ($roundId != $prevRoundId);
+    $isNewRound = ($roundTypeId != $prevRoundId);
 
     #--- Welcome new rounds.
     if( $isNewEvent  ||  $isNewRound ){
 
-      $anchors = ($isNewEvent ? "$eventId " : "") . "${eventId}_$roundId";
+      $anchors = ($isNewEvent ? "$eventId " : "") . "${eventId}_$roundTypeId";
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName ));
       tableCaptionNew( false, $anchors, $caption );
@@ -262,14 +262,14 @@ function showCompetitionResults ( $competitionId, $eventId, $roundId ) {
     ));
 
     $prevEventId = $eventId;
-    $prevRoundId = $roundId;
+    $prevRoundId = $roundTypeId;
   }
 
   tableEnd();
 }
 
 #----------------------------------------------------------------------
-function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
+function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 #----------------------------------------------------------------------
 
   # NOTE: This is mostly a copy of the same function in competition_results.php
@@ -301,8 +301,8 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
       AND competition.id = '$competitionId'
       AND eventId        = '$eventId'
       AND event.id       = '$eventId'
-      AND roundId        = '$roundId'
-      AND round.id       = '$roundId'
+      AND roundTypeId        = '$roundTypeId'
+      AND round.id       = '$roundTypeId'
       AND format.id     = formatId
       AND country.id    = result.countryId
       AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
@@ -327,13 +327,13 @@ function checkSimilarResults () {
   $rows = pdo_query( "
       SELECT
           Results.competitionId AS competitionId,
-          Results.personId AS personIdA, Results.personName AS personNameA, Results.eventId AS eventIdA, Results.roundId AS roundIdA,
-          h.personId AS personIdB, h.personName AS personNameB, h.eventId AS eventIdB, h.roundId AS roundIdB,
+          Results.personId AS personIdA, Results.personName AS personNameA, Results.eventId AS eventIdA, Results.roundTypeId AS roundTypeIdA,
+          h.personId AS personIdB, h.personName AS personNameB, h.eventId AS eventIdB, h.roundTypeId AS roundTypeIdB,
           Results.value1 AS value1A, Results.value2 AS value2A, Results.value3 AS value3A, Results.value4 AS value4A, Results.value5 AS value5A,
           h.value1 AS value1B, h.value2 AS value2B, h.value3 AS value3B, h.value4 AS value4B, h.value5 AS value5B
       FROM Results
       JOIN (
-          SELECT Results.id as resultId, competitionId, eventId, roundId, personId, personName, value1, value2, value3, value4, value5
+          SELECT Results.id as resultId, competitionId, eventId, roundTypeId, personId, personName, value1, value2, value3, value4, value5
           FROM Results ".
           ($competitionCondition ? "JOIN Competitions ON Competitions.id = competitionId " : "").
          "WHERE best > 0 ".
@@ -371,7 +371,7 @@ function checkSimilarResults () {
         array(
           personLink( $row['personId'.$letter], $row['personName'.$letter] ),
           eventCellName( $row['eventId'.$letter] ),
-          roundCellName( $row['roundId'.$letter] ),
+          roundCellName( $row['roundTypeId'.$letter] ),
           $resultStr
         )
       );

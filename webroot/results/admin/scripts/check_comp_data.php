@@ -56,7 +56,7 @@ $results_view = $wcadb_conn->boundQuery(
         e.cellName as eventCellName
     FROM InboxResults AS r
       LEFT JOIN Events AS e ON e.id = r.eventId
-      LEFT JOIN Rounds AS d ON d.id = r.roundId
+      LEFT JOIN RoundTypes AS d ON d.id = r.roundTypeId
       LEFT JOIN InboxPersons AS p ON p.id = r.personId
     WHERE r.competitionId = ?
     AND r.pos >= 1
@@ -157,19 +157,19 @@ print "<li><p>Sanity Checks:</p>
                 </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
-   "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundId FROM (
-        SELECT s.eventId as event, s.roundId as round, s.eventId as hasscr, r.eventId as hasevent FROM
-         (SELECT DISTINCT eventId, roundId, competitionId FROM Scrambles WHERE competitionId = ?) as s
-        LEFT JOIN (SELECT DISTINCT eventId, roundId, competitionId FROM Results WHERE competitionId = ?) as r
-        ON (s.eventId=r.eventId AND s.roundId=r.roundId)
+   "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundTypeId FROM (
+        SELECT s.eventId as event, s.roundTypeId as round, s.eventId as hasscr, r.eventId as hasevent FROM
+         (SELECT DISTINCT eventId, roundTypeId, competitionId FROM Scrambles WHERE competitionId = ?) as s
+        LEFT JOIN (SELECT DISTINCT eventId, roundTypeId, competitionId FROM Results WHERE competitionId = ?) as r
+        ON (s.eventId=r.eventId AND s.roundTypeId=r.roundTypeId)
         UNION
-        SELECT r.eventId as event, r.roundId as round, s.eventId as hasscr, r.eventId as hasevent FROM
-         (SELECT DISTINCT eventId, roundId, competitionId FROM Scrambles WHERE competitionId = ?) as s
-        RIGHT JOIN (SELECT DISTINCT eventId, roundId, competitionId FROM Results WHERE competitionId = ?) as r
-        ON (s.eventId=r.eventId AND s.roundId=r.roundId)
+        SELECT r.eventId as event, r.roundTypeId as round, s.eventId as hasscr, r.eventId as hasevent FROM
+         (SELECT DISTINCT eventId, roundTypeId, competitionId FROM Scrambles WHERE competitionId = ?) as s
+        RIGHT JOIN (SELECT DISTINCT eventId, roundTypeId, competitionId FROM Results WHERE competitionId = ?) as r
+        ON (s.eventId=r.eventId AND s.roundTypeId=r.roundTypeId)
     ) AS c
     LEFT JOIN Events as e ON e.id=c.event
-    LEFT JOIN Rounds as d ON d.id=c.round
+    LEFT JOIN RoundTypes as d ON d.id=c.round
     ORDER BY e.rank, d.rank",  // no full outer joins in mysql?!
     array('ssss', &$compId, &$compId, &$compId, &$compId)
   );
@@ -195,7 +195,7 @@ if(count( $checks_table ) > 0) {
       // link to remove scrambles for this round
       // should protect this if we keep using the php system
       // jQuery attempts to load this
-      $has_scrambles = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Scrambles&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundId']}' target='_blank' title='Remove Scrambles'>X</a>)";
+      $has_scrambles = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Scrambles&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundTypeId']}' target='_blank' title='Remove Scrambles'>X</a>)";
     } else {
       $has_scrambles = 'N';
     }
@@ -204,7 +204,7 @@ if(count( $checks_table ) > 0) {
       // link to remove results for this round
       // should protect this if we keep using the php system
       // jQuery attempts to load this
-      $has_results = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Results&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundId']}' target='_blank' title='Remove Results'>X</a>)";
+      $has_results = "Y&nbsp;&nbsp;&nbsp;(<a class='remove_link' href='scripts/remove_data.php?t=Results&c=$compIdUrl&amp;e=${round['eventId']}&amp;r=${round['roundTypeId']}' target='_blank' title='Remove Results'>X</a>)";
     } else {
       $has_results = 'N';
     }

@@ -162,14 +162,14 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
    (SELECT id
     FROM
       Results result,
-      (SELECT eventId, competitionId, roundId, countryId, min($valueId) value
+      (SELECT eventId, competitionId, roundTypeId, countryId, min($valueId) value
        FROM Results
        WHERE $valueId > 0
        " . eventCondition() . competitionCondition() . "
-       GROUP BY eventId, competitionId, roundId, countryId) helper
+       GROUP BY eventId, competitionId, roundTypeId, countryId) helper
     WHERE result.eventId       = helper.eventId
       AND result.competitionId = helper.competitionId
-      AND result.roundId       = helper.roundId
+      AND result.roundTypeId       = helper.roundTypeId
       AND result.countryId     = helper.countryId
       AND result.$valueId      = helper.value)";
 
@@ -180,7 +180,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       result.id resultId,
       result.eventId,
       result.competitionId,
-      result.roundId,
+      result.roundTypeId,
       result.personId,
       result.personName,
       result.countryId,
@@ -196,15 +196,15 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       Countries    country,
       Continents   continent,
       Events       event,
-      Rounds       round
+      RoundTypes   roundType
     WHERE 1
       AND result.id      = relevantIds.id
       AND competition.id = result.competitionId
-      AND round.id       = result.roundId
+      AND roundType.id   = result.roundTypeId
       AND country.id     = result.countryId
       AND continent.id   = country.continentId
       AND event.id       = result.eventId
-    ORDER BY event.rank, startDate, competitionId, round.rank, $valueId
+    ORDER BY event.rank, startDate, competitionId, roundType.rank, $valueId
   ");
 
   #--- For displaying the dates, fetch all competitions
@@ -215,7 +215,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
   #--- Process each result.
   $currentEventId = $announcedEventId = $announcedRoundId = $announcedCompoId = NULL;
   while( $row = mysql_fetch_row( $results )){
-    list( $startDate, $resultId, $eventId, $competitionId, $roundId, $personId, $personName, $countryId, $storedMarker, $value, $continentId, $continentalRecordName, $valueFormat ) = $row;
+    list( $startDate, $resultId, $eventId, $competitionId, $roundTypeId, $personId, $personName, $countryId, $storedMarker, $value, $continentId, $continentalRecordName, $valueFormat ) = $row;
 
     #--- Handle failures of multi-attempts.
     if( ! isSuccessValue( $value, $valueFormat ))
@@ -288,7 +288,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 
       #--- Recognize new events/rounds/competitions.
       $announceEvent = ($eventId       != $announcedEventId); $announcedEventId = $eventId;
-      $announceRound = ($roundId       != $announcedRoundId); $announcedRoundId = $roundId;
+      $announceRound = ($roundTypeId       != $announcedRoundId); $announcedRoundId = $roundTypeId;
       $announceCompo = ($competitionId != $announcedCompoId); $announcedCompoId = $competitionId;
 
       #--- If new event, announce it.
@@ -309,7 +309,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       tableRow( array(
         competitionDate($allCompetitions[$competitionId]),
         competitionLink( $competitionId, $competitionId ),
-        $roundId,
+        $roundTypeId,
         personLink( $personId, $personName ),
         $eventId,
         $countryName,

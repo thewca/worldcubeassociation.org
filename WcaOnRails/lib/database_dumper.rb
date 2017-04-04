@@ -240,7 +240,7 @@ module DatabaseDumper
           pos
           regionalAverageRecord
           regionalSingleRecord
-          roundId
+          roundTypeId
           updated_at
           value1
           value2
@@ -250,7 +250,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Rounds" => {
+    "RoundTypes" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -270,7 +270,7 @@ module DatabaseDumper
           eventId
           groupId
           isExtra
-          roundId
+          roundTypeId
           scramble
           scrambleId
           scrambleNum

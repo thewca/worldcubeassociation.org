@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-sql = "INSERT INTO `Rounds` (`id`, `rank`, `name`, `cellName`, `final`) VALUES
+sql = "INSERT INTO `RoundTypes` (`id`, `rank`, `name`, `cellName`, `final`) VALUES
 ('0', 19, 'Qualification round', 'Qualification', 0),
 ('1', 29, 'First round', 'First', 0),
 ('2', 50, 'Second round', 'Second', 0),

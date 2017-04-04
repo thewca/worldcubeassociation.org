@@ -58,16 +58,16 @@ function checkRounds () {
 
   #--- Get the number of competitors per round
   $roundRows = dbQuery("
-    SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundId, round.cellName, result.formatId,
+    SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundTypeId, round.cellName, result.formatId,
              CASE result.formatId WHEN '2' THEN BIT_AND( IF( result.value2,1,0)) WHEN '3' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'm' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'a' THEN BIT_AND( IF( result.value5 <> 0,1,0)) ELSE 1 END isNotCombined
-    FROM     Results result, Competitions competition, Rounds round
+    FROM     Results result, Competitions competition, RoundTypes roundType
     WHERE    competition.id = competitionId
       $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
-      AND    result.roundId <> 'b'
-      AND    result.roundId = round.id
-    GROUP BY competitionId, eventId, roundId
-    ORDER BY year desc, month desc, day desc, competitionId, eventId, round.rank
+      AND    result.roundTypeId <> 'b'
+      AND    result.roundTypeId = roundType.id
+    GROUP BY competitionId, eventId, roundTypeId
+    ORDER BY year desc, month desc, day desc, competitionId, eventId, roundType.rank
   ");
 
   #--- Get the number of competitors per event
@@ -77,7 +77,7 @@ function checkRounds () {
     WHERE    competition.id = competitionId
       $competitionCondition
       AND    (( eventId <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
-      AND    result.roundId <> 'b'
+      AND    result.roundTypeId <> 'b'
     GROUP BY competitionId, eventId
     ORDER BY year desc, month desc, day desc, competitionId, eventId
   ");
@@ -88,7 +88,7 @@ function checkRounds () {
   $prevEvent = '';
   $wrongs = 0;
   foreach( $roundRows as $i => $roundRow ){
-    list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
+    list( $nbPersons, $competitionId, $year, $month, $day, $eventId, $roundTypeId, $roundCellName, $formatId, $isNotCombined ) = $roundRow;
     $event = "$competitionId|$eventId";
     $competitionDate = mktime( 0, 0, 0, $month, $day, $year );
 
@@ -122,7 +122,7 @@ function checkRounds () {
       }
 
       if($subsequentRoundCount > $maxAllowedSubsequentRoundCount) {
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
         echo "<p>There were $nbPersons competitors in this round, and $subsequentRoundCount subsequent round(s), which is more than the allowed $maxAllowedSubsequentRoundCount subsequent round(s).</p>";
         echo "<br /><hr />";
         $wrongs++;
@@ -146,15 +146,15 @@ function checkRounds () {
       $roundInfos = array();
 
       #--- Checks for qualification round
-      $isThisRoundQuals = (( $roundId == '0' or $roundId == 'h' ));
+      $isThisRoundQuals = (( $roundTypeId == '0' or $roundTypeId == 'h' ));
 
       if (( $nbTotalPersons != $nbPersons ) and ( ! $isThisRoundQuals )) {
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
 
-        #--- Peek at next roundId
+        #--- Peek at next roundTypeId
         if($subsequentRoundCount > 0) {
-          $nextRoundId = $roundRows[$i+1]['roundId'];
-          showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
+          $nextRoundId = $roundRows[$i+1]['roundTypeId'];
+          showQualifications( $competitionId, $eventId, $roundTypeId, $nextRoundId );
         }
 
         echo "<p>Not all persons that competed in $eventId are in $roundCellName. It should thus be indicated as Qualification round<p/>";
@@ -165,12 +165,12 @@ function checkRounds () {
       }
 
       if (( $nbTotalPersons == $nbPersons ) and ( $isThisRoundQuals )) {
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
 
-        #--- Peek at next roundId
+        #--- Peek at next roundTypeId
         if($subsequentRoundCount > 0) {
-          $nextRoundId = $roundRows[$i+1]['roundId'];
-          showQualifications( $competitionId, $eventId, $roundId, $nextRoundId );
+          $nextRoundId = $roundRows[$i+1]['roundTypeId'];
+          showQualifications( $competitionId, $eventId, $roundTypeId, $nextRoundId );
         }
 
         echo "<p>All persons that competed in $eventId are in $roundCellName. It should thus not be indicated as Qualification round</p>";
@@ -188,7 +188,7 @@ function checkRounds () {
       # Article 9m, since April 9, 2008 until April 17, 2016
       if (mktime( 0, 0, 0, 4, 9, 2008 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 17, 2016 )) {
         if ((( $nbRounds > 1 ) and ( $nbTotalPersons < 8 )) or (( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
@@ -199,7 +199,7 @@ function checkRounds () {
       # Article 9m/n/o, since July 20, 2006 until April 8, 2008
       if ( mktime( 0, 0, 0, 7, 20, 2006 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 8, 2008 )) {
         if ((( $nbRounds > 2 ) and ( $nbTotalPersons < 16 )) or (( $nbRounds > 3 ) and ( $nbTotalPersons < 100 )) or ( $nbRounds > 4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
           echo "<p>There are $nbRounds rounds for event $eventId, but only $nbTotalPersons competitors in total</p>";
           removeRound( $competitionId, $eventId, $nbRounds );
           echo "<br /><hr />";
@@ -207,13 +207,13 @@ function checkRounds () {
         }
       }
 
-      $nbQualPersons = $isPrevRoundQuals ? getQualifications( $competitionId, $eventId, $prevRoundId, $roundId ) : $nbPersons;
+      $nbQualPersons = $isPrevRoundQuals ? getQualifications( $competitionId, $eventId, $prevRoundId, $roundTypeId ) : $nbPersons;
 
       # Article 9p1, since April 14, 2010
       if ( mktime( 0, 0, 0, 4, 14, 2010 ) <= $competitionDate ) {
         if ( $nbQualPersons > ( 3*$prevNbPersons/4 )) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
-          showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId</a></p>";
+          showQualifications( $competitionId, $eventId, $prevRoundId, $roundTypeId );
           echo "<p>From round $prevRoundCellName with $prevNbPersons competitors, $nbQualPersons were qualified to round $roundCellName which is more than 75%</p>";
           echo "<br /><hr />";
           $wrongs++;
@@ -223,8 +223,8 @@ function checkRounds () {
       # Article 9p, since July 20, 2006 until April 13, 2010
       if (mktime( 0, 0, 0, 7, 20, 2006 ) <= $competitionDate and $competitionDate <= mktime( 0, 0, 0, 4, 13, 2010 )) {
         if ( $nbQualPersons >= $prevNbPersons ) {
-          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId</a></p>";
-          showQualifications( $competitionId, $eventId, $prevRoundId, $roundId );
+          echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId</a></p>";
+          showQualifications( $competitionId, $eventId, $prevRoundId, $roundTypeId );
           echo "<p>From round $prevRoundCellName to round $roundCellName, at least one competitor must not proceed</p>";
           echo "<br /><hr />";
           $wrongs++;
@@ -234,10 +234,10 @@ function checkRounds () {
     $nbRounds += 1;
     $prevNbPersons = $nbPersons;
     $prevEvent = $event;
-    $prevRoundId = $roundId;
+    $prevRoundId = $roundTypeId;
     $prevRoundCellName = $roundCellName;
     $isPrevRoundQuals = $isThisRoundQuals;
-    $roundInfos[] = array( $roundId, $roundCellName, $formatId, $isNotCombined );
+    $roundInfos[] = array( $roundTypeId, $roundCellName, $formatId, $isNotCombined );
 
   }
 
@@ -279,29 +279,29 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
 
   foreach( $roundInfos as $roundInfo ){
 
-    list( $roundId, $roundCellName, $formatId, $isNotCombined ) = $roundInfo;
-    $backRoundId = $roundId;
+    list( $roundTypeId, $roundCellName, $formatId, $isNotCombined ) = $roundInfo;
+    $backRoundId = $roundTypeId;
 
     #--- Check for round "combined-ness"
-    if(( ! $isNotCombined ) xor $listCombined[$roundId] ){
-      echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $roundId</a></p>";
+    if(( ! $isNotCombined ) xor $listCombined[$roundTypeId] ){
+      echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $roundTypeId</a></p>";
       echo "<p>Round $roundCellName should ". ( $isNotCombined?"not ":"" ) . "be a combined round</p>";
-      $roundId = $switchCombined[$roundId];
+      $roundTypeId = $switchCombined[$roundTypeId];
       $nbErrors += 1;
     }
 
     if(( $backRoundId != '0' ) and ( $backRoundId != 'h' )){
       #--- Check for round name
       $normalRoundId = array_shift( $normalRoundIds[$nbRounds] );
-      if(( $listCombined[$roundId]?$switchCombined[$roundId]:$roundId ) != $normalRoundId ){
-        $roundId = $listCombined[$roundId]?$switchCombined[$normalRoundId]:$normalRoundId; 
-        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundId'>$competitionId - $eventId - $backRoundId</a></p>";
-        echo "<p>Round $roundCellName should be ". roundCellName( $roundId ) . "</p>";
+      if(( $listCombined[$roundTypeId]?$switchCombined[$roundTypeId]:$roundTypeId ) != $normalRoundId ){
+        $roundTypeId = $listCombined[$roundTypeId]?$switchCombined[$normalRoundId]:$normalRoundId; 
+        echo "<p style='margin-top:2em; margin-bottom:0'><a href='/competitions/$competitionId/results/all#e{$eventId}_$roundTypeId'>$competitionId - $eventId - $backRoundId</a></p>";
+        echo "<p>Round $roundCellName should be ". roundCellName( $roundTypeId ) . "</p>";
         $nbErrors += 1;
       }
     }
 
-    $translateRounds[$backRoundId] = $roundId;
+    $translateRounds[$backRoundId] = $roundTypeId;
 
   }
 
@@ -313,13 +313,13 @@ function checkRoundNames ( $roundInfos, $competitionId, $eventId ) {
 }
 
 #----------------------------------------------------------------------
-function getQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
+function getQualifications ( $competitionId, $eventId, $roundTypeId1, $roundTypeId2 ) {
 #----------------------------------------------------------------------
   global $competitionResults1, $competitionResults2, $personsBothRounds;
 
   #--- Get the results.
-  $competitionResults1 = getCompetitionResults( $competitionId, $eventId, $roundId1 );
-  $competitionResults2 = getCompetitionResults( $competitionId, $eventId, $roundId2 );
+  $competitionResults1 = getCompetitionResults( $competitionId, $eventId, $roundTypeId1 );
+  $competitionResults2 = getCompetitionResults( $competitionId, $eventId, $roundTypeId2 );
 
   #--- Intersection of the two rounds
   foreach( $competitionResults1 as $row )
@@ -332,11 +332,11 @@ function getQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
 }
 
 #----------------------------------------------------------------------
-function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
+function showQualifications ( $competitionId, $eventId, $roundTypeId1, $roundTypeId2 ) {
 #----------------------------------------------------------------------
   global $competitionResults1, $competitionResults2, $personsBothRounds;
 
-  getQualifications ( $competitionId, $eventId, $roundId1, $roundId2 );
+  getQualifications ( $competitionId, $eventId, $roundTypeId1, $roundTypeId2 );
 
   tableBegin( 'results', 8 );
 
@@ -350,7 +350,7 @@ function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
 
     #--- Header
     if( ! $captionShowed ){
-      $anchors = "$eventId " . "${eventId}_$roundId";
+      $anchors = "$eventId " . "${eventId}_$roundTypeId";
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName ));
       tableCaptionNew( false, $anchors, $caption );
@@ -395,7 +395,7 @@ function showQualifications ( $competitionId, $eventId, $roundId1, $roundId2 ) {
 
     #--- Header
     if( ! $captionShowed ){
-      $anchors = "$eventId " . "${eventId}_$roundId";
+      $anchors = "$eventId " . "${eventId}_$roundTypeId";
       $eventHtml = eventLink( $eventId, $eventName );
       $caption = spaced( array( $eventHtml, $roundName, $formatName ));
       tableCaptionNew( false, $anchors, $caption );
@@ -473,14 +473,14 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
 
   #--- Get rounds of the event
   $roundRows = dbQuery("
-    SELECT   roundId, round.cellName
-    FROM     Results result, Rounds round
+    SELECT   roundTypeId, round.cellName
+    FROM     Results result, RoundTypes roundType
     WHERE    result.competitionId = '$competitionId'
       AND    result.eventId = '$eventId'
-      AND    result.roundId = round.id
-      AND    result.roundId <> 'b'
-    GROUP BY competitionId, eventId, roundId
-    ORDER BY round.rank
+      AND    result.roundTypeId = roundType.id
+      AND    result.roundTypeId <> 'b'
+    GROUP BY competitionId, eventId, roundTypeId
+    ORDER BY roundType.rank
   ");
 
   tableBegin( 'results', 3 );
@@ -490,8 +490,8 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
   foreach( $roundRows as $roundRow ){
     extract( $roundRow );
 
-    $formId = "setround$competitionId/$eventId/$roundId";
-    tableRow( array( $cellName, listRounds( $translateRounds[$roundId], $formId), '' )); 
+    $formId = "setround$competitionId/$eventId/$roundTypeId";
+    tableRow( array( $cellName, listRounds( $translateRounds[$roundTypeId], $formId), '' )); 
 
   }
   tableEnd();
@@ -524,7 +524,7 @@ function listRounds ( $selectedRoundId, $formId ) {
 }
 
 #----------------------------------------------------------------------
-function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
+function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 #----------------------------------------------------------------------
 
   # NOTE: This is mostly a copy of the same function in competition_results.php
@@ -547,7 +547,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
     FROM
       Results      result,
       Events       event,
-      Rounds       round,
+      RoundTypes   roundType,
       Formats      format,
       Countries    country,
       Competitions competition
@@ -556,8 +556,8 @@ function getCompetitionResults ( $competitionId, $eventId, $roundId ) {
       AND competition.id = '$competitionId'
       AND eventId        = '$eventId'
       AND event.id       = '$eventId'
-      AND roundId        = '$roundId'
-      AND round.id       = '$roundId'
+      AND roundTypeId        = '$roundTypeId'
+      AND round.id       = '$roundTypeId'
       AND format.id     = formatId
       AND country.id    = result.countryId
       AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))

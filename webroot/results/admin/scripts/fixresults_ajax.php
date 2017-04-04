@@ -53,7 +53,7 @@ function getEventId()
 
 function getRoundId()
 {
-    return get_GET('roundId','/[^0-9a-z]/');
+    return get_GET('roundTypeId','/[^0-9a-z]/');
 }
 
 function getFix()
@@ -98,12 +98,12 @@ if (getFix()) { // fix data
     $values = array($resultId);
     if (!$values[] = getCompetitionId()) error('Invalid calling - no competitionId');
     if (!$values[] = getEventId()) error('Invalid calling - no eventId');
-    if (!$values[] = getRoundId()) error('Invalid calling - no roundId');
+    if (!$values[] = getRoundId()) error('Invalid calling - no roundTypeId');
     if (!$values[] = getPersonId()) error('Invalid calling - no personId');
 
     $result = pdo_query(
         'SELECT * FROM Results '.
-        'WHERE id=? AND competitionId=? AND eventId=? AND roundId=? AND personId=? ',
+        'WHERE id=? AND competitionId=? AND eventId=? AND roundTypeId=? AND personId=? ',
         $values
     );
     if (!count($result)) error('Could not find the results to fix (!?)');
@@ -132,13 +132,13 @@ if (getFix()) { // fix data
     if (!$personId = getPersonId()) error('Invalid calling - no personId');
     if ($competitionId = getCompetitionId()) {
         if ($eventId = getEventId()) {
-            $roundId = getRoundId();
+            $roundTypeId = getRoundId();
         } else {
-            $roundId = null;
+            $roundTypeId = null;
         }
     } else {
         $eventId = null;
-        $roundId = null;
+        $roundTypeId = null;
     }
     $return = array();
 
@@ -177,26 +177,26 @@ if (getFix()) { // fix data
         $defaultEvent = $eventId;
     }
 
-    if (!$roundId) {
+    if (!$roundTypeId) {
         $result = pdo_query(
-            'SELECT Rounds.id, Rounds.name FROM '.
-            '(SELECT DISTINCT roundId FROM Results WHERE competitionId=? AND eventId=? AND personId=?) AS t '.
-            'JOIN Rounds ON Rounds.id=t.roundId '.
-            'ORDER BY Rounds.rank',
+            'SELECT RoundTypes.id, RoundTypes.name FROM '.
+            '(SELECT DISTINCT roundTypeId FROM Results WHERE competitionId=? AND eventId=? AND personId=?) AS t '.
+            'JOIN RoundTypes ON RoundTypes.id=t.roundTypeId '.
+            'ORDER BY RoundTypes.rank',
             array($defaultCompetition,$defaultEvent,$personId)
         );
         if (!count($result)) error('Event without rounds (!?)');
         $defaultRound = $result[0]['id'];
         $return['rounds'] = $result;
     } else {
-        $defaultRound = $roundId;
+        $defaultRound = $roundTypeId;
     }
 
     $result = pdo_query(
         'SELECT Results.*, format, Formats.name AS roundFormatName FROM Results '.
         'JOIN Events ON Events.id=Results.eventId '.
         'JOIN Formats ON Formats.id=Results.formatId '.
-        'WHERE competitionId=? AND eventId=? AND personId=? AND roundId=?',
+        'WHERE competitionId=? AND eventId=? AND personId=? AND roundTypeId=?',
         array($defaultCompetition,$defaultEvent,$personId,$defaultRound)
     );
     if (!count($result)) error('No results for this competition, person, event and round (!?)');

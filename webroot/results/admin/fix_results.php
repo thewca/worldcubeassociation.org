@@ -28,7 +28,7 @@ if(!isset($_SESSION['anticsrf_key'])) {
         </tr>
         <tr>
             <td><label for="rounds">Rounds</label></td>
-            <td><select id="rounds" onchange="roundIdChange(this.value);"></select></td>
+            <td><select id="rounds" onchange="roundTypeIdChange(this.value);"></select></td>
         </tr>
         <tr>
             <td style="width:130px;"><div id="roundFormat" style="font-size: 11px; text-align: right;"></div><div id="samples" style="font-size: 11px; text-align: right;"></div></td>
@@ -291,7 +291,7 @@ function eventIdChange(newEventId)
     }
 }
 
-function roundIdChange(newRoundId)
+function roundTypeIdChange(newRoundId)
 {
     if (newRoundId != lastRoundId) {
         clearResults();
@@ -303,7 +303,7 @@ function roundIdChange(newRoundId)
                 personId: lastPersonId,
                 competitionId: lastCompetitionId,
                 eventId: lastEventId,
-                roundId: newRoundId
+                roundTypeId: newRoundId
             }
         ).done(function(data) {
             var obj = $.parseJSON(data);
@@ -567,7 +567,7 @@ function fixResults()
             personId: lastPersonId,
             competitionId: lastCompetitionId,
             eventId: lastEventId,
-            roundId: lastRoundId,
+            roundTypeId: lastRoundId,
             value1: stringToWcaResult(resultsInputs.value1.val()),
             value2: stringToWcaResult(resultsInputs.value2.val()),
             value3: stringToWcaResult(resultsInputs.value3.val()),
@@ -585,7 +585,7 @@ function fixResults()
         } else {
             var aux = lastRoundId;
             lastRoundId = null;
-            roundIdChange(aux);
+            roundTypeIdChange(aux);
             if (!obj.success) {
                 alert('OOOPS, there was an error trying to update those results');
             }

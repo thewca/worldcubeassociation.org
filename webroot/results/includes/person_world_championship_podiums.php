@@ -21,7 +21,7 @@ function showWorldChampionshipPodiums () {
     WHERE " . randomDebug() . "
       AND best > 0
       AND pos <= 3
-      AND roundId in ('f', 'c')
+      AND roundTypeId in ('f', 'c')
       AND competition.cellName like 'World Championship %'
       AND result.personId = '$chosenPersonId'
       AND event.id = result.eventId
@@ -47,7 +47,7 @@ function showWorldChampionshipPodiums () {
     tableRow( array(
       ($year != $lastYear) ? $year : '',
       eventLink( $eventId, $eventCellName ),
-      competitionLink( $competitionId, $pos, $eventId, $roundId ),
+      competitionLink( $competitionId, $pos, $eventId, $roundTypeId ),
       formatValue( $best, $valueFormat ),
       formatValue( $average, $valueFormat ),
       formatAverageSources( true, $result, $valueFormat )

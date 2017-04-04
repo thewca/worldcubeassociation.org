@@ -12,7 +12,7 @@ function add_blindfold_333_consecutive_successes () {
     $WHERE 1
       AND eventId = '333bf'
       AND competition.id = competitionId
-    ORDER BY personId, year, month, day, roundId
+    ORDER BY personId, year, month, day, roundTypeId
   ");
   
   foreach( structureBy( $results, 'personId' ) as $personResults ){

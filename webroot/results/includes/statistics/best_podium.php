@@ -13,8 +13,8 @@ function bestPodiums () {
 #----------------------------------------------------------------------
   $results = dbQuery( "SELECT average, competitionId, personId, pos
                        FROM Results
-                       WHERE pos<=3 AND eventId='333' AND formatId='a' AND average>0 AND roundId in ('f','c')
-                       ORDER BY competitionId, roundId, pos ");
+                       WHERE pos<=3 AND eventId='333' AND formatId='a' AND average>0 AND roundTypeId in ('f','c')
+                       ORDER BY competitionId, roundTypeId, pos ");
 
   foreach( structureBy( $results, 'competitionId' ) as $top3 )
     if( count( $top3 ) >= 3 )
