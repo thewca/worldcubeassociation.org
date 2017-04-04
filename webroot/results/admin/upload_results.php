@@ -155,7 +155,7 @@ if($form->submitted()) {
 
       // cycle through rounds
       foreach ($event->rounds as $round) {
-        $roundTypeId = property_exists($round, 'roundTypeId') ? ($round->roundTypeId) : false;
+        $roundTypeId = property_exists($round, 'roundId') ? ($round->roundId) : false;
         $formatId = property_exists($round, 'formatId') ? ($round->formatId) : false;
 
         // check to make sure results exist for round
