@@ -274,7 +274,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 
   # NOTE: This is mostly a copy of the same function in competition_results.php
 
-  $order = "event.rank, round.rank, pos, average, best, personName";
+  $order = "event.rank, roundType.rank, pos, average, best, personName";
 
   #--- Get and return the results.
   return dbQuery("
@@ -282,8 +282,8 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
                      result.*,
 
       event.name      eventName,
-      round.name      roundName,
-      round.cellName  roundCellName,
+      roundType.name  roundName,
+      roundType.cellName  roundCellName,
       format.name     formatName,
       country.name    countryName,
 
@@ -301,10 +301,10 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
       AND competition.id = '$competitionId'
       AND eventId        = '$eventId'
       AND event.id       = '$eventId'
-      AND roundTypeId        = '$roundTypeId'
-      AND round.id       = '$roundTypeId'
-      AND format.id     = formatId
-      AND country.id    = result.countryId
+      AND roundTypeId    = '$roundTypeId'
+      AND roundType.id   = '$roundTypeId'
+      AND format.id      = formatId
+      AND country.id     = result.countryId
       AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
     ORDER BY
       $order

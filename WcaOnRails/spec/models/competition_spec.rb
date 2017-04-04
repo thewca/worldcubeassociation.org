@@ -544,8 +544,8 @@ RSpec.describe Competition do
       expect(result[3][1][1].muted).to eq true
     end
 
-    it "events_with_rounds_with_results" do
-      results = competition.events_with_rounds_with_results
+    it "events_with_round_types_with_results" do
+      results = competition.events_with_round_types_with_results
       expect(results.size).to eq 2
       expect(results[0].first).to eq three_by_three
       expect(results[0].second.first.first).to eq RoundType.find("1")
