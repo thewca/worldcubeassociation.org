@@ -1194,8 +1194,15 @@ pl:
       approved_registrations: Zaakceptowane rejestracje
       #original_hash: bff04e8
       deleted_registrations: Usunięte rejestracje
-      #original_hash: a844fcf
-      registered: Zarejestrowani
+      #original_hash: ac5d958
+      not_paid: Nie opłacone
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Data rejestracji
+        #original_hash: fca3213
+        with_stripe: Data płatności
+      #original_hash: ce53c71
+      payment_requested_on: 'Data realizacji płatności: %{date}'
       #original_hash: b25928c
       total: Łącznie
     new_registration:
