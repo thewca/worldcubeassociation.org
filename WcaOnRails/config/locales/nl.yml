@@ -1142,8 +1142,15 @@ nl:
       approved_registrations: Goedgekeurde aanmeldingen
       #original_hash: bff04e8
       deleted_registrations: Verwijderde aanmeldingen
-      #original_hash: a844fcf
-      registered: Aangemeld
+      #original_hash: ac5d958
+      not_paid: Nog niet betaald
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Aangemeld op
+        #original_hash: fca3213
+        with_stripe: Betaald op
+      #original_hash: ce53c71
+      payment_requested_on: 'Betaalverzoek op: %{date}'
       #original_hash: b25928c
       total: Totaal
     new_registration:
