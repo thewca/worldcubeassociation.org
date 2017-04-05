@@ -1160,8 +1160,15 @@ hr:
       approved_registrations: Prihvaćene registracije
       #original_hash: bff04e8
       deleted_registrations: Obrisane registracije
-      #original_hash: a844fcf
-      registered: Registrirani
+      #original_hash: ac5d958
+      not_paid: Nije plaćeno
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Registriran dana
+        #original_hash: fca3213
+        with_stripe: Plaćeno dana
+      #original_hash: ce53c71
+      payment_requested_on: 'Plaćanje potrebno do: %{date}'
       #original_hash: b25928c
       total: Ukupno
     new_registration:
@@ -1365,14 +1372,20 @@ hr:
       region: Regija
       #original_hash: bce0641
       search: Pretraži
-      #original_hash: a725020
-      state: Država
+      #original_hash: 769bb19
+      state: Kada
       #original_hash: 4e9f7a3
       present: Trenutno
       #original_hash: 76eec76
       recent: Nedavno
       #original_hash: 405c12f
       past: Prošlo
+      #original_hash: 081ae3f
+      custom: Posebno
+      #original_hash: 3f66052
+      from_date: Iz
+      #original_hash: ae79ea1
+      to_date: Do
       #original_hash: 52c30f8
       past_from: 'Prošla iz %{year}'
       #original_hash: 7cff459
@@ -1388,6 +1401,8 @@ hr:
         recent: 'Nedavna natjecanja (zadnjih %{count} dana)'
         #original_hash: 914742f
         upcoming: Buduća natjecanja
+        #original_hash: 8b57693
+        custom: Natjecanja u odabranom vremenskom periodu
       #original_hash: 6684214
       no_access: Nemate pristup ovoj stranici!
       tooltips:
