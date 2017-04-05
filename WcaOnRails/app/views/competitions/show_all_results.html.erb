@@ -2,7 +2,7 @@
 
 <%= render layout: 'results_nav' do %>
   <% cache @competition.result_cache_key("all_results") do %>
-    <% @competition.events_with_rounds_with_results.each do |event, rounds_with_results| %>
+    <% @competition.events_with_round_types_with_results.each do |event, rounds_with_results| %>
 
       <% # Empty div to allow linking directly to results for an event %>
       <%= content_tag :div, "", id: "e#{event.id}" %>

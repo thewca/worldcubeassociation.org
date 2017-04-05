@@ -19,14 +19,14 @@ class LightResult
               :event,
               :event,
               :format,
-              :round,
+              :round_type,
               :pos,
               :personId,
               :regionalSingleRecord,
               :regionalAverageRecord,
               :country
 
-  def initialize(r, country, format, round, event)
+  def initialize(r, country, format, round_type, event)
     @value1 = r["value1"]
     @value2 = r["value2"]
     @value3 = r["value3"]
@@ -41,7 +41,7 @@ class LightResult
     @regionalAverageRecord = r["regionalAverageRecord"]
     @country = country
     @format = format
-    @round = round
+    @round_type = round_type
     @event = event
   end
 
@@ -50,6 +50,6 @@ class LightResult
   end
 
   def roundTypeId
-    round.id
+    round_type.id
   end
 end

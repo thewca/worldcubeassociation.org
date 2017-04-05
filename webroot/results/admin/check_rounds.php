@@ -58,7 +58,7 @@ function checkRounds () {
 
   #--- Get the number of competitors per round
   $roundRows = dbQuery("
-    SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundTypeId, round.cellName, result.formatId,
+    SELECT   count(result.id) nbPersons, result.competitionId, competition.year, competition.month, competition.day, result.eventId, result.roundTypeId, roundType.cellName, result.formatId,
              CASE result.formatId WHEN '2' THEN BIT_AND( IF( result.value2,1,0)) WHEN '3' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'm' THEN BIT_AND( IF( result.value3,1,0)) WHEN 'a' THEN BIT_AND( IF( result.value5 <> 0,1,0)) ELSE 1 END isNotCombined
     FROM     Results result, Competitions competition, RoundTypes roundType
     WHERE    competition.id = competitionId
@@ -473,7 +473,7 @@ function changeRounds ( $competitionId, $eventId, $translateRounds, $checked ) {
 
   #--- Get rounds of the event
   $roundRows = dbQuery("
-    SELECT   roundTypeId, round.cellName
+    SELECT   roundTypeId, roundType.cellName
     FROM     Results result, RoundTypes roundType
     WHERE    result.competitionId = '$competitionId'
       AND    result.eventId = '$eventId'
@@ -529,7 +529,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
 
   # NOTE: This is mostly a copy of the same function in competition_results.php
 
-  $order = "event.rank, round.rank, pos, average, best, personName";
+  $order = "event.rank, roundType.rank, pos, average, best, personName";
 
   #--- Get and return the results.
   return dbQuery("
@@ -537,8 +537,8 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
                      result.*,
 
       event.name      eventName,
-      round.name      roundName,
-      round.cellName  roundCellName,
+      roundType.name  roundName,
+      roundType.cellName  roundCellName,
       format.name     formatName,
       country.name    countryName,
 
@@ -556,10 +556,10 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
       AND competition.id = '$competitionId'
       AND eventId        = '$eventId'
       AND event.id       = '$eventId'
-      AND roundTypeId        = '$roundTypeId'
-      AND round.id       = '$roundTypeId'
-      AND format.id     = formatId
-      AND country.id    = result.countryId
+      AND roundTypeId    = '$roundTypeId'
+      AND roundType.id   = '$roundTypeId'
+      AND format.id      = formatId
+      AND country.id     = result.countryId
       AND (( event.id <> '333mbf' ) OR (( competition.year = 2009 ) AND ( competition.month > 1 )) OR ( competition.year > 2009 ))
     ORDER BY
       $order

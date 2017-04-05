@@ -654,7 +654,7 @@ class Competition < ApplicationRecord
       .group_by(&:personId)
       .sort_by { |_personId, results| results.first.personName }
       .map do |personId, results|
-        results.sort_by! { |r| [r.event.rank, -r.round.rank] }
+        results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
 
         # Mute (soften) each result that wasn't the competitor's last for the event.
         last_event = nil
@@ -663,21 +663,21 @@ class Competition < ApplicationRecord
           last_event = result.event
         end
 
-        [personId, results.sort_by { |r| [r.event.rank, -r.round.rank] }]
+        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
       end
   end
 
-  def events_with_rounds_with_results
+  def events_with_round_types_with_results
     light_results_from_relation(results)
       .group_by(&:event)
       .sort_by { |event, _results| event.rank }
       .map do |event, results_for_event|
-        rounds_with_results = results_for_event
-                              .group_by(&:round)
-                              .sort_by { |format, _results| format.rank }
-                              .map { |round, results| [round, results.sort_by { |r| [r.pos, r.personName] }] }
+        round_types_with_results = results_for_event
+                                   .group_by(&:round_type)
+                                   .sort_by { |format, _results| format.rank }
+                                   .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
 
-        [event, rounds_with_results]
+        [event, round_types_with_results]
       end
   end
 
