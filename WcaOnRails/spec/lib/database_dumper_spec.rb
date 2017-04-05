@@ -7,7 +7,7 @@ def with_database(db_name)
   old_connection_config = ActiveRecord::Base.connection_config
   begin
     ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
-    ActiveRecord::Base.connection.execute("CREATE DATABASE #{db_name} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci")
+    ActiveRecord::Base.connection.execute("CREATE DATABASE #{db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
     connection_config = old_connection_config.merge(database: db_name, connect_flags: Mysql2::Client::MULTI_STATEMENTS)
     ActiveRecord::Base.establish_connection(connection_config)
     yield
