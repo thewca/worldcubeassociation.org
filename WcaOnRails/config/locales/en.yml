@@ -612,7 +612,7 @@ en:
         #context: "n_total" will be replaced by the total number of registrations on waiting list, and "people" by the pluralization of "person" in your language (key registrations.registration_info_people.person)
         on_waiting_list: "Your registration is on the waiting list, which currently has %{n_total} %{people} on it."
         #context: "here" is replaced by a link to view the registration
-        approval_info_html: "You will be emailed when your registration is approved. Please note that registrations are not automatically approved. To see the approval criteria visit the competition website or contact the organisers. You can also check the status of your registration %{here}."
+        approval_info_html: "You will be emailed when your registration is approved. Please note that registrations are not automatically approved. To see the approval criteria visit the competition website or contact the organizers. You can also check the status of your registration %{here}."
       #context: when registration is accepted
       accepted:
         #context: "comp_name" contains the competition's name
@@ -1024,7 +1024,7 @@ en:
       title: "Mission"
       paragraphs:
         '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
-        '2': "The World Cube Association organises competitions all over the world, supported by national organizations responsible for organising competitions in their countries."
+        '2': "The World Cube Association organizes competitions all over the world, supported by national organizations responsible for organizing competitions in their countries."
         '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
         '4': "The spirit of the World Cube Association is that<br />
              <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
@@ -1062,6 +1062,34 @@ en:
   national_organizations:
     title: "National Organizations"
     content: "The WCA acknowledges the following national organizations:"
+    how_to:
+      title: How to become a WCA National Organization
+      description: The WCA recognizes various national organizations worldwide.
+        The purpose of a WCA national organization is to organize WCA
+        Competitions and support the WCA’s activities in the region. Countries
+        wishing to form a national organization are encouraged to contribute to
+        the WCA in their area before submitting their application. For help
+        organizing a WCA competition in your area, please contact your nearest
+        delegate.
+    requirements:
+      title: Requirements for WCA National Organizations
+      list:
+        '1': To actively organize or support WCA Competitions in the region of the organization
+        '2': To actively contribute to the Continental WCA Competitions that are held in the continent of the Regional Organization
+        '3': To respect and operationalize the Objectives set out in the By-Laws and Regulations of the WCA
+        '4': To comply with all applicable WCA Regulations
+        '5': To accept and comply with decisions of WCA Officials
+        '6': To keep on file with the WCA a copy of its current by-laws and regulations in an electronic format
+    application_instructions:
+      title: Application Instructions
+      description: To apply to become a National Organization we require the region to submit a written application to the WCA Board containing all of the details listed below.
+      list:
+        '1': Name of the Regional Organization
+        '2': Official address and contact details
+        '3': A copy of its current by-laws, which are in compliance with the By-Laws and Regulations of the WCA
+        '4': A list of its principal officers
+        '5': A clear description of the area that is being covered by the Regional Organization
+        '6': A report on past and current WCA related activities
   #context: Contact page
   contact:
     title: "Contact Information"
