@@ -161,7 +161,7 @@ function computeRanks ( $valueSource, $valueName ) {
     `countryRank` INTEGER NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `fk_persons` (`personId`),
-  KEY `fk_events` (`eventId`)) COLLATE utf8_unicode_ci
+  KEY `fk_events` (`eventId`)) COLLATE utf8mb4_unicode_ci
   " );
 
   #--- Determine everybody's current country and continent
