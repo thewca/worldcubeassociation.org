@@ -13,6 +13,7 @@ FactoryGirl.define do
     transient do
       starts 1.year.ago
       ends { starts }
+      event_ids { %w(333 333oh) }
     end
 
     start_date { starts.nil? ? nil : starts.strftime("%F") }
@@ -34,7 +35,7 @@ FactoryGirl.define do
       results_posted_at Time.now
     end
 
-    events { Event.where(id: %w(333 333oh)) }
+    events { Event.where(id: event_ids) }
 
     venue "My backyard"
     venueAddress "My backyard street"

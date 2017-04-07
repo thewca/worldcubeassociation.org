@@ -829,6 +829,25 @@ CREATE TABLE `registrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `rounds`
+--
+
+DROP TABLE IF EXISTS `rounds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rounds` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `competition_event_id` int(11) NOT NULL,
+  `format_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `schema_migrations`
 --
 
@@ -1128,6 +1147,7 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170228140556'),
 ('20170320222511'),
 ('20170402223714'),
-('20170404184332');
+('20170404184332'),
+('20170406170418');
 
 

@@ -250,6 +250,19 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "rounds" => {
+      where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{JOIN_WHERE_VISIBLE_COMP}",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_event_id
+          format_id
+          number
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "RoundTypes" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
