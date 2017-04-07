@@ -103,6 +103,10 @@ class CompetitionsController < ApplicationController
       end
     end
 
+    if (1..4).cover? params[:days].to_i
+      @competitions = @competitions.where("DATEDIFF(end_date, start_date) + 1 = ?", params[:days])
+    end
+
     if @display == 'admin'
       @competitions = @competitions.includes(:delegates, :delegate_report)
     end
