@@ -292,7 +292,7 @@ function getCompetitionResults ( $competitionId, $eventId, $roundTypeId ) {
     FROM
       Results      result,
       Events       event,
-      Rounds       round,
+      RoundTypes       roundType,
       Formats      format,
       Countries    country,
       Competitions competition
