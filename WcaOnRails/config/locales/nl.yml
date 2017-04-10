@@ -1064,13 +1064,13 @@ nl:
         on_waiting_list: >-
           Je aanmelding staat op de wachtlijst. Op de wachtlijst staan momenteel
           %{n_total} %{people}.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Je ontvangt een e-mail als je aanmelding is geaccepteerd. Let op dat
           aanmeldingen niet automatisch worden geaccepteerd. Om te zien wat de
-          voorwaarden zijn voor aanmeldingen, kun je op de website kijken of de
-          organisatoren een e-mail sturen. De status van je aanmelding staat
-          %{here}.
+          voorwaarden zijn voor aanmeldingen, kun je op de website kijken of
+          contact opnemen met de organisatoren. Je kunt ook de status van je
+          aanmelding %{here} bekijken.
       accepted:
         #original_hash: 34515b5
         mail_subject: 'Je aanmelding voor %{comp_name} is geaccepteerd.'
@@ -1877,7 +1877,7 @@ nl:
           puzzels is de Rubik's Kubus, uitgevonden door professor Rubik uit
           Hongarije. Een selectie uit deze puzzels is gekozen als officiële
           wedstrijdonderdelen van de WCA.
-        #original_hash: c8ecd24
+        #original_hash: 1e83a7f
         '2': >-
           De World Cube Association organiseert wedstrijden over de hele wereld,
           ondersteund door nationale organisaties die verantwoordelijk zijn voor
@@ -1971,6 +1971,69 @@ nl:
     title: Nationale Organisaties
     #original_hash: f9a7f4d
     content: 'De WCA erkent de volgende Nationale Organisaties:'
+    how_to:
+      #original_hash: 8f367b8
+      title: Hoe een WCA Nationale Organisatie worden
+      #original_hash: 31dd809
+      description: >-
+        De WCA erkent verschillende nationale organisaties wereldwijd. Het doel
+        van een WCA nationale organisatie is het organiseren van WCA-wedstrijden
+        en het ondersteunen van de WCA-activiteiten in de regio. Landen die een
+        nationale organisatie willen aanmelden worden aangemoedigd om een
+        bijdrage te leveren aan de WCA in hun gebied, voordat ze zich aanmelden.
+        Neem voor hulp bij het organiseren van een wedstijd in jouw regio
+        contact op met de dichtstbijzijnde delegate.
+    requirements:
+      #original_hash: 8bc9e59
+      title: Eisen aan WCA Nationale Organisaties
+      list:
+        #original_hash: 22a9f26
+        '1': >-
+          - actief organiseren of ondersteunen van WCA-wedstrijden in de regio
+          van de organisatie
+        #original_hash: 8c5a7fe
+        '2': >-
+          - actief bijdragen aan de continentale WCA-wedstrijden die in het
+          continent van de organisatie worden gehouden
+        #original_hash: 5913cd0
+        '3': >-
+          - het respecteren en operationaliseren van de doelstellingen die zijn
+          opgenomen in de statuten en het wedstrijdreglement van de WCA
+        #original_hash: 0c3576b
+        '4': '- het voldoen aan alle van toepassing zijnde WCA-wedstrijdreglementen'
+        #original_hash: 23cda60
+        '5': '- het accepteren en voldoen aan beslissingen van WCA-officials'
+        #original_hash: 08c6d86
+        '6': >-
+          - het vastleggen en bewaren bij de WCA van een kopie van de huidige
+          statuten en reglementen, in elektronisch formaat
+    application_instructions:
+      #original_hash: 4da829b
+      title: Aanmeldingsinstructies
+      #original_hash: d000a70
+      description: >-
+        Om een nationale organisatie aan te melden, moet een geschreven
+        aanmelding worden gestuurd aan de WCA-board met daarin alle onderstaande
+        details.
+      list:
+        #original_hash: 1a9d544
+        '1': Naam van de regionale organisatie
+        #original_hash: a9bf3f4
+        '2': Officieel adres en contactgegevens
+        #original_hash: 2a029e9
+        '3': >-
+          Een kopie van de huidige statuten, die moeten voldoen aan de eisen in
+          de statuten en het wedstrijdreglement van de WCA
+        #original_hash: a5a2771
+        '4': Een lijst met de belangrijkste medewerkers
+        #original_hash: 1186ebf
+        '5': >-
+          Een duidelijke beschrijving van het gebied dat door de regionale
+          organisatie wordt afgedekt
+        #original_hash: 826e371
+        '6': >-
+          Een rapportage van WCA-gerelateerde activiteiten in het verleden en
+          het heden
   contact:
     #original_hash: a34b69f
     title: Contactinformatie
