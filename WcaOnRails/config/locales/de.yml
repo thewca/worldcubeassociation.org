@@ -1094,7 +1094,7 @@ de:
         on_waiting_list: >-
           Deine Registrierung ist auf der Warteliste, auf der momentan
           %{n_total} %{people} sind.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Du bekommst eine E-Mail wenn deine Registrierung bestätigt wurde.
           Bitte bedenke, dass Registrierungen nicht automatisch bestätigt
@@ -1172,8 +1172,15 @@ de:
       approved_registrations: Bestätigte Anmeldungen
       #original_hash: bff04e8
       deleted_registrations: Gelöschte Anmeldungen
-      #original_hash: a844fcf
-      registered: Angemeldet
+      #original_hash: ac5d958
+      not_paid: Nicht bezahlt
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Registriert am
+        #original_hash: fca3213
+        with_stripe: Bezahlt am
+      #original_hash: ce53c71
+      payment_requested_on: 'Zahlung angefordert am: %{date}'
       #original_hash: b25928c
       total: Gesamt
     new_registration:
@@ -1236,10 +1243,10 @@ de:
       Bitte überprüfe die Informationen zur Registrierung, um herauszufinden, ob
       noch weitere Schritte, wie zum Beispiel die Zahlung einer Teilnahmegebühr,
       notwendig sind.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Du hast dich für %{comp} angemeldet. Du kannst die Informationen zu deiner
-      Anmeldung unten sehen.
+      Du hast deine Anmeldung für %{comp} abgeschickt. Du kannst die Details zu
+      deiner Anmeldung unten sehen.
     #original_hash: 3c9141f
     contact_organizer: 'Kontaktiere den Organisator, wenn Du Änderungen vornehmen willst.'
     #original_hash: 59354fd
@@ -1384,7 +1391,7 @@ de:
       region: Region
       #original_hash: bce0641
       search: Suche
-      #original_hash: a725020
+      #original_hash: 769bb19
       state: Status
       #original_hash: 4e9f7a3
       present: Gegenwärtig
@@ -1392,6 +1399,12 @@ de:
       recent: Aktuell
       #original_hash: 405c12f
       past: Vergangenheit
+      #original_hash: 081ae3f
+      custom: Individuell
+      #original_hash: 3f66052
+      from_date: Von
+      #original_hash: ae79ea1
+      to_date: Bis
       #original_hash: 52c30f8
       past_from: 'Vergangene aus %{year}'
       #original_hash: 7cff459
@@ -1407,6 +1420,8 @@ de:
         recent: 'Aktuelle Wettbewerbe (letzte %{count} Tage)'
         #original_hash: 914742f
         upcoming: Kommende Wettbewerbe
+        #original_hash: 8b57693
+        custom: Wettbewerbe im ausgewählten Zeitraum
       #original_hash: 6684214
       no_access: Du hast keinen Zugriff auf diese Seite!
       tooltips:
@@ -1912,7 +1927,7 @@ de:
           dieser Puzzle ist der Rubik's Cube, erfunden von Professor Rubik aus
           Ungarn. Eine Auswahl dieser Puzzles werden als offizielle Disziplinen
           der WCA anerkannt.
-        #original_hash: c8ecd24
+        #original_hash: 1e83a7f
         '2': >-
           Die World Cube Association organisiert Wettbewerbe auf der ganzen
           Welt, unterstützt von nationalen Organisationen, die verantwortlich
@@ -2009,6 +2024,70 @@ de:
     title: Nationale Organisationen
     #original_hash: f9a7f4d
     content: 'Die WCA erkennt die folgenden nationalen Organisationen an:'
+    how_to:
+      #original_hash: 8f367b8
+      title: Wie man eine nationale WCA Organisation wird
+      #original_hash: 31dd809
+      description: >-
+        Die WCA erkennt verschiedene nationale Organisationen weltweit an. Der
+        Zweck einer nationalen WCA Organisation ist die Organisation von WCA
+        Wettbewerben und die Unterstützung von WCA Aktivitäten in der Region.
+        Länder, die gerne eine nationale Organisation gründen wollen, sind
+        aufgefordert, einen Beitrag zu WCA Aktivitäten zu leisten, bevor sie
+        ihre  Anmeldung einreichen. Für Hilfe bei der Organisation von WCA
+        Wettbewerben in deiner Region kontaktiere bitte deinen nächsten
+        Delegierten.
+    requirements:
+      #original_hash: 8bc9e59
+      title: Bedingungen für nationale WCA Organisationen
+      list:
+        #original_hash: 22a9f26
+        '1': >-
+          Die aktive Organisation oder Unterstützung von WCA Wettbewerben in der
+          Region der Organisation
+        #original_hash: 8c5a7fe
+        '2': >-
+          Ein aktiver Beitrag zu kontinentalen WCA Wettbewerben, die auf dem
+          Kontinent der regionalen Organisation durchgeführt werden
+        #original_hash: 5913cd0
+        '3': >-
+          Achtung und Umsetzung der von den Verordnungen und Regeln der WCA
+          gesetzten Ziele
+        #original_hash: 0c3576b
+        '4': Das Erfüllen aller anwendbaren WCA Regeln
+        #original_hash: 23cda60
+        '5': Annahme und Erfüllung aller Entscheidungen von WCA Offiziellen
+        #original_hash: 08c6d86
+        '6': >-
+          Aufbewahrung einer Kopie der Verordnungen und Regeln der WCA in einem
+          elektronischen Format
+    application_instructions:
+      #original_hash: 4da829b
+      title: Bewerbungsablauf
+      #original_hash: d000a70
+      description: >-
+        Um sich als nationale Organisation zu bewerben, muss eine schriftliche
+        Bewerbung an das WCA Board geschrieben werden, welche die folgenden
+        Angaben enthält.
+      list:
+        #original_hash: 1a9d544
+        '1': Name der regionalen Organisation
+        #original_hash: a9bf3f4
+        '2': Offizielle Adresse und Kontaktangaben
+        #original_hash: 2a029e9
+        '3': >-
+          Eine Kopie der aktuellen Verordnung, welche alle Verordnungen und
+          Regeln der WCA erfüllt.
+        #original_hash: a5a2771
+        '4': Eine Liste der Verantwortlichen
+        #original_hash: 1186ebf
+        '5': >-
+          Eine klare Beschreibung der Region, die von der Regionalen
+          Organisation betreut wird
+        #original_hash: 826e371
+        '6': >-
+          Ein Bericht über vergangene und aktuelle mit der WCA zusammenhängende
+          Aktivitäten
   contact:
     #original_hash: a34b69f
     title: Kontaktinformationen
