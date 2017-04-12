@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class DobContact < ContactForm
-  attribute :dob, validate: true
+  attribute :dob, validate: :validate_dob
   attribute :wca_id, validate: :validate_wca_id
   attribute :document, attachment: true, validate: true
+
+  def validate_dob
+    errors.add(:dob, I18n.t('mail_form.errors.dob_contact.dob_invalid')) unless Date.safe_parse(dob)
+  end
 
   def validate_wca_id
     errors.add(:wca_id, I18n.t('users.errors.not_found')) unless Person.find_by_wca_id(wca_id)

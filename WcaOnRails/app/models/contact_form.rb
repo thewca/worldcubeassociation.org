@@ -8,11 +8,11 @@ class ContactForm < MailForm::Base
   attribute :subject, validate: true
 
   def validate_your_email
-    errors.add(:your_email, "invalid") unless ValidateEmail.valid?(your_email)
+    errors.add(:your_email, I18n.t('common.errors.invalid')) unless ValidateEmail.valid?(your_email)
   end
 
   def validate_to_email
-    errors.add(:to_email, "invalid") unless ValidateEmail.valid?(to_email)
+    errors.add(:to_email, I18n.t('common.errors.invalid')) unless ValidateEmail.valid?(to_email)
   end
 
   def headers

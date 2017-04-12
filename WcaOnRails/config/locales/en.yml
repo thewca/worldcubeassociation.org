@@ -379,6 +379,9 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+    errors:
+      dob_contact:
+        dob_invalid: "is misformatted"
   errors:
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
