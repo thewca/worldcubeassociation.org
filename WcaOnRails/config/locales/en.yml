@@ -411,6 +411,7 @@ en:
         public: 'Access your public data (name, WCA ID, gender, citizenship, and profile picture)'
         dob: 'Access your date of birth'
         email: 'Access your email address'
+        manage_competitions: 'Manage any upcoming competitions you are organizing'
 
     #context: Key used for sign in/sign up
     devise:

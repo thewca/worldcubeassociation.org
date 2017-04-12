@@ -1,18 +1,16 @@
 # frozen_string_literal: true
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
+  protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
-  rescue_from WcaExceptions::BadApiParameter, with: :bad_api_parameter
-  def bad_api_parameter(e)
-    render status: :unprocessable_entity, json: { errors: [e.to_s] }
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
 
   def me
-    current_resource_owner = User.find(doorkeeper_token.resource_owner_id)
-    current_resource_owner.doorkeeper_token = doorkeeper_token
-    render json: { me: current_resource_owner }
+    render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
 
   def auth_results
@@ -48,8 +46,8 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-0.9.0",   # 2015-03-30
         "TNoodle-WCA-0.10.0",  # 2015-06-30
         "TNoodle-WCA-0.11.1",  # 2016-04-04
-        "TNoodle-WCA-0.11.3",   # 2016-10-17
-        "TNoodle-WCA-0.11.5",   # 2016-12-12
+        "TNoodle-WCA-0.11.3",  # 2016-10-17
+        "TNoodle-WCA-0.11.5",  # 2016-12-12
       ],
     }
   end
@@ -108,15 +106,15 @@ class Api::V0::ApiController < ApplicationController
     show_user(user)
   end
 
-  def competitions
-    params[:sort] ||= "-start_date"
-    competitions = Competition.search(params[:q], params: params)
-    competitions = competitions.includes(:delegates).includes(:organizers)
-
-    paginate json: competitions
-  end
-
   def delegates
     paginate json: User.delegates
+  end
+
+  # Find the user that owns the access token.
+  # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
+  private def current_api_user
+    return @current_api_user if defined?(@current_api_user)
+
+    @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
   end
 end
