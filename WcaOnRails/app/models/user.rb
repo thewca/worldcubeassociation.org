@@ -526,8 +526,13 @@ class User < ApplicationRecord
     if admin? || board_member?
       fields += %i(delegate_status senior_delegate_id region)
     end
-    if user.any_kind_of_delegate? && (user == self || user.senior_delegate == self || admin? || board_member?)
-      fields += %i(location_description phone_number notes)
+    if user.any_kind_of_delegate?
+      if user == self
+        fields += %i(location_description phone_number)
+      end
+      if user.senior_delegate == self || admin? || board_member?
+        fields += %i(notes)
+      end
     end
     if admin? || any_kind_of_delegate?
       fields += %i(
