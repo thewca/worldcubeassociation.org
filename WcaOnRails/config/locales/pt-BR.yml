@@ -643,6 +643,10 @@ pt-BR:
         dob: Data de nascimento correta
         #original_hash: e214b8a
         document: Documento
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: está no formato errado
   errors:
     messages:
       #original_hash: dc2367c
@@ -683,6 +687,8 @@ pt-BR:
         dob: Acesse sua data de nascimento
         #original_hash: 17aa24f
         email: Acesse seu endereço de email
+        #original_hash: e0d0654
+        manage_competitions: Gerencie as competições futuras que você está organizando
     devise:
       #original_hash: 06184f5
       no_account: Não tem conta?
@@ -1070,7 +1076,7 @@ pt-BR:
         on_waiting_list: >-
           Sua inscrição está na lista de pendências, que tem atualmente
           %{n_total} %{people}.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Você receberá um email quando sua inscrição for aprovada. As
           inscrições não são aprovadas automaticamente. Para ver os critérios
@@ -1146,8 +1152,15 @@ pt-BR:
       approved_registrations: Inscrições aprovadas
       #original_hash: bff04e8
       deleted_registrations: Inscrições excluídas
-      #original_hash: a844fcf
-      registered: Inscrito
+      #original_hash: ac5d958
+      not_paid: Não paga
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Inscrito em
+        #original_hash: fca3213
+        with_stripe: Paga em
+      #original_hash: ce53c71
+      payment_requested_on: 'Pagamento solicitado em: %{date}'
       #original_hash: b25928c
       total: Total
     new_registration:
@@ -1207,8 +1220,8 @@ pt-BR:
     check_registration_information: >-
       Por favor verifique as informações sobre inscrição para ver se você deve
       fazer algo mais, como pagar uma taxa de inscrição.
-    #original_hash: ea2b586
-    have_registered: 'Você se inscreveu no %{comp}. Veja suas informações abaixo.'
+    #original_hash: 88ac7c3
+    have_registered: 'Você solicitou sua inscrição em %{comp}. Veja os detalhes abaixo.'
     #original_hash: 3c9141f
     contact_organizer: Contacte os organizadores se você quer fazer alguma mudança.
     #original_hash: 59354fd
@@ -1299,10 +1312,11 @@ pt-BR:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Somente competições que usam o sistema de inscrição da WCA serão
-        mostradas aqui.
+        mostradas aqui. Se sua competição não aparecer, verifique o website da
+        competição.
       #original_hash: 94a2fc8
       past_competitions: Competições passadas
     competition_info:
@@ -1351,14 +1365,20 @@ pt-BR:
       region: Região
       #original_hash: bce0641
       search: Buscar
-      #original_hash: a725020
-      state: Estado
+      #original_hash: 769bb19
+      state: Quando
       #original_hash: 4e9f7a3
       present: Presente
       #original_hash: 76eec76
       recent: Recente
       #original_hash: 405c12f
       past: Passadas
+      #original_hash: 081ae3f
+      custom: Personalizado
+      #original_hash: 3f66052
+      from_date: De
+      #original_hash: ae79ea1
+      to_date: Até
       #original_hash: 52c30f8
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
@@ -1374,6 +1394,8 @@ pt-BR:
         recent: 'Competições recentes (últimos %{count} dias)'
         #original_hash: 914742f
         upcoming: Competições futuras
+        #original_hash: 8b57693
+        custom: Competições no período de tempo selecionado
       #original_hash: 6684214
       no_access: Você não tem acesso a esta página!
       tooltips:
@@ -1862,7 +1884,7 @@ pt-BR:
           "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
           professor Rubik, da Hungria. Alguns destes quebra-cabeças são eventos
           oficiais da WCA.
-        #original_hash: c8ecd24
+        #original_hash: 1e83a7f
         '2': >-
           A World Cube Association organiza competições em todo o mundo, apoiada
           por organizações nacionais, responsáveis por organizar competições em
@@ -1952,6 +1974,63 @@ pt-BR:
     title: Organizações Nacionais
     #original_hash: f9a7f4d
     content: 'A WCA reconhece as seguintes organizações nacionais:'
+    how_to:
+      #original_hash: 8f367b8
+      title: Como se tornar uma Organização Nacional da WCA
+      #original_hash: 31dd809
+      description: >-
+        A WCA reconhece várias organizações nacionais no mundo todo. O objetivo
+        de uma organização nacional da WCA é organizar competições da WCA e dar
+        apoio às atividades da WCA na região. Países interessados em formar uma
+        organização nacional são estimulados a contribuir com a WCA em sua área
+        antes de enviar sua proposta. Para obter ajuda sobre como organizer uma
+        competição da WCA na sua área, por favor contate um delegado mais
+        próximo.
+    requirements:
+      #original_hash: 8bc9e59
+      title: Requisitos para Organizações Nacionais da WCA
+      list:
+        #original_hash: 22a9f26
+        '1': Ativamente organizar ou apoiar competições da WCA em sua região
+        #original_hash: 8c5a7fe
+        '2': >-
+          Ativamente contribuir para Competições Continentais da WCA que
+          acontecem em seu continente
+        #original_hash: 5913cd0
+        '3': >-
+          Respeitar e operacionalizar os Objetivos definidos no Regimento e
+          Regulamento da WCA
+        #original_hash: 0c3576b
+        '4': Seguir todas as Regras da WCA
+        #original_hash: 23cda60
+        '5': Aceitar e seguir as decisões dos Oficias da WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Disponibilizar à WCA uma cópia de seu regimento e regulamento em
+          formato eletrônico
+    application_instructions:
+      #original_hash: 4da829b
+      title: Instruções para candidatura
+      #original_hash: d000a70
+      description: >-
+        Para se candidatar a ser uma Organização Nacional, a região deve enviar
+        uma proposta por escrito ao Conselho da WCA contendo os detalhes
+        listados abaixo.
+      list:
+        #original_hash: 1a9d544
+        '1': Nome da Organização Nacional
+        #original_hash: a9bf3f4
+        '2': Endereço e detalhes de contato oficiais
+        #original_hash: 2a029e9
+        '3': >-
+          Uma cópia de seu regimento atual, que deve estar de acordo com o
+          Regimento e Regulamento da WCA
+        #original_hash: a5a2771
+        '4': Uma lista dos principais diretores
+        #original_hash: 1186ebf
+        '5': Uma descrição clara da área de cobertura da Organização Nacional
+        #original_hash: 826e371
+        '6': Um relatório das atividades passadas e atuais relacionadas com a WCA
   contact:
     #original_hash: a34b69f
     title: Informações de Contato
