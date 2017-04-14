@@ -112,6 +112,9 @@ Style/IfInsideElse:
 Style/IfUnlessModifier:
   Enabled: false
 
+Style/InverseMethods:
+  Enabled: false
+
 Style/Lambda:
   Enabled: false
 
@@ -125,6 +128,9 @@ Style/Next:
   Enabled: false
 
 Style/NumericPredicate:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
   Enabled: false
 
 Style/PerlBackrefs:
@@ -143,6 +149,9 @@ Style/SpaceAroundOperators:
   Enabled: false
 
 Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/SymbolArray:
   Enabled: false
 
 Style/WordArray:
