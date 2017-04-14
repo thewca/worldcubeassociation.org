@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'solve_time'
 
 def solve_time(centis)

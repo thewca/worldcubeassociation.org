@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryGirl.define do
   factory :delegate_report do
     competition { FactoryGirl.create :competition }

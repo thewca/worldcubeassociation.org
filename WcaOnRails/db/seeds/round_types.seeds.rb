@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 sql = "INSERT INTO `RoundTypes` (`id`, `rank`, `name`, `cellName`, `final`) VALUES
 ('0', 19, 'Qualification round', 'Qualification', 0),
 ('1', 29, 'First round', 'First', 0),

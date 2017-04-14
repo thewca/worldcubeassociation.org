@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CompetitionMedium < ApplicationRecord
   self.table_name = "CompetitionsMedia"
   # Work around the fact that the CompetitionsMedia has a type field.

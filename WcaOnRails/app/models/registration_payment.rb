@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RegistrationPayment < ApplicationRecord
   belongs_to :registration
 

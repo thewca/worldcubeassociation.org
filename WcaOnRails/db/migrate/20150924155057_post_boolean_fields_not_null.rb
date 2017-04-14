@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PostBooleanFieldsNotNull < ActiveRecord::Migration
   def change
     change_column_null :posts, :sticky, false, false

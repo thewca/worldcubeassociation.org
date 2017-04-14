@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DatePickerInput < SimpleForm::Inputs::StringInput
   def input(wrapper_options)
     set_html_options

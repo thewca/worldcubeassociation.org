@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddTeamsToUsers < ActiveRecord::Migration
   def change
     add_column :users, :wdc_team, :boolean

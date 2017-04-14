@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Event < ApplicationRecord
   include Cachable
   self.table_name = "Events"

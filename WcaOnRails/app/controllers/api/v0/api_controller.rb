@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
   protect_from_forgery with: :null_session

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ConvertCompetitionWebsiteToUrl < ActiveRecord::Migration
   def up
     Competition.all.each do |competition|

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'tempfile'
 require 'rails_helper'
 require 'database_dumper'

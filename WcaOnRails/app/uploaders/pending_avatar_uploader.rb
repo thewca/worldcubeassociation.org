@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PendingAvatarUploader < AvatarUploaderBase
   # Create different versions of your uploaded files:
   version :thumb do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCompetitionTabs < ActiveRecord::Migration
   def change
     create_table :competition_tabs do |t|

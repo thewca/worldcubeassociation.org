@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 sql = "INSERT INTO preferred_formats
 (event_id, format_id, ranking)
 VALUES

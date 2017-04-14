@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RegistrationsHelper
   def fees_hint_and_context(registration)
     if registration.competition.using_stripe_payments?

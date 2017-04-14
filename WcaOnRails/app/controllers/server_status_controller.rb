@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ServerStatusController < ApplicationController
   MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING = 5
 

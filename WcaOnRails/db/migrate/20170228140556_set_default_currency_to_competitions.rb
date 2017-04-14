@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SetDefaultCurrencyToCompetitions < ActiveRecord::Migration[5.0]
   def up
     change_column_default :Competitions, :currency_code, "USD"

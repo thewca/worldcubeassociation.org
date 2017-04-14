@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 sql = "INSERT INTO `Countries` (`id`, `name`, `continentId`, `iso2`) VALUES
 ('Afghanistan', 'Afghanistan', '_Asia', 'AF'),
 ('Albania', 'Albania', '_Europe', 'AL'),

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module I18nUtils
   def self.localized_sort_by!(wca_locale, array, &block)
     # Unfortunately, it looks like the set of languages supported by

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddDelegateStatusToUsers < ActiveRecord::Migration
   def change
     add_column :users, :delegate_status, :string

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Api::V0::CompetitionsController < Api::V0::ApiController
   def index
     managed_by_user = nil

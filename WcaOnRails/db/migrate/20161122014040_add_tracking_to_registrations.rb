@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddTrackingToRegistrations < ActiveRecord::Migration
   def change
     add_column :registrations, :accepted_by, :integer

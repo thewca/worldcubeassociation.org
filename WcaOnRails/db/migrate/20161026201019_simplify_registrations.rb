@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SimplifyRegistrations < ActiveRecord::Migration
   def up
     execute <<-SQL

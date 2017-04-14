@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddWorldReadableToPosts < ActiveRecord::Migration
   def change
     add_column :posts, :world_readable, :boolean

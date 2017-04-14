@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Team.create(friendly_id: 'results', name: 'Results Team',
             description: 'This team is responsible for managing all competition results.')
 Team.create(friendly_id: 'software', name: 'Software Team',

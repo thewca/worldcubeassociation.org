@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ResultMethods
   def results_path
     "/results/p.php?i=#{personId}"

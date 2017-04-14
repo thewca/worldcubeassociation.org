@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copied from https://gist.github.com/koffeinfrei/8931935,
 # and slightly modified.
 namespace :db do

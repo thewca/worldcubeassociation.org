@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeLatitudeAndLongitudeDefault < ActiveRecord::Migration
   def up
     change_column_null(:Competitions, :latitude, true)

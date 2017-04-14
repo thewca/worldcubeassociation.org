@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # For classes such as Country, Event, etc. we want to keep a local cache of the data in the db:
 #  - the data are read very often
 #  - we don't modify these tables from within the application, so cache invalidation is

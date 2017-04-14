@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddLiechtensteinToCountries < ActiveRecord::Migration
   def change
     execute "

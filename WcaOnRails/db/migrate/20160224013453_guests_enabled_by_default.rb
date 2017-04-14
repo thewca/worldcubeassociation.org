@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GuestsEnabledByDefault < ActiveRecord::Migration
   def change
     Competition.update_all guests_enabled: true

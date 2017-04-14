@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeEventOrderAndNames < ActiveRecord::Migration
   def up
     # No change for Rubik's Cube event.

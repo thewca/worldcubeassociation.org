@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RenameCropCoordinatesInUsers < ActiveRecord::Migration
   def change
     # Rename the columns from the carrierwave-crop defaults, because we

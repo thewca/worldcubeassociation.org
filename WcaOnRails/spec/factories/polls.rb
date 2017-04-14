@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryGirl.define do
   factory :poll do
     question { Faker::Lorem.paragraph }

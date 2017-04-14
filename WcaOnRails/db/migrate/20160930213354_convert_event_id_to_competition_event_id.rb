@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ConvertEventIdToCompetitionEventId < ActiveRecord::Migration
   def up
     add_column :registration_events, :competition_event_id, :int

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddUpdatedAtToResults < ActiveRecord::Migration
   def up
     execute "ALTER TABLE Results ADD updated_at timestamp NOT NULL default now() on update now();"

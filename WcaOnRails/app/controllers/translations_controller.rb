@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 

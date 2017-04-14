@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UpdateCompetitionNames < ActiveRecord::Migration
   def up
     execute "update Competitions set name = 'Clock N'' Other Stuff 2016', cellName = 'Clock N'' Other Stuff 2016' where id = 'ClockNOtherStuff2016';"

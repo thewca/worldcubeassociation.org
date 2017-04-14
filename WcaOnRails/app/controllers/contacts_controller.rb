@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ContactsController < ApplicationController
   def website
     @contact = WebsiteContact.new(your_email: current_user&.email)

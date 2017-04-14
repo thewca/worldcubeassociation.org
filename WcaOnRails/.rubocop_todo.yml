@@ -29,9 +29,6 @@ Style/VariableName:
 ### End camelCase stuff
 ###
 
-Style/EmptyLineAfterMagicComment:
-  Enabled: false
-
 # This was broken in Rubocop 0.48.1.
 # See https://github.com/bbatsov/rubocop/pull/4237
 Lint/AmbiguousBlockAssociation:

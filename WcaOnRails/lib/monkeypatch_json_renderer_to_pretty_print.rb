@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Monkeypatch ActiveSupport's JSON encoder to prettyprint JSON.
 module ActiveSupport::JSON::Encoding
   class JSONGemEncoder

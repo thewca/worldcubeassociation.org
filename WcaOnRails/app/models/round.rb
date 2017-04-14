@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :event, through: :competition_event
