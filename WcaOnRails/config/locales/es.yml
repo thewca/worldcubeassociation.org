@@ -262,8 +262,8 @@ es:
         external_website: Sitio web
         #original_hash: 692e1f9
         generate_website: Usaré la web de la WCA en vez de una web externa
-        #original_hash: 3d53469
-        base_entry_fee_lowest_denomination: Tarifa básica en la denominación mínima
+        #original_hash: dd88e47
+        base_entry_fee_lowest_denomination: Tarifa básica
         #original_hash: 28a6fbb
         currency_code: Moneda
         #original_hash: 5b2fe69
@@ -290,6 +290,8 @@ es:
         clone_tabs: Clonar también todas las pestañas con información adicional
         #original_hash: c5497bc
         competition_events: Pruebas
+        #original_hash: 71c8461
+        enable_donations: Quiero habilitar donaciones además de cobrar el importe del registro
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -371,14 +373,6 @@ es:
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Por favor, revisa los siguientes errores:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Nombre
-        #original_hash: 3fa6f5f
-        your_email: Tu correo electrónico
-        #original_hash: 68f4145
-        message: Mensaje
     hints:
       user:
         #original_hash: 87e1e6f
@@ -472,10 +466,17 @@ es:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Precio del registro básico. El precio del registro se muestra en la
+          página de información de la competición y en el proceso de registro si
+          se utiliza.
         #original_hash: 866bc05
         currency_code: Moneda en que se especifica el precio del registro.
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -492,13 +493,29 @@ es:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: Tu fecha de nacimiento correcta en formato AAAA-MM-DD
+        #original_hash: 059d2ed
+        document: >-
+          Para demostrar tu identidad y probar tu fecha de nacimiento, tienes
+          que adjuntar una foto de algún documento legal (DNI, carnet de
+          conducir, carnet de estudiante, pasaporte, certificado de
+          nacimiento,...) donde tu nombre completo y tu fecha de nacimiento sean
+          visibles.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -611,6 +628,27 @@ es:
           'true': Preguntar por acompañantes
           #original_hash: f8c2332
           'false': NO preguntar por acompañantes
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Nombre
+        #original_hash: 3fa6f5f
+        your_email: Tu correo electrónico
+      website_contact:
+        #original_hash: 68f4145
+        message: Cuerpo del mensaje
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Tu WCA ID
+        #original_hash: 51d0597
+        dob: Fecha de nacimiento correcta
+        #original_hash: e214b8a
+        document: Documento
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: tiene un formato incorrecto
   errors:
     messages:
       #original_hash: dc2367c
@@ -651,6 +689,8 @@ es:
         dob: Acceso a tu fecha de nacimiento
         #original_hash: 17aa24f
         email: Acceso a tu dirección de correo electrónico
+        #original_hash: e0d0654
+        manage_competitions: Administra las próximas competiciones que vas a organizar
     devise:
       #original_hash: 06184f5
       no_account: ¿No tienes cuenta?
@@ -884,15 +924,12 @@ es:
       not_found: no encontrado
       #original_hash: 49a6fe4
       already_assigned: ya ha sido asignada a otro usuario
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         no coincide con nuestros registros. Si estás seguro de estar
         proporcionando la fecha correcta en el formato correcto (AAAA-MM-DD),
-        escribe en inglés al <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Equipo de Resultados</a> informando de este error y
-        anexando una foto de algún documento (DNI, carnet de conducir,
-        pasaporte, carnet de estudiante...) donde tu nombre y tu fecha de
-        nacimiento sean visibles.
+        ponte en contacto con el Equipo de Resultados mediante <a
+        href="%{dob_form_path}">este formulario</a>.
       #original_hash: 0fbcefd
       unique: debe ser único
       #original_hash: 26f70ed
@@ -1049,7 +1086,7 @@ es:
         on_waiting_list: >-
           Tu registro está en la lista de espera, que actualmente está formada
           por %{n_total} %{people}.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Se te enviará un correo electrónico cuando tu registro se apruebe. Por
           favor, ten presente que los registros no se aprueban automáticamente.
@@ -1125,8 +1162,15 @@ es:
       approved_registrations: Registros aprobados
       #original_hash: bff04e8
       deleted_registrations: Registros eliminados
-      #original_hash: a844fcf
-      registered: Registrado
+      #original_hash: ac5d958
+      not_paid: Impagado
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Registrado en
+        #original_hash: fca3213
+        with_stripe: Pagado en
+      #original_hash: ce53c71
+      payment_requested_on: 'Pago requerido el %{date}'
       #original_hash: b25928c
       total: Total
     new_registration:
@@ -1140,6 +1184,8 @@ es:
     sign_in: Identificarse
     #original_hash: 5d45a00
     profile: perfil
+    #original_hash: 801b3e9
+    panel_title: Detalles del registro
     #original_hash: c0063c3
     register: ¡Regístrate!
     #original_hash: f484f15
@@ -1168,7 +1214,7 @@ es:
       %{sign_in} para comprobar el estado de tu registro. Si no tienes cuenta en
       la WCA aún, puedes crearte una %{here}, pero el registro para esta
       competición no está abierto todavía.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} para registrarte en %{comp}. Si no tienes cuenta en la WCA aún,
       puedes crearte una %{here}.
@@ -1185,12 +1231,10 @@ es:
       Por favor, comprueba la información sobre el registro para asegurarte si
       tienes que hacer algo más, como pagar por adelantado el importe del
       registro.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Te has registrado en %{comp}. Puedes ver la información de tu registro
-      abajo.
-    #original_hash: fa52a9b
-    entry_fee: 'El precio del registro es %{fee}'
+      Has solicitado registrarte en %{comp}. Puedes ver la información de tu
+      registro abajo.
     #original_hash: 3c9141f
     contact_organizer: Ponte en contacto con el organizador si quieres realizar algún cambio.
     #original_hash: 59354fd
@@ -1200,18 +1244,40 @@ es:
       la página web del campeonato.
     #original_hash: 58b1a3c
     accepted: ¡Tu registro ha sido aceptado!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      De momento has pagado %{paid} del total de %{total_entry_fee} del
-      registro.
-    #original_hash: 9153695
+    #original_hash: 70de60f
     entry_fees_fully_paid: 'Has pagado la totalidad de tu registro (%{paid}).'
-    #original_hash: 05495d6
-    payment_button_text: 'Paga %{entry_fee} de tu registro con tarjeta'
+    #original_hash: 2e5d1b9
+    will_pay_here: Vas a pagar en cuanto solicites el registro
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Por favor, consulta la información de la competición acerca de
+      instrucciones sobre el pago
+    payment_form:
+      #original_hash: 4de825f
+      title: Importe del registro
+      hints:
+        #original_hash: bf3a39e
+        donation: Donativo opcional para el equipo organizador
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Precio de la entrada
+        #original_hash: 2c09302
+        donation: Donativo
+      alerts:
+        #original_hash: a34940e
+        not_a_number: 'Por favor, introduce una cantidad válida'
+        #original_hash: 707b9ca
+        amount_too_low: El total pagado es menos que el importe del registro
+    #original_hash: 8607a87
+    payment_button_text: Paga tu registro con tarjeta
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para facilitar tus registros en el futuro, puedes seleccionar tus pruebas
       favoritas %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Hemos rellenado esta lista con tus pruebas favoritas. Puedes configurar
+      tus pruebas favoritas %{link}.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1257,10 +1323,11 @@ es:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Aquí se muestran sólo competiciones que utilizan el sistema de registro
-        de la WCA.
+        de la WCA. Si alguna competición no se muestra, comprueba la lista de
+        competidores en la web externa de la competición.
       #original_hash: 94a2fc8
       past_competitions: Competiciones anteriores
     competition_info:
@@ -1309,14 +1376,20 @@ es:
       region: Región
       #original_hash: bce0641
       search: Buscar
-      #original_hash: a725020
-      state: Estado
+      #original_hash: 769bb19
+      state: Cuándo
       #original_hash: 4e9f7a3
       present: Presentes
       #original_hash: 76eec76
       recent: Recientes
       #original_hash: 405c12f
       past: Anteriores
+      #original_hash: 081ae3f
+      custom: Filtro
+      #original_hash: 3f66052
+      from_date: Desde
+      #original_hash: ae79ea1
+      to_date: Hasta
       #original_hash: 52c30f8
       past_from: 'Anteriores del %{year}'
       #original_hash: 7cff459
@@ -1332,6 +1405,8 @@ es:
         recent: 'Competiciones recientes (últimos %{count} días)'
         #original_hash: 914742f
         upcoming: Próximas competiciones
+        #original_hash: 8b57693
+        custom: Competiciones que cumplen el filtro
       #original_hash: 6684214
       no_access: ¡No tienes acceso a esta página!
       tooltips:
@@ -1458,6 +1533,8 @@ es:
       end_date_before_start: La fecha final no puede ser anterior a la de inicio.
       #original_hash: be3933b
       span_too_many_days: 'La competición no puede durar más de %{max_days} días.'
+      #original_hash: cdcd288
+      invalid_currency_code: El código de moneda seleccionado no es válido
     new:
       #original_hash: 1208df7
       create_competition: Crear competición
@@ -1547,6 +1624,8 @@ es:
         orga_view: Vista organizador
         #original_hash: c6171f8
         event_view: Administrar pruebas
+        #original_hash: 6f7aef9
+        payment_view: Configurar pagos
         #original_hash: 76bfdcf
         admin_view: Vista administrador
         #original_hash: a857eb4
@@ -1624,6 +1703,33 @@ es:
     confirm_delete_post: >-
       ¿Estás seguro de querer eliminar este anuncio? Esta acción no es
       reversible.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: Formulario de Contacto sobre la Web de la WCA
+      #original_hash: 9039572
+      description_html: >-
+        Utiliza este formulario exclusivamente para enviarnos preguntas,
+        comentarios o sugerencias sobre la web. Para otras consultas ponte en
+        contacto con el <a href="%{contact_path}">departamento apropiado</a>.
+      #original_hash: c70a890
+      submit: Enviar
+    dob:
+      #original_hash: 907ac6c
+      title: Formulario de Solicitud de Cambio de Fecha de Nacimiento
+      #original_hash: 8a4ced5
+      description: >-
+        Utiliza este formulario si tu fecha de nacimiento almacenada en nuestra
+        base de datos es incorrecta.
+      #original_hash: 19c17ec
+      submit: Solicitar el cambio
+    messages:
+      #original_hash: 41948b9
+      success: >-
+        Gracias por ponerte en contacto con nosotros. ¡Te responderemos lo antes
+        posible!
+      #original_hash: 8e3a9da
+      delivery_error: Error enviando el mensaje.
   faq:
     #original_hash: d790b40
     title: Preguntas Más Frecuentes
@@ -1797,7 +1903,7 @@ es:
           entre ellos, el más popular es el Cubo de Rubik, inventado por el
           Profesor Rubik de Hungría. La WCA emplea una selección de estos puzles
           para sus pruebas oficiales.
-        #original_hash: c8ecd24
+        #original_hash: 1e83a7f
         '2': >-
           La World Cube Association organiza competiciones en todo el mundo
           apoyada por organizaciones nacionales que se encargan de la logística
@@ -1891,6 +1997,65 @@ es:
     title: Organizaciones Nacionales
     #original_hash: f9a7f4d
     content: 'La WCA reconoce las siguientes organizaciones regionales:'
+    how_to:
+      #original_hash: 8f367b8
+      title: Cómo ser reconocidos como Organización Nacional por la WCA
+      #original_hash: 31dd809
+      description: >-
+        La WCA reconoce organizaciones nacionales en todo el mundo. El propósito
+        de una organización nacional es organizar competiciones de la WCA y
+        apoyar actividades de la WCA en la región. Animamos a los países que
+        deseen establecer una organización nacional a contribuir en su región
+        antes de enviar su solicitud. Para recibir asesoramiento sobre cómo
+        acoger competiciones de la WCA, por favor, ponte en contacto con tu
+        delegado más cercano.
+    requirements:
+      #original_hash: 8bc9e59
+      title: Requisitos para ser Organización Nacional de la WCA
+      list:
+        #original_hash: 22a9f26
+        '1': Organizar o apoyar activamente competiciones de la WCA en la región
+        #original_hash: 8c5a7fe
+        '2': >-
+          Contribuir activamente en las competiciones continentales de la WCA
+          que se celebren en el continente de la organización
+        #original_hash: 5913cd0
+        '3': >-
+          Respetar y hacer respetar los Objetivos de los Estatutos y el
+          Reglamento de la WCA
+        #original_hash: 0c3576b
+        '4': Cumplir el Reglamento de la WCA
+        #original_hash: 23cda60
+        '5': Aceptar y cumplir las decisiones de los Oficiales de la WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Mantener actualizada con la WCA una copia de sus estatutos y
+          reglamento en formato electrónico
+    application_instructions:
+      #original_hash: 4da829b
+      title: Instrucciones de Solicitud
+      #original_hash: d000a70
+      description: >-
+        Para solicitar ser reconocida como Organización Nacional se requiere
+        enviar un escrito de solicitud a la Junta Directiva de la WCA con el
+        siguiente contenido:
+      list:
+        #original_hash: 1a9d544
+        '1': Nombre de la Organización Nacional
+        #original_hash: a9bf3f4
+        '2': Dirección oficial y detalles de contacto
+        #original_hash: 2a029e9
+        '3': >-
+          Una copia de los estatutos en curso, lo cuales deben estar en sintonía
+          con los Estatutos y el Reglamento de la WCA
+        #original_hash: a5a2771
+        '4': Una lista de sus principales directivos
+        #original_hash: 1186ebf
+        '5': Una clara descripción del área que cubre la Organización Nacional
+        #original_hash: 826e371
+        '6': >-
+          Un informe sobre las actividades relacionadas con la WCA ya realizadas
+          y en proyecto
   contact:
     #original_hash: a34b69f
     title: Información de Contacto
