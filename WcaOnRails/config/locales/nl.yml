@@ -634,6 +634,10 @@ nl:
         dob: Juiste geboortedatum
         #original_hash: e214b8a
         document: Document
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: heeft het verkeerde formaat
   errors:
     messages:
       #original_hash: dc2367c
@@ -674,6 +678,8 @@ nl:
         dob: Toegang tot je geboortedatum
         #original_hash: 17aa24f
         email: Toegang tot je e-mailadres
+        #original_hash: e0d0654
+        manage_competitions: Beheer de aankomende wedstrijden die je organiseert
     devise:
       #original_hash: 06184f5
       no_account: Geen account?
