@@ -1,0 +1,16 @@
+<div class="container">
+  <%= render "relation_form" %>
+
+  <% previous = nil %>
+  <% @people.each do |current| %>
+    <% if previous %>
+      <ul>
+        <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition_id, competition_name| %>
+          <li><%= link_to competition_name, competition_path(competition_id) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <p><%= current.name %></p>
+    <% previous = current %>
+  <% end %>
+</div>
