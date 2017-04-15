@@ -1,16 +1,31 @@
 <div class="container">
   <%= render "relation_form" %>
 
-  <% previous = nil %>
-  <% @people.each do |current| %>
-    <% if previous %>
-      <ul>
-        <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition_id, competition_name| %>
-          <li><%= link_to competition_name, competition_path(competition_id) %></li>
+  <div class="container">
+    <% previous = nil %>
+    <% @people.each do |current| %>
+      <% if previous %>
+        <div class="description col-md-6 col-md-offset-3">
+          Was on
+        </div>
+        <div class="competitions-slider col-md-6 col-md-offset-3">
+          <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition_id, competition_name| %>
+            <div class="competition-box">
+              <%= link_to competition_name, competition_path(competition_id) %>
+            </div>
+          <% end %>
+        </div>
+        <div class="description col-md-6 col-md-offset-3">
+          Together with
+        </div>
+      <% end %>
+      <div class="person-box col-md-6 col-md-offset-3">
+        <% if current.user %>
+          <img src="<%= current.user.avatar.url(:thumb) %>" class="avatar-thumbnail">
         <% end %>
-      </ul>
+        <%= link_to current.name, "/results/p.php?i=#{current.wca_id}" %>
+      </div>
+      <% previous = current %>
     <% end %>
-    <p><%= current.name %></p>
-    <% previous = current %>
-  <% end %>
+  </div>
 </div>

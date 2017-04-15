@@ -52,6 +52,7 @@
 //= require autoNumeric
 //= require currencies-data
 //= require currencies
+//= require jquery.slick
 //= require_self
 //= require_tree .
 

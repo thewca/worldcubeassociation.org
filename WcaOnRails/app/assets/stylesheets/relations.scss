@@ -1,3 +1,39 @@
-// Place all the styles related to the Relations controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.slick-arrow {
+  &::before {
+    color: black;
+  }
+}
+
+.slick-slider {
+  margin-bottom: 0;
+}
+
+.competition-box,
+.person-box {
+  margin: {
+    top: 10px;
+    bottom: 10px;
+  }
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  text-align: center;
+  a {
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+  }
+}
+
+.person-box {
+  background-color: lightgray;
+}
+
+.competition-box {
+  background-color: $blue;
+}
+
+.description {
+  font-size: 1.5em;
+  text-align: center;
+}

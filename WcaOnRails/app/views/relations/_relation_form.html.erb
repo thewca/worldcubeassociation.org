@@ -1,6 +1,6 @@
 <%= form_tag relations_url do %>
   <% autoselect_class = "form-control wca-autocomplete wca-autocomplete-users_search wca-autocomplete-persons_table wca-autocomplete-only_one" %>
-  <% data_for = lambda { |wca_id| { data: @selected_people&.select { |person| person.wca_id == wca_id }.to_json } } %>
+  <% data_for = lambda { |wca_id| { data: (@selected_people || []).select { |person| person.wca_id == wca_id }.to_json } } %>
 
   <div class="form-group">
     <%= text_field_tag :wca_id_1, @wca_id_1, class: autoselect_class, data: data_for.call(@wca_id_1) %>
