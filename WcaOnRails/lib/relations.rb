@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-LINKINGS = ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM linkings")
-                             .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
-                             .to_h.freeze
-
 module Relations
   def self.get_chain(wca_id1, wca_id2)
     find_chain([[wca_id1]], [[wca_id2]])
@@ -33,7 +29,7 @@ module Relations
 
   def self.extended_chains_by_one_degree!(chains)
     chains.map! do |chain|
-      LINKINGS[chain.last].map { |wca_id| [*chain, wca_id] }
+      linkings[chain.last].map { |wca_id| [*chain, wca_id] }
     end.flatten!(1)
   end
 
@@ -44,5 +40,19 @@ module Relations
       end
     end
     nil
+  end
+
+  def self.linkings
+    @@linkings ||= ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM linkings")
+                                     .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
+                                     .to_h.freeze
+  end
+
+  def self.compute_auxiliary_data
+    sql = File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
+    sql.split(';').each do |statement|
+      ActiveRecord::Base.connection.execute statement if statement.present?
+    end
+    @@linkings = nil
   end
 end
