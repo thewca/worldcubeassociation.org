@@ -154,16 +154,16 @@ ro:
       invalid: invalid
     #original_hash: 49d0140
     days:
-      other: '%{count} zile'
-      few: câteva
-      one: o zi
       zero: astăzi
+      one: o zi
+      few: câteva
+      other: '%{count} zile'
     #original_hash: 203e1b3
     these_events:
-      other: 'aceste %{count} evenimente'
-      few: 'aceste %{count} evenimente'
-      one: acest eveniment
       zero: 'aceste %{count} evenimente'
+      one: acest eveniment
+      few: 'aceste %{count} evenimente'
+      other: 'aceste %{count} evenimente'
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -264,7 +264,7 @@ ro:
         generate_website: >-
           Voi folosi site-ul WCA pentru informații suplimentare în loc de alt
           site
-        #original_hash: 3d53469
+        #original_hash: dd88e47
         base_entry_fee_lowest_denomination: Taxa de intrare de bază
         #original_hash: 28a6fbb
         currency_code: RON
@@ -296,6 +296,10 @@ ro:
           suplimentare
         #original_hash: c5497bc
         competition_events: Probe
+        #original_hash: 71c8461
+        enable_donations: >-
+          Vreau să accept donații, îm plus față de colectarea taxei de
+          înregistrare.
       registration:
         #original_hash: 3c23a67
         guests: Însoțitori
@@ -376,15 +380,7 @@ ro:
       html: ''
     error_notification:
       #original_hash: d70e9cb
-      default_message: 'Vă rugăm să corectați problemele:'
-    labels:
-      contact:
-        #original_hash: 709a232
-        name: Nume
-        #original_hash: 3fa6f5f
-        your_email: Email-ul tău
-        #original_hash: 68f4145
-        message: Mesaj
+      default_message: 'Te rugăm să corectezi problemele:'
     hints:
       user:
         #original_hash: 87e1e6f
@@ -477,10 +473,16 @@ ro:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Taxa de intrare de bază.Taxa de intrare va fi afișată pe pagina de
+          informații a competiției și pe pagina de înregistrare, dacă există.
         #original_hash: 866bc05
         currency_code: 'Codul monezii (exemplu: RON) pentru taxa de intrare.'
         #original_hash: da39a3e
         guests_enabled: ''
+        #original_hash: da39a3e
+        enable_donations: ''
         #original_hash: da39a3e
         id: ''
         #original_hash: da39a3e
@@ -497,13 +499,29 @@ ro:
         use_wca_registration: ''
         #original_hash: da39a3e
         venueAddress: ''
-      contact:
+      website_contact:
         #original_hash: da39a3e
         message: ''
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
         your_email: ''
+      dob_contact:
+        #original_hash: da39a3e
+        name: ''
+        #original_hash: da39a3e
+        your_email: ''
+        #original_hash: da39a3e
+        wca_id: ''
+        #original_hash: 8723825
+        dob: 'Data ta de naștere corectă, în formatul AAAA-LL-ZZ'
+        #original_hash: 059d2ed
+        document: >-
+          Pentru a ne dovedi că identitatea și data nașterii tale sunt corecte,
+          trebuie să atașezi o poză a oricărui document legal (Carte de
+          Identitate, Permis de Conducere, Carnet de Student, Pașaport,
+          Certificat de Naștere, etc.) în care numele și data nașterii sunt
+          vizibile și inteligibile pentru un vorbitor de limba engleză.
       post:
         #original_hash: 53c16eb
         body: >-
@@ -615,6 +633,27 @@ ro:
           'true': Întreabă despre însoțitori
           #original_hash: f8c2332
           'false': NU întreba despre însoțitori
+  mail_form:
+    attributes:
+      contact_form:
+        #original_hash: 709a232
+        name: Nume
+        #original_hash: 3fa6f5f
+        your_email: Emailul tău
+      website_contact:
+        #original_hash: 68f4145
+        message: Mesaj
+      dob_contact:
+        #original_hash: 390edfa
+        wca_id: Id-ul tău WCA
+        #original_hash: 51d0597
+        dob: Data nașterii corectă
+        #original_hash: e214b8a
+        document: Document
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: e într-un format greșit
   errors:
     messages:
       #original_hash: dc2367c
@@ -634,10 +673,10 @@ ro:
       messages:
         #original_hash: e88f903
         form_error:
-          other: 'Formularul conține %{count} erori:'
-          few: 'Formularul conține %{count} erori:'
-          one: 'Formularul conține o eroare:'
           zero: Formularul nu conține erori.
+          one: 'Formularul conține o eroare:'
+          few: 'Formularul conține %{count} erori:'
+          other: 'Formularul conține %{count} erori:'
     doorkeeper:
       applications:
         help:
@@ -656,6 +695,8 @@ ro:
         dob: Acceseze data nașterii
         #original_hash: 17aa24f
         email: Acceseze adresa de e-mail
+        #original_hash: e0d0654
+        manage_competitions: Administrează orice competiție viitoare pe care o organizezi
     devise:
       #original_hash: 06184f5
       no_account: Nu ai cont?
@@ -890,15 +931,12 @@ ro:
       not_found: nu s-a găsit
       #original_hash: 49a6fe4
       already_assigned: deja alocat unui utilizator diferit
-      #original_hash: 4bef62b
+      #original_hash: 51650d2
       dob_incorrect_html: >-
         nu se potrivește cu baza noastră de date. Dacă ești sigur că ai scris
-        data corectă în formatul corect (AAAA-LL-ZZ), te rugăm să trimiți un
-        email către <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Echipa de Rezultate WCA</a> în care să raportezi această
-        eroare. Atașează și o poză cu orice document (carte de identitate,
-        permis de conducere etc.) în care numele tău și data nașterii sunt
-        vizibile.
+        data corectă în formatul corect (AAAA-LL-ZZ), te rugăm să contactezi
+        Echipa de Rezultate WCA folosind acest <a
+        href="%{dob_form_path}">formular dedicat</a>.
       #original_hash: 0fbcefd
       unique: trebuie să fie unic(ă)
       #original_hash: 26f70ed
@@ -997,22 +1035,22 @@ ro:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: concurenți noi
-        few: concurenți noi
-        one: concurent nou
         zero: concurenți noi
+        one: concurent nou
+        few: concurenți noi
+        other: concurenți noi
       #original_hash: bc010e3
       returner:
-        other: concurenți vechi
-        few: concurenți vechi
-        one: concurent vechi
         zero: concurenți vechi
+        one: concurent vechi
+        few: concurenți vechi
+        other: concurenți vechi
       #original_hash: b7da17a
       person:
-        other: persoane
-        few: persoane
-        one: persoană
         zero: persoane
+        one: persoană
+        few: persoane
+        other: persoane
     flash:
       #original_hash: da7ec53
       not_using_wca: >-
@@ -1020,22 +1058,22 @@ ro:
         WCA.
       #original_hash: d528030
       accepted_and_mailed:
-        other: Înregistrări acceptate! E-mailuri de notificare trimise.
-        few: Înregistrări acceptate! E-mailuri de notificare trimise.
-        one: Înregistrare acceptată! E-mail de notificare trimis.
         zero: Înregistrări acceptate! E-mailuri de notificare trimise.
+        one: Înregistrare acceptată! E-mail de notificare trimis.
+        few: Înregistrări acceptate! E-mailuri de notificare trimise.
+        other: Înregistrări acceptate! E-mailuri de notificare trimise.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        other: Înregistrări transferate pe lista de așteptare.
-        few: Înregistrări transferate pe lista de așteptare.
-        one: Înregistrare transferată pe lista de așteptare.
         zero: Înregistrări transferate pe lista de așteptare.
+        one: Înregistrare transferată pe lista de așteptare.
+        few: Înregistrări transferate pe lista de așteptare.
+        other: Înregistrări transferate pe lista de așteptare.
       #original_hash: a360b31
       deleted_and_mailed:
-        other: Înregistrări șterse.
-        few: Înregistrări șterse.
-        one: Înregistrare ștearsă.
         zero: Înregistrări șterse.
+        one: Înregistrare ștearsă.
+        few: Înregistrări șterse.
+        other: Înregistrări șterse.
       #original_hash: c3aa289
       single_deletion_and_mail: 'Înregistrare ștearsă și e-mail trimis către %{mail}.'
       #original_hash: d8f067f
@@ -1063,7 +1101,7 @@ ro:
         on_waiting_list: >-
           Înregistrarea ta se află pe lista de așteptare, ce conține %{n_total}
           %{people}.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Vei primi un e-mail când înregistrarea ta va fi aprobată. Te rugăm să
           ții cont că înregistrările nu sunt aprobate automat. Pentru a vedea
@@ -1120,10 +1158,10 @@ ro:
       edit: Editează
       #original_hash: 0ab725c
       country_plural:
-        other: '%{count} țări'
-        few: '%{count} țări'
-        one: o țară
         zero: țări
+        one: o țară
+        few: '%{count} țări'
+        other: '%{count} țări'
       #original_hash: 1feee0e
       export_csv: Exportă în CSV
       #original_hash: 84add5b
@@ -1140,8 +1178,15 @@ ro:
       approved_registrations: Înregistrări aprobate
       #original_hash: bff04e8
       deleted_registrations: Înregistrări șterse
-      #original_hash: a844fcf
-      registered: Înregistrat
+      #original_hash: ac5d958
+      not_paid: Neplătit
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Înregistrat pe
+        #original_hash: fca3213
+        with_stripe: Plătit pe
+      #original_hash: ce53c71
+      payment_requested_on: 'Plată cerută pe: %{date}'
       #original_hash: b25928c
       total: Total
     new_registration:
@@ -1155,6 +1200,8 @@ ro:
     sign_in: Intră în cont
     #original_hash: 5d45a00
     profile: profil
+    #original_hash: 801b3e9
+    panel_title: Detalii despre înregistrare
     #original_hash: c0063c3
     register: Înregistrare!
     #original_hash: f484f15
@@ -1170,7 +1217,7 @@ ro:
     #original_hash: e9ddc6e
     will_open_html: 'Înregistrările se vor deschide în <strong>%{days}</strong> la ora %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'Înregistrările se vor închide în <strong>%{days}</strong> la ora %{time}.'
+    will_close_html: 'Înregistrările se vor închide în <strong>%{days}</strong> pe %{time}.'
     #original_hash: dc8a520
     closed_html: 'Înregistrare terminată acum <strong>%{days}</strong> la ora %{time}.'
     #original_hash: 2e7024d
@@ -1183,7 +1230,7 @@ ro:
       %{sign_in} to check the status of your registration. If you do not yet
       have a WCA account, you can create one %{here}, but its registration is
       not yet open.
-    #original_hash: e1301c4
+    #original_hash: 4f84af0
     please_sign_in_html: >-
       %{sign_in} pentru a te înregistra la %{comp}. Dacă nu ai încă un cont WCA,
       îl poți crea %{here}
@@ -1199,12 +1246,10 @@ ro:
     check_registration_information: >-
       Te rugăm să verifici informațiile despre înregistrare pentru a afla dacă e
       nevoie să mai faci ceva (de exemplu, plata unei taxe de înregistrare).
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Te-ai înregistrat pentru %{comp}. Poți vedea informații despre
-      înregistrarea ta mai jos.
-    #original_hash: fa52a9b
-    entry_fee: 'Taxa de intrare este %{fee}'
+      Ți-ai depus cererea de înregistrare pentru %{comp}. Poți vedea informații
+      despre înregistrarea ta mai jos.
     #original_hash: 3c9141f
     contact_organizer: Contactează organizatorul dacă vrei să faci vreo schimbare.
     #original_hash: 59354fd
@@ -1214,17 +1259,39 @@ ro:
       pentru detalii.
     #original_hash: 58b1a3c
     accepted: Înregistrarea ta a fost acceptată!
-    #original_hash: 69cf660
-    entry_fees_partially_paid: >-
-      Până acum ai plătit %{paid} din totalul de %{total_entry_fee} al taxei de
-      intrare.
-    #original_hash: 9153695
-    entry_fees_fully_paid: 'Ai plătit integral taxa de intrare de %{paid}.'
-    #original_hash: 05495d6
-    payment_button_text: 'Plătește taxa de intrare de %{entry_fee} cu cardul.'
+    #original_hash: 70de60f
+    entry_fees_fully_paid: 'Ai plătit, %{paid}, ce acoperă integral taxa de intrare.'
+    #original_hash: 2e5d1b9
+    will_pay_here: Le vei plăti aici după depunerea înregistrării
+    #original_hash: b7ef562
+    wont_pay_here: >-
+      Te rugăm să verifici informațiile despre competiție pentru a afla cum poți
+      plăti
+    payment_form:
+      #original_hash: 4de825f
+      title: Taxe de înregistrare
+      hints:
+        #original_hash: bf3a39e
+        donation: Donație opțională care va ajunga numai la echipa de organizare
+      labels:
+        #original_hash: 948ec72
+        entry_fees: Taxe de intrare
+        #original_hash: 2c09302
+        donation: Donație
+      alerts:
+        #original_hash: a34940e
+        not_a_number: Te rugăm să introduci o cantitate validă
+        #original_hash: 707b9ca
+        amount_too_low: Suma totală trebuie să fie cel puțin cât taxa de înregistrare.
+    #original_hash: 8607a87
+    payment_button_text: Plătește taxa de intrare cardul.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Pentru a te înscrie mai repede în viitor, îți poți seta probele preferate
+      %{link}.
+    #original_hash: 67d8734
+    preferred_events_populated_html: >-
+      Am completat automat cu evenimentele tale preferate, pe care le poti edita
       %{link}.
   competitions:
     messages:
@@ -1271,10 +1338,11 @@ ro:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Competițiile mele
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
-        Doar competițiile ce folosesc înregistrarea prin site-ul WCA vor fi
-        afișate aici.
+        Doar competițiile ce folosesc înregistrarea prin site-ul WCA sunt
+        afișate aici. Dacă nu găsești competiția ta aici, verifică lista
+        concurenților de pe site-ul competiției.
       #original_hash: 94a2fc8
       past_competitions: Competiții trecute
     competition_info:
@@ -1292,16 +1360,16 @@ ro:
       website: Site
       #original_hash: 680567f
       organizer_plural:
-        other: Organizatori
-        few: Organizatori
-        one: Organizator
         zero: Organizatori
+        one: Organizator
+        few: Organizatori
+        other: Organizatori
       #original_hash: 6afa61e
       delegate:
-        other: Delegați WCA
-        few: Delegați WCA
-        one: Delegat WCA
         zero: Delegați WCA
+        one: Delegat WCA
+        few: Delegați WCA
+        other: Delegați WCA
       #original_hash: b37456c
       contact: Contact
       #original_hash: a428739
@@ -1325,14 +1393,20 @@ ro:
       region: Regiune
       #original_hash: bce0641
       search: Căutare
-      #original_hash: a725020
-      state: Stat
+      #original_hash: 769bb19
+      state: Când
       #original_hash: 4e9f7a3
       present: Prezent
       #original_hash: 76eec76
       recent: Recent
       #original_hash: 405c12f
       past: În trecut
+      #original_hash: 081ae3f
+      custom: Personalizat
+      #original_hash: 3f66052
+      from_date: Din
+      #original_hash: ae79ea1
+      to_date: Către
       #original_hash: 52c30f8
       past_from: 'În trecut, din %{year}'
       #original_hash: 7cff459
@@ -1348,6 +1422,8 @@ ro:
         recent: 'Competiții recente (din ultimele %{count} zile)'
         #original_hash: 914742f
         upcoming: Competiții viitoare
+        #original_hash: 8b57693
+        custom: Competiții în perioada selectată
       #original_hash: 6684214
       no_access: Nu ai acces la această pagină!
       tooltips:
@@ -1390,6 +1466,8 @@ ro:
       #original_hash: 9104a03
       no_past_competitions: Nu ai competiții trecute
     competition_form:
+      #original_hash: e879b0b
+      board: Board
       #original_hash: f957dcb
       supports_md_html: >-
         Suportă <a href='https://daringfireball.net/projects/markdown/basics'
@@ -1469,6 +1547,8 @@ ro:
       end_date_before_start: Data de sfârșit nu poate fi înainte de data de începere.
       #original_hash: be3933b
       span_too_many_days: 'Competiția nu poate dura mai mult de %{max_days} zile.'
+      #original_hash: cdcd288
+      invalid_currency_code: Codul monedei selectate este invalid
     new:
       #original_hash: 1208df7
       create_competition: Creează competiție
@@ -1496,10 +1576,10 @@ ro:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        other: '%{count} competiții'
-        few: '%{count} competiții'
-        one: O competiție
         zero: Nicio competiție
+        one: O competiție
+        few: '%{count} competiții'
+        other: '%{count} competiții'
       #original_hash: e3528ec
       label: 'Competiții în apropiere (în mai puțin de %{days} zile și %{kms} km)'
       #original_hash: 3446062
@@ -1559,6 +1639,8 @@ ro:
         orga_view: Interfață Organizator
         #original_hash: c6171f8
         event_view: Administrează probele
+        #original_hash: 6f7aef9
+        payment_view: Setări despre plăți
         #original_hash: 76bfdcf
         admin_view: Interfață Admin
         #original_hash: a857eb4
@@ -1634,6 +1716,31 @@ ro:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Ești sigur că vrei să ștergi această postare? Nu mai poate fi recuperată.
+  contacts:
+    website:
+      #original_hash: ac2ac3d
+      title: Formular de Contact pentru Site-ul WCA
+      #original_hash: 9039572
+      description_html: >-
+        Folosește acest formular numai pentru întrebări, comentarii și sugestii
+        despre site. <a href="%{contact_path}">Alte cereri</a> trebuie să fie
+        trimise către grupul corespunzător.
+      #original_hash: c70a890
+      submit: Trimite mesajul
+    dob:
+      #original_hash: 907ac6c
+      title: Formular de Cerere pentru Schimbarea Datei Nașterii
+      #original_hash: 8a4ced5
+      description: >-
+        Folosește acest formular dacă data nașterii tale din baza noastră de
+        date diferă de cea adevărată.
+      #original_hash: 19c17ec
+      submit: Cere schimbarea
+    messages:
+      #original_hash: 41948b9
+      success: Mulțumim pentru mesaj! Te vom contacta în curând.
+      #original_hash: 8e3a9da
+      delivery_error: Eroare la trimiterea mesajului.
   faq:
     #original_hash: d790b40
     title: Întrebări Frecvente
@@ -1806,7 +1913,7 @@ ro:
           se rezolvă prin rotirea marginilor. Cel mai faimos dintre aceste
           puzzle-uri este Cubul Rubik, inventat de profesorul Rubik din Ungaria.
           O selecție din aceste puzzle-uri reprezintă probe oficiale ale WCA.
-        #original_hash: c8ecd24
+        #original_hash: 1e83a7f
         '2': >-
           World Cube Association organizează competiții în toată lumea,
           susținută de organizațiile naționale, responsabile de organizarea
@@ -1897,6 +2004,63 @@ ro:
     title: Organizații Naționale
     #original_hash: f9a7f4d
     content: 'WCA recunoaște următoarele organizații naționale:'
+    how_to:
+      #original_hash: 8f367b8
+      title: Cum să devii o Organizație Națională WCA
+      #original_hash: 31dd809
+      description: >-
+        WCA recunoaște diverse organizații naționale din întreaga lume. Scopul
+        organizațiilor naționale WCA este să organizeze competiții WCA și să
+        susțină activitățile acesteia în regiunea lor. Țările care vor să
+        formeze o organizație națională sunt încurajate să ajute activitatea WCA
+        în zona lor înainte să înainteze aplicația lor. Dacă ai nevoie de ajutor
+        pentru organizarea unei competiții WCA în zona ta, te rugăm să
+        contactezi cel mai apropiat delegat.
+    requirements:
+      #original_hash: 8bc9e59
+      title: Cerințe pentru Organizațiile Naționale WCA
+      list:
+        #original_hash: 22a9f26
+        '1': Să organizeze sau să susțină activ Competițiile WCA în regiunea lor
+        #original_hash: 8c5a7fe
+        '2': >-
+          Să contribuie activ la Competițiile Continentale WCA care au loc pe
+          continentul lor
+        #original_hash: 5913cd0
+        '3': >-
+          Să respecte și să operaționalizeze Obiectivele stabilite prin
+          Regulamentul și deciziile WCA
+        #original_hash: 0c3576b
+        '4': Să se supună tuturor Regulilor WCA aplicabile
+        #original_hash: 23cda60
+        '5': Să accepte și să îndeplinească toate deciziile Oficialilor WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Să mențină către WCA un document electronic cu regulile și deciziile
+          organizației
+    application_instructions:
+      #original_hash: 4da829b
+      title: Intrucțiuni pentru aplicație
+      #original_hash: d000a70
+      description: >-
+        Pentru a deveni o Organizație Națională WCA, este necesară trimiterea
+        unei aplicații scrise către Boardul WCA, care să conțină toate detaliile
+        de mai jos
+      list:
+        #original_hash: 1a9d544
+        '1': Numele Organizației Regionale
+        #original_hash: a9bf3f4
+        '2': Adresă oficială și detalii de contact
+        #original_hash: 2a029e9
+        '3': >-
+          O copie a deciziilor acesteia, care sunt in conformitate cu Deciziile
+          și Regulamentul WCA
+        #original_hash: a5a2771
+        '4': O listă a liderilor principali
+        #original_hash: 1186ebf
+        '5': O descriere clară a zonei acoperite de Organizația Regională
+        #original_hash: 826e371
+        '6': 'Un raport cu activitățile legate de WCA, din trecut și din prezent'
   contact:
     #original_hash: a34b69f
     title: Informații de Contact
