@@ -3,7 +3,7 @@
 <div class="container text-center">
   <h3><%= t '.find_relations' %></h3>
 
-  <%= form_tag relations_url, class: "form-inline relations-form" do %>
+  <%= form_tag relation_url, method: :get, class: "form-inline relations-form" do %>
     <% autoselect_class = "form-control wca-autocomplete wca-autocomplete-users_search wca-autocomplete-persons_table wca-autocomplete-only_one" %>
     <% data_for = lambda { |wca_id| { data: (@selected_people || []).select { |person| person.wca_id == wca_id }.to_json } } %>
     <div class="form-group">

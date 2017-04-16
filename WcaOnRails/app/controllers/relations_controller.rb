@@ -4,7 +4,7 @@ class RelationsController < ApplicationController
     render :relation
   end
 
-  def find_relation
+  def relation
     @wca_id1 = params[:wca_id1]
     @wca_id2 = params[:wca_id2]
     @selected_people = Person.where(wca_id: [@wca_id1, @wca_id2]).includes(:user)
