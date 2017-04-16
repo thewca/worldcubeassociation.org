@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-LINKINGS = ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM concise_linkings")
+LINKINGS = ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM linkings")
                              .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
                              .to_h.freeze
 
@@ -19,6 +19,18 @@ module Relations
     ActiveRecord::Base.connection.execute(sql).to_a
   end
 
+  # Internal
+
+  def self.find_chain(left_chains, right_chains)
+    extended_chains_by_one_degree!(left_chains)
+    final_chain = random_linked_chain(left_chains, right_chains)
+    return final_chain if final_chain
+    extended_chains_by_one_degree!(right_chains)
+    final_chain = random_linked_chain(left_chains, right_chains)
+    return final_chain if final_chain
+    find_chain(left_chains, right_chains)
+  end
+
   def self.extended_chains_by_one_degree!(chains)
     chains.map! do |chain|
       LINKINGS[chain.last].map { |wca_id| [*chain, wca_id] }
@@ -32,15 +44,5 @@ module Relations
       end
     end
     nil
-  end
-
-  def self.find_chain(left_chains, right_chains)
-    extended_chains_by_one_degree!(left_chains)
-    final_chain = random_linked_chain(left_chains, right_chains)
-    return final_chain if final_chain
-    extended_chains_by_one_degree!(right_chains)
-    final_chain = random_linked_chain(left_chains, right_chains)
-    return final_chain if final_chain
-    find_chain(left_chains, right_chains)
   end
 end
