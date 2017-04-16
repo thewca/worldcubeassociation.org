@@ -4,8 +4,7 @@ LINKINGS = ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM co
 
 module Relations
   def self.get_chain(wca_id_1, wca_id_2)
-    wca_ids_chain = find_chain([[wca_id_1]], [[wca_id_2]])
-    Person.where(wca_id: wca_ids_chain).sort_by { |person| wca_ids_chain.find_index person.wca_id }
+    find_chain([[wca_id_1]], [[wca_id_2]])
   end
 
   def self.competitions_together(first, second)
