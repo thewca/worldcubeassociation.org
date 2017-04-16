@@ -1,53 +1,55 @@
-.slick-arrow {
-  &::before {
-    color: black;
-  }
-}
-
-.slick-slider {
-  margin-bottom: 0;
-}
-
-.relations-form {
-  .selectize-input {
-    width: 300px;
+.relations {
+  .slick-arrow {
+    &::before {
+      color: black;
+    }
   }
 
-  .button-box {
-    margin-top: 10px;
+  .slick-slider {
+    margin-bottom: 0;
   }
-}
 
-.relations-line {
-  margin-top: 40px;
-}
+  .relations-form {
+    .selectize-input {
+      width: 300px;
+    }
 
-.competition-box,
-.person-box {
-  margin: {
-    top: 10px;
-    bottom: 10px;
+    .button-box {
+      margin-top: 10px;
+    }
   }
-  padding: 10px;
-  text-align: center;
-  border-radius: 10px;
-  text-align: center;
-  a {
-    color: white;
-    font-size: 2em;
-    text-decoration: none;
+
+  .relations-line {
+    margin-top: 40px;
   }
-}
 
-.person-box {
-  background-color: lightgray;
-}
+  .competition-box,
+  .person-box {
+    margin: {
+      top: 10px;
+      bottom: 10px;
+    }
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    text-align: center;
+    a {
+      color: white;
+      font-size: 2em;
+      text-decoration: none;
+    }
+  }
 
-.competition-box {
-  background-color: $blue;
-}
+  .person-box {
+    background-color: lightgray;
+  }
 
-.description {
-  font-size: 1.5em;
-  text-align: center;
+  .competition-box {
+    background-color: $blue;
+  }
+
+  .description {
+    font-size: 1.5em;
+    text-align: center;
+  }
 }

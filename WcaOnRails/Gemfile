@@ -69,7 +69,7 @@ gem 'daemons'
 gem 'i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
-gem "jquery-slick-rails"
+gem 'jquery-slick-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'

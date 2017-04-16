@@ -1174,7 +1174,7 @@ en:
       connectives:
         #context: Appears between a person and a competition.
         #context: Note that "was" may refer either to male or female. Do whatever is appropriate for your language, e.g. <male form>/<female form>.
-        was_on: "Was on"
+        was_at: "Was at"
         #context: Appears between a competition and a person.
         together_with: "Together with"
     messages:

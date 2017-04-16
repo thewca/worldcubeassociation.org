@@ -1,6 +1,6 @@
 <% provide(:title, t('.title')) %>
 
-<div class="container text-center">
+<div class="container text-center relations">
   <h3><%= t '.find_relations' %></h3>
 
   <%= form_tag relation_url, method: :get, class: "form-inline relations-form" do %>
@@ -23,7 +23,7 @@
       <% @people_chain.each do |current| %>
         <% if previous %>
           <div class="description col-md-6 col-md-offset-3">
-            <%= t '.connectives.was_on' %>
+            <%= t '.connectives.was_at' %>
           </div>
           <div class="competitions-slider col-md-6 col-md-offset-3">
             <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition_id, competition_name| %>
