@@ -5,13 +5,14 @@ class RelationsController < ApplicationController
   end
 
   def find_relation
-    @wca_id_1, @wca_id_2 = [params[:wca_id_1], params[:wca_id_2]]
-    @selected_people = Person.where(wca_id: [@wca_id_1, @wca_id_2]).includes(:user)
+    @wca_id1 = params[:wca_id1]
+    @wca_id2 = params[:wca_id2]
+    @selected_people = Person.where(wca_id: [@wca_id1, @wca_id2]).includes(:user)
     if @selected_people.count != 2
       flash[:danger] = I18n.t('relations.messages.invalid_wca_ids')
       redirect_to relations_url
     end
-    wca_ids_chain = Relations.get_chain(@wca_id_1, @wca_id_2)
+    wca_ids_chain = Relations.get_chain(@wca_id1, @wca_id2)
     @people_chain = Person.where(wca_id: wca_ids_chain).includes(:user).sort_by { |person| wca_ids_chain.find_index person.wca_id }
     render :relation
   end

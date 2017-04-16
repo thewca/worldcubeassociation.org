@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 LINKINGS = ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM concise_linkings")
-          .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
-          .to_h.freeze
+                             .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
+                             .to_h.freeze
 
 module Relations
-  def self.get_chain(wca_id_1, wca_id_2)
-    find_chain([[wca_id_1]], [[wca_id_2]])
+  def self.get_chain(wca_id1, wca_id2)
+    find_chain([[wca_id1]], [[wca_id2]])
   end
 
-  def self.competitions_together(first, second)
+  def self.competitions_together(wca_id1, wca_id2)
     sql = <<-SQL
       SELECT competition.id, competition.name
       FROM people_pairs_with_competition
       JOIN Competitions competition ON competition.id = competition_id
-      WHERE 1
-        AND wca_id_1 = '#{first}'
-        AND wca_id_2 = '#{second}'
+      WHERE wca_id1 = '#{wca_id1}' AND wca_id2 = '#{wca_id2}'
     SQL
     ActiveRecord::Base.connection.execute(sql).to_a
   end
@@ -31,7 +31,7 @@ module Relations
         return [*left_chain, left_last, *right_chain.reverse] if left_last == right_last
       end
     end
-    return nil
+    nil
   end
 
   def self.find_chain(left_chains, right_chains)
