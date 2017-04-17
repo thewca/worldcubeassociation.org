@@ -39,7 +39,7 @@ function showContent () {
     file_put_contents( 'generated/statistics.log', "$logMessage\n", FILE_APPEND );
     echo "<p>$logMessage</p>";
   }
-  
+
   #--- Show the cache
   echo file_get_contents( 'generated/statistics.cache' );
 }
@@ -47,18 +47,20 @@ function showContent () {
 #----------------------------------------------------------------------
 function showResults () {
 #----------------------------------------------------------------------
-  
+
   #--- Output the page header.
   echo "<h1>Fun Statistics</h1>\n\n<br>";
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>Here you see a selection of fun statistics, based on official WCA competition results.</p>";
   echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'>There are also three separate statistics pages: <a href='misc/evolution/'>Evolution of Records</a>, <a href='misc/sum_of_ranks/'>Sum of Ranks</a>, and <a href='misc/missing_averages/'>Missing Averages</a>.</p>";
+  #--- TODO: Please remove the "New" label after 18 July 2017.
+  echo "<p style='padding-left:20px;padding-right:20px;font-weight:bold'><span style='color: red;border: 2px solid red;padding: 2px;border-radius: 5px;font-size: 12px;'>New</span> You can find connections between cubers (aka Six Degrees) <a href='/relations'>here</a>.</p>";
   echo "<p style='padding-left:20px;padding-right:20px;color:gray;font-size:10px'>Generated on " . wcaDate() . ".</p>";
 
   #--- Get all the list definitions.
   defineAllLists();
   global $lists;
 
-  #--- Output the links to the individual lists.  
+  #--- Output the links to the individual lists.
   echo "<ul style='padding-left:20px'>\n";
   foreach( $lists as $list )
     echo "<li style='padding-bottom:5px'><a style='color:#33C;font-weight:normal' href='#$list[0]'>$list[1]</a></li>\n";
@@ -73,22 +75,22 @@ function showResults () {
 #----------------------------------------------------------------------
 function defineAllLists () {
 #----------------------------------------------------------------------
-  
+
   #--- Compute some helpers.
   global $WHERE, $sinceDateHtml, $sinceDateMysql, $sinceDateCondition;
-  
+
   $WHERE = "WHERE " . randomDebug() . " AND";
-  
+
   list( $year, $month, $day ) = explode( ' ', wcaDate( "Y m d" ));
   $year = intval( $year ) - 1;
   $month = intval( $month );
   $day = intval( $day );
   $monthName = getMonthName( $month );
-  
+
   $sinceDateHtml = "$monthName $day, $year";
   $sinceDateMysql = $year*10000 + $month*100 + $day;
   $sinceDateCondition = "(year*10000 + month*100 + day) >= $sinceDateMysql";
-  
+
   #--- Import the list definitions.
   require( 'includes/statistics/ALL_LISTS.php' );
 }
@@ -101,7 +103,7 @@ function addList ( $list, $legacyId ) {
 
   list( $id, $title, $subtitle, $columnDefs, $rows ) = $list;
   $info = isset($list[5]) ? $list[5] : '';
-  
+
   #--- From column definitions like "[P] Person [N] Appearances [T] | [P] Person [N] Appearances"
   #--- extract classes and names like:
   #--- ('P', 'N', 'T', 'P', 'N', 'f')
@@ -180,7 +182,7 @@ function addList ( $list, $legacyId ) {
     TableRow( $values );
   }
 
-  TableEnd();  
+  TableEnd();
   echo "</div>\n";
 }
 
@@ -188,11 +190,11 @@ function addList ( $list, $legacyId ) {
 function readDatabaseTableWithId ( $name ) {
 #----------------------------------------------------------------------
   global $cachedDatabaseTableWithId;
-  
+
   if( ! isset( $cachedDatabaseTableWithId[$name] ))
     foreach( dbQuery( "SELECT * FROM $name" ) as $row )
       $cachedDatabaseTableWithId[$name][$row['id']] = $row;
-      
+
   return $cachedDatabaseTableWithId[$name];
 }
 

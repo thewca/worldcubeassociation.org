@@ -1168,7 +1168,7 @@ en:
     #context: The page used to find a relation between two given cubers.
     relation:
       title: "Relations"
-      find_relations: "Find relations between speedcubers"
+      find_relations: "Find connections between cubers"
       show_relation: "Show me the relation!"
       #context: A kind of connectives that link person/competition boxes on the relation line.
       connectives:
