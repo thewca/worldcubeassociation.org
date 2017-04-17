@@ -322,7 +322,7 @@ RSpec.describe Api::V0::ApiController do
         wrc_team = Team.find_by_friendly_id('wrc')
         FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
 
-        results_team = Team.find_by_friendly_id('results')
+        results_team = Team.find_by_friendly_id('wrt')
         FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, team_leader: true)
 
         api_sign_in_as(user)
@@ -335,7 +335,7 @@ RSpec.describe Api::V0::ApiController do
 
         expect(json['me']['delegate_status']).to eq nil
         expect(json['me']['teams']).to match_array [
-          { "friendly_id" => "results", "leader" => true },
+          { "friendly_id" => "wrt", "leader" => true },
           { "friendly_id" => "wrc", "leader" => false },
         ]
       end

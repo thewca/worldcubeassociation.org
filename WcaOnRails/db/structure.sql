@@ -903,13 +903,15 @@ DROP TABLE IF EXISTS `teams`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `friendly_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `friendly_id` varchar(191) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+  `email` varchar(191) DEFAULT NULL,
+  `rank` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_teams_on_rank` (`rank`),
+  KEY `index_teams_on_friendly_id` (`friendly_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1164,4 +1166,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170404184332'),
 ('20170406170418'),
 ('20170418171035'),
-('20170426145811');
+('20170426145811'),
+('20170417072301');
