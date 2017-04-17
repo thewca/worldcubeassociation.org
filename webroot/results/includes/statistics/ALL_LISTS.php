@@ -56,7 +56,7 @@ $statisticFiles = array(
   'most_persons',
   'most_competitions',
   'most_countries',
-  'most_solves_in_one_competition_or_year'
+  'most_solves'
 
 );
 

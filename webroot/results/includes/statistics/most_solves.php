@@ -1,6 +1,24 @@
 <?php
 
-$solves = polishMostSolvesAttempts( "
+$solvesTotal = polishMostSolvesAttempts( "
+  SELECT    personId,
+            count(value1>0 or null)+
+            count(value2>0 or null)+
+            count(value3>0 or null)+
+            count(value4>0 or null)+
+            count(value5>0 or null) solves,
+            count(value1 and value1<>-2 or null)+
+            count(value2 and value2<>-2 or null)+
+            count(value3 and value3<>-2 or null)+
+            count(value4 and value4<>-2 or null)+
+            count(value5 and value5<>-2 or null) attempts
+  FROM      Results
+  GROUP BY  personId
+  ORDER BY  solves DESC, attempts
+  LIMIT     50
+" );
+
+$solvesCompetition = polishMostSolvesAttempts( "
   SELECT    personId,
             competitionId whereId,
             count(value1>0 or null)+
@@ -19,7 +37,7 @@ $solves = polishMostSolvesAttempts( "
   LIMIT     50
 " );
 
-$attempts = polishMostSolvesAttempts( "
+$solvesYear = polishMostSolvesAttempts( "
   SELECT    personId,
             year whereId,
             count(value1>0 or null)+
@@ -53,10 +71,10 @@ function polishMostSolvesAttempts ( $query ) {
 
 $lists[] = array(
   "most_solves",
-  "Most solves in one competition or year",
+  "Most solves",
   "",
-  "[P] Person [n] Solves [C] Competition [T] | [P] Person [n] Solves [N] Year",
-  my_merge( $solves, $attempts )
+  "[P] Person [n] Solves [T] | [P] Person [n] Solves [C] Competition [T] | [P] Person [n] Solves [N] Year",
+  my_merge( $solvesTotal, $solvesCompetition, $solvesYear )
 );
 
 ?>
