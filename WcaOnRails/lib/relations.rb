@@ -19,10 +19,10 @@ module Relations
 
   def self.find_chain(left_chains, right_chains)
     extended_chains_by_one_degree!(left_chains)
-    final_chain = random_linked_chain(left_chains, right_chains)
+    final_chain = random_final_chain(left_chains, right_chains)
     return final_chain if final_chain
     extended_chains_by_one_degree!(right_chains)
-    final_chain = random_linked_chain(left_chains, right_chains)
+    final_chain = random_final_chain(left_chains, right_chains)
     return final_chain if final_chain
     find_chain(left_chains, right_chains)
   end
@@ -33,7 +33,7 @@ module Relations
     end.flatten!(1)
   end
 
-  def self.random_linked_chain(left_chains, right_chains)
+  def self.random_final_chain(left_chains, right_chains)
     for *left_chain, left_last in left_chains.shuffle
       for *right_chain, right_last in right_chains.shuffle
         return [*left_chain, left_last, *right_chain.reverse] if left_last == right_last
