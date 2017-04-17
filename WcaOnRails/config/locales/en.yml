@@ -434,7 +434,7 @@ en:
       information: "Information"
       about: "About the WCA"
       delegates: "WCA Delegates"
-      organizations: "National Organizations"
+      organizations: "Regional Organizations"
       faq: "Frequently Asked Questions"
       contact: "Contact Information"
       forum: "Forum"
@@ -1063,11 +1063,11 @@ en:
       name: "Name"
       role: "Role"
       region: "Region"
-  national_organizations:
-    title: "National Organizations"
+  regional_organizations:
+    title: "Regional Organizations"
     content: "The WCA acknowledges the following national organizations:"
     how_to:
-      title: How to become a WCA National Organization
+      title: How to become a WCA Regional Organization
       description: The WCA recognizes various national organizations worldwide.
         The purpose of a WCA national organization is to organize WCA
         Competitions and support the WCA’s activities in the region. Countries
@@ -1076,7 +1076,7 @@ en:
         organizing a WCA competition in your area, please contact your nearest
         delegate.
     requirements:
-      title: Requirements for WCA National Organizations
+      title: Requirements for WCA Regional Organizations
       list:
         '1': To actively organize or support WCA Competitions in the region of the organization
         '2': To actively contribute to the Continental WCA Competitions that are held in the continent of the Regional Organization
@@ -1086,7 +1086,7 @@ en:
         '6': To keep on file with the WCA a copy of its current by-laws and regulations in an electronic format
     application_instructions:
       title: Application Instructions
-      description: To apply to become a National Organization we require the region to submit a written application to the WCA Board containing all of the details listed below.
+      description: To apply to become a Regional Organization we require the region to submit a written application to the WCA Board containing all of the details listed below.
       list:
         '1': Name of the Regional Organization
         '2': Official address and contact details
