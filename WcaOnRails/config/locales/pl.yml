@@ -656,6 +656,10 @@ pl:
         dob: Poprawna data urodzenia
         #original_hash: e214b8a
         document: Dokument
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: jest błednie sformatowana
   errors:
     messages:
       #original_hash: dc2367c
@@ -692,12 +696,14 @@ pl:
       scopes:
         #original_hash: 1920e95
         public: >-
-          Dostęp do twoich publicznych danych (imię, WCA ID, płeć, obywatelstwo
-          i zdjęcie profilowe)
+          Mieć dostęp do twoich publicznych danych (imię, WCA ID, płeć,
+          obywatelstwo i zdjęcie profilowe)
         #original_hash: d4003be
-        dob: Dostęp do twojej daty urodzin
+        dob: Mieć dostęp do twojej daty urodzin
         #original_hash: 17aa24f
-        email: Dostęp do twojego adresu email
+        email: Mieć dostęp do twojego adresu email
+        #original_hash: e0d0654
+        manage_competitions: 'Zarządzać nadchodzącymi zawodami, które organizujesz.'
     devise:
       #original_hash: 06184f5
       no_account: Nie posiadasz konta?
