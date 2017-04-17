@@ -1,4 +1,4 @@
-onPage('relations#find_relation', function() {
+onPage('relations#relation', function() {
   $('.competitions-slider').slick({
     adaptiveHeight: true
   });
