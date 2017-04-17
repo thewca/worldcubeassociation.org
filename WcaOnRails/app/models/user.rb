@@ -420,7 +420,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_competition?(competition)
-    can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self)
+    can_admin_results? || competition.organizers.include?(self) || competition.delegates.include?(self) || wrc_team?
   end
 
   def can_view_hidden_competitions?
