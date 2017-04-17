@@ -24,8 +24,7 @@
       <% if competition.organizers.length > 0 %>
         <dt><%= t('.organizer_plural', count: competition.organizers.length) %></dt>
         <dd>
-          <%# If the contact field is present, don't show organizers' emails. %>
-          <%= users_to_sentence competition.organizers, include_email: competition.contact.blank? %>
+          <%= users_to_sentence competition.organizers, include_email: false %>
         </dd>
       <% end %>
 
@@ -34,10 +33,14 @@
         <%= users_to_sentence competition.delegates, include_email: true %>
       </dd>
 
-      <% if competition.contact.present? %>
-        <dt><%= t '.contact' %></dt>
-        <dd><%=md competition.contact %></dd>
-      <% end %>
+      <dt><%= t '.contact' %></dt>
+      <dd>
+        <% if competition.contact.present? %>
+          <%=md competition.contact %>
+        <% else %>
+          <%= mail_to competition.managers.map(&:email).join(","), icon("envelope"), target: "_blank", class: "hide-new-window-icon" %>
+        <% end %>
+      </dd>
 
       <% if competition.has_entry_fee? %>
         <dt><%= t '.entry_fee' %></dt>
