@@ -38,7 +38,7 @@
         <% if competition.contact.present? %>
           <%=md competition.contact %>
         <% else %>
-          <%= mail_to competition.managers.map(&:email).join(","), icon("envelope"), target: "_blank", class: "hide-new-window-icon" %>
+          <%= mail_to competition.managers.map(&:email).join(","), icon("envelope"), subject: "Question about #{competition.name}", target: "_blank", class: "hide-new-window-icon" %>
         <% end %>
       </dd>
 
