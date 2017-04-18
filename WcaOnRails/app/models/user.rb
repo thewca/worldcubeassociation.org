@@ -674,6 +674,25 @@ class User < ApplicationRecord
     json
   end
 
+  def to_wcif(registration = nil)
+    {
+      "id" => 0,
+      "name" => name,
+      "wca_user_id" => id,
+      "wca_id" => wca_id,
+      "gender" => gender,
+      # /wcif is restricted to user who can manage the competition,
+      # we can include private data
+      "birthdate" => dob.to_s,
+      "email" => email,
+      "registration" => registration,
+      "avatar" => {
+        "url" => avatar.url,
+        "thumb_url" => avatar.url(:thumb),
+      },
+    }
+  end
+
   # Devise's method overriding! (the unwanted lines are commented)
   # We have the separate form for updating password and it requires current_password to be entered.
   # So we don't want to remove the password and password_confirmation if they are in the params and are blank.

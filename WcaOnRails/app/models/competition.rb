@@ -807,10 +807,21 @@ class Competition < ApplicationRecord
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif
+    officials = (organizers + delegates).uniq
+    persons_wcif = registrations.map do |r|
+      officials.delete(r.user)
+      r.user.to_wcif(r.to_wcif)
+    end
+    persons_wcif += officials.map(&:to_wcif)
+
     {
-      "formatVersion" => "1.0",
-      "id" => self.id,
-      "events" => self.competition_events.map(&:to_wcif),
+      "format_version" => "1.0",
+      "id" => id,
+      "name" => name,
+      "organizers" => organizers.map(&:id),
+      "delegates" => delegates.map(&:id),
+      "persons" => persons_wcif,
+      "events" => competition_events.map(&:to_wcif),
     }
   end
 

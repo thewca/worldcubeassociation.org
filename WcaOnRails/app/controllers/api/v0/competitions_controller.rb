@@ -20,15 +20,24 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show_wcif
-    competition = competition_from_params
+    # This is all the associations we may need for the WCIF!
+    includes_associations = [
+      {
+        registrations: [:user, :events],
+      },
+      :delegates,
+      :organizers,
+    ]
+    competition = competition_from_params(includes_associations)
     require_can_manage!(competition)
 
     render json: competition.to_wcif
   end
 
-  private def competition_from_params
+  private def competition_from_params(associations = {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.find_by_id(id)
+    base_model = associations.any? ? Competition.includes(associations) : Competition
+    competition = base_model.find_by_id(id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.

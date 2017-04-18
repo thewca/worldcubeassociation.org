@@ -171,6 +171,22 @@ class Registration < ApplicationRecord
     OpenStruct.new(index: index, length: pending_registrations.length)
   end
 
+  def to_wcif
+    {
+      "id" => id,
+      "event_ids" => events.map(&:id),
+      "status" => if accepted?
+                    'accepted'
+                  elsif deleted?
+                    'deleted'
+                  else
+                    'pending'
+                  end,
+      "guests" => guests,
+      "comments" => comments,
+    }
+  end
+
   validate :user_can_register_for_competition
   private def user_can_register_for_competition
     if user&.cannot_register_for_competition_reasons.present?
