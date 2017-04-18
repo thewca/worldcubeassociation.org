@@ -8,7 +8,7 @@ $results = dbQuery("
     competition.cellName competitionName,
     country.name         countryName
   FROM
-    (SELECT MIN(valueAndId) valueAndId
+    (SELECT MIN(value * 1000000000 + resultId) valueAndId
      FROM Concise${valueName}Results result
      WHERE $valueSource>0 $eventCondition $yearCondition $regionCondition
      GROUP BY personId
