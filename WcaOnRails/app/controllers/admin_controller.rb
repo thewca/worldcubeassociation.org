@@ -48,10 +48,14 @@ class AdminController < ApplicationController
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
             <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
           end
+        else
+          flash.now[:danger] = "Error while fixing #{@person.name}."
         end
       when "update"
         if @person.update_using_sub_id(person_params)
           flash.now[:success] = "Successfully updated #{@person.name}."
+        else
+          flash.now[:danger] = "Error while updating #{@person.name}."
         end
       end
     else

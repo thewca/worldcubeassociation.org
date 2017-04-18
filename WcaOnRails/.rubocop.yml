@@ -65,7 +65,7 @@ Metrics/ParameterLists:
   CountKeywordArgs: false
 
 Metrics/PerceivedComplexity:
-  Max: 23
+  Max: 25
 
 Metrics/LineLength:
   Max: 245

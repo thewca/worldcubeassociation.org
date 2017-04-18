@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
     if dangerous_change ? @user.update_with_password(user_params) : @user.update_attributes(user_params)
       if current_user == @user
-        # Sign in the user by passing validation in case their password changed
+        # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
       end
       flash[:success] = if @user.confirmation_sent_at != old_confirmation_sent_at

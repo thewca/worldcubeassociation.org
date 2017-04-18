@@ -212,6 +212,7 @@ function wcaDate ( $format='r', $timestamp=false ) {
 function genderText ($gender) {
   if ($gender == 'm') return 'Male';
   if ($gender == 'f') return 'Female';
+  if ($gender == 'o') return '';
   return '';
 }
 

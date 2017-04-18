@@ -49,6 +49,13 @@ class User < ApplicationRecord
 
   ALLOWABLE_GENDERS = [:m, :f, :o].freeze
   enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
+  GENDER_LABEL_METHOD = lambda do |g|
+    {
+      m: I18n.t('wca.devise.gender.male'),
+      f: I18n.t('wca.devise.gender.female'),
+      o: I18n.t('wca.devise.gender.other_gender'),
+    }[g]
+  end
 
   enum delegate_status: {
     candidate_delegate: "candidate_delegate",
@@ -135,6 +142,8 @@ class User < ApplicationRecord
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
         if !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
+        elsif unconfirmed_person.gender.blank?
+          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
