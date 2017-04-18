@@ -46,7 +46,7 @@ class UsersController < ApplicationController
   end
 
   private def user_to_edit
-    User.find_by_id(params[:id] || current_user.id)
+    User.includes(:current_teams).find_by_id(params[:id] || current_user.id)
   end
 
   def edit
