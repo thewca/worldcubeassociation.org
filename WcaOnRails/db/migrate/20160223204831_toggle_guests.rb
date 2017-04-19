@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ToggleGuests < ActiveRecord::Migration
   def change
     rename_column :Preregs, :guests, :guests_old

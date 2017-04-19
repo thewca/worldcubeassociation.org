@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MoneyAmountInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     # Here is some explanation about how generating the input works (to save people

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 I18n.config.missing_interpolation_argument_handler = lambda do |missing_key, provided_hash, string|
   if I18n.locale == :en
     # We only want to raise exceptions for English. This allows development to continue

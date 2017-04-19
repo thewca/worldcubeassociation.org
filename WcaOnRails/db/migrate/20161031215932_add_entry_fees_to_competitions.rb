@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddEntryFeesToCompetitions < ActiveRecord::Migration
   def change
     add_column :Competitions, :base_entry_fee_lowest_denomination, :integer

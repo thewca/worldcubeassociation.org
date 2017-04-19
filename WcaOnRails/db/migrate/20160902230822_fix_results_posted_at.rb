@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FixResultsPostedAt < ActiveRecord::Migration
   def change
     execute <<-SQL

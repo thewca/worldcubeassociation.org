@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangePreregsUpdatedAtToNotNull < ActiveRecord::Migration
   def change
     Registration.where(updated_at: nil).each do |registration|

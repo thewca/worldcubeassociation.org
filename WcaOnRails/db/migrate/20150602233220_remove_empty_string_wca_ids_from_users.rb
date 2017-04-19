@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RemoveEmptyStringWcaIdsFromUsers < ActiveRecord::Migration
   def change
     User.all.each do |user|

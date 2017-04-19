@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 sql = "INSERT INTO `Continents` (`id`, `name`, `recordName`, `latitude`, `longitude`, `zoom`) VALUES
 ('_Africa', 'Africa', 'AfR', 213671, 16984850, 3),
 ('_Asia', 'Asia', 'AsR', 34364439, 108330700, 2),

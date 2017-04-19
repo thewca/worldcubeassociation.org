@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RanksAverage < ApplicationRecord
   self.table_name = "RanksAverage"
 

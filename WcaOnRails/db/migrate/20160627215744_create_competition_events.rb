@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateCompetitionEvents < ActiveRecord::Migration
   def up
     create_table :competition_events do |t|

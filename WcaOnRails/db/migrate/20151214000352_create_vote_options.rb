@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateVoteOptions < ActiveRecord::Migration
   def change
     create_table :vote_options do |t|

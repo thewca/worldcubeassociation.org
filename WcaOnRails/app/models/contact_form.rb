@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ContactForm < MailForm::Base
   append :remote_ip, :user_agent
 

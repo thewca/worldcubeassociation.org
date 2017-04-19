@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddProperDateFieldsToCompetition < ActiveRecord::Migration
   def up
     add_column :Competitions, :start_date, :date

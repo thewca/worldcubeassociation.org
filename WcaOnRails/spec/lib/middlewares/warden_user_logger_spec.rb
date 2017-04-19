@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'middlewares/warden_user_logger'
 require 'ostruct'
 

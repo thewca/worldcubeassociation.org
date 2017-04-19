@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TestDbManager
   CONSTANT_TABLES = %w(Countries Continents Events RoundTypes Formats preferred_formats teams).freeze
 

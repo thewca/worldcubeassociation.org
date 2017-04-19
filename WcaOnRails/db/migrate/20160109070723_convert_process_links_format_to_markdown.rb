@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ConvertProcessLinksFormatToMarkdown < ActiveRecord::Migration
   def processLinks_to_markdown(s)
     s ? s.gsub(/\[ *{([^}]+)} *{([^}]+)} *\]/, '[\1](\2)') : nil

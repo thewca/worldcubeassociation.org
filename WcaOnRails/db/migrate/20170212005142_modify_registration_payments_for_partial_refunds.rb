@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ModifyRegistrationPaymentsForPartialRefunds < ActiveRecord::Migration
   def change
     add_column :registration_payments, :refunded_registration_payment_id, :int

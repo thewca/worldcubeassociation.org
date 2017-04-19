@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddUnconfirmedWcaIdToUsers < ActiveRecord::Migration
   def change
     add_column :users, :unconfirmed_wca_id, :string

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddResultsPostedToCompetitions < ActiveRecord::Migration
   def up
     add_column :Competitions, :results_posted_at, :datetime

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'boot'
 require_relative '../lib/middlewares/fix_accept_header'
 require_relative '../lib/middlewares/warden_user_logger'

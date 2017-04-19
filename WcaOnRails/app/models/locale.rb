@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Locale < SimpleDelegator
   include ActionView::Helpers::TextHelper
   SOME_CHARS = '[\s\S]*?'

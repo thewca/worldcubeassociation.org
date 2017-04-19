@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WcaIdClaimMailer < ApplicationMailer
   def notify_delegate_of_wca_id_claim(user_claiming_wca_id)
     @user_claiming_wca_id = user_claiming_wca_id

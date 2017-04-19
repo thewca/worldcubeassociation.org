@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeWcaDelegateAndOrganiserToTextInCompetitions < ActiveRecord::Migration
   def up
     change_column :Competitions, :organiser, :text, default: nil, null: true

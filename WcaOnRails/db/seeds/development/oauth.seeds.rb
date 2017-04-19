@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 after "development:users" do
   software_team_user = User.find_by_email!("software_team")
   Doorkeeper::Application.create!(

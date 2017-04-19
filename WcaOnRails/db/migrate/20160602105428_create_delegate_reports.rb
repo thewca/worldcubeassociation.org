@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateDelegateReports < ActiveRecord::Migration
   def change
     create_table :delegate_reports do |t|

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddRailsPersonsView < ActiveRecord::Migration
   def change
     execute "ALTER TABLE Persons DROP PRIMARY KEY;"

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ApiSignInControllerHelper
   def api_sign_in_as(user, scopes: nil)
     scopes ||= Doorkeeper::OAuth::Scopes.new

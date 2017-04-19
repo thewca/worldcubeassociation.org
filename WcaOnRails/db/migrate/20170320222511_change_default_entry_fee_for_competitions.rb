@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeDefaultEntryFeeForCompetitions < ActiveRecord::Migration[5.0]
   def change
     Competition.where(base_entry_fee_lowest_denomination: nil).update_all(base_entry_fee_lowest_denomination: 0)

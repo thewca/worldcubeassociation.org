@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateRegistrationEvents < ActiveRecord::Migration
   def change
     create_table :registration_events do |t|
