@@ -3,5 +3,12 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <%= link_to "Crash course", delegate_crash_course_path %>
+  <ul>
+    <li>
+      <%= link_to "Crash course", delegate_crash_course_path %>
+    </li>
+    <li>
+      <%= link_to "Delegates", delegates_stats_path %>
+    </li>
+  </ul>
 </div>
