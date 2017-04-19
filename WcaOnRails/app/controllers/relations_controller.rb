@@ -15,6 +15,5 @@ class RelationsController < ApplicationController
     end
     wca_ids_chain = Relations.get_chain(@wca_id1, @wca_id2)
     @people_chain = Person.current.where(wca_id: wca_ids_chain).includes(:user).sort_by { |person| wca_ids_chain.find_index person.wca_id }
-    render :relation
   end
 end
