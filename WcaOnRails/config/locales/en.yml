@@ -540,7 +540,7 @@ en:
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote senior delegate with subordinate delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
-      wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> with a photo of any legal document (ID card, driver license, etc) where your name and date of birth are visible."
+      wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."

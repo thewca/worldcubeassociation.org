@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
+
   it "defines a valid user" do
     user = FactoryGirl.create :user
     expect(user).to be_valid
@@ -154,7 +156,7 @@ RSpec.describe User, type: :model do
     it "does not allow assigning a birthdateless WCA ID to a user" do
       user.wca_id = birthdayless_person.wca_id
       expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html')]
+      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)]
     end
 
     it "does not allow assigning a genderless WCA ID to a user" do
@@ -388,7 +390,7 @@ RSpec.describe User, type: :model do
       user.unconfirmed_wca_id = person_without_dob.wca_id
       user.dob_verification = "1234-04-03"
       expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html')]
+      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)]
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do
