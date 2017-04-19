@@ -26,9 +26,9 @@
             <%= t '.connectives.was_at' %>
           </div>
           <div class="competitions-slider col-md-6 col-md-offset-3">
-            <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition_id, competition_name| %>
+            <% Relations.competitions_together(previous.wca_id, current.wca_id).each do |competition| %>
               <div class="competition-box">
-                <%= link_to competition_name, competition_path(competition_id) %>
+                <%= link_to competition.name, competition_path(competition) %>
               </div>
             <% end %>
           </div>

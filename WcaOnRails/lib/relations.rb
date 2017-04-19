@@ -6,13 +6,7 @@ module Relations
   end
 
   def self.competitions_together(wca_id1, wca_id2)
-    sql = <<-SQL
-      SELECT competition.id, competition.name
-      FROM people_pairs_with_competition
-      JOIN Competitions competition ON competition.id = competition_id
-      WHERE wca_id1 = '#{wca_id1}' AND wca_id2 = '#{wca_id2}'
-    SQL
-    ActiveRecord::Base.connection.execute(sql).to_a
+    PeoplePairWithCompetition.includes(:competition).where(wca_id1: wca_id1, wca_id2: wca_id2).map(&:competition)
   end
 
   # Internal
