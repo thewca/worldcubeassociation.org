@@ -8,7 +8,7 @@ class DelegateReport < ApplicationRecord
 
   before_create :set_discussion_url
   def set_discussion_url
-    self.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode(competition.name)
+    self.discussion_url = "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + competition.name.gsub(/ /,'$20')
   end
 
   before_create :equipment_default
