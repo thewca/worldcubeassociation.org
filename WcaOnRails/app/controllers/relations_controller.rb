@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RelationsController < ApplicationController
   def index
     render :relation

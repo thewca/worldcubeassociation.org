@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "relations" do
   let!(:person1) { FactoryGirl.create(:person_with_multiple_sub_ids) }
   let!(:person2) { FactoryGirl.create(:person) }
+  let!(:competition) { FactoryGirl.create(:competition) }
 
   before do
     # They have been to the same competition - that's a direct relation.
@@ -11,7 +13,7 @@ RSpec.describe "relations" do
       person1.wca_id => [person2.wca_id],
       person2.wca_id => [person1.wca_id],
     )
-    allow(Relations).to receive(:competitions_together).and_return([["CompId", "Comp Name"]])
+    allow(Relations).to receive(:competitions_together).and_return([competition])
   end
 
   context "given a person with multiple subIDs" do

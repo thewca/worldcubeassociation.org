@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ComputeRelationsAuxiliaryData < ApplicationJob
   queue_as :default
 

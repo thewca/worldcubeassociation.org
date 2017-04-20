@@ -43,10 +43,7 @@ module Relations
   end
 
   def self.compute_auxiliary_data
-    sql = File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
-    sql.split(';').each do |statement|
-      ActiveRecord::Base.connection.execute statement if statement.present?
-    end
+    DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
     @@linkings = nil
   end
 end
