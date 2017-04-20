@@ -132,12 +132,13 @@ class User < ApplicationRecord
 
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
+        dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
         if !unconfirmed_person.dob
-          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html').html_safe)
+          errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
-          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: Rails.application.routes.url_helpers.contact_dob_path).html_safe)
+          errors.add(:dob_verification, I18n.t('users.errors.dob_incorrect_html', dob_form_path: dob_form_path).html_safe)
         end
       end
       if claiming_wca_id && person

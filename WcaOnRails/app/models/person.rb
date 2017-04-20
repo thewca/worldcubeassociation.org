@@ -104,10 +104,11 @@ class Person < ApplicationRecord
 
   # Note this is very similar to the cannot_register_for_competition_reasons method in user.rb.
   def cannot_be_assigned_to_user_reasons
+    dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
     [].tap do |reasons|
       reasons << I18n.t('users.errors.wca_id_no_name_html') if name.blank?
       reasons << I18n.t('users.errors.wca_id_no_gender_html') if gender.blank?
-      reasons << I18n.t('users.errors.wca_id_no_birthdate_html') if dob.blank?
+      reasons << I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path) if dob.blank?
       reasons << I18n.t('users.errors.wca_id_no_citizenship_html') if country_iso2.blank?
     end
   end
