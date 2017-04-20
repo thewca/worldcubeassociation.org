@@ -216,7 +216,7 @@ CREATE TABLE `InboxPersons` (
   `wcaId` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `countryId` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `gender` varchar(1) DEFAULT '',
   `dob` date NOT NULL,
   `competitionId` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `InboxPersons_fk_country` (`countryId`),
@@ -265,7 +265,7 @@ CREATE TABLE `Persons` (
   `subId` tinyint(6) NOT NULL DEFAULT '1',
   `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `gender` varchar(1) DEFAULT '',
   `year` smallint(6) NOT NULL DEFAULT '0',
   `month` tinyint(4) NOT NULL DEFAULT '0',
   `day` tinyint(4) NOT NULL DEFAULT '0',
@@ -1148,4 +1148,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170320222511'),
 ('20170402223714'),
 ('20170404184332'),
-('20170406170418');
+('20170406170418'),
+('20170418171035');

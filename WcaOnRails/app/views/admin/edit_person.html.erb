@@ -22,7 +22,7 @@
         <%= f.input :name %>
         <%= f.input :countryId, collection: Country.real, value_method: lambda { |c| c.id }, label_method: lambda { |c| c.name } %>
 
-        <%= f.input :gender, collection: [:m, :f], label_method: lambda { |g| { m: "Male", f: "Female" }[g] } %>
+        <%= f.input :gender, collection: User::ALLOWABLE_GENDERS, label_method: User::GENDER_LABEL_METHOD %>
         <%= f.input :dob, as: :date_picker %>
 
         <button type="submit" name="method" value="fix" class="btn btn-primary">
