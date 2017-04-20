@@ -932,11 +932,10 @@ nl:
       senior_has_delegate: kan senior delegate niet demoveren als deze nog delegates heeft
       #original_hash: 48653a9
       already_have_id: 'kan WCA-id niet claimen omdat je al een WCA-id %{wca_id} hebt'
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
-        We hebben jouw geboortedatum nog niet. Stuur een e-mail naar <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
-        Results Team</a> met een foto van je legitimatiebewijs.
+        We hebben jouw geboortedatum nog niet. Neem alsjeblieft contact op met
+        het WCA-resultatenteam via <a href="%{dob_form_path}">dit formulier</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Voor deze WCA-id hebben we nog geen geslacht. Stuur een e-mail aan <a
