@@ -23,7 +23,9 @@
         <tr class="<%= delegate.delegate_status %>">
           <td class="delegate" data-toggle="tooltip" data-placement="top" data-container="body" title="<%= delegate.notes %>">
             <%= delegate.name %>
-            <%= link_to icon("pencil"), edit_user_path(delegate) %>
+            <% if current_user&.can_edit_notes_of_user?(delegate) %>
+              <%= link_to icon("pencil"), edit_user_path(delegate) %>
+            <% end %>
             <%= mail_to delegate.email, icon("envelope"), target: "_blank", class: "hide-new-window-icon" %>
           </td>
           <td class="position"><%= delegate.delegate_status.humanize %></td>
@@ -33,7 +35,9 @@
           <td class="total"><%= competitions&.count %></td>
           <td><%= delegate.phone_number %></td>
           <td>
-            <%= link_to "History", competitions_path(display: "admin", years: "all", delegate: delegate.id) %>
+            <% if current_user&.can_see_admin_competitions? %>
+              <%= link_to "History", competitions_path(display: "admin", years: "all", delegate: delegate.id) %>
+            <% end %>
           </td>
         </tr>
       <% end %>

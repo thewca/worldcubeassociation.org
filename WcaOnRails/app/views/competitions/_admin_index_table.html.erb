@@ -74,7 +74,9 @@
               end %>
             <%= content_tag :td, results_content, class: "admin-date #{results_class}" %>
             <td>
-              <%= link_to "Edit", admin_edit_competition_path(competition), class: "btn btn-sm btn-primary", target: "_blank" %>
+              <% if current_user&.can_admin_results? %>
+                <%= link_to "Edit", admin_edit_competition_path(competition), class: "btn btn-sm btn-primary", target: "_blank" %>
+              <% end %>
             </td>
           </tr>
         <% end %>
