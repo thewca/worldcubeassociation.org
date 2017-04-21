@@ -7,9 +7,9 @@ RSpec::Matchers.define :be_invalid_with_errors do |errors|
 
   failure_message do |ar_object|
     if ar_object.valid?
-      "expected to find the following errors: #{errors}"
-    else
       "expected that #{ar_object} would be invalid"
+    else
+      "expected to find the following errors: #{errors}, instead found #{ar_object.errors.messages}"
     end
   end
 end
