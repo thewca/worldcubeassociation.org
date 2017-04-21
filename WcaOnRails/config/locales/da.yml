@@ -466,6 +466,11 @@ da:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
+          på konkurrencens informations side og tilmeldings siden hvis det
+          bliver brugt.
         #original_hash: 866bc05
         currency_code: Valuta koden for indgangs gebyrer.
         #original_hash: da39a3e
@@ -637,6 +642,10 @@ da:
         dob: Korrekt fødselsdag
         #original_hash: e214b8a
         document: Dokument
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: er formateret forkert
   errors:
     messages:
       #original_hash: dc2367c
@@ -677,6 +686,8 @@ da:
         dob: Gå ind på din fødselsdag
         #original_hash: 17aa24f
         email: Gå ind på din email adresse
+        #original_hash: e0d0654
+        manage_competitions: Styr dine kommende konkurrencer som du arrangerer
     devise:
       #original_hash: 06184f5
       no_account: Ingen konto?
@@ -710,8 +721,8 @@ da:
       about: Om WCA
       #original_hash: d8fd3e4
       delegates: WCA Delegater
-      #original_hash: 0ef06c8
-      organizations: Nationale Organisationer
+      #original_hash: 37b8fdc
+      organizations: Regionale Organisationer
       #original_hash: d790b40
       faq: Ofte Stillede Spørgsmål
       #original_hash: a34b69f
@@ -927,12 +938,10 @@ da:
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
         %{wca_id}
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
-        Vi har ikke nogen fødselsdag for dette WCA ID. Send venligst en email
-        til <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Resultat Holdet</a> med noget dokumentation (ID
-        kort, kørekort, osv) hvor dit navn og din fødselsdag er synligt.
+        Vi har ikke nogen fødselsdag for dette WCA ID. Kontakt venligst WCA
+        Resultatholdet med <a href="%{dob_form_path}">denne formular</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Vi har ikke et køn tilknyttet til dette WCA ID. Email <a
@@ -1065,7 +1074,7 @@ da:
         on_waiting_list: >-
           Din registrering er på ventelisten, som lige nu er %{n_total}
           %{people} på den.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Du vil modtage en email når din tilmelding er godkendt. Læg mærke til
           at tilmeldinger ikke bliver accepteret automatisk. For at se
@@ -1139,8 +1148,15 @@ da:
       approved_registrations: Accepterede registreringer
       #original_hash: bff04e8
       deleted_registrations: Slettede registreringer
-      #original_hash: a844fcf
-      registered: Registrerede
+      #original_hash: ac5d958
+      not_paid: Ikke betalt
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Tilmeldt på
+        #original_hash: fca3213
+        with_stripe: Betalt på
+      #original_hash: ce53c71
+      payment_requested_on: 'Betaling efterspurgt inden: %{date}'
       #original_hash: b25928c
       total: Total
     new_registration:
@@ -1199,10 +1215,10 @@ da:
     check_registration_information: >-
       Tjek informationen om tilmelding og find ud af om du også skal gøre noget
       andet, som at betale et deltagergebyr.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Du har tilmeldt dig til %{comp}. Du kan se din tilmeldings information
-      nedenunder.
+      Du har indsendt din tilmelding til %{comp}. Du kan se din tilmeldings
+      detaljer nedenunder.
     #original_hash: 3c9141f
     contact_organizer: Kontakt arrangøren hvis du gerne vil lave en ændring.
     #original_hash: 59354fd
@@ -1286,8 +1302,11 @@ da:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mine konkurrencer
-      #original_hash: 6e79aaf
-      disclaimer: Kun konkurrencer der bruger WCA tilmelding vil blive vist her.
+      #original_hash: 1fa5a4b
+      disclaimer: >-
+        Kun konkurrencer der bruger WCA tilmelding er vist her. Hvis din
+        konkurrence ikke er her, så tjek konkurrencens hjemmesides tilmeldings
+        liste.
       #original_hash: 94a2fc8
       past_competitions: Tidligere konkurrencer
     competition_info:
@@ -1336,14 +1355,20 @@ da:
       region: Region
       #original_hash: bce0641
       search: Søg
-      #original_hash: a725020
-      state: Status
+      #original_hash: 769bb19
+      state: Tid
       #original_hash: 4e9f7a3
       present: Kommende
       #original_hash: 76eec76
       recent: Seneste
       #original_hash: 405c12f
       past: Tidligere
+      #original_hash: 081ae3f
+      custom: Brugerdefineret
+      #original_hash: 3f66052
+      from_date: Fra
+      #original_hash: ae79ea1
+      to_date: Til
       #original_hash: 52c30f8
       past_from: 'Tidligere fra %{year}'
       #original_hash: 7cff459
@@ -1359,6 +1384,8 @@ da:
         recent: 'Seneste konkurrencer (sidste %{count} dage)'
         #original_hash: 914742f
         upcoming: Kommende konkurrencer
+        #original_hash: 8b57693
+        custom: Konkurrencer i den valgte periode
       #original_hash: 6684214
       no_access: Du har ikke adgang til denne side!
       tooltips:
@@ -1848,11 +1875,11 @@ da:
           dreje siderne de såkaldte 'twisty puzzles'. Den meste kendte af disse
           "puzzles" er Rubiks Kuben, opfundet af professor Rubik fra Ungarn. Et
           udvalg af disse "puzzles" er valgt som officielle discipliner af WCA.
-        #original_hash: c8ecd24
+        #original_hash: 22c3593
         '2': >-
           World Cube Association arrangerer konkurrencer over hele verden,
-          støttet af nationale organisationer som har ansvaret for at arrangere
-          konkurrencer i deres land.
+          støttet af regionale organisationer som har ansvaret for at arrangere
+          konkurrencer i deres lande.
         #original_hash: 20e0550
         '3': >-
           Målet for World Cube Association er at have <br /><strong>flere
@@ -1929,11 +1956,71 @@ da:
       role: Rolle
       #original_hash: 0f21717
       region: Region
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Nationale Organisationer
-    #original_hash: f9a7f4d
-    content: 'WCA anerkender følgende nationale organisationer:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Regionale Organisationer
+    #original_hash: ba87c07
+    content: 'WCA anerkender de følgende regionale organisationer:'
+    how_to:
+      #original_hash: fc3af12
+      title: Hvordan laver man en WCA Regional Organisation
+      #original_hash: bdf57ff
+      description: >-
+        WCA anerkender mange regionale organisationer over hele verden. Formålet
+        med en WCA regional organization er at organisere WCA konkurrencer og
+        støtte WCA's aktiviteter i den del af verden. Lande der ønsker at lave
+        en regional organisation er opfordret til at hjælpe WCA i deres område
+        før de indsender en ansøgning. For hjælp med at organisere en WCA
+        konkurrence i dit område, så kontakt venligst din tætteste delegerede.
+    requirements:
+      #original_hash: 1e04fd7
+      title: Krav for WCA Regionale Organisationer
+      list:
+        #original_hash: 22a9f26
+        '1': >-
+          At aktivt organisere eller støtte WCA konkurrence i den region af
+          organisationen
+        #original_hash: 8c5a7fe
+        '2': >-
+          At aktivt hjælpe til med kontinentale WCA konkurrencer som bliver
+          afholdt på kontinentet af den Regionale Organisation
+        #original_hash: 5913cd0
+        '3': >-
+          At respektere og operationalisere målene som er sat af reglerne fra
+          WCA
+        #original_hash: 0c3576b
+        '4': At overholde alle gældende WCA regler
+        #original_hash: 23cda60
+        '5': At acceptere og imødekomme valg af WCA Officielle
+        #original_hash: 08c6d86
+        '6': >-
+          At have en fil med en kopi af WCA's nuværende regler i en elektronisk
+          format.
+    application_instructions:
+      #original_hash: 4da829b
+      title: Applikation Instruktioner
+      #original_hash: 7ae038e
+      description: >-
+        For at blive en Regional Organisation kræver vi at regionen indsender en
+        foresprøgelse til WCA Kommissionen som indeholder alle detaljer der er
+        skrevet nedenunder.
+      list:
+        #original_hash: 1a9d544
+        '1': Navn på den Regionale Organisation
+        #original_hash: a9bf3f4
+        '2': Officiel adresse og kontakt detaljer
+        #original_hash: 2a029e9
+        '3': >-
+          En kopi af dens nuværende regler, som er i overholdelse med WCA's
+          regler
+        #original_hash: a5a2771
+        '4': En liste af dens ledere
+        #original_hash: 1186ebf
+        '5': >-
+          En klar beskrivelse af området som bliver dækket af den Regionale
+          Organansation
+        #original_hash: 826e371
+        '6': En report af alle tidligere og nuværende WCA relaterede aktiviteter
   contact:
     #original_hash: a34b69f
     title: Kontakt information
