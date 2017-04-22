@@ -737,8 +737,8 @@ pl:
       about: O WCA
       #original_hash: d8fd3e4
       delegates: Delegaci WCA
-      #original_hash: 0ef06c8
-      organizations: Organizacje Narodowe
+      #original_hash: 37b8fdc
+      organizations: Organizacje Regionalne
       #original_hash: d790b40
       faq: Często Zadawane Pytania
       #original_hash: a34b69f
@@ -958,14 +958,11 @@ pl:
       already_have_id: >-
         nie możesz poprosić o podpięcie WCA ID ponieważ masz już WCA ID
         %{wca_id}
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
-        Nie mamy zapisanej daty urodzin dla tego WCA ID. Prosimy o wysłanie
-        maila do <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>Zespołu do Spraw Wyników</a>, zgłoszenie tego błędu oraz
-        wysłanie zdjęcia dowolnego legalnego dokumentu (dowód osobisty,
-        paszport, prawo jazdy, legitymacja szkolna...), na którym twoje imię i
-        data urodzin jest widoczna.
+        Nie mamy zapisanej daty urodzin dla tego WCA ID. Prosimy o kontakt z
+        Zespołem do Spraw Wyników przy użyciu <a href="%{dob_form_path}">tego
+        specjalnego formularza</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nie mamy zapisanej płci dla tego WCA ID. Prosimy o skontaktowanie się z
@@ -1942,10 +1939,10 @@ pl:
           Najsłynniejszą z nich jest Kostka Rubika, wymyśloną przez profesora
           Rubika z Węgier. Określony zbiór tych kostek jest wybrany jako
           oficjalne konkurencje WCA.
-        #original_hash: 1e83a7f
+        #original_hash: 22c3593
         '2': >-
           World Cube Association organizuje zawody na całym świecie, przy
-          wsparciu narodowych organizacji odpowiedzialnych za organizację
+          wsparciu organizacji regionalnych odpowiedzialnych za organizację
           zawodów swoich państwach.
         #original_hash: 20e0550
         '3': >-
@@ -2025,25 +2022,26 @@ pl:
       role: Rola
       #original_hash: 0f21717
       region: Region
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Organizacje narodowe
-    #original_hash: f9a7f4d
-    content: 'WCA rozpoznaje następujące organizacje narodowe:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Organizacje Regionalne
+    #original_hash: ba87c07
+    content: 'WCA rozpoznaje następujące organizacje regionalne:'
     how_to:
-      #original_hash: 8f367b8
-      title: Jak zostać Organizacją Narodową WCA
-      #original_hash: 31dd809
+      #original_hash: fc3af12
+      title: Jak zostać Organizacją Regionalną WCA
+      #original_hash: bdf57ff
       description: >-
-        WCA uznaje wiele organizacji narodowych na całym świecie. Celem
-        organizacji narodowej WCA jest organizacja zawodów WCA oraz wspieranie
+        WCA uznaje wiele organizacji regionalnych na całym świecie. Celem
+        organizacji regionalnej WCA jest organizacja zawodów WCA oraz wspieranie
         działań WCA w jej regionie. Zachęcamy kraje pragnące utworzyć
-        organizację narodową, aby wspomogły WCA w swoim regionie przed wysłaniem
-        swojego podania. W celu uzyskania pomocy dotyczącej organizacji zawodów
-        WCA w swoim regionie, prosimy o kontakt z najbliższym delegate.
+        organizację reginalną, aby wspomogły WCA w swoim regionie przed
+        wysłaniem swojego podania. W celu uzyskania pomocy dotyczącej
+        organizacji zawodów WCA w swoim regionie, prosimy o kontakt z
+        najbliższym delegatem.
     requirements:
-      #original_hash: 8bc9e59
-      title: Wymagania stawiane Organizacjom Narodowym WCA
+      #original_hash: 1e04fd7
+      title: Wymagania stawiane Organizacjom Regionalnym WCA
       list:
         #original_hash: 22a9f26
         '1': Aktywna organizacja lub wspieranie Zawodów WCA we własnym regionie
@@ -2057,7 +2055,7 @@ pl:
           oraz Regulamin WCA
         #original_hash: 0c3576b
         '4': >-
-          Spełnianie wszystkich obowiązujących przepisów określonych w 
+          Spełnianie wszystkich obowiązujących przepisów określonych w
           Regulaminie WCA
         #original_hash: 23cda60
         '5': Akceptowanie i stosowanie się do wszystkich decyzji Oficjeli WCA
@@ -2068,9 +2066,9 @@ pl:
     application_instructions:
       #original_hash: 4da829b
       title: Instrukcje dotyczące składania wniosku
-      #original_hash: d000a70
+      #original_hash: 7ae038e
       description: >-
-        W celu ubiegania się o bycie Organizacją Narodową wymagamy aby dany
+        W celu ubiegania się o bycie Organizacją Regionalną wymagamy aby dany
         region wysłał pisemny wniosek do Zarządu WCA zawierający wszystkie
         szczegóły wymienione poniżej.
       list:
