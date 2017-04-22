@@ -174,7 +174,7 @@ class Registration < ApplicationRecord
   def to_wcif
     {
       "id" => id,
-      "event_ids" => events.map(&:id),
+      "eventIds" => events.map(&:id),
       "status" => if accepted?
                     'accepted'
                   elsif deleted?

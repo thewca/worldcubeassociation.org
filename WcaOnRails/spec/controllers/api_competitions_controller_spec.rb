@@ -274,7 +274,7 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response.status).to eq 200
         parsed_body = JSON.parse(response.body)
         expect(parsed_body).to eq(
-          "format_version" => "1.0",
+          "formatVersion" => "1.0",
           "id" => "TestComp2014",
           "name" => "Test Comp 2014",
           "organizers" => [],

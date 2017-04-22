@@ -678,8 +678,8 @@ class User < ApplicationRecord
     {
       "id" => 0,
       "name" => name,
-      "wca_user_id" => id,
-      "wca_id" => wca_id,
+      "wcaUserId" => id,
+      "wcaId" => wca_id,
       "gender" => gender,
       # /wcif is restricted to user who can manage the competition,
       # we can include private data
@@ -688,7 +688,7 @@ class User < ApplicationRecord
       "registration" => registration,
       "avatar" => {
         "url" => avatar.url,
-        "thumb_url" => avatar.url(:thumb),
+        "thumbUrl" => avatar.url(:thumb),
       },
     }
   end
