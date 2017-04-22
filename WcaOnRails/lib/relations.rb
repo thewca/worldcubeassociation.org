@@ -23,7 +23,7 @@ module Relations
 
   def self.extended_chains_by_one_degree!(chains)
     chains.map! do |chain|
-      linkings[chain.last].map { |wca_id| [*chain, wca_id] }
+      linkings(chain.last).map { |wca_id| [*chain, wca_id] }
     end.flatten!(1)
   end
 
@@ -36,10 +36,8 @@ module Relations
     nil
   end
 
-  def self.linkings
-    @@linkings ||= ActiveRecord::Base.connection.execute("SELECT wca_id, wca_ids FROM linkings")
-                                     .to_a.map! { |wca_id, wca_ids| [wca_id, wca_ids.split(',')] }
-                                     .to_h.freeze
+  def self.linkings(wca_id)
+    ActiveRecord::Base.connection.execute("SELECT wca_ids FROM linkings WHERE wca_id = '#{wca_id}'").first[0].split(',')
   end
 
   def self.compute_auxiliary_data
@@ -49,6 +47,5 @@ module Relations
     else
       DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
     end
-    @@linkings = nil
   end
 end
