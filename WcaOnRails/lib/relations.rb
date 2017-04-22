@@ -43,7 +43,12 @@ module Relations
   end
 
   def self.compute_auxiliary_data
-    DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
+    table_exists = ActiveRecord::Base.connection.execute("SHOW TABLES LIKE 'linkings'").to_a.present?
+    if table_exists
+      DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_update_auxiliary_data.sql'))
+    else
+      DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
+    end
     @@linkings = nil
   end
 end

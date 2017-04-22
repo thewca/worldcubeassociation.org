@@ -1,17 +1,15 @@
 -- Compute relations auxiliary data.
 
-CREATE TABLE IF NOT EXISTS wca_id_with_competition_TMP AS (
+DROP TABLE IF EXISTS wca_id_with_competition;
+CREATE TABLE wca_id_with_competition AS (
   SELECT DISTINCT personId wca_id, competitionId competition_id
   FROM Results
 );
 
-DROP TABLE IF EXISTS wca_id_with_competition;
-RENAME TABLE wca_id_with_competition_TMP TO wca_id_with_competition;
+CREATE INDEX index_wca_id_with_competition_on_competition_id_andwca_id ON wca_id_with_competition (competition_id, wca_id);
 
-CREATE INDEX wca_id_with_competition_wca_id_index ON wca_id_with_competition (wca_id);
-CREATE INDEX wca_id_with_competition_competition_id_index ON wca_id_with_competition (competition_id);
-
-CREATE TABLE IF NOT EXISTS people_pairs_with_competition_TMP AS (
+DROP TABLE IF EXISTS people_pairs_with_competition;
+CREATE TABLE people_pairs_with_competition AS (
   SELECT
     first.wca_id wca_id1,
     second.wca_id wca_id2,
@@ -20,14 +18,13 @@ CREATE TABLE IF NOT EXISTS people_pairs_with_competition_TMP AS (
   JOIN wca_id_with_competition second ON first.competition_id = second.competition_id AND first.wca_id != second.wca_id
 );
 
-DROP TABLE IF EXISTS people_pairs_with_competition;
-RENAME TABLE people_pairs_with_competition_TMP TO people_pairs_with_competition;
-
-CREATE INDEX people_pairs_with_competition_wca_ids_index ON people_pairs_with_competition (wca_id1, wca_id2);
+CREATE INDEX index_people_pairs_with_competition_on_wca_ids ON people_pairs_with_competition (wca_id1, wca_id2);
+CREATE INDEX index_people_pairs_with_competition_on_competition_id ON people_pairs_with_competition (competition_id);
 
 SET SESSION group_concat_max_len = 1000000;
 
-CREATE TABLE IF NOT EXISTS linkings_TMP AS (
+DROP TABLE IF EXISTS linkings;
+CREATE TABLE IF NOT EXISTS linkings AS (
   SELECT
     wca_id1 wca_id,
     GROUP_CONCAT(DISTINCT wca_id2) wca_ids
@@ -35,5 +32,6 @@ CREATE TABLE IF NOT EXISTS linkings_TMP AS (
   GROUP BY wca_id1
 );
 
-DROP TABLE IF EXISTS linkings;
-RENAME TABLE linkings_TMP TO linkings;
+CREATE INDEX index_linkings_on_wca_id ON linkings (wca_id);
+
+DROP TABLE wca_id_with_competition;
