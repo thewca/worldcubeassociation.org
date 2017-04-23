@@ -649,6 +649,10 @@ de:
         dob: Korrektes Geburtsdatum
         #original_hash: e214b8a
         document: Dokument
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: ist falsch formatiert
   errors:
     messages:
       #original_hash: dc2367c
@@ -689,6 +693,8 @@ de:
         dob: Zugriff auf das Geburtsdatum
         #original_hash: 17aa24f
         email: Zugriff auf die E-Mail-Adresse
+        #original_hash: e0d0654
+        manage_competitions: 'Zukünftige Wettbewerbe, die du organisierst, verwalten'
     devise:
       #original_hash: 06184f5
       no_account: Kein Benutzerkonto?
@@ -725,8 +731,8 @@ de:
       about: Über die WCA
       #original_hash: d8fd3e4
       delegates: WCA-Delegierte
-      #original_hash: 0ef06c8
-      organizations: Nationale Organisationen
+      #original_hash: 37b8fdc
+      organizations: Regionale Organisationen
       #original_hash: d790b40
       faq: Häufig gestellte Fragen (FAQ)
       #original_hash: a34b69f
@@ -951,13 +957,11 @@ de:
       already_have_id: >-
         kann keine WCA-ID anfordern da Du bereits mit der WCA-ID %{wca_id}
         verknüpft bist
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
         Wir haben kein Geburtsdatum für diese WCA-ID hinterlegt. Bitte
-        kontaktiere das <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> mit einem Foto eines amtlichen
-        Ausweisdokuments (Personalausweis, Führerschein,...) aus dem dein Name
-        sowie dein Geburtsdatum ersichtlich sind.
+        kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
+        Formular</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Wir haben für diese WCA ID kein Geschlecht eingetragen. Bitte sende eine
@@ -1927,10 +1931,10 @@ de:
           dieser Puzzle ist der Rubik's Cube, erfunden von Professor Rubik aus
           Ungarn. Eine Auswahl dieser Puzzles werden als offizielle Disziplinen
           der WCA anerkannt.
-        #original_hash: 1e83a7f
+        #original_hash: 22c3593
         '2': >-
           Die World Cube Association organisiert Wettbewerbe auf der ganzen
-          Welt, unterstützt von nationalen Organisationen, die verantwortlich
+          Welt, unterstützt von regionalen Organisationen, die verantwortlich
           für die Organisation von Wettbewerben im jeweiligen Land sind.
         #original_hash: 20e0550
         '3': >-
@@ -2019,75 +2023,72 @@ de:
       role: Rolle
       #original_hash: 0f21717
       region: Region
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Nationale Organisationen
-    #original_hash: f9a7f4d
-    content: 'Die WCA erkennt die folgenden nationalen Organisationen an:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Regionale Organisationen
+    #original_hash: ba87c07
+    content: 'Die WCA erkennt die folgenden regionalen Organisationen an:'
     how_to:
-      #original_hash: 8f367b8
-      title: Wie man eine nationale WCA Organisation wird
-      #original_hash: 31dd809
+      #original_hash: fc3af12
+      title: Wie man eine offiziell anerkannte regionale WCA Organisation wird
+      #original_hash: bdf57ff
       description: >-
-        Die WCA erkennt verschiedene nationale Organisationen weltweit an. Der
-        Zweck einer nationalen WCA Organisation ist die Organisation von WCA
-        Wettbewerben und die Unterstützung von WCA Aktivitäten in der Region.
-        Länder, die gerne eine nationale Organisation gründen wollen, sind
-        aufgefordert, einen Beitrag zu WCA Aktivitäten zu leisten, bevor sie
-        ihre  Anmeldung einreichen. Für Hilfe bei der Organisation von WCA
-        Wettbewerben in deiner Region kontaktiere bitte deinen nächsten
-        Delegierten.
+        Die WCA erkennt verschiedene regionale Organisationen weltweit an. Der
+        Zweck einer regionalen Organisation ist die Organisation von WCA
+        Turnieren und die Unterstützung von WCA Aktivitäten in der Region.
+        Länder, die eine regionale Organisation gründen wollen, sind eingeladen
+        einen Beitrag zu WCA Aktivitäten in ihrer Region zu leisten, bevor sie
+        eine Bewerbung abgeben. Um Hilfe bei der Organisation von WCA Turnieren
+        zu erhalten, kontaktiere bitte deinen nächsten Delegate.
     requirements:
-      #original_hash: 8bc9e59
-      title: Bedingungen für nationale WCA Organisationen
+      #original_hash: 1e04fd7
+      title: Anforderungen an regionale WCA Organisationen
       list:
         #original_hash: 22a9f26
         '1': >-
-          Die aktive Organisation oder Unterstützung von WCA Wettbewerben in der
+          Die aktive Organisation und Unterstützung von WCA Turnieren in der
           Region der Organisation
         #original_hash: 8c5a7fe
         '2': >-
-          Ein aktiver Beitrag zu kontinentalen WCA Wettbewerben, die auf dem
+          Der aktive Beitrag zu kontinentalen WCA Turnieren, welche auf dem
           Kontinent der regionalen Organisation durchgeführt werden
         #original_hash: 5913cd0
         '3': >-
-          Achtung und Umsetzung der von den Verordnungen und Regeln der WCA
-          gesetzten Ziele
+          Die Anerkennung und Operationalisierung der Ziele, die in den
+          Verordnungen und Regeln der WCA definiert sind
         #original_hash: 0c3576b
-        '4': Das Erfüllen aller anwendbaren WCA Regeln
+        '4': Das Befolgen aller geltenden WCA Regeln
         #original_hash: 23cda60
-        '5': Annahme und Erfüllung aller Entscheidungen von WCA Offiziellen
+        '5': Die Anerkennung und Erfüllung der Entscheidungen von WCA Offiziellen
         #original_hash: 08c6d86
         '6': >-
-          Aufbewahrung einer Kopie der Verordnungen und Regeln der WCA in einem
+          Die Bereitstellung der aktuellen Verordnungen und Regeln in einem
           elektronischen Format
     application_instructions:
       #original_hash: 4da829b
-      title: Bewerbungsablauf
-      #original_hash: d000a70
+      title: Ablauf der Bewerbung
+      #original_hash: 7ae038e
       description: >-
-        Um sich als nationale Organisation zu bewerben, muss eine schriftliche
-        Bewerbung an das WCA Board geschrieben werden, welche die folgenden
-        Angaben enthält.
+        Um eine regionale Organisation zu werden, muss eine schriftliche
+        Bewerbung an das WCA Board geschickt werden, die die folgenden Details
+        enthält.
       list:
         #original_hash: 1a9d544
         '1': Name der regionalen Organisation
         #original_hash: a9bf3f4
-        '2': Offizielle Adresse und Kontaktangaben
+        '2': Offizielle Adresse und Kontaktdetails
         #original_hash: 2a029e9
         '3': >-
-          Eine Kopie der aktuellen Verordnung, welche alle Verordnungen und
-          Regeln der WCA erfüllt.
+          Eine Kopie der aktuellen Verordnungen, die die Verordnungen und Regeln
+          der WCA erfüllen.
         #original_hash: a5a2771
-        '4': Eine Liste der Verantwortlichen
+        '4': Eine Liste der Vorsitzenden und Verantwortlichen.
         #original_hash: 1186ebf
         '5': >-
-          Eine klare Beschreibung der Region, die von der Regionalen
-          Organisation betreut wird
+          Eine eindeutige Beschreibung der Region, welche von der regionalen
+          Organisation abgedeckt wird.
         #original_hash: 826e371
-        '6': >-
-          Ein Bericht über vergangene und aktuelle mit der WCA zusammenhängende
-          Aktivitäten
+        '6': Ein Bericht über frühere und aktuelle Aktivitäten im Kontext der WCA.
   contact:
     #original_hash: a34b69f
     title: Kontaktinformationen
