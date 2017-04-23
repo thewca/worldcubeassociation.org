@@ -593,6 +593,10 @@ zh-TW:
         dob: 正確的生日
         #original_hash: e214b8a
         document: 文件
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: 格式錯誤
   errors:
     messages:
       #original_hash: dc2367c
@@ -632,6 +636,8 @@ zh-TW:
         dob: Access your date of birth
         #original_hash: 17aa24f
         email: Access your email address
+        #original_hash: e0d0654
+        manage_competitions: Manage any upcoming competitions you are organizing
     devise:
       #original_hash: 06184f5
       no_account: 沒有WCA帳號嗎?
@@ -660,8 +666,8 @@ zh-TW:
       about: 關於WCA
       #original_hash: d8fd3e4
       delegates: WCA代表
-      #original_hash: 0ef06c8
-      organizations: 各國方塊協會
+      #original_hash: 37b8fdc
+      organizations: 地區性組織
       #original_hash: d790b40
       faq: 常見問題
       #original_hash: a34b69f
@@ -853,10 +859,8 @@ zh-TW:
       senior_has_delegate: 一般代表無法將高級代表降職
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
-      #original_hash: eeb76a7
-      wca_id_no_birthdate_html: >-
-        我們沒有記錄到此WCA ID的生日。請寄信至<a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA成績組</a>，並且附上一張有您的姓名和生日的合法證件之照片(身份證、駕照等)。
+      #original_hash: 2684f33
+      wca_id_no_birthdate_html: '我們沒有記錄到此WCA ID的生日。請使用<a href="%{dob_form_path}">此表單</a>聯繫WCA成績組。'
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         我們沒有記錄到此WCA ID的性別。請寄信至<a href='mailto:results@worldcubeassociation.org'
@@ -969,7 +973,7 @@ zh-TW:
         registered_html: '您剛剛報名了%{comp_name}。'
         #original_hash: 9238412
         on_waiting_list: '您的報名正在等候補位，目前有%{n_total}個%{people}等候中。'
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           當您的報名成功時，您會收到電子郵件。請注意報名並不是自動成功的，請至比賽網站或聯絡主辦人以了解報名的規則。您可以在%{here}檢查您的報名狀態。
       accepted:
@@ -1030,8 +1034,15 @@ zh-TW:
       approved_registrations: 成功報名
       #original_hash: bff04e8
       deleted_registrations: 取消報名
-      #original_hash: a844fcf
-      registered: 已報名
+      #original_hash: ac5d958
+      not_paid: 尚未付款
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Registered on
+        #original_hash: fca3213
+        with_stripe: Paid on
+      #original_hash: ce53c71
+      payment_requested_on: 'Payment requested on: %{date}'
       #original_hash: b25928c
       total: 總共
     new_registration:
@@ -1096,7 +1107,7 @@ zh-TW:
       title: 報名費
       hints:
         #original_hash: bf3a39e
-        donation: 額外的捐款僅限給主辦單位使用
+        donation: 額外捐款僅限於主辦單位使用
       labels:
         #original_hash: 948ec72
         entry_fees: 入場費
@@ -1566,15 +1577,15 @@ zh-TW:
         title: 我可以在家鄉辦WCA比賽嗎?
         content:
           #original_hash: 3d4eb1c
-          '1': 如果您有興趣主辦比賽的話，我們高度建議您至少先參加一至兩場比賽以學習經驗。
+          '1': 如果您有興趣舉辦比賽的話，我們高度建議您至少先參加一至兩場比賽以學習經驗。
           #original_hash: be305b8
           '2': >-
             WCA比賽必須遵守<a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。雖然主辦單位不需要熟記規則，但是相當程度的理解規則對主辦比賽絕對有幫助。
+            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。雖然主辦單位不需要熟記規則，但是相當程度的理解規則對舉辦比賽絕對有幫助。
           #original_hash: dbd72c2
           '3': >-
             接著，主辦單位必須聯絡附近的<a target='_blank'
-            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>。WCA代表須監督比賽的進行，以確保比賽受WCA官方認證。WCA代表會協助並指導主辦單位主辦一場成功的比賽。
+            href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>。WCA代表須監督比賽的進行，以確保比賽受WCA官方認證。WCA代表會協助並指導主辦單位舉辦一場成功的比賽。
           #original_hash: 809f53a
           '4': >-
             更多資訊請參考<a target='_blank'
@@ -1631,8 +1642,8 @@ zh-TW:
         #original_hash: 16ad45e
         '1': >-
           世界方塊協會管理的比賽內容包括魯比克方塊，以及其他可轉動面的方塊，稱為魔術方塊。這些魔術方塊當中最有名的就是魯比克方塊，由匈牙利的魯比克教授發明。而當中的一些魔術方塊則被挑選為WCA官方的比賽項目。
-        #original_hash: c8ecd24
-        '2': 世界方塊協會在世界各地舉辦比賽，幫助各國方塊協會在各個國家舉辦比賽。
+        #original_hash: 22c3593
+        '2': 世界方塊協會在世界各地舉辦比賽，幫助地區性組織在各個國家舉辦比賽。
         #original_hash: 20e0550
         '3': 世界方塊協會的目標是<br /><strong>在公平及平等的條件下，在更多國家舉辦更多比賽讓更多人更快樂。</strong>
         #original_hash: bee3687
@@ -1683,11 +1694,51 @@ zh-TW:
       role: 角色
       #original_hash: 0f21717
       region: 地區
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: 各國方塊協會
-    #original_hash: f9a7f4d
-    content: 'WCA承認以下各國方塊協會:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: 地區性組織
+    #original_hash: ba87c07
+    content: 'WCA承認以下地區性組織:'
+    how_to:
+      #original_hash: fc3af12
+      title: 如何成為WCA地區性組織
+      #original_hash: bdf57ff
+      description: >-
+        WCA承認世界各地的地區性組織，WCA地區性組織的目的是在各地區舉辦WCA比賽及協助WCA活動。我們鼓勵那些想要組成地區性組織的國家在提交申請之前，對該地區有所貢獻。若您想在您的所在地舉辦比賽，請聯絡您附近的WCA代表。
+    requirements:
+      #original_hash: 1e04fd7
+      title: 成為WCA地區性組織的必要條件
+      list:
+        #original_hash: 22a9f26
+        '1': 經常地在該地區舉辦或協助WCA比賽的組織
+        #original_hash: 8c5a7fe
+        '2': 經常地在各大洲舉辦的洲際WCA比賽有所貢獻的地區性組織
+        #original_hash: 5913cd0
+        '3': 尊重並實施由WCA章程與規則所制定的目標
+        #original_hash: 0c3576b
+        '4': 遵守所有WCA規則
+        #original_hash: 23cda60
+        '5': 同意並遵守WCA官方的決定
+        #original_hash: 08c6d86
+        '6': 以電子文件保留一份WCA目前的章程與規則
+    application_instructions:
+      #original_hash: 4da829b
+      title: 申請說明
+      #original_hash: 7ae038e
+      description: 申請地區性組織之前，該地區需要提交一份完整的申請書給WCA委員會，內容包含以下所有細節。
+      list:
+        #original_hash: 1a9d544
+        '1': 地區性組織的名稱
+        #original_hash: a9bf3f4
+        '2': 官方地址與聯絡資訊
+        #original_hash: 2a029e9
+        '3': 一份遵守WCA章程與規則的組織章程
+        #original_hash: a5a2771
+        '4': 主要幹部名單
+        #original_hash: 1186ebf
+        '5': 完整描述地區性組織所涵蓋的範圍
+        #original_hash: 826e371
+        '6': 一份描述過去與現有的WCA相關活動報告
   contact:
     #original_hash: a34b69f
     title: 聯絡資訊
