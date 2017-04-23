@@ -115,7 +115,8 @@ class Registration < ApplicationRecord
   end
 
   def last_payment_date
-    registration_payments.order(created_at: :desc).first&.created_at
+    sorted_payments = registration_payments.sort_by { |p| p.created_at }
+    sorted_payments.first&.created_at
   end
 
   def outstanding_entry_fees
