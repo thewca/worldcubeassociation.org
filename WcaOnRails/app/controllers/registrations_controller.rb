@@ -91,15 +91,13 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private def selected_registrations_from_params
-    params[:selected_registrations].map { |r| r.split('-')[1] }.map do |registration_id|
-      competition_from_params.registrations.find_by_id!(registration_id)
-    end
+  private def selected_registrations_ids
+    params[:selected_registrations].map { |r| r.split('-')[1] }
   end
 
   def export
     @competition = competition_from_params
-    @registrations = selected_registrations_from_params
+    @registrations = @competition.registrations.includes(:user, :events).find(selected_registrations_ids)
 
     respond_to do |format|
       format.csv do
@@ -112,7 +110,7 @@ class RegistrationsController < ApplicationController
   def do_actions_for_selected
     @show_events = params[:show_events] == "true"
     @competition = competition_from_params
-    registrations = selected_registrations_from_params
+    registrations = @competition.registrations.find(selected_registrations_ids)
 
     case params[:registrations_action]
     when "accept-selected"
