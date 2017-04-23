@@ -23,7 +23,7 @@ module Relations
 
   def self.extended_chains_by_one_degree!(chains)
     chains.map! do |chain|
-      linkings(chain.last).map { |wca_id| [*chain, wca_id] }
+      Linking.find(chain.last).wca_ids.map { |wca_id| [*chain, wca_id] }
     end.flatten!(1)
   end
 
@@ -34,10 +34,6 @@ module Relations
       end
     end
     nil
-  end
-
-  def self.linkings(wca_id)
-    ActiveRecord::Base.connection.execute("SELECT wca_ids FROM linkings WHERE wca_id = '#{wca_id}'").first[0].split(',')
   end
 
   def self.compute_auxiliary_data

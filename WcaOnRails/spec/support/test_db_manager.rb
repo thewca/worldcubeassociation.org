@@ -5,6 +5,7 @@ class TestDbManager
 
   def self.fill_tables
     Dir["db/seeds/*.seeds.rb"].sort.each { |file| load file }
+    Relations.compute_auxiliary_data # Ensure the 'linkings' and 'people_pairs_with_competition' tables are there.
   end
 end
 

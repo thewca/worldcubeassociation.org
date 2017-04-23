@@ -521,6 +521,8 @@ module DatabaseDumper
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
+    "people_pairs_with_competition" => :skip_all_rows,
+    "linkings" => :skip_all_rows,
   }.freeze
 
   def self.development_dump(dump_filename)

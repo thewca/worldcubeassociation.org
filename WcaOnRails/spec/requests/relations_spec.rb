@@ -9,11 +9,11 @@ RSpec.describe "relations" do
 
   before do
     # They have been to the same competition - that's a direct relation.
-    allow(Relations).to receive(:linkings).and_return(
-      person1.wca_id => [person2.wca_id],
-      person2.wca_id => [person1.wca_id],
-    )
-    allow(Relations).to receive(:competitions_together).and_return([competition])
+    PeoplePairWithCompetition.create! wca_id1: person1.wca_id, wca_id2: person2.wca_id, competition_id: competition.id
+    Linking.create! [
+      { wca_id: person1.wca_id, wca_ids: [person2.wca_id] },
+      { wca_id: person2.wca_id, wca_ids: [person1.wca_id] },
+    ]
   end
 
   context "given a person with multiple subIDs" do

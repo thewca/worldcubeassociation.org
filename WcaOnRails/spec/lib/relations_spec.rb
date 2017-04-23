@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
 require 'relations'
 
 RSpec.describe "Relations" do
   before do
-    allow(Relations).to receive(:linkings).and_return(
-      "2013KOSK01" => %w(2005FLEI01 2008VIRO01),
-      "2005FLEI01" => %w(2013KOSK01 2008VIRO01 1982PETR01),
-      "2008VIRO01" => %w(2013KOSK01 2005FLEI01 1982PETR01),
-      "1982PETR01" => %w(2005FLEI01 2008VIRO01),
-    )
+    Linking.create! [
+      { wca_id: "2013KOSK01", wca_ids: %w(2005FLEI01 2008VIRO01) },
+      { wca_id: "2005FLEI01", wca_ids: %w(2013KOSK01 2008VIRO01 1982PETR01) },
+      { wca_id: "2008VIRO01", wca_ids: %w(2013KOSK01 2005FLEI01 1982PETR01) },
+      { wca_id: "1982PETR01", wca_ids: %w(2005FLEI01 2008VIRO01) },
+    ]
   end
 
   describe ".get_chain" do
