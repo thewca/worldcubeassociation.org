@@ -166,6 +166,8 @@ hr:
       few: nekoliko disciplina
       many: nekoliko disciplina
       other: 'ovih %{count} disciplina'
+    #original_hash: 1301886
+    last_updated_html: 'zadnje ažurirano %{last_updated}'
   oauth:
     applications:
       #original_hash: 0c4ea38
