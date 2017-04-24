@@ -194,6 +194,10 @@ class Person < ApplicationRecord
     }
   end
 
+  def completed_solves_count
+    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+  end
+
   def results_path
     "/results/p.php?i=#{self.wca_id}"
   end

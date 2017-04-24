@@ -8,14 +8,15 @@
     <% end %>
   </div>
 
-  <div class="details">
+  <div class="table-responsive details">
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Country</th>
-          <th>WCA ID</th>
-          <%= content_tag :th, "Gender" if @person.gender.present? %>
-          <th>Competitions</th>
+          <th><%= t 'common.country' %></th>
+          <th><%= t 'common.user.wca_id' %></th>
+          <%= content_tag :th, t('activerecord.attributes.person.gender') if @person.gender.present? %>
+          <th><%= t 'layouts.navigation.competitions' %></th>
+          <th><%= t '.completed_solves' %></th>
         </tr>
       </thead>
       <tbody>
@@ -23,6 +24,7 @@
         <td><%= @person.wca_id %></td>
         <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender.present? %>
         <td><%= @person.competitions.count %></td>
+        <td><%= @person.completed_solves_count %></td>
       </tbody>
     </table>
   </div>
