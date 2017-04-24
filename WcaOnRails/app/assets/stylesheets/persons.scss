@@ -29,3 +29,62 @@
     border: 0;
   }
 }
+
+#person {
+  .avatar {
+    max-width: 100%;
+    max-height: 300px;
+  }
+
+  .details {
+    margin-top: 10px;
+  }
+
+  .personal-records {
+    table {
+      td {
+        padding: {
+          top: 2px;
+          bottom: 2px;
+        }
+
+        &.country-rank {
+          opacity: 0.6;
+        }
+
+        &.continent-rank {
+          opacity: 0.8;
+        }
+
+        &.single,
+        &.average {
+          font-weight: bold;
+        }
+
+        &.record {
+          color: red;
+          opacity: 1;
+        }
+      }
+
+      th,
+      td {
+        &.event {
+          width: 1px;
+          white-space: nowrap;
+
+          .cubing-icon {
+            font-size: 1.3em;
+            line-height: normal;
+            vertical-align: middle;
+          }
+        }
+
+        &:not(.event) {
+          text-align: right;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}

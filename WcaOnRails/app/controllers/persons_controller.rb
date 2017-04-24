@@ -25,4 +25,11 @@ class PersonsController < ApplicationController
       end
     end
   end
+
+  def show
+    @person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id(params[:id])
+    @ranks_single = @person.ranksSingle
+    @ranks_average = @person.ranksAverage
+    @events_competed_in = Event.where(id: (@ranks_single.map(&:eventId) + @ranks_average.map(&:eventId)).uniq)
+  end
 end
