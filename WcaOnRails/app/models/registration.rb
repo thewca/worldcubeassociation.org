@@ -116,7 +116,7 @@ class Registration < ApplicationRecord
   end
 
   def last_payment_date
-    registration_payments.order(created_at: :desc).first&.created_at
+    registration_payments.map(&:created_at).max
   end
 
   def outstanding_entry_fees
