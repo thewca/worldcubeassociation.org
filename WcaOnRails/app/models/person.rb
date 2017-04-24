@@ -184,6 +184,16 @@ class Person < ApplicationRecord
     }
   end
 
+  def records
+    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
+    {
+      national: records.count("NR"),
+      continental: records.reject { |record| %w(NR WR).include?(record) }.count,
+      world: records.count("WR"),
+      total: records.count,
+    }
+  end
+
   def results_path
     "/results/p.php?i=#{self.wca_id}"
   end
