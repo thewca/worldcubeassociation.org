@@ -465,6 +465,11 @@ it:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Tassa d'iscrizione per la competizione. La tassa d'iscrizione sarà
+          mostrata nelle pagine di registrazione e di informazioni della
+          competizione.
         #original_hash: 866bc05
         currency_code: La valuta delle tasse di iscrizione
         #original_hash: da39a3e
@@ -637,6 +642,10 @@ it:
         dob: Data di nascita corretta
         #original_hash: e214b8a
         document: Documento
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: è mal formattato
   errors:
     messages:
       #original_hash: dc2367c
@@ -677,6 +686,8 @@ it:
         dob: Accedere alla tua data di nascita
         #original_hash: 17aa24f
         email: Accedere al tuo indirizzo email
+        #original_hash: e0d0654
+        manage_competitions: Gestisci una competizione futura che stai organizzando
     devise:
       #original_hash: 06184f5
       no_account: Non hai un account?
@@ -711,8 +722,8 @@ it:
       about: Riguardo la WCA
       #original_hash: d8fd3e4
       delegates: Delegati WCA
-      #original_hash: 0ef06c8
-      organizations: Organizzazioni Nazionali
+      #original_hash: 37b8fdc
+      organizations: Organizzazioni Regionali
       #original_hash: d790b40
       faq: Domande Frequenti
       #original_hash: a34b69f
@@ -934,13 +945,11 @@ it:
       already_have_id: >-
         non puoi richiedere un WCA ID perchè ti è già stato assegnato il WCA ID
         %{wca_id}
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
         Non è presente alcuna data di nascita registrata per questo WCA ID.
-        Invia una email al <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> (in inglese) con allegata una foto
-        e un qualsiasi documento (carta d'identità, patente di guida, ...) in
-        cui siano visibili il tuo nome e la tua data di nascita.
+        Contatta il WCA Results Team usando <a href="%{dob_form_path}">questo
+        form dedicato</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nessun genere è stato assegnato a questo WCA ID. Contatta il <a
@@ -1076,7 +1085,7 @@ it:
           La tua registrazione è in attesa di approvazione, al momento ci sono
           %{n_total} %{people} in attesa. In caso non fosse ancora stato
           raggiunto il limite partecipanti, a breve sarai accettato.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Ti sarà inviata una email appena la tua registrazione sarà accettata.
           Nota che le registrazioni non sono approvate automaticamente, ma a
@@ -1155,8 +1164,15 @@ it:
       approved_registrations: Registrazioni approvate
       #original_hash: bff04e8
       deleted_registrations: Registrazioni cancellate
-      #original_hash: a844fcf
-      registered: Registrazione
+      #original_hash: ac5d958
+      not_paid: Non pagato
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Registrato il
+        #original_hash: fca3213
+        with_stripe: Pagato il
+      #original_hash: ce53c71
+      payment_requested_on: 'Richiesta di pagamento il: %{date}'
       #original_hash: b25928c
       total: Totale
     new_registration:
@@ -1217,10 +1233,10 @@ it:
       Controlla le informazioni sulla registrazione per verificare se è
       necessario eseguire ulteriori passaggi, per esempio il pagamento della
       tassa d'iscrizione.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Ti sei registrato al %{comp}. Qui puoi vedere le informazioni della tua
-      registrazione.
+      Ti sei registrato al %{comp}. Di seguito puoi vedere le informazioni della
+      tua registrazione.
     #original_hash: 3c9141f
     contact_organizer: Contatta l'organizzatore se desideri effettuare modifiche.
     #original_hash: 59354fd
@@ -1312,10 +1328,11 @@ it:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Solamente le competizioni che utilizzano il sistema di registrazione sul
-        sito WCA sono visibili qui.
+        sito WCA sono visibili qui. Se la tua competizione non è elencata qui,
+        controlla la lista dei partecipanti sul sito web della competizione.
       #original_hash: 94a2fc8
       past_competitions: Competizioni passate
     competition_info:
@@ -1364,14 +1381,20 @@ it:
       region: Regione
       #original_hash: bce0641
       search: Cerca
-      #original_hash: a725020
-      state: Periodo
+      #original_hash: 769bb19
+      state: Quando
       #original_hash: 4e9f7a3
       present: Presente
       #original_hash: 76eec76
       recent: Recente
       #original_hash: 405c12f
       past: Passato
+      #original_hash: 081ae3f
+      custom: Personalizzato
+      #original_hash: 3f66052
+      from_date: Da
+      #original_hash: ae79ea1
+      to_date: A
       #original_hash: 52c30f8
       past_from: '%{year}'
       #original_hash: 7cff459
@@ -1387,6 +1410,8 @@ it:
         recent: 'Competizioni recenti (ultimi %{count} giorni)'
         #original_hash: 914742f
         upcoming: Competizioni future
+        #original_hash: 8b57693
+        custom: Competizioni nel periodo di tempo selezionato
       #original_hash: 6684214
       no_access: Non hai accesso a questa pagina!
       tooltips:
@@ -1879,7 +1904,7 @@ it:
           dei pezzi, chiamati "Twisty Puzzle". Il più famoso di questi puzzle è
           il Cubo di Rubik, inventato dal professore ungherese Rubik. Alcuni di
           questi puzzle sono stati scelti come eventi ufficiali WCA.
-        #original_hash: c8ecd24
+        #original_hash: 22c3593
         '2': >-
           La World Cube Association organizza competizioni in tutto il mondo,
           supportata dalle organizzazioni nazionali responsabili di organizzare
@@ -1971,11 +1996,70 @@ it:
       role: Ruolo
       #original_hash: 0f21717
       region: Regione
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Organizzazioni Nazionali
-    #original_hash: f9a7f4d
-    content: 'La WCA riconosce le seguenti organizzazioni nazionali:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Organizzazioni regionali
+    #original_hash: ba87c07
+    content: 'La WCA riconosce le seguenti organizzazioni regionali:'
+    how_to:
+      #original_hash: fc3af12
+      title: Come diventare una Organizzazione Regionale WCA
+      #original_hash: bdf57ff
+      description: >-
+        La WCA riconosce varie organizzazioni regionali in tutto il mondo. Lo
+        scopo di una organizzazione regionale WCA è quello di organizzare
+        competizioni WCA e supportare l'attività della WCA nella regione. Le
+        nazioni che desiderano formare una organizzazione regionale sono
+        incoraggiate a contribuire alla WCA nella loro zona prima di inviare la
+        richiesta. Per aiutare l'organizzazione di una competizione WCA nella
+        tua area, contatta il delegato WCA più vicino.
+    requirements:
+      #original_hash: 1e04fd7
+      title: Requisiti per un'organizzazione regionale WCA
+      list:
+        #original_hash: 22a9f26
+        '1': >-
+          Organizzare attivamente o supportare competizioni WCA nella regione
+          dell'organizzazione
+        #original_hash: 8c5a7fe
+        '2': >-
+          Contribuire attivamente alle competizioni continentali WCA che si
+          svolgono nel continente dell'organizzazione regionale
+        #original_hash: 5913cd0
+        '3': >-
+          Rispettare e mettere in pratica gli obiettivi presentati dallo statuto
+          e dal Regolamento WCA
+        #original_hash: 0c3576b
+        '4': Rispettare tutte le regole presenti nel Regolamento WCA
+        #original_hash: 23cda60
+        '5': Accettare e attenersi alle decisioni prese dagli ufficiali WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Tenere una copia aggiornata dello statuto e del regolamento WCA in
+          formato elettronico
+    application_instructions:
+      #original_hash: 4da829b
+      title: Istruzione per la richiesta
+      #original_hash: 7ae038e
+      description: >-
+        Per richiedere di diventare una organizzazione nazionale, è necessario
+        inviare al WCA Board una richiesta scritta contenente tutti i dettagli
+        elencati di seguito.
+      list:
+        #original_hash: 1a9d544
+        '1': Nome dell'organizzazione regionale
+        #original_hash: a9bf3f4
+        '2': Contatti e Indirizzo ufficiale della sede
+        #original_hash: 2a029e9
+        '3': >-
+          Una copia dello statuto che sia conforme allo statuto della WCA e al
+          Regolamento WCA
+        #original_hash: a5a2771
+        '4': La lista degli ufficiali principali
+        #original_hash: 1186ebf
+        '5': Una descrizione chiara dell'area coperta dall'organizzazione regionale
+        #original_hash: 826e371
+        '6': Un report delle attività passate e correnti collegate alla WCA
   contact:
     #original_hash: a34b69f
     title: Contatti
