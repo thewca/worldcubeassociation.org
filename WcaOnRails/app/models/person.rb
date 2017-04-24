@@ -167,6 +167,13 @@ class Person < ApplicationRecord
     SolveTime.new(event.id, type, rank ? rank.best : 0)
   end
 
+  def world_championship_podiums
+    results.includes(:competition, :event, :format)
+           .podium
+           .where("Competitions.cellName LIKE 'World Championship %'")
+           .order("year DESC, Events.rank")
+  end
+
   def results_path
     "/results/p.php?i=#{self.wca_id}"
   end

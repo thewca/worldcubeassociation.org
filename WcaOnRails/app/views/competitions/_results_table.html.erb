@@ -83,20 +83,7 @@
 
         <td class="country"><%= result.country.name %></td>
 
-        <% trimmed_indices = result.trimmed_indices %>
-        <% best_index = result.best_index %>
-        <% worst_index = result.worst_index %>
-        <% result.solve_times.each_with_index do |solve_time, i| %>
-          <% classes = "solve#{i + 1}" %>
-          <% classes << " trimmed" if trimmed_indices.include?(i) %>
-          <% classes << " best" if i == best_index %>
-          <% classes << " worst" if i == worst_index %>
-
-          <%# Note: It's important that there not be any spaces around the solve,
-                    otherwise it screws up the :before and :after rules for trimmed
-                    solves %>
-          <td class="<%= classes %>"><%= solve_time.clock_format %></td>
-        <% end %>
+        <%= solve_tds_for_result(result) %>
 
         <% # Extra column for .table-greedy-last-column %>
         <td></td>

@@ -31,6 +31,13 @@
 }
 
 #person {
+  .shrink {
+    padding: {
+      top: 2px;
+      bottom: 2px;
+    }
+  }
+
   .avatar {
     max-width: 100%;
     max-height: 300px;
@@ -40,13 +47,16 @@
     margin-top: 10px;
   }
 
+  .cubing-icon {
+    font-size: 1.3em;
+    line-height: normal;
+    vertical-align: middle;
+  }
+
   .personal-records {
     table {
       td {
-        padding: {
-          top: 2px;
-          bottom: 2px;
-        }
+        @extend .shrink;
 
         &.country-rank {
           opacity: 0.6;
@@ -72,17 +82,49 @@
         &.event {
           width: 1px;
           white-space: nowrap;
-
-          .cubing-icon {
-            font-size: 1.3em;
-            line-height: normal;
-            vertical-align: middle;
-          }
         }
 
         &:not(.event) {
           text-align: right;
           vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  .wc-podiums {
+    table {
+      @extend table.with-solves;
+
+      .competition-link {
+        font-weight: bold;
+      }
+
+      .result td {
+        @extend .shrink;
+        vertical-align: middle;
+
+        &.event .cubing-icon {
+          margin-left: 30px;
+        }
+
+        &.place {
+          color: $blue;
+          font-weight: bold;
+        }
+
+        &.single,
+        &.average {
+          font-weight: bold;
+        }
+      }
+
+      td,
+      th {
+        &.place,
+        &.single,
+        &.average {
+          text-align: right;
         }
       }
     }

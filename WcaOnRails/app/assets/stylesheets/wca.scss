@@ -102,7 +102,43 @@ table.table-greedy-last-column {
   }
 }
 
+
+table.with-solves {
+  thead tr th {
+    &.solves {
+      text-align: center;
+    }
+  }
+  tbody tr td {
+    &.solve1,
+    &.solve2,
+    &.solve3,
+    &.solve4,
+    &.solve5, {
+      text-align: right;
+      &::before {
+        content: '(';
+        opacity: 0;
+      }
+      &::after {
+        content: ')';
+        opacity: 0;
+      }
+      &.trimmed {
+        &::before {
+          opacity: 1;
+        }
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
 table.wca-results {
+  @extend table.with-solves;
+
   thead tr th {
     &.pos {
       text-align: right;
@@ -127,9 +163,6 @@ table.wca-results {
     }
     &.single {
       text-align: right;
-    }
-    &.solves {
-      text-align: center;
     }
   }
   tbody tr td {
@@ -165,29 +198,6 @@ table.wca-results {
     }
     &.single {
       text-align: right;
-    }
-    &.solve1,
-    &.solve2,
-    &.solve3,
-    &.solve4,
-    &.solve5, {
-      text-align: right;
-      &::before {
-        content: '(';
-        opacity: 0;
-      }
-      &::after {
-        content: ')';
-        opacity: 0;
-      }
-      &.trimmed {
-        &::before {
-          opacity: 1;
-        }
-        &::after {
-          opacity: 1;
-        }
-      }
     }
   }
 
