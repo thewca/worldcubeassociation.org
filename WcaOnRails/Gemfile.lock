@@ -182,6 +182,7 @@ GEM
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
     formatador (0.2.5)
+    get_process_mem (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.1)
@@ -470,6 +471,9 @@ GEM
     unicorn (5.3.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
+    unicorn-worker-killer (0.4.4)
+      get_process_mem (~> 0)
+      unicorn (>= 4, < 6)
     uniform_notifier (1.10.0)
     valid_email (0.0.13)
       activemodel
@@ -570,6 +574,7 @@ DEPENDENCIES
   twitter_cldr
   uglifier
   unicorn
+  unicorn-worker-killer
   valid_email
   web-console
   world-flags!
