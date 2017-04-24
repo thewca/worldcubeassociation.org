@@ -174,6 +174,16 @@ class Person < ApplicationRecord
            .order("year DESC, Events.rank")
   end
 
+  def medals
+    positions = results.podium.pluck(:pos)
+    {
+      gold: positions.count(1),
+      silver: positions.count(2),
+      bronze: positions.count(3),
+      total: positions.count,
+    }
+  end
+
   def results_path
     "/results/p.php?i=#{self.wca_id}"
   end

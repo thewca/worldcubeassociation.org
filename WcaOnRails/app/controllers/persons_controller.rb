@@ -32,5 +32,6 @@ class PersonsController < ApplicationController
     @ranks_average = @person.ranksAverage
     @events_competed_in = Event.where(id: (@ranks_single.map(&:eventId) + @ranks_average.map(&:eventId)).uniq)
     @world_championship_podiums = @person.world_championship_podiums
+    @medals = @person.medals
   end
 end
