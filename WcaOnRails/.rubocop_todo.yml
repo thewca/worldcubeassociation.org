@@ -33,7 +33,3 @@ Style/VariableName:
 # See https://github.com/bbatsov/rubocop/pull/4237
 Lint/AmbiguousBlockAssociation:
   Enabled: false
-
-Style/For:
-  Exclude:
-    - 'lib/relations.rb' # We need to return from nested iteration, thus `for` is more suitable.

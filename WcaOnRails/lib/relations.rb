@@ -5,8 +5,8 @@ module Relations
     find_chain([[wca_id1]], [[wca_id2]])
   end
 
-  def self.competitions_together(wca_id1, wca_id2)
-    PeoplePairWithCompetition.includes(:competition).where(wca_id1: wca_id1, wca_id2: wca_id2).map(&:competition)
+  def self.competitions_together(person1, person2)
+    Competition.find(person1.competition_ids & person2.competition_ids)
   end
 
   # Internal
@@ -28,20 +28,17 @@ module Relations
   end
 
   def self.random_final_chain(left_chains, right_chains)
+    # rubocop:disable Style/For
     for *left_chain, left_last in left_chains.shuffle
       for *right_chain, right_last in right_chains.shuffle
         return [*left_chain, left_last, *right_chain.reverse] if left_last == right_last
       end
     end
+    # rubocop:enable Style/For
     nil
   end
 
   def self.compute_auxiliary_data
-    table_exists = ActiveRecord::Base.connection.execute("SHOW TABLES LIKE 'linkings'").to_a.present?
-    if table_exists
-      DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_update_auxiliary_data.sql'))
-    else
-      DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
-    end
+    DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
   end
 end

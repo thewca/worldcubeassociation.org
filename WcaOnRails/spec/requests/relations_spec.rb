@@ -8,8 +8,9 @@ RSpec.describe "relations" do
   let!(:competition) { FactoryGirl.create(:competition) }
 
   before do
+    FactoryGirl.create :result, person: person1, competition: competition
+    FactoryGirl.create :result, person: person2, competition: competition
     # They have been to the same competition - that's a direct relation.
-    PeoplePairWithCompetition.create! wca_id1: person1.wca_id, wca_id2: person2.wca_id, competition_id: competition.id
     Linking.create! [
       { wca_id: person1.wca_id, wca_ids: [person2.wca_id] },
       { wca_id: person2.wca_id, wca_ids: [person1.wca_id] },

@@ -9,7 +9,7 @@ class ComputeRelationsAuxiliaryData < ApplicationJob
       SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_NAME='linkings'
     SQL
     relations_data_computation_date = selected.first[0]
-    relations_data_computation_date < 1.month.ago
+    relations_data_computation_date < 3.days.ago
   end
 
   def perform
