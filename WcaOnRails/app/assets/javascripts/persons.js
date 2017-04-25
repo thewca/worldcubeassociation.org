@@ -48,3 +48,18 @@ onPage('persons#index', function() {
     history.replaceState(null, null, url);
   });
 });
+
+onPage('persons#show', function() {
+  /* Handle events selector for results by event */
+  $('.event-selector input[type="radio"]').on('change', function() {
+    var eventId = $(this).val();
+    var $tbodies = $('.results-by-event table tbody');
+    $tbodies.hide();
+    $tbodies.filter('.event-' + eventId).show();
+    $('.results-by-event table').trigger('resize'); /* Let the table recalculate all widths. */
+    /* Update the URL. */
+    var queryParams = '?' + $.param({ results_event: eventId });
+    history.replaceState(null, null, queryParams);
+  })
+  $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
+});

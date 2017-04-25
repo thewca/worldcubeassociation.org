@@ -51,7 +51,7 @@
     }
   }
 
-  .cubing-icon {
+  table .cubing-icon {
     font-size: 1.3em;
     line-height: normal;
     vertical-align: middle;
@@ -59,6 +59,8 @@
 
   .personal-records {
     table {
+      white-space: nowrap;
+
       td {
         @extend .shrink;
 
@@ -99,6 +101,7 @@
   .wc-podiums {
     table {
       @extend table.with-solves;
+      white-space: nowrap;
 
       .competition-link {
         font-weight: bold;
@@ -145,6 +148,33 @@
     padding-right: 0;
     @media (max-width: $screen-md-max) {
       padding-left: 0;
+    }
+  }
+
+  .results-by-event {
+    table {
+      @extend table.with-solves;
+      white-space: nowrap;
+
+      th,
+      td {
+        &.regional-single-record,
+        &.regional-average-record {
+          font-weight: bold;
+          color: red;
+          text-align: left;
+        }
+
+        &.single,
+        &.average {
+          text-align: right;
+          font-weight: bold;
+        }
+
+        &.pb {
+          color: $blue;
+        }
+      }
     }
   }
 }

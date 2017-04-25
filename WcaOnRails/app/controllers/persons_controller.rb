@@ -34,5 +34,7 @@ class PersonsController < ApplicationController
     @world_championship_podiums = @person.world_championship_podiums
     @medals = @person.medals
     @records = @person.records
+    @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, Competitions.start_date DESC, RoundTypes.rank DESC")
+    params[:results_event] ||= @results.first.event.id
   end
 end

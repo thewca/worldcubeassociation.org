@@ -83,11 +83,14 @@ table.table {
   }
 }
 
-form .event-checkbox .cubing-icon {
-  font-size: 2em;
+.event-checkbox,
+.event-radio {
+  .cubing-icon {
+    font-size: 2em;
+  }
 }
 
-form .event-checkbox-sm .cubing-icon {
+.event-checkbox-sm .cubing-icon {
   font-size: 1em;
 }
 
@@ -316,11 +319,13 @@ textarea {
 }
 
 // Style for event pickers
-.event-checkbox {
+.event-checkbox,
+.event-radio {
   label {
     margin-bottom: 0;
   }
-  input[type=checkbox] {
+  input[type=checkbox],
+  input[type=radio] {
     display: none;
     + span.cubing-icon {
       color: #ccc;
