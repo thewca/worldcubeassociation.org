@@ -986,7 +986,8 @@ en:
         title: "What are the requirements for attending a WCA competition? What do I need to know before attending a WCA competition?"
         #context: Answer to "What are the requirements for attending a WCA competitions? ..."
         content:
-          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA regulations</a>. In addition, we would recommend having a look at <a target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's competitor tutorial</a>, which gives several nice hints for newcomers."
+          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. If English is not your first language and you have trouble to understand the document, please read the <a href='https://www.worldcubeassociation.org/regulations/translations/'>Translations</a>."
+          '2': "In addition, we would recommend having a look at <a target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's competitor tutorial</a>, which gives several nice hints for newcomers."
       '5':
         title: "How can I have a WCA Competition in my hometown?"
         #context: Paragraph of the answer to "How can I have a WCA competition in my hometown?"
@@ -1021,6 +1022,31 @@ en:
         content:
           #context: Yup, nothing to translate here! Just hit "Use the original version"
           '1': "%{current_user_claim}"
+      '9':
+        title: "I am registered for a competition and want to sign up for an additional event, what should I do? Can I bring guests?"
+        #context: Answer to "I want to sign up or an additional event ...?"
+        content:
+          '1': "Please contact the organizer. You can find the contact information on the competition website. If you are unsure where to find it, check the <a href='/competitions'>list of competitions</a>."
+      'regulations1':
+        title: "Is my puzzle competition legal?"
+        #context: Answer to "Is my puzzle competition legal?"
+        content:
+          '1': "You can find the regulations regarding puzzles in <a href='https://www.worldcubeassociation.org/regulations/#3'>Article 3</a>. All puzzles have to be approved by the WCA Delegate of the competition. If you are unsure, please ask him. To be on the safe side, you should bring a replacement puzzle in case you are not allowed to use it."
+      'regulations2':
+        title: "May I use a magnetic puzzle in an official WCA competition?"
+        #context: Answer to "May I use a magnetic puzzle in an official WCA competition?"
+        content:
+          '1': "You are allowed to use magnetic puzzles as long as they comply with the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. Please pay particular attention to <a href='https://www.worldcubeassociation.org/regulations/#3h'>Paragraph 3h</a>."
+      'regulations3':
+        title: "I lost a center cap or a piece of my puzzle. Am I still allowed to use it?"
+        #context: Answer to "Am I allowed to use damaged puzzles?"
+        content:
+          '1': "You are not allowed to use this puzzle. Puzzles must not have any damages or other differences that significantly distinguish any piece from a similar piece (see <a href='https://www.worldcubeassociation.org/regulations/#3j'>Regulation 3j</a>)."
+      'regulations4':
+        title: "How old do I have to be to register for a WCA competition?"
+        #context: Answer to "How old do I have to be ...?"
+        content:
+          '1': "There is no minimum age. However, you should ask your parents before registering (see <a href='https://www.worldcubeassociation.org/regulations/#2b'>Regulation 2b</a>)."
   #context: About the WCA
   about:
     title: "About the WCA"
