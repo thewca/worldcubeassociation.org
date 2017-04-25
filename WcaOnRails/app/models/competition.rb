@@ -567,7 +567,7 @@ class Competition < ApplicationRecord
   # select events, unsaved events are still presented if
   # there are any validation issues on the form.
   def saved_and_unsaved_events
-    competition_events.includes(:event).reject(&:marked_for_destruction?).map(&:event).sort_by(&:rank)
+    competition_events.reject(&:marked_for_destruction?).map(&:event)
   end
 
   def nearby_competitions(days, distance)
