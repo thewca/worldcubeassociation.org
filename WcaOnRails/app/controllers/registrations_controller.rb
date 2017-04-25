@@ -285,6 +285,7 @@ class RegistrationsController < ApplicationController
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path
     else
+      @selected_events = @registration.saved_and_unsaved_events
       render :register
     end
   end

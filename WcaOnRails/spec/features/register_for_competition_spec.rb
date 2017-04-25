@@ -21,6 +21,16 @@ RSpec.feature "Registering for a competition" do
       expect(registration).not_to eq nil
     end
 
+    scenario "User registers for a competition" do
+      visit competition_register_path(competition)
+      fill_in "Guests", with: "-1"
+      click_button "Register!"
+      expect(page).to have_text("Guests must be greater than or equal to 0")
+      expect(page).to have_text("must register for at least one event")
+      registration = competition.registrations.find_by_user_id(user.id)
+      expect(registration).to eq nil
+    end
+
     scenario "User with preferred events goes to register page" do
       user.update_attribute :preferred_events, Event.where(id: %w(333 444 555))
       competition.update_attribute :events, Event.where(id: %w(444 555 666))
