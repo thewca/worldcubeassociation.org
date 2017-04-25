@@ -263,11 +263,11 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_events
-    @competition = Competition.find(params[:id])
+    @competition = Competition.includes(:events).find(params[:id])
   end
 
   def update_events
-    @competition = Competition.find(params[:id])
+    @competition = Competition.includes(:events).find(params[:id])
     if @competition.update_attributes(competition_params)
       flash[:success] = t('.update_success')
       redirect_to edit_events_path(@competition)
