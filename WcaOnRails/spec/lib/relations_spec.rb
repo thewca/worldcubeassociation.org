@@ -56,4 +56,19 @@ RSpec.describe "Relations" do
       expect(final_chain).to eq %w(2013KOSK01 2005FLEI01 1982PETR01)
     end
   end
+
+  describe ".compute_linkings" do
+    it "creates linkings by computing 1st degree relation for each person" do
+      persons = FactoryGirl.create_list :person, 3
+      competition = FactoryGirl.create :competition
+      persons.each { |person| FactoryGirl.create :result, person: person, competition: competition }
+      wca_id1, wca_id2, wca_id3 = persons.map(&:wca_id)
+
+      Relations.compute_linkings
+
+      expect(Linking.find_by_wca_id(wca_id1).wca_ids).to match_array [wca_id2, wca_id3]
+      expect(Linking.find_by_wca_id(wca_id2).wca_ids).to match_array [wca_id1, wca_id3]
+      expect(Linking.find_by_wca_id(wca_id3).wca_ids).to match_array [wca_id1, wca_id2]
+    end
+  end
 end

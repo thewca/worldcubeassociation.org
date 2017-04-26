@@ -1,4 +1,4 @@
--- Compute relations auxiliary data.
+-- Compute linkings - relations auxiliary data.
 
 DROP TABLE IF EXISTS wca_id_with_competition;
 CREATE TABLE wca_id_with_competition AS (

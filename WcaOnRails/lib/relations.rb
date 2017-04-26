@@ -38,7 +38,7 @@ module Relations
     nil
   end
 
-  def self.compute_auxiliary_data
-    DbHelper.execute_sql File.read(Rails.root.join('lib', 'relations_compute_auxiliary_data.sql'))
+  def self.compute_linkings
+    DbHelper.execute_sql File.read(Rails.root.join('lib', 'compute_linkings.sql'))
   end
 end
