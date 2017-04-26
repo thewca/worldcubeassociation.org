@@ -986,7 +986,7 @@ en:
         title: "What are the requirements for attending a WCA competition? What do I need to know before attending a WCA competition?"
         #context: Answer to "What are the requirements for attending a WCA competitions? ..."
         content:
-          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. If English is not your first language and you have trouble to understand the document, please read the <a href='https://www.worldcubeassociation.org/regulations/translations/'>Translations</a>."
+          '1': "In general, there are not many requirements for a person to participate at a WCA competition. However, all participants of a competition are expected to have a good understanding of the <a href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. If English is not your first language and you have trouble understanding the document, please read the <a href='https://www.worldcubeassociation.org/regulations/translations/'>Translations</a>."
           '2': "In addition, we would recommend having a look at <a target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's competitor tutorial</a>, which gives several nice hints for newcomers."
       '5':
         title: "How can I have a WCA Competition in my hometown?"
@@ -1006,6 +1006,7 @@ en:
           '3': "%{current_user_status}"
       'results':
         title: "When are the results of a WCA competition uploaded to the WCA website?"
+        #context: Paragraph of the answer to "When are the results of a WCA competition uploaded?"
         content:
           '1': "After a competition has ended, the WCA Delegate has to double-check all score sheets and person data to eliminate possible errors. Once this is done, the results are sent to the WCA Results Team (WRT), which is responsible for uploading competition results and maintaining the WCA database. The WRT finally uploads the results to the WCA database as soon as possible."
           '2': "Depending on the size of the competition and the delegate's personal schedule, all this can take only a day or up to a week. Please be patient."
@@ -1024,19 +1025,19 @@ en:
           '1': "%{current_user_claim}"
       '9':
         title: "I am registered for a competition and want to sign up for an additional event, what should I do? Can I bring guests?"
-        #context: Answer to "I want to sign up or an additional event ...?"
+        #context: Answer to "I want to sign up for an additional event ...?"
         content:
           '1': "Please contact the organizer. You can find the contact information on the competition website. If you are unsure where to find it, check the <a href='/competitions'>list of competitions</a>."
       'regulations1':
         title: "Is my puzzle competition legal?"
         #context: Answer to "Is my puzzle competition legal?"
         content:
-          '1': "You can find the regulations regarding puzzles in <a href='https://www.worldcubeassociation.org/regulations/#3'>Article 3</a>. All puzzles have to be approved by the WCA Delegate of the competition. If you are unsure, please ask him. To be on the safe side, you should bring a replacement puzzle in case you are not allowed to use it."
+          '1': "You can find the regulations regarding puzzles in <a href='https://www.worldcubeassociation.org/regulations/#3'>Article 3</a>. All puzzles have to be approved by a WCA Delegate. If you are unsure, please ask the Delegate of your competition. To be on the safe side, you should bring a replacement puzzle in case you are not allowed to use it."
       'regulations2':
         title: "May I use a magnetic puzzle in an official WCA competition?"
         #context: Answer to "May I use a magnetic puzzle in an official WCA competition?"
         content:
-          '1': "You are allowed to use magnetic puzzles as long as they comply with the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. Please pay particular attention to <a href='https://www.worldcubeassociation.org/regulations/#3h'>Paragraph 3h</a>."
+          '1': "You are allowed to use magnetic puzzles as long as they comply with the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. Please pay particular attention to <a href='https://www.worldcubeassociation.org/regulations/#3h'>Regulation 3h</a>."
       'regulations3':
         title: "I lost a center cap or a piece of my puzzle. Am I still allowed to use it?"
         #context: Answer to "Am I allowed to use damaged puzzles?"
