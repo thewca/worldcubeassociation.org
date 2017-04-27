@@ -674,14 +674,16 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(registration = nil)
+  def to_wcif(competition, registration = nil)
     person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     {
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
+      "delegatesCompetition" => competition.delegates.include?(self),
+      "organizesCompetition" => competition.organizers.include?(self),
       "gender" => gender,
-      # /wcif is restricted to user who can manage the competition,
+      # /wcif is restricted to users who can manage the competition,
       # we can include private data
       "birthdate" => dob.to_s,
       "email" => email,

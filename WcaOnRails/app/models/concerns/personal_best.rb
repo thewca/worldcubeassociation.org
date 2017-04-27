@@ -9,9 +9,9 @@ module PersonalBest
     {
       "eventId": eventId,
       "best": best,
-      "worldRank": worldRank,
-      "continentRank": continentRank,
-      "countryRank": countryRank,
+      "worldRanking": worldRank,
+      "continentalRanking": continentRank,
+      "nationalRanking": countryRank,
       "type": type,
     }
   end

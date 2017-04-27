@@ -277,9 +277,7 @@ RSpec.describe Api::V0::CompetitionsController do
           "formatVersion" => "1.0",
           "id" => "TestComp2014",
           "name" => "Test Comp 2014",
-          "organizers" => [],
-          "delegates" => [delegate.id],
-          "persons" => [delegate.to_wcif],
+          "persons" => [delegate.to_wcif(competition)],
           "events" => [
             {
               "id" => "333",
