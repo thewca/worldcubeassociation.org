@@ -686,6 +686,7 @@ RSpec.describe CompetitionsController do
     let!(:registration3) { FactoryGirl.create(:registration, competition: past_competition1, user: registered_user) }
     let!(:registration4) { FactoryGirl.create(:registration, competition: past_competition3, user: organizer) }
     let!(:registration5) { FactoryGirl.create(:registration, competition: future_competition3, user: delegate) }
+    let!(:past_rejected_registration) { FactoryGirl.create(:registration, :pending, competition: past_competition3, user: registered_user) }
     let!(:results_person) { FactoryGirl.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
     let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
@@ -719,7 +720,7 @@ RSpec.describe CompetitionsController do
       it 'shows my upcoming and past competitions' do
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:past_competitions)).to eq []
       end
     end
 
@@ -731,7 +732,7 @@ RSpec.describe CompetitionsController do
       it 'shows my upcoming and past competitions' do
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1, past_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
       end
     end
 
