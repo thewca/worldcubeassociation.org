@@ -675,8 +675,8 @@ class User < ApplicationRecord
   end
 
   def to_wcif(registration = nil)
+    person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
     {
-      "id" => 0,
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
@@ -690,6 +690,7 @@ class User < ApplicationRecord
         "url" => avatar.url,
         "thumbUrl" => avatar.url(:thumb),
       },
+      "personalBests" => person_pb.map(&:to_wcif),
     }
   end
 

@@ -807,14 +807,14 @@ class Competition < ApplicationRecord
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif
-    comp_managers = managers
+    managers = self.managers
     persons_wcif = registrations.map do |r|
-      comp_managers.delete(r.user)
+      managers.delete(r.user)
       r.user.to_wcif(r.to_wcif)
     end
     # Note: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif += comp_managers.map(&:to_wcif)
+    persons_wcif += managers.map(&:to_wcif)
     {
       "formatVersion" => "1.0",
       "id" => id,

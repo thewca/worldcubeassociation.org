@@ -23,7 +23,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     # This is all the associations we may need for the WCIF!
     includes_associations = [
       {
-        registrations: [:user, :events],
+        registrations: [{ user: { person: [:ranksSingle, :ranksAverage] } },
+                        :events],
       },
       :delegates,
       :organizers,
