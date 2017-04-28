@@ -4,12 +4,8 @@ class ComputeLinkings < ApplicationJob
   queue_as :default
 
   def computation_needed
-    # Compute the linkings table for relations feature every three days.
-    selected = ActiveRecord::Base.connection.execute <<-SQL
-      SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_NAME='linkings'
-    SQL
-    relations_data_computation_date = selected.first[0]
-    relations_data_computation_date < 3.days.ago
+    # Compute the linkings table for the relations feature whenever results are updated.
+    Result.maximum(:updated_at) > 1.hour.ago
   end
 
   def perform
