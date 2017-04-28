@@ -330,7 +330,7 @@ textarea {
 // _associated_events_picker.html.erb specific styles
 .form-horizontal {
   .associated-events-label {
-    @extend .col-sm-3, .control-label;
+    @extend .col-sm-2, .control-label;
   }
 
   .associated-events {
