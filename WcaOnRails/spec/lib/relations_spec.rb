@@ -32,7 +32,7 @@ RSpec.describe "Relations" do
     end
   end
 
-  describe ".compute_linkings" do
+  describe ".compute_linkings", clean_db_with_truncation: true do
     it "creates linkings by computing 1st degree relation for each person" do
       persons = FactoryGirl.create_list :person, 3
       competition = FactoryGirl.create :competition
