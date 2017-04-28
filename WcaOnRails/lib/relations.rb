@@ -10,30 +10,30 @@ module Relations
   end
 
   def self.get_chain(root_wca_id, other_wca_id)
-    left_tree = { degrees: { root_wca_id => 0 }, current_degree: 0 }
-    right_tree = { degrees: { other_wca_id => 0 }, current_degree: 0 }
+    left_tree = { degrees: { root_wca_id => 0 }, outermost_wca_ids: [root_wca_id] }
+    right_tree = { degrees: { other_wca_id => 0 }, outermost_wca_ids: [other_wca_id] }
 
     wca_id_linking_trees = calculate_degrees_and_find_wca_id_linking_trees! left_tree, right_tree
-    return [] unless wca_id_linking_trees # Return an empty array if there is no realtion.
+    return [] unless wca_id_linking_trees # Return an empty array if there is no relation.
     left_chain = build_chain root_wca_id, wca_id_linking_trees, left_tree[:degrees]
     right_chain = build_chain other_wca_id, wca_id_linking_trees, right_tree[:degrees]
-    (left_chain + right_chain.reverse!).uniq!
+    left_chain[0...-1] + right_chain.reverse! # Don't include wca_id_linking_trees twice.
   end
 
   # rubocop:disable Style/For
 
   def self.calculate_degrees_and_find_wca_id_linking_trees!(first_tree, second_tree)
-    degrees_copy = first_tree[:degrees].clone
-    for wca_id, degree in degrees_copy # We need a copy as we add new keys during the iteration.
-      next if degree != first_tree[:current_degree] # Continue for the outermost people in the tree.
+    new_outermost_wca_ids = []
+    for wca_id in first_tree[:outermost_wca_ids]
       for related_wca_id in Linking.find(wca_id).wca_ids.shuffle
         next if first_tree[:degrees].key? related_wca_id
-        first_tree[:degrees][related_wca_id] = first_tree[:current_degree] + 1
+        new_outermost_wca_ids.push related_wca_id
+        first_tree[:degrees][related_wca_id] = first_tree[:degrees][wca_id] + 1
         return related_wca_id if second_tree[:degrees].key? related_wca_id # If both trees include the WCA ID, we are done.
       end
     end
-    return nil if first_tree[:degrees] == degrees_copy # If none new WCA ID was added, there's no relation to search for.
-    first_tree[:current_degree] += 1
+    return nil if new_outermost_wca_ids.empty? # If no new WCA ID was added, there's no relation to search for.
+    first_tree[:outermost_wca_ids] = new_outermost_wca_ids
     calculate_degrees_and_find_wca_id_linking_trees! second_tree, first_tree # For optimisation reasons we expand the trees (left, right) one by one.
   end
 
