@@ -130,6 +130,9 @@ Rails.application.routes.draw do
 
   patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
 
+  get '/relations' => 'relations#index'
+  get '/relation' => 'relations#relation'
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

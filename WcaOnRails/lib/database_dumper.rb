@@ -521,6 +521,15 @@ module DatabaseDumper
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
+    "linkings" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          wca_id
+          wca_ids
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)

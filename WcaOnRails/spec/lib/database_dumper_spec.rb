@@ -5,17 +5,11 @@ require 'rails_helper'
 require 'database_dumper'
 
 def with_database(db_name)
-  old_connection_config = ActiveRecord::Base.connection_config
-  begin
-    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
-    ActiveRecord::Base.connection.execute("CREATE DATABASE #{db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
-    connection_config = old_connection_config.merge(database: db_name, connect_flags: Mysql2::Client::MULTI_STATEMENTS)
-    ActiveRecord::Base.establish_connection(connection_config)
-    yield
-  ensure
-    ActiveRecord::Base.establish_connection(old_connection_config)
-    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
-  end
+  ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
+  ActiveRecord::Base.connection.execute("CREATE DATABASE #{db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
+  yield
+ensure
+  ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
 end
 
 RSpec.describe "DatabaseDumper" do
@@ -50,12 +44,7 @@ RSpec.describe "DatabaseDumper" do
     dump_file.close
 
     with_database "wca_db_dump_test" do
-      ActiveRecord::Base.connection.execute(sql)
-      # We have to walk over all the results from the previous multistatement query
-      # in order to wait for the entire query to finish.
-      while ActiveRecord::Base.connection.raw_connection.next_result
-      end
-      ActiveRecord::Base.connection.reconnect!
+      DbHelper.execute_sql sql
 
       expect(Competition.count).to eq 1
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"

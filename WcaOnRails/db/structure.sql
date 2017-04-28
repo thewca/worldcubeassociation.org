@@ -562,7 +562,21 @@ CREATE TABLE `delegate_reports` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3781 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `linkings`
+--
+
+DROP TABLE IF EXISTS `linkings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `linkings` (
+  `wca_id` varchar(10) NOT NULL,
+  `wca_ids` mediumtext NOT NULL,
+  UNIQUE KEY `index_linkings_on_wca_id` (`wca_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1149,4 +1163,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170402223714'),
 ('20170404184332'),
 ('20170406170418'),
-('20170418171035');
+('20170418171035'),
+('20170426145811');
