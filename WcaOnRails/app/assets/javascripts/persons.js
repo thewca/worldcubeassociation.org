@@ -50,7 +50,7 @@ onPage('persons#index', function() {
 });
 
 onPage('persons#show', function() {
-  /* Handle events selector for results by event */
+  /* Handle events selector for results by event. */
   $('.event-selector input[type="radio"]').on('change', function() {
     var eventId = $(this).val();
     var $tbodies = $('.results-by-event table tbody');

@@ -219,4 +219,16 @@
       </table>
     </div>
   </div>
+
+  <% provide(:include_gmaps, true) %>
+  <div id="competitions-map"></div>
+  <script>
+    $(function() {
+      wca.addGoogleMapsLoadedListener(function() {
+        var competitions = <%= competitions_json_for_markers @person.competitions %>
+        var map = wca.createCompetitionsMap(document.getElementById('competitions-map'));
+        wca.addCompetitionsToMap(map, competitions);
+      });
+    });
+  </script>
 </div>

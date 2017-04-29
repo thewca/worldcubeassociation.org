@@ -29,4 +29,19 @@ module CompetitionsHelper
   def year_is_a_number?(year)
     year.is_a?(Integer) || year =~ /\A\d+\z/
   end
+
+  def competitions_json_for_markers(competitions)
+    competitions.map do |c|
+      {
+        id: c.id,
+        name: c.name,
+        latitude_degrees: c.latitude_degrees,
+        longitude_degrees: c.longitude_degrees,
+        cityName: c.cityName,
+        marker_date: c.start_date.to_formatted_s(:long),
+        is_probably_over: c.is_probably_over?,
+        url: competition_path(c),
+      }
+    end.to_json.html_safe
+  end
 end

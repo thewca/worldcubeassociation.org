@@ -10,27 +10,6 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
   }).trigger('change');
 });
 
-// Creates the competitions map and marker cluster if they don't already exist. Returns the map.
-function getCompetitionsMap() {
-  if(wca.competitionsMap === undefined) {
-    wca.competitionsMap = new google.maps.Map(document.getElementById('competitions-map'), {
-      zoom: 2,
-      center: {lat: 0, lng: 0},
-      scrollwheel: true,
-    });
-
-    wca.competitionsOverlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(wca.competitionsMap);
-    var infowindow = new google.maps.InfoWindow();
-    wca.competitionsOverlappingMarkerSpiderfier.addListener('click', function(marker) {
-      infowindow.setContent(marker.desc);
-      infowindow.open(wca.competitionsMap, marker);
-    });
-
-  }
-
-  return wca.competitionsMap;
-}
-
 // Sets map container height.
 function resizeMapContainer() {
   var formHeight = $('#competition-query-form').outerHeight(true);

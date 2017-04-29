@@ -91,11 +91,8 @@ wca.addGoogleMapsLoadedListener = function(listener) {
   }
 };
 
-wca.competitionsToMarkers = function(map, competitions) {
-  var markers = [];
-
+wca.addCompetitionsToMap = function(map, competitions) {
   competitions.forEach(function(c) {
-
     if (c.is_probably_over) {
       iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
     } else {
@@ -114,10 +111,32 @@ wca.competitionsToMarkers = function(map, competitions) {
 
     c.marker.desc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
 
-    markers.push(c.marker);
+    map.overlappingMarkerSpiderfier.addMarker(c.marker);
+  });
+};
+
+wca.createCompetitionsMap = function(element) {
+  var map = new google.maps.Map(element, {
+    zoom: 2,
+    center: { lat: 0, lng: 0 },
+    scrollwheel: true,
   });
 
-  return markers;
+  map.overlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(map);
+  var infowindow = new google.maps.InfoWindow();
+  map.overlappingMarkerSpiderfier.addListener('click', function(marker) {
+    infowindow.setContent(marker.desc);
+    infowindow.open(map, marker);
+  });
+
+  return map;
+};
+
+wca.removeMarkers = function(map) {
+  map.overlappingMarkerSpiderfier.getMarkers().forEach(function(marker) {
+    marker.setMap(null);
+  });
+  map.overlappingMarkerSpiderfier.clearMarkers();
 };
 
 wca.renderMarkdownRequest = function(markdownContent) {
