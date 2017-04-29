@@ -978,7 +978,11 @@ en:
         bronze: "Bronze"
       competition: "Competition"
       results: "Results"
+      records: "Records"
       competitions_map: "Map"
+      world_records: "History of World Records"
+      continental_records: "History of Continental Records"
+      national_records: "History of National Records"
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
   #context: Contact forms

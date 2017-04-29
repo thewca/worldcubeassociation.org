@@ -189,4 +189,20 @@
     width: 100%;
     height: 500px;
   }
+
+  .records {
+    table {
+      @extend table.with-solves;
+      white-space: nowrap;
+
+      th,
+      td {
+        &.single,
+        &.average {
+          text-align: right;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }

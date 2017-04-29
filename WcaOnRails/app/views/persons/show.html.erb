@@ -9,6 +9,9 @@
 
   <ul class="nav nav-tabs nav-justified">
     <li><a href="#results-by-event" data-toggle="tab"><%= t '.results' %></a></li>
+    <% if @records[:total] > 0 %>
+      <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
+    <% end %>
     <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
   </ul>
 
@@ -16,6 +19,11 @@
     <div class="tab-pane" id="results-by-event">
       <%= render "results_by_event" %>
     </div>
+    <% if @records[:total] > 0 %>
+      <div class="tab-pane" id="records">
+        <%= render "records" %>
+      </div>
+    <% end %>
     <div class="tab-pane" id="map">
       <%= render "competitions_map" %>
     </div>
