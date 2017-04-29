@@ -151,6 +151,13 @@
     }
   }
 
+  .nav.nav-tabs {
+    li a {
+      @extend h3;
+      margin-bottom: 0;
+    }
+  }
+
   .results-by-event {
     table {
       @extend table.with-solves;

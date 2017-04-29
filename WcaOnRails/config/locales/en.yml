@@ -971,11 +971,14 @@ en:
       place: "Place"
       result_details: "Result Details"
       medal_collection: "Medal Collection"
+      record_collection: "Record Collection"
       medals:
         gold: "Gold"
         silver: "Silver"
         bronze: "Bronze"
       competition: "Competition"
+      results: "Results"
+      competitions_map: "Map"
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
   #context: Contact forms

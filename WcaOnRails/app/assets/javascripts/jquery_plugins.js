@@ -15,4 +15,22 @@
     var result = new RegExp(name + '=([^&]*)', 'i').exec(window.location.search);
     return result && (decodeURIComponent(result[1]) || '');
   };
+
+  // http://stackoverflow.com/a/8486188
+  $.urlParams = function() {
+    var query = location.search.substr(1);
+    var result = {};
+    if(query) {
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+    }
+    return result;
+  };
+
+  $.setUrlParams = function(params) {
+    var allParams = $.extend({}, $.urlParams(), params);
+    history.replaceState(null, null, '?' + $.param(allParams));
+  };
 })(jQuery);

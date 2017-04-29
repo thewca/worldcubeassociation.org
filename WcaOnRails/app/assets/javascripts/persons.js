@@ -1,3 +1,4 @@
+
 // Add params from the search fields to the bootstrap-table for on Ajax request.
 var personsTableAjax = {
   queryParams: function(params) {
@@ -57,9 +58,19 @@ onPage('persons#show', function() {
     $tbodies.hide();
     $tbodies.filter('.event-' + eventId).show();
     $('.results-by-event table').trigger('resize'); /* Let the table recalculate all widths. */
-    /* Update the URL. */
-    var queryParams = '?' + $.param({ results_event: eventId });
-    history.replaceState(null, null, queryParams);
+    $.setUrlParams({ results_event:  eventId });
   })
   $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
+
+  var currentTab = $.getUrlParam('tab') || 'results-by-event';
+  $('a[href="#' + currentTab + '"]').tab('show');
+
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+    var tab = $(this).attr('href').slice(1);
+    if(tab === 'map') {
+      /* Google Map is not properly initialized within a hidden container. */
+      google.maps.event.trigger($('#competitions-map')[0], 'resize');
+    }
+    $.setUrlParams({ tab: tab });
+  });
 });
