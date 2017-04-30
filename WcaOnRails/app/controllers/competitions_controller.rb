@@ -17,8 +17,8 @@ class CompetitionsController < ApplicationController
     :admin_edit,
   ]
 
-  private def competition_from_params
-    Competition.find(params[:competition_id] || params[:id]).tap do |competition|
+  private def competition_from_params(includes: nil)
+    Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
       unless competition.user_can_view?(current_user)
         raise ActionController::RoutingError.new('Not Found')
       end
@@ -263,11 +263,11 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_events
-    @competition = Competition.includes(:events).find(params[:id])
+    @competition = competition_from_params(includes: [:events])
   end
 
   def update_events
-    @competition = Competition.includes(:events).find(params[:id])
+    @competition = competition_from_params(includes: [:events])
     if @competition.update_attributes(competition_params)
       flash[:success] = t('.update_success')
       redirect_to edit_events_path(@competition)
@@ -283,7 +283,7 @@ class CompetitionsController < ApplicationController
   end
 
   def admin_edit
-    @competition = Competition.find(params[:id])
+    @competition = competition_from_params
     @competition_admin_view = true
     @competition_organizer_view = false
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -291,7 +291,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit
-    @competition = Competition.find(params[:id])
+    @competition = competition_from_params
     @competition_admin_view = false
     @competition_organizer_view = true
     @nearby_competitions = get_nearby_competitions(@competition)
@@ -299,7 +299,7 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
-    @competition = Competition.find(params[:id])
+    @competition = competition_from_params
 
     client = create_stripe_oauth_client
     oauth_params = {
@@ -338,7 +338,7 @@ class CompetitionsController < ApplicationController
   end
 
   def clone_competition
-    competition_to_clone = Competition.find(params[:id])
+    competition_to_clone = competition_from_params
     @competition = competition_to_clone.build_clone
     if current_user.any_kind_of_delegate?
       @competition.delegates |= [current_user]
@@ -381,7 +381,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    @competition = Competition.find(params[:id])
+    @competition = competition_from_params
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_results?
     @competition_organizer_view = !@competition_admin_view
 

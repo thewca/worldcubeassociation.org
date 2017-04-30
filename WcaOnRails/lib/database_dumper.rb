@@ -258,6 +258,9 @@ module DatabaseDumper
           competition_event_id
           format_id
           number
+          time_limit
+          cutoff
+          advance_to_next_round_requirement
           created_at
           updated_at
         ),

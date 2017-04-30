@@ -23,7 +23,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     require_can_manage!(competition)
 
-    render json: competition.wcif.json
+    render json: competition.to_wcif
   end
 
   private def competition_from_params

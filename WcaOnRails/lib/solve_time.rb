@@ -81,8 +81,19 @@ class SolveTime
   end
 
   def time_centiseconds=(time_centiseconds)
+    raise "time out of range" unless 0 <= time_centiseconds && time_centiseconds <= 99_999 * 100
     @time_centiseconds = time_centiseconds
     recompute_wca_value
+  end
+
+  attr_reader :solved, :attempted
+
+  def missed
+    self.attempted - self.solved
+  end
+
+  def points
+    self.solved - self.missed
   end
 
   def solved=(solved)
@@ -142,6 +153,19 @@ class SolveTime
     to_orderable <=> other.to_orderable
   end
 
+  def self.centiseconds_to_clock_format(centiseconds)
+    hours = centiseconds / 360_000
+    minutes = (centiseconds % 360_000) / 6000
+    seconds = (centiseconds % 6000) / 100
+    centis = centiseconds % 100
+
+    clock_format = format(CLOCK_FORMAT, hours, minutes, seconds, centis).sub(/^[0:]*/, EMPTY_STRING)
+    if clock_format.start_with? DOT_STRING
+      clock_format = ZERO_STRING + clock_format
+    end
+    clock_format
+  end
+
   def clock_format
     if dns?
       return DNS_STRING
@@ -175,16 +199,7 @@ class SolveTime
 
       "#{@solved}/#{@attempted} #{result}"
     else
-      hours = time_centiseconds / 360_000
-      minutes = (time_centiseconds % 360_000) / 6000
-      seconds = (time_centiseconds % 6000) / 100
-      centis = time_centiseconds % 100
-
-      clock_format = format(CLOCK_FORMAT, hours, minutes, seconds, centis).sub(/^[0:]*/, EMPTY_STRING)
-      if clock_format.start_with? DOT_STRING
-        clock_format = ZERO_STRING + clock_format
-      end
-      clock_format
+      SolveTime.centiseconds_to_clock_format(time_centiseconds)
     end
   end
 

@@ -41,4 +41,17 @@ class Event < ApplicationRecord
   def deprecated?
     990 <= rank && rank < 1000
   end
+
+  # See https://www.worldcubeassociation.org/regulations/#9f12
+  def timed_event?
+    !fewest_moves? && !multiple_blindfolded?
+  end
+
+  def fewest_moves?
+    self.id == "333fm"
+  end
+
+  def multiple_blindfolded?
+    self.id == "333mbf" || self.id == "333mbo"
+  end
 end

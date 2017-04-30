@@ -269,10 +269,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
-  def wcif
-    Wcif.new(competition: self)
-  end
-
   before_validation :unpack_dates
   validate :dates_must_be_valid
 
@@ -807,6 +803,15 @@ class Competition < ApplicationRecord
     end
 
     competitions.includes(:delegates, :organizers).order(start_date: :desc)
+  end
+
+  # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
+  def to_wcif
+    {
+      "formatVersion" => "1.0",
+      "id" => self.id,
+      "events" => self.competition_events.map(&:to_wcif),
+    }
   end
 
   def serializable_hash(options = nil)
