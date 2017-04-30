@@ -1,32 +1,34 @@
-<div class="text-center">
-  <h2><%= @person.name %></h2>
-  <!-- Handle multiple sub ids. -->
-  <% if @previous_persons.any? %>
-    <h4>
-      (Previously <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
-    </h4>
-  <% end %>
-  <% if @person&.user&.avatar %>
-    <%= image_tag @person.user.avatar, class: "avatar" %>
-  <% end %>
-</div>
-<div class="table-responsive details">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%= t 'common.country' %></th>
-        <th><%= t 'common.user.wca_id' %></th>
-        <%= content_tag :th, t('activerecord.attributes.person.gender') if @person.gender.present? %>
-        <th><%= t 'layouts.navigation.competitions' %></th>
-        <th><%= t 'persons.show.completed_solves' %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <td class="country"><i class="flag f32 <%= @person.country_iso2.downcase %>"></i> <%= @person.country.name %></td>
-      <td><%= @person.wca_id %></td>
-      <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender.present? %>
-      <td><%= @person.competitions.count %></td>
-      <td><%= @person.completed_solves_count %></td>
-    </tbody>
-  </table>
+<div>
+  <div class="text-center">
+    <h2><%= @person.name %></h2>
+    <!-- Handle multiple sub ids. -->
+    <% if @previous_persons.any? %>
+      <h4>
+        (Previously <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
+      </h4>
+    <% end %>
+    <% if @person&.user&.avatar %>
+      <%= image_tag @person.user.avatar, class: "avatar" %>
+    <% end %>
+  </div>
+  <div class="table-responsive details">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><%= t 'common.country' %></th>
+          <th><%= t 'common.user.wca_id' %></th>
+          <%= content_tag :th, t('activerecord.attributes.person.gender') if @person.gender.present? %>
+          <th><%= t 'layouts.navigation.competitions' %></th>
+          <th><%= t 'persons.show.completed_solves' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td class="country"><i class="flag f32 <%= @person.country_iso2.downcase %>"></i> <%= @person.country.name %></td>
+        <td><%= @person.wca_id %></td>
+        <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender.present? %>
+        <td><%= @person.competitions.count %></td>
+        <td><%= @person.completed_solves_count %></td>
+      </tbody>
+    </table>
+  </div>
 </div>

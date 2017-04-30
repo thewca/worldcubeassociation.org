@@ -4,28 +4,32 @@
   <%= render "details" %>
   <%= render "personal_records" %>
   <%= render "world_championship_podiums" if @world_championship_podiums.any? %>
-  <%= render "medal_collection" if @medals[:total] > 0 %>
-  <%= render "record_collection" if @records[:total] > 0 %>
+  <div class="row">
+    <%= render "medal_collection" if @medals[:total] > 0 %>
+    <%= render "record_collection" if @records[:total] > 0 %>
+  </div>
 
-  <ul class="nav nav-tabs nav-justified">
-    <li><a href="#results-by-event" data-toggle="tab"><%= t '.results' %></a></li>
-    <% if @records[:total] > 0 %>
-      <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
-    <% end %>
-    <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
-  </ul>
+  <div>
+    <ul class="nav nav-tabs nav-justified">
+      <li><a href="#results-by-event" data-toggle="tab"><%= t '.results' %></a></li>
+      <% if @records[:total] > 0 %>
+        <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
+      <% end %>
+      <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
+    </ul>
 
-  <div class="tab-content">
-    <div class="tab-pane" id="results-by-event">
-      <%= render "results_by_event" %>
-    </div>
-    <% if @records[:total] > 0 %>
-      <div class="tab-pane" id="records">
-        <%= render "records" %>
+    <div class="tab-content">
+      <div class="tab-pane" id="results-by-event">
+        <%= render "results_by_event" %>
       </div>
-    <% end %>
-    <div class="tab-pane" id="map">
-      <%= render "competitions_map" %>
+      <% if @records[:total] > 0 %>
+        <div class="tab-pane" id="records">
+          <%= render "records" %>
+        </div>
+      <% end %>
+      <div class="tab-pane" id="map">
+        <%= render "competitions_map" %>
+      </div>
     </div>
   </div>
 </div>

@@ -145,20 +145,6 @@
     }
   }
 
-  .medal-collection {
-    padding-left: 0;
-    @media (max-width: $screen-md-max) {
-      padding-right: 0;
-    }
-  }
-
-  .record-collection {
-    padding-right: 0;
-    @media (max-width: $screen-md-max) {
-      padding-left: 0;
-    }
-  }
-
   .nav.nav-tabs {
     li a {
       @extend h3;

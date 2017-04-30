@@ -1,5 +1,5 @@
 <div class="results-by-event">
-  <div class="event-selector">
+  <div class="event-selector text-center">
     <% @results.map(&:event).uniq.each do |event| %>
       <span class="event-radio">
         <%= label_tag "radio-#{event.id}" do %>
