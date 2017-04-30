@@ -860,7 +860,7 @@ zh-TW:
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
       #original_hash: 2684f33
-      wca_id_no_birthdate_html: '我們沒有記錄到此WCA ID的生日。請使用<a href="%{dob_form_path}">此表單</a>聯繫WCA成績組。'
+      wca_id_no_birthdate_html: '我們沒有記錄到此WCA ID的生日。請使用<a href="%{dob_form_path}">此表單</a>聯絡WCA成績組。'
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         我們沒有記錄到此WCA ID的性別。請寄信至<a href='mailto:results@worldcubeassociation.org'
@@ -1239,7 +1239,7 @@ zh-TW:
         #original_hash: 8b57693
         custom: 選取時間內的比賽
       #original_hash: 6684214
-      no_access: 您沒有此網頁的權限!
+      no_access: 您沒有此頁面的權限!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -1566,12 +1566,16 @@ zh-TW:
         #original_hash: 9a5ae28
         title: 參加比賽須具備什麼條件? 我必須知道哪些規則呢?
         content:
-          #original_hash: 40aa9c0
+          #original_hash: 3bb4e11
           '1': >-
             基本上，參加比賽沒有太多必備條件。但是所有參賽者應熟悉<a
-            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。另外，我們建議新人在參加比賽前閱讀<a
-            target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing
-            USA's competitor tutorial</a>，可以更了解比賽流程。
+            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>。如果英文不是您的母語且您看不太懂該內容，請閱讀<a
+            href='https://www.worldcubeassociation.org/regulations/translations/'>翻譯</a>。
+          #original_hash: da99893
+          '2': >-
+            此外，我們建議新人在參加比賽前閱讀<a target='_blank'
+            href='http://www.cubingusa.com/ctutorial.php'>Cubing USA's
+            competitor tutorial</a>，可以更了解比賽流程。
       '5':
         #original_hash: 3b657aa
         title: 我可以在家鄉辦WCA比賽嗎?
@@ -1619,9 +1623,17 @@ zh-TW:
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
+      '9':
+        #original_hash: 7a4a71d
+        title: 若我已經報名比賽了，我可以再加報額外項目嗎? 我可以攜帶訪客嗎?
+        content:
+          #original_hash: 957487d
+          '1': >-
+            請聯絡主辦人。您可以在比賽網站找到聯絡資訊，若您不確定在哪找到資訊，請看<a
+            href='/competitions'>比賽列表</a>。
       results:
         #original_hash: 9aae576
-        title: WCA比賽的成績何時會上傳至WCA網頁呢?
+        title: WCA比賽的成績何時會上傳至WCA網站呢?
         content:
           #original_hash: 890d879
           '1': >-
@@ -1632,6 +1644,42 @@ zh-TW:
           '3': >-
             另外，如果您已經將您的WCA帳號與您的WCA ID綁定(見底下)，您可以在<a
             href='%{preferences_edit_path}'>here</a>開啟比賽的成績通知。
+      regulations1:
+        #original_hash: 2951eb6
+        title: 請問我的方塊符合比賽標準嗎?
+        content:
+          #original_hash: 5ac78e4
+          '1': >-
+            您可以在<a
+            href='https://www.worldcubeassociation.org/regulations/#3'>第3章</a>找到與方塊有關的規則。所以方塊應經過WCA代表的審核。如果您不確定，請詢問您那場比賽的代表。為了確保您的方塊被允許使用，您應攜帶一顆備用方塊。
+      regulations2:
+        #original_hash: 48f1234
+        title: 請問我可以在WCA官方比賽使用磁力方塊嗎?
+        content:
+          #original_hash: 024ce81
+          '1': >-
+            只要您的方塊遵守 <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>WCA規則</a>，您就可以使用磁力方塊。請特別注意<a
+            href='https://www.worldcubeassociation.org/regulations/#3h'>規則
+            3h</a>。
+      regulations3:
+        #original_hash: c7460a5
+        title: 我掉了方塊的中心蓋或是其中一塊零件，請問我可以使用它比賽嗎?
+        content:
+          #original_hash: 0d76323
+          '1': >-
+            您不可以使用這顆方塊比賽。方塊不得有任何損壞或是任何可以讓方塊更容易區分的相異處(參見<a
+            href='https://www.worldcubeassociation.org/regulations/#3j'>規則
+            3j</a>)。
+      regulations4:
+        #original_hash: 43f9da8
+        title: 我應至少幾歲才能報名參加WCA比賽?
+        content:
+          #original_hash: 984704a
+          '1': >-
+            沒有最小年齡限制。但您在報名前應該先詢問您的家長(參見<a
+            href='https://www.worldcubeassociation.org/regulations/#2b'>規則
+            2b</a>)。
   about:
     #original_hash: 9ac918a
     title: 關於WCA
@@ -1679,7 +1727,7 @@ zh-TW:
       delegates_html: >-
         <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
       #original_hash: 27d18ac
-      see_link_html: '(見%{link})'
+      see_link_html: '(參見%{link})'
       #original_hash: 5b01fcc
       members_html: 所有選手在參加第一場WCA比賽後自動成為WCA<strong>成員</strong>。
   delegates_page:
@@ -1765,7 +1813,7 @@ zh-TW:
       #original_hash: 899dc9c
       info: (比賽成績、成績更正)
     software:
-      #original_hash: 325ab0a
+      #original_hash: dfbf427
       info: (維護WCA軟體)
   score_tools:
     #original_hash: ea9d41d
@@ -1878,3 +1926,19 @@ zh-TW:
       content_html: >-
         透過電子郵件將WCA小幫手產生的JSON檔傳送至<a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
+  relations:
+    relation:
+      #original_hash: 6519fe1
+      title: 關聯
+      #original_hash: 69ba020
+      find_relations: 尋找方塊玩家之間的關係
+      #original_hash: 5d6056d
+      show_relation: 送出請求!
+      connectives:
+        #original_hash: f85194e
+        was_at: Was at
+        #original_hash: 8c00243
+        together_with: Together with
+    messages:
+      #original_hash: 4406a0b
+      invalid_wca_ids: 請提供兩個有效且不同的WCA ID。
