@@ -4,8 +4,7 @@
       <span class="event-radio">
         <%= label_tag "radio-#{event.id}" do %>
           <%= radio_button_tag "results_event", event.id, params[:results_event] == event.id, id: "radio-#{event.id}" %>
-          <%= content_tag(:span, "", class: "cubing-icon event-#{event.id}", data: { toggle: "tooltip", placement: "top" },
-                                     title: event.name ) %>
+          <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
         <% end %>
       </span>
     <% end %>
@@ -28,7 +27,7 @@
         <tbody class="event-<%= event.id %>">
           <tr>
             <td colspan="12" class="event">
-              <%= content_tag :span, "", class: "cubing-icon event-#{event.id}" %>
+              <%= cubing_icon event.id %>
               <%= t "events.#{event.id}" %>
             </td>
           </tr>

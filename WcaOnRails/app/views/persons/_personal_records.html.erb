@@ -21,7 +21,7 @@
           <% rank_average = @ranks_average.find { |rank| rank.event_id == event.id } %>
           <tr>
             <td class="event">
-              <%= content_tag :span, "", class: "cubing-icon event-#{event.id}" %>
+              <%= cubing_icon event.id %>
               <%= t "events.#{event.id}" %>
             </td>
             <%= rank_td rank_single, "country" %>

@@ -43,7 +43,7 @@
           <td class="event">
             <% if !result.muted %>
               <%= link_to competition_results_all_path(@competition, anchor: "e#{result.event.id}") do %>
-                <span class="cubing-icon event-<%= result.event.id %>"></span>
+                <%= cubing_icon result.event.id %>
                 <%= result.event.name %>
               <% end %>
             <% end %>

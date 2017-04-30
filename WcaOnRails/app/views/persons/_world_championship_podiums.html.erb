@@ -21,7 +21,7 @@
           <% results.each do |result| %>
             <tr class="result">
               <td class="event">
-                <%= content_tag :span, "", class: "cubing-icon event-#{result.event.id}" %>
+                <%= cubing_icon result.event.id %>
                 <%= t "events.#{result.event.id}" %>
               </td>
               <td class="place"><%= result.pos %></td>

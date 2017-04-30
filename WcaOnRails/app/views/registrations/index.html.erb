@@ -15,12 +15,7 @@
 
           <% @competition.events.each do |event| %>
             <th>
-              <span title="<%= event.name %>"
-                    class="cubing-icon event-<%= event.id %>"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    data-container="body">
-              </span>
+              <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>
             </th>
           <% end %>
 
@@ -48,8 +43,7 @@
               <td>
                 <% if registration.events.include?(event) %>
                   <% @count_by_event[event.id] += 1 %>
-                  <span class="cubing-icon event-<%= event.id %>">
-                  </span>
+                  <%= cubing_icon event.id %>
                 <% end %>
               </td>
             <% end %>

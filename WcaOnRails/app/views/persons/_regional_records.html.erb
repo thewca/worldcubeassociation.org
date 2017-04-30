@@ -23,7 +23,7 @@
                 <tr class="result">
                   <td class="event">
                     <% if index == 0 %>
-                      <%= content_tag :span, "", class: "cubing-icon event-#{event.id}" %>
+                      <%= cubing_icon event.id %>
                       <%= t "events.#{event.id}" %>
                     <% end %>
                   </td>

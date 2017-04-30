@@ -186,4 +186,10 @@ module ApplicationHelper
       end
     end
   end
+
+  def cubing_icon(event, html_options = {})
+    html_options[:class] ||= ""
+    html_options[:class] += " cubing-icon event-#{event}"
+    content_tag :span, "", html_options
+  end
 end
