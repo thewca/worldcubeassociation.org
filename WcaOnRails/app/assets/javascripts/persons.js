@@ -28,7 +28,7 @@ onPage('persons#index', function() {
   }
 
   // Set the table options from the url params.
-  options.pageNumber = parseInt($.getUrlParam('page')) || options.pageNumber;
+  options.pageNumber = parseInt($.getUrlParams()['page']) || options.pageNumber;
   // Load the data using the options set above.
   personsTableAjax.queriesOK = true;
   $table.bootstrapTable('refresh');
@@ -44,9 +44,7 @@ onPage('persons#index', function() {
       // Extended with region and search params.
       page: options.pageNumber
     });
-    var url = location.toString();
-    url = url.replace(/persons.*/, 'persons?' + $.param(params));
-    history.replaceState(null, null, url);
+    $.setUrlParams(params);
   });
 });
 
@@ -62,7 +60,7 @@ onPage('persons#show', function() {
   })
   $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
 
-  var currentTab = $.getUrlParam('tab') || 'results-by-event';
+  var currentTab = $.getUrlParams()['tab'] || 'results-by-event';
   $('a[href="#' + currentTab + '"]').tab('show');
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
