@@ -1,5 +1,11 @@
 <div class="text-center">
   <h2><%= @person.name %></h2>
+  <!-- Handle multiple sub ids. -->
+  <% if @previous_persons.any? %>
+    <h4>
+      (Previously <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
+    </h4>
+  <% end %>
   <% if @person&.user&.avatar %>
     <%= image_tag @person.user.avatar, class: "avatar" %>
   <% end %>
