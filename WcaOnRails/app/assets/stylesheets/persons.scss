@@ -45,8 +45,16 @@
 
   .details {
     margin-top: 10px;
+
     th,
     td {
+      .flag {
+        margin: {
+          top: -10px;
+          bottom: -10px;
+        }
+      }
+
       text-align: center;
     }
   }

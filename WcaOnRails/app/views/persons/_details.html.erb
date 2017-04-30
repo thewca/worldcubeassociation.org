@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <td><i class="flag f16 <%= @person.country_iso2.downcase %>"></i> <%= @person.country.name %></td>
+      <td class="country"><i class="flag f32 <%= @person.country_iso2.downcase %>"></i> <%= @person.country.name %></td>
       <td><%= @person.wca_id %></td>
       <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender.present? %>
       <td><%= @person.competitions.count %></td>
