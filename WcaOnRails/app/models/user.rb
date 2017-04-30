@@ -631,7 +631,7 @@ class User < ApplicationRecord
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: "/results/p.php?i=#{self.wca_id}",
+      url: self.wca_id ? Rails.application.routes.url_helpers.person_path(self.wca_id) : "",
 
       id: self.id,
       wca_id: self.wca_id,

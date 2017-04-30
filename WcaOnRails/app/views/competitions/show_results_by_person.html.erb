@@ -6,7 +6,7 @@
       <h3>
         <% first_result = results.first %>
         <%= anchorable "#{first_result.personName} - #{first_result.country.name}", personId %>
-        <%= link_to t('competitions.results_table.wca_profile'), first_result.results_path %>
+        <%= link_to t('competitions.results_table.wca_profile'), person_path(personId) %>
       </h3>
       <%= render "results_table", results: results, hide_name: true, hide_country: true %>
     <% end %>

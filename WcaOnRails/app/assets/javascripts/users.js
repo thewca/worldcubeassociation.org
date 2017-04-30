@@ -36,7 +36,7 @@ onPage('users#edit, users#update', function() {
     var unconfirmed_wca_id = $unconfirmed_wca_id.val();
     $approve_wca_id.prop("disabled", !unconfirmed_wca_id);
     $unconfirmed_wca_id_profile_link.parent().toggle(!!unconfirmed_wca_id);
-    $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
+    $unconfirmed_wca_id_profile_link.attr('href', "/persons/" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
 

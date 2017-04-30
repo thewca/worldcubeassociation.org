@@ -68,7 +68,7 @@
         <% if !hide_name %>
           <td class="name">
             <% if result.wca_id %>
-              <%= link_to result.personName, "/results/p.php?i=#{result.wca_id}" %>
+              <%= link_to result.personName, person_path(result.wca_id) %>
             <% else %>
               <%= result.personName %>
             <% end %>

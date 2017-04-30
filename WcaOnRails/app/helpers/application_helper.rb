@@ -182,7 +182,7 @@ module ApplicationHelper
   def wca_id_link(wca_id, options = {})
     if wca_id
       content_tag :span, class: "wca-id" do
-        link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}", options
+        link_to wca_id, person_url(wca_id), options
       end
     end
   end

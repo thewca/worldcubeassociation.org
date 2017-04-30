@@ -76,7 +76,7 @@ RSpec.describe ApplicationHelper do
 
   describe "#wca_id_link" do
     it "links to a person's WCA profile page" do
-      expect(wca_id_link("2005FLEI01")).to eq '<span class="wca-id"><a href="http://test.host/results/p.php?i=2005FLEI01">2005FLEI01</a></span>'
+      expect(wca_id_link("2005FLEI01")).to eq '<span class="wca-id"><a href="http://test.host/persons/2005FLEI01">2005FLEI01</a></span>'
     end
   end
 end

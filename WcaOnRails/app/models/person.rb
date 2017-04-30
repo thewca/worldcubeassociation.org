@@ -198,14 +198,10 @@ class Person < ApplicationRecord
     results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
   end
 
-  def results_path
-    "/results/p.php?i=#{self.wca_id}"
-  end
-
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: results_path,
+      url: Rails.application.routes.url_helpers.person_path(self.wca_id),
 
       id: self.wca_id,
       wca_id: self.wca_id,

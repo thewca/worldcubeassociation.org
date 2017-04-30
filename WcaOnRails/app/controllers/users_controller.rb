@@ -34,7 +34,7 @@ class UsersController < ApplicationController
           total: @users.count,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
-              wca_id: user.wca_id ? view_context.link_to(user.wca_id, "/results/p.php?i=#{user.wca_id}") : "",
+              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
               name: ERB::Util.html_escape(user.name),
               country: user.country.id,
               email: ERB::Util.html_escape(user.email),

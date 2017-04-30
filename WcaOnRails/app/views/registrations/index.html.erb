@@ -31,7 +31,7 @@
             <td class="name">
               <% if registration.wca_id.present? %>
                 <% @returners += 1 %>
-                <%= link_to registration.name, "/results/p.php?i=#{registration.wca_id}" %>
+                <%= link_to registration.name, person_path(registration.wca_id) %>
               <% else %>
                 <% @newcomers += 1 %>
                 <%= registration.name %>

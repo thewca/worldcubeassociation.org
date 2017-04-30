@@ -52,7 +52,7 @@
             <li><a href="/results/regions.php"><%= icon('trophy') %> <%= t '.records' %></a></li>
             <li><a href="<%= persons_path %>"><%= icon('users') %> <%= t '.persons' %></a></li>
             <% if current_user&.wca_id? %>
-              <li><%= link_to icon('user', t('.my_results')), "/results/p.php?i=#{current_user.wca_id}" -%></li>
+              <li><%= link_to icon('user', t('.my_results')), person_path(current_user.wca_id) -%></li>
             <% end %>
             <li class="divider"></li>
             <li><a href="/results/statistics.php"><%= icon('area-chart') %> <%= t '.statistics' %></a></li>
