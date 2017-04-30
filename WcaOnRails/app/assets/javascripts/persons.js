@@ -72,5 +72,8 @@ onPage('persons#show', function() {
       google.maps.event.trigger($('#competitions-map')[0], 'resize');
     }
     $.setUrlParams({ tab: tab });
+
+    var top = $(this).offset().top;
+    $('html, body').animate({ scrollTop: top - 5 });
   });
 });
