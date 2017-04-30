@@ -317,12 +317,16 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  def show_events
+    @competition = competition_from_params(includes: [competition_events: { rounds: [:format, :competition_event] }])
+  end
+
   def edit_events
-    @competition = competition_from_params(includes: [:events])
+    @competition = competition_from_params
   end
 
   def update_events
-    @competition = competition_from_params(includes: [:events])
+    @competition = competition_from_params
     if @competition.update_attributes(competition_params)
       flash[:success] = t('.update_success')
       redirect_to edit_events_path(@competition)

@@ -28,6 +28,10 @@ class CompetitionEvent < ApplicationRecord
     fee.nonzero?
   end
 
+  def event
+    Event.c_find(event_id)
+  end
+
   def to_wcif
     {
       "id" => self.event.id,

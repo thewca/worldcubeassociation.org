@@ -1,0 +1,68 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <% cumulative_time_limit = false %>
+  <% cumulative_across_rounds_time_limit = false %>
+  <%= wca_table do %>
+    <thead>
+      <tr>
+        <% max_round_number = @competition.competition_events.map { |ce| ce.rounds.length }.max %>
+        <th rowspan="2">Event name</th>
+        <% (1..max_round_number).each do |round_number| %>
+          <th colspan="4">Round <%= round_number %></th>
+        <% end %>
+      </tr>
+      <tr>
+        <% (1..max_round_number).each do |round_number| %>
+          <th>Format</th>
+          <th><%= link_to "Time Limit", "#time-limit" %></th>
+          <th><%= link_to "Cutoff", "#cutoff" %></th>
+          <th></th>
+        <% end %>
+      </tr>
+    <thead>
+
+    <tbody>
+      <% @competition.competition_events.each do |competition_event| %>
+        <tr>
+          <td>
+            <%= competition_event.event.name %>
+          </td>
+          <% competition_event.rounds.each do |round| %>
+            <td><%= round.format.name %></td>
+            <td>
+              <%= round.time_limit_to_s %>
+              <% if round.time_limit.cumulative_round_ids %>
+                <% if round.time_limit.cumulative_round_ids.length == 1 %>
+                  <% cumulative_time_limit = true %>
+                  <%= link_to "*", "#cumulative-time-limit" %>
+                <% else %>
+                  <% cumulative_across_rounds_time_limit = true %>
+                  <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= round.cutoff_to_s %></td>
+            <td><%= round.advancement_condition_to_s %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
+
+  <dl class="dl-horizontal">
+    <dt id="time-limit">Time Limit</dt>
+    <dd>
+      AKA: hard cutoff.
+      <% if cumulative_time_limit %>
+        A <strong id="cumulative-time-limit">cumulative time limit</strong> may be enforced....
+      <% end %>
+      <% if cumulative_across_rounds_time_limit %>
+        A <strong id="cumulative-across-rounds-time-limit">cumulative time limit</strong> may be enforced across rounds....
+      <% end %>
+    </dd>
+
+    <dt id="cutoff">Cutoff</dt>
+    <dd>What is a cutoff?</dd>
+  </dl>
+<% end %>
