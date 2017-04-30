@@ -31,12 +31,12 @@
               <%= t "events.#{event.id}" %>
             </td>
           </tr>
-          <% pb_markers = pb_markers(results.reverse) %>
+          <% pb_markers = pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
           <% results.group_by(&:competitionId).each do |_, results| %>
             <% results.each_with_index do |result, index| %>
               <tr class="result">
                 <td class="competition">
-                  <% if index == 0 %>
+                  <% if index == 0 # Show each competition name only once to avoid redundancy. %>
                     <%= link_to result.competition.name, result.competition %>
                   <% end %>
                 </td>

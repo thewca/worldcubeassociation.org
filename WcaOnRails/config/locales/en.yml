@@ -965,6 +965,7 @@ en:
       podiums: "Podiums"
       no_persons_found: "No person matches the given criteria."
     show:
+      previously: "Previously"
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       wc_podiums: "World Championship Podiums"

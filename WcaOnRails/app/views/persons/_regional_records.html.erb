@@ -22,7 +22,7 @@
               <% results.each_with_index do |result, index| %>
                 <tr class="result">
                   <td class="event">
-                    <% if index == 0 %>
+                    <% if index == 0 # Show each event name only once to avoid redundancy. %>
                       <%= cubing_icon event.id %>
                       <%= t "events.#{event.id}" %>
                     <% end %>
@@ -35,7 +35,7 @@
                   </td>
                   <td class="competition"><%= link_to result.competition.name, result.competition %></td>
                   <td class="round"><%= t "rounds.#{result.roundTypeId}.name" %></td>
-                  <% if result.regionalAverageRecord.present? %>
+                  <% if record_types.include? result.regionalAverageRecord # Show all solves for average only. %>
                     <%= solve_tds_for_result(result) %>
                   <% else %>
                     <td colspan="5"></td>
