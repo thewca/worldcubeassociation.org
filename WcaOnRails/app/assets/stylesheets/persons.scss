@@ -31,10 +31,36 @@
 }
 
 #person {
-  .shrink {
-    padding: {
-      top: 2px;
-      bottom: 2px;
+  /* Generic table style for the person profile page. */
+  table {
+    @extend table.with-solves;
+    white-space: nowrap;
+
+    .cubing-icon {
+      font-size: 1.3em;
+      line-height: normal;
+      vertical-align: middle;
+    }
+
+    td,
+    th {
+      vertical-align: middle;
+      &.single,
+      &.average {
+        text-align: right;
+      }
+    }
+
+    td {
+      padding: {
+        top: 4px;
+        bottom: 4px;
+      }
+
+      &.single,
+      &.average {
+        font-weight: bold;
+      }
     }
   }
 
@@ -48,41 +74,27 @@
 
     th,
     td {
+      text-align: center;
+
       .flag {
+        /* A trick to prevent the flag from expanding the row (this effectively lets the flag avoid the impact of td padding). */
         margin: {
           top: -10px;
           bottom: -10px;
         }
       }
-
-      text-align: center;
     }
-  }
-
-  table .cubing-icon {
-    font-size: 1.3em;
-    line-height: normal;
-    vertical-align: middle;
   }
 
   .personal-records {
     table {
-      white-space: nowrap;
-
       td {
-        @extend .shrink;
-
         &.country-rank {
           opacity: 0.6;
         }
 
         &.continent-rank {
           opacity: 0.8;
-        }
-
-        &.single,
-        &.average {
-          font-weight: bold;
         }
 
         &.record {
@@ -108,17 +120,11 @@
 
   .wc-podiums {
     table {
-      @extend table.with-solves;
-      white-space: nowrap;
-
       .competition-link {
         font-weight: bold;
       }
 
       .result td {
-        @extend .shrink;
-        vertical-align: middle;
-
         &.event .cubing-icon {
           margin-left: 30px;
         }
@@ -127,20 +133,23 @@
           color: $blue;
           font-weight: bold;
         }
-
-        &.single,
-        &.average {
-          font-weight: bold;
-        }
       }
 
       td,
       th {
-        &.place,
-        &.single,
-        &.average {
+        &.place {
           text-align: right;
         }
+      }
+    }
+  }
+
+  .medal-collection,
+  .record-collection {
+    table {
+      td,
+      th {
+        text-align: center;
       }
     }
   }
@@ -155,9 +164,6 @@
 
   .results-by-event {
     table {
-      @extend table.with-solves;
-      white-space: nowrap;
-
       th,
       td {
         &.regional-single-record,
@@ -165,12 +171,6 @@
           font-weight: bold;
           color: red;
           text-align: left;
-        }
-
-        &.single,
-        &.average {
-          text-align: right;
-          font-weight: bold;
         }
 
         &.pb {
@@ -183,21 +183,5 @@
   #competitions-map {
     width: 100%;
     height: 500px;
-  }
-
-  .records {
-    table {
-      @extend table.with-solves;
-      white-space: nowrap;
-
-      th,
-      td {
-        &.single,
-        &.average {
-          text-align: right;
-          font-weight: bold;
-        }
-      }
-    }
   }
 }
