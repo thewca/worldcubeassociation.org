@@ -24,14 +24,12 @@
 
   <p><%= t('about.structure.committees') %>
   <ul>
-    <li><%= t('about.structure.wdc.name_html') %>: <%= format_team_members('wdc') %> <br />
-      <%= t('about.structure.wdc.description') %></li>
-    <li><%= t('about.structure.wrc.name_html') %>: <%= format_team_members('wrc') %> <br />
-      <%= t('about.structure.wrc.description') %></li>
-    <li><%= t('about.structure.results.name_html') %>: <%= format_team_members('results') %> <br />
-      <%= t('about.structure.results.description') %></li>
-    <li><%= t('about.structure.software.name_html') %>: <%= format_team_members('software') %> <br />
-      <%= t('about.structure.software.description') %></li>
+    <% Team.order(:rank).each do |team| %>
+      <li>
+        <strong><%= team.name %> (<%= team.acronym %>)</strong>: <%= format_team_members(team) %> <br />
+        <%= t("about.structure.#{team.friendly_id}.description") %>
+      </li>
+    <% end %>
   </ul>
 
   <p>

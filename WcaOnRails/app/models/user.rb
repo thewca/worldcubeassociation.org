@@ -348,11 +348,11 @@ class User < ApplicationRecord
   end
 
   def software_team?
-    team_member?('software')
+    team_member?('wst')
   end
 
   def results_team?
-    team_member?('results')
+    team_member?('wrt')
   end
 
   def wrc_team?
@@ -361,6 +361,10 @@ class User < ApplicationRecord
 
   def wdc_team?
     team_member?('wdc')
+  end
+
+  def communication_team?
+    team_member?('wct')
   end
 
   def team_member?(team_friendly_id)
@@ -384,7 +388,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || any_kind_of_delegate?
+    admin? || board_member? || results_team? || communication_team? || any_kind_of_delegate?
   end
 
   def can_edit_user?(user)
@@ -419,11 +423,11 @@ class User < ApplicationRecord
   end
 
   def can_view_crash_course?
-    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team?
+    admin? || board_member? || any_kind_of_delegate? || results_team? || wdc_team? || wrc_team? || communication_team?
   end
 
   def can_create_posts?
-    admin? || board_member? || results_team? || wdc_team? || wrc_team?
+    admin? || board_member? || results_team? || wdc_team? || wrc_team? || communication_team?
   end
 
   def can_update_crash_course?

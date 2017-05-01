@@ -20,4 +20,12 @@ class Team < ApplicationRecord
       end
     end
   end
+
+  def acronym
+    friendly_id.upcase
+  end
+
+  def name
+    I18n.t("about.structure.#{friendly_id}.name")
+  end
 end

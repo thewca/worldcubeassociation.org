@@ -9,20 +9,6 @@ class TeamsController < ApplicationController
     @teams = Team.all
   end
 
-  def new
-    @team = Team.new
-  end
-
-  def create
-    @team = Team.new(team_params)
-    if @team.save
-      flash[:success] = "Created new team"
-      redirect_to edit_team_path(@team)
-    else
-      render :new
-    end
-  end
-
   def edit
     @team = team_from_params
   end

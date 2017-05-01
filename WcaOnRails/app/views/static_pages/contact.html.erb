@@ -14,32 +14,16 @@
   <h2><%= t('contact.committees_and_teams_html') %></h2>
 
   <p>
-    <%= t('contact.board.name_html') %> - <a href="mailto:board@worldcubeassociation.org">board@worldcubeassociation.org</a><br />
+    <strong><%= t('contact.board.name_html') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
     <%= t('contact.board.info') %><br />
     <%= @board_members.order(:name).map(&:name).join(", ") %>
   </p>
 
-  <p>
-    <%= t('about.structure.wdc.name_html') %> - <a href="mailto:wdc@worldcubeassociation.org">wdc@worldcubeassociation.org</a><br />
-    <%= t('contact.wdc.info') %><br />
-    <%= format_team_members('wdc') %>
-  </p>
-
-  <p>
-    <%= t('about.structure.wrc.name_html') %> - <a href="mailto:wrc@worldcubeassociation.org">wrc@worldcubeassociation.org</a><br />
-    <%= t('contact.wrc.info') %><br />
-    <%= format_team_members('wrc') %>
-  </p>
-
-  <p>
-    <%= t('about.structure.results.name_html') %> - <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a><br />
-    <%= t('contact.results.info') %><br />
-    <%= format_team_members('results') %>
-  </p>
-
-  <p>
-    <%= t('about.structure.software.name_html') %> - <a href="mailto:software@worldcubeassociation.org">software@worldcubeassociation.org</a><br />
-    <%= t('contact.software.info') %><br />
-    <%= format_team_members('software') %>
-  </p>
+  <% Team.order(:rank).each do |team| %>
+    <p>
+      <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
+      <%= t("contact.#{team.friendly_id}.info") %><br />
+      <%= format_team_members(team) %>
+    </p>
+  <% end %>
 </div>

@@ -450,9 +450,9 @@ module DatabaseDumper
         copy: %w(
           id
           created_at
-          description
           friendly_id
-          name
+          email
+          rank
           updated_at
         ),
       ),

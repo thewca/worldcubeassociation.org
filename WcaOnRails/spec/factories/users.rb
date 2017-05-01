@@ -29,14 +29,14 @@ FactoryGirl.define do
       name "Mr. Admin"
       email "admin@worldcubeassociation.org"
       after(:create) do |user|
-        software_team = Team.find_by_friendly_id('software')
+        software_team = Team.find_by_friendly_id('wst')
         FactoryGirl.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
       end
     end
 
     factory :results_team do
       after(:create) do |user|
-        results_team = Team.find_by_friendly_id('results')
+        results_team = Team.find_by_friendly_id('wrt')
         FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id)
       end
     end
