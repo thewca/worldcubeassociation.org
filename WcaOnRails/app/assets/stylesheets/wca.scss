@@ -83,13 +83,6 @@ table.table {
   }
 }
 
-.event-checkbox,
-.event-radio {
-  .cubing-icon {
-    font-size: 2em;
-  }
-}
-
 .event-checkbox-sm .cubing-icon {
   font-size: 1em;
 }
@@ -321,6 +314,10 @@ textarea {
 // Style for event pickers
 .event-checkbox,
 .event-radio {
+  .cubing-icon {
+    font-size: 2em;
+  }
+
   label {
     margin-bottom: 0;
   }

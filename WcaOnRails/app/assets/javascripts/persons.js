@@ -28,7 +28,7 @@ onPage('persons#index', function() {
   }
 
   // Set the table options from the url params.
-  options.pageNumber = parseInt($.getUrlParams()['page']) || options.pageNumber;
+  options.pageNumber = parseInt($.getUrlParams().page) || options.pageNumber;
   // Load the data using the options set above.
   personsTableAjax.queriesOK = true;
   $table.bootstrapTable('refresh');
@@ -57,10 +57,10 @@ onPage('persons#show', function() {
     $tbodies.filter('.event-' + eventId).show();
     $('.results-by-event table').trigger('resize'); /* Let the table recalculate all widths. */
     $.setUrlParams({ results_event:  eventId });
-  })
+  });
   $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
 
-  var currentTab = $.getUrlParams()['tab'] || 'results-by-event';
+  var currentTab = $.getUrlParams().tab || 'results-by-event';
   $('a[href="#' + currentTab + '"]').tab('show');
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function() {

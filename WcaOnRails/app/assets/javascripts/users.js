@@ -76,9 +76,9 @@ onPage('users#index', function() {
   // Set the table options from the url params.
   var urlParams = $.getUrlParams();
   $.extend(options, {
-    pageNumber: parseInt(urlParams['page']) || options.pageNumber,
-    sortOrder: urlParams['order'] || options.sortOrder,
-    sortName: urlParams['sort'] || options.sortName
+    pageNumber: parseInt(urlParams.page) || options.pageNumber,
+    sortOrder: urlParams.order || options.sortOrder,
+    sortName: urlParams.sort || options.sortName
   });
   // Load the data using the options set above.
   $table.bootstrapTable('refresh');

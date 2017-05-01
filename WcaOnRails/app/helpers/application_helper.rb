@@ -180,7 +180,7 @@ module ApplicationHelper
   end
 
   def wca_id_link(wca_id, options = {})
-    if wca_id
+    if wca_id.present?
       content_tag :span, class: "wca-id" do
         link_to wca_id, person_url(wca_id), options
       end
