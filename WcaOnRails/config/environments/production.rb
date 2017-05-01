@@ -72,10 +72,6 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   if ENVied.WCA_LIVE_SITE
-    # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-    # Cloudfront! https://console.aws.amazon.com/cloudfront/home
-    config.action_controller.asset_host = 'https://d1qsrrpnlo9sni.cloudfront.net'
-
     config.action_mailer.smtp_settings = {
       address: "email-smtp.us-west-2.amazonaws.com",
       port: 587,
