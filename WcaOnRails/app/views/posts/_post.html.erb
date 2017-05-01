@@ -6,7 +6,7 @@
       <% else %>
         <%= post.title %>
       <% end %>
-      <% if user_signed_in? && current_user.can_admin_results? %>
+      <% if current_user&.can_create_posts? %>
         <span class="pull-right">
           <%= link_to post.edit_path do %>
             <span class="glyphicon glyphicon-pencil"></span>
