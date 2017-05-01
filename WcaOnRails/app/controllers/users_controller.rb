@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:search, :select_nearby_delegate]
 
   def self.WCA_TEAMS
-    %w(software results wdc wrc)
+    %w(wst wrt wdc wrc wct)
   end
 
   def index
