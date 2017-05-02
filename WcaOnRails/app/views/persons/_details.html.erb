@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <td class="country"><i class="flag f32 <%= @person.country_iso2.downcase %>"></i> <%= @person.country.name %></td>
+        <td class="country"><%= flag_icon @person.country_iso2, 32 %> <%= @person.country.name %></td>
         <td><%= @person.wca_id %></td>
         <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender_visible? %>
         <td><%= @person.competitions.count %></td>

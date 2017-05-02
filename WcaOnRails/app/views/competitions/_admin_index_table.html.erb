@@ -32,7 +32,7 @@
           <% results = competition.results_posted_at %>
           <tr>
             <td>
-              <i class="flag f16 <%= competition.country.iso2.downcase %>"></i><%= link_to competition.cellName, competition_path(competition) %>
+              <%= flag_icon competition.country.iso2, 16 %><%= link_to competition.cellName, competition_path(competition) %>
               <br /><strong><%= competition.country.name_in(:en) %></strong>, <%= competition.cityName %>
             </td>
             <td class="admin-delegate">

@@ -192,4 +192,10 @@ module ApplicationHelper
     html_options[:class] += " cubing-icon event-#{event}"
     content_tag :span, "", html_options
   end
+
+  def flag_icon(iso2, size, html_options = {})
+    html_options[:class] ||= ""
+    html_options[:class] += " flag f#{size} #{iso2.downcase}"
+    content_tag :span, "", html_options
+  end
 end
