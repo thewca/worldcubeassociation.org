@@ -16,13 +16,12 @@
         </tr>
       </thead>
       <tbody>
-        <% @events_competed_in.each do |event| %>
-          <% rank_single = @ranks_single.find { |rank| rank.event_id == event.id } %>
-          <% rank_average = @ranks_average.find { |rank| rank.event_id == event.id } %>
+        <% @ranks_single.sort_by { |rank_single| rank_single.event.rank } .each do |rank_single| %>
+          <% rank_average = @ranks_average.find { |rank| rank.event_id == rank_single.event_id } %>
           <tr>
             <td class="event">
-              <%= cubing_icon event.id %>
-              <%= t "events.#{event.id}" %>
+              <%= cubing_icon rank_single.event.id %>
+              <%= t "events.#{rank_single.event.id}" %>
             </td>
             <%= rank_td rank_single, "country" %>
             <%= rank_td rank_single, "continent" %>

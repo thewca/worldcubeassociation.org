@@ -12,6 +12,10 @@ class RanksSingle < ApplicationRecord
     SolveTime.new(eventId, :best, best).clock_format
   end
 
+  def event
+    Event.c_find(eventId)
+  end
+
   # Alises for SQL camelCase columns
   alias_attribute :event_id, :eventId
   alias_attribute :country_rank, :countryRank
