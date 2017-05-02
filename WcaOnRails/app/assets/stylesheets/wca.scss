@@ -106,11 +106,7 @@ table.with-solves {
     }
   }
   tbody tr td {
-    &.solve1,
-    &.solve2,
-    &.solve3,
-    &.solve4,
-    &.solve5, {
+    &.solve, {
       text-align: right;
       &::before {
         content: '(';
