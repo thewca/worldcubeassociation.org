@@ -533,6 +533,15 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "timestamps" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          name
+          date
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)

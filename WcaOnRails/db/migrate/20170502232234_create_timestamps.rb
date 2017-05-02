@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTimestamps < ActiveRecord::Migration[5.0]
   def change
     create_table :timestamps, id: false do |t|

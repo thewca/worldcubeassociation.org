@@ -3,12 +3,11 @@
 class ComputeLinkings < ApplicationJob
   queue_as :default
 
-  def computation_needed
-    # Compute the linkings table for the relations feature whenever results are updated.
-    Result.maximum(:updated_at) > 1.hour.ago
-  end
-
   def perform
-    Relations.compute_linkings if computation_needed
+    last_computation = Timestamp.find_or_create_by(name: 'linkings_computation')
+    if last_computation.date.nil? || last_computation < 3.days.ago
+      Relations.compute_linkings
+      last_computation.touch :date
+    end
   end
 end
