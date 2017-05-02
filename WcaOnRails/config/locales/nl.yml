@@ -124,6 +124,45 @@ nl:
       name: Gecombineerde kwalificatie
       #original_hash: 4c66ad0
       cellName: Gecombineerde kwalificatie
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Ronde %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: 'Beste %{ranking} gaan door naar ronde %{next_round_number}'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: 'Beste resultaat ≤ %{time} gaat door naar ronde %{next_round_number}'
+      #original_hash: efa4ad1
+      moves: >-
+        Beste resultaat ≤ %{moves} draaien gaat door naar ronde
+        %{next_round_number}
+      #original_hash: 29f8453
+      points: >-
+        Beste resultaat ≥ %{points} punten gaat door naar ronde
+        %{next_round_number}
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      zero: 'geen pogingen voor ≤ %{time}'
+      one: 'één poging voor ≤ %{time}'
+      other: '%{count} pogingen voor ≤ %{time}'
+    #original_hash: 6f99fa6
+    moves:
+      zero: 'geen pogingen voor ≤ %{moves} draaien'
+      one: 'één poging voor ≤ %{moves} draaien'
+      other: '%{count} pogingen voor ≤ %{moves} draaien'
+    #original_hash: 1c7c5f1
+    points:
+      zero: 'geen pogingen voor ≥ %{moves} punten'
+      one: 'één poging voor ≥ %{moves} punten'
+      other: '%{count} pogingen voor ≥ %{moves} punten'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} cumulatief'
+      #original_hash: c01adfa
+      across_rounds: '%{time} totaal voor %{rounds}'
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -385,10 +424,10 @@ nl:
         email: >-
           Veranderen van je e-mailadres vereist bevestiging van het nieuwe
           e-mailadres.
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
-          Na het uploaden van je profielfoto, wordt deze binnen enkele dagen
-          beoordeeld.
+          Na het uploaden van je profielfoto, is het wachten tot het
+          WCA-resultaten deze goedkeurt.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -593,8 +632,6 @@ nl:
         #original_hash: da39a3e
         status: ''
       team:
-        #original_hash: da39a3e
-        description: ''
         #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
@@ -1974,8 +2011,8 @@ nl:
         De volgende commissies zijn verantwoordelijk voor de operationele
         activiteiten van de WCA:
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>WCA Disciplinaire Commissie (WDC)</strong>
+        #original_hash: c97077a
+        name: WCA Disciplinaire Commissie
         #original_hash: 286fdf8
         description: >-
           Deze commissie adviseert de WCA Board in speciale gevallen, zoals
@@ -1983,26 +2020,36 @@ nl:
           worden gecontacteerd door WCA-leden ingeval van belangrijke
           persoonlijke zaken betreffende WCA-wedstrijden.
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>WCA Reglement Commissie (WRC)</strong>
+        #original_hash: 3da1e85
+        name: WCA Reglementen Commissie
         #original_hash: 13ada5b
         description: >-
           Deze commissie is verantwoordelijk voor het onderhouden van het WCA
           Wedstrijdreglement.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA Resultatenteam</strong>
+      wrt:
+        #original_hash: 67be768
+        name: WCA-resultatenteam
         #original_hash: 439ffae
         description: >-
           Dit team is verantwoordelijk voor het beheren van alle
           wedstrijdresultaten.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA Softwareteam</strong>
+      wst:
+        #original_hash: a14bc62
+        name: WCA-softwareteam
         #original_hash: ec961e4
         description: >-
-          Dit team is verantwoordelijk voor het beheren van de WCA-software
-          (website, scramblers, werkboeken en beheertools).
+          Dit team is verantwoordelijk voor het beheren van de software van WCA
+          (website, scramblers, werkboeken, administratietools).
+      wct:
+        #original_hash: 63a2388
+        name: WCA Communicatie Team
+        #original_hash: 50fd091
+        description: >-
+          Het WCA Communicatie Team (WCT) heeft de rol om de communicatie van
+          WCA met de Community en het publiek te overzien en ondersteunen. De
+          communicatie van WCA moet bijdragen aan de doelstellingen van WCA en
+          een positieve cultuur van vriendschap, transparantie, inclusiviteit,
+          openheid en responsiviteit ondersteunen.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA delegates</strong> zijn leden van de WCA die
@@ -2119,12 +2166,15 @@ nl:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Commissies en Teams</u>
     board:
-      #original_hash: ccad374
+      #original_hash: 90fcc48
       name_html: <strong>WCA Board</strong>
       #original_hash: 7ee8e36
       info: >-
         (WCA-organisatie, delegate reports, goedkeuring van competitions,
         algemene vragen)
+    wct:
+      #original_hash: c53144e
+      info: (communicatie van WCA met Community en publiek)
     wdc:
       #original_hash: 562e197
       info: >-
@@ -2133,12 +2183,12 @@ nl:
     wrc:
       #original_hash: 4a256f0
       info: (onderhoud van het WCA-wedstrijdreglement)
-    results:
+    wrt:
       #original_hash: 899dc9c
-      info: '(wedstrijdresultaten, resultaatcorrecties)'
-    software:
+      info: '(wedstrijdresultaten, correcties)'
+    wst:
       #original_hash: dfbf427
-      info: (onderhoud van de WCA-software)
+      info: (onderhoud van de software van WCA)
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
