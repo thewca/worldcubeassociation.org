@@ -71,8 +71,7 @@ onPage('persons#show', function() {
   $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
     var tab = $(this).attr('href').slice(1);
     if(tab === 'map') {
-      /* Google Map is not properly initialized within a hidden container. */
-      google.maps.event.trigger($('#competitions-map')[0], 'resize');
+      $('#competitions-map').trigger('map-shown');
     }
     $.setUrlParams({ tab: tab });
     scrollToTabs();

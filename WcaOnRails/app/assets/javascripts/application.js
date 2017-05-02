@@ -119,7 +119,6 @@ wca.createCompetitionsMap = function(element) {
   var map = new google.maps.Map(element, {
     zoom: 2,
     center: { lat: 0, lng: 0 },
-    scrollwheel: true,
   });
 
   map.overlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(map);

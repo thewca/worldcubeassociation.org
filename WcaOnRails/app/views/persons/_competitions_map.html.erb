@@ -6,6 +6,12 @@
       var competitions = <%= competitions_json_for_markers @person.competitions %>
       var map = wca.createCompetitionsMap(document.getElementById('competitions-map'));
       wca.addCompetitionsToMap(map, competitions);
+
+      $('#competitions-map').one('map-shown', function() {
+        /* Google Map is not properly initialized within a hidden container, that's how we fix it. */
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter({ lat: 0, lng: 0 });
+      });
     });
   });
 </script>
