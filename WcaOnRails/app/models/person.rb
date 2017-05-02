@@ -198,6 +198,10 @@ class Person < ApplicationRecord
     results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
   end
 
+  def gender_visible?
+    %(m f).include? gender
+  end
+
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
