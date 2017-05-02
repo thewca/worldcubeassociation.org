@@ -197,6 +197,16 @@ server {
     return 302 /persons?$rails_args;
   }
 
+  # Redirect /results/person.php to /person
+  location /results/person.php {
+    return 302 /persons/$arg_personId;
+  }
+
+  # Redirect /results/p.php to /person
+  location /results/p.php {
+    return 302 /persons/$arg_i;
+  }
+
   #### phpBB forum
   location /forum {
     alias <%= @repo_root %>/webroot/forum;
