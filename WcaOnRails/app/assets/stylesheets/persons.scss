@@ -169,12 +169,11 @@
         &.regional-single-record,
         &.regional-average-record {
           font-weight: bold;
-          color: red;
           text-align: left;
         }
 
         &.pb {
-          color: $blue;
+          color: $orange;
         }
       }
     }
