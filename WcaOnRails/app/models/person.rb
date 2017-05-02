@@ -199,7 +199,7 @@ class Person < ApplicationRecord
   end
 
   def gender_visible?
-    %(m f).include? gender
+    %w(m f).include? gender
   end
 
   def serializable_hash(options = nil)
