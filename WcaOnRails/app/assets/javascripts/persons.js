@@ -54,16 +54,23 @@ onPage('persons#show', function() {
     $('html, body').animate({ scrollTop: top - 5 });
   }
 
-  /* Handle events selector for results by event. */
-  $('.event-selector input[type="radio"]').on('change', function() {
-    var eventId = $(this).val();
+  /* Show tbody for the given event. */
+  function showResultsFor(eventId) {
     var $tbodies = $('.results-by-event table tbody');
     $tbodies.hide();
     $tbodies.filter('.event-' + eventId).show();
     $('.results-by-event table').trigger('resize'); /* Let the table recalculate all widths. */
+  }
+
+  /* Handle events selector for results by event. */
+  $('.event-selector input[type="radio"]').on('change', function() {
+    var eventId = $(this).val();
+    showResultsFor(eventId);
     $.setUrlParams({ event:  eventId });
   });
-  $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
+
+  /* Show results for the initially selected event without updating the URL. */
+  showResultsFor($('.event-selector input[checked="checked"]').val());
 
   var currentTab = $.getUrlParams().tab || 'results-by-event';
   $('a[href="#' + currentTab + '"]').tab('show');
