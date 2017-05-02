@@ -9,7 +9,11 @@ class RanksSingle < ApplicationRecord
   end
 
   def to_s
-    SolveTime.new(eventId, :best, best).clock_format
+    solve_time.clock_format
+  end
+
+  def solve_time
+    SolveTime.new(eventId, :best, best)
   end
 
   def event

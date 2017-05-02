@@ -9,7 +9,11 @@ class RanksAverage < ApplicationRecord
   end
 
   def to_s
-    SolveTime.new(eventId, :average, best).clock_format
+    solve_time.clock_format
+  end
+
+  def solve_time
+    SolveTime.new(eventId, :average, best)
   end
 
   def event
