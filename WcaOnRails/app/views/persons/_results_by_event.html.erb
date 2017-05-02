@@ -3,7 +3,7 @@
     <% @results.map(&:event).uniq.each do |event| %>
       <span class="event-radio">
         <%= label_tag "radio-#{event.id}" do %>
-          <%= radio_button_tag "results_event", event.id, params[:results_event] == event.id, id: "radio-#{event.id}" %>
+          <%= radio_button_tag "event", event.id, params[:event] == event.id, id: "radio-#{event.id}" %>
           <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name %>
         <% end %>
       </span>

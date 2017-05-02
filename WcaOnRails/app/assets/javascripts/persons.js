@@ -56,7 +56,7 @@ onPage('persons#show', function() {
     $tbodies.hide();
     $tbodies.filter('.event-' + eventId).show();
     $('.results-by-event table').trigger('resize'); /* Let the table recalculate all widths. */
-    $.setUrlParams({ results_event:  eventId });
+    $.setUrlParams({ event:  eventId });
   });
   $('.event-selector input[type="radio"][checked="checked"]').trigger('change');
 
