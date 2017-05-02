@@ -260,7 +260,6 @@ RSpec.describe Result do
       expect(result.errors.messages[:value2]).to eq ["times over 10 minutes should be rounded"]
 
       result.value2 = 10*6000 + 4300
-      result.average = 6000
       expect(result).to be_valid
     end
 

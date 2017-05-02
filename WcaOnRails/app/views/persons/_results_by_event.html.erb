@@ -31,7 +31,7 @@
               <%= t "events.#{event.id}" %>
             </td>
           </tr>
-          <% pb_markers = pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
+          <% pb_markers = historical_pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
           <% results.group_by(&:competitionId).each do |_, results| %>
             <% results.each_with_index do |result, index| %>
               <tr class="result">

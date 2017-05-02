@@ -15,11 +15,11 @@ FactoryGirl.define do
     eventId "333oh"
     roundTypeId "f"
     formatId "a"
-    value1 3000
-    value2 4000
-    value3 5000
-    value4 6000
-    value5 7000
+    value1 { best }
+    value2 { average }
+    value3 { average }
+    value4 { average }
+    value5 { average }
     best 3000
     average 5000
     regionalSingleRecord ""

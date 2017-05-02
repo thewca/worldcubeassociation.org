@@ -132,6 +132,10 @@ class SolveTime
     !skipped?
   end
 
+  def completed?
+    !dn? && unskipped?
+  end
+
   def time_seconds
     time_centiseconds / 100.0
   end
