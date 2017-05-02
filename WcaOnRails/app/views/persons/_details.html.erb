@@ -7,7 +7,7 @@
         (<%= t 'persons.show.previously' %> <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
       </h4>
     <% end %>
-    <% if @person&.user&.avatar %>
+    <% if @person.user&.avatar %>
       <%= image_tag @person.user.avatar, class: "avatar" %>
     <% end %>
   </div>
