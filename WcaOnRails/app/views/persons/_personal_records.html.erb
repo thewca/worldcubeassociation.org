@@ -27,8 +27,16 @@
             <%= rank_td rank_single, "country" %>
             <%= rank_td rank_single, "continent" %>
             <%= rank_td rank_single, "world" %>
-            <td class="single"><%= rank_single.solve_time.clock_format %></td>
-            <td class="average"><%= rank_average&.solve_time&.clock_format %></td>
+            <td class="single">
+              <%= link_to_ranking rank_single.event_id, :single do %>
+                <%= rank_single.solve_time.clock_format %>
+              <% end %>
+            </td>
+            <td class="average">
+              <%= link_to_ranking rank_single.event_id, :average do %>
+                <%= rank_average&.solve_time&.clock_format %>
+              <% end %>
+            </td>
             <%= rank_td rank_average, "world" %>
             <%= rank_td rank_average, "continent" %>
             <%= rank_td rank_average, "country" %>
