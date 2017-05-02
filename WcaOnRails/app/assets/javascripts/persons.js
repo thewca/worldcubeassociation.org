@@ -49,6 +49,11 @@ onPage('persons#index', function() {
 });
 
 onPage('persons#show', function() {
+  function scrollToTabs() {
+    var top = $('.nav.nav-tabs').offset().top;
+    $('html, body').animate({ scrollTop: top - 5 });
+  }
+
   /* Handle events selector for results by event. */
   $('.event-selector input[type="radio"]').on('change', function() {
     var eventId = $(this).val();
@@ -70,8 +75,14 @@ onPage('persons#show', function() {
       google.maps.event.trigger($('#competitions-map')[0], 'resize');
     }
     $.setUrlParams({ tab: tab });
+    scrollToTabs();
+  });
 
-    var top = $(this).offset().top;
-    $('html, body').animate({ scrollTop: top - 5 });
+  /* Personal records links. */
+  $('.personal-records table td.event').on('click', function() {
+    var eventId = $(this).data('event');
+    $('a[href="#results-by-event"]').tab('show');
+    $('.event-selector #radio-' + eventId).click();
+    scrollToTabs();
   });
 });

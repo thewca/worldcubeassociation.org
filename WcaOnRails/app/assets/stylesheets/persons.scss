@@ -108,6 +108,11 @@
         &.event {
           width: 1px;
           white-space: nowrap;
+          cursor: pointer;
+
+          &:hover {
+            opacity: 0.6;
+          }
         }
 
         &:not(.event) {
