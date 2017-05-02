@@ -13,6 +13,7 @@
           <th class="world-rank">WR</th>
           <th class="continent-rank">CR</th>
           <th class="country-rank">NR</th>
+          <th></th><!-- Place for the odd message -->
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,7 @@
             <%= rank_td rank_average, "world" %>
             <%= rank_td rank_average, "continent" %>
             <%= rank_td rank_average, "country" %>
+            <td><%= odd_rank_reason if odd_rank_reason_needed?(rank_single, rank_average) %></td>
           </tr>
         <% end %>
       </tbody>
