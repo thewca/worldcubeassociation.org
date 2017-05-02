@@ -9,7 +9,6 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="event"><%= t 'competitions.results_table.event' %></th>
             <th class="single"><%= t 'common.single' %></th>
             <th class="average"><%= t 'common.average' %></th>
             <th class="competition"><%= t 'persons.show.competition' %></th>
@@ -19,14 +18,14 @@
         </thead>
         <tbody>
           <% results.group_by(&:event).each do |event, results| %>
+              <tr>
+                <td colspan="9" class="event">
+                  <%= cubing_icon event.id %>
+                  <%= t "events.#{event.id}" %>
+                </td>
+              </tr>
               <% results.each_with_index do |result, index| %>
                 <tr class="result">
-                  <td class="event">
-                    <% if index == 0 # Show each event name only once to avoid redundancy. %>
-                      <%= cubing_icon event.id %>
-                      <%= t "events.#{event.id}" %>
-                    <% end %>
-                  </td>
                   <td class="single">
                     <%= result.best_solve.clock_format if record_types.include? result.regionalSingleRecord %>
                   </td>
