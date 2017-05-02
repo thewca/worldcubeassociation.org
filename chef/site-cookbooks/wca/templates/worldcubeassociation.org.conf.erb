@@ -207,6 +207,11 @@ server {
     return 302 /persons/$arg_i;
   }
 
+  # Redirect /results/person_map.php to /person
+  location /results/person_map.php {
+    return 302 /persons/$arg_i?tab=map;
+  }
+
   #### phpBB forum
   location /forum {
     alias <%= @repo_root %>/webroot/forum;
