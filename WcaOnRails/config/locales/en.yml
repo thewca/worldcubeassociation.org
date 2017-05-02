@@ -967,6 +967,7 @@ en:
     #context: Person profile page
     show:
       previously: "Previously"
+      in_memoriam: "In Memoriam"
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
