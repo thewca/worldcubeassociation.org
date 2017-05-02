@@ -919,6 +919,20 @@ CREATE TABLE `teams` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `timestamps`
+--
+
+DROP TABLE IF EXISTS `timestamps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `timestamps` (
+  `name` varchar(191) NOT NULL,
+  `date` datetime DEFAULT NULL,
+  UNIQUE KEY `index_timestamps_on_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user_preferred_events`
 --
 
@@ -1174,3 +1188,4 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170421204700'),
 ('20170426145811'),
 ('20170503205810');
+('20170502232234');
