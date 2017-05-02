@@ -94,6 +94,31 @@ en:
     "h":
       name: "Combined qualification"
       cellName: "Combined qualification"
+  round:
+    name: "%{event} Round %{number}"
+  #context: Words used to describe the requirement to advance to the next round
+  advance_to_next_round_requirement:
+    ranking: "Top %{ranking} advance to round %{next_round_number}"
+    attemptValue:
+      time: "Best solve ≤ %{time} advances to round %{next_round_number}"
+      moves: "Best solve ≤ %{moves} moves advances to round %{next_round_number}"
+      points: "Best solve ≥ %{points} points advances to round %{next_round_number}"
+  #context: Words used to describe combined round cutoffs
+  cutoff:
+    time:
+      one: "%{count} attempt to get ≤ %{time}"
+      other: "%{count} attempts to get ≤ %{time}"
+    moves:
+      one: "%{count} attempt to get ≤ %{moves} moves"
+      other: "%{count} attempts to get ≤ %{moves} moves"
+    points:
+      one: "%{count} attempt to get ≥ %{points} points"
+      other: "%{count} attempts to get ≥ %{points} points"
+  #context: Words used to describe time limits
+  time_limit:
+    cumulative:
+      one_round: "%{time} cumulative"
+      across_rounds: "%{time} total for %{rounds}"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"

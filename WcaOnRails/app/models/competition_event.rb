@@ -14,4 +14,11 @@ class CompetitionEvent < ApplicationRecord
       errors.add(:rounds, "#{numbers} is wrong")
     end
   end
+
+  def to_wcif
+    {
+      "id" => self.event.id,
+      "rounds" => self.rounds.map(&:to_wcif),
+    }
+  end
 end

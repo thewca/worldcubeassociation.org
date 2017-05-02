@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :round do
     transient do
-      competition { FactoryGirl.create :competition }
+      competition { FactoryGirl.create :competition, event_ids: [event_id] }
       event_id "333"
       format_id "a"
     end

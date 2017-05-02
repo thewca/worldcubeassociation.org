@@ -243,7 +243,8 @@ RSpec.describe CompetitionsController do
       it 'clones a competition' do
         # Set some attributes we don't want cloned.
         competition.update_attributes(isConfirmed: true,
-                                      results_posted_at: Time.now)
+                                      results_posted_at: Time.now,
+                                      showAtAll: true)
 
         user1 = FactoryGirl.create(:delegate)
         user2 = FactoryGirl.create(:user)
