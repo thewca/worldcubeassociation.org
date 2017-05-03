@@ -26,3 +26,5 @@ public/assets/**
 pids/*.pid
 
 .byebug_history
+/public/packs
+/node_modules

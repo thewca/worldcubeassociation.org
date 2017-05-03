@@ -2,6 +2,11 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.3
+  Exclude:
+    - 'node_modules/**/*'
+    - 'bin/webpack-dev-server'
+    - 'bin/webpack'
+    - 'bin/yarn'
 
 Bundler/OrderedGems:
   Enabled: false
