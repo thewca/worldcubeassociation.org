@@ -204,7 +204,10 @@ server {
 
   # Redirect /results/p.php to /person
   location /results/p.php {
-    return 302 /persons/$arg_i;
+    if ($arg_personId = "") {
+      set $arg_personId $arg_i;
+    }
+    return 302 /persons/$arg_personId;
   }
 
   # Redirect /results/person_map.php to /person
