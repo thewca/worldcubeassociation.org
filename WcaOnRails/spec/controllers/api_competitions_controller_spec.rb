@@ -197,6 +197,7 @@ RSpec.describe Api::V0::CompetitionsController do
         :competition,
         :with_delegate,
         id: "TestComp2014",
+        name: "Test Comp 2014",
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
@@ -275,6 +276,8 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(parsed_body).to eq(
           "formatVersion" => "1.0",
           "id" => "TestComp2014",
+          "name" => "Test Comp 2014",
+          "persons" => [delegate.to_wcif(competition)],
           "events" => [
             {
               "id" => "333",

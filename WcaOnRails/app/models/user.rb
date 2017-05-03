@@ -674,6 +674,28 @@ class User < ApplicationRecord
     json
   end
 
+  def to_wcif(competition, registration = nil)
+    person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
+    {
+      "name" => name,
+      "wcaUserId" => id,
+      "wcaId" => wca_id,
+      "delegatesCompetition" => competition.delegates.include?(self),
+      "organizesCompetition" => competition.organizers.include?(self),
+      "gender" => gender,
+      # /wcif is restricted to users who can manage the competition,
+      # we can include private data
+      "birthdate" => dob.to_s,
+      "email" => email,
+      "registration" => registration,
+      "avatar" => {
+        "url" => avatar.url,
+        "thumbUrl" => avatar.url(:thumb),
+      },
+      "personalBests" => person_pb.map(&:to_wcif),
+    }
+  end
+
   # Devise's method overriding! (the unwanted lines are commented)
   # We have the separate form for updating password and it requires current_password to be entered.
   # So we don't want to remove the password and password_confirmation if they are in the params and are blank.
