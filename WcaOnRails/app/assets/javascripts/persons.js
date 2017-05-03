@@ -67,10 +67,16 @@ onPage('persons#show', function() {
     var eventId = $(this).val();
     showResultsFor(eventId);
     $.setUrlParams({ event:  eventId });
+    scrollToTabs();
   });
 
-  /* Show results for the initially selected event without updating the URL. */
-  showResultsFor($('.event-selector input[checked="checked"]').val());
+  if(location.hash) {
+    /* Support old URLs with hash indicating an event id. */
+    $('.event-selector #radio-' + location.hash.slice(1)).click();
+  } else {
+    /* Show results for the initially selected event without updating the URL. */
+    showResultsFor($('.event-selector input[checked="checked"]').val());
+  }
 
   var currentTab = $.getUrlParams().tab || 'results-by-event';
   $('a[href="#' + currentTab + '"]').tab('show');
