@@ -31,10 +31,10 @@ class PersonsController < ApplicationController
     @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
     @ranks_single = @person.ranksSingle
     @ranks_average = @person.ranksAverage
-    @world_championship_podiums = @person.world_championship_podiums
     @medals = @person.medals
     @records = @person.records
     @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, Competitions.start_date DESC, RoundTypes.rank DESC")
+    @world_championship_podiums = @person.world_championship_podiums
     params[:event] ||= @results.first.event.id
   end
 end

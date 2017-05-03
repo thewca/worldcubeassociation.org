@@ -3,7 +3,6 @@
 <div class="container" id="person">
   <%= render "details" %>
   <%= render "personal_records" %>
-  <%= render "world_championship_podiums" if @world_championship_podiums.any? %>
   <div class="row">
     <%= render "medal_collection" if @medals[:total] > 0 %>
     <%= render "record_collection" if @records[:total] > 0 %>
@@ -15,6 +14,9 @@
       <% if @records[:total] > 0 %>
         <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
       <% end %>
+      <% if @world_championship_podiums.any? %>
+        <li><a href="#championship-podiums" data-toggle="tab"><%= t '.championship_podiums' %></a></li>
+      <% end %>
       <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
     </ul>
 
@@ -25,6 +27,11 @@
       <% if @records[:total] > 0 %>
         <div class="tab-pane" id="records">
           <%= render "records" %>
+        </div>
+      <% end %>
+      <% if @world_championship_podiums.any? %>
+        <div class="tab-pane" id="championship-podiums">
+          <%= render "world_championship_podiums" %>
         </div>
       <% end %>
       <div class="tab-pane" id="map">

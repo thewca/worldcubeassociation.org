@@ -974,6 +974,7 @@ en:
         A missing rank or worse continent rank than the country one
         is due to a change of country. Results from the previous region
         are not taken into account in the current region ranking.
+      championship_podiums: "Championship Podiums"
       wc_podiums: "World Championship Podiums"
       place: "Place"
       medal_collection: "Medal Collection"
