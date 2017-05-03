@@ -876,7 +876,6 @@ en:
       confirmed_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{board} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
       awaiting_confirmation_html: "Fill in all the fields and click Confirm when you're ready for the %{board} to approve this competition."
-      submit_modify_value: "Modify Events"
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"

@@ -1,0 +1,26 @@
+import formats from 'wca/formats.js.erb';
+
+export default {
+  official: <%= Event.official.to_json.html_safe %>.map(extend),
+  byId: mapObjectValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extend),
+};
+
+function mapObjectValues(obj, func) {
+  let newObj = {};
+  Object.keys(obj).forEach(key => {
+    newObj[key] = func(obj[key]);
+  });
+  return newObj;
+}
+
+function extend(rawEvent) {
+  return {
+    ...rawEvent,
+    formats() {
+      return rawEvent.format_ids.map(format_id => formats.byId[format_id]);
+    },
+    recommended_format() {
+      return this.formats()[0];
+    },
+  }
+}

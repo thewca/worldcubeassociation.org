@@ -33,6 +33,10 @@ class Round < ApplicationRecord
     end
   end
 
+  def event
+    Event.c_find(competition_event.event_id)
+  end
+
   def final_round?
     competition_event.rounds.last == self
   end

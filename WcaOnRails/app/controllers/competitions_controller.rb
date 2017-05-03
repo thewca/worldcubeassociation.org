@@ -322,7 +322,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_events
-    @competition = competition_from_params
+    @competition = competition_from_params(includes: [competition_events: { rounds: [:competition_event] }])
   end
 
   def update_events

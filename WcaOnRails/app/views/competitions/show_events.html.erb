@@ -24,6 +24,7 @@
 
     <tbody>
       <% @competition.competition_events.each do |competition_event| %>
+        <% next if competition_event.rounds.length == 0 %>
         <tr>
           <td>
             <%= competition_event.event.name %>

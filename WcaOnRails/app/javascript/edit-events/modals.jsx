@@ -1,0 +1,343 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Modal from 'react-bootstrap/lib/Modal'
+import Button from 'react-bootstrap/lib/Button'
+import Checkbox from 'react-bootstrap/lib/Checkbox'
+
+import events from 'wca/events.js.erb'
+import formats from 'wca/formats.js.erb'
+import { rootRender } from 'edit-events'
+
+class ButtonActivatedModal extends React.Component {
+  constructor() {
+    super();
+    this.state = { showModal: false };
+  }
+
+  open = () => {
+    this.setState({ showModal: true });
+  }
+
+  close = () => {
+    this.props.reset();
+    this.setState({ showModal: false });
+  }
+
+  render() {
+    return (
+      <button type="button" className="btn btn-default btn-xs"
+              onClick={this.open}>
+        {this.props.buttonValue}
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <form onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>
+            {this.props.children}
+            <Modal.Footer>
+              <Button onClick={this.close} className="pull-left">Close</Button>
+              <Button onClick={this.props.reset} bsStyle="danger" className="pull-left">Reset</Button>
+              <Button type="submit" bsStyle="primary">Save</Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+      </button>
+    );
+  }
+}
+
+class EditRoundAttribute extends React.Component {
+  componentWillMount() {
+    this.reset();
+  }
+
+  getWcifRound() {
+    let { wcifEvent, roundNumber } = this.props;
+    return wcifEvent.rounds[roundNumber - 1];
+  }
+
+  getSavedValue() {
+    return this.getWcifRound()[this.props.attribute];
+  }
+
+  onChange = (value) => {
+    this.setState({ value: value });
+  }
+
+  onSave = () => {
+    this.getWcifRound()[this.props.attribute] = this.state.value;
+    this._modal.close();
+    rootRender();
+  }
+
+  reset = () => {
+    this.setState({ value: this.getSavedValue() });
+  }
+
+  render() {
+    let { wcifEvents, wcifEvent, roundNumber } = this.props;
+    let wcifRound = this.getWcifRound();
+    let Show = RoundAttributeComponents[this.props.attribute].Show;
+    let Input = RoundAttributeComponents[this.props.attribute].Input;
+    let Title = RoundAttributeComponents[this.props.attribute].Title;
+
+    return (
+      <ButtonActivatedModal
+        buttonValue={<Show value={this.getSavedValue()} />}
+        onSave={this.onSave}
+        reset={this.reset}
+        ref={c => this._modal = c}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title><Title wcifEvent={wcifEvent} roundNumber={roundNumber} /></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Input value={this.state.value} wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} onChange={this.onChange} autoFocus />
+        </Modal.Body>
+      </ButtonActivatedModal>
+    );
+  }
+}
+
+let RoundAttributeComponents = {
+  timeLimit: {
+    Title({ wcifEvent, roundNumber }) {
+      let event = events.byId[wcifEvent.id];
+      return <span>Time limit for {event.name} round {roundNumber}</span>;
+    },
+    Show({ value: timeLimit }) {
+      let timeStr = `${(timeLimit.centiseconds / 100 / 60).toFixed(2)} minutes`;
+      let str;
+      switch(timeLimit.cumulativeRoundIds.length) {
+        case 0:
+          str = timeStr;
+          break;
+        case 1:
+          str = timeStr + " cumulative";
+          break;
+        default:
+          str = timeStr + ` total for ${timeLimit.cumulativeRoundIds.join(", ")}`;
+          break;
+      }
+      return <span>{str}</span>;
+    },
+    Input: function({ value: timeLimit, autoFocus, wcifEvents, wcifEvent, roundNumber, onChange }) {
+      let event = events.byId[wcifEvent.id];
+      let wcifRound = wcifEvent.rounds[roundNumber - 1];
+      let format = formats.byId[wcifRound.format];
+
+      let otherWcifRounds = [];
+      wcifEvents.forEach(wcifEvent => {
+        otherWcifRounds = otherWcifRounds.concat(wcifEvent.rounds.filter(r => r != wcifRound));
+      });
+
+      let centisInput, cumulativeInput;
+      let roundCheckboxes = [];
+      let onChangeAggregator = () => {
+        let cumulativeRoundIds;
+        switch(cumulativeInput.value) {
+          case "per-solve":
+            cumulativeRoundIds = [];
+            break;
+          case "cumulative":
+            cumulativeRoundIds = [wcifRound.id];
+            cumulativeRoundIds = cumulativeRoundIds.concat(roundCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value));
+            break;
+          default:
+            throw new Error(`Unrecognized value ${cumulativeInput.value}`);
+            break;
+        }
+
+        let newTimeLimit = {
+          centiseconds: parseInt(centisInput.value),
+          cumulativeRoundIds,
+        };
+        onChange(newTimeLimit);
+      };
+      return (
+        <span>
+          centis
+          <input type="number"
+                 autoFocus={autoFocus}
+                 ref={c => centisInput = c}
+                 value={timeLimit.centiseconds}
+                 onChange={onChangeAggregator} />
+
+          <select type="checkbox"
+                  value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
+                  onChange={onChangeAggregator}
+                  ref={c => cumulativeInput = c}
+          >
+            <option value="per-solve">per solve</option>
+            <option value="cumulative">cumulative</option>
+          </select>
+
+          {timeLimit.cumulativeRoundIds.length >= 1 && (
+            <span>
+              {otherWcifRounds.map(wcifRound => {
+                let roundId = wcifRound.id;
+                return (
+                  <label key={roundId}>
+                    <input type="checkbox"
+                           value={roundId}
+                           checked={timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0}
+                           ref={c => roundCheckboxes.push(c) }
+                           onChange={onChangeAggregator} />
+                    {roundId}
+                  </label>
+                );
+              })}
+            </span>
+          )}
+        </span>
+      );
+    },
+  },
+  cutoff: {
+    Title({ wcifEvent, roundNumber }) {
+      let event = events.byId[wcifEvent.id];
+      return <span>Cutoff for {event.name} round {roundNumber}</span>;
+    },
+    Show({ value: cutoff }) {
+      let str;
+      if(cutoff) {
+        str = `better than or equal to ${cutoff.attemptResult} in ${cutoff.numberOfAttempts}`;
+      } else {
+        str = "-";
+      }
+      return <span>{str}</span>;
+    },
+    Input({ value: cutoff, onChange, autoFocus }) {
+      let numberOfAttemptsInput, attemptResultInput;
+      let onChangeAggregator = () => {
+        let numberOfAttempts = parseInt(numberOfAttemptsInput.value);
+        let newCutoff;
+        if(numberOfAttempts > 0) {
+          newCutoff = {
+            numberOfAttempts,
+            attemptResult: attemptResultInput ? parseInt(attemptResultInput.value) : 0,
+          };
+        } else {
+          newCutoff = null;
+        }
+        onChange(newCutoff);
+      };
+
+      return (
+        <span>
+          <select value={cutoff ? cutoff.numberOfAttempts : 0}
+                  autoFocus={autoFocus}
+                  onChange={onChangeAggregator}
+                  ref={c => numberOfAttemptsInput = c}
+          >
+            <option value={0}>No cutoff</option>
+            <option disabled="disabled">────────</option>
+            <option value={1}>1 attempt</option>
+            <option value={2}>2 attempts</option>
+            <option value={3}>3 attempts</option>
+          </select>
+          {cutoff && (
+            <span>
+              {" "}to get better than or equal to{" "}
+              <input type="number"
+                     value={cutoff.attemptResult}
+                     onChange={onChangeAggregator}
+                     ref={c => attemptResultInput = c}
+              />
+            </span>
+          )}
+        </span>
+      );
+    },
+  },
+  advancementCondition: {
+    Title({ wcifEvent, roundNumber }) {
+      let event = events.byId[wcifEvent.id];
+      return <span>Requirement to advance from {event.name} round {roundNumber} to round {roundNumber + 1}</span>;
+    },
+    Show({ value: advancementCondition }) {
+      function advanceReqToStr(advancementCondition) {
+        return advancementCondition ? `${advancementCondition.type} ${advancementCondition.level}` : "-";
+      }
+      let str = advanceReqToStr(advancementCondition);
+      return <span>{str}</span>;
+    },
+    Input({ value: advancementCondition, onChange, autoFocus }) {
+      let typeInput, rankingInput, percentileInput, attemptResultInput;
+      let onChangeAggregator = () => {
+        let type = typeInput.value;
+        let newAdvancementCondition;
+        switch(typeInput.value) {
+          case "ranking":
+            newAdvancementCondition = {
+              type: "ranking",
+              level: rankingInput ? parseInt(rankingInput.value): 0,
+            };
+            break;
+          case "percentile":
+            newAdvancementCondition = {
+              type: "percentile",
+              level: percentileInput ? parseInt(percentileInput.value) : 0,
+            };
+            break;
+          case "attemptValue":
+            newAdvancementCondition = {
+              type: "attemptValue",
+              level: attemptResultInput ? parseInt(attemptValue.value) : 0,
+            };
+            break;
+          default:
+            newAdvancementCondition = null;
+            break;
+        }
+        onChange(newAdvancementCondition);
+      };
+
+      return (
+        <span>
+          <select value={advancementCondition ? advancementCondition.type : ""}
+                  autoFocus={autoFocus}
+                  onChange={onChangeAggregator}
+                  ref={c => typeInput = c}
+          >
+            <option value="">TBA</option>
+            <option disabled="disabled">────────</option>
+            <option value="ranking">Ranking</option>
+            <option value="percentile">Percentile</option>
+            <option value="attemptValue">Attempt value</option>
+          </select>
+
+          {advancementCondition && advancementCondition.type == "ranking" && (
+            <span>
+              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />
+              ranking?
+            </span>
+          )}
+
+          {advancementCondition && advancementCondition.type == "percentile" && (
+            <span>
+              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentileInput = c} />
+              percentile?
+            </span>
+          )}
+
+          {advancementCondition && advancementCondition.type == "attemptValue" && (
+            <span>
+              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />
+              my shirt?
+            </span>
+          )}
+        </span>
+      );
+    },
+  },
+};
+
+export function EditTimeLimitButton(props) {
+  return <EditRoundAttribute {...props} attribute="timeLimit" />;
+};
+
+export function EditCutoffButton(props) {
+  return <EditRoundAttribute {...props} attribute="cutoff" />;
+};
+
+export function EditAdvancementConditionButton(props) {
+  return <EditRoundAttribute {...props} attribute="advancementCondition" />;
+};
