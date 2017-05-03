@@ -74,7 +74,9 @@
 
     th,
     td {
-      text-align: center;
+      @media (min-width: $screen-sm) {
+        text-align: center;
+      }
 
       .flag {
         /* A trick to prevent the flag from expanding the row (this effectively lets the flag avoid the impact of td padding). */
