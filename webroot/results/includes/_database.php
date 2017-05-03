@@ -5,14 +5,7 @@
  needs to be phased out. Instead, please use or extend the mysqli connection class for any new code needing mysql functionality.
 **/
 
-if( ! isset( $dontLoadCachedDatabase ))
-  $dontLoadCachedDatabase = false;
-
 establishDatabaseAccess();
-if( ! $dontLoadCachedDatabase ){
-  if( file_exists( $config->get('filesPath') . 'generated/cachedDatabase.php' ))
-    require( $config->get('filesPath') . 'generated/cachedDatabase.php' );
-}
 
 #----------------------------------------------------------------------
 function establishDatabaseAccess () {
