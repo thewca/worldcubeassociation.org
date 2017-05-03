@@ -19,6 +19,7 @@
     "precss": "^1.4.0",
     "rails-erb-loader": "^5.0.0",
     "sass-loader": "^6.0.3",
+    "simplemde": "^1.11.2",
     "style-loader": "^0.17.0",
     "webpack": "^2.4.1",
     "webpack-manifest-plugin": "^1.1.0",

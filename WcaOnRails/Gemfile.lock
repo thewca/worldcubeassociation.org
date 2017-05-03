@@ -347,7 +347,6 @@ GEM
       sprockets-rails (>= 2.0.0)
     rails-assets-autoNumeric (2.0.12)
     rails-assets-autosize (3.0.20)
-    rails-assets-simplemde (1.10.1)
     rails-controller-testing (1.0.1)
       actionpack (~> 5.x)
       actionview (~> 5.x)
@@ -555,7 +554,6 @@ DEPENDENCIES
   rails (= 5.0.2)
   rails-assets-autoNumeric!
   rails-assets-autosize!
-  rails-assets-simplemde (= 1.10.1)!
   rails-controller-testing
   rails-i18n (~> 5.0.0)
   rake
