@@ -24,7 +24,7 @@ function establishDatabaseAccess () {
   # TODO: Upgrade
   mysql_connect( $db_config['host'], $db_config['user'], $db_config['pass'] )
     or showDatabaseError( "Unable to connect to the database." );
-    
+
   #--- Select the database.
   mysql_select_db( $db_config['name'] )
     or showDatabaseError( "Unable to access the database." );
@@ -52,7 +52,7 @@ function dbQuery ( $query ) {
     echo "<br>";
     stopTimer( 'printing the database query' );
   }
-  
+
   startTimer();
   $dbResult = mysql_query( $query )
     or showDatabaseError( "Unable to perform database query." );
@@ -86,7 +86,7 @@ function dbQueryHandle ( $query ) {
     echo "<br>";
     stopTimer( 'printing the database query' );
   }
-  
+
   startTimer();
   $dbResult = mysql_query( $query )
     or showDatabaseError( "Unable to perform database query." );
@@ -129,50 +129,57 @@ function dbCommand ( $command ) {
 #----------------------------------------------------------------------
 function getAllEvents () {
 #----------------------------------------------------------------------
-  global $cachedEvents;
-  return $cachedEvents;
+  return dbQuery("SELECT * FROM Events WHERE rank<990 ORDER BY rank");
 }
 
 #----------------------------------------------------------------------
 function getAllRounds () {
 #----------------------------------------------------------------------
-  global $cachedRounds;
-  return $cachedRounds;
+  return dbQuery("SELECT * FROM RoundTypes ORDER BY rank");
 }
 
 #----------------------------------------------------------------------
 function getAllCompetitions () {
 #----------------------------------------------------------------------
-  global $cachedCompetitions;
-  return $cachedCompetitions;
+  return dbQuery("
+    SELECT id, cellName
+    FROM Competitions
+    ORDER BY (start_date BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND DATE_ADD(NOW(), INTERVAL 7 DAY)) DESC, year DESC, month DESC, day DESC
+  ");
 }
 
 #----------------------------------------------------------------------
 function getAllUsedCountries () {
 #----------------------------------------------------------------------
-  global $cachedUsedCountries;
-  return $cachedUsedCountries;
+  return dbQuery("
+    SELECT DISTINCT country.*
+    FROM Results result, Countries country
+    WHERE country.id = countryId
+    ORDER BY country.name
+  ");
 }
 
 #----------------------------------------------------------------------
 function getAllUsedCountriesCompetitions () {
 #----------------------------------------------------------------------
-  global $cachedUsedCountriesCompetitions;
-  return $cachedUsedCountriesCompetitions;
+  return dbQuery("
+    SELECT DISTINCT country.*
+    FROM Competitions competition, Countries country
+    WHERE country.id = countryId
+    ORDER BY country.name
+  ");
 }
 
 #----------------------------------------------------------------------
 function getAllUsedContinents () {
 #----------------------------------------------------------------------
-  global $cachedUsedContinents;
-  return $cachedUsedContinents;
+  return dbQuery("SELECT * FROM Continents");
 }
 
 #----------------------------------------------------------------------
 function getAllUsedYears () {
 #----------------------------------------------------------------------
-  global $cachedUsedYears;
-  return $cachedUsedYears;
+  return dbQuery("SELECT DISTINCT year FROM Competitions WHERE showAtAll=1 ORDER BY year DESC");
 }
 
 #----------------------------------------------------------------------
@@ -262,7 +269,7 @@ function dbDebug ( $query ) {
   foreach ( dbQuery( $query ) as $row ) {
     echo "<tr>";
     foreach ( array_values( $row ) as $value )
-      echo "<td>" . htmlEntities( $value ) . "</td>"; 
+      echo "<td>" . htmlEntities( $value ) . "</td>";
     echo "</tr>";
   }
   echo "</table>";
