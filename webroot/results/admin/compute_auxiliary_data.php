@@ -3,8 +3,6 @@
 #   Initialization and page contents.
 #----------------------------------------------------------------------
 
-$dontLoadCachedDatabase = true;
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -25,7 +23,6 @@ if( $chosenDoIt ){
   computeConciseRecords();
   computeRanks( 'best', 'Single' );
   computeRanks( 'average', 'Average' );
-  computeCachedDatabase('../generated/cachedDatabase.php');
   deleteCaches();
   noticeBox3( 1, "Ok, finished.<br />" . wcaDate() );
 }
@@ -36,7 +33,7 @@ require( '../includes/_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
-  echo "<p>This computes means for 3x3 bld, the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage, as well as the cachedDatabase.php script, and clears the caches.</p>\n";
+  echo "<p>This computes means for 3x3 bld, the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage and clears the caches.</p>\n";
 
   echo "<p>Do it after changes to the database data so that these things are up-to-date.</p><hr />\n";
 }
@@ -109,7 +106,7 @@ function computeConciseRecords () {
 
     startTimer();
     echo "Building table Concise${valueName}Results...<br />\n";
-    
+
     dbCommand( "DROP TABLE IF EXISTS Concise${valueName}Results" );
     dbCommand("
       CREATE TABLE
@@ -136,7 +133,7 @@ function computeConciseRecords () {
         AND competition.id = competitionId
         AND country.id     = result.countryId
     ");
-    
+
     stopTimer( "Concise${valueName}Results" );
     echo "... done<br /><br />\n";
   }
@@ -230,7 +227,7 @@ function computeRanks ( $valueSource, $valueName ) {
   #--- Free the result handle
   mysql_free_result( $personalRecords );
 
-  #--- Store the ranks of the last event  
+  #--- Store the ranks of the last event
   storeRanks( $valueName, $latestEventId, $personRecord, $personWR, $personCR, $personNR );
 
   if( $missingPersonIDs )

@@ -1,8 +1,8 @@
 <?php
 /* @file
- * 
+ *
  * This file contains a class which can be used for accessing configuration settings.
- * 
+ *
  */
 namespace WCAClasses;
 
@@ -76,17 +76,13 @@ class ConfigurationData
         $filesPath = $this->data["filesPath"];
         $pathToRoot = $this->data["pathToRoot"];
         $errors = Array();
-
-        if (!file_exists($filesPath . 'generated/cachedDatabase.php')) {
-            $errors[] = "Missing cachedDatabase.php file! Go <a href='{$pathToRoot}admin/compute_auxiliary_data.php'>here</a> to generate this file.";
-        }
         
         $writable_paths = Array("uploads", "generated", "generated/cache");
         foreach($writable_paths as $path) {
             $fullpath = $filesPath . $path;
             if (!is_writable($fullpath) || !file_exists($fullpath)) {
                 $errors[] = "Directory/File '" . $path . "' is missing or not writable!";
-            }            
+            }
         }
 
         return $errors;

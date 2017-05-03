@@ -358,8 +358,9 @@ CREATE TABLE `Results` (
   KEY `Results_regionalAverageRecordCheckSpeedup` (`eventId`,`competitionId`,`roundTypeId`,`countryId`,`average`),
   KEY `Results_regionalSingleRecordCheckSpeedup` (`eventId`,`competitionId`,`roundTypeId`,`countryId`,`best`),
   KEY `Results_fk_competitor` (`personId`),
-  KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=1485960 DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+  KEY `index_Results_on_competitionId_and_updated_at` (`competitionId`,`updated_at`),
+  KEY `_tmp_index_Results_on_countryId` (`countryId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1519381 DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1168,7 +1169,8 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170402223714'),
 ('20170404184332'),
 ('20170406170418'),
-('20170418171035'),
-('20170426145811'),
 ('20170417072301'),
-('20170421204700');
+('20170418171035'),
+('20170421204700'),
+('20170426145811'),
+('20170503205810');
