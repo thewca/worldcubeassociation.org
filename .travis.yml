@@ -1,20 +1,21 @@
+dist: trusty
+sudo: false
 language: ruby
-cache:
-  directories:
-    - WcaOnRails/vendor/bundle
 rvm:
   - 2.3.1
+bundler_args: --path $HOME/.bundle
+cache:
+  directories:
+    - $HOME/.phantomjs
+    - $HOME/.bundle
 env:
   global:
-    - DATABASE_URL=mysql2://root@127.0.0.1:3306/wca_test
-    - PATH=$HOME/.local/bin:$PATH
+    - DATABASE_URL=mysql2://root:travis@127.0.0.1:3306/wca_test
+    - RACK_ENV=test
 before_install:
-  # The Stripe API requires a newer version of openssl
-  - sudo apt-get update && sudo apt-get install --only-upgrade openssl
   - cd WcaOnRails/
 before_script:
-  - bundle exec rake db:reset RAILS_ENV=test
-sudo: required
+  - bundle exec rake db:reset
 script:
   - bundle exec pre-commit run git
   - bundle exec rubocop
