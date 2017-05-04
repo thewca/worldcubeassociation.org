@@ -2,13 +2,10 @@ onPage('admin#edit_person, admin#update_person', function() {
 
   $('#person_wca_id').on('change', function() {
     // Update person wca id in the url.
-    var currentUrl = location.toString();
     var personWcaId = $('#person_wca_id').val();
-    var newUrl = currentUrl.replace(/admin.*/, 'admin/edit_person');
     if(personWcaId !== '') {
-      newUrl +='?person[wca_id]=' + personWcaId;
+      $.setUrlParams({ 'person[wca_id]': personWcaId });
     }
-    history.replaceState(null, null, newUrl);
 
     // Clear or fill all the other fields.
     var $personFields = $('#person-fields :input');

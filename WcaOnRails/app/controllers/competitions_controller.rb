@@ -202,13 +202,13 @@ class CompetitionsController < ApplicationController
       else
         title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
-        body = "[#{top333.first.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.first.personId})"
+        body = "[#{top333.first.personName}](#{person_url top333.first.personId})"
         body += " won the [#{comp.name}](#{competition_url(comp)})"
         body += " with an average of #{top333.first.to_s :average} seconds."
 
-        body += " [#{top333.second.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.second.personId}) finished second (#{top333.second.to_s :average})"
+        body += " [#{top333.second.personName}](#{person_url top333.second.personId}) finished second (#{top333.second.to_s :average})"
 
-        body += " and [#{top333.third.personName}](https://www.worldcubeassociation.org/results/p.php?i=#{top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
+        body += " and [#{top333.third.personName}](#{person_url top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
       end
 
       [

@@ -167,14 +167,45 @@ class Person < ApplicationRecord
     SolveTime.new(event.id, type, rank ? rank.best : 0)
   end
 
-  def results_path
-    "/results/p.php?i=#{self.wca_id}"
+  def world_championship_podiums
+    results.includes(:competition, :event, :format)
+           .podium
+           .where("Competitions.cellName LIKE 'World Championship %'")
+           .order("year DESC, Events.rank")
+  end
+
+  def medals
+    positions = results.podium.pluck(:pos)
+    {
+      gold: positions.count(1),
+      silver: positions.count(2),
+      bronze: positions.count(3),
+      total: positions.count,
+    }
+  end
+
+  def records
+    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
+    {
+      national: records.count("NR"),
+      continental: records.reject { |record| %w(NR WR).include?(record) }.count,
+      world: records.count("WR"),
+      total: records.count,
+    }
+  end
+
+  def completed_solves_count
+    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+  end
+
+  def gender_visible?
+    %w(m f).include? gender
   end
 
   def serializable_hash(options = nil)
     json = {
       class: self.class.to_s.downcase,
-      url: results_path,
+      url: Rails.application.routes.url_helpers.person_path(self.wca_id),
 
       id: self.wca_id,
       wca_id: self.wca_id,

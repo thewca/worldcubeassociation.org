@@ -36,16 +36,14 @@ onPage('users#edit, users#update', function() {
     var unconfirmed_wca_id = $unconfirmed_wca_id.val();
     $approve_wca_id.prop("disabled", !unconfirmed_wca_id);
     $unconfirmed_wca_id_profile_link.parent().toggle(!!unconfirmed_wca_id);
-    $unconfirmed_wca_id_profile_link.attr('href', "/results/p.php?i=" + unconfirmed_wca_id);
+    $unconfirmed_wca_id_profile_link.attr('href', "/persons/" + unconfirmed_wca_id);
   });
   $unconfirmed_wca_id.trigger('input');
 
   // Change the 'section' parameter when a tab is switched.
   $('a[data-toggle="tab"]').on('show.bs.tab', function() {
     var section = $(this).attr('href').slice(1);
-    var url = window.location.toString();
-    url = url.replace(/edit.*/, 'edit?section=' + section);
-    history.replaceState(null, null, url);
+    $.setUrlParams({ section: section });
   });
 });
 
@@ -76,10 +74,11 @@ onPage('users#index', function() {
   };
 
   // Set the table options from the url params.
+  var urlParams = $.getUrlParams();
   $.extend(options, {
-    pageNumber: parseInt($.getUrlParam('page')) || options.pageNumber,
-    sortOrder: $.getUrlParam('order') || options.sortOrder,
-    sortName: $.getUrlParam('sort') || options.sortName
+    pageNumber: parseInt(urlParams.page) || options.pageNumber,
+    sortOrder: urlParams.order || options.sortOrder,
+    sortName: urlParams.sort || options.sortName
   });
   // Load the data using the options set above.
   $table.bootstrapTable('refresh');
@@ -96,13 +95,11 @@ onPage('users#index', function() {
     $('#search-box i').removeClass('fa-spinner fa-spin').addClass('fa-search');
 
     // Update params in the url.
-    var params = personsTableAjax.queryParams({
+    var params = usersTableAjax.queryParams({
       page: options.pageNumber,
       order: options.sortOrder,
       sort: options.sortName
     });
-    var url = location.toString();
-    url = url.replace(/users.*/, 'users?' + $.param(params));
-    history.replaceState(null, null, url);
+    $.setUrlParams(params);
   });
 });

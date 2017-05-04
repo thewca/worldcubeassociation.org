@@ -83,11 +83,7 @@ table.table {
   }
 }
 
-form .event-checkbox .cubing-icon {
-  font-size: 2em;
-}
-
-form .event-checkbox-sm .cubing-icon {
+.event-checkbox-sm .cubing-icon {
   font-size: 1em;
 }
 
@@ -102,7 +98,39 @@ table.table-greedy-last-column {
   }
 }
 
+
+table.with-solves {
+  thead tr th {
+    &.solves {
+      text-align: center;
+    }
+  }
+  tbody tr td {
+    &.solve, {
+      text-align: right;
+      &::before {
+        content: '(';
+        opacity: 0;
+      }
+      &::after {
+        content: ')';
+        opacity: 0;
+      }
+      &.trimmed {
+        &::before {
+          opacity: 1;
+        }
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
 table.wca-results {
+  @extend table.with-solves;
+
   thead tr th {
     &.pos {
       text-align: right;
@@ -127,9 +155,6 @@ table.wca-results {
     }
     &.single {
       text-align: right;
-    }
-    &.solves {
-      text-align: center;
     }
   }
   tbody tr td {
@@ -165,29 +190,6 @@ table.wca-results {
     }
     &.single {
       text-align: right;
-    }
-    &.solve1,
-    &.solve2,
-    &.solve3,
-    &.solve4,
-    &.solve5, {
-      text-align: right;
-      &::before {
-        content: '(';
-        opacity: 0;
-      }
-      &::after {
-        content: ')';
-        opacity: 0;
-      }
-      &.trimmed {
-        &::before {
-          opacity: 1;
-        }
-        &::after {
-          opacity: 1;
-        }
-      }
     }
   }
 
@@ -306,11 +308,17 @@ textarea {
 }
 
 // Style for event pickers
-.event-checkbox {
+.event-checkbox,
+.event-radio {
+  .cubing-icon {
+    font-size: 2em;
+  }
+
   label {
     margin-bottom: 0;
   }
-  input[type=checkbox] {
+  input[type=checkbox],
+  input[type=radio] {
     display: none;
     + span.cubing-icon {
       color: #ccc;
@@ -346,4 +354,9 @@ textarea {
 
 .bs-table-query-fields {
   margin: 15px 0;
+}
+
+a.plain {
+  color: inherit;
+  text-decoration: none;
 }

@@ -36,7 +36,7 @@
 
   <p>
     <% if current_user.wca_id %>
-      <%= link_to t('layouts.navigation.my_results'), "/results/p.php?i=" + current_user.wca_id %>
+      <%= link_to t('layouts.navigation.my_results'), person_path(current_user.wca_id) %>
     <% end %>
   </p>
 

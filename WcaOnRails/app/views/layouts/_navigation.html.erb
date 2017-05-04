@@ -52,7 +52,7 @@
             <li><a href="/results/regions.php"><%= icon('trophy') %> <%= t '.records' %></a></li>
             <li><a href="<%= persons_path %>"><%= icon('users') %> <%= t '.persons' %></a></li>
             <% if current_user&.wca_id? %>
-              <li><%= link_to icon('user', t('.my_results')), "/results/p.php?i=#{current_user.wca_id}" -%></li>
+              <li><%= link_to icon('user', t('.my_results')), person_path(current_user.wca_id) -%></li>
             <% end %>
             <li class="divider"></li>
             <li><a href="/results/statistics.php"><%= icon('area-chart') %> <%= t '.statistics' %></a></li>
@@ -83,7 +83,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
-            <i class="flag f16 <%= active_locale_info[:flag_id] %>"></i> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
+            <%= flag_icon active_locale_info[:flag_id], 16 %> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu countries" role="menu">
@@ -91,7 +91,7 @@
               <% unless l == I18n.locale %>
                 <li>
                   <%= link_to update_locale_path(l), method: :patch do %>
-                    <i class="flag f16 <%= data[:flag_id] %>"></i> <%= data[:name] %>
+                    <%= flag_icon data[:flag_id], 16 %> <%= data[:name] %>
                   <% end %>
                 </li>
               <% end %>

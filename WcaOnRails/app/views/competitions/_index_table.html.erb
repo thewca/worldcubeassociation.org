@@ -21,7 +21,7 @@
       </span>
       <span class="competition-info">
         <p class="competition-link">
-          <i class="flag f16 <%= competition.country.iso2.downcase %>"></i>
+          <%= flag_icon competition.country.iso2, 16 %>
           <%= link_to competition.cellName, competition_path(competition) %>
         </p>
         <p class="location">

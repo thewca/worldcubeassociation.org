@@ -1,0 +1,19 @@
+<div class="col-md-6 medal-collection">
+  <h3 class="text-center"><%= t 'persons.show.medal_collection' %></h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= t 'persons.show.medals.gold' %></th>
+        <th><%= t 'persons.show.medals.silver' %></th>
+        <th><%= t 'persons.show.medals.bronze' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @medals[:gold] %></td>
+        <td><%= @medals[:silver] %></td>
+        <td><%= @medals[:bronze] %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

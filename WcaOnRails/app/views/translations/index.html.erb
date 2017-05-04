@@ -14,7 +14,7 @@
       <div class="panel-heading <%= class_heading %>" data-toggle="collapse" data-target="#collapse-<%= locale %>">
         <h3 class="panel-title">
           <span class="label label-<%= class_panel %>">i18n</span>
-          <span class="label label-<%= class_panel %>"><i class="flag f16 <%= Locales::AVAILABLE[locale][:flag_id] %>"></i> <%= locale %></span> <%# this is all on one line for a reason. See http://stackoverflow.com/a/25879479 %>
+          <span class="label label-<%= class_panel %>"><%= flag_icon Locales::AVAILABLE[locale][:flag_id], 16 %> <%= locale %></span> <%# this is all on one line for a reason. See http://stackoverflow.com/a/25879479 %>
           <span class="badge"><%= bad_keys_for_locale.size %></span>
           <%= bad_keys_for_locale.empty? ? "All good" : "Needs attention" %>
           <% unless bad_keys_for_locale.empty? %>

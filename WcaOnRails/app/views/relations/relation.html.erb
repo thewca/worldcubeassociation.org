@@ -40,7 +40,7 @@
           <% if current.user %>
             <img src="<%= current.user.avatar.url(:thumb) %>" class="avatar-thumbnail">
           <% end %>
-          <%= link_to current.name, "/results/p.php?i=#{current.wca_id}" %>
+          <%= link_to current.name, person_path(current.wca_id) %>
         </div>
         <% previous = current %>
       <% end %>

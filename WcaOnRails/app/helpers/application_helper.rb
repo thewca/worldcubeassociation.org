@@ -180,10 +180,22 @@ module ApplicationHelper
   end
 
   def wca_id_link(wca_id, options = {})
-    if wca_id
+    if wca_id.present?
       content_tag :span, class: "wca-id" do
-        link_to wca_id, "#{root_url}results/p.php?i=#{wca_id}", options
+        link_to wca_id, person_url(wca_id), options
       end
     end
+  end
+
+  def cubing_icon(event, html_options = {})
+    html_options[:class] ||= ""
+    html_options[:class] += " cubing-icon event-#{event}"
+    content_tag :span, "", html_options
+  end
+
+  def flag_icon(iso2, size, html_options = {})
+    html_options[:class] ||= ""
+    html_options[:class] += " flag f#{size} #{iso2.downcase}"
+    content_tag :span, "", html_options
   end
 end
