@@ -971,7 +971,7 @@ en:
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
-        A missing rank or worse continent rank than the country one
+        A missing rank or worse country rank than the continent one
         is due to a change of country. Results from the previous region
         are not taken into account in the current region ranking.
       championship_podiums: "Championship Podiums"
