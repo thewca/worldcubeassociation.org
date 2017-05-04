@@ -124,6 +124,38 @@ zh-TW:
       name: 門檻制資格賽
       #original_hash: 4c66ad0
       cellName: 門檻制資格賽
+  round:
+    #original_hash: 66e902f
+    name: '%{event}第%{number}輪'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: '前%{ranking}名晉級第%{next_round_number}輪'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: '最佳成績 ≤ %{time}秒晉級第%{next_round_number}輪'
+      #original_hash: efa4ad1
+      moves: '最佳成績 ≤ %{moves}步晉級第%{next_round_number}輪'
+      #original_hash: 29f8453
+      points: '最佳成績 ≤ %{points}分晉級第%{next_round_number}輪'
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      zero: '%{count}次還原 ≤ %{time}秒'
+      other: '%{count}次還原 ≤ %{time}秒'
+    #original_hash: 6f99fa6
+    moves:
+      zero: '%{count}次還原 ≤ %{moves}步'
+      other: '%{count}次還原 ≤ %{moves}步'
+    #original_hash: 1c7c5f1
+    points:
+      zero: '%{count}次還原 ≤ %{points}分'
+      other: '%{count}次還原 ≤ %{points}分'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '累計%{time}'
+      #original_hash: c01adfa
+      across_rounds: '%{rounds}輪總計%{time}'
   common:
     #original_hash: 2513cf0
     continent: 洲
@@ -294,7 +326,7 @@ zh-TW:
         #original_hash: fce06e2
         comments: 意見
         #original_hash: dc9d458
-        paid_entry_fees: 付報名費
+        paid_entry_fees: 付款金額
         #original_hash: bae7d5b
         status: 狀態
         #original_hash: 709a232
@@ -379,8 +411,8 @@ zh-TW:
           pochman</strong>。
         #original_hash: c03b949
         email: 您必須確認新的電子郵件才能更改您的電子郵件。
-        #original_hash: bfd11f4
-        pending_avatar: 上傳新的頭像之後，必須等待WCA董事會的審核。
+        #original_hash: 8a91e53
+        pending_avatar: 上傳新的頭像之後，必須等待WCA成績組的審核。
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -421,11 +453,11 @@ zh-TW:
           比賽的全名且必須以年份為結尾(例如: Danish Open
           2016)。字首得大寫且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()。
         #original_hash: 525fcc8
-        cellName: '供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣(例如: Europe 2006)。'
+        cellName: '供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣(例如: All is Well 2017)。'
         #original_hash: bce4589
-        cityName: '比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如: 巴黎、舊金山或加州)'
+        cityName: '比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如: 台北、台中或高雄)'
         #original_hash: 17c8ff8
-        information: '關於比賽的一些資訊(例如: Euro 2006開放給所有歐洲人和以色列人)。'
+        information: '關於比賽的一些資訊(例如:  All is Well 2017開放給任何國籍的人)。'
         #original_hash: 0708400
         delegate_ids: 本場比賽的WCA代表
         #original_hash: 517d376
@@ -552,8 +584,6 @@ zh-TW:
         #original_hash: da39a3e
         status: ''
       team:
-        #original_hash: da39a3e
-        description: ''
         #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
@@ -1038,9 +1068,9 @@ zh-TW:
       not_paid: 尚未付款
       registered:
         #original_hash: 2c2f473
-        without_stripe: Registered on
+        without_stripe: 報名於
         #original_hash: fca3213
-        with_stripe: Paid on
+        with_stripe: 付款於
       #original_hash: ce53c71
       payment_requested_on: 'Payment requested on: %{date}'
       #original_hash: b25928c
@@ -1286,8 +1316,8 @@ zh-TW:
         target='_blank'>Markdown</a>
       #original_hash: 9d9126e
       venue_html: >-
-        舉行比賽的場地。%{md} 例如: [Cité des Sciences et de
-        l'Industrie](http://www.cite-sciences.fr)
+        舉行比賽的場地。%{md} 例如: [Hsinchu National Senior High
+        School](http://www.hchs.hc.edu.tw/bin/home.php?Lang=en)
       #original_hash: 2651d1a
       venue_details_html: '場地的細節 (例如: 一樓的正後方，跟隨指標走) %{md}'
       #original_hash: b727e58
@@ -1499,6 +1529,48 @@ zh-TW:
       podiums: 獎牌數
       #original_hash: 56656a0
       no_persons_found: 查無此人。
+    show:
+      #original_hash: 1e43436
+      previously: 先前為
+      #original_hash: 79b6788
+      in_memoriam: 悼念
+      #original_hash: 4bc65e0
+      completed_solves: 總還原次數
+      #original_hash: fc78642
+      personal_records: 目前個人紀錄
+      #original_hash: 5e00ce5
+      odd_rank_reason: 因其更改國籍導致排名空白或是國家排名大於洲際排名。前一個國籍的成績不會列入目前的地區排名。
+      #original_hash: a91508f
+      championship_podiums: 錦標賽前三名
+      #original_hash: 3746f3b
+      wc_podiums: 世界錦標賽前三名
+      #original_hash: c32a014
+      place: 名次
+      #original_hash: ddb18c1
+      medal_collection: 獎牌累積數
+      #original_hash: 9e69e13
+      record_collection: 紀錄累積數
+      medals:
+        #original_hash: c57604d
+        gold: 金牌
+        #original_hash: 8697f43
+        silver: 銀牌
+        #original_hash: af31025
+        bronze: 銅牌
+      #original_hash: 1917f4f
+      competition: 比賽
+      #original_hash: 612e12d
+      results: 成績
+      #original_hash: e51c552
+      records: 紀錄
+      #original_hash: ab478f3
+      competitions_map: 參賽地圖
+      #original_hash: a99cec5
+      world_records: 世界紀錄經歷
+      #original_hash: 2d36a49
+      continental_records: 洲際紀錄經歷
+      #original_hash: 3ce631e
+      national_records: 國家紀錄經歷
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 您確定要刪除這篇文章嗎?這個動作是不可逆的。
@@ -1704,25 +1776,30 @@ zh-TW:
       #original_hash: b0c72a9
       committees: '以下的委員會負責WCA的分工:'
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>WCA紀律委員會(WDC)</strong>
+        #original_hash: c97077a
+        name: WCA紀律委員會
         #original_hash: 286fdf8
         description: 該委員會在特殊案件下向WCA董事提供建議，例如有違反WCA規則嫌疑的，以及處理WCA比賽當中重大個人事件。
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>WCA規則委員會(WRC)</strong>
+        #original_hash: 3da1e85
+        name: WCA規則委員會
         #original_hash: 13ada5b
         description: 該委員會負責管理WCA規則。
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA成績組</strong>
+      wrt:
+        #original_hash: 67be768
+        name: WCA成績組
         #original_hash: 439ffae
         description: 該團隊負責管理所有比賽成績。
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA軟體組</strong>
+      wst:
+        #original_hash: a14bc62
+        name: WCA軟體組
         #original_hash: ec961e4
         description: 該團隊負責管理WCA軟體(網站、轉亂程式、工作簿、管理工具)。
+      wct:
+        #original_hash: 63a2388
+        name: WCA傳播組
+        #original_hash: 50fd091
+        description: WCA傳播組(WCT)是監督和協助WCA與社群大眾的溝通橋梁。WCA應傳遞其組織目標並普及友善、透明、包容、開放、熱誠等正面價值。
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA代表</strong>是負責確保WCA比賽符合WCA任務、規則和精神的WCA成員。WCA將代表區別成<strong>WCA高級代表</strong>、<strong>WCA代表</strong>和<strong>WCA代表候選人</strong>%{see_link}。跟WCA代表職責不同的是，WCA高級代表需額外負責管理該地區的代表以及處理地方社群的事務。新上任的代表會先列為WCA代表候選人，並且需要證明他們能成功管理比賽之後才能升任為WCA代表。
@@ -1799,20 +1876,23 @@ zh-TW:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>委員會和團隊<u>
     board:
-      #original_hash: ccad374
-      name_html: <strong>WCA董事會</strong>
+      #original_hash: 90fcc48
+      name_html: WCA董事會
       #original_hash: 7ee8e36
       info: (WCA組織、比賽報告、審核比賽、一般問題)
+    wct:
+      #original_hash: c53144e
+      info: (WCA與社群大眾的溝通橋梁)
     wdc:
       #original_hash: 562e197
-      info: (獨立於WCA董事會的建議、獨立的調查、重大個人事件的顧問)
+      info: (獨立於WCA董事會的顧問，獨立調查與處理重大個人事件)
     wrc:
       #original_hash: 4a256f0
       info: (維護WCA規則)
-    results:
+    wrt:
       #original_hash: 899dc9c
-      info: (比賽成績、成績更正)
-    software:
+      info: (比賽成績、成績修正)
+    wst:
       #original_hash: dfbf427
       info: (維護WCA軟體)
   score_tools:
