@@ -124,6 +124,46 @@ hu:
       name: Kombinált kvalifikáció
       #original_hash: 4c66ad0
       cellName: Kombinált kvalifikáció
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Forduló %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: >-
+      Az első %{ranking} versenyző jut tovább a(z) %{next_round_number}.
+      fordulóba
+    attemptValue:
+      #original_hash: 2f332eb
+      time: >-
+        Leggyorsabb kirakás ≤ %{time} jut tovább a(z) %{next_round_number}.
+        fordulóba
+      #original_hash: efa4ad1
+      moves: >-
+        Legjobb megoldás ≤ %{moves} mozdulat jut tovább a(z)
+        %{next_round_number}. fordulóba
+      #original_hash: 29f8453
+      points: >-
+        Legjobb kirakás ≥ %{points} pont jut tovább a(z) %{next_round_number}.
+        fordulóba
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      zero: '%{count} lehetőséged van rá hogy az időd ≤ %{time} legyen'
+      other: '%{count} lehetőséged van rá hogy az időd ≤ %{time} legyen'
+    #original_hash: 6f99fa6
+    moves:
+      zero: '%{count} lehetőséged van rá, hogy az eredményed ≤ %{moves} legyen'
+      other: '%{count} lehetőséged van rá, hogy az eredményed ≤ %{moves} legyen'
+    #original_hash: 1c7c5f1
+    points:
+      zero: '%{count} lehetőséged van, hogy az eredményed ≥ %{points} pont legyen'
+      other: '%{count} lehetőséged van, hogy az eredményed ≥ %{points} pont legyen'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} kumulatív'
+      #original_hash: c01adfa
+      across_rounds: 'összesen %{time}időd van a %{rounds} fordulóra'
   common:
     #original_hash: 2513cf0
     continent: Kontinens
@@ -386,10 +426,10 @@ hu:
         email: >-
           Az e-mail címed megváltoztatásához szükséges az új e-mail címed
           megerősítése.
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
-          Miután feltöltötted az új profilképedet, várnod kell amíg a Board
-          jóváhagyja.
+          Miután feltöltötted az új profilképedet, várnod kell amíg a WCA
+          Results Team jóváhagyja.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -605,8 +645,6 @@ hu:
         status: ''
       team:
         #original_hash: da39a3e
-        description: ''
-        #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
         name: ''
@@ -645,6 +683,10 @@ hu:
         dob: Helyes születési dátum
         #original_hash: e214b8a
         document: Dokumentum
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: rossz formátumú
   errors:
     messages:
       #original_hash: dc2367c
@@ -684,6 +726,8 @@ hu:
         dob: Hozzáférés a születési dátumodhoz
         #original_hash: 17aa24f
         email: Hozzáférés az e-mail címedhez
+        #original_hash: e0d0654
+        manage_competitions: 'Kezelheted bármelyik jövőbeli, általad szervezett versenyedet'
     devise:
       #original_hash: 06184f5
       no_account: Nincs felhasználód?
@@ -718,7 +762,7 @@ hu:
       about: A WCA-ról
       #original_hash: d8fd3e4
       delegates: WCA delegáltak
-      #original_hash: 0ef06c8
+      #original_hash: 37b8fdc
       organizations: Nemzeti szervezetek
       #original_hash: d790b40
       faq: Gyakran Ismételt Kérdések
@@ -942,13 +986,11 @@ hu:
       already_have_id: >-
         nem tudod WCA ID hozzárendelését kérni, mert már hozzá van rendelve egy
         WCA ID (%{wca_id}) a felhasználódhoz
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
-        Ehhez a WCA ID-hez nincs hozzárendelve születési dátum. Kérlek küldj egy
-        e-mailt a <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team-nek</a> és csatolj egy fényképet egy
-        hivatalos dokumentumról (személyigazolvány, jogosítvány, stb.), ahol a
-        neved és a születési dátumod is látszik.
+        Ehhez a WCA ID-hez nincs hozzárendelve születési dátum. Kérlek lépj
+        kapcsolatban a WCA Results Team-mel a <a
+        href="%{dob_form_path}">kijelölt felületen</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Ehhez a WCA ID-hez nincs megadva nem. Kérlek, hogy a probléma
@@ -1080,7 +1122,7 @@ hu:
         on_waiting_list: >-
           Jelenleg a várólistán vagy, ahol összesen %{n_total} %{people}
           található.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           E-mailben értesítünk ha a regisztrációd el lesz fogadva. Kérlek vedd
           figyelembe, hogy a regisztrációk elfogadása nem automatikus. A
@@ -1155,8 +1197,15 @@ hu:
       approved_registrations: Elfogadott regisztrációk
       #original_hash: bff04e8
       deleted_registrations: Törölt regisztrációk
-      #original_hash: a844fcf
-      registered: Regisztrált
+      #original_hash: ac5d958
+      not_paid: Nem fizetett
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Regisztrálva van
+        #original_hash: fca3213
+        with_stripe: Fizetett
+      #original_hash: ce53c71
+      payment_requested_on: 'A befizetés %{date} dátummal lett igényelve'
       #original_hash: b25928c
       total: Összesen
     new_registration:
@@ -1768,15 +1817,20 @@ hu:
           Milyen követelményeknek kell megfelelnem, hogy részt vehessek egy WCA
           versenyen? Mit kell tudnom mielőtt WCA versenyre megyek?
         content:
-          #original_hash: 40aa9c0
+          #original_hash: 3bb4e11
           '1': >-
             Általánosságban nincs túl sok feltétele a WCA versenyeken való
             részvételnek. Bár minden versenyzőtől elvárjuk, hogy megértse a <a
             href='https://www.worldcubeassociation.org/regulations/'>WCA
-            Szabályzatot</a>, ezen kívül javasoljuk, hogy nézd meg a <a
-            target='_blank' href='http://www.cubingusa.com/ctutorial.php'>Cubing
-            USA versenyzési információit</a>, mert ez is rengeteg információval
-            szolgálhat új versenyzőknek.
+            Szabályzatot</a>. Ha az angol nem az anyanyelved és gondjaid vannak
+            a dokumentum értelmezésével, akkor nézd meg a <a
+            href='https://www.worldcubeassociation.org/regulations/translations/'>Fordítások</a>at.
+          #original_hash: da99893
+          '2': >-
+            Ezen kívül javasoljuk, hogy nézd meg <a target='_blank'
+            href='http://www.cubingusa.com/ctutorial.php'>Cubing USA újoncoknak
+            szóló videóját</a>, ami számos hasznos tanáccsal szolgálhat az első
+            versenyed előtt.
       '5':
         #original_hash: 3b657aa
         title: Hogyan lehet WCA verseny az én lakóhelyemen is?
@@ -1848,6 +1902,18 @@ hu:
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
+      '9':
+        #original_hash: 7a4a71d
+        title: >-
+          Regisztrálva vagyok egy versenyre, de szeretnék még több
+          versenyszámban is indulni. Mit tegyek ilyenkor? Hozhatok magammal
+          vendég(ek)et?
+        content:
+          #original_hash: 957487d
+          '1': >-
+            Kérjük, lépj kapcsolatba  a verseny szervezőjével. Az ő
+            elérhetőségét megtalálod a verseny honlapján. Ha nem tudod hol
+            találod néz meg a <a href='/competitions'>versenyek listáját</a>.
       results:
         #original_hash: 9aae576
         title: Mikor lesznek feltöltve egy WCA verseny eredményei a WCA honlapra?
@@ -1871,6 +1937,54 @@ hu:
             (lásd lent), lehetőséged van e-mail értesítést beállítani a téged
             érintő eredmények feltöltéséről <a
             href='%{preferences_edit_path}'>itt</a>.
+      regulations1:
+        #original_hash: 2951eb6
+        title: Használhatom a játékomat versenyeken?
+        content:
+          #original_hash: 5ac78e4
+          '1': >-
+            A játékokkal kapcsolatos szabályokat a <a
+            href='https://www.worldcubeassociation.org/regulations/#3'>3.
+            Cikk</a>ben találod. Minden versenyen használt játékot a WCA
+            delegáltnak kell jóváhagynia. Ha nem vagy benne biztos, akkor
+            kérdezd meg a versenyed delegáltját. Ha biztosra akarsz menni, akkor
+            vigyél magaddal egy csere játékot a versenyre, arra az esetre, ha az
+            elsődlegeset nem tudnád használni.
+      regulations2:
+        #original_hash: 48f1234
+        title: Használhatok mágneses játékot hivatalos WCA versenyen?
+        content:
+          #original_hash: 024ce81
+          '1': >-
+            Amennyiben a mágneses játék megfelel a <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>WCA
+            Szabályzat</a>ban engedélyezett játékok követelményeinek, úgy
+            természetesen használhatod. Kérlek fordíts különös figyelmet a <a
+            href='https://www.worldcubeassociation.org/regulations/#3h'>Szabályzat
+            3h</a> pontjára.
+      regulations3:
+        #original_hash: c7460a5
+        title: >-
+          Elveszett a játékom egyik középsapkája vagy egy másik eleme. Így is
+          használhatom versenyen?
+        content:
+          #original_hash: 0d76323
+          '1': >-
+            Ezt a játékot nem használhatod versenyeken. A játékok nem lehetnek
+            sérültek vagy lehetnek rajtuk más eltérések, amelyek
+            megkülönböztetik az egyes darabjait egymástól. (lásd: <a
+            href='https://www.worldcubeassociation.org/regulations/#3j'>Szabályzat
+            3j</a>).
+      regulations4:
+        #original_hash: 43f9da8
+        title: 'Hány évesnek kell lennem, hogy regisztrálhassak egy WCA versenyre?'
+        content:
+          #original_hash: 984704a
+          '1': >-
+            Nincs minimum követelmény. De mindenképp kérdezd meg a szüleidet a
+            regisztráció előtt. (lásd: <a
+            href='https://www.worldcubeassociation.org/regulations/#2b'>Szabályzat
+            2b</a>).
   about:
     #original_hash: 9ac918a
     title: A WCA-ról
@@ -1885,7 +1999,7 @@ hu:
           irányítószerve. A leghíresebb ezek közül a Rubik-kocka, amelyet a
           magyar Rubik Ernő talált fel. Ezeknek a játékoknak egy kiválasztott
           része alkotja a WCA hivatalos versenyszámait.
-        #original_hash: c8ecd24
+        #original_hash: 22c3593
         '2': >-
           A World Cube Association versenyeket szervez szerte a világon, olyan
           nemzeti szervezetek támogatásával, melyek saját országaik versenyeinek
@@ -1911,8 +2025,8 @@ hu:
       #original_hash: b0c72a9
       committees: 'Az alábbi bizottságok felelősek a WCA működtetéséért:'
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>WCA Disciplinary Committee (WDC)</strong>
+        #original_hash: c97077a
+        name: WCA Disciplinary Committee
         #original_hash: 286fdf8
         description: >-
           Ez a bizottság tanácsokkal látja el a WCA Board-ot speciális
@@ -1920,22 +2034,32 @@ hu:
           léphetnek kapcsolatba a WCA tagjai ha a WCA versenyeket érintő,
           lényeges személyes kérdések merülnek fel.
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>WCA Regulations Committee (WRC)</strong>
+        #original_hash: 3da1e85
+        name: WCA Regulations Committee
         #original_hash: 13ada5b
         description: Ez a bizottság a WCA Szabályzat kezeléséért felelős.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA Results team</strong>
+      wrt:
+        #original_hash: 67be768
+        name: WCA Results Team
         #original_hash: 439ffae
-        description: Ez a csoport felelős a versenyeredmények kezeléséért.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA Software team</strong>
+        description: Ez a csoport felelős minden versenyeredmény kezeléséért.
+      wst:
+        #original_hash: a14bc62
+        name: WCA Software Team
         #original_hash: ec961e4
         description: >-
-          Ez a csoport felelős a WCA szoftverének kezeléséért. (weboldal,
-          keverések, kézikönyv, admin eszközök)
+          Ez a csoport felelős a WCA szoftverének kezeléséért. (honlap,
+          keverések, kézikönyvek, admin eszközök)
+      wct:
+        #original_hash: 63a2388
+        name: WCA Communication Team
+        #original_hash: 50fd091
+        description: >-
+          A WCA Communication Team (WCT) feladata hogy felügyelje és támogassa a
+          WCA kommunikációját a közösséggel és a nagyközönséggel. A WCA
+          kommunikációjának hozzá kell járulnia a WCA célkitűzéseihez és
+          támogatnia kell az általános pozitív hangulatot a barátságosság,
+          átláthatóság, inkluzivitás, nyitottság és válaszkészség jegyében.
       #original_hash: f2ceade
       delegates_html: >-
         A <strong>WCA delegáltak</strong> a WCA tagjai, akik azért felelősek,
@@ -1968,11 +2092,70 @@ hu:
       role: Beosztás
       #original_hash: 0f21717
       region: Régió
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Nemzetközi szervezetek
-    #original_hash: f9a7f4d
-    content: 'A WCA az alábbi nemzeti szervezeteket ismeri el:'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Nemzeti szervezetek
+    #original_hash: ba87c07
+    content: 'A WCA a következő nemzeti szervezeteket ismeri el:'
+    how_to:
+      #original_hash: fc3af12
+      title: Hogyan lehet WCA nemzeti szervezetté válni
+      #original_hash: bdf57ff
+      description: >-
+        A WCA világszerte számos nemzeti szervezetet ismer el. A WCA nemzeti
+        szervezetek célja, hogy WCA versenyeket szervezzen és támogassa a WCA
+        tevékenységét az adott régióban. Azok az országoknak, akik nemzeti
+        szervezetet szeretnének létrehozni először támogatniuk kell a WCA
+        tevékenységét az adott régióban, mielőtt beadják a jelentkezésüket. WCA
+        versenyek szervezésében segítséget kaphatsz a hozzád legközelebb lévő
+        WCA delegálttól.
+    requirements:
+      #original_hash: 1e04fd7
+      title: Feltételek a WCA nemzeti szervezetekkel szemben
+      list:
+        #original_hash: 22a9f26
+        '1': Aktívan szervezzen és támogassa a WCA versenyek szervezését a régióban
+        #original_hash: 8c5a7fe
+        '2': >-
+          Aktívan támogassa a kontinens versenyeket, amik a nemzeti szervezet
+          kontinensén kerülnek megrendezésre
+        #original_hash: 5913cd0
+        '3': >-
+          Elismerje és alkalmazza a célkitűzéseket, amelyek WCA Alaptörvényében
+          és a WCA Szabályzatban vannak lefektetve
+        #original_hash: 0c3576b
+        '4': Megfeleljen az érvényes WCA Szabályzatnak
+        #original_hash: 23cda60
+        '5': Fogadja el a WCA képviselőinek döntéseit és feleljen meg nekik
+        #original_hash: 08c6d86
+        '6': >-
+          Folyamatosan el kell juttatnia az aktuális alaptörvényét és
+          szabályzatát a WCA-hoz elektronikus formában
+    application_instructions:
+      #original_hash: 4da829b
+      title: Jelentkezés menete
+      #original_hash: 7ae038e
+      description: >-
+        A nemzeti szervezetté válásra való jelentkezéshez kötelező beadni egy
+        írásbeli jelentkezést a WCA Board-nak, amiben az alább felsorolt
+        részletek mindegyikének szerepelnie kell.
+      list:
+        #original_hash: 1a9d544
+        '1': A nemzeti szervezet neve
+        #original_hash: a9bf3f4
+        '2': Hivatalos cím és elérhetőség
+        #original_hash: 2a029e9
+        '3': >-
+          A jelenleg érvényes alaptörvényeinek másolata, ami összhangban van a
+          WCA Alaptörvényével és a WCA Szabályzattal
+        #original_hash: a5a2771
+        '4': A főbb tisztségviselőinek listája
+        #original_hash: 1186ebf
+        '5': >-
+          Egy egyértelmű leírás, arra vonatkozóan, hogy mely területet fedi le a
+          nemzeti szervezet
+        #original_hash: 826e371
+        '6': Egy összegzés a múltbeli és jelenlegi WCA-hoz kötődő tevékenygeiről
   contact:
     #original_hash: a34b69f
     title: Kontakt Információ
@@ -1989,12 +2172,15 @@ hu:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Bizottságok és csoportok</u>
     board:
-      #original_hash: ccad374
+      #original_hash: 90fcc48
       name_html: <strong>WCA Board</strong>
       #original_hash: 7ee8e36
       info: >-
         (a WCA szervezet, delegált riportok, versenyek jóváhagyása, általános
         kérdések)
+    wct:
+      #original_hash: c53144e
+      info: (a WCA kommunikációja a közösség illetve a nagyközönség felé)
     wdc:
       #original_hash: 562e197
       info: >-
@@ -2003,12 +2189,12 @@ hu:
     wrc:
       #original_hash: 4a256f0
       info: (a WCA Szabályzatért felelős)
-    results:
+    wrt:
       #original_hash: 899dc9c
       info: '(versenyeredmények, eredmények javítása)'
-    software:
-      #original_hash: 325ab0a
-      info: (a WCA szoftveréért felelős)
+    wst:
+      #original_hash: dfbf427
+      info: (a WCA szoftverének karbantartása)
   score_tools:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
@@ -2172,3 +2358,19 @@ hu:
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
         címre.
+  relations:
+    relation:
+      #original_hash: 6519fe1
+      title: Kapcsolat
+      #original_hash: 69ba020
+      find_relations: Kockások közötti kapcsolat megkeresése
+      #original_hash: 5d6056d
+      show_relation: Mutasd a kapcsolatot!
+      connectives:
+        #original_hash: f85194e
+        was_at: Részt vett az alábbi versenyen
+        #original_hash: 8c00243
+        together_with: Együtt az alábbi versenyzővel
+    messages:
+      #original_hash: 4406a0b
+      invalid_wca_ids: Kérlek adj meg két különböző és érvényes WCA ID-t!
