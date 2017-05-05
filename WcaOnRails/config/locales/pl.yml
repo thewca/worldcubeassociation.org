@@ -124,6 +124,51 @@ pl:
       name: Kwalifikacje Kombinowane
       #original_hash: 4c66ad0
       cellName: Kwalifikacje Kombinowane
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Runda %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: 'Najlepsze %{ranking} osób awansuje do %{next_round_number}. rundy'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: 'Najlepszy czas ≤ %{time}  awansuje do %{next_round_number}. rundy'
+      #original_hash: efa4ad1
+      moves: >-
+        Najlepsze ułożenie ≤ %{moves} ruchów awansuje do %{next_round_number}.
+        rundy
+      #original_hash: 29f8453
+      points: >-
+        Najlepszy wynik ≥ %{points} punktów awansuje do %{next_round_number}.
+        rundy
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      zero: '%{count} prób na uzyskanie ≤ %{time}'
+      one: '%{count} próba na uzyskanie ≤ %{time}'
+      few: '%{count} próby na uzyskanie ≤ %{time}'
+      many: '%{count} prób na uzyskanie ≤ %{time}'
+      other: '%{count} próby na uzyskanie ≤ %{time}'
+    #original_hash: 6f99fa6
+    moves:
+      zero: '%{count} prób na uzyskanie ≤ %{moves} ruchów'
+      one: '%{count} próba na uzyskanie ≤ %{moves} ruchów'
+      few: '%{count} próby na uzyskanie ≤ %{moves} ruchów'
+      many: '%{count} prób na uzyskanie ≤ %{moves} ruchów'
+      other: '%{count} próby na uzyskanie ≤ %{moves} ruchów'
+    #original_hash: 1c7c5f1
+    points:
+      zero: '%{count} prób na uzyskanie ≥ %{points} punktów'
+      one: '%{count} próba na uzyskanie ≥ %{points} punktów'
+      few: '%{count} próby na uzyskanie ≥ %{points} punktów'
+      many: '%{count} prób na uzyskanie ≥ %{points} punktów'
+      other: '%{count} próby na uzyskanie ≥ %{points} punktów'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} łączenie'
+      #original_hash: c01adfa
+      across_rounds: '%{time} łącznie na %{rounds}'
   common:
     #original_hash: 2513cf0
     continent: Kontynent
@@ -395,10 +440,10 @@ pl:
         email: >-
           Zmiana twojego adresu email będzie wymagać potwierdzenia nowego
           adresu.
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
           Po przesłaniu nowego zdjęcia profilowego, będziesz musiał zaczekać, aż
-          Zarząd go zaakceptuje.
+          Zespół do Spraw Wyników go zaakceptuje.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -615,8 +660,6 @@ pl:
         #original_hash: da39a3e
         status: ''
       team:
-        #original_hash: da39a3e
-        description: ''
         #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
@@ -1737,6 +1780,51 @@ pl:
       podiums: Podia
       #original_hash: 56656a0
       no_persons_found: Żadna osoba nie spełnia podanych kryteriów.
+    show:
+      #original_hash: 1e43436
+      previously: Poprzednio
+      #original_hash: 79b6788
+      in_memoriam: Ku Pamięci
+      #original_hash: 4bc65e0
+      completed_solves: Ukończone Ułożenia
+      #original_hash: fc78642
+      personal_records: Obecne Rekordy Osobiste
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        Brakująca pozycja w rankingu lub gorsza pozycja w kraju niż na
+        kontynencie jest spowodowana zmianą kraju. Wyniki z poprzedniego regionu
+        nie są brane pod uwagę w rankingu obecnego regionu.
+      #original_hash: a91508f
+      championship_podiums: Tytuły Mistrzowskie
+      #original_hash: 3746f3b
+      wc_podiums: Podia na Mistrzostwach Świata
+      #original_hash: c32a014
+      place: Miejsce
+      #original_hash: ddb18c1
+      medal_collection: Kolekcja Medalowa
+      #original_hash: 9e69e13
+      record_collection: Kolekcja Rekordowa
+      medals:
+        #original_hash: c57604d
+        gold: Złote
+        #original_hash: 8697f43
+        silver: Srebrne
+        #original_hash: af31025
+        bronze: Brązowe
+      #original_hash: 1917f4f
+      competition: Zawody
+      #original_hash: 612e12d
+      results: Wyniki
+      #original_hash: e51c552
+      records: Rekordy
+      #original_hash: ab478f3
+      competitions_map: Mapa
+      #original_hash: a99cec5
+      world_records: Historia Rekordów Świata
+      #original_hash: 2d36a49
+      continental_records: Historia Rekordów Kontynentu
+      #original_hash: 3ce631e
+      national_records: Historia Rekordów Kraju
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 'Czy jesteś pewien, że chcesz usunąć ten post? Ta akcja jest nieodwracalna.'
@@ -1819,16 +1907,21 @@ pl:
           Jakie wymagania należy spełniać, aby móc wciąć udział w zawodach WCA?
           Co muszę wiedzieć przed startowaniem w nich?
         content:
-          #original_hash: 40aa9c0
+          #original_hash: 3bb4e11
           '1': >-
             Generalnie, nie ma wielu wymagań stawianych osobie, która chce brać
             udział w zawodach WCA. Jednak od wszystkich uczestników zawodów
             oczekuje się dobrego zrozumienia <a
             href='https://www.worldcubeassociation.org/regulations/'>regulaminu
-            WCA</a>. Dodatkowo pragniemy polecić spojrzenie na <a
-            target='_blank' href='http://www.cubingusa.com/ctutorial.php'>kurs
-            zawodnika stworzony przez Cubing USA</a>, który daje kila bardzo
-            dobrych wskazówek dla nowicjuszy.
+            WCA</a>. Jeżeli angielski nie jest twoim językiem ojczystym i masz
+            problem ze zrozumieniem tego dokumentu, prosimy o przeczytanie <a
+            href='https://www.worldcubeassociation.org/regulations/translations/'>Tłumaczeń</a>.
+          #original_hash: da99893
+          '2': >-
+            Dodatkowo pragniemy polecić spojrzenie na <a target='_blank'
+            href='http://www.cubingusa.com/ctutorial.php'>kurs zawodnika
+            stworzony przez Cubing USA</a>, który daje kilka bardzo dobrych
+            wskazówek dla nowicjuszy.
       '5':
         #original_hash: 3b657aa
         title: W jaki sposób mogę mieć zawody WCA zorganizowane w swoim mieście?
@@ -1900,6 +1993,18 @@ pl:
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
+      '9':
+        #original_hash: 7a4a71d
+        title: >-
+          Jestem zarejestrowany na zawody i chciałbym zapisać się na dodatkową
+          konkurencję, co powinienem zrobić? Mogę przyprowadzić gości?
+        content:
+          #original_hash: 957487d
+          '1': >-
+            Prosimy o kontakt z organizatorem. Możesz odnaleźć informacje
+            kontaktowe na stronie zawodów. Jeżeli nie jesteś pewien, gdzie
+            możesz ją znaleźć, spojrzyj na <a href='/competitions'>listę
+            zawodów</a>.
       results:
         #original_hash: 9aae576
         title: Kiedy wyniki z zawodów WCA są dostępne na stronie?
@@ -1924,6 +2029,47 @@ pl:
             poniżej), masz możliwość włączyć powiadomienia drogą mailową o
             przesłaniu twoich wyników <a
             href='%{preferences_edit_path}'>tutaj</a>.
+      regulations1:
+        #original_hash: 2951eb6
+        title: Czy moja kostka nadaje się do układania na oficjalnych zawodach?
+        content:
+          #original_hash: 5ac78e4
+          '1': "Zapisy dotyczące układanek możesz odnaleźć w <a href='https://www.worldcubeassociation.org/regulations/#3'>3. Artykule Regulaminu</a>. Wszystkie układanki muszą być zaakceptowane przez delegata WCA. Jeżeli nie jesteś pewien, prosimy o zwrócenie się\_z pytaniem do Delegata twoich zawodów. Na wszelki wypadek powinieneś zabrać łamigłówkę zastępczą, w przypadku gdy nie zostaniesz dopuszczony do używania tej pierwszej z nich."
+      regulations2:
+        #original_hash: 48f1234
+        title: Czy mogę używać magnetyczną kostkę na oficjalnych zawodach WCA?
+        content:
+          #original_hash: 024ce81
+          '1': >-
+            Masz pozwolenie na używanie magnetycznych kostek dopóki są one
+            zgodne z <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Regulaminem
+            WCA</a>. Prosimy o zwrócenie szczególnej uwagi na <a
+            href='https://www.worldcubeassociation.org/regulations/#3h'>Zapis
+            3h</a>.
+      regulations3:
+        #original_hash: c7460a5
+        title: >-
+          Zgubiłem zaślepkę lub element z mojej kostki. Czy wciąż mogę jej
+          używać?
+        content:
+          #original_hash: 0d76323
+          '1': >-
+            Nie wolno ci używać tej kostki. Łamigłówki nie mogą mieć żadnych
+            uszkodzeń ani innych różnic, które w znaczący sposób odróżniają
+            element od podobnego elementu (spójrz na <a
+            href='https://www.worldcubeassociation.org/regulations/#3j'>Zapis
+            3j</a>).
+      regulations4:
+        #original_hash: 43f9da8
+        title: 'Ile muszę mieć lat, aby móc zarejestrować się na zawody WCA?'
+        content:
+          #original_hash: 984704a
+          '1': >-
+            Nie ma wieku minimalnego. Jednakże powinieneś zapytać swoich
+            rodziców przed zarejestrowaniem się (spójrz na <a
+            href='https://www.worldcubeassociation.org/regulations/#2b'>Zapis
+            2b</a>).
   about:
     #original_hash: 9ac918a
     title: O WCA
@@ -1964,8 +2110,8 @@ pl:
       #original_hash: b0c72a9
       committees: 'Następujące komitety są odpowiedzialne za działalność WCA:'
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>Komitet Dyscyplinarny WCA (WDC)</strong>
+        #original_hash: c97077a
+        name: Komitet Dyscyplinarny WCA (WDC)
         #original_hash: 286fdf8
         description: >-
           Ten komitet wspiera Zarząd WCA w szczególnych przypadkach, jak
@@ -1973,25 +2119,34 @@ pl:
           członkowie WCA w przypadkach ważnych osobistych spraw związanych z
           zawodami WCA.
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>Komitet Regulacyjny WCA (WRC)</strong>
+        #original_hash: 3da1e85
+        name: Komitet Regulacyjny WCA (WRC)
         #original_hash: 13ada5b
         description: Ten komitet jest odpowiedzialny za Regulamin WCA.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>Zespół do Spraw Wyników WCA (WRT)</strong>
+      wrt:
+        #original_hash: 67be768
+        name: Zespół do Spraw Wyników WCA (WRT)
         #original_hash: 439ffae
         description: >-
           Ten zespół jest odpowiedzialny za zarządzanie wszystkimi wynikami z
           zawodów.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>Zespół Programistyczny WCA (WST)</strong>
+      wst:
+        #original_hash: a14bc62
+        name: Zespół Programistyczny WCA (WST)
         #original_hash: ec961e4
         description: >-
           Ten zespół jest odpowiedzialny za zarządzanie oprogramowaniem WCA
           (stroną internetową, programami generującymi algorytmy mieszające,
           narzędziami administracyjnymi).
+      wct:
+        #original_hash: 63a2388
+        name: Zespół Komunikacyjny WCA (WCT)
+        #original_hash: 50fd091
+        description: >-
+          Zespół Komunikacyjny WCA (WCT) pełni rolę nadzorczą i wspiera
+          komunikację WCA ze Społecznością oraz ogółem społeczeńswa. Komunikacja
+          WCA powinna realizować cele WCA i przyczyniać się do ogólnej
+          życzliwości, przejrzystości, integracji, otwartości i wrażliwości.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegaci WCA</strong> to członkowie WCA, którzy są
@@ -2104,12 +2259,15 @@ pl:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Komitety i Zespoły</u>
     board:
-      #original_hash: ccad374
-      name_html: <strong>Zarząd WCA (WCA Board)</strong>
+      #original_hash: 90fcc48
+      name_html: Zarząd WCA (WCA Board)
       #original_hash: 7ee8e36
       info: >-
         (organizacja WCA, raporty delegatów, akceptacja zawodów, ogólne
         zapytania)
+    wct:
+      #original_hash: c53144e
+      info: (komunikacja WCA ze społecznością i ogółem społeczeństwa)
     wdc:
       #original_hash: 562e197
       info: >-
@@ -2118,11 +2276,11 @@ pl:
     wrc:
       #original_hash: 4a256f0
       info: (odpowiedzialność za Regulamin WCA)
-    results:
+    wrt:
       #original_hash: 899dc9c
       info: '(wyniki zawodów, korekty rezultatów)'
-    software:
-      #original_hash: 325ab0a
+    wst:
+      #original_hash: dfbf427
       info: (odpowiedzialność za oprogramowanie WCA)
   score_tools:
     #original_hash: ea9d41d
@@ -2290,3 +2448,19 @@ pl:
         Wyślij maila, dołączając plik JSON wyeksportowany przez WCA Workbook
         Assistant, na adres <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
+  relations:
+    relation:
+      #original_hash: 6519fe1
+      title: Relacje
+      #original_hash: 69ba020
+      find_relations: Znajdź powiązanie pomiędzy speedcuberami
+      #original_hash: 5d6056d
+      show_relation: Pokaż mi powiązanie!
+      connectives:
+        #original_hash: f85194e
+        was_at: Był(a) na
+        #original_hash: 8c00243
+        together_with: Razem z
+    messages:
+      #original_hash: 4406a0b
+      invalid_wca_ids: 'Prosimy o podanie dwóch różnych, poprawnych WCA ID.'
