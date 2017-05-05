@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AuxiliaryDataComputation
-
   def self.compute_everything
     self.compute_best_of_3_in_333bf
     self.compute_concise_results

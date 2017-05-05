@@ -2,6 +2,18 @@
 
 <div class="container">
   <%= render layout: "nav" do %>
-    <%= link_to "Do!", admin_compute_auxiliary_data_path, method: :post %>
+    <h2><%= yield(:title) %></h2>
+    <% if @auxiliary_data_start.date.nil? %>
+      <%= alert :danger, "Oh dear! The data has never been computed!" %>
+    <% elsif @auxiliary_data_end.date.nil? %>
+      <%= alert :info, "The data is being computed. Thanks for checking =)" %>
+    <% else %>
+      <%= alert :success, "Data was last computed #{time_ago_in_words @auxiliary_data_end.date} ago and took #{distance_of_time_in_words @auxiliary_data_start.date, @auxiliary_data_end.date}" %>
+    <% end %>
+    <% unless @auxiliary_data_start.date.present? && @auxiliary_data_end.date.nil? # Show unless the data is being computed. %>
+      <div>
+        <%= link_to "Do it!", admin_compute_auxiliary_data_path, method: :post, class: "btn btn-primary" %>
+      </div>
+    <% end %>
   <% end %>
 </div>

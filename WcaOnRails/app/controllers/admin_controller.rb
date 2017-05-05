@@ -77,9 +77,14 @@ class AdminController < ApplicationController
   end
 
   def compute_auxiliary_data
+    @auxiliary_data_start = Timestamp.find_or_create_by(name: 'auxiliary_data_start')
+    @auxiliary_data_end = Timestamp.find_or_create_by(name: 'auxiliary_data_end')
   end
 
   def do_compute_auxiliary_data
-    AuxiliaryDataComputation.compute_everything
+    # Reset the end date. The start date is updated directly before the computation.
+    Timestamp.find_or_create_by(name: 'auxiliary_data_end').update date: nil
+    ComputeAuxiliaryData.perform_later
+    redirect_to admin_compute_auxiliary_data_path
   end
 end
