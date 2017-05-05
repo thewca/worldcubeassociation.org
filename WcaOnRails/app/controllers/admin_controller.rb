@@ -75,4 +75,11 @@ class AdminController < ApplicationController
       dob: @person.dob,
     }
   end
+
+  def compute_auxiliary_data
+  end
+
+  def do_compute_auxiliary_data
+    AuxiliaryDataComputation.compute_everything
+  end
 end
