@@ -5,6 +5,8 @@ module AuxiliaryDataComputation
     self.compute_best_of_3_in_333bf
     self.compute_concise_results
     self.compute_rank_tables
+
+    self.delete_php_cache # Note: this should go away together with the PHP code.
   end
 
   ## Compute mean for 'best of 3' results in 333bf.
@@ -115,5 +117,10 @@ module AuxiliaryDataComputation
         SQL
       end
     end
+  end
+
+  def self.delete_php_cache
+    cache_files = Dir.glob(Rails.root.join("../webroot/results/generated/cache/*.cache"))
+    FileUtils.rm cache_files
   end
 end
