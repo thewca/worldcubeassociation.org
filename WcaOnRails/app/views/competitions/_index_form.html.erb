@@ -22,6 +22,11 @@
 </div>
 
 <div class="form-group">
+  <%= label_tag(t('competitions.index.days')) %>
+  <%= select_tag(:days, options_for_select(["", *(1..4)], params[:days]), class: "form-control") %>
+</div>
+
+<div class="form-group">
   <%= label_tag(t('competitions.index.search')) %>
   <div id="search-field">
     <div class="input-group">

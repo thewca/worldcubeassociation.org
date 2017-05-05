@@ -789,6 +789,7 @@ en:
       list: "List"
       map: "Map"
       region: "Region"
+      days: "Days"
       search: "Search"
       state: "When"
       present: "Present"
