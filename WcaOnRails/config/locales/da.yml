@@ -124,6 +124,43 @@ da:
       name: Kombineret kvalifikation
       #original_hash: 4c66ad0
       cellName: Kombineret kvalifikation
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Runde %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: 'Top %{ranking} kommer videre til runde %{next_round_number}'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: 'Bedste resultat ≤ %{time} kommer videre til runde %{next_round_number}'
+      #original_hash: efa4ad1
+      moves: 'Bedste tid  ≤ %{moves} træk kommer videre til runde %{next_round_number}'
+      #original_hash: 29f8453
+      points: >-
+        Bedste tid ≥ %{points} point kommer videre til runde
+        %{next_round_number}
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      other: '%{count} prøver at få ≤ %{time}'
+      one: '%{count} prøver at få ≤ %{time}'
+      zero: '%{count} prøver at få ≤ %{time}'
+    #original_hash: 6f99fa6
+    moves:
+      zero: '%{count} prøver at få ≤ %{moves} moves'
+      one: '%{count} prøver at få ≤ %{moves} moves'
+      other: '%{count} prøver at få ≤ %{moves} moves'
+    #original_hash: 1c7c5f1
+    points:
+      other: '%{count} prøver at få ≥ %{points} points'
+      one: '%{count} prøver at få ≥ %{points} points'
+      zero: '%{count} prøver at få ≥ %{points} points'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} sammenlagt'
+      #original_hash: c01adfa
+      across_rounds: '%{time} total for %{rounds}'
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -1014,9 +1051,9 @@ da:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        other: nye
-        one: ny
         zero: nye
+        one: ny
+        other: nye
       #original_hash: bc010e3
       returner:
         zero: returners
@@ -1676,6 +1713,51 @@ da:
       podiums: Podier
       #original_hash: 56656a0
       no_persons_found: Ingen person matchede med de givne kriterier.
+    show:
+      #original_hash: 1e43436
+      previously: Tidligere
+      #original_hash: 79b6788
+      in_memoriam: I Mindet Om
+      #original_hash: 4bc65e0
+      completed_solves: Fuldendte Løsninger
+      #original_hash: fc78642
+      personal_records: Nuværende Personlige Rekorder
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        En manglende rang eller værre lands rang end kontinentet rang er på
+        grund af et landsskifte. Resultater fra den tidligere region er ikke
+        taget i brug i den nuværende regions rangliste.
+      #original_hash: a91508f
+      championship_podiums: Mesterskabs Podier
+      #original_hash: 3746f3b
+      wc_podiums: Verdensmesterskab Podier
+      #original_hash: c32a014
+      place: Placering
+      #original_hash: ddb18c1
+      medal_collection: Medalje Samling
+      #original_hash: 9e69e13
+      record_collection: Rekord Samling
+      medals:
+        #original_hash: c57604d
+        gold: Guld
+        #original_hash: 8697f43
+        silver: Sølv
+        #original_hash: af31025
+        bronze: Bronze
+      #original_hash: 1917f4f
+      competition: Konkurrence
+      #original_hash: 612e12d
+      results: Resultat
+      #original_hash: e51c552
+      records: Rekorder
+      #original_hash: ab478f3
+      competitions_map: Kort
+      #original_hash: a99cec5
+      world_records: Historie af Verdensrekorder
+      #original_hash: 2d36a49
+      continental_records: Historie af Kontinentale Rekorder
+      #original_hash: 3ce631e
+      national_records: Historie af Nationale Rekorder
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: >-
