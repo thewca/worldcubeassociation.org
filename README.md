@@ -3,12 +3,12 @@
 This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
 
 ## Setup
-- Install [Vagrant](https://www.vagrantup.com/), which requires
-  [VirtualBox](https://www.virtualbox.org/).
 - `git clone https://github.com/thewca/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
 - `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run in Vagrant (easier and gets everything working)
+- Install [Vagrant](https://www.vagrantup.com/), which requires
+  [VirtualBox](https://www.virtualbox.org/).
 - `vagrant up all` - Once the VM finishes initializing (which can take some time),
   the website will be accessible at [http://localhost:2331](http://localhost:2331).
   - Note: There are some minor [issues with development on Windows](https://github.com/thewca/worldcubeassociation.org/issues/393).
@@ -16,7 +16,12 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - Please take a look at this [wiki page](https://github.com/thewca/worldcubeassociation.org/wiki/Misc.-important-commands-to-know) for more detailed informations about the application's internals.
 
 ## Run locally ruby (lightweight, but only run the rails portions of the site)
-- We don't support development with sqlite3, you'll need to set up MySQL.
+- Set up mysql with a user with username "root" with an empty password.
+  1. `cd WcaOnRails/`
+  2. `bundle install && bin/yarn`
+  3. `bin/rake db:load:development` - Download and import a sanitized copy of our production database.
+  4. `bin/foreman start` - Run rails and webpack. The server will be accessible at localhost:3000
+- `bin/rspec` - Run tests. Make sure that `RAILS_ENV=test bin/webpack-dev-server` is already running.
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
 
 ## Provision New VM
