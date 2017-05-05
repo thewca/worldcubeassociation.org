@@ -86,7 +86,7 @@ module AuxiliaryDataComputation
         counter = Hash.new(0)
         current_rank = Hash.new(0)
         previous_value = {}
-        personal_records.each do |event_id, person_id, country_id, continent_id, value|
+        personal_records.each do |_, person_id, country_id, continent_id, value|
           # Update the region states (unless we have ranked this person already,
           # e.g. 2008SEAR01 twice in North America and World because of his two countries).
           ["World", continent_id, country_id].each do |region|
