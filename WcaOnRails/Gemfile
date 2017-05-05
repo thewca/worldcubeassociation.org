@@ -70,15 +70,10 @@ gem 'i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 gem 'jquery-slick-rails'
+gem 'webpacker'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
-
-  # simplemde is pinned to 1.10.1 because version 1.11.0 doesn't give us compiled assets.
-  # See
-  # https://github.com/NextStepWebs/simplemde-markdown-editor/issues/407 and
-  # https://github.com/tenex/rails-assets/issues/367.
-  gem 'rails-assets-simplemde', '1.10.1'
   gem 'rails-assets-autoNumeric'
 end
 
@@ -103,6 +98,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
+  gem 'foreman'
 end
 
 group :test do

@@ -2,7 +2,19 @@ require 'shellwords'
 require 'securerandom'
 
 include_recipe "wca::base"
-include_recipe "nodejs"
+apt_repository 'nodejs' do
+  uri 'https://deb.nodesource.com/node_7.x'
+  components ['trusty', 'main']
+  key 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+end
+package 'nodejs'
+
+apt_repository 'yarn' do
+  uri 'https://dl.yarnpkg.com/debian/'
+  components ['stable', 'main']
+  key 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+end
+package 'yarn'
 
 
 secrets = WcaHelper.get_secrets(self)

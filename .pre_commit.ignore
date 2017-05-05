@@ -3,6 +3,7 @@ webroot/**
 WcaOnRails/vendor/**
 WcaOnRails/tmp/**
 WcaOnRails/db/structure.sql
+WcaOnRails/node_modules/**
 chef/**
 .gitmodules
 
@@ -10,3 +11,5 @@ chef/**
 *.jpg
 *.png
 *.gif
+*.xls
+*.ico

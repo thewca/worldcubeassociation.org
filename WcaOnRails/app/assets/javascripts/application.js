@@ -47,7 +47,6 @@
 //= require bootstrap-table
 //= require extensions/bootstrap-table-mobile
 //= require autosize
-//= require simplemde
 //= require jquery_plugins
 //= require autoNumeric
 //= require currencies-data
@@ -251,73 +250,6 @@ $(function() {
 
   // Activate currency masks for the relevant fields
   $('input.wca-currency-mask').wcaSetupCurrencyMask();
-
-  $('.markdown-editor').each(function() {
-    var editor = new SimpleMDE({
-      element: this,
-      spellChecker: false,
-      promptURLs: true,
-      insertTexts: {
-        image: ['![Image description', '](#url#)'],
-      },
-      toolbar: [
-        'bold', 'italic', 'heading',
-        '|', 'quote', 'unordered-list', 'ordered-list', 'table',
-        '|', 'link', 'image',
-        {
-          name: 'map',
-          action: function insertMap(editor) {
-            var mapMarkup = {
-              start: 'map(',
-              end: ')',
-              build: function(address) { return this.start + address + this.end; }
-            };
-
-            insertText(editor, mapMarkup, 'Address or coordinates of the place:');
-          },
-          className: 'fa fa-map-marker',
-          title: 'Insert Map',
-        },
-        {
-          name: 'youtube',
-          action: function insertMap(editor) {
-            var youTubeMarkup = {
-              start: 'youtube(',
-              end: ')',
-              build: function(videoUrl) { return this.start + videoUrl + this.end; }
-            };
-
-            insertText(editor, youTubeMarkup, 'Full url to the YouTube video:');
-          },
-          className: 'fa fa-youtube-play',
-          title: 'Insert YouTube Video',
-        },
-        '|', 'preview', 'side-by-side', 'fullscreen',
-        '|', 'guide',
-      ],
-
-      // Status bar isn't quite working. See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/334
-      status: false,
-      previewRender: function(plainText, preview) {
-        if(this.markdownReqest) {
-          clearTimeout(this.markdownReqest);
-        }
-
-        this.markdownReqest = setTimeout(function() {
-          wca.renderMarkdownRequest(plainText).done(function(result) {
-            preview.innerHTML = result;
-          });
-        }, TEXT_INPUT_DEBOUNCE_MS);
-
-        return "Waiting...";
-      },
-    });
-
-    // Trick to fix tab and shift+tab focus from:
-    //  https://github.com/NextStepWebs/simplemde-markdown-editor/issues/122#issuecomment-176329907
-    editor.codemirror.options.extraKeys.Tab = false;
-    editor.codemirror.options.extraKeys['Shift-Tab'] = false;
-  });
 
   var $tablesToFloatHeaders = $('table.floatThead');
   $tablesToFloatHeaders.floatThead({
