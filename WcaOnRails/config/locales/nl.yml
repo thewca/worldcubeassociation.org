@@ -1717,6 +1717,51 @@ nl:
       podiums: Top 3
       #original_hash: 56656a0
       no_persons_found: Er is geen persoon die aan de criteria voldoet.
+    show:
+      #original_hash: 1e43436
+      previously: Voorheen
+      #original_hash: 79b6788
+      in_memoriam: In Memoriam
+      #original_hash: 4bc65e0
+      completed_solves: Succesvolle pogingen
+      #original_hash: fc78642
+      personal_records: Huidige persoonlijke records
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        Een ontbrekende ranking of slechtere landranking dan de continentale
+        komen door het veranderen van land. Resultaten van de vorige regio
+        worden niet meegenomen in de huidige ranking per regio.
+      #original_hash: a91508f
+      championship_podiums: Podiumplaatsen tijdens kampioenschappen
+      #original_hash: 3746f3b
+      wc_podiums: Podiumplaatsen bij WK's
+      #original_hash: c32a014
+      place: Plaats
+      #original_hash: ddb18c1
+      medal_collection: Behaalde medailles
+      #original_hash: 9e69e13
+      record_collection: Behaalde records
+      medals:
+        #original_hash: c57604d
+        gold: Goud
+        #original_hash: 8697f43
+        silver: Zilver
+        #original_hash: af31025
+        bronze: Brons
+      #original_hash: 1917f4f
+      competition: Wedstrijd
+      #original_hash: 612e12d
+      results: Resultaten
+      #original_hash: e51c552
+      records: Records
+      #original_hash: ab478f3
+      competitions_map: Kaart
+      #original_hash: a99cec5
+      world_records: Historie van Wereldrecords
+      #original_hash: 2d36a49
+      continental_records: Historie van Continentale Records
+      #original_hash: 3ce631e
+      national_records: Historie van Nationale Records
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: >-
