@@ -2,35 +2,50 @@
 
 class TimedApplicationJob < ApplicationJob
   class DeferJob < StandardError
-    attr_reader :time
-    def initialize(time)
+    attr_reader :wait_time
+    def initialize(wait_time)
       super("Delay the job by #{time} s")
-      @time = time
+      @wait_time = wait_time
     end
   end
 
   rescue_from(DeferJob) do |defer_job|
-    retry_job wait: defer_job.time
+    retry_job wait: defer_job.wait_time
   end
 
-  def defer_job_for(time)
-    raise DeferJob.new(time)
+  def defer_job_for(wait_time)
+    raise DeferJob.new(wait_time)
   end
 
-  def self.start_timestamp
-    Timestamp.find_or_create_by(name: "#{self.name.underscore}_start")
+  class << self
+    def start_timestamp
+      Timestamp.find_or_create_by(name: "#{self.name.underscore}_start")
+    end
+
+    def end_timestamp
+      Timestamp.find_or_create_by(name: "#{self.name.underscore}_end")
+    end
+
+    def start_date
+      start_timestamp.date
+    end
+
+    def end_date
+      end_timestamp.date
+    end
+
+    def in_progress?
+      start_date.present? && end_date.nil?
+    end
+
+    def finished?
+      end_date.present?
+    end
   end
 
-  def self.end_timestamp
-    Timestamp.find_or_create_by(name: "#{self.name.underscore}_end")
-  end
-
-  def self.in_progress?
-    self.start_timestamp.date.present? && self.end_timestamp.date.nil?
-  end
-
-  def self.finished?
-    self.end_timestamp.date.present?
+  after_enqueue do |job|
+    # Reset the end timestamp so the job is no longer considered finished.
+    job.class.end_timestamp.update! date: nil
   end
 
   around_perform do |job, block|
@@ -38,11 +53,5 @@ class TimedApplicationJob < ApplicationJob
     job.class.end_timestamp.update! date: nil
     block.call
     job.class.end_timestamp.touch :date
-  end
-
-  def self.perform_later
-    # Reset timestamps.
-    self.end_timestamp.update! date: nil
-    super
   end
 end

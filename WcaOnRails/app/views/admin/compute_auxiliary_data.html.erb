@@ -15,8 +15,8 @@
       <%= alert :info, "The data is being computed. Thanks for checking =)" %>
     <% elsif ComputeAuxiliaryData.finished? %>
       <%= alert :success do %>
-        Data was last computed <%= time_ago_in_words ComputeAuxiliaryData.end_timestamp.date %> ago
-        and took <%= distance_of_time_in_words ComputeAuxiliaryData.start_timestamp.date, ComputeAuxiliaryData.end_timestamp.date %>
+        Data was last computed <%= time_ago_in_words ComputeAuxiliaryData.end_date %> ago
+        and took <%= distance_of_time_in_words ComputeAuxiliaryData.start_date, ComputeAuxiliaryData.end_date %>
       <% end %>
     <% else %>
       <%= alert :danger, "Oh dear! The data has never been computed!" %>
