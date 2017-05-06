@@ -68,10 +68,7 @@ module AuxiliaryDataComputation
       %w(average RanksAverage ConciseAverageResults),
     ].each do |field, table_name, concise_table_name|
       ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{table_name}"
-      current_country = Person.current.pluck(:wca_id, :countryId).to_h
-      current_continent = Hash.new do |hash, person_id|
-        hash[person_id] = Country.c_find(current_country[person_id]).continentId
-      end
+      current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
       # Get all personal records (note: people that changed their country appear once for each country).
       personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL
         SELECT eventId, personId, countryId, continentId, min(#{field}) value
@@ -100,10 +97,10 @@ module AuxiliaryDataComputation
           # Set the person's data (first time the current location is matched).
           personal_rank[person_id][:best] ||= value
           personal_rank[person_id][:world_rank] ||= current_rank["World"]
-          if continent_id == current_continent[person_id]
+          if continent_id == Country.c_find(current_country_by_wca_id[person_id]).continentId
             personal_rank[person_id][:continent_rank] ||= current_rank[continent_id]
           end
-          if country_id == current_country[person_id]
+          if country_id == current_country_by_wca_id[person_id]
             personal_rank[person_id][:country_rank] ||= current_rank[country_id]
           end
         end
