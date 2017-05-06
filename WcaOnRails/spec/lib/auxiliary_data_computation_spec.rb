@@ -91,4 +91,53 @@ RSpec.describe "AuxiliaryDataComputation" do
       ]
     end
   end
+
+  describe ".compute_rank_tables", clean_db_with_truncation: true do
+    let(:australian) { FactoryGirl.create :person, countryId: "Australia" }
+    let(:canadian) { FactoryGirl.create :person, countryId: "Canada" }
+    let(:american_1) { FactoryGirl.create :person, countryId: "USA" }
+    let(:american_2) { FactoryGirl.create :person, countryId: "USA" }
+
+    def rank_333(person, ranks_type)
+      person.public_send(ranks_type).find_by(eventId: "333").attributes.symbolize_keys
+    end
+
+    before do
+      FactoryGirl.create :result, eventId: "333", best: 600, average: 700, person: australian
+      FactoryGirl.create :result, eventId: "333", best: 700, average: 800, person: american_1
+      FactoryGirl.create :result, eventId: "333", best: 800, average: 900, person: canadian
+      FactoryGirl.create :result, eventId: "333", best: 900, average: 1000, person: american_2
+    end
+
+    it "computes world, continental and national ranking position" do
+      AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
+      AuxiliaryDataComputation.compute_rank_tables
+      %w(ranksSingle ranksAverage).each do |ranks_type|
+        expect(rank_333(australian, ranks_type)).to include(worldRank: 1, continentRank: 1, countryRank: 1)
+        expect(rank_333(american_1, ranks_type)).to include(worldRank: 2, continentRank: 1, countryRank: 1)
+        expect(rank_333(canadian, ranks_type)).to include(worldRank: 3, continentRank: 2, countryRank: 1)
+        expect(rank_333(american_2, ranks_type)).to include(worldRank: 4, continentRank: 3, countryRank: 2)
+      end
+    end
+
+    it "when a person changes country results from the previous region doesn't apply to the current one" do
+      american_1.update_using_sub_id! countryId: "Canada"
+      new_canadian = american_1
+      australian.update_using_sub_id! countryId: "France"
+      new_french = australian
+      FactoryGirl.create :result, eventId: "333", best: 900, average: 1000, person: new_canadian
+      AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
+      AuxiliaryDataComputation.compute_rank_tables
+      %w(ranksSingle ranksAverage).each do |ranks_type|
+        # Note: this person hasn't got any results in Europe/France yet.
+        expect(rank_333(new_french, ranks_type)).to include(worldRank: 1, continentRank: 0, countryRank: 0)
+        # Note: the only change is the countryRank of new_canadian (previosly american_1).
+        # Note: the continent is still USA, so continentRank shouldn't be affected.
+        expect(rank_333(new_canadian, ranks_type)).to include(worldRank: 2, continentRank: 1, countryRank: 2)
+        expect(rank_333(canadian, ranks_type)).to include(worldRank: 3, continentRank: 2, countryRank: 1)
+         # Note: this person stays 2nd in the country.
+        expect(rank_333(american_2, ranks_type)).to include(worldRank: 4, continentRank: 3, countryRank: 2)
+      end
+    end
+  end
 end
