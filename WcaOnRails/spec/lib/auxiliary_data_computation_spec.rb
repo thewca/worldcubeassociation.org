@@ -37,10 +37,10 @@ RSpec.describe "AuxiliaryDataComputation" do
     end
 
     it "rounds averages over 10 minutes to down to full seconds" do
-      over_10 = (10.minutes + 10.5.seconds) * 100 # In centiseconds.
-      with_completed_solves = create_new_333bld_result value1: over_10, value2: over_10, value3: over_10
+      over10 = (10.minutes + 10.5.seconds) * 100 # In centiseconds.
+      with_completed_solves = create_new_333bld_result value1: over10, value2: over10, value3: over10
       AuxiliaryDataComputation.compute_best_of_3_in_333bf
-      expect(with_completed_solves.reload.average).to eq (10.minutes + 10.seconds) * 100
+      expect(with_completed_solves.reload.average).to eq((10.minutes + 10.seconds) * 100)
     end
   end
 
@@ -135,7 +135,7 @@ RSpec.describe "AuxiliaryDataComputation" do
         # Note: the continent is still USA, so continentRank shouldn't be affected.
         expect(rank_333(new_canadian, ranks_type)).to include(worldRank: 2, continentRank: 1, countryRank: 2)
         expect(rank_333(canadian, ranks_type)).to include(worldRank: 3, continentRank: 2, countryRank: 1)
-         # Note: this person stays 2nd in the country.
+        # Note: this person stays 2nd in the country.
         expect(rank_333(american_2, ranks_type)).to include(worldRank: 4, continentRank: 3, countryRank: 2)
       end
     end
