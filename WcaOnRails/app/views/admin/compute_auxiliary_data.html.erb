@@ -11,14 +11,17 @@
         <li class="list-group-item">Clears some cache files (living on the PHP side)</li>
       </ul>
     </div>
-    <% if @auxiliary_data_start.date.nil? %>
-      <%= alert :danger, "Oh dear! The data has never been computed!" %>
-    <% elsif @auxiliary_data_end.date.nil? %>
+    <% if ComputeAuxiliaryData.in_progress? %>
       <%= alert :info, "The data is being computed. Thanks for checking =)" %>
+    <% elsif ComputeAuxiliaryData.finished? %>
+      <%= alert :success do %>
+        Data was last computed <%= time_ago_in_words ComputeAuxiliaryData.end_timestamp.date %> ago
+        and took <%= distance_of_time_in_words ComputeAuxiliaryData.start_timestamp.date, ComputeAuxiliaryData.end_timestamp.date %>
+      <% end %>
     <% else %>
-      <%= alert :success, "Data was last computed #{time_ago_in_words @auxiliary_data_end.date} ago and took #{distance_of_time_in_words @auxiliary_data_start.date, @auxiliary_data_end.date}" %>
+      <%= alert :danger, "Oh dear! The data has never been computed!" %>
     <% end %>
-    <% unless @auxiliary_data_start.date.present? && @auxiliary_data_end.date.nil? # Show unless the data is being computed. %>
+    <% unless ComputeAuxiliaryData.in_progress? %>
       <div>
         <%= link_to "Do it!", admin_compute_auxiliary_data_path, method: :post, class: "btn btn-primary" %>
       </div>
