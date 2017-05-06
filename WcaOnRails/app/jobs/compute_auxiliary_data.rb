@@ -7,7 +7,7 @@ class ComputeAuxiliaryData < TimedApplicationJob
     # Note: During the results posting process some results may be missing their corresponding WCA ID.
     #       If we detect that (means someone else is posting results at the moment), we defer the computation.
     if Result.exists?(personId: "")
-      defer_job_for 10.minutes
+      defer_job_for 1.minute
     else
       AuxiliaryDataComputation.compute_everything
     end
