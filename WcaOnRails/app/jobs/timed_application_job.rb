@@ -1,22 +1,6 @@
 # frozen_string_literal: true
 
 class TimedApplicationJob < ApplicationJob
-  class DeferJob < StandardError
-    attr_reader :wait_time
-    def initialize(wait_time)
-      super("Delay the job by #{time} s")
-      @wait_time = wait_time
-    end
-  end
-
-  rescue_from(DeferJob) do |defer_job|
-    retry_job wait: defer_job.wait_time
-  end
-
-  def defer_job_for(wait_time)
-    raise DeferJob.new(wait_time)
-  end
-
   class << self
     def start_timestamp
       Timestamp.find_or_create_by(name: "#{self.name.underscore}_start")
