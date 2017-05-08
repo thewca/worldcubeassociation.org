@@ -33,6 +33,8 @@ require( '../includes/_footer.php' );
 function showDescription () {
 #----------------------------------------------------------------------
 
+  echo "<p style='font-weight: bold; color: red;'>PLEASE use the new version of this script <a href='/admin/compute_auxiliary_data'>here</a>. This old version is going to be removed on the next Monday (15 May).</p>\n";
+
   echo "<p>This computes means for 3x3 bld, the auxiliary tables ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage and clears the caches.</p>\n";
 
   echo "<p>Do it after changes to the database data so that these things are up-to-date.</p><hr />\n";
