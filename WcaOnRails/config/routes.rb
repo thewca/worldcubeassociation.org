@@ -124,7 +124,7 @@ Rails.application.routes.draw do
   patch '/admin/update_person' => 'admin#update_person'
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
-  post '/admin/compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
 
   get '/search' => 'search_results#index'
 

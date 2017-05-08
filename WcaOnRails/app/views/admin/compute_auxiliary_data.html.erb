@@ -31,7 +31,7 @@
       <% end %>
       <% unless ComputeAuxiliaryData.in_progress? %>
         <div>
-          <%= link_to "Do it!", admin_compute_auxiliary_data_path, method: :post, class: "btn btn-primary" %>
+          <%= link_to "Do it!", admin_do_compute_auxiliary_data_path, class: "btn btn-primary" %>
         </div>
       <% end %>
     <% end %>
