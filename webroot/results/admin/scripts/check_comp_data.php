@@ -144,7 +144,7 @@ print "<li><p>Run some more scripts:</p>
          <ol type='a'>
            <li><a href='check_rounds.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_rounds</a></li>
            <li><a href='check_regional_record_markers.php?competitionId=$compIdUrl&show=Show' target='_blank' class='link-external external'>check_regional_record_markers</a></li>
-           <li><a href='compute_auxiliary_data.php?doit=+Do+it+now+' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
+           <li><a href='/admin/do_compute_auxiliary_data' target='_blank' class='link-external external'>compute_auxiliary_data</a></li>
          </ol>
        </li>";
 
@@ -259,4 +259,3 @@ if( count( $competition_has_scrambles ) > 0 ){
 if( count( $competition_has_inbox_results ) > 0 || count($competition_has_inbox_persons) > 0){
   noticeBox3(0, 'This competition has temporary data uploaded. Uploading more data may cause duplicate entries.');
 }
-
