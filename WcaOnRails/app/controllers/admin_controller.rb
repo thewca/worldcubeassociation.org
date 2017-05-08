@@ -77,6 +77,7 @@ class AdminController < ApplicationController
   end
 
   def compute_auxiliary_data
+    @reason_not_to_run = ComputeAuxiliaryData.reason_not_to_run
   end
 
   def do_compute_auxiliary_data

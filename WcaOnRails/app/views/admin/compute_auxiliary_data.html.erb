@@ -16,8 +16,8 @@
         <li class="list-group-item">Clears some cache files (living on the PHP side)</li>
       </ul>
     </div>
-    <% if Result.exists?(personId: "") %>
-      <%= alert :warning, "Some results are missing their corresponding WCA ID, which means that someone hasn't finished submitting results." %>
+    <% if @reason_not_to_run %>
+      <%= alert :warning, @reason_not_to_run %>
     <% else %>
       <% if ComputeAuxiliaryData.in_progress? %>
         <%= alert :info, "The data is being computed. Thanks for checking =)" %>
