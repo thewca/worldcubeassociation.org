@@ -75,4 +75,13 @@ class AdminController < ApplicationController
       dob: @person.dob,
     }
   end
+
+  def compute_auxiliary_data
+    @reason_not_to_run = ComputeAuxiliaryData.reason_not_to_run
+  end
+
+  def do_compute_auxiliary_data
+    ComputeAuxiliaryData.perform_later unless ComputeAuxiliaryData.in_progress?
+    redirect_to admin_compute_auxiliary_data_path
+  end
 end
