@@ -566,7 +566,69 @@ RSpec.describe CompetitionsController do
         session[:locale] = :fr
       end
 
-      it "creates a results post" do
+      it "handles no 3x3x3 event" do
+        get :post_results, params: { id: competition }
+        post = assigns(:post)
+        expect(post.title).to eq "Results of #{competition.name}, in #{competition.cityName}, #{competition.countryId} posted"
+        expect(post.body).to eq "Results of the [#{competition.name}](#{competition_url(competition)}) are now available.\n\n"
+      end
+
+      context "winners announcement" do
+        def add_result(pos, name)
+          Result.create!(
+            pos: pos,
+            personId: "2006YOYO#{format('%.2d', pos)}",
+            personName: name,
+            countryId: "USA",
+            competitionId: competition.id,
+            eventId: "333",
+            roundTypeId: "f",
+            formatId: "a",
+            value1: 999,
+            value2: 999,
+            value3: 999,
+            value4: 999,
+            value5: 999,
+            best: 999,
+            average: 999,
+          )
+        end
+
+        it "announces top 3 in 3x3 final" do
+          add_result(1, "Jeremy")
+          add_result(2, "Dan")
+          add_result(3, "Steven")
+
+          get :post_results, params: { id: competition }
+          post = assigns(:post)
+          expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+          expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds. " \
+            "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+            "[Steven](#{person_url('2006YOYO03')}) finished third (9.99).\n\n"
+        end
+
+        it "handles only 2 people in 3x3 final" do
+          add_result(1, "Jeremy")
+          add_result(2, "Dan")
+
+          get :post_results, params: { id: competition }
+          post = assigns(:post)
+          expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+          expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds. " \
+            "[Dan](#{person_url('2006YOYO02')}) finished second (9.99).\n\n"
+        end
+
+        it "handles only 1 person in 3x3 final" do
+          add_result(1, "Jeremy")
+
+          get :post_results, params: { id: competition }
+          post = assigns(:post)
+          expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+          expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds.\n\n"
+        end
+      end
+
+      it "announces world records" do
         Result.create!(
           pos: 1,
           personId: "2006SHEU01",
