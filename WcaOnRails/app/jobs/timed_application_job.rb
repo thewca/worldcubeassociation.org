@@ -3,11 +3,11 @@
 class TimedApplicationJob < ApplicationJob
   class << self
     def start_timestamp
-      Timestamp.find_or_create_by(name: "#{self.name.underscore}_start")
+      Timestamp.find_or_create_by!(name: "#{self.name.underscore}_start")
     end
 
     def end_timestamp
-      Timestamp.find_or_create_by(name: "#{self.name.underscore}_end")
+      Timestamp.find_or_create_by!(name: "#{self.name.underscore}_end")
     end
 
     def start_date
