@@ -41,7 +41,7 @@
                       <%= link_to result.competition.name, result.competition %>
                     <% end %>
                   </td>
-                  <td class="round"><%= t "rounds.#{result.roundTypeId}.name" %></td>
+                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
                   <td class="place"><%= result.pos %></td>
                   <td class="single <%= 'pb' if pb_markers[result.id][:single] %>">
                     <%= result.best_solve.clock_format %>
