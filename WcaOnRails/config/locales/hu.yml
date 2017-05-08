@@ -1732,6 +1732,51 @@ hu:
       podiums: Dobogós helyezések
       #original_hash: 56656a0
       no_persons_found: Nem található személy a megadott kritériumokkal.
+    show:
+      #original_hash: 1e43436
+      previously: Korábbi
+      #original_hash: 79b6788
+      in_memoriam: Emlékére
+      #original_hash: 4bc65e0
+      completed_solves: Sikeres kirakások
+      #original_hash: fc78642
+      personal_records: Jelenlegi személyes rekordok
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        A hiányzó helyezés vagy a rosszabb országos helyezés, mint a kontinens
+        helyezés ország-váltás miatt van. A korábbi régióból származó eredmények
+        nem számítanak bele a jelenlegi régió helyezéseibe.
+      #original_hash: a91508f
+      championship_podiums: Világverseny dobogók
+      #original_hash: 3746f3b
+      wc_podiums: Világbajnokság dobogók
+      #original_hash: c32a014
+      place: Helyezés
+      #original_hash: ddb18c1
+      medal_collection: Érem kollekció
+      #original_hash: 9e69e13
+      record_collection: Rekord kollekció
+      medals:
+        #original_hash: c57604d
+        gold: Arany
+        #original_hash: 8697f43
+        silver: Ezüst
+        #original_hash: af31025
+        bronze: Bronz
+      #original_hash: 1917f4f
+      competition: Verseny
+      #original_hash: 612e12d
+      results: Eredmények
+      #original_hash: e51c552
+      records: Rekordok
+      #original_hash: ab478f3
+      competitions_map: Térkép
+      #original_hash: a99cec5
+      world_records: Világrekord-történelem
+      #original_hash: 2d36a49
+      continental_records: Kontinens bajnokság történelem
+      #original_hash: 3ce631e
+      national_records: Nemzeti rekord történelem
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Biztosan törölni szeretnéd ezt a posztot? Ez az akció nem visszavonható.
