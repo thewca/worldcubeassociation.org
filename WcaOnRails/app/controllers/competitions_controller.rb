@@ -196,19 +196,21 @@ class CompetitionsController < ApplicationController
       if top333.empty? # If there was no 3x3x3 event.
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
-      elsif top333.length < 3
-        render html: "<div class='container'><div class='alert alert-danger'>Too few people competed in 333</div></div>".html_safe
-        return
       else
         title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
         body = "[#{top333.first.personName}](#{person_url top333.first.personId})"
         body += " won the [#{comp.name}](#{competition_url(comp)})"
-        body += " with an average of #{top333.first.to_s :average} seconds."
+        body += " with an average of #{top333.first.to_s :average} seconds"
 
-        body += " [#{top333.second.personName}](#{person_url top333.second.personId}) finished second (#{top333.second.to_s :average})"
+        if top333.length > 1
+          body += ". [#{top333.second.personName}](#{person_url top333.second.personId}) finished second (#{top333.second.to_s :average})"
+          if top333.length > 2
+            body += " and [#{top333.third.personName}](#{person_url top333.third.personId}) finished third (#{top333.third.to_s :average})"
+          end
+        end
 
-        body += " and [#{top333.third.personName}](#{person_url top333.third.personId}) finished third (#{top333.third.to_s :average}).\n\n"
+        body += ".\n\n"
       end
 
       [
