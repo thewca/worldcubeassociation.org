@@ -60,8 +60,6 @@ unless node.chef_environment.start_with?("development")
   end
 end
 
-init_php_commands << "(cd #{repo_root}/webroot/results/admin/; time SERVER_NAME=wca REQUEST_URI='doit=live' php compute_auxiliary_data.php)"
-
 # Run init-php-results on our first provisioning, but not on subsequent provisions.
 lockfile = '/tmp/php-results-initialized'
 init_php_commands.each do |cmd|

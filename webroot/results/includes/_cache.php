@@ -6,7 +6,7 @@
 # in order to reduce waste of resources (cpu time, database queries)
 # and to improve delivery speed. When a certain page is first viewed,
 # a suffix part can be stored in the cache directory for later reuse.
-# The caches are deleted by the compute_auxiliary_data admin script.
+# The caches are deleted by the compute_auxiliary_data admin script (that has already been ported to Rails).
 #
 # Details:
 #
@@ -27,9 +27,6 @@
 # If the file isn't found, tryCache starts buffering the output. When the
 # page is completed, _footer.php calls finishCache which (if tryCache was called)
 # stores the buffered output in the cache file and flushes it.
-#
-# Function deleteCaches deletes all such cache files. It is called by the
-# compute_auxiliary_data.php admin script.
 #
 # Note: The reason we're only storing suffixes and not the whole HTML page
 # is that we need to read the parameters for the cacheId before we can start
@@ -86,24 +83,6 @@ function finishCache ( ) {
     }
     ob_end_flush();
   }
-}
-
-#----------------------------------------------------------------------
-function deleteCaches () {
-#----------------------------------------------------------------------
-  startTimer();
-  cacheLog( "delete all" );
-  global $config;
-  $cacheFiles = glob( $config->get('filesPath') . 'generated/cache/*.cache' );
-  echo "Deleting " . count($cacheFiles) . " cache files...<br />\n";
-
-  foreach ( $cacheFiles as $cacheFile ) {
-    #echo "deleting cache file [$cacheFile]<br />";
-    unlink( $cacheFile );    
-  }
-
-  stopTimer( "deleteCaches" );
-  echo "... done<br /><br />\n";
 }
 
 #----------------------------------------------------------------------
