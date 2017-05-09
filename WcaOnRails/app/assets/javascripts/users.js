@@ -45,6 +45,19 @@ onPage('users#edit, users#update', function() {
     var section = $(this).attr('href').slice(1);
     $.setUrlParams({ section: section });
   });
+
+  // Render a preview of an avatar whenever a new one is selected.
+  var $avatar = $('#avatar-img');
+  var reader = new FileReader();
+  reader.onload = function() {
+    $avatar[0].src = reader.result;
+  };
+  $('#user_pending_avatar').on('change', function() {
+    var file = this.files[0];
+    if(file) {
+      reader.readAsDataURL(file);
+    }
+  });
 });
 
 
