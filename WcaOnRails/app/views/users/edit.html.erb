@@ -182,16 +182,10 @@
 
     <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
-        <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
-          <%= hidden_field_tag "section", "avatar" %>
-
-          <div class="row">
-            <% if @user.avatar? %>
-              <div class="col-sm-6">
-                <%= image_tag @user.avatar.url, class: "img-responsive center-block" %>
-              </div>
-            <% end %>
-            <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-6">
+            <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
+              <%= hidden_field_tag "section", "avatar" %>
               <div class="well">
                 <h3><%=t '.guidelines' %></h3>
                 <ul>
@@ -200,24 +194,28 @@
                   <% end %>
                 </ul>
               </div>
-              <% if @user.avatar? %>
-                <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-                <p><%= t('.your_thumbnail') %></p>
-                <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                  <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
-                <% end %>
-              <% end %>
-
               <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
               <%= f.hidden_field :pending_avatar_cache %>
 
+              <% if @user.avatar? %>
+                <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
+              <% end %>
+
               <%= f.submit t('.save'), class: "btn btn-primary" %>
-            </div>
+            <% end %>
           </div>
-        <% end %>
+          <div class="col-sm-6 text-center">
+            <%= image_tag @user.avatar.url, class: "img-responsive center-block", id: "avatar-img" %>
+            <% if @user.avatar? %>
+              <h4><%= t('.your_thumbnail') %></h4>
+              <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
+                <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     <% end %>
-
   </div>
   <script>
     $('a[href="#<%=j params[:section] %>"]').tab('show');
