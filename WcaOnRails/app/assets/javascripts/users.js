@@ -45,7 +45,14 @@ onPage('users#edit, users#update', function() {
     var section = $(this).attr('href').slice(1);
     $.setUrlParams({ section: section });
   });
-
+  // Require the user to confirm reading guidelines.
+  $('#upload-avatar-form input[type="submit"]').on('click', function(event) {
+    var $confirmation = $('#guidelines-confirmation');
+    if(!$confirmation[0].checked) {
+      event.preventDefault();
+      alert($confirmation.data('alert'));
+    }
+  });
   // Render a preview of an avatar whenever a new one is selected.
   var $avatar = $('#avatar-img');
   var reader = new FileReader();
