@@ -197,11 +197,11 @@
               <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
               <%= f.hidden_field :pending_avatar_cache %>
 
-              <% if @user.avatar? %>
-                <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-              <% end %>
-
               <%= f.submit t('.save'), class: "btn btn-primary" %>
+              <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
+                <%= link_to t('.remove_avatar'), user_path(@user, user: { remove_avatar: true }), method: :patch,
+                                                 class: "btn btn-danger", data: { confirm: t('.remove_avatar_confirm') } %>
+              <% end %>
             <% end %>
           </div>
           <div class="col-sm-6 text-center">
