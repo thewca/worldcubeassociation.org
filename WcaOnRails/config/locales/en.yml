@@ -293,7 +293,6 @@ en:
         password_confirmation: ""
         region: ""
         remember_me: ""
-        remove_avatar: ""
         results_notifications_enabled: ""
         unconfirmed_wca_id: ""
         wca_id: ""
@@ -543,7 +542,11 @@ en:
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
+      guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
+      confirm_guidelines: "Make sure to read avatar guidelines and submit a valid picture."
       save: "Save"
+      remove_avatar: "Remove avatar"
+      remove_avatar_confirm: "Are you sure you want to delete your avatar?"
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."

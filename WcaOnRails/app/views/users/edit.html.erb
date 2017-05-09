@@ -184,7 +184,7 @@
       <div class="tab-pane active" id="avatar">
         <div class="row">
           <div class="col-sm-6">
-            <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure' } do |f| %>
+            <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure', id: "upload-avatar-form" } do |f| %>
               <%= hidden_field_tag "section", "avatar" %>
               <div class="well">
                 <h3><%=t '.guidelines' %></h3>
@@ -196,12 +196,15 @@
               </div>
               <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
               <%= f.hidden_field :pending_avatar_cache %>
-
-              <% if @user.avatar? %>
-                <%= f.input :remove_avatar, as: :boolean, disabled: !editable_fields.include?(:remove_avatar) %>
-              <% end %>
-
+              <div>
+                <input type="checkbox" name="guidelines-confirmation" id="guidelines-confirmation" data-alert="<%= t '.confirm_guidelines' %>">
+                <label for="guidelines-confirmation"><%= t '.guidelines_confirmation' %></label>
+              </div>
               <%= f.submit t('.save'), class: "btn btn-primary" %>
+              <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
+                <%= link_to t('.remove_avatar'), user_path(@user, user: { remove_avatar: true }), method: :patch,
+                                                 class: "btn btn-danger", data: { confirm: t('.remove_avatar_confirm') } %>
+              <% end %>
             <% end %>
           </div>
           <div class="col-sm-6 text-center">
