@@ -449,8 +449,6 @@ nl:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -925,8 +923,18 @@ nl:
           assigned: je hebt al een toegekende WCA-id
           #original_hash: 1c4670f
           registered: je hebt je aangemeld voor een wedstrijd
+      #original_hash: fe7122d
+      guidelines_confirmation: Ik bevestig dat mijn profielfoto aan alle eisen voldoet.
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Zorg dat je de richtlijnen voor profielfoto's kent en een goede foto
+        inzendt.
       #original_hash: efc007a
       save: Opslaan
+      #original_hash: 58e0c56
+      remove_avatar: Verwijder profielfoto
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: Weet je zeker dat je je profielfoto wilt verwijderen?
       #original_hash: 141d1d7
       guidelines: Aanvullende richtlijnen
       avatar_guidelines:
