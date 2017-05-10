@@ -124,6 +124,45 @@ de:
       name: Combined Qualifikation
       #original_hash: 4c66ad0
       cellName: Combined Qualifikation
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Runde %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: 'Die ersten %{ranking} kommen in Runde %{next_round_number}'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: 'Bestes Ergebnis ≤ %{time} um in Runde %{next_round_number} zu kommen'
+      #original_hash: efa4ad1
+      moves: >-
+        Bester Versuch ≤ %{moves} Zügen um in Runde %{next_round_number} zu
+        kommen
+      #original_hash: 29f8453
+      points: >-
+        Bester Versuch ≥ %{points} Punkten, um in Runde %{next_round_number} zu
+        kommen
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      zero: '%{count} Versuche um ≤ %{time} zu erreichen'
+      one: '%{count} Versuch um ≤ %{time} zu erreichen'
+      other: '%{count} Versuche um ≤ %{time} zu erreichen'
+    #original_hash: 6f99fa6
+    moves:
+      zero: '%{count} Versuche um ≤ %{moves} Züge zu erreichen'
+      one: '%{count} Versuch um ≤ %{moves} Züge zu erreichen'
+      other: '%{count} Versuche um ≤ %{moves} Züge zu erreichen'
+    #original_hash: 1c7c5f1
+    points:
+      zero: '%{count} Versuche um ≥ %{points} Punkte zu erreichen'
+      one: '%{count} Versuch um ≥ %{points} Punkte zu erreichen'
+      other: '%{count} Versuche um ≥ %{points} Punkte zu erreichen'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} kumulativ'
+      #original_hash: c01adfa
+      across_rounds: '%{time} insgesamt für %{rounds}'
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -390,10 +429,10 @@ de:
         email: >-
           Wenn Du deine E-Mail änderst, musst Du die neue Adresse erneut
           bestätigen
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
           Nachdem Du ein neues Profilbild hochgeladen hast, muss dieses erst vom
-          Board bestätigt werden.
+          WCA Results Team bestätigt werden.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -414,8 +453,6 @@ de:
         region: ''
         #original_hash: da39a3e
         remember_me: ''
-        #original_hash: da39a3e
-        remove_avatar: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
@@ -608,8 +645,6 @@ de:
         #original_hash: da39a3e
         status: ''
       team:
-        #original_hash: da39a3e
-        description: ''
         #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
@@ -911,8 +946,18 @@ de:
           assigned: Du hast eine verknüpfte WCA-ID
           #original_hash: 1c4670f
           registered: Du hast dich für einen Wettbewerb angemeldet
+      #original_hash: fe7122d
+      guidelines_confirmation: 'Ich bestätige, dass mein Avatar den Avatar Richtlinien entspricht.'
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Stelle sicher, dass du die Avatar Richtlinien gelesen hast und ein
+        zulässiges Bild hochlädst.
       #original_hash: efc007a
       save: Speichern
+      #original_hash: 58e0c56
+      remove_avatar: Avatar entfernen
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: 'Bist du sicher, dass du deinen Avatar löschen willst?'
       #original_hash: 141d1d7
       guidelines: Richtlinien
       avatar_guidelines:
@@ -1722,6 +1767,52 @@ de:
       podiums: Podien
       #original_hash: 56656a0
       no_persons_found: Keine Person entspricht den gegebenen Kriterien.
+    show:
+      #original_hash: 1e43436
+      previously: Vorher
+      #original_hash: 79b6788
+      in_memoriam: Im Gedenken
+      #original_hash: 4bc65e0
+      completed_solves: Erfolgreiche Versuche
+      #original_hash: fc78642
+      personal_records: Aktuelle persönliche Rekorde
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        Ein fehlender Rank oder ein schlechteres Landesranking als das des
+        Kontinents entsteht durch einen Wechsel der Nationalität. Ergebnisse aus
+        bisherigen Regionen werden nicht berücksichtigt in der aktuellen
+        Rangliste der Region.
+      #original_hash: a91508f
+      championship_podiums: Meisterschafts-Podien
+      #original_hash: 3746f3b
+      wc_podiums: Weltmeisterschafts-Podien
+      #original_hash: c32a014
+      place: Platz
+      #original_hash: ddb18c1
+      medal_collection: Medaillensammlung
+      #original_hash: 9e69e13
+      record_collection: Rekordsammlung
+      medals:
+        #original_hash: c57604d
+        gold: Gold
+        #original_hash: 8697f43
+        silver: Silber
+        #original_hash: af31025
+        bronze: Bronze
+      #original_hash: 1917f4f
+      competition: Turnier
+      #original_hash: 612e12d
+      results: Ergebnis
+      #original_hash: e51c552
+      records: Rekord
+      #original_hash: ab478f3
+      competitions_map: Karte
+      #original_hash: a99cec5
+      world_records: Verlauf der Weltrekorde
+      #original_hash: 2d36a49
+      continental_records: Verlauf der kontinentalen Rekorde
+      #original_hash: 3ce631e
+      national_records: Verlauf der nationalen Rekorde
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: >-
@@ -2023,8 +2114,8 @@ de:
         Die folgenden Kommittees sind für die operationellen Aktivitäten der WCA
         verantwortlich:
       wdc:
-        #original_hash: 853bffa
-        name_html: <strong>WCA Disciplinary Committee (WDC)</strong>
+        #original_hash: c97077a
+        name: WCA Disciplinary Committee
         #original_hash: 286fdf8
         description: >-
           Dieses Kommittee berät das WCA Board in besonderen Fällen, wie etwa
@@ -2032,26 +2123,36 @@ de:
           der WCA in dringenden persönlichen Angelegenheiten bezüglich
           WCA-Wettbewerben kontaktiert werden.
       wrc:
-        #original_hash: 4aa147f
-        name_html: <strong>WCA Regulations Committee (WRC)</strong>
+        #original_hash: 3da1e85
+        name: WCA Regulations Committee
         #original_hash: 13ada5b
         description: >-
           Dieses Kommittee ist dafür verantwortlich, die WCA-Regeln zu
           verwalten.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA Results team (WRT)</strong>
+      wrt:
+        #original_hash: 67be768
+        name: WCA Results Team
         #original_hash: 439ffae
         description: >-
-          Dieses Team ist dafür verantwortlich, alle Ergebnisse sämtlicher
-          WCA-Wettbewerbe zu verwalten.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA Software team (WST)</strong>
+          Dieses Team ist dafür zuständig, die Resultate von Turnieren zu
+          verwalten.
+      wst:
+        #original_hash: a14bc62
+        name: WCA Software Team
         #original_hash: ec961e4
         description: >-
-          Dieses Team ist verantwortlich für die Verwaltung der Software der WCA
-          (Webseite, Scrambler, Workbooks, Admin-Werkzeuge).
+          Dieses Team ist für die Software der WCA zuständig (Webseite,
+          Scrambling Software, Workbook, Admin Tools).
+      wct:
+        #original_hash: 63a2388
+        name: WCA Communication Team
+        #original_hash: 50fd091
+        description: >-
+          Das WCA Communication Team (WCT) hat die Aufgabe die Communication der
+          WCA mit der Community und der Öffentlichkeit zu managen und zu
+          unterstützen. Die Kommunikation der WCA sollte den Zielen der WCA
+          dienen und eine positive Kultur von Freundlichkeit, Transparenz,
+          Respekt, Offenheit und Verantwortung unterstützen.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA-Delegierte</strong> sind Mitglieder der WCA, die die
@@ -2169,12 +2270,15 @@ de:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Kommittees und Teams</u>
     board:
-      #original_hash: ccad374
-      name_html: <strong>WCA Board</strong>
+      #original_hash: 90fcc48
+      name_html: WCA Board
       #original_hash: 7ee8e36
       info: >-
         (Organisation der WCA, Berichte von Delegierten, Zulassung von
         Wettbewerben, allgemeine Anfragen)
+    wct:
+      #original_hash: c53144e
+      info: (Kommunication der WCA mit der Community und der Öffentlichkeit)
     wdc:
       #original_hash: 562e197
       info: >-
@@ -2183,10 +2287,10 @@ de:
     wrc:
       #original_hash: 4a256f0
       info: (Pflege der WCA-Regeln)
-    results:
+    wrt:
       #original_hash: 899dc9c
-      info: '(Wettbewerbsergebnisse, Korrektur von Ergebnissen, Personendaten)'
-    software:
+      info: (Turnierergebnisse und Korrektur von Ergebnissen)
+    wst:
       #original_hash: dfbf427
       info: (Instandhaltung der Software der WCA)
   score_tools:
@@ -2363,3 +2467,19 @@ de:
         Schicke die vom WCA Workbook Assistant erzeugte JSON-Datei per E-Mail an
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
+  relations:
+    relation:
+      #original_hash: 6519fe1
+      title: Verbindungen
+      #original_hash: 69ba020
+      find_relations: Finde Verbindungen zwischen Cubern
+      #original_hash: 5d6056d
+      show_relation: Zeig mir weitere Verbindungen!
+      connectives:
+        #original_hash: f85194e
+        was_at: War bei
+        #original_hash: 8c00243
+        together_with: Zusammen mit
+    messages:
+      #original_hash: 4406a0b
+      invalid_wca_ids: 'Bitte gib zwei verschiedene, gültige WCA IDs ein.'
