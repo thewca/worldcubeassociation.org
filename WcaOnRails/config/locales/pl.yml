@@ -465,8 +465,6 @@ pl:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -955,8 +953,18 @@ pl:
           assigned: masz przydzielone WCA ID
           #original_hash: 1c4670f
           registered: zarejestrowałeś się na zawody
+      #original_hash: fe7122d
+      guidelines_confirmation: 'Potwierdzam, że wybrane zdjęcie profilowe spełnia wszystkie wytyczne.'
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Zapoznaj się z wytycznymi dotyczącymi zdjęć profilowych i wybierz
+        odpowiednie zdjęcie.
       #original_hash: efc007a
       save: Zapisz
+      #original_hash: 58e0c56
+      remove_avatar: Usuń zdjęcie profilowe
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: 'Czy jesteś pewien, że chcesz usunąć swoje zdjęcie profilowe?'
       #original_hash: 141d1d7
       guidelines: Wytyczne
       avatar_guidelines:
