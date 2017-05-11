@@ -56,7 +56,7 @@ if(!isset($_SESSION['anticsrf_key'])) {
 <p>After fixing your results, you must run these scripts to ensure that the changes are sound.</p>
 <ol>
     <li><a id="check-results" href="#" target="_blank">Check results</a></li>
-    <li><a href="compute_auxiliary_data.php?doit=+Do+it+now+" target="_blank">Compute auxiliary data</a></li>
+    <li><a href="/admin/do_compute_auxiliary_data" target="_blank">Compute auxiliary data</a></li>
 </ol>
 
 <script>
