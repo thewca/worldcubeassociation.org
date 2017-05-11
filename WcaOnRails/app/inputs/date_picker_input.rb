@@ -18,7 +18,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   def self.date_options_base
     {
       locale: I18n.locale.to_s,
-      format: DatePickerInput.picker_pattern,
+      format: self.picker_pattern,
       dayViewHeaderFormat: DatePickerInput.date_view_header_format,
     }
   end
@@ -57,7 +57,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def set_value_html_option
     return unless value.present?
-    input_html_options[:value] ||= value.is_a?(String) ? value : I18n.localize(value, format: DatePickerInput.display_pattern)
+    input_html_options[:value] ||= value.is_a?(String) ? value : I18n.localize(value, format: self.class.display_pattern)
   end
 
   def value
@@ -66,6 +66,6 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def date_options
     custom_options = input_html_options[:data][:date_options] || {}
-    DatePickerInput.date_options_base.merge!(custom_options)
+    self.class.date_options_base.merge!(custom_options)
   end
 end
