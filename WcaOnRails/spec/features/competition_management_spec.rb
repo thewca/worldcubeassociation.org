@@ -158,6 +158,17 @@ RSpec.feature "Competition management" do
 
         expect(comp_with_fours.reload.events).to match_array [threes]
       end
+
+      scenario 'can edit registration open datetime', js: true do
+        visit edit_competition_path(comp_with_fours)
+        check "competition_use_wca_registration"
+
+        expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .datepicker")
+        expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .timepicker")
+        find('#competition_registration_open').click
+        expect(page).to have_selector(".bootstrap-datetimepicker-widget .datepicker")
+        expect(page).to have_selector(".bootstrap-datetimepicker-widget .timepicker")
+      end
     end
   end
 end
