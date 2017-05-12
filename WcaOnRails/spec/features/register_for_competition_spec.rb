@@ -21,7 +21,7 @@ RSpec.feature "Registering for a competition" do
       expect(registration).not_to eq nil
     end
 
-    scenario "User registers for a competition" do
+    scenario "User registers for a competition with invalid guest info" do
       visit competition_register_path(competition)
       fill_in "Guests", with: "-1"
       click_button "Register!"
@@ -39,6 +39,29 @@ RSpec.feature "Registering for a competition" do
       expect(find("#registration_competition_events_444")).to be_checked
       expect(find("#registration_competition_events_555")).to be_checked
       expect(find("#registration_competition_events_666")).to_not be_checked
+    end
+
+    context "editing registration" do
+      let!(:registration) { FactoryGirl.create(:registration, user: user, competition: competition, guests: 0) }
+
+      scenario "Users changes number of guests" do
+        expect(registration.guests).to eq 0
+
+        visit competition_register_path(competition)
+        fill_in "Guests", with: "2"
+        click_button "Update Registration"
+
+        expect(page).to have_text("Your registration is pending.")
+        expect(registration.reload.guests).to eq 2
+      end
+
+      scenario "Users sets guests to a non number" do
+        visit competition_register_path(competition)
+        fill_in "Guests", with: "this is not a number"
+        click_button "Update Registration"
+
+        expect(page).to have_text("Your registration is pending.")
+      end
     end
   end
 
