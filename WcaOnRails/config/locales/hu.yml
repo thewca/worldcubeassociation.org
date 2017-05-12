@@ -451,8 +451,6 @@ hu:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -938,8 +936,18 @@ hu:
           assigned: egy WCA ID hozzá van rendelve a felhasználódhoz
           #original_hash: 1c4670f
           registered: regisztrálva vagy egy versenyre
+      #original_hash: fe7122d
+      guidelines_confirmation: 'Megerősítem, hogy a profilképem megfelel az útmutatónak.'
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Olvasd el a profilképekre vonatkozó útmutatót és egy annak megfelelő
+        képet tölts fel.
       #original_hash: efc007a
       save: Mentés
+      #original_hash: 58e0c56
+      remove_avatar: Profilkép eltávolítása
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: Biztosan törölni szeretnéd a profilképedet?
       #original_hash: 141d1d7
       guidelines: Útmutató
       avatar_guidelines:
