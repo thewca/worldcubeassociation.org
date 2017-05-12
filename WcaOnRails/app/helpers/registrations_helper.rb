@@ -13,8 +13,12 @@ module RegistrationsHelper
     end
   end
 
-  def notify_of_preferred_events(preferred_events)
-    if preferred_events.empty?
+  def notify_of_preferred_events(registration)
+    if registration.persisted?
+      # If they already registered, don't bother telling them about the
+      # preferred events feature.
+      ""
+    elsif registration.user.preferred_events.empty?
       t('registrations.preferred_events_prompt_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences)))
     else
       t('registrations.preferred_events_populated_html', link: link_to(t('common.here'), profile_edit_path(section: :preferences)))
