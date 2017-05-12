@@ -23,9 +23,12 @@ Note: form_builder.object is the object having associated events.
 
 <div class="form-group <%= "has-error" unless errors.empty? %>">
   <%= label_tag events_association_name, class: "associated-events-label" do %>
-    <%= label %> (<span class="events-selected-count"></span>) <br />
-    <button type="button" class="btn btn-primary btn-xs select-all-events"><%= t 'competitions.index.all_events' %></button>
-    <button type="button" class="btn btn-default btn-xs clear-all-events"><%= t 'competitions.index.clear' %></button>
+    <%= label %> (<span class="events-selected-count"></span>)
+    <% unless disabled %>
+      <br />
+      <button type="button" class="btn btn-primary btn-xs select-all-events"><%= t 'competitions.index.all_events' %></button>
+      <button type="button" class="btn btn-default btn-xs clear-all-events"><%= t 'competitions.index.clear' %></button>
+    <% end %>
   <% end %>
   <div id="<%= events_association_name %>" class="associated-events">
     <%= form_builder.simple_fields_for events_association_name, all_events do |f| %>
