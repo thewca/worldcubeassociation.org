@@ -18,6 +18,6 @@
       <%= render "shared/user", user: delegate %>
     <% end %>
   </td>
-  <td><%= delegate.delegate_status.titleize %></td>
+  <td><%= t "delegate_statuses.#{delegate.delegate_status}" %></td>
   <td><%= delegate.region %></td>
 </tr>
