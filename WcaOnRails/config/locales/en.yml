@@ -146,6 +146,11 @@ en:
     these_events:
       one: "this event"
       other: "these %{count} events"
+  delegate_statuses:
+    candidate_delegate: "Candidate Delegate"
+    delegate: "Delegate"
+    senior_delegate: "Senior Delegate"
+    board_member: "Board Member"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
