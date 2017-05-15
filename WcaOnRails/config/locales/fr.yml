@@ -124,6 +124,47 @@ fr:
       name: Qualification combinée
       #original_hash: 4c66ad0
       cellName: Qualification combinée
+  round:
+    #original_hash: 66e902f
+    name: '%{event} Tour %{number}'
+  advance_to_next_round_requirement:
+    #original_hash: 6381d11
+    ranking: 'Les %{ranking} premiers avancent au tour %{next_round_number}'
+    attemptValue:
+      #original_hash: 2f332eb
+      time: >-
+        Un meilleur temps ≤ %{time} permet d'avancer au tour
+        %{next_round_number}
+      #original_hash: efa4ad1
+      moves: >-
+        Un meilleur résultat ≤ %{moves} mouvements permet d'avancer au tour
+        %{next_round_number}
+      #original_hash: 29f8453
+      points: >-
+        Un meilleur résultat ≥ %{points} points permet d'avancer au tour
+        %{next_round_number}
+  cutoff:
+    #original_hash: 38a40f6
+    time:
+      other: '%{count} essais pour obtenir un résultat ≤ %{time}'
+      one: '%{count} essai pour obtenir un résultat ≤ %{time}'
+      zero: '%{count} essais pour obtenir un résultat ≤ %{time}'
+    #original_hash: 6f99fa6
+    moves:
+      other: '%{count} essais pour obtenir un résultat ≤ %{moves} mouvements'
+      one: '%{count} essai pour obtenir un résultat ≤ %{moves} mouvements'
+      zero: '%{count} essais pour obtenir un résultat ≤ %{moves} mouvements'
+    #original_hash: 1c7c5f1
+    points:
+      other: '%{count} essais pour obtenir un résultat ≥ %{points} points'
+      one: '%{count} essai pour obtenir un résultat ≥ %{points} points'
+      zero: '%{count} essais pour obtenir un résultat ≥ %{points} points'
+  time_limit:
+    cumulative:
+      #original_hash: 9da5a3e
+      one_round: '%{time} cumulative'
+      #original_hash: c01adfa
+      across_rounds: '%{time} au total pour les tours suivant : %{rounds}'
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -390,10 +431,10 @@ fr:
           ou <strong>Stefan POCHMAN</strong>.
         #original_hash: c03b949
         email: 'Si vous changez votre adresse email, vous devrez la confirmer.'
-        #original_hash: bfd11f4
+        #original_hash: 8a91e53
         pending_avatar: >-
           Après avoir chargé une nouvelle photo de profil, vous devrez attendre
-          que le bureau de la WCA l'approuve.
+          que l'équipe des résultats (WCA Results Team) l'approuve.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -414,8 +455,6 @@ fr:
         region: ''
         #original_hash: da39a3e
         remember_me: ''
-        #original_hash: da39a3e
-        remove_avatar: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
@@ -475,6 +514,11 @@ fr:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
+        #original_hash: 950a7ea
+        base_entry_fee_lowest_denomination: >-
+          Les frais d'inscriptions de base pour la compétition. Les frais
+          d'inscriptions seront affichés dans les informations de la compétition
+          et lors de l'inscription (si utilisée).
         #original_hash: 866bc05
         currency_code: La monnaie utilisée pour les frais d'inscription
         #original_hash: da39a3e
@@ -611,8 +655,6 @@ fr:
         status: ''
       team:
         #original_hash: da39a3e
-        description: ''
-        #original_hash: da39a3e
         friendly_id: ''
         #original_hash: da39a3e
         name: ''
@@ -651,6 +693,10 @@ fr:
         dob: Date de naissance correcte
         #original_hash: e214b8a
         document: Document
+    errors:
+      dob_contact:
+        #original_hash: 79ccfe2
+        dob_invalid: est mal formatée
   errors:
     messages:
       #original_hash: dc2367c
@@ -691,6 +737,8 @@ fr:
         dob: Accéder à votre date de naissance
         #original_hash: 17aa24f
         email: Accéder à votre adresse email
+        #original_hash: e0d0654
+        manage_competitions: Administrer n'importe quelle compétition que vous organisez
     devise:
       #original_hash: 06184f5
       no_account: Pas de compte ?
@@ -727,8 +775,8 @@ fr:
       about: À propos de la WCA
       #original_hash: d8fd3e4
       delegates: Délégués WCA
-      #original_hash: 0ef06c8
-      organizations: Organisations Nationales
+      #original_hash: 37b8fdc
+      organizations: Organisations Régionales
       #original_hash: d790b40
       faq: Questions Fréquentes
       #original_hash: a34b69f
@@ -905,8 +953,20 @@ fr:
           assigned: vous avez déjà un ID WCA qui vous est assigné
           #original_hash: 1c4670f
           registered: vous vous êtes inscrit à une compétition
+      #original_hash: fe7122d
+      guidelines_confirmation: >-
+        Je confirme que ma photo de profil est conforme à toutes les
+        recommandations pour les avatars.
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Merci de bien lire les recommandations pour les photos de profil, et de
+        soumettre une image valide.
       #original_hash: efc007a
       save: Sauvegarder
+      #original_hash: 58e0c56
+      remove_avatar: Retirer la photo de profil
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: Êtes vous sur de vouloir supprimer votre photo de profil ?
       #original_hash: 141d1d7
       guidelines: Recommendations
       avatar_guidelines:
@@ -951,13 +1011,11 @@ fr:
       senior_has_delegate: ne peut pas destituer un Délégué sénior qui supervise d'autres Délégués
       #original_hash: 48653a9
       already_have_id: 'impossible à réclamer car vous avez déjà l''ID WCA %{wca_id}'
-      #original_hash: eeb76a7
+      #original_hash: 2684f33
       wca_id_no_birthdate_html: >-
         Nous n'avons pas de date de naissance enregistrée pour cet ID WCA. Merci
-        de contacter la <a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA Results Team</a> avec une photo d'un document légal
-        (carte d'identité, permis de conduire, etc) où vos noms et date de
-        naissance sont visibles.
+        de contacter l'équipe des résultats (WCA Results Team) via <a
+        href="%{dob_form_path}">ce formulaire dédié</a>.
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Nous n'avons pas de genre enregistré pour cet ID WCA. Merci de contacter
@@ -1092,7 +1150,7 @@ fr:
         on_waiting_list: >-
           Votre inscription est en attente, il y a actuellement %{n_total}
           %{people} en attente.
-        #original_hash: f5b00be
+        #original_hash: 5dd5905
         approval_info_html: >-
           Un email vous sera envoyé lorsque votre inscription sera acceptée. Les
           inscriptions sont approuvées manuellement. Pour voir les conditions
@@ -1170,8 +1228,15 @@ fr:
       approved_registrations: Inscriptions acceptées
       #original_hash: bff04e8
       deleted_registrations: Inscriptions supprimées
-      #original_hash: a844fcf
-      registered: Inscription
+      #original_hash: ac5d958
+      not_paid: Non payée
+      registered:
+        #original_hash: 2c2f473
+        without_stripe: Inscrit le
+        #original_hash: fca3213
+        with_stripe: Payé le
+      #original_hash: ce53c71
+      payment_requested_on: 'Paiement demandé le %{date}'
       #original_hash: b25928c
       total: Total
     new_registration:
@@ -1232,10 +1297,10 @@ fr:
       Merci de vérifier les informations à propos de l'inscription, afin de
       déterminer si vous devez faire quelque chose d'autre, comme payer les
       frais d'inscriptions si la compétition est payante.
-    #original_hash: ea2b586
+    #original_hash: 88ac7c3
     have_registered: >-
-      Vous êtes inscrit au %{comp}. Vous pouvez voir les détails de votre
-      inscription ci-dessous.
+      Vous avez soumis votre inscription au %{comp}. Vous pouvez voir les
+      détails de votre inscription ci-dessous.
     #original_hash: 3c9141f
     contact_organizer: Contactez l'organisateur si vous souhaitez effectuer des changements.
     #original_hash: 59354fd
@@ -1327,10 +1392,12 @@ fr:
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
-      #original_hash: 6e79aaf
+      #original_hash: 1fa5a4b
       disclaimer: >-
         Seules les compétitions qui utilisent le site de la WCA pour les
-        inscriptions seront affichées ici.
+        inscriptions seront affichées ici. Si votre compétition n'est pas listée
+        ici, merci de consulter les informations présentes sur le site de la
+        compétition en question.
       #original_hash: 94a2fc8
       past_competitions: Historique des compétitions
     competition_info:
@@ -1379,14 +1446,20 @@ fr:
       region: Région
       #original_hash: bce0641
       search: Rechercher
-      #original_hash: a725020
-      state: État
+      #original_hash: 769bb19
+      state: Date
       #original_hash: 4e9f7a3
       present: Courantes
       #original_hash: 76eec76
       recent: Récentes
       #original_hash: 405c12f
       past: Terminées
+      #original_hash: 081ae3f
+      custom: Personnalisé
+      #original_hash: 3f66052
+      from_date: Du
+      #original_hash: ae79ea1
+      to_date: Au
       #original_hash: 52c30f8
       past_from: 'Terminées en %{year}'
       #original_hash: 7cff459
@@ -1402,6 +1475,8 @@ fr:
         recent: 'Compétitions récentes (%{count} derniers jours)'
         #original_hash: 914742f
         upcoming: Compétitions à venir
+        #original_hash: 8b57693
+        custom: Compétitions pour l'intervalle sélectionné
       #original_hash: 6684214
       no_access: Vous n'avez pas accès à cette page !
       tooltips:
@@ -1698,11 +1773,59 @@ fr:
       podiums: Podiums
       #original_hash: 56656a0
       no_persons_found: Personne ne correspond aux critères donnés.
+    show:
+      #original_hash: 1e43436
+      previously: Précédemment
+      #original_hash: 79b6788
+      in_memoriam: In Memoriam
+      #original_hash: 4bc65e0
+      completed_solves: Résolutions terminées
+      #original_hash: fc78642
+      personal_records: Records Personnel
+      #original_hash: e631f13
+      odd_rank_reason: >-
+        Un classement manquant, ou un classement national moins bon que le
+        continental est du à un changement de pays. Les résultats du continent
+        précédent ne sont pas pris en compte dans le classement continental
+        actuel.
+      #original_hash: a91508f
+      championship_podiums: Podiums de Championnats
+      #original_hash: 3746f3b
+      wc_podiums: Podiums de Championnats du Monde
+      #original_hash: c32a014
+      place: Place
+      #original_hash: ddb18c1
+      medal_collection: Médailles obtenues
+      #original_hash: 9e69e13
+      record_collection: Records battus
+      medals:
+        #original_hash: c57604d
+        gold: Or
+        #original_hash: 8697f43
+        silver: Argent
+        #original_hash: af31025
+        bronze: Bronze
+      #original_hash: 1917f4f
+      competition: Compétition
+      #original_hash: 612e12d
+      results: Résultats
+      #original_hash: e51c552
+      records: Records
+      #original_hash: ab478f3
+      competitions_map: Carte
+      #original_hash: a99cec5
+      world_records: Historique des Records du Monde
+      #original_hash: 2d36a49
+      continental_records: Historique des Records Continentaux
+      #original_hash: 3ce631e
+      national_records: Historique des Records Nationaux
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: >-
       Êtes-vous sûr de vouloir supprimer ce post ? Cette action n'est pas
       réversible.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Annoncé par %{author_name} le %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -1784,15 +1907,19 @@ fr:
           Quels sont les prérequis pour venir à une compétition WCA ? Que
           dois-je savoir avant de venir à une compétition WCA ?
         content:
-          #original_hash: 40aa9c0
+          #original_hash: 3bb4e11
           '1': >-
             Il n'y a généralement pas beaucoup de prérequis pour qu'une personne
             puisse participer à une compétition WCA. Il est attendu que tous les
             participants aux compétitions aient une bonne compréhension du <a
-            href='https://www.worldcubeassociation.org/regulations/translations/french'>Règlement
-            WCA</a>. Additionnellement, il est recommandé de lire les tutoriels
-            à destination des compétiteurs (en Français sur le <a
-            target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Règlement
+            WCA</a>. Si vous avez des problèmes pour comprendre le document en
+            anglais, merci de consulter les <a
+            href='https://www.worldcubeassociation.org/regulations/translations/'>traductions</a>.
+          #original_hash: da99893
+          '2': >-
+            De plus, nous vous recommandons de lire les tutoriels à destination
+            des compétiteurs (en Français sur le <a target='_blank'
             href='http://www.speedcubingfrance.org/speedcubing/tutos/'>site de
             l'AFS</a>), qui contiennent des indications pour les nouveaux
             participants.
@@ -1868,6 +1995,19 @@ fr:
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
+      '9':
+        #original_hash: 7a4a71d
+        title: >-
+          Je suis inscrit à une compétition et je voudrais m'inscrire à une
+          autre épreuve, que dois-je faire ? Est-ce que je peux amener des
+          accompagnants ?
+        content:
+          #original_hash: 957487d
+          '1': >-
+            Merci de contacter les organisateurs. Vous pouvez trouver leur
+            informations de contact sur le site de la compétition. Si vous
+            n'êtes pas sûr d'où chercher, regardez la <a
+            href='/competitions'>liste des compétitions</a>.
       results:
         #original_hash: 9aae576
         title: >-
@@ -1893,6 +2033,57 @@ fr:
             Si vous avez lié votre compte WCA à votre ID WCA, vous pouvez
             également activer les notifications par email concernant vos
             résultats <a href='%{preferences_edit_path}'>ici</a>.
+      regulations1:
+        #original_hash: 2951eb6
+        title: Est-ce que mon puzzle est légal pour la compétition ?
+        content:
+          #original_hash: 5ac78e4
+          '1': >-
+            Vous pouvez trouver les règles concernant les puzzles dans l'<a
+            href='https://www.worldcubeassociation.org/regulations/#3'>Article
+            3</a>. Tous les puzzles doivent être approuvés par un Délégué WCA.
+            Si vous n'êtes pas sûr, merci de demander au Délégué WCA de votre
+            compétition. Juste au cas où, vous pouvez apporter un puzzle de
+            remplacement au cas où vous ne soyez pas autorisé à l'utiliser.
+      regulations2:
+        #original_hash: 48f1234
+        title: >-
+          Puis-je utiliser un puzzle magnétique lors d'une compétition
+          officielle de la WCA ?
+        content:
+          #original_hash: 024ce81
+          '1': >-
+            Vous êtes autorisé à utiliser un puzzle magnétique tant qu'il
+            respecte le <a target='_blank'
+            href='https://www.worldcubeassociation.org/regulations/'>Règlement
+            WCA</a>. Merci de faire particulièrement attention à la <a
+            href='https://www.worldcubeassociation.org/regulations/#3h'>Règle
+            3h</a>.
+      regulations3:
+        #original_hash: c7460a5
+        title: >-
+          J'ai perdu un cache de centre ou une pièce de mon puzzle. Suis-je
+          toujours autorisé à l'utiliser ?
+        content:
+          #original_hash: 0d76323
+          '1': >-
+            Vous n'êtes pas autorisé à utiliser ce puzzle. Les puzzles ne
+            doivent pas être abîmés ou avoir de différences qui permettent
+            d'identifier une pièce par rapport à une autre pièce similaire (voir
+            la <a
+            href='https://www.worldcubeassociation.org/regulations/#3j'>Règle
+            3j</a>).
+      regulations4:
+        #original_hash: 43f9da8
+        title: Quel âge dois-je avoir pour pouvoir m'inscrire à une compétition WCA ?
+        content:
+          #original_hash: 984704a
+          '1': >-
+            Il n'y a pas d'âge minimum. Par contre si vous êtes mineur vous
+            devez demander l'autorisation à vos parents avant de vous inscrire
+            (voir la <a
+            href='https://www.worldcubeassociation.org/regulations/#2b'>Règle
+            2b</a>).
   about:
     #original_hash: 9ac918a
     title: À propos de la WCA
@@ -1908,10 +2099,10 @@ fr:
           Rubik's cube, inventé par le professeur hongrois Ernő Rubik. Une
           sélection de ces casse-tête a été choisie comme épreuves officielles
           de la WCA.
-        #original_hash: c8ecd24
+        #original_hash: 22c3593
         '2': >-
           La World Cube Association organise des compétitions à travers le
-          monde, et est supportée par des organisations nationales responsables
+          monde, et est supportée par des organisations régionales responsables
           de l'organisation des compétitions dans leur pays.
         #original_hash: 20e0550
         '3': >-
@@ -1936,10 +2127,8 @@ fr:
         Les comités suivants sont responsables des activités opérationnelles de
         la WCA :
       wdc:
-        #original_hash: 853bffa
-        name_html: >-
-          <strong>WCA Disciplinary Committee (WDC, comité
-          disciplinaire)</strong>
+        #original_hash: c97077a
+        name: Comité Disciplinaire de la WCA
         #original_hash: 286fdf8
         description: >-
           Ce comité conseille le bureau de la WCA dans des cas spéciaux, tels
@@ -1947,24 +2136,34 @@ fr:
           contacté par les membres de la WCA en cas d'affaires personnelles
           importantes concernant les compétitions WCA.
       wrc:
-        #original_hash: 4aa147f
-        name_html: '<strong>WCA Regulations Committee (WRC, comité réglementaire)</strong>'
+        #original_hash: 3da1e85
+        name: Comité Réglementaire de la WCA
         #original_hash: 13ada5b
         description: Ce comité est responsable de la gestion du règlement WCA.
-      results:
-        #original_hash: 3e819b8
-        name_html: <strong>WCA Results team (équipe des résultats)</strong>
+      wrt:
+        #original_hash: 67be768
+        name: Équipe des Résultats de la WCA
         #original_hash: 439ffae
         description: >-
-          Cette équipe est responsable de la gestion de tous les résultats de
-          compétitions.
-      software:
-        #original_hash: ea7f654
-        name_html: <strong>WCA Software team (équipe logicielle)</strong>
+          Cette équipe est responsable de l'administration de tous les résultats
+          des compétitions.
+      wst:
+        #original_hash: a14bc62
+        name: Équipe Logicielle de la WCA
         #original_hash: ec961e4
         description: >-
           Cette équipe est responsable de la gestion des logiciels de la WCA
           (site internet, programme de mélanges, outils d'administration).
+      wct:
+        #original_hash: 63a2388
+        name: Équipe Communication de la WCA
+        #original_hash: 50fd091
+        description: >-
+          L'Équipe Communication de la WCA (WCT) a pour rôle de superviser et
+          supporter les communications de la WCA avec la communauté et le
+          public. Les communications de la WCA devraient contribuer aux
+          objectifs de la WCA, et supporter une culture positive amicale,
+          transparente, inclusive, ouverte, et réactive.
       #original_hash: f2ceade
       delegates_html: >-
         Les <strong>Délégués WCA</strong> sont des membres de la WCA
@@ -2000,11 +2199,72 @@ fr:
       role: Rôle
       #original_hash: 0f21717
       region: Région
-  national_organizations:
-    #original_hash: 0ef06c8
-    title: Organisations Nationales
-    #original_hash: f9a7f4d
-    content: 'La WCA reconnaît les organisations nationales suivantes :'
+  regional_organizations:
+    #original_hash: 37b8fdc
+    title: Organisations Régionales
+    #original_hash: ba87c07
+    content: 'La WCA reconnait les organisations régionales suivantes :'
+    how_to:
+      #original_hash: fc3af12
+      title: Comment devenir une Organisation Régionale de la WCA
+      #original_hash: bdf57ff
+      description: >-
+        La WCA reconnait plusieurs organisation régionales à travers le monde.
+        L'objectif d'une organisation régionale de la WCA est d'organiser des
+        compétitions WCA, et de supporter les activités de la WCA dans la
+        région. Les pays souhaitant former une organisation régionale sont
+        encouragés à contribuer à la WCA avant de soumettre leur candidature.
+        Pour avoir de l'aide pour organiser une compétition WCA dans votre
+        région, merci de contacter le Délégué WCA le plus proche de vous.
+    requirements:
+      #original_hash: 1e04fd7
+      title: Prérequis pour les organisations régionales de la WCA
+      list:
+        #original_hash: 22a9f26
+        '1': >-
+          Organiser ou supporter activement des compétitions WCA dans la région
+          de l'organisation
+        #original_hash: 8c5a7fe
+        '2': >-
+          Contribuer activement aux compétitions continentales WCA qui sont
+          organisées sur le continent de l'organisation régionale
+        #original_hash: 5913cd0
+        '3': >-
+          Respecter et mettre en oeuvre les objectifs décrits dans les By-Laws
+          et le Règlement de la WCA
+        #original_hash: 0c3576b
+        '4': Respecter l'ensemble les Règles WCA applicables
+        #original_hash: 23cda60
+        '5': Accepter et se conformer aux décisions des officiels de la WCA
+        #original_hash: 08c6d86
+        '6': >-
+          Garder et fournir à la WCA une copie électronique de ses by-laws
+          (Statuts) et règlements.
+    application_instructions:
+      #original_hash: 4da829b
+      title: Instructions pour la candidature
+      #original_hash: 7ae038e
+      description: >-
+        Pour candidater pour devenir une Organisation Régionale nous demandons à
+        l'organisation de soumettre une candidature au bureau de la WCA, qui
+        devra inclure les éléments ci-dessous.
+      list:
+        #original_hash: 1a9d544
+        '1': Nom de l'Organisation Régionale
+        #original_hash: a9bf3f4
+        '2': Adresse officielle et détails de contact
+        #original_hash: 2a029e9
+        '3': >-
+          Une copie de ses by-laws (Statuts) actuels, qui devront être en accord
+          avec les By-Laws et le Règlement de la WCA
+        #original_hash: a5a2771
+        '4': Une liste des membres du bureau
+        #original_hash: 1186ebf
+        '5': >-
+          Une description claire de la zone couverte par l'Organisation
+          Régionale
+        #original_hash: 826e371
+        '6': Un rapport sur les activités passées et actuelles concernant la WCA
   contact:
     #original_hash: a34b69f
     title: Information de contact
@@ -2021,12 +2281,15 @@ fr:
     #original_hash: 4a30d30
     committees_and_teams_html: <u>Comités et Équipes</u>
     board:
-      #original_hash: ccad374
-      name_html: <strong>WCA Board</strong>
+      #original_hash: 90fcc48
+      name_html: WCA Board
       #original_hash: 7ee8e36
       info: >-
         (Organisation de la WCA, rapports des délégués, officialisation de
         compétitions, demande de renseignements)
+    wct:
+      #original_hash: c53144e
+      info: (communications de la WCA avec la communauté et le public)
     wdc:
       #original_hash: 562e197
       info: >-
@@ -2035,11 +2298,11 @@ fr:
     wrc:
       #original_hash: 4a256f0
       info: (maintenance du Règlement WCA)
-    results:
+    wrt:
       #original_hash: 899dc9c
       info: '(résultats des compétitions, corrections de résultats)'
-    software:
-      #original_hash: 325ab0a
+    wst:
+      #original_hash: dfbf427
       info: (maintenance des logiciels de la WCA)
   score_tools:
     #original_hash: ea9d41d
@@ -2208,3 +2471,19 @@ fr:
         Envoyez par mail le fichier JSON exporté par le WCA Workbook Assistant à
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>.
+  relations:
+    relation:
+      #original_hash: 6519fe1
+      title: Relations
+      #original_hash: 69ba020
+      find_relations: Trouver les connections entre cubeurs
+      #original_hash: 5d6056d
+      show_relation: Afficher la relation !
+      connectives:
+        #original_hash: f85194e
+        was_at: Était au
+        #original_hash: 8c00243
+        together_with: avec
+    messages:
+      #original_hash: 4406a0b
+      invalid_wca_ids: Merci de donner deux IDs WCA valides et différents.
