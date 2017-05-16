@@ -142,9 +142,9 @@ da:
   cutoff:
     #original_hash: 38a40f6
     time:
-      other: '%{count} prøver at få ≤ %{time}'
-      one: '%{count} prøver at få ≤ %{time}'
       zero: '%{count} prøver at få ≤ %{time}'
+      one: '%{count} prøver at få ≤ %{time}'
+      other: '%{count} prøver at få ≤ %{time}'
     #original_hash: 6f99fa6
     moves:
       zero: '%{count} prøver at få ≤ %{moves} moves'
@@ -152,9 +152,9 @@ da:
       other: '%{count} prøver at få ≤ %{moves} moves'
     #original_hash: 1c7c5f1
     points:
-      other: '%{count} prøver at få ≥ %{points} points'
-      one: '%{count} prøver at få ≥ %{points} points'
       zero: '%{count} prøver at få ≥ %{points} points'
+      one: '%{count} prøver at få ≥ %{points} points'
+      other: '%{count} prøver at få ≥ %{points} points'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -199,6 +199,15 @@ da:
       zero: ingen discipliner
       one: denne disciplin
       other: disse discipliner
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Kandidat Delegat
+    #original_hash: 12ab214
+    delegate: Delegat
+    #original_hash: d463c23
+    senior_delegate: Senior Delegat
+    #original_hash: 660ee15
+    board_member: Bestyrelses Medlem
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -447,8 +456,6 @@ da:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -492,7 +499,7 @@ da:
         registration_open: 'Note: Registreringens åbningstider og lukketider er i UTC-tid'
         #original_hash: f688881
         remarks: >-
-          Ekstra information som du gerne vil give kommissionen. For eksempel,
+          Ekstra information som du gerne vil give bestyrelsen. For eksempel,
           grunde til hvorfor konkurrencen var ønsket mindre end en måned var nu,
           hvis det er relevant.
         #original_hash: da39a3e
@@ -930,8 +937,16 @@ da:
           assigned: Du har et WCA ID tilknyttet
           #original_hash: 1c4670f
           registered: Du har registreret for en konkurrence
+      #original_hash: fe7122d
+      guidelines_confirmation: Jeg kan bekræfte at mit billede udfylder alle kravene.
+      #original_hash: d677ceb
+      confirm_guidelines: Vær sikker på at læse kravene og at opgive et passende billede.
       #original_hash: efc007a
       save: Gem
+      #original_hash: 58e0c56
+      remove_avatar: Fjern billede
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: Er du sikker på at du vil slette dit billede?
       #original_hash: 141d1d7
       guidelines: Retningslinjer
       avatar_guidelines:
@@ -994,8 +1009,8 @@ da:
         Resultat Holdet</a> for at løse det.
       #original_hash: 49083d8
       board_member_cannot_resign: >-
-        Du kan ikke fratræde fra din rolle som kommision medlem! Find et andet
-        kommision medlem til at fyre dig.
+        Du kan ikke fratræde fra din rolle som bestyrelses medlem! Find et andet
+        bestyrrelses medlem til at fyre dig.
       #original_hash: d02c03b
       avatar_requires_wca_id: har brug for et WCA ID tildelt
     successes:
@@ -1763,6 +1778,8 @@ da:
     confirm_delete_post: >-
       Er du sikker på at du vil slette dette opslag? Denne handling kan ikke
       gøres om.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Annonceret af %{author_name} den %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2038,7 +2055,7 @@ da:
       title: Strukturen
       #original_hash: d855b50
       board_html: >-
-        World Cube Association er anført af <strong>WCA Kommisionen</strong>,
+        World Cube Association er anført af <strong>WCA Bestyrrelsen</strong>,
         som består af følgende medlemmer:
       #original_hash: b0c72a9
       committees: 'De følgende komitéer er ansvarlige for aktiviteterne af WCA:'
@@ -2191,7 +2208,7 @@ da:
     committees_and_teams_html: <u>Komitéer og Hold</u>
     board:
       #original_hash: 90fcc48
-      name_html: WCA Kommisionen
+      name_html: WCA Bestyrtelsen
       #original_hash: 7ee8e36
       info: >-
         (WCA organisation, delegat reporter, konkurrence godkendelser, generalle
@@ -2202,7 +2219,7 @@ da:
     wdc:
       #original_hash: 562e197
       info: >-
-        (uafhængig rådgiver til WCA Kommisionen, selvstændig udforskning,
+        (uafhængig rådgiver til WCA bestyrelsen, selvstændig udforskning,
         rådgiver af vigtige personlige problemer)
     wrc:
       #original_hash: 4a256f0
@@ -2257,7 +2274,7 @@ da:
         Alle WCA arrangører må bruge WCA logoet for hjemmesider, tøj, gaver,
         eller dekorationer, kun for officiell WCA konkurrencer.  <br /> For alle
         andre personer og formål der bruger WCA logoet behøver en bekræftelse af
-        <a href="mailto:board@worldcubeassociation.org">WCA Kommisionen</a>.
+        <a href="mailto:board@worldcubeassociation.org">WCA Bestyrelsen</a>.
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA Workbook Assistant
