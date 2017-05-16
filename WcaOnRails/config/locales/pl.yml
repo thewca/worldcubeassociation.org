@@ -211,6 +211,15 @@ pl:
       few: 'te %{count} konkurencje'
       many: 'te %{count} konkurencji'
       other: 'te %{count} konkurencji'
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Kandydat na Delegata
+    #original_hash: 12ab214
+    delegate: Delegat
+    #original_hash: d463c23
+    senior_delegate: Starszy Delegat
+    #original_hash: 660ee15
+    board_member: Członek Zarządu
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1836,6 +1845,8 @@ pl:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 'Czy jesteś pewien, że chcesz usunąć ten post? Ta akcja jest nieodwracalna.'
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Ogłoszone przez %{author_name}, %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
