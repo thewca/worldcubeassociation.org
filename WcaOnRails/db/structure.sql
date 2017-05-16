@@ -860,9 +860,9 @@ CREATE TABLE `rounds` (
   `updated_at` datetime NOT NULL,
   `time_limit` text COLLATE utf8mb4_unicode_ci,
   `cutoff` text COLLATE utf8mb4_unicode_ci,
-  `advance_to_next_round_requirement` text COLLATE utf8mb4_unicode_ci,
+  `advancement_condition` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
-  KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
+  UNIQUE KEY `index_rounds_on_competition_event_id_and_number` (`competition_event_id`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1190,4 +1190,6 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170426145811'),
 ('20170502232234'),
 ('20170503205810'),
+('20170510071858'),
+('20170516002944'),
 ('20170517192919');

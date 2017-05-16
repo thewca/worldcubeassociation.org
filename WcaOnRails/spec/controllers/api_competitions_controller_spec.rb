@@ -2,8 +2,6 @@
 
 require 'rails_helper'
 
-ONE_MINUTE_IN_CENTISECONDS = 60*100
-
 RSpec.describe Api::V0::CompetitionsController do
   describe 'GET #show' do
     let(:competition) {
@@ -205,11 +203,6 @@ RSpec.describe Api::V0::CompetitionsController do
         event_ids: %w(333 444),
       )
     }
-    let(:sixty_second_2_attempt_cutoff) { Cutoff.new(numberOfAttempts: 2, attemptValue: ONE_MINUTE_IN_CENTISECONDS) }
-    let(:top_16_advance) { AdvanceToNextRoundRequirement.new(type: "ranking", ranking: 16) }
-    let!(:round333_1) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff) }
-    let!(:round333_2) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 2, advance_to_next_round_requirement: top_16_advance) }
-    let!(:round444_1) { FactoryGirl.create(:round, competition: competition, event_id: "444", number: 1) }
 
     let(:hidden_competition) {
       FactoryGirl.create(
@@ -273,60 +266,7 @@ RSpec.describe Api::V0::CompetitionsController do
         get :show_wcif, params: { competition_id: "TestComp2014" }
         expect(response.status).to eq 200
         parsed_body = JSON.parse(response.body)
-        expect(parsed_body).to eq(
-          "formatVersion" => "1.0",
-          "id" => "TestComp2014",
-          "name" => "Test Comp 2014",
-          "persons" => [delegate.to_wcif(competition)],
-          "events" => [
-            {
-              "id" => "333",
-              "rounds" => [
-                {
-                  "id" => "333-1",
-                  "format" => "a",
-                  "timeLimit" => {
-                    "centiseconds" => TimeLimit::TEN_MINUTES_IN_CENTISECONDS,
-                    "cumulative_round_ids" => [],
-                  },
-                  "cutoff" => {
-                    "numberOfAttempts" => 2,
-                    "attemptValue" => ONE_MINUTE_IN_CENTISECONDS,
-                  },
-                  "advanceToNextRoundRequirement" => nil,
-                },
-                {
-                  "id" => "333-2",
-                  "format" => "a",
-                  "timeLimit" => {
-                    "centiseconds" => TimeLimit::TEN_MINUTES_IN_CENTISECONDS,
-                    "cumulative_round_ids" => [],
-                  },
-                  "cutoff" => nil,
-                  "advanceToNextRoundRequirement" => {
-                    "type" => "ranking",
-                    "ranking" => 16,
-                  },
-                },
-              ],
-            },
-            {
-              "id" => "444",
-              "rounds" => [
-                {
-                  "id" => "444-1",
-                  "format" => "a",
-                  "timeLimit" => {
-                    "centiseconds" => TimeLimit::TEN_MINUTES_IN_CENTISECONDS,
-                    "cumulative_round_ids" => [],
-                  },
-                  "cutoff" => nil,
-                  "advanceToNextRoundRequirement" => nil,
-                },
-              ],
-            },
-          ],
-        )
+        expect(parsed_body["id"]).to eq "TestComp2014"
       end
     end
   end

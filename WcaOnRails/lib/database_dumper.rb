@@ -260,7 +260,7 @@ module DatabaseDumper
           number
           time_limit
           cutoff
-          advance_to_next_round_requirement
+          advancement_condition
           created_at
           updated_at
         ),
