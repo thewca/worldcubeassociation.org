@@ -183,7 +183,12 @@ class RegistrationsController < ApplicationController
       end
     else
       flash.now[:danger] = I18n.t('registrations.flash.failed')
-      render :edit
+      if params[:from_admin_view]
+        render :edit
+      else
+        @selected_events = @registration.saved_and_unsaved_events
+        render :register
+      end
     end
   end
 
@@ -195,24 +200,22 @@ class RegistrationsController < ApplicationController
   def register
     @competition = competition_from_params
     @registration = nil
-    @selected_events ||= []
+    @selected_events = []
     if current_user
-      @registration = Registration.find_by(user_id: current_user.id, competition_id: @competition.id) || @competition.registrations.build(user_id: current_user.id)
+      @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
     end
   end
 
   def process_payment
     competition = competition_from_params
-    if current_user
-      registrations = competition.registrations
-      registration = registrations.find_by_user_id!(current_user.id)
-    end
+    registration = competition.registrations.find_by_user_id!(current_user&.id)
+
     token, amount_param = params.require(:payment).require([:stripe_token, :total_amount])
     amount = amount_param.to_i
 
-    # 'amount' has not been check by anyone, and could be user-crafted; validate it!
-    # if 'token' is wrong, it's Stripe which will complain
+    # 'amount' has not been checked by anyone, and could be user-crafted; validate it!
+    # If 'token' is wrong, Stripe will complain.
     if amount < registration.outstanding_entry_fees.cents
       flash[:danger] = "Charge was cancelled because the amount to be charged was lower than the registration fees to pay"
       redirect_to competition_register_path

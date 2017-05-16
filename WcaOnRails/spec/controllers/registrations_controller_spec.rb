@@ -36,7 +36,7 @@ RSpec.describe RegistrationsController do
       competition.events = [three_by_three]
 
       patch :update, params: { id: registration.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first.id }, { competition_event_id: -2342 }] } }
-      registration = assigns(:registration)
+      registration.reload
       expect(registration.events).to match_array [three_by_three]
     end
 
