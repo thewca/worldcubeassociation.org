@@ -30,9 +30,10 @@ class Post < ApplicationRecord
   CRASH_COURSE_POST_SLUG = "delegate-crash-course"
 
   def self.crash_course_post
-    post = (Post.find_by_slug(CRASH_COURSE_POST_SLUG) ||
-            Post.create!(slug: CRASH_COURSE_POST_SLUG, title: "Delegate crash course", body: "Nothing here yet"))
-    post
+    Post.find_or_create_by!(slug: CRASH_COURSE_POST_SLUG) do |post|
+      post.title = "Delegate crash course"
+      post.body = "Nothing here yet"
+    end
   end
 
   def deletable
