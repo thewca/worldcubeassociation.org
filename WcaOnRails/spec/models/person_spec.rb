@@ -39,8 +39,7 @@ RSpec.describe Person, type: :model do
       it "fixing countryId fails if there exist an old person with the same wca id, greater subId and the same countryId" do
         Person.create(wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
         person.countryId = "New Zealand"
-        expect(person).to be_invalid
-        expect(person.errors[:countryId]).to eq ["Cannot change the country to a country the person has already represented in the past."]
+        expect(person).to be_invalid_with_errors(countryId: ["Cannot change the country to a country the person has already represented in the past."])
       end
 
       it "updates personName and countryId columns in the results table" do

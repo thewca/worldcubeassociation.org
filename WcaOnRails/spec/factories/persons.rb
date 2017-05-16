@@ -28,7 +28,9 @@ FactoryGirl.define do
 
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
-        person.update_using_sub_id!(name: "new #{person.name}")
+        name = person.name
+        person.update!(name: "old name")
+        person.update_using_sub_id!(name: name)
       end
     end
 
