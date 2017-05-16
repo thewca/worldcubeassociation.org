@@ -4,12 +4,8 @@ require 'rails_helper'
 
 RSpec.describe MergePeople do
   let(:person1) { FactoryGirl.create(:person, countryId: "USA") }
-  let(:person2) {
-    FactoryGirl.create(
-      :person,
-      person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day),
-    )
-  }
+  let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day) }
+  let(:person2) { FactoryGirl.create(:person, shared_attributes) }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
   it "is valid" do
@@ -18,54 +14,47 @@ RSpec.describe MergePeople do
 
   it "requires different people" do
     merge_people.person2_wca_id = merge_people.person1_wca_id
-    expect(merge_people).to be_invalid
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Cannot merge a person with themself!"])
   end
 
   it "requires person1 not have multiple subIds" do
-    merge_people.person1_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids).wca_id
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person1_wca_id]).to include "This person has multiple subIds"
+    merge_people.person1_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
+    expect(merge_people).to be_invalid_with_errors(person1_wca_id: ["This person has multiple subIds"])
   end
 
   it "requires person2 not have multiple subIds" do
-    merge_people.person2_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids).wca_id
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to include "This person has multiple subIds"
+    merge_people.person2_wca_id = FactoryGirl.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["This person has multiple subIds"])
   end
 
   it "requires same name" do
     person2.update_attribute(:name, "Some other name")
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Names don't match"]
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Names don't match"])
   end
 
   it "requires same country" do
     person2.update_attribute(:countryId, "Israel")
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Countries don't match"]
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Countries don't match"])
   end
 
   it "requires same gender" do
     person2.update_attribute(:gender, { "m"=>"f", "f"=>"m" }[person1.gender])
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Genders don't match"]
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Genders don't match"])
   end
 
   it "requires same dob" do
     person2.update_attribute(:year, person1.year + 1)
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Birthdays don't match"]
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Birthdays don't match"])
   end
 
   it "handles invalid wca_id" do
     merge_people.person1_wca_id = "FOOBAR"
-    expect(merge_people).to be_invalid
+    expect(merge_people).to be_invalid_with_errors(person1_wca_id: ["Not found"])
   end
 
   it "requires person2 to not have an account" do
     FactoryGirl.create :user, :wca_id, person: person2
-    expect(merge_people).to be_invalid
-    expect(merge_people.errors.messages[:person2_wca_id]).to eq ["Must not have an account"]
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Must not have an account"])
   end
 
   it "can actually merge people" do

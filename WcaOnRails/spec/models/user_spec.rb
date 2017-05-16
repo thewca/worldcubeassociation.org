@@ -64,7 +64,7 @@ RSpec.describe User, type: :model do
     user = FactoryGirl.create :user
 
     delegate.senior_delegate = user
-    expect(delegate).to be_invalid
+    expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a senior delegate"])
 
     user.senior_delegate!
     expect(delegate).to be_valid
@@ -95,7 +95,7 @@ RSpec.describe User, type: :model do
 
     expect(senior_delegate1).to be_valid
     senior_delegate1.senior_delegate = senior_delegate2
-    expect(senior_delegate1).to be_invalid
+    expect(senior_delegate1).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
   it "does not allow senior delegate if board member" do
@@ -107,7 +107,7 @@ RSpec.describe User, type: :model do
 
     expect(board_member).to be_valid
     board_member.senior_delegate = senior_delegate
-    expect(board_member).to be_invalid
+    expect(board_member).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
   it "does not allow senior delegate if regular user" do
@@ -118,7 +118,7 @@ RSpec.describe User, type: :model do
 
     expect(user).to be_valid
     user.senior_delegate = senior_delegate
-    expect(user).to be_invalid
+    expect(user).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
   describe "WCA ID" do
@@ -131,13 +131,13 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
 
       user = FactoryGirl.build :user, wca_id: "2005FLE01"
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
 
       user = FactoryGirl.build :user, wca_id: "200FLEI01"
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
 
       user = FactoryGirl.build :user, wca_id: "200FLEI0"
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
     end
 
     it "requires that name match person name" do
@@ -155,14 +155,12 @@ RSpec.describe User, type: :model do
 
     it "does not allow assigning a birthdateless WCA ID to a user" do
       user.wca_id = birthdayless_person.wca_id
-      expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)]
+      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)])
     end
 
     it "does not allow assigning a genderless WCA ID to a user" do
       user.wca_id = genderless_person.wca_id
-      expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq [I18n.t('users.errors.wca_id_no_gender_html')]
+      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_gender_html')])
     end
 
     it "nullifies empty WCA IDs" do
@@ -179,8 +177,7 @@ RSpec.describe User, type: :model do
       person2 = FactoryGirl.create :person, wca_id: "2006FLEI01"
       user2 = FactoryGirl.create :user, wca_id: "2006FLEI01", name: person2.name
       user.wca_id = user2.wca_id
-      expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq ["must be unique"]
+      expect(user).to be_invalid_with_errors(wca_id: ["must be unique"])
     end
 
     it "removes dummy accounts and copies name when WCA ID is assigned" do
@@ -362,72 +359,67 @@ RSpec.describe User, type: :model do
       user.claiming_wca_id = false
       other_person = FactoryGirl.create :person, year: 1980, month: 2, day: 1
       user.unconfirmed_wca_id = other_person.wca_id
-      expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to be_present
+      expect(user).to be_invalid_with_errors(dob_verification: [I18n.t("users.errors.dob_incorrect_html", dob_form_path: dob_form_path)])
     end
 
     it "requires fields when claiming_wca_id" do
       user.unconfirmed_wca_id = nil
       user.dob_verification = nil
       user.delegate_id_to_handle_wca_id_claim = nil
-      expect(user).to be_invalid
-      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
-      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
+      expect(user).to be_invalid_with_errors(
+        unconfirmed_wca_id: ['required'],
+        delegate_id_to_handle_wca_id_claim: ['required'],
+      )
     end
 
     it "requires unconfirmed_wca_id" do
       user.unconfirmed_wca_id = ""
-      expect(user).to be_invalid
-      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ['required']
+      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ['required'])
     end
 
     it "requires dob verification" do
       user.dob_verification = nil
-      expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to be_present
+      expect(user).to be_invalid_with_errors(dob_verification: [I18n.t("users.errors.dob_incorrect_html", dob_form_path: dob_form_path)])
     end
 
     it "does not allow claiming wca id Person without dob" do
       user.unconfirmed_wca_id = person_without_dob.wca_id
       user.dob_verification = "1234-04-03"
-      expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to eq [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)]
+      expect(user).to be_invalid_with_errors(dob_verification: [I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path)])
     end
 
     it "does not allow claiming wca id Person without gender" do
       user.unconfirmed_wca_id = person_without_gender.wca_id
       user.dob_verification = "1234-04-03"
-      expect(user).to be_invalid
-      expect(user.errors.messages[:gender]).to eq [I18n.t('users.errors.wca_id_no_gender_html')]
+      expect(user).to be_invalid_with_errors(gender: [I18n.t('users.errors.wca_id_no_gender_html')])
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
-      expect(user).to be_invalid
-      expect(user.errors.messages[:unconfirmed_wca_id]).to eq ["already assigned to a different user"]
-      expect(user.errors.messages[:dob_verification]).to eq []
+      expect(user).to be_invalid_with_errors(
+        unconfirmed_wca_id: ["already assigned to a different user"],
+        dob_verification: [],
+      )
     end
 
     it "requires correct dob verification" do
       user.dob_verification = '2016-01-02'
-      expect(user).to be_invalid
-      expect(user.errors.messages[:dob_verification]).to be_present
+      expect(user).to be_invalid_with_errors(dob_verification: [I18n.t("users.errors.dob_incorrect_html", dob_form_path: dob_form_path)])
     end
 
     it "requires delegate_id_to_handle_wca_id_claim" do
       user.delegate_id_to_handle_wca_id_claim = nil
-      expect(user).to be_invalid
-      expect(user.errors.messages[:delegate_id_to_handle_wca_id_claim]).to eq ['required']
+      expect(user).to be_invalid_with_errors(delegate_id_to_handle_wca_id_claim: ['required'])
     end
 
     it "delegate_id_to_handle_wca_id_claim must be a delegate" do
       user.delegate_id_to_handle_wca_id_claim = user.id
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(delegate_id_to_handle_wca_id_claim: ["not found"])
     end
 
     it "must claim a real wca id" do
       user.unconfirmed_wca_id = "1982AAAA01"
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ["not found"])
 
       user.unconfirmed_wca_id = person.wca_id
       expect(user).to be_valid
@@ -435,7 +427,7 @@ RSpec.describe User, type: :model do
 
     it "cannot claim a wca id already assigned to a real user" do
       user.unconfirmed_wca_id = user_with_wca_id.wca_id
-      expect(user).to be_invalid
+      expect(user).to be_invalid_with_errors(unconfirmed_wca_id: ["already assigned to a different user"])
     end
 
     it "can claim a wca id already assigned to a dummy user" do
@@ -463,10 +455,7 @@ RSpec.describe User, type: :model do
       user_with_wca_id.claiming_wca_id = true
       user_with_wca_id.unconfirmed_wca_id = person.wca_id
       user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
-      expect(user_with_wca_id).to be_invalid
-      expect(user_with_wca_id.errors.messages[:unconfirmed_wca_id]).to eq [
-        "cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}",
-      ]
+      expect(user_with_wca_id).to be_invalid_with_errors(unconfirmed_wca_id: ["cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}"])
     end
 
     context "when the delegate to handle WCA ID claim is demoted" do

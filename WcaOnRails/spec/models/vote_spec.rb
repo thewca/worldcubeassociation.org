@@ -13,35 +13,30 @@ RSpec.describe Vote do
 
   it "can't vote for nothing" do
     vote.poll_options = []
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_options]).to eq ["can't be empty"]
+    expect(vote).to be_invalid_with_errors(poll_options: ["can't be empty"])
   end
 
   it "can't vote for multiple options on single-answer polls" do
     vote.poll_options = [poll.poll_options[0], poll.poll_options[1]]
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_options]).to eq ["you must choose just one option"]
+    expect(vote).to be_invalid_with_errors(poll_options: ["you must choose just one option"])
   end
 
   it "can't vote for unconfirmed polls" do
     expect(vote).to be_valid
     poll.update_column(:confirmed_at, nil)
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_id]).to eq ["poll is not confirmed"]
+    expect(vote).to be_invalid_with_errors(poll_id: ["poll is not confirmed"])
   end
 
   it "can't vote for closed polls" do
     expect(vote).to be_valid
     poll.deadline = Time.now - 1.minute
     poll.save!
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_id]).to eq ["poll is closed"]
+    expect(vote).to be_invalid_with_errors(poll_id: ["poll is closed"])
   end
 
   it "can't vote for a non-existent poll" do
     vote.poll_id = "hello"
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_id]).to eq ["is not valid"]
+    expect(vote).to be_invalid_with_errors(poll_id: ["is not valid"])
   end
 
   it "can't vote with a non-existent poll_option_id" do
@@ -51,7 +46,6 @@ RSpec.describe Vote do
   it "can't vote with poll_option_id for different poll" do
     other_poll = FactoryGirl.create(:poll, :confirmed)
     vote.poll_option_ids = [other_poll.poll_options.first.id]
-    expect(vote).to be_invalid
-    expect(vote.errors[:poll_options]).to eq ["One or more poll_options don't match the poll"]
+    expect(vote).to be_invalid_with_errors(poll_options: ["One or more poll_options don't match the poll"])
   end
 end

@@ -50,10 +50,11 @@ RSpec.describe ApplicationHelper do
       user.wca_id = '1999FLEI01'
       user.dob = 2.days.from_now
       user.senior_delegate = FactoryGirl.create :senior_delegate
-      expect(user).to be_invalid
-      expect(user.errors.messages[:wca_id]).to eq ["not found"]
-      expect(user.errors.messages[:dob]).to eq ["must be in the past"]
-      expect(user.errors.messages[:senior_delegate]).to eq ["must not be present"]
+      expect(user).to be_invalid_with_errors(
+        wca_id: ["not found"],
+        dob: ["must be in the past"],
+        senior_delegate: ["must not be present"],
+      )
 
       form_html = helper.simple_form_for(user) do |f|
         buf = ""

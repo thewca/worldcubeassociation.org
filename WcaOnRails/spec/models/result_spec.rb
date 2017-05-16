@@ -11,27 +11,27 @@ RSpec.describe Result do
   context "associations" do
     it "validates competitionId" do
       result = FactoryGirl.build :result, competitionId: "foo"
-      expect(result).to be_invalid
+      expect(result).to be_invalid_with_errors(competition: ["can't be blank"])
     end
 
     it "validates countryId" do
       result = FactoryGirl.build :result, countryId: "foo"
-      expect(result).to be_invalid
+      expect(result).to be_invalid_with_errors(country: ["can't be blank"])
     end
 
     it "validates eventId" do
       result = FactoryGirl.build :result, eventId: "foo"
-      expect(result).to be_invalid
+      expect(result).to be_invalid_with_errors(event: ["can't be blank"])
     end
 
     it "validates formatId" do
       result = FactoryGirl.build :result, formatId: "foo"
-      expect(result).to be_invalid
+      expect(result).to be_invalid_with_errors(format: ["can't be blank"])
     end
 
     it "validates roundTypeId" do
       result = FactoryGirl.build :result, roundTypeId: "foo"
-      expect(result).to be_invalid
+      expect(result).to be_invalid_with_errors(round_type: ["can't be blank"])
     end
 
     it "person association always looks for subId 1" do
@@ -47,20 +47,17 @@ RSpec.describe Result do
   context "valid" do
     it "skipped solves must all come at the end" do
       result = FactoryGirl.build :result, value2: 0
-      expect(result).to be_invalid
-      expect(result.errors.messages[:base]).to eq ["Skipped solves must all come at the end."]
+      expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
     end
 
     it "cannot skip all solves" do
       result = FactoryGirl.build :result, value1: 0, value2: 0, value3: 0, value4: 0, value5: 0
-      expect(result).to be_invalid
-      expect(result.errors.messages[:base]).to eq ["Cannot skip all solves."]
+      expect(result).to be_invalid_with_errors(base: ["Cannot skip all solves."])
     end
 
     it "values must all be >= -2" do
       result = FactoryGirl.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
-      expect(result).to be_invalid
-      expect(result.errors.messages[:value2]).to eq ["invalid"]
+      expect(result).to be_invalid(value2: ["invalid"])
     end
 
     it "correctly computes best" do
@@ -68,8 +65,7 @@ RSpec.describe Result do
       expect(result).to be_valid
 
       result.best = 41
-      expect(result).to be_invalid
-      expect(result.errors.messages[:best]).to eq ["should be 42"]
+      expect(result).to be_invalid(best: ["should be 42"])
     end
 
     context "correctly computes average" do
@@ -85,16 +81,14 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 44
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 44"]
+            expect(result).to be_invalid(average: ["should be 44"])
           end
 
           it "missing solves" do
             result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
             expect(result.average_is_not_computable_reason).to eq nil
             expect(result.compute_correct_average).to eq 0
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 0"]
+            expect(result).to be_invalid(average: ["should be 0"])
           end
         end
 
@@ -107,8 +101,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 44
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 44"]
+            expect(result).to be_invalid_with_errors(average: ["should be 44"])
           end
 
           it "missing solves" do
@@ -130,8 +123,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 43
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 43"]
+            expect(result).to be_invalid_with_errors(average: ["should be 43"])
           end
 
           it "missing solves" do
@@ -140,15 +132,13 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 0
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 0"]
+            expect(result).to be_invalid_with_errors(average: ["should be 0"])
           end
 
           it "too many solves" do
             result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
             expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid
-            expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 5."]
+            expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 5."])
           end
         end
 
@@ -161,22 +151,19 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 43
-            expect(result).to be_invalid
-            expect(result.errors.messages[:average]).to eq ["should be 43"]
+            expect(result).to be_invalid_with_errors(average: ["should be 43"])
           end
 
           it "missing solves" do
             result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
             expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid
-            expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 1."]
+            expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 1."])
           end
 
           it "too many solves" do
             result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
             expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid
-            expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 5."]
+            expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 5."])
           end
         end
       end
@@ -187,8 +174,7 @@ RSpec.describe Result do
 
         result.average = 4200
         expect(result.compute_correct_average).to eq 4233
-        expect(result).to be_invalid
-        expect(result.errors.messages[:average]).to eq ["should be 4233"]
+        expect(result).to be_invalid_with_errors(average: ["should be 4233"])
       end
     end
 
@@ -204,60 +190,51 @@ RSpec.describe Result do
       context "non-combined rounds" do
         it "format 1" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "1")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected 1 solve, but found 2."]
+          expect(result).to be_invalid_with_errors(base: ["Expected 1 solve, but found 2."])
         end
 
         it "format 2" do
           result = result_with_n_solves(3, roundTypeId: "1", formatId: "2")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected 2 solves, but found 3."]
+          expect(result).to be_invalid_with_errors(base: ["Expected 2 solves, but found 3."])
         end
 
         it "format 3" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "3")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 2."]
+          expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 2."])
         end
 
         it "format m" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "m")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected 3 solves, but found 2."]
+          expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 2."])
         end
 
         it "format a" do
           result = result_with_n_solves(2, roundTypeId: "1", formatId: "a")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected 5 solves, but found 2."]
+          expect(result).to be_invalid_with_errors(base: ["Expected 5 solves, but found 2."])
         end
       end
 
       context "combined rounds" do
         it "format 2" do
           result = result_with_n_solves(3, roundTypeId: "c", formatId: "2")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected at most 2 solves, but found 3."]
+          expect(result).to be_invalid_with_errors(base: ["Expected at most 2 solves, but found 3."])
         end
 
         it "format 3" do
           result = result_with_n_solves(4, roundTypeId: "c", formatId: "3")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 4."]
+          expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 4."])
         end
 
         it "format m" do
           result = result_with_n_solves(4, roundTypeId: "c", formatId: "m")
-          expect(result).to be_invalid
-          expect(result.errors.messages[:base]).to eq ["Expected at most 3 solves, but found 4."]
+          expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 4."])
         end
       end
     end
 
     it "times over 10 minutes must be rounded" do
       result = FactoryGirl.build :result, value2: 10*6000 + 4343
-      expect(result).to be_invalid
-      expect(result.errors.messages[:value2]).to eq ["times over 10 minutes should be rounded"]
+      expect(result).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
 
       result.value2 = 10*6000 + 4300
       expect(result).to be_valid
@@ -272,8 +249,7 @@ RSpec.describe Result do
         solve_time.time_centiseconds = 65*60*100
 
         result = FactoryGirl.build :result, eventId: "333mbf", value1: solve_time.wca_value
-        expect(result).to be_invalid
-        expect(result.errors.messages[:value1]).to eq ["should be less than or equal to 60 minutes"]
+        expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
       end
 
       it "time must be below 30 minutes if they attempted 3 cubes" do
@@ -283,8 +259,7 @@ RSpec.describe Result do
         solve_time.time_centiseconds = 31*60*100
 
         result = FactoryGirl.build :result, eventId: "333mbf", value1: solve_time.wca_value
-        expect(result).to be_invalid
-        expect(result.errors.messages[:value1]).to eq ["should be less than or equal to 30 minutes"]
+        expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])
       end
     end
   end

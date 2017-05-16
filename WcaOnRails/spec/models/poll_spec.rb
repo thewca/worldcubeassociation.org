@@ -19,8 +19,7 @@ RSpec.describe Poll do
     it "requires two options" do
       poll = FactoryGirl.create :poll
       poll.confirmed_at = Time.now
-      expect(poll).to be_invalid
-      expect(poll.errors.keys).to eq [:poll_options]
+      expect(poll).to be_invalid_with_errors(poll_options: ["Poll must have at least two options"])
 
       FactoryGirl.create(:poll_option, poll_id: poll.id)
       FactoryGirl.create(:poll_option, poll_id: poll.id)
@@ -28,7 +27,7 @@ RSpec.describe Poll do
       expect(poll).to be_valid
 
       poll.poll_options[0].mark_for_destruction
-      expect(poll).to be_invalid
+      expect(poll).to be_invalid_with_errors(poll_options: ["Poll must have at least two options"])
     end
 
     it "testing deadline bug" do

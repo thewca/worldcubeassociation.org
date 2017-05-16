@@ -20,7 +20,9 @@ RSpec.describe Competition do
       "Moldavian Nationals – Winter 2016",
       "PingSkills Cubing Classic, 2016",
     ].each do |name|
-      expect(FactoryGirl.build(:competition, name: name)).to be_invalid
+      expect(FactoryGirl.build(:competition, name: name)).to be_invalid_with_errors(
+        name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"],
+      )
     end
   end
 
@@ -29,8 +31,7 @@ RSpec.describe Competition do
       competition = FactoryGirl.build :competition, :with_delegate, :future
       competition.delegates.first.update_columns(delegate_status: nil)
 
-      expect(competition).to be_invalid
-      expect(competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
+      expect(competition).to be_invalid_with_errors(delegate_ids: ["are not all delegates"])
     end
 
     it "delegates for past comps no longer need to be delegates" do
@@ -52,20 +53,17 @@ RSpec.describe Competition do
 
   it "requires that registration_open be before registration_close" do
     competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: 2.weeks.ago, use_wca_registration: true
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:registration_close]).to eq ["registration close must be after registration open"]
+    expect(competition).to be_invalid_with_errors(registration_close: ["registration close must be after registration open"])
   end
 
   it "requires registration_open if use_wca_registration" do
     competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: nil, registration_close: 2.weeks.ago, use_wca_registration: true
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:registration_open]).to eq ["required"]
+    expect(competition).to be_invalid_with_errors(registration_open: ["required"])
   end
 
   it "requires registration_close if use_wca_registration" do
     competition = FactoryGirl.build :competition, name: "Foo Test 2015", registration_open: 1.week.ago, registration_close: nil, use_wca_registration: true
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:registration_close]).to eq ["required"]
+    expect(competition).to be_invalid_with_errors(registration_close: ["required"])
   end
 
   it "truncates name as necessary to produce id and cellName" do
@@ -85,13 +83,14 @@ RSpec.describe Competition do
 
   it "requires that name end in a year" do
     competition = FactoryGirl.build :competition, name: "Name without year"
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:name]).to eq ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"]
+    expect(competition).to be_invalid_with_errors(
+      name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"],
+    )
   end
 
   it "requires that cellName end in a year" do
     competition = FactoryGirl.build :competition, cellName: "Name no year"
-    expect(competition).to be_invalid
+    expect(competition).to be_invalid_with_errors(cellName: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"])
   end
 
   it "populates year, month, day, endYear, endMonth, endDay" do
@@ -127,7 +126,7 @@ RSpec.describe Competition do
 
     competition.start_date = "1987-12-04"
     competition.end_date = ""
-    expect(competition).to be_invalid
+    expect(competition).to be_invalid_with_errors(end_date: ["invalid"])
 
     competition.end_date = "1987-12-05"
     expect(competition).to be_valid
@@ -137,21 +136,23 @@ RSpec.describe Competition do
     competition = FactoryGirl.create :competition
     competition.start_date = "1987-12-06"
     competition.end_date = "1987-12-05"
-    expect(competition).to be_invalid
+    expect(competition).to be_invalid_with_errors(end_date: ["End date cannot be before start date."])
   end
 
   it "last less than MAX_SPAN_DAYS days" do
     competition = FactoryGirl.create :competition
     competition.start_date = 1.days.ago.strftime("%F")
     competition.end_date = Competition::MAX_SPAN_DAYS.days.from_now.strftime("%F")
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:end_date]).to eq [I18n.t('competitions.errors.span_too_many_days', max_days: Competition::MAX_SPAN_DAYS)]
+    expect(competition).to be_invalid_with_errors(
+      end_date: [I18n.t('competitions.errors.span_too_many_days', max_days: Competition::MAX_SPAN_DAYS)],
+    )
   end
 
   it "requires competition name is not greater than 50 characters" do
     competition = FactoryGirl.build :competition, name: "A really long competition name that is greater than 50 characters 2016"
-    expect(competition).to be_invalid
-    expect(competition.errors.messages[:name]).to eq ["is too long (maximum is 50 characters)"]
+    expect(competition).to be_invalid_with_errors(
+      name: ["is too long (maximum is 50 characters)"],
+    )
   end
 
   context "#user_should_post_delegate_report?" do
@@ -239,7 +240,7 @@ RSpec.describe Competition do
     competition.start_date = "1987-11-06"
     competition.end_date = "1988-12-07"
     competition.save
-    expect(competition).to be_invalid
+    expect(competition).to be_invalid_with_errors(end_date: ["Competition cannot last more than 6 days."])
     expect(competition.end_date).to eq Date.parse("1988-12-07")
   end
 
