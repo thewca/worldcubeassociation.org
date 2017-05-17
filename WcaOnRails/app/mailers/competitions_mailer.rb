@@ -54,4 +54,14 @@ class CompetitionsMailer < ApplicationMailer
       subject: "#{competition.name} Results",
     )
   end
+
+  def submit_report_nag(competition)
+    @competition = competition
+    mail(
+      to: competition.delegates.pluck(:email),
+      cc: ["board@worldcubeassociation.org"] + competition.delegates.map { |delegate| delegate.senior_delegate&.email }.uniq.compact.flatten,
+      reply_to: "board@worldcubeassociation.org",
+      subject: "#{competition.name} Delegate Report",
+    )
+  end
 end

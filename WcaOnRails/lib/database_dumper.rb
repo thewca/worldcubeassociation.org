@@ -363,6 +363,7 @@ module DatabaseDumper
           discussion_url
           posted_by_user_id
           posted_at
+          nag_sent_at
         ),
       ),
     }.freeze,

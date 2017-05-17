@@ -1,0 +1,16 @@
+<p>
+  Dear <%= "Delegate".pluralize(@competition.delegates.count) %> of <%= @competition.name %>,
+</p>
+
+<p>
+  This is an automated reminder. Over a week has passed since <%= @competition.name %> took
+  place and the delegate report of the competition is still not available for The Board
+  as required by regulation <a href="https://www.worldcubeassociation.org/regulations/#1c1">1c1)</a>.
+  Irrespective of if you have an availability to send in your report any soon,
+  please reply this email to update us on the situation of this missing report.
+  Then submit the report as fast as possible <%= link_to "here", delegate_report_url(@competition) %>.
+</p>
+
+<p>
+  Regards, The WCA Board.
+</p>

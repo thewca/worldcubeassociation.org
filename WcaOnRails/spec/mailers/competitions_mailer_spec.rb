@@ -74,6 +74,32 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
   end
 
+  describe "submit_report_nag" do
+    let(:senior) { FactoryGirl.create(:senior_delegate) }
+    let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
+    let(:competition) { FactoryGirl.create(:competition, :with_delegate, name: "Peculiar Comp 2016", delegates: [delegate]) }
+    let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
+
+    before do
+      competition.delegates.first.tap do |delegate|
+        delegate.senior_delegate = senior
+        delegate.save!
+      end
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq "Peculiar Comp 2016 Delegate Report"
+      expect(mail.to).to match_array competition.delegates.pluck(:email)
+      expect(mail.cc).to eq ["board@worldcubeassociation.org", senior.email]
+      expect(mail.reply_to).to eq ["board@worldcubeassociation.org"]
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
+      expect(mail.body.encoded).to match(/delegate report/)
+    end
+  end
+
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
       competition = FactoryGirl.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
