@@ -561,9 +561,10 @@ CREATE TABLE `delegate_reports` (
   `posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `nag_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3869 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1187,5 +1188,6 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170418171035'),
 ('20170421204700'),
 ('20170426145811'),
+('20170502232234'),
 ('20170503205810'),
-('20170502232234');
+('20170517192919');

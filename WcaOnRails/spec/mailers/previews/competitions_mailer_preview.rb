@@ -14,8 +14,11 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def submit_results_nag
-    competition = Competition.last
-    CompetitionsMailer.submit_results_nag(competition)
+    CompetitionsMailer.submit_results_nag(Competition.last)
+  end
+
+  def submit_report_nag
+    CompetitionsMailer.submit_report_nag(Competition.last)
   end
 
   def notify_of_delegate_report_submission

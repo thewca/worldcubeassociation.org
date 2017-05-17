@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DelegateReport < ApplicationRecord
+  REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
+
   belongs_to :competition
   belongs_to :posted_by_user, class_name: "User"
 
