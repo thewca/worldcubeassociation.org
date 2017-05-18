@@ -54,4 +54,12 @@ class Event < ApplicationRecord
   def multiple_blindfolded?
     self.id == "333mbf" || self.id == "333mbo"
   end
+
+  def serializable_hash(options = nil)
+    {
+      id: self.id,
+      name: self.name,
+      format_ids: self.formats.map(&:id),
+    }
+  end
 end
