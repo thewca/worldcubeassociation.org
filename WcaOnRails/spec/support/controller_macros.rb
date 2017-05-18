@@ -26,6 +26,13 @@ module RequestMacros
       follow_redirect!
     end
   end
+
+  def sign_out
+    before :each do
+      delete destroy_user_session_path
+      follow_redirect!
+    end
+  end
 end
 
 RSpec.configure do |config|

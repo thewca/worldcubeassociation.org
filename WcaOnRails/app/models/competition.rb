@@ -842,6 +842,25 @@ class Competition < ApplicationRecord
     }
   end
 
+  def set_wcif_events!(wcif_events)
+    # Remove extra events.
+    self.competition_events.each do |competition_event|
+      competition_event.destroy! unless wcif_events.find { |wcif_event| wcif_event["id"] == competition_event.event.id }
+    end
+
+    # Create missing events.
+    wcif_events.each do |wcif_event|
+      competition_events.find_or_create_by!(event_id: wcif_event["id"])
+    end
+
+    # Update all events.
+    wcif_events.each do |wcif_event|
+      competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
+    end
+
+    reload
+  end
+
   def serializable_hash(options = nil)
     {
       class: self.class.to_s.downcase,

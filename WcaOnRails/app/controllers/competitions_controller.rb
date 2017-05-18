@@ -25,7 +25,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :update_events, :update_events_from_wcif, :payment_setup]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -324,6 +324,20 @@ class CompetitionsController < ApplicationController
     else
       render :edit_events
     end
+  end
+
+  def update_events_from_wcif
+    @competition = competition_from_params
+    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h } # TODO: validate that the incoming stuff is actually wcif
+    @competition.set_wcif_events!(wcif_events)
+    render json: {
+      status: "Successfully saved WCIF events",
+    }
+  rescue ActiveRecord::RecordInvalid => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e,
+    }
   end
 
   def get_nearby_competitions(competition)

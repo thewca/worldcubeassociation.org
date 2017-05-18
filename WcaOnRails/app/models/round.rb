@@ -53,6 +53,16 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self) : ""
   end
 
+  def self.from_wcif(wcif, round_number)
+    Round.new(
+      number: round_number,
+      format_id: wcif["format"],
+      time_limit: TimeLimit.load(wcif["timeLimit"]),
+      cutoff: Cutoff.load(wcif["cutoff"]),
+      advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
+    )
+  end
+
   def to_wcif
     {
       "id" => "#{event.id}-#{self.number}",

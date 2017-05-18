@@ -4,7 +4,7 @@ class CompetitionEvent < ApplicationRecord
   belongs_to :competition
   belongs_to :event
   has_many :registration_competition_events, dependent: :destroy
-  has_many :rounds, -> { order(:number) }
+  has_many :rounds, -> { order(:number) }, dependent: :destroy
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
   validates_numericality_of :fee_lowest_denomination, greater_than_or_equal_to: 0
@@ -33,5 +33,17 @@ class CompetitionEvent < ApplicationRecord
       "id" => self.event.id,
       "rounds" => self.rounds.map(&:to_wcif),
     }
+  end
+
+  def load_wcif!(wcif)
+    if wcif["rounds"].empty?
+      self.destroy!
+      return
+    end
+
+    self.rounds.destroy_all!
+    wcif["rounds"].each_with_index do |wcif_round, index|
+      self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1))
+    end
   end
 end
