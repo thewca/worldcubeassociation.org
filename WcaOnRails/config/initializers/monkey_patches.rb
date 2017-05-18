@@ -50,4 +50,14 @@ Rails.configuration.to_prepare do
       end
     end
   end
+
+  ActiveSupport::Duration.class_eval do
+    def in_seconds
+      self.to_i
+    end
+
+    def in_centiseconds
+      self.in_seconds * 100
+    end
+  end
 end

@@ -97,9 +97,10 @@ en:
   round:
     name: "%{event} Round %{number}"
   #context: Words used to describe the requirement to advance to the next round
-  advance_to_next_round_requirement:
+  advancement_condition:
     ranking: "Top %{ranking} advance to round %{next_round_number}"
-    attemptValue:
+    percent: "Top %{percent}% advance to round %{next_round_number}"
+    attempt_result:
       time: "Best solve ≤ %{time} advances to round %{next_round_number}"
       moves: "Best solve ≤ %{moves} moves advances to round %{next_round_number}"
       points: "Best solve ≥ %{points} points advances to round %{next_round_number}"

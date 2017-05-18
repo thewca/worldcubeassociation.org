@@ -21,6 +21,8 @@ Lint/UnusedBlockArgument:
 Lint/UnusedMethodArgument:
   Enabled: false
 
+Style/Alias:
+  Enabled: false
 Style/EmptyMethod:
   EnforcedStyle: expanded
 

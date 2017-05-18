@@ -157,6 +157,10 @@ class SolveTime
     to_orderable <=> other.to_orderable
   end
 
+  def self.multibld_attempt_to_points(attempt_result)
+    SolveTime.new("333mbf", :best, attempt_result).points
+  end
+
   def self.centiseconds_to_clock_format(centiseconds)
     hours = centiseconds / 360_000
     minutes = (centiseconds % 360_000) / 6000
