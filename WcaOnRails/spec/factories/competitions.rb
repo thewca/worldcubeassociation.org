@@ -36,6 +36,12 @@ FactoryGirl.define do
       results_posted_at Time.now
     end
 
+    trait :with_competitor_limit do
+      competitor_limit_enabled true
+      competitor_limit 100
+      competitor_limit_reason "The hall only fits 100 competitors."
+    end
+
     events { Event.where(id: event_ids) }
 
     venue "My backyard"

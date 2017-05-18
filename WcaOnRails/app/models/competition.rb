@@ -68,6 +68,9 @@ class Competition < ApplicationRecord
     contact
     remarks
     use_wca_registration
+    competitor_limit_enabled
+    competitor_limit
+    competitor_limit_reason
     guests_enabled
     base_entry_fee_lowest_denomination
     currency_code
@@ -99,6 +102,9 @@ class Competition < ApplicationRecord
   PATTERN_TEXT_WITH_LINKS_RE = /\A[^{}]*(#{PATTERN_LINK_RE.source}[^{}]*)*\z/
   MAX_ID_LENGTH = 32
   MAX_NAME_LENGTH = 50
+  MAX_COMPETITOR_LIMIT = 5000
+  validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
+  validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :id, presence: true, uniqueness: true, length: { maximum: MAX_ID_LENGTH },
                  format: { with: /\A[a-zA-Z0-9]+\Z/ }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
@@ -517,6 +523,10 @@ class Competition < ApplicationRecord
 
   def has_fees?
     base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
+  end
+
+  def competitor_limit_enabled?
+    competitor_limit_enabled
   end
 
   def pending_results_or_report(days)

@@ -215,6 +215,9 @@ en:
         contact: "Contact"
         information: "Information"
         use_wca_registration: "I would like to use the WCA website for registration"
+        competitor_limit_enabled: "I would like to specify a limit on the number of competitors that can enter this competition."
+        competitor_limit: "Maximum number of competitors"
+        competitor_limit_reason: "The reason for the competitor limit"
         guests_enabled: "Guests"
         receive_registration_emails: "Notify me by email when someone registers for this competition"
         registration_open: "Registration open"
@@ -333,6 +336,9 @@ en:
         showAtAll: ""
         start_date: ""
         use_wca_registration: ""
+        competitor_limit_enabled: "For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
+        competitor_limit: "The number of competitors allowed in this competition."
+        competitor_limit_reason: "What is the reason for the limit on competitors?"
         venueAddress: ""
       website_contact:
         message: ""
@@ -790,6 +796,7 @@ en:
         one: "WCA Delegate"
         other: "WCA Delegates"
       contact: "Contact"
+      competitor_limit: "Competitor Limit"
       entry_fee: "Entry Fee"
       information: "Information"
     #context: on the competition's index page

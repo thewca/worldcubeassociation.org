@@ -41,6 +41,28 @@ RSpec.describe Competition do
     end
   end
 
+  context "when competition has a competitor limit" do
+    it "requires competitor limit to be a number" do
+      competition = FactoryGirl.build :competition, competitor_limit_enabled: true
+      expect(competition).to be_invalid_with_errors(competitor_limit: ["is not a number"])
+    end
+
+    it "requires competitor limit to be greater than 0" do
+      competition = FactoryGirl.build :competition, competitor_limit_enabled: true, competitor_limit: 0, competitor_limit_reason: 'Because'
+      expect(competition).to be_invalid_with_errors(competitor_limit: ["must be greater than or equal to 1"])
+    end
+
+    it "requires competitor limit to be less than 5001" do
+      competition = FactoryGirl.build :competition, competitor_limit_enabled: true, competitor_limit: 5001, competitor_limit_reason: 'Because'
+      expect(competition).to be_invalid_with_errors(competitor_limit: ["must be less than or equal to 5000"])
+    end
+
+    it "requires a competitor limit reason" do
+      competition = FactoryGirl.build :competition, competitor_limit_enabled: true, competitor_limit: 100
+      expect(competition).to be_invalid_with_errors(competitor_limit_reason: ["can't be blank"])
+    end
+  end
+
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryGirl.build :competition, :with_delegate, :future

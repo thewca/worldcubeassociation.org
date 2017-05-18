@@ -841,7 +841,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'POST #udpate_events' do
+  describe 'POST #update_events' do
     context 'when not signed in' do
       sign_out
 
