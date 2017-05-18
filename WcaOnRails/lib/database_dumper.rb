@@ -2,6 +2,7 @@
 
 module DatabaseDumper
   JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id WHERE showAtAll=1"
+  DUMP_TIMESTAMP_NAME = "developer_dump_exported_at"
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -569,6 +570,8 @@ module DatabaseDumper
         populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{column_sanitizers.keys.join(", ")}) SELECT #{column_expressions} FROM #{table_name} #{table_sanitizer[:where_clause]}"
         ActiveRecord::Base.connection.execute(populate_table_sql)
       end
+
+      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.timestamps (name, date) VALUES ('#{DUMP_TIMESTAMP_NAME}', UTC_TIMESTAMP())")
     end
 
     LogTask.log_task "Dumping '#{dump_db_name}' to '#{dump_filename}'" do

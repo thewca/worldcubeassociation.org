@@ -37,18 +37,22 @@ RSpec.describe "DatabaseDumper" do
     user = FactoryGirl.create :user, dob: Date.new(1989, 1, 1)
 
     dump_file = Tempfile.new
+    before_dump = Time.now
     DatabaseDumper.development_dump(dump_file.path)
     dump_file.rewind
     sql = dump_file.read
     dump_file.close
 
     with_database "wca_db_dump_test" do
+      expect(Timestamp.find_by_name(DatabaseDumper::DUMP_TIMESTAMP_NAME)).to be_nil
+
       DbHelper.execute_sql sql
 
       expect(Competition.count).to eq 1
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
       expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to eq nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
+      expect(Timestamp.find_by_name(DatabaseDumper::DUMP_TIMESTAMP_NAME).date).to be >= before_dump
     end
   end
 end
