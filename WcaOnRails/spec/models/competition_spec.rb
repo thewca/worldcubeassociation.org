@@ -26,6 +26,21 @@ RSpec.describe Competition do
     end
   end
 
+  context "when there is an entry fee" do
+    it "correctly identifies there is a fee when there is only a base fee" do
+      competition = FactoryGirl.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
+      expect(competition.has_fees?).to be true
+      expect(competition.has_base_entry_fee?).to eq competition.base_entry_fee
+    end
+
+    it "correctly identifies there is a fee when there is only event fees" do
+      competition = FactoryGirl.create :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0
+      competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
+      expect(competition.has_base_entry_fee?).to be nil
+      expect(competition.has_fees?).to be true
+    end
+  end
+
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryGirl.build :competition, :with_delegate, :future
