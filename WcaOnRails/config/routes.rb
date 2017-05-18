@@ -155,4 +155,9 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
+  resources :forums, only: [:index, :show] do
+  end
+  resources :forum_topics, only: [:show]
 end

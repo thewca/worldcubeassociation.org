@@ -1,0 +1,15 @@
+<!-- NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED! -->
+
+<div class="container">
+  <h2><%= @topic.topic_title %></h2>
+  <% @topic.forum_posts.sort_by { |post| -post.post_time }.each do |post| %>
+    <div id="p<%= post.post_id %>">
+      <div>
+        <strong><%= post.poster&.username || "Guest" %></strong> (<%= Time.at(post.post_time) %>)
+      </div>
+      <div class="well">
+        <%= raw post.post_text %>
+      </div>
+    </div>
+  <% end %>
+</div>
