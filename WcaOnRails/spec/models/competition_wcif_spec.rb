@@ -87,8 +87,9 @@ RSpec.describe "Competition WCIF" do
   end
 
   describe "#set_wcif_events!" do
+    let(:wcif) { competition.to_wcif }
+
     it "removes competition event when wcif rounds are empty" do
-      wcif = competition.to_wcif
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"] = []
 
@@ -100,7 +101,6 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "removes competition event when wcif event is missing" do
-      wcif = competition.to_wcif
       wcif["events"].reject! { |e| e["id"] == "444" }
 
       competition.set_wcif_events!(wcif["events"])
@@ -110,7 +110,6 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
-      wcif = competition.to_wcif
       wcif["events"] << {
         "id" => "555",
         "rounds" => [
@@ -133,7 +132,6 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "creates new round when adding round to existing event" do
-      wcif = competition.to_wcif
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"][0]["advancementCondition"] = {
         "type" => "ranking",
@@ -164,7 +162,6 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "can change round format to '3'" do
-      wcif = competition.to_wcif
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
       wcif_333_event["rounds"][0]["format"] = '3'
 
