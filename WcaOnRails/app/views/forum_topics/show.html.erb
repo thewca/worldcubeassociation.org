@@ -2,7 +2,7 @@
 
 <div class="container">
   <h2><%= @topic.topic_title %></h2>
-  <% @topic.forum_posts.sort_by { |post| -post.post_time }.each do |post| %>
+  <% @topic.forum_posts.sort_by(&:post_time).each do |post| %>
     <div id="p<%= post.post_id %>">
       <div>
         <strong><%= post.poster&.username || "Guest" %></strong> (<%= Time.at(post.post_time) %>)

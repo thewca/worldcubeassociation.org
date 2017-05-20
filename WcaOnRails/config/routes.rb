@@ -137,8 +137,7 @@ Rails.application.routes.draw do
 
   scope :legacy do
     # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
-    resources :forums, only: [:index, :show] do
-    end
+    resources :forums, only: [:index, :show]
     resources :forum_topics, only: [:show]
   end
 
