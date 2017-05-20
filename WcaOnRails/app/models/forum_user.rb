@@ -5,4 +5,5 @@
 class ForumUser < ApplicationRecord
   self.table_name = "phpbb3_users"
   self.primary_key = "user_id"
+  establish_connection ActiveRecord::Base.connection_config.merge(database: "cubing_phpbb")
 end

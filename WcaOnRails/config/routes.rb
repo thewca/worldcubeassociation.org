@@ -135,6 +135,13 @@ Rails.application.routes.draw do
   get '/relations' => 'relations#index'
   get '/relation' => 'relations#relation'
 
+  scope :legacy do
+    # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
+    resources :forums, only: [:index, :show] do
+    end
+    resources :forum_topics, only: [:show]
+  end
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do
@@ -155,9 +162,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
-  resources :forums, only: [:index, :show] do
-  end
-  resources :forum_topics, only: [:show]
 end

@@ -5,6 +5,7 @@
 class Forum < ApplicationRecord
   self.table_name = "phpbb3_forums"
   self.primary_key = "forum_id"
+  establish_connection ActiveRecord::Base.connection_config.merge(database: "cubing_phpbb")
 
   has_many :forum_topics
 
