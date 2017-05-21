@@ -127,19 +127,21 @@ nl:
   round:
     #original_hash: 66e902f
     name: '%{event} Ronde %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
     ranking: 'Beste %{ranking} gaan door naar ronde %{next_round_number}'
-    attemptValue:
+    #original_hash: 31ad77c
+    percent: 'Beste %{percent}% gaan door naar ronde %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
-      time: 'Beste resultaat ≤ %{time} gaat door naar ronde %{next_round_number}'
+      time: 'Beste poging <= %{time} gaan door naar ronde %{next_round_number}'
       #original_hash: efa4ad1
       moves: >-
-        Beste resultaat ≤ %{moves} draaien gaat door naar ronde
+        Beste poging <= %{moves} draaien gaan door naar ronde
         %{next_round_number}
       #original_hash: 29f8453
       points: >-
-        Beste resultaat ≥ %{points} punten gaat door naar ronde
+        Beste poging >= %{points} punten gaan door naar ronde
         %{next_round_number}
   cutoff:
     #original_hash: 38a40f6
@@ -201,6 +203,15 @@ nl:
       zero: geen wedstrijdonderdelen
       one: dit wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Candidate Delegate
+    #original_hash: 12ab214
+    delegate: Delegate
+    #original_hash: d463c23
+    senior_delegate: Senior Delegate
+    #original_hash: 660ee15
+    board_member: Bestuurslid
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1775,6 +1786,8 @@ nl:
     confirm_delete_post: >-
       Weet je zeker dat je deze post wilt verwijderen? Deze actie kan niet
       worden teruggedraaid.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Aangekondigd door %{author_name} op %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
