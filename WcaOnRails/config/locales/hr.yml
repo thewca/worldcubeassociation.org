@@ -127,19 +127,23 @@ hr:
   round:
     #original_hash: 66e902f
     name: 'Original:  %{event} Runda %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
     ranking: 'Najboljih %{ranking} prolazi u slijedeću rundu %{next_round_number}'
-    attemptValue:
+    #original_hash: 31ad77c
+    percent: 'Najboljih %{percent}% prolazi u slijedeću rundu %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
-      time: 'Najbrže vrijeme ≤ %{time} prolazi u slijedeću rundu %{next_round_number}'
+      time: >-
+        Najbolje rješenje ≤ %{time} prolazi u slijedeću rundu
+        %{next_round_number}
       #original_hash: efa4ad1
       moves: >-
-        Najbolje rješenje  ≤ %{moves} prolazi u slijedeću rundu
+        Najbolje rješenje ≤ %{moves} prolazi u slijedeću rundu
         %{next_round_number}
       #original_hash: 29f8453
       points: >-
-        Najbrže vrijeme ≥ %{points} prolazi u slijedeću rundu
+        Najbolje rješenje ≥ %{points} bodova proalzi u slijedeću rundu
         %{next_round_number}
   cutoff:
     #original_hash: 38a40f6
