@@ -215,8 +215,22 @@ server {
     return 302 /persons/$arg_i?tab=map;
   }
 
-  #### phpBB forum
+  # phpBB forum redirects
+
   location /forum {
+    return 302 /legacy/forums;
+  }
+
+  location /forum/viewforum.php {
+    return 302 /legacy/forums/$arg_f;
+  }
+
+  location /forum/viewtopic.php {
+    return 302 /legacy/forum_topics/$arg_t;
+  }
+
+  #### phpBB forum
+  location /old_forum {
     alias <%= @repo_root %>/webroot/forum;
     index index.php index.html;
 
