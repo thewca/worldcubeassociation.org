@@ -15,6 +15,10 @@ env:
     - DATABASE_URL=mysql2://root:travis@127.0.0.1:3306/wca_test
     - RACK_ENV=test
 before_install:
+  # TMP BEGIN (see: https://github.com/thewca/worldcubeassociation.org/issues/1656)
+  - gem uninstall -i /home/travis/.rvm/gems/ruby-2.4.1@global -x bundler
+  - gem install -i /home/travis/.rvm/gems/ruby-2.4.1@global -v 1.14.6 bundler
+  # TMP END
   - nvm install 6.9.1
   - nvm use 6.9.1
 
