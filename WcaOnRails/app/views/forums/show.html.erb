@@ -1,0 +1,23 @@
+<!-- NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED! -->
+
+<div class="container">
+  <h2><%= @forum.forum_name %></h2>
+  <%= wca_table do %>
+    <thead>
+      <tr>
+        <th>Topic</th>
+        <th>Created by</th>
+        <th>Created on</th>
+      </tr>
+    </thead>
+      <tbody>
+        <% @forum.forum_topics.sort_by { |topic| -topic.topic_last_post_time }.each do |topic| %>
+          <tr>
+            <td><%= link_to raw(topic.topic_title), forum_topic_path(topic) %></td>
+            <td><%= topic.topic_first_poster_name %></td>
+            <td><%= Time.at(topic.topic_time).to_date %></td>
+          </tr>
+        <% end %>
+    </tbody>
+  <% end %>
+</div>

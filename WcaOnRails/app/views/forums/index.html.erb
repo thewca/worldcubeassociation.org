@@ -1,0 +1,11 @@
+<!-- NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED! -->
+
+<div class="container">
+  <% @forums.each do |forum| %>
+    <%= link_to forum_path(forum) do %>
+      <div class="well">
+        <%= forum.forum_name %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
