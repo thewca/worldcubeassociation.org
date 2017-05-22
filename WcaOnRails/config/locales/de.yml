@@ -127,20 +127,20 @@ de:
   round:
     #original_hash: 66e902f
     name: '%{event} Runde %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
-    ranking: 'Die ersten %{ranking} kommen in Runde %{next_round_number}'
-    attemptValue:
+    ranking: 'Die obersten %{ranking} kommen in Runde %{next_round_number}'
+    #original_hash: 31ad77c
+    percent: 'Die obersten %{percent}% kommen in Runde %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
-      time: 'Bestes Ergebnis ≤ %{time} um in Runde %{next_round_number} zu kommen'
+      time: 'Das beste Ergebnis ≤ %{time} um in Runde %{next_round_number} zu kommen'
       #original_hash: efa4ad1
-      moves: >-
-        Bester Versuch ≤ %{moves} Zügen um in Runde %{next_round_number} zu
-        kommen
+      moves: 'Bestes Ergebnis ≤ %{moves} um in Runde %{next_round_number} zu kommen'
       #original_hash: 29f8453
       points: >-
-        Bester Versuch ≥ %{points} Punkten, um in Runde %{next_round_number} zu
-        kommen
+        Bestes Ergebnis  ≥ %{points} Punkten um in Runde  %{next_round_number}
+        zu kommen
   cutoff:
     #original_hash: 38a40f6
     time:
@@ -177,7 +177,7 @@ de:
     #original_hash: 15f86c0
     average: Schnitt
     #original_hash: e7f6fc5
-    solves: Lösungen
+    solves: Versuche
     date:
       #original_hash: acb6273
       no_date: Kein Datum
@@ -201,6 +201,15 @@ de:
       zero: Keine Disziplin
       one: Diese Disziplin
       other: 'Diese %{count} Disziplinen'
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Delegat Kandidat
+    #original_hash: 12ab214
+    delegate: Delegierter
+    #original_hash: d463c23
+    senior_delegate: Senior Delegierter
+    #original_hash: 660ee15
+    board_member: Board Mitglied
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1362,7 +1371,7 @@ de:
         schnellstmöglich zu veröffentlichen!
       #original_hash: a0168ee
       in_progress: >-
-        Dieser Wettbewerb läuft gerade. Komme nach dem %{date} zurück um die
+        Dieser Wettbewerb läuft gerade. Komme nach dem %{date} zurück, um die
         Ergebnisse zu sehen!
       #original_hash: 3322400
       tooltip_registered: Du bist angemeldet.
@@ -1443,9 +1452,9 @@ de:
       #original_hash: 769bb19
       state: Status
       #original_hash: 4e9f7a3
-      present: Gegenwärtig
+      present: Aktuell
       #original_hash: 76eec76
-      recent: Aktuell
+      recent: Kürzlich
       #original_hash: 405c12f
       past: Vergangenheit
       #original_hash: 081ae3f
@@ -1802,22 +1811,24 @@ de:
       #original_hash: 1917f4f
       competition: Turnier
       #original_hash: 612e12d
-      results: Ergebnis
+      results: Ergebnisse
       #original_hash: e51c552
-      records: Rekord
+      records: Rekorde
       #original_hash: ab478f3
       competitions_map: Karte
       #original_hash: a99cec5
-      world_records: Verlauf der Weltrekorde
+      world_records: Übersicht der Weltrekorde
       #original_hash: 2d36a49
-      continental_records: Verlauf der kontinentalen Rekorde
+      continental_records: Übersicht der kontinentalen Rekorde
       #original_hash: 3ce631e
-      national_records: Verlauf der nationalen Rekorde
+      national_records: Übersicht der nationalen Rekorde
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: >-
       Bist Du dir sicher, dass Du diesen Post löschen willst? Diese Aktion lässt
       sich nicht rückgängig machen.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Angekündigt von %{author_name} am %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2299,13 +2310,12 @@ de:
     paragraphs:
       #original_hash: ec3e0ab
       '1': >-
-        Die WCA empfiehlt sehr die Nutzung von <a
-        href="http://cubecomps.com">Cube Comps</a> vor und während eines
-        Wettbewerbs. Cube Comps ist ein Online-System mit
-        Echtzeit-Ergebniserfassung und vielen interessanten Funktionen, wie z.B.
-        dem Drucken von Ergebniszetteln und einem sehr effizienten
-        Dateneingabe-System für mehrere Nutzer gleichzeitig. Erstellt von Luis
-        J. Iáñez und jetzt als Open Source verfügbar.
+        Die WCA empfiehlt die Nutzung von <a href="http://cubecomps.com">Cube
+        Comps</a> vor und während eines Wettbewerbs. Cube Comps ist ein
+        Online-System mit Echtzeit-Ergebniserfassung und vielen interessanten
+        Funktionen, wie z.B. dem Drucken von Ergebniszetteln und einem sehr
+        effizienten Dateneingabe-System für mehrere Nutzer gleichzeitig.
+        Erstellt von Luis J. Iáñez und jetzt als Open Source verfügbar.
       #original_hash: 7438b0d
       '2': >-
         Ergebnisse und Scrambles sollten unter Zuhilfenahme des %{workbook_link}
@@ -2482,4 +2492,4 @@ de:
         together_with: Zusammen mit
     messages:
       #original_hash: 4406a0b
-      invalid_wca_ids: 'Bitte gib zwei verschiedene, gültige WCA IDs ein.'
+      invalid_wca_ids: 'Bitte gebe zwei verschiedene, gültige WCA IDs ein.'
