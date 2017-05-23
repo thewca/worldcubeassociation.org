@@ -720,6 +720,24 @@ CREATE TABLE `polls` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `post_tags`
+--
+
+DROP TABLE IF EXISTS `post_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `post_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `tag` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_post_tags_on_post_id_and_tag` (`post_id`,`tag`),
+  KEY `index_post_tags_on_post_id` (`post_id`),
+  KEY `index_post_tags_on_tag` (`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `posts`
 --
 
@@ -1194,4 +1212,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170510071858'),
 ('20170516002944'),
 ('20170517192919'),
-('20170518011526');
+('20170518011526'),
+('20170523034604');

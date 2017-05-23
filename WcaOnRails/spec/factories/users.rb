@@ -34,14 +34,21 @@ FactoryGirl.define do
       end
     end
 
-    factory :results_team do
+    trait :wrt_member do
       after(:create) do |user|
         results_team = Team.find_by_friendly_id('wrt')
         FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id)
       end
     end
 
-    factory :wrc_team do
+    trait :wdc_member do
+      after(:create) do |user|
+        wdc_team = Team.find_by_friendly_id('wdc')
+        FactoryGirl.create(:team_member, team_id: wdc_team.id, user_id: user.id)
+      end
+    end
+
+    trait :wrc_member do
       after(:create) do |user|
         wrc_team = Team.find_by_friendly_id('wrc')
         FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)

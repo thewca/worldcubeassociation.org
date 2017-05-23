@@ -62,8 +62,8 @@ RSpec.describe PostsController do
     end
   end
 
-  context "logged in as wrc team" do
-    sign_in { FactoryGirl.create :wrc_team }
+  context "logged in as wrc member" do
+    sign_in { FactoryGirl.create :user, :wrc_member }
 
     describe "GET #new" do
       it "works" do
@@ -78,6 +78,28 @@ RSpec.describe PostsController do
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
+        expect(p.world_readable).to eq true
+      end
+    end
+  end
+
+  context "logged in as wdc member" do
+    sign_in { FactoryGirl.create :user, :wdc_member }
+
+    describe "GET #new" do
+      it "returns 200" do
+        get :new
+        expect(response.status).to eq 200
+      end
+    end
+
+    describe "POST #create" do
+      it "creates a tagged post" do
+        post :create, params: { post: { title: "Title", body: "body", tags: "wrc, notes" } }
+        p = Post.find_by_slug("Title")
+        expect(p.title).to eq "Title"
+        expect(p.body).to eq "body"
+        expect(p.tags_array).to match_array %w(wrc notes)
         expect(p.world_readable).to eq true
       end
     end

@@ -481,34 +481,34 @@ RSpec.describe User, type: :model do
 
   it "#teams and #current_teams return unique team names" do
     wrc_team = Team.find_by_friendly_id('wrc')
-    results_team = Team.find_by_friendly_id('wrt')
+    wrt_team = Team.find_by_friendly_id('wrt')
     user = FactoryGirl.create(:user)
 
     FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
+    FactoryGirl.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryGirl.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
 
-    expect(user.teams).to match_array [wrc_team, results_team]
-    expect(user.current_teams).to match_array [results_team]
+    expect(user.teams).to match_array [wrc_team, wrt_team]
+    expect(user.current_teams).to match_array [wrt_team]
   end
 
   it 'former members of the results team are not considered current members' do
-    member = FactoryGirl.create :results_team
-    team_member = member.team_members.first
+    wrt_member = FactoryGirl.create :user, :wrt_member
+    team_member = wrt_member.team_members.first
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(member.reload.team_member?('wrt')).to eq false
+    expect(wrt_member.reload.team_member?('wrt')).to eq false
   end
 
   it 'former leaders of the results team are not considered current leaders' do
-    leader = FactoryGirl.create :results_team
-    team_member = leader.team_members.first
+    wrt_leader = FactoryGirl.create :user, :wrt_member
+    team_member = wrt_leader.team_members.first
     team_member.update_attributes!(team_leader: true)
     team_member.update_attributes!(end_date: 1.day.ago)
 
-    expect(leader.reload.team_leader?('wrt')).to eq false
+    expect(wrt_leader.reload.team_leader?('wrt')).to eq false
 
-    expect(leader.teams_where_is_leader.count).to eq 0
+    expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end
 
   describe "#update_with_password" do

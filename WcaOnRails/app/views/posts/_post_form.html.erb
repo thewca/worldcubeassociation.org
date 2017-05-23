@@ -2,6 +2,7 @@
 <%= simple_form_for @post, url: url, html: { class: 'form-horizontal' } do |f| %>
   <%= f.input :title, disabled: !editable_post_fields.include?(:title), autofocus: true %>
   <%= f.input :body, input_html: { class: 'markdown-editor' } if editable_post_fields.include? :body %>
+  <%= f.input :tags if editable_post_fields.include? :tags %>
   <%= f.input :sticky if editable_post_fields.include? :sticky %>
   <%= f.button :submit %>
 

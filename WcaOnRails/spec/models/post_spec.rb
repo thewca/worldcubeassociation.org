@@ -28,4 +28,28 @@ RSpec.describe Post do
     expect(post.body_teaser).to eq post.body
     expect(post.body_full).to eq post.body
   end
+
+  context "tags" do
+    let(:post) { FactoryGirl.create(:post) }
+
+    it "can tag posts with a comma separated list" do
+      expect(post.tags_array).to match_array %w()
+
+      post.update!(tags: "wdc, test")
+      expect(Post.find(post.id).tags_array).to match_array %w(wdc test)
+
+      post.update!(tags: "wdc")
+      expect(Post.find(post.id).tags_array).to match_array %w(wdc)
+    end
+
+    it "tags must not have spaces" do
+      post.update!(tags: "wdc")
+      expect(Post.find(post.id).tags_array).to match_array %w(wdc)
+
+      expect(post.update(tags: "wdc,test tag with spaces")).to eq false
+      expect(post).to be_invalid_with_errors("post_tags.tag": ["only allows English letters and numbers"])
+
+      expect(Post.find(post.id).tags_array).to match_array %w(wdc)
+    end
+  end
 end

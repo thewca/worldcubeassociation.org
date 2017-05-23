@@ -262,6 +262,7 @@ en:
         title: "Title"
         body: "Body"
         sticky: "Sticky"
+        tags: "Tags"
       #context: a team
       team:
         name: "Name"
@@ -347,6 +348,7 @@ en:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
         sticky: ""
         title: ""
+        tags: "Enter a comma separated list of tags for this post."
       #context: for a delegate report
       delegate_report:
         schedule_url: "Full link to the published schedule (e.g., https://www.cubingusa.com/usnationals2016/schedule.php)"

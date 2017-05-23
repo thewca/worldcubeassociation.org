@@ -58,7 +58,7 @@ class PostsController < ApplicationController
   end
 
   private def editable_post_fields
-    [:title, :body, :sticky]
+    [:title, :body, :sticky, :tags]
   end
   helper_method :editable_post_fields
 
