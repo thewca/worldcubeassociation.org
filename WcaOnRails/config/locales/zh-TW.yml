@@ -127,29 +127,31 @@ zh-TW:
   round:
     #original_hash: 66e902f
     name: '%{event}第%{number}輪'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
     ranking: '前%{ranking}名晉級第%{next_round_number}輪'
-    attemptValue:
+    #original_hash: 31ad77c
+    percent: '前%{percent}%晉級第%{next_round_number}輪'
+    attempt_result:
       #original_hash: 2f332eb
-      time: '最佳成績 ≤ %{time}秒晉級第%{next_round_number}輪'
+      time: '最佳成績 ≤ %{time}晉級第%{next_round_number}輪'
       #original_hash: efa4ad1
       moves: '最佳成績 ≤ %{moves}步晉級第%{next_round_number}輪'
       #original_hash: 29f8453
-      points: '最佳成績 ≤ %{points}分晉級第%{next_round_number}輪'
+      points: '最佳成績 ≥ %{points}分晉級第%{next_round_number}輪'
   cutoff:
     #original_hash: 38a40f6
     time:
-      zero: '%{count}次還原 ≤ %{time}秒'
-      other: '%{count}次還原 ≤ %{time}秒'
+      other: '%{count}次還原 ≤ %{time}'
+      zero: '%{count}次還原 ≤ %{time}'
     #original_hash: 6f99fa6
     moves:
       zero: '%{count}次還原 ≤ %{moves}步'
       other: '%{count}次還原 ≤ %{moves}步'
     #original_hash: 1c7c5f1
     points:
-      zero: '%{count}次還原 ≤ %{points}分'
-      other: '%{count}次還原 ≤ %{points}分'
+      other: '%{count}次還原 ≥ %{points}分'
+      zero: '%{count}次還原 ≥ %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -160,7 +162,7 @@ zh-TW:
     #original_hash: 2513cf0
     continent: 洲
     #original_hash: d523ebb
-    country: 國家
+    country: 國籍
     #original_hash: 0154c0d
     here: 這裡
     #original_hash: 77003d0
@@ -192,6 +194,15 @@ zh-TW:
     these_events:
       zero: 這個項目
       other: '這%{count}個項目'
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: 代表候選人
+    #original_hash: 12ab214
+    delegate: 代表
+    #original_hash: d463c23
+    senior_delegate: 高級代表
+    #original_hash: 660ee15
+    board_member: 董事會成員
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -226,7 +237,7 @@ zh-TW:
         #original_hash: 8ed8874
         login: 登入
         #original_hash: 1528d10
-        country_iso2: 國家
+        country_iso2: 國籍
         #original_hash: ab58155
         dob: 生日
         #original_hash: ab58155
@@ -400,7 +411,7 @@ zh-TW:
       html: ''
     error_notification:
       #original_hash: d70e9cb
-      default_message: '請預覽以下問題:'
+      default_message: 請預覽以下問題：
     hints:
       user:
         #original_hash: 87e1e6f
@@ -434,8 +445,6 @@ zh-TW:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -450,14 +459,14 @@ zh-TW:
       competition:
         #original_hash: 2c812a0
         name: >-
-          比賽的全名且必須以年份為結尾(例如: Danish Open
-          2016)。字首得大寫且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()。
+          比賽的全名且必須以年份為結尾(例如：All is Well
+          2017)。字首得大寫且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()。
         #original_hash: 525fcc8
-        cellName: '供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣(例如: All is Well 2017)。'
+        cellName: 供顯示方便的縮寫。如果比賽名稱已經很短，縮寫可以和比賽名稱一樣(例如：All is Well 2017)。
         #original_hash: bce4589
-        cityName: '比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如: 台北、台中或高雄)'
+        cityName: 比賽舉行的城市或州(如果適用)。不要包含國家名稱(例如：台北、台中或高雄)
         #original_hash: 17c8ff8
-        information: '關於比賽的一些資訊(例如:  All is Well 2017開放給任何國籍的人)。'
+        information: 關於比賽的一些資訊(例如：All is Well 2017開放給任何國籍的人)。
         #original_hash: 0708400
         delegate_ids: 本場比賽的WCA代表
         #original_hash: 517d376
@@ -465,7 +474,7 @@ zh-TW:
         #original_hash: cabe7fb
         external_website: 這場比賽的比賽網站。必須為有效的網址。
         #original_hash: 9965635
-        registration_open: '備註: 報名開始和結束時間採用UTC時間'
+        registration_open: 備註：報名開始和結束時間採用UTC時間
         #original_hash: f688881
         remarks: 任何您想跟WCA董事會說明的事。例如，於比賽日期30日內才申請比賽的理由。
         #original_hash: da39a3e
@@ -530,28 +539,25 @@ zh-TW:
         title: ''
       delegate_report:
         #original_hash: 4eefb60
-        schedule_url: '公開賽程表的完整網址(例如: https://www.cubingusa.com/usnationals2016/schedule.php)'
+        schedule_url: '公開賽程表的完整網址(例如：https://www.cubingusa.com/usnationals2016/schedule.php)'
         #original_hash: 1a68719
         equipment: 這場比賽使用的大顯、計時器數量和款式。請把您沒用到的器材該行刪掉。
         #original_hash: 4658dd9
         venue: >-
-          簡述比賽的概況、燈光、交通、場地佈置(比賽區、轉亂區、等待區、成績錄入區)，如果您採用和平常比賽不一樣的配置，請描述一下是否有遇到問題(例如:
-          噪音)並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
+          簡述比賽的概況、燈光、交通、場地佈置(比賽區、轉亂區、等待區、成績錄入區)，如果您採用和平常比賽不一樣的配置，請描述一下是否有遇到問題(例如：噪音)並說明您怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: f8de509
         organization: >-
-          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題(例如:
-          賽程延誤)和怎麼解決問題的。請具體描述，不要回答不相關的內容。
+          簡述比賽的主辦單位以及他們如何分工的，如果您有參與其中的話，您可以提及他們過往的主辦經驗以及進步的部份、比賽當天的表現和積極度、遇到的問題(例如：賽程延誤)和怎麼解決問題的。請具體描述，不要回答不相關的內容。
         #original_hash: 715f020
         incidents: >-
-          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如:
-          常見的+2或是DNF)。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
+          任何您認為值得報告意外事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。請提及重要的事件就好，而非一般的(例如：常見的+2或是DNF)。您可以任意的請其他代表或WRC給這些事件回饋。如果您想要請WDC參與討論，確保您有清楚的請求他們。
         #original_hash: f30abdc
-        remarks: '分享任何關於比賽的事情(例如: 進步/社群/這地區的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。'
+        remarks: 分享任何關於比賽的事情(例如：進步/社群/這地區的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
         #original_hash: e396d28
-        name: '例如: 交通、付款方式、獎品、住宿'
+        name: 例如：交通、付款方式、獎品、住宿
         #original_hash: da39a3e
         content: ''
       person:
@@ -646,8 +652,8 @@ zh-TW:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: '至少有1個錯誤:'
-          other: '至少有%{count}個錯誤:'
+          zero: 至少有1個錯誤：
+          other: '至少有%{count}個錯誤：'
     doorkeeper:
       applications:
         help:
@@ -797,9 +803,9 @@ zh-TW:
       submit_value: 取得WCA ID
     edit_avatar_thumbnail:
       #original_hash: 79f14eb
-      current: 目前的縮圖
+      current: 目前的縮圖：
       #original_hash: b42ba27
-      new: 新的縮圖
+      new: 新的縮圖：
       #original_hash: efc007a
       save: 儲存
     edit:
@@ -816,7 +822,7 @@ zh-TW:
       #original_hash: 42619dd
       preferred_events_desc: 選取您喜好的項目，讓報名比賽更加快速。
       #original_hash: b402e03
-      please_fix_profile: '您必須修改以下問題，才能報名報名比賽:'
+      please_fix_profile: 您必須修改以下問題，才能報名報名比賽：
       #original_hash: ff4fc02
       profile: 個人頁面
       #original_hash: 7b2c7f1
@@ -832,7 +838,7 @@ zh-TW:
       #original_hash: fc7269a
       pending_claim_mail_confirmation_html: '這位使用者已經取得WCA ID %{wca_id}。負責的代表%{delegate}將在這些帳號的電子郵件被確認之後收到通知。'
       #original_hash: 1cde7e6
-      your_thumbnail: 您的縮圖
+      your_thumbnail: 您的縮圖：
       #original_hash: af18820
       edit_thumbnail: 編輯縮圖
       #original_hash: cf65c6e
@@ -844,15 +850,23 @@ zh-TW:
       cannot_edit:
         #original_hash: 8501c74
         msg: >-
-          您無法更改您的姓名、生日、性別或國籍因為%{reason}。如果您需要更改以上資料，請聯絡您的<a
+          您無法更改您的姓名、生日、性別或國籍，原因：%{reason}。如果您需要更改以上資料，請聯絡您的<a
           href='%{delegate_url}'>代表</a>。
         reason:
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了
           #original_hash: 1c4670f
           registered: 您已經報名比賽了
+      #original_hash: fe7122d
+      guidelines_confirmation: 我確認我的頭像符合相關規定。
+      #original_hash: d677ceb
+      confirm_guidelines: 請確保您已詳閱頭像的指導方針並提交有效的照片。
       #original_hash: efc007a
       save: 儲存
+      #original_hash: 58e0c56
+      remove_avatar: 移除頭像
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: 您確定要刪除您的頭像嗎?
       #original_hash: 141d1d7
       guidelines: 指導方針
       avatar_guidelines:
@@ -904,7 +918,7 @@ zh-TW:
         我們沒有記錄到此WCA ID的姓名。請寄信至<a href='mailto:results@worldcubeassociation.org'
         target='_blank'>WCA成績組</a>處理。
       #original_hash: 49083d8
-      board_member_cannot_resign: WCA董事成員無法自行辭職! 請找其他WCA董事成員解雇您。
+      board_member_cannot_resign: WCA董事會成員無法自行辭職! 請找其他WCA董事成員解雇您。
       #original_hash: d02c03b
       avatar_requires_wca_id: 需要對應的WCA ID
     successes:
@@ -1017,7 +1031,7 @@ zh-TW:
         #original_hash: e48d8bd
         mail_subject: '您%{comp_name}的報名已經被移至等待候補中。'
         #original_hash: 6fd0a8e
-        moved_html: '您%{comp_name}的報名已經被移至等待候補中。可能的原因為:'
+        moved_html: '您%{comp_name}的報名已經被移至等待候補中。可能的原因為：'
         causes:
           #original_hash: eadfc0d
           accepted: 您的報名發生意外
@@ -1029,12 +1043,12 @@ zh-TW:
         #original_hash: 268e248
         mail_subject: '您已經取消報名%{comp_name}'
         #original_hash: f66ae63
-        message_html: '您已經取消報名%{comp_name}。可能的原因為:'
+        message_html: '您已經取消報名%{comp_name}。可能的原因為：'
         causes:
           #original_hash: 978944c
           missing_info: 您沒有輸入所有必填的資料。
           #original_hash: 788f2ec
-          incomplete: '您沒有符合報名的規則(例如: 預先支付報名費)'
+          incomplete: 您沒有符合報名的規則(例如：預先支付報名費)
           #original_hash: 1e225f0
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
           #original_hash: 0d4cce9
@@ -1113,7 +1127,7 @@ zh-TW:
     #original_hash: 89b4e7f
     greeting: '嗨，%{name}!'
     #original_hash: fb34a17
-    please_fix_profile_html: '您必須修改以下%{profile}問題，才能報名%{comp}。'
+    please_fix_profile_html: '您必須修改以下%{profile}問題，才能報名%{comp}：'
     #original_hash: 855ca9c
     can_register: '您可以在底下報名%{comp}。'
     #original_hash: 4167ed7
@@ -1316,10 +1330,10 @@ zh-TW:
         target='_blank'>Markdown</a>
       #original_hash: 9d9126e
       venue_html: >-
-        舉行比賽的場地。%{md} 例如: [Hsinchu National Senior High
+        舉行比賽的場地。%{md} 例如：[Hsinchu National Senior High
         School](http://www.hchs.hc.edu.tw/bin/home.php?Lang=en)
       #original_hash: 2651d1a
-      venue_details_html: '場地的細節 (例如: 一樓的正後方，跟隨指標走) %{md}'
+      venue_details_html: '場地的細節 (例如：一樓的正後方，跟隨指標走) %{md}'
       #original_hash: b727e58
       contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例: [顯示內容](mailto:some@email.com)'
       #original_hash: c5497bc
@@ -1524,7 +1538,7 @@ zh-TW:
       #original_hash: 709a232
       name: 姓名
       #original_hash: d523ebb
-      country: 國家
+      country: 國籍
       #original_hash: 02ae2bd
       podiums: 獎牌數
       #original_hash: 56656a0
@@ -1538,8 +1552,8 @@ zh-TW:
       completed_solves: 總還原次數
       #original_hash: fc78642
       personal_records: 目前個人紀錄
-      #original_hash: 5e00ce5
-      odd_rank_reason: 因其更改國籍導致排名空白或是國家排名大於洲際排名。前一個國籍的成績不會列入目前的地區排名。
+      #original_hash: e631f13
+      odd_rank_reason: 因其更改國籍導致排名空白或是國家排名差於洲際排名。前一個國籍的成績不會列入目前的地區排名。
       #original_hash: a91508f
       championship_podiums: 錦標賽前三名
       #original_hash: 3746f3b
@@ -1558,7 +1572,7 @@ zh-TW:
         #original_hash: af31025
         bronze: 銅牌
       #original_hash: 1917f4f
-      competition: 比賽
+      competition: 比賽次數
       #original_hash: 612e12d
       results: 成績
       #original_hash: e51c552
@@ -1574,6 +1588,8 @@ zh-TW:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: 您確定要刪除這篇文章嗎?這個動作是不可逆的。
+    #original_hash: 3dcbf6d
+    announcement_info_html: '%{author_name}於%{date_time}公告'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -1602,7 +1618,7 @@ zh-TW:
     #original_hash: 6cf2723
     contact_us: 聯絡我們
     #original_hash: 9100be3
-    search_for_competition: '尋找比賽:'
+    search_for_competition: 尋找比賽：
     #original_hash: cba12bc
     already_logged_in: 您已經登入WCA帳號了。
     #original_hash: 5b7fa52
@@ -1772,14 +1788,14 @@ zh-TW:
       #original_hash: 9482c5d
       title: 組織
       #original_hash: d855b50
-      board_html: 世界方塊協會由<strong></strong>
+      board_html: 世界方塊協會由<strong>WCA董事會</strong>領導，包括以下成員：
       #original_hash: b0c72a9
-      committees: '以下的委員會負責WCA的分工:'
+      committees: 以下的委員會負責WCA的分工：
       wdc:
         #original_hash: c97077a
         name: WCA紀律委員會
         #original_hash: 286fdf8
-        description: 該委員會在特殊案件下向WCA董事提供建議，例如有違反WCA規則嫌疑的，以及處理WCA比賽當中重大個人事件。
+        description: 該委員會在特殊案件下向WCA董事會提供建議，例如有違反WCA規則嫌疑的，以及處理WCA比賽當中重大個人事件。
       wrc:
         #original_hash: 3da1e85
         name: WCA規則委員會
@@ -1811,7 +1827,7 @@ zh-TW:
     #original_hash: d8fd3e4
     title: WCA代表
     #original_hash: 0a89b0f
-    acknowledges: 'WCA承認以下成員為WCA官方比賽的代表:'
+    acknowledges: WCA承認以下成員為WCA官方比賽的代表：
     table:
       #original_hash: 709a232
       name: 姓名
@@ -1823,7 +1839,7 @@ zh-TW:
     #original_hash: 37b8fdc
     title: 地區性組織
     #original_hash: ba87c07
-    content: 'WCA承認以下地區性組織:'
+    content: WCA承認以下地區性組織：
     how_to:
       #original_hash: fc3af12
       title: 如何成為WCA地區性組織
@@ -1850,7 +1866,7 @@ zh-TW:
       #original_hash: 4da829b
       title: 申請說明
       #original_hash: 7ae038e
-      description: 申請地區性組織之前，該地區需要提交一份完整的申請書給WCA委員會，內容包含以下所有細節。
+      description: 申請地區性組織之前，該地區需要提交一份完整的申請書給WCA董事會，內容包含以下所有細節。
       list:
         #original_hash: 1a9d544
         '1': 地區性組織的名稱
@@ -1920,13 +1936,13 @@ zh-TW:
         />我們喜歡這個標誌因為它的設計、顏色、以及它沒有特意秀出Rubik's Cube / 3x3x3方塊。
       #original_hash: f228da2
       '2': >-
-        我們有三種版本的標誌:  <a href="/files/WCAlogo_XL.jpg">JPG檔(大)</a> (46 KB, 1756 px
+        我們有三種版本的標誌：<a href="/files/WCAlogo_XL.jpg">JPG檔(大)</a> (46 KB, 1756 px
         by 1068 px)、<a href="/files/WCAlogo.svg">向量圖檔</a>和<a
         href="/files/WCAlogo_notext.svg">向量圖檔無文字版</a>。
       #original_hash: dcb1ad6
       '3': >-
-        3D版標誌，由越南的Vu Minh Tan設計: <a href="/files/WCALogo3D.png">PNG檔</a> (2.1
-        MB)、<a href="/files/WCALogo3Dsmall.png">PNG檔(小)</a> (0.25 MB)
+        3D版標誌，由越南的Vu Minh Tan設計：<a href="/files/WCALogo3D.png">PNG檔</a> (2.1
+        MB)、<a href="/files/WCALogo3Dsmall.png">PNG檔(小)</a> (0.25 MB)。
       #original_hash: 545fcd9
       '4': >-
         所有WCA比賽的主辦人可以在網站、衣服、紀念品或是裝飾品上使用WCA標誌，但是僅限於WCA官方比賽。<br
@@ -1942,10 +1958,10 @@ zh-TW:
     #original_hash: feece00
     version_history: 歷史版本
     #original_hash: 8f3f4c0
-    header: 在向WCA遞出成績之前，如何處理成績和轉亂步驟
+    header: 在向WCA提交成績之前，如何處理成績和轉亂步驟
     step1:
       #original_hash: c0450b1
-      title: '步驟一 : 打開成績小幫手'
+      title: 步驟一：打開成績小幫手
       #original_hash: 656d70d
       content_html: 按下<em>Open...</em>按鈕打開成績小幫手或著直接拖曳成績檔案到成績小幫手視窗。
     step2:
