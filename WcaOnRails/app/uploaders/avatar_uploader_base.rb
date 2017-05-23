@@ -3,6 +3,8 @@
 class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
+  DEFAULT_URL = ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: ENVied.ROOT_URL).freeze
+
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog
@@ -29,7 +31,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
-    ActionController::Base.helpers.asset_path("missing_avatar_thumb.png")
+    DEFAULT_URL
   end
 
   # Create different versions of your uploaded files:
