@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe PostsController do
-  let(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
-  let(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
-  let(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
+  let!(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
+  let!(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
+  let!(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
+  let!(:wdc_post) { FactoryGirl.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag") }
 
   context "not logged in" do
     describe "GET #index" do
@@ -13,12 +14,17 @@ RSpec.describe PostsController do
         get :index
         expect(assigns(:posts)).to eq [sticky_post, post1]
       end
+
+      it "filters by tag" do
+        get :index, params: { tag: "wdc" }
+        expect(assigns(:posts)).to eq [wdc_post]
+      end
     end
 
     describe "GET #rss" do
       it "populates an array of posts ignoring sticky bit" do
         get :rss, format: :xml
-        expect(assigns(:posts)).to eq [post1, sticky_post]
+        expect(assigns(:posts).to_a).to eq [post1, sticky_post, wdc_post]
       end
     end
 
@@ -95,11 +101,11 @@ RSpec.describe PostsController do
 
     describe "POST #create" do
       it "creates a tagged post" do
-        post :create, params: { post: { title: "Title", body: "body", tags: "wrc, notes" } }
+        post :create, params: { post: { title: "Title", body: "body", tags: "wdc, notes" } }
         p = Post.find_by_slug("Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
-        expect(p.tags_array).to match_array %w(wrc notes)
+        expect(p.tags_array).to match_array %w(wdc notes)
         expect(p.world_readable).to eq true
       end
     end

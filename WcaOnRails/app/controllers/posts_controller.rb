@@ -5,7 +5,13 @@ class PostsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:index, :rss, :show]
 
   def index
-    @posts = Post.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
+    tag = params[:tag]
+    if tag
+      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
+    else
+      @posts = Post.joins("LEFT JOIN post_tags ON post_tags.post_id = posts.id").group("posts.id").having("IFNULL(SUM(tag = 'wdc'), 0) = 0")
+    end
+    @posts = @posts.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
   end
 
   def rss
