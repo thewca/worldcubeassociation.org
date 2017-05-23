@@ -6,7 +6,7 @@ RSpec.describe PostsController do
   let!(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
   let!(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
   let!(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
-  let!(:wdc_post) { FactoryGirl.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag") }
+  let!(:wdc_post) { FactoryGirl.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag", show_on_homepage: false) }
 
   context "not logged in" do
     describe "GET #index" do
@@ -48,7 +48,7 @@ RSpec.describe PostsController do
         expect(assigns(:post)).to eq post1
       end
 
-      it "cannot find not worldreadable posts" do
+      it "cannot find not world_readable posts" do
         expect { get :show, params: { id: hidden_post.slug } }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end

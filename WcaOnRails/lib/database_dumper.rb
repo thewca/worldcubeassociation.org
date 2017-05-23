@@ -387,6 +387,7 @@ module DatabaseDumper
           title
           updated_at
           world_readable
+          show_on_homepage
         ),
       ),
     }.freeze,

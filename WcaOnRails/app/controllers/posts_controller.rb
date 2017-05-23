@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     if tag
       @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
     else
-      @posts = Post.joins("LEFT JOIN post_tags ON post_tags.post_id = posts.id").group("posts.id").having("IFNULL(SUM(tag = 'wdc'), 0) = 0")
+      @posts = Post.where(show_on_homepage: true)
     end
     @posts = @posts.where(world_readable: true).order(sticky: :desc, created_at: :desc).includes(:author).page(params[:page])
   end
@@ -64,7 +64,7 @@ class PostsController < ApplicationController
   end
 
   private def editable_post_fields
-    [:title, :body, :sticky, :tags]
+    [:title, :body, :sticky, :tags, :show_on_homepage]
   end
   helper_method :editable_post_fields
 

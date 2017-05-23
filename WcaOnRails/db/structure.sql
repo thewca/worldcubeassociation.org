@@ -754,10 +754,12 @@ CREATE TABLE `posts` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `world_readable` tinyint(1) NOT NULL DEFAULT '0',
+  `show_on_homepage` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_posts_on_slug` (`slug`),
   KEY `index_posts_on_world_readable_and_sticky_and_created_at` (`world_readable`,`sticky`,`created_at`),
-  KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`)
+  KEY `index_posts_on_world_readable_and_created_at` (`world_readable`,`created_at`),
+  KEY `idx_show_wr_sticky_created_at` (`show_on_homepage`,`world_readable`,`sticky`,`created_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7114 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1213,4 +1215,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170516002944'),
 ('20170517192919'),
 ('20170518011526'),
-('20170523034604');
+('20170523034604'),
+('20170523185221');

@@ -54,6 +54,8 @@ class Post < ApplicationRecord
     Post.find_or_create_by!(slug: CRASH_COURSE_POST_SLUG) do |post|
       post.title = "Delegate crash course"
       post.body = "Nothing here yet"
+      post.show_on_homepage = false
+      post.world_readable = false
     end
   end
 

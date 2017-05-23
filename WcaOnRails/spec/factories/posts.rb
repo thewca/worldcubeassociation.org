@@ -7,6 +7,7 @@ FactoryGirl.define do
     slug { title.parameterize }
     sticky false
     world_readable true
+    show_on_homepage true
     author
 
     trait :sticky do
