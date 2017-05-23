@@ -59,20 +59,6 @@
       <% end %>
     <% end %>
 
-    <%#
-      Urgg... this is a dirty hack for Kit Clement for RoseCity2017, and should be removed
-      on May 22nd, 2017 (after the competition is over). See:
-       https://github.com/thewca/worldcubeassociation.org/issues/1493
-    %>
-    <% if @competition.id == "RoseCity2017" %>
-      <strong>
-        Please note: payment is not required for those only competing at the Sunday
-        competition at the Hillsdale Library. If you are only competing in the 3x3x3
-        Blindfolded, 4x4x4 Blindfolded, or 3x3x3 Fewest Moves events, skip the
-        payment step and we will approve your registration automatically.
-      </strong>
-    <% end %>
-
     <% if user_may_register %>
       <% show_payment_form = @registration.show_payment_form? %>
       <% if show_payment_form %>
