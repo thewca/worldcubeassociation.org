@@ -349,7 +349,7 @@ en:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
         sticky: ""
         title: ""
-        tags: "Enter a comma separated list of tags for this post."
+        tags: ""
         show_on_homepage: "Careful! This is not secure for private data. This is only to prevent cluttering the homepage. Posts that are not shown on the homepage are still accessible to the public via permalink or through tags."
       #context: for a delegate report
       delegate_report:
