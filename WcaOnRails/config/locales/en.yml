@@ -341,7 +341,7 @@ en:
         your_email: ""
         wca_id: ""
         dob: "Your correct day of birth in the format YYYY-MM-DD"
-        document: "To proof your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker."
+        document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker."
       #context: for a post
       post:
         body: "Use the &lt;!-- break --&gt; tag to show a preview on the home page. Any post on the home page will show all text before this divider. The actual post will display the full body."
@@ -1011,6 +1011,7 @@ en:
     dob:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
+      important_message_html: '<span class="text-danger">IMPORTANT</span>: Attach a picture of a <u>legal document</u> (identity card, driver license, passport...) showing your name AND date of birth.'
       submit: "Request change"
     messages:
       success: "Thank you for your message. We will contact you soon!"

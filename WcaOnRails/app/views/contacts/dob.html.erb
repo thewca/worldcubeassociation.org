@@ -9,6 +9,9 @@
     <%= f.input :your_email %>
     <%= f.input :wca_id %>
     <%= f.input :dob, as: :date_picker %>
+
+    <strong><%= t('.important_message_html') %></strong>
+
     <%= f.input :document, as: :file %>
     <%= recaptcha_tags %>
     <div>
