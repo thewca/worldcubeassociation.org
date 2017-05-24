@@ -32,6 +32,13 @@ before_script:
   # See https://github.com/thewca/worldcubeassociation.org/issues/1629
   - echo "***** Some debugging info for https://github.com/thewca/worldcubeassociation.org/issues/1629 ****"
   - ps -efw | grep -i mysql
+  - service --status-all
+  - initctl list
+  - initctl status mysql-5.6
+  - date
+  - dmesg | grep -i -C 100 mysql
+
+  - ps -efw | grep -i mysql
   - /usr/sbin/mysql-5.6-wait-ready
 
   - bundle exec rake db:reset
