@@ -105,12 +105,12 @@ class Registration < ApplicationRecord
   end
 
   def entry_fee
-    competition.base_entry_fee
+    competition.base_entry_fee + competition_events.to_a.sum(&:fee)
   end
 
   def paid_entry_fees
     Money.new(
-      registration_payments.sum(&:amount_lowest_denomination),
+      registration_payments.sum(:amount_lowest_denomination),
       competition.currency_code,
     )
   end

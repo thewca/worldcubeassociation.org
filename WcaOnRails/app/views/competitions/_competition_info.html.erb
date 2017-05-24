@@ -42,9 +42,15 @@
         <% end %>
       </dd>
 
-      <% if competition.has_entry_fee? %>
+      <% if competition.has_fees? %>
         <dt><%= t '.entry_fee' %></dt>
         <dd><%= humanized_money_with_symbol competition.base_entry_fee %></dd>
+        <% competition.competition_events.each do |competition_event| %>
+          <% if competition_event.has_fee? %>
+            <dt><%= competition_event.event.name %></dt>
+            <dd><%= humanized_money_with_symbol competition_event.fee %></dd>
+          <% end %>
+        <% end %>
       <% end %>
     </dl>
   </div>

@@ -451,7 +451,7 @@ class Competition < ApplicationRecord
   end
 
   def using_stripe_payments?
-    connected_stripe_account_id && has_entry_fee?
+    connected_stripe_account_id && has_fees?
   end
 
   def can_edit_registration_fees?
@@ -511,8 +511,12 @@ class Competition < ApplicationRecord
     self.events.include?(event)
   end
 
-  def has_entry_fee?
+  def has_base_entry_fee?
     base_entry_fee.nonzero?
+  end
+
+  def has_fees?
+    base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
   end
 
   def pending_results_or_report(days)

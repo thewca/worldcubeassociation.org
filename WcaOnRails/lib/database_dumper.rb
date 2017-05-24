@@ -314,6 +314,7 @@ module DatabaseDumper
           id
           competition_id
           event_id
+          fee_lowest_denomination
         ),
       ),
     }.freeze,

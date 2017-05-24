@@ -449,6 +449,7 @@ CREATE TABLE `competition_events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `competition_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fee_lowest_denomination` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_competition_events_on_competition_id_and_event_id` (`competition_id`,`event_id`),
   KEY `fk_rails_ba6cfdafb1` (`event_id`)
@@ -1192,4 +1193,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170503205810'),
 ('20170510071858'),
 ('20170516002944'),
-('20170517192919');
+('20170517192919'),
+('20170518011526');
