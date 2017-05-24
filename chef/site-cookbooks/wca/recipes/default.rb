@@ -290,15 +290,6 @@ template "#{rails_root}/.env.production" do
   })
 end
 
-#### PHP Forum
-template "#{repo_root}/webroot/forum/config.php" do
-  source "forum_config.php.erb"
-  variables({
-    secrets: secrets,
-    db: db,
-  })
-end
-
 #### phpMyAdmin
 template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
   source "phpMyAdmin_config.inc.php.erb"
