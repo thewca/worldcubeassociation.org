@@ -554,7 +554,7 @@ nl:
         wca_id: ''
         #original_hash: 8723825
         dob: Je correcte geboortedatum in het formaat jjjj-mm-dd
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           Om je identiteit en je geboortedatum aan te tonen, kun je een foto 
           opsturen van een legitimatiebewijs (identiteitskaart, rijbewijs,
@@ -1806,6 +1806,11 @@ nl:
       description: >-
         Gebruik dit formulier als je geregisteerde geboortedatum anders is dan
         je werkelijke.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">LET OP</span>: Voeg een foto toe van een
+        <u>wettelijk document</u> (identiteitskaart, rijbewijs, paspoort...) met
+        daarop je naam EN geboortedatum.
       #original_hash: 19c17ec
       submit: Verzoek wijziging
     messages:
