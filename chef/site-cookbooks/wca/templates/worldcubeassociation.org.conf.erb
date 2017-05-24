@@ -229,24 +229,6 @@ server {
     return 302 /archive/forum_topics/$arg_t;
   }
 
-  #### phpBB forum
-  location /old_forum {
-    alias <%= @repo_root %>/webroot/forum;
-    index index.php index.html;
-
-    # From http://nginxlibrary.com/phpbb-configuration/
-    location ~ /(config\.php|common\.php|cache|files|images/avatars/upload|includes|store) {
-      deny all;
-      return 403;
-    }
-
-    location ~* \.(gif|jpe?g|png|css)$ {
-      expires 30d;
-    }
-
-    include fcgi.conf;
-  }
-
   #### Regulations
   # This is kind of a mess: we're using Rails to template most, but not all,
   # of the regulations html. We also have static content such as pdfs and images
