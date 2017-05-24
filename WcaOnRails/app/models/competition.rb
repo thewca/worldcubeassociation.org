@@ -831,7 +831,7 @@ class Competition < ApplicationRecord
   def serializable_hash(options = nil)
     {
       class: self.class.to_s.downcase,
-      url: Rails.application.routes.url_helpers.competition_path(self),
+      url: Rails.application.routes.url_helpers.competition_url(self, host: ENVied.ROOT_URL),
 
       id: id,
       name: name,

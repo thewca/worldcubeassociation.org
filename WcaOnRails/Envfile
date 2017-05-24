@@ -20,7 +20,7 @@ variable :WCA_LIVE_SITE, :boolean, default: false
 if defined? Rails::Server
   default_root_url = "http://localhost:#{Rails::Server.new.options[:Port]}"
 elsif Rails.env.test?
-  default_root_url = "test.host"
+  default_root_url = "http://test.host"
 else
   default_root_url = ""
 end
