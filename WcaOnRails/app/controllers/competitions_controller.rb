@@ -183,7 +183,7 @@ class CompetitionsController < ApplicationController
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
-      create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+      create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
 
       comp.update!(announced_at: Time.now)
     end
@@ -308,7 +308,7 @@ class CompetitionsController < ApplicationController
       comp.update!(results_posted_at: Time.now)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
       comp.registrations.accepted.each { |registration| registration.user.notify_of_id_claim_possibility(comp) }
-      create_post_and_redirect(title: title, body: body, author: current_user, world_readable: true)
+      create_post_and_redirect(title: title, body: body, author: current_user, tags: "results", world_readable: true)
     end
   end
 

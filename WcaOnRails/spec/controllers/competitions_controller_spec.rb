@@ -545,6 +545,7 @@ RSpec.describe CompetitionsController do
         post = assigns(:post)
         expect(post.title).to eq "#{competition.name} on December 4 - 5, 2011 in #{competition.cityName}, #{competition.countryId}"
         expect(post.body).to match(/in #{competition.cityName}, #{competition.countryId}\./)
+        expect(post.tags_array).to match_array %w(competitions new)
       end
 
       it 'handles nil start date' do
@@ -676,6 +677,7 @@ RSpec.describe CompetitionsController do
             expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a single solve of 1:00.00 in the 3x3x3 Blindfolded event. " \
               "[Dan](#{person_url('2006YOYO02')}) finished second (1:00.00) and " \
               "[Steven](#{person_url('2006YOYO03')}) finished third (1:00.00).\n\n"
+            expect(post.tags_array).to match_array %w(results)
           end
         end
 
