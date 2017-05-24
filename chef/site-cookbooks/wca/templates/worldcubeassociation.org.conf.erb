@@ -218,15 +218,15 @@ server {
   # phpBB forum redirects
 
   location /forum {
-    return 302 /legacy/forums;
+    return 302 /archive/forums;
   }
 
   location /forum/viewforum.php {
-    return 302 /legacy/forums/$arg_f;
+    return 302 /archive/forums/$arg_f;
   }
 
   location /forum/viewtopic.php {
-    return 302 /legacy/forum_topics/$arg_t;
+    return 302 /archive/forum_topics/$arg_t;
   }
 
   #### phpBB forum
