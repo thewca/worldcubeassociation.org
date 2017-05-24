@@ -666,7 +666,38 @@ CREATE TABLE `archive_phpbb3_users` (
   KEY `user_birthday` (`user_birthday`),
   KEY `user_email_hash` (`user_email_hash`),
   KEY `user_type` (`user_type`)
-) ENGINE=MyISAM AUTO_INCREMENT=11893 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `archive_registrations`
+--
+
+DROP TABLE IF EXISTS `archive_registrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_registrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `competitionId` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `personId` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `guests_old` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `guests` int(11) NOT NULL DEFAULT '0',
+  `accepted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -901,38 +932,7 @@ CREATE TABLE `oauth_applications` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_oauth_applications_on_uid` (`uid`),
   KEY `index_oauth_applications_on_owner_id_and_owner_type` (`owner_id`,`owner_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `old_registrations`
---
-
-DROP TABLE IF EXISTS `old_registrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `old_registrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `competitionId` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `personId` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `guests_old` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `user_id` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `guests` int(11) NOT NULL DEFAULT '0',
-  `accepted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86141 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1469,4 +1469,5 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170518011526'),
 ('20170523034604'),
 ('20170523185221'),
-('20170524221221');
+('20170524221221'),
+('20170524224533');
