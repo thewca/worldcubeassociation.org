@@ -52,3 +52,9 @@ function comparePaymentDate(a, b) {
     return paidA === "" ? 1 : -1;
   }
 }
+
+function compareHtmlContent(a, b) {
+  var first = $('<p>' + a + '</p>').text().trim();
+  var second = $('<p>' + b + '</p>').text().trim();
+  return first.localeCompare(second);
+}

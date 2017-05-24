@@ -10,7 +10,7 @@
     <%= wca_table data: { toggle: "table" } do %>
       <thead>
         <tr>
-          <th class="name" data-sortable="true" data-field="name"><%= t 'activerecord.attributes.registration.name' %></th>
+          <th class="name" data-sortable="true" data-field="name" data-sorter="compareHtmlContent"><%= t 'activerecord.attributes.registration.name' %></th>
           <th class="country" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
 
           <% @competition.events.each do |event| %>
