@@ -2,7 +2,27 @@
 <%= simple_form_for @post, url: url, html: { class: 'form-horizontal' } do |f| %>
   <%= f.input :title, disabled: !editable_post_fields.include?(:title), autofocus: true %>
   <%= f.input :body, input_html: { class: 'markdown-editor' } if editable_post_fields.include? :body %>
+
+  <% if editable_post_fields.include? :tags %>
+    <%= f.input :tags %>
+    <script>
+      $('input#post_tags').selectize({
+        plugins: ['remove_button'],
+        delimiter: ',',
+        persist: false,
+        options: <%= PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag } }.to_json.html_safe %>,
+        create: function(input) {
+          return {
+            value: input,
+            text: input
+          };
+        },
+      });
+    </script>
+  <% end %>
+
   <%= f.input :sticky if editable_post_fields.include? :sticky %>
+  <%= f.input :show_on_homepage if editable_post_fields.include? :show_on_homepage %>
   <%= f.button :submit %>
 
   <% if @post.deletable %>

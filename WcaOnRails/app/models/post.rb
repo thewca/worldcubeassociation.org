@@ -2,10 +2,31 @@
 
 class Post < ApplicationRecord
   belongs_to :author, class_name: "User"
+  has_many :post_tags, autosave: true, dependent: :destroy
 
   validates :title, presence: true, uniqueness: true
   validates :body, presence: true
   validates :slug, presence: true, uniqueness: true
+
+  attr_writer :tags
+
+  def tags
+    @tags ||= post_tags.pluck(:tag).join(",")
+  end
+
+  def tags_array
+    tags.split(",")
+  end
+
+  before_validation do
+    tags_array.each do |tag|
+      post_tags.find_or_initialize_by(tag: tag)
+    end
+
+    post_tags.each do |post_tag|
+      post_tag.mark_for_destruction unless tags_array.include?(post_tag.tag)
+    end
+  end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/
 
@@ -33,6 +54,8 @@ class Post < ApplicationRecord
     Post.find_or_create_by!(slug: CRASH_COURSE_POST_SLUG) do |post|
       post.title = "Delegate crash course"
       post.body = "Nothing here yet"
+      post.show_on_homepage = false
+      post.world_readable = false
     end
   end
 

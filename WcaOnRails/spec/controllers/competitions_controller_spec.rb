@@ -531,7 +531,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #post_announcement' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:user, :wrt_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale
@@ -558,7 +558,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #post_results' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:results_team) }
+      sign_in { FactoryGirl.create(:user, :wrt_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale

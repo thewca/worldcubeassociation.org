@@ -387,6 +387,17 @@ module DatabaseDumper
           title
           updated_at
           world_readable
+          show_on_homepage
+        ),
+      ),
+    }.freeze,
+    "post_tags" => {
+      where_clause: "JOIN posts ON posts.id=post_tags.post_id WHERE world_readable = TRUE",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          post_id
+          tag
         ),
       ),
     }.freeze,

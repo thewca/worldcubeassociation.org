@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe DelegatesPanelController do
-  describe "signed in as results team member" do
-    let(:results_team_user) { FactoryGirl.create :results_team }
+  describe "signed in as wrt member" do
+    let(:wrt_member) { FactoryGirl.create :user, :wrt_member }
     before :each do
-      sign_in results_team_user
+      sign_in wrt_member
     end
 
     it "can edit" do
