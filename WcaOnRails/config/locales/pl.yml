@@ -127,10 +127,12 @@ pl:
   round:
     #original_hash: 66e902f
     name: '%{event} Runda %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
     ranking: 'Najlepsze %{ranking} osób awansuje do %{next_round_number}. rundy'
-    attemptValue:
+    #original_hash: 31ad77c
+    percent: 'Najlepsze %{percent}% osób awansuje do %{next_round_number}. rundy'
+    attempt_result:
       #original_hash: 2f332eb
       time: 'Najlepszy czas ≤ %{time}  awansuje do %{next_round_number}. rundy'
       #original_hash: efa4ad1
@@ -414,6 +416,10 @@ pl:
         body: Treść
         #original_hash: 6f915a2
         sticky: Przypięty
+        #original_hash: 848eed0
+        tags: Tagi
+        #original_hash: fb4002e
+        show_on_homepage: Wyświetl na stronie głównej
       team:
         #original_hash: 709a232
         name: Nazwa
@@ -571,7 +577,7 @@ pl:
         wca_id: ''
         #original_hash: 8723825
         dob: Twoja poprawna data urodzenia w formacie RRRR-MM-DD
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           Aby potwierdzić swoją tożsamość i poprawną datę urodzenia, musisz
           załączyć zdjęcie jakiegokolwiek legalnego dokumentu (dowodu
@@ -589,6 +595,14 @@ pl:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Uwaga! To nie jest bezpieczne w przypadku prywatnych danych, jedynie
+          zapobiega bałaganowi na stronie domowej. Posty, które nie są
+          wyświetlone na stronie głównej, są wciąż dostępne publicznie poprzez
+          odpowiedni link z tagami.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -793,8 +807,6 @@ pl:
       faq: Często Zadawane Pytania
       #original_hash: a34b69f
       contact: Informacje kontaktowe
-      #original_hash: cf1d2c9
-      forum: Forum
       #original_hash: 4fa8cc8
       tools: Narzędzia
       #original_hash: 83fce83
@@ -1865,6 +1877,11 @@ pl:
       description: >-
         Używaj tego formularza, jeżeli twoja data urodzenia w naszej bazie
         danych różni się od prawdziwej.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">WAŻNE</span>: Załącz zdjęcie jakiegokolwiek
+        <u>legalnego dokumentu</u>  (dowodu osobistego, prawa jazdy,
+        paszportu...) na którym widać twoje imię oraz datę urodzenia.
       #original_hash: 19c17ec
       submit: Poproś o zmianę
     messages:
