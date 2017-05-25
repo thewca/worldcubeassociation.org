@@ -19,7 +19,7 @@ fi
 FOLDER=$1
 shift
 
-db_names="cubing cubing_phpbb"
+db_names="cubing"
 if [ "$COMMAND" == "dump" ]; then
   sudo rm -rf $FOLDER
   mkdir -p $FOLDER

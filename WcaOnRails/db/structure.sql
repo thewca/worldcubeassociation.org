@@ -418,6 +418,289 @@ CREATE TABLE `ar_internal_metadata` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `archive_phpbb3_forums`
+--
+
+DROP TABLE IF EXISTS `archive_phpbb3_forums`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_phpbb3_forums` (
+  `forum_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `left_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `right_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_parents` mediumtext COLLATE utf8_bin NOT NULL,
+  `forum_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_desc` text COLLATE utf8_bin NOT NULL,
+  `forum_desc_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_desc_options` int(11) unsigned NOT NULL DEFAULT '7',
+  `forum_desc_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_link` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_password` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_style` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_image` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_rules` text COLLATE utf8_bin NOT NULL,
+  `forum_rules_link` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_rules_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_rules_options` int(11) unsigned NOT NULL DEFAULT '7',
+  `forum_rules_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_topics_per_page` tinyint(4) NOT NULL DEFAULT '0',
+  `forum_type` tinyint(4) NOT NULL DEFAULT '0',
+  `forum_status` tinyint(4) NOT NULL DEFAULT '0',
+  `forum_last_post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_last_poster_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_last_post_subject` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_last_post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `forum_last_poster_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_last_poster_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `forum_flags` tinyint(4) NOT NULL DEFAULT '32',
+  `display_on_index` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_indexing` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_icons` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_prune` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `prune_next` int(11) unsigned NOT NULL DEFAULT '0',
+  `prune_days` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `prune_viewed` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `prune_freq` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `display_subforum_list` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `forum_options` int(20) unsigned NOT NULL DEFAULT '0',
+  `forum_posts_approved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_posts_unapproved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_posts_softdeleted` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_topics_approved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_topics_unapproved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_topics_softdeleted` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `enable_shadow_prune` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `prune_shadow_days` mediumint(8) unsigned NOT NULL DEFAULT '7',
+  `prune_shadow_freq` mediumint(8) unsigned NOT NULL DEFAULT '1',
+  `prune_shadow_next` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`forum_id`),
+  KEY `left_right_id` (`left_id`,`right_id`),
+  KEY `forum_lastpost_id` (`forum_last_post_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `archive_phpbb3_posts`
+--
+
+DROP TABLE IF EXISTS `archive_phpbb3_posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_phpbb3_posts` (
+  `post_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `topic_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `poster_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `icon_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `poster_ip` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `post_reported` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `enable_bbcode` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_smilies` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_magic_url` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `enable_sig` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `post_username` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `post_text` mediumtext CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `post_checksum` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_attachment` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `bbcode_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_postcount` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `post_edit_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `post_edit_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_edit_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `post_edit_count` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `post_edit_locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `post_visibility` tinyint(3) NOT NULL DEFAULT '0',
+  `post_delete_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `post_delete_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `post_delete_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`post_id`),
+  KEY `forum_id` (`forum_id`),
+  KEY `topic_id` (`topic_id`),
+  KEY `poster_ip` (`poster_ip`),
+  KEY `poster_id` (`poster_id`),
+  KEY `tid_post_time` (`topic_id`,`post_time`),
+  KEY `post_username` (`post_username`),
+  KEY `post_visibility` (`post_visibility`),
+  FULLTEXT KEY `post_subject` (`post_subject`),
+  FULLTEXT KEY `post_content` (`post_text`,`post_subject`)
+) ENGINE=MyISAM AUTO_INCREMENT=7411 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `archive_phpbb3_topics`
+--
+
+DROP TABLE IF EXISTS `archive_phpbb3_topics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_phpbb3_topics` (
+  `topic_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `forum_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `icon_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_attachment` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `topic_reported` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `topic_title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `topic_poster` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_time_limit` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_views` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_status` tinyint(3) NOT NULL DEFAULT '0',
+  `topic_type` tinyint(3) NOT NULL DEFAULT '0',
+  `topic_first_post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_first_poster_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `topic_first_poster_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_last_post_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_last_poster_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_last_poster_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_last_poster_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_last_post_subject` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_last_post_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_last_view_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_moved_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_bumped` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `topic_bumper` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `poll_title` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `poll_start` int(11) unsigned NOT NULL DEFAULT '0',
+  `poll_length` int(11) unsigned NOT NULL DEFAULT '0',
+  `poll_max_options` tinyint(4) NOT NULL DEFAULT '1',
+  `poll_last_vote` int(11) unsigned NOT NULL DEFAULT '0',
+  `poll_vote_change` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `poll_vote_name` tinyint(1) NOT NULL DEFAULT '0',
+  `topic_visibility` tinyint(3) NOT NULL DEFAULT '0',
+  `topic_delete_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `topic_delete_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `topic_delete_user` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_approved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_unapproved` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topic_posts_softdeleted` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`topic_id`),
+  KEY `forum_id` (`forum_id`),
+  KEY `forum_id_type` (`forum_id`,`topic_type`),
+  KEY `last_post_time` (`topic_last_post_time`),
+  KEY `fid_time_moved` (`forum_id`,`topic_last_post_time`,`topic_moved_id`),
+  KEY `topic_visibility` (`topic_visibility`),
+  KEY `forum_vis_last` (`forum_id`,`topic_visibility`,`topic_last_post_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2031 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `archive_phpbb3_users`
+--
+
+DROP TABLE IF EXISTS `archive_phpbb3_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_phpbb3_users` (
+  `user_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `user_type` tinyint(2) NOT NULL DEFAULT '0',
+  `group_id` mediumint(8) unsigned NOT NULL DEFAULT '3',
+  `user_permissions` mediumtext COLLATE utf8_bin NOT NULL,
+  `user_perm_from` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_ip` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_regdate` int(11) unsigned NOT NULL DEFAULT '0',
+  `username` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `username_clean` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_password` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_passchg` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_email` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_email_hash` bigint(20) NOT NULL DEFAULT '0',
+  `user_birthday` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_lastvisit` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_lastmark` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_lastpost_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_lastpage` varchar(200) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_last_confirm_key` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_last_search` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_warnings` tinyint(4) NOT NULL DEFAULT '0',
+  `user_last_warning` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_login_attempts` tinyint(4) NOT NULL DEFAULT '0',
+  `user_inactive_reason` tinyint(2) NOT NULL DEFAULT '0',
+  `user_inactive_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_posts` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_lang` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_timezone` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_dateformat` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT 'd M Y H:i',
+  `user_style` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_rank` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `user_colour` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_new_privmsg` int(4) NOT NULL DEFAULT '0',
+  `user_unread_privmsg` int(4) NOT NULL DEFAULT '0',
+  `user_last_privmsg` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_message_rules` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `user_full_folder` int(11) NOT NULL DEFAULT '-3',
+  `user_emailtime` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_topic_show_days` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `user_topic_sortby_type` varchar(1) COLLATE utf8_bin NOT NULL DEFAULT 't',
+  `user_topic_sortby_dir` varchar(1) COLLATE utf8_bin NOT NULL DEFAULT 'd',
+  `user_post_show_days` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `user_post_sortby_type` varchar(1) COLLATE utf8_bin NOT NULL DEFAULT 't',
+  `user_post_sortby_dir` varchar(1) COLLATE utf8_bin NOT NULL DEFAULT 'a',
+  `user_notify` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `user_notify_pm` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_notify_type` tinyint(4) NOT NULL DEFAULT '0',
+  `user_allow_pm` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_allow_viewonline` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_allow_viewemail` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_allow_massemail` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_options` int(11) unsigned NOT NULL DEFAULT '230271',
+  `user_avatar` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_avatar_type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_avatar_width` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `user_avatar_height` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `user_sig` mediumtext COLLATE utf8_bin NOT NULL,
+  `user_sig_bbcode_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_sig_bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_jabber` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_actkey` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_newpasswd` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_form_salt` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user_new` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user_reminded` tinyint(4) NOT NULL DEFAULT '0',
+  `user_reminded_time` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username_clean` (`username_clean`),
+  KEY `user_birthday` (`user_birthday`),
+  KEY `user_email_hash` (`user_email_hash`),
+  KEY `user_type` (`user_type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `archive_registrations`
+--
+
+DROP TABLE IF EXISTS `archive_registrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `archive_registrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `competitionId` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `personId` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `guests_old` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `guests` int(11) NOT NULL DEFAULT '0',
+  `accepted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `competition_delegates`
 --
 
@@ -649,38 +932,7 @@ CREATE TABLE `oauth_applications` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_oauth_applications_on_uid` (`uid`),
   KEY `index_oauth_applications_on_owner_id_and_owner_type` (`owner_id`,`owner_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `old_registrations`
---
-
-DROP TABLE IF EXISTS `old_registrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `old_registrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `competitionId` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `personId` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `birthYear` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `birthMonth` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `birthDay` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `guests_old` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `user_id` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `guests` int(11) NOT NULL DEFAULT '0',
-  `accepted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_registrations_on_competitionId_and_user_id` (`competitionId`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86141 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1216,4 +1468,6 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170517192919'),
 ('20170518011526'),
 ('20170523034604'),
-('20170523185221');
+('20170523185221'),
+('20170524221221'),
+('20170524224533');
