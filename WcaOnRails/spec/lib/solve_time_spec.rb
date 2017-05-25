@@ -24,7 +24,7 @@ RSpec.describe "SolveTime" do
       solve_time = SolveTime.new("333mbf", :single, 0)
       solve_time.attempted = 3
       solve_time.solved = 2
-      solve_time.time_centiseconds = 3 * 60 * 100 + 5800
+      solve_time.time_centiseconds = (3.minutes + 58.seconds).in_centiseconds
 
       expect(solve_time.clock_format).to eq "2/3 3:58"
     end

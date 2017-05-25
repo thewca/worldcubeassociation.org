@@ -698,6 +698,45 @@ RSpec.describe CompetitionsController do
               "[Steven](#{person_url('2006YOYO03')}) finished third (27.66).\n\n"
           end
         end
+
+        context "333mbf" do
+          def add_result(pos, name)
+            solve_time = SolveTime.new("333mbf", :best, 0)
+            solve_time.attempted = 9
+            solve_time.solved = 8
+            solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
+            Result.create!(
+              pos: pos,
+              personId: "2006YOYO#{format('%.2d', pos)}",
+              personName: name,
+              countryId: "USA",
+              competitionId: competition.id,
+              eventId: "333mbf",
+              roundTypeId: "f",
+              formatId: "3",
+              value1: solve_time.wca_value,
+              value2: solve_time.wca_value,
+              value3: solve_time.wca_value,
+              value4: 0,
+              value5: 0,
+              best: solve_time.wca_value,
+              average: 273200, # See https://github.com/thewca/worldcubeassociation.org/issues/1688
+            )
+          end
+
+          it "announces top 3 in 333mbf final" do
+            add_result(1, "Jeremy")
+            add_result(2, "Dan")
+            add_result(3, "Steven")
+
+            get :post_results, params: { id: competition, event_id: "333mbf" }
+            post = assigns(:post)
+            expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a result of 8/9 45:32. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (8/9 45:32) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (8/9 45:32).\n\n"
+          end
+        end
       end
 
       it "announces world records" do

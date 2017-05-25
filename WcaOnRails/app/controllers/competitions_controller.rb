@@ -212,7 +212,11 @@ class CompetitionsController < ApplicationController
           case first_result.format.sort_by
           when "single"
             sort_by_field = :best
-            a_win_by_word = "a single solve"
+            if event.multiple_blindfolded?
+              a_win_by_word = "a result"
+            else
+              a_win_by_word = "a single solve"
+            end
           when "average"
             sort_by_field = :average
             a_win_by_word = first_result.format.id == "a" ? "an average" : "a mean"
@@ -222,11 +226,11 @@ class CompetitionsController < ApplicationController
 
           result_units = nil
           if event.timed_event?
-            result_units = "seconds"
+            result_units = " seconds"
           elsif event.fewest_moves?
-            result_units = "moves"
+            result_units = " moves"
           elsif event.multiple_blindfolded?
-            raise "We do not support multiblind yet"
+            result_units = ""
           else
             raise "Unrecognized event type #{event.id}"
           end
@@ -235,7 +239,7 @@ class CompetitionsController < ApplicationController
 
           body = "[#{first_result.personName}](#{person_url first_result.personId})"
           body += " won the [#{comp.name}](#{competition_url(comp)})"
-          body += " with #{a_win_by_word} of #{first_result.to_s sort_by_field} #{result_units}"
+          body += " with #{a_win_by_word} of #{first_result.to_s sort_by_field}#{result_units}"
 
           if top_three.length > 1
             body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{top_three.second.to_s sort_by_field})"
