@@ -167,6 +167,11 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def editable_post_fields
+    [:title, :body, :sticky, :tags, :show_on_homepage]
+  end
+  helper_method :editable_post_fields
+
   def post_announcement
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
