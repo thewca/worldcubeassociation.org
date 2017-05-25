@@ -35,8 +35,8 @@ RSpec.describe Post do
     it "can tag posts with a comma separated list" do
       expect(post.tags_array).to match_array %w()
 
-      post.update!(tags: "wdc, test")
-      expect(Post.find(post.id).tags_array).to match_array %w(wdc test)
+      post.update!(tags: "wdc, test-with-hyphens")
+      expect(Post.find(post.id).tags_array).to match_array %w(wdc test-with-hyphens)
 
       post.update!(tags: "wdc")
       expect(Post.find(post.id).tags_array).to match_array %w(wdc)
@@ -47,7 +47,7 @@ RSpec.describe Post do
       expect(Post.find(post.id).tags_array).to match_array %w(wdc)
 
       expect(post.update(tags: "wdc,test tag with spaces")).to eq false
-      expect(post).to be_invalid_with_errors("post_tags.tag": ["only allows English letters and numbers"])
+      expect(post).to be_invalid_with_errors("post_tags.tag": ["only allows English letters, numbers, and hyphens"])
 
       expect(Post.find(post.id).tags_array).to match_array %w(wdc)
     end
