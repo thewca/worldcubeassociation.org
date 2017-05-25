@@ -150,11 +150,27 @@ print "<li><p>Run some more scripts:</p>
 
 
 // table to check existence of results vs scrambles
+$eventIdResults = $wcadb_conn->boundQuery( "SELECT DISTINCT(eventId) FROM Results WHERE competitionId=?", array('s', &$compId));
+$eventIds = array_unique(array_map(function($eventIdResult) {
+  return $eventIdResult["eventId"];
+}, $eventIdResults));
+$eventOptionsStr = implode("", array_map(function($eventId) {
+  $selected = $eventId == "333" ? "selected" : "";
+  return "<option ${selected} value='${eventId}'>${eventId}</option>";
+}, $eventIds));
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
            <li><a href='/competitions/$compIdUrl' target='_blank' class='link-external external'>View the Public competition page</a></li>
-           <li>Post the <a href='/competitions/$compIdUrl/post/results' target='_blank' class='link-external external'>results announcement</a>
-                </li>
+           <li>
+             Post the
+             <a data-competition-id='$compIdUrl' href='#' id='post-results-link' target='_blank' class='link-external external'>
+               results announcement
+             </a>
+             <select id='main-event-select'>
+               <option value=''>No main event</option>
+               ${eventOptionsStr}
+             </select>
+           </li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
    "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundTypeId FROM (

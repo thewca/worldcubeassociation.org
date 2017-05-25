@@ -11,6 +11,18 @@ function get_comp_info(obj) {
   .done( function(data) {
     $('#notice_area').html(data);
 
+    var $postResultsLink = $('#post-results-link');
+    var $mainEventSelect = $('#main-event-select');
+    $mainEventSelect.change(function() {
+      var compId = $postResultsLink.data('competition-id');
+      var postResultsUrl = "/competitions/" + compId + "/post/results";
+      var eventId = $mainEventSelect.val();
+      if(eventId) {
+        postResultsUrl += "?event_id=" + eventId;
+      }
+      $postResultsLink.attr('href', postResultsUrl);
+    }).trigger('change');
+
     // remove scramble links
     $('#notice_area a.remove_link').click(function(e) {
       e.preventDefault();

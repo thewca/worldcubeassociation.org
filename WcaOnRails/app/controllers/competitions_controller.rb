@@ -188,29 +188,59 @@ class CompetitionsController < ApplicationController
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
       unless comp.results
-        render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
-        return
+        return render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
       end
 
-      top333 = comp.results.where(eventId: '333', roundTypeId: ['f', 'c']).order(:pos).limit(3)
-      if top333.empty? # If there was no 3x3x3 event.
+      event = Event.c_find(params[:event_id])
+      if event.nil?
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
       else
-        title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
+        top_three = comp.results.where(eventId: event.id, roundTypeId: ['f', 'c']).order(:pos).limit(3)
+        if top_three.empty?
+          return render html: "<div class='container'><div class='alert alert-warning'>Nobody competed in event: #{event.id}</div></div>".html_safe
+        else
+          first_result = top_three.first
 
-        body = "[#{top333.first.personName}](#{person_url top333.first.personId})"
-        body += " won the [#{comp.name}](#{competition_url(comp)})"
-        body += " with an average of #{top333.first.to_s :average} seconds"
-
-        if top333.length > 1
-          body += ". [#{top333.second.personName}](#{person_url top333.second.personId}) finished second (#{top333.second.to_s :average})"
-          if top333.length > 2
-            body += " and [#{top333.third.personName}](#{person_url top333.third.personId}) finished third (#{top333.third.to_s :average})"
+          sort_by_field = nil
+          a_win_by_word = nil
+          case first_result.format.sort_by
+          when "single"
+            sort_by_field = :best
+            a_win_by_word = "a single solve"
+          when "average"
+            sort_by_field = :average
+            a_win_by_word = first_result.format.id == "a" ? "an average" : "a mean"
+          else
+            raise "Unrecognized sort_by #{first_result.format.sort_by}"
           end
-        end
 
-        body += ".\n\n"
+          result_units = nil
+          if event.timed_event?
+            result_units = "seconds"
+          elsif event.fewest_moves?
+            result_units = "moves"
+          elsif event.multiple_blindfolded?
+            raise "We do not support multiblind yet"
+          else
+            raise "Unrecognized event type #{event.id}"
+          end
+
+          title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
+
+          body = "[#{first_result.personName}](#{person_url first_result.personId})"
+          body += " won the [#{comp.name}](#{competition_url(comp)})"
+          body += " with #{a_win_by_word} of #{first_result.to_s sort_by_field} #{result_units}"
+
+          if top_three.length > 1
+            body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{top_three.second.to_s sort_by_field})"
+            if top_three.length > 2
+              body += " and [#{top_three.third.personName}](#{person_url top_three.third.personId}) finished third (#{top_three.third.to_s sort_by_field})"
+            end
+          end
+
+          body += ".\n\n"
+        end
       end
 
       [
