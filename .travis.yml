@@ -36,7 +36,7 @@ before_script:
   - initctl list
   - initctl status mysql-5.6
   - date
-  - dmesg | grep -i -C 100 mysql
+  - dmesg | grep -i -C 100 mysql || true
 
   - ps -efw | grep -i mysql
   - /usr/sbin/mysql-5.6-wait-ready
