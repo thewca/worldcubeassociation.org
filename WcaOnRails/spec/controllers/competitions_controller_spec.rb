@@ -575,8 +575,8 @@ RSpec.describe CompetitionsController do
 
       context "winners announcement" do
         context "333" do
-          def add_result(pos, name)
-            Result.create!(
+          def add_result(pos, name, dnf: false)
+            Result.new(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -585,17 +585,17 @@ RSpec.describe CompetitionsController do
               eventId: "333",
               roundTypeId: "f",
               formatId: "a",
-              value1: 999,
+              value1: dnf ? SolveTime::DNF_VALUE : 999,
               value2: 999,
               value3: 999,
-              value4: 999,
+              value4: dnf ? SolveTime::DNF_VALUE : 999,
               value5: 999,
               best: 999,
-              average: 999,
-            )
+              average: dnf ? SolveTime::DNF_VALUE : 999,
+            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
           end
 
-          it "announces top 3 in 3x3 final" do
+          it "announces top 3 in final" do
             add_result(1, "Jeremy")
             add_result(2, "Dan")
             add_result(3, "Steven")
@@ -608,7 +608,7 @@ RSpec.describe CompetitionsController do
               "[Steven](#{person_url('2006YOYO03')}) finished third (9.99).\n\n"
           end
 
-          it "handles only 2 people in 3x3 final" do
+          it "handles only 2 people in final" do
             add_result(1, "Jeremy")
             add_result(2, "Dan")
 
@@ -619,13 +619,26 @@ RSpec.describe CompetitionsController do
               "[Dan](#{person_url('2006YOYO02')}) finished second (9.99).\n\n"
           end
 
-          it "handles only 1 person in 3x3 final" do
+          it "handles only 1 person in final" do
             add_result(1, "Jeremy")
 
             get :post_results, params: { id: competition, event_id: "333" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
             expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds.\n\n"
+          end
+
+          it "handles DNF averages in the podium" do
+            add_result(1, "Jeremy")
+            add_result(2, "Dan")
+            add_result(3, "Steven", dnf: true)
+
+            get :post_results, params: { id: competition, event_id: "333" }
+            post = assigns(:post)
+            expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with an average of 9.99 seconds. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 9.99 seconds).\n\n"
           end
         end
 
@@ -650,7 +663,7 @@ RSpec.describe CompetitionsController do
             )
           end
 
-          it "announces top 3 in 333bf final" do
+          it "announces top 3 in final" do
             add_result(1, "Jeremy")
             add_result(2, "Dan")
             add_result(3, "Steven")
@@ -665,8 +678,8 @@ RSpec.describe CompetitionsController do
         end
 
         context "333fm" do
-          def add_result(pos, name)
-            Result.create!(
+          def add_result(pos, name, dnf: false)
+            Result.new(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -675,17 +688,17 @@ RSpec.describe CompetitionsController do
               eventId: "333fm",
               roundTypeId: "f",
               formatId: "m",
-              value1: 29,
+              value1: dnf ? SolveTime::DNF_VALUE : 29,
               value2: 24,
               value3: 30,
               value4: 0,
               value5: 0,
               best: 24,
-              average: 2766,
-            )
+              average: dnf ? SolveTime::DNF_VALUE : 2766,
+            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
           end
 
-          it "announces top 3 in 333bf final" do
+          it "announces top 3 in final" do
             add_result(1, "Jeremy")
             add_result(2, "Dan")
             add_result(3, "Steven")
@@ -697,6 +710,19 @@ RSpec.describe CompetitionsController do
               "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
               "[Steven](#{person_url('2006YOYO03')}) finished third (27.66).\n\n"
           end
+
+          it "handles DNF averages in the podium" do
+            add_result(1, "Jeremy")
+            add_result(2, "Dan")
+            add_result(3, "Steven", dnf: true)
+
+            get :post_results, params: { id: competition, event_id: "333fm" }
+            post = assigns(:post)
+            expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a mean of 27.66 moves. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (27.66) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves).\n\n"
+          end
         end
 
         context "333mbf" do
@@ -705,7 +731,7 @@ RSpec.describe CompetitionsController do
             solve_time.attempted = 9
             solve_time.solved = 8
             solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
-            Result.create!(
+            Result.new(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -720,11 +746,11 @@ RSpec.describe CompetitionsController do
               value4: 0,
               value5: 0,
               best: solve_time.wca_value,
-              average: 273200, # See https://github.com/thewca/worldcubeassociation.org/issues/1688
-            )
+              average: 0,
+            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
           end
 
-          it "announces top 3 in 333mbf final" do
+          it "announces top 3 in final" do
             add_result(1, "Jeremy")
             add_result(2, "Dan")
             add_result(3, "Steven")

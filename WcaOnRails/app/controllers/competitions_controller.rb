@@ -189,6 +189,53 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def pretty_print_result(result, short: false)
+    event = result.event
+    sort_by = result.format.sort_by
+
+    # If the format for this round was to sort by average, but this particular
+    # result did not achieve an average, then switch to "best", and do not allow
+    # a short format (to make it clear what happened).
+    if sort_by == "average" && !result.to_solve_time(:average).completed?
+      sort_by = "single"
+      short = false
+    end
+
+    sort_by_field = nil
+    a_win_by_word = nil
+    case sort_by
+    when "single"
+      sort_by_field = :best
+      if event.multiple_blindfolded?
+        a_win_by_word = "a result"
+      else
+        a_win_by_word = "a single solve"
+      end
+    when "average"
+      sort_by_field = :average
+      a_win_by_word = result.format.id == "a" ? "an average" : "a mean"
+    else
+      raise "Unrecognized sort_by #{sort_by}"
+    end
+
+    result_units = nil
+    if event.timed_event?
+      result_units = " seconds"
+    elsif event.fewest_moves?
+      result_units = " moves"
+    elsif event.multiple_blindfolded?
+      result_units = ""
+    else
+      raise "Unrecognized event type #{event.id}"
+    end
+
+    if short
+      result.to_s sort_by_field
+    else
+      "with #{a_win_by_word} of #{result.to_s sort_by_field}#{result_units}"
+    end
+  end
+
   def post_results
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
@@ -207,44 +254,16 @@ class CompetitionsController < ApplicationController
         else
           first_result = top_three.first
 
-          sort_by_field = nil
-          a_win_by_word = nil
-          case first_result.format.sort_by
-          when "single"
-            sort_by_field = :best
-            if event.multiple_blindfolded?
-              a_win_by_word = "a result"
-            else
-              a_win_by_word = "a single solve"
-            end
-          when "average"
-            sort_by_field = :average
-            a_win_by_word = first_result.format.id == "a" ? "an average" : "a mean"
-          else
-            raise "Unrecognized sort_by #{first_result.format.sort_by}"
-          end
-
-          result_units = nil
-          if event.timed_event?
-            result_units = " seconds"
-          elsif event.fewest_moves?
-            result_units = " moves"
-          elsif event.multiple_blindfolded?
-            result_units = ""
-          else
-            raise "Unrecognized event type #{event.id}"
-          end
-
           title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
           body = "[#{first_result.personName}](#{person_url first_result.personId})"
           body += " won the [#{comp.name}](#{competition_url(comp)})"
-          body += " with #{a_win_by_word} of #{first_result.to_s sort_by_field}#{result_units}"
+          body += " #{pretty_print_result(first_result)}"
 
           if top_three.length > 1
-            body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{top_three.second.to_s sort_by_field})"
+            body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{pretty_print_result(top_three.second, short: true)})"
             if top_three.length > 2
-              body += " and [#{top_three.third.personName}](#{person_url top_three.third.personId}) finished third (#{top_three.third.to_s sort_by_field})"
+              body += " and [#{top_three.third.personName}](#{person_url top_three.third.personId}) finished third (#{pretty_print_result(top_three.third, short: true)})"
             end
           end
 

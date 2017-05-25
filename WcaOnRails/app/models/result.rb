@@ -99,8 +99,12 @@ class Result < ApplicationRecord
     end
   end
 
+  def to_solve_time(field)
+    SolveTime.new(eventId, field, send(field))
+  end
+
   def to_s(field)
-    SolveTime.new(eventId, field, send(field)).clock_format
+    to_solve_time(field).clock_format
   end
 
   def hlp
