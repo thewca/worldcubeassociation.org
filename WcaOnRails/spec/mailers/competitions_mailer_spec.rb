@@ -77,7 +77,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "submit_report_nag" do
     let(:senior) { FactoryGirl.create(:senior_delegate) }
     let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
-    let(:competition) { FactoryGirl.create(:competition, :with_delegate, name: "Peculiar Comp 2016", delegates: [delegate]) }
+    let(:former_delegate) { FactoryGirl.create(:user) }
+    let(:competition) { FactoryGirl.create(:competition, :past, :with_delegate, name: "Peculiar Comp 2016", delegates: [delegate, former_delegate]) }
     let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
 
     before do
@@ -89,7 +90,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq "Peculiar Comp 2016 Delegate Report"
-      expect(mail.to).to match_array competition.delegates.pluck(:email)
+      expect(mail.to).to match_array [delegate.email]
       expect(mail.cc).to eq ["board@worldcubeassociation.org", senior.email]
       expect(mail.reply_to).to eq ["board@worldcubeassociation.org"]
     end
