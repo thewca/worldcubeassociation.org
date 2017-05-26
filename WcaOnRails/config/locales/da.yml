@@ -43,7 +43,7 @@ da:
     #original_hash: 31ed23f
     333oh: 3x3x3 Med En Hånd
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Færrest Træk
+    333fm: 3x3x3 Færreste Træk
     #original_hash: be41d70
     333ft: 3x3x3 Med Fødderne
     #original_hash: d542376
@@ -127,17 +127,21 @@ da:
   round:
     #original_hash: 66e902f
     name: '%{event} Runde %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
-    ranking: 'Top %{ranking} kommer videre til runde %{next_round_number}'
-    attemptValue:
+    ranking: 'Top %{ranking} kommer videre til næste runde %{next_round_number}'
+    #original_hash: 31ad77c
+    percent: 'Top %{percent}% kommer videre til næste runde %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
-      time: 'Bedste resultat ≤ %{time} kommer videre til runde %{next_round_number}'
+      time: 'Bedste tid ≤ %{time} kommer videre til næste runde %{next_round_number}'
       #original_hash: efa4ad1
-      moves: 'Bedste tid  ≤ %{moves} træk kommer videre til runde %{next_round_number}'
+      moves: >-
+        Bedste resultat ≤ %{moves} træk kommer videre til næste runde
+        %{next_round_number}
       #original_hash: 29f8453
       points: >-
-        Bedste tid ≥ %{points} point kommer videre til runde
+        Bedste resultat ≥ %{points} point kommer videre til næste runde
         %{next_round_number}
   cutoff:
     #original_hash: 38a40f6
@@ -398,6 +402,10 @@ da:
         body: Body
         #original_hash: 6f915a2
         sticky: Sticky
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: fb4002e
+        show_on_homepage: Vis på hovedsiden
       team:
         #original_hash: 709a232
         name: Navn
@@ -553,7 +561,7 @@ da:
         wca_id: ''
         #original_hash: 8723825
         dob: Din korrekte fødselsdag i formaten ÅÅÅÅ-MM-DD
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           For at bevise din identitet og din korrekte fødselsdag for os, du skal
           vise et billed fra et hvert officielt dokument(ID kort, kørekort,
@@ -569,6 +577,13 @@ da:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Forsigtig! Dette er ikke sikkert for privat data. Det er kun for at
+          forhindre rod på hovedsiden. Opslag der ikke er vist på hovedsiden er
+          stadig åbent for offentligheden via et permalink eller igennem tags.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -769,8 +784,6 @@ da:
       faq: Ofte Stillede Spørgsmål
       #original_hash: a34b69f
       contact: Kontakt Information
-      #original_hash: cf1d2c9
-      forum: Forum
       #original_hash: 4fa8cc8
       tools: Tools
       #original_hash: 83fce83
@@ -1798,6 +1811,11 @@ da:
       description: >-
         Brug denne formular hvis din fødselsdag in vores database er anderledes
         end din rigtige.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">VIGTIGT</span>: Vedhæft et billede af et
+        <u>legal document</u> (ID kort, kørekort, pas...) som viser dit navn OG
+        fødselsdag.
       #original_hash: 19c17ec
       submit: Foresprøgelse ændring
     messages:
