@@ -259,6 +259,7 @@ class CompetitionsController < ApplicationController
           body = "[#{first_result.personName}](#{person_url first_result.personId})"
           body += " won the [#{comp.name}](#{competition_url(comp)})"
           body += " #{pretty_print_result(first_result)}"
+          body += " in the #{event.name} event" if event.id != "333"
 
           if top_three.length > 1
             body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{pretty_print_result(top_three.second, short: true)})"
