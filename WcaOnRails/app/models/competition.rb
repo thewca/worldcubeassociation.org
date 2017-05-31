@@ -659,7 +659,7 @@ class Competition < ApplicationRecord
 
   def events_with_podium_results
     light_results_from_relation(
-      results.podium.order(:pos),
+      results.podium,
     ).group_by(&:event)
       .sort_by { |event, _results| event.rank }
   end

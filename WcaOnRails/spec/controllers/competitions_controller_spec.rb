@@ -575,14 +575,14 @@ RSpec.describe CompetitionsController do
 
       context "winners announcement" do
         context "333" do
-          def add_result(pos, name, dnf: false)
+          def add_result(pos, name, event_id: "333", dnf: false)
             Result.new(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
               countryId: "USA",
               competitionId: competition.id,
-              eventId: "333",
+              eventId: event_id,
               roundTypeId: "f",
               formatId: "a",
               value1: dnf ? SolveTime::DNF_VALUE : 999,
@@ -594,6 +594,8 @@ RSpec.describe CompetitionsController do
               average: dnf ? SolveTime::DNF_VALUE : 999,
             ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
           end
+
+          let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh") }
 
           it "announces top 3 in final" do
             add_result(1, "Jeremy")
