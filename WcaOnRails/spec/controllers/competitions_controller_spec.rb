@@ -655,13 +655,13 @@ RSpec.describe CompetitionsController do
               eventId: "333bf",
               roundTypeId: "f",
               formatId: "3",
-              value1: 999,
-              value2: 999,
-              value3: 999,
+              value1: 60.seconds.in_centiseconds,
+              value2: 60.seconds.in_centiseconds,
+              value3: 60.seconds.in_centiseconds,
               value4: 0,
               value5: 0,
-              best: 999,
-              average: 999,
+              best: 60.seconds.in_centiseconds,
+              average: 60.seconds.in_centiseconds,
             )
           end
 
@@ -673,9 +673,9 @@ RSpec.describe CompetitionsController do
             get :post_results, params: { id: competition, event_id: "333bf" }
             post = assigns(:post)
             expect(post.title).to eq "Jeremy wins #{competition.name}, in #{competition.cityName}, #{competition.countryId}"
-            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a single solve of 9.99 seconds in the 3x3x3 Blindfolded event. " \
-              "[Dan](#{person_url('2006YOYO02')}) finished second (9.99) and " \
-              "[Steven](#{person_url('2006YOYO03')}) finished third (9.99).\n\n"
+            expect(post.body).to eq "[Jeremy](#{person_url('2006YOYO01')}) won the [#{competition.name}](#{competition_url(competition)}) with a single solve of 1:00.00 in the 3x3x3 Blindfolded event. " \
+              "[Dan](#{person_url('2006YOYO02')}) finished second (1:00.00) and " \
+              "[Steven](#{person_url('2006YOYO03')}) finished third (1:00.00).\n\n"
           end
         end
 

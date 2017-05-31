@@ -201,38 +201,27 @@ class CompetitionsController < ApplicationController
       short = false
     end
 
-    sort_by_field = nil
+    solve_time = nil
     a_win_by_word = nil
     case sort_by
     when "single"
-      sort_by_field = :best
+      solve_time = result.to_solve_time(:best)
       if event.multiple_blindfolded?
         a_win_by_word = "a result"
       else
         a_win_by_word = "a single solve"
       end
     when "average"
-      sort_by_field = :average
+      solve_time = result.to_solve_time(:average)
       a_win_by_word = result.format.id == "a" ? "an average" : "a mean"
     else
       raise "Unrecognized sort_by #{sort_by}"
     end
 
-    result_units = nil
-    if event.timed_event?
-      result_units = " seconds"
-    elsif event.fewest_moves?
-      result_units = " moves"
-    elsif event.multiple_blindfolded?
-      result_units = ""
-    else
-      raise "Unrecognized event type #{event.id}"
-    end
-
     if short
-      result.to_s sort_by_field
+      solve_time.clock_format
     else
-      "with #{a_win_by_word} of #{result.to_s sort_by_field}#{result_units}"
+      "with #{a_win_by_word} of #{solve_time.clock_format_with_units}"
     end
   end
 
