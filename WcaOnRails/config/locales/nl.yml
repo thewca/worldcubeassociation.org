@@ -400,6 +400,10 @@ nl:
         body: Berichttekst
         #original_hash: 6f915a2
         sticky: Bovenaan plaatsen
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: fb4002e
+        show_on_homepage: Toon op startpagina
       team:
         #original_hash: 709a232
         name: Naam
@@ -570,6 +574,14 @@ nl:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Let op! Dit is niet veilig voor privégegevens. Het is uitsluitend om
+          te voorkomen dat de startpagina vervuilt. Berichten die niet worden
+          getoond op de startpagina zijn toch bereikbaar voor het publiek via
+          een directe link of via tags.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -765,8 +777,6 @@ nl:
       faq: Veelgestelde vragen (FAQ)
       #original_hash: a34b69f
       contact: Contactinformatie
-      #original_hash: cf1d2c9
-      forum: Forum
       #original_hash: 4fa8cc8
       tools: Tools
       #original_hash: 83fce83
