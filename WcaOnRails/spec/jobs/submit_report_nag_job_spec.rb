@@ -7,7 +7,7 @@ RSpec.describe SubmitReportNagJob, type: :job do
     _unscheduled_competition = FactoryGirl.create :competition, starts: nil
     _recent_competition_missing_report = FactoryGirl.create :competition, :visible, starts: 3.days.ago
     old_competition_missing_report = FactoryGirl.create :competition, :visible, starts: 3.weeks.ago
-    _very_old_competition_missing_report = FactoryGirl.create :competition, :visible, starts: 1.year.ago
+    _very_old_competition_missing_report = FactoryGirl.create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
     _older_competition_missing_report_but_already_nagged = FactoryGirl.create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
       competition.delegate_report.update_attributes(nag_sent_at: 1.day.ago)
     end
