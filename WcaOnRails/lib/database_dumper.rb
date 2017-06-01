@@ -55,6 +55,9 @@ module DatabaseDumper
           registration_close
           enable_donations
           use_wca_registration
+          competitor_limit_enabled
+          competitor_limit
+          competitor_limit_reason
           guests_enabled
           results_posted_at
           results_nag_sent_at

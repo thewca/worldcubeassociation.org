@@ -477,6 +477,9 @@ class CompetitionsController < ApplicationController
         :contact,
         :generate_website,
         :external_website,
+        :competitor_limit_enabled,
+        :competitor_limit,
+        :competitor_limit_reason,
         :remarks,
         competition_events_attributes: [:id, :event_id, :_destroy],
       ]

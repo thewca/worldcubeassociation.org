@@ -3,6 +3,10 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.wca-registration-options').toggle(this.checked);
   }).trigger('change');
 
+  $('input[name="competition[competitor_limit_enabled]"]').on('change', function() {
+    $('.wca-competitor-limit-options').toggle(this.checked);
+  }).trigger('change');
+
   $('input[name="competition[generate_website]"]').on('change', function() {
     var generateWebsite = this.checked;
     $('div.competition_external_website').toggle(!generateWebsite);

@@ -252,6 +252,14 @@
       </div>
     </div>
 
+    <% if @competition_admin_view || !is_actually_confirmed %>
+      <%= f.input :competitor_limit_enabled %>
+      <div class="wca-competitor-limit-options">
+        <%= f.input :competitor_limit %>
+        <%= f.input :competitor_limit_reason %>
+      </div>
+    <% end %>
+
     <hr>
     <%= f.input :remarks, disabled: is_actually_confirmed %>
 

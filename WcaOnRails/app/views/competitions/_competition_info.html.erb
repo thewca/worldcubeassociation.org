@@ -42,6 +42,11 @@
         <% end %>
       </dd>
 
+      <% if competition.competitor_limit_enabled? %>
+        <dt><%= t '.competitor_limit' %></dt>
+        <dd><%= competition.competitor_limit %></dd>
+      <% end %>
+
       <% if competition.has_fees? %>
         <dt><%= t '.entry_fee' %></dt>
         <dd><%= humanized_money_with_symbol competition.base_entry_fee %></dd>

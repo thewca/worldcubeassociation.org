@@ -6,7 +6,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_board_of_confirmed_competition" do
     let(:delegate) { FactoryGirl.create :delegate }
     let(:second_delegate) { FactoryGirl.create :delegate }
-    let(:competition) { FactoryGirl.create :competition, delegates: [delegate, second_delegate] }
+    let(:competition) { FactoryGirl.create :competition, :with_competitor_limit, delegates: [delegate, second_delegate] }
     let(:mail) { CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
@@ -17,6 +17,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       expect(mail.subject).to eq("#{delegate.name} just confirmed #{competition.name}")
       expect(mail.body.encoded).to match("#{competition.name} is confirmed")
+      expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
       expect(mail.body.encoded).to match(admin_edit_competition_url(competition))
     end
   end
