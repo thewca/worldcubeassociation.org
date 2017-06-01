@@ -127,23 +127,23 @@ hu:
   round:
     #original_hash: 66e902f
     name: '%{event} Forduló %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
-    ranking: >-
-      Az első %{ranking} versenyző jut tovább a(z) %{next_round_number}.
-      fordulóba
-    attemptValue:
+    ranking: 'Az első %{ranking} fő jut tovább a %{next_round_number}. fordulóba'
+    #original_hash: 31ad77c
+    percent: 'Az első %{percent}% jut tovább a(z) %{next_round_number}. fordulóba'
+    attempt_result:
       #original_hash: 2f332eb
       time: >-
-        Leggyorsabb kirakás ≤ %{time} jut tovább a(z) %{next_round_number}.
+        Legjobb kirakás ≤ %{time} jut tovább a(z) %{next_round_number}.
         fordulóba
       #original_hash: efa4ad1
       moves: >-
-        Legjobb megoldás ≤ %{moves} mozdulat jut tovább a(z)
+        Legjobb kirakás ≤ %{moves} fordítás jut tovább a(z)
         %{next_round_number}. fordulóba
       #original_hash: 29f8453
       points: >-
-        Legjobb kirakás ≥ %{points} pont jut tovább a(z) %{next_round_number}.
+        Legjobb kirakás ≥ %{points} pont jut tovább a(z) %{next_round_number}
         fordulóba
   cutoff:
     #original_hash: 38a40f6
@@ -200,6 +200,15 @@ hu:
     these_events:
       zero: ez a 0 versenyszám
       other: 'ez a(z) %{count} versenyszám'
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Candidate Delegate
+    #original_hash: 12ab214
+    delegate: Delegate
+    #original_hash: d463c23
+    senior_delegate: Senior Delegate
+    #original_hash: 660ee15
+    board_member: Board Member
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -390,6 +399,10 @@ hu:
         body: Törzs
         #original_hash: 6f915a2
         sticky: Rögzített
+        #original_hash: 848eed0
+        tags: Címkék
+        #original_hash: fb4002e
+        show_on_homepage: Mutasd a főoldalon
       team:
         #original_hash: 709a232
         name: Név
@@ -548,7 +561,7 @@ hu:
         wca_id: ''
         #original_hash: 8723825
         dob: 'A helyes születési dátum forma: ÉÉÉÉ-HH-NN'
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           A személyiséged és a helyes születési dátumod igazolásához csatolnod
           kell egy képet valamilyen hivatalos dokumentumról (személyi
@@ -566,6 +579,13 @@ hu:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Óvatosan! Ez nem biztonságos a személyes adatoknak. Csak azért van,
+          hogy megakadályozza a honlap zavarását. A főoldalon nem szereplő
+          posztok továbbra is publikusak a fix linkek és a címkék által.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -766,8 +786,6 @@ hu:
       faq: Gyakran Ismételt Kérdések
       #original_hash: a34b69f
       contact: Elérhetőségek
-      #original_hash: cf1d2c9
-      forum: Fórum
       #original_hash: 4fa8cc8
       tools: Eszközök
       #original_hash: 83fce83
@@ -1788,6 +1806,8 @@ hu:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Biztosan törölni szeretnéd ezt a posztot? Ez az akció nem visszavonható.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Kihirdetve %{author_name} által, %{date_time} dátummal'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -1806,6 +1826,11 @@ hu:
       description: >-
         Akkor használd ezt a felületet, ha az adatbázisban szereplő születési
         dátumod eltér a valóstól.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">IMPORTANT</span>: Csatolj egy képet <u>egy
+        hivatalos dokumentumról</u> (személyi igazolvány, jogosítvány,
+        útlevél...) amin látható a neved ÉS a születési dátumod.
       #original_hash: 19c17ec
       submit: Változtatás kérése
     messages:
