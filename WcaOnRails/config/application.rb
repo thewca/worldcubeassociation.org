@@ -9,6 +9,7 @@ require_relative 'locales/locales'
 require 'rails/all'
 
 require_relative '../lib/monkeypatch_json_renderer_to_pretty_print'
+require_relative '../lib/database_dumper'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
