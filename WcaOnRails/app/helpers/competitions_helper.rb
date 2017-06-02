@@ -24,15 +24,17 @@ module CompetitionsHelper
     date ? (date.to_date - competition.end_date).to_i : nil
   end
 
+  private def days_announced_before_competition(competition)
+    days_before_competition(competition.announced_at, competition)
+  end
+
   def announced_content(competition)
-    days_announced = days_before_competition(competition.announced_at, competition)
-    days_announced ? "#{pluralize(days_announced, "day")} before" : ""
+    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ""
   end
 
   def announced_class(competition)
-    days_announced = days_before_competition(competition.announced_at, competition)
-    if days_announced
-      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced > d }.count
+    if competition.announced_at
+      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced_before_competition(competition) > d }.count
       ["alert-danger", "alert-orange", "alert-green"][level]
     else
       ""
@@ -48,7 +50,7 @@ module CompetitionsHelper
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
       submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
-      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by else"
+      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
     else
       competition.is_probably_over? ? "pending" : ""
     end
@@ -59,7 +61,7 @@ module CompetitionsHelper
     if days_report
       report_and_results_days_to_class(days_report)
     elsif competition.is_probably_over?
-      days_report = (Date.today - competition.end_date).to_i
+      days_report = days_after_competition(Date.today, competition)
       report_and_results_days_to_class(days_report)
     else
       ""
