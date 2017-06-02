@@ -37,7 +37,7 @@ RSpec.describe "DatabaseDumper" do
     user = FactoryGirl.create :user, dob: Date.new(1989, 1, 1)
 
     dump_file = Tempfile.new
-    before_dump = Time.now
+    before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
     DatabaseDumper.development_dump(dump_file.path)
     dump_file.rewind
     sql = dump_file.read
