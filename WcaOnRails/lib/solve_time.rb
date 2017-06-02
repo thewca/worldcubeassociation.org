@@ -128,8 +128,12 @@ class SolveTime
     !skipped?
   end
 
-  def completed?
+  def complete?
     !dn? && unskipped?
+  end
+
+  def incomplete?
+    !complete?
   end
 
   def time_seconds
@@ -208,7 +212,7 @@ class SolveTime
   end
 
   private def units
-    if !completed?
+    if incomplete?
       ""
     elsif @event.timed_event?
       time_minutes >= 1 ? "" : " seconds"

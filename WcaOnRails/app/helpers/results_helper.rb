@@ -17,11 +17,11 @@ module ResultsHelper
       pb_single = results.first.best_solve
       pb_average = results.first.average_solve
       results.each do |result|
-        if result.best_solve.completed? && result.best_solve <= pb_single
+        if result.best_solve.complete? && result.best_solve <= pb_single
           pb_single = result.best_solve
           markers[result.id][:single] = true
         end
-        if result.average_solve.completed? && result.average_solve <= pb_average
+        if result.average_solve.complete? && result.average_solve <= pb_average
           pb_average = result.average_solve
           markers[result.id][:average] = true
         end

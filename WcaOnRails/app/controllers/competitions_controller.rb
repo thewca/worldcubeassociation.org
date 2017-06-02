@@ -196,7 +196,7 @@ class CompetitionsController < ApplicationController
     # If the format for this round was to sort by average, but this particular
     # result did not achieve an average, then switch to "best", and do not allow
     # a short format (to make it clear what happened).
-    if sort_by == "average" && !result.to_solve_time(:average).completed?
+    if sort_by == "average" && result.to_solve_time(:average).incomplete?
       sort_by = "single"
       short = false
     end
