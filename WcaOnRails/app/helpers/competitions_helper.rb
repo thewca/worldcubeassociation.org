@@ -47,7 +47,8 @@ module CompetitionsHelper
   def report_content(competition)
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
-      "#{pluralize(days_report, "day")} after"
+      submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
+      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by else"
     else
       competition.is_probably_over? ? "pending" : ""
     end
