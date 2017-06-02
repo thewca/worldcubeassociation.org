@@ -142,16 +142,16 @@ zh-TW:
   cutoff:
     #original_hash: 38a40f6
     time:
-      other: '%{count}次還原 ≤ %{time}'
       zero: '%{count}次還原 ≤ %{time}'
+      other: '%{count}次還原 ≤ %{time}'
     #original_hash: 6f99fa6
     moves:
       zero: '%{count}次還原 ≤ %{moves}步'
       other: '%{count}次還原 ≤ %{moves}步'
     #original_hash: 1c7c5f1
     points:
-      other: '%{count}次還原 ≥ %{points}分'
       zero: '%{count}次還原 ≥ %{points}分'
+      other: '%{count}次還原 ≥ %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -315,6 +315,12 @@ zh-TW:
         information: 資訊
         #original_hash: 87b7d5f
         use_wca_registration: 我要使用WCA網站的報名系統
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: 我想要指定一個可以參加這場比賽的人數上限。
+        #original_hash: 749f4c9
+        competitor_limit: 人數上限
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: 人數上限的理由
         #original_hash: 3c23a67
         guests_enabled: 不得攜帶訪客
         #original_hash: 089cbfd
@@ -389,6 +395,10 @@ zh-TW:
         body: 主文
         #original_hash: 6f915a2
         sticky: 備忘錄
+        #original_hash: 848eed0
+        tags: 標籤
+        #original_hash: fb4002e
+        show_on_homepage: 在首頁顯示
       team:
         #original_hash: 709a232
         name: 名稱
@@ -507,6 +517,12 @@ zh-TW:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: 目前這數字僅做為發佈消息之用，並不會阻止更多選手報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
+        #original_hash: b9bc84d
+        competitor_limit: 這場比賽允許的參賽人數。
+        #original_hash: 32951f9
+        competitor_limit_reason: 設定人數上限的理由是什麼?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -525,8 +541,8 @@ zh-TW:
         wca_id: ''
         #original_hash: 8723825
         dob: 將您的生日填成YYYY-MM-DD的格式
-        #original_hash: 059d2ed
-        document: 為了證明您的身份和您正確的生日，您必須附上一張有您的姓名和生日的合法證件之照片以供辨識(身份證、駕照、學生證、護照等)。
+        #original_hash: 2029dde
+        document: 為了證明您的身份和您正確的生日，您必須附件一張有您的姓名和生日的合法證件之照片以供辨識(身份證、駕照、學生證、護照等)。
       post:
         #original_hash: 53c16eb
         body: >-
@@ -537,6 +553,13 @@ zh-TW:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Careful! This is not secure for private data. This is only to prevent
+          cluttering the homepage. Posts that are not shown on the homepage are
+          still accessible to the public via permalink or through tags.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: '公開賽程表的完整網址(例如：https://www.cubingusa.com/usnationals2016/schedule.php)'
@@ -708,8 +731,6 @@ zh-TW:
       faq: 常見問題
       #original_hash: a34b69f
       contact: 聯絡資訊
-      #original_hash: cf1d2c9
-      forum: 論壇
       #original_hash: 4fa8cc8
       tools: 工具
       #original_hash: 83fce83
@@ -1230,6 +1251,8 @@ zh-TW:
         other: WCA代表
       #original_hash: b37456c
       contact: 聯絡
+      #original_hash: 32946e9
+      competitor_limit: 人數上限
       #original_hash: a428739
       entry_fee: 報名費
       #original_hash: 0eb5ed5
@@ -1335,7 +1358,7 @@ zh-TW:
       #original_hash: 2651d1a
       venue_details_html: '場地的細節 (例如：一樓的正後方，跟隨指標走) %{md}'
       #original_hash: b727e58
-      contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例: [顯示內容](mailto:some@email.com)'
+      contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
       #original_hash: c5497bc
       events: 項目
       #original_hash: ae66391
@@ -1572,7 +1595,7 @@ zh-TW:
         #original_hash: af31025
         bronze: 銅牌
       #original_hash: 1917f4f
-      competition: 比賽次數
+      competition: 比賽
       #original_hash: 612e12d
       results: 成績
       #original_hash: e51c552
@@ -1603,6 +1626,10 @@ zh-TW:
       title: 請求更改生日表單
       #original_hash: 8a4ced5
       description: 若您的生日與我們記錄當中的資料不符時，請使用此表單。
+      #original_hash: 563d056
+      important_message_html: >-
+        <span
+        class="text-danger">重要</span>：請附件一個有您的姓名和生日的<u>合法證件</u>(身份證、駕照、護照等)。
       #original_hash: 19c17ec
       submit: 請求更改
     messages:
@@ -1996,7 +2023,7 @@ zh-TW:
       content2_html: 當選取錯誤清單時，所有錯誤細節會被列在左下角。
       #original_hash: 0600502
       content3_html: >-
-        你可以開啟成績檔案來修正錯誤，編輯之後並且儲存。接著在WCA成績小幫手按下<em>Refresh</em>按鈕以重新載入成績檔案。此操作僅重新讀取成績，不影響已經載入的轉亂步驟。
+        您可以開啟成績檔案來修正錯誤，編輯之後並且儲存。接著在WCA成績小幫手按下<em>Refresh</em>按鈕以重新載入成績檔案。此操作僅重新讀取成績，不影響已經載入的轉亂步驟。
     step5:
       #original_hash: 536ec4d
       title: 步驟五：選取比賽ID
