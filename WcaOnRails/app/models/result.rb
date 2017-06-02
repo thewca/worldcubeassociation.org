@@ -12,10 +12,16 @@ class Result < ApplicationRecord
   belongs_to :event, foreign_key: :eventId
   belongs_to :format, foreign_key: :formatId
 
-  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0") }
+  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0").order(:pos) }
   scope :winners, -> { joins(:round_type, :event).merge(RoundType.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
 
-  validate :validate_each_solve
+  validates :competition, presence: true
+  validates :country, presence: true
+  validates :event, presence: true
+  validates :round_type, presence: true
+  validates :format, presence: true
+
+  validate :validate_each_solve, if: :event
   def validate_each_solve
     solve_times.each_with_index do |solve_time, i|
       unless solve_time.valid?
@@ -24,13 +30,7 @@ class Result < ApplicationRecord
     end
   end
 
-  validates :competition, presence: true
-  validates :country, presence: true
-  validates :event, presence: true
-  validates :round_type, presence: true
-  validates :format, presence: true
-
-  validate :validate_solve_count
+  validate :validate_solve_count, if: :event
   def validate_solve_count
     # We need to know the round_type and the format in order to validate the number of solves.
     if round_type && format
@@ -46,7 +46,7 @@ class Result < ApplicationRecord
     errors.add(:average, "should be #{correct_average}") if correct_average != average
   end
 
-  validate :validate_best
+  validate :validate_best, if: :event
   def validate_best
     correct_best = compute_correct_best
     errors.add(:best, "should be #{correct_best}") if correct_best != best
@@ -99,8 +99,12 @@ class Result < ApplicationRecord
     end
   end
 
+  def to_solve_time(field)
+    SolveTime.new(eventId, field, send(field))
+  end
+
   def to_s(field)
-    SolveTime.new(eventId, field, send(field)).clock_format
+    to_solve_time(field).clock_format
   end
 
   def hlp

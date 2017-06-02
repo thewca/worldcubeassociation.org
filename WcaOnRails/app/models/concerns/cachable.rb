@@ -33,5 +33,9 @@ module Cachable
     def c_find(id)
       c_all_by_id[id]
     end
+
+    def c_find!(id)
+      self.c_find(id) || raise("id not found: #{id}")
+    end
   end
 end

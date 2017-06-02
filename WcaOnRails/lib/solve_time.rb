@@ -13,7 +13,7 @@ class SolveTime
   QUESTION_STRING = "?:??:??"
 
   def initialize(event_id, field, wca_value)
-    @event_id = event_id
+    @event = Event.c_find!(event_id)
     @field = field
     self.wca_value = wca_value
   end
@@ -26,12 +26,12 @@ class SolveTime
     @solved = nil
     @time_centiseconds = nil
 
-    if @event_id == '333fm'
+    if @event.fewest_moves?
       # The average field for 333fm is pretty weird. It's the sum
       # of the solves, multiplied by 100.
       # Otherwise, wca_value is simply the number of moves.
       @move_count = @field == :average ? (wca_value / 100.0) : wca_value
-    elsif multi_blind?
+    elsif @event.multiple_blindfolded?
       mb_value = wca_value
       # Extract wca_value parts.
       old = mb_value / 1_000_000_000 != 0
@@ -58,17 +58,17 @@ class SolveTime
   end
 
   def recompute_wca_value
-    if @event_id == '333fm'
+    if @event.fewest_moves?
       @wca_value = @move_count
-    elsif multi_blind?
+    elsif @event.multiple_blindfolded?
       missed = @attempted - @solved
       dd = 99 - (@solved - missed)
       ttttt = time_centiseconds / 100
 
-      if @event_id == "333mbf"
+      if @event.id == "333mbf"
         mm = missed
         @wca_value = (dd * 1e7 + ttttt * 1e2 + mm).to_i
-      elsif @event_id == "333mbo"
+      elsif @event.id == "333mbo"
         ss = @solved
         aa = @attempted
         @wca_value = (1 * 1e8 + ss * 1e7 + aa * 1e5 + ttttt).to_i
@@ -106,10 +106,6 @@ class SolveTime
     raise "attempted out of range" unless (0...100).cover?(attempted)
     @attempted = attempted
     recompute_wca_value
-  end
-
-  def multi_blind?
-    @event_id == '333mbf' || @event_id == '333mbo'
   end
 
   def dn?
@@ -183,10 +179,10 @@ class SolveTime
       return EMPTY_STRING
     end
 
-    if @event_id == '333fm'
+    if @event.fewest_moves?
       format_str = (@field == :average ? "%.2f" : "%.0f")
       format_str % @move_count
-    elsif multi_blind?
+    elsif @event.multiple_blindfolded?
       # Build time string.
       if time_centiseconds.nil?
         result = QUESTION_STRING
@@ -211,6 +207,24 @@ class SolveTime
     end
   end
 
+  private def units
+    if !completed?
+      ""
+    elsif @event.timed_event?
+      time_minutes >= 1 ? "" : " seconds"
+    elsif @event.fewest_moves?
+      " moves"
+    elsif @event.multiple_blindfolded?
+      ""
+    else
+      raise "Unrecognized event type #{@event.id}"
+    end
+  end
+
+  def clock_format_with_units
+    "#{clock_format}#{units}"
+  end
+
   validate :wca_value_valid
   def wca_value_valid
     unless wca_value >= -2
@@ -221,7 +235,7 @@ class SolveTime
   # Enforce https://www.worldcubeassociation.org/regulations/#H1b.
   validate :multiblind_time_limit
   def multiblind_time_limit
-    return unless @event_id == "333mbf"
+    return unless @event.id == "333mbf"
 
     time_limit_minutes = [60, @attempted * 10].min
     if time_minutes > time_limit_minutes
@@ -229,21 +243,17 @@ class SolveTime
     end
   end
 
-  validate :times_over_10_minutes_must_be_rounded, if: :timed_event?
+  validate :times_over_10_minutes_must_be_rounded
   def times_over_10_minutes_must_be_rounded
-    if time_minutes > 10 && time_centiseconds % 100 > 0
+    if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
       errors.add(:base, "times over 10 minutes should be rounded")
     end
   end
 
-  def timed_event?
-    @event_id != "333fm"
-  end
-
   DNF_VALUE = -1
-  DNF = SolveTime.new(nil, nil, DNF_VALUE)
+  DNF = SolveTime.new('333', nil, DNF_VALUE)
   DNS_VALUE = -2
-  DNS = SolveTime.new(nil, nil, DNS_VALUE)
+  DNS = SolveTime.new('333', nil, DNS_VALUE)
   SKIPPED_VALUE = 0
-  SKIPPED = SolveTime.new(nil, nil, SKIPPED_VALUE)
+  SKIPPED = SolveTime.new('333', nil, SKIPPED_VALUE)
 end

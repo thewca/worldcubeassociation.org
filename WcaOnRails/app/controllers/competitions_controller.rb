@@ -167,6 +167,11 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def editable_post_fields
+    [:title, :body, :sticky, :tags, :show_on_homepage]
+  end
+  helper_method :editable_post_fields
+
   def post_announcement
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
@@ -184,33 +189,76 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def pretty_print_result(result, short: false)
+    event = result.event
+    sort_by = result.format.sort_by
+
+    # If the format for this round was to sort by average, but this particular
+    # result did not achieve an average, then switch to "best", and do not allow
+    # a short format (to make it clear what happened).
+    if sort_by == "average" && !result.to_solve_time(:average).completed?
+      sort_by = "single"
+      short = false
+    end
+
+    solve_time = nil
+    a_win_by_word = nil
+    case sort_by
+    when "single"
+      solve_time = result.to_solve_time(:best)
+      if event.multiple_blindfolded?
+        a_win_by_word = "a result"
+      else
+        a_win_by_word = "a single solve"
+      end
+    when "average"
+      solve_time = result.to_solve_time(:average)
+      a_win_by_word = result.format.id == "a" ? "an average" : "a mean"
+    else
+      raise "Unrecognized sort_by #{sort_by}"
+    end
+
+    if short
+      solve_time.clock_format
+    else
+      "with #{a_win_by_word} of #{solve_time.clock_format_with_units}"
+    end
+  end
+
   def post_results
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
       unless comp.results
-        render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
-        return
+        return render html: "<div class='container'><div class='alert alert-warning'>No results</div></div>".html_safe
       end
 
-      top333 = comp.results.where(eventId: '333', roundTypeId: ['f', 'c']).order(:pos).limit(3)
-      if top333.empty? # If there was no 3x3x3 event.
+      event = Event.c_find(params[:event_id])
+      if event.nil?
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
       else
-        title = "#{top333.first.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
+        top_three = comp.results.where(event: event).podium
+        if top_three.empty?
+          return render html: "<div class='container'><div class='alert alert-warning'>Nobody competed in event: #{event.id}</div></div>".html_safe
+        else
+          first_result = top_three.first
 
-        body = "[#{top333.first.personName}](#{person_url top333.first.personId})"
-        body += " won the [#{comp.name}](#{competition_url(comp)})"
-        body += " with an average of #{top333.first.to_s :average} seconds"
+          title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
 
-        if top333.length > 1
-          body += ". [#{top333.second.personName}](#{person_url top333.second.personId}) finished second (#{top333.second.to_s :average})"
-          if top333.length > 2
-            body += " and [#{top333.third.personName}](#{person_url top333.third.personId}) finished third (#{top333.third.to_s :average})"
+          body = "[#{first_result.personName}](#{person_url first_result.personId})"
+          body += " won the [#{comp.name}](#{competition_url(comp)})"
+          body += " #{pretty_print_result(first_result)}"
+          body += " in the #{event.name} event" if event.id != "333"
+
+          if top_three.length > 1
+            body += ". [#{top_three.second.personName}](#{person_url top_three.second.personId}) finished second (#{pretty_print_result(top_three.second, short: true)})"
+            if top_three.length > 2
+              body += " and [#{top_three.third.personName}](#{person_url top_three.third.personId}) finished third (#{pretty_print_result(top_three.third, short: true)})"
+            end
           end
-        end
 
-        body += ".\n\n"
+          body += ".\n\n"
+        end
       end
 
       [
