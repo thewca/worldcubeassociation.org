@@ -3,6 +3,14 @@
 class AvatarUploaderBase < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
+  # Copied from https://makandracards.com/makandra/12323-carrierwave-auto-rotate-tagged-jpegs.
+  process :auto_orient
+  def auto_orient
+    manipulate! do |image|
+      image.tap(&:auto_orient)
+    end
+  end
+
   def self.missing_avatar_thumb_url
     @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: ENVied.ROOT_URL).freeze
   end
