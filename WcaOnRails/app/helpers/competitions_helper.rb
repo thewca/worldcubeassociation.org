@@ -16,14 +16,72 @@ module CompetitionsHelper
     messages.join(' ')
   end
 
-  def announced_class(days_announced)
-    level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced > d }.count
-    ["alert-danger", "alert-orange", "alert-green"][level]
+  private def days_before_competition(date, competition)
+    date ? (competition.start_date - date.to_date).to_i : nil
   end
 
-  def report_and_results_class(days)
+  private def days_after_competition(date, competition)
+    date ? (date.to_date - competition.end_date).to_i : nil
+  end
+
+  private def days_announced_before_competition(competition)
+    days_before_competition(competition.announced_at, competition)
+  end
+
+  def announced_content(competition)
+    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ""
+  end
+
+  def announced_class(competition)
+    if competition.announced_at
+      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced_before_competition(competition) > d }.count
+      ["alert-danger", "alert-orange", "alert-green"][level]
+    else
+      ""
+    end
+  end
+
+  private def report_and_results_days_to_class(days)
     level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select { |d| days > d }.count
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
+  end
+
+  def report_content(competition)
+    days_report = days_after_competition(competition.delegate_report.posted_at, competition)
+    if days_report
+      submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
+      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
+    else
+      competition.is_probably_over? ? "pending" : ""
+    end
+  end
+
+  def report_class(competition)
+    days_report = days_after_competition(competition.delegate_report.posted_at, competition)
+    if days_report
+      report_and_results_days_to_class(days_report)
+    elsif competition.is_probably_over?
+      days_report = days_after_competition(Date.today, competition)
+      report_and_results_days_to_class(days_report)
+    else
+      ""
+    end
+  end
+
+  def results_content(competition)
+    days_results = days_after_competition(competition.results_posted_at, competition)
+    if days_results
+      "#{pluralize(days_results, "day")} after"
+    else
+      competition.is_probably_over? ? "pending" : ""
+    end
+  end
+
+  def results_class(competition)
+    return "" unless competition.is_probably_over?
+
+    days_results = days_after_competition(competition.results_posted_at, competition)
+    report_and_results_days_to_class(days_results)
   end
 
   def year_is_a_number?(year)
