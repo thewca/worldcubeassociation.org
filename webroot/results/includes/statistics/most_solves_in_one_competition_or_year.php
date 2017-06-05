@@ -72,7 +72,7 @@ function polishMostSolvesAttempts ( $query ) {
 
 $lists[] = array(
   "most_solves",
-  "Most solves in one competition or year",
+  "Most solves in one competition, year, or lifetime",
   "",
   "[P] Person [n] Solves [C] Competition [T] | [P] Person [n] Solves [N] Year [T] | [P] Person [n] Solves [T]",
   my_merge( $solves, $attempts, $allTime)
