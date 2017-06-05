@@ -8,7 +8,7 @@ class CompetitionsMailer < ApplicationMailer
     @confirmer = confirmer
     mail(
       to: "board@worldcubeassociation.org",
-      cc: competition.delegates.pluck(:email),
+      cc: competition.delegates.pluck(:email) + competition.delegates.map { |d| d.senior_delegate&.email }.compact.uniq,
       reply_to: confirmer.email,
       subject: "#{confirmer.name} just confirmed #{competition.name}",
     )

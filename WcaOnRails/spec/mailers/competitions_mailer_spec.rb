@@ -4,14 +4,16 @@ require "rails_helper"
 
 RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_board_of_confirmed_competition" do
-    let(:delegate) { FactoryGirl.create :delegate }
-    let(:second_delegate) { FactoryGirl.create :delegate }
-    let(:competition) { FactoryGirl.create :competition, :with_competitor_limit, delegates: [delegate, second_delegate] }
+    let(:senior_delegate) { FactoryGirl.create :senior_delegate }
+    let(:delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
+    let(:second_delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
+    let(:third_delegate) { FactoryGirl.create :delegate }
+    let(:competition) { FactoryGirl.create :competition, :with_competitor_limit, delegates: [delegate, second_delegate, third_delegate] }
     let(:mail) { CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
       expect(mail.to).to eq(["board@worldcubeassociation.org"])
-      expect(mail.cc).to match_array competition.delegates.pluck(:email)
+      expect(mail.cc).to match_array(competition.delegates.pluck(:email) + [senior_delegate.email])
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
       expect(mail.reply_to).to eq([delegate.email])
 
