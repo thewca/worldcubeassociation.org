@@ -684,6 +684,7 @@ class User < ApplicationRecord
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
+      "countryIso2" => country_iso2,
       "delegatesCompetition" => competition.delegates.include?(self),
       "organizesCompetition" => competition.organizers.include?(self),
       "gender" => gender,
