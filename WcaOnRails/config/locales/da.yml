@@ -326,6 +326,14 @@ da:
         information: Information
         #original_hash: 87b7d5f
         use_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til registrering
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: >-
+          Jeg vil gerne specificere en grænse på antal deltagere der kan deltage
+          i denne her konkurrence.
+        #original_hash: 749f4c9
+        competitor_limit: Max antal deltagere
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: Grunden til deltagergrænsen
         #original_hash: 3c23a67
         guests_enabled: Gæster
         #original_hash: 089cbfd
@@ -543,6 +551,15 @@ da:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          For nu er det her tal kun information, og forhindre ikke folk i at
+          tilmelde sig. Vi arbejder på at tilføje tydelig hjælp til
+          tilmeldings-flowet, men det kræver noget arbejde først.
+        #original_hash: b9bc84d
+        competitor_limit: Antal deltagere tilladt for denne konkurrence.
+        #original_hash: 32951f9
+        competitor_limit_reason: Hvad er grunden til deltagergrænsen?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -1397,6 +1414,8 @@ da:
         other: WCA Delegater
       #original_hash: b37456c
       contact: Kontakt
+      #original_hash: 32946e9
+      competitor_limit: Deltagergrænse
       #original_hash: a428739
       entry_fee: Adgangsgebyr
       #original_hash: 0eb5ed5
