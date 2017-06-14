@@ -67,6 +67,15 @@ module NotificationsHelper
       }
     end
 
+    user.delegated_competitions.visible.over
+        .includes(:delegate_report).where(delegate_reports: { posted_at: nil })
+        .each do |competition|
+          notifications << {
+            text: "The delegate report for #{competition.name} has not been submitted.",
+            url: delegate_report_path(competition),
+          }
+        end
+
     notifications
   end
 end
