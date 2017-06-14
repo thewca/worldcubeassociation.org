@@ -69,14 +69,15 @@ RSpec.describe Result do
     end
 
     context "correctly computes average" do
-      context "average 5" do
+      context "333 average 5" do
+        let(:eventId) { "333" }
         let(:formatId) { "a" }
 
         context "combined round" do
           let(:roundTypeId) { "c" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
             expect(result).to be_valid
 
             result.average = 33
@@ -85,7 +86,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
             expect(result.average_is_not_computable_reason).to eq nil
             expect(result.compute_correct_average).to eq 0
             expect(result).to be_invalid(average: ["should be 0"])
@@ -96,7 +97,7 @@ RSpec.describe Result do
           let(:roundTypeId) { "1" }
 
           it "all solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
             expect(result).to be_valid
 
             result.average = 33
@@ -104,8 +105,17 @@ RSpec.describe Result do
             expect(result).to be_invalid_with_errors(average: ["should be 44"])
           end
 
+          it "DNF average" do
+            result = build_result(value1: SolveTime::DNF_VALUE, value2: 43, value3: SolveTime::DNF_VALUE, value4: 45, value5: 46, best: 43, average: SolveTime::DNF_VALUE)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq SolveTime::DNF_VALUE
+            expect(result).to be_invalid_with_errors(average: ["should be -1"])
+          end
+
           it "missing solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
             expect(result.average_is_not_computable_reason).to be_truthy
           end
         end
@@ -114,67 +124,166 @@ RSpec.describe Result do
       context "mean of 3" do
         let(:formatId) { "m" }
 
-        context "combined round" do
-          let(:roundTypeId) { "c" }
+        context "777" do
+          let(:eventId) { "777" }
 
-          it "all solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
+          context "combined round" do
+            let(:roundTypeId) { "c" }
+
+            it "all solves" do
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
+              expect(result).to be_valid
+
+              result.average = 33
+              expect(result.compute_correct_average).to eq 43
+              expect(result).to be_invalid_with_errors(average: ["should be 43"])
+            end
+
+            it "missing solves" do
+              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0)
+              expect(result).to be_valid
+
+              result.average = 33
+              expect(result.compute_correct_average).to eq 0
+              expect(result).to be_invalid_with_errors(average: ["should be 0"])
+            end
+
+            it "too many solves" do
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43)
+              expect(result.average_is_not_computable_reason).to be_truthy
+              expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 5."])
+            end
+          end
+
+          context "uncombined round" do
+            let(:roundTypeId) { "1" }
+
+            it "all solves" do
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
+              expect(result).to be_valid
+
+              result.average = 33
+              expect(result.compute_correct_average).to eq 43
+              expect(result).to be_invalid_with_errors(average: ["should be 43"])
+            end
+
+            it "missing solves" do
+              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0)
+              expect(result.average_is_not_computable_reason).to be_truthy
+              expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 1."])
+            end
+
+            it "too many solves" do
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43)
+              expect(result.average_is_not_computable_reason).to be_truthy
+              expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 5."])
+            end
+          end
+        end
+
+        context "333fm uncombined round" do
+          let(:eventId) { "333fm" }
+          let(:roundTypeId) { "1" }
+
+          it "correctly computes average" do
+            result = build_result(eventId: "333fm", formatId: "m", value1: 42, value2: 42, value3: 43, value4: 0, value5: 0, best: 42, average: 4233)
+            expect(result).to be_valid
+
+            result.average = 4200
+            expect(result.compute_correct_average).to eq 4233
+            expect(result).to be_invalid_with_errors(average: ["should be 4233"])
+          end
+
+          it "correctly computes DNF average" do
+            result = build_result(value1: 42, value2: SolveTime::DNF_VALUE, value3: 44, value4: 0, value5: 0, best: 42, average: SolveTime::DNF_VALUE)
             expect(result).to be_valid
 
             result.average = 33
-            expect(result.compute_correct_average).to eq 43
-            expect(result).to be_invalid_with_errors(average: ["should be 43"])
+            expect(result.compute_correct_average).to eq(-1)
+            expect(result).to be_invalid_with_errors(average: ["should be -1"])
           end
+        end
+      end
 
-          it "missing solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
+      context "best of 3" do
+        let(:formatId) { "3" }
+        let(:roundTypeId) { "1" }
+
+        context "333bf" do
+          let(:eventId) { "333bf" }
+
+          it "does compute average" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
+        end
+
+        context "333fm" do
+          let(:eventId) { "333fm" }
+
+          it "does compute average" do
+            result = build_result(value1: 24, value2: 25, value3: 26, value4: 0, value5: 0, best: 24, average: 2500)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 2500
+            expect(result).to be_invalid_with_errors(average: ["should be 2500"])
+          end
+        end
+
+        context "333ft" do
+          let(:eventId) { "333ft" }
+
+          it "does compute average" do
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 1000
+            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+          end
+        end
+
+        context "333mbf" do
+          let(:eventId) { "333mbf" }
+
+          it "does not compute average" do
+            solve_time = SolveTime.new("333mbf", :best, 0)
+            solve_time.attempted = 9
+            solve_time.solved = 8
+            solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
+            val = solve_time.wca_value
+
+            result = build_result(value1: val, value2: val, value3: val, value4: 0, value5: 0, best: val, average: 0)
             expect(result).to be_valid
 
             result.average = 33
             expect(result.compute_correct_average).to eq 0
             expect(result).to be_invalid_with_errors(average: ["should be 0"])
           end
-
-          it "too many solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
-            expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 5."])
-          end
-        end
-
-        context "uncombined round" do
-          let(:roundTypeId) { "1" }
-
-          it "all solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43
-            expect(result).to be_valid
-
-            result.average = 33
-            expect(result.compute_correct_average).to eq 43
-            expect(result).to be_invalid_with_errors(average: ["should be 43"])
-          end
-
-          it "missing solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0
-            expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 1."])
-          end
-
-          it "too many solves" do
-            result = FactoryGirl.build :result, roundTypeId: roundTypeId, formatId: formatId, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43
-            expect(result.average_is_not_computable_reason).to be_truthy
-            expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 5."])
-          end
         end
       end
 
-      it "fmc" do
-        result = FactoryGirl.build :result, eventId: "333fm", formatId: "m", value1: 42, value2: 42, value3: 43, value4: 0, value5: 0, best: 42, average: 4233
-        expect(result).to be_valid
+      context "333 best of 2" do
+        let(:formatId) { "2" }
+        let(:roundTypeId) { "1" }
 
-        result.average = 4200
-        expect(result.compute_correct_average).to eq 4233
-        expect(result).to be_invalid_with_errors(average: ["should be 4233"])
+        context "333" do
+          let(:eventId) { "333" }
+
+          it "does not compute average" do
+            result = build_result(value1: 999, value2: 1000, value3: 0, value4: 0, value5: 0, best: 999, average: 0)
+            expect(result).to be_valid
+
+            result.average = 33
+            expect(result.compute_correct_average).to eq 0
+            expect(result).to be_invalid_with_errors(average: ["should be 0"])
+          end
+        end
       end
     end
 
@@ -263,4 +372,8 @@ RSpec.describe Result do
       end
     end
   end
+end
+
+def build_result(attrs)
+  FactoryGirl.build :result, { roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
 end

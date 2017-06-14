@@ -576,7 +576,7 @@ RSpec.describe CompetitionsController do
       context "winners announcement" do
         context "333" do
           def add_result(pos, name, event_id: "333", dnf: false)
-            Result.new(
+            Result.create!(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -592,7 +592,7 @@ RSpec.describe CompetitionsController do
               value5: 999,
               best: 999,
               average: dnf ? SolveTime::DNF_VALUE : 999,
-            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
+            )
           end
 
           let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh") }
@@ -681,7 +681,7 @@ RSpec.describe CompetitionsController do
 
         context "333fm" do
           def add_result(pos, name, dnf: false)
-            Result.new(
+            Result.create!(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -697,7 +697,7 @@ RSpec.describe CompetitionsController do
               value5: 0,
               best: 24,
               average: dnf ? SolveTime::DNF_VALUE : 2766,
-            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
+            )
           end
 
           it "announces top 3 in final" do
@@ -733,7 +733,7 @@ RSpec.describe CompetitionsController do
             solve_time.attempted = 9
             solve_time.solved = 8
             solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
-            Result.new(
+            Result.create!(
               pos: pos,
               personId: "2006YOYO#{format('%.2d', pos)}",
               personName: name,
@@ -749,7 +749,7 @@ RSpec.describe CompetitionsController do
               value5: 0,
               best: solve_time.wca_value,
               average: 0,
-            ).save!(validate: false) # See https://github.com/thewca/worldcubeassociation.org/issues/1688
+            )
           end
 
           it "announces top 3 in final" do

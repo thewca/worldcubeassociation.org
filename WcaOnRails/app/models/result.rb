@@ -80,16 +80,47 @@ class Result < ApplicationRecord
     event ? invalid_solve_count_reason : "Event needed to compute average"
   end
 
+  def should_compute_average?
+    # Average of 5 and Mean of 3 rounds should definitely attempt to compute the average (the average
+    # may still be empty because of combined rounds).
+    # Best of 3 is weird. We actually do want to populate the average column for best of 3 with:
+    #  - 333fm was changed from allowing best of 3 (and disallowing mean of 3) to allowing mean of 3 (and disallowing best of 3).
+    #    See "Relevant regulations changes" below.
+    #    With this change in format, the Board decided to compute means for all
+    #    the old best of 3 rounds, and assign mean records to them.
+    #    However, we could not change the format of the rounds, as that would have affected rankings
+    #    in past competitions, so the rounds remain as best of 3, but with an average computed.
+    #  - 333ft has a similar story to 333fm. It also changed from allowing best of 3
+    #    (and disallowing mean of 3) to allowing mean of 3 (and disallowing best
+    #    of 3). See "Relevant regulations changes" below.
+    #  - 333bf is quite a special case. At competitions, competitors are ranked according to best of 3, but
+    #    the WCA awards records on both single and mean of 3.
+    #    See https://www.worldcubeassociation.org/regulations/#9b3b.
+
+    # Relevant regulations changes:
+    #  - August 28, 2012 (beginning of the regulations on github): https://github.com/thewca/wca-regulations/commit/0c7f3e0501970c84178d914cd41a0d488ad3fac1
+    #    - 333ft introduced with legal formats "123a".
+    #  - September 9, 2012: https://github.com/thewca/wca-regulations/commit/6e5c44f0e397b735549923ff538846d3c4387dd4
+    #    - 333ft legal formats changed from "123a" to "123m".
+    #  - December 7, 2013: https://github.com/thewca/wca-regulations/commit/dc182c84e2ef60aeba37f5af896bd67f4c459575
+    #    - 333fm legal formats changed from "123" to "123m".
+    #  - December 9, 2013: https://github.com/thewca/wca-regulations/issues/109 and https://github.com/thewca/wca-regulations/commit/80ebf04e3ed0752df8047f4428277bf186f374c2
+    #    - All events that allow "mean of 3" no longer allow "best of 3".
+    formatId == "a" || formatId == "m" || (formatId == "3" && %(333ft 333fm 333bf).include?(eventId))
+  end
+
   def compute_correct_best
     best_solve = sorted_solves.first
     best_solve ? best_solve.wca_value : 0
   end
 
   def compute_correct_average
-    if average_is_not_computable_reason || missed_combined_round_cutoff?
+    if average_is_not_computable_reason || missed_combined_round_cutoff? || !should_compute_average?
       0
     else
-      if eventId == "333fm"
+      if counting_solve_times.any?(&:incomplete?)
+        SolveTime::DNF_VALUE
+      elsif eventId == "333fm"
         sum_moves = counting_solve_times.sum(&:move_count)
         100 * sum_moves / counting_solve_times.length
       else
