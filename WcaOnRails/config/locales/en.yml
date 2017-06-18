@@ -799,6 +799,7 @@ en:
       competitor_limit: "Competitor Limit"
       entry_fee: "Entry Fee"
       information: "Information"
+      events: "Events"
     #context: on the competition's index page
     index:
       title: "Competitions"

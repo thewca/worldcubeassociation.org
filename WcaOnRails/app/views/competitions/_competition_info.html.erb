@@ -66,6 +66,15 @@
       <dd><%=md competition.information %></dd>
     </dl>
 
+    <dl class="dl-horizontal">
+      <dt><%= t '.events' %></dt>
+      <dd class="competition-events-list">
+        <% @competition.events.each do |event| %>
+          <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "top", container: "body" }, title: event.name %>
+        <% end %>
+      </dd>
+    </dl>
+
     <% media = competition.media.accepted %>
     <% [:report, :article, :multimedia].each do |media_type| %>
       <% media_of_type = media.send(media_type).order(timestampDecided: :desc) %>
