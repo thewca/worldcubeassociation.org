@@ -28,6 +28,7 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
 
   scope :visible, -> { where(showAtAll: true) }
+  scope :over, -> { where("end_date < ?", Date.today) }
   scope :not_over, -> { where("end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
