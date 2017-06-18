@@ -389,7 +389,6 @@ en:
         status: ""
       team:
         friendly_id: ""
-        name: ""
       vote:
         comment: ""
     #context: and a label for an option
