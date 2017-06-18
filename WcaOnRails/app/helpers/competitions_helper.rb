@@ -81,7 +81,7 @@ module CompetitionsHelper
     return "" unless competition.is_probably_over?
 
     days_results = days_after_competition(competition.results_posted_at, competition)
-    report_and_results_days_to_class(days_results)
+    days_results ? report_and_results_days_to_class(days_results) : ""
   end
 
   def year_is_a_number?(year)
