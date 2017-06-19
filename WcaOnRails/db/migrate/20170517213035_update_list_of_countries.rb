@@ -4,9 +4,7 @@ class UpdateListOfCountries < ActiveRecord::Migration[5.0]
   def up
     ActiveRecord::Base.transaction do
       Country.delete_all
-      Country::ALL_STATES.each do |state|
-        Country.create!(state)
-      end
+      Country::ALL_STATES.each(&:save!)
       # These substitions have been found by running the migration and checking
       # users with iso2 not matching anything in the 'Country' table.
       {

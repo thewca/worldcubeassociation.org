@@ -24,7 +24,7 @@ class Country < ApplicationRecord
       end
     end,
     MULTIPLE_COUNTRIES,
-  ].flatten.freeze
+  ].flatten.map { |c| Country.new(c) }.freeze
 
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
@@ -52,7 +52,7 @@ class Country < ApplicationRecord
   end
 
   ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
-    countries = I18nUtils.localized_sort_by!(locale, Country.all.to_a) { |country| country.name_in(locale) }
+    countries = I18nUtils.localized_sort_by!(locale, ALL_STATES.dup) { |country| country.name_in(locale) }
     [locale, countries]
   end].freeze
 
