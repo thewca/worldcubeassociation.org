@@ -2,9 +2,29 @@
 
 class Country < ApplicationRecord
   include Cachable
+  WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
   self.table_name = "Countries"
 
-  MULTIPLE_COUNTRIES_IDS = %w(XA XE XS).freeze
+  MULTIPLE_COUNTRIES = [
+    { id: 'XA', name: 'Multiple Countries (Asia)', continentId: '_Asia', iso2: 'XA' },
+    { id: 'XE', name: 'Multiple Countries (Europe)', continentId: '_Europe', iso2: 'XE' },
+    { id: 'XS', name: 'Multiple Countries (South America)', continentId: '_South America', iso2: 'XS' },
+  ].freeze
+
+  MULTIPLE_COUNTRIES_IDS = MULTIPLE_COUNTRIES.map { |c| c[:id] }.freeze
+
+  WCA_STATES = JSON.parse(File.read(WCA_STATES_JSON_PATH)).freeze
+
+  ALL_STATES = [
+    WCA_STATES["states_lists"].map do |list|
+      list["states"].map do |state|
+        state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
+        { id: state_id, continentId: state["continent_id"],
+          iso2: state["iso2"], name: state["name"] }
+      end
+    end,
+    MULTIPLE_COUNTRIES,
+  ].flatten.map { |c| Country.new(c) }.freeze
 
   belongs_to :continent, foreign_key: :continentId
   has_many :competitions, foreign_key: :countryId
@@ -32,7 +52,7 @@ class Country < ApplicationRecord
   end
 
   ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
-    countries = I18nUtils.localized_sort_by!(locale, Country.all.to_a) { |country| country.name_in(locale) }
+    countries = I18nUtils.localized_sort_by!(locale, ALL_STATES.dup) { |country| country.name_in(locale) }
     [locale, countries]
   end].freeze
 
