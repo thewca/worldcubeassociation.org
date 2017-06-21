@@ -499,10 +499,11 @@ da:
           Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
           afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco,
           California).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Noget tekst omkring konkurrencen. (eksempel, Euro 2006 er åben for
-          alle europæiske statsborgere og Israel).
+          Information om deltagergrænsen, indgangs gebyret for deltager og
+          tilskuere, og andre detaljer som er vigtige for folk der ønsker at
+          deltage eller at være tilskuere.
         #original_hash: 0708400
         delegate_ids: WCA delegater for konkurrencen.
         #original_hash: 517d376
@@ -679,8 +680,6 @@ da:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1420,6 +1419,8 @@ da:
       entry_fee: Adgangsgebyr
       #original_hash: 0eb5ed5
       information: Information
+      #original_hash: c5497bc
+      events: Discipliner
     index:
       #original_hash: db98a68
       title: Konkurrencer
