@@ -514,10 +514,11 @@ pl:
         cityName: >-
           Nazwa miasta gdzie zawody mają miejsce. Nie powinna zawierać nazwy
           państwa (np. Warszawa).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Trochę informacji o zawodach (np. Polish Nationals 2016 są otwarte dla
-          obywateli Polski).
+          Informacje o limicie zawodników, wysokości wpisowego dla zawodników i
+          widzów oraz inne istotne szczegóły dla ludzi zainteresowanych braniem
+          udziału lub oglądaniem.
         #original_hash: 0708400
         delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: 517d376
@@ -701,8 +702,6 @@ pl:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1487,6 +1486,8 @@ pl:
       entry_fee: Wpisowe
       #original_hash: 0eb5ed5
       information: Informacje
+      #original_hash: c5497bc
+      events: Konkurencje
     index:
       #original_hash: db98a68
       title: Zawody
