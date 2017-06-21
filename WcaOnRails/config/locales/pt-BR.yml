@@ -127,10 +127,12 @@ pt-BR:
   round:
     #original_hash: 66e902f
     name: '%{event} Rodada %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
     ranking: 'Os %{ranking} primeiros avançam para a rodada %{next_round_number}'
-    attemptValue:
+    #original_hash: 31ad77c
+    percent: 'Os %{percent} primeiros avançam para a rodada %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
       time: >-
         Aqueles com melhor tempo menor ou igual a %{time} avançam para a rodada
@@ -326,6 +328,14 @@ pt-BR:
         information: Informação
         #original_hash: 87b7d5f
         use_wca_registration: Eu quero usar o site da WCA para as inscrições
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: >-
+          Eu quero especificar um limite para o número de competidores que podem
+          participar desta competição.
+        #original_hash: 749f4c9
+        competitor_limit: Número máximo de competidores
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: Razão(ões) para o limite de competidores
         #original_hash: 3c23a67
         guests_enabled: Acompanhantes
         #original_hash: 089cbfd
@@ -400,6 +410,10 @@ pt-BR:
         body: Corpo
         #original_hash: 6f915a2
         sticky: Fixado
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: fb4002e
+        show_on_homepage: Mostrar na página inicial
       team:
         #original_hash: 709a232
         name: Nome
@@ -487,10 +501,11 @@ pt-BR:
         cityName: >-
           Nome da cidade e estado onde a competição acontecerá. Não inclua o
           país (exemplos: São Paulo, São Paulo ou Uberlândia, Minas Gerais).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Mais informações sobre a competição (p. ex. "As inscrições custam 10
-          reais e 1 kg de alimento não perecível").
+          Informações sobre o limite de competidores, taxa de inscrição para
+          competidores ou espectadores, e outros detalhes relevantes para as
+          pessoas interessadas em competir ou assistir.
         #original_hash: 0708400
         delegate_ids: Delegado(s) da WCA da competição.
         #original_hash: 517d376
@@ -538,6 +553,16 @@ pt-BR:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          Por enquanto este número é apenas informativo, e não impede mais
+          pessoas de se inscreverem. Estamos trabalhando em disponibilizar
+          suporte para isso no processo de inscrição, mas alguns outros pontos
+          são necessários primeiro.
+        #original_hash: b9bc84d
+        competitor_limit: O número de competidores permitido nesta competição.
+        #original_hash: 32951f9
+        competitor_limit_reason: Qual a razão para o limite de competidores?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -556,7 +581,7 @@ pt-BR:
         wca_id: ''
         #original_hash: 8723825
         dob: Sua data de nascimento no formato AAAA-MM-DD
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           Para provar sua identidade e sua data de nascimento correta para nós,
           anexe uma foto de algum documento legal (carteira de identidade, CNH,
@@ -574,6 +599,13 @@ pt-BR:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Cuidado! Isto não é seguro para informações privadas. Somente evita
+          obstrução na página inicial. Postagens que não aparecem nela ainda são
+          acessíveis ao público por um "permalink" ou pelas tags.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -652,8 +684,6 @@ pt-BR:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -774,8 +804,6 @@ pt-BR:
       faq: Perguntas Frequentes
       #original_hash: a34b69f
       contact: Informação de contato
-      #original_hash: cf1d2c9
-      forum: Fórum
       #original_hash: 4fa8cc8
       tools: Ferramentas
       #original_hash: 83fce83
@@ -1395,10 +1423,14 @@ pt-BR:
         other: Delegados da WCA
       #original_hash: b37456c
       contact: Contato
+      #original_hash: 32946e9
+      competitor_limit: Limite de competidores
       #original_hash: a428739
       entry_fee: Taxa de inscrição
       #original_hash: 0eb5ed5
       information: Informação
+      #original_hash: c5497bc
+      events: Eventos
     index:
       #original_hash: db98a68
       title: Competições
@@ -1807,6 +1839,11 @@ pt-BR:
       description: >-
         Use este formulário se a data de nascimento registrada em nosso banco de
         dados está diferente da data real.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">IMPORTANTE</span>: Anexe uma foto de um
+        <u>documento legal</u> (carteira de identidade, de habilitação,
+        passaporte...) que mostre seu nome e data de nascimento.
       #original_hash: 19c17ec
       submit: Solicitar alteração
     messages:
@@ -2190,15 +2227,15 @@ pt-BR:
         listados abaixo.
       list:
         #original_hash: 1a9d544
-        '1': null
+        '1': Nome da Organização Regional
         #original_hash: a9bf3f4
-        '2': null
+        '2': Endereço oficial e detalhes para contato
         #original_hash: 2a029e9
         '3': >-
           Uma cópia de seu estato atual, que deve estar em conformidade com o
           Estatuto e Regulamento da WCA
         #original_hash: a5a2771
-        '4': null
+        '4': Uma lista dos principais administradores
         #original_hash: 1186ebf
         '5': Uma descrição clara da área de cobertura da Organização Regional
         #original_hash: 826e371
