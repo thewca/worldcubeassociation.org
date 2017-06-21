@@ -497,10 +497,12 @@ nl:
         cityName: >-
           Naam van de stad, zonder provincie of land. (voor sommige landen laten
           we de staat zien)
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Extra informatie over de wedstrijd, bijv. De wedstrijd is open voor
-          alle deelnemers ongeacht hun oplossnelheid.
+          Informatie over een limiet van het aantal deelnemers, de
+          registratiekosten voor deelnemers en toeschouwers, en andere details
+          die relevant zijn voor mensen die zijn geïnteresseerd om deel te nemen
+          of te komen kijken.
         #original_hash: 0708400
         delegate_ids: WCA delegates van de wedstrijd.
         #original_hash: 517d376
@@ -672,8 +674,6 @@ nl:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1426,6 +1426,8 @@ nl:
       entry_fee: Deelnamekosten
       #original_hash: 0eb5ed5
       information: Informatie
+      #original_hash: c5497bc
+      events: Wedstrijdonderdelen
     index:
       #original_hash: db98a68
       title: Wedstrijden
