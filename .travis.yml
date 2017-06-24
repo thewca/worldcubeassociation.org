@@ -12,7 +12,7 @@ cache:
   yarn: true
 env:
   global:
-    - DATABASE_URL=mysql2://root:travis@127.0.0.1:3306/wca_test
+    - DATABASE_URL=mysql2://root:@127.0.0.1:3306/wca_test
     - RACK_ENV=test
 before_install:
   # TMP BEGIN (see: https://github.com/thewca/worldcubeassociation.org/issues/1656)
@@ -28,18 +28,13 @@ before_install:
 
   - cd WcaOnRails/
 before_script:
-  # Wait for mysql to fully come up before continuing.
-  # See https://github.com/thewca/worldcubeassociation.org/issues/1629
   - echo "***** Some debugging info for https://github.com/thewca/worldcubeassociation.org/issues/1629 ****"
+  - mysql -e 'select host, user, password from mysql.user;'
   - ps -efw | grep -i mysql
   - service --status-all
-  - initctl list
-  - initctl status mysql-5.6
   - date
   - dmesg | grep -i -C 100 mysql || true
-
   - ps -efw | grep -i mysql
-  - /usr/sbin/mysql-5.6-wait-ready
 
   - bundle exec rake db:reset
   - bundle exec rake assets:precompile
