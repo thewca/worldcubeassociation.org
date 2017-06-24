@@ -1154,6 +1154,9 @@ en:
       wct:
         name: "WCA Communication Team"
         description: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
+      wfc:
+        name: "WCA Financial Committee"
+        description: "This team is responsible for managing the finances of the WCA"
       delegates_html: "<strong>WCA Delegates</strong> are members of the WCA who are responsible for making sure that all WCA competitions are run according to the mission, regulations and spirit of the WCA. The WCA distinguishes between <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong> and <strong>WCA Candidate Delegates</strong>%{see_link}. Additional to the duties of a WCA Delegate, a WCA Senior Delegate is responsible for managing the Delegates in their area and can also be contacted by the community for regional matters. New Delegates are at first listed as WCA Candidate Delegates and need to show that they are capable of managing competitions successfully before being listed as WCA Delegates."
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
@@ -1217,6 +1220,8 @@ en:
       info: "(competition results, result corrections)"
     wst:
       info: "(maintenance of software of the WCA)"
+    wfc:
+      info: "(finances of the WCA)"
   score_tools:
     title: "WCA Score Taking tools"
     paragraphs:
