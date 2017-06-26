@@ -220,30 +220,6 @@ $(function() {
     }).trigger("dp.change");
   });
 
-  function insertText(editor, markup, promptText) {
-    var cm = editor.codemirror;
-
-    var startPoint = cm.getCursor('start');
-    var endPoint = cm.getCursor('end');
-    var somethingSelected = cm.somethingSelected();
-
-    var text = (somethingSelected ? cm.getSelection() : prompt(promptText));
-
-    if(!text) {
-      return false;
-    }
-
-    cm.replaceSelection(markup.build(text));
-
-    if(somethingSelected) {
-      startPoint.ch += markup.start.length;
-      endPoint.ch += markup.start.length;
-      cm.setSelection(startPoint, endPoint);
-    }
-
-    cm.focus();
-  }
-
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
