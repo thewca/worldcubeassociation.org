@@ -4,6 +4,7 @@ import SimpleMDE from 'simplemde';
 // See https://github.com/NextStepWebs/simplemde-markdown-editor/issues/578.
 //import 'simplemde/src/css/simplemde.css';
 import 'simplemde/debug/simplemde.css';
+import './style.scss';
 
 $(function() {
   function insertText(editor, markup, promptText) {
