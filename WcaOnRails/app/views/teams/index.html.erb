@@ -29,8 +29,4 @@
       </table>
     </div>
   <% end %>
-
-  <% if current_user.can_manage_teams? %>
-    <%= link_to icon("plus", "New team"), new_team_path, class: "btn btn-primary" %>
-  <% end %>
 </div>
