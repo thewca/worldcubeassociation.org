@@ -2204,6 +2204,11 @@ pl:
           komunikację WCA ze Społecznością oraz ogółem społeczeńswa. Komunikacja
           WCA powinna realizować cele WCA i przyczyniać się do ogólnej
           życzliwości, przejrzystości, integracji, otwartości i wrażliwości.
+      wfc:
+        #original_hash: 9cb13de
+        name: Komitet Finansowy WCA (WFC)
+        #original_hash: 2d4807e
+        description: Ten zespół jest odpowiedzialny za zarządzanie finansami WCA
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegaci WCA</strong> to członkowie WCA, którzy są
@@ -2339,6 +2344,9 @@ pl:
     wst:
       #original_hash: dfbf427
       info: (odpowiedzialność za oprogramowanie WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (finanse WCA)
   score_tools:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
