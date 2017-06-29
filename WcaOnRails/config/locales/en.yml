@@ -147,6 +147,7 @@ en:
     these_events:
       one: "this event"
       other: "these %{count} events"
+    search_site: "Search site"
   delegate_statuses:
     candidate_delegate: "Candidate Delegate"
     delegate: "Delegate"

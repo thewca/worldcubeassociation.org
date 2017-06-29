@@ -80,7 +80,8 @@ module ApplicationHelper
   end
 
   def wca_omni_search
-    text_field_tag nil, @omni_query, placeholder: "Search site", class: "form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table"
+    text_field_tag nil, @omni_query, placeholder: I18n.t('common.search_site'),
+                                     class: "form-control wca-autocomplete wca-autocomplete-omni wca-autocomplete-search wca-autocomplete-only_one wca-autocomplete-users_search wca-autocomplete-persons_table"
   end
 
   def wca_local_time(time)
