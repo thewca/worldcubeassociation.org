@@ -213,6 +213,8 @@ pl:
       few: 'te %{count} konkurencje'
       many: 'te %{count} konkurencji'
       other: 'te %{count} konkurencji'
+    #original_hash: 51ef7d4
+    search_site: Szukaj
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Kandydat na Delegata
@@ -2529,3 +2531,24 @@ pl:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: 'Prosimy o podanie dwóch różnych, poprawnych WCA ID.'
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Zawody
+      #original_hash: b37554f
+      people: Osoby
+      #original_hash: 6db75ea
+      advanced_search: Wyszukiwanie zaawanasowane
+      #original_hash: a0ca0c3
+      posts: Posty
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Punkty Regulaminu i Wytyczne
+      not_found:
+        #original_hash: b8a7006
+        competitions: Nie znaleziono żadnych zawodów dla
+        #original_hash: 99d4290
+        people: Nie znaleziono żadnych osób dla
+        #original_hash: c6a04aa
+        posts: Nie znaleziono żadnych postów dla
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: 'Nie znaleziono żadnych punktów Regulaminu, ani Wytycznych dla'
