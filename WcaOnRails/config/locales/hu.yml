@@ -200,6 +200,8 @@ hu:
     these_events:
       zero: ez a 0 versenyszám
       other: 'ez a(z) %{count} versenyszám'
+    #original_hash: 51ef7d4
+    search_site: Keresés az oldalon
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidate Delegate
@@ -323,6 +325,14 @@ hu:
         information: Információ
         #original_hash: 87b7d5f
         use_wca_registration: A WCA holnapot szeretném használni a regisztrációhoz
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: >-
+          Szeretnék versenyzői limitet meghatározni, hogy hányan vehetnek részt
+          ezen a versenyen.
+        #original_hash: 749f4c9
+        competitor_limit: A versenyzők maximális száma
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: A versenyzői limit oka
         #original_hash: 3c23a67
         guests_enabled: Vendégek
         #original_hash: 089cbfd
@@ -492,10 +502,11 @@ hu:
           A város és állam neve (amennyiben értelmezhető), ahol a verseny
           megrendezésre kerül. Ne tartalmazza az ország nevét (pl: Párizs VAGY
           San Francisco, California)!
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Információ a versenyről (pl: Az Euro 2006-on bármely európai vagy
-          izraeli versenyző részt vehet.)
+          Információ a versenyzői limitről, regisztrációs díjról és nézőkről és
+          más fontos információról azoknak, akik a versenyzőként vagy nézőként
+          érdeklődnek a verseny iránt.
         #original_hash: 0708400
         delegate_ids: A verseny WCA delegáltjai
         #original_hash: 517d376
@@ -543,6 +554,16 @@ hu:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          Jelenleg ez az szám csak információs jellegű, nem gátolja meg, hogy
+          több ember jelentkezni tudjon a versenyre. Dolgozunk, rajta hogy
+          támogassuk a regisztráció menetét, de ez néhány más felad elvégzését
+          követeli meg ezt megelőzően.
+        #original_hash: b9bc84d
+        competitor_limit: 'A versenyzők maximális száma, akik részt vehetnek a versenyen.'
+        #original_hash: 32951f9
+        competitor_limit_reason: Mi az oka a versenyzői limitnek?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -664,8 +685,6 @@ hu:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1417,10 +1436,14 @@ hu:
         other: WCA delegált(ak)
       #original_hash: b37456c
       contact: Kontakt
+      #original_hash: 32946e9
+      competitor_limit: Versenyzői limit
       #original_hash: a428739
       entry_fee: Regisztrációs díj
       #original_hash: 0eb5ed5
       information: Információk
+      #original_hash: c5497bc
+      events: Versenyszámok
     index:
       #original_hash: db98a68
       title: Versenyek
@@ -2138,6 +2161,11 @@ hu:
           kommunikációjának hozzá kell járulnia a WCA célkitűzéseihez és
           támogatnia kell az általános pozitív hangulatot a barátságosság,
           átláthatóság, inkluzivitás, nyitottság és válaszkészség jegyében.
+      wfc:
+        #original_hash: 9cb13de
+        name: WCA Financial Committee
+        #original_hash: 2d4807e
+        description: Ez a szervezet felelős a WCA pénzügyeinek kezeléséért.
       #original_hash: f2ceade
       delegates_html: >-
         A <strong>WCA delegáltak</strong> a WCA tagjai, akik azért felelősek,
@@ -2273,6 +2301,9 @@ hu:
     wst:
       #original_hash: dfbf427
       info: (a WCA szoftverének karbantartása)
+    wfc:
+      #original_hash: 674291e
+      info: (WCA pénzügyei)
   score_tools:
     #original_hash: ea9d41d
     title: WCA adatrögzítő eszközök
@@ -2452,3 +2483,24 @@ hu:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Kérlek adj meg két különböző és érvényes WCA ID-t!
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Versenyek
+      #original_hash: b37554f
+      people: Személyek
+      #original_hash: 6db75ea
+      advanced_search: Részletes keresés
+      #original_hash: a0ca0c3
+      posts: Posztok
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Szabályzat és Útmutató
+      not_found:
+        #original_hash: b8a7006
+        competitions: 'Nem található verseny a következő kereséssel:'
+        #original_hash: 99d4290
+        people: 'Nem található személy a következő kereséssel:'
+        #original_hash: c6a04aa
+        posts: 'Nem található poszt a következő kereséssel:'
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: 'Nem található Szabályzat vagy Útmutató cikk a következő kereséssel:'
