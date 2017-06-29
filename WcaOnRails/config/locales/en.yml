@@ -1289,3 +1289,16 @@ en:
         together_with: "Together with"
     messages:
       invalid_wca_ids: "Please provide two different valid WCA IDs."
+  search_results:
+    index:
+      competitions: "Competitions"
+      people: "People"
+      advanced_search: "Advanced search"
+      posts: "Posts"
+      regulations_and_guidelines: "Regulations and Guidelines"
+      #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
+      not_found:
+        competitions: "No competitions found for"
+        people: "No people found for"
+        posts: "No posts found for"
+        regulations_and_guidelines: "No Regulations or Guidelines found for"
