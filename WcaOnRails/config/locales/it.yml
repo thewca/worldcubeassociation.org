@@ -127,21 +127,21 @@ it:
   round:
     #original_hash: 66e902f
     name: '%{event} Round %{number}'
-  advance_to_next_round_requirement:
+  advancement_condition:
     #original_hash: 6381d11
-    ranking: 'I migliori %{ranking} avanzano al turno %{next_round_number}'
-    attemptValue:
+    ranking: 'I migliori %{ranking} avanzano al round %{next_round_number}'
+    #original_hash: 31ad77c
+    percent: 'Il %{percent} avanza al round %{next_round_number}'
+    attempt_result:
       #original_hash: 2f332eb
-      time: >-
-        Le migliori risoluzioni  ≤ %{time} avanzano al turno
-        %{next_round_number}
+      time: 'Miglior risoluzione   ≤ %{time} avanzano al turno %{next_round_number}'
       #original_hash: efa4ad1
       moves: >-
-        Le migliori risoluzioni ≤ %{moves} mosse avanzano al turno
+        Miglior risoluzione ≤ %{moves} mosse avanza al turno
         %{next_round_number}
       #original_hash: 29f8453
       points: >-
-        Le migliori risoluzioni  ≥ %{points}  punti avanzano al turno
+        Miglior risoluzione ≥ %{points} punti avanza al turno
         %{next_round_number}
   cutoff:
     #original_hash: 38a40f6
@@ -203,6 +203,17 @@ it:
       zero: nessun evento
       one: questo evento
       other: '%{count} eventi'
+    #original_hash: 51ef7d4
+    search_site: Cerca nel sito
+  delegate_statuses:
+    #original_hash: 28ec02d
+    candidate_delegate: Candidato Delegato
+    #original_hash: 12ab214
+    delegate: Delegato
+    #original_hash: d463c23
+    senior_delegate: Delegato Senior
+    #original_hash: 660ee15
+    board_member: Membro del Board
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -315,6 +326,14 @@ it:
         information: Informazioni
         #original_hash: 87b7d5f
         use_wca_registration: Vorrei usare il sito WCA per le registrazioni
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: >-
+          Voglio specificare un limite per il numero di partecipanti che possono
+          partecipare a questa competizione.
+        #original_hash: 749f4c9
+        competitor_limit: Numero massimo di partecipanti
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: Motivazione per il limite partecipanti
         #original_hash: 3c23a67
         guests_enabled: Accompagnatori
         #original_hash: 089cbfd
@@ -389,6 +408,10 @@ it:
         body: Messaggio
         #original_hash: 6f915a2
         sticky: Fissato
+        #original_hash: 848eed0
+        tags: Tag
+        #original_hash: fb4002e
+        show_on_homepage: Mostra nella homepage
       team:
         #original_hash: 709a232
         name: Nome
@@ -448,8 +471,6 @@ it:
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
-        remove_avatar: ''
-        #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -477,10 +498,12 @@ it:
           Nome della città e (se applicabile) dello stato dove si svolge la
           gara. NON scrivere il nome della nazione (es. Milan o San Francisco,
           California).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Informazioni riguardo la competizione (es. numero massimo di
-          partecipanti, informazioni riguardo email di conferma).
+          Informazioni riguardo il numero massimo di partecipanti, tasse di
+          registrazione per partecipanti e spettatori, altri dettagli
+          particolarmente rilevanti per le persone interessate a partecipare o
+          assistere.
         #original_hash: 0708400
         delegate_ids: Delegati WCA della competizione.
         #original_hash: 517d376
@@ -531,6 +554,16 @@ it:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          For now this number is informational only, and does not yet prevent
+          more people from registering. We are working on adding explicit
+          support for this to the registration flow, but it requires some other
+          work first.
+        #original_hash: b9bc84d
+        competitor_limit: Il numero massimo di partecipanti per questa competizione.
+        #original_hash: 32951f9
+        competitor_limit_reason: Quale è la motivazione del limite massimo di partecipanti?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -549,7 +582,7 @@ it:
         wca_id: ''
         #original_hash: 8723825
         dob: La tua data di nascita nel formato AAAA-MM-GG
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           Per verificare la tua identità e la correttezza della data di nascita,
           devi allegare una foto di un documento legale (carta d'identità,
@@ -566,6 +599,13 @@ it:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Careful! This is not secure for private data. This is only to prevent
+          cluttering the homepage. Posts that are not shown on the homepage are
+          still accessible to the public via permalink or through tags.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -644,8 +684,6 @@ it:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -767,8 +805,6 @@ it:
       faq: Domande Frequenti
       #original_hash: a34b69f
       contact: Contatti
-      #original_hash: cf1d2c9
-      forum: Forum
       #original_hash: 4fa8cc8
       tools: Strumenti
       #original_hash: 83fce83
@@ -937,8 +973,18 @@ it:
           assigned: hai un WCA ID assegnato
           #original_hash: 1c4670f
           registered: sei iscritto a una competizione
+      #original_hash: fe7122d
+      guidelines_confirmation: Confermo che il mio avatar rispetta le linee guida.
+      #original_hash: d677ceb
+      confirm_guidelines: >-
+        Assicurati di leggere le linee guida sugli avatar e invia un'immagine
+        valida.
       #original_hash: efc007a
       save: Salva
+      #original_hash: 58e0c56
+      remove_avatar: Rimuovi avatar
+      #original_hash: 4bd25cf
+      remove_avatar_confirm: Sei sicuro di voler cancellare il tuo avatar?
       #original_hash: 141d1d7
       guidelines: Linee Guida
       avatar_guidelines:
@@ -1399,10 +1445,14 @@ it:
         other: Delegati WCA
       #original_hash: b37456c
       contact: Contatti
+      #original_hash: 32946e9
+      competitor_limit: Limite partecipanti
       #original_hash: a428739
       entry_fee: Tassa d'iscrizione
       #original_hash: 0eb5ed5
       information: Informazioni
+      #original_hash: c5497bc
+      events: Eventi
     index:
       #original_hash: db98a68
       title: Competizioni
@@ -1753,10 +1803,10 @@ it:
       completed_solves: Risoluzioni Completate
       #original_hash: fc78642
       personal_records: Record Personali
-      #original_hash: 5e00ce5
+      #original_hash: e631f13
       odd_rank_reason: >-
-        Un record mancante o un ranking continentale peggiore di quello
-        nazionale è dovuto a un cambio di nazione. I risultati della regione
+        Un record mancante o un ranking nazionale peggiore di quello
+        continentale è dovuto a un cambio di nazione. I risultati della regione
         precedente non sono presi in considerazione nel conteggio dei ranking
         della regione attuale.
       #original_hash: a91508f
@@ -1793,6 +1843,8 @@ it:
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Sei sicuro di voler eliminare questo post? L'azione non è reversibile.
+    #original_hash: 3dcbf6d
+    announcement_info_html: 'Annunciato da %{author_name} il %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -1811,6 +1863,11 @@ it:
       description: >-
         Usa questo form se la tua data di nascita inserita nel database è
         diversa da quella reale.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">IMPORTANTE</span>: allega un'immagine di un
+        <u>documento legale</u> (carta d'identità, patente di guida,
+        passaporto,...) che mostrino il tuo nome E la tua data di nascita.
       #original_hash: 19c17ec
       submit: Richiedi cambiamento
     messages:
@@ -2118,6 +2175,11 @@ it:
           Le comunicazioni della WCA dovrebbero contribuire al raggiungimento
           degli obiettivi della WCA e supportare una cultura generale positiva
           basata su simpatia, trasparenza, inclusività, apertura e reattività.
+      wfc:
+        #original_hash: 9cb13de
+        name: Commissione Finanze WCA
+        #original_hash: 2d4807e
+        description: Questo team è responsabile della gestione delle finanze della WCA
       #original_hash: f2ceade
       delegates_html: >-
         I <strong>Delegati WCA</strong> sono membri della WCA che si assicurano
@@ -2252,6 +2314,9 @@ it:
     wst:
       #original_hash: dfbf427
       info: (mantenimento del software della WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (finanze della WCA)
   score_tools:
     #original_hash: ea9d41d
     title: Tool segna-punti WCA
@@ -2432,3 +2497,24 @@ it:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: 'Perfavore, inserisci due WCA ID validi e differenti.'
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Competizioni
+      #original_hash: b37554f
+      people: Persone
+      #original_hash: 6db75ea
+      advanced_search: Ricerca avanzata
+      #original_hash: a0ca0c3
+      posts: Post
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Regolamento e Linee Guida
+      not_found:
+        #original_hash: b8a7006
+        competitions: Non è stata trovata alcuna competizione per
+        #original_hash: 99d4290
+        people: Nessuna persona trovata per
+        #original_hash: c6a04aa
+        posts: Nessun messaggio trovato per
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Nessuna regola o linea guida trovata per
