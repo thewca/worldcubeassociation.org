@@ -205,6 +205,8 @@ pt-BR:
       zero: zero evento
       one: este evento
       other: 'estes %{count} eventos'
+    #original_hash: 51ef7d4
+    search_site: Procurar no site
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Delegado Candidato
@@ -2145,6 +2147,11 @@ pt-BR:
           comunicação da WCA deve contribuir para os Objetivos da WCA e apoiar
           uma cultura geral positiva de amizade, transparência, inclusão,
           compreensão e responsividade.
+      wfc:
+        #original_hash: 9cb13de
+        name: Comitê Financeiro da WCA
+        #original_hash: 2d4807e
+        description: Esse comitê é responsável por gerenciar as finanças da WCA
       #original_hash: f2ceade
       delegates_html: >-
         <strong>Delegados da WCA</strong> são membros da WCA que são
@@ -2278,6 +2285,9 @@ pt-BR:
     wst:
       #original_hash: dfbf427
       info: (manutenção do software da WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (finanças da WCA)
   score_tools:
     #original_hash: ea9d41d
     title: Ferramentas de Resultados da WCA
@@ -2457,3 +2467,24 @@ pt-BR:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Por favor informe duas IDs da WCA válidas.
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Competições
+      #original_hash: b37554f
+      people: Pessoas
+      #original_hash: 6db75ea
+      advanced_search: Busca avançada
+      #original_hash: a0ca0c3
+      posts: Posts
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Regulamento e Orientações
+      not_found:
+        #original_hash: b8a7006
+        competitions: Nenhuma competição encontrada para
+        #original_hash: 99d4290
+        people: Nenhuma pessoa encontrada para
+        #original_hash: c6a04aa
+        posts: Nenhum post encontrado para
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Nenhum Regulamento ou Oriengação encontrado para
