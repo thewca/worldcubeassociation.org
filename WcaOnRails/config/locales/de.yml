@@ -201,6 +201,8 @@ de:
       zero: Keine Disziplin
       one: Diese Disziplin
       other: 'Diese %{count} Disziplinen'
+    #original_hash: 51ef7d4
+    search_site: Suche
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Delegat Kandidat
@@ -324,6 +326,12 @@ de:
         information: Informationen
         #original_hash: 87b7d5f
         use_wca_registration: Ich würde gerne die WCA-Website für die Registrierung benutzen
+        #original_hash: a2dfcf8
+        competitor_limit_enabled: Ich möchte das Teilnehmerlimit angeben.
+        #original_hash: 749f4c9
+        competitor_limit: Maximale Anzahl an Teilnehmern
+        #original_hash: 4a8b6f1
+        competitor_limit_reason: Der Grund für das Teilnehmerlimit
         #original_hash: 3c23a67
         guests_enabled: Gäste
         #original_hash: 089cbfd
@@ -402,6 +410,10 @@ de:
         body: Inhalt
         #original_hash: 6f915a2
         sticky: Fixiert
+        #original_hash: 848eed0
+        tags: Tags
+        #original_hash: fb4002e
+        show_on_homepage: Auf der Webseite anzeigen
       team:
         #original_hash: 709a232
         name: Name
@@ -490,10 +502,11 @@ de:
           Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem der
           Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER
           San Francisco, Kalifornien).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Informationen über den Wettbewerb (z.B. Euro 2006 ist offen für
-          Staatsbürger der Europäischen Länder sowie Israel).
+          Informationen über das Teilnehmerlimit, Eintrittsgebühren für
+          Teilnehmer und Gäste und andere Details, die für interessierte
+          Personen relevant sind.
         #original_hash: 0708400
         delegate_ids: WCA-Delegierte für den Wettbewerb.
         #original_hash: 517d376
@@ -540,6 +553,15 @@ de:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: c0ab502
+        competitor_limit_enabled: >-
+          Derzeit dient dies nur als Information und hindert weitere Personen
+          nicht daran, sich zu registrieren. Wir arbeiten an einer Umsetzung
+          dieser Möglichkeit, aber es erfordert zunächst zusätzliche Arbeiten.
+        #original_hash: b9bc84d
+        competitor_limit: 'Die Anzahl der Teilnehmer, die für diese Competition zugelassen werden'
+        #original_hash: 32951f9
+        competitor_limit_reason: Was ist der Grund für das Teilnehmerlimit?
         #original_hash: da39a3e
         venueAddress: ''
       website_contact:
@@ -558,7 +580,7 @@ de:
         wca_id: ''
         #original_hash: 8723825
         dob: Dein korrektes Geburtsdatum im Format YYYY-MM-DD (Jahr - Monat - Tag)
-        #original_hash: 059d2ed
+        #original_hash: 2029dde
         document: >-
           Um deine Identität und dein korrektes Geburtsdatum nachzuweisen, musst
           du ein Bild eines Ausweisdokumentes anhängen. Dies kann ein Ausweis,
@@ -575,6 +597,14 @@ de:
         sticky: ''
         #original_hash: da39a3e
         title: ''
+        #original_hash: da39a3e
+        tags: ''
+        #original_hash: 0e3764f
+        show_on_homepage: >-
+          Achtung! Dies ist nicht sicher für vertrauliche Informationen. Es
+          verhindert nur die Anzeige auf der Homepage. Beiträge, die nicht auf
+          der Webseite angezeigt werden, sind über den Link und die Tags
+          öffentlich abrufbar.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
@@ -656,8 +686,6 @@ de:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -781,8 +809,6 @@ de:
       faq: Häufig gestellte Fragen (FAQ)
       #original_hash: a34b69f
       contact: Kontakt
-      #original_hash: cf1d2c9
-      forum: Forum
       #original_hash: 4fa8cc8
       tools: Werkzeuge
       #original_hash: 83fce83
@@ -1428,10 +1454,14 @@ de:
         other: WCA-Delegierte
       #original_hash: b37456c
       contact: Kontakt
+      #original_hash: 32946e9
+      competitor_limit: Teilnehmerlimit
       #original_hash: a428739
       entry_fee: Teilnahmegebühr
       #original_hash: 0eb5ed5
       information: Informationen
+      #original_hash: c5497bc
+      events: Disziplinen
     index:
       #original_hash: db98a68
       title: Wettbewerbe
@@ -1847,6 +1877,11 @@ de:
       description: >-
         Benutze dieses Formular falls das Geburtsdatum, das in unserer Datenbank
         gespeichert ist, nicht deinem Geburtsdatum entspricht.
+      #original_hash: 563d056
+      important_message_html: >-
+        <span class="text-danger">Achtung</span>: Hänge ein Bild eines
+        <u>gültigen Dokuments</u> (Personalausweis, Führerschein, Reisepass...)
+        an, auf dem dein Name und dein Geburtsdatum angegeben ist.
       #original_hash: 19c17ec
       submit: Änderung anfragen
     messages:
@@ -2164,6 +2199,11 @@ de:
           unterstützen. Die Kommunikation der WCA sollte den Zielen der WCA
           dienen und eine positive Kultur von Freundlichkeit, Transparenz,
           Respekt, Offenheit und Verantwortung unterstützen.
+      wfc:
+        #original_hash: 9cb13de
+        name: WCA Financial Committee
+        #original_hash: 2d4807e
+        description: Das Team ist für die Verwaltung der Finanzen der WCA verantwortlich
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA-Delegierte</strong> sind Mitglieder der WCA, die die
@@ -2304,6 +2344,9 @@ de:
     wst:
       #original_hash: dfbf427
       info: (Instandhaltung der Software der WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (Finanzen der WCA)
   score_tools:
     #original_hash: ea9d41d
     title: WCA-Werkzeuge zur Ergebniserfassung
@@ -2493,3 +2536,24 @@ de:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: 'Bitte gebe zwei verschiedene, gültige WCA IDs ein.'
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Wettbewerbe
+      #original_hash: b37554f
+      people: Personen
+      #original_hash: 6db75ea
+      advanced_search: Erweiterte Suche
+      #original_hash: a0ca0c3
+      posts: Beiträge
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Regeln und Richtlinien
+      not_found:
+        #original_hash: b8a7006
+        competitions: Keine Ergebnisse gefunden für
+        #original_hash: 99d4290
+        people: Keine Personen gefunden für
+        #original_hash: c6a04aa
+        posts: Keine Beiträge gefunden für
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Keine Regeln oder Richtlinien gefunden für
