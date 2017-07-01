@@ -203,6 +203,8 @@ nl:
       zero: geen wedstrijdonderdelen
       one: dit wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
+    #original_hash: 51ef7d4
+    search_site: Zoeken op site
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidate Delegate
@@ -2152,6 +2154,11 @@ nl:
           communicatie van WCA moet bijdragen aan de doelstellingen van WCA en
           een positieve cultuur van vriendschap, transparantie, inclusiviteit,
           openheid en responsiviteit ondersteunen.
+      wfc:
+        #original_hash: 9cb13de
+        name: WCA Financiële Commissie
+        #original_hash: 2d4807e
+        description: Dit team is verantwoordelijk voor de financiën van de WCA.
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA delegates</strong> zijn leden van de WCA die
@@ -2291,6 +2298,9 @@ nl:
     wst:
       #original_hash: dfbf427
       info: (onderhoud van de software van WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (financiën van de WCA)
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score tools
@@ -2476,3 +2486,24 @@ nl:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Geef ajb twee andere correcte WCA-id's op.
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Wedstrijden
+      #original_hash: b37554f
+      people: Mensen
+      #original_hash: 6db75ea
+      advanced_search: Geavanceerd zoeken
+      #original_hash: a0ca0c3
+      posts: Berichten
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Wedstrijdreglement en richtlijnen
+      not_found:
+        #original_hash: b8a7006
+        competitions: Geen wedstrijden gevonden voor
+        #original_hash: 99d4290
+        people: Geen mensen gevonden voor
+        #original_hash: c6a04aa
+        posts: Geen berichten gevonden voor
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Geen wedstrijdreglement of richtlijnen gevonden voor
