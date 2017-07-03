@@ -203,6 +203,8 @@ da:
       zero: ingen discipliner
       one: denne disciplin
       other: disse discipliner
+    #original_hash: 51ef7d4
+    search_site: Søg på siden
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Kandidat Delegat
@@ -933,7 +935,7 @@ da:
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Denne konto venter bekræftelse af den nye email adresse %{email}.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Denne konto venter bekræftelse af den nye avatar.
+      pending_avatar_confirmation: Denne konto afventer bekræftelse af den nye avatar.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Denne konto venter på at %{delegate} bekræfter deres opkrævede WCA ID
@@ -2133,6 +2135,11 @@ da:
           kommunikationen mellem WCA og kubingmiljøet. WCAs kommunikation er til
           for at nå WCAs mål og hjælpe på den positive kultur af venlighed,
           gennemskuelighed, ansvar, rummelighed og åbenhed.
+      wfc:
+        #original_hash: 9cb13de
+        name: WCA Finansiel Komiten
+        #original_hash: 2d4807e
+        description: Dette hold er ansvarlig for at holder styr over alle WCA's finanser
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegater</strong> er medlemmer af WCA som er ansvarlige for
@@ -2268,6 +2275,9 @@ da:
     wst:
       #original_hash: dfbf427
       info: (vedligeholdelse af WCAs software)
+    wfc:
+      #original_hash: 674291e
+      info: (WCA's finanser)
   score_tools:
     #original_hash: ea9d41d
     title: WCA Score Taking tools
@@ -2443,3 +2453,24 @@ da:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Giv to forskellige gyldige WCA IDer.
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Konkurrencer
+      #original_hash: b37554f
+      people: Personer
+      #original_hash: 6db75ea
+      advanced_search: Avanceret søgning
+      #original_hash: a0ca0c3
+      posts: Opslag
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Regelsæt og Retningslinjer
+      not_found:
+        #original_hash: b8a7006
+        competitions: Ingen konkurrencer fundet for
+        #original_hash: 99d4290
+        people: Ingen personer fundet for
+        #original_hash: c6a04aa
+        posts: Ingen opslag fundet for
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Ingen Regler eller Retningslinjer fundet for
