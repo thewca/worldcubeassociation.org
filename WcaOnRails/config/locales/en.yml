@@ -292,7 +292,7 @@ en:
       #context: for a user
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."
-        name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>."
+        name: "Enter your full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>.<br/>Middle names or initials are optional, but can be included if it is customary in your region."
         email: "Changing your email will require confirming the new email."
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
