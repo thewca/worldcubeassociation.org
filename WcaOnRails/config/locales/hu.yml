@@ -440,11 +440,12 @@ hu:
       user:
         #original_hash: 87e1e6f
         dob: Add meg a születési dátumodat ÉÉÉÉ-HH-NN formátumban.
-        #original_hash: 5106479
+        #original_hash: 7de9ab2
         name: >-
           Add meg a teljes nevedet angol szórendnek megfelelően, ékezetekkel,
           például: <strong>Péter Példa</strong>. Nem pedig hanyagul, mint
-          <strong>pelda peter</strong>.
+          <strong>pelda peter</strong>.<br/>A második keresztnevedet, ha nem
+          használod, akkor kihagyhatod.
         #original_hash: c03b949
         email: >-
           Az e-mail címed megváltoztatásához szükséges az új e-mail címed
