@@ -453,10 +453,12 @@ hr:
       user:
         #original_hash: 87e1e6f
         dob: Unesite svoj datum rođenja u formatu YYYY-MM-DD.
-        #original_hash: 5106479
+        #original_hash: 7de9ab2
         name: >-
           Unesite svoje puno ime točno, primjerice <strong>Pero Perić</strong>.
-          Ne aljkavo kao <strong>p perić</strong>.
+          Ne aljkavo kao <strong>p perić</strong>. <br/> Srednje ime ili
+          inicijali su neobavezni, ali mogu biti uključeni ukoliko su uobičajeni
+          u Vašoj regiji.
         #original_hash: c03b949
         email: Promjena Vaše e-mail adrese će zahtijevati potvrdu nove e-mail adrese.
         #original_hash: 8a91e53
