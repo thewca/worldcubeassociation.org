@@ -443,10 +443,11 @@ da:
       user:
         #original_hash: 87e1e6f
         dob: Skriv din Fødselsdag in denne format ÅÅÅÅ-MM-DD
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Skriv dit fulde navn korrekt, for eksempel <strong>Stefan
           Pochmann</strong>. Ikke sjusket som <strong>s pochman</strong>.
+          <br/>Mellem navne (enten fulde eller som initialer) er valgfrie.
         #original_hash: c03b949
         email: At skifte din email kræver at du bekræfter den nye email.
         #original_hash: 8a91e53
@@ -519,7 +520,7 @@ da:
         #original_hash: f688881
         remarks: >-
           Ekstra information som du gerne vil give bestyrelsen. For eksempel,
-          grunde til hvorfor konkurrencen var ønsket mindre end en måned var nu,
+          grunde til hvorfor konkurrencen var ønsket mindre end en måned fra nu,
           hvis det er relevant.
         #original_hash: da39a3e
         clone_tabs: ''
@@ -1514,7 +1515,7 @@ da:
       no_past_competitions: Du har ingen tidligere konkurrencer.
     competition_form:
       #original_hash: e879b0b
-      board: Tavle
+      board: Kommisionen
       #original_hash: f957dcb
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
@@ -1814,7 +1815,7 @@ da:
       Er du sikker på at du vil slette dette opslag? Denne handling kan ikke
       gøres om.
     #original_hash: 3dcbf6d
-    announcement_info_html: 'Annonceret af %{author_name} den %{date_time}'
+    announcement_info_html: 'Annonceret af %{author_name} %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
