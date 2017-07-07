@@ -36,7 +36,7 @@ RSpec.describe Person, type: :model do
     let!(:user) { FactoryGirl.create(:user_with_wca_id, person: person) }
 
     context "fixing the person" do
-      it "fixing countryId fails if there exist an old person with the same wca id, greater subId and the same countryId" do
+      it "fixing countryId fails if there exists an old person with the same wca id, greater subId and the same countryId" do
         Person.create(wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
         person.countryId = "New Zealand"
         expect(person).to be_invalid_with_errors(countryId: ["Cannot change the country to a country the person has already represented in the past."])
@@ -90,6 +90,24 @@ RSpec.describe Person, type: :model do
         expect(user.reload.name).to eq "New Name"
         expect(user.country_iso2).to eq "NZ"
         expect(user.dob).to eq Date.new(1990, 10, 10)
+      end
+    end
+
+    context "updating country and then fixing name" do
+      it "does not affect old results" do
+        person.update_using_sub_id!(countryId: "New Zealand")
+        person.update_attributes!(name: "Felix Zemdegs")
+        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
+      end
+    end
+
+    context "updating name and then fixing country" do
+      it "does not affect old results" do
+        person.update_using_sub_id!(name: "Felix Zemdegs")
+        person.update_attributes!(countryId: "New Zealand")
+        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
       end
     end
   end
