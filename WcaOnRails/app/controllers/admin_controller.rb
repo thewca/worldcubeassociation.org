@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 class AdminController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }
@@ -83,5 +85,16 @@ class AdminController < ApplicationController
   def do_compute_auxiliary_data
     ComputeAuxiliaryData.perform_later unless ComputeAuxiliaryData.in_progress?
     redirect_to admin_compute_auxiliary_data_path
+  end
+
+  def voters
+    csv = CSV.generate do |line|
+      line << ["name", "email"]
+
+      User.eligible_voters.each do |user|
+        line << [user.name, user.email]
+      end
+    end
+    send_data csv, filename: "wca-voters.csv", type: :csv
   end
 end

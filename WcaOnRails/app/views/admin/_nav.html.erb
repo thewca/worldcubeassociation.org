@@ -22,8 +22,9 @@
         { text: "Update statistics", path: "/results/statistics.php?update8392=1", fa_icon: "area-chart" },
         { text: "Export public", path: "/results/admin/export_public.php", fa_icon: "cloud-upload" },
         { text: "Edit teams", path: teams_path, fa_icon: "users" },
-        { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap"},
-        { text: "Server status", path: server_status_path, fa_icon: "info"}
+        { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap" },
+        { text: "Server status", path: server_status_path, fa_icon: "info" },
+        { text: "WCA Voting Members CSV", path: eligible_voters_path, fa_icon: "download" },
       ].each do |nav_item| %>
         <%= link_to nav_item[:path], class: "list-group-item" + (current_page?(nav_item[:path]) ? ' active' : '') do %>
           <i class="fa fa-fw fa-<%= nav_item[:fa_icon] %>"></i> <%= nav_item[:text] %>

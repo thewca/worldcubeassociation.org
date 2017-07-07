@@ -22,6 +22,12 @@ class User < ApplicationRecord
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
 
+  def self.eligible_voters
+    team_leaders = TeamMember.current.where(team_leader: true).map(&:user)
+    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate board_member))
+    (team_leaders + eligible_delegates).uniq
+  end
+
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
   strip_attributes only: [:wca_id, :country_iso2]
