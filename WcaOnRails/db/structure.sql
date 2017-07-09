@@ -61,7 +61,7 @@ CREATE TABLE `Competitions` (
   `enable_donations` tinyint(1) DEFAULT NULL,
   `competitor_limit_enabled` tinyint(1) NOT NULL DEFAULT '0',
   `competitor_limit` int(11) DEFAULT NULL,
-  `competitor_limit_reason` varchar(191) DEFAULT NULL,
+  `competitor_limit_reason` text,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -1476,4 +1476,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170523185221'),
 ('20170524221221'),
 ('20170524224533'),
-('20170624115851');
+('20170624115851'),
+('20170629134754');
