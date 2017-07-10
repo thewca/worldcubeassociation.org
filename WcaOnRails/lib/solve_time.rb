@@ -27,8 +27,7 @@ class SolveTime
     @time_centiseconds = nil
 
     if @event.fewest_moves?
-      # The average field for 333fm is pretty weird. It's the sum
-      # of the solves, multiplied by 100.
+      # The average field for 333fm is stored the same way as for other events, multiplied by 100.
       # Otherwise, wca_value is simply the number of moves.
       @move_count = @field == :average ? (wca_value / 100.0) : wca_value
     elsif @event.multiple_blindfolded?
