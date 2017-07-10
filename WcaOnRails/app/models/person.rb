@@ -75,8 +75,8 @@ class Person < ApplicationRecord
   after_update :update_results_table_and_associated_user
   private def update_results_table_and_associated_user
     unless @updating_using_sub_id
-      results.where(personName: name_was).update_all(personName: name) if name_changed?
-      results.where(countryId: countryId_was).update_all(countryId: countryId) if countryId_changed?
+      results_for_most_recent_sub_id = results.where(personName: name_was, countryId: countryId_was)
+      results_for_most_recent_sub_id.update_all(personName: name, countryId: countryId) if name_changed? || countryId_changed?
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
@@ -91,17 +91,19 @@ class Person < ApplicationRecord
 
   # Update the person attributes and save the old state as a new Person with greater subId.
   def update_using_sub_id(attributes)
+    @updating_using_sub_id = true
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }
       errors[:base] << "The name or the country must be different to update the person."
       return false
     end
     old_attributes = self.attributes
-    @updating_using_sub_id = true
     if update_attributes(attributes)
       Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
       Person.create(old_attributes.merge!(subId: 2))
       return true
     end
+  ensure
+    @updating_using_sub_id = false
   end
 
   # Note this is very similar to the cannot_register_for_competition_reasons method in user.rb.
