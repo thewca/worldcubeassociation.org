@@ -146,22 +146,22 @@ ro:
   cutoff:
     #original_hash: 38a40f6
     time:
-      other: '%{count} încercări pentru a obține ≤ %{time}'
-      few: '%{count} încercări pentru a obține ≤ %{time}'
-      one: '%{count} încercare pentru a obține ≤ %{time}'
       zero: '%{count} încercări pentru a obține ≤ %{time}'
+      one: '%{count} încercare pentru a obține ≤ %{time}'
+      few: '%{count} încercări pentru a obține ≤ %{time}'
+      other: '%{count} încercări pentru a obține ≤ %{time}'
     #original_hash: 6f99fa6
     moves:
-      other: '%{count} încercări pentru a obține ≤ %{moves} mutări'
-      few: '%{count} încercări pentru a obține ≤ %{moves} mutări'
-      one: '%{count} încercare pentru a obține ≤ %{moves} mutări'
       zero: '%{count} încercări pentru a obține ≤ %{moves} mutări'
+      one: '%{count} încercare pentru a obține ≤ %{moves} mutări'
+      few: '%{count} încercări pentru a obține ≤ %{moves} mutări'
+      other: '%{count} încercări pentru a obține ≤ %{moves} mutări'
     #original_hash: 1c7c5f1
     points:
-      other: '%{count} încercări pentru a obține ≥ %{points} puncte'
-      few: '%{count} încercări pentru a obține ≥ %{points} puncte'
-      one: '%{count} încercare pentru a obține ≥ %{points} puncte'
       zero: '%{count} încercări pentru a obține ≥ %{points} puncte'
+      one: '%{count} încercare pentru a obține ≥ %{points} puncte'
+      few: '%{count} încercări pentru a obține ≥ %{points} puncte'
+      other: '%{count} încercări pentru a obține ≥ %{points} puncte'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -190,7 +190,7 @@ ro:
       #original_hash: 603a218
       wca_id: ID WCA
       #original_hash: e0f64f7
-      citizen_of: Cetățean din
+      citizen_of: Țara de origine
     #original_hash: 3fc0ba1
     all_regions: Toate regiunile
     errors:
@@ -452,11 +452,12 @@ ro:
       user:
         #original_hash: 87e1e6f
         dob: Introdu data nașterii în formatul an-lună-zi (AAAA-LL-ZZ)
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Introdu numele tău complet și corect (de exemplu <strong>Stefan
           Pochmann</strong>, nu <strong>stefan pochmann</strong> sau <strong>S.
-          Pochmann</strong>)
+          Pochmann</strong>). Nu este obligatoriu să iți treci toate prenumele
+          (dacă vrei, le poți scrie, întregi sau doar inițialele).
         #original_hash: c03b949
         email: Schimbarea adresei de e-mail necesită confiramrea noii adrese.
         #original_hash: 8a91e53
@@ -848,7 +849,7 @@ ro:
       #original_hash: 141d1d7
       guidelines: Îndrumări
       #original_hash: c4622c3
-      scrambles: Amestecări
+      scrambles: Scramble-uri
       #original_hash: 90ccd64
       history: Istoric
       #original_hash: 8ad8302
@@ -1286,7 +1287,7 @@ ro:
     #original_hash: 801b3e9
     panel_title: Detalii despre înregistrare
     #original_hash: c0063c3
-    register: Înregistrare!
+    register: Înregistrează-te!
     #original_hash: f484f15
     refund: Returnarea Plății
     #original_hash: a9af643
@@ -1302,7 +1303,9 @@ ro:
     #original_hash: 34eb009
     will_close_html: 'Înregistrările se vor închide în <strong>%{days}</strong> pe %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Înregistrare terminată acum <strong>%{days}</strong> la ora %{time}.'
+    closed_html: >-
+      Înregistrările au fost închise acum <strong>%{days}</strong> la ora
+      %{time}.
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} pentru a verifica stadiul înregistrării. Dacă nu ai încă un
@@ -1737,7 +1740,7 @@ ro:
         #original_hash: b233e77
         registration: Înregistrare
         #original_hash: d672995
-        register: Înregistrează
+        register: Înscrie-te
         #original_hash: 855bd26
         competitors: Concurenți
     results_table:
@@ -1849,7 +1852,7 @@ ro:
     #original_hash: 2a7da42
     confirm_delete_post: Ești sigur că vrei să ștergi această postare? Nu mai poate fi recuperată.
     #original_hash: 3dcbf6d
-    announcement_info_html: 'Anunțat de by %{author_name}, pe %{date_time}'
+    announcement_info_html: 'Anunțat de by %{author_name}, %{date_time}'
   contacts:
     website:
       #original_hash: ac2ac3d
@@ -2194,7 +2197,7 @@ ro:
         Delegat WCA, un Delegat Senior WCA este responsabil de supravegherea
         Delegaților din zona lui și poate fi contactat de comunitate pentru
         probleme regionale. Noii Delegați sunt, mai întâi, Delegați Candidați
-        WCA, și trebuie să arate că sunt capabili să administreze cu succes
+        WCA, și trebuie să arate că sunt capabili să supervizeze cu succes
         competițiile, înainte de a fi numiți Delegați WCA.
       #original_hash: 27d18ac
       see_link_html: '(vezi %{link})'
@@ -2223,7 +2226,7 @@ ro:
     content: 'WCA recunoaște următoarele organizații regionale:'
     how_to:
       #original_hash: fc3af12
-      title: Cum să devii o Organizație Regională WCA
+      title: Cum este recunoscută o Organizație Regională WCA
       #original_hash: bdf57ff
       description: >-
         WCA recunoaște mai multe organizații regionale din toată lumea. Scopul
@@ -2281,7 +2284,7 @@ ro:
     #original_hash: b5c2eaa
     info_alert_html: >-
       Înainte de a contacta oricare dintre echipele de pe această pagină, te
-      rugăm să te uiți pe %{link}!
+      rugăm să consulți pagina de %{link}!
     #original_hash: 2b023eb
     questions_and_comments_html: >-
       Pentru întrebări legate de site, comentarii și sugestii, folosește acest
@@ -2303,14 +2306,14 @@ ro:
     wdc:
       #original_hash: 562e197
       info: >-
-        (avize independente de Boardul WCA, investigații independente,
-        consiliere pentru probleme personale importante)
+        (consultanță pentru Boardul WCA, investigații independente, consiliere
+        pentru probleme importante)
     wrc:
       #original_hash: 4a256f0
       info: (întreținerea Regulamentului WCA)
     wrt:
       #original_hash: 899dc9c
-      info: '(rezultate de la competiții, corecții ale rezultatelor)'
+      info: '(rezultate de la competiții, corectarea rezultatelor)'
     wst:
       #original_hash: dfbf427
       info: (mentenanța software-ului WCA)
