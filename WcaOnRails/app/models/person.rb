@@ -75,15 +75,11 @@ class Person < ApplicationRecord
   after_update :update_results_table_and_associated_user
   private def update_results_table_and_associated_user
     unless @updating_using_sub_id
-      results_for_most_recent_sub_id = results.where(personName: name_was, countryId: countryId_was)
-      results_for_most_recent_sub_id.update_all(personName: name, countryId: countryId) if name_changed? || countryId_changed?
+      results_for_most_recent_sub_id = results.where(personName: name_before_last_save, countryId: countryId_before_last_save)
+      results_for_most_recent_sub_id.update_all(personName: name, countryId: countryId) if saved_change_to_name? || saved_change_to_countryId?
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
-
-  # Keep the information since admin_controller needs it.
-  attr_reader :country_id_changed
-  after_update -> { @country_id_changed = countryId_changed? }
 
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
