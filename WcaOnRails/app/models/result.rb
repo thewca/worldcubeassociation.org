@@ -12,7 +12,7 @@ class Result < ApplicationRecord
   belongs_to :event, foreign_key: :eventId
   belongs_to :format, foreign_key: :formatId
 
-  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0").order(:pos) }
+  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0") }
   scope :winners, -> { joins(:round_type, :event).merge(RoundType.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
 
   validates :competition, presence: true
