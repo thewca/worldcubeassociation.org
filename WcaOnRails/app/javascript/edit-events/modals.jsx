@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Modal from 'react-bootstrap/lib/Modal'
+import Radio from 'react-bootstrap/lib/Radio'
 import Button from 'react-bootstrap/lib/Button'
 import Checkbox from 'react-bootstrap/lib/Checkbox'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
 
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
@@ -39,6 +41,28 @@ class ButtonActivatedModal extends React.Component {
           </form>
         </Modal>
       </button>
+    );
+  }
+}
+
+class RadioGroup extends React.Component {
+  get value() {
+    let formGroupDom = ReactDOM.findDOMNode(this.formGroup);
+    return formGroupDom.querySelectorAll('input:checked')[0].value
+  }
+
+  render() {
+    return (
+      <FormGroup ref={c => this.formGroup = c}>
+        {this.props.children.map(child => {
+          return React.cloneElement(child, {
+            name: this.props.name,
+            key: child.props.value,
+            checked: this.props.value == child.props.value,
+            onChange: this.props.onChange,
+          });
+        })}
+      </FormGroup>
     );
   }
 }
@@ -128,11 +152,11 @@ let RoundAttributeComponents = {
         otherWcifRounds = otherWcifRounds.concat(wcifEvent.rounds.filter(r => r != wcifRound));
       });
 
-      let centisInput, cumulativeInput;
+      let centisInput, cumulativeInput, cumulativeRadio;
       let roundCheckboxes = [];
       let onChangeAggregator = () => {
         let cumulativeRoundIds;
-        switch(cumulativeInput.value) {
+        switch(cumulativeRadio.value) {
           case "per-solve":
             cumulativeRoundIds = [];
             break;
@@ -141,7 +165,7 @@ let RoundAttributeComponents = {
             cumulativeRoundIds = cumulativeRoundIds.concat(roundCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value));
             break;
           default:
-            throw new Error(`Unrecognized value ${cumulativeInput.value}`);
+            throw new Error(`Unrecognized value ${cumulativeRadio.value}`);
             break;
         }
 
@@ -160,14 +184,14 @@ let RoundAttributeComponents = {
                  value={timeLimit.centiseconds}
                  onChange={onChangeAggregator} />
 
-          <select type="checkbox"
-                  value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
-                  onChange={onChangeAggregator}
-                  ref={c => cumulativeInput = c}
+          <RadioGroup value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
+                      name="cumulative-radio"
+                      onChange={onChangeAggregator}
+                      ref={c => cumulativeRadio = c}
           >
-            <option value="per-solve">per solve</option>
-            <option value="cumulative">cumulative</option>
-          </select>
+            <Radio value="per-solve" inline>Per Solve</Radio>
+            <Radio value="cumulative" inline>Cumulative</Radio>
+          </RadioGroup>
 
           {timeLimit.cumulativeRoundIds.length >= 1 && (
             <span>
