@@ -7,7 +7,7 @@ pl:
     #original_hash: 459f987
     XS: Wiele Państw (Ameryka Południowa)
     #original_hash: 918c53a
-    MO: Macao
+    MO: Makau
     #original_hash: 2f488ff
     HK: Hong Kong
     #original_hash: 4e8bd04
@@ -2470,7 +2470,7 @@ pl:
       #original_hash: 7fbf6b8
       content2_html: >-
         Po wybraniu wiersza z błędami w panelu przeglądu arkusza, aplikacja
-        wyświetli szczegóły w panelu błędów walidacji w lewym dolnym roku.
+        wyświetli szczegóły w panelu błędów walidacji w lewym dolnym rogu.
       #original_hash: 0600502
       content3_html: >-
         Błędy mogą zostać poprawione poprzez otwarcie arkusza w arkuszu
