@@ -124,7 +124,7 @@ let RoundAttributeComponents = {
   timeLimit: {
     Title({ wcifEvent, roundNumber }) {
       let event = events.byId[wcifEvent.id];
-      return <span>Time limit for {event.name} round {roundNumber}</span>;
+      return <span>Time limit for {event.name}, Round {roundNumber}</span>;
     },
     Show({ value: timeLimit }) {
       let timeStr = `${(timeLimit.centiseconds / 100 / 60).toFixed(2)} minutes`;
@@ -217,7 +217,7 @@ let RoundAttributeComponents = {
   cutoff: {
     Title({ wcifEvent, roundNumber }) {
       let event = events.byId[wcifEvent.id];
-      return <span>Cutoff for {event.name} round {roundNumber}</span>;
+      return <span>Cutoff for {event.name}, Round {roundNumber}</span>;
     },
     Show({ value: cutoff }) {
       let str;
