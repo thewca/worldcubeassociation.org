@@ -284,7 +284,7 @@ let RoundAttributeComponents = {
       return <span>{str}</span>;
     },
     Input({ value: advancementCondition, onChange, autoFocus }) {
-      let typeInput, rankingInput, percentileInput, attemptResultInput;
+      let typeInput, rankingInput, percentInput, attemptResultInput;
       let onChangeAggregator = () => {
         let type = typeInput.value;
         let newAdvancementCondition;
@@ -295,16 +295,16 @@ let RoundAttributeComponents = {
               level: rankingInput ? parseInt(rankingInput.value): 0,
             };
             break;
-          case "percentile":
+          case "percent":
             newAdvancementCondition = {
-              type: "percentile",
-              level: percentileInput ? parseInt(percentileInput.value) : 0,
+              type: "percent",
+              level: percentInput ? parseInt(percentInput.value) : 0,
             };
             break;
-          case "attemptValue":
+          case "attemptResult":
             newAdvancementCondition = {
-              type: "attemptValue",
-              level: attemptResultInput ? parseInt(attemptValue.value) : 0,
+              type: "attemptResult",
+              level: attemptResultInput ? parseInt(attemptResult.value) : 0,
             };
             break;
           default:
@@ -324,8 +324,8 @@ let RoundAttributeComponents = {
             <option value="">TBA</option>
             <option disabled="disabled">────────</option>
             <option value="ranking">Ranking</option>
-            <option value="percentile">Percentile</option>
-            <option value="attemptValue">Attempt value</option>
+            <option value="percent">Percent</option>
+            <option value="attemptResult">Result</option>
           </select>
 
           {advancementCondition && advancementCondition.type == "ranking" && (
@@ -335,14 +335,14 @@ let RoundAttributeComponents = {
             </span>
           )}
 
-          {advancementCondition && advancementCondition.type == "percentile" && (
+          {advancementCondition && advancementCondition.type == "percent" && (
             <span>
-              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentileInput = c} />
-              percentile?
+              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />
+              percent?
             </span>
           )}
 
-          {advancementCondition && advancementCondition.type == "attemptValue" && (
+          {advancementCondition && advancementCondition.type == "attemptResult" && (
             <span>
               <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />
               my shirt?
