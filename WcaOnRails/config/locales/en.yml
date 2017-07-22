@@ -122,6 +122,8 @@ en:
     cumulative:
       one_round: "%{time} cumulative"
       across_rounds: "%{time} total for %{rounds}"
+    333fm: "1 hour"
+    333mbf: "10 minutes per cube"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"

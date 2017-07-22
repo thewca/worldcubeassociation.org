@@ -55,6 +55,10 @@ class Event < ApplicationRecord
     self.id == "333mbf" || self.id == "333mbo"
   end
 
+  def can_change_time_limit?
+    !fewest_moves? && !multiple_blindfolded?
+  end
+
   def serializable_hash(options = nil)
     {
       id: self.id,

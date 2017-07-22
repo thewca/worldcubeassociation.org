@@ -32,12 +32,14 @@
           <% competition_event.rounds.each do |round| %>
             <td><%= round.format.name %></td>
             <td>
-              <%= round.time_limit_to_s %>
-              <% if round.time_limit.cumulative_round_ids %>
+              <% if !competition_event.event.can_change_time_limit? %>
+                <%= t "time_limit.#{competition_event.event.id}" %>
+              <% else %>
+                <%= round.time_limit_to_s %>
                 <% if round.time_limit.cumulative_round_ids.length == 1 %>
                   <% cumulative_time_limit = true %>
                   <%= link_to "*", "#cumulative-time-limit" %>
-                <% else %>
+                <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
                   <% cumulative_across_rounds_time_limit = true %>
                   <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
                 <% end %>

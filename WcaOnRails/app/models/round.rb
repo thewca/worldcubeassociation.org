@@ -71,7 +71,7 @@ class Round < ApplicationRecord
     {
       "id" => "#{event.id}-#{self.number}",
       "format" => self.format_id,
-      "timeLimit" => time_limit&.to_wcif,
+      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
     }
