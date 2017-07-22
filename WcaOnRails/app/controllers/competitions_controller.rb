@@ -237,7 +237,7 @@ class CompetitionsController < ApplicationController
         title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
       else
-        top_three = comp.results.where(event: event).podium
+        top_three = comp.results.where(event: event).podium.order(:pos)
         if top_three.empty?
           return render html: "<div class='container'><div class='alert alert-warning'>Nobody competed in event: #{event.id}</div></div>".html_safe
         else

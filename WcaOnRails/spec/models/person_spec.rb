@@ -111,4 +111,16 @@ RSpec.describe Person, type: :model do
       end
     end
   end
+
+  describe "#world_championship_podiums" do
+    let!(:wc2015) { FactoryGirl.create :competition, cellName: "World Championship 2015", starts: Date.new(2015, 1, 1) }
+    let!(:wc2017) { FactoryGirl.create :competition, cellName: "World Championship 2017", starts: Date.new(2017, 1, 1) }
+    let!(:result1) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 2, eventId: "333" }
+    let!(:result2) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 1, eventId: "333oh" }
+    let!(:result3) { FactoryGirl.create :result, person: person, competition: wc2017, pos: 3, eventId: "444" }
+
+    it "return results ordered by year and event" do
+      expect(person.world_championship_podiums.to_a).to eq [result3, result1, result2]
+    end
+  end
 end
