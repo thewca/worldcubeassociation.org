@@ -64,6 +64,7 @@ class Event < ApplicationRecord
       id: self.id,
       name: self.name,
       format_ids: self.formats.map(&:id),
+      can_change_time_limit: self.can_change_time_limit?,
     }
   end
 end

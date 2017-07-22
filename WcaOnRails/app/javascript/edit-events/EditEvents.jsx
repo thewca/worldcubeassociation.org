@@ -84,6 +84,7 @@ export default class EditEvents extends React.Component {
 
 function RoundsTable({ wcifEvents, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
+  let canChangeTimeLimit = event.can_change_time_limit;
   return (
     <div className="table-responsive">
       <table className="table table-condensed">
@@ -91,7 +92,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
           <tr>
             <th>#</th>
             <th className="text-center">Format</th>
-            <th className="text-center">Time Limit</th>
+            {canChangeTimeLimit && <th className="text-center">Time Limit</th>}
             <th className="text-center">Cutoff</th>
             <th className="text-center">To Advance</th>
           </tr>
@@ -116,9 +117,11 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
                   </select>
                 </td>
 
-                <td className="text-center">
-                  <EditTimeLimitButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
-                </td>
+                {canChangeTimeLimit && (
+                  <td className="text-center">
+                    <EditTimeLimitButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
+                  </td>
+                )}
 
                 <td className="text-center">
                   <EditCutoffButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
