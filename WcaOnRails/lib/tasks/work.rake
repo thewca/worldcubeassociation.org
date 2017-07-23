@@ -6,5 +6,6 @@ namespace :work do
     SubmitResultsNagJob.perform_later
     SubmitReportNagJob.perform_later
     ComputeLinkings.perform_later
+    DumpDeveloperDatabase.perform_later
   end
 end
