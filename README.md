@@ -4,7 +4,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 
 ## Setup
 - `git clone https://github.com/thewca/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
-- `(cd WcaOnRails; bundle install) && pre-commit install` - Set up git pre-commit hook. Optional, but very useful.
+- `(cd WcaOnRails; bundle install) && bundle pre-commit install && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run in Vagrant (easier and gets everything working)
 - Install [Vagrant](https://www.vagrantup.com/), which requires

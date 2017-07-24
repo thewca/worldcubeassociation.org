@@ -10,10 +10,8 @@ regulations/
 !WcaOnRails/app/views/regulations/history/*.erb
 WcaOnRails/app/views/regulations-todelete/
 
-# It appears that Dreamhost automatically creates these files for us. See:
-#  https://discussion.dreamhost.com/thread-127984.html
-webroot/favicon.gif
-webroot/favicon.ico
+# byebug stuff
+.byebug_history
 
 # Vagrant stuff
 .vagrant/

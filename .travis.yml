@@ -34,7 +34,6 @@ before_script:
 
   - bundle exec rake db:reset
   - bundle exec rake assets:precompile
-  - bin/webpack-dev-server &
 script:
   - bundle exec pre-commit run git
   - bundle exec rubocop

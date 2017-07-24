@@ -2,6 +2,7 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.3
+  DisplayCopNames: true
   Exclude:
     - 'node_modules/**/*'
     - 'bin/webpack-dev-server'
@@ -153,7 +154,7 @@ Style/RedundantParentheses:
 Style/SignalException:
   EnforcedStyle: only_raise
 
-Style/SpaceAroundOperators:
+Layout/SpaceAroundOperators:
   Enabled: false
 
 Style/StringLiteralsInInterpolation:
@@ -169,4 +170,7 @@ Style/SymbolProc:
   Enabled: false
 
 Style/PredicateName:
+  Enabled: false
+
+Style/YodaCondition:
   Enabled: false
