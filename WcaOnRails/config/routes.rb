@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   get '/regulations/*id' => 'regulations#show'
 
   get '/admin' => 'admin#index'
+  get '/admin/voters' => 'admin#voters', as: :eligible_voters
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
   get '/admin/edit_person' => 'admin#edit_person'
