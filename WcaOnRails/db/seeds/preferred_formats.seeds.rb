@@ -23,5 +23,5 @@ VALUES
 ('333mbf', '3', 1), ('333mbf', '2', 2), ('333mbf', '1', 3),
 ('magic', 'a', 1),
 ('mmagic', 'a', 1),
-('333mbo', 'a', 1);"
+('333mbo', '3', 1), ('333mbo', '2', 2), ('333mbo', '1', 3);"
 ActiveRecord::Base.connection.execute(sql)
