@@ -704,6 +704,23 @@ CREATE TABLE `archive_registrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `championships`
+--
+
+DROP TABLE IF EXISTS `championships`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `championships` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `competition_id` varchar(191) NOT NULL,
+  `championship_type` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_championships_on_competition_id_and_championship_type` (`competition_id`,`championship_type`),
+  KEY `index_championships_on_championship_type` (`championship_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `competition_delegates`
 --
 
@@ -1478,4 +1495,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170524224533'),
 ('20170624115851'),
 ('20170629134754'),
-('20170726133627');
+('20170726133627'),
+('20170801010739');
