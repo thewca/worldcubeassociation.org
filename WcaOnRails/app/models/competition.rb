@@ -19,6 +19,7 @@ class Competition < ApplicationRecord
   has_one :delegate_report, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
+  has_many :championships, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
 
