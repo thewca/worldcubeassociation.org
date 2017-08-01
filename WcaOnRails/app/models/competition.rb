@@ -245,7 +245,8 @@ class Competition < ApplicationRecord
              'media',
              'scrambles',
              'country',
-             'continent'
+             'continent',
+             'championships'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
