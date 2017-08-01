@@ -102,4 +102,14 @@ module CompetitionsHelper
       }
     end.to_json.html_safe
   end
+
+  def championship_select_fields
+    [
+      ["World", "world"],
+      ["", ""],
+      *Continent.all.map { |continent| [continent.name, continent.id] },
+      ["", ""],
+      *Country.all.map { |country| [country.name, country.iso2] },
+    ]
+  end
 end

@@ -22,6 +22,7 @@ class Competition < ApplicationRecord
   has_many :championships, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
+  accepts_nested_attributes_for :championships, allow_destroy: true
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0
   monetize :base_entry_fee_lowest_denomination,

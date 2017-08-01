@@ -227,6 +227,7 @@ en:
         clone_tabs: "I would like to clone all tabs with additional information as well"
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
+        championship_type: "Championship type"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -341,6 +342,7 @@ en:
         competitor_limit: "The number of competitors allowed in this competition."
         competitor_limit_reason: "What is the reason for the limit on competitors?"
         venueAddress: ""
+        championship_type: ""
       website_contact:
         message: ""
         name: ""
@@ -876,6 +878,7 @@ en:
       submit_confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the Board was notified."
       submit_delete: "Are you sure you want to delete this competition? There is no going back."
       coordinates: "Coordinates"
+      add_championship: "Add Championship"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
