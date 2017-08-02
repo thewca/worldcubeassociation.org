@@ -18,6 +18,20 @@
       $dobArea.toggle(false);
     }
     clearExtraInfo();
+
+    var addListenerToDelegateSearch = function() {
+      var $delegateSearch = $('#nearby-delegate-search');
+      var selectize = $delegateSearch[0].selectize;
+      var $radioInput = $delegateSearch.siblings('input');
+      selectize.on("focus", function(e) {
+        $radioInput.prop('checked', true);
+      });
+      selectize.on("change", function(value) {
+        $radioInput.val(value);
+        $submitButton.prop("disabled", false);
+      });
+    };
+
     var onUnconfirmedWcaId = function(unconfirmed_wca_id) {
       clearExtraInfo();
 
@@ -32,26 +46,18 @@
           var $delegateSearch = $('#nearby-delegate-search');
           if($delegateSearch.length > 0) {
             $delegateSearch.wcaAutocomplete();
-            var selectize = $delegateSearch[0].selectize;
-            var $radioInput = $delegateSearch.siblings('input');
-            selectize.on("focus", function(e) {
-              $radioInput.prop('checked', true);
-            });
-            selectize.on("change", function(value) {
-              $radioInput.val(value);
-              $submitButton.prop("disabled", false);
-            });
+            addListenerToDelegateSearch();
           }
         }
       });
     };
     unconfirmed_wca_id_selectize.on("change", onUnconfirmedWcaId);
     if($('[name="user[delegate_id_to_handle_wca_id_claim]"]:checked').val()) {
-      $dobArea.toggle(true);
       $submitButton.prop("disabled", false);
     }
     if(unconfirmed_wca_id_selectize.items.length > 0) {
-      var $selected_delegate_id = $('[name="user[delegate_id_to_handle_wca_id_claim]"]:checked');
+      addListenerToDelegateSearch();
+      $dobArea.toggle(true);
     }
 
     $("form.edit_user").on("change", 'input[type="radio"]', function(e) {

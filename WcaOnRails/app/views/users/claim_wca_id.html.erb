@@ -13,10 +13,10 @@
                            target: "_blank") %>
   <% else %>
     <p>
-    <%= t '.info_competed_before' %>
+      <%= t '.info_competed_before' %>
     </p>
     <p>
-    <%= t '.info_never_competed_html', comp:link_to(t('.competition'), competitions_path) %>
+      <%= t '.info_never_competed_html', comp:link_to(t('.competition'), competitions_path) %>
     </p>
 
     <%= simple_form_for @user do |f| %>
@@ -25,7 +25,6 @@
 
       <%= render "claim_wca_id_selector", f: f %>
       <%= f.button :submit, t('.submit_value'), id: "claim-wca-id-button", class: "btn-primary" %>
-
     <% end %>
   <% end %>
 </div>
