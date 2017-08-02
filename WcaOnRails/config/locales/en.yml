@@ -148,6 +148,8 @@ en:
       one: "this event"
       other: "these %{count} events"
     search_site: "Search site"
+    date_placeholder: "YYYY-MM-DD"
+    datetime_placeholder: "YYYY-MM-DD HH:MM"
   delegate_statuses:
     candidate_delegate: "Candidate Delegate"
     delegate: "Delegate"
