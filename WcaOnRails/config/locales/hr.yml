@@ -217,6 +217,10 @@ hr:
       other: 'ovih %{count} disciplina'
     #original_hash: 51ef7d4
     search_site: Pretraži stranicu
+    #original_hash: d3f8f7b
+    date_placeholder: GODINA-MJESEC-DAN
+    #original_hash: 52249b5
+    datetime_placeholder: 'GODINA-MJESEC-DAN SAT:MINUTA'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Kandidat Delegat
@@ -453,12 +457,11 @@ hr:
       user:
         #original_hash: 87e1e6f
         dob: Unesite svoj datum rođenja u formatu YYYY-MM-DD.
-        #original_hash: 7de9ab2
+        #original_hash: d0bb74a
         name: >-
           Unesite svoje puno ime točno, primjerice <strong>Pero Perić</strong>.
           Ne aljkavo kao <strong>p perić</strong>. <br/> Srednje ime ili
-          inicijali su neobavezni, ali mogu biti uključeni ukoliko su uobičajeni
-          u Vašoj regiji.
+          inicijali su neobavezni.
         #original_hash: c03b949
         email: Promjena Vaše e-mail adrese će zahtijevati potvrdu nove e-mail adrese.
         #original_hash: 8a91e53
