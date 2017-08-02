@@ -218,6 +218,22 @@
       <hr>
 
     <% end %>
+
+    <% if @competition_admin_view %>
+      <div class="championships">
+        <%= f.simple_fields_for :championships, @competition.championships do |f2| %>
+          <%= render "championship_fields", f: f2 %>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="col-sm-offset-2 col-sm-9">
+          <%= link_to_add_association button_tag(icon("plus", t('.add_championship')), type: "button", class: "btn btn-default"), f, :championships,
+                                      data: { association_insertion_node: '.championships', association_insertion_method: 'append' } %>
+        </div>
+      </div>
+      <hr>
+    <% end %>
+
     <% disable_money_input = !@competition.can_edit_registration_fees? %>
     <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
     <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input %>
@@ -266,21 +282,6 @@
     <% if @competition.being_cloned_from&.tabs&.present? %>
       <%= f.input :being_cloned_from_id, as: :hidden %>
       <%= f.input :clone_tabs, as: :boolean %>
-    <% end %>
-
-    <% if @competition_admin_view %>
-      <hr>
-      <div class="championships">
-        <%= f.simple_fields_for :championships, @competition.championships do |f2| %>
-          <%= render "championship_fields", f: f2 %>
-        <% end %>
-      </div>
-      <div class="row">
-        <div class="col-sm-offset-2 col-sm-9">
-          <%= link_to_add_association button_tag(icon("plus", t('.add_championship')), type: "button", class: "btn btn-default"), f, :championships,
-                                      data: { association_insertion_node: '.championships', association_insertion_method: 'append' } %>
-        </div>
-      </div>
     <% end %>
 
     <hr>
