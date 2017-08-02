@@ -11,5 +11,10 @@ RSpec.describe Championship do
       championship_duplicate = competition.championships.build championship_type: "world"
       expect(championship_duplicate).to be_invalid_with_errors(championship_type: ["has already been taken"])
     end
+
+    it "cannot create a championship of an invalid type" do
+      championship = competition.championships.build championship_type: "mars"
+      expect(championship).to be_invalid_with_errors(championship_type: ["is not included in the list"])
+    end
   end
 end

@@ -3,5 +3,6 @@
 class Championship < ApplicationRecord
   belongs_to :competition
   validates_presence_of :competition
-  validates :championship_type, uniqueness: { scope: :competition_id }
+  validates :championship_type, uniqueness: { scope: :competition_id },
+                                inclusion: { in: ["world", *Continent.all.map(&:id), *Country.all.map(&:iso2)] }
 end
