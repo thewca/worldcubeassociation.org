@@ -215,6 +215,10 @@ pl:
       other: 'te %{count} konkurencji'
     #original_hash: 51ef7d4
     search_site: Szukaj
+    #original_hash: d3f8f7b
+    date_placeholder: RRRR-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'RRRR-MM-DD GG:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Kandydat na Delegata
@@ -457,7 +461,7 @@ pl:
       user:
         #original_hash: 87e1e6f
         dob: Wprowadź swoją datę urodzenia w formacie RRRR-MM-DD
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Wprowadź swoje pełne imię poprawnie, na przykład <strong>Jan
           Kowalski</strong>. Nie zdrobniale jak <strong>j kowalski</strong>.
