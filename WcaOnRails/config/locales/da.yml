@@ -205,6 +205,10 @@ da:
       other: disse discipliner
     #original_hash: 51ef7d4
     search_site: Søg på siden
+    #original_hash: d3f8f7b
+    date_placeholder: ÅÅÅÅ-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Kandidat Delegat
