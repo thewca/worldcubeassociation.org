@@ -31,4 +31,18 @@ RSpec.describe "competitions" do
 
     expect(Post.count).to eq 1
   end
+
+  it 'can set championship types for a competition' do
+    patch competition_path(competition), params: {
+      competition: {
+        championships_attributes: {
+          "1" => { championship_type: "world" },
+          "0" => { championship_type: "_Europe" },
+        },
+      },
+    }
+    follow_redirect!
+    expect(response).to be_success
+    expect(competition.reload.championships.count).to eq 2
+  end
 end
