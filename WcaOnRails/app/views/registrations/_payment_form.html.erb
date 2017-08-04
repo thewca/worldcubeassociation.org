@@ -18,7 +18,8 @@
       var handler = StripeCheckout.configure({
         key: '<%= ENVied.STRIPE_PUBLISHABLE_KEY %>',
         locale: 'auto',
-        image: '<%= image_url("/files/WCALogo3Dsmall.png") %>',
+        image: '<%= image_url("wca_logo.svg") %>',
+        email: <%= current_user.email.to_json.html_safe %>,
         name: 'World Cube Association',
         description: 'Registration fee',
         currency: '<%= @registration.outstanding_entry_fees.currency.iso_code %>',
