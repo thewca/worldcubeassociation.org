@@ -205,6 +205,10 @@ nl:
       other: 'deze %{count} wedstrijdonderdelen'
     #original_hash: 51ef7d4
     search_site: Zoeken op site
+    #original_hash: d3f8f7b
+    date_placeholder: JJJJ-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'JJJJ-MM-DD UU:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidate Delegate
@@ -441,10 +445,11 @@ nl:
       user:
         #original_hash: 87e1e6f
         dob: Voer je geboortedatum in met formaat jjjj-mm-dd.
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Voer je naam volledig en juist in, bijvoorbeeld <strong>Stefan
-          Pochmann</strong>. Met hoofdletters en volledig uitgeschreven.
+          Pochmann</strong>. Niet: <strong>s pochmann</strong>. Tussennamen
+          (volledige of als initialen) zijn optioneel.
         #original_hash: c03b949
         email: >-
           Veranderen van je e-mailadres vereist bevestiging van het nieuwe
