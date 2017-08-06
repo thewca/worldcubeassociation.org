@@ -60,9 +60,9 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   def filename
     if original_filename
       # This is pretty gross. We only want to reuse the existing filename if
-      # a new avatar isn't being uploaded, we look at the *_change attribute to
+      # a new avatar isn't being uploaded, we look at the saved_change_to_* attribute to
       # determine if that happened.
-      if model && model.read_attribute(mounted_as).present? && !model.send(:"#{mounted_as}_change")
+      if model && model.read_attribute(mounted_as).present? && !model.send(:"saved_change_to_#{mounted_as}?")
         model.read_attribute(mounted_as)
       else
         # new filename

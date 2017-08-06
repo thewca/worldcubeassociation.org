@@ -358,12 +358,12 @@ class Competition < ApplicationRecord
 
   # This callback updates all tables having the competition id, when the id changes.
   # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
-  after_save :update_foreign_keys, if: :id_changed?
+  after_save :update_foreign_keys, if: :saved_change_to_id?
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
       if ["competition_id", "competitionId"].include?(foreign_key)
-        association_reflection.klass.where(foreign_key => id_was).update_all(foreign_key => id)
+        association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id)
       end
     end
   end

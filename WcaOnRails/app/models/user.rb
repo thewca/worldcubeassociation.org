@@ -321,10 +321,10 @@ class User < ApplicationRecord
 
   after_save :remove_pending_wca_id_claims
   private def remove_pending_wca_id_claims
-    if delegate_status_changed? && !delegate_status
+    if saved_change_to_delegate_status? && !delegate_status
       users_claiming_wca_id.each do |user|
         user.update delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil
-        senior_delegate = User.find_by_id(senior_delegate_id_was)
+        senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
         WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
       end
     end
