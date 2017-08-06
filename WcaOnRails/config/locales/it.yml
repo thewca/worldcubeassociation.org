@@ -205,6 +205,10 @@ it:
       other: '%{count} eventi'
     #original_hash: 51ef7d4
     search_site: Cerca nel sito
+    #original_hash: d3f8f7b
+    date_placeholder: YYYY-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'YYYY-MM-DD HH:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidato Delegato
@@ -439,11 +443,12 @@ it:
       user:
         #original_hash: 87e1e6f
         dob: Inserisci la tua data di nascita nel formato AAAA-MM-GG
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Inserisci il tuo nome e cognome completo, per esempio <strong>Lorenzo
           Vigani Poli</strong>. Non inserire abbreviazioni come <strong> l
-          vigani</strong>
+          vigani</strong>.<br/>I secondi nomi (sia completi o anche solo le
+          iniziali) sono opzionali.
         #original_hash: c03b949
         email: Per cambiare la tua email è necessario confermare il nuovo indirizzo.
         #original_hash: 8a91e53
@@ -2153,7 +2158,7 @@ it:
           WCA.
       wrt:
         #original_hash: 67be768
-        name: WCA Results TEam
+        name: WCA Results Team
         #original_hash: 439ffae
         description: >-
           Questo team è responsabile della gestione dei risultati delle
