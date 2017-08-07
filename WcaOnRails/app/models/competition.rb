@@ -19,8 +19,10 @@ class Competition < ApplicationRecord
   has_one :delegate_report, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
   has_one :continent, foreign_key: :continentId, through: :country
+  has_many :championships, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
+  accepts_nested_attributes_for :championships, allow_destroy: true
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0
   monetize :base_entry_fee_lowest_denomination,
@@ -243,7 +245,8 @@ class Competition < ApplicationRecord
              'media',
              'scrambles',
              'country',
-             'continent'
+             'continent',
+             'championships'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

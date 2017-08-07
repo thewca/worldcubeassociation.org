@@ -535,6 +535,7 @@ class CompetitionsController < ApplicationController
         permitted_competition_params += [
           :isConfirmed,
           :showAtAll,
+          { championships_attributes: [:id, :championship_type, :_destroy] },
         ]
       end
     end

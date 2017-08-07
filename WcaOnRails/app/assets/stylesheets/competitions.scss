@@ -378,3 +378,12 @@ table.admin-competitions {
 #status {
   display: block;
 }
+
+#competition-form {
+  .championships .nested-fields {
+    .championship-type {
+      display: inline-block;
+      width: auto;
+    }
+  }
+}

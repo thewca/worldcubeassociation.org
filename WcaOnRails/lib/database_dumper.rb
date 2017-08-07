@@ -563,6 +563,16 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "championships" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          championship_type
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)
