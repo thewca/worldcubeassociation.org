@@ -102,6 +102,8 @@ RSpec.describe "competitions" do
         ]
         patch update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
         expect(response).to have_http_status(400)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "The property '#/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
         expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 2
       end
     end

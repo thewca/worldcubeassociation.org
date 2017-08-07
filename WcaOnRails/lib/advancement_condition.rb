@@ -39,6 +39,16 @@ class AdvancementCondition
   def self.dump(cutoff)
     cutoff ? JSON.dump(cutoff.to_wcif) : nil
   end
+
+  def self.wcif_json_schema
+    {
+      "type" => ["object", "null"],
+      "properties" => {
+        "type" => { "type" => "string", "enum" => AdvancementCondition.subclasses.map(&:wcif_type) },
+        "level" => { "type" => "integer" },
+      },
+    }
+  end
 end
 
 class RankingCondition < AdvancementCondition

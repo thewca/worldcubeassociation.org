@@ -72,4 +72,19 @@ class Round < ApplicationRecord
       "advancementCondition" => advancement_condition&.to_wcif,
     }
   end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "id" => { "type" => "string" },
+        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
+        "timeLimit" => TimeLimit.wcif_json_schema,
+        "cutoff" => Cutoff.wcif_json_schema,
+        "advancementCondition" => AdvancementCondition.wcif_json_schema,
+        "roundResults" => { "type" => "array" }, # TODO: expand on this
+        "groups" => { "type" => "array" }, # TODO: expand on this
+      },
+    }
+  end
 end

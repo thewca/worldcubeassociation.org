@@ -843,6 +843,9 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif_events!(wcif_events)
+    events_schema = { "type" => "array", "items" => CompetitionEvent.wcif_json_schema }
+    JSON::Validator.validate!(events_schema, wcif_events)
+
     ActiveRecord::Base.transaction do
       # Remove extra events.
       self.competition_events.each do |competition_event|

@@ -328,7 +328,7 @@ class CompetitionsController < ApplicationController
 
   def update_events_from_wcif
     @competition = competition_from_params
-    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h } # TODO: validate that the incoming stuff is actually wcif
+    wcif_events = params["_json"].map { |wcif_event| wcif_event.permit!.to_h }
     @competition.set_wcif_events!(wcif_events)
     render json: {
       status: "Successfully saved WCIF events",
@@ -337,6 +337,11 @@ class CompetitionsController < ApplicationController
     render status: 400, json: {
       status: "Error while saving WCIF events",
       error: e,
+    }
+  rescue JSON::Schema::ValidationError => e
+    render status: 400, json: {
+      status: "Error while saving WCIF events",
+      error: e.message,
     }
   end
 

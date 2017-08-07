@@ -41,6 +41,16 @@ class Cutoff
     cutoff ? JSON.dump(cutoff.to_wcif) : nil
   end
 
+  def self.wcif_json_schema
+    {
+      "type" => ["object", "null"],
+      "properties" => {
+        "numberOfAttempts" => { "type" => "integer" },
+        "attemptResult" => { "type" => "integer" },
+      },
+    }
+  end
+
   def to_s(round)
     if round.event.timed_event?
       centiseconds = self.attempt_result

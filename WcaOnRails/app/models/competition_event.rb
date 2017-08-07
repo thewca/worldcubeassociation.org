@@ -46,4 +46,16 @@ class CompetitionEvent < ApplicationRecord
       self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1))
     end
   end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "id" => { "type" => "string" },
+        "rounds" => { "type" => "array", "items" => Round.wcif_json_schema },
+        "competitorLimit" => { "type" => "integer" },
+        "qualification" => { "type" => "object" }, # TODO: expand on this
+      },
+    }
+  end
 end
