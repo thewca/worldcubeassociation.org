@@ -19,16 +19,21 @@ RSpec.describe "competitions" do
     expect(competition.reload.isConfirmed?).to eq true
   end
 
-  it 'can post results for a competition' do
-    expect(Post.count).to eq 0
+  describe "GET #post_results" do
+    context "when signed in as an admin" do
+      sign_in { FactoryGirl.create :admin }
+      it 'can post results for a competition' do
+        expect(Post.count).to eq 0
 
-    get competition_post_results_path(competition)
+        get competition_post_results_path(competition)
 
-    expect(Post.count).to eq 1
+        expect(Post.count).to eq 1
 
-    # Attempt to post results for a competition that already has results posted.
-    get competition_post_results_path(competition)
+        # Attempt to post results for a competition that already has results posted.
+        get competition_post_results_path(competition)
 
-    expect(Post.count).to eq 1
+        expect(Post.count).to eq 1
+      end
+    end
   end
 end
