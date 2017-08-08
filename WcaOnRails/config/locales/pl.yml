@@ -372,6 +372,8 @@ pl:
         enable_donations: >-
           Chcę włączyć możliwość przekazywania darowizn jako dodatek do
           wpisowego podczas rejestracji
+        #original_hash: 4baf44b
+        championship_type: Rodzaj mistrzostw
       registration:
         #original_hash: 3c23a67
         guests: Goście
@@ -586,6 +588,8 @@ pl:
         competitor_limit_reason: Jaki jest powód wyznaczenia limitu zawodników dla tych zawodów?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1646,6 +1650,8 @@ pl:
         odwrotu.
       #original_hash: 8ebebca
       coordinates: Koordynaty
+      #original_hash: a672984
+      add_championship: Dodaj mistrzostwa
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
