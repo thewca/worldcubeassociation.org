@@ -354,6 +354,8 @@ it:
         competition_events: Eventi
         #original_hash: 71c8461
         enable_donations: Voglio abilitare le donazioni addizionali alle tasse di iscrizione
+        #original_hash: 4baf44b
+        championship_type: Tipo di campionato
       registration:
         #original_hash: 3c23a67
         guests: Accompagnatori
@@ -571,6 +573,8 @@ it:
         competitor_limit_reason: Quale è la motivazione del limite massimo di partecipanti?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1610,6 +1614,8 @@ it:
         reversibile.
       #original_hash: 8ebebca
       coordinates: Coordinate
+      #original_hash: a672984
+      add_championship: Aggiungi campionato
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
