@@ -358,6 +358,8 @@ da:
         enable_donations: >-
           Jeg vil give mulighed for donationer oven i at indsamle
           deltagergebyrene
+        #original_hash: 4baf44b
+        championship_type: Mesterskabs type
       registration:
         #original_hash: 3c23a67
         guests: Gæster
@@ -570,6 +572,8 @@ da:
         competitor_limit_reason: Hvad er grunden til deltagergrænsen?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1579,6 +1583,8 @@ da:
         tilbage.
       #original_hash: 8ebebca
       coordinates: Koordinater
+      #original_hash: a672984
+      add_championship: Tilføj Mesterskab
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
