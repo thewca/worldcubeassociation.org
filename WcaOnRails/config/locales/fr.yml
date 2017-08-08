@@ -205,6 +205,12 @@ fr:
       zero: pas d'épreuve
       one: cette épreuve
       other: 'ces %{count} épreuves'
+    #original_hash: 51ef7d4
+    search_site: Rechercher sur le site
+    #original_hash: d3f8f7b
+    date_placeholder: AAAA-MM-JJ
+    #original_hash: 52249b5
+    datetime_placeholder: 'AAAA-MM-JJ HH:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidat Délégué
@@ -356,6 +362,8 @@ fr:
         enable_donations: >-
           Je souhaite activer les donations, en plus de récolter des frais
           d'inscription
+        #original_hash: 4baf44b
+        championship_type: Type de championnat
       registration:
         #original_hash: 3c23a67
         guests: Accompagnateurs
@@ -447,7 +455,7 @@ fr:
         dob: >-
           Sélectionnez votre date de naissance, ou entrez la au format
           AAAA-MM-JJ.
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Entrez votre nom complet correctement, par exemple <strong>Stefan
           Pochmann</strong>. Pas négligemment comme <strong>s pochman</strong>
@@ -506,10 +514,11 @@ fr:
         cityName: >-
           Nom de la ville où la compétition a lieu. Ne pas mettre le pays (Par
           exemple, Paris).
-        #original_hash: 17c8ff8
+        #original_hash: 3d99319
         information: >-
-          Quelques informations à propos de la compétition (Par exemple, France
-          2006 est ouvert à toute les nationalités, maximum 100 compétiteurs).
+          Informations à propos de la limite au nombre de compétiteurs, des
+          éventuels frais d'inscription, ainsi que d'autres détails important
+          pour les personnes souhaitant assister à la compétition.
         #original_hash: 0708400
         delegate_ids: Délégué(s) WCA pour la compétition.
         #original_hash: 517d376
@@ -574,6 +583,8 @@ fr:
         competitor_limit_reason: Quelle est la raison pour la limite au nombre de compétiteurs ?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -697,8 +708,6 @@ fr:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-        #original_hash: da39a3e
-        name: ''
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1470,6 +1479,8 @@ fr:
       entry_fee: Coût de l'inscription
       #original_hash: 0eb5ed5
       information: Information
+      #original_hash: c5497bc
+      events: Épreuves
     index:
       #original_hash: db98a68
       title: Compétitions
@@ -1623,6 +1634,8 @@ fr:
         est irréversible.
       #original_hash: 8ebebca
       coordinates: Coordonnées GPS
+      #original_hash: a672984
+      add_championship: Ajouter un type de championnat
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2210,6 +2223,11 @@ fr:
           public. Les communications de la WCA devraient contribuer aux
           objectifs de la WCA, et supporter une culture positive amicale,
           transparente, inclusive, ouverte, et réactive.
+      wfc:
+        #original_hash: 9cb13de
+        name: Comité financier de la WCA
+        #original_hash: 2d4807e
+        description: Ce comité est responsable de la gestion des finances de la WCA
       #original_hash: f2ceade
       delegates_html: >-
         Les <strong>Délégués WCA</strong> sont des membres de la WCA
@@ -2350,6 +2368,9 @@ fr:
     wst:
       #original_hash: dfbf427
       info: (maintenance des logiciels de la WCA)
+    wfc:
+      #original_hash: 674291e
+      info: (finances de la WCA)
   score_tools:
     #original_hash: ea9d41d
     title: Outils WCA pour la saisie des résultats
@@ -2533,3 +2554,24 @@ fr:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: Merci de donner deux IDs WCA valides et différents.
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: Compétitions
+      #original_hash: b37554f
+      people: Compétiteurs
+      #original_hash: 6db75ea
+      advanced_search: Recherche avancée
+      #original_hash: a0ca0c3
+      posts: Articles
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: Règles et Recommandations
+      not_found:
+        #original_hash: b8a7006
+        competitions: Pas de compétition trouvée pour
+        #original_hash: 99d4290
+        people: Pas de compétiteur trouvé pour
+        #original_hash: c6a04aa
+        posts: Pas d'article trouvé pour
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: Pas de Règle ou Recommandation trouvée pour
