@@ -368,6 +368,8 @@ hr:
         competition_events: Discipline
         #original_hash: 71c8461
         enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
+        #original_hash: 4baf44b
+        championship_type: Vrsta prvenstva
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -582,6 +584,8 @@ hr:
         competitor_limit_reason: Koji je razlog ograničavanja broja natjecatelja?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1605,6 +1609,8 @@ hr:
       submit_delete: Jeste li sigurno da želite obrisati ovo natjecanje? Nema povratka nazad.
       #original_hash: 8ebebca
       coordinates: Koordinate
+      #original_hash: a672984
+      add_championship: Dodaj prvenstvo
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
