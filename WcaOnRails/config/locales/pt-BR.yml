@@ -207,6 +207,10 @@ pt-BR:
       other: 'estes %{count} eventos'
     #original_hash: 51ef7d4
     search_site: Procurar no site
+    #original_hash: d3f8f7b
+    date_placeholder: AAAA-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'AAAA-MM-DD HH:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Delegado Candidato
@@ -354,6 +358,8 @@ pt-BR:
         competition_events: Eventos
         #original_hash: 71c8461
         enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
+        #original_hash: 4baf44b
+        championship_type: Tipo de Campeonato
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -567,6 +573,8 @@ pt-BR:
         competitor_limit_reason: Qual a razão para o limite de competidores?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1584,6 +1592,8 @@ pt-BR:
         reverter isto.
       #original_hash: 8ebebca
       coordinates: Coordenadas
+      #original_hash: a672984
+      add_championship: Adicionar Campeonato
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
