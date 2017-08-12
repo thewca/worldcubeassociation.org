@@ -178,7 +178,7 @@ ro:
     #original_hash: 77003d0
     best: Cel mai bun
     #original_hash: dd11868
-    single: Singulară
+    single: Single
     #original_hash: 15f86c0
     average: Medie
     #original_hash: e7f6fc5
@@ -210,6 +210,10 @@ ro:
       other: 'aceste %{count} evenimente'
     #original_hash: 51ef7d4
     search_site: Caută în site
+    #original_hash: d3f8f7b
+    date_placeholder: AAAA-LL-ZZ
+    #original_hash: 52249b5
+    datetime_placeholder: 'AAAA-LL-ZZ HH:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Delegat Candidat
@@ -363,6 +367,8 @@ ro:
         enable_donations: >-
           Vreau să accept donații, îm plus față de colectarea taxei de
           înregistrare.
+        #original_hash: 4baf44b
+        championship_type: Tipul Campionatului
       registration:
         #original_hash: 3c23a67
         guests: Însoțitori
@@ -575,6 +581,8 @@ ro:
         competitor_limit_reason: De ce există limita numărului de concurenți?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -835,7 +843,7 @@ ro:
       #original_hash: e51c552
       records: Recorduri
       #original_hash: f3cf96e
-      persons: Persoane
+      persons: Concurenți
       #original_hash: 5b72b5a
       my_results: Rezultatele mele
       #original_hash: 2086b21
@@ -1614,6 +1622,8 @@ ro:
       submit_delete: Ești sigur că vrei să ștergi competiția? Nu o mai poți recupera.
       #original_hash: 8ebebca
       coordinates: Coordonate
+      #original_hash: a672984
+      add_championship: Adaugă Campionat
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
