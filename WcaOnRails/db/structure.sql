@@ -717,7 +717,7 @@ CREATE TABLE `championships` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_championships_on_competition_id_and_championship_type` (`competition_id`,`championship_type`),
   KEY `index_championships_on_championship_type` (`championship_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1239,7 +1239,7 @@ CREATE TABLE `timestamps` (
   `name` varchar(191) NOT NULL,
   `date` datetime DEFAULT NULL,
   UNIQUE KEY `index_timestamps_on_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1514,4 +1514,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170726133627'),
 ('20170801010739'),
 ('20170816115449'),
-('20170816143703');
+('20170816143703'),
+('20170812120421');
