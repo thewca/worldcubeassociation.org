@@ -106,8 +106,8 @@ module CompetitionsHelper
   def championship_option_tags(selected: nil)
     grouped_championship_types = {
       "Planetary Championship" => [["World", "world"]],
-      "Continental Championship" => Continent.all.map { |continent| [continent.name, continent.id] },
-      "National Championship" => Country.all.map { |country| [country.name, country.iso2] },
+      "Continental Championship" => Continent::ALL_SORTED_BY_LOCALE[I18n.locale].map { |continent| [continent.name, continent.id] },
+      "National Championship" => Country.all_sorted_by(I18n.locale).map { |country| [country.name, country.iso2] },
     }
     grouped_options_for_select(grouped_championship_types, selected)
   end
