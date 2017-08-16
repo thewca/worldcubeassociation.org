@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-after "countries" do
+after :countries do
   {
     "greater_china" => ["China", "Hong Kong", "Macau", "Taiwan"],
   }.each do |championship_type, country_names|

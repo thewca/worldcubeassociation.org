@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGreaterChinaChampionshipType < ActiveRecord::Migration[5.1]
   def change
     %w(CN HK MO TW).each do |iso2|
