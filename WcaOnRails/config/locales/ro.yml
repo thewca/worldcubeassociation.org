@@ -1283,7 +1283,7 @@ ro:
       total: Total
     new_registration:
       #original_hash: 8b9f726
-      title: 'Înregistrează pentru %{comp}'
+      title: 'Înregistrează-te la %{comp}'
     #original_hash: 7cae988
     registered_with_account_html: >-
       Această persoană s-a înscris cu un cont. Poți edita informațiile personale
