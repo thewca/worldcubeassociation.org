@@ -872,6 +872,22 @@ CREATE TABLE `delegate_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `eligible_country_iso2s_for_championship`
+--
+
+DROP TABLE IF EXISTS `eligible_country_iso2s_for_championship`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `eligible_country_iso2s_for_championship` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `championship_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `eligible_country_iso2` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_eligible_iso2s_for_championship_on_type_and_country_iso2` (`championship_type`,`eligible_country_iso2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `linkings`
 --
 
@@ -1496,4 +1512,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170624115851'),
 ('20170629134754'),
 ('20170726133627'),
-('20170801010739');
+('20170801010739'),
+('20170816115449'),
+('20170816143703');

@@ -573,6 +573,16 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          championship_type
+          eligible_country_iso2
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   def self.development_dump(dump_filename)
