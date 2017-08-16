@@ -5,4 +5,8 @@ class EligibleCountryIso2ForChampionship < ApplicationRecord
 
   validates :eligible_country_iso2, uniqueness: { scope: :championship_type },
                                     inclusion: { in: Country.all.map(&:iso2) }
+
+  def self.championship_types
+    pluck(:championship_type).uniq
+  end
 end
