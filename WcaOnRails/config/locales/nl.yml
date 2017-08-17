@@ -356,6 +356,8 @@ nl:
         enable_donations: >-
           Ik wil naast de aanmeldingsbedragen ook de mogelijkheid bieden om
           donaties te doen
+        #original_hash: 4baf44b
+        championship_type: Type Kampioenschap
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -568,6 +570,8 @@ nl:
         competitor_limit_reason: Wat is de reden voor de limiet op deelnemersaantal?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1265,6 +1269,8 @@ nl:
     register: Aanmelden!
     #original_hash: f484f15
     refund: Verzoek om terugbetaling
+    #original_hash: dc8d7d2
+    refund_confirmation: Weet je zeker dat je het bedrag wilt terugbetalen?
     #original_hash: a9af643
     update: Bijwerken aanmelding
     #original_hash: f6fdbe4
@@ -1584,6 +1590,8 @@ nl:
       submit_delete: Weet je zeker dat je de wedstrijd wilt verwijderen? Je kunt niet terug.
       #original_hash: 8ebebca
       coordinates: Coördinaten
+      #original_hash: a672984
+      add_championship: Voeg Kampioenschap toe
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
