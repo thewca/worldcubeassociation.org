@@ -41,7 +41,7 @@
           <%= humanized_money_with_symbol payment.amount %>
           <% if payment.amount_available_for_refund > 0 %>
             <%= form_tag registration_payment_refund_path(@registration, payment), method: :post do %>
-              <%= submit_tag t('registrations.refund'), class: "btn btn-warning" %>
+              <%= submit_tag t('registrations.refund'), class: "btn btn-warning", data: { confirm: t('registrations.refund_confirmation') } %>
             <% end %>
           <% end %>
         </p>
