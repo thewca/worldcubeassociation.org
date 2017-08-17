@@ -724,6 +724,7 @@ en:
     panel_title: "Registration details"
     register: "Register!"
     refund: "Refund Payment"
+    refund_confirmation: "Are you sure you want to refund this payment?"
     update: "Update Registration"
     delete: "Delete"
     delete_confirm: "Are you sure you want to delete your registration?"
