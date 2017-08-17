@@ -1269,6 +1269,8 @@ pt-BR:
     register: Inscrever!
     #original_hash: f484f15
     refund: Devolver pagamento
+    #original_hash: dc8d7d2
+    refund_confirmation: Tem certeza que deseja devolver este pagamento?
     #original_hash: a9af643
     update: Atualizar Inscrição
     #original_hash: f6fdbe4
@@ -2497,4 +2499,4 @@ pt-BR:
         #original_hash: c6a04aa
         posts: Nenhum post encontrado para
         #original_hash: 76a6bf1
-        regulations_and_guidelines: Nenhum Regulamento ou Oriengação encontrado para
+        regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrado para
