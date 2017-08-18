@@ -202,6 +202,10 @@ hu:
       other: 'ez a(z) %{count} versenyszám'
     #original_hash: 51ef7d4
     search_site: Keresés az oldalon
+    #original_hash: d3f8f7b
+    date_placeholder: ÉÉÉÉ-HH-NN
+    #original_hash: 52249b5
+    datetime_placeholder: 'ÉÉÉÉ-HH-NN ÓÓ:PP'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Candidate Delegate
@@ -351,6 +355,8 @@ hu:
         enable_donations: >-
           Engedélyezni akarom az adományok befizetését a regisztrációs díjak
           mellett
+        #original_hash: 4baf44b
+        championship_type: Verseny típus
       registration:
         #original_hash: 3c23a67
         guests: Nézők
@@ -440,7 +446,7 @@ hu:
       user:
         #original_hash: 87e1e6f
         dob: Add meg a születési dátumodat ÉÉÉÉ-HH-NN formátumban.
-        #original_hash: 7de9ab2
+        #original_hash: d0bb74a
         name: >-
           Add meg a teljes nevedet angol szórendnek megfelelően, ékezetekkel,
           például: <strong>Péter Példa</strong>. Nem pedig hanyagul, mint
@@ -567,6 +573,8 @@ hu:
         competitor_limit_reason: Mi az oka a versenyzői limitnek?
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -1271,6 +1279,8 @@ hu:
     register: Regisztrálj!
     #original_hash: f484f15
     refund: Befizetés visszatérítése
+    #original_hash: dc8d7d2
+    refund_confirmation: 'Biztos vagy benne, hogy vissza akarod utalni ezt a befizetést?'
     #original_hash: a9af643
     update: Regisztráció frissítése
     #original_hash: f6fdbe4
@@ -1594,6 +1604,8 @@ hu:
       submit_delete: Biztosan törölni szeretnéd ezt a versenyt? Utána nem tudod visszavonni.
       #original_hash: 8ebebca
       coordinates: Koordináták
+      #original_hash: a672984
+      add_championship: Adj hozzá versenyt
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
