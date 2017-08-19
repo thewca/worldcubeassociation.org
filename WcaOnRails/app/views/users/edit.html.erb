@@ -208,7 +208,9 @@
             <% end %>
           </div>
           <div class="col-sm-6 text-center">
-            <%= image_tag @user.avatar.url, class: "img-responsive center-block", id: "avatar-img" %>
+            <div class="image-preview-container" data-input-selector="#user_pending_avatar" data-max-height="400" data-orientation="true">
+              <%= image_tag @user.avatar.url, class: "img-responsive center-block", id: "avatar-img" %>
+            </div>
             <% if @user.avatar? %>
               <h4><%= t('.your_thumbnail') %></h4>
               <%= link_to users_avatar_thumbnail_edit_path(@user) do %>

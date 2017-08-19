@@ -53,18 +53,6 @@ onPage('users#edit, users#update', function() {
       alert($confirmation.data('alert'));
     }
   });
-  // Render a preview of an avatar whenever a new one is selected.
-  var $avatar = $('#avatar-img');
-  var reader = new FileReader();
-  reader.onload = function() {
-    $avatar[0].src = reader.result;
-  };
-  $('#user_pending_avatar').on('change', function() {
-    var file = this.files[0];
-    if(file) {
-      reader.readAsDataURL(file);
-    }
-  });
 });
 
 
