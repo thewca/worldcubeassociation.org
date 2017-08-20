@@ -1,6 +1,6 @@
-<% provide(:title, 'WCA Organizer Guidelines') %>
+<% provide(:title, t("organizer_guidelines.title")) %>
 <div class="container">
-  <h1><%= t("organizer_guidelines.title") %></h1>
+  <h1><%= yield(:title)  %></h1>
 
   <h4><%= t("organizer_guidelines.paragraph1.title") %></h4>
   <%= t("organizer_guidelines.paragraph1.content") %>

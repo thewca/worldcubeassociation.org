@@ -1,6 +1,6 @@
-<% provide(:title, 'About the WCA Regulations') %>
+<% provide(:title, t('about_regulations.title')) %>
 <div class="container">
-  <h1><%= t('about_regulations.title') %></h1>
+  <h1><%= yield(:title) %></h1>
 
   <div class="panel panel-default">
     <div class="panel-heading">
