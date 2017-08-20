@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 after "development:users" do
-  results_team_users = Team.find_by_friendly_id('software').team_members.map(&:user)
+  results_team_users = Team.find_by_friendly_id('wst').team_members.map(&:user)
   100.times do
     sticky = (rand(25) == 0)
     title = Faker::Hacker.say_something_smart
