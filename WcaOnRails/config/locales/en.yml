@@ -25,17 +25,19 @@ en:
     XA: "Multiple Countries (Asia)"
     XE: "Multiple Countries (Europe)"
     XS: "Multiple Countries (South America)"
+    XM: "Multiple Countries (Americas)"
     MO: "Macao"
     HK: "Hong Kong"
     KR: "Korea"
   #context: Continent name
   continents:
-    AfR: "Africa"
-    AsR: "Asia"
-    ER: "Europe"
-    NAR: "North America"
-    OcR: "Oceania"
-    SAR: "South America"
+    "Multiple Continents": "Multiple Countries"
+    Africa: "Africa"
+    Asia: "Asia"
+    Europe: "Europe"
+    "North America": "North America"
+    Oceania: "Oceania"
+    "South America": "South America"
   #context: Event name
   events:
     "333": "Rubik's Cube"

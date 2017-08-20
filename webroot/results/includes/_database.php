@@ -166,7 +166,7 @@ function getAllUsedCountriesCompetitions () {
 #----------------------------------------------------------------------
 function getAllUsedContinents () {
 #----------------------------------------------------------------------
-  return dbQuery("SELECT * FROM Continents");
+  return dbQuery("SELECT * FROM Continents WHERE recordName <> ''");
 }
 
 #----------------------------------------------------------------------

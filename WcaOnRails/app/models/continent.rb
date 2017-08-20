@@ -11,11 +11,11 @@ class Continent < ApplicationRecord
   end
 
   def name
-    I18n.t(recordName, scope: :continents)
+    I18n.t(read_attribute(:name), scope: :continents)
   end
 
   def name_in(locale)
-    I18n.t(recordName, scope: :continents, locale: locale)
+    I18n.t(read_attribute(:name), scope: :continents, locale: locale)
   end
 
   ALL_SORTED_BY_LOCALE = Hash[I18n.available_locales.map do |locale|
