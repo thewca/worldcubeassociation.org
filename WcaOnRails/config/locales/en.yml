@@ -324,7 +324,7 @@ en:
         organizer_ids: "Competition organizers (they need an account to be listed here)."
         external_website: "The website of the competition. Must be a valid http(s) url."
         registration_open: "Note: Registration open and close are in UTC time"
-        remarks: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable."
+        remarks: "Some additional information you want to pass on to the board. For example, reasons why this competition was requested less than one month away, if applicable. Please fill this out in English!"
         clone_tabs: ""
         countryId: ""
         end_date: ""
@@ -342,7 +342,7 @@ en:
         use_wca_registration: ""
         competitor_limit_enabled: "For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit: "The number of competitors allowed in this competition."
-        competitor_limit_reason: "What is the reason for the limit on competitors?"
+        competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
         venueAddress: ""
         championship_type: ""
       website_contact:
