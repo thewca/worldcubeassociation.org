@@ -8,3 +8,4 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import 'markdown-editor';
+import 'image-preview';
