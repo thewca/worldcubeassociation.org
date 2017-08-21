@@ -10,6 +10,9 @@ regulations/
 !WcaOnRails/app/views/regulations/history/*.erb
 WcaOnRails/app/views/regulations-todelete/
 
+# acme.sh stuff
+WcaOnRails/public/.well-known/
+
 # byebug stuff
 .byebug_history
 
