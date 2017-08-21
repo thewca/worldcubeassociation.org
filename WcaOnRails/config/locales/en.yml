@@ -1340,7 +1340,7 @@ en:
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
     paragraph3:
       title: "Deadlines for the announcement of the competition"
-      content: "The competition should be announced at least one month before the start of the competition (see <a href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline 8a4++</a>). If there are special reasons preventing this deadline to be met, competitions may be announced up to two weeks before, at the discretion
+      content_html: "The competition should be announced at least one month before the start of the competition (see <a href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline 8a4++</a>). If there are special reasons preventing this deadline to be met, competitions may be announced up to two weeks before, at the discretion
       of the WCA Board. It is highly recommended to inform the WCA Board of these reasons as soon as possible to avoid a later refusal of the competition."
     paragraph4:
       title: "Proximity policy"
@@ -1356,7 +1356,7 @@ en:
         '1': "If any location of such competitions is closer than 200 km to any other regular competition, then both competitions should be at least 5 days apart, or the other competition must not have the FM event."
     paragraph5:
       title: "Competitor limits"
-      content: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the delegate of the competition must get an approval of the competitor limit by the Board. Competitor limits should be
+      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation Z4</a>). Like for all regulations in article Z, the delegate of the competition must get an approval of the competitor limit by the Board. Competitor limits should be
         chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
         limit must be clearly stated on the competition page on the WCA website."
     paragraph6:
