@@ -731,7 +731,7 @@ DROP TABLE IF EXISTS `linkings`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `linkings` (
   `wca_id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `wca_ids` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wca_ids` mediumtext COLLATE utf8mb4_unicode_ci,
   UNIQUE KEY `index_linkings_on_wca_id` (`wca_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
