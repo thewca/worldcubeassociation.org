@@ -24,14 +24,6 @@ before_install:
 
   - cd WcaOnRails/
 before_script:
-  - echo "***** Some debugging info for https://github.com/thewca/worldcubeassociation.org/issues/1629 ****"
-  - mysql -e 'select host, user, password from mysql.user;'
-  - ps -efw | grep -i mysql
-  - service --status-all
-  - date
-  - dmesg | grep -i -C 100 mysql || true
-  - ps -efw | grep -i mysql
-
   - bundle exec rake db:reset
   - bundle exec rake assets:precompile
 script:
