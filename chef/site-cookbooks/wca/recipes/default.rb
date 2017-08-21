@@ -165,6 +165,17 @@ end
 
 # Use HTTPS in non development mode
 https = !node.chef_environment.start_with?("development")
+server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
+
+#### Let's Encrypt with acme.sh
+if https
+  home_dir = "#{repo_root}/.."
+  acme_sh_dir = "#{home_dir}/.acme.sh"
+  link acme_sh_dir do
+    to "#{repo_root}/secrets/https/acme.sh-#{server_name}"
+    owner username
+  end
+end
 
 #### Nginx
 # Unfortunately, we have to compile nginx from source to get the auth request module
@@ -233,7 +244,6 @@ logrotate_app 'nginx-wca' do
   postrotate "[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`"
 end
 
-server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
 template "/etc/nginx/conf.d/worldcubeassociation.org.conf" do
   source "worldcubeassociation.org.conf.erb"
   mode 0644
