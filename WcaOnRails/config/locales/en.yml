@@ -1319,7 +1319,7 @@ en:
       content1_html: 'The <a href="/faq">FAQ section</a> answers several frequently asked questions about the WCA Regulations.'
     panel4:
       title: "Organizer Guidelines"
-      content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="/organizer_guidelines">Organizer Guidelines</a>.'
+      content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="/organizer-guidelines">Organizer Guidelines</a>.'
       content2_html: 'This document contains important information and should be read by every competition organizer.'
   #context: Organizer Guidelines
   organizer_guidelines:
