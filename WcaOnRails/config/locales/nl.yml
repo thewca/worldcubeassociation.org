@@ -522,11 +522,11 @@ nl:
         external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
         #original_hash: 9965635
         registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
-        #original_hash: f688881
+        #original_hash: 36963bc
         remarks: >-
           Aanvullende informatie voor de Board. Bijv. een reden waarom de
           wedstrijd minder dan een maand vooraf is aangekondigd, indien van
-          toepassing.
+          toepassing. Graag in het Engels!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -566,8 +566,10 @@ nl:
           aanmeldingsproces, maar hiervoor is nog meer werk nodig.
         #original_hash: b9bc84d
         competitor_limit: Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
-        #original_hash: 32951f9
-        competitor_limit_reason: Wat is de reden voor de limiet op deelnemersaantal?
+        #original_hash: 4bd7102
+        competitor_limit_reason: >-
+          Wat is de reden voor de limiet op deelnemersaantal? Graag in het
+          Engels!
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
