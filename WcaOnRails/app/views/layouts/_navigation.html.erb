@@ -64,8 +64,10 @@
             <%= icon('book') %> <span class="hidden-sm"><%= t '.regulations' %></span> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="/regulations/about"><%= icon('info-circle') %> <%= t '.about_regulations' %></a></li>
+            <li class="divider"></li>
             <li><a href="/regulations/"><%= icon('book') %> <%= t '.regulations' %></a></li>
-            <li><a href="/regulations/guidelines.html"><%= icon('question-circle') %> <%= t '.guidelines' %></a></li>
+            <li><a href="/regulations/guidelines.html"><%= icon('sticky-note') %> <%= t '.guidelines' %></a></li>
             <li><a href="/regulations/scrambles/"><%= icon('random') %> <%= t '.scrambles' %></a></li>
             <li class="divider"></li>
             <li><a href="/regulations/history/"><%= icon('history') %> <%= t '.history' %></a></li>
