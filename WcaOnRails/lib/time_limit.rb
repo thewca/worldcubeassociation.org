@@ -53,6 +53,16 @@ class TimeLimit
     competition_event.rounds.find_by_number!(round_number)
   end
 
+  def self.wcif_json_schema
+    {
+      "type" => ["object", "null"],
+      "properties" => {
+        "centiseconds" => { "type" => "integer" },
+        "cumulativeRoundIds" => { "type" => "array", "items" => { "type" => "string" } },
+      },
+    }
+  end
+
   def to_s(round)
     time_str = SolveTime.new(round.competition_event.event_id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length

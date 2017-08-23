@@ -60,4 +60,11 @@ Rails.configuration.to_prepare do
       self.in_seconds * 100
     end
   end
+
+  ActiveRecord::Associations::CollectionProxy.class_eval do
+    def destroy_all!
+      self.each(&:destroy!)
+      self.reload
+    end
+  end
 end

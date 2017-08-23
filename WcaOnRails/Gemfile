@@ -71,6 +71,7 @@ gem 'http_accept_language'
 gem 'twitter_cldr'
 gem 'jquery-slick-rails'
 gem 'webpacker'
+gem 'json-schema'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'

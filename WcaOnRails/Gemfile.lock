@@ -234,6 +234,8 @@ GEM
     jquery-slick-rails (1.6.0.3)
       railties (>= 3.1)
     json (1.8.6)
+    json-schema (2.8.0)
+      addressable (>= 2.4)
     jwt (1.5.6)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
@@ -537,6 +539,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-slick-rails
+  json-schema
   kaminari
   kaminari-i18n
   launchy
@@ -587,4 +590,4 @@ DEPENDENCIES
   world-flags!
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

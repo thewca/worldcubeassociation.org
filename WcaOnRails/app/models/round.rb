@@ -53,6 +53,16 @@ class Round < ApplicationRecord
     advancement_condition ? advancement_condition.to_s(self) : ""
   end
 
+  def self.wcif_to_round_attributes(wcif, round_number)
+    {
+      number: round_number,
+      format_id: wcif["format"],
+      time_limit: TimeLimit.load(wcif["timeLimit"]),
+      cutoff: Cutoff.load(wcif["cutoff"]),
+      advancement_condition: AdvancementCondition.load(wcif["advancementCondition"]),
+    }
+  end
+
   def to_wcif
     {
       "id" => "#{event.id}-#{self.number}",
@@ -60,6 +70,21 @@ class Round < ApplicationRecord
       "timeLimit" => time_limit&.to_wcif,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
+    }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "id" => { "type" => "string" },
+        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
+        "timeLimit" => TimeLimit.wcif_json_schema,
+        "cutoff" => Cutoff.wcif_json_schema,
+        "advancementCondition" => AdvancementCondition.wcif_json_schema,
+        "roundResults" => { "type" => "array" }, # TODO: expand on this
+        "groups" => { "type" => "array" }, # TODO: expand on this
+      },
     }
   end
 end
