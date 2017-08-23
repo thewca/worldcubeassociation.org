@@ -282,7 +282,8 @@ table.wca-results {
   // Set flag imitations for competitions taking place in multiple countries.
   &.xe,
   &.xa,
-  &.xs {
+  &.xs,
+  &.xm {
     background-image: none;
     display: inline-block;
     top: 1px;
@@ -299,6 +300,10 @@ table.wca-results {
   }
   &.xs {
     border: 1px solid red;
+  }
+  &.xm {
+    border: 1px solid;
+    border-image: linear-gradient(to right, red, blue) 1;
   }
 }
 
