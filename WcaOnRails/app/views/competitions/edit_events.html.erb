@@ -2,13 +2,17 @@
 <%= javascript_pack_tag 'edit_events' %>
 
 <%= render layout: 'nav' do %>
-  <div id="events-edit-area"></div>
-  <script>
-    $(function() {
-      wca.initializeEventsForm(
-        <%= @competition.id.to_json.html_safe %>,
-        <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>
-      );
-    });
-  </script>
+  <% if @competition.events.deprecated.count > 0 %>
+    <%= t('competitions.competition_form.deprecated_events') %>
+  <% else %>
+    <div id="events-edit-area"></div>
+    <script>
+      $(function() {
+        wca.initializeEventsForm(
+          <%= @competition.id.to_json.html_safe %>,
+          <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>
+        );
+      });
+    </script>
+  <% end %>
 <% end %>
