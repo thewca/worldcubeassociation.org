@@ -838,7 +838,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "persons" => persons_wcif,
-      "events" => competition_events.map(&:to_wcif),
+      "events" => competition_events.order(:event_id).map(&:to_wcif),
     }
   end
 
