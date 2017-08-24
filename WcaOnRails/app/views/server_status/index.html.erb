@@ -58,6 +58,22 @@
     </div>
   </div>
 
+  <% kind_class = @certificate_good ? "success" : "danger" %>
+  <div class="panel panel-<%= kind_class %>">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <span class="label label-<%= kind_class %>">SSL Certificate</span>
+        <% if @expires_in.nil? %>
+          No certificate to check! (Certificate path was "<%= ServerStatusController::CERTIFICATE_PATH %>")
+        <% elsif @expires_in < 0 %>
+          Has expired <%= -@expires_in %> days ago!
+        <% else %>
+          Expires in <%= @expires_in %> days.
+        <% end %>
+      </h3>
+    </div>
+  </div>
+
   <%= alert :info do
     sha1 = `git rev-parse HEAD`
     {
