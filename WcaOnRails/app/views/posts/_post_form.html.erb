@@ -6,18 +6,7 @@
   <% if editable_post_fields.include? :tags %>
     <%= f.input :tags %>
     <script>
-      $('input#post_tags').selectize({
-        plugins: ['remove_button'],
-        delimiter: ',',
-        persist: false,
-        options: <%= PostTag.distinct.pluck(:tag).map { |tag| { value: tag, text: tag } }.to_json.html_safe %>,
-        create: function(input) {
-          return {
-            value: input,
-            text: input
-          };
-        },
-      });
+      $('input#post_tags').selectize(defaultSelectizeOptions(<%= all_to_options(PostTag) %>));
     </script>
   <% end %>
 

@@ -1,0 +1,7 @@
+<% provide(:title, "Create a new incident") %>
+
+<%= render layout: "nav" do %>
+  <h1><%= yield(:title) %></h1>
+
+  <%= render 'form', incident: @incident %>
+<% end %>

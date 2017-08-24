@@ -3,30 +3,15 @@
 class Post < ApplicationRecord
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
+  # Note: adding an alias is less awkward than doing
+  # has_many :item_tags, autosave: true, dependent: :destroy, class_name: "PostTag"
+  # Because joining would look like Post.joins(:item_tags).where('post_tags.tag = ?', tag)
+  alias_attribute :item_tags, :post_tags
+  include Taggable
 
   validates :title, presence: true, uniqueness: true
   validates :body, presence: true
   validates :slug, presence: true, uniqueness: true
-
-  attr_writer :tags
-
-  def tags
-    @tags ||= post_tags.pluck(:tag).join(",")
-  end
-
-  def tags_array
-    tags.split(",")
-  end
-
-  before_validation do
-    tags_array.each do |tag|
-      post_tags.find_or_initialize_by(tag: tag)
-    end
-
-    post_tags.each do |post_tag|
-      post_tag.mark_for_destruction unless tags_array.include?(post_tag.tag)
-    end
-  end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/
 

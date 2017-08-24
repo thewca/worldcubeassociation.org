@@ -1,0 +1,108 @@
+<% provide(:title, "Incidents log") %>
+
+<%= render layout: "nav" do %>
+  <h1><%= yield(:title) %></h1>
+
+  <div id="custom-search-toolbar">
+    <input id="incident-tags" class="form-control" type="text" placeholder="Filter by tags">
+  </div>
+  <div class="incidents-log-table-container">
+    <%= wca_table(table_class: "incidents-log-table", data: { toggle: "table", pagination: true, search: true, toolbar: "#custom-search-toolbar" }, floatThead: false, greedy: false) do %>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th class="tags-cell">Tags</th>
+          <th class="comps-cell">Happened during</th>
+          <th class="status-cell">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @incidents.each do |incident| %>
+          <tr>
+            <td><%= link_to incident.name, incident %></td>
+            <td data-tags="<%= incident.tags %>">
+              <% incident.tags_array.each do |t| %>
+                <%= render "incident_tag", tag: t %>
+              <% end %>
+            </td>
+            <td data-tags="<%= incident.competitions %>">
+              <% incident.competitions.each do |c| %>
+                <%= render "competition_tag", comp: c %>
+              <% end %>
+            </td>
+            <td><%= incident.status %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    <% end %>
+  </div>
+
+  <script>
+var resetSelectedTags = function(e, tag) {
+  e.preventDefault();
+  $('.search input').val("");
+  var selectize = $('input#incident-tags')[0].selectize;
+  selectize.clear();
+  selectize.addItem(tag);
+}
+
+
+var bootstrap_object = null;
+// Can't use filterBy, as some cells have multiple value
+var search_func = function(text) {
+  // See the hack to force refresh below...
+  if (!bootstrap_object) {
+    bootstrap_object = this;
+  }
+  if (text.length == 0) {
+    // Hack because bootstrap table does the search but doesn't get the filtered
+    // data unless "this.searchText" has non-zero length.
+    // See here: https://github.com/wenzhixin/bootstrap-table/blob/22ca907e623ab696fd9711f497989cd30abb5d23/src/bootstrap-table.js#L2395-L2398
+    this.searchText = " ";
+  }
+  var tags_value = $('input#incident-tags').val();
+  var filter_tags = tags_value.length > 0 ? tags_value.split(",") : [];
+  //console.log(text);
+  //console.log(filter_tags);
+  this.data = $.grep(this.options.data, function(item, i) {
+    // item[1] is the incidents' tags
+    var tags = item._1_data.tags.split(",");
+    var filtered = tags.filter(function (tag) {
+      return filter_tags.includes(tag);
+    });
+    //console.log(tags);
+    //console.log(filtered);
+    if (filter_tags.length > 0 && filtered.length == 0) {
+      return false;
+    }
+    // item[0] is actually a link with the title, so we need to turn it into an element
+    // then take its text.
+    var incident_title = $(item[0]).text();
+    return incident_title.indexOf(text) != -1;
+  });
+}
+$('.incidents-log-table').data("customSearch", search_func);
+$('.incidents-log-table').on('search.bs.table', function() {
+  // Yep, when it's filtered we need to reactivate popovers :(
+  $('[data-toggle="popover"]').popover();
+});
+
+var opts = defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
+delete opts["create"];
+opts["onChange"] = function (value) {
+  // Hack to force refresh
+  if (bootstrap_object)
+    bootstrap_object.searchText = " ";
+  $('.incidents-log-table').bootstrapTable('resetSearch', $('.search input').val());
+};
+opts["maxOptions"] = 5;
+$('input#incident-tags').selectize(opts);
+  </script>
+
+  <br>
+  <% if current_user&.can_manage_incidents? %>
+    <%= link_to icon('plus', 'New Incident'), new_incident_path, class: "btn btn-success" %>
+  <% end %>
+
+<% end %>

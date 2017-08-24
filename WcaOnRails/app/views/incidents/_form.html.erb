@@ -1,0 +1,32 @@
+<%= horizontal_simple_form_for(@incident, html: { class: "incident-form" }) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :private_description, input_html: { class: "markdown-editor" } %>
+    <%= f.input :private_wrc_decision, input_html: { class: "markdown-editor" } %>
+    <%= f.input :public_summary, input_html: { class: "markdown-editor" } %>
+    <hr/>
+    <%# FIXME improve this collection with better name/values %>
+    <%= f.input :status, collection: Incident.statuses, value_method: lambda { |s| s.first } %>
+    <%= f.input :tags %>
+    <script>
+      $('input#incident_tags').selectize(defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
+    </script>
+    <hr/>
+    <div class="incident-competitions">
+      <%= f.simple_fields_for :incident_competitions do |f2| %>
+        <%= render "incident_competition_fields", f: f2 %>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-sm-offset-2 col-sm-9">
+        <%= link_to_add_association button_tag(icon("plus", "Link a competition"), type: "button", class: "btn btn-default"), f, :incident_competitions,
+          data: { association_insertion_node: '.incident-competitions', association_insertion_method: 'append' } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn-primary" %>
+  </div>
+<% end %>

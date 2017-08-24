@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row">
+    <div id="wrc-nav">
+      <div class="list-group list-group-root">
+        <%= link_to "Incidents log", incidents_path, class: "list-group-item" %>
+        <%= link_to "Some navbar test", incidents_path, class: "list-group-item" %>
+        <%= link_to "Maybe useless", incidents_path, class: "list-group-item" %>
+      </div>
+    </div>
+    <div id="wrc-data">
+      <%= yield %>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var $nav = $('#wrc-nav > .list-group');
+    $nav.affix({
+      offset: {
+        top: function() {
+          var parentTop = $nav.parent().offset().top;
+          var affixTopSpacing = 20; // From .bs-affix in wca.scss
+          return parentTop - affixTopSpacing;
+        },
+        bottom: function () {
+          return (this.bottom = $('.footer').outerHeight(true));
+        },
+      },
+    });
+  })();
+</script>

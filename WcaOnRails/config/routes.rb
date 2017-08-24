@@ -149,6 +149,8 @@ Rails.application.routes.draw do
     resources :forum_topics, only: [:show]
   end
 
+  resources :incidents
+
   namespace :api do
     get '/', to: redirect('/api/v0')
     namespace :v0 do

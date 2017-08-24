@@ -1,0 +1,9 @@
+<% provide(:title, "Editing incident") %>
+
+<%= render layout: "nav" do %>
+  <h1><%= yield(:title) %></h1>
+
+  <%= render 'form', incident: @incident %>
+
+  <%= link_to 'Show', @incident, class: "btn btn-default" %>
+<% end %>

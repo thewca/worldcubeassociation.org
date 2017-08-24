@@ -727,6 +727,47 @@ CREATE TABLE `eligible_country_iso2s_for_championship` (
   UNIQUE KEY `index_eligible_iso2s_for_championship_on_type_and_country_iso2` (`championship_type`,`eligible_country_iso2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `incident_competitions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `incident_competitions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `incident_id` bigint(20) NOT NULL,
+  `competition_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comments` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_incident_competitions_on_incident_id_and_competition_id` (`incident_id`,`competition_id`),
+  KEY `index_incident_competitions_on_incident_id` (`incident_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `incident_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `incident_tags` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `incident_id` bigint(20) NOT NULL,
+  `tag` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_incident_tags_on_incident_id_and_tag` (`incident_id`,`tag`),
+  KEY `index_incident_tags_on_incident_id` (`incident_id`),
+  KEY `index_incident_tags_on_tag` (`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `incidents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `incidents` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `private_description` text COLLATE utf8mb4_unicode_ci,
+  `private_wrc_decision` text COLLATE utf8mb4_unicode_ci,
+  `public_summary` text COLLATE utf8mb4_unicode_ci,
+  `status` int(11) DEFAULT '0',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `linkings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1257,6 +1298,9 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170818164058'),
 ('20170820023104'),
 ('20170823170616'),
+('20170823203113'),
+('20170824082448'),
+('20170824133352'),
 ('20170830140540'),
 ('20170831170616'),
 ('20171006182851'),

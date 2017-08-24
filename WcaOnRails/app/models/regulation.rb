@@ -5,9 +5,11 @@ class Regulation < SimpleDelegator
 
   def self.reload_regulations
     @regulations = JSON.parse(File.read(REGULATIONS_JSON_PATH)).freeze
+    @regulations_by_id = @regulations.index_by { |r| r["id"] }
     @regulations_load_error = nil
   rescue StandardError => error
     @regulations = []
+    @regulations_by_id = {}
     @regulations_load_error = error
   end
 
@@ -19,6 +21,10 @@ class Regulation < SimpleDelegator
 
   def limit(number)
     first(number)
+  end
+
+  def self.find_or_nil(id)
+    @regulations_by_id[id]
   end
 
   def self.search(query, *)

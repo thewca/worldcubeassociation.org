@@ -1,0 +1,45 @@
+<% provide(:title, "Incident: #{@incident.name}") %>
+
+<%= render layout: "nav" do %>
+  <h1><%= yield(:title) %></h1>
+
+  <p>
+  <% @incident.tags_array.each do |t| %>
+    <%= render "incident_tag", tag: t %>
+  <% end %>
+  </p>
+  <p>
+  <% @incident.competitions.each do |c| %>
+    <%= render "competition_tag", comp: c %>
+  <% end %>
+  </p>
+
+  <% if @incident.status == "pending" %>
+    <%= alert :info do %>
+      This incident is pending, a final ruling and public description may not be available.
+    <% end %>
+  <% end %>
+
+  <div>
+  <strong>Incident description and resolution:</strong>
+  <%=md @incident.public_summary %>
+  </div>
+
+  <% if current_user&.can_view_delegate_matters? %>
+    <div>
+    <strong>Private description:</strong>
+    <%=md @incident.private_description %>
+    </div>
+  <% end %>
+
+  <% if current_user&.can_view_incident_private_sections?(@incident) %>
+    <div>
+    <strong>Private wrc decision:</strong>
+    <%=md @incident.private_wrc_decision %>
+    </div>
+  <% end %>
+
+  <% if current_user&.can_manage_incidents? %>
+    <%= link_to 'Edit', edit_incident_path(@incident), class: "btn btn-primary" %>
+  <% end %>
+<% end %>

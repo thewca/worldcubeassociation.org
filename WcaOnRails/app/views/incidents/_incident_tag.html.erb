@@ -1,0 +1,14 @@
+<%
+tag ||= ""
+reg = Regulation.find_or_nil(tag)
+label_class = reg ? "primary" : "default"
+title = reg ? "#{link_to(reg["id"], reg["url"], target: "_blank")}" : tag
+content = "<a href='#' onclick='resetSelectedTags(event, \"#{tag}\");'>Search incidents with this tag</a>"
+
+if reg
+  content = "#{reg["content_html"]} <hr/>" + content
+end
+%>
+<span tabindex="0" class="incident-tag label label-<%= label_class%>" title='<%= title %>' data-toggle="popover" data-placement="bottom" data-content="<%= content %>" data-trigger="focus" data-html="true">
+  <%= tag %>
+</span>

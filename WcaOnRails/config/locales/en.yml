@@ -284,6 +284,15 @@ en:
       #context: a vote
       vote:
         comment: "Comment"
+      #context: an incident
+      incident:
+        name: "Name"
+        private_description: "Description (private)"
+        private_wrc_decision: "Decision (private)"
+        public_summary: "Summary (public)"
+        status: "Status"
+        tags: "Tags"
+        competition_id: "Happened during"
       competition_medium:
         competitionId: "Competition"
         type: "Type"
@@ -330,6 +339,15 @@ en:
       default_message: "Please review the problems below:"
     #context: and a hint given about a specific field
     hints:
+      #context: for an incident
+      incident:
+        name: "Keep in mind this is public!"
+        private_description: "A description of the incident which can only be viewed by Delegates."
+        private_wrc_decision: "The final WRC decision, including private details."
+        public_summary: "An overall description of the incident and its decision, to be displayed publicly."
+        status: ""
+        tags: ""
+        competition_id: ""
       #context: for a user
       user:
         dob: "Enter your date of birth in the format YYYY-MM-DD."

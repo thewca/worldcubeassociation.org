@@ -1,0 +1,62 @@
+// Place all the styles related to the Incidents controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.incident-form {
+  .nested-fields {
+    .comments-input {
+      @extend .form-control;
+      display: inline-block;
+      vertical-align: middle;
+      width: 50%;
+      margin-right: 15px;
+      margin-left: 15px;
+    }
+    .competition-selector {
+      width: 30%;
+      vertical-align: middle;
+      display: inline-block;
+    }
+  }
+}
+
+.incident-tag,
+.competition-tag {
+  display: inline-block;
+  a.no-after {
+    all: unset;
+    &[target=_blank]::after {
+      content: none;
+    }
+  }
+}
+
+.incidents-log-table-container {
+  .table-responsive {
+    overflow-x: visible;
+    .search,
+    #custom-search-toolbar {
+      @extend .pull-left;
+      padding: 5px;
+      input {
+        display: inline-block;
+      }
+    }
+    .tags-cell,
+    .comps-cell {
+      vertical-align: top;
+      width: 25%;
+    }
+    .status-cell {
+      width: 10%;
+    }
+  }
+}
+
+#wrc-nav {
+  @extend #competition-nav;
+}
+
+#wrc-data {
+  @extend #competition-data;
+}
