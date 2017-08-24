@@ -2,7 +2,7 @@
 
 class ServerStatusController < ApplicationController
   MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING = 5
-  CERTIFICATE_PATH = "#{Rails.root}/../secrets/#{URI.parse(ENVied.ROOT_URL).host}"
+  CERTIFICATE_PATH = "#{Rails.root}/../secrets/https/#{URI.parse(ENVied.ROOT_URL).host}.chained.crt"
   # We want to be warned 10 days before certificate's renewal
   CERTIFICATE_RENEW_DELAY = 10
 
