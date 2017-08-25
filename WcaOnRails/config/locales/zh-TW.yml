@@ -6,6 +6,8 @@ zh-TW:
     XE: 多個國家(歐洲)
     #original_hash: 459f987
     XS: 多個國家(南美洲)
+    #original_hash: 374ac0d
+    XM: 多個國家(美洲)
     #original_hash: 918c53a
     MO: 澳門
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ zh-TW:
     #original_hash: 4e8bd04
     KR: 韓國
   continents:
+    #original_hash: c2994db
+    Multiple Continents: 多個國家
     #original_hash: 1d35114
-    AfR: 非洲
+    Africa: 非洲
     #original_hash: a173e72
-    AsR: 亞洲
+    Asia: 亞洲
     #original_hash: 576347e
-    ER: 歐洲
+    Europe: 歐洲
     #original_hash: 247ce5d
-    NAR: 北美洲
+    North America: 北美洲
     #original_hash: 3642950
-    OcR: 大洋洲
+    Oceania: 大洋洲
     #original_hash: b1ffb4c
-    SAR: 南美洲
+    South America: 南美洲
   events:
     #original_hash: 3732390
     '222': 2x2x2方塊
@@ -194,6 +198,12 @@ zh-TW:
     these_events:
       zero: 這個項目
       other: '這%{count}個項目'
+    #original_hash: 51ef7d4
+    search_site: 搜尋網站
+    #original_hash: d3f8f7b
+    date_placeholder: YYYY-MM-DD
+    #original_hash: 52249b5
+    datetime_placeholder: 'YYYY-MM-DD HH:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: 代表候選人
@@ -337,6 +347,8 @@ zh-TW:
         competition_events: 項目
         #original_hash: 71c8461
         enable_donations: 我想要開啟捐款以增加報名費收入
+        #original_hash: 4baf44b
+        championship_type: 錦標賽種類
       registration:
         #original_hash: 3c23a67
         guests: 訪客
@@ -426,10 +438,10 @@ zh-TW:
       user:
         #original_hash: 87e1e6f
         dob: 請依照YYYY-MM-DD格式輸入您的生日。
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           請正確地輸入您的全名，例如<strong>Stefan Pochmann</strong>。禁止隨意輸入，例如<strong>s
-          pochman</strong>。
+          pochman</strong>。<br/>中間名（全名或字首縮寫）則可有可無。
         #original_hash: c03b949
         email: 您必須確認新的電子郵件才能更改您的電子郵件。
         #original_hash: 8a91e53
@@ -485,8 +497,8 @@ zh-TW:
         external_website: 這場比賽的比賽網站。必須為有效的網址。
         #original_hash: 9965635
         registration_open: 備註：報名開始和結束時間採用UTC時間
-        #original_hash: f688881
-        remarks: 任何您想跟WCA董事會說明的事。例如，於比賽日期30日內才申請比賽的理由。
+        #original_hash: 36963bc
+        remarks: 任何您想跟WCA董事會說明的事。例如，於比賽日期30日內才申請比賽的理由。請用英文填寫!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -521,10 +533,12 @@ zh-TW:
         competitor_limit_enabled: 目前這數字僅做為發佈消息之用，並不會阻止更多選手報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
         #original_hash: b9bc84d
         competitor_limit: 這場比賽允許的參賽人數。
-        #original_hash: 32951f9
-        competitor_limit_reason: 設定人數上限的理由是什麼?
+        #original_hash: 4bd7102
+        competitor_limit_reason: 設定人數上限的理由是什麼？請用英文填寫！
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -697,7 +711,7 @@ zh-TW:
         manage_competitions: Manage any upcoming competitions you are organizing
     devise:
       #original_hash: 06184f5
-      no_account: 沒有WCA帳號嗎?
+      no_account: 沒有WCA帳號嗎？
       #original_hash: a268696
       have_competed: 我已經參加過WCA比賽了。
       #original_hash: dcd1d70
@@ -759,6 +773,8 @@ zh-TW:
       db_export: 下載WCA資料庫
       #original_hash: 1fa73f3
       regulations: 規則
+      #original_hash: 6bce1b5
+      about_regulations: 關於規則
       #original_hash: 141d1d7
       guidelines: 指導方針
       #original_hash: c4622c3
@@ -885,7 +901,7 @@ zh-TW:
       #original_hash: 58e0c56
       remove_avatar: 移除頭像
       #original_hash: 4bd25cf
-      remove_avatar_confirm: 您確定要刪除您的頭像嗎?
+      remove_avatar_confirm: 您確定要刪除您的頭像嗎？
       #original_hash: 141d1d7
       guidelines: 指導方針
       avatar_guidelines:
@@ -1123,12 +1139,14 @@ zh-TW:
     register: 報名!
     #original_hash: f484f15
     refund: 退款
+    #original_hash: dc8d7d2
+    refund_confirmation: 您確定要退款此金額嗎？
     #original_hash: a9af643
     update: 更新報名
     #original_hash: f6fdbe4
     delete: 取消
     #original_hash: b72119a
-    delete_confirm: 您確定要取消報名嗎?
+    delete_confirm: 您確定要取消報名嗎？
     #original_hash: cfc4865
     delete_registration: 取消報名。
     #original_hash: e9ddc6e
@@ -1202,7 +1220,7 @@ zh-TW:
       #original_hash: 07de612
       upload_results: 比賽已經結束了，我們正盡快地上傳成績!
       #original_hash: a0168ee
-      in_progress: '比賽正在進行當中，過%{date}天再回來看成績吧!'
+      in_progress: '比賽正在進行當中，過%{date}以後再回來看成績吧!'
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
@@ -1382,11 +1400,13 @@ zh-TW:
       #original_hash: f6fdbe4
       submit_delete_value: 取消
       #original_hash: 1ca19b1
-      submit_confirm: 您確定要申請比賽了嗎? 一旦申請就無法修改任何資訊了，請檢查您的電子郵件以確保WCA董事有收到比賽申請。
+      submit_confirm: 您確定要申請比賽了嗎？一旦申請就無法修改任何資訊了，請檢查您的電子郵件以確保WCA董事有收到比賽申請。
       #original_hash: 4c7deb7
-      submit_delete: 您確定要取消這場比賽嗎? 一旦執行了就回不去了。
+      submit_delete: 您確定要取消這場比賽嗎？一旦執行了就回不去了。
       #original_hash: 8ebebca
       coordinates: 座標
+      #original_hash: a672984
+      add_championship: 新增錦標賽種類
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白號()'
@@ -1537,7 +1557,7 @@ zh-TW:
       #original_hash: f6fdbe4
       delete: 取消
       #original_hash: 14e49c1
-      confirm_delete: '您確定要取消%{tab_name}標籤嗎?'
+      confirm_delete: '您確定要取消%{tab_name}標籤嗎？'
       #original_hash: ce1bf0b
       back_to_tabs: 回到標籤
     new:
@@ -1610,7 +1630,7 @@ zh-TW:
       national_records: 國家紀錄經歷
   posts:
     #original_hash: 2a7da42
-    confirm_delete_post: 您確定要刪除這篇文章嗎?這個動作是不可逆的。
+    confirm_delete_post: 您確定要刪除這篇文章嗎？這個動作是不可逆的。
     #original_hash: 3dcbf6d
     announcement_info_html: '%{author_name}於%{date_time}公告'
   contacts:
@@ -1645,7 +1665,7 @@ zh-TW:
     #original_hash: 6cf2723
     contact_us: 聯絡我們
     #original_hash: 9100be3
-    search_for_competition: 尋找比賽：
+    search_for_competition: 搜尋比賽：
     #original_hash: cba12bc
     already_logged_in: 您已經登入WCA帳號了。
     #original_hash: 5b7fa52
@@ -1657,7 +1677,7 @@ zh-TW:
     answers:
       '1':
         #original_hash: f79b522
-        title: 我該如何取得WCA ID和WCA個人頁面呢?
+        title: 我該如何取得WCA ID和WCA個人頁面呢？
         content:
           #original_hash: b645fe1
           '1': >-
@@ -1665,13 +1685,13 @@ zh-TW:
             當您參加的第一場比賽成績公布後，您就會有WCA ID和WCA個人頁面了。
       '2':
         #original_hash: eb948e7
-        title: 我該如何搜尋WCA比賽呢?
+        title: 我該如何搜尋WCA比賽呢？
         content:
           #original_hash: d195cec
           '1': 請參考<a href='/competitions'>比賽列表</a>
       '3':
         #original_hash: af6ad12
-        title: 我該如何報名比賽? 如果我有關於報名比賽的問題，我可以詢問誰?
+        title: 我該如何報名比賽？如果我有關於報名比賽的問題，我可以詢問誰？
         content:
           #original_hash: 7b91db1
           '1': >-
@@ -1679,7 +1699,7 @@ zh-TW:
             %{comp_search_form}
       '4':
         #original_hash: 9a5ae28
-        title: 參加比賽須具備什麼條件? 我必須知道哪些規則呢?
+        title: 參加比賽須具備什麼條件？我必須知道哪些規則呢？
         content:
           #original_hash: 3bb4e11
           '1': >-
@@ -1693,7 +1713,7 @@ zh-TW:
             competitor tutorial</a>，可以更了解比賽流程。
       '5':
         #original_hash: 3b657aa
-        title: 我可以在家鄉辦WCA比賽嗎?
+        title: 我可以在家鄉辦WCA比賽嗎？
         content:
           #original_hash: 3d4eb1c
           '1': 如果您有興趣舉辦比賽的話，我們高度建議您至少先參加一至兩場比賽以學習經驗。
@@ -1711,7 +1731,7 @@ zh-TW:
             href='https://www.cubingusa.com/cguide.php'>這裡</a>。(其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。)
       '6':
         #original_hash: 8005a61
-        title: WCA帳號的用途是什麼? WCA帳號和WCA個人頁面的差異何在?
+        title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
         content:
           #original_hash: 57a3767
           '1': 當您參加第一場WCA認證比賽的成績公布後，您就會有WCA ID了。
@@ -1721,7 +1741,7 @@ zh-TW:
           '3': '%{current_user_status}'
       '7':
         #original_hash: d7ee9bd
-        title: 我該如何更改個人頁面的頭像?
+        title: 我該如何更改個人頁面的頭像？
         content:
           #original_hash: e619524
           '1': >-
@@ -1734,13 +1754,13 @@ zh-TW:
             href='%{profile_edit_path}'>編輯個人頁面</a>修改您的頭像。
       '8':
         #original_hash: 1d61217
-        title: 我該如何將我的WCA帳號和我的WCA ID綁定?
+        title: 我該如何將我的WCA帳號和我的WCA ID綁定？
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
       '9':
         #original_hash: 7a4a71d
-        title: 若我已經報名比賽了，我可以再加報額外項目嗎? 我可以攜帶訪客嗎?
+        title: 若我已經報名比賽了，我可以再加報額外項目嗎？我可以攜帶訪客嗎？
         content:
           #original_hash: 957487d
           '1': >-
@@ -1748,7 +1768,7 @@ zh-TW:
             href='/competitions'>比賽列表</a>。
       results:
         #original_hash: 9aae576
-        title: WCA比賽的成績何時會上傳至WCA網站呢?
+        title: WCA比賽的成績何時會上傳至WCA網站呢？
         content:
           #original_hash: 890d879
           '1': >-
@@ -1761,7 +1781,7 @@ zh-TW:
             href='%{preferences_edit_path}'>here</a>開啟比賽的成績通知。
       regulations1:
         #original_hash: 2951eb6
-        title: 請問我的方塊符合比賽標準嗎?
+        title: 請問我的方塊符合比賽標準嗎？
         content:
           #original_hash: 5ac78e4
           '1': >-
@@ -1769,7 +1789,7 @@ zh-TW:
             href='https://www.worldcubeassociation.org/regulations/#3'>第3章</a>找到與方塊有關的規則。所以方塊應經過WCA代表的審核。如果您不確定，請詢問您那場比賽的代表。為了確保您的方塊被允許使用，您應攜帶一顆備用方塊。
       regulations2:
         #original_hash: 48f1234
-        title: 請問我可以在WCA官方比賽使用磁力方塊嗎?
+        title: 請問我可以在WCA官方比賽使用磁力方塊嗎？
         content:
           #original_hash: 024ce81
           '1': >-
@@ -1779,7 +1799,7 @@ zh-TW:
             3h</a>。
       regulations3:
         #original_hash: c7460a5
-        title: 我掉了方塊的中心蓋或是其中一塊零件，請問我可以使用它比賽嗎?
+        title: 我掉了方塊的中心蓋或是其中一塊零件，請問我可以使用它比賽嗎？
         content:
           #original_hash: 0d76323
           '1': >-
@@ -1788,7 +1808,7 @@ zh-TW:
             3j</a>)。
       regulations4:
         #original_hash: 43f9da8
-        title: 我應至少幾歲才能報名參加WCA比賽?
+        title: 我應至少幾歲才能報名參加WCA比賽？
         content:
           #original_hash: 984704a
           '1': >-
@@ -1945,7 +1965,7 @@ zh-TW:
       info: (維護WCA軟體)
     wfc:
       #original_hash: 674291e
-      info: WCA財政
+      info: (負責WCA財政)
   score_tools:
     #original_hash: ea9d41d
     title: WCA成績輸入工具
@@ -2073,3 +2093,148 @@ zh-TW:
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: 請提供兩個有效且不同的WCA ID。
+  search_results:
+    index:
+      #original_hash: db98a68
+      competitions: 比賽
+      #original_hash: b37554f
+      people: 選手
+      #original_hash: 6db75ea
+      advanced_search: 進階搜尋
+      #original_hash: a0ca0c3
+      posts: 文章
+      #original_hash: 9d7ea9c
+      regulations_and_guidelines: 規則與指導方針
+      not_found:
+        #original_hash: b8a7006
+        competitions: 未找到相符比賽
+        #original_hash: 99d4290
+        people: 未找到相符選手
+        #original_hash: c6a04aa
+        posts: 未找到相符文章
+        #original_hash: 76a6bf1
+        regulations_and_guidelines: 未找到相符規則或指導方針
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: 關於規則
+    panel1:
+      #original_hash: 1fa73f3
+      title: 規則
+      #original_hash: 557095b
+      content1_html: 所有比賽應遵守<a href="/regulations/">WCA規則</a>。選手必須在參加第一場比賽之前閱讀這些規則。
+      #original_hash: 4296902
+      content2_html: >-
+        WCA規則附有<a
+        href="/regulations/guidelines.html">WCA指導方針</a>補充說明，包含額外的釐清與解釋。
+    panel2:
+      #original_hash: 8ad8302
+      title: 翻譯
+      #original_hash: 7477d9b
+      content1_html: >-
+        WCA規則不僅有英文版本，WCA成員們已將規則翻譯為多國語言：<a
+        href="/regulations/translations/">翻譯</a>。
+      #original_hash: 6add7a3
+      content2_html: <strong>注意</strong>：儘管翻譯版本有助於理解規則，但它們並非官方版本。在比賽當中，必須以英文版本為主。
+    panel3:
+      #original_hash: 234fd4d
+      title: 常見問題
+      #original_hash: 8afba93
+      content1_html: <a href="/faq">常見問題區</a>回答了許多關於WCA規則的常見問題。
+    panel4:
+      #original_hash: ad5f6e7
+      title: 主辦人指導方針
+      #original_hash: 9bbdf16
+      content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="/organizer-guidelines">主辦人指導方針</a>。
+      #original_hash: 5016669
+      content2_html: 此文件包含重要資訊，所有比賽主辦人應詳閱。
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: WCA比賽主辦人指導方針
+    paragraph1:
+      #original_hash: e5f5329
+      title: 如何主辦比賽
+      #original_hash: 3dbbbee
+      content: >-
+        所以有WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
+    paragraph2:
+      #original_hash: f20dd3b
+      title: 主辦比賽的預計開銷
+      #original_hash: ab53dda
+      content: >-
+        比賽預計開銷在每個國家的情況不大相同，且會受到很多因素影響，例如比賽場地大小或其他基本的條件。基本上所有開銷可以由報名費彌補，不過為了盡可能降低開銷，建議您尋找贊助商。儘管WCA代表為自願性出席且沒有因工作收取酬勞，主辦人仍應補貼代表的車馬費。
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: 公告比賽的截止期限
+      #original_hash: c61c6c9
+      content_html: >-
+        比賽應在比賽日期的至少一個月前公布（參見<a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>指導方針
+        8a4++</a>）。如果有特殊狀況使得比賽無法如期申請，最慢可以在比賽兩周前公告，由WCA董事會決定。建議您盡早向WCA董事會告知狀況，以避免太晚申請比賽而遭拒絕。
+    paragraph4:
+      #original_hash: b6dca56
+      title: 鄰近比賽政策
+      #original_hash: b2bc107
+      content1: >-
+        一般政策上，WCA比賽必須與其他比賽間隔200公里或26天以上才會通過申請。若申請中的比賽與其他比賽的距離小於200公里且日期小於26天，WCA董事會應仔細審核。當WCA代表申請這類型的比賽時，必須提供額外的資訊來說明為什麼這場比賽應該通過申請。可能讓比賽申請通過的理由如下：
+      list1:
+        #original_hash: 424c134
+        '1': 兩場比賽有不同項目。
+        #original_hash: f7bacc5
+        '2': 兩場比賽在不同國家舉行。
+        #original_hash: 9aa4d96
+        '3': 在過去的12個月當中，比賽場地方圓200公里以內少於13場比賽。
+      #original_hash: ab65dfb
+      content2: 多地同時的FMC比賽不得為其他正規比賽的一部分：
+      list2:
+        #original_hash: a57b541
+        '1': 如果這種比賽所在地200公里之內有其他正規比賽，則兩場比賽之間應至少間隔5天以上，或是該比賽不能有最少步項目。
+    paragraph5:
+      #original_hash: 17d01de
+      title: 人數上限
+      #original_hash: 18976be
+      content_html: >-
+        每項比賽項目或每場比賽的人數上限（參見<a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>規則
+        Z4</a>）。主辦單位應根據預期人數明智地的選擇人數上限，不能因為次要的理由設定較小的人數上限。當您在尋找適合的場地時，應考慮預期的參加人數。人數上限必須很清楚的標示在WCA的比賽頁面。
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: 處理報名
+      #original_hash: cb13cd0
+      content: >-
+        報名必須以先到者優先服務為原則，因此越早報名即越早受理。如果報名費採用預付制度，當報名費支付完成後才視為報名結束。相關付款資訊應清楚的公告在比賽網站上。
+    paragraph7:
+      #original_hash: e4f1c62
+      title: 管理候補名單
+      #original_hash: 81ca3f3
+      content1: 一旦參賽人數達到上限，候補名單將會被開放。當已報名且通過審核的選手取消其報名，其位置將會被下一位候補選手取代。
+      #original_hash: 1b2ea79
+      content2: >-
+        如果比賽報名費採用預付制度，則下一個候補選手會自動補位，其報名費應在截止時間前繳清才能完成報名（例如：48小時）。萬一選手沒有及時繳清或是取消報名，則該位置會再補位給下一名選手。此程序會一直持續到位置都被補滿為止，任何選手一律不得略過候補程序。
+      #original_hash: 37bcbd6
+      content3: 如果參賽者沒有透過正規程序報名卻參加比賽，該選手成績將會被事後取消（假設有報名上限且達到上限）。
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: 比賽之前的工作
+      list:
+        #original_hash: c8abb5e
+        '1': 在公告比賽之前，賽程需發布在比賽網站上。賽程隨後還可以進行調整。
+        #original_hash: e93d043
+        '2': 比賽選手應被分派至若干組別，成績單應提前列印且需根據分組分類。建議您提早規劃負責每個項目每個組別的轉亂員，至少第一輪。轉亂員應值得信賴。
+    paragraph9:
+      #original_hash: ead44f5
+      title: 比賽當中的工作
+      #original_hash: ee2e9c6
+      content: 主辦人在比賽當中應與WCA代表討論的工作項目。常見的工作如下（可以委託給其他值得信任的人）：
+      list:
+        #original_hash: 03aea46
+        '1': 負責報到處
+        #original_hash: c4388f3
+        '2': 宣布比賽通知
+        #original_hash: 45c78ae
+        '3': 呼叫組別並發放成績單
+        #original_hash: 0b31986
+        '4': 輸入成績並列印結果
+        #original_hash: 7ab2d4c
+        '5': 尋找轉亂員和裁判
+        #original_hash: 52e8316
+        '6': 處理所有有關場地的問題（例如：鑰匙或無線網路）
