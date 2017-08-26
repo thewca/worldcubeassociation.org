@@ -6,6 +6,8 @@ hr:
     XE: Više država (Europa)
     #original_hash: 459f987
     XS: Više država (Južna Amerika)
+    #original_hash: 374ac0d
+    XM: Više država (Amerika)
     #original_hash: 918c53a
     MO: Makao
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ hr:
     #original_hash: 4e8bd04
     KR: Koreja
   continents:
+    #original_hash: c2994db
+    Multiple Continents: Više država
     #original_hash: 1d35114
-    AfR: Afrika
+    Africa: Afrika
     #original_hash: a173e72
-    AsR: Azija
+    Asia: Azija
     #original_hash: 576347e
-    ER: Europa
+    Europe: Europa
     #original_hash: 247ce5d
-    NAR: Sjeverna Amerika
+    North America: Sjeverna Amerika
     #original_hash: 3642950
-    OcR: Oceanija
+    Oceania: Oceanija
     #original_hash: b1ffb4c
-    SAR: Južna Amerika
+    South America: Južna Amerika
   events:
     #original_hash: 3732390
     '222': 2x2x2 kocka
@@ -535,11 +539,11 @@ hr:
         registration_open: >-
           Bilješka: Registracije se otvaraja i zatvaraju u vremenu univerzalne
           vremenske zone (UTC)
-        #original_hash: f688881
+        #original_hash: 36963bc
         remarks: >-
           Dodatne informacije koje želite poslati Board-u. Primjerice, razlozi
           zašto je objava natjecanja zatražena manje od mjesec dana od
-          održavanja natjecanja.
+          održavanja natjecanja. Molimo Vas ispunite na engleskom jeziku!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -580,8 +584,10 @@ hr:
           obliku, no to zahtjeva razvoj.
         #original_hash: b9bc84d
         competitor_limit: Dozvoljeni broj natjecatelja na ovom natjecanju.
-        #original_hash: 32951f9
-        competitor_limit_reason: Koji je razlog ograničavanja broja natjecatelja?
+        #original_hash: 4bd7102
+        competitor_limit_reason: >-
+          Koji je razlog ograničavanja broja natjecatelja? Molimo Vas ispunite
+          na engleskom jeziku!
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
@@ -856,6 +862,8 @@ hr:
       db_export: Izvoz baze podataka
       #original_hash: 1fa73f3
       regulations: Pravila
+      #original_hash: 6bce1b5
+      about_regulations: O Pravilniku
       #original_hash: 141d1d7
       guidelines: Smjernice
       #original_hash: c4622c3
@@ -1292,6 +1300,8 @@ hr:
     register: Registriraj se!
     #original_hash: f484f15
     refund: Povrat novca
+    #original_hash: dc8d7d2
+    refund_confirmation: Jeste li sigurni da želite povrat novca za ovo plaćanje?
     #original_hash: a9af643
     update: Ažuriraj registraciju
     #original_hash: f6fdbe4
@@ -2499,3 +2509,198 @@ hr:
         posts: Nema pronađenih objava za
         #original_hash: 76a6bf1
         regulations_and_guidelines: Nema pronađenih Pravila i Smjernica za
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: O Pravilniku
+    panel1:
+      #original_hash: 1fa73f3
+      title: Pravilnik
+      #original_hash: 557095b
+      content1_html: >-
+        Sva natjecanja moraju pratiti <a href="/regulations/">WCA Pravilnik</a>.
+        Važno je da natjecatelji pročitaju Pravilnik prije nego pristupe prvom
+        natjecanju.
+      #original_hash: 4296902
+      content2_html: >-
+        WCA Pravilnik je upotpunjen <a href="/regulations/guidelines.html">WCA
+        Guidelines-ima</a>, koji sadržavaju dodatna objašnjenja i razjašnjenja.
+    panel2:
+      #original_hash: 8ad8302
+      title: Prijevodi
+      #original_hash: 7477d9b
+      content1_html: >-
+        WCA Pravilnik nije dostupan samo na engleskom jeziku, preveli su ga
+        članovi WCA na više jezika: <a href="/regulations/translations/">
+        Prijevodi</a>.
+      #original_hash: 6add7a3
+      content2_html: >-
+        <strong>Važno:</strong>: Iako su prijevodi veoma korisni, nisu službeni.
+        Na natjecanjima, engleska verzija je jedina službeno važeća.
+    panel3:
+      #original_hash: 234fd4d
+      title: Često postavljena pitanja o Pravilniku
+      #original_hash: 8afba93
+      content1_html: >-
+        <a href="/faq">Sekcija "Često postavljena pitanja"</a> odgovara na
+        nekoliko učestalih pitanja o WCA Pravilniku.
+    panel4:
+      #original_hash: ad5f6e7
+      title: Smjernice za organizatore
+      #original_hash: 9bbdf16
+      content1_html: >-
+        Ukoliko ste zainteresirani organizirati natjecanje ili već planirate
+        organizirati jedno, pročitajte naše <a
+        href="/organizer-guidelines">Smjernice za organizatore</a>.
+      #original_hash: 5016669
+      content2_html: >-
+        Ovaj dokument sadrži važne informacije koje svaki organizator natjecanja
+        mora pročitati.
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: WCA Natjecanje - Smjernice za organizatore
+    paragraph1:
+      #original_hash: e5f5329
+      title: Kako organizirati natjecanje
+      #original_hash: 3dbbbee
+      content: >-
+        Sva WCA Natjecanja moraju imati prisutnog WCA Delegata. Ako ste
+        zainteresirani organizirati svoje natjecanje, kontaktirajte najbližeg
+        WCA Delegata. Oni će Vam pružiti više informacija te će Vam naći
+        odgovarajući datum za natjecanje. Ako nemate delegata u Vašoj regiji,
+        kontaktirajte Senior Delegata za Vašu regiju.
+    paragraph2:
+      #original_hash: f20dd3b
+      title: Očekivani troškovi organiziranja natjecanja
+      #original_hash: ab53dda
+      content: >-
+        Očekivani troškovi se uvelike razlikuju od države do države i određeni
+        su s nekoliko faktora kao većina prostora i ostali uvjeti. Pokrivanje
+        svih troškova je moguće s kotizacijama. Međutim, kako bi se kotizacije
+        snizile na najnižu razinu, preporučljivo je naći sponzora. Iako su WCA
+        Delegati volonteri i ne dobivaju plaću za svoj rad, organizatori bi se
+        mogli potruditi i platiti im kompenzaciju za njihove putne troškove.
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: Rokovi za objavljivanje natjecanja
+      #original_hash: c61c6c9
+      content_html: >-
+        Natjecanje bi trebalo biti objavljeno barem mjesec dana prije njegovog
+        početka (pogledaj <a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline
+        8a4++</a>). Ako postoje neki određeni razlozi koji Vas sprječavaju s
+        rokom, natjecanja mogu biti objavljena do 2 tjedna prije njihovog
+        početka, na diskreciju WCA Board-a. Važno je obavijestiti WCA Board o
+        svim razlozima na vrijeme da bi se izbjeglo odbijanje natjecanja.
+    paragraph4:
+      #original_hash: b6dca56
+      title: Politika udaljenosti
+      #original_hash: b2bc107
+      content1: >-
+        Kao generalna politika, WCA Natjecanja će biti prihvaćena ako su barem
+        200km ili 26 dalje od bilo kojeg drugog natjecanja. WCA Board mora
+        obratiti posebnu pozornost na ta 2 čimbenika. Delegat koji traži
+        odobrenje takvog natjecanja mora imati jako dobar razlog zašto bi se to
+        natjecanje trebalo potvrditi. Mogući argumenti koji mogu pomoći takvom
+        natjecanju da bude prihvaćeno su:
+      list1:
+        #original_hash: 424c134
+        '1': Natjecanja imaju različite discipline.
+        #original_hash: f7bacc5
+        '2': Natjecanja se održavaju u različitim državama.
+        #original_hash: 9aa4d96
+        '3': >-
+          U zadnjih 12 mjeseci, bilo je manje od 13 natjecanja na području od
+          200km oko ovog natjecanja.
+      #original_hash: ab65dfb
+      content2: >-
+        FMC natjecanja (npr. FMC Europe, koja se održavaju u isto vrijeme na
+        više lokacija) ne mogu biti dio bilo kojeg drugog natjecanja:
+      list2:
+        #original_hash: a57b541
+        '1': >-
+          Ako je lokacija takvih natjecanja manja od 200km od drugih natjecanja,
+          oba natjecanja moraju biti barem u razmaku od 5 dana ili drugo
+          natjecanje ne smije imati FM disciplinu.
+    paragraph5:
+      #original_hash: 17d01de
+      title: Limit natjecatelja
+      #original_hash: 18976be
+      content_html: >-
+        Broj natjecatelja može biti limitiran po disciplini ili po natjecanju
+        (vidi <a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation
+        Z4</a>). Kao i sva ostala pravila pod člankom Z, delegat natjecanja mora
+        dobiti potvrdu o limitu natjecatelja od strane Board-a. Limit
+        natjecatelja mora biti odabran pomno i u skladu s očekivanim interesom
+        natjecatelja. Limit ne smije biti postavljen na manji broj. Također,
+        limit mora biti i u obziru s veličinom prostora gdje će se natjecanje
+        održati. Limit natjecatelja mora biti jasno vidljiv na stranici
+        natjecanja na WCA web-stranici.
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: Upravljanje registracijama
+      #original_hash: cb13cd0
+      content: >-
+        Registracije se moraju upravljati po principu "tko prvi, njegovo", što u
+        znači da se ranije registracije mroaju tretirati kao prve. Ako se
+        kotizacije plaćaju, registracija je kompletna tek onda kad je plaćena.
+        Ove informacije moraju biti jasno dostupne na web-stranici natjecanja.
+    paragraph7:
+      #original_hash: e4f1c62
+      title: Upravljanje listom čekanja
+      #original_hash: 81ca3f3
+      content1: >-
+        Čim se dostigne limit natjecatelja, treba se otvoriti lista čekanja.
+        Kada registrirani i prihvaćeni natjecatelji otkažu svoje prisustvo, oni
+        mogu biti zamijenjeni za prve natjecatelje na listi čekanja.
+      #original_hash: 1b2ea79
+      content2: >-
+        Ako se kotizacije naplaćuju, preporučljivo je ponuditi prvoj osobi na
+        listi čekanja registraciju, ali i rok (npr. 48h) plaćanja kotizacije.
+        Ukoliko kotizacija nije plaćena u tom roku, prazno mjesto se nudi
+        slijedećem natjecatelju na listi čekanja. Ovaj proces treba teći sve dok
+        se ne isprazni lista čekanja. Nema iznimki za preskakanje natjecatelja
+        na listi čekanja.
+      #original_hash: 37bcbd6
+      content3: >-
+        Ako natjecatelji nisu prošli kroz normalan registracijski proces, ali su
+        se natjecali, njihovi rezultati će se retroaktivno obrisati (uzimajući u
+        obzir da je limit natjecatelja dostignut i ostvaren).
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: Zadatci prije natjecanja
+      list:
+        #original_hash: c8abb5e
+        '1': >-
+          Prije objavljivanja natjecanja, raspored je potreban te mora biti
+          objavljen na stranici natjecanja. Raspored se može prilagoditi
+          kasnije.
+        #original_hash: e93d043
+        '2': >-
+          Natjecatelji moraju biti podijeljeni u grupe, listići s rezultatima
+          moraju biti isprintani i raspoređeni po grupama. Također je
+          preporučljivo imati u planu "scramblere" za svaku grupu i svaku
+          disciplinu, makar samo prve runde. Scrambleri moraju biti pouzdani.
+    paragraph9:
+      #original_hash: ead44f5
+      title: Zadatci tijekom natjecanja
+      #original_hash: ee2e9c6
+      content: >-
+        Zadatci koje organizator radi tijekom natjecanja moraju biti određeni od
+        WCA Delegata. Tipični zadatci su (mogu biti i zadani ostalim pouzdanim
+        osobama):
+      list:
+        #original_hash: 03aea46
+        '1': Upravljanje registracijskim stolom
+        #original_hash: c4388f3
+        '2': Najavljivanje
+        #original_hash: 45c78ae
+        '3': Pozivanje grupa i raspoređivanje listića s rezultatima
+        #original_hash: 0b31986
+        '4': Unošenje rezultata i printanje rezultata
+        #original_hash: 7ab2d4c
+        '5': Traženje scramblera i sudaca
+        #original_hash: 52e8316
+        '6': >-
+          Suočavanje sa svim organizacijskim problemima oko prostora (npr.
+          ključevi, WiFi)
