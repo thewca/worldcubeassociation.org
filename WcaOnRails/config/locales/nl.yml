@@ -6,6 +6,8 @@ nl:
     XE: Meerdere landen (Europa)
     #original_hash: 459f987
     XS: Meerdere landen (Zuid-Amerika)
+    #original_hash: 374ac0d
+    XM: Meerdere Landen (Amerika's)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ nl:
     #original_hash: 4e8bd04
     KR: Zuid-Korea
   continents:
+    #original_hash: c2994db
+    Multiple Continents: Meerdere Landen
     #original_hash: 1d35114
-    AfR: Afrika
+    Africa: Afrika
     #original_hash: a173e72
-    AsR: Azië
+    Asia: Azië
     #original_hash: 576347e
-    ER: Europa
+    Europe: Europa
     #original_hash: 247ce5d
-    NAR: Noord-Amerika
+    North America: Noord-Amerika
     #original_hash: 3642950
-    OcR: Oceanië
+    Oceania: Oceanië
     #original_hash: b1ffb4c
-    SAR: Zuid-Amerika
+    South America: Zuid-Amerika
   events:
     #original_hash: 3732390
     '222': 2x2x2 kubus
@@ -837,6 +841,8 @@ nl:
       db_export: Database Export
       #original_hash: 1fa73f3
       regulations: Wedstrijdreglement
+      #original_hash: 6bce1b5
+      about_regulations: Over de Wedstrijdreglementen
       #original_hash: 141d1d7
       guidelines: Aanvullende richtlijnen
       #original_hash: c4622c3
@@ -1958,12 +1964,15 @@ nl:
             delegate</a> dichtbij. Er moet een WCA delegate aanwezig zijn om de
             wedstrijden officieel te maken voor WCA. De WCA delegate kan de
             organisatoren helpen om een succesvolle wedstrijd te organiseren.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
             Bezoek <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>deze gids</a> voor
-            verdere informatie. Het WCA-wedstrijdreglement is leidend als er
-            verschillen zijn met de gids.
+            href=''https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            Competitieorganisator richtlijnen</a> en de <a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>CubingUSA
+            Competitiegids</a> voor verdere informatie. Het
+            WCA-wedstrijdreglement is leidend als er verschillen zijn met de
+            informatie uit de genoemde referenties.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2522,3 +2531,212 @@ nl:
         posts: Geen berichten gevonden voor
         #original_hash: 76a6bf1
         regulations_and_guidelines: Geen wedstrijdreglement of richtlijnen gevonden voor
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: Over de Wedstrijdreglementen
+    panel1:
+      #original_hash: 1fa73f3
+      title: Wedstrijdreglementen
+      #original_hash: 557095b
+      content1_html: >-
+        Alle wedstrijden moeten de <a href="/regulations/'">WCA
+        Wedstrijdreglementen</a> volgen. Het is belangrijk voor de deelnemers om
+        deze reglementen te lezen voor het meedoen aan hun eerste wedstrijd.
+      #original_hash: 4296902
+      content2_html: >-
+        De WCA Wedstrijdreglementen zijn aangevuld met de <a
+        href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
+        verduidelijkingen en toelichtingen bevatten.
+    panel2:
+      #original_hash: 8ad8302
+      title: Vertalingen
+      #original_hash: 7477d9b
+      content1_html: >-
+        De WCA Wedstrijdreglementen zijn niet alleen in het Engels beschikbaar,
+        maar leden van de WCA hebben deze in verschillende talen vertaald: <a
+        href="/regulations/translations/">Vertalingen</a>.
+      #original_hash: 6add7a3
+      content2_html: >-
+        <strong>Belangrijk</strong>: Hoewel de vertaling erg nuttig zijn, zijn
+        ze niet officieel, de Engelse versie van de WCA Wedstrijdreglementen is
+        bindend.
+    panel3:
+      #original_hash: 234fd4d
+      title: Wedstrijdreglementen FAQ
+      #original_hash: 8afba93
+      content1_html: >-
+        De <a href="/faq">FAQ</a> geeft antwoord op veelgestelde vragen over de
+        WCA Wedstrijdreglementen.
+    panel4:
+      #original_hash: ad5f6e7
+      title: Organisatorrichtlijnen
+      #original_hash: 9bbdf16
+      content1_html: >-
+        Als je geïnteresseerd bent in het organiseren van een wedstrijd of al
+        een wedstrijd aan het plannen bent, lees dan onze <a
+        href="/organizer-guidelines">Organisatorrichtlijnen</a>.
+      #original_hash: 5016669
+      content2_html: >-
+        Dit document bevat belangrijke informatie en moet worden gelezen door
+        elke wedstrijdorganisator.
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: WCA Wedstrijdorganisatorrichtlijnen
+    paragraph1:
+      #original_hash: e5f5329
+      title: Hoe een wedstrijd organiseren
+      #original_hash: 3dbbbee
+      content: >-
+        Alle WCA-wedstrijden moeten worden bezocht en begeleid door een
+        WCA-delegate. Als je geïnteresseerd bent om een eigen wedstrijd te
+        organiseren, neem dan ajb contact op met je dichtstbijzijnde
+        WCA-delegate. WCA-delegates kunnen je meer informatie geven over de
+        lokale gang van zaken en je helpen een geschikte datum te vinden,
+        aangezien zij weten of er andere wedstrijden gepland zijn in dezelfde
+        periode. Als er geen WCA-delegate beschikbaar is in jouw omgeving, neem
+        dan contact op met de Senior Delegate van je regio.
+    paragraph2:
+      #original_hash: f20dd3b
+      title: Verwachte kosten voor het organiseren van een wedstrijd
+      #original_hash: ab53dda
+      content: >-
+        De verwachte kosten verschillen sterk per land en worden bepaald door
+        factoren als de grootte van de wedstrijdlocatie and other algemene
+        voorwaarden. Het afdekking van de kosten met registratiegelden is
+        mogelijk. Echter, om de kosten zo laag mogelijk te houden, is het
+        aanbevolen om sponsoren te zoeken. Hoewel de WCA-delegates vrijwilligers
+        zijn en geen vergoeding ontvangen voor hun werk, zouden organisatoren
+        rekening moeten houden met vergoeding van onkosten en eventuele
+        reiskosten
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: Deadline voor het aankondigen van de wedstrijd
+      #original_hash: c61c6c9
+      content_html: >-
+        De wedstrijd zou minstens een maand van tevoren moeten worden
+        aangekondigd (zie <a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Richtlijn
+        8a4++</a>). als er speciale redenen zijn waarom deze deadline niet kan
+        worden gehaald, mogen wedstrijd tot uiterlijk twee weken van tevoren
+        worden aangekondigd. Het is sterk aan te bevelen om de WCA-board van
+        deze redenen op de hoogte te brengen om latere weigering te voorkomen.
+    paragraph4:
+      #original_hash: b6dca56
+      title: Nabijheidsbeleid
+      #original_hash: b2bc107
+      content1: >-
+        Algemeen beleid is dat wedstrijden worden geaccepteerd als je minstens
+        200km of 26 dagen van andere wedstrijden plaatsvinden. De WCA-board zal
+        specifiek voorstellen voor wedstrijden beoordelen als er een andere
+        wedstrijd is op minder dan 200km afstand en met minder dan 26 dagen
+        verschil. Een WCA-delegate die zo'n wedstrijd wil laten goedkeuren, moet
+        nadere informatie leveren waarom deze wedstrijd alsnog moet worden
+        geaccepteerd. Mogelijke argumenten die daarbij ondersteunend kunnen
+        zijn:
+      list1:
+        #original_hash: 424c134
+        '1': De twee wedstrijden hebben verschillende wedstrijdonderdelen
+        #original_hash: f7bacc5
+        '2': De twee wedstrijden vinden plaats in andere landen.
+        #original_hash: 9aa4d96
+        '3': >-
+          In de laatste 12 maanden, zijn er minder dan 13 wedstrijden geweest in
+          een gebied 200km rond de wedstrijd.
+      #original_hash: ab65dfb
+      content2: >-
+        FMC-wedstrijden op meerdere locaties mogen geen onderdeel zijn van een
+        reguliere wedstrijd:
+      list2:
+        #original_hash: a57b541
+        '1': >-
+          Als één van de locaties van zo'n wedstrijd dichter dan 200km van
+          reguliere andere wedstrijden is, dan moeten beide wedstrijden minimaal
+          5 dagen uit elkaar plaatsvinden en mag de andere wedstrijd geen
+          wedstrijdonderdeel FMC hebben.
+    paragraph5:
+      #original_hash: 17d01de
+      title: Maximumaantal Deelnemers
+      #original_hash: 18976be
+      content_html: >-
+        Het aantal deelnemers kan worden beperkt per wedstrijdonderdeel of per
+        wedstrijd (zie <a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>Reglement
+        Z4</a>). Zoals alle Reglementen in artikel Z, moet de WCA-delegate van
+        de wedstrijd goedkeuring krijgen van de WCA-board. Maximaantallen
+        deelnemers moeten zorgvuldig woren gekozen en in lijn zijn met het
+        verwachte aantal aanmeldingen. Het maximumaantal mag niet voor
+        onbelangrijke reden laag worden ingesteld. Het bedoelde maximum moet al
+        in ogenschouw worden genomen bij het zoeken van een geschikte
+        wedstrijdlocatie. Het maximumaantal moet duidelijk worden vermeld op de
+        wedstrijdpagina.
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: Afhandelen van aanmeldingen
+      #original_hash: cb13cd0
+      content: >-
+        Aanmeldingen moeten worden verwerkt in volgorde van wie het eerst, die
+        het eerst maalt, wat betekent dat vroeger afgeronde aanmeldingen als
+        eerste moeten verwerkt. Als er registratiegelden voor moeten worden
+        betaald, dan is de aanmelding pas compleet als het geld is betaald. Dit
+        moet duidelijk worden vermeld in de instructies op de wedstrijdpagina.
+    paragraph7:
+      #original_hash: e4f1c62
+      title: Beheren van de wachtlijst
+      #original_hash: 81ca3f3
+      content1: >-
+        Als het maximumaantal deelnemers is bereikt, wordt een wachtlijst
+        geopend. Als aangemelde en goedgekeurde deelnemers hun aanmelden
+        annuleren, kunnen zij worden vervangen door de volgende aanmeldingen op
+        de wachtlijst.
+      #original_hash: 1b2ea79
+      content2: >-
+        Als er wedstrijdgelden vooraf moeten worden betaald, is het efficiënt om
+        een vrije plek aan te bieden aan de volgende deelnemer op de wachtlijst
+        en een deadline te zetten wanneer de wedstrijdgelden moeten zijn
+        betaald. Als de betaling niet op tijd is, wordt de deelnameplek
+        aangeboden aan de volgende persoon op de wachtlijst. Dit proces gaat zo
+        door tot alle vrije plekken zijn bezet. Er is geen mogelijkheid voor
+        speciale behandeling van deelnemers om de wachtlijst te passeren.
+      #original_hash: 37bcbd6
+      content3: >-
+        Als deelnemers niet door het reguliere aanmeldingsproces zijn gegaan,
+        maar toch deelnemen, worden hun wedstrijdresultaten verwijderd als er
+        een maximumaantal deelnemers was en dat aantal was bereikt.
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: Taken voor de wedstrijd
+      list:
+        #original_hash: c8abb5e
+        '1': >-
+          Voordat een wedstrijd wordt aangekondigd is het vereist dat er een
+          voorlopig tijdschema is gepubliceerd om de wedstrijdpagina. Dit
+          tijdschema kan later worden aangepast.
+        #original_hash: e93d043
+        '2': >-
+          Deelnemers worden in groepen onderverdeeld, wedstrijdbriefjes worden
+          afgedrukt en conform de groepen worden gesplitst. Het is ook
+          aanbevolen om vooraf te regelen welke mensen gaan scramblen per
+          onderdeel en per groep. In ieder geval voor de eerste rondes.
+          Scramblers moeten zeer betrouwbaar zijn.
+    paragraph9:
+      #original_hash: ead44f5
+      title: Taken tijdens de wedstrijd
+      #original_hash: ee2e9c6
+      content: >-
+        De taken van een organisator tijdens een wedstrijd worden afgestemd met
+        de WCA-delegate. Typische taken (eventueel te delegeren) zijn:
+      list:
+        #original_hash: 03aea46
+        '1': Afhandelen van de aanmeldingen
+        #original_hash: c4388f3
+        '2': Doen van aankondigingen
+        #original_hash: 45c78ae
+        '3': Oproepen van groepen en klaarleggen van wedstrijdbriefjes
+        #original_hash: 0b31986
+        '4': Scoreregistratie en afdrukken van resultaten
+        #original_hash: 7ab2d4c
+        '5': Verzamelen van scramblers en juryleden
+        #original_hash: 52e8316
+        '6': >-
+          Afhandelen van organisatorische zaken rond de wedstrijdlocatie (zoals
+          sleutels en internettoegang)
