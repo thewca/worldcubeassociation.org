@@ -43,7 +43,7 @@ class ButtonActivatedModal extends React.Component {
       <button type="button" className="btn btn-default btn-xs"
               onClick={this.open}>
         {this.props.buttonValue}
-        <Modal show={this.state.showModal} onHide={this.close}>
+        <Modal show={this.state.showModal} onHide={this.close} backdrop="static">
           <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>
             {this.props.children}
             <Modal.Footer>
