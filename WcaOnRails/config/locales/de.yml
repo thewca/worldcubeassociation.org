@@ -6,6 +6,8 @@ de:
     XE: Mehrere Länder (Europa)
     #original_hash: 459f987
     XS: Mehrere Länder (Südamerika)
+    #original_hash: 374ac0d
+    XM: Mehrere Länder (Amerika)
     #original_hash: 918c53a
     MO: Macau
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ de:
     #original_hash: 4e8bd04
     KR: Korea
   continents:
+    #original_hash: c2994db
+    Multiple Continents: Mehrere Länder
     #original_hash: 1d35114
-    AfR: Afrika
+    Africa: Afrika
     #original_hash: a173e72
-    AsR: Asien
+    Asia: Asien
     #original_hash: 576347e
-    ER: Europa
+    Europe: Europa
     #original_hash: 247ce5d
-    NAR: Nordamerika
+    North America: Nordamerika
     #original_hash: 3642950
-    OcR: Ozeanien
+    Oceania: Ozeanien
     #original_hash: b1ffb4c
-    SAR: Südamerika
+    South America: Südamerika
   events:
     #original_hash: 3732390
     '222': 2x2x2 Würfel
@@ -203,6 +207,10 @@ de:
       other: 'Diese %{count} Disziplinen'
     #original_hash: 51ef7d4
     search_site: Suche
+    #original_hash: d3f8f7b
+    date_placeholder: JJJJ-MM-TT
+    #original_hash: 52249b5
+    datetime_placeholder: 'JJJJ-MM-TT SS:MM'
   delegate_statuses:
     #original_hash: 28ec02d
     candidate_delegate: Delegat Kandidat
@@ -352,6 +360,8 @@ de:
         competition_events: Disziplinen
         #original_hash: 71c8461
         enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
+        #original_hash: 4baf44b
+        championship_type: Meisterschaftstyp
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -441,11 +451,12 @@ de:
       user:
         #original_hash: 87e1e6f
         dob: Trage dein Geburtsdatum im Format JJJJ-MM-TT ein.
-        #original_hash: 5106479
+        #original_hash: d0bb74a
         name: >-
           Trage deinen vollen Namen sorgfältig ein, zum Beispiel <strong>Stefan
           Pochmann</strong>. Nicht unachtsam wie etwa <strong>s
-          pochman</strong>.
+          pochman</strong>. Zweite Vornamen (entweder ganz oder als Initial)
+          sind optional.
         #original_hash: c03b949
         email: >-
           Wenn Du deine E-Mail änderst, musst Du die neue Adresse erneut
@@ -515,11 +526,11 @@ de:
         external_website: Die Website des Wettbewerbs. Muss als gültige http(s)-URL vorliegen.
         #original_hash: 9965635
         registration_open: 'Anmerkung: Anmeldebeginn und -schluss sind in UTC anzugeben'
-        #original_hash: f688881
+        #original_hash: 36963bc
         remarks: >-
           Zusätzliche Informationen, die an das Board gehen sollen. Zum Beispiel
           Gründe, weshalb der Wettbewerb nicht innerhalb eines Monats angefragt
-          wurde, falls relevant.
+          wurde, falls relevant. Bitte fülle dieses Feld in Englisch aus.
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -560,10 +571,14 @@ de:
           dieser Möglichkeit, aber es erfordert zunächst zusätzliche Arbeiten.
         #original_hash: b9bc84d
         competitor_limit: 'Die Anzahl der Teilnehmer, die für diese Competition zugelassen werden'
-        #original_hash: 32951f9
-        competitor_limit_reason: Was ist der Grund für das Teilnehmerlimit?
+        #original_hash: 4bd7102
+        competitor_limit_reason: >-
+          Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses Feld in
+          Englisch aus.
         #original_hash: da39a3e
         venueAddress: ''
+        #original_hash: da39a3e
+        championship_type: ''
       website_contact:
         #original_hash: da39a3e
         message: ''
@@ -839,6 +854,8 @@ de:
       db_export: Datenbank-Export
       #original_hash: 1fa73f3
       regulations: Regeln
+      #original_hash: 6bce1b5
+      about_regulations: Über die Regeln
       #original_hash: 141d1d7
       guidelines: Richtlinien
       #original_hash: c4622c3
@@ -1284,6 +1301,8 @@ de:
     register: Neu anmelden!
     #original_hash: f484f15
     refund: Rückerstattung
+    #original_hash: dc8d7d2
+    refund_confirmation: 'Bist du sicher, dass du die Zahlung zurückerstatten willst?'
     #original_hash: a9af643
     update: Anmeldung aktualisieren
     #original_hash: f6fdbe4
@@ -1617,6 +1636,8 @@ de:
         es kein Zurück
       #original_hash: 8ebebca
       coordinates: Koordinaten
+      #original_hash: a672984
+      add_championship: Wettbewerb hinzufügen
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -1986,9 +2007,11 @@ de:
             der Wettbewerb offiziell von der WCA zugelassen und anerkannt wird.
             Der WCA-Delegerte unterstützt das Organisationsteam auch bei der
             erfolgreichen Organisation des Wettbewerbs.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
-            Besuche das <a target='_blank'
+            Besuche die <a target='_blank'
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            Competition Organizer Guidelines</a> oder das <a target='_blank'
             href='http://cube.hackvalue.de/tutorials/competition.php'>deutsche
             Organisations-Tutorial</a> für weitere Informationen. (Bei jedwedem
             Konflikt zwischen Daten und Informationen aus dieser Ressource und
@@ -2557,3 +2580,216 @@ de:
         posts: Keine Beiträge gefunden für
         #original_hash: 76a6bf1
         regulations_and_guidelines: Keine Regeln oder Richtlinien gefunden für
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: Über die Regeln
+    panel1:
+      #original_hash: 1fa73f3
+      title: Regeln
+      #original_hash: 557095b
+      content1_html: >-
+        Alle Wettbewerbe müssen den <a href="/regulations/">WCA Regeln</a>
+        folgen. Es ist für Teilnehmer wichtig, die Regeln vor der Teilnahme an
+        ihrem ersten Wettbewerb zu lesen.
+      #original_hash: 4296902
+      content2_html: >-
+        Die WCA Regeln werden durch die <a
+        href="/regulations/guidelines.html">WCA Guidelines</a> ergänzt, die
+        zusätzliche Erklärungen und Beispiele geben.
+    panel2:
+      #original_hash: 8ad8302
+      title: Übersetzungen
+      #original_hash: 7477d9b
+      content1_html: >-
+        Die WCA Regeln sind nicht nur in Englisch verfügbar, sondern wurden von
+        WCA Mitgliedern in viele Sprachen übersetzt: <a
+        href="/regulations/translations/">Übersetzungen</a>.
+      #original_hash: 6add7a3
+      content2_html: >-
+        <strong>Wichtig</strong>: Obwohl die Übersetzungen sehr hilfreich sind,
+        sind sie nicht offiziell. Die englische Version der WCA Regeln ist in
+        Wettbewerben bindend.
+    panel3:
+      #original_hash: 234fd4d
+      title: Regel FAQ
+      #original_hash: 8afba93
+      content1_html: >-
+        Die <a href="/faq">FAQ</a> beantwortet regelmässig gestellte Fragen über
+        die WCA Regeln.
+    panel4:
+      #original_hash: ad5f6e7
+      title: Leitfaden für Organisatoren
+      #original_hash: 9bbdf16
+      content1_html: >-
+        Wenn du daran interessiert bist, einen Wettbewerb zu organisieren oder
+        bereits dabei bist, lies bitte den <a
+        href="/organizer-guidelines">Leitfaden für Organisatoren</a>.
+      #original_hash: 5016669
+      content2_html: >-
+        Das Dokument enthält wichtige Informationen und sollte von jedem
+        Organisator gelesen werden.
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: WCA Leitfaden für Organisatoren
+    paragraph1:
+      #original_hash: e5f5329
+      title: Wie ein Wettbewerb organisiert wird
+      #original_hash: 3dbbbee
+      content: >-
+        An allen Wettbewerben muss ein WCA Delegate teilnehmen. Wenn du daran
+        interessiert bist, einen Wettbewerb zu organisieren, kontaktiere bitte
+        den nächsten WCA Delegierten. Er wird dir mehr Informationen über lokale
+        Gegebenheiten und wird dir helfen, ein passendes Datum zu finden, da er
+        über weitere Wettbewerbe in der Gegend Bescheid weiß. Falls es in deiner
+        Nähe keinen WCA Delegierten gibt, wende dich bitte an den Senior
+        Delegierten in deiner Region.
+    paragraph2:
+      #original_hash: f20dd3b
+      title: Erwartete Ausgaben für die Organisation eines Wettbewerbs
+      #original_hash: ab53dda
+      content: >-
+        Die zu erwartenden Ausgaben unterscheiden sich in einzelnen Ländern und
+        werden durch verschiedene Faktoren, wie beispielsweise die Größe des
+        Veranstaltungsortes und viele weitere Gegebenheiten bestimmt. Die Kosten
+        mit Eintrittsgeldern zu decken ist möglich. Trotzdem ist es
+        empfehlenswert nach Sponsoren zu suchen, um die Eintrittspreise so
+        gering wie möglich zu halten. Obwohl WCA Delegierte Freiwillige sind und
+        keinen Lohn erhalten, sollten Organisatoren erwägen ihre Reisekosten zu
+        zahlen.
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: Fristen für die Ankündigung von Wettbewerben
+      #original_hash: c61c6c9
+      content_html: >-
+        Der Wettbewerb sollte mindestens einen Monat vor Beginn angekündigt
+        werden (siehe <a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline
+        8a4++</a>). Wenn es besondere Gründe gibt, die verhindern dass diese
+        Deadline nicht eingehalten werden kann, dürfen Wettbewerbe bis zu zwei
+        Wochen vor Beginn angekündigt werden (im Ermessen des WCA Boards). Es
+        ist sehr empfehlenswert das WCA Board in diesem Fall möglichst
+        frühzeitig zu informieren, um eine spätere Ablehnung des Wettbewerbs zu
+        verhindern.
+    paragraph4:
+      #original_hash: b6dca56
+      title: Abstandsregel
+      #original_hash: b2bc107
+      content1: >-
+        Als generelle Regel werden WCA Wettbewerbe akzeptiert, wenn sie
+        mindestens 200 km oder 26 Tage von jedem anderen Wettbewerb entfernt
+        sind. Das WCA Board sollte einen Wettbewerb überprüfen, wenn die Distanz
+        unter 200 km und die Zeitspanne unter 26 Tagen liegt. Ein Delegierter,
+        der einen Wettbewerb anfragt, der diese Regeln nicht erfüllt, muss
+        weitere Informationen angeben, warum dieser Wettbewerb trotzdem
+        akzeptiert werden soll. Mögliche Gründe, die eine solche Entscheidung
+        beeinflussen sind:
+      list1:
+        #original_hash: 424c134
+        '1': Die beiden Wettbewerbe bieten unterschiedliche Kategorien an.
+        #original_hash: f7bacc5
+        '2': Die beiden Wettbewerbe finden in verschiedenen Ländern statt.
+        #original_hash: 9aa4d96
+        '3': >-
+          In den letzten 12 Monaten gab es weniger als 13 Wettbewerbe in einem
+          Radius von 200km um den Ort des Wettbewerbs.
+      #original_hash: ab65dfb
+      content2: >-
+        Simultane FMC Wettbewerbe dürfen nicht Teil anderer regulärer
+        Wettbewerbe sein:
+      list2:
+        #original_hash: a57b541
+        '1': >-
+          Wenn ein Ort eines solchen Wettbewerbs näher als 200 km von einem
+          anderen regulären Wettbewerb entfernt ist, müssen beide Wettbewerbe
+          entweder 5 Tage auseinanderliegen oder der andere Wettbewerb darf
+          nicht Fewest Moves anbieten.
+    paragraph5:
+      #original_hash: 17d01de
+      title: Teilnehmerlimit
+      #original_hash: 18976be
+      content_html: >-
+        Die Anzahl der Teilnehmer darf für einzelne Kategorien oder für den
+        Wettbewerb begrenzt werden (siehe <a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulation
+        Z4</a>). Wie für alle Regeln in Artikel Z muss der Delegierte die
+        Erlaubnis des Boards erhalten. Teilnehmerlimits sollten umsichtig
+        gesetzt werden und dem erwarteten Interesse von Teilnehmern gerecht
+        werden. Das Limit sollte nicht aus nebensächlichen Gründen niedriger
+        gesetzt werden. Das beabsichtigte Teilnehmerlimit sollte schon bei der
+        Suche nach einem passenden Veranstaltungsort beachtet werden. Das
+        Teilnehmerlimit muss klar und deutlich auf der Wettbewerbsseite
+        angekündigt werden.
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: Verwaltung der Anmeldungen
+      #original_hash: cb13cd0
+      content: >-
+        Anmeldungen müssen nach einem "first come, first serve"-Prinzip
+        verwaltet werden. Das bedeutet, dass die erste Anmeldungen zuerst
+        bearbeitet werden muss. Wenn Eintrittspreise im Voraus bezahlt werden,
+        wird eine Anmeldung als vollständig angesehen, wenn der Teilnehmer diese
+        bezahlt hat. Dies sollte auf der Webseite des Wettbewerbs klar
+        beschrieben werden.
+    paragraph7:
+      #original_hash: e4f1c62
+      title: Verwaltung der Warteliste
+      #original_hash: 81ca3f3
+      content1: >-
+        Wenn das Teilnehmerlimit erreicht wurde, sollte eine Warteliste angelegt
+        werden. Wenn registrierte Teilnehmer absagen, sollten sie mit
+        Teilnehmern von der Warteliste ersetzt werden.
+      #original_hash: 1b2ea79
+      content2: >-
+        Wenn Eintrittsgelder im Voraus bezahlt werden sollen, hat es sich als
+        effizientes Vorgehen erwiesen, freie Plätze dem nächsten Teilnehmer auf
+        der Warteliste anzubieten und ihm eine Frist für die Zahlung des
+        Eintrittspreises zu setzen (z.B. 48 Stunden). Falls diese Frist nicht
+        eingehalten wird oder der Teilnehmer ablehnt, sollte der Platz dem
+        nächsten Teilnehmer auf der Warteliste angeboten werden. Dieser Prozess
+        sollte fortgesetzt werden, bis alle freien Plätze gefüllt sind. Es
+        existieren keine Ausnahmen, die Teilnehmern ermöglichen diesen Prozess
+        zu umgehen.
+      #original_hash: 37bcbd6
+      content3: >-
+        Wenn Teilnehmer sich nicht regulär angemeldet haben, aber am Wettbewerb
+        teilgenommen haben, werden ihre Ergebnisse nachträglich entfernt (wenn
+        ein Teilnehmerlimit vorhanden und erreicht wurde).
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: Aufgaben vor dem Wettbewerb
+      list:
+        #original_hash: c8abb5e
+        '1': >-
+          Bevor der Wettbewerb angekündigt wird, muss ein Zeitplan auf der
+          Webseite veröffentlicht werden. Diese Zeitplan kann später angepasst
+          werden.
+        #original_hash: e93d043
+        '2': >-
+          Teilnehmer sollten in Gruppen eingeteilt werden, Scoresheets sollten
+          gedruckt werden und sollten entsprechend der Gruppeneinteilung
+          sortiert werden. Es ist auch empfehlenswert zumindest für die ersten
+          Runden zu planen, wer in den einzelnen Kategorien scrambeln soll.
+          Scrambler sollten besonders zuverlässig sein.
+    paragraph9:
+      #original_hash: ead44f5
+      title: Aufgaben während des Wettbewerbs
+      #original_hash: ee2e9c6
+      content: >-
+        Die Aufgaben als Organisator sollten vorab mit dem WCA Delegierten
+        besprochen werden. Typische Aufgaben, die auch von anderen zuverlässigen
+        Personen übernommen werden können, sind folgende:
+      list:
+        #original_hash: 03aea46
+        '1': Die Anmeldung verwalten
+        #original_hash: c4388f3
+        '2': Ankündigungen machen
+        #original_hash: 45c78ae
+        '3': Gruppen aufrufen und Scoresheets auslegen
+        #original_hash: 0b31986
+        '4': Scoretaking und Ergebnisse ausdrucken
+        #original_hash: 7ab2d4c
+        '5': Scrambler und Judges aufrufen
+        #original_hash: 52e8316
+        '6': >-
+          Organisatorische Aufgaben bezüglich des Veranstaltungsortes (z.B.
+          Schlüssel oder WLAN)
