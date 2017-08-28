@@ -65,6 +65,9 @@ class Event < ApplicationRecord
       name: self.name,
       format_ids: self.formats.map(&:id),
       can_change_time_limit: self.can_change_time_limit?,
+      timed_event: self.timed_event?,
+      fewest_moves: self.fewest_moves?,
+      multiple_blindfolded: self.multiple_blindfolded?,
     }
   end
 end

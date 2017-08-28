@@ -10,6 +10,19 @@ import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import { rootRender } from 'edit-events'
 
+function attemptResultToString(attemptResult, eventId) {
+  let event = events.byId[eventId];
+  if(event.timed_event) {
+    return `${attemptResult} centiseconds`; // TODO <<<>>>
+  } else if(event.fewest_moves) {
+    return `${attemptResult} moves`;
+  } else if(event.multiple_blindfolded) {
+    return `${attemptResult} points`; // TODO <<<>>>
+  } else {
+    throw new Error(`Unrecognized event type: ${eventId}`);
+  }
+}
+
 class ButtonActivatedModal extends React.Component {
   constructor() {
     super();
@@ -219,10 +232,10 @@ let RoundAttributeComponents = {
       let event = events.byId[wcifEvent.id];
       return <span>Cutoff for {event.name}, Round {roundNumber}</span>;
     },
-    Show({ value: cutoff }) {
+    Show({ value: cutoff, wcifEvent }) {
       let str;
       if(cutoff) {
-        str = `better than or equal to ${cutoff.attemptResult} in ${cutoff.numberOfAttempts}`;
+        str = `better than or equal to ${attemptResultToString(cutoff.attemptResult, wcifEvent.id)} in ${cutoff.numberOfAttempts}`;
       } else {
         str = "-";
       }
@@ -283,7 +296,7 @@ let RoundAttributeComponents = {
       let str = advanceReqToStr(advancementCondition);
       return <span>{str}</span>;
     },
-    Input({ value: advancementCondition, onChange, autoFocus, roundNumber }) {
+    Input({ value: advancementCondition, onChange, autoFocus, roundNumber, wcifEvent }) {
       let typeInput, rankingInput, percentInput, attemptResultInput;
       let onChangeAggregator = () => {
         let type = typeInput.value;
@@ -328,7 +341,7 @@ let RoundAttributeComponents = {
           break;
         case "attemptResult":
           advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
-          helpBlock = `Everyone in round ${roundNumber} with a result better than or equal to ${advancementCondition.level} will advance to round ${roundNumber + 1}.`;
+          helpBlock = `Everyone in round ${roundNumber} with a result better than or equal to ${attemptResultToString(advancementCondition.level, wcifEvent.id)} will advance to round ${roundNumber + 1}.`;
           break;
         default:
           advancementInput = null;
