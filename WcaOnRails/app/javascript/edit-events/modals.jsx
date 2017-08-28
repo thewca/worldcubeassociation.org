@@ -44,7 +44,7 @@ class ButtonActivatedModal extends React.Component {
               onClick={this.open}>
         {this.props.buttonValue}
         <Modal show={this.state.showModal} onHide={this.close}>
-          <form onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>
+          <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>
             {this.props.children}
             <Modal.Footer>
               <Button onClick={this.close} className="pull-left">Close</Button>
@@ -110,14 +110,14 @@ class EditRoundAttribute extends React.Component {
 
   render() {
     let { wcifEvents, wcifEvent, roundNumber } = this.props;
-    let wcifRound = this.getWcifRound();
     let Show = RoundAttributeComponents[this.props.attribute].Show;
     let Input = RoundAttributeComponents[this.props.attribute].Input;
     let Title = RoundAttributeComponents[this.props.attribute].Title;
 
     return (
       <ButtonActivatedModal
-        buttonValue={<Show value={this.getSavedValue()} />}
+        buttonValue={<Show value={this.getSavedValue()} wcifEvent={wcifEvent} />}
+        formClass="form-horizontal"
         onSave={this.onSave}
         reset={this.reset}
         ref={c => this._modal = c}
@@ -241,7 +241,9 @@ let RoundAttributeComponents = {
       }
       return <span>{str}</span>;
     },
-    Input({ value: cutoff, onChange, autoFocus }) {
+    Input({ value: cutoff, onChange, autoFocus, wcifEvent, roundNumber }) {
+      let wcifRound = wcifEvent.rounds[roundNumber - 1];
+
       let numberOfAttemptsInput, attemptResultInput;
       let onChangeAggregator = () => {
         let numberOfAttempts = parseInt(numberOfAttemptsInput.value);
@@ -258,29 +260,45 @@ let RoundAttributeComponents = {
       };
 
       return (
-        <span>
-          <select value={cutoff ? cutoff.numberOfAttempts : 0}
-                  autoFocus={autoFocus}
-                  onChange={onChangeAggregator}
-                  ref={c => numberOfAttemptsInput = c}
-          >
-            <option value={0}>No cutoff</option>
-            <option disabled="disabled">────────</option>
-            <option value={1}>1 attempt</option>
-            <option value={2}>2 attempts</option>
-            <option value={3}>3 attempts</option>
-          </select>
+        <div>
+          <div className="form-group">
+            <label htmlFor="cutoff-round-format-input" className="col-sm-3 control-label">Round format</label>
+            <div className="col-sm-9">
+              <div className="input-group">
+                <select value={cutoff ? cutoff.numberOfAttempts : 0}
+                        autoFocus={autoFocus}
+                        onChange={onChangeAggregator}
+                        className="form-control"
+                        id="cutoff-round-format-input"
+                        ref={c => numberOfAttemptsInput = c}
+                >
+                  <option value={0}>No cutoff</option>
+                  <option disabled="disabled">────────</option>
+                  <option value={1}>Best of 1</option>
+                  <option value={2}>Best of 2</option>
+                  <option value={3}>Best of 3</option>
+                </select>
+                <div className="input-group-addon">
+                  <strong>/ {formats.byId[wcifRound.format].name}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
           {cutoff && (
-            <span>
-              {" "}to get better than or equal to{" "}
-              <input type="number"
-                     value={cutoff.attemptResult}
-                     onChange={onChangeAggregator}
-                     ref={c => attemptResultInput = c}
-              />
-            </span>
+            <div className="form-group">
+              <label htmlFor="cutoff-input" className="col-sm-3 control-label">Cutoff</label>
+              <div className="col-sm-9">
+                <input type="number"
+                       className="form-control"
+                       id="cutoff-input"
+                       value={cutoff.attemptResult}
+                       onChange={onChangeAggregator}
+                       ref={c => attemptResultInput = c}
+                />
+              </div>
+            </div>
           )}
-        </span>
+        </div>
       );
     },
   },
