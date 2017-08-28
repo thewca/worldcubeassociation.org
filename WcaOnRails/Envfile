@@ -9,6 +9,10 @@ group :production do
   variable :SMTP_PASSWORD
 end
 
+group :development do
+  variable :DISABLE_BULLET, :boolean, default: false
+end
+
 # Set WCA_LIVE_SITE to enable Google Analytics
 # and allow all on robots.txt.
 variable :WCA_LIVE_SITE, :boolean, default: false
