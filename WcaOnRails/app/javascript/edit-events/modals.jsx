@@ -283,7 +283,7 @@ let RoundAttributeComponents = {
       let str = advanceReqToStr(advancementCondition);
       return <span>{str}</span>;
     },
-    Input({ value: advancementCondition, onChange, autoFocus }) {
+    Input({ value: advancementCondition, onChange, autoFocus, roundNumber }) {
       let typeInput, rankingInput, percentInput, attemptResultInput;
       let onChangeAggregator = () => {
         let type = typeInput.value;
@@ -304,7 +304,7 @@ let RoundAttributeComponents = {
           case "attemptResult":
             newAdvancementCondition = {
               type: "attemptResult",
-              level: attemptResultInput ? parseInt(attemptResult.value) : 0,
+              level: attemptResultInput ? parseInt(attemptResultInput.value) : 0,
             };
             break;
           default:
@@ -314,41 +314,49 @@ let RoundAttributeComponents = {
         onChange(newAdvancementCondition);
       };
 
+      let advancementInput = null;
+      let helpBlock = null;
+      let advancementType = advancementCondition ? advancementCondition.type : "";
+      switch(advancementType) {
+        case "ranking":
+          advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
+          helpBlock = `The top ${advancementCondition.level} competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
+          break;
+        case "percent":
+          advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
+          helpBlock = `The top ${advancementCondition.level}% of competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
+          break;
+        case "attemptResult":
+          advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
+          helpBlock = `Everyone in round ${roundNumber} with a result better than or equal to ${advancementCondition.level} will advance to round ${roundNumber + 1}.`;
+          break;
+        default:
+          advancementInput = null;
+          break;
+      }
+
       return (
-        <span>
-          <select value={advancementCondition ? advancementCondition.type : ""}
-                  autoFocus={autoFocus}
-                  onChange={onChangeAggregator}
-                  ref={c => typeInput = c}
-          >
-            <option value="">TBA</option>
-            <option disabled="disabled">────────</option>
-            <option value="ranking">Ranking</option>
-            <option value="percent">Percent</option>
-            <option value="attemptResult">Result</option>
-          </select>
+        <div>
+          <div className="form-group">
+            <div className="input-group advancement-condition">
+              <select value={advancementCondition ? advancementCondition.type : ""}
+                      autoFocus={autoFocus}
+                      onChange={onChangeAggregator}
+                      className="form-control"
+                      ref={c => typeInput = c}
+              >
+                <option value="">To be announced</option>
+                <option disabled="disabled">────────</option>
+                <option value="ranking">Ranking</option>
+                <option value="percent">Percent</option>
+                <option value="attemptResult">Result</option>
+              </select>
 
-          {advancementCondition && advancementCondition.type == "ranking" && (
-            <span>
-              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />
-              ranking?
-            </span>
-          )}
-
-          {advancementCondition && advancementCondition.type == "percent" && (
-            <span>
-              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />
-              percent?
-            </span>
-          )}
-
-          {advancementCondition && advancementCondition.type == "attemptResult" && (
-            <span>
-              <input type="number" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />
-              my shirt?
-            </span>
-          )}
-        </span>
+              {advancementInput}
+            </div>
+          </div>
+          {helpBlock}
+        </div>
       );
     },
   },
