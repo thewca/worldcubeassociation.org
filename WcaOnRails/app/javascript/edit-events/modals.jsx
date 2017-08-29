@@ -101,8 +101,40 @@ class RadioGroup extends React.Component {
   }
 }
 
+function findRoundsSharingTimeLimitWithRound(wcifEvents, wcifRound) {
+  let roundsSharingTimeLimit = [];
+  wcifEvents.forEach(otherWcifEvent => {
+    otherWcifEvent.rounds.forEach(otherWcifRound => {
+      if(otherWcifRound == wcifRound || !otherWcifRound.timeLimit) {
+        return;
+      }
+
+      if(otherWcifRound.timeLimit.cumulativeRoundIds.indexOf(wcifRound.id) >= 0) {
+        roundsSharingTimeLimit.push(otherWcifRound);
+      }
+    });
+  });
+  return roundsSharingTimeLimit;
+}
+
+function findRounds(wcifEvents, roundIds) {
+  let wcifRounds = [];
+  wcifEvents.forEach(wcifEvent => {
+    wcifEvent.rounds.forEach(wcifRound => {
+      if(roundIds.indexOf(wcifRound.id) >= 0) {
+        wcifRounds.push(wcifRound);
+      }
+    });
+  });
+  return wcifRounds;
+}
+
 class EditRoundAttribute extends React.Component {
   componentWillMount() {
+    this.reset();
+  }
+
+  componentWillReceiveProps() {
     this.reset();
   }
 
@@ -120,7 +152,33 @@ class EditRoundAttribute extends React.Component {
   }
 
   onSave = () => {
-    this.getWcifRound()[this.props.attribute] = this.state.value;
+    let wcifRound = this.getWcifRound();
+    wcifRound[this.props.attribute] = this.state.value;
+
+    // This is gross. timeLimit is special because of cross round cumulative time limits.
+    // If you set a time limit for 3x3x3 round 1 shared with 2x2x2 round 1, then we need
+    // to make sure the same timeLimit gets set for both of the rounds.
+    if(this.props.attribute == "timeLimit") {
+      let timeLimit = this.state.value;
+
+      // First, remove this round from all other rounds that previously shared
+      // a time limit with this round.
+      findRoundsSharingTimeLimitWithRound(this.props.wcifEvents, wcifRound).forEach(otherWcifRound => {
+        let index = otherWcifRound.timeLimit.cumulativeRoundIds.indexOf(wcifRound.id);
+        if(index < 0) {
+          throw new Error();
+        }
+        otherWcifRound.timeLimit.cumulativeRoundIds.splice(index, 1);
+      });
+
+      // Second, clobber the time limits for all rounds that this round now shares a time limit with.
+      if(timeLimit) {
+        findRounds(this.props.wcifEvents, timeLimit.cumulativeRoundIds).forEach(wcifRound => {
+          wcifRound.timeLimit = timeLimit;
+        });
+      }
+    }
+
     this._modal.close();
     rootRender();
   }
@@ -186,7 +244,9 @@ let RoundAttributeComponents = {
         // Cross round cumulative time limits may not include other rounds of
         // the same event.
         // See https://github.com/thewca/wca-regulations/issues/457.
-        if(wcifEvent == otherWcifEvent) {
+        let otherEvent = events.byId[otherWcifEvent.id];
+        let canChangeTimeLimit = otherEvent.can_change_time_limit;
+        if(!canChangeTimeLimit || wcifEvent == otherWcifEvent) {
           return;
         }
         otherWcifRounds = otherWcifRounds.concat(otherWcifEvent.rounds.filter(r => r != wcifRound));
@@ -228,8 +288,8 @@ let RoundAttributeComponents = {
       } else {
         let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);
         description = (<span>
-          This round has a cross round cumulative time limit, see
-          guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>.
+          This round has a cross round cumulative time limit (see
+          guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>).
           This means that competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
           of their solves in this round ({wcifRound.id})
           {" "}<strong>shared with</strong>:
@@ -270,19 +330,32 @@ let RoundAttributeComponents = {
           {timeLimit.cumulativeRoundIds.length >= 1 && (
             <div className="row">
               <div className="col-sm-offset-2 col-sm-10">
-                {otherWcifRounds.map(wcifRound => {
-                  let roundId = wcifRound.id;
-                  return (
-                    <label key={roundId}>
-                      <input type="checkbox"
-                             value={roundId}
-                             checked={timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0}
-                             ref={c => roundCheckboxes.push(c) }
-                             onChange={onChangeAggregator} />
-                      {roundIdToString(roundId)}
-                    </label>
-                  );
-                })}
+                <ul className="list-unstyled">
+                  {otherWcifRounds.map(wcifRound => {
+                    let roundId = wcifRound.id;
+                    let eventId = roundId.split("-")[0];
+                    let event = events.byId[eventId];
+                    let checked = timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0;
+                    let eventAlreadySelected = timeLimit.cumulativeRoundIds.find(roundId => roundId.split("-")[0] == eventId);
+                    let disabled = !checked && eventAlreadySelected;
+                    let disabledReason = disabled && `Cannot select this round because you've already selected a round with event ${event.name}`;
+                    return (
+                      <li key={roundId}>
+                        <div className="checkbox">
+                          <label title={disabledReason}>
+                            <input type="checkbox"
+                                   value={roundId}
+                                   checked={checked}
+                                   disabled={disabled}
+                                   ref={c => roundCheckboxes.push(c) }
+                                   onChange={onChangeAggregator} />
+                            {roundIdToString(roundId)}
+                          </label>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           )}
