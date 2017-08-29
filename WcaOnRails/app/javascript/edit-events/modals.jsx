@@ -4,14 +4,31 @@ import Modal from 'react-bootstrap/lib/Modal'
 import Radio from 'react-bootstrap/lib/Radio'
 import Button from 'react-bootstrap/lib/Button'
 import Checkbox from 'react-bootstrap/lib/Checkbox'
-import FormGroup from 'react-bootstrap/lib/FormGroup'
 
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import { rootRender } from 'edit-events'
 
+function roundIdToString(roundId) {
+  let [ eventId, roundNumber ] = roundId.split("-");
+  roundNumber = parseInt(roundNumber);
+  let event = events.byId[eventId];
+  return `${event.name}, Round ${roundNumber}`;
+}
+
 function centisecondsToString(centiseconds) {
-  return `${centiseconds / 100} seconds`; // TODO <<< >>>
+  const seconds = centiseconds / 100;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+
+  // TODO <<< >>>
+  if(hours >= 1) {
+    return `${hours.toFixed(2)} hours`;
+  } else if(minutes >= 1) {
+    return `${minutes.toFixed(2)} minutes`;
+  } else {
+    return `${seconds.toFixed(2)} seconds`;
+  }
 }
 
 function attemptResultToString(attemptResult, eventId) {
@@ -70,7 +87,7 @@ class RadioGroup extends React.Component {
 
   render() {
     return (
-      <FormGroup ref={c => this.formGroup = c}>
+      <div ref={c => this.formGroup = c}>
         {this.props.children.map(child => {
           return React.cloneElement(child, {
             name: this.props.name,
@@ -79,7 +96,7 @@ class RadioGroup extends React.Component {
             onChange: this.props.onChange,
           });
         })}
-      </FormGroup>
+      </div>
     );
   }
 }
@@ -114,6 +131,7 @@ class EditRoundAttribute extends React.Component {
 
   render() {
     let { wcifEvents, wcifEvent, roundNumber } = this.props;
+    let wcifRound = this.getWcifRound();
     let Show = RoundAttributeComponents[this.props.attribute].Show;
     let Input = RoundAttributeComponents[this.props.attribute].Input;
     let Title = RoundAttributeComponents[this.props.attribute].Title;
@@ -127,7 +145,7 @@ class EditRoundAttribute extends React.Component {
         ref={c => this._modal = c}
       >
         <Modal.Header closeButton>
-          <Modal.Title><Title wcifEvent={wcifEvent} roundNumber={roundNumber} /></Modal.Title>
+          <Modal.Title><Title wcifRound={wcifRound} /></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Input value={this.state.value} wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} onChange={this.onChange} autoFocus />
@@ -139,12 +157,11 @@ class EditRoundAttribute extends React.Component {
 
 let RoundAttributeComponents = {
   timeLimit: {
-    Title({ wcifEvent, roundNumber }) {
-      let event = events.byId[wcifEvent.id];
-      return <span>Time limit for {event.name}, Round {roundNumber}</span>;
+    Title({ wcifRound }) {
+      return <span>Time limit for {roundIdToString(wcifRound.id)}</span>;
     },
     Show({ value: timeLimit }) {
-      let timeStr = `${(timeLimit.centiseconds / 100 / 60).toFixed(2)} minutes`;
+      let timeStr = centisecondsToString(timeLimit.centiseconds);
       let str;
       switch(timeLimit.cumulativeRoundIds.length) {
         case 0:
@@ -165,8 +182,14 @@ let RoundAttributeComponents = {
       let format = formats.byId[wcifRound.format];
 
       let otherWcifRounds = [];
-      wcifEvents.forEach(wcifEvent => {
-        otherWcifRounds = otherWcifRounds.concat(wcifEvent.rounds.filter(r => r != wcifRound));
+      wcifEvents.forEach(otherWcifEvent => {
+        // Cross round cumulative time limits may not include other rounds of
+        // the same event.
+        // See https://github.com/thewca/wca-regulations/issues/457.
+        if(wcifEvent == otherWcifEvent) {
+          return;
+        }
+        otherWcifRounds = otherWcifRounds.concat(otherWcifEvent.rounds.filter(r => r != wcifRound));
       });
 
       let centisInput, cumulativeInput, cumulativeRadio;
@@ -195,7 +218,7 @@ let RoundAttributeComponents = {
 
       let description = null;
       if(timeLimit.cumulativeRoundIds.length === 0) {
-        description = `Competitors have ${timeLimit.centiseconds} centiseconds for each of their solves.`;
+        description = `Competitors have ${centisecondsToString(timeLimit.centiseconds)} for each of their solves.`;
       } else if(timeLimit.cumulativeRoundIds.length === 1) {
         description = (<span>
           Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
@@ -205,19 +228,22 @@ let RoundAttributeComponents = {
       } else {
         let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);
         description = (<span>
-          Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
-          of their solves in this round
-          {" "}<strong>and round(s) {otherSelectedRoundIds.join(", ")}</strong>.
-          This is called a cross round cumulative time limit, see
+          This round has a cross round cumulative time limit, see
           guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>.
+          This means that competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
+          of their solves in this round ({wcifRound.id})
+          {" "}<strong>shared with</strong>:
+          <ul>
+            {otherSelectedRoundIds.map(roundId => <li key={roundId}>{roundIdToString(roundId)}</li>)}
+          </ul>
         </span>);
       }
 
       return (
         <div>
           <div className="form-group">
-            <label htmlFor="time-limit-input" className="col-sm-3 control-label">Time</label>
-            <div className="col-sm-9">
+            <label htmlFor="time-limit-input" className="col-sm-2 control-label">Time</label>
+            <div className="col-sm-10">
               <input type="number"
                      id="time-limit-input"
                      className="form-control"
@@ -228,8 +254,8 @@ let RoundAttributeComponents = {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-sm-offset-3 col-sm-9">
+          <div className="form-group">
+            <div className="col-sm-offset-2 col-sm-10">
               <RadioGroup value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
                           name="cumulative-radio"
                           onChange={onChangeAggregator}
@@ -243,7 +269,7 @@ let RoundAttributeComponents = {
 
           {timeLimit.cumulativeRoundIds.length >= 1 && (
             <div className="row">
-              <div className="col-sm-offset-3 col-sm-9">
+              <div className="col-sm-offset-2 col-sm-10">
                 {otherWcifRounds.map(wcifRound => {
                   let roundId = wcifRound.id;
                   return (
@@ -253,7 +279,7 @@ let RoundAttributeComponents = {
                              checked={timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0}
                              ref={c => roundCheckboxes.push(c) }
                              onChange={onChangeAggregator} />
-                      {roundId}
+                      {roundIdToString(roundId)}
                     </label>
                   );
                 })}
@@ -262,16 +288,15 @@ let RoundAttributeComponents = {
           )}
 
           <div className="row">
-            <span className="col-sm-offset-3 col-sm-9">{description}</span>
+            <span className="col-sm-offset-2 col-sm-10">{description}</span>
           </div>
         </div>
       );
     },
   },
   cutoff: {
-    Title({ wcifEvent, roundNumber }) {
-      let event = events.byId[wcifEvent.id];
-      return <span>Cutoff for {event.name}, Round {roundNumber}</span>;
+    Title({ wcifRound }) {
+      return <span>Cutoff for {roundIdToString(wcifRound.id)}</span>;
     },
     Show({ value: cutoff, wcifEvent }) {
       let str;
@@ -344,12 +369,12 @@ let RoundAttributeComponents = {
     },
   },
   advancementCondition: {
-    Title({ wcifEvent, roundNumber }) {
-      let event = events.byId[wcifEvent.id];
-      return <span>Requirement to advance from {event.name} round {roundNumber} to round {roundNumber + 1}</span>;
+    Title({ wcifRound }) {
+      return <span>Requirement to advance past {roundIdToString(wcifRound.id)}</span>;
     },
     Show({ value: advancementCondition }) {
       function advanceReqToStr(advancementCondition) {
+        // TODO <<< >>>
         return advancementCondition ? `${advancementCondition.type} ${advancementCondition.level}` : "-";
       }
       let str = advanceReqToStr(advancementCondition);
@@ -410,21 +435,23 @@ let RoundAttributeComponents = {
       return (
         <div>
           <div className="form-group">
-            <div className="input-group advancement-condition">
-              <select value={advancementCondition ? advancementCondition.type : ""}
-                      autoFocus={autoFocus}
-                      onChange={onChangeAggregator}
-                      className="form-control"
-                      ref={c => typeInput = c}
-              >
-                <option value="">To be announced</option>
-                <option disabled="disabled">────────</option>
-                <option value="ranking">Ranking</option>
-                <option value="percent">Percent</option>
-                <option value="attemptResult">Result</option>
-              </select>
+            <div className="col-sm-12">
+              <div className="input-group advancement-condition">
+                <select value={advancementCondition ? advancementCondition.type : ""}
+                        autoFocus={autoFocus}
+                        onChange={onChangeAggregator}
+                        className="form-control"
+                        ref={c => typeInput = c}
+                >
+                  <option value="">To be announced</option>
+                  <option disabled="disabled">────────</option>
+                  <option value="ranking">Ranking</option>
+                  <option value="percent">Percent</option>
+                  <option value="attemptResult">Result</option>
+                </select>
 
-              {advancementInput}
+                {advancementInput}
+              </div>
             </div>
           </div>
           {helpBlock}
