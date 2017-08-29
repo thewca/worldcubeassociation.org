@@ -104,7 +104,8 @@
 
 <div id="delegate" class="form-group delegate-selector">
   <%= label_tag(t('layouts.navigation.delegate')) %>
-  <input id="delegate" name="delegate" class="wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_delegates wca-autocomplete-users_search"></input>
+  <%= text_field_tag "delegate", params[:delegate], class: "wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_delegates wca-autocomplete-users_search",
+                                 data: { data: User.where(id: params[:delegate]).to_json } %>
 </div>
 
 <div id="display" class="form-group">
@@ -127,8 +128,6 @@
 </div>
 
 <script>
-  $('#<%= params[:state] %>').button('toggle');
-
   $('#present').on('click', function() {
     $('#past .caption').html("<%= t('competitions.index.past') %>");
   });
@@ -154,15 +153,11 @@
     }
   });
 
-  $('#state .btn:not(#custom)').on('click', function() {
-    $('.custom-control').hide();
+  $('#state').on('change', function(event) {
+    $('.custom-control').toggle(event.target === $('#state_custom')[0]);
   });
 
-  $('#custom').on('click', function() {
-    $('.custom-control').show();
-  });
-
-  $('#state .btn.active').trigger('click');
+  $('#<%= params[:state] %>').button('toggle');
 
   $('#display-<%= @display %>').button('toggle');
 </script>
