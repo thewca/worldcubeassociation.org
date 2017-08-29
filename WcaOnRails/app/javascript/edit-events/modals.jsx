@@ -10,10 +10,14 @@ import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import { rootRender } from 'edit-events'
 
+function centisecondsToString(centiseconds) {
+  return `${centiseconds / 100} seconds`; // TODO <<< >>>
+}
+
 function attemptResultToString(attemptResult, eventId) {
   let event = events.byId[eventId];
   if(event.timed_event) {
-    return `${attemptResult} centiseconds`; // TODO <<<>>>
+    return centisecondsToString(attemptResult);
   } else if(event.fewest_moves) {
     return `${attemptResult} moves`;
   } else if(event.multiple_blindfolded) {
@@ -188,42 +192,79 @@ let RoundAttributeComponents = {
         };
         onChange(newTimeLimit);
       };
-      return (
-        <span>
-          centis
-          <input type="number"
-                 autoFocus={autoFocus}
-                 ref={c => centisInput = c}
-                 value={timeLimit.centiseconds}
-                 onChange={onChangeAggregator} />
 
-          <RadioGroup value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
-                      name="cumulative-radio"
-                      onChange={onChangeAggregator}
-                      ref={c => cumulativeRadio = c}
-          >
-            <Radio value="per-solve" inline>Per Solve</Radio>
-            <Radio value="cumulative" inline>Cumulative</Radio>
-          </RadioGroup>
+      let description = null;
+      if(timeLimit.cumulativeRoundIds.length === 0) {
+        description = `Competitors have ${timeLimit.centiseconds} centiseconds for each of their solves.`;
+      } else if(timeLimit.cumulativeRoundIds.length === 1) {
+        description = (<span>
+          Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
+          of their solves in this round. This is called a cumulative time limit, defined in
+          regulation <a href="https://www.worldcubeassociation.org/regulations/#A1a2" target="_blank">A1a2</a>.
+        </span>);
+      } else {
+        let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);
+        description = (<span>
+          Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
+          of their solves in this round
+          {" "}<strong>and round(s) {otherSelectedRoundIds.join(", ")}</strong>.
+          This is called a cross round cumulative time limit, see
+          guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>.
+        </span>);
+      }
+
+      return (
+        <div>
+          <div className="form-group">
+            <label htmlFor="time-limit-input" className="col-sm-3 control-label">Time</label>
+            <div className="col-sm-9">
+              <input type="number"
+                     id="time-limit-input"
+                     className="form-control"
+                     autoFocus={autoFocus}
+                     ref={c => centisInput = c}
+                     value={timeLimit.centiseconds}
+                     onChange={onChangeAggregator} />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-offset-3 col-sm-9">
+              <RadioGroup value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
+                          name="cumulative-radio"
+                          onChange={onChangeAggregator}
+                          ref={c => cumulativeRadio = c}
+              >
+                <Radio value="per-solve" inline>Per Solve</Radio>
+                <Radio value="cumulative" inline>Cumulative</Radio>
+              </RadioGroup>
+            </div>
+          </div>
 
           {timeLimit.cumulativeRoundIds.length >= 1 && (
-            <span>
-              {otherWcifRounds.map(wcifRound => {
-                let roundId = wcifRound.id;
-                return (
-                  <label key={roundId}>
-                    <input type="checkbox"
-                           value={roundId}
-                           checked={timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0}
-                           ref={c => roundCheckboxes.push(c) }
-                           onChange={onChangeAggregator} />
-                    {roundId}
-                  </label>
-                );
-              })}
-            </span>
+            <div className="row">
+              <div className="col-sm-offset-3 col-sm-9">
+                {otherWcifRounds.map(wcifRound => {
+                  let roundId = wcifRound.id;
+                  return (
+                    <label key={roundId}>
+                      <input type="checkbox"
+                             value={roundId}
+                             checked={timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0}
+                             ref={c => roundCheckboxes.push(c) }
+                             onChange={onChangeAggregator} />
+                      {roundId}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
           )}
-        </span>
+
+          <div className="row">
+            <span className="col-sm-offset-3 col-sm-9">{description}</span>
+          </div>
+        </div>
       );
     },
   },
