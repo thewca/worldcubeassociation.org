@@ -45,6 +45,7 @@
 //= require moment/ro.js
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
+//= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
 //= require autosize
 //= require jquery_plugins

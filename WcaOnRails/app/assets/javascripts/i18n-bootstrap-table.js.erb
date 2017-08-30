@@ -1,0 +1,21 @@
+/*
+  This file is a workaround for bootstrap table which use the long version of
+  locale codes, whereas we use either short or long.
+  See here for the discussion: https://github.com/thewca/worldcubeassociation.org/issues/1124.
+*/
+var wcaLocaleCodes = <%= raw(JSON.pretty_generate(I18n.available_locales)) %>;
+
+$.each($.fn.bootstrapTable.locales, function(locale, value) {
+  if (locale.length > 2) {
+    // We do it this way because it's easier to get the short code compared to "guessing" the long code
+    var short_code = locale.substring(0, 2);
+    $.fn.bootstrapTable.locales[short_code] = value;
+  }
+});
+
+var missing = _.difference(wcaLocaleCodes, Object.keys($.fn.bootstrapTable.locales));
+
+// Alias missing locales to English (otherwise it defaults to Chinese)
+$.each(missing, function(index, locale) {
+  $.fn.bootstrapTable.locales[locale] = $.fn.bootstrapTable.locales['en'];
+});
