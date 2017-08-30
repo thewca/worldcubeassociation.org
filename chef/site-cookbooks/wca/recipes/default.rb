@@ -346,10 +346,6 @@ end
 execute "sed -i -r 's/(; *)?max_input_vars = .*/max_input_vars = #{PHP_MAX_INPUT_VARS}/g' /etc/php5/fpm/php.ini" do
   not_if "grep '^max_input_vars = #{PHP_MAX_INPUT_VARS}' /etc/php5/fpm/php.ini"
 end
-# Install pear mail
-# http://www.markstechstuff.com/2009/04/installing-pear-mail-for-php-on-ubuntu.html
-package "php-pear"
-execute "pear install mail Net_SMTP Auth_SASL mail_mime"
 # Install mysqli for php. See:
 #  http://stackoverflow.com/a/22525205
 package "php5-mysqlnd"
