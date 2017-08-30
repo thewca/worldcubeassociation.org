@@ -68,7 +68,7 @@ EOL
 fi
 
 if [ "$environment" != "development" ]; then
-  # Download database export and other secrets that are required to provision a new server.
+  # Download secrets that are required to provision a new server.
   # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
   # software-admins@worldcubeassociation.org if you need access.
   echo "Downloading secrets from worldcubeassociation.org..."
