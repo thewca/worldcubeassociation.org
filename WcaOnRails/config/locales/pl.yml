@@ -6,6 +6,8 @@ pl:
     XE: Wiele Państw (Europa)
     #original_hash: 459f987
     XS: Wiele Państw (Ameryka Południowa)
+    #original_hash: 374ac0d
+    XM: Wiele Państw (Ameryki)
     #original_hash: 918c53a
     MO: Makau
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ pl:
     #original_hash: 4e8bd04
     KR: Korea
   continents:
+    #original_hash: c2994db
+    Multiple Continents: Wiele Państw
     #original_hash: 1d35114
-    AfR: Afryka
+    Africa: Afryka
     #original_hash: a173e72
-    AsR: Azja
+    Asia: Azja
     #original_hash: 576347e
-    ER: Europa
+    Europe: Europa
     #original_hash: 247ce5d
-    NAR: Ameryka Północna
+    North America: Ameryka Północna
     #original_hash: 3642950
-    OcR: Oceania
+    Oceania: Oceania
     #original_hash: b1ffb4c
-    SAR: Ameryka Południowa
+    South America: Ameryka Południowa
   events:
     #original_hash: 3732390
     '222': Kostka 2x2x2
@@ -539,11 +543,12 @@ pl:
           zawierającym protokół http(s).
         #original_hash: 9965635
         registration_open: 'Zauważ: Daty startowa i końcowa rejestracji są w czasie UTC.'
-        #original_hash: f688881
+        #original_hash: 36963bc
         remarks: >-
           Informacje które chcesz przesłać Zarządowi. Na przykład powody, dla
           których zawody zostały zgłoszone z mniejszym niż miesięczne
-          wyprzedzeniem, jeśli tak było w tej sytuacji.
+          wyprzedzeniem, jeśli tak było w tej sytuacji. Prosimy o wypełnienie w
+          języku angielskim!
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
@@ -584,8 +589,10 @@ pl:
           limitem zawodników.
         #original_hash: b9bc84d
         competitor_limit: Liczba zawodników dopuszczona do udziału w zawodach.
-        #original_hash: 32951f9
-        competitor_limit_reason: Jaki jest powód wyznaczenia limitu zawodników dla tych zawodów?
+        #original_hash: 4bd7102
+        competitor_limit_reason: >-
+          Jaki jest powód wyznaczenia limitu zawodników dla tych zawodów?
+          Prosimy o wypełnienie w języku angielskim!
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
@@ -863,7 +870,9 @@ pl:
       #original_hash: 4fd2a7f
       db_export: Eksport Bazy Danych
       #original_hash: 1fa73f3
-      regulations: Regulacje
+      regulations: Regulamin
+      #original_hash: 6bce1b5
+      about_regulations: O Regulaminie
       #original_hash: 141d1d7
       guidelines: Wytyczne
       #original_hash: c4622c3
@@ -1324,6 +1333,8 @@ pl:
     register: Zarejestruj się!
     #original_hash: f484f15
     refund: Zwrot Płatności
+    #original_hash: dc8d7d2
+    refund_confirmation: 'Czy jesteś pewien, że chcesz zwrócić tę płatność?'
     #original_hash: a9af643
     update: Zaktualizuj Rejestrację
     #original_hash: f6fdbe4
@@ -2015,9 +2026,11 @@ pl:
             WCA</a>. Nadzór WCA jest wymagany, w celu uczynienia zawodów
             oficjalnie zatwierdzonymi przez organizację. Delegat pomoże w
             pomyślnej organizacji zawodów.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
             Spójrz na <a target='_blank'
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>Wytyczne
+            Dla Organizatora Zawodów WCA</a> oraz <a target='_blank'
             href='https://www.cubingusa.com/cguide.php'>ten poradnik</a> w celu
             uzyskania dalszych informacji. (W przypadku jakiegokolwiek konfliktu
             pomiędzy informacjami prezentowanymi w tym dodatkowym źródle wiedzy
@@ -2562,3 +2575,205 @@ pl:
         posts: Nie znaleziono żadnych postów dla
         #original_hash: 76a6bf1
         regulations_and_guidelines: 'Nie znaleziono żadnych punktów Regulaminu, ani Wytycznych dla'
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: O Regulaminie
+    panel1:
+      #original_hash: 1fa73f3
+      title: Regulamin
+      #original_hash: 557095b
+      content1_html: >-
+        Wszystkie zawody muszą być zgodne z <a target='_blank'
+        href='/regulations/'>regulaminem WCA</a>. Ważne jest, aby zawodnicy
+        przeczytali go przed wzięciem udziału w swoich pierwszych zawodach.
+      #original_hash: 4296902
+      content2_html: >-
+        Regulamin WCA jest uzupełniany przez  <a
+        href="/regulations/guidelines.html">Wytyczne WCA</a>, które zawierają
+        dodatkowe doprecyzowania i wyjaśnienia.
+    panel2:
+      #original_hash: 8ad8302
+      title: Tłumaczenia
+      #original_hash: 7477d9b
+      content1_html: >-
+        Regulamin WCA jest dostępny w kilku językach poza angielskim dzięki
+        pracy członków WCA: <a
+        href="/regulations/translations/">Tłumaczenia</a>.
+      #original_hash: 6add7a3
+      content2_html: >-
+        <strong>Ważne:</strong> Mimo że tłumaczenia są bardzo pomocne, nie są
+        one oficjalne. Na zawodach obowiązuje angielska wersja Regulaminu.
+    panel3:
+      #original_hash: 234fd4d
+      title: Regulamin FAQ
+      #original_hash: 8afba93
+      content1_html: >-
+        <a href="/faq">Sekcja FAQ</a> odpowiada na kilka najczęściej zadawanych
+        pytań odnośnie Regulaminu WCA.
+    panel4:
+      #original_hash: ad5f6e7
+      title: Wytyczne Dla Organizatora
+      #original_hash: 9bbdf16
+      content1_html: >-
+        Jeżeli jesteś zainteresowany organizacją zawodów lub jesteś w trakcie
+        ich planowania, prosimy o przeczytanie naszych <a
+        href="/organizer-guidelines">Wytycznych Dla Organizatora</a>.
+      #original_hash: 5016669
+      content2_html: >-
+        Ten dokument zawiera ważne informacje i powinien być przeczytany przez
+        każdego organizatora zawodów.
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: Wytyczne Dla Organizatora Zawodów WCA
+    paragraph1:
+      #original_hash: e5f5329
+      title: Jak zorganizować zawody
+      #original_hash: 3dbbbee
+      content: >-
+        Wszystkie zawody WCA muszą posiadać Delegata WCA, który będzie
+        nadzorował ich przebieg. Jeżeli jesteś zainteresowany organizacją
+        włąsnych zawodów, prosimy o skontaktowanie się z najbliższym Delegatem
+        WCA. On będzie w stanie udzielić ci większej ilości informacji na temat
+        lokalnych praktyk oraz pomóc w wybraniu odpowiedniej daty, ponieważ wie
+        on, czy w tym samym obrębie czasu są zaplanowane inne zawody. Jeżeli w
+        twoim bliskim rejonie nie ma Delegata WCA, prosimy o kontakt ze Starszym
+        Delegatem dla twojego obszaru.
+    paragraph2:
+      #original_hash: f20dd3b
+      title: Oczekiwane wydatki związane z organizacją zawodów
+      #original_hash: ab53dda
+      content: >-
+        Oczekiwane wydatki różnią się znacznie w zależności od kraju i są
+        określone przez kilka czynników, takich jak wielkość miejsca zawodów
+        oraz inne, bardziej ogólne warunki. Pokrycie wszystkich wydatków jest
+        możliwe za pomocą opłaty wpisowej. Jednakowoż, aby była ona jak
+        najniższa, szukanie sponsorów jest wysoce wskazane. Mimo że Delegaci WCA
+        pracują na zasadzie wolontariatu, tym samym nie otrzymując żadnego
+        wynagrodzenia, organizatorzy powinni rozważyć opłacenie kosztów ich
+        podróży.
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: Terminy ogłoszenia zawodów
+      #original_hash: c61c6c9
+      content_html: >-
+        Zawody powinny być ogłoszone z co najmniej miesięcznym wyprzedzeniem
+        (zobacz <a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Wytyczną
+        8a4++</a>). Jeżeli istnieją specjalne powody uniemożliwiające spełnienie
+        tej granicy czasowej, zawody mogą być ogłoczone minimalnie dwa tygodnie
+        przed ich rozpoczęciem, według uznania Zarządu WCA. Jest wysoce
+        wskazanym, aby poinformować Zarząd WCA o tych powowach tak szybko jak to
+        możliwe, w celu uniknięcia odmowy przeprowadzenia zawodów.
+    paragraph4:
+      #original_hash: b6dca56
+      title: Polityka odległości
+      #original_hash: b2bc107
+      content1: "W ogólnym przypadku, zawody WCA będą zaakceptowane, jeżeli są co najmniej 200 km lub 26 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 200 km oraz w przeciągu mniej niż\_26 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąz powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
+      list1:
+        #original_hash: 424c134
+        '1': Na obu zawodach rozgrywają się inne konkurencje.
+        #original_hash: f7bacc5
+        '2': Zawody mają miejsce w innych państwach.
+        #original_hash: 9aa4d96
+        '3': >-
+          W przeciągu ostatnich 12 miesięcy miało miejsce mniej niż 13 zawodów w
+          promieniu 200 km od danych zawodów.
+      #original_hash: ab65dfb
+      content2: 'Równoległe zawody FMC nie mogą być częścią żadnych normalnych zawodów:'
+      list2:
+        #original_hash: a57b541
+        '1': >-
+          Jeżeli jakakolwiej z lokalizacji tychże zawodów jest w odległości
+          mniejszej niż 200 km od innych normalnych zadowów, to powinny być
+          oddzielone o co najmniej 5 dni lub drugie z nich nie mogą mieć
+          konkurencji FM.
+    paragraph5:
+      #original_hash: 17d01de
+      title: Limity zawodników
+      #original_hash: 18976be
+      content_html: >-
+        Liczba zawodników może być ograniczona w danej konkurencji lub na danych
+        zawodach (zobacz <a
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regulację
+        Z4</a>). Jak dla każdej regulacji artykułu Z, delegat musi dostać
+        pozwolenie na ograniczenie liczby zawodników przez Zarząd WCA. Limity
+        zawodników powinny być wybierane rozsądnie i zgodnie z oczekiwanym
+        zainteresowaniem zawodników. Ilość zawodników nie powinna być
+        zmniejszana z błahych powowód. Zamierzony limit powinien być wzięty pod
+        uwagę podczas szukania odpowiedniego miejsca zawodów. Limit zawodników
+        musi być jasno określony na stronie zawodów WCA.
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: Obsługa rejestracji
+      #original_hash: cb13cd0
+      content: >-
+        Rejestracje muszą być przeprowadzane na zasadzie "kto pierwszy ten
+        lepszy", co oznacza, że najwcześniejsza kompletna rejestracja musi być
+        traktowana jako pierwsza. Jeżeli opłata wpisowa jest płacona z góry,
+        rejestracja jest uznana za kompletną, w momencie gdy cała opłata
+        zostanie uiszczona. Powinno być to jasno określone wśród instrukcji
+        zapłaty na stronie zawodów.
+    paragraph7:
+      #original_hash: e4f1c62
+      title: Zarządzanie listą oczekujących
+      #original_hash: 81ca3f3
+      content1: >-
+        W momencie gdy limit zawodników zostanie osiągnięty, powinna zostać
+        otwarta lista oczekujących. Gdy zarejestrowani i zaakceptowani zawodnicy
+        anulują swoją rejestrację, powinni zostać zastąpieni kolejnymi
+        zawodnikami z listy oczekujących.
+      #original_hash: 1b2ea79
+      content2: >-
+        Jeżeli opłata wpisowa jest płatna z góry, skutecznym podejściem jest
+        zaoferowanie wolnego miejsca następnemu zawodnikowi z listy oczekujących
+        i ustalenie terminu, przed którym wpisowe powinno zostać uiszczone w
+        celu ukończenia rejestracji (np. 48 godzin). W prypadku, gdy płatność
+        nie zostanie zrealizowana na czas lub zawodnik rezygnuje, dane wolne
+        miejsce powinno być zaoferowane kolejnej osobie z listy oczekujących.
+        Ten proces powinien być kontunuowany, aż do momentu zapełnienia się
+        wszystkich wolnych miejsc. Nie ma wyjątków, które pozwalałyby zawodnikom
+        na ominięcie listy oczekujących.
+      #original_hash: 37bcbd6
+      content3: >-
+        Jeżeli zawodnicy nie przeszli przez standardowy proces rejestracji, ale
+        pomimo tego uczestniczyli w zawodach, ich wyniki zostaną usunięte z mocą
+        wsteczną (zakładając, że istniał limit zawodników i został osiągnięty).
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: Zadania przed zawodami
+      list:
+        #original_hash: c8abb5e
+        '1': >-
+          Przed ogłoszeniem zawodów wymaga się, aby harmonogram został
+          opublikowany na stronie zawodów. Ten harmonogram może zostać
+          skorygowany później.
+        #original_hash: e93d043
+        '2': >-
+          Zawodnicy zostali podzieleni na grupy, karty wyników muszą być
+          wydrukowane i powinny być rozdzielone zgodnie z tymże podziałem grup.
+          Zaleca się również zalanowanie kto będzie odpowiedzialny za mieszanie
+          każdej z grup w każdej konkurencji, co najmniej dla pierwszych rund.
+          Mieszacze powinni być godni zaufania.
+    paragraph9:
+      #original_hash: ead44f5
+      title: Zadania podczas zawodów
+      #original_hash: ee2e9c6
+      content: >-
+        Zadania, które musi realizować organizator podczas zawodów, powinny być
+        przedyskutowane z Delegatem WCA. Typowymi czynnościami są (mogą być
+        powierzone innym zaufanym osobom):
+      list:
+        #original_hash: 03aea46
+        '1': Zarządzanie stanowiskiem rejestracyjnym
+        #original_hash: c4388f3
+        '2': Ogłaszanie informacji
+        #original_hash: 45c78ae
+        '3': Wzywanie grup oraz rozkładanie kart wyników
+        #original_hash: 0b31986
+        '4': Rejestrowanie wyników oraz drukowanie rezultatów rund
+        #original_hash: 7ab2d4c
+        '5': Szukanie mieszaczy oraz sędziów
+        #original_hash: 52e8316
+        '6': >-
+          Zajmowanie się wszystkimi sprawami organizacyjnymi dotyczącymi miejsca
+          zawodów (np. kluczami oraz Wi-Fi)
