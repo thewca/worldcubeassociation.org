@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'shellwords'
 require 'securerandom'
 
@@ -166,6 +167,14 @@ end
 # Use HTTPS in non development mode
 https = !node.chef_environment.start_with?("development")
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
+
+# If /etc/ssh is not a symlink, back it up first.
+unless File.symlink?("/etc/ssh")
+  FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
+end
+link "/etc/ssh" do
+  to "#{repo_root}/secrets/etc_ssh-#{server_name}"
+end
 
 #### Let's Encrypt with acme.sh
 if https
