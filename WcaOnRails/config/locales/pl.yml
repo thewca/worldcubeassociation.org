@@ -2668,7 +2668,7 @@ pl:
       #original_hash: b6dca56
       title: Polityka odległości
       #original_hash: b2bc107
-      content1: "W ogólnym przypadku, zawody WCA będą zaakceptowane, jeżeli są co najmniej 200 km lub 26 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 200 km oraz w przeciągu mniej niż\_26 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąz powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
+      content1: "W ogólnym przypadku, zawody WCA będą zaakceptowane, jeżeli są co najmniej 200 km lub 26 dni od jakichkolwiek innych zawodów. Zarząd WCA powinien szczególnie rozpatrywać propozycje zawodów, jeżeli mają miejsce inne zawody odległe o mniej niż 200 km oraz w przeciągu mniej niż\_26 dni. Delegat wnoszący o zaakceptowanie takowych zawodów musi przedstawić dalsze informacje, wskazujące dlaczego zawody wciąż powinny zostać zaakceptowane. Możliwe argumenty, które mogą prowadzić do akceptacji takich zawodów, obejmują:"
       list1:
         #original_hash: 424c134
         '1': Na obu zawodach rozgrywają się inne konkurencje.
@@ -2728,7 +2728,7 @@ pl:
         zaoferowanie wolnego miejsca następnemu zawodnikowi z listy oczekujących
         i ustalenie terminu, przed którym wpisowe powinno zostać uiszczone w
         celu ukończenia rejestracji (np. 48 godzin). W prypadku, gdy płatność
-        nie zostanie zrealizowana na czas lub zawodnik rezygnuje, dane wolne
+        nie zostanie zrealizowana na czas lub zawodnik zrezygnuje, dane wolne
         miejsce powinno być zaoferowane kolejnej osobie z listy oczekujących.
         Ten proces powinien być kontunuowany, aż do momentu zapełnienia się
         wszystkich wolnych miejsc. Nie ma wyjątków, które pozwalałyby zawodnikom
@@ -2749,7 +2749,7 @@ pl:
           skorygowany później.
         #original_hash: e93d043
         '2': >-
-          Zawodnicy zostali podzieleni na grupy, karty wyników muszą być
+          Zawodnicy powinni zostać podzieleni na grupy, karty wyników muszą być
           wydrukowane i powinny być rozdzielone zgodnie z tymże podziałem grup.
           Zaleca się również zalanowanie kto będzie odpowiedzialny za mieszanie
           każdej z grup w każdej konkurencji, co najmniej dla pierwszych rund.
