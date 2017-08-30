@@ -168,12 +168,10 @@ end
 https = !node.chef_environment.start_with?("development")
 server_name = { "production" => "www.worldcubeassociation.org", "staging" => "staging.worldcubeassociation.org", "development" => "" }[node.chef_environment]
 
-# If /etc/ssh is not a symlink, back it up first.
+# If /etc/ssh is not a symlink, back it up and create a symlink.
 unless File.symlink?("/etc/ssh")
   FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
-end
-link "/etc/ssh" do
-  to "#{repo_root}/secrets/etc_ssh-#{server_name}"
+  FileUtils.ln_s "#{repo_root}/secrets/etc_ssh-#{server_name}", "/etc/ssh"
 end
 
 #### Let's Encrypt with acme.sh
