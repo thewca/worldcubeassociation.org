@@ -6,12 +6,17 @@ pull_latest() {
 }
 
 restart_app() {
-  # Attempt to restart unicorn gracefully as per
-  #  http://unicorn.bogomips.org/SIGNALS.html
-  pid=$(<"WcaOnRails/pids/unicorn.pid")
-  kill -SIGUSR2 $pid
-  sleep 5
-  kill -SIGQUIT $pid
+  if ps -efw | grep "unicorn master" | grep -v grep; then
+    # Found a unicorn master process, restart it gracefully as per
+    #  http://unicorn.bogomips.org/SIGNALS.html
+    pid=$(<"WcaOnRails/pids/unicorn.pid")
+    kill -SIGUSR2 $pid
+    sleep 5
+    kill -SIGQUIT $pid
+  else
+    # We could not find a unicorn master process running, lets start one up!
+    (cd WcaOnRails; bundle exec unicorn -D -c config/unicorn.rb)
+  fi
 }
 
 commit_hash() {
@@ -141,9 +146,9 @@ rebuild_rails() {
 cd "$(dirname "$0")"/..
 
 if [ "$(hostname)" == "production" ] || [ "$(hostname)" == "staging" ]; then
-  export RAILS_ENV=production
+  export RACK_ENV=production
 else
-  export RAILS_ENV=development
+  export RACK_ENV=development
 fi
 
 allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs"
