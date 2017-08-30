@@ -31,12 +31,12 @@
     "recipe[openssh]",
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
+    "recipe[wca::supervisor]",
     "recipe[wca]",
     "recipe[wca::regulations]",
     "recipe[wca::email]",
     "recipe[wca::cronjobs]",
     "recipe[wca::newrelic]",
-    "recipe[wca::supervisor]",
     "recipe[wca::backup]"
   ],
   "env_run_lists": {
