@@ -176,10 +176,10 @@ class CompetitionsController < ApplicationController
     I18n.with_locale :en do
       comp = Competition.find(params[:id])
       date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
-      title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.countryId}"
+      title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.country.name}"
 
       body = "The [#{comp.name}](#{competition_url(comp)})"
-      body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.countryId}."
+      body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.country.name}."
       unless comp.website.blank?
         body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
       end
@@ -234,7 +234,7 @@ class CompetitionsController < ApplicationController
 
       event = Event.c_find(params[:event_id])
       if event.nil?
-        title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.countryId} posted"
+        title = "Results of #{comp.name}, in #{comp.cityName}, #{comp.country.name} posted"
         body = "Results of the [#{comp.name}](#{competition_url(comp)}) are now available.\n\n"
       else
         top_three = comp.results.where(event: event).podium.order(:pos)
@@ -243,7 +243,7 @@ class CompetitionsController < ApplicationController
         else
           first_result = top_three.first
 
-          title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.countryId}"
+          title = "#{first_result.personName} wins #{comp.name}, in #{comp.cityName}, #{comp.country.name}"
 
           body = "[#{first_result.personName}](#{person_url first_result.personId})"
           body += " won the [#{comp.name}](#{competition_url(comp)})"
