@@ -7,6 +7,7 @@ package "fonts-unfonts-core"
 package "fonts-wqy-microhei"
 package "fonts-ipafont"
 package "lmodern"
+package "libxrender1"
 
 bash "install_wkhtmltopdf" do
   not_if "/usr/local/bin/wkhtmltopdf --version | grep -q 'with patched qt'"
