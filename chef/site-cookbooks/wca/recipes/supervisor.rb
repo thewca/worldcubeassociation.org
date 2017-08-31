@@ -6,5 +6,6 @@ template "/etc/supervisor/conf.d/workers.conf" do
   source "workers.conf.erb"
   variables({
     repo_root: repo_root,
+    username: username,
   })
 end
