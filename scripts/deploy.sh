@@ -126,6 +126,7 @@ rebuild_regs() {
 }
 
 restart_dj() {
+  sudo supervisorctl update
   sudo supervisorctl restart workers:*
 }
 

@@ -7,10 +7,4 @@ template "/etc/supervisor/conf.d/workers.conf" do
   variables({
     repo_root: repo_root,
   })
-  notifies :run, 'execute[supervisor-update]', :delayed
-end
-
-execute "supervisor-update" do
-  command "supervisorctl update"
-  action :nothing
 end
