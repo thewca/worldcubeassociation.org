@@ -5,9 +5,47 @@ set -e
 PRODUCTION_SERVER_NAME="worldcubeassociation.org"
 TEMP_NEW_SERVER_NAME="temp-new-server-via-cli"
 ELASTIC_IP="34.208.140.116"
+AWS_USERNAME="WCA"
+AWS_REGION="us-west-2"
+
+CONFIGURATION_INSTRUCTIONS="https://docs.google.com/document/d/1cq-4R0ERnK-dGNlkoG8gwKKjr5WecuXSppbSHQ0FI9s/edit#heading=h.qsrd2h8spn50"
+
+test_aws_cli() {
+  if ! command -v aws &>/dev/null; then
+    echo "" >> /dev/stderr
+    echo "Unable to find the aws command line client. Are you sure it's installed?" >> /dev/stderr
+    echo "Try following the installation instructions here: https://docs.aws.amazon.com/cli/latest/userguide/installing.html" >> /dev/stderr
+    exit 1
+  fi
+
+  local configured_region=`aws configure get region`
+  if [ "${configured_region}" != "${AWS_REGION}" ]; then
+    echo "" >> /dev/stderr
+    echo "Found the aws command line client, but your region is configured to be '${configured_region}', when it should be '${AWS_REGION}'." >> /dev/stderr
+    echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
+    exit 1
+  fi
+
+  local configured_output=`aws configure get output`
+  if [ "${configured_output}" != "json" ]; then
+    echo "" >> /dev/stderr
+    echo "Found the aws command line client, but your default output format is configured to be '${configured_output}', when it should be 'json'." >> /dev/stderr
+    echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
+    exit 1
+  fi
+
+  local username=`aws iam get-user | jq --raw-output '.User.UserName'`
+  if [ "${username}" != "${AWS_USERNAME}" ]; then
+    echo "" >> /dev/stderr
+    echo "Found the aws command line client, but it does not appear to be configured correctly." >> /dev/stderr
+    echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
+    echo "The command 'aws iam get-user' should show UserName '${AWS_USERNAME}', but it showed '${username}'." >> /dev/stderr
+    exit 1
+  fi
+}
 
 test_ssh_to_production() {
-  local test_command='ssh -o PasswordAuthentication=no cubing@worldcubeassociation.org echo Successfulness'
+  local test_command='ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no cubing@worldcubeassociation.org echo Successfulness'
   local connected_str=`${test_command} || true`
   if [ "${connected_str}" != "Successfulness" ]; then
     echo "" >> /dev/stderr
@@ -84,6 +122,8 @@ new() {
   fi
 
   test_ssh_to_production
+
+  test_aws_cli
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
