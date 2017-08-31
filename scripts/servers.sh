@@ -2,7 +2,8 @@
 
 set -e
 
-PRODUCTION_SERVER_NAME="worldcubeassociation.org"
+PRODUCTION_SERVER_NAME="www.worldcubeassociation.org"
+OLD_PRODUCTION_SERVER_NAME="DELETEME_old_${PRODUCTION_SERVER_NAME}"
 TEMP_NEW_SERVER_NAME="temp-new-server-via-cli"
 ELASTIC_IP="34.208.140.116"
 AWS_USERNAME="WCA"
@@ -149,7 +150,7 @@ new() {
     --security-groups "allow all incoming" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 32, "VolumeType": "standard" } } ]'`
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
-  json=`aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${TEMP_NEW_SERVER_NAME}`
+  aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${TEMP_NEW_SERVER_NAME}
   echo "Allocated new server with instance id: $instance_id and named it ${TEMP_NEW_SERVER_NAME}."
   get_instance_domain_name domain_name ${instance_id}
   echo "Its public dns name is ${domain_name}."
@@ -226,6 +227,16 @@ function hostsfile() {
   fi
 }
 
+wait_for_confirmation() {
+  user_confirmation_str=$0
+  confirmation_str="HOLD ONTO YOUR BUTTS"
+  while [ "${user_confirmation_str}" != "${confirmation_str}" ]; do
+    echo "Please type \"${confirmation_str}\" and press enter before proceeding."
+    echo -n "> "
+    read user_confirmation_str
+  done
+}
+
 function passthetorch() {
   print_command_usage_and_exit() {
     echo "Usage: $0 passthetorch" >> /dev/stderr
@@ -274,17 +285,44 @@ function passthetorch() {
   echo "If you do not, then our attempt to edit /etc/hosts probably failed and you're still communicating with the current production server."
   echo "If everything looks good, then run '$0 passthetorch' to switchover to the new server."
 
-  user_confirmation_str=""
-  confirmation_str="HOLD ONTO YOUR BUTTS"
-  while [ "${user_confirmation_str}" != "${confirmation_str}" ]; do
-    echo "Please type \"${confirmation_str}\" and press enter before proceeding."
-    echo -n "> "
-    read user_confirmation_str
-  done
+  wait_for_confirmation "HOLD ONTO YOUR BUTTS"
 
   removehostsfile
 
   aws ec2 associate-address --public-ip ${ELASTIC_IP} --instance-id ${new_server_id}
+  echo ""
+  echo "The new server with id ${new_server_id} is now live with the elastic ip ${ELASTIC_IP}!"
+
+  aws ec2 create-tags --resources ${production_instance_id} --tags Key=Name,Value=${OLD_PRODUCTION_SERVER_NAME}
+  echo "Renamed server ${production_instance_id} to ${OLD_PRODUCTION_SERVER_NAME}."
+
+  aws ec2 create-tags --resources ${new_server_id} --tags Key=Name,Value=${PRODUCTION_SERVER_NAME}
+  echo "Renamed server ${new_server_id} to ${PRODUCTION_SERVER_NAME}."
+
+  echo "Don't forget to terminate the old server named ${OLD_PRODUCTION_SERVER_NAME}!"
+  echo "You can do this by running '$0 reap-servers'."
+}
+
+reap_servers() {
+  print_command_usage_and_exit() {
+    echo "Usage: $0 passthetorch" >> /dev/stderr
+    echo "Terminates any old EC2 instances named '${OLD_PRODUCTION_SERVER_NAME}'."
+    echo "Meant to be run sometime after 'passthetorch'."
+    exit 1
+  }
+  if [ $# -ne 0 ]; then
+    print_command_usage_and_exit
+  fi
+
+  find_instance_by_name old_production_id ${OLD_PRODUCTION_SERVER_NAME}
+  echo "Found instance '${OLD_PRODUCTION_SERVER_NAME}' with id ${old_production_id}!"
+
+  echo "I am going to terminate ${OLD_PRODUCTION_SERVER_NAME}"
+  wait_for_confirmation "HOLD ONTO YOUR BUTTS"
+
+  aws ec2 terminate-instances --instance-ids ${old_production_id}
+  echo ""
+  echo "Successfully terminated ${OLD_PRODUCTION_SERVER_NAME}"
 }
 
 # Copied from https://stackoverflow.com/a/17841619
@@ -315,7 +353,7 @@ assert_eq `count_lines $'foo\n'` "1"
 assert_eq `count_lines $'foo\nbar'` "2"
 assert_eq `count_lines $'foo\nbar\n'` "2"
 
-COMMANDS=(new passthetorch hostsfile)
+COMMANDS=(new passthetorch hostsfile reap-servers)
 JOINED_COMMANDS=`join_by "|" "${COMMANDS[@]}"`
 print_usage_and_exit() {
   echo "Usage: $0 [$JOINED_COMMANDS]" >> /dev/stderr
@@ -336,6 +374,8 @@ if [ "$COMMAND" == "new" ]; then
   new "$@"
 elif [ "$COMMAND" == "passthetorch" ]; then
   passthetorch "$@"
+elif [ "$COMMAND" == "reap-servers" ]; then
+  reap_servers "$@"
 elif [ "$COMMAND" == "hostsfile" ]; then
   hostsfile "$@"
 fi
