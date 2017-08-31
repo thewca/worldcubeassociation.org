@@ -172,6 +172,9 @@ server_name = { "production" => "www.worldcubeassociation.org", "staging" => "st
 unless File.symlink?("/etc/ssh")
   FileUtils.mv "/etc/ssh", "/etc/ssh-backup"
   FileUtils.ln_s "#{repo_root}/secrets/etc_ssh-#{server_name}", "/etc/ssh"
+  service "ssh" do
+    action :restart
+  end
 end
 
 #### Let's Encrypt with acme.sh
