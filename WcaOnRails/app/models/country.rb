@@ -9,7 +9,7 @@ class Country < ApplicationRecord
     { id: 'XA', name: 'Multiple Countries (Asia)', continentId: '_Asia', iso2: 'XA' },
     { id: 'XE', name: 'Multiple Countries (Europe)', continentId: '_Europe', iso2: 'XE' },
     { id: 'XS', name: 'Multiple Countries (South America)', continentId: '_South America', iso2: 'XS' },
-    { id: 'XM', name: 'Multiple Countries (Americas)', continentId: '_Multiple Countries', iso2: 'XM' },
+    { id: 'XM', name: 'Multiple Countries (Americas)', continentId: '_Multiple Continents', iso2: 'XM' },
   ].freeze
 
   MULTIPLE_COUNTRIES_IDS = MULTIPLE_COUNTRIES.map { |c| c[:id] }.freeze

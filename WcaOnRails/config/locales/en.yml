@@ -31,7 +31,7 @@ en:
     KR: "Korea"
   #context: Continent name
   continents:
-    "Multiple Continents": "Multiple Countries"
+    "Multiple Continents": "Multiple Continents"
     Africa: "Africa"
     Asia: "Asia"
     Europe: "Europe"
