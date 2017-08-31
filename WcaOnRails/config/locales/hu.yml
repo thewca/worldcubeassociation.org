@@ -2623,7 +2623,7 @@ hu:
         delegáltnak ilyen esetben extra információkkal kell szolgálnia, hogy
         milyen okból kéri a verseny kihirdetését. Lehetséges érvek, amik segítik
         egy ilyen verseny kihirdetését:
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': A két versenyen más versenyszámokat tartanak
         #original_hash: f7bacc5
@@ -2636,7 +2636,7 @@ hu:
       content2: >-
         A több helyszínen zajló FMC versenyek nem lehetnek részei más
         versenynek:
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': >-
           Ha egy helyszín 200 km-nél közelebb van egy másik normál versenyhez,

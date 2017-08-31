@@ -2605,7 +2605,7 @@ hr:
         odobrenje takvog natjecanja mora imati jako dobar razlog zašto bi se to
         natjecanje trebalo potvrditi. Mogući argumenti koji mogu pomoći takvom
         natjecanju da bude prihvaćeno su:
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': Natjecanja imaju različite discipline.
         #original_hash: f7bacc5
@@ -2618,7 +2618,7 @@ hr:
       content2: >-
         FMC natjecanja (npr. FMC Europe, koja se održavaju u isto vrijeme na
         više lokacija) ne mogu biti dio bilo kojeg drugog natjecanja:
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': >-
           Ako je lokacija takvih natjecanja manja od 200km od drugih natjecanja,

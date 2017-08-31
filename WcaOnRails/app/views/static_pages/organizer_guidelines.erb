@@ -1,55 +1,29 @@
 <% provide(:title, t("organizer_guidelines.title")) %>
 <div class="container">
   <h1><%= yield(:title)  %></h1>
+  <% guidelines_in_english = t("organizer_guidelines", locale: :en) %>
+  <% localized_guidelines = t("organizer_guidelines") %>
+  <% guidelines_in_english.deep_merge(localized_guidelines).each do |key, paragraph| %>
+    <% next if key == :title %>
+    <% paragraph.each do |item, content| %>
+      <% if item.to_s.start_with?("olist") %>
+        <ol>
+          <% content.each do |_, elem| %>
+            <li><%= raw(elem) %></li>
+          <% end %>
+        </ol>
+      <% elsif item.to_s.start_with?("list") %>
+        <ul>
+          <% content.each do |_, elem| %>
+            <li><%= raw(elem) %></li>
+          <% end %>
+        </ul>
+      <% elsif item.to_s.start_with?("title") %>
+        <h4><%= content %></h4>
+      <% else %>
+        <%= raw(content) %><br/>
+      <% end %>
+    <% end %>
+  <% end %>
 
-  <h4><%= t("organizer_guidelines.paragraph1.title") %></h4>
-  <%= t("organizer_guidelines.paragraph1.content") %>
-  
-  <h4><%= t("organizer_guidelines.paragraph2.title") %></h4>
-  <%= t("organizer_guidelines.paragraph2.content") %>
-  
-  <h4><%= t("organizer_guidelines.paragraph3.title") %></h4>
-  <%= t("organizer_guidelines.paragraph3.content_html") %>
-  
-  <h4><%= t("organizer_guidelines.paragraph4.title") %></h4>
-  <%= t("organizer_guidelines.paragraph4.content1") %>
-
-  <ol>
-    <li><%= t("organizer_guidelines.paragraph4.list1.1") %></li>
-    <li><%= t("organizer_guidelines.paragraph4.list1.2") %></li>
-    <li><%= t("organizer_guidelines.paragraph4.list1.3") %></li>
-  </ol>
-
-  <%= t("organizer_guidelines.paragraph4.content2") %>
-  <ol>
-    <li><%= t("organizer_guidelines.paragraph4.list2.1") %></li>
-  </ol>
-  
-  <h4><%= t("organizer_guidelines.paragraph5.title") %></h4>
-  <%= t("organizer_guidelines.paragraph5.content_html") %>
-  
-  <h4><%= t("organizer_guidelines.paragraph6.title") %></h4>
-  <%= t("organizer_guidelines.paragraph6.content") %>
-
-  <h4><%= t("organizer_guidelines.paragraph7.title") %></h4>
-  <%= t("organizer_guidelines.paragraph7.content1") %><br/>
-  <%= t("organizer_guidelines.paragraph7.content2") %><br/>
-  <%= t("organizer_guidelines.paragraph7.content3") %>
-
-  <h4><%= t("organizer_guidelines.paragraph8.title") %></h4>
-  <ul>
-    <li><%= t("organizer_guidelines.paragraph8.list.1") %></li>
-    <li><%= t("organizer_guidelines.paragraph8.list.2") %></li>
-  </ul>
-  
-  <h4><%= t("organizer_guidelines.paragraph9.title") %></h4>
-  <%= t("organizer_guidelines.paragraph9.content") %>
-  <ul>
-    <li><%= t("organizer_guidelines.paragraph9.list.1") %></li>
-    <li><%= t("organizer_guidelines.paragraph9.list.2") %></li>
-    <li><%= t("organizer_guidelines.paragraph9.list.3") %></li>
-    <li><%= t("organizer_guidelines.paragraph9.list.4") %></li>
-    <li><%= t("organizer_guidelines.paragraph9.list.5") %></li>
-    <li><%= t("organizer_guidelines.paragraph9.list.6") %></li>
-  </ul>
 </div>

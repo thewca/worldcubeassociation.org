@@ -2143,7 +2143,7 @@ zh-CN:
       title: null
       #original_hash: b2bc107
       content1: null
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': null
         #original_hash: f7bacc5
@@ -2152,7 +2152,7 @@ zh-CN:
         '3': null
       #original_hash: ab65dfb
       content2: null
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': null
     paragraph5:

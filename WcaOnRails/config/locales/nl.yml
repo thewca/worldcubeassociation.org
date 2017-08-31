@@ -2633,7 +2633,7 @@ nl:
         nadere informatie leveren waarom deze wedstrijd alsnog moet worden
         geaccepteerd. Mogelijke argumenten die daarbij ondersteunend kunnen
         zijn:
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': De twee wedstrijden hebben verschillende wedstrijdonderdelen
         #original_hash: f7bacc5
@@ -2646,7 +2646,7 @@ nl:
       content2: >-
         FMC-wedstrijden op meerdere locaties mogen geen onderdeel zijn van een
         reguliere wedstrijd:
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': >-
           Als één van de locaties van zo'n wedstrijd dichter dan 200km van
