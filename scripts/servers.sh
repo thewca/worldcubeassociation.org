@@ -80,6 +80,21 @@ test_ssh_agent_forwarding() {
   fi
 }
 
+find_instance_by_name() {
+  local  __resultvar=$1
+  local instance_name=$2
+
+  local running_instances=`aws ec2 describe-instances | jq ".Reservations[] | .Instances[] | select(.State.Name == \"running\")"`
+  local instance_id=`echo "${running_instances}" | jq --raw-output "select((.Tags[] | select(.Key == \"Name\") | .Value) == \"${instance_name}\") | .InstanceId"`
+  local instances_count=`count_lines "${instance_id}"`
+  if [ "${instances_count}" != "1" ]; then
+    echo "Found ${instances_count} running instances named ${instance_name}, when I expected to find exactly 1." >> /dev/stderr
+    echo "I'm giving up now." >> /dev/stderr
+    exit 1
+  fi
+  eval $__resultvar="'$instance_id'"
+}
+
 get_instance_domain_name() {
   local  __resultvar=$1
   local instance_id=$2
@@ -133,13 +148,10 @@ new() {
     --key-name $keyname \
     --security-groups "allow all incoming" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 32, "VolumeType": "standard" } } ]'`
-
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
-
-  get_instance_domain_name domain_name ${instance_id}
-
   json=`aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${TEMP_NEW_SERVER_NAME}`
   echo "Allocated new server with instance id: $instance_id and named it ${TEMP_NEW_SERVER_NAME}."
+  get_instance_domain_name domain_name ${instance_id}
   echo "Its public dns name is ${domain_name}."
 
   echo -n "Waiting for ${TEMP_NEW_SERVER_NAME} to finish initializing..."
@@ -165,32 +177,63 @@ new() {
   #
   # we remove the now invalid host key associated with this domain name.
   ssh-keygen -R ${domain_name}
+
+  echo ""
+  echo "Successfully spun up new server at ${domain_name}"
+  echo "Run '$0 passthetorch' to test out the new server and possibly switchover to it."
+}
+
+function addhostfile() {
+  find_instance_by_name new_server_id ${TEMP_NEW_SERVER_NAME}
+  get_instance_domain_name domain_name ${new_server_id}
+  local ip_address=`dig +short ${domain_name}`
+  echo "Found instance '${TEMP_NEW_SERVER_NAME}' with id ${new_server_id} at ${domain_name} (${ip_address})!"
+  if grep " worldcubeassociation.org " /etc/hosts > /dev/null; then
+    echo "" >> /dev/stderr
+    echo "Already found an entry in /etc/hosts for worldcubeassociation.org." >> /dev/stderr
+    echo "You can remove it by running '$0 hostsfile remove'." >> /dev/stderr
+    exit 1
+  fi
+  sudo cp /etc/hosts /etc/hosts.old
+  sudo bash -c "echo '${ip_address} worldcubeassociation.org www.worldcubeassociation.org' >> /etc/hosts"
+  echo "Backed up /etc/hosts to /etc/hosts.old and added entry for worldcubeassociation.org."
+}
+
+function removehostsfile() {
+  sudo cp /etc/hosts /etc/hosts.old
+  sudo sed -i "/ worldcubeassociation.org /d" /etc/hosts
+  echo "Backed up /etc/hosts to /etc/hosts.old and removed entry for worldcubeassociation.org."
+}
+
+function hostsfile() {
+  print_command_usage_and_exit() {
+    echo "Usage: $0 hostsfile [add|remove]" >> /dev/stderr
+    echo "$0 hostsfile add - This command will add an entry to /etc/hosts for a newly created server so you can test it out." >> /dev/stderr
+    echo "$0 hostsfile remove - This command will remove the entry in /etc/hosts that 'hostsfile add' created." >> /dev/stderr
+    exit 1
+  }
+  if [ $# -ne 1 ]; then
+    print_command_usage_and_exit
+  fi
+
+  subcommand=$1
+  shift
+
+  if [ "$subcommand" == "add" ]; then
+    addhostfile
+  elif [ "$subcommand" == "remove" ]; then
+    removehostsfile
+  fi
 }
 
 function passthetorch() {
   print_command_usage_and_exit() {
     echo "Usage: $0 passthetorch" >> /dev/stderr
-    echo "For example: $0 passthetorch" >> /dev/stderr
     exit 1
   }
   if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
-
-  find_instance_by_name() {
-    local  __resultvar=$1
-    local instance_name=$2
-
-    local running_instances=`aws ec2 describe-instances | jq ".Reservations[] | .Instances[] | select(.State.Name == \"running\")"`
-    local instance_id=`echo "${running_instances}" | jq --raw-output "select((.Tags[] | select(.Key == \"Name\") | .Value) == \"${instance_name}\") | .InstanceId"`
-    local instances_count=`count_lines "${instance_id}"`
-    if [ "${instances_count}" != "1" ]; then
-      echo "Found ${instances_count} running instances named ${instance_name}, when I expected to find exactly 1." >> /dev/stderr
-      echo "I'm giving up now." >> /dev/stderr
-      exit 1
-    fi
-    eval $__resultvar="'$instance_id'"
-  }
 
   find_instance_by_name production_instance_id ${PRODUCTION_SERVER_NAME}
   echo "Found instance '${PRODUCTION_SERVER_NAME}' with id ${production_instance_id}!"
@@ -199,9 +242,9 @@ function passthetorch() {
   echo "Found instance '${TEMP_NEW_SERVER_NAME}' with id ${new_server_id}!"
 
   get_instance_domain_name domain_name ${new_server_id}
-  echo "Testing out new server at ${domain_name}"
 
   # Do a quick smoke test of the new server.
+  echo "Testing out new server at ${domain_name}"
   local ip_address=`dig +short ${domain_name}`
   curl_cmd="curl --write-out %{http_code} --silent --resolve www.worldcubeassociation.org:443:${ip_address} https://www.worldcubeassociation.org/server-status"
   curl_result=`${curl_cmd}`
@@ -223,7 +266,13 @@ function passthetorch() {
   fi
 
   echo "The new server at ${domain_name} appears to be working."
-  echo "We're ready to assign it the elastic ip address ${ELASTIC_IP}"
+  echo "We're almost ready to assign it the elastic ip address ${ELASTIC_IP}"
+
+  addhostfile
+  echo "NOTE: This server is not live yet! I just added an entry to your hostsfile (www.worldcubeassociation.org should now resolve to ${ip_address}) so you can test it out manually before we switchover the elastic ip address."
+  echo "Try visiting https://www.worldcubeassociation.org/server-status in your web browser. At the bottom, you should see ip address ${expected_ip}."
+  echo "If you do not, then our attempt to edit /etc/hosts probably failed and you're still communicating with the current production server."
+  echo "If everything looks good, then run '$0 passthetorch' to switchover to the new server."
 
   user_confirmation_str=""
   confirmation_str="HOLD ONTO YOUR BUTTS"
@@ -232,6 +281,8 @@ function passthetorch() {
     echo -n "> "
     read user_confirmation_str
   done
+
+  removehostsfile
 
   aws ec2 associate-address --public-ip ${ELASTIC_IP} --instance-id ${new_server_id}
 }
@@ -264,7 +315,7 @@ assert_eq `count_lines $'foo\n'` "1"
 assert_eq `count_lines $'foo\nbar'` "2"
 assert_eq `count_lines $'foo\nbar\n'` "2"
 
-COMMANDS=(new passthetorch)
+COMMANDS=(new passthetorch hostsfile)
 JOINED_COMMANDS=`join_by "|" "${COMMANDS[@]}"`
 print_usage_and_exit() {
   echo "Usage: $0 [$JOINED_COMMANDS]" >> /dev/stderr
@@ -275,14 +326,16 @@ if [ $# -eq 0 ]; then
 fi
 
 COMMAND=$1
+shift
 if ! containsElement "$COMMAND" "${COMMANDS[@]}"; then
   echo "Unrecognized command: $COMMAND" >> /dev/stderr
   print_usage_and_exit
 fi
-shift
 
 if [ "$COMMAND" == "new" ]; then
   new "$@"
 elif [ "$COMMAND" == "passthetorch" ]; then
   passthetorch "$@"
+elif [ "$COMMAND" == "hostsfile" ]; then
+  hostsfile "$@"
 fi
