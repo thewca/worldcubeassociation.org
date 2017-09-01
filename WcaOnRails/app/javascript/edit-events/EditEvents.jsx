@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import classNames from 'classnames'
+import cn from 'classnames'
 
 import events from 'wca/events.js.erb'
 import { rootRender, promiseSaveWcif } from 'edit-events'
@@ -73,7 +73,7 @@ export default class EditEvents extends React.Component {
         </div>
         <button onClick={this.save}
                 disabled={this.state.saving}
-                className={classNames("btn", "btn-default", { "btn-primary": this.unsavedChanges(), saving: this.state.saving })}
+                className={cn("btn", "btn-default", { "btn-primary": this.unsavedChanges(), saving: this.state.saving })}
         >
           Update Competition
         </button>
@@ -166,10 +166,10 @@ const EventPanel = ({ wcifEvents, wcifEvent }) => {
   };
 
   return (
-    <div className="panel panel-default">
+    <div className={cn("panel panel-default", { 'event-not-being-held': wcifEvent.rounds.length == 0 })}>
       <div className="panel-heading">
         <h3 className="panel-title">
-          <span className={classNames("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
+          <span className={cn("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
           <span className="title">{event.name}</span>
           {" "}
           <select className="form-control input-xs" value={wcifEvent.rounds.length} onChange={roundCountChanged}>
