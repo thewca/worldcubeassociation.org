@@ -1,7 +1,65 @@
 import React from 'react'
 
 import events from 'wca/events.js.erb'
-import { mbPointsToAttemptResult, attemptResultToMbPoints } from './utils'
+import {
+  MINUTE_IN_CS,
+  SECOND_IN_CS,
+  mbPointsToAttemptResult,
+  attemptResultToMbPoints,
+} from './utils'
+
+class CentisecondsInput extends React.Component {
+  get value() {
+    let minutes = parseInt(this.minutesInput.value) || 0;
+    let seconds = parseInt(this.secondsInput.value) || 0;
+    let centiseconds = parseInt(this.centisecondsInput.value) || 0;
+    return minutes*60*100 + seconds*100 + centiseconds;
+  }
+
+  render() {
+    let { id, autoFocus, centiseconds, onChange } = this.props;
+
+    let minutes = Math.floor(centiseconds / MINUTE_IN_CS);
+    centiseconds %= MINUTE_IN_CS;
+
+    let seconds = Math.floor(centiseconds / SECOND_IN_CS);
+    centiseconds %= SECOND_IN_CS;
+
+    return (
+      <div>
+        <input type="number"
+               id={id}
+               className="form-control"
+               autoFocus={autoFocus}
+               value={minutes}
+               min={0} max={60}
+               ref={c => this.minutesInput = c}
+               onChange={onChange} />
+        minutes
+
+        <input type="number"
+               id={id}
+               className="form-control"
+               autoFocus={autoFocus}
+               value={seconds}
+               min={0} max={59}
+               ref={c => this.secondsInput = c}
+               onChange={onChange} />
+        seconds
+
+        <input type="number"
+               id={id}
+               className="form-control"
+               autoFocus={autoFocus}
+               value={centiseconds}
+               min={0} max={99}
+               ref={c => this.centisecondsInput = c}
+               onChange={onChange} />
+        centiseconds
+      </div>
+    );
+  }
+}
 
 export default class extends React.Component {
   onChange = () => {
@@ -12,7 +70,7 @@ export default class extends React.Component {
     let event = events.byId[this.props.eventId];
 
     if(event.timed_event) {
-      return parseInt(this.centisInput.value);
+      return this.centisecondsInput.value;
     } else if(event.fewest_moves) {
       return parseInt(this.movesInput.value);
     } else if(event.multiple_blindfolded) {
@@ -27,18 +85,12 @@ export default class extends React.Component {
     let event = events.byId[this.props.eventId];
 
     if(event.timed_event) {
-      return (
-        <div>
-          <input type="text"
-                 id={id}
-                 className="form-control"
-                 autoFocus={autoFocus}
-                 value={this.props.value}
-                 ref={c => this.centisInput = c}
-                 onChange={this.onChange} />
-          (centiseconds)
-        </div>
-      );
+      return <CentisecondsInput id={id}
+                                autoFocus={autoFocus}
+                                centiseconds={this.props.value}
+                                onChange={this.onChange}
+                                ref={c => this.centisecondsInput = c}
+      />;
     } else if(event.fewest_moves) {
       return (
         <div>
@@ -49,7 +101,7 @@ export default class extends React.Component {
                  value={this.props.value}
                  ref={c => this.movesInput = c}
                  onChange={this.onChange} />
-          (moves)
+          moves
         </div>
       );
     } else if(event.multiple_blindfolded) {
@@ -62,7 +114,7 @@ export default class extends React.Component {
                  value={attemptResultToMbPoints(this.props.value)}
                  ref={c => this.mbldPointsInput = c}
                  onChange={this.onChange} />
-          (mbld points)
+          points
         </div>
       );
     } else {

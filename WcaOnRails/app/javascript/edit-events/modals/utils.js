@@ -66,9 +66,11 @@ let pluralize = function(count, word, { fixed, abbreviate } = {}) {
   let countDesc = abbreviate ? word[0] : " " + (count == 1 ? word : word + "s");
   return countStr + countDesc;
 }
-const SECOND_IN_CS = 100;
-const MINUTE_IN_CS = 60*SECOND_IN_CS;
-const HOUR_IN_CS = 60*MINUTE_IN_CS;
+
+export const SECOND_IN_CS = 100;
+export const MINUTE_IN_CS = 60*SECOND_IN_CS;
+export const HOUR_IN_CS = 60*MINUTE_IN_CS;
+
 export function centisecondsToString(centiseconds, { short } = {}) {
   let str = "";
 
