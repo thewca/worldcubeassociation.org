@@ -3,7 +3,7 @@ import React from 'react'
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
-import { attemptResultToString, roundIdToString } from './utils'
+import { attemptResultToString, roundIdToString, matchResult } from './utils'
 
 export default {
   Title({ wcifRound }) {
@@ -12,9 +12,7 @@ export default {
   Show({ value: cutoff, wcifEvent }) {
     let str;
     if(cutoff) {
-      let event = events.byId[wcifEvent.id];
-      let comparisonString = event.multiple_blindfolded ? "≥" : "≤";
-      str = `Best of ${cutoff.numberOfAttempts} ${comparisonString} ${attemptResultToString(cutoff.attemptResult, wcifEvent.id, { short: true })}`;
+      str = `Best of ${cutoff.numberOfAttempts} ${matchResult(cutoff.attemptResult, wcifEvent.id, { short: true })}`;
     } else {
       str = "-";
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import AttemptResultInput from './AttemptResultInput'
-import { attemptResultToString, roundIdToString } from './utils'
+import { attemptResultToString, roundIdToString, matchResult } from './utils'
 
 export default {
   Title({ wcifRound }) {
@@ -21,7 +21,7 @@ export default {
           return `Top ${advancementCondition.level}%`;
           break;
         case "attemptResult":
-          return attemptResultToString(advancementCondition.level, wcifEvent.id, { short: true });
+          return matchResult(advancementCondition.level, wcifEvent.id, { short: true });
           break;
         default:
           throw new Error(`Unrecognized advancementCondition type: ${advancementCondition.type}`);
@@ -76,7 +76,7 @@ export default {
         break;
       case "attemptResult":
         advancementInput = <AttemptResultInput eventId={wcifEvent.id} value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
-        helpBlock = `Everyone in round ${roundNumber} with a result better than or equal to ${attemptResultToString(advancementCondition.level, wcifEvent.id)} will advance to round ${roundNumber + 1}.`;
+        helpBlock = `Everyone in round ${roundNumber} with a result ${matchResult(advancementCondition.level, wcifEvent.id)} will advance to round ${roundNumber + 1}.`;
         break;
       default:
         advancementInput = null;

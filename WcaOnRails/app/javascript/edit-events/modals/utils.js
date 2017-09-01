@@ -61,6 +61,18 @@ export function attemptResultToString(attemptResult, eventId, { short } = {}) {
   }
 }
 
+export function matchResult(attemptResult, eventId, { short } = {}) {
+  let event = events.byId[eventId];
+  let comparisonString = event.multiple_blindfolded ? "≥" : "≤";
+  if(!short) {
+    comparisonString = {
+      "≤": "less than or equal to",
+      "≥": "greater than or equal to",
+    }[comparisonString];
+  }
+  return `${comparisonString} ${attemptResultToString(attemptResult, eventId, { short })}`;
+}
+
 let pluralize = function(count, word, { fixed, abbreviate } = {}) {
   let countStr = (fixed && count % 1 > 0) ? count.toFixed(fixed) : count;
   let countDesc = abbreviate ? word[0] : " " + (count == 1 ? word : word + "s");

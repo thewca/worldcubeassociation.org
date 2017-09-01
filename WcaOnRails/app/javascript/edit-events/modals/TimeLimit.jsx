@@ -106,8 +106,7 @@ export default {
         This round has a cross round cumulative time limit (see
         guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>).
         This means that competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
-        of their solves in this round ({wcifRound.id})
-        {" "}<strong>shared with</strong>:
+        of their solves in this round ({wcifRound.id}) shared with:
         <ul>
           {otherSelectedRoundIds.map(roundId => <li key={roundId}>{roundIdToString(roundId)}</li>)}
         </ul>
