@@ -7,10 +7,26 @@ export default {
   Title({ wcifRound }) {
     return <span>Requirement to advance past {roundIdToString(wcifRound.id)}</span>;
   },
-  Show({ value: advancementCondition }) {
+  Show({ value: advancementCondition, wcifEvent }) {
     function advanceReqToStr(advancementCondition) {
-      // TODO <<< >>>
-      return advancementCondition ? `${advancementCondition.type} ${advancementCondition.level}` : "-";
+      if(!advancementCondition) {
+        return "-";
+      }
+
+      switch(advancementCondition.type) {
+        case "ranking":
+          return `Top ${advancementCondition.level}`;
+          break;
+        case "percent":
+          return `Top ${advancementCondition.level}%`;
+          break;
+        case "attemptResult":
+          return attemptResultToString(advancementCondition.level, wcifEvent.id);
+          break;
+        default:
+          throw new Error(`Unrecognized advancementCondition type: ${advancementCondition.type}`);
+          break;
+      }
     }
     let str = advanceReqToStr(advancementCondition);
     return <span>{str}</span>;
