@@ -6,6 +6,8 @@
     .panel-title {
       white-space: nowrap;
       overflow: hidden;
+      display: flex;
+      align-items: center;
 
       $cubing-icon-size: 55px;
       .img-thumbnail.cubing-icon {
@@ -18,6 +20,7 @@
 
       .title {
         padding-left: $cubing-icon-size;
+        padding-right: 5px;
       }
     }
   }

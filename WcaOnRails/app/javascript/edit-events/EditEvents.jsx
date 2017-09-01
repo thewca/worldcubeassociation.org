@@ -108,12 +108,16 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
               rootRender();
             };
 
+            let abbreviate = str => {
+              return str.split(" ").map(word => word[0]).join("");
+            };
+
             return (
               <tr key={roundNumber}>
                 <td>{roundNumber}</td>
                 <td>
-                  <select value={wcifRound.format} onChange={roundFormatChanged}>
-                    {event.formats().map(format => <option key={format.id} value={format.id}>{format.name}</option>)}
+                  <select className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged}>
+                    {event.formats().map(format => <option key={format.id} value={format.id}>{abbreviate(format.name)}</option>)}
                   </select>
                 </td>
 
@@ -168,7 +172,7 @@ const EventPanel = ({ wcifEvents, wcifEvent }) => {
           <span className={classNames("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
           <span className="title">{event.name}</span>
           {" "}
-          <select value={wcifEvent.rounds.length} onChange={roundCountChanged}>
+          <select className="form-control input-xs" value={wcifEvent.rounds.length} onChange={roundCountChanged}>
             <option value={0}>Not being held</option>
             <option disabled="disabled">────────</option>
             <option value={1}>1 round</option>

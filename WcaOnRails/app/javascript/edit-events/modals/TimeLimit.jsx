@@ -34,7 +34,7 @@ export default {
     return <span>Time limit for {roundIdToString(wcifRound.id)}</span>;
   },
   Show({ value: timeLimit }) {
-    let timeStr = centisecondsToString(timeLimit.centiseconds);
+    let timeStr = centisecondsToString(timeLimit.centiseconds, { short: true });
     let str;
     switch(timeLimit.cumulativeRoundIds.length) {
       case 0:
@@ -97,8 +97,8 @@ export default {
     } else if(timeLimit.cumulativeRoundIds.length === 1) {
       description = (<span>
         Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
-        of their solves in this round. This is called a cumulative time limit, defined in
-        regulation <a href="https://www.worldcubeassociation.org/regulations/#A1a2" target="_blank">A1a2</a>.
+        of their solves in this round. This is called a cumulative time limit (see
+        regulation <a href="https://www.worldcubeassociation.org/regulations/#A1a2" target="_blank">A1a2</a>).
       </span>);
     } else {
       let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);

@@ -21,7 +21,7 @@ export default {
           return `Top ${advancementCondition.level}%`;
           break;
         case "attemptResult":
-          return attemptResultToString(advancementCondition.level, wcifEvent.id);
+          return attemptResultToString(advancementCondition.level, wcifEvent.id, { short: true });
           break;
         default:
           throw new Error(`Unrecognized advancementCondition type: ${advancementCondition.type}`);

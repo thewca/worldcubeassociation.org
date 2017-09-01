@@ -1,5 +1,6 @@
 import React from 'react'
 
+import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
 import { attemptResultToString, roundIdToString } from './utils'
@@ -11,7 +12,9 @@ export default {
   Show({ value: cutoff, wcifEvent }) {
     let str;
     if(cutoff) {
-      str = `better than or equal to ${attemptResultToString(cutoff.attemptResult, wcifEvent.id)} in ${cutoff.numberOfAttempts}`;
+      let event = events.byId[wcifEvent.id];
+      let comparisonString = event.multiple_blindfolded ? "≥" : "≤";
+      str = `Best of ${cutoff.numberOfAttempts} ${comparisonString} ${attemptResultToString(cutoff.attemptResult, wcifEvent.id, { short: true })}`;
     } else {
       str = "-";
     }

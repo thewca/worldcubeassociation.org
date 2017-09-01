@@ -48,10 +48,10 @@ export function mbPointsToAttemptResult(mbPoints) {
   return parsedMbToAttemptResult({ solved, attempted, timeCentiseconds });
 }
 
-export function attemptResultToString(attemptResult, eventId) {
+export function attemptResultToString(attemptResult, eventId, { short } = {}) {
   let event = events.byId[eventId];
   if(event.timed_event) {
-    return centisecondsToString(attemptResult);
+    return centisecondsToString(attemptResult, { short });
   } else if(event.fewest_moves) {
     return `${attemptResult} moves`;
   } else if(event.multiple_blindfolded) {
@@ -61,18 +61,35 @@ export function attemptResultToString(attemptResult, eventId) {
   }
 }
 
-export function centisecondsToString(centiseconds) {
-  const seconds = centiseconds / 100;
-  const minutes = seconds / 60;
-  const hours = minutes / 60;
+let pluralize = function(count, word, { fixed, abbreviate } = {}) {
+  let countStr = (fixed && count % 1 > 0) ? count.toFixed(fixed) : count;
+  let countDesc = abbreviate ? word[0] : " " + (count == 1 ? word : word + "s");
+  return countStr + countDesc;
+}
+const SECOND_IN_CS = 100;
+const MINUTE_IN_CS = 60*SECOND_IN_CS;
+const HOUR_IN_CS = 60*MINUTE_IN_CS;
+export function centisecondsToString(centiseconds, { short } = {}) {
+  let str = "";
 
+  const hours = centiseconds / HOUR_IN_CS;
+  centiseconds %= HOUR_IN_CS;
   if(hours >= 1) {
-    return `${hours.toFixed(2)} hours`;
-  } else if(minutes >= 1) {
-    return `${minutes.toFixed(2)} minutes`;
-  } else {
-    return `${seconds.toFixed(2)} seconds`;
+    str += pluralize(Math.floor(hours), "hour", { abbreviate: short }) + " ";
   }
+
+  let minutes = centiseconds / MINUTE_IN_CS;
+  centiseconds %= MINUTE_IN_CS;
+  if(minutes >= 1) {
+    str += pluralize(Math.floor(minutes), "minute", { abbreviate: short }) + " ";
+  }
+
+  let seconds = centiseconds / SECOND_IN_CS;
+  if(seconds > 0) {
+    str += pluralize(seconds, "second", { fixed: 2, abbreviate: short }) + " ";
+  }
+
+  return str.trim();
 }
 
 export function roundIdToString(roundId) {

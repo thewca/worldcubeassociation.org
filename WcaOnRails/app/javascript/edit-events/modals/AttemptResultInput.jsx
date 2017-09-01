@@ -4,10 +4,6 @@ import events from 'wca/events.js.erb'
 import { mbPointsToAttemptResult, attemptResultToMbPoints } from './utils'
 
 export default class extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   onChange = () => {
     this.props.onChange();
   }
@@ -33,7 +29,7 @@ export default class extends React.Component {
     if(event.timed_event) {
       return (
         <div>
-          <input type="number"
+          <input type="text"
                  id={id}
                  className="form-control"
                  autoFocus={autoFocus}
