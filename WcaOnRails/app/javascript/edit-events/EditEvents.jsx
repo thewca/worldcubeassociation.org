@@ -1,6 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import cn from 'classnames'
+import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
 import { rootRender, promiseSaveWcif } from 'edit-events'

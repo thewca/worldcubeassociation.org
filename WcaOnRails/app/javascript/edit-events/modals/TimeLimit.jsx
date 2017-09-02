@@ -1,11 +1,14 @@
+import _ from 'lodash'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Modal from 'react-bootstrap/lib/Modal'
 import Radio from 'react-bootstrap/lib/Radio'
 
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
 import { centisecondsToString, roundIdToString } from './utils'
+import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
 
 class RadioGroup extends React.Component {
   get value() {
@@ -27,6 +30,124 @@ class RadioGroup extends React.Component {
       </div>
     );
   }
+}
+
+function objectifyArray(arr) {
+  let obj = {};
+  arr.forEach(el => obj[el] = true);
+  return obj;
+}
+
+class SelectRoundsButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { selectedRoundsById: objectifyArray(props.selectedRoundIds) };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ selectedRoundsById: objectifyArray(nextProps.selectedRoundIds) });
+  }
+
+  reset = () => {
+    this.setState({ selectedRoundsById: objectifyArray(this.props.selectedRoundIds) });
+  }
+
+  getSelectedRoundIds() {
+    return Object.entries(this.state.selectedRoundsById).filter(([k, v]) => v).map(([k, v]) => k);
+  }
+
+  onSave = () => {
+    this.props.onChange();
+    this._modal.close();
+  }
+
+  render() {
+    let { timeLimit, excludeRound, wcifEvents } = this.props;
+    let selectedRoundsById = this.state.selectedRoundsById;
+
+    let wcifRounds = [];
+    wcifEvents.forEach(otherWcifEvent => {
+      // Cross round cumulative time limits may not include other rounds of
+      // the same event.
+      // See https://github.com/thewca/wca-regulations/issues/457.
+      let excludeEventId = excludeRound.id.split("-")[0];
+      let otherEvent = events.byId[otherWcifEvent.id];
+      let canChangeTimeLimit = otherEvent.can_change_time_limit;
+      if(!canChangeTimeLimit || excludeEventId == otherWcifEvent.id) {
+        return;
+      }
+      wcifRounds = wcifRounds.concat(otherWcifEvent.rounds.filter(r => r != excludeRound));
+    });
+
+    return (
+      <ButtonActivatedModal
+        buttonValue="Share with other rounds"
+        buttonClass="btn-success"
+        onSave={this.onSave}
+        reset={this.reset}
+        ref={c => this._modal = c}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Choose rounds for cumulative time limit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col-sm-offset-2 col-sm-10">
+              <ul className="list-unstyled">
+                {wcifRounds.map(wcifRound => {
+                  let roundId = wcifRound.id;
+                  let eventId = roundId.split("-")[0];
+                  let event = events.byId[eventId];
+                  let checked = !!selectedRoundsById[roundId];
+                  let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => roundId.split("-")[0] == eventId);
+                  let disabled = !checked && eventAlreadySelected;
+                  let disabledReason = disabled && `Cannot select this round because you've already selected a round with ${event.name}`;
+                  return (
+                    <li key={roundId}>
+                      <div className="checkbox">
+                        <label title={disabledReason}>
+                          <input type="checkbox"
+                                 value={roundId}
+                                 checked={checked}
+                                 disabled={disabled}
+                                 onChange={e => {
+                                   selectedRoundsById[wcifRound.id] = e.currentTarget.checked;
+                                   this.setState({ selectedRoundsById });
+                                 }}
+                          />
+                          {roundIdToString(roundId)}
+                        </label>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </Modal.Body>
+      </ButtonActivatedModal>
+    );
+  }
+}
+
+function RegulationLink({ regulation }) {
+  return (
+    <span>
+      regulation <a href={`https://www.worldcubeassociation.org/regulations/#${regulation}`} target="_blank">
+        {regulation}
+      </a>
+    </span>
+  );
+}
+
+function GuidelineLink({ guideline }) {
+  return (
+    <span>
+      guideline <a href={`https://www.worldcubeassociation.org/regulations/guidelines.html#${guideline}`} target="_blank">
+        {guideline}
+      </a>
+    </span>
+  );
 }
 
 export default {
@@ -54,21 +175,7 @@ export default {
     let wcifRound = wcifEvent.rounds[roundNumber - 1];
     let format = formats.byId[wcifRound.format];
 
-    let otherWcifRounds = [];
-    wcifEvents.forEach(otherWcifEvent => {
-      // Cross round cumulative time limits may not include other rounds of
-      // the same event.
-      // See https://github.com/thewca/wca-regulations/issues/457.
-      let otherEvent = events.byId[otherWcifEvent.id];
-      let canChangeTimeLimit = otherEvent.can_change_time_limit;
-      if(!canChangeTimeLimit || wcifEvent == otherWcifEvent) {
-        return;
-      }
-      otherWcifRounds = otherWcifRounds.concat(otherWcifEvent.rounds.filter(r => r != wcifRound));
-    });
-
-    let centisInput, cumulativeInput, cumulativeRadio;
-    let roundCheckboxes = [];
+    let centisInput, cumulativeInput, cumulativeRadio, roundsSelector;
     let onChangeAggregator = () => {
       let cumulativeRoundIds;
       switch(cumulativeRadio.value) {
@@ -77,7 +184,9 @@ export default {
           break;
         case "cumulative":
           cumulativeRoundIds = [wcifRound.id];
-          cumulativeRoundIds = cumulativeRoundIds.concat(roundCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value));
+          if(roundsSelector) {
+            cumulativeRoundIds = _.uniq(cumulativeRoundIds.concat(roundsSelector.getSelectedRoundIds()));
+          }
           break;
         default:
           throw new Error(`Unrecognized value ${cumulativeRadio.value}`);
@@ -91,25 +200,38 @@ export default {
       onChange(newTimeLimit);
     };
 
+    let selectRoundsButton = (
+        <SelectRoundsButton onChange={onChangeAggregator}
+                            wcifEvents={wcifEvents}
+                            excludeRound={wcifRound}
+                            selectedRoundIds={timeLimit.cumulativeRoundIds}
+                            ref={c => roundsSelector = c}
+        />
+    );
+
     let description = null;
     if(timeLimit.cumulativeRoundIds.length === 0) {
       description = `Competitors have ${centisecondsToString(timeLimit.centiseconds)} for each of their solves.`;
     } else if(timeLimit.cumulativeRoundIds.length === 1) {
       description = (<span>
         Competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
-        of their solves in this round. This is called a cumulative time limit (see
-        regulation <a href="https://www.worldcubeassociation.org/regulations/#A1a2" target="_blank">A1a2</a>).
+        of their solves in this round. This is called a cumulative time limit
+        (see <RegulationLink regulation="A1a2" />).
+        The button below allows you to share this cumulative time limit with other rounds
+        (see <GuidelineLink guideline="A1a2++" />).
+        <div>{selectRoundsButton}</div>
       </span>);
     } else {
       let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);
       description = (<span>
-        This round has a cross round cumulative time limit (see
-        guideline <a href="https://www.worldcubeassociation.org/regulations/guidelines.html#A1a2++" target="_blank">A1a2++</a>).
+        This round has a cross round cumulative time limit
+        (see <GuidelineLink guideline="A1a2++" />).
         This means that competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
         of their solves in this round ({wcifRound.id}) shared with:
         <ul>
           {otherSelectedRoundIds.map(roundId => <li key={roundId}>{roundIdToString(roundId)}</li>)}
         </ul>
+        {selectRoundsButton}
       </span>);
     }
 
@@ -140,39 +262,6 @@ export default {
             </RadioGroup>
           </div>
         </div>
-
-        {timeLimit.cumulativeRoundIds.length >= 1 && (
-          <div className="row">
-            <div className="col-sm-offset-2 col-sm-10">
-              <ul className="list-unstyled">
-                {otherWcifRounds.map(wcifRound => {
-                  let roundId = wcifRound.id;
-                  let eventId = roundId.split("-")[0];
-                  let event = events.byId[eventId];
-                  let checked = timeLimit.cumulativeRoundIds.indexOf(roundId) >= 0;
-                  let eventAlreadySelected = timeLimit.cumulativeRoundIds.find(roundId => roundId.split("-")[0] == eventId);
-                  let disabled = !checked && eventAlreadySelected;
-                  let disabledReason = disabled && `Cannot select this round because you've already selected a round with ${event.name}`;
-                  return (
-                    <li key={roundId}>
-                      <div className="checkbox">
-                        <label title={disabledReason}>
-                          <input type="checkbox"
-                                 value={roundId}
-                                 checked={checked}
-                                 disabled={disabled}
-                                 ref={c => roundCheckboxes.push(c) }
-                                 onChange={onChangeAggregator} />
-                          {roundIdToString(roundId)}
-                        </label>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </div>
-        )}
 
         <div className="row">
           <span className="col-sm-offset-2 col-sm-10">{description}</span>
