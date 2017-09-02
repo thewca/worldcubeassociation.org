@@ -2683,7 +2683,7 @@ de:
         weitere Informationen angeben, warum dieser Wettbewerb trotzdem
         akzeptiert werden soll. Mögliche Gründe, die eine solche Entscheidung
         beeinflussen sind:
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': Die beiden Wettbewerbe bieten unterschiedliche Kategorien an.
         #original_hash: f7bacc5
@@ -2696,7 +2696,7 @@ de:
       content2: >-
         Simultane FMC Wettbewerbe dürfen nicht Teil anderer regulärer
         Wettbewerbe sein:
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': >-
           Wenn ein Ort eines solchen Wettbewerbs näher als 200 km von einem

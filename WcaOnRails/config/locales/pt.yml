@@ -2617,7 +2617,7 @@ pt:
         competição nestas condições deve conter informação adicional que o
         justifique e ainda assim deverá ser aprovado. Argumentos possíveis que
         suportarão a sua aprovação incluem:
-      list1:
+      olist1:
         #original_hash: 424c134
         '1': As duas competições têm eventos diferentes.
         #original_hash: f7bacc5
@@ -2630,7 +2630,7 @@ pt:
       content2: >-
         Competições simultâneas de FMC não podem ser parte de qualquer outra
         competição regular:
-      list2:
+      olist2:
         #original_hash: a57b541
         '1': >-
           Se a localização de qualquer destas competições for mais próxima do
