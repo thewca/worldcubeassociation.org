@@ -15,8 +15,8 @@ pl:
     #original_hash: 4e8bd04
     KR: Korea
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Wiele Państw
+    #original_hash: 0f138c8
+    Multiple Continents: Wiele Kontynentów
     #original_hash: 1d35114
     Africa: Afryka
     #original_hash: a173e72
@@ -2687,6 +2687,11 @@ pl:
           mniejszej niż 200 km od innych normalnych zadowów, to powinny być
           oddzielone o co najmniej 5 dni lub drugie z nich nie mogą mieć
           konkurencji FM.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Zapowiadanie konkurencji
+      #original_hash: b6c6d26
+      content: "Wszystkie konkurencjie, które mają odbyć się na zawodach, muszą być określone przez Delegata, podczas składania prośby o akceptację zawodów. Dotyczy to również\_\"niepewnych\" konkurencji (tzn. takich, które mogą się odbyć dodatkowo w zależności od przebiegu zawodów). Późniejsze zmiany muszą być zaakceptowane przez Zarząd."
     paragraph5:
       #original_hash: 17d01de
       title: Limity zawodników
