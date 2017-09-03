@@ -71,12 +71,12 @@ gem 'i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 gem 'jquery-slick-rails'
-gem 'webpacker'
+gem 'webpacker', '~> 2' # TODO: https://github.com/thewca/worldcubeassociation.org/issues/1901
 gem 'json-schema'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
-  gem 'rails-assets-autoNumeric'
+  gem 'rails-assets-autoNumeric', '~> 2' # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/1900
 end
 
 group :development, :test do
