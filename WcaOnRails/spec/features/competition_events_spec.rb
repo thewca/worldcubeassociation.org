@@ -66,8 +66,8 @@ RSpec.feature "Competition events management" do
       within_round("333", 1) { find("[name=advancementCondition]").click }
 
       within_modal do
-        select "Ranking", from: "type"
-        fill_in "ranking", with: "12"
+        select "Ranking", from: "Type"
+        fill_in "Ranking", with: "12"
         click_button "Save"
       end
       save

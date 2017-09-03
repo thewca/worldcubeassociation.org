@@ -65,17 +65,21 @@ export default {
     let advancementInput = null;
     let helpBlock = null;
     let advancementType = advancementCondition ? advancementCondition.type : "";
+    let valueLabel = null;
     switch(advancementType) {
       case "ranking":
-        advancementInput = <input type="number" name="ranking" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
+        valueLabel = "Ranking";
+        advancementInput = <input type="number" id="advacement-condition-value" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
         helpBlock = `The top ${advancementCondition.level} competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "percent":
-        advancementInput = <input type="number" name="percent" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
+        valueLabel = "Percent";
+        advancementInput = <input type="number" id="advacement-condition-value" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
         helpBlock = `The top ${advancementCondition.level}% of competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "attemptResult":
-        advancementInput = <AttemptResultInput eventId={wcifEvent.id} value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
+        valueLabel = "Result";
+        advancementInput = <AttemptResultInput id="advacement-condition-value" eventId={wcifEvent.id} value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
         helpBlock = `Everyone in round ${roundNumber} with a result ${matchResult(advancementCondition.level, wcifEvent.id)} will advance to round ${roundNumber + 1}.`;
         break;
       default:
@@ -86,26 +90,34 @@ export default {
     return (
       <div>
         <div className="form-group">
-          <div className="col-sm-12">
-            <div className="input-group advancement-condition">
-              <select value={advancementCondition ? advancementCondition.type : ""}
-                      name="type"
-                      autoFocus={autoFocus}
-                      onChange={onChangeAggregator}
-                      className="form-control"
-                      ref={c => typeInput = c}
-              >
-                <option value="">To be announced</option>
-                <option disabled="disabled">────────</option>
-                <option value="ranking">Ranking</option>
-                <option value="percent">Percent</option>
-                <option value="attemptResult">Result</option>
-              </select>
-
-              {advancementInput}
-            </div>
+          <label htmlFor="advacement-condition-type" className="col-sm-3 control-label">Type</label>
+          <div className="col-sm-9">
+            <select value={advancementCondition ? advancementCondition.type : ""}
+                    id="advacement-condition-type"
+                    name="type"
+                    autoFocus={autoFocus}
+                    onChange={onChangeAggregator}
+                    className="form-control"
+                    ref={c => typeInput = c}
+            >
+              <option value="">To be announced</option>
+              <option disabled="disabled">────────</option>
+              <option value="ranking">Ranking</option>
+              <option value="percent">Percent</option>
+              <option value="attemptResult">Result</option>
+            </select>
           </div>
         </div>
+
+        <div className="form-group">
+          <label htmlFor="advacement-condition-value" className="col-sm-3 control-label">
+            {valueLabel}
+          </label>
+          <div className="col-sm-9">
+            {advancementInput}
+          </div>
+        </div>
+
         {helpBlock}
       </div>
     );
