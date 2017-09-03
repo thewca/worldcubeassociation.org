@@ -15,8 +15,8 @@ nl:
     #original_hash: 4e8bd04
     KR: Zuid-Korea
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Meerdere Landen
+    #original_hash: 0f138c8
+    Multiple Continents: Meerdere Continenten
     #original_hash: 1d35114
     Africa: Afrika
     #original_hash: a173e72
@@ -2653,6 +2653,17 @@ nl:
           reguliere andere wedstrijden is, dan moeten beide wedstrijden minimaal
           5 dagen uit elkaar plaatsvinden en mag de andere wedstrijd geen
           wedstrijdonderdeel FMC hebben.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Wedstrijdonderdelen aankondigen
+      #original_hash: b6c6d26
+      content: >-
+        Alle wedstrijdonderdelen die tijdens een wedstrijd worden gehouden
+        moeten worden gespecificeerd door de WCA Delegate, bij het goedkeuren
+        van een wedstrijd. Hieronder vallen ook de wedstrijdonderdelen die
+        misschien worden gehouden, d.w.z. wedstrijdonderdelen die afhangen van
+        hoe soepel de wedstrijd verloopt. Aanvullingen moeten worden goedgekeurd
+        door de WCA Board,
     paragraph5:
       #original_hash: 17d01de
       title: Maximumaantal Deelnemers
