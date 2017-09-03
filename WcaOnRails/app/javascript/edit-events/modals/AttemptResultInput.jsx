@@ -29,6 +29,7 @@ class CentisecondsInput extends React.Component {
       <div>
         <input type="number"
                id={id}
+               name="minutes"
                className="form-control"
                autoFocus={autoFocus}
                value={minutes}
@@ -38,9 +39,8 @@ class CentisecondsInput extends React.Component {
         minutes
 
         <input type="number"
-               id={id}
+               name="seconds"
                className="form-control"
-               autoFocus={autoFocus}
                value={seconds}
                min={0} max={59}
                ref={c => this.secondsInput = c}
@@ -48,9 +48,8 @@ class CentisecondsInput extends React.Component {
         seconds
 
         <input type="number"
-               id={id}
+               name="centiseconds"
                className="form-control"
-               autoFocus={autoFocus}
                value={centiseconds}
                min={0} max={99}
                ref={c => this.centisecondsInput = c}

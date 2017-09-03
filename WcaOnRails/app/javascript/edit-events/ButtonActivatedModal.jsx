@@ -20,7 +20,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <button type="button" className={cn("btn", this.props.buttonClass)} onClick={this.open}>
+      <button type="button" name={this.props.name} className={cn("btn", this.props.buttonClass)} onClick={this.open}>
         {this.props.buttonValue}
         <Modal show={this.state.showModal} onHide={this.close} backdrop="static">
           <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>

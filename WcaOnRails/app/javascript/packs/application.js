@@ -9,3 +9,4 @@
 
 import 'markdown-editor';
 import 'image-preview';
+import 'polyfills';

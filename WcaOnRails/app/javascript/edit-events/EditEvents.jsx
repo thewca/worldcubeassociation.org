@@ -113,10 +113,10 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
             };
 
             return (
-              <tr key={roundNumber}>
+              <tr key={roundNumber} className={`round-${roundNumber}`}>
                 <td>{roundNumber}</td>
                 <td>
-                  <select className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged}>
+                  <select name="format" className="form-control input-xs" value={wcifRound.format} onChange={roundFormatChanged}>
                     {event.formats().map(format => <option key={format.id} value={format.id}>{abbreviate(format.name)}</option>)}
                   </select>
                 </td>
@@ -166,13 +166,13 @@ const EventPanel = ({ wcifEvents, wcifEvent }) => {
   };
 
   return (
-    <div className={cn("panel panel-default", { 'event-not-being-held': wcifEvent.rounds.length == 0 })}>
+    <div className={cn(`panel panel-default event-${wcifEvent.id}`, { 'event-not-being-held': wcifEvent.rounds.length == 0 })}>
       <div className="panel-heading">
         <h3 className="panel-title">
           <span className={cn("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
           <span className="title">{event.name}</span>
           {" "}
-          <select className="form-control input-xs" value={wcifEvent.rounds.length} onChange={roundCountChanged}>
+          <select className="form-control input-xs" name="select-round-count" value={wcifEvent.rounds.length} onChange={roundCountChanged}>
             <option value={0}>Not being held</option>
             <option disabled="disabled">────────</option>
             <option value={1}>1 round</option>

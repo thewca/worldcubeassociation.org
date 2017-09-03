@@ -67,11 +67,11 @@ export default {
     let advancementType = advancementCondition ? advancementCondition.type : "";
     switch(advancementType) {
       case "ranking":
-        advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
+        advancementInput = <input type="number" name="ranking" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
         helpBlock = `The top ${advancementCondition.level} competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "percent":
-        advancementInput = <input type="number" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
+        advancementInput = <input type="number" name="percent" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
         helpBlock = `The top ${advancementCondition.level}% of competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "attemptResult":
@@ -89,6 +89,7 @@ export default {
           <div className="col-sm-12">
             <div className="input-group advancement-condition">
               <select value={advancementCondition ? advancementCondition.type : ""}
+                      name="type"
                       autoFocus={autoFocus}
                       onChange={onChangeAggregator}
                       className="form-control"

@@ -106,15 +106,16 @@ class EditRoundAttribute extends React.Component {
   }
 
   render() {
-    let { wcifEvents, wcifEvent, roundNumber } = this.props;
+    let { wcifEvents, wcifEvent, roundNumber, attribute } = this.props;
     let wcifRound = this.getWcifRound();
-    let Show = RoundAttributeComponents[this.props.attribute].Show;
-    let Input = RoundAttributeComponents[this.props.attribute].Input;
-    let Title = RoundAttributeComponents[this.props.attribute].Title;
+    let Show = RoundAttributeComponents[attribute].Show;
+    let Input = RoundAttributeComponents[attribute].Input;
+    let Title = RoundAttributeComponents[attribute].Title;
 
     return (
       <ButtonActivatedModal
         buttonValue={<Show value={this.getSavedValue()} wcifEvent={wcifEvent} />}
+        name={attribute}
         buttonClass="btn-default btn-xs"
         formClass="form-horizontal"
         onSave={this.onSave}

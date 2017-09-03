@@ -11,10 +11,10 @@ function getAuthenticityToken() {
 export function promiseSaveWcif(wcif) {
   let url = `/competitions/${wcif.id}/wcif/events`;
   let fetchOptions = {
-    headers: new Headers({
+    headers: {
       "Content-Type": "application/json",
       "X-CSRF-Token": getAuthenticityToken(),
-    }),
+    },
     credentials: 'include',
     method: "PATCH",
     body: JSON.stringify(wcif.events),
