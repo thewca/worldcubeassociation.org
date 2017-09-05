@@ -20,8 +20,8 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   1. `cd WcaOnRails/`
   2. `bundle install && bin/yarn`
   3. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export).
-  4. `bin/foreman start` - Run rails and webpack. The server will be accessible at localhost:3000
-- `bin/rspec` - Run tests. Make sure that `RAILS_ENV=test bin/webpack-dev-server` is already running.
+  4. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
+- `bin/rspec` - Run tests.
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
 
 ## Provision New VM

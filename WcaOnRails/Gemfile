@@ -71,7 +71,7 @@ gem 'i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 gem 'jquery-slick-rails'
-gem 'webpacker', '~> 2' # TODO: https://github.com/thewca/worldcubeassociation.org/issues/1901
+gem 'webpacker'
 gem 'json-schema'
 
 source 'https://rails-assets.org' do
@@ -100,7 +100,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
-  gem 'foreman'
 end
 
 group :test do
