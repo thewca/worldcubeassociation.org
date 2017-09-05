@@ -173,19 +173,24 @@ class CompetitionsController < ApplicationController
   helper_method :editable_post_fields
 
   def post_announcement
-    I18n.with_locale :en do
-      comp = Competition.find(params[:id])
-      date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
-      title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.country.name}"
+    if ComputeAuxiliaryData.in_progress?
+      flash[:warning] = "Please wait until auxiliary data is computed."
+      redirect_to admin_edit_competition_path(competition_from_params)
+    else
+      I18n.with_locale :en do
+        comp = Competition.find(params[:id])
+        date_range_str = wca_date_range(comp.start_date, comp.end_date, format: :long)
+        title = "#{comp.name} on #{date_range_str} in #{comp.cityName}, #{comp.country.name}"
 
-      body = "The [#{comp.name}](#{competition_url(comp)})"
-      body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.country.name}."
-      unless comp.website.blank?
-        body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
+        body = "The [#{comp.name}](#{competition_url(comp)})"
+        body += " will take place on #{date_range_str} in #{comp.cityName}, #{comp.country.name}."
+        unless comp.website.blank?
+          body += " Check out the [#{comp.name} website](#{comp.website}) for more information and registration."
+        end
+        create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
+
+        comp.update!(announced_at: Time.now)
       end
-      create_post_and_redirect(title: title, body: body, author: current_user, tags: "competitions,new", world_readable: true)
-
-      comp.update!(announced_at: Time.now)
     end
   end
 
