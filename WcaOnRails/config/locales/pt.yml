@@ -15,8 +15,8 @@ pt:
     #original_hash: 4e8bd04
     KR: Coreia do Sul
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Vários Países
+    #original_hash: 0f138c8
+    Multiple Continents: Vários Continentes
     #original_hash: 1d35114
     Africa: África
     #original_hash: a173e72
@@ -150,19 +150,19 @@ pt:
   cutoff:
     #original_hash: 38a40f6
     time:
-      other: '%{count} tentativas para obter ≤ %{time}'
-      one: '%{count} tentativa para obter ≤ %{time}'
       zero: '%{count} tentativas para obter ≤ %{time}'
+      one: '%{count} tentativa para obter ≤ %{time}'
+      other: '%{count} tentativas para obter ≤ %{time}'
     #original_hash: 6f99fa6
     moves:
-      other: '%{count} tentativas para obter ≤ %{moves} movimentos'
-      one: '%{count} tentativa para obter ≤ %{moves} movimentos'
       zero: '%{count} tentativas para obter ≤ %{moves} movimentos'
+      one: '%{count} tentativa para obter ≤ %{moves} movimentos'
+      other: '%{count} tentativas para obter ≤ %{moves} movimentos'
     #original_hash: 1c7c5f1
     points:
-      other: '%{count} tentativas para obter ≥ %{points} pontos'
-      one: '%{count} tentativa para obter ≥ %{points} pontos'
       zero: '%{count} tentativas para obter ≥ %{points} pontos'
+      one: '%{count} tentativa para obter ≥ %{points} pontos'
+      other: '%{count} tentativas para obter ≥ %{points} pontos'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -2619,13 +2619,13 @@ pt:
         suportarão a sua aprovação incluem:
       olist1:
         #original_hash: 424c134
-        '1': As duas competições têm eventos diferentes.
+        '1': As duas competições têm eventos distintos.
         #original_hash: f7bacc5
         '2': As duas competições ocorrem em países diferentes.
         #original_hash: 9aa4d96
         '3': >-
-          Nos últimos 12 meses, existiram menos que 13 competições numa área de
-          200 km ao redor do sítio da competição.
+          Nos últimos 12 meses, existiram menos que 13 competições num raio de
+          200 km do local da competição.
       #original_hash: ab65dfb
       content2: >-
         Competições simultâneas de FMC não podem ser parte de qualquer outra
@@ -2635,8 +2635,18 @@ pt:
         '1': >-
           Se a localização de qualquer destas competições for mais próxima do
           que 200 km para qualquer competição regular, então ambas as
-          competições devem ser separadas por pelo menos 5 dias e as outras
-          competições não podem ter o evento de Menos Movimentos.
+          competições devem ter pelo menos 5 dias de separação e a outra
+          competição não pode ter o evento de Menos Movimentos.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Anunciando eventos
+      #original_hash: b6c6d26
+      content: >-
+        Todos os eventos que serão realizados na competição têm que ser
+        especificados pelo Delegado quando regista a competição para aprovação.
+        Isto inclui igualmente eventos "provisórios" (i.e. eventos que podem ou
+        não ser realizados consoante o fluxo da competição). Adições extra têm
+        que ser aprovadas pelo Conselho.
     paragraph5:
       #original_hash: 17d01de
       title: Limite de competidores
