@@ -15,8 +15,8 @@ de:
     #original_hash: 4e8bd04
     KR: Korea
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Mehrere Länder
+    #original_hash: 0f138c8
+    Multiple Continents: Mehrere Kontinente
     #original_hash: 1d35114
     Africa: Afrika
     #original_hash: a173e72
@@ -2639,9 +2639,9 @@ de:
         An allen Wettbewerben muss ein WCA Delegate teilnehmen. Wenn du daran
         interessiert bist, einen Wettbewerb zu organisieren, kontaktiere bitte
         den nächsten WCA Delegierten. Er wird dir mehr Informationen über lokale
-        Gegebenheiten und wird dir helfen, ein passendes Datum zu finden, da er
-        über weitere Wettbewerbe in der Gegend Bescheid weiß. Falls es in deiner
-        Nähe keinen WCA Delegierten gibt, wende dich bitte an den Senior
+        Gegebenheiten geben und wird dir helfen, ein passendes Datum zu finden,
+        da er über weitere Wettbewerbe in der Gegend Bescheid weiß. Falls es in
+        deiner Nähe keinen WCA Delegierten gibt, wende dich bitte an den Senior
         Delegierten in deiner Region.
     paragraph2:
       #original_hash: f20dd3b
@@ -2650,8 +2650,8 @@ de:
       content: >-
         Die zu erwartenden Ausgaben unterscheiden sich in einzelnen Ländern und
         werden durch verschiedene Faktoren, wie beispielsweise die Größe des
-        Veranstaltungsortes und viele weitere Gegebenheiten bestimmt. Die Kosten
-        mit Eintrittsgeldern zu decken ist möglich. Trotzdem ist es
+        Veranstaltungsortes und viele weitere Gegebenheiten bestimmt. Es ist
+        möglich, die Kosten durch Eintrittsgelder zu decken. Trotzdem ist es
         empfehlenswert nach Sponsoren zu suchen, um die Eintrittspreise so
         gering wie möglich zu halten. Obwohl WCA Delegierte Freiwillige sind und
         keinen Lohn erhalten, sollten Organisatoren erwägen ihre Reisekosten zu
@@ -2664,37 +2664,36 @@ de:
         Der Wettbewerb sollte mindestens einen Monat vor Beginn angekündigt
         werden (siehe <a
         href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Guideline
-        8a4++</a>). Wenn es besondere Gründe gibt, die verhindern dass diese
-        Deadline nicht eingehalten werden kann, dürfen Wettbewerbe bis zu zwei
-        Wochen vor Beginn angekündigt werden (im Ermessen des WCA Boards). Es
-        ist sehr empfehlenswert das WCA Board in diesem Fall möglichst
-        frühzeitig zu informieren, um eine spätere Ablehnung des Wettbewerbs zu
-        verhindern.
+        8a4++</a>). Wenn es Gründe gibt, die verhindern, dass diese Deadline
+        nicht eingehalten werden kann, dürfen Wettbewerbe bis zu zwei Wochen vor
+        Beginn angekündigt werden (im Ermessen des WCA Boards). Es ist sehr
+        empfehlenswert das WCA Board in diesem Fall möglichst frühzeitig zu
+        informieren, um eine spätere Ablehnung des Wettbewerbs zu verhindern.
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
       #original_hash: b2bc107
       content1: >-
-        Als generelle Regel werden WCA Wettbewerbe akzeptiert, wenn sie
-        mindestens 200 km oder 26 Tage von jedem anderen Wettbewerb entfernt
+        Als generelle Regel werden WCA Competitions akzeptiert, wenn sie
+        mindestens 200 km oder 26 Tage von jedem anderen Competitions entfernt
         sind. Das WCA Board sollte einen Wettbewerb überprüfen, wenn die Distanz
         unter 200 km und die Zeitspanne unter 26 Tagen liegt. Ein Delegierter,
-        der einen Wettbewerb anfragt, der diese Regeln nicht erfüllt, muss
-        weitere Informationen angeben, warum dieser Wettbewerb trotzdem
+        der eine Competition anfragt, der diese Regeln nicht erfüllt, muss
+        weitere Informationen angeben, warum diese Competition trotzdem
         akzeptiert werden soll. Mögliche Gründe, die eine solche Entscheidung
-        beeinflussen sind:
+        beeinflussen, sind folgende:
       olist1:
         #original_hash: 424c134
-        '1': Die beiden Wettbewerbe bieten unterschiedliche Kategorien an.
+        '1': Die beiden Wettbewerbe bieten unterschiedliche Events an.
         #original_hash: f7bacc5
         '2': Die beiden Wettbewerbe finden in verschiedenen Ländern statt.
         #original_hash: 9aa4d96
         '3': >-
-          In den letzten 12 Monaten gab es weniger als 13 Wettbewerbe in einem
-          Radius von 200km um den Ort des Wettbewerbs.
+          In einem Radius von 200km um den Ort des Wettbewerbs herum gab es in
+          den letzten 12 Monaten weniger als 13 Wettbewerbe.
       #original_hash: ab65dfb
       content2: >-
-        Simultane FMC Wettbewerbe dürfen nicht Teil anderer regulärer
+        Simultane FMC Competitions dürfen nicht Teil anderer regulärer
         Wettbewerbe sein:
       olist2:
         #original_hash: a57b541
@@ -2703,6 +2702,16 @@ de:
           anderen regulären Wettbewerb entfernt ist, müssen beide Wettbewerbe
           entweder 5 Tage auseinanderliegen oder der andere Wettbewerb darf
           nicht Fewest Moves anbieten.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Events ankündigen
+      #original_hash: b6c6d26
+      content: >-
+        Alle Events, die bei dem Wettbewerb abgehalten werden sollen, müssen vom
+        Delegierten angegeben werden, wenn der Wettbewerb beantragt wird. Das
+        schließt auch sogenannte "tentative Events" ein (d.h. Events, die
+        hinzugefügt werden, wenn die Zeit es erlaubt). Zusätzliche Events müssen
+        vom Board bestätigt werden.
     paragraph5:
       #original_hash: 17d01de
       title: Teilnehmerlimit
@@ -2767,7 +2776,7 @@ de:
         '2': >-
           Teilnehmer sollten in Gruppen eingeteilt werden, Scoresheets sollten
           gedruckt werden und sollten entsprechend der Gruppeneinteilung
-          sortiert werden. Es ist auch empfehlenswert zumindest für die ersten
+          sortiert werden. Es ist auch empfehlenswert, mindestens für die ersten
           Runden zu planen, wer in den einzelnen Kategorien scrambeln soll.
           Scrambler sollten besonders zuverlässig sein.
     paragraph9:
