@@ -51,10 +51,12 @@ class Competition < ApplicationRecord
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins(:competition_organizers, :competition_delegates).where(
-      "delegate_id = :user_id OR organizer_id = :user_id",
-      user_id: user_id,
-    ).group(:id)
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+      .where(
+        "delegate_id = :user_id OR organizer_id = :user_id",
+        user_id: user_id,
+      ).group(:id)
   }
 
   CLONEABLE_ATTRIBUTES = %w(
