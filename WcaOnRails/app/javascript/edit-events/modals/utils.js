@@ -73,7 +73,7 @@ export function matchResult(attemptResult, eventId, { short } = {}) {
   return `${comparisonString} ${attemptResultToString(attemptResult, eventId, { short })}`;
 }
 
-let pluralize = function(count, word, { fixed, abbreviate } = {}) {
+export function pluralize(count, word, { fixed, abbreviate } = {}) {
   let countStr = (fixed && count % 1 > 0) ? count.toFixed(fixed) : count;
   let countDesc = abbreviate ? word[0] : " " + (count == 1 ? word : word + "s");
   return countStr + countDesc;

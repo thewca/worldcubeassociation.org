@@ -3,7 +3,12 @@ import React from 'react'
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
-import { attemptResultToString, roundIdToString, matchResult } from './utils'
+import {
+  pluralize,
+  matchResult,
+  roundIdToString,
+  attemptResultToString,
+} from './utils'
 
 export default {
   Title({ wcifRound }) {
@@ -35,6 +40,12 @@ export default {
       }
       onChange(newCutoff);
     };
+
+    let explanationText = null;
+    if(cutoff) {
+      explanationText = `Competitors get ${pluralize(cutoff.numberOfAttempts, "attempt")} to get ${matchResult(cutoff.attemptResult, wcifEvent.id)}.`;
+      explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expected_solve_count} solves.`;
+    }
 
     return (
       <div>
@@ -74,6 +85,8 @@ export default {
             </div>
           </div>
         )}
+
+        {explanationText}
       </div>
     );
   },
