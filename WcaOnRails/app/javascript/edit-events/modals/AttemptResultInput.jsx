@@ -33,7 +33,7 @@ class CentisecondsInput extends React.Component {
                className="form-control"
                autoFocus={autoFocus}
                value={minutes}
-               min={0} max={60}
+               min={0}
                ref={c => this.minutesInput = c}
                onChange={onChange} />
         minutes
