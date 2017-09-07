@@ -40,11 +40,6 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def load_wcif!(wcif)
-    if wcif["rounds"].empty?
-      self.destroy!
-      return
-    end
-
     self.rounds.destroy_all!
     wcif["rounds"].each_with_index do |wcif_round, index|
       self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1))

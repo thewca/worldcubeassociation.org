@@ -22,15 +22,15 @@ export default class EditEvents extends React.Component {
 
     this.setState({ saving: true });
     promiseSaveWcif(wcif).then(response => {
+      return response.json().then(json => [ response, json ]);
+    }).then(([response, json]) => {
       if(!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}`);
+        throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
       }
-      return response;
-    }).then(() => {
       this.setState({ savedWcifEvents: clone(this.props.wcifEvents), saving: false });
-    }).catch(() => {
+    }).catch(e => {
       this.setState({ saving: false });
-      alert("Something went wrong while saving.");
+      alert("Something went wrong while saving.\n" + e.message);
     });
   }
 

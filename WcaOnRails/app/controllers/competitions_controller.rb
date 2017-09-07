@@ -352,6 +352,8 @@ class CompetitionsController < ApplicationController
       status: "Error while saving WCIF events",
       error: e.message,
     }
+  rescue WcaExceptions::ApiException => e
+    render status: e.status, json: { error: e.to_s }
   end
 
   def get_nearby_competitions(competition)
