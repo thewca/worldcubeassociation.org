@@ -692,4 +692,26 @@ RSpec.describe Competition do
       expect(Competition.contains('wes').contains('blah').first).to eq nil
     end
   end
+
+  describe "#managed_by" do
+    let(:delegate1) { FactoryGirl.create(:delegate) }
+    let(:delegate2) { FactoryGirl.create(:delegate) }
+    let(:organizer1) { FactoryGirl.create(:user) }
+    let(:organizer2) { FactoryGirl.create(:user) }
+    let!(:competition) {
+      FactoryGirl.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
+    }
+    let!(:competition_without_organizers) {
+      FactoryGirl.create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [])
+    }
+    let!(:other_comp) { FactoryGirl.create(:competition) }
+
+    it "finds comps by delegate" do
+      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_without_organizers]
+    end
+
+    it "finds comps by organizer" do
+      expect(Competition.managed_by(organizer1.id)).to match_array [competition]
+    end
+  end
 end
