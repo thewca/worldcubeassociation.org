@@ -3,6 +3,9 @@ import React from 'react'
 import AttemptResultInput from './AttemptResultInput'
 import { attemptResultToString, roundIdToString, matchResult } from './utils'
 
+const MIN_ADVANCE_PERCENT = 1;
+const MAX_ADVANCE_PERCENT = 75;
+
 export default {
   Title({ wcifRound }) {
     return <span>Requirement to advance past {roundIdToString(wcifRound.id)}</span>;
@@ -74,7 +77,17 @@ export default {
         break;
       case "percent":
         valueLabel = "Percent";
-        advancementInput = <input type="number" id="advacement-condition-value" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => percentInput = c} />;
+        advancementInput = (
+          <input type="number"
+                 id="advacement-condition-value"
+                 min={MIN_ADVANCE_PERCENT}
+                 max={MAX_ADVANCE_PERCENT}
+                 className="form-control"
+                 value={advancementCondition.level}
+                 onChange={onChangeAggregator}
+                 ref={c => percentInput = c}
+          />
+        );
         helpBlock = `The top ${advancementCondition.level}% of competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "attemptResult":
