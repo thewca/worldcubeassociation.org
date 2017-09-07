@@ -152,5 +152,8 @@ else
   export RACK_ENV=development
 fi
 
+# Workaround for https://github.com/rails/webpacker/issues/773
+export RAILS_ENV=${RACK_ENV}
+
 allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs"
 source scripts/_parse_args.sh
