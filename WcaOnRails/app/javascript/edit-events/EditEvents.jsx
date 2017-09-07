@@ -59,7 +59,7 @@ export default class EditEvents extends React.Component {
   }
 
   render() {
-    let { competitionId, wcifEvents } = this.props;
+    let { competitionId, competitionConfirmed, wcifEvents } = this.props;
     let unsavedChanges = null;
     if(this.unsavedChanges()) {
       unsavedChanges = (
@@ -81,7 +81,7 @@ export default class EditEvents extends React.Component {
           {wcifEvents.map(wcifEvent => {
             return (
               <div key={wcifEvent.id} className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} />
+                <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} competitionConfirmed={competitionConfirmed} />
               </div>
             );
           })}
@@ -153,7 +153,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
   );
 }
 
-const EventPanel = ({ wcifEvents, wcifEvent }) => {
+const EventPanel = ({ wcifEvents, competitionConfirmed, wcifEvent }) => {
   let event = events.byId[wcifEvent.id];
   let roundCountChanged = e => {
     let newRoundCount = parseInt(e.target.value);
@@ -175,16 +175,35 @@ const EventPanel = ({ wcifEvents, wcifEvent }) => {
     rootRender();
   };
 
+  let panelTitle = null;
+  let disableAdd = false;
+  let disableRemove = false;
+  if(competitionConfirmed) {
+    if(wcifEvent.rounds.length === 0) {
+      disableAdd = true;
+      panelTitle = `Cannot add ${wcifEvent.id} because the competition is confirmed.`;
+    } else {
+      disableRemove = true;
+      panelTitle = `Cannot remove ${wcifEvent.id} because the competition is confirmed.`;
+    }
+  }
+
   return (
     <div className={cn(`panel panel-default event-${wcifEvent.id}`, { 'event-not-being-held': wcifEvent.rounds.length == 0 })}>
-      <div className="panel-heading">
+      <div className="panel-heading" title={panelTitle}>
         <h3 className="panel-title">
           <span className={cn("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
           <span className="title">{event.name}</span>
           {" "}
-          <select className="form-control input-xs" name="select-round-count" value={wcifEvent.rounds.length} onChange={roundCountChanged}>
-            <option value={0}>Not being held</option>
-            <option disabled="disabled">────────</option>
+          <select
+            className="form-control input-xs"
+            name="select-round-count"
+            value={wcifEvent.rounds.length}
+            onChange={roundCountChanged}
+            disabled={disableAdd}
+          >
+            {!disableRemove && <option value={0}>Not being held</option>}
+            {!disableRemove && <option disabled="disabled">────────</option>}
             <option value={1}>1 round</option>
             <option value={2}>2 rounds</option>
             <option value={3}>3 rounds</option>

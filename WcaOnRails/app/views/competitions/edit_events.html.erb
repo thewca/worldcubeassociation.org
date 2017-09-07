@@ -10,6 +10,7 @@
       $(function() {
         wca.initializeEventsForm(
           <%= @competition.id.to_json.html_safe %>,
+          <%= @competition.isConfirmed.to_json.html_safe %>,
           <%= @competition.competition_events.map(&:to_wcif).to_json.html_safe %>
         );
       });
