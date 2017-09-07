@@ -60,8 +60,23 @@ export default class EditEvents extends React.Component {
 
   render() {
     let { competitionId, wcifEvents } = this.props;
+    let unsavedChanges = null;
+    if(this.unsavedChanges()) {
+      unsavedChanges = (
+        <div className="alert alert-info">
+          You have unsaved changes. Don't forget to{" "}
+          <button onClick={this.save}
+            disabled={this.state.saving}
+            className={cn("btn", "btn-default btn-primary", { saving: this.state.saving })}
+          >
+            save your changes!
+          </button>
+        </div>
+      );
+    }
     return (
       <div>
+        {unsavedChanges}
         <div className="row equal">
           {wcifEvents.map(wcifEvent => {
             return (
@@ -71,12 +86,7 @@ export default class EditEvents extends React.Component {
             );
           })}
         </div>
-        <button onClick={this.save}
-                disabled={this.state.saving}
-                className={cn("btn", "btn-default", { "btn-primary": this.unsavedChanges(), saving: this.state.saving })}
-        >
-          Update Competition
-        </button>
+        {unsavedChanges}
       </div>
     );
   }

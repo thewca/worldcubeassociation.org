@@ -98,9 +98,7 @@ def within_modal
 end
 
 def save
-  click_button "Update Competition"
+  first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
-  # Clicking the button disables it, and capybara won't find the button
-  # until it's clickable again (after the ajax has succeeded).
-  find_button "Update Competition"
+  expect(page).to have_no_content("You have unsaved changes")
 end
