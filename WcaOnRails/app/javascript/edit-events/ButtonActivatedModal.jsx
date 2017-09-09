@@ -2,6 +2,8 @@ import React from 'react'
 import cn from 'classnames'
 import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
+import addEventListener from 'react-overlays/lib/utils/addEventListener';
+import ownerDocument from 'react-overlays/lib/utils/ownerDocument';
 
 export default class extends React.Component {
   constructor() {
@@ -14,6 +16,10 @@ export default class extends React.Component {
   }
 
   close = () => {
+    if(this.props.hasUnsavedChanges() && !confirm("Are you sure you want to discard your changes?")) {
+      return;
+    }
+
     this.props.reset();
     this.setState({ showModal: false });
   }
@@ -22,17 +28,52 @@ export default class extends React.Component {
     return (
       <button type="button" name={this.props.name} className={cn("btn", this.props.buttonClass)} onClick={this.open}>
         {this.props.buttonValue}
-        <Modal show={this.state.showModal} onHide={this.close} backdrop="static">
-          <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onSave(); }}>
+        <KeydownDismissModal show={this.state.showModal} onHide={this.close}>
+          <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onOk(); }}>
             {this.props.children}
             <Modal.Footer>
-              <Button onClick={this.close} className="pull-left">Close</Button>
-              <Button onClick={this.props.reset} bsStyle="danger" className="pull-left">Reset</Button>
-              <Button type="submit" bsStyle="primary">Save</Button>
+              <Button onClick={this.close} bsStyle="warning">Close</Button>
+              <Button type="submit" bsStyle="success">Ok</Button>
             </Modal.Footer>
           </form>
-        </Modal>
+        </KeydownDismissModal>
       </button>
     );
+  }
+}
+
+// More or less copied from https://github.com/react-bootstrap/react-overlays/pull/195
+// This can go away once a new version of react-overlays is released and react-bootstrap
+// is updated to depend on it.
+class KeydownDismissModal extends React.Component {
+  static defaultProps = Modal.defaultProps;
+
+  handleDocumentKeyDown = (e) => {
+    if (this.props.keyboard && e.key === 'Escape' && this._modal._modal.isTopModal()) {
+      if (this.props.onEscapeKeyDown) {
+        this.props.onEscapeKeyDown(e);
+      }
+
+      this.props.onHide();
+    }
+  }
+
+  onShow = () => {
+    let doc = ownerDocument(this);
+    this._onDocumentKeydownListener =
+      addEventListener(doc, 'keydown', this.handleDocumentKeyDown);
+  }
+
+  onHide = () => {
+    this._onDocumentKeydownListener.remove();
+  }
+
+  render() {
+    let subprops = {
+      ...this.props,
+      keyboard: false,
+      onShow: this.onShow,
+    };
+    return <Modal {...subprops} ref={m => this._modal = m} />;
   }
 }

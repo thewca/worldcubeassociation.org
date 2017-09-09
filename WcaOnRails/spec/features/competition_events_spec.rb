@@ -38,7 +38,7 @@ RSpec.feature "Competition events management" do
 
       within_modal do
         fill_in "minutes", with: "5"
-        click_button "Save"
+        click_button "Ok"
       end
       save
 
@@ -52,7 +52,7 @@ RSpec.feature "Competition events management" do
       within_modal do
         select "Best of 2", from: "Round format"
         fill_in "minutes", with: "2"
-        click_button "Save"
+        click_button "Ok"
       end
       save
 
@@ -68,7 +68,7 @@ RSpec.feature "Competition events management" do
       within_modal do
         select "Ranking", from: "Type"
         fill_in "Ranking", with: "12"
-        click_button "Save"
+        click_button "Ok"
       end
       save
 

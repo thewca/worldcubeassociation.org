@@ -65,11 +65,15 @@ class EditRoundAttribute extends React.Component {
     return this.getWcifRound()[this.props.attribute];
   }
 
+  hasUnsavedChanges = () => {
+    return JSON.stringify(this.getSavedValue()) != JSON.stringify(this.state.value);
+  }
+
   onChange = (value) => {
     this.setState({ value: value });
   }
 
-  onSave = () => {
+  onOk = () => {
     let wcifRound = this.getWcifRound();
     wcifRound[this.props.attribute] = this.state.value;
 
@@ -118,8 +122,9 @@ class EditRoundAttribute extends React.Component {
         name={attribute}
         buttonClass="btn-default btn-xs"
         formClass="form-horizontal"
-        onSave={this.onSave}
+        onOk={this.onOk}
         reset={this.reset}
+        hasUnsavedChanges={this.hasUnsavedChanges}
         ref={c => this._modal = c}
       >
         <Modal.Header closeButton>
