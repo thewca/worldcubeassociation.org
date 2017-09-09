@@ -101,7 +101,7 @@ class EditRoundAttribute extends React.Component {
       }
     }
 
-    this._modal.close();
+    this._modal.close({ skipUnsavedChangesCheck: true });
     rootRender();
   }
 

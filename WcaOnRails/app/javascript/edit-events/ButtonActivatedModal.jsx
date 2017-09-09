@@ -15,8 +15,8 @@ export default class extends React.Component {
     this.setState({ showModal: true });
   }
 
-  close = () => {
-    if(this.props.hasUnsavedChanges() && !confirm("Are you sure you want to discard your changes?")) {
+  close = ({ skipUnsavedChangesCheck } = { skipUnsavedChangesCheck: false }) => {
+    if(!skipUnsavedChangesCheck && this.props.hasUnsavedChanges() && !confirm("Are you sure you want to discard your changes?")) {
       return;
     }
 

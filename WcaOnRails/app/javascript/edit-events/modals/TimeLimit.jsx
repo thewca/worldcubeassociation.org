@@ -56,9 +56,13 @@ class SelectRoundsButton extends React.Component {
     return Object.entries(this.state.selectedRoundsById).filter(([k, v]) => v).map(([k, v]) => k);
   }
 
-  onSave = () => {
+  onOk = () => {
     this.props.onChange();
-    this._modal.close();
+    this._modal.close({ skipUnsavedChangesCheck: true });
+  }
+
+  hasUnsavedChanges = () => {
+    return JSON.stringify(this.props.selectedRoundIds) != JSON.stringify(this.getSelectedRoundIds());
   }
 
   render() {
@@ -83,7 +87,8 @@ class SelectRoundsButton extends React.Component {
       <ButtonActivatedModal
         buttonValue="Share with other rounds"
         buttonClass="btn-success"
-        onSave={this.onSave}
+        onOk={this.onOk}
+        hasUnsavedChanges={this.hasUnsavedChanges}
         reset={this.reset}
         ref={c => this._modal = c}
       >
