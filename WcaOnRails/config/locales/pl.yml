@@ -2708,10 +2708,10 @@ pl:
         Z4</a>). Jak dla każdej regulacji artykułu Z, delegat musi dostać
         pozwolenie na ograniczenie liczby zawodników przez Zarząd WCA. Limity
         zawodników powinny być wybierane rozsądnie i zgodnie z oczekiwanym
-        zainteresowaniem zawodników. Ilość zawodników nie powinna być
-        zmniejszana z błahych powowód. Zamierzony limit powinien być wzięty pod
-        uwagę podczas szukania odpowiedniego miejsca zawodów. Limit zawodników
-        musi być jasno określony na stronie zawodów WCA.
+        zainteresowaniem zawodników. Nie powinny być również zmieniane z błahych
+        powowód. Zamierzony limit powinien być wzięty pod uwagę podczas szukania
+        odpowiedniego miejsca zawodów. Limit zawodników musi być jasno określony
+        na stronie zawodów WCA.
     paragraph6:
       #original_hash: ce4c3d0
       title: Obsługa rejestracji
@@ -2737,7 +2737,7 @@ pl:
         Jeżeli opłata wpisowa jest płatna z góry, skutecznym podejściem jest
         zaoferowanie wolnego miejsca następnemu zawodnikowi z listy oczekujących
         i ustalenie terminu, przed którym wpisowe powinno zostać uiszczone w
-        celu ukończenia rejestracji (np. 48 godzin). W prypadku, gdy płatność
+        celu ukończenia rejestracji (np. 48 godzin). W przypadku, gdy płatność
         nie zostanie zrealizowana na czas lub zawodnik zrezygnuje, dane wolne
         miejsce powinno być zaoferowane kolejnej osobie z listy oczekujących.
         Ten proces powinien być kontunuowany, aż do momentu zapełnienia się
@@ -2761,7 +2761,7 @@ pl:
         '2': >-
           Zawodnicy powinni zostać podzieleni na grupy, karty wyników muszą być
           wydrukowane i powinny być rozdzielone zgodnie z tymże podziałem grup.
-          Zaleca się również zalanowanie kto będzie odpowiedzialny za mieszanie
+          Zaleca się również zaplanowanie kto będzie odpowiedzialny za mieszanie
           każdej z grup w każdej konkurencji, co najmniej dla pierwszych rund.
           Mieszacze powinni być godni zaufania.
     paragraph9:
