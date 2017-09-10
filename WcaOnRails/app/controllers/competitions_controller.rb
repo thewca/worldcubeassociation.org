@@ -318,11 +318,11 @@ class CompetitionsController < ApplicationController
   end
 
   def show_events
-    @competition = competition_from_params(includes: [competition_events: { rounds: [:format, :competition_event] }])
+    @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:format, :competition_event] }])
   end
 
   def edit_events
-    @competition = competition_from_params(includes: [competition_events: { rounds: [:competition_event] }])
+    @competition = competition_from_params(includes: [:events, competition_events: { rounds: [:competition_event] }])
   end
 
   def update_events
