@@ -35,32 +35,17 @@ export default {
     return <span>{str}</span>;
   },
   Input({ value: advancementCondition, onChange, autoFocus, roundNumber, wcifEvent }) {
-    let typeInput, rankingInput, percentInput, attemptResultInput;
+    let typeInput;
+    let inputByType = {};
     let onChangeAggregator = () => {
       let type = typeInput.value;
-      let newAdvancementCondition;
-      switch(typeInput.value) {
-        case "ranking":
-          newAdvancementCondition = {
-            type: "ranking",
-            level: rankingInput ? parseInt(rankingInput.value): 0,
-          };
-          break;
-        case "percent":
-          newAdvancementCondition = {
-            type: "percent",
-            level: percentInput ? parseInt(percentInput.value) : 0,
-          };
-          break;
-        case "attemptResult":
-          newAdvancementCondition = {
-            type: "attemptResult",
-            level: attemptResultInput ? parseInt(attemptResultInput.value) : 0,
-          };
-          break;
-        default:
-          newAdvancementCondition = null;
-          break;
+      let newAdvancementCondition = null;
+      if(type !== "") {
+        let input = inputByType[type];
+        newAdvancementCondition = {
+          type,
+          level: input ? parseInt(input.value) : 0,
+        };
       }
       onChange(newAdvancementCondition);
     };
@@ -72,7 +57,7 @@ export default {
     switch(advancementType) {
       case "ranking":
         valueLabel = "Ranking";
-        advancementInput = <input type="number" id="advacement-condition-value" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => rankingInput = c} />;
+        advancementInput = <input type="number" id="advacement-condition-value" className="form-control" value={advancementCondition.level} onChange={onChangeAggregator} ref={c => inputByType["ranking"] = c} />;
         helpBlock = `The top ${advancementCondition.level} competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "percent":
@@ -85,14 +70,14 @@ export default {
                  className="form-control"
                  value={advancementCondition.level}
                  onChange={onChangeAggregator}
-                 ref={c => percentInput = c}
+                 ref={c => inputByType["percent"] = c}
           />
         );
         helpBlock = `The top ${advancementCondition.level}% of competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
         break;
       case "attemptResult":
         valueLabel = "Result";
-        advancementInput = <AttemptResultInput id="advacement-condition-value" eventId={wcifEvent.id} value={advancementCondition.level} onChange={onChangeAggregator} ref={c => attemptResultInput = c} />;
+        advancementInput = <AttemptResultInput id="advacement-condition-value" eventId={wcifEvent.id} value={advancementCondition.level} onChange={onChangeAggregator} ref={c => inputByType["attemptResult"] = c} />;
         helpBlock = `Everyone in round ${roundNumber} with a result ${matchResult(advancementCondition.level, wcifEvent.id)} will advance to round ${roundNumber + 1}.`;
         break;
       default:

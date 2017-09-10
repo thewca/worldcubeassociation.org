@@ -1,25 +1,19 @@
+import _ from 'lodash';
 import formats from 'wca/formats.js.erb';
 
 export default {
   official: <%= Event.official.to_json.html_safe %>.map(extend),
-  byId: mapObjectValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extend),
+  byId: _.mapValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extend),
 };
 
-function mapObjectValues(obj, func) {
-  let newObj = {};
-  Object.keys(obj).forEach(key => {
-    newObj[key] = func(obj[key]);
-  });
-  return newObj;
-}
-
 function extend(rawEvent) {
+  rawEvent = _.mapKeys(rawEvent, (v, k) => _.camelCase(k));
   return {
     ...rawEvent,
     formats() {
-      return rawEvent.format_ids.map(format_id => formats.byId[format_id]);
+      return rawEvent.formatIds.map(formatId => formats.byId[formatId]);
     },
-    recommended_format() {
+    recommentedFormat() {
       return this.formats()[0];
     },
   }

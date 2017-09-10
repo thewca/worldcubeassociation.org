@@ -1,5 +1,6 @@
 import events from 'wca/events.js.erb'
 
+// This is ported from the Ruby code in solve_time.rb.
 function parseMbValue(mbValue) {
   let old = Math.floor(mbValue / 1000000000) !== 0;
   let timeSeconds, attempted, solved;
@@ -24,6 +25,7 @@ function parseMbValue(mbValue) {
   return { solved, attempted, timeCentiseconds };
 }
 
+// This is ported from the Ruby code in solve_time.rb.
 function parsedMbToAttemptResult(parsedMb) {
   let { solved, attempted, timeCentiseconds } = parsedMb;
   let missed = attempted - solved;
@@ -34,6 +36,7 @@ function parsedMbToAttemptResult(parsedMb) {
   return (dd * 1e7 + ttttt * 1e2 + mm);
 }
 
+// Ported from SolveTime.multibld_attempt_to_points in solve_time.rb.
 // See https://www.worldcubeassociation.org/regulations/#9f12c
 export function attemptResultToMbPoints(mbValue) {
   let { solved, attempted } = parseMbValue(mbValue);
@@ -41,6 +44,7 @@ export function attemptResultToMbPoints(mbValue) {
   return solved - missed;
 }
 
+// Ported from SolveTime.points_to_multibld_attempt in solve_time.rb.
 export function mbPointsToAttemptResult(mbPoints) {
   let solved = mbPoints;
   let attempted = mbPoints;
@@ -50,11 +54,11 @@ export function mbPointsToAttemptResult(mbPoints) {
 
 export function attemptResultToString(attemptResult, eventId, { short } = {}) {
   let event = events.byId[eventId];
-  if(event.timed_event) {
+  if(event.isTimedEvent) {
     return centisecondsToString(attemptResult, { short });
-  } else if(event.fewest_moves) {
+  } else if(event.isFewestMoves) {
     return `${attemptResult} moves`;
-  } else if(event.multiple_blindfolded) {
+  } else if(event.isMultipleBlindfolded) {
     return `${attemptResultToMbPoints(attemptResult)} points`;
   } else {
     throw new Error(`Unrecognized event type: ${eventId}`);
@@ -63,7 +67,7 @@ export function attemptResultToString(attemptResult, eventId, { short } = {}) {
 
 export function matchResult(attemptResult, eventId, { short } = {}) {
   let event = events.byId[eventId];
-  let comparisonString = event.multiple_blindfolded ? "≥" : "≤";
+  let comparisonString = event.isMultipleBlindfolded ? "≥" : "≤";
   if(!short) {
     comparisonString = {
       "≤": "less than or equal to",
@@ -107,8 +111,13 @@ export function centisecondsToString(centiseconds, { short } = {}) {
 }
 
 export function roundIdToString(roundId) {
-  let [ eventId, roundNumber ] = roundId.split("-");
-  roundNumber = parseInt(roundNumber);
+  let { eventId, roundNumber } = parseRoundId(roundId);
   let event = events.byId[eventId];
   return `${event.name}, Round ${roundNumber}`;
+}
+
+export function parseRoundId(roundId) {
+  let [eventId, roundNumber] = roundId.split("-");
+  roundNumber = parseInt(roundNumber);
+  return { eventId, roundNumber };
 }

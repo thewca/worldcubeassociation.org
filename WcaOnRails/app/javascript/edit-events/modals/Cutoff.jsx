@@ -6,22 +6,34 @@ import AttemptResultInput from './AttemptResultInput'
 import {
   pluralize,
   matchResult,
+  parseRoundId,
   roundIdToString,
   attemptResultToString,
 } from './utils'
+
+function roundCutoffToString(wcifRound, { short } = {}) {
+  let cutoff = wcifRound.cutoff;
+  if(!cutoff) {
+    return "-";
+  }
+
+  let eventId = parseRoundId(wcifRound.id).eventId;
+  let matchStr = matchResult(cutoff.attemptResult, eventId, { short });
+  if(short) {
+    return `Best of ${cutoff.numberOfAttempts} ${matchStr}`;
+  } else {
+    let explanationText = `Competitors get ${pluralize(cutoff.numberOfAttempts, "attempt")} to get ${matchStr}.`;
+    explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expectedSolveCount} solves.`;
+    return explanationText;
+  }
+}
 
 export default {
   Title({ wcifRound }) {
     return <span>Cutoff for {roundIdToString(wcifRound.id)}</span>;
   },
-  Show({ value: cutoff, wcifEvent }) {
-    let str;
-    if(cutoff) {
-      str = `Best of ${cutoff.numberOfAttempts} ${matchResult(cutoff.attemptResult, wcifEvent.id, { short: true })}`;
-    } else {
-      str = "-";
-    }
-    return <span>{str}</span>;
+  Show({ value: cutoff, wcifEvent, wcifRound }) {
+    return <span>{roundCutoffToString(wcifRound, { short: true })}</span>;
   },
   Input({ value: cutoff, onChange, autoFocus, wcifEvent, roundNumber }) {
     let wcifRound = wcifEvent.rounds[roundNumber - 1];
@@ -30,23 +42,18 @@ export default {
     let onChangeAggregator = () => {
       let numberOfAttempts = parseInt(numberOfAttemptsInput.value);
       let newCutoff;
-      if(numberOfAttempts > 0) {
+      if(numberOfAttempts === 0) {
+        newCutoff = null;
+      } else {
         newCutoff = {
           numberOfAttempts,
           attemptResult: attemptResultInput ? parseInt(attemptResultInput.value) : 0,
         };
-      } else {
-        newCutoff = null;
       }
       onChange(newCutoff);
     };
 
-    let explanationText = null;
-    if(cutoff) {
-      explanationText = `Competitors get ${pluralize(cutoff.numberOfAttempts, "attempt")} to get ${matchResult(cutoff.attemptResult, wcifEvent.id)}.`;
-      explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expected_solve_count} solves.`;
-    }
-
+    let explanationText = cutoff ? roundCutoffToString(wcifRound) : null;
     return (
       <div>
         <div className="form-group">

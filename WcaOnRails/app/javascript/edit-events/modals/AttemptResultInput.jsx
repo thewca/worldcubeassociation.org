@@ -8,6 +8,9 @@ import {
   attemptResultToMbPoints,
 } from './utils'
 
+// https://www.worldcubeassociation.org/regulations/#E2d1
+const MAX_FMC_SOLUTION_LENGTH = 80;
+
 class CentisecondsInput extends React.Component {
   get value() {
     let minutes = parseInt(this.minutesInput.value) || 0;
@@ -60,7 +63,7 @@ class CentisecondsInput extends React.Component {
   }
 }
 
-export default class extends React.Component {
+export default class AttemptResultInput extends React.Component {
   onChange = () => {
     this.props.onChange();
   }
@@ -68,11 +71,11 @@ export default class extends React.Component {
   get value() {
     let event = events.byId[this.props.eventId];
 
-    if(event.timed_event) {
+    if(event.isTimedEvent) {
       return this.centisecondsInput.value;
-    } else if(event.fewest_moves) {
+    } else if(event.isFewestMoves) {
       return parseInt(this.movesInput.value);
-    } else if(event.multiple_blindfolded) {
+    } else if(event.isMultipleBlindfolded) {
       return mbPointsToAttemptResult(parseInt(this.mbldPointsInput.value));
     } else {
       throw new Error(`Unrecognized event type: ${event.id}`);
@@ -83,17 +86,18 @@ export default class extends React.Component {
     let { id, autoFocus } = this.props;
     let event = events.byId[this.props.eventId];
 
-    if(event.timed_event) {
+    if(event.isTimedEvent) {
       return <CentisecondsInput id={id}
                                 autoFocus={autoFocus}
                                 centiseconds={this.props.value}
                                 onChange={this.onChange}
                                 ref={c => this.centisecondsInput = c}
       />;
-    } else if(event.fewest_moves) {
+    } else if(event.isFewestMoves) {
       return (
         <div>
           <input type="number"
+                 min={1} max={MAX_FMC_SOLUTION_LENGTH}
                  id={id}
                  className="form-control"
                  autoFocus={autoFocus}
@@ -103,10 +107,11 @@ export default class extends React.Component {
           moves
         </div>
       );
-    } else if(event.multiple_blindfolded) {
+    } else if(event.isMultipleBlindfolded) {
       return (
         <div>
           <input type="number"
+                 min={1}
                  id={id}
                  className="form-control"
                  autoFocus={autoFocus}

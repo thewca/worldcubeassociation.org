@@ -20,31 +20,15 @@ let RoundAttributeComponents = {
 };
 
 function findRoundsSharingTimeLimitWithRound(wcifEvents, wcifRound) {
-  let roundsSharingTimeLimit = [];
-  wcifEvents.forEach(otherWcifEvent => {
-    otherWcifEvent.rounds.forEach(otherWcifRound => {
-      if(otherWcifRound == wcifRound || !otherWcifRound.timeLimit) {
-        return;
-      }
-
-      if(otherWcifRound.timeLimit.cumulativeRoundIds.indexOf(wcifRound.id) >= 0) {
-        roundsSharingTimeLimit.push(otherWcifRound);
-      }
-    });
-  });
-  return roundsSharingTimeLimit;
+  return _.flatMap(wcifEvents, 'rounds').filter(otherWcifRound =>
+    otherWcifRound !== wcifRound
+    && otherWcifRound.timeLimit
+    && otherWcifRound.timeLimit.cumulativeRoundIds.includes(wcifRound.id)
+  );
 }
 
 function findRounds(wcifEvents, roundIds) {
-  let wcifRounds = [];
-  wcifEvents.forEach(wcifEvent => {
-    wcifEvent.rounds.forEach(wcifRound => {
-      if(roundIds.indexOf(wcifRound.id) >= 0) {
-        wcifRounds.push(wcifRound);
-      }
-    });
-  });
-  return wcifRounds;
+  return _.flatMap(wcifEvents, 'rounds').filter(wcifRound => roundIds.includes(wcifRound.id));
 }
 
 class EditRoundAttribute extends React.Component {
@@ -66,11 +50,11 @@ class EditRoundAttribute extends React.Component {
   }
 
   hasUnsavedChanges = () => {
-    return JSON.stringify(this.getSavedValue()) != JSON.stringify(this.state.value);
+    return !_.isEqual(this.getSavedValue(), this.state.value);
   }
 
   onChange = (value) => {
-    this.setState({ value: value });
+    this.setState({ value });
   }
 
   onOk = () => {
@@ -86,11 +70,7 @@ class EditRoundAttribute extends React.Component {
       // First, remove this round from all other rounds that previously shared
       // a time limit with this round.
       findRoundsSharingTimeLimitWithRound(this.props.wcifEvents, wcifRound).forEach(otherWcifRound => {
-        let index = otherWcifRound.timeLimit.cumulativeRoundIds.indexOf(wcifRound.id);
-        if(index < 0) {
-          throw new Error();
-        }
-        otherWcifRound.timeLimit.cumulativeRoundIds.splice(index, 1);
+        _.pull(otherWcifRound.timeLimit.cumulativeRoundIds, wcifRound.id);
       });
 
       // Second, clobber the time limits for all rounds that this round now shares a time limit with.
@@ -118,7 +98,7 @@ class EditRoundAttribute extends React.Component {
 
     return (
       <ButtonActivatedModal
-        buttonValue={<Show value={this.getSavedValue()} wcifEvent={wcifEvent} />}
+        buttonValue={<Show value={this.getSavedValue()} wcifRound={wcifRound} wcifEvent={wcifEvent} />}
         name={attribute}
         buttonClass="btn-default btn-xs"
         formClass="form-horizontal"

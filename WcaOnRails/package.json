@@ -25,7 +25,6 @@
     "postcss-loader": "^2.0.6",
     "postcss-smart-import": "^0.7.5",
     "precss": "^2.0.0",
-    "promise-polyfill": "^6.0.2",
     "prop-types": "^15.5.8",
     "rails-erb-loader": "^5.0.2",
     "react": "^15.5.4",

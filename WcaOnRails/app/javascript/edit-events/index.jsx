@@ -33,7 +33,7 @@ export function rootRender() {
 
 function normalizeWcifEvents(wcifEvents) {
   return events.official.map(event => {
-    return wcifEvents.find(wcifEvent => wcifEvent.id == event.id) || { id: event.id, rounds: [] };
+    return _.find(wcifEvents, { id: event.id }) || { id: event.id, rounds: [] };
   });
 }
 

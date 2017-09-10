@@ -7,13 +7,7 @@ import { rootRender, promiseSaveWcif } from 'edit-events'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
 export default class EditEvents extends React.Component {
-  constructor(props) {
-    super(props);
-    this.save = this.save.bind(this);
-    this.onUnload = this.onUnload.bind(this);
-  }
-
-  save(e) {
+  save = e => {
     let {competitionId, wcifEvents} = this.props;
     let wcif = {
       id: competitionId,
@@ -22,32 +16,33 @@ export default class EditEvents extends React.Component {
 
     this.setState({ saving: true });
     promiseSaveWcif(wcif).then(response => {
-      return response.json().then(json => [ response, json ]);
+      return Promise.all([response, response.json()]);
     }).then(([response, json]) => {
       if(!response.ok) {
         throw new Error(`${response.status}: ${response.statusText}\n${json["error"]}`);
       }
-      this.setState({ savedWcifEvents: clone(this.props.wcifEvents), saving: false });
+      this.setState({ savedWcifEvents: _.cloneDeep(wcifEvents), saving: false });
     }).catch(e => {
       this.setState({ saving: false });
-      alert("Something went wrong while saving.\n" + e.message);
+      alert(`Something went wrong while saving.\n${e.message}`);
     });
   }
 
   unsavedChanges() {
-    return !deepEqual(this.state.savedWcifEvents, this.props.wcifEvents);
+    return !_.isEqual(this.state.savedWcifEvents, this.props.wcifEvents);
   }
 
-  onUnload(e) {
+  onUnload = e => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
     if(this.unsavedChanges()) {
-      var confirmationMessage = "\o/";
+      let confirmationMessage = "You have unsaved changes, are you sure you want to leave?";
       e.returnValue = confirmationMessage;
       return confirmationMessage;
     }
   }
 
   componentWillMount() {
-    this.setState({ savedWcifEvents: clone(this.props.wcifEvents) });
+    this.setState({ savedWcifEvents: _.cloneDeep(this.props.wcifEvents) });
   }
 
   componentDidMount() {
@@ -94,7 +89,6 @@ export default class EditEvents extends React.Component {
 
 function RoundsTable({ wcifEvents, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
-  let canChangeTimeLimit = event.can_change_time_limit;
   return (
     <div className="table-responsive">
       <table className="table table-condensed">
@@ -102,7 +96,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
           <tr>
             <th>#</th>
             <th className="text-center">Format</th>
-            {canChangeTimeLimit && <th className="text-center">Time Limit</th>}
+            {event.canChangeTimeLimit && <th className="text-center">Time Limit</th>}
             <th className="text-center">Cutoff</th>
             <th className="text-center">To Advance</th>
           </tr>
@@ -110,7 +104,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
         <tbody>
           {wcifEvent.rounds.map((wcifRound, index) => {
             let roundNumber = index + 1;
-            let isLastRound = roundNumber == wcifEvent.rounds.length;
+            let isLastRound = roundNumber === wcifEvent.rounds.length;
 
             let roundFormatChanged = e => {
               let newFormat = e.target.value;
@@ -131,7 +125,7 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
                   </select>
                 </td>
 
-                {canChangeTimeLimit && (
+                {event.canChangeTimeLimit && (
                   <td className="text-center">
                     <EditTimeLimitButton wcifEvents={wcifEvents} wcifEvent={wcifEvent} roundNumber={roundNumber} />
                   </td>
@@ -153,18 +147,17 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
   );
 }
 
-const EventPanel = ({ wcifEvents, competitionConfirmed, wcifEvent }) => {
+function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
   let roundCountChanged = e => {
     let newRoundCount = parseInt(e.target.value);
     if(wcifEvent.rounds.length > newRoundCount) {
       // We have too many rounds, remove the extras.
-      wcifEvent.rounds = wcifEvent.rounds.slice(0, newRoundCount);
+      wcifEvent.rounds = _.take(wcifEvent.rounds, newRoundCount);
 
       // Final rounds must not have an advance to next round requirement.
       if(wcifEvent.rounds.length >= 1) {
-        let lastRound = wcifEvent.rounds[wcifEvent.rounds.length - 1];
-        lastRound.advancementCondition = null;
+        _.last(wcifEvent.rounds).advancementCondition = null;
       }
     } else {
       // We do not have enough rounds, create the missing ones.
@@ -219,7 +212,7 @@ const EventPanel = ({ wcifEvents, competitionConfirmed, wcifEvent }) => {
       )}
     </div>
   );
-};
+}
 
 function addRoundToEvent(wcifEvent) {
   const DEFAULT_TIME_LIMIT = { centiseconds: 10*60*100, cumulativeRoundIds: [] };
@@ -227,19 +220,11 @@ function addRoundToEvent(wcifEvent) {
   let nextRoundNumber = wcifEvent.rounds.length + 1;
   wcifEvent.rounds.push({
     id: `${wcifEvent.id}-${nextRoundNumber}`,
-    format: event.recommended_format().id,
+    format: event.recommentedFormat().id,
     timeLimit: DEFAULT_TIME_LIMIT,
     cutoff: null,
     advancementCondition: null,
     results: [],
     groups: [],
   });
-}
-
-function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function deepEqual(obj1, obj2) {
-  return JSON.stringify(obj1) == JSON.stringify(obj2);
 }

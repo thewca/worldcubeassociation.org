@@ -160,6 +160,14 @@ class SolveTime
     SolveTime.new("333mbf", :best, attempt_result).points
   end
 
+  def self.points_to_multibld_attempt(points)
+    SolveTime.new("333mbf", :best, 0).tap do |solve_time|
+      solve_time.attempted = points
+      solve_time.solved = points
+      solve_time.time_centiseconds = 99_999
+    end.wca_value
+  end
+
   def self.centiseconds_to_clock_format(centiseconds)
     hours = centiseconds / 360_000
     minutes = (centiseconds % 360_000) / 6000

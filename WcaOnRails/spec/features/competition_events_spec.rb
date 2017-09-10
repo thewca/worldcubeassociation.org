@@ -42,8 +42,7 @@ RSpec.feature "Competition events management" do
       end
       save
 
-      expect(round_333_1.reload.time_limit).to eq TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: [])
-      expect(round_333_1.reload.time_limit.to_s(round_333_1)).to eq "5:00.00"
+      expect(round_333_1.reload.time_limit_to_s).to eq "5:00.00"
     end
 
     scenario "change cutoff to best of 2 in 2 minutes", js: true do
@@ -56,7 +55,7 @@ RSpec.feature "Competition events management" do
       end
       save
 
-      expect(round_333_1.reload.cutoff.to_s(round_333_1)).to eq "2 attempts to get ≤ 2:00.00"
+      expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get ≤ 2:00.00"
     end
 
     scenario "change advancement condition to top 12 people", js: true do
@@ -72,15 +71,13 @@ RSpec.feature "Competition events management" do
       end
       save
 
-      expect(round_333_1.reload.advancement_condition.to_s(round_333_1)).to eq "Top 12 advance to round 2"
+      expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to round 2"
     end
   end
 end
 
-def within_event_panel(event_id)
-  within(:css, ".panel.event-#{event_id}") do
-    yield
-  end
+def within_event_panel(event_id, &block)
+  within(:css, ".panel.event-#{event_id}", &block)
 end
 
 def within_round(event_id, round_number)

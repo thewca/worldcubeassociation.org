@@ -7,7 +7,7 @@ import Radio from 'react-bootstrap/lib/Radio'
 import events from 'wca/events.js.erb'
 import formats from 'wca/formats.js.erb'
 import AttemptResultInput from './AttemptResultInput'
-import { centisecondsToString, roundIdToString } from './utils'
+import { centisecondsToString, roundIdToString, parseRoundId } from './utils'
 import ButtonActivatedModal from 'edit-events/ButtonActivatedModal'
 
 class RadioGroup extends React.Component {
@@ -33,9 +33,7 @@ class RadioGroup extends React.Component {
 }
 
 function objectifyArray(arr) {
-  let obj = {};
-  arr.forEach(el => obj[el] = true);
-  return obj;
+  return _.fromPairs(arr.map(el => [el, true]));
 }
 
 class SelectRoundsButton extends React.Component {
@@ -53,7 +51,7 @@ class SelectRoundsButton extends React.Component {
   }
 
   getSelectedRoundIds() {
-    return Object.entries(this.state.selectedRoundsById).filter(([k, v]) => v).map(([k, v]) => k);
+    return _.keys(_.pickBy(this.state.selectedRoundsById));
   }
 
   onOk = () => {
@@ -62,25 +60,22 @@ class SelectRoundsButton extends React.Component {
   }
 
   hasUnsavedChanges = () => {
-    return JSON.stringify(this.props.selectedRoundIds) != JSON.stringify(this.getSelectedRoundIds());
+    return !_.isEqual(this.props.selectedRoundIds, this.getSelectedRoundIds());
   }
 
   render() {
-    let { timeLimit, excludeRound, wcifEvents } = this.props;
+    let { timeLimit, excludeEventId, wcifEvents } = this.props;
     let selectedRoundsById = this.state.selectedRoundsById;
 
-    let wcifRounds = [];
-    wcifEvents.forEach(otherWcifEvent => {
+    let wcifRounds = _.flatMap(wcifEvents, otherWcifEvent => {
       // Cross round cumulative time limits may not include other rounds of
       // the same event.
       // See https://github.com/thewca/wca-regulations/issues/457.
-      let excludeEventId = excludeRound.id.split("-")[0];
       let otherEvent = events.byId[otherWcifEvent.id];
-      let canChangeTimeLimit = otherEvent.can_change_time_limit;
-      if(!canChangeTimeLimit || excludeEventId == otherWcifEvent.id) {
-        return;
+      if(!otherEvent.canChangeTimeLimit || excludeEventId === otherWcifEvent.id) {
+        return [];
       }
-      wcifRounds = wcifRounds.concat(otherWcifEvent.rounds.filter(r => r != excludeRound));
+      return otherWcifEvent.rounds;
     });
 
     return (
@@ -101,10 +96,10 @@ class SelectRoundsButton extends React.Component {
               <ul className="list-unstyled">
                 {wcifRounds.map(wcifRound => {
                   let roundId = wcifRound.id;
-                  let eventId = roundId.split("-")[0];
+                  let { eventId } = parseRoundId(roundId);
                   let event = events.byId[eventId];
                   let checked = !!selectedRoundsById[roundId];
-                  let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => roundId.split("-")[0] == eventId);
+                  let eventAlreadySelected = this.getSelectedRoundIds().find(roundId => parseRoundId(roundId).eventId === eventId);
                   let disabled = !checked && eventAlreadySelected;
                   let disabledReason = disabled && `Cannot select this round because you've already selected a round with ${event.name}`;
                   return (
@@ -188,10 +183,7 @@ export default {
           cumulativeRoundIds = [];
           break;
         case "cumulative":
-          cumulativeRoundIds = [wcifRound.id];
-          if(roundsSelector) {
-            cumulativeRoundIds = _.uniq(cumulativeRoundIds.concat(roundsSelector.getSelectedRoundIds()));
-          }
+          cumulativeRoundIds = roundsSelector ? roundsSelector.getSelectedRoundIds() : [wcifRound.id];
           break;
         default:
           throw new Error(`Unrecognized value ${cumulativeRadio.value}`);
@@ -208,7 +200,7 @@ export default {
     let selectRoundsButton = (
         <SelectRoundsButton onChange={onChangeAggregator}
                             wcifEvents={wcifEvents}
-                            excludeRound={wcifRound}
+                            excludeEventId={event.id}
                             selectedRoundIds={timeLimit.cumulativeRoundIds}
                             ref={c => roundsSelector = c}
         />
@@ -227,12 +219,12 @@ export default {
         <div>{selectRoundsButton}</div>
       </span>);
     } else {
-      let otherSelectedRoundIds = timeLimit.cumulativeRoundIds.filter(roundId => roundId != wcifRound.id);
+      let otherSelectedRoundIds = _.without(timeLimit.cumulativeRoundIds, wcifRound.id);
       description = (<span>
         This round has a cross round cumulative time limit
         (see <GuidelineLink guideline="A1a2++" />).
         This means that competitors have {centisecondsToString(timeLimit.centiseconds)} total for all
-        of their solves in this round ({wcifRound.id}) shared with:
+        of their solves in this round ({roundIdToString(wcifRound.id)}) shared with:
         <ul>
           {otherSelectedRoundIds.map(roundId => <li key={roundId}>{roundIdToString(roundId)}</li>)}
         </ul>
@@ -257,7 +249,7 @@ export default {
 
         <div className="form-group">
           <div className="col-sm-offset-2 col-sm-10">
-            <RadioGroup value={timeLimit.cumulativeRoundIds.length == 0 ? "per-solve" : "cumulative"}
+            <RadioGroup value={timeLimit.cumulativeRoundIds.length === 0 ? "per-solve" : "cumulative"}
                         name="cumulative-radio"
                         onChange={onChangeAggregator}
                         ref={c => cumulativeRadio = c}

@@ -1,3 +1,9 @@
+import _ from 'lodash';
+
 export default {
-  byId: <%= Format.all.index_by(&:id).to_json.html_safe %>,
+  byId: _.mapValues(<%= Format.all.index_by(&:id).to_json.html_safe %>, extend),
 };
+
+function extend(rawFormat) {
+  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+}

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button'
 import addEventListener from 'react-overlays/lib/utils/addEventListener';
 import ownerDocument from 'react-overlays/lib/utils/ownerDocument';
 
-export default class extends React.Component {
+export default class ButtonActivatedModal extends React.Component {
   constructor() {
     super();
     this.state = { showModal: false };
@@ -16,12 +16,10 @@ export default class extends React.Component {
   }
 
   close = ({ skipUnsavedChangesCheck } = { skipUnsavedChangesCheck: false }) => {
-    if(!skipUnsavedChangesCheck && this.props.hasUnsavedChanges() && !confirm("Are you sure you want to discard your changes?")) {
-      return;
+    if(skipUnsavedChangesCheck || !this.props.hasUnsavedChanges() || confirm("Are you sure you want to discard your changes?")) {
+      this.props.reset();
+      this.setState({ showModal: false });
     }
-
-    this.props.reset();
-    this.setState({ showModal: false });
   }
 
   render() {
