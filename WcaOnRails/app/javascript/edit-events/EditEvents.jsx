@@ -3,6 +3,7 @@ import cn from 'classnames'
 import ReactDOM from 'react-dom'
 
 import events from 'wca/events.js.erb'
+import { pluralize } from 'edit-events/modals/utils'
 import { rootRender, promiseSaveWcif } from 'edit-events'
 import { EditTimeLimitButton, EditCutoffButton, EditAdvancementConditionButton } from 'edit-events/modals'
 
@@ -149,9 +150,13 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
 
 function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
-  let roundCountChanged = e => {
-    let newRoundCount = parseInt(e.target.value);
-    if(wcifEvent.rounds.length > newRoundCount) {
+  let setRoundCount = newRoundCount => {
+    let roundsToRemoveCount = wcifEvent.rounds.length - newRoundCount;
+    if(roundsToRemoveCount > 0) {
+      if(!confirm(`Are you sure you want to remove the ${pluralize(roundsToRemoveCount, "round")} of ${event.name}?`)) {
+        return;
+      }
+
       // We have too many rounds, remove the extras.
       wcifEvent.rounds = _.take(wcifEvent.rounds, newRoundCount);
 
@@ -168,40 +173,56 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
     rootRender();
   };
 
-  let panelTitle = null;
-  let disableAdd = false;
-  let disableRemove = false;
-  if(competitionConfirmed) {
-    if(wcifEvent.rounds.length === 0) {
-      disableAdd = true;
-      panelTitle = `Cannot add ${wcifEvent.id} because the competition is confirmed.`;
-    } else {
-      disableRemove = true;
-      panelTitle = `Cannot remove ${wcifEvent.id} because the competition is confirmed.`;
-    }
+  let roundsCountSelector = null;
+  if(wcifEvent.rounds.length > 0) {
+    let disableRemove = competitionConfirmed;
+    roundsCountSelector = (
+      <div className="input-group">
+        <select
+          className="form-control input-xs"
+          name="select-round-count"
+          value={wcifEvent.rounds.length}
+          onChange={e => setRoundCount(parseInt(e.target.value))}
+        >
+          <option value={1}>1 round</option>
+          <option value={2}>2 rounds</option>
+          <option value={3}>3 rounds</option>
+          <option value={4}>4 rounds</option>
+        </select>
+
+        <span className="input-group-btn">
+          <button
+            className="btn btn-danger btn-xs remove-event"
+            disabled={disableRemove}
+            title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed.` : ""}
+            onClick={() => setRoundCount(0)}
+          >
+            Remove event
+          </button>
+        </span>
+      </div>
+    );
+  } else {
+    let disableAdd = competitionConfirmed;
+    roundsCountSelector = (
+      <button
+        className="btn btn-success btn-xs add-event"
+        disabled={disableAdd}
+        title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed.` : ""}
+        onClick={() => setRoundCount(1)}
+      >
+        Add event
+      </button>
+    );
   }
 
   return (
-    <div className={cn(`panel panel-default event-${wcifEvent.id}`, { 'event-not-being-held': wcifEvent.rounds.length == 0 })}>
-      <div className="panel-heading" title={panelTitle}>
+    <div className={`panel panel-default event-${wcifEvent.id}`}>
+      <div className="panel-heading">
         <h3 className="panel-title">
           <span className={cn("img-thumbnail", "cubing-icon", `event-${event.id}`)}></span>
           <span className="title">{event.name}</span>
-          {" "}
-          <select
-            className="form-control input-xs"
-            name="select-round-count"
-            value={wcifEvent.rounds.length}
-            onChange={roundCountChanged}
-            disabled={disableAdd}
-          >
-            {!disableRemove && <option value={0}>Not being held</option>}
-            {!disableRemove && <option disabled="disabled">────────</option>}
-            <option value={1}>1 round</option>
-            <option value={2}>2 rounds</option>
-            <option value={3}>3 rounds</option>
-            <option value={4}>4 rounds</option>
-          </select>
+          {" "}{roundsCountSelector}
         </h3>
       </div>
 

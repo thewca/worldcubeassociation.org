@@ -1,8 +1,4 @@
 #events-edit-area {
-  .panel.event-not-being-held {
-    opacity: 0.5;
-  }
-
   .panel-heading {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -25,6 +21,22 @@
       .title {
         padding-left: $cubing-icon-size;
         padding-right: 5px;
+      }
+
+      .add-event {
+        margin-left: auto;
+      }
+
+      .input-group {
+        margin-left: auto;
+
+        select {
+          width: 100px;
+        }
+
+        .input-group-btn {
+          display: inline-block;
+        }
       }
     }
   }

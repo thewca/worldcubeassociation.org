@@ -14,7 +14,7 @@ RSpec.feature "Competition events management" do
   background do
     sign_in FactoryGirl.create(:admin)
     visit "/competitions/#{competition.id}/events/edit"
-    within_event_panel("333") { select("1 round", from: "select-round-count") }
+    within_event_panel("333") { click_button "Add event" }
     save
     competition.reload
   end
