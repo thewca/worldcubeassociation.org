@@ -42,6 +42,9 @@
         display: inline-block;
       }
     }
+    .selectize-input > input {
+      min-width: 100px;
+    }
     .tags-cell,
     .comps-cell {
       vertical-align: top;
