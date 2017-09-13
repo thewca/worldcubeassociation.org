@@ -67,7 +67,7 @@ class SelectRoundsButton extends React.Component {
     let { timeLimit, excludeEventId, wcifEvents } = this.props;
     let selectedRoundsById = this.state.selectedRoundsById;
 
-    let wcifRounds = _.flatMap(wcifEvents, otherWcifEvent => {
+    let wcifRounds = _.compact(_.flatMap(wcifEvents, otherWcifEvent => {
       // Cross round cumulative time limits may not include other rounds of
       // the same event.
       // See https://github.com/thewca/wca-regulations/issues/457.
@@ -76,7 +76,7 @@ class SelectRoundsButton extends React.Component {
         return [];
       }
       return otherWcifEvent.rounds;
-    });
+    }));
 
     return (
       <ButtonActivatedModal

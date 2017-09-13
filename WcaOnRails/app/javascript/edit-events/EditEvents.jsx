@@ -150,10 +150,21 @@ function RoundsTable({ wcifEvents, wcifEvent }) {
 
 function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
   let event = events.byId[wcifEvent.id];
+
+  let removeEvent = () => {
+    if(!wcifEvent.rounds
+       || (wcifEvent.rounds.length > 0 && !confirm(`Are you sure you want to remove all ${pluralize(wcifEvent.rounds.length, "round")} of ${event.name}?`))) {
+      return;
+    }
+
+    wcifEvent.rounds = null;
+    rootRender();
+  };
   let setRoundCount = newRoundCount => {
+    wcifEvent.rounds = wcifEvent.rounds || [];
     let roundsToRemoveCount = wcifEvent.rounds.length - newRoundCount;
     if(roundsToRemoveCount > 0) {
-      if(!confirm(`Are you sure you want to remove the ${pluralize(roundsToRemoveCount, "round")} of ${event.name}?`)) {
+      if(!confirm(`Are you sure you want to remove ${pluralize(roundsToRemoveCount, "round")} of ${event.name}?`)) {
         return;
       }
 
@@ -174,7 +185,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
   };
 
   let roundsCountSelector = null;
-  if(wcifEvent.rounds.length > 0) {
+  if(wcifEvent.rounds) {
     let disableRemove = competitionConfirmed;
     roundsCountSelector = (
       <div className="input-group">
@@ -184,6 +195,8 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
           value={wcifEvent.rounds.length}
           onChange={e => setRoundCount(parseInt(e.target.value))}
         >
+          <option value={0}>How many rounds?</option>
+          <option disabled="disabled">────────</option>
           <option value={1}>1 round</option>
           <option value={2}>2 rounds</option>
           <option value={3}>3 rounds</option>
@@ -195,7 +208,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
             className="btn btn-danger btn-xs remove-event"
             disabled={disableRemove}
             title={disableRemove ? `Cannot remove ${event.name} because the competition is confirmed.` : ""}
-            onClick={() => setRoundCount(0)}
+            onClick={removeEvent}
           >
             Remove event
           </button>
@@ -209,7 +222,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
         className="btn btn-success btn-xs add-event"
         disabled={disableAdd}
         title={disableAdd ? `Cannot add ${event.name} because the competition is confirmed.` : ""}
-        onClick={() => setRoundCount(1)}
+        onClick={() => setRoundCount(0)}
       >
         Add event
       </button>
@@ -226,7 +239,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
         </h3>
       </div>
 
-      {wcifEvent.rounds.length > 0 && (
+      {wcifEvent.rounds && (
         <div className="panel-body">
           <RoundsTable wcifEvents={wcifEvents} wcifEvent={wcifEvent} />
         </div>

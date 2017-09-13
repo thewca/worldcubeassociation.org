@@ -115,9 +115,19 @@ RSpec.describe "Competition WCIF" do
   describe "#set_wcif_events!" do
     let(:wcif) { competition.to_wcif }
 
-    it "removes competition event when wcif rounds are empty" do
+    it "does not remove competition event when wcif rounds are empty" do
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"] = []
+
+      competition.set_wcif_events!(wcif["events"])
+
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf 444)
+    end
+
+    it "does remove competition event when wcif rounds are nil" do
+      wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
+      wcif_444_event["rounds"] = nil
 
       competition.set_wcif_events!(wcif["events"])
 

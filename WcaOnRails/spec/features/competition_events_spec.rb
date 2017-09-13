@@ -14,13 +14,27 @@ RSpec.feature "Competition events management" do
   background do
     sign_in FactoryGirl.create(:admin)
     visit "/competitions/#{competition.id}/events/edit"
-    within_event_panel("333") { click_button "Add event" }
+    within_event_panel("333") do
+      click_button "Add event"
+      select("1 round", from: "select-round-count")
+    end
     save
     competition.reload
   end
 
   scenario "adds 1 round of 333", js: true do
     expect(competition.events.map(&:id)).to match_array %w(333)
+  end
+
+  scenario "remove event", js: true do
+    within_event_panel("333") do
+      click_button "Remove event"
+      accept_alert "Are you sure you want to remove all 1 round of Rubik's Cube?"
+    end
+    save
+    competition.reload
+
+    expect(competition.events.map(&:id)).to eq []
   end
 
   feature 'change round attributes' do

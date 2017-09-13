@@ -851,7 +851,7 @@ class Competition < ApplicationRecord
       # Remove extra events.
       self.competition_events.each do |competition_event|
         wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
-        event_to_be_removed = !wcif_event || !wcif_event["rounds"] || wcif_event["rounds"].empty?
+        event_to_be_removed = !wcif_event || !wcif_event["rounds"]
         if event_to_be_removed
           raise WcaExceptions::BadApiParameter.new("Cannot remove events from a confirmed competition") if self.isConfirmed?
           competition_event.destroy!
@@ -861,7 +861,7 @@ class Competition < ApplicationRecord
       # Create missing events.
       wcif_events.each do |wcif_event|
         event_found = competition_events.find_by_event_id(wcif_event["id"])
-        event_to_be_added = wcif_event["rounds"] && !wcif_event["rounds"].empty?
+        event_to_be_added = wcif_event["rounds"]
         if !event_found && event_to_be_added
           raise WcaExceptions::BadApiParameter.new("Cannot add events to a confirmed competition") if self.isConfirmed?
           competition_events.create!(event_id: wcif_event["id"])
@@ -870,7 +870,7 @@ class Competition < ApplicationRecord
 
       # Update all events.
       wcif_events.each do |wcif_event|
-        event_to_be_added = wcif_event["rounds"] && !wcif_event["rounds"].empty?
+        event_to_be_added = wcif_event["rounds"]
         if event_to_be_added
           competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
         end

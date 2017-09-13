@@ -20,7 +20,7 @@ let RoundAttributeComponents = {
 };
 
 function findRoundsSharingTimeLimitWithRound(wcifEvents, wcifRound) {
-  return _.flatMap(wcifEvents, 'rounds').filter(otherWcifRound =>
+  return _.compact(_.flatMap(wcifEvents, 'rounds')).filter(otherWcifRound =>
     otherWcifRound !== wcifRound
     && otherWcifRound.timeLimit
     && otherWcifRound.timeLimit.cumulativeRoundIds.includes(wcifRound.id)
@@ -28,7 +28,7 @@ function findRoundsSharingTimeLimitWithRound(wcifEvents, wcifRound) {
 }
 
 function findRounds(wcifEvents, roundIds) {
-  return _.flatMap(wcifEvents, 'rounds').filter(wcifRound => roundIds.includes(wcifRound.id));
+  return _.compact(_.flatMap(wcifEvents, 'rounds')).filter(wcifRound => roundIds.includes(wcifRound.id));
 }
 
 class EditRoundAttribute extends React.Component {

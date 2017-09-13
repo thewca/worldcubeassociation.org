@@ -33,7 +33,7 @@ export function rootRender() {
 
 function normalizeWcifEvents(wcifEvents) {
   return events.official.map(event => {
-    return _.find(wcifEvents, { id: event.id }) || { id: event.id, rounds: [] };
+    return _.find(wcifEvents, { id: event.id }) || { id: event.id, rounds: null };
   });
 }
 

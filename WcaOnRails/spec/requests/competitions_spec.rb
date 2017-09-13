@@ -220,7 +220,7 @@ RSpec.describe "competitions" do
           },
           {
             id: "222",
-            rounds: [],
+            rounds: nil,
           },
         ]
         patch update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
