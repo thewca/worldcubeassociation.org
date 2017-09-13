@@ -76,7 +76,7 @@ export default class EditEvents extends React.Component {
         <div className="row equal">
           {wcifEvents.map(wcifEvent => {
             return (
-              <div key={wcifEvent.id} className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+              <div key={wcifEvent.id} className="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                 <EventPanel wcifEvents={wcifEvents} wcifEvent={wcifEvent} competitionConfirmed={competitionConfirmed} />
               </div>
             );
@@ -195,7 +195,7 @@ function EventPanel({ wcifEvents, competitionConfirmed, wcifEvent }) {
           value={wcifEvent.rounds.length}
           onChange={e => setRoundCount(parseInt(e.target.value))}
         >
-          <option value={0}>How many rounds?</option>
+          <option value={0}># of rounds?</option>
           <option disabled="disabled">────────</option>
           <option value={1}>1 round</option>
           <option value={2}>2 rounds</option>
