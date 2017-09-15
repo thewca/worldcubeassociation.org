@@ -234,7 +234,7 @@ class Competition < ApplicationRecord
     Competition.new(attributes.slice(*CLONEABLE_ATTRIBUTES)).tap do |clone|
       clone.being_cloned_from_id = id
 
-      Competition.reflections.keys.each do |association_name|
+      Competition.reflections.each_key do |association_name|
         case association_name
         when 'registrations',
              'results',
@@ -286,7 +286,6 @@ class Competition < ApplicationRecord
 
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
-  attr_accessor :longitude_degrees, :latitude_degrees
   before_validation :compute_coordinates
 
   before_validation :create_id_and_cell_name
@@ -731,15 +730,15 @@ class Competition < ApplicationRecord
 
   def psych_sheet_event(event, sort_by, sort_by_second)
     competition_event = competition_events.find_by!(event_id: event.id)
-    joinsql = <<-ENDSQL
+    joinsql = <<-SQL
       JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
       JOIN users ON users.id = registrations.user_id
       JOIN Countries ON Countries.iso2 = users.country_iso2
       LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
       LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
-    ENDSQL
+    SQL
 
-    selectsql = <<-ENDSQL
+    selectsql = <<-SQL
       registrations.id,
       users.name select_name,
       users.wca_id select_wca_id,
@@ -751,7 +750,7 @@ class Competition < ApplicationRecord
       ifnull(RanksAverage.best, 0) average_best,
       RanksSingle.worldRank single_rank,
       ifnull(RanksSingle.best, 0) single_best
-    ENDSQL
+    SQL
 
     sort_clause = "-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name"
 
