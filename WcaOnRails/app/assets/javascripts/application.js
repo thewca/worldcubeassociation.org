@@ -53,6 +53,7 @@
 //= require autosize
 //= require jquery_plugins
 //= require jquery.slick
+//= require incidents
 //= require_self
 //= require_tree .
 

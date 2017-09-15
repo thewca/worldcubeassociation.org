@@ -10,7 +10,7 @@
     <%= f.input :status, collection: Incident.statuses, value_method: lambda { |s| s.first } %>
     <%= f.input :tags %>
     <script>
-      $('input#incident_tags').selectize(defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
+      $('input#incident_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));
     </script>
     <hr/>
     <div class="incident-competitions">

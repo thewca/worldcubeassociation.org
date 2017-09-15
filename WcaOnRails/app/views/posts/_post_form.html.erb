@@ -6,7 +6,7 @@
   <% if editable_post_fields.include? :tags %>
     <%= f.input :tags %>
     <script>
-      $('input#post_tags').selectize(defaultSelectizeOptions(<%= all_to_options(PostTag) %>));
+      $('input#post_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(PostTag) %>));
     </script>
   <% end %>
 
