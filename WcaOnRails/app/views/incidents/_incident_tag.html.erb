@@ -1,6 +1,6 @@
 <%
 tag ||= ""
-reg = Regulation.find_or_nil(tag)
+reg = Regulation.find(tag)
 label_class = reg ? "primary" : "default"
 title = reg ? "#{link_to(reg["id"], reg["url"], target: "_blank")}" : tag
 content = "<a href='#' onclick='wca.searchIncidentsForTag(event, \"#{tag}\");'>Search incidents with this tag</a>"

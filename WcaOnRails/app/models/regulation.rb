@@ -23,7 +23,7 @@ class Regulation < SimpleDelegator
     first(number)
   end
 
-  def self.find_or_nil(id)
+  def self.find(id)
     @regulations_by_id[id]
   end
 

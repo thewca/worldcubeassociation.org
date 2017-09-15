@@ -341,10 +341,10 @@ en:
     hints:
       #context: for an incident
       incident:
-        name: "Keep in mind this is public!"
-        private_description: "A description of the incident which can only be viewed by Delegates."
-        private_wrc_decision: "The final WRC decision, including private details."
-        public_summary: "An overall description of the incident and its decision, to be displayed publicly."
+        name: "Keep in mind this is public, and that you have to fill this in English!"
+        private_description: "A description of the incident which can only be viewed by Delegates. Please fill this in English."
+        private_wrc_decision: "The final WRC decision, including private details. Please fill this in English."
+        public_summary: "An overall description of the incident and its decision, to be displayed publicly. Please fill this in English."
         status: ""
         tags: ""
         competition_id: ""

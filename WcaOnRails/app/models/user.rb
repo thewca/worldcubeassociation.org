@@ -496,11 +496,15 @@ class User < ApplicationRecord
     any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee?
   end
 
+  def can_manage_incidents?
+    admin? || wrc_team?
+  end
+
   def can_view_incident_private_sections?(incident)
     if incident.resolved?
       can_view_delegate_matters?
     else
-      admin? || wrc_team?
+      can_manage_incidents?
     end
   end
 
@@ -523,10 +527,6 @@ class User < ApplicationRecord
 
   def can_approve_media?
     admin? || communication_team?
-  end
-
-  def can_manage_incidents?
-    admin? || wrc_team?
   end
 
   def get_cannot_delete_competition_reason(competition)

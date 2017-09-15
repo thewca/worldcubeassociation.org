@@ -9,7 +9,7 @@ module Taggable
   extend ActiveSupport::Concern
 
   private def item_tags
-    @tags_association ||= public_send("#{self.class.name.underscore}_tags")
+    public_send("#{self.class.name.underscore}_tags")
   end
 
   included do

@@ -48,8 +48,12 @@ class IncidentsController < ApplicationController
 
   def destroy
     @incident.destroy
-    flash[:success] = "Incident was successfully destroyed."
-    redirect_to incidents_url
+    if @incident.destroy
+      flash[:success] = "Incident was successfully destroyed."
+      redirect_to incidents_url
+    else
+      render :edit
+    end
   end
 
   private
@@ -59,12 +63,14 @@ class IncidentsController < ApplicationController
   end
 
   def incident_params
-    params.require(:incident).permit(:name,
-                                     :private_description,
-                                     :private_wrc_decision,
-                                     :public_summary,
-                                     :tags,
-                                     :status,
-                                     incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy])
+    params.require(:incident).permit(
+      :name,
+      :private_description,
+      :private_wrc_decision,
+      :public_summary,
+      :tags,
+      :status,
+      incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
+    )
   end
 end

@@ -1,4 +1,3 @@
-<% comp ||= Competition.new %>
 <span class="competition-tag label label-info">
-  <%= link_to(comp.id, competition_path(comp), target: "_blank", class: "no-after") %>
+  <%= link_to(comp.id, competition_path(comp), target: "_blank", class: "hide-new-window-icon") %>
 </span>
