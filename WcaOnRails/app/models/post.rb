@@ -3,10 +3,6 @@
 class Post < ApplicationRecord
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
-  # Note: adding an alias is less awkward than doing
-  # has_many :item_tags, autosave: true, dependent: :destroy, class_name: "PostTag"
-  # Because joining would look like Post.joins(:item_tags).where('post_tags.tag = ?', tag)
-  alias_attribute :item_tags, :post_tags
   include Taggable
 
   validates :title, presence: true, uniqueness: true

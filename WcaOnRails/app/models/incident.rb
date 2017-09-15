@@ -11,7 +11,6 @@ class Incident < ApplicationRecord
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
-  alias_attribute :item_tags, :incident_tags
   include Taggable
 
   def resolved?

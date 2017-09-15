@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 # This module can be included by a model willing to have tags.
-# The including model must have a has_many relationship to their tags table named "item_tags"
+# The including model must have a has_many relationship to their tags table,
+# and the relation must be named the following way:
+#  - "my_foo_tags" for the MyFoo model
+#  - "foo_tags" for the Foo model
 module Taggable
   extend ActiveSupport::Concern
+
+  private def item_tags
+    @tags_association ||= public_send("#{self.class.name.underscore}_tags")
+  end
 
   included do
     attr_writer :tags
