@@ -3,7 +3,7 @@
 class MergePeople
   include ActiveModel::Model
 
-  attr_accessor :person1_wca_id, :person2_wca_id
+  attr_reader :person1_wca_id, :person2_wca_id
   attr_reader :person1, :person2
 
   def person1_wca_id=(wca_id)

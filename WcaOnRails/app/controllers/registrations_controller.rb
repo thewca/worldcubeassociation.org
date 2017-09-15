@@ -244,9 +244,6 @@ class RegistrationsController < ApplicationController
   rescue Stripe::CardError => e
     flash[:danger] = 'Unsuccessful payment: ' + e.message
     redirect_to competition_register_path
-  rescue => e
-    flash[:danger] = 'Something went wrong: ' + e.message
-    redirect_to competition_register_path
   end
 
   def refund_payment
@@ -268,9 +265,6 @@ class RegistrationsController < ApplicationController
     )
 
     flash[:success] = 'Payment was refunded'
-    redirect_to edit_registration_path(registration)
-  rescue => e
-    flash[:danger] = 'Something went wrong with the refund: ' + e.message
     redirect_to edit_registration_path(registration)
   end
 

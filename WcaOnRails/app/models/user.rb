@@ -104,7 +104,7 @@ class User < ApplicationRecord
     end
   end
 
-  attr_accessor :claiming_wca_id
+  attr_reader :claiming_wca_id
   def claiming_wca_id=(claiming_wca_id)
     @claiming_wca_id = ActiveRecord::Type::Boolean.new.cast(claiming_wca_id)
   end

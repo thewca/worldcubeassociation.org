@@ -24,7 +24,7 @@ class ServerStatusController < ApplicationController
       raw = File.read(CERTIFICATE_PATH)
       certificate = OpenSSL::X509::Certificate.new(raw)
       @expires_in = (certificate.not_after.to_date - Time.now.to_date).to_i
-    rescue
+    rescue Errno::ENOENT
       @expires_in = nil
     end
     # If we're in test or development, we don't want to go red on the SSL certificate.

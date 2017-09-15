@@ -18,7 +18,6 @@ class LightResult
               :average,
               :personName,
               :event,
-              :event,
               :format,
               :round_type,
               :pos,
