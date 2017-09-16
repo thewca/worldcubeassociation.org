@@ -1,13 +1,15 @@
 <%= horizontal_simple_form_for(@incident, html: { class: "incident-form" }) do |f| %>
 
   <div class="form-inputs">
-    <%= f.input :name %>
+    <%= f.input :title %>
+    <%= f.input :digest_worthy, disabled: @incident.digest_sent? %>
+    <% if @incident.digest_sent? %>
+      <div class="form-group"><div class="col-sm-10 col-sm-offset-2">Digest marked as sent on <%= wca_local_time(@incident.digest_sent_at) %></div></div>
+    <% end %>
     <%= f.input :private_description, input_html: { class: "markdown-editor" } %>
     <%= f.input :private_wrc_decision, input_html: { class: "markdown-editor" } %>
     <%= f.input :public_summary, input_html: { class: "markdown-editor" } %>
     <hr/>
-    <%# FIXME improve this collection with better name/values %>
-    <%= f.input :status, collection: Incident.statuses, value_method: lambda { |s| s.first } %>
     <%= f.input :tags %>
     <script>
       $('input#incident_tags').selectize(wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>));

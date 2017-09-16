@@ -37,6 +37,30 @@ class IncidentsController < ApplicationController
     end
   end
 
+  def mark_as
+    @incident = Incident.find(params[:incident_id])
+    updated_attrs = {}
+    case params[:kind]
+    when "sent"
+      updated_attrs[:digest_sent_at] = Time.now
+    when "resolved"
+      updated_attrs[:resolved_at] = Time.now
+    else
+      flash[:danger] = "Unrecognize action, expecting either 'sent' or 'resolved'."
+      return redirect_to @incident
+    end
+
+    if @incident.update(updated_attrs)
+      flash[:success] = "Successfully updated incident."
+    else
+      flash[:danger] = "Couldn't mark the incident as sent."
+      @incident.errors.each do |key, message|
+        flash[:danger] += " #{key} #{message}"
+      end
+    end
+    redirect_to @incident
+  end
+
   def update
     if @incident.update(incident_params)
       flash[:success] = "Incident was successfully updated."
@@ -64,12 +88,14 @@ class IncidentsController < ApplicationController
 
   def incident_params
     params.require(:incident).permit(
-      :name,
+      :title,
       :private_description,
       :private_wrc_decision,
       :public_summary,
       :tags,
-      :status,
+      :resolved_at,
+      :digest_worthy,
+      :digest_sent_at,
       incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
     )
   end

@@ -10,7 +10,7 @@
     <%= wca_table(table_class: "incidents-log-table", data: { toggle: "table", pagination: true, search: true, toolbar: "#custom-search-toolbar" }, floatThead: false, greedy: false) do %>
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Title</th>
           <th class="tags-cell">Tags</th>
           <th class="comps-cell">Happened during</th>
           <th class="status-cell">Status</th>
@@ -20,7 +20,7 @@
       <tbody>
         <% @incidents.each do |incident| %>
           <tr>
-            <td><%= link_to incident.name, incident %></td>
+            <td><%= link_to incident.title, incident %></td>
             <td data-tags="<%= incident.tags %>">
               <% incident.tags_array.each do |t| %>
                 <%= render "incident_tag", tag: t %>
@@ -31,7 +31,11 @@
                 <%= render "competition_tag", comp: c %>
               <% end %>
             </td>
-            <td><%= incident.status %></td>
+            <% if incident.resolved_at %>
+              <td class="text-success">Resolved</td>
+            <% else %>
+              <td class="text-warning">Pending</td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

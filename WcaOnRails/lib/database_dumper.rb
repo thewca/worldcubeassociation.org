@@ -550,7 +550,7 @@ module DatabaseDumper
     "incidents" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(id name public_summary status created_at updated_at),
+        copy: %w(id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at),
         db_default: %w(private_description private_wrc_decision),
       ),
     }.freeze,

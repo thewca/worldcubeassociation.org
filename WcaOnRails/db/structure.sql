@@ -758,13 +758,15 @@ DROP TABLE IF EXISTS `incidents`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `incidents` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `private_description` text COLLATE utf8mb4_unicode_ci,
   `private_wrc_decision` text COLLATE utf8mb4_unicode_ci,
   `public_summary` text COLLATE utf8mb4_unicode_ci,
-  `status` int(11) DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `resolved_at` datetime DEFAULT NULL,
+  `digest_worthy` tinyint(1) DEFAULT '0',
+  `digest_sent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1303,6 +1305,7 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170824133352'),
 ('20170830140540'),
 ('20170831170616'),
+('20170916165728'),
 ('20171006182851'),
 ('20171113154922'),
 ('20171122010954'),

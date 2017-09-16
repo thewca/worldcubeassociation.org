@@ -286,11 +286,11 @@ en:
         comment: "Comment"
       #context: an incident
       incident:
-        name: "Name"
+        title: "Title"
         private_description: "Description (private)"
         private_wrc_decision: "Decision (private)"
         public_summary: "Summary (public)"
-        status: "Status"
+        digest_worthy: "Digest worthy"
         tags: "Tags"
         competition_id: "Happened during"
       competition_medium:
@@ -341,11 +341,11 @@ en:
     hints:
       #context: for an incident
       incident:
-        name: "Keep in mind this is public, and that you have to fill this in English!"
+        title: "Keep in mind this is public, and that you have to fill this in English!"
         private_description: "A description of the incident which can only be viewed by Delegates. Please fill this in English."
         private_wrc_decision: "The final WRC decision, including private details. Please fill this in English."
         public_summary: "An overall description of the incident and its decision, to be displayed publicly. Please fill this in English."
-        status: ""
+        digest_worthy: ""
         tags: ""
         competition_id: ""
       #context: for a user
