@@ -13,7 +13,12 @@ class IncidentsController < ApplicationController
   ]
 
   def index
-    @incidents = Incident.includes(:competitions, :incident_tags).all
+    base_model = Incident.includes(:competitions, :incident_tags)
+    if current_user&.can_view_delegate_matters?
+      @incidents = base_model.all
+    else
+      @incidents = base_model.resolved
+    end
   end
 
   def show

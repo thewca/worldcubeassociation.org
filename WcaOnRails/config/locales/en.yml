@@ -1406,6 +1406,10 @@ en:
         people: "No people found for"
         posts: "No posts found for"
         regulations_and_guidelines: "No Regulations or Guidelines found for"
+  #context: Incident log
+  incidents_log:
+    #context: disclaimer displayed to inform incidents are only in English
+    i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"
