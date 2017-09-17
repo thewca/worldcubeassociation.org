@@ -51,6 +51,11 @@ $competition-nav-padding: 50px;
     width: calc(100% - (#{$competition-nav-width} + #{$competition-nav-padding}));
   }
 
+  .show-events-table {
+    .last-round > td {
+      border-bottom: 4px solid #ccc;
+    }
+  }
 }
 
 // Workaround for https://github.com/cubing/icons/issues/16

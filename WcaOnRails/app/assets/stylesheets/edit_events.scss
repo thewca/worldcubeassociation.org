@@ -1,0 +1,49 @@
+#events-edit-area {
+  .panel-heading {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    .panel-title {
+      white-space: nowrap;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+
+      $cubing-icon-size: 55px;
+      .img-thumbnail.cubing-icon {
+        font-size: 40px;
+        position: absolute;
+        top: -5px;
+        height: $cubing-icon-size;
+        z-index: 1;
+      }
+
+      .title {
+        padding-left: $cubing-icon-size;
+        padding-right: 5px;
+      }
+
+      .add-event {
+        margin-left: auto;
+      }
+
+      .input-group {
+        margin-left: auto;
+
+        select {
+          width: 100px;
+        }
+
+        .input-group-btn {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .panel-body {
+    select {
+      width: 100%;
+    }
+  }
+}

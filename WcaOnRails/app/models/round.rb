@@ -33,12 +33,28 @@ class Round < ApplicationRecord
     end
   end
 
+  def event
+    Event.c_find(competition_event.event_id)
+  end
+
   def final_round?
     competition_event.rounds.last == self
   end
 
+  def self.parse_wcif_id(wcif_id)
+    event_id, round_number = wcif_id.split("-")
+    round_number = round_number.to_i
+    { event_id: event_id, round_number: round_number }
+  end
+
+  def self.wcif_id_to_name(wcif_id)
+    parsed = Round.parse_wcif_id(wcif_id)
+    event = Event.c_find(parsed[:event_id])
+    I18n.t("round.name", event: event.name, number: parsed[:round_number])
+  end
+
   def name
-    I18n.t("round.name", event: event.name, number: self.number)
+    Round.wcif_id_to_name(wcif_id)
   end
 
   def time_limit_to_s
@@ -63,11 +79,15 @@ class Round < ApplicationRecord
     }
   end
 
+  def wcif_id
+    "#{event.id}-#{self.number}"
+  end
+
   def to_wcif
     {
-      "id" => "#{event.id}-#{self.number}",
+      "id" => wcif_id,
       "format" => self.format_id,
-      "timeLimit" => time_limit&.to_wcif,
+      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
     }

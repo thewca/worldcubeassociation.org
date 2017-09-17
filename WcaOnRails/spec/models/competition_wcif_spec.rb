@@ -13,7 +13,7 @@ RSpec.describe "Competition WCIF" do
       end_date: "2014-02-05",
       external_website: "http://example.com",
       showAtAll: true,
-      event_ids: %w(333 444),
+      event_ids: %w(333 444 333fm 333mbf),
     )
   }
   let(:delegate) { competition.delegates.first }
@@ -22,6 +22,8 @@ RSpec.describe "Competition WCIF" do
   let!(:round333_1) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance) }
   let!(:round333_2) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 2) }
   let!(:round444_1) { FactoryGirl.create(:round, competition: competition, event_id: "444", number: 1) }
+  let!(:round333fm_1) { FactoryGirl.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
+  let!(:round333mbf_1) { FactoryGirl.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   before :each do
     # Load all the rounds we just created.
     competition.reload
@@ -67,6 +69,30 @@ RSpec.describe "Competition WCIF" do
             ],
           },
           {
+            "id" => "333fm",
+            "rounds" => [
+              {
+                "id" => "333fm-1",
+                "format" => "m",
+                "timeLimit" => nil,
+                "cutoff" => nil,
+                "advancementCondition" => nil,
+              },
+            ],
+          },
+          {
+            "id" => "333mbf",
+            "rounds" => [
+              {
+                "id" => "333mbf-1",
+                "format" => "3",
+                "timeLimit" => nil,
+                "cutoff" => nil,
+                "advancementCondition" => nil,
+              },
+            ],
+          },
+          {
             "id" => "444",
             "rounds" => [
               {
@@ -89,15 +115,25 @@ RSpec.describe "Competition WCIF" do
   describe "#set_wcif_events!" do
     let(:wcif) { competition.to_wcif }
 
-    it "removes competition event when wcif rounds are empty" do
+    it "does not remove competition event when wcif rounds are empty" do
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
       wcif_444_event["rounds"] = []
 
       competition.set_wcif_events!(wcif["events"])
 
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf 444)
+    end
+
+    it "does remove competition event when wcif rounds are nil" do
+      wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
+      wcif_444_event["rounds"] = nil
+
+      competition.set_wcif_events!(wcif["events"])
+
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333)
+      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
     end
 
     it "removes competition event when wcif event is missing" do
@@ -106,7 +142,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"])
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333)
+      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
@@ -166,6 +202,27 @@ RSpec.describe "Competition WCIF" do
       wcif_333_event["rounds"][0]["format"] = '3'
 
       competition.set_wcif_events!(wcif["events"])
+
+      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
+
+    it "ignores setting time limit for 333mbf and 333fm" do
+      wcif_333mbf_event = wcif["events"].find { |e| e["id"] == "333mbf" }
+      wcif_333mbf_event["rounds"][0]["timeLimit"] = {
+        "centiseconds" => 30.minutes.in_centiseconds,
+        "cumulativeRoundIds" => [],
+      }
+
+      wcif_333fm_event = wcif["events"].find { |e| e["id"] == "333fm" }
+      wcif_333fm_event["rounds"][0]["timeLimit"] = {
+        "centiseconds" => 30.minutes.in_centiseconds,
+        "cumulativeRoundIds" => [],
+      }
+
+      competition.set_wcif_events!(wcif["events"])
+
+      wcif_333mbf_event["rounds"][0]["timeLimit"] = nil
+      wcif_333fm_event["rounds"][0]["timeLimit"] = nil
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end

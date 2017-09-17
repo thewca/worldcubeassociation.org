@@ -28,6 +28,10 @@ class CompetitionEvent < ApplicationRecord
     fee.nonzero?
   end
 
+  def event
+    Event.c_find(event_id)
+  end
+
   def to_wcif
     {
       "id" => self.event.id,
@@ -36,11 +40,6 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def load_wcif!(wcif)
-    if wcif["rounds"].empty?
-      self.destroy!
-      return
-    end
-
     self.rounds.destroy_all!
     wcif["rounds"].each_with_index do |wcif_round, index|
       self.rounds.create!(Round.wcif_to_round_attributes(wcif_round, index+1))
@@ -52,7 +51,7 @@ class CompetitionEvent < ApplicationRecord
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "rounds" => { "type" => "array", "items" => Round.wcif_json_schema },
+        "rounds" => { "type" => ["array", "null"], "items" => Round.wcif_json_schema },
         "competitorLimit" => { "type" => "integer" },
         "qualification" => { "type" => "object" }, # TODO: expand on this
       },

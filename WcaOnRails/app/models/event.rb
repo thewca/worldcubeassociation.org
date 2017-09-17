@@ -54,4 +54,20 @@ class Event < ApplicationRecord
   def multiple_blindfolded?
     self.id == "333mbf" || self.id == "333mbo"
   end
+
+  def can_change_time_limit?
+    !fewest_moves? && !multiple_blindfolded?
+  end
+
+  def serializable_hash(options = nil)
+    {
+      id: self.id,
+      name: self.name,
+      format_ids: self.formats.map(&:id),
+      can_change_time_limit: self.can_change_time_limit?,
+      is_timed_event: self.timed_event?,
+      is_fewest_moves: self.fewest_moves?,
+      is_multiple_blindfolded: self.multiple_blindfolded?,
+    }
+  end
 end

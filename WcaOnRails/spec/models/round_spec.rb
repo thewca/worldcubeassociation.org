@@ -28,19 +28,19 @@ RSpec.describe Round do
     let!(:five_blind_round) { FactoryGirl.create :round, competition: competition, event_id: "555bf", format_id: "3" }
 
     it "defaults to 10 minutes" do
-      expect(round.time_limit).to eq(TimeLimit.new(centiseconds: 10*60*100, cumulative_round_ids: []))
+      expect(round.time_limit).to eq(TimeLimit.new(centiseconds: 10.minutes.in_centiseconds, cumulative_round_ids: []))
       expect(round.time_limit_to_s).to eq "10:00.00"
     end
 
     it "set to 5 minutes" do
-      round.update!(time_limit: TimeLimit.new(centiseconds: 5*60*100, cumulative_round_ids: ["333-1"]))
-      expect(round.time_limit.centiseconds).to eq 5*60*100
+      round.update!(time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: ["333-1"]))
+      expect(round.time_limit.centiseconds).to eq 5.minutes.in_centiseconds
       expect(round.time_limit_to_s).to eq "5:00.00 cumulative"
     end
 
     it "set to 60 minutes shared between 444bf and 555bf" do
-      four_blind_round.update!(time_limit: TimeLimit.new(centiseconds: 5*60*100, cumulative_round_ids: ["444bf-1", "555bf-1"]))
-      expect(four_blind_round.time_limit.centiseconds).to eq 5*60*100
+      four_blind_round.update!(time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: ["444bf-1", "555bf-1"]))
+      expect(four_blind_round.time_limit.centiseconds).to eq 5.minutes.in_centiseconds
       expect(four_blind_round.time_limit_to_s).to eq "5:00.00 total for 4x4x4 Blindfolded Round 1 and 5x5x5 Blindfolded Round 1"
     end
   end
@@ -100,7 +100,7 @@ RSpec.describe Round do
       end
 
       it "1 attempt to get 4 points or better" do
-        round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: points_to_multibld_attempt(4)))
+        round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: SolveTime.points_to_multibld_attempt(4)))
         expect(round.cutoff_to_s).to eq "1 attempt to get ≥ 4 points"
       end
     end
@@ -140,7 +140,7 @@ RSpec.describe Round do
       it "set to <= 3 minutes" do
         first_round, _second_round = create_rounds("333", count: 2)
 
-        first_round.update!(advancement_condition: AttemptResultCondition.new(3*60*100))
+        first_round.update!(advancement_condition: AttemptResultCondition.new(3.minutes.in_centiseconds))
         expect(first_round.advancement_condition_to_s).to eq "Best solve ≤ 3:00.00 advances to round 2"
       end
 
@@ -154,19 +154,11 @@ RSpec.describe Round do
       it "set to >= 6 points" do
         first_round, _second_round = create_rounds("333mbf", format_id: '3', count: 2)
 
-        first_round.update!(advancement_condition: AttemptResultCondition.new(points_to_multibld_attempt(6)))
+        first_round.update!(advancement_condition: AttemptResultCondition.new(SolveTime.points_to_multibld_attempt(6)))
         expect(first_round.advancement_condition_to_s).to eq "Best solve ≥ 6 points advances to round 2"
       end
     end
   end
-end
-
-def points_to_multibld_attempt(points)
-  SolveTime.new("333mbf", :best, 0).tap do |solve_time|
-    solve_time.attempted = points
-    solve_time.solved = points
-    solve_time.time_centiseconds = 99_999
-  end.wca_value
 end
 
 def create_rounds(event_id, format_id: 'a', count:)

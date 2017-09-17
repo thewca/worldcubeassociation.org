@@ -122,6 +122,8 @@ en:
     cumulative:
       one_round: "%{time} cumulative"
       across_rounds: "%{time} total for %{rounds}"
+    333fm: "1 hour"
+    333mbf: "10 minutes per cube"
   #context: Common word used in multiple places on the website
   common:
     continent: "Continent"
@@ -871,12 +873,11 @@ en:
       venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
       contact_html: "Optional contact information. If you do not fill this in, organizer emails will be shown to the public. %{md}. Example: [Text to display](mailto:some@email.com)"
       events: "Events"
-      unoff_events: "Events that are no longer official"
+      deprecated_events: "This competition has events that are no longer official, we do not support editing them."
       locked_edit_html: "This competition is publicly visible and locked for editing. If you need to make a change, contact the %{board}."
       confirmed_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{board} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
       awaiting_confirmation_html: "Fill in all the fields and click Confirm when you're ready for the %{board} to approve this competition."
-      submit_modify_value: "Modify Events"
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"

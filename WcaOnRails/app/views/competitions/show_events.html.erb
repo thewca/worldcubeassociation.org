@@ -1,0 +1,69 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <% cumulative_time_limit = false %>
+  <% cumulative_across_rounds_time_limit = false %>
+  <%= wca_table table_class: "show-events-table" do %>
+    <thead>
+      <tr>
+        <th>Event name</th>
+        <th>Round</th>
+        <th>Format</th>
+        <th><%= link_to "Time Limit", "#time-limit" %></th>
+        <th><%= link_to "Cutoff", "#cutoff" %></th>
+        <th></th>
+      </tr>
+    <thead>
+
+    <tbody>
+      <% @competition.competition_events.each do |competition_event| %>
+        <% event_round_number = competition_event.rounds.length %>
+        <% next if event_round_number == 0 %>
+        <% competition_event.rounds.each do |round| %>
+          <% line_class = round.number == event_round_number ? "last-round" : "" %>
+          <tr class="<%= line_class %>">
+            <td>
+              <%= competition_event.event.name if round.number == 1 %>
+            </td>
+            <td><%= round.number %></td>
+            <td><%= round.format.name %></td>
+            <td>
+              <% if !competition_event.event.can_change_time_limit? %>
+                <%= t "time_limit.#{competition_event.event.id}" %>
+              <% else %>
+                <%= round.time_limit_to_s %>
+                <% if round.time_limit.cumulative_round_ids.length == 1 %>
+                  <% cumulative_time_limit = true %>
+                  <%= link_to "*", "#cumulative-time-limit" %>
+                <% elsif round.time_limit.cumulative_round_ids.length > 1 %>
+                  <% cumulative_across_rounds_time_limit = true %>
+                  <%= link_to "**", "#cumulative-across-rounds-time-limit" %>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= round.cutoff_to_s %></td>
+            <td><%= round.advancement_condition_to_s %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  <% end %>
+
+  <dl class="dl-horizontal">
+    <dt id="time-limit">Time Limit</dt>
+    <dd>
+      If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see <%= link_to "Regulation A1a4",  regulations_path + "#A1a4", target: "_blank" %>).
+      <br/>
+      <% if cumulative_time_limit %>
+        A <strong id="cumulative-time-limit">cumulative time limit</strong> may be enforced (see <%= link_to "Regulation A1a2",  regulations_path + "#A1a2", target: "_blank" %>).
+      <% end %>
+      <br/>
+      <% if cumulative_across_rounds_time_limit %>
+        A <strong id="cumulative-across-rounds-time-limit">cumulative time limit</strong> may be enforced across rounds (see <%= link_to "Guideline A1a2++",  regulations_path + "/guidelines.html#A1a2++", target: "_blank" %>).
+      <% end %>
+    </dd>
+
+    <dt id="cutoff">Cutoff</dt>
+    <dd>The ranking or time to meet to proceed to the second phase of a combined round (see <%= link_to "Regulation 9g",  regulations_path + "#9g", target: "_blank" %>)</dd>
+  </dl>
+<% end %>

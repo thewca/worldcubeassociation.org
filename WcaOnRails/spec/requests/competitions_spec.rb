@@ -108,6 +108,128 @@ RSpec.describe "competitions" do
       end
     end
 
+    context 'when signed in as competition delegate' do
+      let(:comp_delegate) { competition.delegates.first }
+
+      before :each do
+        sign_in comp_delegate
+        competition.events = [Event.find("333"), Event.find("222")]
+        competition.update!(isConfirmed: true)
+      end
+
+      it 'allows adding rounds to an event of confirmed competition' do
+        headers = { "CONTENT_TYPE" => "application/json" }
+        competition_events = [
+          {
+            id: "333",
+            rounds: [
+              {
+                id: "333-1",
+                format: "a",
+                timeLimit: {
+                  centiseconds: 4242,
+                  cumulativeRoundIds: [],
+                },
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+          {
+            id: "222",
+            rounds: [
+              {
+                id: "222-1",
+                format: "a",
+                timeLimit: nil,
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+        ]
+        expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
+        patch update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
+        expect(response).to be_success
+        expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
+      end
+
+      it 'does not allow adding events to a confirmed competition' do
+        headers = { "CONTENT_TYPE" => "application/json" }
+        competition_events = [
+          {
+            id: "333",
+            rounds: [
+              {
+                id: "333-1",
+                format: "a",
+                timeLimit: nil,
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+          {
+            id: "222",
+            rounds: [
+              {
+                id: "222-1",
+                format: "a",
+                timeLimit: nil,
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+          {
+            id: "333oh",
+            rounds: [
+              {
+                id: "333oh-1",
+                format: "a",
+                timeLimit: nil,
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+        ]
+        patch update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
+        expect(response).to have_http_status(422)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Cannot add events to a confirmed competition"
+      end
+
+      it 'does not allow removing events from a confirmed competition' do
+        headers = { "CONTENT_TYPE" => "application/json" }
+        competition_events = [
+          {
+            id: "333",
+            rounds: [
+              {
+                id: "333-1",
+                format: "a",
+                timeLimit: {
+                  centiseconds: 4242,
+                  cumulativeRoundIds: [],
+                },
+                cutoff: nil,
+                advancementCondition: nil,
+              },
+            ],
+          },
+          {
+            id: "222",
+            rounds: nil,
+          },
+        ]
+        patch update_events_from_wcif_path(competition), params: competition_events.to_json, headers: headers
+        expect(response).to have_http_status(422)
+        response_json = JSON.parse(response.body)
+        expect(response_json["error"]).to eq "Cannot remove events from a confirmed competition"
+      end
+    end
+
     context 'when signed in as a regular user' do
       sign_in { FactoryGirl.create :user }
 

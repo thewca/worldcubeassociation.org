@@ -150,15 +150,6 @@ RSpec.feature "Competition management" do
     feature "edit" do
       let(:comp_with_fours) { FactoryGirl.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit events' do
-        visit edit_events_path(comp_with_fours)
-        check "competition_events_333"
-        uncheck "competition_events_444"
-        click_button "Modify Events"
-
-        expect(comp_with_fours.reload.events).to match_array [threes]
-      end
-
       scenario 'can edit registration open datetime', js: true do
         visit edit_competition_path(comp_with_fours)
         check "competition_use_wca_registration"
