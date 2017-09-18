@@ -87,6 +87,7 @@ class Person < ApplicationRecord
 
   # Update the person attributes and save the old state as a new Person with greater subId.
   def update_using_sub_id(attributes)
+    attributes = attributes.to_h
     @updating_using_sub_id = true
     if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }
       errors[:base] << "The name or the country must be different to update the person."
