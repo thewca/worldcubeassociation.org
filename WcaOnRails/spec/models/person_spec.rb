@@ -113,8 +113,8 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#world_championship_podiums" do
-    let!(:wc2015) { FactoryGirl.create :competition, cellName: "World Championship 2015", starts: Date.new(2015, 1, 1) }
-    let!(:wc2017) { FactoryGirl.create :competition, cellName: "World Championship 2017", starts: Date.new(2017, 1, 1) }
+    let!(:wc2015) { FactoryGirl.create :competition, championship_types: ["world"], starts: Date.new(2015, 1, 1) }
+    let!(:wc2017) { FactoryGirl.create :competition, championship_types: ["world"], starts: Date.new(2017, 1, 1) }
     let!(:result1) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 2, eventId: "333" }
     let!(:result2) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 1, eventId: "333oh" }
     let!(:result3) { FactoryGirl.create :result, person: person, competition: wc2017, pos: 3, eventId: "444" }
