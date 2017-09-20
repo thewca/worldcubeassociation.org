@@ -99,5 +99,15 @@ FactoryGirl.define do
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
       connected_stripe_account_id "acct_19ZQVmE2qoiROdto"
     end
+
+    transient do
+      championship_types []
+    end
+
+    after(:create) do |competition, evaluator|
+      evaluator.championship_types.each do |championship_type|
+        competition.championships.create!(championship_type: championship_type)
+      end
+    end
   end
 end
