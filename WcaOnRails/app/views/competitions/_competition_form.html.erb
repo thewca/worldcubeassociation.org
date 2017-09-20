@@ -1,4 +1,5 @@
   <% provide(:include_gmaps, true) %>
+  <%= javascript_pack_tag 'auto_numeric' %>
   <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).isConfirmed? : false %>
   <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
     <% if @competition.persisted? %>
@@ -235,10 +236,15 @@
     <%= f.input :currency_code, collection: Money::Currency.table.values, label_method: lambda { |c| c[:name]  }, value_method: lambda { |c| c[:iso_code] }, disabled: disable_money_input  %>
     <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input %>
     <script>
+
+      // Activate currency mask
+      var autoNumericObject = wca.setupCurrencyMask('input.wca-currency-mask');
+
       // Setup currency onchange callback
       $('#competition_currency_code').change(function() {
         wca.applyCurrencyMask('update',
                               '#base_entry_fee_lowest_denomination_input_field',
+                              autoNumericObject,
                               $('#competition_currency_code').val());
       });
     </script>
