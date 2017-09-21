@@ -3,6 +3,8 @@
 class EligibleCountryIso2ForChampionship < ApplicationRecord
   self.table_name = "eligible_country_iso2s_for_championship"
 
+  belongs_to :championship, foreign_key: :championship_type
+
   validates :eligible_country_iso2, uniqueness: { scope: :championship_type },
                                     inclusion: { in: Country.all.map(&:iso2) }
 

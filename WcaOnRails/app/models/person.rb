@@ -174,21 +174,21 @@ class Person < ApplicationRecord
            .order("year DESC, Events.rank")
   end
 
-  def continental_championship_podiums
+  def championship_podiums_with_condition(region_condition)
     [].tap do |championship_podium_results|
       results
-        .joins(:country, competition: [:championships])
+        .includes(:country, competition: { championships: :eligible_country_iso2s_for_championship })
         .final
-        .where("championships.championship_type = Countries.continentId")
+        .where(region_condition)
         .order("year DESC")
         .map(&:competition)
         .uniq
         .each do |competition|
           competition
             .results
-            .includes(:country, :event, :format, competition: [:championships])
+            .includes(:country, :event, :format, competition: { championships: :eligible_country_iso2s_for_championship })
             .final
-            .where("championships.championship_type = Countries.continentId")
+            .where(region_condition)
             .order("Events.rank, pos")
             .group_by(&:event)
             .each do |event, results|
@@ -198,11 +198,22 @@ class Person < ApplicationRecord
                 positions_delta += (previous_pos == result.pos ? 0 : previous_pos - result.pos + 1)
                 previous_pos = result.pos
                 result.pos += positions_delta
-                championship_podium_results.push result if result.personId == self.wca_id
                 break if result.pos > 3
+                championship_podium_results.push result if result.personId == self.wca_id
               end
             end
         end
+    end
+  end
+
+  def championship_podiums
+    {}.tap do |podiums|
+      podiums[:world] = world_championship_podiums
+      podiums[:continental] = championship_podiums_with_condition("championships.championship_type = Countries.continentId")
+      EligibleCountryIso2ForChampionship.where(eligible_country_iso2: self.country_iso2).distinct.pluck(:championship_type).each do |championship_type|
+        podiums[championship_type.to_s] = championship_podiums_with_condition("eligible_country_iso2s_for_championship.championship_type = '#{championship_type}' AND Countries.iso2 = eligible_country_iso2s_for_championship.eligible_country_iso2")
+      end
+      podiums[:national] = championship_podiums_with_condition("championships.championship_type = Countries.iso2")
     end
   end
 
