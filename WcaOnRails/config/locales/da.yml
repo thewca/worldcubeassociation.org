@@ -169,6 +169,10 @@ da:
       one_round: '%{time} sammenlagt'
       #original_hash: c01adfa
       across_rounds: '%{time} total for %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 time
+    #original_hash: 2c2abd5
+    333mbf: 10 minutter per terning
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -1551,8 +1555,10 @@ da:
         vise](mailto:some@email.com)
       #original_hash: c5497bc
       events: Discipliner
-      #original_hash: ae66391
-      unoff_events: Discipliner der ikke længere er officielle
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Denne konkurrence har discipliner der ikke længere er officielle, vi
+        understøtter ikke muligheden for at ændre dem.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Denne konkurrence er offentlig og er ikke mulig at redigere. Hvis du
@@ -1569,8 +1575,6 @@ da:
       awaiting_confirmation_html: >-
         Udfyld alle fælter og klik Bekræft når du er klar til at %{board}
         acceptere denne konkurrence.
-      #original_hash: 7586b02
-      submit_modify_value: Ænder discipliner
       #original_hash: 8966fd0
       submit_create_value: Opret Konkurrence
       #original_hash: 40b0dfd
