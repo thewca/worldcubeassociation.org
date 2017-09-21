@@ -174,6 +174,38 @@ class Person < ApplicationRecord
            .order("year DESC, Events.rank")
   end
 
+  def continental_championship_podiums
+    [].tap do |championship_podium_results|
+      results
+        .joins(:country, competition: [:championships])
+        .final
+        .where("championships.championship_type = Countries.continentId")
+        .order("year DESC")
+        .map(&:competition)
+        .uniq
+        .each do |competition|
+          competition
+            .results
+            .includes(:country, :event, :format, competition: [:championships])
+            .final
+            .where("championships.championship_type = Countries.continentId")
+            .order("Events.rank, pos")
+            .group_by(&:event)
+            .each do |event, results|
+              positions_delta = 0
+              previous_pos = 0
+              results.each_with_index do |result, index|
+                positions_delta += (previous_pos == result.pos ? 0 : previous_pos - result.pos + 1)
+                previous_pos = result.pos
+                result.pos += positions_delta
+                championship_podium_results.push result if result.personId == self.wca_id
+                break if result.pos > 3
+              end
+            end
+        end
+    end
+  end
+
   def medals
     positions = results.podium.pluck(:pos)
     {
