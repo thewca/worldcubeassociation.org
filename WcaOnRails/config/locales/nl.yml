@@ -169,6 +169,10 @@ nl:
       one_round: '%{time} cumulatief'
       #original_hash: c01adfa
       across_rounds: '%{time} totaal voor %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 uur
+    #original_hash: 2c2abd5
+    333mbf: 10 minuten per kubus
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -1561,8 +1565,10 @@ nl:
         [Tekst](mailto:some@email.com)
       #original_hash: c5497bc
       events: Wedstrijdonderdelen
-      #original_hash: ae66391
-      unoff_events: Voormalige wedstrijdonderdelen
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Deze wedstrijd heeft wedstrijdonderdelen die niet langer officieel zijn,
+        we ondersteunen niet het bewerken daarvan.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Deze wedstrijd is publiek zichtbaar en kan worden bewerkt. Als je een
@@ -1579,8 +1585,6 @@ nl:
       awaiting_confirmation_html: >-
         Vul alle velden in en klik op Bevestigen als je klaar bent om de
         %{board} de wedstrijd te laten goedkeuren.
-      #original_hash: 7586b02
-      submit_modify_value: Opslaan wedstrijdonderdelen
       #original_hash: 8966fd0
       submit_create_value: Aanmaken wedstrijd
       #original_hash: 40b0dfd
