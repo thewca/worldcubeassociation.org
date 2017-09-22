@@ -25,9 +25,7 @@ if( $chosenExport ){
     'RoundTypes'   => '*',
     'Events'       => '*',
     'Formats'      => '*',
-    # This should be set back to '*' after https://github.com/thewca/wca-workbook-assistant/pull/115
-    # is merged and released. Also see the change here: https://github.com/thewca/worldcubeassociation.org/pull/808
-    'Countries'    => 'SELECT id, name, continentId, 0 as latitude, 0 as longitude, 0 as zoom, iso2 FROM Countries',
+    'Countries'    => '*',
     'Continents'   => '*',
     'Persons'      => 'SELECT id, subid, name, countryId, gender FROM Persons',
     # To maintain the database export format, we have to build up the
