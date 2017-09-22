@@ -1,0 +1,4 @@
+sudo: false
+language: ruby
+install: true
+script: true
