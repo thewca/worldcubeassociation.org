@@ -6,6 +6,8 @@ ro:
     XE: 'Mai multe țări: (Europa)'
     #original_hash: 459f987
     XS: 'Mai multe țări: (America de Sud)'
+    #original_hash: 374ac0d
+    XM: Mai multe țări (America)
     #original_hash: 918c53a
     MO: Macao
     #original_hash: 2f488ff
@@ -13,18 +15,20 @@ ro:
     #original_hash: 4e8bd04
     KR: Coreea
   continents:
+    #original_hash: 0f138c8
+    Multiple Continents: Mai multe continente
     #original_hash: 1d35114
-    AfR: Africa
+    Africa: Africa
     #original_hash: a173e72
-    AsR: Asia
+    Asia: Asia
     #original_hash: 576347e
-    ER: Europa
+    Europe: Europa
     #original_hash: 247ce5d
-    NAR: America de Nord
+    North America: America de Nord
     #original_hash: 3642950
-    OcR: Oceania
+    Oceania: Oceania
     #original_hash: b1ffb4c
-    SAR: America de Sud
+    South America: America de Sud
   events:
     #original_hash: 3732390
     '222': Cubul 2x2x2
@@ -168,6 +172,10 @@ ro:
       one_round: '%{time} cumulativ'
       #original_hash: c01adfa
       across_rounds: '%{time} total pentru %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 oră
+    #original_hash: 2c2abd5
+    333mbf: 10 minute per cub
   common:
     #original_hash: 2513cf0
     continent: Continent
@@ -176,7 +184,7 @@ ro:
     #original_hash: 0154c0d
     here: aici
     #original_hash: 77003d0
-    best: Cel mai bun
+    best: Best
     #original_hash: dd11868
     single: Single
     #original_hash: 15f86c0
@@ -856,6 +864,8 @@ ro:
       db_export: Export bază de date
       #original_hash: 1fa73f3
       regulations: Regulament
+      #original_hash: 6bce1b5
+      about_regulations: Despre Regulament
       #original_hash: 141d1d7
       guidelines: Îndrumări
       #original_hash: c4622c3
@@ -1589,8 +1599,10 @@ ro:
         [Text de afișat](mailto:some@email.com)
       #original_hash: c5497bc
       events: Probe
-      #original_hash: ae66391
-      unoff_events: Probe care nu mai sunt oficiale
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Această competiție are probe care nu mai sunt oficiale și nu se mai pot
+        edita
       #original_hash: 815d5c3
       locked_edit_html: >-
         Această competiție este vizibilă public și nu mai poate fi editată. Dacă
@@ -1607,8 +1619,6 @@ ro:
       awaiting_confirmation_html: >-
         Completează toate câmpurile și apasă pe Confirmare când ești gata ca
         %{board} să aprobe competiția.
-      #original_hash: 7586b02
-      submit_modify_value: Modifică Probele
       #original_hash: 8966fd0
       submit_create_value: Creează Competiție
       #original_hash: 40b0dfd
@@ -1992,13 +2002,16 @@ ro:
             WCA</a> din zona ei. Competiția este recunoscută oficial de WCA
             numai sub supravegherea unui Delegat WCA. Acesta va îndruma
             organizatorii pentru a face o competiție reușită.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
             Consultă <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>acest ghid</a> pentru
-            informații suplimentare (Dacă există vreun conflict între
-            informațiile prezentate în acest ghid suplimentar și Regulamentul
-            WCA, atunci rămâne valabil ce scrie în Regulamentul WCA).
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>Ghidul
+            Organizatorului de Competiții WCA</a> și <a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>Ghidul de Competiții de
+            la CubingUSA</a>  pentru informații suplimentare (Dacă există vreun
+            conflict între informațiile prezentate în acest ghid suplimentar și
+            Regulamentul WCA, atunci ceea ce se găsește în Regulamentul WCA este
+            corect.)
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2539,3 +2552,220 @@ ro:
         posts: Nicio postare găsită pentru
         #original_hash: 76a6bf1
         regulations_and_guidelines: Niciun Regulament sau Îndrumar găsit pentru
+  about_regulations:
+    #original_hash: 6bce1b5
+    title: Despre Regulament
+    panel1:
+      #original_hash: 1fa73f3
+      title: Regulament
+      #original_hash: 557095b
+      content1_html: >-
+        Toate competițiile trebuie să se desfășoare conform <a
+        href="/regulations/">Regulamentului WCA</a>. Este important ca
+        participanții să citească aceste reguli înainte de prima lor competiție.
+      #original_hash: 4296902
+      content2_html: >-
+        Pe lângă Regulamentul WCA, există și <a
+        href="/regulations/guidelines.html">Îndrumările WCA</a>, ce conțin
+        clarificări și explicații suplimentare
+    panel2:
+      #original_hash: 8ad8302
+      title: Traduceri
+      #original_hash: 7477d9b
+      content1_html: >-
+        Regulamentul WCA este valabil nu numai în limba engleză, ci a fpst
+        tradus în mai multe limbi de către membrii WCA:  <a
+        href="/regulations/translations/">Traduceri</a>.
+      #original_hash: 6add7a3
+      content2_html: >-
+        <strong>Important</strong>: Deși traducerile sunt foarte utile, ele nu
+        sunt oficiale. În competiții, versiunea în limba engleză a
+        Regulamentului WCA este cea care se aplică.
+    panel3:
+      #original_hash: 234fd4d
+      title: Întrebări Frecvente despre Regulament
+      #original_hash: 8afba93
+      content1_html: >-
+        <a href="/faq">Secțiunea de Întrebări Frecvente</a> conține răspunsuri
+        pentru multe întrebări despre Regulamentul WCA.
+    panel4:
+      #original_hash: ad5f6e7
+      title: Ghidul Organizatorului
+      #original_hash: 9bbdf16
+      content1_html: >-
+        Dacă ești interesat sau deja planifici să organizezi o competiție, te
+        rugăm să citești <a href="/organizer-guidelines">Ghidul
+        Organizatorului</a>.
+      #original_hash: 5016669
+      content2_html: >-
+        Acest document conține informații importante și trebuie să fie citit de
+        către toți organizatorii de competiții.
+  organizer_guidelines:
+    #original_hash: 7486ac4
+    title: Îndrumări pentru Organizarea Competițiilor WCA
+    paragraph1:
+      #original_hash: e5f5329
+      title: Cum să organizezi o competiție
+      #original_hash: 3dbbbee
+      content: >-
+        Toate competițiile WCA trebuie să fie supravegheate de un Delegat WCA
+        participant. Dacă ești interesat să organizezi propria ta competiție, te
+        rugăm să iei legătura cu cel mai apropiat Delegat WCA. Acesta va fi
+        capabil să îți dea mai multe informații specifice zonei tale și te va
+        ajuta să găsești o dată potrivită, deoarece știe dacă mai sunt
+        planificate alte competiții în aceeași perioadă. Dacă nu există niciun
+        Delegat WCA în zona ta, te rugăm să iei legătura cu Delegatul Senior al
+        regiunii tale.
+    paragraph2:
+      #original_hash: f20dd3b
+      title: Costuri estimative pentru organizarea unei competiții
+      #original_hash: ab53dda
+      content: >-
+        Costurile la care te poți aștepta pentru organizarea competiției variază
+        de la țară la țară și sunt determinate de mulți factori, precum mărimea
+        locației și alte condiții generale. Acoperirea costurilor prin taxa de
+        participare este posibilă. Însă, pentru a menține taxa cât mai mică,
+        este foarte recomandat să cauți sponsori. Chiar dacă Delegații WCA nu
+        sunt plătiți pentru munca lor, organizatorii ar trebui să acopere
+        costurile cu transportul ale Delgatului.
+    paragraph3:
+      #original_hash: 00d3bf8
+      title: Termene limită pentru anunțarea competiției
+      #original_hash: c61c6c9
+      content_html: >-
+        Competiția ar trebui anunțată cel târziu cu o lună înainte de prima zi a
+        acesteia (vezi <a
+        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>Îndrumarea
+        8a4++</a>). Dacă există motive din cauza cărora termenul nu poate fi
+        respectat, competiția poate fi anunțată cel târziu cu două săptămâni
+        înainte, la discreția Boardului WCA. Este foarte recomandat ca Boardul
+        WCA să fie informat despre aceste motive cât mai repede, pentru a evita
+        refuzarea ulterioară a competiției.
+    paragraph4:
+      #original_hash: b6dca56
+      title: Reguli privind distanța
+      #original_hash: b2bc107
+      content1: >-
+        Ca regulă generală, Competițiile WCA sunt acceptate dacă sunt la cel
+        puțin 200 km sau 26 de zile distanță de altă copmetiție. Boardul WCA
+        trebuie să aprobe separat competițiile care nu se încadrează în aceste
+        limite. Delegatul care cere aprobarea unei astfel de competiții trebuie
+        să ofere informații suplimentare. Argumente posibile pentru aprobarea
+        unei asemenea competiții:
+      olist1:
+        #original_hash: 424c134
+        '1': Cele două competiții au probe diferite
+        #original_hash: f7bacc5
+        '2': Cele două competiții sunt în țări diferite
+        #original_hash: 9aa4d96
+        '3': >-
+          În ultimele 12 luni, au fost mai puțin de 13 competiții la mai puțin
+          de 200 de km de locația actualei competiții
+      #original_hash: ab65dfb
+      content2: >-
+        Competițiile FMC ce se desfășoară simultan în mai multe locații nu pot
+        face parte din altă competiție obișnuită:
+      olist2:
+        #original_hash: a57b541
+        '1': >-
+          Dacă locația unei astfel de competiții este la mai puțin de 200 km de
+          locația unei competiții obișnuite, atunci cele două competiții trebuie
+          să fie la cel puțin 5 zile distanță, iar competiția obișnuită trebuie
+          să nu fi avut probă de FMC.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Anunțarea probelor
+      #original_hash: b6c6d26
+      content: >-
+        Toate probele ce se vor desfășura la concurs trebuie specificate de
+        către Delegat când acesta cere aprobarea. Se incud și probele incerte
+        (de exemplu, probe ce se țin în funcție de numărul de concurenți).
+        Adăugările ulterioare trebuie aprobate de Board.
+    paragraph5:
+      #original_hash: 17d01de
+      title: Limita de concurenți
+      #original_hash: 18976be
+      content_html: >-
+        Limita numărului de concurenți poate fi stabilită pentru fiecare probă
+        în parte sau pentru toată competiția (vezi
+        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regula
+        Z4</a>). Ca în cazul tuturor regulilor din articolul Z, delegatul
+        competiției trebuiî sî obțină aprobarea numărului de concurenți din
+        partea Boardului. Limitele trebuie să fie alese cu atenție, conform cu
+        interesul pentru acea competiție. Limita nu trebuie coborâtă pentru
+        motive minore. Numărul maxim planificat trebuie luat în considerare
+        pentru alegerea sălii. Limita numărului de concurenți trebuie să fie
+        trecută clar pe pagina competiției de pe site-ul WCA.
+    paragraph6:
+      #original_hash: ce4c3d0
+      title: Arbitrarea înregistrărilor
+      #original_hash: cb13cd0
+      content: >-
+        Înregistrările trebuie să fie procesate după principiul "primul venit,
+        primul servit", deci înregistrările complete să fie tratate în prdinea
+        finalizării lor. Dacă taxa de intrare trebuie plătită în avans,
+        înregistrarea se consideră completă odată cu finalizarea plății. Acest
+        aspect trebuie să fie clar precizat în instrucțiunile de plată de pe
+        site-ul competiției.
+    paragraph7:
+      #original_hash: e4f1c62
+      title: Managementul listei de așteptare
+      #original_hash: 81ca3f3
+      content1: >-
+        Odată cu atingerea numărului maxim de concurenți, trebuie deschisă o
+        listă de așteptare. Când un concurent aprobat își anulează
+        înregistrarea, acesta poate fi înlocuit cu prima persoană din lista de
+        așteptare.
+      #original_hash: 1b2ea79
+      content2: >-
+        Dacă taxa de intrare este plătită în avans, o strategie eficientă este
+        de a oferi locul rămas liber următorului concurent de pe lista de
+        așteptare și de a seta un termen limită pentru efectuarea plății (de
+        exemplu, 48 ore). În cazul în care plata nu este realizată în timp util
+        sau concurentul refuză înscrierea, locul liber va fi oferit următorului
+        concurent. Acest proces ar trebui continuat până la ocuparea tuturor
+        locurilor libere. Concurenții trebuie să respecte ordinea din lista de
+        așteptare, nu pot exista excepții.
+      #original_hash: 37bcbd6
+      content3: >-
+        Dacă o persoană a concurat fără să respecte procesul de înscriere,
+        rezultatele acesteia vor fi anulate ulterior (dacă limita de concurenți
+        exista și fusese atinsă).
+    paragraph8:
+      #original_hash: c8ad8e6
+      title: Responsabilități înaintea competiției
+      list:
+        #original_hash: c8abb5e
+        '1': >-
+          Înainte de anunțare, este necesară publicarea unui program pe site-ul
+          competiției. Acesta poate fi modificat ulterior.
+        #original_hash: e93d043
+        '2': >-
+          Concurenții trebuie împărțiți pe grupe, trebuie printate
+          scoresheeturile și separate conform grupurilor create. Este, de
+          asemenea, recomandat să se planifice în avans cine va amesteca pentru
+          fiecare grupă, cel puțin în rundele inițiale. Scramblerii trebuie să
+          fie de încredere.
+    paragraph9:
+      #original_hash: ead44f5
+      title: Responsabilități în timpul competiției
+      #original_hash: ee2e9c6
+      content: >-
+        Sarcinile pe care organizatorul trebuie să le îndeplinească în timpul
+        competiției trebuie stabilite împreună cu Delegatul WCA. Sarcinile
+        tipice sunt (ele pot fi delegate și altor persoane de încredere):
+      list:
+        #original_hash: 03aea46
+        '1': Managementul standului de înscrieri
+        #original_hash: c4388f3
+        '2': Realizarea anunțurilor
+        #original_hash: 45c78ae
+        '3': Chemarea grupelor și pregătirea scoresheeturilor
+        #original_hash: 0b31986
+        '4': Score-taking și printarea rezultatelor
+        #original_hash: 7ab2d4c
+        '5': Găsirea scramblerilor și arbitrilor
+        #original_hash: 52e8316
+        '6': >-
+          Rezolvarea eventualelor probleme cu locația (de exemplu, chei sau
+          WiFi)
