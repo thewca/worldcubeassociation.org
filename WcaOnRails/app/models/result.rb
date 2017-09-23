@@ -13,8 +13,9 @@ class Result < ApplicationRecord
   belongs_to :format, foreign_key: :formatId
 
   scope :final, -> { joins(:round_type).merge(RoundType.final_rounds) }
-  scope :podium, -> { joins(:round_type).merge(RoundType.final_rounds).where(pos: [1..3]).where("best > 0") }
-  scope :winners, -> { joins(:round_type, :event).merge(RoundType.final_rounds).where("pos = 1 and best > 0").order("Events.rank") }
+  scope :succeeded, -> { where("best > 0") }
+  scope :podium, -> { final.succeeded.where(pos: [1..3]) }
+  scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("Events.rank") }
 
   validates :competition, presence: true
   validates :country, presence: true

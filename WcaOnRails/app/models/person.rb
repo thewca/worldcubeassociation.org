@@ -167,34 +167,37 @@ class Person < ApplicationRecord
   end
 
   def world_championship_podiums
-    results.includes(:competition, :event, :format)
+    results.podium
            .joins(:event, competition: [:championships])
-           .podium
            .where("championships.championship_type = 'world'")
            .order("year DESC, Events.rank")
+           .includes(:competition, :format)
   end
 
-  def championship_podiums_with_condition(region_condition)
+  def championship_podiums_with_condition
+    # Get all championship competitions of the given type where the person made it to the finals.
+    # For each of these competitions, get final results only for people eligible for the championship
+    # and reassign their positions. If a result belongs to the person, add it to the array.
     [].tap do |championship_podium_results|
-      results
-        .includes(:country, competition: { championships: :eligible_country_iso2s_for_championship })
+      yield(results)
         .final
-        .where(region_condition)
+        .succeeded
         .order("year DESC")
+        .includes(:competition)
         .map(&:competition)
         .uniq
         .each do |competition|
-          competition
-            .results
-            .includes(:country, :event, :format, competition: { championships: :eligible_country_iso2s_for_championship })
+          yield(competition.results)
             .final
-            .where(region_condition)
+            .succeeded
+            .joins(:event)
             .order("Events.rank, pos")
-            .group_by(&:event)
-            .each do |event, results|
+            .includes(:format, :competition)
+            .group_by(&:eventId)
+            .each_value do |final_results|
               positions_delta = 0
               previous_pos = 0
-              results.each_with_index do |result, index|
+              final_results.each_with_index do |result, index|
                 positions_delta += (previous_pos == result.pos ? 0 : previous_pos - result.pos + 1)
                 previous_pos = result.pos
                 result.pos += positions_delta
@@ -209,11 +212,20 @@ class Person < ApplicationRecord
   def championship_podiums
     {}.tap do |podiums|
       podiums[:world] = world_championship_podiums
-      podiums[:continental] = championship_podiums_with_condition("championships.championship_type = Countries.continentId")
-      EligibleCountryIso2ForChampionship.where(eligible_country_iso2: self.country_iso2).distinct.pluck(:championship_type).each do |championship_type|
-        podiums[championship_type.to_s] = championship_podiums_with_condition("eligible_country_iso2s_for_championship.championship_type = '#{championship_type}' AND Countries.iso2 = eligible_country_iso2s_for_championship.eligible_country_iso2")
+      podiums[:continental] = championship_podiums_with_condition do |results|
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
       end
-      podiums[:national] = championship_podiums_with_condition("championships.championship_type = Countries.iso2")
+      EligibleCountryIso2ForChampionship.where(eligible_country_iso2: self.country_iso2).distinct.pluck(:championship_type).each do |championship_type|
+        podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
+          results
+            .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
+            .where("eligible_country_iso2s_for_championship.championship_type = '#{championship_type}'")
+            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
+        end
+      end
+      podiums[:national] = championship_podiums_with_condition do |results|
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.iso2")
+      end
     end
   end
 
