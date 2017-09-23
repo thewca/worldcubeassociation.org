@@ -123,4 +123,28 @@ RSpec.describe Person, type: :model do
       expect(person.world_championship_podiums.to_a).to eq [result3, result1, result2]
     end
   end
+
+  describe "#championship_podiums" do
+    let!(:nationals2017) { FactoryGirl.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
+    let!(:us_competitor) { FactoryGirl.create :person, countryId: "USA" }
+    let!(:fr_competitor) { FactoryGirl.create :person, countryId: "France" }
+    let!(:us_podium_result) { FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "333" }
+    let!(:fr_podium_result) { FactoryGirl.create :result, person: fr_competitor, competition: nationals2017, pos: 1, eventId: "333" }
+    let!(:us_dnf_podium_result) { FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "555bf",
+                                                              best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE }
+
+    context "when a foreiner does compete" do
+      it "cannot gain a champion title" do
+        expect(fr_competitor.championship_podiums[:national]).to eq []
+      end
+
+      it "is ignored when computing others' position" do
+        expect(us_competitor.championship_podiums[:national].first.pos).to eq 1
+      end
+    end
+
+    it "ignores DNF results on the podium" do
+      expect(us_competitor.championship_podiums[:national].map(&:eventId)).to eq %w(333)
+    end
+  end
 end
