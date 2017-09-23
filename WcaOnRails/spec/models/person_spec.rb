@@ -130,8 +130,10 @@ RSpec.describe Person, type: :model do
     let!(:fr_competitor) { FactoryGirl.create :person, countryId: "France" }
     let!(:us_podium_result) { FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "333" }
     let!(:fr_podium_result) { FactoryGirl.create :result, person: fr_competitor, competition: nationals2017, pos: 1, eventId: "333" }
-    let!(:us_dnf_podium_result) { FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "555bf",
-                                                              best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE }
+    let!(:us_dnf_podium_result) do
+      FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "555bf",
+                                  best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
+    end
 
     context "when a foreiner does compete" do
       it "cannot gain a champion title" do
