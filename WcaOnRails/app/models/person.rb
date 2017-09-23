@@ -215,11 +215,11 @@ class Person < ApplicationRecord
       podiums[:continental] = championship_podiums_with_condition do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
       end
-      EligibleCountryIso2ForChampionship.where(eligible_country_iso2: self.country_iso2).distinct.pluck(:championship_type).each do |championship_type|
+      EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
-            .where("eligible_country_iso2s_for_championship.championship_type = '#{championship_type}'")
+            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
             .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
         end
       end
