@@ -175,6 +175,10 @@ pl:
       one_round: '%{time} łączenie'
       #original_hash: c01adfa
       across_rounds: '%{time} łącznie na %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 godzina
+    #original_hash: 2c2abd5
+    333mbf: 10 minut na kostkę
   common:
     #original_hash: 2513cf0
     continent: Kontynent
@@ -1621,8 +1625,10 @@ pl:
         [Tekst do wyświetlenia](mailto:ktoś@email.com)
       #original_hash: c5497bc
       events: Konkurencje
-      #original_hash: ae66391
-      unoff_events: Konkurencje które nie są już oficjalne
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Te zawody mają konkurencje, które nie są już oficjalne, nie obsługujemy
+        edytowania ich.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Te zawody są widoczne publicznie i edycja jest zablokowana. Jeżeli
@@ -1639,8 +1645,6 @@ pl:
       awaiting_confirmation_html: >-
         Wypełnij wszystkie pola i kliknij "Potwierdź", kiedy będziesz gotowy,
         aby %{board} zatwierdził te zawody.
-      #original_hash: 7586b02
-      submit_modify_value: Modyfikuj Konkurencje
       #original_hash: 8966fd0
       submit_create_value: Utwórz Zawody
       #original_hash: 40b0dfd
