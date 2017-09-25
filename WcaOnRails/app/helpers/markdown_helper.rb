@@ -39,6 +39,7 @@ module MarkdownHelper
 
     extensions = {
       tables: true,
+      autolink: true,
     }
 
     if target_blank
