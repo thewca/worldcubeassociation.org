@@ -125,19 +125,23 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#championship_podiums" do
-    let!(:nationals2017) { FactoryGirl.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
-    let!(:us_competitor) { FactoryGirl.create :person, countryId: "USA" }
-    let!(:fr_competitor) { FactoryGirl.create :person, countryId: "France" }
-    let!(:us_podium_result) { FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "333" }
-    let!(:fr_podium_result) { FactoryGirl.create :result, person: fr_competitor, competition: nationals2017, pos: 1, eventId: "333" }
-    let!(:us_dnf_podium_result) do
-      FactoryGirl.create :result, person: us_competitor, competition: nationals2017, pos: 2, eventId: "555bf",
-                                  best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
+    let!(:fr_nationals2016) { FactoryGirl.create :competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1) }
+    let!(:us_nationals2017) { FactoryGirl.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
+    let!(:fr_competitor) do
+      FactoryGirl.create(:person, countryId: "France").tap do |fr_competitor|
+        FactoryGirl.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333"
+        FactoryGirl.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333"
+      end
+    end
+    let!(:us_competitor) do
+      FactoryGirl.create(:person, countryId: "USA").tap do |us_competitor|
+        FactoryGirl.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333"
+      end
     end
 
-    context "when a foreiner does compete" do
+    context "when a foreigner does compete" do
       it "cannot gain a champion title" do
-        expect(fr_competitor.championship_podiums[:national]).to eq []
+        expect(fr_competitor.championship_podiums[:national].map(&:countryId)).to eq %w(France)
       end
 
       it "is ignored when computing others' position" do
@@ -146,7 +150,32 @@ RSpec.describe Person, type: :model do
     end
 
     it "ignores DNF results on the podium" do
-      expect(us_competitor.championship_podiums[:national].map(&:eventId)).to eq %w(333)
+      expect do
+        FactoryGirl.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "555bf",
+                                    best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
+      end.to_not change { us_competitor.championship_podiums[:national] }
+    end
+
+    context "when a person changed nationality and continent" do
+      before { fr_competitor.update_using_sub_id! countryId: "USA" }
+
+      it "includes championship titles related to the previous nationality" do
+        expect(fr_competitor.championship_podiums[:national].map(&:countryId)).to eq %w(France)
+      end
+
+      it "does no longer treat the person as eligible for championship title related to previous nationality" do
+        expect do
+          fr_nationals2017 = FactoryGirl.create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
+          FactoryGirl.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, eventId: "333"
+        end.to_not change { fr_competitor.championship_podiums[:national] }
+      end
+
+      it "is eligible for championship title of the current continent" do
+        expect do
+          na_championship2017 = FactoryGirl.create :competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)
+          FactoryGirl.create :result, person: fr_competitor, competition: na_championship2017, pos: 1, eventId: "333"
+        end.to change { fr_competitor.championship_podiums[:continental].count }.by 1
+      end
     end
   end
 end
