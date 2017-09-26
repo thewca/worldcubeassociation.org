@@ -25,7 +25,7 @@
     "postcss-loader": "^2.0.6",
     "postcss-smart-import": "^0.7.5",
     "precss": "^2.0.0",
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.6.0",
     "rails-erb-loader": "^5.0.2",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.1",
