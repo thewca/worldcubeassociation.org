@@ -1,5 +1,5 @@
-<% @championship_podiums.each do |championship_type, results| %>
+<% @championship_podiums.each do |championship_level, results| %>
   <% if results.any? %>
-    <%= render "regional_championship_podiums", title: t("persons.show.championship_podium_types.#{championship_type}"), results: results %>
+    <%= render "regional_championship_podiums", title: t("persons.show.championship_podium_levels.#{championship_level}"), results: results %>
   <% end %>
 <% end %>

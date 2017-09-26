@@ -1005,7 +1005,7 @@ en:
         is due to a change of country. Results from the previous region
         are not taken into account in the current region ranking.
       championship_podiums: "Championship Podiums"
-      championship_podium_types:
+      championship_podium_levels:
         world: "World Championship Podiums"
         continental: "Continental Championship Podiums"
         national: "National Championship Podiums"
