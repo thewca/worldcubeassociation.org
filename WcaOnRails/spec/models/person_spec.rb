@@ -177,5 +177,19 @@ RSpec.describe Person, type: :model do
         end.to change { fr_competitor.championship_podiums[:continental].count }.by 1
       end
     end
+
+    it "reassigns positions correctly in the case of a tie" do
+      us_competitor1 = FactoryGirl.create :person, countryId: "USA"
+      us_competitor2 = FactoryGirl.create :person, countryId: "USA"
+      us_competitor3 = FactoryGirl.create :person, countryId: "USA"
+      FactoryGirl.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "222"
+      FactoryGirl.create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, eventId: "222"
+      FactoryGirl.create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, eventId: "222"
+      FactoryGirl.create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, eventId: "222"
+
+      expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
+      expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1
+      expect(us_competitor3.championship_podiums[:national].first.pos).to eq 3
+    end
   end
 end

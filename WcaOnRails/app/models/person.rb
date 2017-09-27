@@ -195,12 +195,13 @@ class Person < ApplicationRecord
             .includes(:format, :competition)
             .group_by(&:eventId)
             .each_value do |final_results|
-              positions_delta = 0
-              previous_pos = 0
+              previous_old_pos = nil
+              previous_new_pos = nil
               final_results.each_with_index do |result, index|
-                positions_delta += (previous_pos == result.pos ? 0 : previous_pos - result.pos + 1)
-                previous_pos = result.pos
-                result.pos += positions_delta
+                old_pos = result.pos
+                result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
+                previous_old_pos = old_pos
+                previous_new_pos = result.pos
                 break if result.pos > 3
                 championship_podium_results.push result if result.personId == self.wca_id
               end
