@@ -168,7 +168,7 @@ class Person < ApplicationRecord
 
   def world_championship_podiums
     results.includes(:competition, :event, :format)
-           .joins(competition: [:championships])
+           .joins(:event, competition: [:championships])
            .podium
            .where("championships.championship_type = 'world'")
            .order("year DESC, Events.rank")
