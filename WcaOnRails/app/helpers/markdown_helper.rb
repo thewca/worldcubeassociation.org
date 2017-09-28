@@ -18,7 +18,8 @@ module MarkdownHelper
       end
 
       # Support embed YouTube videos
-      full_document.gsub!(/youtube\(([^)]*)\)/) do
+      # Note: the URL in parentheses is turned into an <a></a> tag by the `autolink` extension.
+      full_document.gsub!(/youtube\(.*?href="([^)]*)".*?\)/) do
         embed_url = $1.gsub("watch?v=", "embed/")
         "<iframe width='640' height='390' frameborder='0' src='#{embed_url}'></iframe>"
       end
