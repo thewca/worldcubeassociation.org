@@ -1873,8 +1873,15 @@ pl:
         nie są brane pod uwagę w rankingu obecnego regionu.
       #original_hash: a91508f
       championship_podiums: Tytuły Mistrzowskie
-      #original_hash: 3746f3b
-      wc_podiums: Podia na Mistrzostwach Świata
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Podia na Mistrzostwach Świata
+        #original_hash: d248cd7
+        continental: Podia na Mistrzostwach Kontynentu
+        #original_hash: aa40175
+        national: Podia na Mistrzostwach Kraju
+        #original_hash: 868be55
+        greater_china: Podia na Mistrzostwach Wielkich Chin
       #original_hash: c32a014
       place: Miejsce
       #original_hash: ddb18c1
