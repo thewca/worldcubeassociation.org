@@ -14,7 +14,7 @@
       <% if @records[:total] > 0 %>
         <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
       <% end %>
-      <% if @world_championship_podiums.any? %>
+      <% if @championship_podiums.values.flatten.any? %>
         <li><a href="#championship-podiums" data-toggle="tab"><%= t '.championship_podiums' %></a></li>
       <% end %>
       <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
@@ -29,9 +29,9 @@
           <%= render "records" %>
         </div>
       <% end %>
-      <% if @world_championship_podiums.any? %>
+      <% if @championship_podiums.values.flatten.any? %>
         <div class="tab-pane" id="championship-podiums">
-          <%= render "world_championship_podiums" %>
+          <%= render "championship_podiums" %>
         </div>
       <% end %>
       <div class="tab-pane" id="map">

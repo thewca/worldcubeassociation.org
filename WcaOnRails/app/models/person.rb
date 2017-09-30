@@ -167,11 +167,67 @@ class Person < ApplicationRecord
   end
 
   def world_championship_podiums
-    results.includes(:competition, :event, :format)
+    results.podium
            .joins(:event, competition: [:championships])
-           .podium
            .where("championships.championship_type = 'world'")
            .order("year DESC, Events.rank")
+           .includes(:competition, :format)
+  end
+
+  def championship_podiums_with_condition
+    # Get all championship competitions of the given type where the person made it to the finals.
+    # For each of these competitions, get final results only for people eligible for the championship
+    # and reassign their positions. If a result belongs to the person, add it to the array.
+    [].tap do |championship_podium_results|
+      yield(results)
+        .final
+        .succeeded
+        .order("year DESC")
+        .includes(:competition)
+        .map(&:competition)
+        .uniq
+        .each do |competition|
+          yield(competition.results)
+            .final
+            .succeeded
+            .joins(:event)
+            .order("Events.rank, pos")
+            .includes(:format, :competition)
+            .group_by(&:eventId)
+            .each_value do |final_results|
+              previous_old_pos = nil
+              previous_new_pos = nil
+              final_results.each_with_index do |result, index|
+                old_pos = result.pos
+                result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
+                previous_old_pos = old_pos
+                previous_new_pos = result.pos
+                break if result.pos > 3
+                championship_podium_results.push result if result.personId == self.wca_id
+              end
+            end
+        end
+    end
+  end
+
+  def championship_podiums
+    {}.tap do |podiums|
+      podiums[:world] = world_championship_podiums
+      podiums[:continental] = championship_podiums_with_condition do |results|
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
+      end
+      EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
+        podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
+          results
+            .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
+            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
+            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
+        end
+      end
+      podiums[:national] = championship_podiums_with_condition do |results|
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.iso2")
+      end
+    end
   end
 
   def medals
