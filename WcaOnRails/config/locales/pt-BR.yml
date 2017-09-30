@@ -171,6 +171,10 @@ pt-BR:
       one_round: '%{time} cumulativo'
       #original_hash: c01adfa
       across_rounds: '%{time} total para %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 hora
+    #original_hash: 2c2abd5
+    333mbf: 10 minutos por cubo
   common:
     #original_hash: 2513cf0
     continent: Continente
@@ -1563,8 +1567,10 @@ pt-BR:
         mostrado](mailto:alguem@email.com)
       #original_hash: c5497bc
       events: Eventos
-      #original_hash: ae66391
-      unoff_events: Eventos não mais oficiais
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Essa competição tem eventos que não são mais oficiais, e não é possível
+        editá-los.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Esta competição está visível e travada para edição. Se você precisa
@@ -1581,8 +1587,6 @@ pt-BR:
       awaiting_confirmation_html: >-
         Preencha todos os campos e clique em Confirmar quando tudo estiver
         pronto para o %{board} poder aprovar esta competição.
-      #original_hash: 7586b02
-      submit_modify_value: Modificar Eventos
       #original_hash: 8966fd0
       submit_create_value: Criar Competição
       #original_hash: 40b0dfd
@@ -1809,8 +1813,15 @@ pt-BR:
         consideração no ranking da região atual.
       #original_hash: a91508f
       championship_podiums: Pódios em Campeonatos
-      #original_hash: 3746f3b
-      wc_podiums: Pódios em Campeonatos Mundiais
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Pódios em Campeonatos Mundiais
+        #original_hash: d248cd7
+        continental: Pódios em Campeonatos Continentais
+        #original_hash: aa40175
+        national: Pódios em Campeonatos Nacionais
+        #original_hash: 868be55
+        greater_china: Pódios em Campeonatos da Grande China
       #original_hash: c32a014
       place: Posição
       #original_hash: ddb18c1
