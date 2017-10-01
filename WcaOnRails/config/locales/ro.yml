@@ -1843,8 +1843,15 @@ ro:
         luate în considerare în noua regiune.
       #original_hash: a91508f
       championship_podiums: Podiumuri de Campionat
-      #original_hash: 3746f3b
-      wc_podiums: Podiumuri de Campionat Mondial
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Podiumuri la Campionate Mondiale
+        #original_hash: d248cd7
+        continental: Podiumuri la Campionate Continentale
+        #original_hash: aa40175
+        national: Podiumuri la Campionate Naționale
+        #original_hash: 868be55
+        greater_china: Podiumuri la Campionate din Regiunea Chineză
       #original_hash: c32a014
       place: Loc
       #original_hash: ddb18c1
@@ -2764,7 +2771,7 @@ ro:
         #original_hash: 0b31986
         '4': Score-taking și printarea rezultatelor
         #original_hash: 7ab2d4c
-        '5': Găsirea scramblerilor și arbitrilor
+        '5': Adunarea scramblerilor și arbitrilor
         #original_hash: 52e8316
         '6': >-
           Rezolvarea eventualelor probleme cu locația (de exemplu, chei sau
