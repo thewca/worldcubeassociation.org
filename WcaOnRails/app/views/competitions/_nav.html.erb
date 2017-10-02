@@ -98,9 +98,7 @@
 
       <% blocks.define :nav_list do |nav_items| %>
         <div class="list-group list-group-root">
-          <% nav_items.each do |nav_item| %>
-            <%= blocks.render :nav_list_item, nav_item %>
-          <% end %>
+          <%= blocks.render :nav_list_item, collection: nav_items %>
         </div>
       <% end %>
 
@@ -117,7 +115,7 @@
         <% if !nav_item[:hidden] %>
 
           <%= link_to nav_item[:path], class: "list-group-item" + (nav_item[:active] ? ' active' : '') do %>
-            <%= blocks.render :nav_icon, nav_item %>
+            <%= blocks.render :nav_icon, nav_item, {} %>
             <%= nav_item[:text] %>
             <% if nav_item[:notification_count] %>
               <span id="pending-registrations-count" class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
@@ -140,7 +138,7 @@
                                   placement: "top",
                                   container: "body",
                                 } do %>
-                      <%= blocks.render :nav_icon, child_nav_item %>
+                      <%= blocks.render :nav_icon, child_nav_item, {} %>
                     <% end %>
                   <% end %>
                 </span>
@@ -149,9 +147,7 @@
 
             <% if nav_item[:children] && nav_item[:children].length > 0 %>
               <div class="list-group">
-                <% nav_item[:children].each do |child_nav_item| %>
-                  <%= blocks.render :nav_list_item, child_nav_item %>
-                <% end %>
+                <%= blocks.render :nav_list_item, collection: nav_item[:children] %>
               </div>
             <% end %>
           <% end %>
