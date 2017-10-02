@@ -219,11 +219,11 @@ da:
     datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
   delegate_statuses:
     #original_hash: 28ec02d
-    candidate_delegate: Kandidat Delegat
+    candidate_delegate: Kandidat Delegeret
     #original_hash: 12ab214
-    delegate: Delegat
+    delegate: Delegeret
     #original_hash: d463c23
-    senior_delegate: Senior Delegat
+    senior_delegate: Senior Delegeret
     #original_hash: 660ee15
     board_member: Bestyrelses Medlem
   oauth:
@@ -284,7 +284,7 @@ da:
         #original_hash: 9af9099
         results_notifications_enabled: Email mig når mine resultater bliver slået op.
         #original_hash: de60ab8
-        delegate_status: Delegat status
+        delegate_status: Delegeret status
         #original_hash: 0f21717
         region: Region
         #original_hash: a10b651
@@ -331,7 +331,7 @@ da:
         #original_hash: 28a6fbb
         currency_code: Valuta kode
         #original_hash: 5b2fe69
-        delegate_ids: WCA delegat(er)
+        delegate_ids: WCA delegeret/delegerede
         #original_hash: 958562e
         organizer_ids: Arrangør(er)
         #original_hash: b37456c
@@ -522,7 +522,7 @@ da:
           tilskuere, og andre detaljer som er vigtige for folk der ønsker at
           deltage eller at være tilskuere.
         #original_hash: 0708400
-        delegate_ids: WCA delegater for konkurrencen.
+        delegate_ids: WCA delegerede for konkurrencen.
         #original_hash: 517d376
         organizer_ids: >-
           Konkurrence arrangører (de har brug for en konto for at være skrevet
@@ -812,7 +812,7 @@ da:
       #original_hash: 9ac918a
       about: Om WCA
       #original_hash: d8fd3e4
-      delegates: WCA Delegater
+      delegates: WCA Delegerede
       #original_hash: 37b8fdc
       organizations: Regionale Organisationer
       #original_hash: d790b40
@@ -1029,11 +1029,11 @@ da:
       #original_hash: 26f70ed
       dob_past: skal være i fortiden
       #original_hash: f599dc5
-      must_be_senior: skal være et senior delegat
+      must_be_senior: skal være en senior delegeret
       #original_hash: 2e582eb
       must_not_be_present: må ikke være nuværende
       #original_hash: b2c4ecc
-      senior_has_delegate: kan ikke degradere senior delegat med underordnede delegater
+      senior_has_delegate: kan ikke degradere en senior delegeret med underordnede delegerede
       #original_hash: 48653a9
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
@@ -1431,9 +1431,9 @@ da:
         other: Arrangører
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Delegater
-        one: WCA Delegat
-        other: WCA Delegater
+        zero: WCA Delegerede
+        one: WCA Delegeret
+        other: WCA Delegerede
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: 32946e9
@@ -1614,7 +1614,7 @@ da:
       #original_hash: 112490b
       must_contain_delegate: skal indeholde mindst et WCA delegat
       #original_hash: 0b2b56b
-      not_all_delegates: er ikke alle delegater
+      not_all_delegates: er ikke alle delegerede
       #original_hash: 43a23c2
       registration_close_after_open: tilmeldingens lukketid skal være efter tilmeldingen åbner
       #original_hash: 43a83a9
@@ -1802,8 +1802,15 @@ da:
         taget i brug i den nuværende regions rangliste.
       #original_hash: a91508f
       championship_podiums: Mesterskabs Podier
-      #original_hash: 3746f3b
-      wc_podiums: Verdensmesterskab Podier
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Verdensmesterskabs Podier
+        #original_hash: d248cd7
+        continental: Kontinentalemesterskabs Podier
+        #original_hash: aa40175
+        national: Nationalmesterskabs Podier
+        #original_hash: 868be55
+        greater_china: Storkina Mesterskabs Podier
       #original_hash: c32a014
       place: Placering
       #original_hash: ddb18c1
@@ -2185,7 +2192,7 @@ da:
         deres første konkurrence.
   delegates_page:
     #original_hash: d8fd3e4
-    title: WCA Delegater
+    title: WCA Delegerede
     #original_hash: 0a89b0f
     acknowledges: >-
       WCA anerkender de følgende medlemmer som delegater for officielle WCA
