@@ -95,9 +95,8 @@ GEM
     bindex (0.5.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    blocks (2.8.0)
-      call_with_params (~> 0.0.2)
-      hashie
+    blocks (3.0.0)
+      call_with_params
       rails (>= 3.0.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
