@@ -881,15 +881,15 @@ RSpec.describe CompetitionsController do
     let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryGirl.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
     let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
-    let!(:registration1) { FactoryGirl.create(:registration, competition: future_competition1, user: registered_user) }
-    let!(:registration2) { FactoryGirl.create(:registration, competition: future_competition3, user: registered_user) }
-    let!(:registration3) { FactoryGirl.create(:registration, competition: past_competition1, user: registered_user) }
-    let!(:registration4) { FactoryGirl.create(:registration, competition: past_competition3, user: organizer) }
-    let!(:registration5) { FactoryGirl.create(:registration, competition: future_competition3, user: delegate) }
+    let!(:registration1) { FactoryGirl.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
+    let!(:registration2) { FactoryGirl.create(:registration, :accepted, competition: future_competition3, user: registered_user) }
+    let!(:registration3) { FactoryGirl.create(:registration, :accepted, competition: past_competition1, user: registered_user) }
+    let!(:registration4) { FactoryGirl.create(:registration, :accepted, competition: past_competition3, user: organizer) }
+    let!(:registration5) { FactoryGirl.create(:registration, :accepted, competition: future_competition3, user: delegate) }
     let!(:results_person) { FactoryGirl.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
     let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
@@ -921,6 +921,34 @@ RSpec.describe CompetitionsController do
       end
 
       it 'shows my upcoming and past competitions' do
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a rejected registration for' do
+        FactoryGirl.create(:registration, :deleted, competition: past_competition2, user: registered_user)
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+
+      it 'does not show upcoming competitions they have a rejected registration for' do
+        FactoryGirl.create(:registration, :deleted, competition: future_competition2, user: registered_user)
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+
+      it 'shows upcoming competition they have a pending registration for' do
+        FactoryGirl.create(:registration, :pending, competition: future_competition2, user: registered_user)
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a pending registration for' do
+        FactoryGirl.create(:registration, :pending, competition: past_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
