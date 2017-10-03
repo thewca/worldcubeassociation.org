@@ -4,7 +4,7 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 
 ## Setup
 - `git clone https://github.com/thewca/worldcubeassociation.org` - Clone this repo! (And navigate into it, `cd worldcubeassociation.org`)
-- `(cd WcaOnRails; bundle install) && bundle pre-commit install && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"` - Set up git pre-commit hook. Optional, but very useful.
+- `(cd WcaOnRails; bundle install && bundle exec pre-commit install) && git config pre-commit.ruby "scripts/ruby_in_wca_on_rails.sh"` - Set up git pre-commit hook. Optional, but very useful.
 
 ## Run directly with Ruby (lightweight, but only runs the Rails portions of the site)
 - Set up mysql with a user with username "root" with an empty password.
