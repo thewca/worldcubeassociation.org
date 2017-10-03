@@ -506,7 +506,10 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competitions = (current_user.delegated_competitions + current_user.organized_competitions + current_user.competitions_registered_for)
+    competitions = (current_user.delegated_competitions +
+      current_user.organized_competitions +
+      current_user.registrations.accepted.map(&:competition) +
+      current_user.registrations.pending.map(&:competition).select(&:upcoming?))
     if current_user.person
       competitions += current_user.person.competitions
     end

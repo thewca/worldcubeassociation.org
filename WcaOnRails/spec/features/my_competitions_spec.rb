@@ -12,7 +12,7 @@ RSpec.feature "My competitions page" do
 
     context "after registring for a competition" do
       let!(:competition) { FactoryGirl.create :competition, :visible, :registration_open }
-      let!(:registration) { FactoryGirl.create :registration, competition: competition, user: user }
+      let!(:registration) { FactoryGirl.create :registration, :accepted, competition: competition, user: user }
 
       scenario "the user visits his competitions page" do
         visit "/competitions/mine"

@@ -653,6 +653,10 @@ class Competition < ApplicationRecord
     !end_date.nil? && end_date < Date.today
   end
 
+  def upcoming?
+    start_date.nil? || start_date > Date.today
+  end
+
   def city_and_country
     [cityName, country&.name].compact.join(', ')
   end
