@@ -16,7 +16,7 @@
     "coffee-script": "^1.12.7",
     "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.4",
-    "extract-text-webpack-plugin": "^3.0.0",
+    "extract-text-webpack-plugin": "^3.0.1",
     "file-loader": "^1.1.4",
     "glob": "^7.1.2",
     "js-yaml": "^3.10.0",
