@@ -883,6 +883,7 @@ RSpec.describe CompetitionsController do
     let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:past_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryGirl.create(:competition, :registration_open, starts: 4.month.ago, results_posted_at: 1.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
     let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryGirl.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
@@ -953,6 +954,13 @@ RSpec.describe CompetitionsController do
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
+
+      it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
+        FactoryGirl.create(:registration, :accepted, competition: past_competition4, user: registered_user)
+        get :my_competitions
+        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition1]
+      end
     end
 
     context 'when signed in as an organizer' do
@@ -975,7 +983,7 @@ RSpec.describe CompetitionsController do
       it 'shows my upcoming and past competitions' do
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3]
+        expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3, past_competition4]
       end
     end
   end
