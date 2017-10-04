@@ -15,8 +15,8 @@ zh-TW:
     #original_hash: 4e8bd04
     KR: 韓國
   continents:
-    #original_hash: c2994db
-    Multiple Continents: 多個國家
+    #original_hash: 0f138c8
+    Multiple Continents: 多個大洲
     #original_hash: 1d35114
     Africa: 非洲
     #original_hash: a173e72
@@ -162,9 +162,13 @@ zh-TW:
       one_round: '累計%{time}'
       #original_hash: c01adfa
       across_rounds: '%{rounds}輪總計%{time}'
+    #original_hash: f030c3d
+    333fm: 1小時
+    #original_hash: 2c2abd5
+    333mbf: 10分鐘/每顆
   common:
     #original_hash: 2513cf0
-    continent: 洲
+    continent: 大洲
     #original_hash: d523ebb
     country: 國籍
     #original_hash: 0154c0d
@@ -1379,8 +1383,8 @@ zh-TW:
       contact_html: '可任意選擇聯絡資訊。若您未填寫，主辦人的電子郵件將會被公開。%{md} 範例：[顯示內容](mailto:some@email.com)'
       #original_hash: c5497bc
       events: 項目
-      #original_hash: ae66391
-      unoff_events: 這個項目已經不被官方承認
+      #original_hash: 09b819f
+      deprecated_events: 這場比賽有些項目已經不被官方認可，我們無法幫您編輯。
       #original_hash: 815d5c3
       locked_edit_html: '這場比賽已經公開並且不得編輯內容。若您需要修改內容，請聯絡%{board}。'
       #original_hash: ce33e21
@@ -1389,8 +1393,6 @@ zh-TW:
       is_visible: 這場比賽已經公開了，因此任何改變將會被公開!
       #original_hash: 34862bb
       awaiting_confirmation_html: '當您準備向%{board}申請比賽時，請填滿所有空格並點擊確認鍵。'
-      #original_hash: 7586b02
-      submit_modify_value: 修改項目
       #original_hash: 8966fd0
       submit_create_value: 申請比賽
       #original_hash: 40b0dfd
@@ -1599,8 +1601,15 @@ zh-TW:
       odd_rank_reason: 因其更改國籍導致排名空白或是國家排名差於洲際排名。前一個國籍的成績不會列入目前的地區排名。
       #original_hash: a91508f
       championship_podiums: 錦標賽前三名
-      #original_hash: 3746f3b
-      wc_podiums: 世界錦標賽前三名
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: 世界錦標賽前三名
+        #original_hash: d248cd7
+        continental: 洲際錦標賽前三名
+        #original_hash: aa40175
+        national: 國家錦標賽前三名
+        #original_hash: 868be55
+        greater_china: 中華組前三名
       #original_hash: c32a014
       place: 名次
       #original_hash: ddb18c1
@@ -1725,10 +1734,12 @@ zh-TW:
           '3': >-
             接著，主辦單位必須聯絡附近的<a target='_blank'
             href='https://www.worldcubeassociation.org/delegates'>WCA代表</a>。WCA代表須監督比賽的進行，以確保比賽受WCA官方認證。WCA代表會協助並指導主辦單位舉辦一場成功的比賽。
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
             更多資訊請參考<a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>這裡</a>。(其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。)
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦人指導方針</a>和<a
+            target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>CubingUSA比賽指南</a>。(其他額外的資訊若有任何與WCA規則衝突的，一律以WCA規則為優先。)
       '6':
         #original_hash: 8005a61
         title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
@@ -2155,7 +2166,7 @@ zh-TW:
       title: 如何主辦比賽
       #original_hash: 3dbbbee
       content: >-
-        所以有WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
+        所以的WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
     paragraph2:
       #original_hash: f20dd3b
       title: 主辦比賽的預計開銷
@@ -2188,6 +2199,12 @@ zh-TW:
       olist2:
         #original_hash: a57b541
         '1': 如果這種比賽所在地200公里之內有其他正規比賽，則兩場比賽之間應至少間隔5天以上，或是該比賽不能有最少步項目。
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: 公告項目
+      #original_hash: b6c6d26
+      content: >-
+        代表在申請比賽時，必須具體列出所有要在比賽中舉辦的項目。上述包括“暫時”項目（例如：根據比賽流程可能會額外加開的項目）。另外新增項目必須經過WCA董事會審核。
     paragraph5:
       #original_hash: 17d01de
       title: 人數上限
