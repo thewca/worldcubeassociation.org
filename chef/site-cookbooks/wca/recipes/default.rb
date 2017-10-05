@@ -4,7 +4,7 @@ require 'securerandom'
 
 include_recipe "wca::base"
 apt_repository 'nodejs' do
-  uri 'https://deb.nodesource.com/node_7.x'
+  uri 'https://deb.nodesource.com/node_8.x'
   components ['trusty', 'main']
   key 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
 end
