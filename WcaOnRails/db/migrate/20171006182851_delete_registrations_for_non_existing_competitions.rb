@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeleteRegistrationsForNonExistingCompetitions < ActiveRecord::Migration[5.1]
   def change
     execute <<-SQL
