@@ -423,7 +423,7 @@ RSpec.describe Competition do
   end
 
   describe "when deleting a competition" do
-    it "clears delegates" do
+    it "deletes delegates" do
       delegate1 = FactoryGirl.create(:delegate)
       delegates = [delegate1]
       competition = FactoryGirl.create :competition, delegates: delegates
@@ -434,7 +434,7 @@ RSpec.describe Competition do
       expect(CompetitionDelegate.find_by_id(cd.id)).to be_nil
     end
 
-    it "clears organizers" do
+    it "deletes organizers" do
       organizer1 = FactoryGirl.create(:delegate)
       organizers = [organizer1]
       competition = FactoryGirl.create :competition, organizers: organizers
@@ -443,6 +443,12 @@ RSpec.describe Competition do
       expect(cd).not_to be_nil
       competition.destroy
       expect(CompetitionOrganizer.find_by_id(cd.id)).to be_nil
+    end
+
+    it "deletes registrations" do
+      registration = FactoryGirl.create(:registration)
+      registration.competition.destroy
+      expect(Registration.find_by_id(registration.id)).to be_nil
     end
   end
 
