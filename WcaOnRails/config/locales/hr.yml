@@ -15,8 +15,8 @@ hr:
     #original_hash: 4e8bd04
     KR: Koreja
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Više država
+    #original_hash: 0f138c8
+    Multiple Continents: Više kontinenata
     #original_hash: 1d35114
     Africa: Afrika
     #original_hash: a173e72
@@ -177,6 +177,10 @@ hr:
       one_round: '%{time} kumulativ (suma)'
       #original_hash: c01adfa
       across_rounds: '%{time} sveukupno za %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 sat
+    #original_hash: 2c2abd5
+    333mbf: 10 minuta po kocki
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -1582,8 +1586,10 @@ hr:
         display](mailto:some@email.com)
       #original_hash: c5497bc
       events: Discipline
-      #original_hash: ae66391
-      unoff_events: Discipline koje više nisu službene
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Ovo natjecanje ima discipline koje nisu više službene, ne podržavamo
+        uređivanje takvih.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Ovo natjecanje je javno vidljivo i zaključano za uređivanje. Ukoliko
@@ -1600,8 +1606,6 @@ hr:
       awaiting_confirmation_html: >-
         Ispunite sva polja i kliknite Potvrdi kada ste spremni da %{board}
         potvrdi ovo natjecanje.
-      #original_hash: 7586b02
-      submit_modify_value: Uredi discipline
       #original_hash: 8966fd0
       submit_create_value: Kreirajte natjecanje
       #original_hash: 40b0dfd
@@ -1828,8 +1832,15 @@ hr:
         obzir u trenutačnom rankingu.
       #original_hash: a91508f
       championship_podiums: Postolja velikih prvenstava
-      #original_hash: 3746f3b
-      wc_podiums: Postolja Svjetskog prvenstva
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Postolja svjetskih prvenstava
+        #original_hash: d248cd7
+        continental: Postolja kontinentalnih prvenstava
+        #original_hash: aa40175
+        national: Postolja nacionalnih prvenstava
+        #original_hash: 868be55
+        greater_china: Postolja natjecanja Velike Kine
       #original_hash: c32a014
       place: Mjesto
       #original_hash: ddb18c1
@@ -2607,12 +2618,12 @@ hr:
         natjecanju da bude prihvaćeno su:
       olist1:
         #original_hash: 424c134
-        '1': Natjecanja imaju različite discipline.
+        '1': Ova 2 natjecanja imaju različite discipline.
         #original_hash: f7bacc5
-        '2': Natjecanja se održavaju u različitim državama.
+        '2': Ova 2 natjecanja će se održati u različitim državama.
         #original_hash: 9aa4d96
         '3': >-
-          U zadnjih 12 mjeseci, bilo je manje od 13 natjecanja na području od
+          U zadnjih 12 mjeseci, bilo je manje od 13 natjecanja na prostoru od
           200km oko ovog natjecanja.
       #original_hash: ab65dfb
       content2: >-
@@ -2621,9 +2632,19 @@ hr:
       olist2:
         #original_hash: a57b541
         '1': >-
-          Ako je lokacija takvih natjecanja manja od 200km od drugih natjecanja,
-          oba natjecanja moraju biti barem u razmaku od 5 dana ili drugo
-          natjecanje ne smije imati FM disciplinu.
+          Ako je bilo koja lokacija takvih natjecanja manja od 200km od bilo
+          kojeg drugog natjecanja, onda oba natjecanja moraju biti odvojena
+          barem 5 dana, ili jedno od natjecanja ne smije imati FM disciplinu.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Najavljivanje disciplina
+      #original_hash: b6c6d26
+      content: >-
+        Sve discipline koje će se održati na natjecanju moraju biti određene od
+        strane Delegata kada se traži potvrda natjecanja. Ovo uključuje i
+        "privremene" discipline (tj. discipline koje se mogu naknadno održati
+        ovisno o tijeku natjecanja). Kasnija dodavanja moraju biti odobrena od
+        strane Board-a.
     paragraph5:
       #original_hash: 17d01de
       title: Limit natjecatelja
