@@ -82,7 +82,7 @@ test_ssh_agent_forwarding() {
 }
 
 find_instance_by_name() {
-  local  __resultvar=$1
+  local __resultvar=$1
   local instance_name=$2
 
   local running_instances=`aws ec2 describe-instances | jq ".Reservations[] | .Instances[] | select(.State.Name == \"running\")"`
@@ -97,7 +97,7 @@ find_instance_by_name() {
 }
 
 get_instance_domain_name() {
-  local  __resultvar=$1
+  local __resultvar=$1
   local instance_id=$2
 
   local __domain_name=`aws ec2 describe-instances --instance-ids ${instance_id} | jq --raw-output ".Reservations[0].Instances[0].PublicDnsName"`
@@ -105,11 +105,24 @@ get_instance_domain_name() {
 }
 
 get_instance_internal_ip_address() {
-  local  __resultvar=$1
+  local __resultvar=$1
   local instance_id=$2
 
   local __ip_address=`aws ec2 describe-instances --instance-ids ${instance_id} | jq --raw-output ".Reservations[0].Instances[0].NetworkInterfaces[0].PrivateIpAddresses[0].PrivateIpAddress"`
   eval $__resultvar="'${__ip_address}'"
+}
+
+get_pem_filename() {
+  local __resultvar=$1
+  local keyname=$2
+  local __pem_filename=~/.ssh/${keyname}.pem
+  if ! [ -e ${__pem_filename} ]; then
+    echo "" >> /dev/stderr
+    echo "Could not find ${__pem_filename}, I won't be able to connect to any EC2 servers until that file exists." >> /dev/stderr
+    exit 1
+  fi
+
+  eval $__resultvar="'${__pem_filename}'"
 }
 
 new() {
@@ -130,12 +143,7 @@ new() {
   keyname=$1
   shift
 
-  pem_filename=~/.ssh/${keyname}.pem
-  if ! [ -e $pem_filename ]; then
-    echo "" >> /dev/stderr
-    echo "Could not find ${pem_filename}, I won't be able to connect to any EC2 servers until that file exists." >> /dev/stderr
-    exit 1
-  fi
+  get_pem_filename pem_filename ${keyname}
 
   test_ssh_to_production
 
@@ -152,12 +160,37 @@ new() {
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
   aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${TEMP_NEW_SERVER_NAME}
   echo "Allocated new server with instance id: $instance_id and named it ${TEMP_NEW_SERVER_NAME}."
-  get_instance_domain_name domain_name ${instance_id}
-  echo "Its public dns name is ${domain_name}."
 
   echo -n "Waiting for ${TEMP_NEW_SERVER_NAME} to finish initializing..."
   aws ec2 wait instance-status-ok --instance-ids ${instance_id}
   echo " done!"
+
+  bootstrap ${keyname} ${instance_id}
+}
+
+bootstrap() {
+  print_command_usage_and_exit() {
+    echo "Usage: $0 bootstrap [keyname] [instance_id]" >> /dev/stderr
+    echo "For example: $0 bootstrap jfly-kaladin-arch i-046efef6b4c8a7237" >> /dev/stderr
+
+    echo "" >> /dev/stderr
+    echo "Run 'aws ec2 describe-key-pairs' to see a list of valid key pairs." >> /dev/stderr
+    echo "Run '$0 list-instances' to see a list of ec2 instances by name and id." >> /dev/stderr
+    exit 1
+  }
+  if [ $# -ne 2 ]; then
+    print_command_usage_and_exit
+  fi
+
+  keyname=$1
+  shift
+
+  instance_id=$1
+  shift
+
+  get_pem_filename pem_filename ${keyname}
+  get_instance_domain_name domain_name ${instance_id}
+  echo "About to bootstrap instance id ${instance_id}. Its public dns name is ${domain_name}."
 
   ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A ubuntu@${domain_name}"
 
@@ -182,6 +215,18 @@ new() {
   echo ""
   echo "Successfully spun up new server at ${domain_name}"
   echo "Run '$0 passthetorch' to test out the new server and possibly switchover to it."
+}
+
+list_instances() {
+  print_command_usage_and_exit() {
+    echo "Usage: $0 list-instances" >> /dev/stderr
+    exit 1
+  }
+  if [ $# -ne 0 ]; then
+    print_command_usage_and_exit
+  fi
+
+  aws ec2 describe-instances | jq --raw-output '.Reservations[] | .Instances[] | "InstanceId: \(.InstanceId)     Name: \(.Tags[] | select(.Key == "Name") | .Value)"'
 }
 
 function addhostfile() {
@@ -353,7 +398,7 @@ assert_eq `count_lines $'foo\n'` "1"
 assert_eq `count_lines $'foo\nbar'` "2"
 assert_eq `count_lines $'foo\nbar\n'` "2"
 
-COMMANDS=(new passthetorch hostsfile reap-servers)
+COMMANDS=(new passthetorch hostsfile reap-servers bootstrap list-instances)
 JOINED_COMMANDS=`join_by "|" "${COMMANDS[@]}"`
 print_usage_and_exit() {
   echo "Usage: $0 [$JOINED_COMMANDS]" >> /dev/stderr
@@ -378,4 +423,8 @@ elif [ "$COMMAND" == "reap-servers" ]; then
   reap_servers "$@"
 elif [ "$COMMAND" == "hostsfile" ]; then
   hostsfile "$@"
+elif [ "$COMMAND" == "bootstrap" ]; then
+  bootstrap "$@"
+elif [ "$COMMAND" == "list-instances" ]; then
+  list_instances "$@"
 fi

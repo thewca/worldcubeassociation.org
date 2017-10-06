@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@rails/webpacker": "^3.0.1",
+    "@rails/webpacker": "^3.0.2",
     "autoprefixer": "^7.1.4",
     "babel-core": "^6.25.0",
     "babel-loader": "7.x",
@@ -17,7 +17,7 @@
     "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.1",
-    "file-loader": "^1.1.4",
+    "file-loader": "^1.1.5",
     "glob": "^7.1.2",
     "js-yaml": "^3.10.0",
     "node-sass": "^4.5.3",
