@@ -5,7 +5,7 @@ class Competition < ApplicationRecord
 
   has_many :competition_events, dependent: :destroy
   has_many :events, through: :competition_events
-  has_many :registrations
+  has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, foreign_key: "competitionId"
   has_many :competitors, -> { distinct }, through: :results, source: :person
