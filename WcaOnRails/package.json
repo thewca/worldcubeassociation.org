@@ -22,7 +22,7 @@
     "js-yaml": "^3.10.0",
     "node-sass": "^4.5.3",
     "path-complete-extname": "^0.1.0",
-    "postcss-loader": "^2.0.6",
+    "postcss-loader": "^2.0.8",
     "postcss-smart-import": "^0.7.5",
     "precss": "^2.0.0",
     "prop-types": "^15.6.0",
