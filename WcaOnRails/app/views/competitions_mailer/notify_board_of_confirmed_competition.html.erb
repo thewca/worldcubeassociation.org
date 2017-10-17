@@ -1,5 +1,9 @@
 <h1><%= @competition.name %> is confirmed</h1>
 
+<% if @competition.championships.present? %>
+  <h2>This competition is marked as <%= @competition.championships.map(&:name).sort.to_sentence %></h2>
+<% end %>
+
 <% if @competition.remarks.present? %>
   <p>
     <%= @confirmer.name %> says: <%= @competition.remarks %>
