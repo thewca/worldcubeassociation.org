@@ -95,7 +95,7 @@ FactoryGirl.define do
       currency_code "AUD"
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected
-      # to the WCA Stripe account. For more inforamtion, see
+      # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
       connected_stripe_account_id "acct_19ZQVmE2qoiROdto"
     end
