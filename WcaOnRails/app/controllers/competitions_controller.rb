@@ -563,12 +563,12 @@ class CompetitionsController < ApplicationController
         :competitor_limit_reason,
         :remarks,
         competition_events_attributes: [:id, :event_id, :_destroy],
+        championships_attributes: [:id, :championship_type, :_destroy],
       ]
       if current_user.can_admin_results?
         permitted_competition_params += [
           :isConfirmed,
           :showAtAll,
-          { championships_attributes: [:id, :championship_type, :_destroy] },
         ]
       end
     end

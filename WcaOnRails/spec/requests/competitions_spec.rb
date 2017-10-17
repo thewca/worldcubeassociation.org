@@ -21,7 +21,9 @@ RSpec.describe "competitions" do
         expect(competition.reload.isConfirmed?).to eq true
       end
 
-      it 'can set championship types for a competition' do
+      it 'can set championship types for an unconfirmed competition' do
+        expect(competition.isConfirmed).to be false
+
         patch competition_path(competition), params: {
           competition: {
             championships_attributes: {
@@ -33,6 +35,60 @@ RSpec.describe "competitions" do
         follow_redirect!
         expect(response).to be_success
         expect(competition.reload.championships.count).to eq 2
+      end
+
+      it 'can set championship types for a confirmed competition' do
+        competition.update!(isConfirmed: true)
+
+        patch competition_path(competition), params: {
+          competition: {
+            championships_attributes: {
+              "1" => { championship_type: "world" },
+              "0" => { championship_type: "_Europe" },
+            },
+          },
+        }
+        follow_redirect!
+        expect(response).to be_success
+        expect(competition.reload.championships.count).to eq 2
+      end
+    end
+
+    context "signed in as a delegate" do
+      before :each do
+        sign_in competition.delegates.first
+      end
+
+      it 'can set championship types for an unconfirmed competition' do
+        expect(competition.isConfirmed).to be false
+
+        patch competition_path(competition), params: {
+          competition: {
+            championships_attributes: {
+              "1" => { championship_type: "world" },
+              "0" => { championship_type: "_Europe" },
+            },
+          },
+        }
+        follow_redirect!
+        expect(response).to be_success
+        expect(competition.reload.championships.count).to eq 2
+      end
+
+      it 'cannot set championship types for a confirmed competition' do
+        competition.update!(isConfirmed: true)
+
+        patch competition_path(competition), params: {
+          competition: {
+            championships_attributes: {
+              "1" => { championship_type: "world" },
+              "0" => { championship_type: "_Europe" },
+            },
+          },
+        }
+        follow_redirect!
+        expect(response).to be_success
+        expect(competition.reload.championships.count).to eq 0
       end
     end
   end
