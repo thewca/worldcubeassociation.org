@@ -11,17 +11,23 @@ AWS_REGION="us-west-2"
 
 CONFIGURATION_INSTRUCTIONS="https://docs.google.com/document/d/1cq-4R0ERnK-dGNlkoG8gwKKjr5WecuXSppbSHQ0FI9s/edit#heading=h.qsrd2h8spn50"
 
-test_aws_cli() {
+check_deps() {
+  if ! command -v jq &>/dev/null; then
+    echo "Unable to find the jq command line utility. Are you sure it's installed?" >> /dev/stderr
+    echo "Try following the installation instructions here: https://stedolan.github.io/jq/download/" >> /dev/stderr
+    exit 1
+  fi
+
   if ! command -v aws &>/dev/null; then
-    echo "" >> /dev/stderr
     echo "Unable to find the aws command line client. Are you sure it's installed?" >> /dev/stderr
     echo "Try following the installation instructions here: https://docs.aws.amazon.com/cli/latest/userguide/installing.html" >> /dev/stderr
     exit 1
   fi
+}
 
+test_aws_cli() {
   local configured_region=`aws configure get region`
   if [ "${configured_region}" != "${AWS_REGION}" ]; then
-    echo "" >> /dev/stderr
     echo "Found the aws command line client, but your region is configured to be '${configured_region}', when it should be '${AWS_REGION}'." >> /dev/stderr
     echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
     exit 1
@@ -29,7 +35,6 @@ test_aws_cli() {
 
   local configured_output=`aws configure get output`
   if [ "${configured_output}" != "json" ]; then
-    echo "" >> /dev/stderr
     echo "Found the aws command line client, but your default output format is configured to be '${configured_output}', when it should be 'json'." >> /dev/stderr
     echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
     exit 1
@@ -37,7 +42,6 @@ test_aws_cli() {
 
   local username=`aws iam get-user | jq --raw-output '.User.UserName'`
   if [ "${username}" != "${AWS_USERNAME}" ]; then
-    echo "" >> /dev/stderr
     echo "Found the aws command line client, but it does not appear to be configured correctly." >> /dev/stderr
     echo "Try following the configuration instructions here: ${CONFIGURATION_INSTRUCTIONS}" >> /dev/stderr
     echo "The command 'aws iam get-user' should show UserName '${AWS_USERNAME}', but it showed '${username}'." >> /dev/stderr
@@ -131,6 +135,12 @@ rsync_secrets() {
   ${ssh_command} rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation/secrets
 }
 
+disable_cron() {
+  local ssh_command=$1
+
+  ${ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
+}
+
 new() {
   print_command_usage_and_exit() {
     echo "Usage: $0 new [keyname]" >> /dev/stderr
@@ -152,8 +162,6 @@ new() {
   get_pem_filename pem_filename ${keyname}
 
   test_ssh_to_production
-
-  test_aws_cli
 
   # Spin up a new EC2 instance.
   json=`aws ec2 run-instances \
@@ -352,6 +360,8 @@ function passthetorch() {
   # Do one last rsync to capture any filesystem changes that occured while we were waiting for the user.
   rsync_secrets ${ssh_command}
 
+  disable_cron ${ssh_command}
+
   aws ec2 associate-address --public-ip ${ELASTIC_IP} --instance-id ${new_server_id}
   echo ""
   echo "The new server with id ${new_server_id} is now live with the elastic ip ${ELASTIC_IP}!"
@@ -432,6 +442,9 @@ if ! containsElement "$COMMAND" "${COMMANDS[@]}"; then
   echo "Unrecognized command: $COMMAND" >> /dev/stderr
   print_usage_and_exit
 fi
+
+check_deps
+test_aws_cli
 
 if [ "$COMMAND" == "new" ]; then
   new "$@"
