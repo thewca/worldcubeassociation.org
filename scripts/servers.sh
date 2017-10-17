@@ -23,6 +23,11 @@ check_deps() {
     echo "Try following the installation instructions here: https://docs.aws.amazon.com/cli/latest/userguide/installing.html" >> /dev/stderr
     exit 1
   fi
+
+  if ! command -v dig &>/dev/null; then
+    echo "Unable to find the dig command line utility. Are you sure it's installed?" >> /dev/stderr
+    exit 1
+  fi
 }
 
 test_aws_cli() {
@@ -63,6 +68,8 @@ test_ssh_to_production() {
 }
 
 test_ssh_agent_forwarding() {
+  test_ssh_to_production
+
   local ssh_command=$1
 
   local test_command="${ssh_command} echo Successfulness"
@@ -132,13 +139,13 @@ get_pem_filename() {
 rsync_secrets() {
   local ssh_command=$1
 
-  ${ssh_command} rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation/secrets
+  ${ssh_command} 'rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets'
 }
 
-disable_cron() {
+disable_old_cron() {
   local ssh_command=$1
 
-  ${ssh_command} 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
+  ssh cubing@worldcubeassociation.org 'crontab -l | sed -e "s/^/#/" -e "1i# Cronjobs disabled on `date` by servers.sh" | crontab'
 }
 
 new() {
@@ -318,6 +325,8 @@ function passthetorch() {
   get_instance_domain_name domain_name ${new_server_id}
   get_pem_filename pem_filename ${keyname}
   ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A ubuntu@${domain_name}"
+  ${ssh_command} 'sudo cp /home/ubuntu/.ssh/authorized_keys /home/cubing/.ssh/authorized_keys && sudo chown cubing:cubing /home/cubing/.ssh/authorized_keys'
+  ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A cubing@${domain_name}"
   test_ssh_agent_forwarding "${ssh_command}"
 
   # Do a quick smoke test of the new server.
@@ -347,20 +356,9 @@ function passthetorch() {
 
   # The contents of the secrets directory on the live production server may
   # have changed since the user spun up this new server.
-  rsync_secrets ${ssh_command}
+  rsync_secrets "${ssh_command}"
 
-  addhostfile
-  echo "NOTE: This server is not live yet! I just added an entry to your hostsfile (www.worldcubeassociation.org should now resolve to ${ip_address}) so you can test it out manually before we switchover the elastic ip address."
-  echo "Try visiting https://www.worldcubeassociation.org/server-status in your web browser. At the bottom, you should see ip address ${expected_ip}."
-  echo "If you do not, then our attempt to edit /etc/hosts probably failed and you're still communicating with the current production server."
-  echo "If everything looks good, then run '$0 passthetorch' to switchover to the new server."
-  wait_for_confirmation "HOLD ONTO YOUR BUTTS"
-  removehostsfile
-
-  # Do one last rsync to capture any filesystem changes that occured while we were waiting for the user.
-  rsync_secrets ${ssh_command}
-
-  disable_cron ${ssh_command}
+  disable_old_cron
 
   aws ec2 associate-address --public-ip ${ELASTIC_IP} --instance-id ${new_server_id}
   echo ""
