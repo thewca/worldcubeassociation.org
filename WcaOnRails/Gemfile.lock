@@ -132,6 +132,12 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.0.5)
+    coveralls (0.7.1)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
     crass (1.0.2)
     css_parser (1.5.0)
       addressable
@@ -153,6 +159,9 @@ GEM
       warden (~> 1.2.3)
     devise-bootstrap-views (0.0.11)
     diff-lcs (1.3)
+    docile (1.1.5)
+    domain_name (0.5.20170404)
+      unf (>= 0.0.5, < 1.0.0)
     doorkeeper (4.2.6)
       railties (>= 4.2)
     doorkeeper-i18n (4.0.0)
@@ -202,6 +211,8 @@ GEM
     high_voltage (3.0.0)
     highline (1.7.8)
     htmlentities (4.3.4)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     http_accept_language (2.1.1)
     i18n (0.8.6)
     i18n-country-translations (1.2.4)
@@ -290,6 +301,7 @@ GEM
     multipart-post (2.0.0)
     mysql2 (0.4.9)
     nenv (0.3.0)
+    netrc (0.11.0)
     newrelic_rpm (4.5.0.337)
     nio4r (2.1.0)
     nokogiri (1.8.1)
@@ -387,6 +399,10 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
@@ -441,6 +457,11 @@ GEM
     simple_form (3.5.0)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
+    simplecov (0.15.1)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     slop (3.6.0)
     spring (2.0.2)
       activesupport (>= 4.2)
@@ -457,6 +478,8 @@ GEM
       activemodel (>= 3.0, < 6.0)
     stripe (3.5.3)
       faraday (~> 0.10)
+    term-ansicolor (1.6.0)
+      tins (~> 1.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     therubyracer (0.12.3)
@@ -468,6 +491,7 @@ GEM
     tilt (2.0.8)
     time_will_tell (0.1.0)
       railties (>= 3.2)
+    tins (1.15.0)
     twitter_cldr (4.4.2)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
@@ -476,6 +500,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.4)
     unicode-display_width (1.3.0)
     unicorn (5.3.1)
       kgio (~> 2.6)
@@ -518,6 +545,7 @@ DEPENDENCIES
   carrierwave
   carrierwave-crop!
   cocoon
+  coveralls
   daemons
   database_cleaner
   datetimepicker-rails!
