@@ -47,8 +47,7 @@ namespace :db do
           DatabaseDumper.development_dump(dump_filename)
 
           LogTask.log_task "Zipping '#{dump_filename}' to '#{zip_filename}'" do
-            `zip #{zip_filename} #{dump_filename}`
-            raise "zip returned: #{$CHILD_STATUS.exitstatus}" unless $CHILD_STATUS.success?
+            system("zip #{zip_filename} #{dump_filename}") || raise("Error running `zip`")
           end
 
           public_zip_path = Rails.root.join('public', 'wst', zip_filename)
@@ -68,8 +67,12 @@ namespace :db do
           dump_filename = "wca-developer-database-dump.sql"
           zip_filename = "wca-developer-database-dump.zip"
 
-          LogTask.log_task("Downloading #{dev_db_dump_url}") { `wget #{dev_db_dump_url}` }
-          LogTask.log_task("Unzipping #{zip_filename}") { `unzip #{zip_filename}` }
+          LogTask.log_task("Downloading #{dev_db_dump_url}") do
+            system("wget #{dev_db_dump_url}") || raise("Error while running `wget`")
+          end
+          LogTask.log_task("Unzipping #{zip_filename}") do
+            system("unzip #{zip_filename}") || raise("Error while running `unzip`")
+          end
 
           config = ActiveRecord::Base.connection_config
           LogTask.log_task "Clobbering contents of '#{config[:database]}' with #{dump_filename}" do
