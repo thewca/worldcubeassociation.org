@@ -41,6 +41,23 @@ RSpec.feature "Competition events management" do
     let(:comp_event_333) { competition.competition_events.find_by_event_id("333") }
     let(:round_333_1) { comp_event_333.rounds.first }
 
+    scenario "close with unsaved changes prompts user before discarding changes", js: true do
+      within_round("333", 1) { find("[name=timeLimit]").click }
+
+      page.accept_confirm "Are you sure you want to discard your changes?" do
+        within_modal do
+          fill_in "minutes", with: "4"
+          click_button "Close"
+        end
+      end
+
+      # Now that we discarded that change, try opening the modal again and check what value is shown.
+      within_round("333", 1) { find("[name=timeLimit]").click }
+      within_modal do
+        expect(page).to have_text "Competitors have 10 minutes for each of their solves."
+      end
+    end
+
     scenario "change to best of 3", js: true do
       within_round("333", 1) { select("Bo3", from: "format") }
       save
