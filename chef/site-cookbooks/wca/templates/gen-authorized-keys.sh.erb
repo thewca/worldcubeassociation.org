@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+print_usage_and_exit() {
+  echo "Usage: $0"
+  echo "Clobber ~/.ssh/authorized_keys with the public keys of the members of the software team."
+  exit
+}
+if [ $# -gt 0 ]; then
+  print_usage_and_exit
+fi
+
+/home/cubing/worldcubeassociation.org/scripts/acces.sh \
+  --gh-token <%= @secrets['GITHUB_LIST_MEMBERS_ACCESS_TOKEN'] %> \
+  --gh-org thewca \
+  --gh-team "Software Team" \
+  --keyfile /home/cubing/.ssh/authorized_keys
