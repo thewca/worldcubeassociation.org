@@ -27,7 +27,16 @@ export default class ButtonActivatedModal extends React.Component {
       <button type="button" name={this.props.name} className={cn("btn", this.props.buttonClass)} onClick={this.open}>
         {this.props.buttonValue}
         <KeydownDismissModal show={this.state.showModal} onHide={this.close}>
-          <form className={this.props.formClass} onSubmit={e => { e.preventDefault(); this.props.onOk(); }}>
+          <form className={this.props.formClass}
+                onSubmit={e => { e.preventDefault(); this.props.onOk(); }}
+                onClick={e => {
+                  // Prevent clicks on the modal from propagating up to the button, which
+                  // would cause this modal to be marked as visible. This causes a race when
+                  // clicking on something in the modal to close the modal: we set showModal to false,
+                  // and then the button onClick listener immediately sets showModal to true.
+                  e.stopPropagation();
+                }}
+          >
             {this.props.children}
             <Modal.Footer>
               <Button onClick={this.close} bsStyle="warning">Close</Button>
