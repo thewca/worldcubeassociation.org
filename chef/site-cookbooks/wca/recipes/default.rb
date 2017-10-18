@@ -87,6 +87,9 @@ template "/home/#{username}/gen-authorized-keys.sh" do
     secrets: secrets,
   })
 end
+execute "~/gen-authorized-keys.sh" do
+  user username
+end
 
 #### Mysql
 db = {
