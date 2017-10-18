@@ -8,7 +8,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def notify_board_of_confirmed_championship_competition
-    c = Championship.last.competition
+    c = Competition.find("WC2013")
     CompetitionsMailer.notify_board_of_confirmed_competition(c.delegates[0], c)
   end
 
