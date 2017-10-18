@@ -1498,11 +1498,11 @@ pl:
         other: Organizatorzy
       #original_hash: 6afa61e
       delegate:
-        zero: Delegatów WCA
+        zero: Delegaci WCA
         one: Delegat WCA
-        few: Delegatów WCA
-        many: Delegatów WCA
-        other: Delegatów WCA
+        few: Delegaci WCA
+        many: Delegaci WCA
+        other: Delegaci WCA
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: 32946e9
