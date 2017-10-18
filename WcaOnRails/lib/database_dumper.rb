@@ -626,14 +626,21 @@ module DatabaseDumper
   end
 
   def self.mysql(command, database = nil)
-    `mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}`
+    bash!("mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
   end
 
   def self.mysqldump(db_name, dest_filename)
-    `mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}`
+    bash!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
+    bash!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 
   def self.filter_out_mysql_warning
-    '2>&1 | grep -v "[Warning] Using a password on the command line interface can be insecure."'
+    '2>&1 | grep -v "[Warning] Using a password on the command line interface can be insecure." || true'
   end
+end
+
+# See https://julialang.org/blog/2012/03/shelling-out-sucks
+def bash!(cmd)
+  cmd = "set -o pipefail && #{cmd}"
+  system("bash -c #{cmd.shellescape}") || raise("Error while running '#{cmd}' (#{$CHILD_STATUS})")
 end
