@@ -217,9 +217,6 @@
       <%= f.input :external_website %>
       <hr>
 
-    <% end %>
-
-    <% if @competition_admin_view %>
       <div class="championships">
         <%= f.simple_fields_for :championships, @competition.championships do |f2| %>
           <%= render "championship_fields", f: f2 %>
