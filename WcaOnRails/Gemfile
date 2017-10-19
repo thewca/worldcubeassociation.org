@@ -73,6 +73,7 @@ gem 'twitter_cldr'
 gem 'jquery-slick-rails'
 gem 'webpacker'
 gem 'json-schema'
+gem 'translighterate'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
