@@ -104,6 +104,7 @@ if [ "$dry_run" = true ]; then
     echo "cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys.bak"
     echo "mv /tmp/authorized_keys ~/.ssh/authorized_keys"
 else
+    mkdir -p `dirname $AUTHORIZED_KEYS_PATH`
     mv $tmp_authorized_keys_path $AUTHORIZED_KEYS_PATH
     echo "$AUTHORIZED_KEYS_PATH has been updated."
 fi
