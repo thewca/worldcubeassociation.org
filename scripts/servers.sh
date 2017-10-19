@@ -305,16 +305,13 @@ wait_for_confirmation() {
 
 function passthetorch() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 passthetorch [keyname]" >> /dev/stderr
-    echo "For example: $0 passthetorch jfly-kaladin-arch" >> /dev/stderr
+    echo "Usage: $0 passthetorch" >> /dev/stderr
+    echo "For example: $0 passthetorch" >> /dev/stderr
     exit 1
   }
-  if [ $# -ne 1 ]; then
+  if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
-
-  keyname=$1
-  shift
 
   find_instance_by_name production_instance_id ${PRODUCTION_SERVER_NAME}
   echo "Found instance '${PRODUCTION_SERVER_NAME}' with id ${production_instance_id}!"
@@ -323,10 +320,7 @@ function passthetorch() {
   echo "Found instance '${TEMP_NEW_SERVER_NAME}' with id ${new_server_id}!"
 
   get_instance_domain_name domain_name ${new_server_id}
-  get_pem_filename pem_filename ${keyname}
-  ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A ubuntu@${domain_name}"
-  ${ssh_command} 'sudo cp /home/ubuntu/.ssh/authorized_keys /home/cubing/.ssh/authorized_keys && sudo chown cubing:cubing /home/cubing/.ssh/authorized_keys'
-  ssh_command="ssh -i ${pem_filename} -o StrictHostKeyChecking=no -A cubing@${domain_name}"
+  ssh_command="ssh -o StrictHostKeyChecking=no -A cubing@${domain_name}"
   test_ssh_agent_forwarding "${ssh_command}"
 
   # Do a quick smoke test of the new server.
