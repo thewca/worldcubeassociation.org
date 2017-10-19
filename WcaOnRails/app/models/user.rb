@@ -488,6 +488,10 @@ class User < ApplicationRecord
     board_member? || senior_delegate? || admin?
   end
 
+  def can_approve_media?
+    admin? || communication_team?
+  end
+
   def get_cannot_delete_competition_reason(competition)
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)

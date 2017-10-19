@@ -179,6 +179,10 @@ class Competition < ApplicationRecord
     self.isConfirmed || self.showAtAll
   end
 
+  def country
+    Country.c_find(self.countryId)
+  end
+
   # Enforce that the users marked as delegates for this competition are
   # actually delegates. Note: just because someone (legally) delegated a
   # competition in the past does not mean that they are still a delegate,

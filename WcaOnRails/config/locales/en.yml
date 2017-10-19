@@ -282,6 +282,15 @@ en:
       #context: a vote
       vote:
         comment: "Comment"
+      competition_medium:
+        competitionId: "Competition"
+        type: "Type"
+        text: "Text"
+        uri: "Link"
+        submitterName: "Submitter name"
+        submitterEmail: "Submitter email"
+        submitterComment: "Submitter comment"
+        status: "Status"
   #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
@@ -400,6 +409,15 @@ en:
         friendly_id: ""
       vote:
         comment: ""
+      competition_medium:
+        competitionId: ""
+        type: ""
+        text: ""
+        uri: ""
+        submitterName: ""
+        submitterEmail: ""
+        submitterComment: ""
+        status: ""
     #context: and a label for an option
     options:
       #context: about registration

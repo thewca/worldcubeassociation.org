@@ -64,6 +64,9 @@ Rails.application.routes.draw do
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
 
+  get "media/validate" => 'media#validate', as: :media_validate
+  resources :media, only: [:edit, :update, :destroy]
+
   resources :persons, only: [:index, :show]
 
   resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
