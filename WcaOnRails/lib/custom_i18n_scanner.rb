@@ -21,6 +21,7 @@ unless Rails.env.production?
       when "devise" then "user"
       when "admin" then "person"
       when "oauth" then "doorkeeper/application"
+      when "medium" then "competition_medium"
       when "contact"
         # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
         # We need to determine which one does the key refer to.

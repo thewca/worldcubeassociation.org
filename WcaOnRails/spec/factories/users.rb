@@ -55,6 +55,13 @@ FactoryBot.define do
       end
     end
 
+    trait :wct_member do
+      after(:create) do |user|
+        wrc_team = Team.find_by_friendly_id('wct')
+        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+      end
+    end
+
     trait :wca_id do
       transient do
         person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
