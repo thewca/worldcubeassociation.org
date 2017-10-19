@@ -36,7 +36,6 @@
     "recipe[wca]",
     "recipe[wca::email]",
     "recipe[wca::cronjobs]",
-    "recipe[wca::newrelic]",
     "recipe[wca::backup]"
   ],
   "env_run_lists": {
