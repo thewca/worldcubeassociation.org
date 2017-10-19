@@ -78,7 +78,8 @@ rails_root = "#{repo_root}/WcaOnRails"
 # acces.sh depends on jq https://github.com/FatBoyXPC/acces.sh
 package 'jq'
 
-template "/home/#{username}/gen-authorized-keys.sh" do
+gen_auth_keys_path = "/home/#{username}/gen-authorized-keys.sh"
+template gen_auth_keys_path do
   source "gen-authorized-keys.sh.erb"
   mode 0755
   owner username
@@ -87,7 +88,7 @@ template "/home/#{username}/gen-authorized-keys.sh" do
     secrets: secrets,
   })
 end
-execute "~/gen-authorized-keys.sh" do
+execute gen_auth_keys_path do
   user username
 end
 
