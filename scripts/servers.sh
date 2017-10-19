@@ -2,6 +2,8 @@
 
 set -e
 
+cd "$(dirname "$0")"
+
 PRODUCTION_SERVER_NAME="www.worldcubeassociation.org"
 OLD_PRODUCTION_SERVER_NAME="DELETEME_old_${PRODUCTION_SERVER_NAME}"
 TEMP_NEW_SERVER_NAME="temp-new-server-via-cli"
@@ -222,7 +224,8 @@ bootstrap() {
   # See http://ubuntu-smoser.blogspot.com/2010/07/verify-ssh-keys-on-ec2-instances.html or
   # https://alestic.com/2012/04/ec2-ssh-host-key/ for better solutions than
   # setting StrictHostKeyChecking=no.
-  ${ssh_command} 'sudo wget https://raw.githubusercontent.com/thewca/worldcubeassociation.org/master/scripts/wca-bootstrap.sh -O /tmp/wca-bootstrap.sh && sudo -E bash /tmp/wca-bootstrap.sh production'
+  scp -i ${pem_filename} -o StrictHostKeyChecking=no ./wca-bootstrap.sh ubuntu@${domain_name}:/tmp/wca-bootstrap.sh
+  ${ssh_command} 'sudo -E bash /tmp/wca-bootstrap.sh production'
 
   # After bootstrapping the new server, it will have a new host key. To avoid future errors like
   #
