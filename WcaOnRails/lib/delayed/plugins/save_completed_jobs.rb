@@ -22,7 +22,7 @@ module Delayed
           handler: job.handler,
           run_at: job.run_at,
           queue: job.queue,
-          completed_at: DateTime.now,
+          completed_at: Time.now,
         )
       end
     end
