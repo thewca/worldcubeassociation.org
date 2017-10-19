@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
+require_relative 'locales/locales'
 require_relative '../lib/middlewares/fix_accept_header'
 require_relative '../lib/middlewares/warden_user_logger'
-require_relative '../lib/wca_exceptions'
-require_relative 'locales/locales'
 
 require 'rails/all'
-
-require_relative '../lib/monkeypatch_json_renderer_to_pretty_print'
-require_relative '../lib/database_dumper'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
