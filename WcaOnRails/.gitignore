@@ -29,3 +29,6 @@ pids/*.pid
 /public/packs
 /public/packs-test
 /node_modules
+
+# Coveralls stuff
+/coverage/
