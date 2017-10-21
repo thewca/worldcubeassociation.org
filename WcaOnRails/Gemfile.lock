@@ -171,6 +171,8 @@ GEM
       json
       thread
       thread_safe
+    enum_help (0.0.17)
+      activesupport (>= 3.0.0)
     envied (0.9.1)
       coercible (~> 1.0)
       thor (~> 0.15)
@@ -545,6 +547,7 @@ DEPENDENCIES
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
+  enum_help
   envied
   factory_bot_rails
   faker

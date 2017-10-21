@@ -74,6 +74,7 @@ gem 'jquery-slick-rails'
 gem 'webpacker'
 gem 'json-schema'
 gem 'translighterate'
+gem 'enum_help'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'

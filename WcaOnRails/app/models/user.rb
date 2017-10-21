@@ -57,9 +57,9 @@ class User < ApplicationRecord
   enum gender: (ALLOWABLE_GENDERS.map { |g| [g, g.to_s] }.to_h)
   GENDER_LABEL_METHOD = lambda do |g|
     {
-      m: I18n.t('wca.devise.gender.male'),
-      f: I18n.t('wca.devise.gender.female'),
-      o: I18n.t('wca.devise.gender.other_gender'),
+      m: I18n.t('enums.user.gender.m'),
+      f: I18n.t('enums.user.gender.f'),
+      o: I18n.t('enums.user.gender.o'),
     }[g]
   end
 

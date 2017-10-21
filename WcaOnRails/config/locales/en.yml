@@ -154,11 +154,6 @@ en:
     search_site: "Search site"
     date_placeholder: "YYYY-MM-DD"
     datetime_placeholder: "YYYY-MM-DD HH:MM"
-  delegate_statuses:
-    candidate_delegate: "Candidate Delegate"
-    delegate: "Delegate"
-    senior_delegate: "Senior Delegate"
-    board_member: "Board Member"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
   oauth:
     applications:
@@ -291,6 +286,30 @@ en:
         submitterEmail: "Submitter email"
         submitterComment: "Submitter comment"
         status: "Status"
+  enums:
+    user:
+      gender:
+        m: "Male"
+        f: "Female"
+        o: "Other"
+      delegate_status:
+        candidate_delegate: "Candidate Delegate"
+        delegate: "Delegate"
+        senior_delegate: "Senior Delegate"
+        board_member: "Board Member"
+    person:
+      gender:
+        m: "Male"
+        f: "Female"
+        o: "Other"
+    competition_medium:
+      status:
+        accepted: "Accepted"
+        pending: "Pending"
+      type:
+        report: "Report"
+        article: "Article"
+        multimedia: "Multimedia"
   #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
@@ -489,10 +508,6 @@ en:
       let_us_know: "Please let us know if you have competed in a WCA competition before."
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
       welcome: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission."
-      gender:
-        male: "Male"
-        female: "Female"
-        other_gender: "Other"
   layouts:
     #context: This key belongs to the navigation bar
     navigation:
