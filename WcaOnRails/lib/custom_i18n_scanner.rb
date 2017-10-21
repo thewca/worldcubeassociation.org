@@ -6,9 +6,9 @@ unless Rails.env.production?
     include I18n::Tasks::Scanners::RelativeKeys
     include I18n::Tasks::Scanners::OccurrenceFromPosition
 
-    def active_record?(model)
-      # FIXME: Find a way to determine this dynamically ?
-      !%w(website_contact dob_contact).include?(model)
+    def to_active_record_class(model)
+      ar_class = model.classify.safe_constantize
+      ar_class && ar_class <= ActiveRecord::Base ? ar_class : nil
     end
 
     def extract_model_name(key)
@@ -47,16 +47,26 @@ unless Rails.env.production?
         abskey = absolute_key(".#{attribute}", path)
         occurrence = occurrence_from_position(path, text, Regexp.last_match.offset(0).first)
         model = extract_model_name(abskey)
+        ar_class = to_active_record_class(model)
+
         # Mark the hint as used if we don't use custom hint
         if !input_params.include?("hint:")
           retval << ["simple_form.hints.#{model}.#{attribute}", occurrence]
         end
-        # Mark the label as used if we don't use custom hint
+
+        # Mark the label as used if we don't use custom hint.
         if !input_params.include?("label:")
           # Simple form can fetch its labels from activerecord.attributes,
           # Mark it as used ... Except if the model is not an ActiveRecord ;)
-          if active_record?(model)
+          if ar_class
             retval << ["activerecord.attributes.#{model}.#{attribute}", occurrence]
+          end
+        end
+
+        # If this is an enum, add all its possible values.
+        if ar_class && ar_class.defined_enums.include?(attribute)
+          ar_class.defined_enums[attribute].each_key do |key|
+            retval << ["enums.#{model}.#{attribute}.#{key}", occurrence]
           end
         end
       end

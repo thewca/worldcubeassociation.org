@@ -13,7 +13,7 @@
     <%= f.input :submitterName %>
     <%= f.input :submitterEmail %>
     <%= f.input :submitterComment %>
-    <%= f.input :status, collection: CompetitionMedium::statuses_i18n.invert, include_blank: false %>
+    <%= f.input :status, include_blank: false %>
 
     <%= f.button :submit %>
     <%= link_to medium_path(@medium), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this medium?" } do %>
