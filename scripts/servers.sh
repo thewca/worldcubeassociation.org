@@ -30,6 +30,8 @@ check_deps() {
     echo "Unable to find the dig command line utility. Are you sure it's installed?" >> /dev/stderr
     exit 1
   fi
+
+  test_aws_cli
 }
 
 test_aws_cli() {
@@ -168,6 +170,8 @@ new() {
   keyname=$1
   shift
 
+  check_deps
+
   get_pem_filename pem_filename ${keyname}
 
   test_ssh_to_production
@@ -211,6 +215,8 @@ bootstrap() {
   instance_id=$1
   shift
 
+  check_deps
+
   get_pem_filename pem_filename ${keyname}
   get_instance_domain_name domain_name ${instance_id}
   echo "About to bootstrap instance id ${instance_id}. Its public dns name is ${domain_name}."
@@ -249,6 +255,8 @@ list_instances() {
   if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
+
+  check_deps
 
   aws ec2 describe-instances | jq --raw-output '.Reservations[] | .Instances[] | "InstanceId: \(.InstanceId)     Name: \(.Tags[] | select(.Key == "Name") | .Value)"'
 }
@@ -289,6 +297,8 @@ function hostsfile() {
   subcommand=$1
   shift
 
+  check_deps
+
   if [ "$subcommand" == "add" ]; then
     addhostfile
   elif [ "$subcommand" == "remove" ]; then
@@ -315,6 +325,8 @@ function passthetorch() {
   if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
+
+  check_deps
 
   find_instance_by_name production_instance_id ${PRODUCTION_SERVER_NAME}
   echo "Found instance '${PRODUCTION_SERVER_NAME}' with id ${production_instance_id}!"
@@ -382,6 +394,8 @@ reap_servers() {
     print_command_usage_and_exit
   fi
 
+  check_deps
+
   find_instance_by_name old_production_id ${OLD_PRODUCTION_SERVER_NAME}
   echo "Found instance '${OLD_PRODUCTION_SERVER_NAME}' with id ${old_production_id}!"
 
@@ -437,9 +451,6 @@ if ! containsElement "$COMMAND" "${COMMANDS[@]}"; then
   echo "Unrecognized command: $COMMAND" >> /dev/stderr
   print_usage_and_exit
 fi
-
-check_deps
-test_aws_cli
 
 if [ "$COMMAND" == "new" ]; then
   new "$@"
