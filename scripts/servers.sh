@@ -6,8 +6,14 @@ cd "$(dirname "$0")"
 
 PRODUCTION_SERVER_NAME="www.worldcubeassociation.org"
 OLD_PRODUCTION_SERVER_NAME="DELETEME_old_${PRODUCTION_SERVER_NAME}"
-TEMP_NEW_SERVER_NAME="temp-new-server-via-cli"
-ELASTIC_IP="34.208.140.116"
+PRODUCTION_ELASTIC_IP="34.208.140.116"
+TEMP_NEW_PROD_SERVER_NAME="temp-new-prod-server-via-cli"
+
+STAGING_SERVER_NAME="staging.worldcubeassociation.org"
+OLD_STAGING_SERVER_NAME="DELETEME_old_${STAGING_SERVER_NAME}"
+STAGING_ELASTIC_IP="52.10.200.132"
+TEMP_NEW_STAGING_SERVER_NAME="temp-new-staging-server-via-cli"
+
 AWS_USERNAME="WCA"
 AWS_REGION="us-west-2"
 
@@ -98,24 +104,24 @@ test_ssh_agent_forwarding() {
 
 find_instance_by_name() {
   local __resultvar=$1
-  local instance_name=$2
+  local __instance_name=$2
 
-  local running_instances=`aws ec2 describe-instances | jq ".Reservations[] | .Instances[] | select(.State.Name == \"running\")"`
-  local instance_id=`echo "${running_instances}" | jq --raw-output "select((.Tags[] | select(.Key == \"Name\") | .Value) == \"${instance_name}\") | .InstanceId"`
-  local instances_count=`count_lines "${instance_id}"`
-  if [ "${instances_count}" != "1" ]; then
-    echo "Found ${instances_count} running instances named ${instance_name}, when I expected to find exactly 1." >> /dev/stderr
+  local __running_instances=`aws ec2 describe-instances | jq ".Reservations[] | .Instances[] | select(.State.Name == \"running\")"`
+  local __instance_id=`echo "${__running_instances}" | jq --raw-output "select((.Tags[] | select(.Key == \"Name\") | .Value) == \"${__instance_name}\") | .InstanceId"`
+  local __instances_count=`count_lines "${__instance_id}"`
+  if [ "${__instances_count}" != "1" ]; then
+    echo "Found ${__instances_count} running instances named ${__instance_name}, when I expected to find exactly 1." >> /dev/stderr
     echo "I'm giving up now." >> /dev/stderr
     exit 1
   fi
-  eval $__resultvar="'$instance_id'"
+  eval $__resultvar="'$__instance_id'"
 }
 
 get_instance_domain_name() {
   local __resultvar=$1
-  local instance_id=$2
+  local __instance_id=$2
 
-  local __domain_name=`aws ec2 describe-instances --instance-ids ${instance_id} | jq --raw-output ".Reservations[0].Instances[0].PublicDnsName"`
+  local __domain_name=`aws ec2 describe-instances --instance-ids ${__instance_id} | jq --raw-output ".Reservations[0].Instances[0].PublicDnsName"`
   eval $__resultvar="'${__domain_name}'"
 }
 
@@ -132,7 +138,6 @@ get_pem_filename() {
   local keyname=$2
   local __pem_filename=~/.ssh/${keyname}.pem
   if ! [ -e ${__pem_filename} ]; then
-    echo "" >> /dev/stderr
     echo "Could not find ${__pem_filename}, I won't be able to connect to any EC2 servers until that file exists." >> /dev/stderr
     exit 1
   fi
@@ -154,8 +159,9 @@ disable_old_cron() {
 
 new() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 new [keyname]" >> /dev/stderr
+    echo "Usage: $0 new [--staging] [keyname]" >> /dev/stderr
     echo "For example: $0 new jfly-kaladin-arch" >> /dev/stderr
+    echo "Or, to spin up a new staging server: $0 --staging new jfly-kaladin-arch" >> /dev/stderr
 
     echo "" >> /dev/stderr
     echo "Run 'aws ec2 describe-key-pairs' to see a list of valid key pairs." >> /dev/stderr
@@ -163,6 +169,16 @@ new() {
     echo "The directions here: http://docs.aws.amazon.com/cli/latest/userguide/cli-ec2-keypairs.html#creating-a-key-pair might help." >> /dev/stderr
     exit 1
   }
+  staging=false
+  if [[ "$1" =~ ^--.* ]]; then
+    if [ "$1" != "--staging" ]; then
+      echo "Unrecognized argument: $1, perhaps you meant '--staging'?" >> /dev/stderr
+      echo "" >> /dev/stderr
+      print_command_usage_and_exit
+    fi
+    staging=true
+    shift
+  fi
   if [ $# -ne 1 ]; then
     print_command_usage_and_exit
   fi
@@ -171,6 +187,12 @@ new() {
   shift
 
   check_deps
+
+  if [ "$staging" = true ]; then
+    temp_new_server_name=${TEMP_NEW_STAGING_SERVER_NAME}
+  else
+    temp_new_server_name=${TEMP_NEW_PROD_SERVER_NAME}
+  fi
 
   get_pem_filename pem_filename ${keyname}
 
@@ -185,37 +207,35 @@ new() {
     --security-groups "allow all incoming" \
     --block-device-mappings '[ { "DeviceName": "/dev/sda1", "Ebs": { "DeleteOnTermination": true, "VolumeSize": 32, "VolumeType": "standard" } } ]'`
   instance_id=`echo $json | jq --raw-output '.Instances[0].InstanceId'`
-  aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${TEMP_NEW_SERVER_NAME}
-  echo "Allocated new server with instance id: $instance_id and named it ${TEMP_NEW_SERVER_NAME}."
+  aws ec2 create-tags --resources ${instance_id} --tags Key=Name,Value=${temp_new_server_name}
+  echo "Allocated new server with instance id: $instance_id and named it ${temp_new_server_name}."
 
-  echo -n "Waiting for ${TEMP_NEW_SERVER_NAME} to finish initializing..."
+  echo -n "Waiting for ${temp_new_server_name} to finish initializing..."
   aws ec2 wait instance-status-ok --instance-ids ${instance_id}
   echo " done!"
 
-  bootstrap ${keyname} ${instance_id}
+  bootstrap ${keyname} ${temp_new_server_name}
 }
 
 bootstrap() {
-  print_command_usage_and_exit() {
-    echo "Usage: $0 bootstrap [keyname] [instance_id]" >> /dev/stderr
-    echo "For example: $0 bootstrap jfly-kaladin-arch i-046efef6b4c8a7237" >> /dev/stderr
-
-    echo "" >> /dev/stderr
-    echo "Run 'aws ec2 describe-key-pairs' to see a list of valid key pairs." >> /dev/stderr
-    echo "Run '$0 list-instances' to see a list of ec2 instances by name and id." >> /dev/stderr
-    exit 1
-  }
-  if [ $# -ne 2 ]; then
-    print_command_usage_and_exit
-  fi
-
   keyname=$1
   shift
 
-  instance_id=$1
+  server_name=$1
   shift
 
-  check_deps
+  if [ "${server_name}" == "${TEMP_NEW_STAGING_SERVER_NAME}" ]; then
+    environment=staging
+    next_cmd="$0 passthetorch --staging"
+  elif [ "${server_name}" == "${TEMP_NEW_PROD_SERVER_NAME}" ]; then
+    environment=production
+    next_cmd="$0 passthetorch"
+  else
+    echo "Unrecognized server name '${server_name}'" >> /dev/stderr
+    exit 1
+  fi
+  find_instance_by_name instance_id ${server_name}
+  echo "Found instance '${server_name}' with id ${instance_id}!"
 
   get_pem_filename pem_filename ${keyname}
   get_instance_domain_name domain_name ${instance_id}
@@ -231,7 +251,7 @@ bootstrap() {
   # https://alestic.com/2012/04/ec2-ssh-host-key/ for better solutions than
   # setting StrictHostKeyChecking=no.
   scp -i ${pem_filename} -o StrictHostKeyChecking=no ./wca-bootstrap.sh ubuntu@${domain_name}:/tmp/wca-bootstrap.sh
-  ${ssh_command} 'sudo -E bash /tmp/wca-bootstrap.sh production'
+  ${ssh_command} "sudo -E bash /tmp/wca-bootstrap.sh ${environment}"
 
   # After bootstrapping the new server, it will have a new host key. To avoid future errors like
   #
@@ -244,7 +264,7 @@ bootstrap() {
 
   echo ""
   echo "Successfully spun up new server at ${domain_name}"
-  echo "Run '$0 passthetorch' to test out the new server and possibly switchover to it."
+  echo "Run '$next_cmd' to test out the new server and possibly switchover to it."
 }
 
 list_instances() {
@@ -262,10 +282,10 @@ list_instances() {
 }
 
 function addhostfile() {
-  find_instance_by_name new_server_id ${TEMP_NEW_SERVER_NAME}
+  find_instance_by_name new_server_id ${TEMP_NEW_PROD_SERVER_NAME}
   get_instance_domain_name domain_name ${new_server_id}
   local ip_address=`dig +short ${domain_name}`
-  echo "Found instance '${TEMP_NEW_SERVER_NAME}' with id ${new_server_id} at ${domain_name} (${ip_address})!"
+  echo "Found instance '${TEMP_NEW_PROD_SERVER_NAME}' with id ${new_server_id} at ${domain_name} (${ip_address})!"
   if grep " worldcubeassociation.org " /etc/hosts > /dev/null; then
     echo "" >> /dev/stderr
     echo "Already found an entry in /etc/hosts for worldcubeassociation.org." >> /dev/stderr
@@ -318,21 +338,47 @@ wait_for_confirmation() {
 
 function passthetorch() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 passthetorch" >> /dev/stderr
+    echo "Usage: $0 passthetorch [--staging]" >> /dev/stderr
     echo "For example: $0 passthetorch" >> /dev/stderr
     exit 1
   }
+  staging=false
+  if [[ "$1" =~ ^--.* ]]; then
+    if [ "$1" != "--staging" ]; then
+      echo "Unrecognized argument: $1, perhaps you meant '--staging'?" >> /dev/stderr
+      echo "" >> /dev/stderr
+      print_command_usage_and_exit
+    fi
+    staging=true
+    shift
+  fi
   if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
 
   check_deps
 
-  find_instance_by_name production_instance_id ${PRODUCTION_SERVER_NAME}
-  echo "Found instance '${PRODUCTION_SERVER_NAME}' with id ${production_instance_id}!"
+  if [ "$staging" == "true" ]; then
+    temp_new_server_name=$TEMP_NEW_STAGING_SERVER_NAME
+    curr_server_name=$STAGING_SERVER_NAME
+    old_server_name=$OLD_STAGING_SERVER_NAME
+    elastic_ip=$STAGING_ELASTIC_IP
+    host=staging.worldcubeassociation.org
+    next_cmd="$0 reap-servers --staging"
+  else
+    temp_new_server_name=$TEMP_NEW_PROD_SERVER_NAME
+    curr_server_name=$PRODUCTION_SERVER_NAME
+    old_server_name=$OLD_PRODUCTION_SERVER_NAME
+    elastic_ip=$PRODUCTION_ELASTIC_IP
+    host=www.worldcubeassociation.org
+    next_cmd="$0 reap-servers"
+  fi
 
-  find_instance_by_name new_server_id ${TEMP_NEW_SERVER_NAME}
-  echo "Found instance '${TEMP_NEW_SERVER_NAME}' with id ${new_server_id}!"
+  find_instance_by_name new_server_id $temp_new_server_name
+  echo "Found instance '${temp_new_server_name}' with id ${new_server_id}!"
+
+  find_instance_by_name curr_instance_id ${curr_server_name}
+  echo "Found instance '${curr_server_name}' with id ${curr_instance_id}!"
 
   get_instance_domain_name domain_name ${new_server_id}
   ssh_command="ssh -o StrictHostKeyChecking=no -A cubing@${domain_name}"
@@ -341,27 +387,38 @@ function passthetorch() {
   # Do a quick smoke test of the new server.
   echo "Testing out new server at ${domain_name}"
   local ip_address=`dig +short ${domain_name}`
-  curl_cmd="curl --write-out %{http_code} --silent --resolve www.worldcubeassociation.org:443:${ip_address} https://www.worldcubeassociation.org/server-status"
-  curl_result=`${curl_cmd}`
+  curl_cmd="curl --write-out %{http_code} --silent --resolve ${host}:443:${ip_address} https://${host}/server-status"
+  exit_code=0
+  curl_result=`${curl_cmd}` || exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+    echo "'$curl_cmd' failed with exit code: $exit_code"
+    exit 1
+  fi
 
-  ip_addresses=`echo "$curl_result" | grep -o "IP Addresses: [^ <]\+"`
+  exit_code=0
+  server_status_curl_cmd="echo '$curl_result' | grep -o 'IP Addresses: [^ <]\+'"
+  ip_addresses=`${server_status_curl_cmd}` || exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+    echo "'${server_status_curl_cmd}' failed with exit code: $exit_code"
+    exit 1
+  fi
   get_instance_internal_ip_address expected_ip ${new_server_id}
   if ! echo $ip_addresses | grep ${expected_ip} > /dev/null; then
     echo "" >> /dev/stderr
-    echo "When visiting https://www.worldcubeassociation.org/server-status via server ${ip_address}, we expected to see internal IP address ${expected_ip}, but instead found ${ip_addresses}" >> /dev/stderr
+    echo "When visiting https://${host}/server-status via server ${ip_address}, we expected to see internal IP address ${expected_ip}, but instead found ${ip_addresses}" >> /dev/stderr
     exit 1
   fi
 
   server_status=`echo "$curl_result" | tail -1`
   if [ "${server_status}" != "200" ]; then
     echo "" >> /dev/stderr
-    echo "https://www.worldcubeassociation.org/server-status returned non 200 status code: ${server_status}" >> /dev/stderr
+    echo "https://${host}/server-status returned non 200 status code: ${server_status}" >> /dev/stderr
     echo "You can test this out by running: ${curl_cmd}" >> /dev/stderr
     exit 1
   fi
 
   echo "The new server at ${domain_name} appears to be working."
-  echo "We're almost ready to assign it the elastic ip address ${ELASTIC_IP}"
+  echo "We're almost ready to assign it the elastic ip address ${elastic_ip}"
 
   # The contents of the secrets directory on the live production server may
   # have changed since the user spun up this new server.
@@ -369,42 +426,58 @@ function passthetorch() {
 
   disable_old_cron
 
-  aws ec2 associate-address --public-ip ${ELASTIC_IP} --instance-id ${new_server_id}
+  aws ec2 associate-address --public-ip ${elastic_ip} --instance-id ${new_server_id}
   echo ""
-  echo "The new server with id ${new_server_id} is now live with the elastic ip ${ELASTIC_IP}!"
+  echo "The new server with id ${new_server_id} is now live with the elastic ip ${elastic_ip}!"
 
-  aws ec2 create-tags --resources ${production_instance_id} --tags Key=Name,Value=${OLD_PRODUCTION_SERVER_NAME}
-  echo "Renamed server ${production_instance_id} to ${OLD_PRODUCTION_SERVER_NAME}."
+  aws ec2 create-tags --resources ${curr_instance_id} --tags Key=Name,Value=${old_server_name}
+  echo "Renamed server ${curr_instance_id} to ${old_server_name}."
 
-  aws ec2 create-tags --resources ${new_server_id} --tags Key=Name,Value=${PRODUCTION_SERVER_NAME}
-  echo "Renamed server ${new_server_id} to ${PRODUCTION_SERVER_NAME}."
+  aws ec2 create-tags --resources ${new_server_id} --tags Key=Name,Value=${curr_server_name}
+  echo "Renamed server ${new_server_id} to ${curr_server_name}."
 
-  echo "Don't forget to terminate the old server named ${OLD_PRODUCTION_SERVER_NAME}!"
-  echo "You can do this by running '$0 reap-servers'."
+  echo "Don't forget to terminate the old server named ${old_server_name}!"
+  echo "You can do this by running '$next_cmd'."
 }
 
 reap_servers() {
   print_command_usage_and_exit() {
-    echo "Usage: $0 passthetorch" >> /dev/stderr
-    echo "Terminates any old EC2 instances named '${OLD_PRODUCTION_SERVER_NAME}'."
+    echo "Usage: $0 reap-servers [--staging]" >> /dev/stderr
+    echo "Terminates any old EC2 instances named '${OLD_PRODUCTION_SERVER_NAME}' or '${OLD_STAGING_SERVER_NAME}."
     echo "Meant to be run sometime after 'passthetorch'."
     exit 1
   }
+  staging=false
+  if [[ "$1" =~ ^--.* ]]; then
+    if [ "$1" != "--staging" ]; then
+      echo "Unrecognized argument: $1, perhaps you meant '--staging'?" >> /dev/stderr
+      echo "" >> /dev/stderr
+      print_command_usage_and_exit
+    fi
+    staging=true
+    shift
+  fi
   if [ $# -ne 0 ]; then
     print_command_usage_and_exit
   fi
 
   check_deps
 
-  find_instance_by_name old_production_id ${OLD_PRODUCTION_SERVER_NAME}
-  echo "Found instance '${OLD_PRODUCTION_SERVER_NAME}' with id ${old_production_id}!"
+  if [ "$staging" == "true" ]; then
+    old_server_name=${OLD_STAGING_SERVER_NAME}
+  else
+    old_server_name=${OLD_PRODUCTION_SERVER_NAME}
+  fi
 
-  echo "I am going to terminate ${OLD_PRODUCTION_SERVER_NAME}"
+  find_instance_by_name old_production_id ${old_server_name}
+  echo "Found instance '${old_server_name}' with id ${old_production_id}!"
+
+  echo "I am going to terminate ${old_production_id}"
   wait_for_confirmation "HOLD ONTO YOUR BUTTS"
 
   aws ec2 terminate-instances --instance-ids ${old_production_id}
   echo ""
-  echo "Successfully terminated ${OLD_PRODUCTION_SERVER_NAME}"
+  echo "Successfully terminated ${old_server_name}"
 }
 
 # Copied from https://stackoverflow.com/a/17841619
@@ -435,7 +508,7 @@ assert_eq `count_lines $'foo\n'` "1"
 assert_eq `count_lines $'foo\nbar'` "2"
 assert_eq `count_lines $'foo\nbar\n'` "2"
 
-COMMANDS=(new passthetorch hostsfile reap-servers bootstrap list-instances)
+COMMANDS=(new passthetorch hostsfile reap-servers list-instances)
 JOINED_COMMANDS=`join_by "|" "${COMMANDS[@]}"`
 print_usage_and_exit() {
   echo "Usage: $0 [$JOINED_COMMANDS]" >> /dev/stderr
@@ -460,8 +533,6 @@ elif [ "$COMMAND" == "reap-servers" ]; then
   reap_servers "$@"
 elif [ "$COMMAND" == "hostsfile" ]; then
   hostsfile "$@"
-elif [ "$COMMAND" == "bootstrap" ]; then
-  bootstrap "$@"
 elif [ "$COMMAND" == "list-instances" ]; then
   list_instances "$@"
 fi
