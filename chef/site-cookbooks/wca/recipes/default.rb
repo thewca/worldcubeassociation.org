@@ -406,6 +406,7 @@ elsif node.chef_environment == "staging"
   db_setup_lockfile = '/tmp/db-development-loaded'
   execute "bundle exec rake db:load:development" do
     cwd rails_root
+    user username
     environment({
       "DATABASE_URL" => db_url,
       "RACK_ENV" => rails_env,
