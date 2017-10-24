@@ -82,7 +82,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = Competition
     end
-    @competitions = @competitions.includes(:country).where(showAtAll: true).order(:start_date)
+    @competitions = @competitions.includes(:country).where(showAtAll: true).order_by_date
 
     if @present_selected
       @competitions = @competitions.not_over

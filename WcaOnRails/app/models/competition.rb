@@ -58,6 +58,7 @@ class Competition < ApplicationRecord
         user_id: user_id,
       ).group(:id)
   }
+  scope :order_by_date, -> { order(:start_date, :end_date) }
 
   CLONEABLE_ATTRIBUTES = %w(
     cityName
