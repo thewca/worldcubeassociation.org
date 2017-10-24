@@ -27,7 +27,7 @@
   <%= wca_table table_class: "validate-media", data: { toggle: "table", sort_name: "submission-date", sort_order: "desc" } do %>
     <thead>
       <tr>
-        <th data-sortable="true" data-field="submission-date">Submission Date</th>
+        <th data-sortable="true" data-field="submission-date" data-sort-name="_submission-date_data" data-sorter="sortBySorter">Submission Date</th>
         <th data-sortable="true" data-field="competition-date" data-sort-name="_competition-date_data" data-sorter="sortBySorter">Competition Date</th>
         <th>Competition</th>
         <th>Country, City</th>
@@ -44,7 +44,7 @@
       <% @media.each do |medium| %>
         <% competition = medium.competition %>
         <tr data-medium-id="<%= medium.id %>">
-          <td><%= medium.timestampSubmitted.iso8601 %></td>
+          <td data-sort-by="<%= medium.timestampSubmitted.to_i %>"><%= medium.timestampSubmitted.to_formatted_s(:long_utc) %></td>
           <td data-sort-by="<%= competition.start_date.to_time.to_i %>">
             <%= wca_date_range(competition.start_date, competition.end_date) %>
           </td>
