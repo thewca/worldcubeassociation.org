@@ -85,7 +85,7 @@ module ApplicationHelper
 
   def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {})
     data[:locale] = I18n.locale
-    table_classes = "table wca-results table-condensed table-greedy-last-column #{table_class}"
+    table_classes = "table table-condensed table-greedy-last-column #{table_class}"
     if floatThead
       table_classes += " floatThead"
     end

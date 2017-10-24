@@ -1,9 +1,18 @@
-td {
+table.validate-media tbody tr td {
+  $button-size: 20px;
+
+  vertical-align: middle;
+
+  a i {
+    font-size: $button-size;
+  }
+
   form {
     display: inline;
 
     .btn {
       padding: 0;
+      font-size: $button-size;
     }
   }
 }
