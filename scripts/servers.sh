@@ -148,7 +148,7 @@ get_pem_filename() {
 rsync_secrets() {
   local ssh_command=$1
 
-  ${ssh_command} 'rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets'
+  ${ssh_command} 'sudo -E rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ /home/cubing/worldcubeassociation.org/secrets'
 }
 
 disable_old_cron() {
