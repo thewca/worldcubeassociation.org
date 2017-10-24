@@ -44,6 +44,11 @@ if( $chosenExport ){
                               WHERE Competitions.showAtAll=1
                               GROUP BY Competitions.id',
     'Scrambles'   => '*',
+    'championships' => 'SELECT championships.*
+                               FROM championships
+                               LEFT JOIN Competitions on Competitions.id=championships.competition_id
+                               WHERE Competitions.showAtAll=1',
+    'eligible_country_iso2s_for_championship' => '*',
   ) );
 }
 
