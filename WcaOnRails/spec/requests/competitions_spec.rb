@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let(:competition) { FactoryGirl.create(:competition, :with_delegate, :visible) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible) }
 
   describe 'PATCH #update_competition' do
     context "when signed in as admin" do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'can confirm competition' do
         patch competition_path(competition), params: {
@@ -104,7 +104,7 @@ RSpec.describe "competitions" do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'updates the competition events' do
         headers = { "CONTENT_TYPE" => "application/json" }
@@ -131,8 +131,8 @@ RSpec.describe "competitions" do
       end
 
       it 'does not delete all rounds of an event if something is invalid' do
-        FactoryGirl.create :round, competition: competition, event_id: "333", number: 1
-        FactoryGirl.create :round, competition: competition, event_id: "333", number: 2
+        FactoryBot.create :round, competition: competition, event_id: "333", number: 1
+        FactoryBot.create :round, competition: competition, event_id: "333", number: 2
         competition.reload
 
         ce = competition.competition_events.find_by_event_id("333")
@@ -287,7 +287,7 @@ RSpec.describe "competitions" do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         patch update_events_from_wcif_path(competition)
@@ -298,7 +298,7 @@ RSpec.describe "competitions" do
 
   describe "GET #post_results" do
     context "when signed in as an admin" do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
       it 'can post results for a competition' do
         expect(Post.count).to eq 0
 

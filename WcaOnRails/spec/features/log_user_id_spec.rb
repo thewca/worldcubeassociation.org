@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "edit user" do
   context "editing own profile" do
-    let(:admin) { FactoryGirl.create :admin, :wca_id }
+    let(:admin) { FactoryBot.create :admin, :wca_id }
 
     before :each do
       sign_in admin

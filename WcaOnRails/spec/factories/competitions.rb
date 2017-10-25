@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
@@ -53,16 +53,16 @@ FactoryGirl.define do
     guests_enabled true
 
     trait :with_delegate do
-      delegates { [FactoryGirl.create(:delegate)] }
+      delegates { [FactoryBot.create(:delegate)] }
     end
 
     trait :with_organizer do
-      organizers { [FactoryGirl.create(:user)] }
+      organizers { [FactoryBot.create(:user)] }
     end
 
     trait :with_delegate_report do
       after(:create) do |competition|
-        FactoryGirl.create :delegate_report, :posted, competition: competition
+        FactoryBot.create :delegate_report, :posted, competition: competition
       end
     end
 

@@ -4,28 +4,28 @@ require 'rails_helper'
 
 RSpec.describe Round do
   it "defines a valid Round" do
-    round = FactoryGirl.build :round
+    round = FactoryBot.build :round
     expect(round).to be_valid
   end
 
   context "format" do
     it "allows average of 5 for 333" do
-      round = FactoryGirl.build :round, event_id: "333", format_id: "a"
+      round = FactoryBot.build :round, event_id: "333", format_id: "a"
       expect(round).to be_valid
     end
 
     it "rejects mean of 3 for 333" do
-      round = FactoryGirl.build :round, event_id: "333", format_id: "m"
+      round = FactoryBot.build :round, event_id: "333", format_id: "m"
       expect(round).to be_invalid_with_errors(format: ["'m' is not allowed for '333'"])
     end
   end
 
   context "time limit" do
-    let(:competition) { FactoryGirl.create :competition, event_ids: %w(333 444bf 555bf) }
-    let(:round) { FactoryGirl.create :round, competition: competition, event_id: "333" }
+    let(:competition) { FactoryBot.create :competition, event_ids: %w(333 444bf 555bf) }
+    let(:round) { FactoryBot.create :round, competition: competition, event_id: "333" }
 
-    let!(:four_blind_round) { FactoryGirl.create :round, competition: competition, event_id: "444bf", format_id: "3" }
-    let!(:five_blind_round) { FactoryGirl.create :round, competition: competition, event_id: "555bf", format_id: "3" }
+    let!(:four_blind_round) { FactoryBot.create :round, competition: competition, event_id: "444bf", format_id: "3" }
+    let!(:five_blind_round) { FactoryBot.create :round, competition: competition, event_id: "555bf", format_id: "3" }
 
     it "defaults to 10 minutes" do
       expect(round.time_limit).to eq(TimeLimit.new(centiseconds: 10.minutes.in_centiseconds, cumulative_round_ids: []))
@@ -47,7 +47,7 @@ RSpec.describe Round do
 
   context "cutoff" do
     context "timed event" do
-      let(:round) { FactoryGirl.create :round, event_id: "333" }
+      let(:round) { FactoryBot.create :round, event_id: "333" }
 
       it "defaults to nil" do
         expect(round.cutoff).to eq nil
@@ -78,7 +78,7 @@ RSpec.describe Round do
     end
 
     context "fmc" do
-      let(:round) { FactoryGirl.create :round, event_id: "333fm", format_id: "m" }
+      let(:round) { FactoryBot.create :round, event_id: "333fm", format_id: "m" }
 
       it "defaults to nil" do
         expect(round.cutoff).to eq nil
@@ -92,7 +92,7 @@ RSpec.describe Round do
     end
 
     context "multibld" do
-      let(:round) { FactoryGirl.create :round, event_id: "333mbf", format_id: "3" }
+      let(:round) { FactoryBot.create :round, event_id: "333mbf", format_id: "3" }
 
       it "defaults to nil" do
         expect(round.cutoff).to eq nil
@@ -162,9 +162,9 @@ RSpec.describe Round do
 end
 
 def create_rounds(event_id, format_id: 'a', count:)
-  first_round = FactoryGirl.create :round, number: 1, format_id: format_id, event_id: event_id
+  first_round = FactoryBot.create :round, number: 1, format_id: format_id, event_id: event_id
   remaining_rounds = (2..count).map do |number|
-    FactoryGirl.create :round, number: number, format_id: format_id, competition_event: first_round.competition_event
+    FactoryBot.create :round, number: number, format_id: format_id, competition_event: first_round.competition_event
   end
   [first_round] + remaining_rounds
 end

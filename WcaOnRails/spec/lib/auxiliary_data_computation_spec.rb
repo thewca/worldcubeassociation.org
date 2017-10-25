@@ -6,7 +6,7 @@ require 'auxiliary_data_computation'
 RSpec.describe "AuxiliaryDataComputation" do
   describe ".compute_best_of_3_in_333bf" do
     def create_new_333bld_result(attributes = {})
-      FactoryGirl.build(:result, {
+      FactoryBot.build(:result, {
         eventId: "333bf", formatId: "3", roundTypeId: "c",
         value1: 3000, value2: 3000, value3: 3000, best: 3000,
         value4: SolveTime::SKIPPED_VALUE, value5: SolveTime::SKIPPED_VALUE,
@@ -45,16 +45,16 @@ RSpec.describe "AuxiliaryDataComputation" do
   end
 
   describe ".compute_concise_results", clean_db_with_truncation: true do
-    let(:person) { FactoryGirl.create :person, countryId: "China" }
-    let(:competition_2016) { FactoryGirl.create :competition, starts: Date.parse("2016-04-04") }
-    let(:next_competition_2016) { FactoryGirl.create :competition, starts: Date.parse("2016-07-07") }
-    let(:competition_2017) { FactoryGirl.create :competition, starts: Date.parse("2017-08-08") }
+    let(:person) { FactoryBot.create :person, countryId: "China" }
+    let(:competition_2016) { FactoryBot.create :competition, starts: Date.parse("2016-04-04") }
+    let(:next_competition_2016) { FactoryBot.create :competition, starts: Date.parse("2016-07-07") }
+    let(:competition_2017) { FactoryBot.create :competition, starts: Date.parse("2017-08-08") }
 
     it "creates tables containing best results data for each person per event per year" do
-      FactoryGirl.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
-      FactoryGirl.create :result, eventId: "333", best: 750, average: 850, competition: competition_2016, person: person
-      FactoryGirl.create :result, eventId: "333", best: 800, average: 900, competition: competition_2017, person: person
-      FactoryGirl.create :result, eventId: "222", best: 100, average: 150, competition: competition_2017, person: person
+      FactoryBot.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
+      FactoryBot.create :result, eventId: "333", best: 750, average: 850, competition: competition_2016, person: person
+      FactoryBot.create :result, eventId: "333", best: 800, average: 900, competition: competition_2017, person: person
+      FactoryBot.create :result, eventId: "222", best: 100, average: 150, competition: competition_2017, person: person
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT eventId, personId, year, best FROM ConciseSingleResults"
@@ -73,9 +73,9 @@ RSpec.describe "AuxiliaryDataComputation" do
     end
 
     it "creates multiple entries for people that have switched country in the middle of a year" do
-      FactoryGirl.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
+      FactoryBot.create :result, eventId: "333", best: 700, average: 800, competition: competition_2016, person: person
       person.update_using_sub_id! countryId: "Chile"
-      FactoryGirl.create :result, eventId: "333", best: 750, average: 850, competition: next_competition_2016, person: person
+      FactoryBot.create :result, eventId: "333", best: 750, average: 850, competition: next_competition_2016, person: person
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT eventId, personId, countryId, year, best FROM ConciseSingleResults"
@@ -93,20 +93,20 @@ RSpec.describe "AuxiliaryDataComputation" do
   end
 
   describe ".compute_rank_tables", clean_db_with_truncation: true do
-    let(:australian) { FactoryGirl.create :person, countryId: "Australia" }
-    let(:canadian) { FactoryGirl.create :person, countryId: "Canada" }
-    let(:american_1) { FactoryGirl.create :person, countryId: "USA" }
-    let(:american_2) { FactoryGirl.create :person, countryId: "USA" }
+    let(:australian) { FactoryBot.create :person, countryId: "Australia" }
+    let(:canadian) { FactoryBot.create :person, countryId: "Canada" }
+    let(:american_1) { FactoryBot.create :person, countryId: "USA" }
+    let(:american_2) { FactoryBot.create :person, countryId: "USA" }
 
     def rank_333(person, ranks_type)
       person.public_send(ranks_type).find_by(eventId: "333").attributes.symbolize_keys
     end
 
     before do
-      FactoryGirl.create :result, eventId: "333", best: 600, average: 700, person: australian
-      FactoryGirl.create :result, eventId: "333", best: 700, average: 800, person: american_1
-      FactoryGirl.create :result, eventId: "333", best: 800, average: 900, person: canadian
-      FactoryGirl.create :result, eventId: "333", best: 900, average: 1000, person: american_2
+      FactoryBot.create :result, eventId: "333", best: 600, average: 700, person: australian
+      FactoryBot.create :result, eventId: "333", best: 700, average: 800, person: american_1
+      FactoryBot.create :result, eventId: "333", best: 800, average: 900, person: canadian
+      FactoryBot.create :result, eventId: "333", best: 900, average: 1000, person: american_2
     end
 
     it "computes world, continental, and national ranking position" do
@@ -125,7 +125,7 @@ RSpec.describe "AuxiliaryDataComputation" do
       new_canadian = american_1
       australian.update_using_sub_id! countryId: "France"
       new_french = australian
-      FactoryGirl.create :result, eventId: "333", best: 900, average: 1000, person: new_canadian
+      FactoryBot.create :result, eventId: "333", best: 900, average: 1000, person: new_canadian
       AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
       AuxiliaryDataComputation.compute_rank_tables
       %w(ranksSingle ranksAverage).each do |ranks_type|

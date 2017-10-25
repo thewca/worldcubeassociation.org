@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_board_of_confirmed_competition" do
-    let(:senior_delegate) { FactoryGirl.create :senior_delegate }
-    let(:delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
-    let(:second_delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
-    let(:third_delegate) { FactoryGirl.create :delegate }
-    let(:competition) { FactoryGirl.create :competition, :with_competitor_limit, championship_types: %w(world greater_china), delegates: [delegate, second_delegate, third_delegate] }
+    let(:senior_delegate) { FactoryBot.create :senior_delegate }
+    let(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
+    let(:second_delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
+    let(:third_delegate) { FactoryBot.create :delegate }
+    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world greater_china), delegates: [delegate, second_delegate, third_delegate] }
     let(:mail) { CompetitionsMailer.notify_board_of_confirmed_competition(delegate, competition) }
 
     it "renders" do
@@ -26,8 +26,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_users_of_results_presence" do
-    let(:competition) { FactoryGirl.create :competition, :with_delegate }
-    let(:competitor_user) { FactoryGirl.create :user, :wca_id }
+    let(:competition) { FactoryBot.create :competition, :with_delegate }
+    let(:competitor_user) { FactoryBot.create :user, :wca_id }
     let(:mail) { CompetitionsMailer.notify_users_of_results_presence(competitor_user, competition) }
 
     it "renders the headers" do
@@ -43,8 +43,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_users_of_id_claim_possibility" do
-    let(:competition) { FactoryGirl.create :competition }
-    let(:newcomer_user) { FactoryGirl.create :user }
+    let(:competition) { FactoryBot.create :competition }
+    let(:newcomer_user) { FactoryBot.create :user }
     let(:mail) { CompetitionsMailer.notify_users_of_id_claim_possibility(newcomer_user, competition) }
 
     it "renders the headers" do
@@ -61,10 +61,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "submit_results_nag" do
-    let(:senior) { FactoryGirl.create(:senior_delegate) }
-    let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
+    let(:senior) { FactoryBot.create(:senior_delegate) }
+    let(:delegate) { FactoryBot.create(:delegate, senior_delegate_id: senior.id) }
     let(:competition) do
-      FactoryGirl.create(:competition, name: "Comp of the Future 2016", delegates: [delegate])
+      FactoryBot.create(:competition, name: "Comp of the Future 2016", delegates: [delegate])
     end
     let(:mail) { CompetitionsMailer.submit_results_nag(competition) }
 
@@ -81,9 +81,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "submit_report_nag" do
-    let(:senior) { FactoryGirl.create(:senior_delegate) }
-    let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
-    let(:competition) { FactoryGirl.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate]) }
+    let(:senior) { FactoryBot.create(:senior_delegate) }
+    let(:delegate) { FactoryBot.create(:delegate, senior_delegate_id: senior.id) }
+    let(:competition) { FactoryBot.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate]) }
     let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
 
     it "renders the headers" do
@@ -101,7 +101,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "notify_of_delegate_report_submission" do
     let(:competition) do
-      competition = FactoryGirl.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
+      competition = FactoryBot.create(:competition, :with_delegate_report, countryId: "Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
       competition.delegate_report.update_attributes!(remarks: "This was a great competition")
       competition
     end

@@ -6,12 +6,12 @@ RSpec.describe User, type: :model do
   let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
 
   it "defines a valid user" do
-    user = FactoryGirl.create :user
+    user = FactoryBot.create :user
     expect(user).to be_valid
   end
 
   it "defines a dummy user" do
-    user = FactoryGirl.create :dummy_user
+    user = FactoryBot.create :dummy_user
     expect(user).to be_valid
     expect(user.dummy_account?).to be true
     users = User.search("")
@@ -19,7 +19,7 @@ RSpec.describe User, type: :model do
   end
 
   it "search can find people who never logged in, but aren't dummy accounts" do
-    user = FactoryGirl.create :user, encrypted_password: ""
+    user = FactoryBot.create :user, encrypted_password: ""
     expect(user.dummy_account?).to be false
     users = User.search("")
     expect(users.count).to eq 1
@@ -27,21 +27,21 @@ RSpec.describe User, type: :model do
   end
 
   it "allows empty country" do
-    user = FactoryGirl.build :user, country_iso2: ""
+    user = FactoryBot.build :user, country_iso2: ""
     expect(user).to be_valid
 
-    user = FactoryGirl.build :user, country_iso2: nil
+    user = FactoryBot.build :user, country_iso2: nil
     expect(user).to be_valid
   end
 
   it "can confirm a user who has never competed before" do
-    user = FactoryGirl.build :user, unconfirmed_wca_id: ""
+    user = FactoryBot.build :user, unconfirmed_wca_id: ""
     user.confirm
   end
 
   it "doesn't allow demotion of a senior delegate with subordinate delegates" do
-    delegate = FactoryGirl.create :delegate
-    senior_delegate = FactoryGirl.create :senior_delegate
+    delegate = FactoryBot.create :delegate
+    senior_delegate = FactoryBot.create :senior_delegate
 
     delegate.senior_delegate = senior_delegate
     delegate.save!
@@ -52,7 +52,7 @@ RSpec.describe User, type: :model do
   end
 
   it "allows demotion of a senior delegate with no subordinate delegates" do
-    senior_delegate = FactoryGirl.create :senior_delegate
+    senior_delegate = FactoryBot.create :senior_delegate
 
     senior_delegate.delegate_status = ""
     expect(senior_delegate.save).to eq true
@@ -60,8 +60,8 @@ RSpec.describe User, type: :model do
   end
 
   it "requires senior delegate be a senior delegate" do
-    delegate = FactoryGirl.create :delegate
-    user = FactoryGirl.create :user
+    delegate = FactoryBot.create :delegate
+    user = FactoryBot.create :user
 
     delegate.senior_delegate = user
     expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a senior delegate"])
@@ -73,24 +73,24 @@ RSpec.describe User, type: :model do
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.
-    delegate = FactoryGirl.create(:delegate, encrypted_password: "", wca_id: nil)
+    delegate = FactoryBot.create(:delegate, encrypted_password: "", wca_id: nil)
 
-    dummy_user = FactoryGirl.create :dummy_user
+    dummy_user = FactoryBot.create :dummy_user
     dummy_user.wca_id = nil
     dummy_user.save!
     expect(User.find(delegate.id)).to eq delegate
   end
 
   it "does not give delegates results admin privileges" do
-    delegate = FactoryGirl.create :delegate
+    delegate = FactoryBot.create :delegate
     expect(delegate.can_admin_results?).to be false
   end
 
   it "does not allow senior delegate if senior delegate" do
-    senior_delegate1 = FactoryGirl.create :user
+    senior_delegate1 = FactoryBot.create :user
     senior_delegate1.senior_delegate!
 
-    senior_delegate2 = FactoryGirl.create :user
+    senior_delegate2 = FactoryBot.create :user
     senior_delegate2.senior_delegate!
 
     expect(senior_delegate1).to be_valid
@@ -99,10 +99,10 @@ RSpec.describe User, type: :model do
   end
 
   it "does not allow senior delegate if board member" do
-    board_member = FactoryGirl.create :user
+    board_member = FactoryBot.create :user
     board_member.board_member!
 
-    senior_delegate = FactoryGirl.create :user
+    senior_delegate = FactoryBot.create :user
     senior_delegate.senior_delegate!
 
     expect(board_member).to be_valid
@@ -111,9 +111,9 @@ RSpec.describe User, type: :model do
   end
 
   it "does not allow senior delegate if regular user" do
-    user = FactoryGirl.create :user
+    user = FactoryBot.create :user
 
-    senior_delegate = FactoryGirl.create :user
+    senior_delegate = FactoryBot.create :user
     senior_delegate.senior_delegate!
 
     expect(user).to be_valid
@@ -122,21 +122,21 @@ RSpec.describe User, type: :model do
   end
 
   describe "WCA ID" do
-    let(:user) { FactoryGirl.create :user_with_wca_id }
-    let(:birthdayless_person) { FactoryGirl.create :person, :missing_dob }
-    let(:genderless_person) { FactoryGirl.create :person, :missing_gender }
+    let(:user) { FactoryBot.create :user_with_wca_id }
+    let(:birthdayless_person) { FactoryBot.create :person, :missing_dob }
+    let(:genderless_person) { FactoryBot.create :person, :missing_gender }
 
     it "validates WCA ID" do
-      user = FactoryGirl.build :user, wca_id: "2005FLEI02"
+      user = FactoryBot.build :user, wca_id: "2005FLEI02"
       expect(user).not_to be_valid
 
-      user = FactoryGirl.build :user, wca_id: "2005FLE01"
+      user = FactoryBot.build :user, wca_id: "2005FLE01"
       expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
 
-      user = FactoryGirl.build :user, wca_id: "200FLEI01"
+      user = FactoryBot.build :user, wca_id: "200FLEI01"
       expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
 
-      user = FactoryGirl.build :user, wca_id: "200FLEI0"
+      user = FactoryBot.build :user, wca_id: "200FLEI0"
       expect(user).to be_invalid_with_errors(wca_id: ["is invalid", "not found"])
     end
 
@@ -165,7 +165,7 @@ RSpec.describe User, type: :model do
 
     it "nullifies empty WCA IDs" do
       # Verify that we can create multiple users with empty wca_ids
-      user2 = FactoryGirl.create :user, wca_id: ""
+      user2 = FactoryBot.create :user, wca_id: ""
       expect(user2.wca_id).to be_nil
 
       user.wca_id = ""
@@ -174,14 +174,14 @@ RSpec.describe User, type: :model do
     end
 
     it "verifies WCA ID unique when changing WCA ID" do
-      person2 = FactoryGirl.create :person, wca_id: "2006FLEI01"
-      user2 = FactoryGirl.create :user, wca_id: "2006FLEI01", name: person2.name
+      person2 = FactoryBot.create :person, wca_id: "2006FLEI01"
+      user2 = FactoryBot.create :user, wca_id: "2006FLEI01", name: person2.name
       user.wca_id = user2.wca_id
       expect(user).to be_invalid_with_errors(wca_id: ["must be unique"])
     end
 
     it "removes dummy accounts and copies name when WCA ID is assigned" do
-      dummy_user = FactoryGirl.create :dummy_user
+      dummy_user = FactoryBot.create :dummy_user
       person_for_dummy = dummy_user.person
       expect(dummy_user).to be_valid
       dummy_user.update_attributes!(
@@ -207,7 +207,7 @@ RSpec.describe User, type: :model do
     end
 
     it "does not allow duplicate WCA IDs" do
-      user2 = FactoryGirl.create :user
+      user2 = FactoryBot.create :user
       expect(user2).to be_valid
       user2.wca_id = user.wca_id
       expect(user2).not_to be_valid
@@ -215,11 +215,11 @@ RSpec.describe User, type: :model do
   end
 
   it "can create user with empty password" do
-    FactoryGirl.create :user, encrypted_password: ""
+    FactoryBot.create :user, encrypted_password: ""
   end
 
   it "saves crop coordinates" do
-    user = FactoryGirl.create :user_with_wca_id
+    user = FactoryBot.create :user_with_wca_id
 
     user.update_attributes!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
@@ -239,7 +239,7 @@ RSpec.describe User, type: :model do
   end
 
   it "can handle missing avatar" do
-    user = FactoryGirl.create :user
+    user = FactoryBot.create :user
     user.avatar = nil
     user.saved_avatar_crop_x = 40
     user.saved_avatar_crop_y = 40
@@ -249,7 +249,7 @@ RSpec.describe User, type: :model do
   end
 
   it "clearing avatar clears cropping area" do
-    user = FactoryGirl.create :user_with_wca_id
+    user = FactoryBot.create :user_with_wca_id
     user.update_attributes!(
       avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       avatar_crop_x: 40,
@@ -281,7 +281,7 @@ RSpec.describe User, type: :model do
   end
 
   it "approving pending avatar moves crop coordinates" do
-    user = FactoryGirl.create :user_with_wca_id
+    user = FactoryBot.create :user_with_wca_id
     user.update_attributes!(
       pending_avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
       pending_avatar_crop_x: 40,
@@ -304,13 +304,13 @@ RSpec.describe User, type: :model do
   end
 
   describe "#delegated_competitions" do
-    let(:delegate) { FactoryGirl.create :delegate }
-    let(:other_delegate) { FactoryGirl.create :delegate }
-    let!(:confirmed_competition1) { FactoryGirl.create :competition, delegates: [delegate] }
-    let!(:confirmed_competition2) { FactoryGirl.create :competition, delegates: [delegate] }
-    let!(:unconfirmed_competition1) { FactoryGirl.create :competition, delegates: [delegate] }
-    let!(:unconfirmed_competition2) { FactoryGirl.create :competition, delegates: [delegate] }
-    let!(:other_delegate_unconfirmed_competition) { FactoryGirl.create :competition, delegates: [other_delegate] }
+    let(:delegate) { FactoryBot.create :delegate }
+    let(:other_delegate) { FactoryBot.create :delegate }
+    let!(:confirmed_competition1) { FactoryBot.create :competition, delegates: [delegate] }
+    let!(:confirmed_competition2) { FactoryBot.create :competition, delegates: [delegate] }
+    let!(:unconfirmed_competition1) { FactoryBot.create :competition, delegates: [delegate] }
+    let!(:unconfirmed_competition2) { FactoryBot.create :competition, delegates: [delegate] }
+    let!(:other_delegate_unconfirmed_competition) { FactoryBot.create :competition, delegates: [other_delegate] }
 
     it "sees delegated competitions" do
       expect(delegate.delegated_competitions).to match_array [
@@ -323,8 +323,8 @@ RSpec.describe User, type: :model do
   end
 
   describe "#organized_competitions" do
-    let(:user) { FactoryGirl.create :user }
-    let(:competition) { FactoryGirl.create :competition, organizers: [user] }
+    let(:user) { FactoryBot.create :user }
+    let(:competition) { FactoryBot.create :competition, organizers: [user] }
 
     it "sees organized competitions" do
       expect(user.organized_competitions).to eq [competition]
@@ -332,19 +332,19 @@ RSpec.describe User, type: :model do
   end
 
   describe "unconfirmed_wca_id" do
-    let!(:person) { FactoryGirl.create :person, year: 1990, month: 1, day: 2 }
-    let!(:senior_delegate) { FactoryGirl.create :senior_delegate }
-    let!(:delegate) { FactoryGirl.create :delegate, senior_delegate: senior_delegate }
+    let!(:person) { FactoryBot.create :person, year: 1990, month: 1, day: 2 }
+    let!(:senior_delegate) { FactoryBot.create :senior_delegate }
+    let!(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let!(:user) do
-      FactoryGirl.create(:user, unconfirmed_wca_id: person.wca_id,
-                                delegate_id_to_handle_wca_id_claim: delegate.id,
-                                claiming_wca_id: true,
-                                dob_verification: "1990-01-2")
+      FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
+                               delegate_id_to_handle_wca_id_claim: delegate.id,
+                               claiming_wca_id: true,
+                               dob_verification: "1990-01-2")
     end
 
-    let!(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
-    let!(:person_without_gender) { FactoryGirl.create :person, gender: nil }
-    let!(:user_with_wca_id) { FactoryGirl.create :user_with_wca_id }
+    let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
+    let!(:person_without_gender) { FactoryBot.create :person, gender: nil }
+    let!(:user_with_wca_id) { FactoryBot.create :user_with_wca_id }
 
     it "defines a valid user" do
       expect(user).to be_valid
@@ -357,7 +357,7 @@ RSpec.describe User, type: :model do
     it "doesn't allow user to change unconfirmed_wca_id" do
       expect(user).to be_valid
       user.claiming_wca_id = false
-      other_person = FactoryGirl.create :person, year: 1980, month: 2, day: 1
+      other_person = FactoryBot.create :person, year: 1980, month: 2, day: 1
       user.unconfirmed_wca_id = other_person.wca_id
       expect(user).to be_invalid_with_errors(dob_verification: [I18n.t("users.errors.dob_incorrect_html", dob_form_path: dob_form_path)])
     end
@@ -431,7 +431,7 @@ RSpec.describe User, type: :model do
     end
 
     it "can claim a wca id already assigned to a dummy user" do
-      dummy_user = FactoryGirl.create :dummy_user
+      dummy_user = FactoryBot.create :dummy_user
 
       user.unconfirmed_wca_id = dummy_user.wca_id
       user.dob_verification = dummy_user.person.dob.strftime("%F")
@@ -439,7 +439,7 @@ RSpec.describe User, type: :model do
     end
 
     it "can match a wca id already claimed by a user" do
-      user2 = FactoryGirl.create :user
+      user2 = FactoryBot.create :user
       user2.delegate_id_to_handle_wca_id_claim = delegate.id
 
       user2.unconfirmed_wca_id = person.wca_id
@@ -473,7 +473,7 @@ RSpec.describe User, type: :model do
     end
 
     it "when empty, is set to nil" do
-      user = FactoryGirl.create :user, unconfirmed_wca_id: nil
+      user = FactoryBot.create :user, unconfirmed_wca_id: nil
       user.update! unconfirmed_wca_id: ""
       expect(user.reload.unconfirmed_wca_id).to eq nil
     end
@@ -482,18 +482,18 @@ RSpec.describe User, type: :model do
   it "#teams and #current_teams return unique team names" do
     wrc_team = Team.find_by_friendly_id('wrc')
     wrt_team = Team.find_by_friendly_id('wrt')
-    user = FactoryGirl.create(:user)
+    user = FactoryBot.create(:user)
 
-    FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryGirl.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryGirl.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
+    FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
+    FactoryBot.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryBot.create(:team_member, team_id: wrt_team.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
 
     expect(user.teams).to match_array [wrc_team, wrt_team]
     expect(user.current_teams).to match_array [wrt_team]
   end
 
   it 'former members of the results team are not considered current members' do
-    wrt_member = FactoryGirl.create :user, :wrt_member
+    wrt_member = FactoryBot.create :user, :wrt_member
     team_member = wrt_member.team_members.first
     team_member.update_attributes!(end_date: 1.day.ago)
 
@@ -501,7 +501,7 @@ RSpec.describe User, type: :model do
   end
 
   it 'former leaders of the results team are not considered current leaders' do
-    wrt_leader = FactoryGirl.create :user, :wrt_member
+    wrt_leader = FactoryBot.create :user, :wrt_member
     team_member = wrt_leader.team_members.first
     team_member.update_attributes!(team_leader: true)
     team_member.update_attributes!(end_date: 1.day.ago)
@@ -512,7 +512,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "#update_with_password" do
-    let(:user) { FactoryGirl.create(:user, password: "wca") }
+    let(:user) { FactoryBot.create(:user, password: "wca") }
 
     context "when the password is not given in the params" do
       it "updates the attributes if the current_password matches" do
@@ -545,23 +545,23 @@ RSpec.describe User, type: :model do
   end
 
   describe "#notify_of_results_posted" do
-    let(:competition) { FactoryGirl.create(:competition) }
+    let(:competition) { FactoryBot.create(:competition) }
 
     it "sends the notification if the user has it enabled" do
-      user = FactoryGirl.create(:user_with_wca_id, results_notifications_enabled: true)
+      user = FactoryBot.create(:user_with_wca_id, results_notifications_enabled: true)
       expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).with(user, competition).and_call_original
       user.notify_of_results_posted(competition)
     end
 
     it "doesn't send the notification if the user has it disabled" do
-      user = FactoryGirl.build(:user_with_wca_id, results_notifications_enabled: false)
+      user = FactoryBot.build(:user_with_wca_id, results_notifications_enabled: false)
       expect(CompetitionsMailer).to_not receive(:notify_users_of_results_presence).with(user, competition).and_call_original
       user.notify_of_results_posted(competition)
     end
   end
 
   describe "#can_view_all_users?" do
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
 
     it "returns false if the user is an organizer of an upcoming comp using registration system" do
       organizer = competition.organizers.first
@@ -569,33 +569,33 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for board" do
-      board_member = FactoryGirl.create :board_member
+      board_member = FactoryBot.create :board_member
       expect(board_member.can_view_all_users?).to eq true
     end
 
     it "returns false for normal user" do
-      normal_user = FactoryGirl.create :user
+      normal_user = FactoryBot.create :user
       expect(normal_user.can_view_all_users?).to eq false
     end
   end
 
   describe "#can_edit_user?" do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
 
     it "returns true for board" do
-      board_member = FactoryGirl.create :board_member
+      board_member = FactoryBot.create :board_member
       expect(board_member.can_edit_user?(user)).to eq true
     end
 
     it "returns false for normal user" do
-      normal_user = FactoryGirl.create :user
+      normal_user = FactoryBot.create :user
       expect(normal_user.can_edit_user?(user)).to eq false
     end
   end
 
   describe "#editable_fields_of_user" do
-    let(:competition) { FactoryGirl.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
-    let(:registration) { FactoryGirl.create(:registration, :newcomer, competition: competition) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, starts: 1.month.from_now) }
+    let(:registration) { FactoryBot.create(:registration, :newcomer, competition: competition) }
 
     it "allows organizers of upcoming competitions to edit newcomer names" do
       organizer = competition.organizers.first

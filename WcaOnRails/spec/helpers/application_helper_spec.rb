@@ -13,17 +13,17 @@ RSpec.describe ApplicationHelper do
   describe "#users_to_sentence" do
     it "escapes name" do
       users = []
-      users << FactoryGirl.create(:user, name: "Jonatan")
-      users << FactoryGirl.create(:user, name: "Pedro")
-      users << FactoryGirl.create(:user, name: "Jeremy O'Fleischman")
+      users << FactoryBot.create(:user, name: "Jonatan")
+      users << FactoryBot.create(:user, name: "Pedro")
+      users << FactoryBot.create(:user, name: "Jeremy O'Fleischman")
       string = helper.users_to_sentence(users)
       expect(string).to eq 'Jeremy O&#39;Fleischman, Jonatan, and Pedro'
     end
 
     it "includes email" do
       users = []
-      users << FactoryGirl.create(:user, name: "Jonatan O'Klosko", email: "jonatan@worldcubeassociation.org")
-      users << FactoryGirl.create(:user, name: "Jeremy", email: "jfly@worldcubeassociation.org")
+      users << FactoryBot.create(:user, name: "Jonatan O'Klosko", email: "jonatan@worldcubeassociation.org")
+      users << FactoryBot.create(:user, name: "Jeremy", email: "jfly@worldcubeassociation.org")
       string = helper.users_to_sentence(users, include_email: true)
       expect(string).to eq '<a href="mailto:jfly@worldcubeassociation.org">Jeremy</a> and <a href="mailto:jonatan@worldcubeassociation.org">Jonatan O&#39;Klosko</a>'
     end
@@ -46,10 +46,10 @@ RSpec.describe ApplicationHelper do
 
   describe "#simple_form_for" do
     it "error messages link to attribute input field" do
-      user = FactoryGirl.create :user
+      user = FactoryBot.create :user
       user.wca_id = '1999FLEI01'
       user.dob = 2.days.from_now
-      user.senior_delegate = FactoryGirl.create :senior_delegate
+      user.senior_delegate = FactoryBot.create :senior_delegate
       expect(user).to be_invalid_with_errors(
         wca_id: ["not found"],
         dob: ["must be in the past"],

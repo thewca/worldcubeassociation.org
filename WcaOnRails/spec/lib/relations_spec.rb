@@ -34,9 +34,9 @@ RSpec.describe "Relations" do
 
   describe ".compute_linkings", clean_db_with_truncation: true do
     it "creates linkings by computing 1st degree relation for each person" do
-      persons = FactoryGirl.create_list :person, 3
-      competition = FactoryGirl.create :competition
-      persons.each { |person| FactoryGirl.create :result, person: person, competition: competition }
+      persons = FactoryBot.create_list :person, 3
+      competition = FactoryBot.create :competition
+      persons.each { |person| FactoryBot.create :result, person: person, competition: competition }
       wca_id1, wca_id2, wca_id3 = persons.map(&:wca_id)
 
       Relations.compute_linkings

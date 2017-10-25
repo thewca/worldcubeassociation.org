@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :oauth_application, class: Doorkeeper::Application do |f|
     f.name "samurai app"
     f.uid "9ad911ea379bd6f49c4f923644dbea3f44aeab5625a25f468210026a862b0c3d"

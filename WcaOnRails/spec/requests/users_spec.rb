@@ -6,7 +6,7 @@ RSpec.describe "users" do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do
-    user = FactoryGirl.build :user
+    user = FactoryBot.build :user
 
     post user_registration_path, params: {
       'user[email]' => user.email,
@@ -24,7 +24,7 @@ RSpec.describe "users" do
   end
 
   it 'can change password' do
-    user = FactoryGirl.create :user
+    user = FactoryBot.create :user
 
     # sign in
     post user_session_path, params: { 'user[login]' => user.email, 'user[password]' => user.password }
@@ -51,7 +51,7 @@ RSpec.describe "users" do
   end
 
   it 'sign in shows conversion message for competitors missing accounts' do
-    person = FactoryGirl.create :person
+    person = FactoryBot.create :person
 
     # attempt to sign in
     post user_session_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
@@ -60,7 +60,7 @@ RSpec.describe "users" do
   end
 
   it 'reset password shows conversion message for competitors missing accounts' do
-    person = FactoryGirl.create :person
+    person = FactoryBot.create :person
 
     # attempt to reset password
     post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Registration do
-  let(:registration) { FactoryGirl.create :registration }
+  let(:registration) { FactoryBot.create :registration }
 
   it "defines a valid registration" do
     expect(registration).to be_valid
@@ -22,8 +22,8 @@ RSpec.describe Registration do
   end
 
   it "cannot create a registration for a competition without wca registration" do
-    competition = FactoryGirl.create(:competition, use_wca_registration: false)
-    reg = FactoryGirl.build :registration, competition: competition
+    competition = FactoryBot.create(:competition, use_wca_registration: false)
+    reg = FactoryBot.build :registration, competition: competition
     expect(reg).to be_invalid_with_errors(competition: ["Competition registration is closed"])
   end
 
@@ -33,23 +33,23 @@ RSpec.describe Registration do
   end
 
   it "requires user on create" do
-    expect(FactoryGirl.build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
+    expect(FactoryBot.build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
   end
 
   it "requires country" do
-    user = FactoryGirl.create(:user, country_iso2: nil)
+    user = FactoryBot.create(:user, country_iso2: nil)
     registration.user = user
     expect(registration).to be_invalid_with_errors(user_id: ["Need a country"])
   end
 
   it "requires gender" do
-    user = FactoryGirl.create(:user, gender: nil)
+    user = FactoryBot.create(:user, gender: nil)
     registration.user = user
     expect(registration).to be_invalid_with_errors(user_id: ["Need a gender"])
   end
 
   it "requires dob" do
-    user = FactoryGirl.create(:user, dob: nil)
+    user = FactoryBot.create(:user, dob: nil)
     registration.user = user
     expect(registration).to be_invalid_with_errors(user_id: ["Need a birthdate"])
   end

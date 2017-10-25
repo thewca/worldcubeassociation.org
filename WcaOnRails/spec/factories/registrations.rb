@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :registration do
     association :competition, factory: [:competition, :registration_open]
     association :user, factory: [:user, :wca_id]
@@ -29,13 +29,13 @@ FactoryGirl.define do
 
     trait :paid do
       after(:create) do |registration|
-        FactoryGirl.create :registration_payment, registration: registration, amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        FactoryBot.create :registration_payment, registration: registration, amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
       end
     end
 
     trait :unpaid do
       after(:create) do |registration|
-        FactoryGirl.create :registration_payment, registration: registration
+        FactoryBot.create :registration_payment, registration: registration
       end
     end
   end

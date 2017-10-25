@@ -3,13 +3,13 @@
 require "rails_helper"
 
 RSpec.describe "relations" do
-  let!(:person1) { FactoryGirl.create(:person_with_multiple_sub_ids) }
-  let!(:person2) { FactoryGirl.create(:person) }
-  let!(:competition) { FactoryGirl.create(:competition) }
+  let!(:person1) { FactoryBot.create(:person_with_multiple_sub_ids) }
+  let!(:person2) { FactoryBot.create(:person) }
+  let!(:competition) { FactoryBot.create(:competition) }
 
   before do
-    FactoryGirl.create :result, person: person1, competition: competition
-    FactoryGirl.create :result, person: person2, competition: competition
+    FactoryBot.create :result, person: person1, competition: competition
+    FactoryBot.create :result, person: person2, competition: competition
     # They have been to the same competition - that's a direct relation.
     Linking.create! [
       { wca_id: person1.wca_id, wca_ids: [person2.wca_id] },

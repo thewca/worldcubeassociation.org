@@ -12,7 +12,7 @@ RSpec.describe AdminController, type: :controller do
     end
 
     context 'when signed in as a delegate' do
-      sign_in { FactoryGirl.create :delegate }
+      sign_in { FactoryBot.create :delegate }
 
       it 'redirects to the root page' do
         get :index
@@ -21,7 +21,7 @@ RSpec.describe AdminController, type: :controller do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'shows the index page' do
         get :index
@@ -31,10 +31,10 @@ RSpec.describe AdminController, type: :controller do
   end
 
   describe 'merge_people' do
-    sign_in { FactoryGirl.create :admin }
+    sign_in { FactoryBot.create :admin }
 
-    let(:person1) { FactoryGirl.create(:person) }
-    let(:person2) { FactoryGirl.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :year, :month, :day)) }
+    let(:person1) { FactoryBot.create(:person) }
+    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :year, :month, :day)) }
 
     it 'can merge people' do
       post :do_merge_people, params: { merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id } }
@@ -45,9 +45,9 @@ RSpec.describe AdminController, type: :controller do
   end
 
   describe 'PATCH #update person' do
-    sign_in { FactoryGirl.create :admin }
+    sign_in { FactoryBot.create :admin }
 
-    let(:person) { FactoryGirl.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
+    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
 
     it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
       patch :update_person, params: { method: "fix", person: { wca_id: person.wca_id, countryId: "New Zealand" } }

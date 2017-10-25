@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe UsersController do
   describe "GET #edit" do
-    let(:user) { FactoryGirl.create(:user_with_wca_id) }
+    let(:user) { FactoryBot.create(:user_with_wca_id) }
 
-    sign_in { FactoryGirl.create :admin }
+    sign_in { FactoryBot.create :admin }
 
     it "populates user" do
       get :edit, params: { id: user.id }
@@ -15,9 +15,9 @@ RSpec.describe UsersController do
   end
 
   describe "claim wca id" do
-    let!(:person) { FactoryGirl.create(:person) }
-    let!(:delegate) { FactoryGirl.create(:delegate) }
-    let!(:user) { FactoryGirl.create(:user) }
+    let!(:person) { FactoryBot.create(:person) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before :each do
       sign_in user
@@ -36,7 +36,7 @@ RSpec.describe UsersController do
     end
 
     it "cannot claim wca id for another user" do
-      other_user = FactoryGirl.create :user
+      other_user = FactoryBot.create :user
 
       old_unconfirmed_wca_id = other_user.unconfirmed_wca_id
       patch :update, params: { id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
@@ -44,7 +44,7 @@ RSpec.describe UsersController do
     end
 
     it "cannot claim wca id if already has a wca id" do
-      other_person = FactoryGirl.create :person
+      other_person = FactoryBot.create :person
       user.wca_id = other_person.wca_id
       user.save!
 
@@ -56,9 +56,9 @@ RSpec.describe UsersController do
   end
 
   describe "approve wca id claim" do
-    let(:delegate) { FactoryGirl.create(:delegate) }
-    let(:person) { FactoryGirl.create(:person) }
-    let(:user) { FactoryGirl.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
+    let(:delegate) { FactoryBot.create(:delegate) }
+    let(:person) { FactoryBot.create(:person) }
+    let(:user) { FactoryBot.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
 
     before :each do
       sign_in delegate
@@ -81,7 +81,7 @@ RSpec.describe UsersController do
     end
 
     it "can set id to something not claimed" do
-      person2 = FactoryGirl.create :person
+      person2 = FactoryBot.create :person
       patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload
       expect(user.wca_id).to eq person2.wca_id
@@ -90,7 +90,7 @@ RSpec.describe UsersController do
     end
 
     it "can change claimed id" do
-      person2 = FactoryGirl.create :person
+      person2 = FactoryBot.create :person
       patch :update, params: { id: user, user: { unconfirmed_wca_id: person2.wca_id } }
       user.reload
       expect(user.unconfirmed_wca_id).to eq person2.wca_id
@@ -98,7 +98,7 @@ RSpec.describe UsersController do
     end
 
     it "can clear claimed id" do
-      FactoryGirl.create :person
+      FactoryBot.create :person
       patch :update, params: { id: user, user: { unconfirmed_wca_id: "" } }
       user.reload
       expect(user.unconfirmed_wca_id).to be_nil
@@ -107,8 +107,8 @@ RSpec.describe UsersController do
   end
 
   describe "editing user data" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:delegate) { FactoryGirl.create(:delegate) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:delegate) { FactoryBot.create(:delegate) }
 
     it "user can change email" do
       sign_in user
@@ -132,7 +132,7 @@ RSpec.describe UsersController do
     end
 
     context "after creating a pending registration" do
-      let!(:registration) { FactoryGirl.create(:registration, :pending, user: user) }
+      let!(:registration) { FactoryBot.create(:registration, :pending, user: user) }
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -141,7 +141,7 @@ RSpec.describe UsersController do
     end
 
     context "after having a registration deleted" do
-      let!(:registration) { FactoryGirl.create(:registration, :deleted, user: user) }
+      let!(:registration) { FactoryBot.create(:registration, :deleted, user: user) }
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -150,7 +150,7 @@ RSpec.describe UsersController do
     end
 
     context "after registration is accepted for a competition" do
-      let!(:registration) { FactoryGirl.create(:registration, :accepted, user: user) }
+      let!(:registration) { FactoryBot.create(:registration, :accepted, user: user) }
 
       it "user cannot change name" do
         sign_in user
@@ -168,7 +168,7 @@ RSpec.describe UsersController do
   end
 
   describe "GET #index" do
-    sign_in { FactoryGirl.create :admin }
+    sign_in { FactoryBot.create :admin }
 
     it "is injection safe" do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }

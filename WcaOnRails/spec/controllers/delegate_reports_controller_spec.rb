@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe DelegateReportsController do
-  let(:delegate) { FactoryGirl.create :delegate }
-  let(:comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: 2.days.ago) }
-  let(:pre_delegate_reports_form_comp) { FactoryGirl.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
+  let(:delegate) { FactoryBot.create :delegate }
+  let(:comp) { FactoryBot.create(:competition, delegates: [delegate], starts: 2.days.ago) }
+  let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -15,7 +15,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryGirl.create(:user) }
+    sign_in { FactoryBot.create(:user) }
 
     it "redirects to home page" do
       get :show, params: { competition_id: comp.id }
@@ -24,7 +24,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as a regular delegate" do
-    sign_in { FactoryGirl.create(:delegate) }
+    sign_in { FactoryBot.create(:delegate) }
 
     it "redirects to home page" do
       get :edit, params: { competition_id: comp.id }
