@@ -447,6 +447,23 @@ ro:
       vote:
         #original_hash: 153d7a5
         comment: Comentariu
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Competiție
+        #original_hash: 3deb745
+        type: Tip
+        #original_hash: c3328c3
+        text: Text
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Numele aplicantului
+        #original_hash: 78cdfee
+        submitterEmail: E-mailul aplicantului
+        #original_hash: 0d31f23
+        submitterComment: Comentariul aplicantului
+        #original_hash: bae7d5b
+        status: Status
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -715,6 +732,23 @@ ro:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -2123,7 +2157,7 @@ ro:
         content:
           #original_hash: 0d76323
           '1': >-
-            Nu mai poți folosi acel puzzle. Puzzle-urile nu trenuie să aibă
+            Nu mai poți folosi acel puzzle. Puzzle-urile nu trebuie să aibă
             defecte sau alte particularități ce realizează o diferențiere
             semnificativă între piese (vezi <a
             href='https://www.worldcubeassociation.org/regulations/#3j'>Regula
@@ -2695,7 +2729,7 @@ ro:
       content_html: >-
         Limita numărului de concurenți poate fi stabilită pentru fiecare probă
         în parte sau pentru toată competiția (vezi
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>Regula
+        <href='https://www.worldcubeassociation.org/regulations/#Z4'>Regula
         Z4</a>). Ca în cazul tuturor regulilor din articolul Z, delegatul
         competiției trebuiî sî obțină aprobarea numărului de concurenți din
         partea Boardului. Limitele trebuie să fie alese cu atenție, conform cu
