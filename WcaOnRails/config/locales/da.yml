@@ -438,6 +438,23 @@ da:
       vote:
         #original_hash: 153d7a5
         comment: Kommentar
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Konkurrence
+        #original_hash: 3deb745
+        type: Type
+        #original_hash: c3328c3
+        text: Tekst
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Afsenderens navn
+        #original_hash: 78cdfee
+        submitterEmail: Afsenderens email
+        #original_hash: 0d31f23
+        submitterComment: Afsenderens kommentar
+        #original_hash: bae7d5b
+        status: Status
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -702,6 +719,23 @@ da:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -1374,7 +1408,7 @@ da:
       #original_hash: e390250
       create_success: Succesfuldt oprettet en ny konkurrence!
       #original_hash: afe3a23
-      results_preview_alert: Du kigger på resultater der ikke er blevet offentligt gjort endnu.
+      results_preview_alert: Du kigger på resultater der ikke er blevet offentliggjort endnu.
       #original_hash: 07de612
       upload_results: >-
         Denne konkurrence er slut, vi arbejder på at uploade resultaterne
@@ -1406,9 +1440,9 @@ da:
       title: Mine konkurrencer
       #original_hash: 1fa5a4b
       disclaimer: >-
-        Kun konkurrencer der bruger WCA tilmelding er vist her. Hvis din
-        konkurrence ikke er her, så tjek konkurrencens hjemmesides tilmeldings
-        liste.
+        Kun konkurrencer der bruger tilmelding på WCA's hjemmeside er vist her.
+        Hvis din konkurrence ikke er her, så tjek konkurrencens egen hjemmesides
+        tilmeldings liste.
       #original_hash: 94a2fc8
       past_competitions: Tidligere konkurrencer
     competition_info:
@@ -1528,9 +1562,9 @@ da:
       #original_hash: e590657
       missing_report: Din report er ikke oppe endnu!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Du har lige nu ikke nogen fremtidige konkurrencer! Tjek %{link}.'
+      no_upcoming_competitions_html: 'Du har lige nu ikke nogle fremtidige konkurrencer! Tjek %{link}.'
       #original_hash: e0f66bb
-      competitions_list: Konkurrence liste
+      competitions_list: konkurrence listen
       #original_hash: 9104a03
       no_past_competitions: Du har ingen tidligere konkurrencer.
     competition_form:
