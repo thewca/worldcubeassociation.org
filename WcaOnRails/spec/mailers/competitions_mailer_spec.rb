@@ -61,15 +61,17 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "submit_results_nag" do
+    let(:senior) { FactoryGirl.create(:senior_delegate) }
+    let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
     let(:competition) do
-      FactoryGirl.create(:competition, name: "Comp of the Future 2016")
+      FactoryGirl.create(:competition, name: "Comp of the Future 2016", delegates: [delegate])
     end
     let(:mail) { CompetitionsMailer.submit_results_nag(competition) }
 
     it "renders the headers" do
       expect(mail.subject).to eq "Comp of the Future 2016 Results"
       expect(mail.to).to match_array competition.delegates.pluck(:email)
-      expect(mail.cc).to eq ["results@worldcubeassociation.org"]
+      expect(mail.cc).to eq ["results@worldcubeassociation.org", senior.email]
       expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
     end
 
@@ -81,15 +83,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "submit_report_nag" do
     let(:senior) { FactoryGirl.create(:senior_delegate) }
     let(:delegate) { FactoryGirl.create(:delegate, senior_delegate_id: senior.id) }
-    let(:competition) { FactoryGirl.create(:competition, :with_delegate, name: "Peculiar Comp 2016", delegates: [delegate]) }
+    let(:competition) { FactoryGirl.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate]) }
     let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
-
-    before do
-      competition.delegates.first.tap do |delegate|
-        delegate.senior_delegate = senior
-        delegate.save!
-      end
-    end
 
     it "renders the headers" do
       expect(mail.subject).to eq "Peculiar Comp 2016 Delegate Report"

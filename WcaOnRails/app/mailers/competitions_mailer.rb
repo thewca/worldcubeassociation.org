@@ -49,7 +49,7 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: competition.delegates.pluck(:email),
-      cc: "results@worldcubeassociation.org",
+      cc: ["results@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "results@worldcubeassociation.org",
       subject: "#{competition.name} Results",
     )
@@ -59,9 +59,13 @@ class CompetitionsMailer < ApplicationMailer
     @competition = competition
     mail(
       to: competition.delegates.pluck(:email),
-      cc: ["board@worldcubeassociation.org"] + competition.delegates.map { |delegate| delegate.senior_delegate&.email }.uniq.compact.flatten,
+      cc: ["board@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "board@worldcubeassociation.org",
       subject: "#{competition.name} Delegate Report",
     )
+  end
+
+  private def delegates_to_senior_delegates_email(delegates)
+    delegates.map { |delegate| delegate.senior_delegate&.email }.uniq.compact
   end
 end
