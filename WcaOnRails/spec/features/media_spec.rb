@@ -3,12 +3,12 @@
 require "rails_helper"
 
 RSpec.feature "Media" do
-  let!(:medium1) { FactoryGirl.create(:competition_medium, text: "Article 1") }
-  let!(:medium2) { FactoryGirl.create(:competition_medium, text: "Article 2") }
+  let!(:medium1) { FactoryBot.create(:competition_medium, text: "Article 1") }
+  let!(:medium2) { FactoryBot.create(:competition_medium, text: "Article 2") }
 
   context "when signed in as WCT member" do
     before :each do
-      sign_in FactoryGirl.create :user, :wct_member
+      sign_in FactoryBot.create :user, :wct_member
     end
 
     context "validate media list" do

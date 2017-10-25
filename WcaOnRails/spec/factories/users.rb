@@ -58,7 +58,7 @@ FactoryBot.define do
     trait :wct_member do
       after(:create) do |user|
         wrc_team = Team.find_by_friendly_id('wct')
-        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
       end
     end
 
