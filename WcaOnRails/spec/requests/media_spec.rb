@@ -11,7 +11,7 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    sign_in { FactoryGirl.create :user }
+    sign_in { FactoryBot.create :user }
 
     it "redirects to home page" do
       self.instance_exec(&action)
@@ -21,7 +21,7 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
 
   context "when signed in as a WCT member" do
     before :each do
-      sign_in FactoryGirl.create :user, :wct_member
+      sign_in FactoryBot.create :user, :wct_member
     end
 
     it 'can perform action' do
@@ -32,9 +32,9 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
 end
 
 RSpec.describe "media" do
-  let(:competition) { FactoryGirl.create(:competition, :with_delegate, :visible) }
-  let!(:medium) { FactoryGirl.create(:competition_medium, text: "i am pending") }
-  let!(:accepted_medium) { FactoryGirl.create(:competition_medium, :accepted, text: "i am accepted") }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible) }
+  let!(:medium) { FactoryBot.create(:competition_medium, text: "i am pending") }
+  let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, text: "i am accepted") }
 
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
@@ -43,7 +43,7 @@ RSpec.describe "media" do
 
     context "signed in as WCT member" do
       before :each do
-        sign_in FactoryGirl.create :user, :wct_member
+        sign_in FactoryBot.create :user, :wct_member
       end
 
       it "shows only pending media by default" do
@@ -81,7 +81,7 @@ RSpec.describe "media" do
 
     context "signed in as WCT member" do
       before :each do
-        sign_in FactoryGirl.create :user, :wct_member
+        sign_in FactoryBot.create :user, :wct_member
       end
 
       it "can accept medium" do
@@ -91,7 +91,7 @@ RSpec.describe "media" do
       end
 
       it "can edit medium" do
-        competition = FactoryGirl.create :competition
+        competition = FactoryBot.create :competition
         expect(medium.type).to eq 'article'
 
         patch_medium.call(

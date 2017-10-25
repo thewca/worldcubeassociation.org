@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :competition_medium do
-    competition { FactoryGirl.create(:competition) }
+    competition { FactoryBot.create(:competition) }
     type "article"
     text "I am an article"
     uri "https://www.example.com/article-42"
