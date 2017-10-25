@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Competition events management" do
-  let(:competition) { FactoryGirl.create(:competition, event_ids: []) }
+  let(:competition) { FactoryBot.create(:competition, event_ids: []) }
 
   before :each do
     # Enable CSRF protection just for these tests.
@@ -12,7 +12,7 @@ RSpec.feature "Competition events management" do
   end
 
   background do
-    sign_in FactoryGirl.create(:admin)
+    sign_in FactoryBot.create(:admin)
     visit "/competitions/#{competition.id}/events/edit"
     within_event_panel("333") do
       click_button "Add event"

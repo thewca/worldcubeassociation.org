@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe NotificationsHelper do
   describe "#notifications_for_user" do
     context "when delegate" do
-      let(:delegate) { FactoryGirl.create :delegate }
+      let(:delegate) { FactoryBot.create :delegate }
 
       context "with some unconfirmed competitions" do
-        let!(:unconfirmed_competition) { FactoryGirl.create :competition, delegates: [delegate] }
-        let!(:confirmed_competition) { FactoryGirl.create :competition, delegates: [delegate], isConfirmed: true }
+        let!(:unconfirmed_competition) { FactoryBot.create :competition, delegates: [delegate] }
+        let!(:confirmed_competition) { FactoryBot.create :competition, delegates: [delegate], isConfirmed: true }
 
         it "shows unconfirmed competitions" do
           notifications = helper.notifications_for_user(delegate)
@@ -38,11 +38,11 @@ RSpec.describe NotificationsHelper do
       end
 
       it "shows WCA ID claims for confirmed accounts, but not for unconfirmed accounts" do
-        person = FactoryGirl.create :person
-        user = FactoryGirl.create :user
+        person = FactoryBot.create :person
+        user = FactoryBot.create :user
         user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
-        unconfirmed_user = FactoryGirl.create :user, :unconfirmed
+        unconfirmed_user = FactoryBot.create :user, :unconfirmed
         unconfirmed_user.update_attributes!(unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob)
 
         notifications = helper.notifications_for_user(delegate)
@@ -55,9 +55,9 @@ RSpec.describe NotificationsHelper do
       end
 
       context "have delegated competitions that are missing reports" do
-        let!(:past_competition_missing_report) { FactoryGirl.create :competition, :past, :visible, :confirmed, delegates: [delegate] }
-        let!(:past_competition_having_report) { FactoryGirl.create :competition, :past, :visible, :confirmed, :with_delegate_report, delegates: [delegate] }
-        let!(:future_competition) { FactoryGirl.create :competition, :future, :visible, :confirmed, delegates: [delegate] }
+        let!(:past_competition_missing_report) { FactoryBot.create :competition, :past, :visible, :confirmed, delegates: [delegate] }
+        let!(:past_competition_having_report) { FactoryBot.create :competition, :past, :visible, :confirmed, :with_delegate_report, delegates: [delegate] }
+        let!(:future_competition) { FactoryBot.create :competition, :future, :visible, :confirmed, delegates: [delegate] }
 
         it "asks me to submit the reports" do
           notifications = helper.notifications_for_user(delegate)
@@ -72,11 +72,11 @@ RSpec.describe NotificationsHelper do
     end
 
     context "when signed in as a board member" do
-      let(:board_member) { FactoryGirl.create :board_member }
-      let!(:unconfirmed_competition) { FactoryGirl.create :competition }
-      let!(:confirmed_competition) { FactoryGirl.create(:competition, :confirmed) }
-      let!(:visible_confirmed_competition) { FactoryGirl.create(:competition, :confirmed, :visible) }
-      let!(:visible_unconfirmed_competition) { FactoryGirl.create :competition, :visible }
+      let(:board_member) { FactoryBot.create :board_member }
+      let!(:unconfirmed_competition) { FactoryBot.create :competition }
+      let!(:confirmed_competition) { FactoryBot.create(:competition, :confirmed) }
+      let!(:visible_confirmed_competition) { FactoryBot.create(:competition, :confirmed, :visible) }
+      let!(:visible_unconfirmed_competition) { FactoryBot.create :competition, :visible }
 
       it "shows confirmed, but not visible competitions, as well as unconfirmed, but visible competitions" do
         notifications = helper.notifications_for_user(board_member)
@@ -94,7 +94,7 @@ RSpec.describe NotificationsHelper do
     end
 
     context "when signed in as someone without a wca id" do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { FactoryBot.create :user }
 
       it "asks me to request my WCA ID" do
         notifications = helper.notifications_for_user(user)
@@ -125,8 +125,8 @@ RSpec.describe NotificationsHelper do
 
       context "when already claimed a wca id" do
         it "tells me who is working on it" do
-          person = FactoryGirl.create :person
-          delegate = FactoryGirl.create :delegate
+          person = FactoryBot.create :person
+          delegate = FactoryBot.create :delegate
           user.unconfirmed_wca_id = person.wca_id
           user.delegate_to_handle_wca_id_claim = delegate
           user.dob_verification = person.dob

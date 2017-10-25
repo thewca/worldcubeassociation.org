@@ -4,41 +4,41 @@ require 'rails_helper'
 
 RSpec.describe Result do
   it "defines a valid result" do
-    result = FactoryGirl.build :result
+    result = FactoryBot.build :result
     expect(result).to be_valid
   end
 
   context "associations" do
     it "validates competitionId" do
-      result = FactoryGirl.build :result, competitionId: "foo"
+      result = FactoryBot.build :result, competitionId: "foo"
       expect(result).to be_invalid_with_errors(competition: ["can't be blank"])
     end
 
     it "validates countryId" do
-      result = FactoryGirl.build :result, countryId: "foo"
+      result = FactoryBot.build :result, countryId: "foo"
       expect(result).to be_invalid_with_errors(country: ["can't be blank"])
     end
 
     it "validates eventId" do
-      result = FactoryGirl.build :result, eventId: "foo"
+      result = FactoryBot.build :result, eventId: "foo"
       expect(result).to be_invalid_with_errors(event: ["can't be blank"])
     end
 
     it "validates formatId" do
-      result = FactoryGirl.build :result, formatId: "foo"
+      result = FactoryBot.build :result, formatId: "foo"
       expect(result).to be_invalid_with_errors(format: ["can't be blank"])
     end
 
     it "validates roundTypeId" do
-      result = FactoryGirl.build :result, roundTypeId: "foo"
+      result = FactoryBot.build :result, roundTypeId: "foo"
       expect(result).to be_invalid_with_errors(round_type: ["can't be blank"])
     end
 
     it "person association always looks for subId 1" do
-      person1 = FactoryGirl.create :person_with_multiple_sub_ids
+      person1 = FactoryBot.create :person_with_multiple_sub_ids
       person2 = Person.find_by!(wca_id: person1.wca_id, subId: 2)
-      result1 = FactoryGirl.create :result, person: person1
-      result2 = FactoryGirl.create :result, person: person2
+      result1 = FactoryBot.create :result, person: person1
+      result2 = FactoryBot.create :result, person: person2
       expect(result1.person).to eq person1
       expect(result2.person).to eq person1
     end
@@ -46,22 +46,22 @@ RSpec.describe Result do
 
   context "valid" do
     it "skipped solves must all come at the end" do
-      result = FactoryGirl.build :result, value2: 0
+      result = FactoryBot.build :result, value2: 0
       expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
     end
 
     it "cannot skip all solves" do
-      result = FactoryGirl.build :result, value1: 0, value2: 0, value3: 0, value4: 0, value5: 0
+      result = FactoryBot.build :result, value1: 0, value2: 0, value3: 0, value4: 0, value5: 0
       expect(result).to be_invalid_with_errors(base: ["Cannot skip all solves."])
     end
 
     it "values must all be >= -2" do
-      result = FactoryGirl.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
+      result = FactoryBot.build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
       expect(result).to be_invalid(value2: ["invalid"])
     end
 
     it "correctly computes best" do
-      result = FactoryGirl.build :result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+      result = FactoryBot.build :result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
       expect(result).to be_valid
 
       result.best = 41
@@ -289,7 +289,7 @@ RSpec.describe Result do
 
     context "check number of non-zero solves" do
       def result_with_n_solves(n, options)
-        result = FactoryGirl.build :result, options
+        result = FactoryBot.build :result, options
         (1..5).each do |i|
           result.send "value#{i}=", i <= n ? 42 : 0
         end
@@ -342,7 +342,7 @@ RSpec.describe Result do
     end
 
     it "times over 10 minutes must be rounded" do
-      result = FactoryGirl.build :result, value2: 10*6000 + 4343
+      result = FactoryBot.build :result, value2: 10*6000 + 4343
       expect(result).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
 
       result.value2 = 10*6000 + 4300
@@ -357,7 +357,7 @@ RSpec.describe Result do
         solve_time.attempted = 30
         solve_time.time_centiseconds = 65*60*100
 
-        result = FactoryGirl.build :result, eventId: "333mbf", value1: solve_time.wca_value
+        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
       end
 
@@ -367,7 +367,7 @@ RSpec.describe Result do
         solve_time.attempted = 3
         solve_time.time_centiseconds = 31*60*100
 
-        result = FactoryGirl.build :result, eventId: "333mbf", value1: solve_time.wca_value
+        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])
       end
     end
@@ -375,5 +375,5 @@ RSpec.describe Result do
 end
 
 def build_result(attrs)
-  FactoryGirl.build :result, { roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
+  FactoryBot.build :result, { roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
 end

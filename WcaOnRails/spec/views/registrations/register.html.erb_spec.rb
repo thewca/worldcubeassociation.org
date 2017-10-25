@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe "registrations/register" do
   it "shows waiting list information" do
-    competition = FactoryGirl.create(:competition, :registration_open)
-    FactoryGirl.create(:registration, competition: competition)
-    registration2 = FactoryGirl.create(:registration, competition: competition)
-    FactoryGirl.create(:registration, competition: competition)
+    competition = FactoryBot.create(:competition, :registration_open)
+    FactoryBot.create(:registration, competition: competition)
+    registration2 = FactoryBot.create(:registration, competition: competition)
+    FactoryBot.create(:registration, competition: competition)
 
     allow(view).to receive(:current_user) { registration2.user }
     assign(:registration, registration2)
@@ -19,7 +19,7 @@ RSpec.describe "registrations/register" do
   end
 
   it "shows message about registration being past" do
-    competition = FactoryGirl.create(:competition, use_wca_registration: true, registration_open: 1.week.ago, registration_close: Time.now.yesterday)
+    competition = FactoryBot.create(:competition, use_wca_registration: true, registration_open: 1.week.ago, registration_close: Time.now.yesterday)
 
     assign(:competition, competition)
 
@@ -28,7 +28,7 @@ RSpec.describe "registrations/register" do
   end
 
   it "shows message about registration not yet being open" do
-    competition = FactoryGirl.create(:competition, use_wca_registration: true, registration_open: 1.week.from_now, registration_close: 2.weeks.from_now)
+    competition = FactoryBot.create(:competition, use_wca_registration: true, registration_open: 1.week.from_now, registration_close: 2.weeks.from_now)
 
     assign(:competition, competition)
 
@@ -37,8 +37,8 @@ RSpec.describe "registrations/register" do
   end
 
   def setup(payment_status)
-    competition = FactoryGirl.create(:competition, :entry_fee, :visible, :registration_open)
-    registration = FactoryGirl.create(:registration, payment_status, competition: competition)
+    competition = FactoryBot.create(:competition, :entry_fee, :visible, :registration_open)
+    registration = FactoryBot.create(:registration, payment_status, competition: competition)
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
     assign(:registration, registration)

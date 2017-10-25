@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :result do
     transient do
-      person { FactoryGirl.create(:person) }
-      competition { FactoryGirl.create(:competition) }
+      person { FactoryBot.create(:person) }
+      competition { FactoryBot.create(:competition) }
     end
 
     personId { person.wca_id }

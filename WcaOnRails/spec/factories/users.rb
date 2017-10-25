@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, aliases: [:author] do
     name { Faker::Name.name }
     email { Faker::Internet.email }
@@ -30,34 +30,34 @@ FactoryGirl.define do
       email "admin@worldcubeassociation.org"
       after(:create) do |user|
         software_team = Team.find_by_friendly_id('wst')
-        FactoryGirl.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
+        FactoryBot.create(:team_member, team_id: software_team.id, user_id: user.id, team_leader: true)
       end
     end
 
     trait :wrt_member do
       after(:create) do |user|
         results_team = Team.find_by_friendly_id('wrt')
-        FactoryGirl.create(:team_member, team_id: results_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: results_team.id, user_id: user.id)
       end
     end
 
     trait :wdc_member do
       after(:create) do |user|
         wdc_team = Team.find_by_friendly_id('wdc')
-        FactoryGirl.create(:team_member, team_id: wdc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: wdc_team.id, user_id: user.id)
       end
     end
 
     trait :wrc_member do
       after(:create) do |user|
         wrc_team = Team.find_by_friendly_id('wrc')
-        FactoryGirl.create(:team_member, team_id: wrc_team.id, user_id: user.id)
+        FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
       end
     end
 
     trait :wca_id do
       transient do
-        person { FactoryGirl.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+        person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
       end
     end
 

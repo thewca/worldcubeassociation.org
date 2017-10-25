@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe "teams/index.html.erb" do
   describe "when signed in as an admin" do
-    let!(:user) { FactoryGirl.create :admin }
+    let!(:user) { FactoryBot.create :admin }
     let!(:teams) { Team.all }
-    let!(:team_member) { FactoryGirl.create :team_member, user_id: user.id, team_id: teams.first.id }
+    let!(:team_member) { FactoryBot.create :team_member, user_id: user.id, team_id: teams.first.id }
 
     before do
       allow(view).to receive(:current_user) { user }

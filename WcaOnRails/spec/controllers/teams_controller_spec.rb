@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe TeamsController do
-  let(:team) { FactoryGirl.create :team }
+  let(:team) { FactoryBot.create :team }
 
   describe "GET #index" do
     context "when not signed in" do
@@ -16,7 +16,7 @@ RSpec.describe TeamsController do
     end
 
     context "when signed in as admin" do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'shows the teams index page' do
         get :index
@@ -25,7 +25,7 @@ RSpec.describe TeamsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         get :index
@@ -39,8 +39,8 @@ RSpec.describe TeamsController do
       let(:team_where_is_leader) { Team.find_by_friendly_id('wrc') }
       let(:team_where_is_not_leader) { Team.find_by_friendly_id('wst') }
       let(:leader) do
-        user = FactoryGirl.create(:user)
-        FactoryGirl.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
+        user = FactoryBot.create(:user)
+        FactoryBot.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
         user
       end
 
@@ -63,7 +63,7 @@ RSpec.describe TeamsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      let(:admin) { FactoryGirl.create :admin }
+      let(:admin) { FactoryBot.create :admin }
       before :each do
         sign_in admin
       end
@@ -76,7 +76,7 @@ RSpec.describe TeamsController do
       end
 
       it 'can add a member' do
-        member = FactoryGirl.create :user
+        member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
@@ -84,7 +84,7 @@ RSpec.describe TeamsController do
       end
 
       it 'can deactivate a member' do
-        other_member = FactoryGirl.create :user
+        other_member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
@@ -102,14 +102,14 @@ RSpec.describe TeamsController do
       end
 
       it 'cannot set start_date < end_date' do
-        member = FactoryGirl.create :user
+        member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end
 
       it 'cannot add overlapping membership periods for the same user' do
-        member = FactoryGirl.create :user
+        member = FactoryBot.create :user
         patch :update, params: {
           id: team,
           team: {
@@ -124,7 +124,7 @@ RSpec.describe TeamsController do
       end
 
       it 'cannot add another membership for the same user without start_date' do
-        member = FactoryGirl.create :user
+        member = FactoryBot.create :user
         patch :update, params: {
           id: team,
           team: {
@@ -138,7 +138,7 @@ RSpec.describe TeamsController do
       end
 
       it 'cannot add a membership with end_date but without start_date' do
-        member = FactoryGirl.create :user
+        member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } } }
         expect(team.reload.team_members.count).to eq 0
       end

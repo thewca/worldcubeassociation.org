@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "oauth api" do
   include Capybara::DSL
 
-  let(:user) { FactoryGirl.create :user_with_wca_id }
+  let(:user) { FactoryBot.create :user_with_wca_id }
 
   it 'can authenticate with grant_type password' do
     post oauth_token_path, params: { grant_type: "password", username: user.email, password: user.password, scope: "public email" }
@@ -19,7 +19,7 @@ RSpec.describe "oauth api" do
 
   it 'can authenticate with grant_type authorization' do
     # Hack around the fact that we aren't allowed to use non HTTPS urls for redirect_uri.
-    oauth_app = FactoryGirl.build(:oauth_application, redirect_uri: oauth_authorization_url)
+    oauth_app = FactoryBot.build(:oauth_application, redirect_uri: oauth_authorization_url)
     oauth_app.save!(validate: false)
     visit oauth_authorization_path(
       client_id: oauth_app.uid,
@@ -51,7 +51,7 @@ RSpec.describe "oauth api" do
   end
 
   it 'can authenticate with response_type token (implicit authorization)' do
-    oauth_app = FactoryGirl.create :oauth_application
+    oauth_app = FactoryBot.create :oauth_application
     visit oauth_authorization_path(
       client_id: oauth_app.uid,
       redirect_uri: oauth_app.redirect_uri,

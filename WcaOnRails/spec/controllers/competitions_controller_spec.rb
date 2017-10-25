@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryGirl.create(:competition, :with_delegate, :entry_fee, :registration_open) }
-  let(:future_competition) { FactoryGirl.create(:competition, :with_delegate, :ongoing) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :entry_fee, :registration_open) }
+  let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
     describe "selecting events" do
-      let!(:competition1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: Event.where(id: %w(222 333 444 555 666))) }
-      let!(:competition2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: Event.where(id: %w(333 444 555 pyram clock))) }
-      let!(:competition3) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: Event.where(id: %w(222 333 skewb 666 pyram sq1))) }
-      let!(:competition4) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: Event.where(id: %w(333 pyram 666 777 clock))) }
+      let!(:competition1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: Event.where(id: %w(222 333 444 555 666))) }
+      let!(:competition2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: Event.where(id: %w(333 444 555 pyram clock))) }
+      let!(:competition3) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: Event.where(id: %w(222 333 skewb 666 pyram sq1))) }
+      let!(:competition4) { FactoryBot.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: Event.where(id: %w(333 pyram 666 777 clock))) }
 
       context "when no event is selected" do
         it "competitions are sorted by start date" do
@@ -40,12 +40,12 @@ RSpec.describe CompetitionsController do
     end
 
     describe "selecting present/past/recent competitions" do
-      let!(:past_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
-      let!(:past_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
-      let!(:in_progress_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
-      let!(:in_progress_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: Date.today, ends: Date.today) }
-      let!(:upcoming_comp1) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
-      let!(:upcoming_comp2) { FactoryGirl.create(:competition, :confirmed, :visible, starts: 3.weeks.from_now) }
+      let!(:past_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
+      let!(:past_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
+      let!(:in_progress_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
+      let!(:in_progress_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: Date.today) }
+      let!(:upcoming_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
+      let!(:upcoming_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.weeks.from_now) }
 
       context "when present is selected" do
         before do
@@ -122,7 +122,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'shows the competition creation form' do
         get :new
@@ -131,7 +131,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      sign_in { FactoryGirl.create :delegate }
+      sign_in { FactoryBot.create :delegate }
 
       it 'shows the competition creation form' do
         get :new
@@ -140,7 +140,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         get :new
@@ -150,10 +150,10 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'GET #edit' do
-    let(:organizer) { FactoryGirl.create(:user) }
-    let(:admin) { FactoryGirl.create :admin }
-    let!(:my_competition) { FactoryGirl.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) { FactoryGirl.create(:competition, :with_delegate, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
+    let(:organizer) { FactoryBot.create(:user) }
+    let(:admin) { FactoryBot.create :admin }
+    let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
+    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
 
     context 'when signed in as an organizer' do
       before :each do
@@ -191,7 +191,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
       it 'does not allow creation' do
         post :create, params: { competition: { name: "Test2015" } }
         expect(response).to redirect_to root_url
@@ -199,7 +199,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'creates a new competition' do
         post :create, params: { competition: { name: "FatBoyXPC 2015" } }
@@ -218,7 +218,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      let(:delegate) { FactoryGirl.create :delegate }
+      let(:delegate) { FactoryBot.create :delegate }
       before :each do
         sign_in delegate
       end
@@ -233,7 +233,7 @@ RSpec.describe CompetitionsController do
       end
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
-        competition = FactoryGirl.create :competition, :with_delegate
+        competition = FactoryBot.create :competition, :with_delegate
         post :create, params: { competition: { name: competition.name } }
         expect(response).to render_template(:new)
         new_comp = assigns(:competition)
@@ -246,9 +246,9 @@ RSpec.describe CompetitionsController do
                                       results_posted_at: Time.now,
                                       showAtAll: true)
 
-        user1 = FactoryGirl.create(:delegate)
-        user2 = FactoryGirl.create(:user)
-        user3 = FactoryGirl.create(:user)
+        user1 = FactoryBot.create(:delegate)
+        user2 = FactoryBot.create(:user)
+        user3 = FactoryBot.create(:user)
         competition.delegates << user1
         competition.organizers << user2
         competition.organizers << user3
@@ -294,7 +294,7 @@ RSpec.describe CompetitionsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'redirects organizer view to organizer view' do
         patch :update, params: { id: competition, competition: { name: competition.name } }
@@ -320,8 +320,8 @@ RSpec.describe CompetitionsController do
       end
 
       it 'saves delegate_ids' do
-        delegate1 = FactoryGirl.create(:delegate)
-        delegate2 = FactoryGirl.create(:delegate)
+        delegate1 = FactoryBot.create(:delegate)
+        delegate2 = FactoryBot.create(:delegate)
         delegates = [delegate1, delegate2]
         delegate_ids = delegates.map(&:id).join(",")
         patch :update, params: { id: competition, competition: { delegate_ids: delegate_ids } }
@@ -357,7 +357,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as organizer' do
-      let(:organizer) { FactoryGirl.create(:delegate) }
+      let(:organizer) { FactoryBot.create(:delegate) }
       before :each do
         competition.organizers << organizer
         future_competition.organizers << organizer
@@ -366,7 +366,7 @@ RSpec.describe CompetitionsController do
 
       it 'cannot pass a non-delegate as delegate' do
         delegate_ids_old = future_competition.delegate_ids
-        fake_delegate = FactoryGirl.create(:user)
+        fake_delegate = FactoryBot.create(:user)
         post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
         expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all delegates"]
@@ -375,7 +375,7 @@ RSpec.describe CompetitionsController do
       end
 
       it 'can change the delegate' do
-        new_delegate = FactoryGirl.create(:delegate)
+        new_delegate = FactoryBot.create(:delegate)
         post :update, params: { id: competition, competition: { delegate_ids: new_delegate.id } }
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
@@ -422,7 +422,7 @@ RSpec.describe CompetitionsController do
       it "cannot update the registration fees when there is any payment" do
         previous_fees = competition.base_entry_fee_lowest_denomination
         previous_currency = competition.currency_code
-        FactoryGirl.create(:registration, :paid, competition: competition)
+        FactoryBot.create(:registration, :paid, competition: competition)
         patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
         competition.reload
         expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees
@@ -431,7 +431,7 @@ RSpec.describe CompetitionsController do
     end
 
     context "when signed in as board member" do
-      let(:board_member) { FactoryGirl.create(:board_member) }
+      let(:board_member) { FactoryBot.create(:board_member) }
 
       before :each do
         sign_in board_member
@@ -463,7 +463,7 @@ RSpec.describe CompetitionsController do
     end
 
     context "when signed in as delegate" do
-      let(:delegate) { FactoryGirl.create(:delegate) }
+      let(:delegate) { FactoryBot.create(:delegate) }
       before :each do
         competition.delegates << delegate
         sign_in delegate
@@ -514,7 +514,7 @@ RSpec.describe CompetitionsController do
     end
 
     context "when signed in as delegate for a different competition" do
-      let(:delegate) { FactoryGirl.create(:delegate) }
+      let(:delegate) { FactoryBot.create(:delegate) }
       before :each do
         sign_in delegate
       end
@@ -531,7 +531,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #post_announcement' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:user, :wrt_member) }
+      sign_in { FactoryBot.create(:user, :wrt_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale
@@ -559,7 +559,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #post_results' do
     context 'when signed in as results team member' do
-      sign_in { FactoryGirl.create(:user, :wrt_member) }
+      sign_in { FactoryBot.create(:user, :wrt_member) }
 
       # Posts should always be in English, therefore we want to check using an English text,
       # even if the user posting has a different locale
@@ -852,8 +852,8 @@ RSpec.describe CompetitionsController do
       end
 
       it "sends the notification emails to users that competed" do
-        FactoryGirl.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
-          FactoryGirl.create_list(:result, 2, person: user.person, competitionId: competition.id)
+        FactoryBot.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
+          FactoryBot.create_list(:result, 2, person: user.person, competitionId: competition.id)
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
@@ -862,10 +862,10 @@ RSpec.describe CompetitionsController do
       end
 
       it "sends notifications of id claim possibility to newcomers" do
-        competition = FactoryGirl.create(:competition, :registration_open)
-        FactoryGirl.create_list(:registration, 2, :accepted, :newcomer, competition: competition)
-        FactoryGirl.create_list(:registration, 3, :pending, :newcomer, competition: competition)
-        FactoryGirl.create_list(:registration, 4, :accepted, competition: competition)
+        competition = FactoryBot.create(:competition, :registration_open)
+        FactoryBot.create_list(:registration, 2, :accepted, :newcomer, competition: competition)
+        FactoryBot.create_list(:registration, 3, :pending, :newcomer, competition: competition)
+        FactoryBot.create_list(:registration, 4, :accepted, competition: competition)
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
         get :post_results, params: { id: competition }
@@ -875,25 +875,25 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'GET #my_competitions' do
-    let(:delegate) { FactoryGirl.create(:delegate) }
-    let(:organizer) { FactoryGirl.create(:user) }
-    let!(:future_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition1) { FactoryGirl.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryGirl.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { FactoryGirl.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { FactoryGirl.create(:competition, :registration_open, starts: 4.month.ago, results_posted_at: 1.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:unscheduled_competition1) { FactoryGirl.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
-    let(:registered_user) { FactoryGirl.create :user, name: "Jan-Ove Waldner" }
-    let!(:registration1) { FactoryGirl.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
-    let!(:registration2) { FactoryGirl.create(:registration, :accepted, competition: future_competition3, user: registered_user) }
-    let!(:registration3) { FactoryGirl.create(:registration, :accepted, competition: past_competition1, user: registered_user) }
-    let!(:registration4) { FactoryGirl.create(:registration, :accepted, competition: past_competition3, user: organizer) }
-    let!(:registration5) { FactoryGirl.create(:registration, :accepted, competition: future_competition3, user: delegate) }
-    let!(:results_person) { FactoryGirl.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
-    let!(:results_user) { FactoryGirl.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
-    let!(:result) { FactoryGirl.create(:result, person: results_person, competitionId: past_competition1.id) }
+    let(:delegate) { FactoryBot.create(:delegate) }
+    let(:organizer) { FactoryBot.create(:user) }
+    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 3.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 1.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition1) { FactoryBot.create(:competition, :registration_open, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryBot.create(:competition, :registration_open, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryBot.create(:competition, :registration_open, starts: 4.month.ago, results_posted_at: 1.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
+    let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
+    let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
+    let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: future_competition3, user: registered_user) }
+    let!(:registration3) { FactoryBot.create(:registration, :accepted, competition: past_competition1, user: registered_user) }
+    let!(:registration4) { FactoryBot.create(:registration, :accepted, competition: past_competition3, user: organizer) }
+    let!(:registration5) { FactoryBot.create(:registration, :accepted, competition: future_competition3, user: delegate) }
+    let!(:results_person) { FactoryBot.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
+    let!(:results_user) { FactoryBot.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
+    let!(:result) { FactoryBot.create(:result, person: results_person, competitionId: past_competition1.id) }
 
     context 'when not signed in' do
       sign_out
@@ -928,35 +928,35 @@ RSpec.describe CompetitionsController do
       end
 
       it 'does not show past competitions they have a rejected registration for' do
-        FactoryGirl.create(:registration, :deleted, competition: past_competition2, user: registered_user)
+        FactoryBot.create(:registration, :deleted, competition: past_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
 
       it 'does not show upcoming competitions they have a rejected registration for' do
-        FactoryGirl.create(:registration, :deleted, competition: future_competition2, user: registered_user)
+        FactoryBot.create(:registration, :deleted, competition: future_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
 
       it 'shows upcoming competition they have a pending registration for' do
-        FactoryGirl.create(:registration, :pending, competition: future_competition2, user: registered_user)
+        FactoryBot.create(:registration, :pending, competition: future_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
 
       it 'does not show past competitions they have a pending registration for' do
-        FactoryGirl.create(:registration, :pending, competition: past_competition2, user: registered_user)
+        FactoryBot.create(:registration, :pending, competition: past_competition2, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
       end
 
       it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
-        FactoryGirl.create(:registration, :accepted, competition: past_competition4, user: registered_user)
+        FactoryBot.create(:registration, :accepted, competition: past_competition4, user: registered_user)
         get :my_competitions
         expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
         expect(assigns(:past_competitions)).to eq [past_competition1]
@@ -999,7 +999,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'shows the edit competition events form' do
         get :edit_events, params: { id: competition.id }
@@ -1008,7 +1008,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         expect {
@@ -1029,7 +1029,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'updates the competition events' do
         patch :update_events, params: { id: competition, competition: { name: competition.name } }
@@ -1038,7 +1038,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         expect {
@@ -1059,7 +1059,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { FactoryGirl.create :admin }
+      sign_in { FactoryBot.create :admin }
 
       it 'displays payment setup status' do
         get :payment_setup, params: { id: competition }
@@ -1069,7 +1069,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         expect {
@@ -1090,7 +1090,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { FactoryGirl.create :user }
+      sign_in { FactoryBot.create :user }
 
       it 'does not allow access' do
         expect {

@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryGirl.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
-  let!(:person_without_dob) { FactoryGirl.create :person, year: 0, month: 0, day: 0 }
-  let!(:custom_delegate) { FactoryGirl.create(:delegate) }
+  let!(:person) { FactoryBot.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
+  let!(:person_without_dob) { FactoryBot.create :person, year: 0, month: 0, day: 0 }
+  let!(:custom_delegate) { FactoryBot.create(:delegate) }
 
   context 'when signing up as a returning competitor', js: true do
     it 'disables sign up button until the user selects "have competed"' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :person do
     wca_id do
       mid = ('A'..'Z').to_a.sample(4).join
@@ -36,9 +36,9 @@ FactoryGirl.define do
 
     factory :person_who_has_competed_once do
       after(:create) do |person|
-        competition = FactoryGirl.create(:competition, :with_delegate)
-        FactoryGirl.create :result, person: person, competitionId: competition.id
-        FactoryGirl.create :result, person: person, competitionId: competition.id
+        competition = FactoryBot.create(:competition, :with_delegate)
+        FactoryBot.create :result, person: person, competitionId: competition.id
+        FactoryBot.create :result, person: person, competitionId: competition.id
       end
     end
   end

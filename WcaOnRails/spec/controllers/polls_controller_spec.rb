@@ -11,7 +11,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryGirl.create(:user) }
+    sign_in { FactoryBot.create(:user) }
     it "redirects to home page" do
       post :create
       expect(response).to redirect_to(root_url)
@@ -19,7 +19,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as board member" do
-    let(:board_member) { FactoryGirl.create :board_member }
+    let(:board_member) { FactoryBot.create :board_member }
     before :each do
       sign_in board_member
     end
@@ -33,7 +33,7 @@ RSpec.describe PollsController do
       end
 
       it "edits a poll" do
-        poll = FactoryGirl.create(:poll)
+        poll = FactoryBot.create(:poll)
         post :update, params: { id: poll.id, poll: { question: "Pedro", multiple: true, deadline: '2016-03-15' } }
         poll.reload
         expect(poll.question).to eq "Pedro"
@@ -42,7 +42,7 @@ RSpec.describe PollsController do
       end
 
       it "add two options and confirm" do
-        poll = FactoryGirl.create(:poll)
+        poll = FactoryBot.create(:poll)
         post :update, params: { id: poll.id, poll: { poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } } }
         poll.reload
         expect(poll.poll_options.length).to eq 2
@@ -55,7 +55,7 @@ RSpec.describe PollsController do
       end
 
       it "removes an option and try to confirm" do
-        poll = FactoryGirl.create(:poll)
+        poll = FactoryBot.create(:poll)
         post :update, params: { id: poll.id, poll: { poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } } }
         poll.reload
         second_option_id = poll.poll_options[1].id
@@ -71,7 +71,7 @@ RSpec.describe PollsController do
       end
 
       it "can't edit a confirmed poll, except for deadline" do
-        poll = FactoryGirl.create(:poll, :confirmed)
+        poll = FactoryBot.create(:poll, :confirmed)
         post :update, params: { id: poll.id, poll: { multiple: true } }
         invalid_poll = assigns :poll
         poll.reload
@@ -80,7 +80,7 @@ RSpec.describe PollsController do
       end
 
       it "can change deadline of a confirmed poll" do
-        poll = FactoryGirl.create(:poll, :confirmed)
+        poll = FactoryBot.create(:poll, :confirmed)
         new_deadline = Date.today - 1
         post :update, params: { id: poll.id, poll: { deadline: new_deadline } }
         poll.reload
@@ -88,19 +88,19 @@ RSpec.describe PollsController do
       end
 
       it "can delete an unconfirmed poll" do
-        poll = FactoryGirl.create(:poll)
+        poll = FactoryBot.create(:poll)
         post :destroy, params: { id: poll.id }
         expect(Poll.find_by_id(poll.id)).to eq nil
       end
 
       it "can't delete a confirmed poll" do
-        poll = FactoryGirl.create(:poll, :confirmed)
+        poll = FactoryBot.create(:poll, :confirmed)
         post :destroy, params: { id: poll.id }
         expect(Poll.find_by_id(poll.id)).not_to eq nil
       end
 
       it "deadline defaults to now if you don't change it" do
-        poll = FactoryGirl.create(:poll)
+        poll = FactoryBot.create(:poll)
         post :update, params: { id: poll.id, poll: { deadline: poll.deadline, poll_options_attributes: { "1" => { description: "Yes" }, "2" => { description: "No" } } } }
         new_poll = assigns :poll
         poll.reload

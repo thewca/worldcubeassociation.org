@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Set the locale" do
   context "As a visitor" do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
 
     scenario "visiting the home page and changing the locale" do
       visit "/"

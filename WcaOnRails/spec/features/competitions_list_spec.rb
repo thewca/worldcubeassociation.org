@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Competitions list" do
   context "list view" do
     context "when a delegate is set in the params" do
-      let(:competition) { FactoryGirl.create :competition, :visible, :future }
+      let(:competition) { FactoryBot.create :competition, :visible, :future }
       let(:delegate) { competition.delegates.first }
 
       before { visit "/competitions?delegate=#{delegate.id}" }
@@ -22,11 +22,11 @@ RSpec.feature "Competitions list" do
 
   context "admin view" do
     before :each do
-      sign_in FactoryGirl.create(:admin)
+      sign_in FactoryBot.create(:admin)
     end
 
     it 'renders finished competition without results' do
-      FactoryGirl.create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
+      FactoryBot.create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
       visit '/competitions?state=recent&display=admin'
       expect(page).to have_http_status(200)
       tr = page.find("tr", text: "Test Comp 2017")

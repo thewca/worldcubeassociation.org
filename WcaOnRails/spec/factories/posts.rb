@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :post do
     body { Faker::Lorem.paragraph }
     title { Faker::Hacker.say_something_smart }

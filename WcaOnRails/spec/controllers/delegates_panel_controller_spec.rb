@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DelegatesPanelController do
   describe "signed in as wrt member" do
-    let(:wrt_member) { FactoryGirl.create :user, :wrt_member }
+    let(:wrt_member) { FactoryBot.create :user, :wrt_member }
     before :each do
       sign_in wrt_member
     end
@@ -21,7 +21,7 @@ RSpec.describe DelegatesPanelController do
   end
 
   describe "signed in as delegate" do
-    let(:delegate) { FactoryGirl.create :delegate }
+    let(:delegate) { FactoryBot.create :delegate }
     before :each do
       sign_in delegate
     end

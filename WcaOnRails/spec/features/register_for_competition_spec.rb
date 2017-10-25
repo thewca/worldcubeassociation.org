@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.feature "Registering for a competition" do
-  let(:user) { FactoryGirl.create :user }
-  let(:delegate) { FactoryGirl.create :delegate }
-  let(:competition) { FactoryGirl.create :competition, :registration_open, delegates: [delegate], showAtAll: true }
+  let(:user) { FactoryBot.create :user }
+  let(:delegate) { FactoryBot.create :delegate }
+  let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], showAtAll: true }
 
   context "signed in as user" do
     before :each do
@@ -42,7 +42,7 @@ RSpec.feature "Registering for a competition" do
     end
 
     context "editing registration" do
-      let!(:registration) { FactoryGirl.create(:registration, user: user, competition: competition, guests: 0) }
+      let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition, guests: 0) }
 
       scenario "Users changes number of guests" do
         expect(registration.guests).to eq 0
@@ -81,7 +81,7 @@ RSpec.feature "Registering for a competition" do
   end
 
   context "signed in as delegate" do
-    let(:registration) { FactoryGirl.create(:registration, user: user, competition: competition) }
+    let(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
     before :each do
       sign_in delegate
     end

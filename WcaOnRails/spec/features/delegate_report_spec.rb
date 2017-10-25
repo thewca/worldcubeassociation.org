@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.feature "Registration management" do
-  let(:delegate) { FactoryGirl.create :delegate, name: "Jeremy on Bart" }
-  let(:competition) { FactoryGirl.create :competition, :registration_open, delegates: [delegate], name: "Submit Report 2017" }
+  let(:delegate) { FactoryBot.create :delegate, name: "Jeremy on Bart" }
+  let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], name: "Submit Report 2017" }
 
   context "when signed in as competition delegate" do
     before :each do

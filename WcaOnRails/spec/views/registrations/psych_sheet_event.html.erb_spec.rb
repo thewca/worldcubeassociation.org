@@ -4,27 +4,27 @@ require "rails_helper"
 
 RSpec.describe "registrations/psych_sheet_event" do
   it "works" do
-    competition = FactoryGirl.create(:competition, :registration_open)
+    competition = FactoryBot.create(:competition, :registration_open)
     event = Event.find("333")
 
-    the_best = FactoryGirl.create(:user, :wca_id, name: "Best Guy")
-    FactoryGirl.create(:ranks_average, eventId: "333", rank: 1, best: "500", personId: the_best.wca_id)
-    FactoryGirl.create(:ranks_single, eventId: "333", rank: 1, best: "450", personId: the_best.wca_id)
+    the_best = FactoryBot.create(:user, :wca_id, name: "Best Guy")
+    FactoryBot.create(:ranks_average, eventId: "333", rank: 1, best: "500", personId: the_best.wca_id)
+    FactoryBot.create(:ranks_single, eventId: "333", rank: 1, best: "450", personId: the_best.wca_id)
 
-    tied_first = FactoryGirl.create(:user, :wca_id, name: "Tied But Better")
-    FactoryGirl.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_first.wca_id)
-    FactoryGirl.create(:ranks_single, eventId: "333", rank: 10, best: "1500", personId: tied_first.wca_id)
+    tied_first = FactoryBot.create(:user, :wca_id, name: "Tied But Better")
+    FactoryBot.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_first.wca_id)
+    FactoryBot.create(:ranks_single, eventId: "333", rank: 10, best: "1500", personId: tied_first.wca_id)
 
-    tied_second = FactoryGirl.create(:user, :wca_id, name: "Tied But Worse")
-    FactoryGirl.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_second.wca_id)
-    FactoryGirl.create(:ranks_single, eventId: "333", rank: 20, best: "1899", personId: tied_second.wca_id)
+    tied_second = FactoryBot.create(:user, :wca_id, name: "Tied But Worse")
+    FactoryBot.create(:ranks_average, eventId: "333", rank: 10, best: "2000", personId: tied_second.wca_id)
+    FactoryBot.create(:ranks_single, eventId: "333", rank: 20, best: "1899", personId: tied_second.wca_id)
 
     # Two guys who have never competed before.
-    newcomer1 = FactoryGirl.create(:user, name: "Newcomer I")
-    newcomer2 = FactoryGirl.create(:user, name: "Newcomer II")
+    newcomer1 = FactoryBot.create(:user, name: "Newcomer I")
+    newcomer2 = FactoryBot.create(:user, name: "Newcomer II")
 
     [the_best, tied_first, tied_second, newcomer1, newcomer2].each do |user|
-      FactoryGirl.create(:registration, :accepted, user: user, competition: competition, events: [event])
+      FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: [event])
     end
 
     assign(:competition, competition)

@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe PostsController do
-  let!(:post1) { FactoryGirl.create(:post, created_at: 1.hours.ago) }
-  let!(:hidden_post) { FactoryGirl.create(:post, created_at: 1.hours.ago, world_readable: false) }
-  let!(:sticky_post) { FactoryGirl.create(:post, sticky: true, created_at: 2.hours.ago) }
-  let!(:wdc_post) { FactoryGirl.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag", show_on_homepage: false) }
+  let!(:post1) { FactoryBot.create(:post, created_at: 1.hours.ago) }
+  let!(:hidden_post) { FactoryBot.create(:post, created_at: 1.hours.ago, world_readable: false) }
+  let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
+  let!(:wdc_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wdc,othertag", show_on_homepage: false) }
 
   context "not logged in" do
     describe "GET #index" do
@@ -35,10 +35,10 @@ RSpec.describe PostsController do
       end
 
       it "only matches exact ids" do
-        post2 = FactoryGirl.create(:post)
+        post2 = FactoryBot.create(:post)
         post2.update_attribute(:slug, "#{post1.id}-foo")
 
-        post1 = FactoryGirl.create(:post)
+        post1 = FactoryBot.create(:post)
         post1.update_attribute(:slug, "#{post2.id}-foo")
 
         get :show, params: { id: post2.slug }
@@ -69,7 +69,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wrc member" do
-    sign_in { FactoryGirl.create :user, :wrc_member }
+    sign_in { FactoryBot.create :user, :wrc_member }
 
     describe "GET #new" do
       it "works" do
@@ -90,7 +90,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wdc member" do
-    sign_in { FactoryGirl.create :user, :wdc_member }
+    sign_in { FactoryBot.create :user, :wdc_member }
 
     describe "GET #new" do
       it "returns 200" do

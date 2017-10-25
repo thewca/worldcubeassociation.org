@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VotesController do
-  let(:poll) { FactoryGirl.create(:poll, :confirmed) }
+  let(:poll) { FactoryBot.create(:poll, :confirmed) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -13,7 +13,7 @@ RSpec.describe VotesController do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryGirl.create(:user) }
+    sign_in { FactoryBot.create(:user) }
     it "redirects to home page" do
       post :create
       expect(response).to redirect_to(root_url)
@@ -21,7 +21,7 @@ RSpec.describe VotesController do
   end
 
   context "logged in as delegate" do
-    let(:delegate) { FactoryGirl.create :delegate }
+    let(:delegate) { FactoryBot.create :delegate }
     before :each do
       sign_in delegate
     end
@@ -40,7 +40,7 @@ RSpec.describe VotesController do
       end
 
       it "creates and updates multiple votes" do
-        multiple_poll = FactoryGirl.create(:poll, :confirmed, :multiple)
+        multiple_poll = FactoryBot.create(:poll, :confirmed, :multiple)
 
         post :create, params: { vote: { poll_option_ids: multiple_poll.poll_options.pluck(:id), poll_id: multiple_poll.id } }
         vote = Vote.find_by_user_id(delegate.id)

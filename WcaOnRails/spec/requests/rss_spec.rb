@@ -6,17 +6,17 @@ RSpec.describe "rss" do
   include Rack::Test::Methods
 
   let!(:post_1) do
-    FactoryGirl.create :post,
-                       body: 'foo **a**',
-                       title: 'bar',
-                       created_at: Time.new(2014, 3, 12, 12, 32, 42)
+    FactoryBot.create :post,
+                      body: 'foo **a**',
+                      title: 'bar',
+                      created_at: Time.new(2014, 3, 12, 12, 32, 42)
   end
 
   let!(:post_2) do
-    FactoryGirl.create :sticky_post,
-                       body: '[link](http://google.de)',
-                       title: 'sticky post',
-                       created_at: Time.new(2014, 3, 14, 11, 18, 0)
+    FactoryBot.create :sticky_post,
+                      body: '[link](http://google.de)',
+                      title: 'sticky post',
+                      created_at: Time.new(2014, 3, 14, 11, 18, 0)
   end
 
   describe "posts" do

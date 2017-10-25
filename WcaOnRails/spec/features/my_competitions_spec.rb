@@ -4,15 +4,15 @@ require "rails_helper"
 
 RSpec.feature "My competitions page" do
   context "when signed in as user" do
-    let!(:user) { FactoryGirl.create :user }
+    let!(:user) { FactoryBot.create :user }
 
     before do
       sign_in user
     end
 
     context "after registring for a competition" do
-      let!(:competition) { FactoryGirl.create :competition, :visible, :registration_open }
-      let!(:registration) { FactoryGirl.create :registration, :accepted, competition: competition, user: user }
+      let!(:competition) { FactoryBot.create :competition, :visible, :registration_open }
+      let!(:registration) { FactoryBot.create :registration, :accepted, competition: competition, user: user }
 
       scenario "the user visits his competitions page" do
         visit "/competitions/mine"

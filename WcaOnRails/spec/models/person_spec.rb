@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-  let!(:person) { FactoryGirl.create :person_who_has_competed_once }
+  let!(:person) { FactoryBot.create :person_who_has_competed_once }
 
   it "defines a valid person" do
     expect(person).to be_valid
@@ -11,7 +11,7 @@ RSpec.describe Person, type: :model do
 
   context "likely_delegates" do
     it "never competed" do
-      person = FactoryGirl.create :person
+      person = FactoryBot.create :person
       expect(person.likely_delegates).to eq []
     end
 
@@ -20,20 +20,20 @@ RSpec.describe Person, type: :model do
       delegate = competition.delegates.first
       expect(person.likely_delegates).to eq [delegate]
 
-      competition2 = FactoryGirl.create :competition, delegates: [delegate], starts: 3.days.ago
-      FactoryGirl.create :result, person: person, competitionId: competition2.id
+      competition2 = FactoryBot.create :competition, delegates: [delegate], starts: 3.days.ago
+      FactoryBot.create :result, person: person, competitionId: competition2.id
       expect(person.likely_delegates).to eq [delegate]
 
-      new_delegate = FactoryGirl.create :delegate
-      competition3 = FactoryGirl.create :competition, delegates: [new_delegate], starts: 2.days.ago
-      FactoryGirl.create :result, person: person, competitionId: competition3.id
+      new_delegate = FactoryBot.create :delegate
+      competition3 = FactoryBot.create :competition, delegates: [new_delegate], starts: 2.days.ago
+      FactoryBot.create :result, person: person, competitionId: competition3.id
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
 
   describe "updating the data" do
-    let!(:person) { FactoryGirl.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
-    let!(:user) { FactoryGirl.create(:user_with_wca_id, person: person) }
+    let!(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
+    let!(:user) { FactoryBot.create(:user_with_wca_id, person: person) }
 
     context "fixing the person" do
       it "fixing countryId fails if there exists an old person with the same wca id, greater subId and the same countryId" do
@@ -49,7 +49,7 @@ RSpec.describe Person, type: :model do
       end
 
       it "doesn't update personName and countryId columns in the results table if they differ from the current ones" do
-        FactoryGirl.create(:person_who_has_competed_once, wca_id: person.wca_id, subId: 2, name: "Old Name", countryId: "France")
+        FactoryBot.create(:person_who_has_competed_once, wca_id: person.wca_id, subId: 2, name: "Old Name", countryId: "France")
         person.update_attributes!(name: "New Name", countryId: "New Zealand")
         expect(person.results.pluck(:personName).uniq).to match_array ["Old Name", "New Name"]
         expect(person.results.pluck(:countryId).uniq).to match_array ["France", "New Zealand"]
@@ -113,11 +113,11 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#world_championship_podiums" do
-    let!(:wc2015) { FactoryGirl.create :competition, championship_types: ["world"], starts: Date.new(2015, 1, 1) }
-    let!(:wc2017) { FactoryGirl.create :competition, championship_types: ["world"], starts: Date.new(2017, 1, 1) }
-    let!(:result1) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 2, eventId: "333" }
-    let!(:result2) { FactoryGirl.create :result, person: person, competition: wc2015, pos: 1, eventId: "333oh" }
-    let!(:result3) { FactoryGirl.create :result, person: person, competition: wc2017, pos: 3, eventId: "444" }
+    let!(:wc2015) { FactoryBot.create :competition, championship_types: ["world"], starts: Date.new(2015, 1, 1) }
+    let!(:wc2017) { FactoryBot.create :competition, championship_types: ["world"], starts: Date.new(2017, 1, 1) }
+    let!(:result1) { FactoryBot.create :result, person: person, competition: wc2015, pos: 2, eventId: "333" }
+    let!(:result2) { FactoryBot.create :result, person: person, competition: wc2015, pos: 1, eventId: "333oh" }
+    let!(:result3) { FactoryBot.create :result, person: person, competition: wc2017, pos: 3, eventId: "444" }
 
     it "return results ordered by year and event" do
       expect(person.world_championship_podiums.to_a).to eq [result3, result1, result2]
@@ -125,17 +125,17 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#championship_podiums" do
-    let!(:fr_nationals2016) { FactoryGirl.create :competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1) }
-    let!(:us_nationals2017) { FactoryGirl.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
+    let!(:fr_nationals2016) { FactoryBot.create :competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1) }
+    let!(:us_nationals2017) { FactoryBot.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
     let!(:fr_competitor) do
-      FactoryGirl.create(:person, countryId: "France").tap do |fr_competitor|
-        FactoryGirl.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333"
-        FactoryGirl.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333"
+      FactoryBot.create(:person, countryId: "France").tap do |fr_competitor|
+        FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333"
+        FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333"
       end
     end
     let!(:us_competitor) do
-      FactoryGirl.create(:person, countryId: "USA").tap do |us_competitor|
-        FactoryGirl.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333"
+      FactoryBot.create(:person, countryId: "USA").tap do |us_competitor|
+        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333"
       end
     end
 
@@ -151,8 +151,8 @@ RSpec.describe Person, type: :model do
 
     it "ignores DNF results on the podium" do
       expect do
-        FactoryGirl.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "555bf",
-                                    best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
+        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "555bf",
+                                   best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE
       end.to_not change { us_competitor.championship_podiums[:national] }
     end
 
@@ -165,27 +165,27 @@ RSpec.describe Person, type: :model do
 
       it "does no longer treat the person as eligible for championship title related to previous nationality" do
         expect do
-          fr_nationals2017 = FactoryGirl.create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
-          FactoryGirl.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, eventId: "333"
+          fr_nationals2017 = FactoryBot.create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
+          FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, eventId: "333"
         end.to_not change { fr_competitor.championship_podiums[:national] }
       end
 
       it "is eligible for championship title of the current continent" do
         expect do
-          na_championship2017 = FactoryGirl.create :competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)
-          FactoryGirl.create :result, person: fr_competitor, competition: na_championship2017, pos: 1, eventId: "333"
+          na_championship2017 = FactoryBot.create :competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)
+          FactoryBot.create :result, person: fr_competitor, competition: na_championship2017, pos: 1, eventId: "333"
         end.to change { fr_competitor.championship_podiums[:continental].count }.by 1
       end
     end
 
     it "reassigns positions correctly in the case of a tie" do
-      us_competitor1 = FactoryGirl.create :person, countryId: "USA"
-      us_competitor2 = FactoryGirl.create :person, countryId: "USA"
-      us_competitor3 = FactoryGirl.create :person, countryId: "USA"
-      FactoryGirl.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "222"
-      FactoryGirl.create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, eventId: "222"
-      FactoryGirl.create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, eventId: "222"
-      FactoryGirl.create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, eventId: "222"
+      us_competitor1 = FactoryBot.create :person, countryId: "USA"
+      us_competitor2 = FactoryBot.create :person, countryId: "USA"
+      us_competitor3 = FactoryBot.create :person, countryId: "USA"
+      FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "222"
+      FactoryBot.create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, eventId: "222"
+      FactoryBot.create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, eventId: "222"
+      FactoryBot.create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, eventId: "222"
 
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1

@@ -4,25 +4,25 @@ require 'rails_helper'
 
 RSpec.describe Poll do
   it "has a valid factory" do
-    expect(FactoryGirl.create(:poll)).to be_valid
+    expect(FactoryBot.create(:poll)).to be_valid
   end
 
   describe "confirming a poll" do
     it "can confirm a poll" do
-      poll = FactoryGirl.create :poll
-      FactoryGirl.create(:poll_option, poll_id: poll.id)
-      FactoryGirl.create(:poll_option, poll_id: poll.id)
+      poll = FactoryBot.create :poll
+      FactoryBot.create(:poll_option, poll_id: poll.id)
+      FactoryBot.create(:poll_option, poll_id: poll.id)
       poll.confirmed_at = Time.now
       expect(poll).to be_valid
     end
 
     it "requires two options" do
-      poll = FactoryGirl.create :poll
+      poll = FactoryBot.create :poll
       poll.confirmed_at = Time.now
       expect(poll).to be_invalid_with_errors(poll_options: ["Poll must have at least two options"])
 
-      FactoryGirl.create(:poll_option, poll_id: poll.id)
-      FactoryGirl.create(:poll_option, poll_id: poll.id)
+      FactoryBot.create(:poll_option, poll_id: poll.id)
+      FactoryBot.create(:poll_option, poll_id: poll.id)
       poll.poll_options.reload
       expect(poll).to be_valid
 
@@ -32,7 +32,7 @@ RSpec.describe Poll do
 
     it "testing deadline bug" do
       # Skipping validation because can't create poll with past deadline.
-      poll = FactoryGirl.build(:poll, deadline: Date.new(2014, 2, 11))
+      poll = FactoryBot.build(:poll, deadline: Date.new(2014, 2, 11))
       poll.save!(validate: false)
       poll.comment = "Hey Jeremy"
       poll.save!(validate: false)

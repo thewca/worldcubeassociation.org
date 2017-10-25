@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe "Competition WCIF" do
   let!(:competition) {
-    FactoryGirl.create(
+    FactoryBot.create(
       :competition,
       :with_delegate,
       id: "TestComp2014",
@@ -19,11 +19,11 @@ RSpec.describe "Competition WCIF" do
   let(:delegate) { competition.delegates.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { RankingCondition.new(16) }
-  let!(:round333_1) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance) }
-  let!(:round333_2) { FactoryGirl.create(:round, competition: competition, event_id: "333", number: 2) }
-  let!(:round444_1) { FactoryGirl.create(:round, competition: competition, event_id: "444", number: 1) }
-  let!(:round333fm_1) { FactoryGirl.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
-  let!(:round333mbf_1) { FactoryGirl.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
+  let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance) }
+  let!(:round333_2) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 2) }
+  let!(:round444_1) { FactoryBot.create(:round, competition: competition, event_id: "444", number: 1) }
+  let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
+  let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   before :each do
     # Load all the rounds we just created.
     competition.reload

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DelegateReport do
   it "factory makes a valid delegate report" do
-    dr = FactoryGirl.create :delegate_report
+    dr = FactoryBot.create :delegate_report
     expect(dr).to be_valid
   end
 
@@ -24,21 +24,21 @@ RSpec.describe DelegateReport do
     ]
 
     valid_urls.each do |valid_url|
-      dr = FactoryGirl.build :delegate_report, schedule_url: valid_url, discussion_url: valid_url
+      dr = FactoryBot.build :delegate_report, schedule_url: valid_url, discussion_url: valid_url
       expect(dr).to be_valid
     end
 
     invalid_urls.each do |invalid_url|
-      dr = FactoryGirl.build :delegate_report, schedule_url: invalid_url, discussion_url: nil
+      dr = FactoryBot.build :delegate_report, schedule_url: invalid_url, discussion_url: nil
       expect(dr).to be_invalid
 
-      dr = FactoryGirl.build :delegate_report, schedule_url: nil, discussion_url: invalid_url
+      dr = FactoryBot.build :delegate_report, schedule_url: nil, discussion_url: invalid_url
       expect(dr).to be_invalid
     end
   end
 
   it "schedule_url is not required when posted" do
-    dr = FactoryGirl.build :delegate_report, schedule_url: nil
+    dr = FactoryBot.build :delegate_report, schedule_url: nil
     expect(dr).to be_valid
 
     dr.posted = true
@@ -49,16 +49,16 @@ RSpec.describe DelegateReport do
   end
 
   it "discussion_url is set on creation" do
-    dr = FactoryGirl.create :delegate_report
+    dr = FactoryBot.create :delegate_report
     expect(dr.discussion_url).to eq "https://groups.google.com/forum/#!topicsearchin/wca-delegates/" + URI.encode_www_form_component(dr.competition.name)
   end
 
   context "can_view_delegate_report?" do
-    let(:other_delegate) { FactoryGirl.create :delegate }
-    let(:board_member) { FactoryGirl.create :board_member }
+    let(:other_delegate) { FactoryBot.create :delegate }
+    let(:board_member) { FactoryBot.create :board_member }
 
     context "past competition" do
-      let(:competition) { FactoryGirl.create :competition, :with_delegate, starts: 1.week.ago }
+      let(:competition) { FactoryBot.create :competition, :with_delegate, starts: 1.week.ago }
       let(:delegate) { competition.delegates.first }
 
       it "cannot view delegate report with unposted report" do
@@ -81,7 +81,7 @@ RSpec.describe DelegateReport do
     end
 
     context "upcoming competition" do
-      let(:competition) { FactoryGirl.create :competition, :with_delegate, starts: 1.week.from_now }
+      let(:competition) { FactoryBot.create :competition, :with_delegate, starts: 1.week.from_now }
       let(:delegate) { competition.delegates.first }
 
       it "cannot view delegate report with unposted report" do

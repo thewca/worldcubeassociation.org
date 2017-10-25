@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Competition management" do
   context "when signed in as admin" do
-    let(:admin) { FactoryGirl.create :admin }
+    let(:admin) { FactoryBot.create :admin }
     before :each do
       sign_in admin
     end
@@ -28,7 +28,7 @@ RSpec.feature "Competition management" do
 
     feature "clone an existing competition" do
       scenario "with valid data" do
-        competition = FactoryGirl.create(:competition, :with_delegate)
+        competition = FactoryBot.create(:competition, :with_delegate)
         visit edit_competition_path(competition)
         click_link "Clone"
         fill_in "Name", with: "Pedro 2016"
@@ -39,7 +39,7 @@ RSpec.feature "Competition management" do
       end
 
       scenario "with validation errors" do
-        competition = FactoryGirl.create(:competition, :with_delegate)
+        competition = FactoryBot.create(:competition, :with_delegate)
         visit edit_competition_path(competition)
         click_link "Clone"
         # See https://github.com/thewca/worldcubeassociation.org/issues/1016#issuecomment-262573451
@@ -51,7 +51,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "User confirms a competition" do
-      competition = FactoryGirl.create(:competition, :with_delegate)
+      competition = FactoryBot.create(:competition, :with_delegate)
       visit edit_competition_path(competition)
       click_button "Confirm"
 
@@ -59,7 +59,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id" do
-      competition = FactoryGirl.create(:competition, :with_delegate)
+      competition = FactoryBot.create(:competition, :with_delegate)
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
@@ -69,7 +69,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id to invalid id" do
-      competition = FactoryGirl.create(:competition, :with_delegate, id: "OldId2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId With Spaces"
       click_button "Update Competition"
@@ -82,7 +82,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id with validation error" do
-      competition = FactoryGirl.create(:competition, :with_delegate, id: "OldId2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       fill_in "Name", with: "Name that does not end in a year"
@@ -103,9 +103,9 @@ RSpec.feature "Competition management" do
   end
 
   context "when signed in as delegate" do
-    let(:delegate) { FactoryGirl.create(:delegate) }
-    let(:cloned_delegate) { FactoryGirl.create(:delegate) }
-    let(:competition_to_clone) { FactoryGirl.create :competition, cityName: 'Melbourne', delegates: [cloned_delegate], showAtAll: true }
+    let(:delegate) { FactoryBot.create(:delegate) }
+    let(:cloned_delegate) { FactoryBot.create(:delegate) }
+    let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne', delegates: [cloned_delegate], showAtAll: true }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }
@@ -148,7 +148,7 @@ RSpec.feature "Competition management" do
     end
 
     feature "edit" do
-      let(:comp_with_fours) { FactoryGirl.create :competition, events: [fours], delegates: [delegate] }
+      let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
       scenario 'can edit registration open datetime', js: true do
         visit edit_competition_path(comp_with_fours)
