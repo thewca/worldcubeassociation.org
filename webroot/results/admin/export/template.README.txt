@@ -28,24 +28,26 @@ but only under the following conditions:
     from the official WCA website
 
 Software created by:
-  Clément Gallet    France
+  ClÃ©ment Gallet    France
   Stefan Pochmann   Germany
   Josef Jelinek     Czech Republic
   Ron van Bruchem   Netherlands
 
 
 The export consists of these tables:
-  Persons        WCA competitors
-  Competitions   WCA competitions
-  Events         WCA events (Rubik's Cube, Megaminx, etc)
-  Results        WCA results per competition+event+round+person
-  RanksSingle    Best single result per competitor+event and ranks
-  RanksAverage   Best average result per competitor+event and ranks
-  Rounds         The round types (first, final, etc)
-  Formats        The round formats (best of 3, average of 5, etc)
-  Countries      Countries
-  Continents     Continents
-  Scrambles      Scrambles
+  Persons                                    WCA competitors
+  Competitions                               WCA competitions
+  Events                                     WCA events (Rubik's Cube, Megaminx, etc)
+  Results                                    WCA results per competition+event+round+person
+  RanksSingle                                Best single result per competitor+event and ranks
+  RanksAverage                               Best average result per competitor+event and ranks
+  Rounds                                     The round types (first, final, etc)
+  Formats                                    The round formats (best of 3, average of 5, etc)
+  Countries                                  Countries
+  Continents                                 Continents
+  Scrambles                                  Scrambles
+  championships                              Championship competitions
+  eligible_country_iso2s_for_championship    Competitors from which countries are eligible for a special championship type
 
 Most of the tables should be self-explanatory, but several things merit further
 explanation.
@@ -55,6 +57,11 @@ http://en.wikipedia.org/wiki/List_of_countries, and may include some countries
 that no longer exist.  The ISO2 column should reflect ISO 3166-1 alpha-2
 country codes, for countries that have them.  Custom codes may used in some
 circumstances.
+
+eligible_country_iso2s_for_championship stores information about which citizenships are eligible to win special cross-country championship types.
+For example, "greater_china" is a special championship type which contains 4 iso2: CN, HK, MC and TW. This means
+competitors from China, Hong Kong, Macau and Taiwan are eligible to win a competition with championship
+type "greater_china".
 
 Result values of the Results table can be interpreted as follows:
 - The result values are in fields value1-value5, best and average.
