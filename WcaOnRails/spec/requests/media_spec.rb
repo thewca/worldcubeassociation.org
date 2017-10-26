@@ -31,6 +31,28 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
   end
 end
 
+RSpec.shared_examples "must sign in" do |action, expect_success|
+  context "when not signed in" do
+    it "redirects to sign in page" do
+      self.instance_exec(&action)
+      expect(response).to redirect_to new_user_session_path
+    end
+  end
+
+  context "when signed in as regular user" do
+    let(:user) { FactoryBot.create :user }
+
+    before :each do
+      sign_in user
+    end
+
+    it 'can perform action' do
+      self.instance_exec(&action)
+      self.instance_exec(user, &expect_success)
+    end
+  end
+end
+
 RSpec.describe "media" do
   let(:competition_2013) { FactoryBot.create(:competition, :with_delegate, :visible, starts: Date.new(2013, 4, 4)) }
   let!(:medium_2013) { FactoryBot.create(:competition_medium, :pending, competition: competition_2013, text: "i am from 2013 and pending") }
@@ -39,6 +61,39 @@ RSpec.describe "media" do
   let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, countryId: "United Kingdom", starts: Date.today) }
   let!(:medium) { FactoryBot.create(:competition_medium, :pending, competition: competition, text: "i am pending") }
   let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, competition: competition, text: "i am accepted") }
+
+  describe 'GET #new' do
+    it_should_behave_like 'must sign in',
+                          lambda { get new_medium_path },
+                          lambda { |current_user| expect(response).to be_success }
+  end
+
+  describe 'POST #create' do
+    it_should_behave_like(
+      'must sign in',
+      lambda do
+        post media_path, params: {
+          'competition_medium[status]': "accepted", # This should get ignored and set to 'pending'
+
+          # These should get ignored and set to the current user's information.
+          'competition_medium[submitterName]': "Jeremy",
+          'competition_medium[submitterEmail]': "jeremy@jflei.com",
+
+          'competition_medium[competitionId]': competition_2013.id,
+          'competition_medium[type]': 'report',
+          'competition_medium[text]': 'i was just created',
+          'competition_medium[link]': "https://www.jflei.com",
+          'competition_medium[submitterComment]': "this is a comment",
+        }
+      end,
+      lambda do |current_user|
+        medium = CompetitionMedium.find_by_text!("i was just created")
+        expect(medium.status).to eq "pending"
+        expect(medium.submitterName).to eq current_user.name
+        expect(medium.submitterEmail).to eq current_user.email
+      end,
+    )
+  end
 
   describe 'GET #index' do
     it "shows accepted media for current year" do

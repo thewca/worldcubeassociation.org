@@ -2,7 +2,27 @@
 
 class MediaController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index]
+  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
+
+  def new
+    @medium = CompetitionMedium.new
+  end
+
+  def create
+    params = medium_params.merge(
+      "status" => "pending",
+      "submitterName" => current_user.name,
+      "submitterEmail" => current_user.email,
+    )
+    @medium = CompetitionMedium.new(params)
+
+    if @medium.save
+      flash[:success] = "Thanks for sending us new media!"
+      redirect_to new_medium_path
+    else
+      render :new
+    end
+  end
 
   private def get_media
     params[:year] ||= "all years"

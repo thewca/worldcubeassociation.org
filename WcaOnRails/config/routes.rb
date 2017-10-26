@@ -65,7 +65,7 @@ Rails.application.routes.draw do
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
 
   get "media/validate" => 'media#validate', as: :media_validate
-  resources :media, only: [:index, :edit, :update, :destroy]
+  resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
   resources :persons, only: [:index, :show]
 
