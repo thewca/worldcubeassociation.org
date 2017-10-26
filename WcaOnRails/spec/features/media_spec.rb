@@ -3,10 +3,39 @@
 require "rails_helper"
 
 RSpec.feature "Media" do
-  let!(:medium1) { FactoryBot.create(:competition_medium, text: "Article 1") }
-  let!(:medium2) { FactoryBot.create(:competition_medium, text: "Article 2") }
+  context "when signed in as regular user" do
+    let(:competition) { FactoryBot.create(:competition) }
+    let(:user) { FactoryBot.create(:user) }
+
+    before :each do
+      sign_in user
+    end
+
+    scenario "submit new media" do
+      visit "/media/new"
+      fill_in "Text", with: "I am a brand new medium!"
+      fill_in "Link", with: "https://example.com"
+      fill_in "Submitter comment", with: "This is the best medium ever"
+      click_button "Create Competition medium"
+
+      # We forgot to fill in competition above, which will cause a validation error.
+      # Fill in competition and then resubmit.
+      expect(page).to have_text "Competition can't be blank"
+      fill_in "Competition", with: competition.id
+      click_button "Create Competition medium"
+
+      medium = CompetitionMedium.find_by_competitionId!(competition.id)
+      expect(medium.status).to eq "pending"
+      expect(medium.text).to eq "I am a brand new medium!"
+      expect(medium.uri).to eq "https://example.com"
+      expect(medium.submitterComment).to eq "This is the best medium ever"
+    end
+  end
 
   context "when signed in as WCT member" do
+    let!(:medium1) { FactoryBot.create(:competition_medium, text: "Article 1") }
+    let!(:medium2) { FactoryBot.create(:competition_medium, text: "Article 2") }
+
     before :each do
       sign_in FactoryBot.create :user, :wct_member
     end
