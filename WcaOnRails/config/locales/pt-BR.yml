@@ -438,6 +438,23 @@ pt-BR:
       vote:
         #original_hash: 153d7a5
         comment: Comentário
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Competição
+        #original_hash: 3deb745
+        type: Tipo
+        #original_hash: c3328c3
+        text: Texto
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Nome do remetente
+        #original_hash: 78cdfee
+        submitterEmail: E-mail do remetente
+        #original_hash: 0d31f23
+        submitterComment: Comentário
+        #original_hash: bae7d5b
+        status: Status
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -707,6 +724,23 @@ pt-BR:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
