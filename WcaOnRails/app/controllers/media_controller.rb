@@ -67,7 +67,7 @@ class MediaController < ApplicationController
     @medium = find_medium
     if @medium.destroy
       flash[:success] = "Deleted medium"
-      redirect_to media_validate_path
+      redirect_to validate_media_path
     else
       I18n.with_locale(:en) { render :edit }
     end

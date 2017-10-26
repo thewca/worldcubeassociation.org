@@ -4,7 +4,7 @@
   <h2>
     <%= yield(:title) %>
     <% if current_user&.can_approve_media? %>
-      <%= link_to media_validate_path, title: "Validate media" do %>
+      <%= link_to validate_media_path, title: "Validate media" do %>
         <span class="badge"><%= CompetitionMedium.pending.count %></span>
       <% end %>
     <% end %>

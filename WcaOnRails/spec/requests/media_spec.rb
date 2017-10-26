@@ -141,7 +141,7 @@ RSpec.describe "media" do
 
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
-                          lambda { get media_validate_path },
+                          lambda { get validate_media_path },
                           lambda { expect(response).to be_success }
 
     context "signed in as WCT member" do
@@ -150,14 +150,14 @@ RSpec.describe "media" do
       end
 
       it "default shows only pending media for all years" do
-        get media_validate_path
+        get validate_media_path
         expect(response.body).to include "i am pending"
         expect(response.body).to include "i am from 2013 and pending"
         expect(response.body).not_to include "i am accepted"
       end
 
       it "can show accepted media" do
-        get media_validate_path, params: { status: "accepted" }
+        get validate_media_path, params: { status: "accepted" }
         expect(response.body).not_to include "i am pending"
         expect(response.body).to include "i am accepted"
       end
@@ -226,7 +226,7 @@ RSpec.describe "media" do
     it_should_behave_like 'only WCT',
                           lambda { destroy_medium.call },
                           lambda {
-                            expect(response).to redirect_to media_validate_path
+                            expect(response).to redirect_to validate_media_path
                             expect(CompetitionMedium.find_by_id(medium.id)).to be_nil
                           }
   end
