@@ -32,9 +32,57 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
 end
 
 RSpec.describe "media" do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible) }
-  let!(:medium) { FactoryBot.create(:competition_medium, text: "i am pending") }
-  let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, text: "i am accepted") }
+  let(:competition_2013) { FactoryBot.create(:competition, :with_delegate, :visible, starts: Date.new(2013, 4, 4)) }
+  let!(:medium_2013) { FactoryBot.create(:competition_medium, :pending, competition: competition_2013, text: "i am from 2013 and pending") }
+  let!(:accepted_medium_2013) { FactoryBot.create(:competition_medium, :accepted, competition: competition_2013, text: "i am from 2013 and accepted") }
+
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, countryId: "United Kingdom", starts: Date.today) }
+  let!(:medium) { FactoryBot.create(:competition_medium, :pending, competition: competition, text: "i am pending") }
+  let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, competition: competition, text: "i am accepted") }
+
+  describe 'GET #index' do
+    it "shows accepted media for current year" do
+      get media_path
+      expect(response.body).not_to include "i am pending"
+      expect(response.body).not_to include "i am from 2013 and accepted"
+      expect(response.body).to include "i am accepted"
+    end
+
+    describe "filter by year" do
+      it "all years" do
+        get media_path, params: { year: "all years" }
+
+        expect(response.body).to include "i am from 2013 and accepted"
+        expect(response.body).to include "i am accepted"
+      end
+
+      it "2013" do
+        get media_path, params: { year: "2013" }
+
+        expect(response.body).to include "i am from 2013 and accepted"
+        expect(response.body).not_to include "i am accepted"
+      end
+    end
+
+    describe "filter by region" do
+      let!(:competition_us) { FactoryBot.create(:competition, :with_delegate, :visible, countryId: "USA", starts: Date.today) }
+      let!(:medium_us) { FactoryBot.create(:competition_medium, :accepted, competition: competition_us, text: "i am in the us and accepted") }
+
+      it "filters by country" do
+        get media_path, params: { region: "USA" }
+
+        expect(response.body).to include "i am in the us and accepted"
+        expect(response.body).not_to include "i am accepted"
+      end
+
+      it "filters by continent" do
+        get media_path, params: { region: "_North America" }
+
+        expect(response.body).to include "i am in the us and accepted"
+        expect(response.body).not_to include "i am accepted"
+      end
+    end
+  end
 
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
@@ -46,9 +94,10 @@ RSpec.describe "media" do
         sign_in FactoryBot.create :user, :wct_member
       end
 
-      it "shows only pending media by default" do
+      it "default shows only pending media for all years" do
         get media_validate_path
         expect(response.body).to include "i am pending"
+        expect(response.body).to include "i am from 2013 and pending"
         expect(response.body).not_to include "i am accepted"
       end
 

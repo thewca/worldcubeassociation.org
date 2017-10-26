@@ -137,6 +137,12 @@ module ApplicationHelper
     end.xss_aware_to_sentence
   end
 
+  def year_option_tags(selected_year: nil, future: false)
+    years = future ? Competition.years : Competition.non_future_years
+
+    content_tag(:option, t('competitions.index.all_years'), value: 'all years') + options_for_select(years, selected_year)
+  end
+
   def region_option_tags(selected_id: nil, real_only: false)
     regions = {
       t('common.continent') => Continent::ALL_SORTED_BY_LOCALE[I18n.locale].map { |continent| [continent.name, continent.id] },

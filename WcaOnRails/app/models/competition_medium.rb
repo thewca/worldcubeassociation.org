@@ -21,4 +21,10 @@ class CompetitionMedium < ApplicationRecord
   def self.types_i18n
     self.types.keys.map { |k| [k, k.titleize] }.to_h
   end
+
+  scope :belongs_to_region, lambda { |region_id|
+    joins(competition: [:country]).where(
+      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+    )
+  }
 end

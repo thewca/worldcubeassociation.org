@@ -794,6 +794,14 @@ class Competition < ApplicationRecord
     end
   end
 
+  def self.years
+    Competition.where(showAtAll: true).pluck(:year).uniq.sort!.reverse!
+  end
+
+  def self.non_future_years
+    self.years.select { |y| y <= Date.today.year }
+  end
+
   def self.search(query, params: {}, managed_by_user: nil)
     if managed_by_user
       competitions = Competition.managed_by(managed_by_user.id)
