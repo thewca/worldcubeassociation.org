@@ -74,7 +74,7 @@ class CompetitionsController < ApplicationController
     @recent_selected = params[:state] == "recent"
     @custom_selected = params[:state] == "custom"
 
-    @years = ["all years"] + Competition.where(showAtAll: true).pluck(:year).uniq.select { |y| y <= Date.today.year }.sort!.reverse!
+    @years = ["all years"] + Competition.non_future_years
 
     if params[:delegate].present?
       delegate = User.find(params[:delegate])

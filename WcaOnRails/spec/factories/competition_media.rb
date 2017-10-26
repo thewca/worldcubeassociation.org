@@ -16,5 +16,9 @@ FactoryBot.define do
     trait :accepted do
       status "accepted"
     end
+
+    trait :pending do
+      status "pending"
+    end
   end
 end

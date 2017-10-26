@@ -1,81 +1,9 @@
 <% provide(:title, "Validate Media") %>
 
-<script>
-  function sortBySorter(a, b) {
-    return b['sort-by'] - a['sort-by'];
-  }
-</script>
 <div class="container-fluid">
   <h2><%= yield(:title) %></h2>
 
-  <form action="" method="get" class="form-inline">
-    <div class="form-group">
-      <label for="status-selector">Status</label>
-      <div class="input-group">
-        <%= select_tag "status",
-                       options_for_select(CompetitionMedium.statuses_i18n.invert, @status),
-                       id: "status-selector",
-                       class: "form-control"
-        %>
-        <span class="input-group-btn">
-          <input type="submit" class="btn btn-default" value="Filter" />
-        </span>
-      </div>
-    </div>
-  </form>
+  <%= link_to "View public media page", media_path %>
 
-  <%= wca_table table_class: "validate-media", data: { toggle: "table", sort_name: "submission-date", sort_order: "desc" } do %>
-    <thead>
-      <tr>
-        <th data-sortable="true" data-field="submission-date" data-sort-name="_submission-date_data" data-sorter="sortBySorter">Submission Date</th>
-        <th data-sortable="true" data-field="competition-date" data-sort-name="_competition-date_data" data-sorter="sortBySorter">Competition Date</th>
-        <th>Competition</th>
-        <th>Country, City</th>
-        <th>Type</th>
-        <th>Link</th>
-        <th></th>
-
-        <!-- Extra column for .table-greedy-last-column -->
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @media.each do |medium| %>
-        <% competition = medium.competition %>
-        <tr data-medium-id="<%= medium.id %>">
-          <td data-sort-by="<%= medium.timestampSubmitted.to_i %>"><%= medium.timestampSubmitted.to_formatted_s(:long_utc) %></td>
-          <td data-sort-by="<%= competition.start_date.to_time.to_i %>">
-            <%= wca_date_range(competition.start_date, competition.end_date) %>
-          </td>
-          <td><%= link_to competition.name, competition_path(competition) %></td>
-          <td><strong><%= competition.country.name %></strong>, <%= competition.cityName %></td>
-          <td><%= medium.type %></td>
-          <td><%= link_to medium.text, medium.uri %></td>
-          <td>
-            <% if medium.pending? %>
-              <%= button_to medium_path(medium),
-                            title: "Accept",
-                            class: "btn btn-link",
-                            method: :patch,
-                            params: { "competition_medium[status]" => "accepted" },
-                            data: { confirm: "Are you sure you want to accept this medium?" } do
-              %>
-                <%= icon("check") %>
-              <% end %>
-            <% end %>
-            <%= link_to icon("pencil"), edit_medium_path(medium), title: "Edit" %>
-            <%= button_to medium_path(medium),
-                          title: "Delete",
-                          class: "btn btn-link",
-                          method: :delete,
-                          data: { confirm: "Are you sure you want to delete this medium?" } do
-            %>
-              <%= icon("trash") %>
-            <% end %>
-          </td>
-          <td></td>
-      <% end %>
-    </tbody>
-  <% end %>
+  <%= render "media_table", media: @media, show_edit_buttons: true %>
 </div>

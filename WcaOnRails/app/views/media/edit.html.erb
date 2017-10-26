@@ -7,7 +7,7 @@
 
   <%= horizontal_simple_form_for @medium, url: medium_path(@medium), html: { class: 'are-you-sure' } do |f| %>
     <%= f.input :competitionId, as: :competition_id, only_one: true %>
-    <%= f.input :type, collection: CompetitionMedium::types_i18n.invert, include_blank: false %>
+    <%= f.input :type, include_blank: false %>
     <%= f.input :text %>
     <%= f.input :uri %>
     <%= f.input :submitterName %>

@@ -1,14 +1,30 @@
 # frozen_string_literal: true
 
 class MediaController < ApplicationController
-  before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }
+  before_action :authenticate_user!, except: [:index]
+  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index]
+
+  private def get_media
+    params[:year] ||= "all years"
+    params[:region] ||= "all"
+
+    media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(timestampSubmitted: :desc)
+    media = media.where("Competitions.year": params[:year]) unless params[:year] == "all years"
+    media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
+
+    media
+  end
+
+  def index
+    params[:status] = "accepted"
+    params[:year] ||= Date.today.year
+    @media = get_media
+    render :index
+  end
 
   def validate
-    @status = params["status"]
-    @status = "pending" unless CompetitionMedium.statuses.include?(@status)
-    @media = CompetitionMedium.includes(:competition).where(status: @status).order(timestampSubmitted: :desc)
-
+    params[:status] ||= "pending"
+    @media = get_media
     I18n.with_locale(:en) { render :validate }
   end
 
