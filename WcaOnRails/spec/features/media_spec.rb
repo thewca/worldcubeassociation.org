@@ -16,13 +16,13 @@ RSpec.feature "Media" do
       fill_in "Text", with: "I am a brand new medium!"
       fill_in "Link", with: "https://example.com"
       fill_in "Submitter comment", with: "This is the best medium ever"
-      click_button "Create Competition medium"
+      click_button "Submit media"
 
       # We forgot to fill in competition above, which will cause a validation error.
       # Fill in competition and then resubmit.
       expect(page).to have_text "Competition can't be blank"
       fill_in "Competition", with: competition.id
-      click_button "Create Competition medium"
+      click_button "Submit media"
 
       medium = CompetitionMedium.find_by_competitionId!(competition.id)
       expect(medium.status).to eq "pending"
@@ -77,14 +77,14 @@ RSpec.feature "Media" do
 
       scenario "accept it" do
         select "Accepted", from: "Status"
-        click_button "Update Competition medium"
+        click_button "Update media"
         expect(medium2.reload.status).to eq "accepted"
       end
 
       scenario "change text" do
         expect(medium2.text).to eq "Article 2"
         fill_in "Text", with: "New text"
-        click_button "Update Competition medium"
+        click_button "Update media"
         expect(medium2.reload.text).to eq "New text"
       end
     end

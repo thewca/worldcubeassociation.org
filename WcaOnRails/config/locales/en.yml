@@ -152,6 +152,8 @@ en:
       one: "this event"
       other: "these %{count} events"
     search_site: "Search site"
+    filter: Filter
+    delete: Delete
     date_placeholder: "YYYY-MM-DD"
     datetime_placeholder: "YYYY-MM-DD HH:MM"
   #context: Key used in the OAuth part of the site (checkout the /oauth/applications page for more details)
@@ -167,6 +169,11 @@ en:
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+  helpers:
+    submit:
+      competition_medium:
+        create: "Submit media"
+        update: "Update media"
   activerecord:
     #context: This key is used as a label for forms regarding
     attributes:
@@ -1428,3 +1435,25 @@ en:
         '4': "Score-taking and printing results"
         '5': "Looking for scramblers and judges"
         '6': "Dealing with all organizational issues regarding the venue (e.g. keys or WiFi)"
+  #context: Media pages
+  media:
+    common:
+      view_media_page: View all media
+      confirm_delete: Are you sure you want to delete this media?
+    new:
+      title: Submit Media
+      review_warning_html: All media will be reviewed before being listed on the <a href="/media">all media page</a>.
+    edit:
+      title: Edit Media
+    index:
+      title: Media
+      validate_media: Validate media
+      submit_media_html: You can submit media <a href="/media/new">here</a>.
+    validate:
+      title: Validate Media
+    media_table:
+      year: Year
+      location: Country, City
+      accept: Accept
+      confirm_accept: Are you sure you want to accept this media?
+      edit: Edit

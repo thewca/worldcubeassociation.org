@@ -8,7 +8,7 @@
 
 <form action="" method="get" class="form-inline">
   <div class="form-group">
-    <label for="year-selector">Year</label>
+    <label for="year-selector"><%= t '.year' %></label>
     <%= select_tag "year",
                    year_option_tags(selected_year: params[:year], future: false),
                    id: "year-selector",
@@ -23,7 +23,7 @@
 
   <% if show_edit_buttons %>
     <div class="form-group">
-      <label for="status-selector">Status</label>
+      <label for="status-selector"><%= t 'activerecord.attributes.competition_medium.status' %></label>
       <%= select_tag "status",
                      options_for_select(CompetitionMedium.statuses_i18n.invert, params[:status]),
                      id: "status-selector",
@@ -32,7 +32,7 @@
     </div>
   <% end %>
 
-  <input type="submit" class="btn btn-default" value="Filter" />
+  <input type="submit" class="btn btn-default" value="<%= t 'common.filter' %>" />
 </form>
 
 <%= wca_table table_class: "media", data: { toggle: "table", sort_name: "submission-date", sort_order: "desc" } do %>
@@ -40,10 +40,10 @@
     <tr>
       <th data-sortable="true" data-field="submission-date" data-sort-name="_submission-date_data" data-sorter="sortBySorter">Submission Date</th>
       <th data-sortable="true" data-field="competition-date" data-sort-name="_competition-date_data" data-sorter="sortBySorter">Competition Date</th>
-      <th>Competition</th>
-      <th>Country, City</th>
-      <th>Type</th>
-      <th>Link</th>
+      <th><%= t 'activerecord.attributes.competition_medium.competitionId' %></th>
+      <th><%= t '.location' %></th>
+      <th><%= t 'activerecord.attributes.competition_medium.type' %></th>
+      <th><%= t 'activerecord.attributes.competition_medium.uri' %></th>
       <th></th>
 
       <!-- Extra column for .table-greedy-last-column -->
@@ -67,26 +67,27 @@
           <td>
             <% if medium.pending? %>
               <%= button_to medium_path(medium),
-                            title: "Accept",
+                            title: t('.accept'),
                             class: "btn btn-link",
                             method: :patch,
                             params: { "competition_medium[status]" => "accepted" },
-                            data: { confirm: "Are you sure you want to accept this medium?" } do
+                            data: { confirm: t('.confirm_accept') } do
               %>
                 <%= icon("check") %>
               <% end %>
             <% end %>
-            <%= link_to icon("pencil"), edit_medium_path(medium), title: "Edit" %>
+            <%= link_to icon("pencil"), edit_medium_path(medium), title: t('.edit') %>
             <%= button_to medium_path(medium),
-                          title: "Delete",
+                          title: t('common.delete'),
                           class: "btn btn-link",
                           method: :delete,
-                          data: { confirm: "Are you sure you want to delete this medium?" } do
+                          data: { confirm: t('media.common.confirm_delete') } do
             %>
               <%= icon("trash") %>
             <% end %>
           </td>
         <% end %>
+
         <!-- Extra column for .table-greedy-last-column -->
         <td></td>
     <% end %>
