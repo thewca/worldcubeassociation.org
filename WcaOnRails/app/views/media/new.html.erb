@@ -1,10 +1,10 @@
-<% provide(:title, "Submit Medium") %>
+<% provide(:title, t('.title')) %>
 
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
   <p>
-    All media will be reviewed before being listed on the <%= link_to "all media page", media_path %>.
+    <%= t('.review_warning_html') %>
   </p>
 
   <%= horizontal_simple_form_for @medium, url: media_path, html: { class: 'are-you-sure' } do |f| %>

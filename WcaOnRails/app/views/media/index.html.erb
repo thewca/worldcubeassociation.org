@@ -1,16 +1,16 @@
-<% provide(:title, "Media") %>
+<% provide(:title, t('.title')) %>
 
 <div class="container-fluid">
   <h2>
     <%= yield(:title) %>
     <% if current_user&.can_approve_media? %>
-      <%= link_to validate_media_path, title: "Validate media" do %>
+      <%= link_to validate_media_path, title: t('.validate_media') do %>
         <span class="badge"><%= CompetitionMedium.pending.count %></span>
       <% end %>
     <% end %>
   </h2>
 
-  You can submit media <%= link_to "here", new_medium_path %>.
+  <%= t('.submit_media_html') %>
   <hr>
 
   <%= render "media_table", media: @media %>

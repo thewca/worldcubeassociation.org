@@ -1,9 +1,9 @@
-<% provide(:title, "Validate Media") %>
+<% provide(:title, t('.title')) %>
 
 <div class="container-fluid">
-  <h2><%= yield(:title) %></h2>
+  <%= link_to t('media.common.view_media_page'), media_path %>
 
-  <%= link_to "View public media page", media_path %>
+  <h2><%= yield(:title) %></h2>
 
   <%= render "media_table", media: @media, show_edit_buttons: true %>
 </div>
