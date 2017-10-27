@@ -133,6 +133,14 @@ server {
     return 302 /competitions/$competitionId;
   }
 
+  # Redirect old media pages
+  location /results/media_insertion.php {
+    return 302 /media/new;
+  }
+  location /results/media.php {
+    return 302 /media/;
+  }
+
   location /results {
     alias <%= @repo_root %>/webroot/results;
     index index.php index.html;
