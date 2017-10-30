@@ -4819,9 +4819,23 @@ resolve-from@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-3.0.0.tgz#b22c7af7d9d6881bc8b6e653335eebcb0a188748"
 
-resolve-url-loader@^2.1.0, resolve-url-loader@^2.1.1:
+resolve-url-loader@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/resolve-url-loader/-/resolve-url-loader-2.1.1.tgz#5354e87381aae348371e555172c50816708e6c1c"
+  dependencies:
+    adjust-sourcemap-loader "^1.1.0"
+    camelcase "^4.0.0"
+    convert-source-map "^1.1.1"
+    loader-utils "^1.0.0"
+    lodash.defaults "^4.0.0"
+    rework "^1.0.1"
+    rework-visit "^1.0.0"
+    source-map "^0.5.6"
+    urix "^0.1.0"
+
+resolve-url-loader@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/resolve-url-loader/-/resolve-url-loader-2.2.0.tgz#9662feaa11debf7cf8e3feb91dae9544aa7dee88"
   dependencies:
     adjust-sourcemap-loader "^1.1.0"
     camelcase "^4.0.0"
