@@ -1443,8 +1443,15 @@ en:
     new:
       title: Submit Media
       review_warning_html: All media will be reviewed before being listed on the <a href="/media">all media page</a>.
+      guidelines: "Guidelines"
+      media_guidelines:
+        '1': All media content must be related to the selected competition.
+        '2': All media content must be appropriate and clean and not contain any improper or offensive material.
+        '3': The media content must not have extensive presence of sponsors or ads.
+        '4': All media content must have appropriate and descriptive titles.
     edit:
       title: Edit Media
+      validate_media_page: View all pending media
     index:
       title: Media
       validate_media: Validate media

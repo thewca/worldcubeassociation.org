@@ -7,6 +7,15 @@
     <%= t('.review_warning_html') %>
   </p>
 
+  <div class="well">
+    <h3><%= t '.guidelines' %></h3>
+    <ul>
+      <% t('.media_guidelines').values.each do |guideline| %>
+        <li><%= guideline %></li>
+      <% end %>
+    </ul>
+  </div>
+
   <%= horizontal_simple_form_for @medium, url: media_path, html: { class: 'are-you-sure' } do |f| %>
     <%= f.input :competitionId, as: :competition_id, only_one: true %>
     <%= f.input :type, include_blank: false %>
