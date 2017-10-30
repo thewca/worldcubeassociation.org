@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="year-selector"><%= t '.year' %></label>
     <%= select_tag "year",
-                   year_option_tags(selected_year: params[:year], future: false),
+                   year_option_tags(selected_year: params[:year], exclude_future: true),
                    id: "year-selector",
                    class: "form-control"
     %>
@@ -44,7 +44,9 @@
       <th><%= t '.location' %></th>
       <th><%= t 'activerecord.attributes.competition_medium.type' %></th>
       <th><%= t 'activerecord.attributes.competition_medium.uri' %></th>
-      <th></th>
+      <% if show_edit_buttons %>
+        <th></th>
+      <% end %>
 
       <!-- Extra column for .table-greedy-last-column -->
       <th></th>
