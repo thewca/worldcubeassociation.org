@@ -137,10 +137,9 @@ module ApplicationHelper
     end.xss_aware_to_sentence
   end
 
-  def year_option_tags(selected_year: nil, future: false)
-    years = future ? Competition.years : Competition.non_future_years
-
-    content_tag(:option, t('competitions.index.all_years'), value: 'all years') + options_for_select(years, selected_year)
+  def year_option_tags(selected_year: nil, exclude_future: true)
+    years = [[t('competitions.index.all_years'), 'all years']] + (exclude_future ? Competition.non_future_years : Competition.years)
+    options_for_select(years, selected_year)
   end
 
   def region_option_tags(selected_id: nil, real_only: false)
@@ -149,7 +148,7 @@ module ApplicationHelper
       t('common.country') => Country.all_sorted_by(I18n.locale, real: real_only).map { |country| [country.name, country.id] },
     }
 
-    content_tag(:option, t('common.all_regions'), value: "all") + grouped_options_for_select(regions, selected_id)
+    options_for_select([[t('common.all_regions'), "all"]], selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
   def simple_form_for(resource, options = {}, &block)
