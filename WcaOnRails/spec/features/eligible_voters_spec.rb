@@ -4,6 +4,9 @@ require "rails_helper"
 require "csv"
 
 RSpec.feature "Eligible voters csv" do
+  before { Timecop.freeze(Time.new(2016, 5, 5, 10, 5, 3, "+00:00")) }
+  after { Timecop.return }
+
   let!(:wrc_team_id) { Team.find_by_friendly_id("wrc") }
 
   let!(:user) { FactoryBot.create(:user) }
@@ -34,14 +37,17 @@ RSpec.feature "Eligible voters csv" do
 
   it 'includes all voters' do
     visit "/admin/voters.csv"
+
+    expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="wca-voters-2016-05-05T10:05:03Z.csv"'
+
     csv = CSV.parse(page.body)
     expect(csv).to match_array [
-      ["name", "email"],
-      [team_leader.name, team_leader.email],
-      [delegate.name, delegate.email],
-      [delegate_who_is_also_team_leader.name, delegate_who_is_also_team_leader.email],
-      [senior_delegate.name, senior_delegate.email],
-      [board_member.name, board_member.email],
+      ["id", "name", "email"],
+      [team_leader.id.to_s, team_leader.name, team_leader.email],
+      [delegate.id.to_s, delegate.name, delegate.email],
+      [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.name, delegate_who_is_also_team_leader.email],
+      [senior_delegate.id.to_s, senior_delegate.name, senior_delegate.email],
+      [board_member.id.to_s, board_member.name, board_member.email],
     ]
   end
 end

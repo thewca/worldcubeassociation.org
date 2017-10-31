@@ -115,6 +115,7 @@ group :test do
   gem 'poltergeist'
   gem 'phantomjs', require: 'phantomjs/poltergeist'
   gem 'coveralls', require: false
+  gem 'timecop'
 end
 
 group :production do

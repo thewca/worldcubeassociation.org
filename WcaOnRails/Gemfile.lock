@@ -488,6 +488,7 @@ GEM
     tilt (2.0.8)
     time_will_tell (0.1.0)
       railties (>= 3.2)
+    timecop (0.9.1)
     tins (1.15.0)
     translighterate (0.2.0)
       actionview (>= 4.0, < 6.0)
@@ -608,6 +609,7 @@ DEPENDENCIES
   stripe
   therubyracer
   time_will_tell
+  timecop
   translighterate
   twitter_cldr
   uglifier
