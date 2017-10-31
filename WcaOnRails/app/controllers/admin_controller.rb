@@ -89,12 +89,12 @@ class AdminController < ApplicationController
 
   def voters
     csv = CSV.generate do |line|
-      line << ["name", "email"]
+      line << ["id", "name", "email"]
 
       User.eligible_voters.each do |user|
-        line << [user.name, user.email]
+        line << [user.id, user.name, user.email]
       end
     end
-    send_data csv, filename: "wca-voters.csv", type: :csv
+    send_data csv, filename: "wca-voters-#{Time.now.utc.iso8601}.csv", type: :csv
   end
 end
