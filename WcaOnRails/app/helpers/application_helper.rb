@@ -2,6 +2,7 @@
 
 module ApplicationHelper
   include MarkdownHelper
+  include MoneyRails::ActionViewExtension
 
   def full_title(page_title = '')
     base_title = WcaOnRails::Application.config.site_name
@@ -199,5 +200,9 @@ module ApplicationHelper
     html_options[:class] ||= ""
     html_options[:class] += " flag f#{size} #{iso2.downcase}"
     content_tag :span, "", html_options
+  end
+
+  def format_money(money)
+    "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
 end
