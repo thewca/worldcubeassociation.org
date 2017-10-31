@@ -88,7 +88,7 @@
               </td>
               <td class="entry_fee">
                 <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">
-                  <%= humanized_money_with_symbol registration.paid_entry_fees %>
+                  <%= format_money registration.paid_entry_fees %>
                 </span>
               </td>
               <td>

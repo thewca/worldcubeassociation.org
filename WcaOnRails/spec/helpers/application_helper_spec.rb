@@ -80,4 +80,18 @@ RSpec.describe ApplicationHelper do
       expect(wca_id_link("2005FLEI01")).to eq "<span class=\"wca-id\"><a href=\"#{person_url "2005FLEI01"}\">2005FLEI01</a></span>"
     end
   end
+
+  describe "#format_money" do
+    it "formats 6.9 United States Dollars" do
+      expect(format_money(Money.new(690, "USD"))).to eq "$6.90 (United States Dollar)"
+    end
+
+    it "formats 135 Czech Korunas" do
+      expect(format_money(Money.new(135*100, "CZK"))).to eq "135 Kč (Czech Koruna)"
+    end
+
+    it "formats 135 New Taiwanese Dollars" do
+      expect(format_money(Money.new(450, "TWD"))).to eq "$4.50 (New Taiwan Dollar)"
+    end
+  end
 end
