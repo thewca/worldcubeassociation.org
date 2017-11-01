@@ -42,12 +42,12 @@ RSpec.feature "Eligible voters csv" do
 
     csv = CSV.parse(page.body)
     expect(csv).to match_array [
-      ["id", "name", "email"],
-      [team_leader.id.to_s, team_leader.name, team_leader.email],
-      [delegate.id.to_s, delegate.name, delegate.email],
-      [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.name, delegate_who_is_also_team_leader.email],
-      [senior_delegate.id.to_s, senior_delegate.name, senior_delegate.email],
-      [board_member.id.to_s, board_member.name, board_member.email],
+      ["id", "email", "name"],
+      [team_leader.id.to_s, team_leader.email, team_leader.name],
+      [delegate.id.to_s, delegate.email, delegate.name],
+      [delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
+      [senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
+      [board_member.id.to_s, board_member.email, board_member.name],
     ]
   end
 end
