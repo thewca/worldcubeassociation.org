@@ -471,7 +471,9 @@ class Competition < ApplicationRecord
   end
 
   def can_edit_registration_fees?
-    registrations.with_payments.empty?
+    # Quick workaround for https://github.com/thewca/worldcubeassociation.org/issues/2123
+    # (We used to return `registrations.with_payments.empty?` here)
+    true
   end
 
   def registration_opened?

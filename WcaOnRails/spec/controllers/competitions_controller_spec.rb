@@ -419,14 +419,15 @@ RSpec.describe CompetitionsController do
         expect(competition.currency_code).to eq "EUR"
       end
 
-      it "cannot update the registration fees when there is any payment" do
+      it "can update the registration fees when there is any payment" do
+        # See https://github.com/thewca/worldcubeassociation.org/issues/2123
+
         previous_fees = competition.base_entry_fee_lowest_denomination
-        previous_currency = competition.currency_code
         FactoryBot.create(:registration, :paid, competition: competition)
         patch :update, params: { id: competition, competition: { base_entry_fee_lowest_denomination: previous_fees + 10, currency_code: "EUR" } }
         competition.reload
-        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees
-        expect(competition.currency_code).to eq previous_currency
+        expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees + 10
+        expect(competition.currency_code).to eq "EUR"
       end
     end
 
