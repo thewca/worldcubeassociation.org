@@ -213,19 +213,14 @@ da:
       other: disse discipliner
     #original_hash: 51ef7d4
     search_site: Søg på siden
+    #original_hash: d7decf1
+    filter: Filter
+    #original_hash: f6fdbe4
+    delete: Slet
     #original_hash: d3f8f7b
     date_placeholder: ÅÅÅÅ-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'ÅÅÅÅ-MM-DD TT:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Kandidat Delegeret
-    #original_hash: 12ab214
-    delegate: Delegeret
-    #original_hash: d463c23
-    senior_delegate: Senior Delegeret
-    #original_hash: 660ee15
-    board_member: Bestyrelses Medlem
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -248,6 +243,13 @@ da:
       scopes: Scopes
       #original_hash: 3b0d449
       callback_urls: Callback Urls
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Indsend medie
+        #original_hash: 4cf19ca
+        update: Opdater medie
   activerecord:
     attributes:
       user:
@@ -455,6 +457,45 @@ da:
         submitterComment: Afsenderens kommentar
         #original_hash: bae7d5b
         status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Mand
+        #original_hash: b7c17e9
+        f: Kvinde
+        #original_hash: 6e6a6f2
+        o: Andet
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Kandidat Delegeret
+        #original_hash: 12ab214
+        delegate: Delegeret
+        #original_hash: d463c23
+        senior_delegate: Senior Delegeret
+        #original_hash: 660ee15
+        board_member: Bestyrelses Medlem
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Mand
+        #original_hash: b7c17e9
+        f: Kvinde
+        #original_hash: 6e6a6f2
+        o: Andet
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Accepteret
+        #original_hash: 96f608c
+        pending: Afventer
+      type:
+        #original_hash: ee45c30
+        report: Report
+        #original_hash: 4360c2d
+        article: Artikel
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -615,12 +656,13 @@ da:
         wca_id: ''
         #original_hash: 8723825
         dob: Din korrekte fødselsdag i formaten ÅÅÅÅ-MM-DD
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           For at bevise din identitet og din korrekte fødselsdag for os, du skal
           vise et billed fra et hvert officielt dokument(ID kort, kørekort,
           studiekort, pas, fødselsattest, ...) hvor dit navn er synligt og
-          forståeligt for en engelsk talende person.
+          forståeligt for en engelsk talende person (eller kontakt din nærmeste
+          delegerede hvis du ikke har sådan et dokument).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -797,11 +839,11 @@ da:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Opdel scopes med mellemrum. Lad den være tom for at bruge standard
             scopes. Se <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">her</a> for en liste at brugte scopes.
       scopes:
         #original_hash: 1920e95
@@ -832,13 +874,6 @@ da:
         Velkommen! Før du kan deltage i din første WCA konkurrence, har vi brug
         for nogle yderlige informationer for ranglisternes skyld. Din fødselsdag
         vil ikke blive offentliggjort uden din tilladelse.
-      gender:
-        #original_hash: 3f3a489
-        male: Mand
-        #original_hash: b7c17e9
-        female: Kvinde
-        #original_hash: 6e6a6f2
-        other_gender: Andet
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2197,15 +2232,15 @@ da:
         name: WCA Kommunikations Holdet
         #original_hash: 50fd091
         description: >-
-          WCA kommunikations holdet (WCT) har at rollen at hjælpe
-          kommunikationen mellem WCA og kubingmiljøet. WCAs kommunikation er til
-          for at nå WCAs mål og hjælpe på den positive kultur af venlighed,
-          gennemskuelighed, ansvar, rummelighed og åbenhed.
+          WCA kommunikations holdet (WCT) har rollen at hjælpe kommunikationen
+          mellem WCA og kubingmiljøet. WCAs kommunikation er til for at nå WCAs
+          mål og hjælpe på den positive kultur af venlighed, gennemskuelighed,
+          ansvar, rummelighed og åbenhed.
       wfc:
         #original_hash: 9cb13de
         name: WCA Finansiel Komiten
         #original_hash: 2d4807e
-        description: Dette hold er ansvarlig for at holder styr over alle WCA's finanser
+        description: Dette hold er ansvarlig for at holde styr over WCA's økonomi
       #original_hash: f2ceade
       delegates_html: >-
         <strong>WCA Delegater</strong> er medlemmer af WCA som er ansvarlige for
@@ -2747,3 +2782,61 @@ da:
         '5': Kigge efter blandere og dommere
         #original_hash: 52e8316
         '6': Håndtere alle arrangør problemer med lokalet (fx. nøgler eller WiFi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Se alle medier
+      #original_hash: b251e98
+      confirm_delete: Er du sikker på at du vil slette dette medie?
+    new:
+      #original_hash: 65cdb28
+      title: Indsend Medie
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Alle medier vil blive kigget igennem før de kommer på <a
+        href="/media">siden for alle medier</a>.
+      #original_hash: 141d1d7
+      guidelines: Retningslinjer
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': >-
+          Alt medie relateret indhold skal være relateret til den valgte
+          konkurrence.
+        #original_hash: 9821119
+        '2': >-
+          Alt medie indhold skal være passende og ikke indeholde noget stødende
+          materiale.
+        #original_hash: 5114fe4
+        '3': >-
+          Medie indholdet må ikke have alt for med sponsorerne at gøre, eller
+          have for mange reklamer.
+        #original_hash: c9d797b
+        '4': >-
+          Alt medie indhold skal være sammenhængende med de beskrivende tekster
+          til den.
+    edit:
+      #original_hash: 32c7cc0
+      title: Rediger Medie
+      #original_hash: 6f161d0
+      validate_media_page: Se alle afventende medier
+    index:
+      #original_hash: 0c77aee
+      title: Medie
+      #original_hash: df43670
+      validate_media: Valider medie
+      #original_hash: 9f2158f
+      submit_media_html: Du kan indsende et nyt medie <a href="/media/new">her</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Valider Medie
+    media_table:
+      #original_hash: 879e323
+      year: År
+      #original_hash: 573da9c
+      location: 'Land, By'
+      #original_hash: bb54db5
+      accept: Accepter
+      #original_hash: 66b69a8
+      confirm_accept: Er du sikker på at du vil acceptere det her medie?
+      #original_hash: 5301648
+      edit: Rediger
