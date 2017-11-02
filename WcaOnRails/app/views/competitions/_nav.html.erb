@@ -64,6 +64,13 @@
           fa_icon: "clone",
         }
       end
+      if current_user&.can_submit_competition_results?(@competition)
+        nav_items << {
+          text: t('.menu.submit_results'),
+          path: submit_results_edit_path(@competition),
+          fa_icon: "cloud-upload",
+        }
+      end
       if current_user&.can_view_delegate_report?(@competition.delegate_report)
         nav_items << {
           text: t('.menu.delegate_report'),
