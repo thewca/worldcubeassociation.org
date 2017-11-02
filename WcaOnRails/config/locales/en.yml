@@ -1178,13 +1178,12 @@ en:
   about:
     title: "About the WCA"
     mission:
-      title: "Mission"
+      title: ""
       paragraphs:
-        '1': "The World Cube Association governs competitions for all puzzles labelled as Rubik puzzles, and all other puzzles that are played by twisting the sides, so-called 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
+        '1': "The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. Most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA."
         '2': "The World Cube Association organizes competitions all over the world, supported by regional organizations responsible for organizing competitions in their countries."
-        '3': "The goal of the World Cube Association is to have<br /><strong>more competitions in more countries with more people and more fun, under fair and equal conditions.</strong>"
-        '4': "The spirit of the World Cube Association is that<br />
-             <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
+        '3': "The Mission of the World Cube Association is to have <strong>more competitions in more countries with more people and more fun, under fair and equal conditions</strong>."
+        '4': "The Spirit of the World Cube Association is that <strong>people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.</strong>"
     structure:
       title: "Structure"
       board_html: "The World Cube Association is led by the <strong>WCA Board</strong>, consisting of the following members:"
