@@ -218,7 +218,7 @@ GEM
       railties (>= 4.0)
     i18n-spec (0.6.0)
       iso
-    i18n-tasks (0.9.18)
+    i18n-tasks (0.9.19)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       easy_translate (>= 0.5.0)
@@ -491,7 +491,7 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
       tzinfo
-    tzinfo (1.2.3)
+    tzinfo (1.2.4)
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
