@@ -35,4 +35,8 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     competition = report.competition
     CompetitionsMailer.notify_of_delegate_report_submission(competition)
   end
+
+  def results_submitted
+    CompetitionsMailer.results_submitted(Competition.last, "Here are the results.\nThey look good.", "John Doe", '{ "results": "good" }')
+  end
 end

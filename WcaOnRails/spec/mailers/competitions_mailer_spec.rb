@@ -128,4 +128,33 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.body.encoded).to match(/Feb 1/)
     end
   end
+
+  describe "results_submitted" do
+    let(:delegates) { FactoryBot.create_list(:delegate, 3) }
+    let(:competition) { FactoryBot.create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates) }
+    let(:file_contents) { '{ "results": "good" }' }
+    let(:mail) { CompetitionsMailer.results_submitted(competition, "Hello, here are the results", "John Doe", file_contents) }
+    let(:utc_now) { Time.utc(2018, 2, 23, 22, 3, 32) }
+
+    before(:each) do
+      allow(Time).to receive(:now).and_return(utc_now)
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq "Results for Comp of the future 2017"
+      expect(mail.to).to eq ["results@worldcubeassociation.org"]
+      expect(mail.cc).to match_array competition.delegates.pluck(:email)
+      expect(mail.from).to eq ["notifications@worldcubeassociation.org"]
+      expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match(/Hello, here are the results/)
+    end
+
+    it "attaches the expected file" do
+      expected_file_name = "Results_CompFut2017_#{utc_now.iso8601}.json"
+      expect(mail.attachments[expected_file_name].read).to eq(file_contents)
+    end
+  end
 end

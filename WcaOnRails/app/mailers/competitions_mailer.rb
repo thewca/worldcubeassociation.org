@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 class CompetitionsMailer < ApplicationMailer
   helper :markdown
 
@@ -62,6 +64,20 @@ class CompetitionsMailer < ApplicationMailer
       cc: ["board@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "board@worldcubeassociation.org",
       subject: "#{competition.name} Delegate Report",
+    )
+  end
+
+  def results_submitted(competition, message, sender_name, file_contents)
+    @competition = competition
+    @message = message
+    @sender_name = sender_name
+    file_name = "Results_#{competition.id}_#{Time.now.utc.iso8601}.json"
+    attachments[file_name] = file_contents
+    mail(
+      to: "results@worldcubeassociation.org",
+      cc: competition.delegates.pluck(:email),
+      reply_to: competition.delegates.pluck(:email),
+      subject: "Results for #{competition.name}",
     )
   end
 

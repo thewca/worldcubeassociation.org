@@ -1,0 +1,21 @@
+<% provide(:title, "Results submission") %>
+<%= render layout: 'nav' do %>
+  <h1><%= yield(:title) %></h1>
+
+  <p>Please enter the body of your email to the Results Team.</p>
+  <p>
+    Make sure to include a link to the competition schedule (and all time
+    limits and cutoffs) and provide any changes to the provided schedule, as
+    well as any other additional details required by the
+    <%= link_to "'Submitting competition results' section of the delegate crash course",
+                delegate_crash_course_path(anchor: "submitting-competition-results") %>.
+  </p>
+
+  <%= form_tag({action: :submit}, multipart: true) do %>
+    <%= text_area_tag :message, params[:message], placeholder: "Email body here", class: "markdown-editor" %><br>
+    Results file<br>
+    <%= file_field_tag 'results' %><br>
+    <input type="submit" class="btn btn-primary" />
+  <% end %>
+
+<% end %>

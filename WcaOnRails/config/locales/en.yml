@@ -1049,6 +1049,7 @@ en:
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"
+        submit_results: "Submit results"
         delegate_report: "Delegate report"
         registration: "Registration"
         register: "Register"

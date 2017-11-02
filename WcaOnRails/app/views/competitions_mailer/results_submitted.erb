@@ -1,0 +1,7 @@
+<p>Results Team,</p>
+
+<p><%= @sender_name %> has uploaded the results for <%= @competition.name %>. You can upload them <%= link_to "here", "https://www.worldcubeassociation.org/results/admin/upload_results.php?competitionId=#{@competition.id}" %>.</p>
+
+<p>Here's a message from <%= @sender_name %>:</p>
+
+<blockquote><%= md @message %></blockquote>
