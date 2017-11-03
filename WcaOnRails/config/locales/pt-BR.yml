@@ -215,19 +215,14 @@ pt-BR:
       other: 'estes %{count} eventos'
     #original_hash: 51ef7d4
     search_site: Procurar no site
+    #original_hash: d7decf1
+    filter: Filtro
+    #original_hash: f6fdbe4
+    delete: Apagar
     #original_hash: d3f8f7b
     date_placeholder: AAAA-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-MM-DD HH:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Delegado Candidato
-    #original_hash: 12ab214
-    delegate: Delegado
-    #original_hash: d463c23
-    senior_delegate: Delegado Sênior
-    #original_hash: 660ee15
-    board_member: Membro do Conselho
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -250,6 +245,13 @@ pt-BR:
       scopes: Escopos
       #original_hash: 3b0d449
       callback_urls: Callback Urls
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Enviar mídia
+        #original_hash: 4cf19ca
+        update: Atualizar mídia
   activerecord:
     attributes:
       user:
@@ -455,6 +457,45 @@ pt-BR:
         submitterComment: Comentário
         #original_hash: bae7d5b
         status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculino
+        #original_hash: b7c17e9
+        f: Feminino
+        #original_hash: 6e6a6f2
+        o: Outro
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Delegado Candidato
+        #original_hash: 12ab214
+        delegate: Delegado
+        #original_hash: d463c23
+        senior_delegate: Delegado Senior
+        #original_hash: 660ee15
+        board_member: Membro do Conselho
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculino
+        #original_hash: b7c17e9
+        f: Feminino
+        #original_hash: 6e6a6f2
+        o: Outro
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Aceita
+        #original_hash: 96f608c
+        pending: Pendente
+      type:
+        #original_hash: ee45c30
+        report: Relatório
+        #original_hash: 4360c2d
+        article: Artigo
+        #original_hash: 82dabd0
+        multimedia: Multimídia
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -618,13 +659,14 @@ pt-BR:
         wca_id: ''
         #original_hash: 8723825
         dob: Sua data de nascimento no formato AAAA-MM-DD
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Para provar sua identidade e sua data de nascimento correta para nós,
           anexe uma foto de algum documento legal (carteira de identidade, CNH,
           carteira de estudante, passaporte, certidão de nascimento, ...) no
           qual seu nome e data de nascimento esteja visíveis e compreensíveis
-          para alguém que fale inglês.
+          para alguém que fale inglês (ou contate um Delegado da WCA em seu país
+          se você não tem um documento desse).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -802,11 +844,11 @@ pt-BR:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Separe os escopos com espaços. Deixe em branco para usar o escopo
             padrão. Veja a lista de escopos suportados em <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">here</a>.
       scopes:
         #original_hash: 1920e95
@@ -837,13 +879,6 @@ pt-BR:
         Bem-vindo! Antes de participar de sua primeira competição da WCA,
         precisamos de algumas informações. Sua data de nascimento nunca será
         divulgada sem sua permissão.
-      gender:
-        #original_hash: 3f3a489
-        male: Masculino
-        #original_hash: b7c17e9
-        female: Feminino
-        #original_hash: 6e6a6f2
-        other_gender: Outro
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2770,3 +2805,57 @@ pt-BR:
         '5': Procurar juízes e embaralhadores
         #original_hash: 52e8316
         '6': Lidar com problemas do local (p. ex. chaves ou WiFi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Ver todas as mídias
+      #original_hash: b251e98
+      confirm_delete: Tem certeza que deseja apagar esta mídia?
+    new:
+      #original_hash: 65cdb28
+      title: Enviar Mídia
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Todas as mídias serão revisadas antes de serem listadas na <a
+        href="/media">página de mídias</a>.
+      #original_hash: 141d1d7
+      guidelines: Orientações
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Todo conteúdo de mídia deve ser relacionado à competição selecionada.
+        #original_hash: 9821119
+        '2': >-
+          Todo conteúdo de mídia deve ser apropriado e não conter nenhum
+          material ofensivo ou impróprio.
+        #original_hash: 5114fe4
+        '3': >-
+          O conteúdo de mídia não deve ter presença exagerada de patrocinadores
+          ou anúncios.
+        #original_hash: c9d797b
+        '4': Toda mídia deve ter um título descritivo e apropriado.
+    edit:
+      #original_hash: 32c7cc0
+      title: Editar Mídia
+      #original_hash: 6f161d0
+      validate_media_page: Ver todas as mídias pendentes
+    index:
+      #original_hash: 0c77aee
+      title: Mídia
+      #original_hash: df43670
+      validate_media: Validar Mídia
+      #original_hash: 9f2158f
+      submit_media_html: Você pode enviar mídia <a href="/media/new">aqui</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Validar Mídia
+    media_table:
+      #original_hash: 879e323
+      year: Ano
+      #original_hash: 573da9c
+      location: 'Cidade, País'
+      #original_hash: bb54db5
+      accept: Aceitar
+      #original_hash: 66b69a8
+      confirm_accept: Tem certeza que deseja aceitar esta mídia?
+      #original_hash: 5301648
+      edit: Editar
