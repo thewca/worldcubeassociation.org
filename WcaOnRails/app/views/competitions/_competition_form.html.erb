@@ -237,14 +237,14 @@
     <%= f.input :base_entry_fee_lowest_denomination, as: :money_amount, currency: @competition.currency_code, disabled: disable_money_input %>
     <script>
 
+      var entry_fee_input_field = $('#base_entry_fee_lowest_denomination_input_field');
       // Activate currency mask
-      var autoNumericObject = wca.setupCurrencyMask('input.wca-currency-mask');
+      wca.setupCurrencyMask(entry_fee_input_field);
 
       // Setup currency onchange callback
       $('#competition_currency_code').change(function() {
         wca.applyCurrencyMask('update',
-                              '#base_entry_fee_lowest_denomination_input_field',
-                              autoNumericObject,
+                              entry_fee_input_field,
                               $('#competition_currency_code').val());
       });
     </script>

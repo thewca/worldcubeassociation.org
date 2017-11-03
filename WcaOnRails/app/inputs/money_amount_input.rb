@@ -19,9 +19,6 @@ class MoneyAmountInput < SimpleForm::Inputs::Base
     actual_field = @builder.hidden_field(attribute_name, value: value)
     input_id = attribute_name.to_s + "_input_field"
 
-    # On page load, inputs with this class get their mask setup
-    merged_input_options[:class] << "wca-currency-mask"
-
     # This helper create an arbitrary tag (in this case an input), with the given attributes.
     amount_input = template.content_tag(:input, "",
                                         value: value,
