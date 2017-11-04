@@ -223,19 +223,14 @@ pl:
       other: 'te %{count} konkurencji'
     #original_hash: 51ef7d4
     search_site: Szukaj
+    #original_hash: d7decf1
+    filter: Filtruj
+    #original_hash: f6fdbe4
+    delete: Usuń
     #original_hash: d3f8f7b
     date_placeholder: RRRR-MM-DD
     #original_hash: 52249b5
     datetime_placeholder: 'RRRR-MM-DD GG:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Kandydat na Delegata
-    #original_hash: 12ab214
-    delegate: Delegat
-    #original_hash: d463c23
-    senior_delegate: Starszy Delegat
-    #original_hash: 660ee15
-    board_member: Członek Zarządu
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -258,6 +253,13 @@ pl:
       scopes: Zakresy
       #original_hash: 3b0d449
       callback_urls: Adresy Wywołania Zwrotnego
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Wyślij medium
+        #original_hash: 4cf19ca
+        update: Aktualizuj medium
   activerecord:
     attributes:
       user:
@@ -469,6 +471,45 @@ pl:
         submitterComment: Komentarz zgłaszającego
         #original_hash: bae7d5b
         status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Mężczyzna
+        #original_hash: b7c17e9
+        f: Kobieta
+        #original_hash: 6e6a6f2
+        o: Inna
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Kandydat na Delegata
+        #original_hash: 12ab214
+        delegate: Delegat
+        #original_hash: d463c23
+        senior_delegate: Starszy Delegat
+        #original_hash: 660ee15
+        board_member: Członek Zarządu
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Mężczyzna
+        #original_hash: b7c17e9
+        f: Kobieta
+        #original_hash: 6e6a6f2
+        o: Inna
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Zaakceptowane
+        #original_hash: 96f608c
+        pending: Oczekujące
+      type:
+        #original_hash: ee45c30
+        report: Reportaż
+        #original_hash: 4360c2d
+        article: Artykuł
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Tak
@@ -634,14 +675,15 @@ pl:
         wca_id: ''
         #original_hash: 8723825
         dob: Twoja poprawna data urodzenia w formacie RRRR-MM-DD
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Aby potwierdzić swoją tożsamość i poprawną datę urodzenia, musisz
           załączyć zdjęcie jakiegokolwiek legalnego dokumentu (dowodu
           osobistego, prawa jazdy, legitymacji studenckiej lub szkolnej,
           paszportu, aktu urodzenia, ...), na którym zarówno twoje imię jak i
           data urodzenia są widoczne i zrozumiałe dla osoby posługującej się
-          językiem angielskim.
+          językiem angielskim (lub skontaktuj się z lokalnym Delegatem WCA,
+          jeżeli nie posiadasz takiego dokumentu).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -823,11 +865,11 @@ pl:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Oddziel zakresy spacjami. Pozostaw puste w celu użycia domyślnego
             zakresu/zakresów. Spójrz <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tutaj</a>, aby zobaczyć listę wspieranych zakresów.
       scopes:
         #original_hash: 1920e95
@@ -858,13 +900,6 @@ pl:
         Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach
         WCA, potrzebujemy kilka dodatkowych informacji. Pamiętaj, że twoja data
         urodzin nigdy nie zostanie ujawniona bez twojej zgody.
-      gender:
-        #original_hash: 3f3a489
-        male: Mężczyzna
-        #original_hash: b7c17e9
-        female: Kobieta
-        #original_hash: 6e6a6f2
-        other_gender: Inna
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2832,3 +2867,57 @@ pl:
         '6': >-
           Zajmowanie się wszystkimi sprawami organizacyjnymi dotyczącymi miejsca
           zawodów (np. kluczami oraz Wi-Fi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Zobacz wszystkie media
+      #original_hash: b251e98
+      confirm_delete: 'Czy jesteś pewien, że chcesz usunąć to medium?'
+    new:
+      #original_hash: 65cdb28
+      title: Wyślij Medium
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Wszystkie media będą sprawdzone zanim pojawią się na <a
+        href="/media">liście wszystkich mediów</a>.
+      #original_hash: 141d1d7
+      guidelines: Wytyczne
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Cała zawartość musi być związana z wybranymi zawodami.
+        #original_hash: 9821119
+        '2': >-
+          Cała zawartość musi być stosowna i przyzwoita, oraz nie może zawierać
+          żadnych niewłąściwych materiałów.
+        #original_hash: 5114fe4
+        '3': >-
+          Cała zawartość nie może zawierać nadmiernej ilości wzmianek o
+          sponsorach lub reklam.
+        #original_hash: c9d797b
+        '4': Wszystkie media muszą mieć właściwe i opisowe tytuły.
+    edit:
+      #original_hash: 32c7cc0
+      title: Edytuj Medium
+      #original_hash: 6f161d0
+      validate_media_page: Zobacz wszystkie oczekujące media
+    index:
+      #original_hash: 0c77aee
+      title: Media
+      #original_hash: df43670
+      validate_media: Weryfikuj media
+      #original_hash: 9f2158f
+      submit_media_html: Możesz przesyłać media <a href="/media/new">tutaj</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Weryfikuj Media
+    media_table:
+      #original_hash: 879e323
+      year: Rok
+      #original_hash: 573da9c
+      location: 'Państwo, Miasto'
+      #original_hash: bb54db5
+      accept: Akceptuj
+      #original_hash: 66b69a8
+      confirm_accept: 'Czy jesteś pewien, że chcesz zaakceptować to medium?'
+      #original_hash: 5301648
+      edit: Edytuj
