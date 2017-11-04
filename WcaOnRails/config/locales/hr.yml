@@ -225,19 +225,14 @@ hr:
       other: 'ovih %{count} disciplina'
     #original_hash: 51ef7d4
     search_site: Pretraži stranicu
+    #original_hash: d7decf1
+    filter: Filter
+    #original_hash: f6fdbe4
+    delete: Obriši
     #original_hash: d3f8f7b
     date_placeholder: GODINA-MJESEC-DAN
     #original_hash: 52249b5
     datetime_placeholder: 'GODINA-MJESEC-DAN SAT:MINUTA'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Kandidat Delegat
-    #original_hash: 12ab214
-    delegate: Delegat
-    #original_hash: d463c23
-    senior_delegate: Senior Delegat
-    #original_hash: 660ee15
-    board_member: Board Member
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -260,6 +255,13 @@ hr:
       scopes: Djelokrug
       #original_hash: 3b0d449
       callback_urls: Callback Urls
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Priloži datoteku
+        #original_hash: 4cf19ca
+        update: Ažuriraj datoteku
   activerecord:
     attributes:
       user:
@@ -448,6 +450,62 @@ hr:
       vote:
         #original_hash: 153d7a5
         comment: Komentar
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Natjecanje
+        #original_hash: 3deb745
+        type: Tip
+        #original_hash: c3328c3
+        text: Tekst
+        #original_hash: d051707
+        uri: Poveznica
+        #original_hash: 1be755a
+        submitterName: Ime osobe koja prilaže
+        #original_hash: 78cdfee
+        submitterEmail: E-mail osobe koja prilaže
+        #original_hash: 0d31f23
+        submitterComment: Komentar osobe koja prilaže
+        #original_hash: bae7d5b
+        status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Muškarac
+        #original_hash: b7c17e9
+        f: Žena
+        #original_hash: 6e6a6f2
+        o: Ostalo
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Kandidat Delegat
+        #original_hash: 12ab214
+        delegate: Delegat
+        #original_hash: d463c23
+        senior_delegate: Senior Delegat
+        #original_hash: 660ee15
+        board_member: Član odbora (Board Member)
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Muškarac
+        #original_hash: b7c17e9
+        f: Žena
+        #original_hash: 6e6a6f2
+        o: Ostalo
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Prihvaćeno
+        #original_hash: 96f608c
+        pending: U tijeku
+      type:
+        #original_hash: ee45c30
+        report: Prijavi
+        #original_hash: 4360c2d
+        article: Članak
+        #original_hash: 82dabd0
+        multimedia: Multimedija
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -612,13 +670,15 @@ hr:
         wca_id: ''
         #original_hash: 8723825
         dob: Vaš točan datum rođenja u formatu YYYY-MM-DD
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Da biste potvrdili svoj identitet i Vaš točan datum rođenja, morate
           nam priložiti fotografiju bilo kojeg valjanog dokumenta (osobna
           iskaznica, vozačka dozvola, studentska iskaznica, putovnica, izvadak
           iz matice rođenih, ...) gdje je Vaš datum rođenja i Vaše ime vidljivo
-          i razumljivo govorniku engleskog jezika.
+          i razumljivo govorniku engleskog jezika (ili kontaktirajte svog
+          lokalnog WCA Delegata ukoliko nema te bilo koji od navedenih
+          dokumenata).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -717,6 +777,23 @@ hr:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -780,11 +857,11 @@ hr:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">here</a> for a list of supported scopes.
       scopes:
         #original_hash: 1920e95
@@ -815,13 +892,6 @@ hr:
         Dobrodošli! Prije nego se natječete na Vašem prvom natjecanju, trebamo
         neke dodatne informacije u svhru baze podataka. Molim Vas da upamtite da
         se Vaš datum rođenja neće nikada objaviti bez Vašeg dopuštenja.
-      gender:
-        #original_hash: 3f3a489
-        male: Muško
-        #original_hash: b7c17e9
-        female: Žensko
-        #original_hash: 6e6a6f2
-        other_gender: Ostalo
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2728,3 +2798,57 @@ hr:
         '6': >-
           Suočavanje sa svim organizacijskim problemima oko prostora (npr.
           ključevi, WiFi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Pogledaj sve
+      #original_hash: b251e98
+      confirm_delete: Jeste li sigurno da želite ovo obrisati?
+    new:
+      #original_hash: 65cdb28
+      title: Priloži
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Sve priloženo će biti pregledao prije nego se objavi na <a
+        href="/media">stranici</a>.
+      #original_hash: 141d1d7
+      guidelines: Smjernice
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Sve priloženo mora biti vezano s odabranim natjecanjem.
+        #original_hash: 9821119
+        '2': >-
+          Sve priloženo mora biti primjereno i "čisto" te ne smije sadržavati
+          bilo kakav neprimjeren ili uvredljiv materijal.
+        #original_hash: 5114fe4
+        '3': >-
+          Priložen sadržaj ne smije imati ogromno prisustvo sponzora ili
+          reklama.
+        #original_hash: c9d797b
+        '4': Sve priloženo mora imati primjerene i jasne naslove.
+    edit:
+      #original_hash: 32c7cc0
+      title: Uredi
+      #original_hash: 6f161d0
+      validate_media_page: Pogledaj sve što je "u tijeku"
+    index:
+      #original_hash: 0c77aee
+      title: Media
+      #original_hash: df43670
+      validate_media: Ocijeni
+      #original_hash: 9f2158f
+      submit_media_html: Možete priložiti medije <a href="/media/new">ovdje</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Ocijeni
+    media_table:
+      #original_hash: 879e323
+      year: Godina
+      #original_hash: 573da9c
+      location: 'Država, Grad'
+      #original_hash: bb54db5
+      accept: Prihvati
+      #original_hash: 66b69a8
+      confirm_accept: Jeste li sigurni da želite prihvatiti?
+      #original_hash: 5301648
+      edit: Uredi
