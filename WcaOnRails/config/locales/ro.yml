@@ -218,19 +218,14 @@ ro:
       other: 'aceste %{count} evenimente'
     #original_hash: 51ef7d4
     search_site: Caută în site
+    #original_hash: d7decf1
+    filter: Filtru
+    #original_hash: f6fdbe4
+    delete: Șterge
     #original_hash: d3f8f7b
     date_placeholder: AAAA-LL-ZZ
     #original_hash: 52249b5
     datetime_placeholder: 'AAAA-LL-ZZ HH:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Delegat Candidat
-    #original_hash: 12ab214
-    delegate: Delegat
-    #original_hash: d463c23
-    senior_delegate: Delegat Senior
-    #original_hash: 660ee15
-    board_member: Membru în Board
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -253,6 +248,13 @@ ro:
       scopes: Domenii
       #original_hash: 3b0d449
       callback_urls: URL-uri Callback
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Încarcă fișiere media
+        #original_hash: 4cf19ca
+        update: Actualizează fișierele media
   activerecord:
     attributes:
       user:
@@ -464,6 +466,45 @@ ro:
         submitterComment: Comentariul aplicantului
         #original_hash: bae7d5b
         status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculin
+        #original_hash: b7c17e9
+        f: Feminin
+        #original_hash: 6e6a6f2
+        o: Altul
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Delegat Candidat
+        #original_hash: 12ab214
+        delegate: Delegat
+        #original_hash: d463c23
+        senior_delegate: Delegat Senior
+        #original_hash: 660ee15
+        board_member: Membru în Board
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Masculin
+        #original_hash: b7c17e9
+        f: Feminin
+        #original_hash: 6e6a6f2
+        o: Altul
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Acceptat
+        #original_hash: 96f608c
+        pending: În așteptare
+      type:
+        #original_hash: ee45c30
+        report: Raport
+        #original_hash: 4360c2d
+        article: Articol
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -626,13 +667,15 @@ ro:
         wca_id: ''
         #original_hash: 8723825
         dob: 'Data ta de naștere corectă, în formatul AAAA-LL-ZZ'
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Pentru a ne dovedi că identitatea și data nașterii tale sunt corecte,
           trebuie să atașezi o poză a oricărui document legal (Carte de
           Identitate, Permis de Conducere, Carnet de Student, Pașaport,
           Certificat de Naștere, etc.) în care numele și data nașterii sunt
-          vizibile și inteligibile pentru un vorbitor de limba engleză.
+          vizibile și inteligibile pentru un vorbitor de limba engleză (sau să-l
+          contactezi pe Delegatul tău local, dacă nu deții un astfel de
+          document).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -811,11 +854,11 @@ ro:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Separă domeniile prin spații. Lasă necompletat pentru a folosii
             domeniul fundamental/domeniile fundamentale. Vezi <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank"> aici </a> o listă de domenii suportate.
       scopes:
         #original_hash: 1920e95
@@ -847,13 +890,6 @@ ro:
         nevoie de câteva informații pentru a putea înregistra rezultatele tale.
         Te asigurăm că data nașterii tale nu va fi niciodată vizibilă fără
         permisiunea ta.
-      gender:
-        #original_hash: 3f3a489
-        male: Masculin
-        #original_hash: b7c17e9
-        female: Feminin
-        #original_hash: 6e6a6f2
-        other_gender: Altul
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2810,3 +2846,59 @@ ro:
         '6': >-
           Rezolvarea eventualelor probleme cu locația (de exemplu, chei sau
           WiFi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Vezi toate fișierele media
+      #original_hash: b251e98
+      confirm_delete: Ești sigur că vrei să ștergi aceast fișier media?
+    new:
+      #original_hash: 65cdb28
+      title: Încarcă fișiere media
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Toate fișierele media vor fi verificate înainte de a fi publicate pe <a
+        href="/media">pagina de media</a>.
+      #original_hash: 141d1d7
+      guidelines: Îndrumări
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Tot conținutul media trebuie să aibă legătură cu competiția selectată.
+        #original_hash: 9821119
+        '2': >-
+          Tot conținutul media trebuie să fie corespunzător și să nu includă
+          materiale nepotrivite, indecente sau ofensive.
+        #original_hash: 5114fe4
+        '3': >-
+          Fișierele media nu trebuie să conțină în mod extensiv reclame sau
+          trimiteri la sponsori.
+        #original_hash: c9d797b
+        '4': >-
+          Toate fișierele media trebuie să aibă titluri potrivite și
+          descriptive.
+    edit:
+      #original_hash: 32c7cc0
+      title: Editează fișierul media
+      #original_hash: 6f161d0
+      validate_media_page: Vezi toate fișierele media în așteptare
+    index:
+      #original_hash: 0c77aee
+      title: Media
+      #original_hash: df43670
+      validate_media: Validează fișierele media
+      #original_hash: 9f2158f
+      submit_media_html: Poți încărca fișiere media <a href="/media/new">aici</a>.
+    validate:
+      #original_hash: 1e0eee6
+      title: Validează fișiere media
+    media_table:
+      #original_hash: 879e323
+      year: An
+      #original_hash: 573da9c
+      location: 'Țară, Oraș'
+      #original_hash: bb54db5
+      accept: Acceptă
+      #original_hash: 66b69a8
+      confirm_accept: Ești sigur că vrei să accepți acest fișier media?
+      #original_hash: 5301648
+      edit: Editează
