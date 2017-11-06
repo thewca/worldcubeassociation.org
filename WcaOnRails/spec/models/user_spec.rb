@@ -183,11 +183,19 @@ RSpec.describe User, type: :model do
       expect(user.wca_id).to be_nil
     end
 
-    it "verifies WCA ID unique when changing WCA ID" do
-      person2 = FactoryBot.create :person, wca_id: "2006FLEI01"
-      user2 = FactoryBot.create :user, wca_id: "2006FLEI01", name: person2.name
-      user.wca_id = user2.wca_id
-      expect(user).to be_invalid_with_errors(wca_id: ["must be unique"])
+    context "when WCA ID is not unique" do
+      let(:existing_user) { FactoryBot.create :user_with_wca_id }
+      let(:invalid_user) { FactoryBot.build :user, wca_id: existing_user.wca_id }
+
+      it "verifies WCA ID unique when changing WCA ID" do
+        expect(invalid_user.valid?).to be false
+        expect(invalid_user.errors.messages).to include :wca_id
+      end
+
+      it "shows an appropriate error message" do
+        expected_message = %(is already used by "#{existing_user.name}" with #{existing_user.email})
+        expect(invalid_user).to be_invalid_with_errors wca_id: [expected_message]
+      end
     end
 
     it "removes dummy accounts and copies name when WCA ID is assigned" do
