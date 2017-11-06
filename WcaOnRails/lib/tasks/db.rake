@@ -68,7 +68,7 @@ namespace :db do
           zip_filename = "wca-developer-database-dump.zip"
 
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("wget #{dev_db_dump_url}") || raise("Error while running `wget`")
+            system("curl -o #{zip_filename} #{dev_db_dump_url}") || raise("Error while running `curl`")
           end
           LogTask.log_task("Unzipping #{zip_filename}") do
             system("unzip #{zip_filename}") || raise("Error while running `unzip`")
