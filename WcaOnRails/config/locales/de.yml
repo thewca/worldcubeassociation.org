@@ -167,6 +167,10 @@ de:
       one_round: '%{time} kumulativ'
       #original_hash: c01adfa
       across_rounds: '%{time} insgesamt für %{rounds}'
+    #original_hash: f030c3d
+    333fm: 1 Stunde
+    #original_hash: 2c2abd5
+    333mbf: 10 Minuten pro Würfel
   common:
     #original_hash: 2513cf0
     continent: Kontinent
@@ -207,19 +211,14 @@ de:
       other: 'Diese %{count} Disziplinen'
     #original_hash: 51ef7d4
     search_site: Suche
+    #original_hash: d7decf1
+    filter: Filter
+    #original_hash: f6fdbe4
+    delete: Löschen
     #original_hash: d3f8f7b
     date_placeholder: JJJJ-MM-TT
     #original_hash: 52249b5
     datetime_placeholder: 'JJJJ-MM-TT SS:MM'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Delegat Kandidat
-    #original_hash: 12ab214
-    delegate: Delegierter
-    #original_hash: d463c23
-    senior_delegate: Senior Delegierter
-    #original_hash: 660ee15
-    board_member: Board Mitglied
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -242,6 +241,13 @@ de:
       scopes: Scopes
       #original_hash: 3b0d449
       callback_urls: Callback-URLs
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Medienberichte einreichen
+        #original_hash: 4cf19ca
+        update: Medienberichte aktualisieren
   activerecord:
     attributes:
       user:
@@ -432,6 +438,62 @@ de:
       vote:
         #original_hash: 153d7a5
         comment: Kommentar
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Competition
+        #original_hash: 3deb745
+        type: Typ
+        #original_hash: c3328c3
+        text: Text
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: Name des Einreichers
+        #original_hash: 78cdfee
+        submitterEmail: E-Mail-Adresse des Einreichers
+        #original_hash: 0d31f23
+        submitterComment: Kommentar des Einreichers
+        #original_hash: bae7d5b
+        status: Status
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Männlich
+        #original_hash: b7c17e9
+        f: Weiblich
+        #original_hash: 6e6a6f2
+        o: Andere
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Candidate Delegate
+        #original_hash: 12ab214
+        delegate: Delegate
+        #original_hash: d463c23
+        senior_delegate: Senior Delegate
+        #original_hash: 660ee15
+        board_member: Board Mitglied
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Männlich
+        #original_hash: b7c17e9
+        f: Weiblich
+        #original_hash: 6e6a6f2
+        o: Andere
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Akzeptiert
+        #original_hash: 96f608c
+        pending: Ausstehend
+      type:
+        #original_hash: ee45c30
+        report: Report
+        #original_hash: 4360c2d
+        article: Artikel
+        #original_hash: 82dabd0
+        multimedia: Multimedia
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -595,13 +657,14 @@ de:
         wca_id: ''
         #original_hash: 8723825
         dob: Dein korrektes Geburtsdatum im Format YYYY-MM-DD (Jahr - Monat - Tag)
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           Um deine Identität und dein korrektes Geburtsdatum nachzuweisen, musst
           du ein Bild eines Ausweisdokumentes anhängen. Dies kann ein Ausweis,
           ein Führerschein, ein Schülerausweis oder ähnliches sein, auf dem dein
           Name und dein Geburtsdatum klar ersichtlich und für einen
-          Englischsprachler verständlich ist.
+          Englischsprachler verständlich ist (oder kontaktiere deinen lokalen
+          WCA Delegate, falls du ein solches Dokument nicht besitzt).
       post:
         #original_hash: 53c16eb
         body: >-
@@ -704,6 +767,23 @@ de:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -765,11 +845,11 @@ de:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Trenne Scopes mit Leerzeichen. Lasse den Standard Scope leer. Siehe
             <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L8"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hier</a> für eine Liste unterstützter Scopes.
       scopes:
         #original_hash: 1920e95
@@ -803,13 +883,6 @@ de:
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
         Einverständnis weitergereicht wird.
-      gender:
-        #original_hash: 3f3a489
-        male: Männlich
-        #original_hash: b7c17e9
-        female: Weiblich
-        #original_hash: 6e6a6f2
-        other_gender: Andere
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1596,8 +1669,10 @@ de:
         zum Anzeigen](mailto:some@email.com)
       #original_hash: c5497bc
       events: Disziplinen
-      #original_hash: ae66391
-      unoff_events: Disziplinen die nicht mehr offiziell anerkannt werden
+      #original_hash: 09b819f
+      deprecated_events: >-
+        Diese Competition hat Events, die nicht mehr offiziell sind. Die
+        Bearbeitung ist nicht möglich.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Dieser Wettbewerb ist öffentlich sichtbar und für die Bearbeitung
@@ -1614,8 +1689,6 @@ de:
       awaiting_confirmation_html: >-
         Fülle alle Felder aus und drücke auf Bestätigen wenn Du bereit bist,
         dass das %{board} den Wettbewerb überprüft.
-      #original_hash: 7586b02
-      submit_modify_value: Disziplinen bearbeiten
       #original_hash: 8966fd0
       submit_create_value: Wettbewerb erstellen
       #original_hash: 40b0dfd
@@ -1844,8 +1917,15 @@ de:
         Rangliste der Region.
       #original_hash: a91508f
       championship_podiums: Meisterschafts-Podien
-      #original_hash: 3746f3b
-      wc_podiums: Weltmeisterschafts-Podien
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: World Championship Podien
+        #original_hash: d248cd7
+        continental: Continental Championship Podien
+        #original_hash: aa40175
+        national: National Championship Podien
+        #original_hash: 868be55
+        greater_china: Greater China Championship Podien
       #original_hash: c32a014
       place: Platz
       #original_hash: ddb18c1
@@ -2802,3 +2882,61 @@ de:
         '6': >-
           Organisatorische Aufgaben bezüglich des Veranstaltungsortes (z.B.
           Schlüssel oder WLAN)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Alle Medienberichte ansehen
+      #original_hash: b251e98
+      confirm_delete: 'Bist du sicher, dass du diesen Medienbericht löschen willst?'
+    new:
+      #original_hash: 65cdb28
+      title: Medienberichte einreichen
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Alle Medienberichte werden begutachtet bevor sie auf der <a
+        href="/media">Medienseite</a> veröffentlicht werden.
+      #original_hash: 141d1d7
+      guidelines: Richtlinien
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': >-
+          Alle Medienberichte müssen für die ausgewählte Competition relevant
+          sein.
+        #original_hash: 9821119
+        '2': >-
+          Alle Medienberichte müssen angemessen sein und dürfen keine
+          unangemessenen oder beleidigenden Inhalte haben.
+        #original_hash: 5114fe4
+        '3': >-
+          Die Medienberichte dürfen keine umfangreiche Erwähnung von Sponsoren
+          oder Werbung beinhalten.
+        #original_hash: c9d797b
+        '4': >-
+          Alle Medienberichte müssen einen angemessenen und erklärenden Titel
+          haben.
+    edit:
+      #original_hash: 32c7cc0
+      title: Medienberichte bearbeiten
+      #original_hash: 6f161d0
+      validate_media_page: Alle ausstehenden Medienberichte ansehen
+    index:
+      #original_hash: 0c77aee
+      title: Medien
+      #original_hash: df43670
+      validate_media: Medienberichte validieren
+      #original_hash: 9f2158f
+      submit_media_html: Du kannst Medienberichte  <a href="/media/new">hier</a> einreichen.
+    validate:
+      #original_hash: 1e0eee6
+      title: Medienberichte validieren
+    media_table:
+      #original_hash: 879e323
+      year: Jahr
+      #original_hash: 573da9c
+      location: 'Land, Stadt'
+      #original_hash: bb54db5
+      accept: Akzeptieren
+      #original_hash: 66b69a8
+      confirm_accept: 'Bist du sicher, dass du diesen Medienbericht akzeptieren willst?'
+      #original_hash: 5301648
+      edit: Editieren
