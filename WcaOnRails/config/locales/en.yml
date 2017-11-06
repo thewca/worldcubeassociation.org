@@ -625,8 +625,8 @@ en:
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
-      dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
-      unique: "must be unique"
+      dob_incorrect_html: "does not match our database. If you're sure you're providing the correct date in the correct format (YYYY-MM-DD) please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
+      unique: "is already used by \"%{used_name}\" with %{used_email}"
       dob_past: "must be in the past"
       must_be_senior: "must be a senior delegate"
       must_not_be_present: "must not be present"
