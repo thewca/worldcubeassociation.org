@@ -63,12 +63,17 @@ class User < ApplicationRecord
     }[g]
   end
 
-  enum delegate_status: {
-    candidate_delegate: "candidate_delegate",
-    delegate: "delegate",
-    senior_delegate: "senior_delegate",
-    board_member: "board_member",
-  }
+  def delegate
+    debugger
+    DelegateInfo.find(self.id)
+  end
+
+  # enum delegate_status: {
+  #   candidate_delegate: "candidate_delegate",
+  #   delegate: "delegate",
+  #   senior_delegate: "senior_delegate",
+  #   board_member: "board_member",
+  # }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User"
 
@@ -99,7 +104,8 @@ class User < ApplicationRecord
 
   validate :cannot_demote_senior_delegate_with_subordinate_delegates
   def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
+    #if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
+    if delegate.status_was == "senior_delegate" && delegate.status != "senior_delegate" && !subordinate_delegates.empty?
       errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
