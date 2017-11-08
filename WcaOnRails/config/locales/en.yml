@@ -485,6 +485,7 @@ en:
     failure:
       invalid: "Invalid email, WCA ID, or password."
       not_found_in_database: "Invalid email, WCA ID, or password."
+      unconfirmed: "You have to confirm your email address before continuing. Didn't receive a confirmation email? Go to https://www.worldcubeassociation.org/users/confirmation/new to request a new one."
   #context: Key used in external code that the WCA use
   wca:
     # These are locales used in WCA's app relevant to external gems, but which are not present in the gem's default locale file.
