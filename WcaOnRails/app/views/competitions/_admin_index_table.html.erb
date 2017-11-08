@@ -29,7 +29,7 @@
         <% competitions.each_with_index do |competition, index| %>
           <tr>
             <td>
-              <%= flag_icon competition.country.iso2, 16 %><%= link_to competition.cellName, competition_path(competition) %>
+              <%= flag_icon competition.country.iso2 %><%= link_to competition.cellName, competition_path(competition) %>
               <br /><strong><%= competition.country.name_in(:en) %></strong>, <%= competition.cityName %>
             </td>
             <td class="admin-delegate">

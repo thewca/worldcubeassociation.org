@@ -78,12 +78,8 @@
         text-align: center;
       }
 
-      .flag {
-        /* A trick to prevent the flag from expanding the row (this effectively lets the flag avoid the impact of td padding). */
-        margin: {
-          top: -10px;
-          bottom: -10px;
-        }
+      .flag-icon {
+        font-size: 1.5em;
       }
     }
   }

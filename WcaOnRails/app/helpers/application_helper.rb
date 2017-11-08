@@ -196,9 +196,9 @@ module ApplicationHelper
     content_tag :span, "", html_options
   end
 
-  def flag_icon(iso2, size, html_options = {})
+  def flag_icon(iso2, html_options = {})
     html_options[:class] ||= ""
-    html_options[:class] += " flag f#{size} #{iso2.downcase}"
+    html_options[:class] += " flag-icon flag-icon-#{iso2.downcase}"
     content_tag :span, "", html_options
   end
 

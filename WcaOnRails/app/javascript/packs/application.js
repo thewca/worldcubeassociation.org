@@ -10,3 +10,5 @@
 import 'markdown-editor';
 import 'image-preview';
 import 'polyfills';
+
+import 'flag-icon-css/css/flag-icon.css';
