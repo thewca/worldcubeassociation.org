@@ -9,7 +9,7 @@ function getCurrencyInfo(isoCode) {
 // Create a mask for an amount input in the given currency, using autoNumeric
 // 'action' can be either "init" or "update"
 // '$element' is a jquery element for the targeted input field
-wca.applyCurrencyMask = function(action, $element, currencyIsoCode) {
+function applyCurrencyMask(action, $element, currencyIsoCode) {
   let entry = getCurrencyInfo(currencyIsoCode);
   let currentVal = 0;
 
@@ -44,7 +44,7 @@ wca.applyCurrencyMask = function(action, $element, currencyIsoCode) {
 
   // Set new val
   autoNumericObject.set(currentVal/entry.subunit_to_unit);
-};
+}
 
 // Retrieve the real value, in the currency's lowest denomination
 // Assumes autoNumeric is running on element, and the number of subunit_to_unit has been set in data
@@ -56,14 +56,26 @@ function getValueInCurrency($element) {
 }
 
 // Setup the mask for the selected element
-wca.setupCurrencyMask = function($element) {
+function setupCurrencyMask($element) {
   let currencyIsoCode = $element.data("currency");
   let targetElemId = $element.data("target");
 
-  wca.applyCurrencyMask('init', $element, currencyIsoCode);
+  applyCurrencyMask('init', $element, currencyIsoCode);
 
   // Populate the actual hidden field on change
   $element.change(function() {
     $(targetElemId).val(getValueInCurrency($element));
   });
-};
+}
+
+$(() => {
+  $('.wca-currency-mask').each((index, element) => {
+    const $element = $(element);
+    const $currency_selector = $($element.data('currencySelector'));
+
+    setupCurrencyMask($element);
+    $currency_selector.change(function() {
+      applyCurrencyMask('update', $element, $currency_selector.val());
+    });
+  });
+});
