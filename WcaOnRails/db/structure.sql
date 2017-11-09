@@ -715,6 +715,23 @@ CREATE TABLE `delegate_reports` (
   UNIQUE KEY `index_delegate_reports_on_competition_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `delegates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delegates` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `senior_delegate_id` int(11) DEFAULT NULL,
+  `region` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location_description` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_number` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notes` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `eligible_country_iso2s_for_championship`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1023,9 +1040,6 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `delegate_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `senior_delegate_id` int(11) DEFAULT NULL,
-  `region` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `wca_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pending_avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1043,15 +1057,11 @@ CREATE TABLE `users` (
   `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country_iso2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `results_notifications_enabled` tinyint(1) DEFAULT '0',
-  `location_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `preferred_locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
   UNIQUE KEY `index_users_on_wca_id` (`wca_id`),
-  KEY `index_users_on_senior_delegate_id` (`senior_delegate_id`),
   KEY `index_users_on_delegate_id_to_handle_wca_id_claim` (`delegate_id_to_handle_wca_id_claim`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1240,4 +1250,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170823170616'),
 ('20170830140540'),
 ('20170831170616'),
+('20170930231828'),
 ('20171006182851');
