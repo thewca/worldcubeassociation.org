@@ -852,6 +852,11 @@ pl:
       invalid: 'Niepoprawny adres email, WCA ID lub hasło.'
       #original_hash: 1186218
       not_found_in_database: 'Niepoprawny adres email, WCA ID lub hasło.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Aby kontunuować musisz aktywować konto. Nie otrzymałeś emaila
+        potwierdzającego? Możesz uzyskać nowy tutaj:
+        https://www.worldcubeassociation.org/users/confirmation/new
   wca:
     errors:
       messages:
