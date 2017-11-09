@@ -833,6 +833,12 @@ pt-BR:
       invalid: 'Email, ID da WCA ou senha inválido.'
       #original_hash: 1186218
       not_found_in_database: 'Email, ID da WCA ou senha inválido.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Você precisa confirmar seu endereço de e-mail antes de continuar. Não
+        recebeu uma mensagem de confirmação? Clique em
+        https://www.worldcubeassociation.org/users/confirmation/new para
+        solicitar uma nova.
   wca:
     errors:
       messages:
