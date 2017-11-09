@@ -259,6 +259,7 @@ $venue-map-wrapper-height: 400px;
       .competition-link {
         display: inline-block;
         margin-right: 20px;
+        padding-left: 20px; /* Prevent from flags' shadows. */
         /* As of 2016-03-25, this width fits about 93% of the competition names */
         width: 250px;
         white-space: nowrap;

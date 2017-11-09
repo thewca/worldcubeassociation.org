@@ -276,7 +276,9 @@ table.wca-results {
 }
 
 .flag-icon {
-  box-shadow: 0 0 2px grey;
+  box-shadow: 0 0 8px rgba($gray-darker, 0.3);
+  /* See the discussion here: https://github.com/thewca/worldcubeassociation.org/pull/2150#issuecomment-343270458 */
+  background-color: rgba($gray-darker, 0.2);
 
   // Set flag imitations for competitions taking place in multiple countries.
   &.flag-icon-xe,
