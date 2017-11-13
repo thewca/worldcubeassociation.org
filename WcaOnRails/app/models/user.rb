@@ -622,7 +622,7 @@ class User < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    users = Person.includes(:user)
+    users = Person.includes(:user).current
     unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
       users = User.where.not(confirmed_at: nil).not_dummy_account
 
