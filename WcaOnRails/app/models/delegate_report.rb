@@ -18,6 +18,7 @@ class DelegateReport < ApplicationRecord
     self.equipment = "Gen 2 Timer: 0
 Gen 3 Pro Timer: 0
 Gen 4 Pro Timer: 0
+Did you attach O-rings (or something similar) to both Stackmat timer buttons (power button and reset button) to prevent pressing them by accident? If not, please explain why.
 
 Gen 2 Display: 0
 Gen 3 Display: 0"
