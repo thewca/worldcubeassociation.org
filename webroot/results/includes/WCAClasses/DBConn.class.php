@@ -28,6 +28,9 @@ class DBConn
             trigger_error("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error, E_USER_ERROR);
         }
 
+        // Treat warnings as errors
+        $this->conn->query("SET SESSION sql_mode = 'TRADITIONAL';");
+
         /* change character set */
         if(!$this->conn->set_charset($charset))
         {
@@ -128,7 +131,12 @@ class DBConn
     {
         $statement = $this->conn->prepare($statement);
         call_user_func_array(array($statement,'bind_param'), $params);
-        $statement->execute();
+        if(!$statement->execute()) {
+            echo "execute failed: ";
+            echo $statement->error;
+            exit();
+        }
+
         $statement->close();
         return;
     }
@@ -139,7 +147,11 @@ class DBConn
         // prepare, execute, then return either the statement or entire result set.
         $statement = $this->conn->prepare($statement);
         call_user_func_array(array($statement,'bind_param'), $params);
-        $statement->execute();
+        if(!$statement->execute()) {
+            echo "execute failed: ";
+            echo $statement->error;
+            exit();
+        }
         if($return_statement) {
             return $statement;
         }
