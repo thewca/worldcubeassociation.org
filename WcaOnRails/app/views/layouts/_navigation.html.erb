@@ -84,7 +84,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
             <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
-            <%= flag_icon active_locale_info[:flag_id], 16 %> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
+            <%= flag_icon active_locale_info[:flag_id] %> <span class="hidden-sm"><%= active_locale_info[:name] %></span>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu countries" role="menu">
@@ -92,7 +92,7 @@
               <% unless l == I18n.locale %>
                 <li>
                   <%= link_to update_locale_path(l), method: :patch do %>
-                    <%= flag_icon data[:flag_id], 16 %> <%= data[:name] %>
+                    <%= flag_icon data[:flag_id] %> <%= data[:name] %>
                   <% end %>
                 </li>
               <% end %>

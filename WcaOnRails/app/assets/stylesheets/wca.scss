@@ -275,33 +275,34 @@ table.wca-results {
   }
 }
 
-
-.f16.flag {
-  vertical-align: middle;
+.flag-icon {
+  box-shadow: 0 0 8px rgba($gray-darker, 0.3);
+  /* See the discussion here: https://github.com/thewca/worldcubeassociation.org/pull/2150#issuecomment-343270458 */
+  background-color: rgba($gray-darker, 0.2);
 
   // Set flag imitations for competitions taking place in multiple countries.
-  &.xe,
-  &.xa,
-  &.xs,
-  &.xm {
+  &.flag-icon-xe,
+  &.flag-icon-xa,
+  &.flag-icon-xs,
+  &.flag-icon-xm {
     background-image: none;
-    display: inline-block;
-    top: 1px;
-    width: 16px;
-    height: 12px;
     background-color: white;
     border-radius: 2px;
+    /* The library uses line-height: 1em, but this doesn't fit the situation
+       as we want the horizontal borders to be counted into the height.
+       So for these particular flags we set the height property. */
+    height: 1em;
   }
-  &.xe {
+  &.flag-icon-xe {
     border: 1px solid $blue;
   }
-  &.xa {
+  &.flag-icon-xa {
     border: 1px solid yellow;
   }
-  &.xs {
+  &.flag-icon-xs {
     border: 1px solid red;
   }
-  &.xm {
+  &.flag-icon-xm {
     border: 1px solid;
     border-image: linear-gradient(to right, red, blue) 1;
   }

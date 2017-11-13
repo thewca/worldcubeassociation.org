@@ -21,15 +21,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/world-flags/world-flags.git
-  revision: b6ea11dbec91d1ec07cc6808215a05d182e67d65
-  specs:
-    world-flags (1.0.0)
-      hashie (>= 1.2)
-      i18n (>= 0.6)
-      sass-rails (>= 3.1.0)
-
-GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
@@ -207,7 +198,6 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    hashie (3.5.6)
     high_voltage (3.0.0)
     highline (1.7.8)
     htmlentities (4.3.4)
@@ -617,7 +607,6 @@ DEPENDENCIES
   valid_email
   web-console
   webpacker
-  world-flags!
 
 BUNDLED WITH
    1.15.4

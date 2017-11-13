@@ -7,7 +7,7 @@
     <% @locale_stats.each do |locale, count| %>
       <li>
         <% data = Locales::AVAILABLE[locale] %>
-        <%= flag_icon data[:flag_id], 16 %>
+        <%= flag_icon data[:flag_id] %>
         <%= data[:name] %>
         <%= count %> views
       </li>

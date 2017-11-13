@@ -61,11 +61,11 @@
           },
 
           competition: function(competition) {
-            var $div = $('<div class="wca-autocomplete-competition"><span class="name"></span><i class="flag f16"></i> <span class="city"></span> (<span class="id"></span>)</div>');
+            var $div = $('<div class="wca-autocomplete-competition"><span class="name"></span><i class="flag-icon"></i> <span class="city"></span> (<span class="id"></span>)</div>');
             $div.find(".id").text(competition.id);
             $div.find(".name").text(competition.name);
             $div.find(".city").text(competition.city);
-            $div.find(".flag").addClass(competition.country_iso2.toLowerCase());
+            $div.find(".flag-icon").addClass("flag-icon-" + competition.country_iso2.toLowerCase());
             return $div[0].outerHTML;
           },
 
