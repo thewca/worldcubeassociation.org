@@ -966,9 +966,9 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-blueimp-load-image@^2.14.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-2.17.0.tgz#d6a669aa17c17c72c127741e1ce1ecf085d390cf"
+blueimp-load-image@^2.17.1:
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-2.17.1.tgz#1be0f9ed416976f034ecc77a9665baba6835248f"
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
