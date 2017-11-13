@@ -313,7 +313,7 @@ CREATE TABLE `Scrambles` (
   `groupId` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
   `isExtra` tinyint(1) NOT NULL,
   `scrambleNum` int(11) NOT NULL,
-  `scramble` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `scramble` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`scrambleId`),
   KEY `competitionId` (`competitionId`,`eventId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1240,4 +1240,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170823170616'),
 ('20170830140540'),
 ('20170831170616'),
-('20171006182851');
+('20171006182851'),
+('20171113154922');
