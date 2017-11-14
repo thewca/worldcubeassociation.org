@@ -26,6 +26,16 @@ RSpec.describe User, type: :model do
     expect(users.first).to eq user
   end
 
+  it "search returns only people with subId 1" do
+    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 1
+    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 2
+    FactoryBot.create :user, wca_id: "2005FLEI01"
+
+    users = User.search("2005FLEI01", params: { persons_table: true });
+    expect(users.count).to eq 1
+    expect(users[0].subId).to eq 1
+  end
+
   it "allows empty country" do
     user = FactoryBot.build :user, country_iso2: ""
     expect(user).to be_valid
