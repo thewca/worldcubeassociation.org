@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
     FactoryBot.create :person, wca_id: "2005FLEI01", subId: 2
     FactoryBot.create :user, wca_id: "2005FLEI01"
 
-    users = User.search("2005FLEI01", params: { persons_table: true });
+    users = User.search("2005FLEI01", params: { persons_table: true })
     expect(users.count).to eq 1
     expect(users[0].subId).to eq 1
   end
