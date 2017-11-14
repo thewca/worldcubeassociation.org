@@ -78,9 +78,12 @@ class User < ApplicationRecord
       user = User.find_by_wca_id(wca_id)
       # If there is a non dummy user with this WCA ID, fail validation.
       if user && !user.dummy_account?
-        errors.add(:wca_id, I18n.t('users.errors.unique',
-                   used_name: user.name,
-                   used_email: user.email))
+        errors.add(
+          :wca_id,
+          I18n.t('users.errors.unique',
+                 used_name: user.name,
+                 used_email: user.email),
+        )
       end
     end
   end
