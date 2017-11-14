@@ -142,11 +142,17 @@ function exportPublic ( $sources ) {
     $sqlInserts = array();
     while ( $row = mysql_fetch_array( $dbResult, MYSQL_NUM ) ) {
       // Polish the whitespace (especially remove characters that would break the tsv file format)
-      $niceValues = preg_replace( '/\s+/', ' ', array_map( 'trim', $row ) );
+      // Replace new lines to | for multi-blindfolded scrambles
+      $niceValues = array_map( 'trim', $row );
+      if ($tableName === 'Scrambles' && in_array('333mbf', $row)) {
+        $niceValues = preg_replace( '/\n+/', ' | ', $niceValues );
+      }
+      $niceValues = preg_replace( '/\s+/', ' ', $niceValues );
 
       // Data to write
       $tsv .= implode( "\t", $niceValues ) . "\n";
-      $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $niceValues ) ) . "')";
+      // Use $row instead of $niceValues
+      $sqlInserts[] = "('" . implode( "','", array_map( 'addslashes', $row ) ) . "')";
 
       // Periodically write data so variable size doesn't explode
       if ( strlen($tsv) > 200000 ) {

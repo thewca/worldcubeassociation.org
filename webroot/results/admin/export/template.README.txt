@@ -47,21 +47,24 @@ The export consists of these tables:
   Continents                                 Continents
   Scrambles                                  Scrambles
   championships                              Championship competitions
-  eligible_country_iso2s_for_championship    Competitors from which countries are eligible for a special championship type
+  eligible_country_iso2s_for_championship    See explanation below
 
 Most of the tables should be self-explanatory, but several things merit further
 explanation.
 
-Countries stored include those from the Wikipedia list of countries at
+Countries stores include those from the Wikipedia list of countries at
 http://en.wikipedia.org/wiki/List_of_countries, and may include some countries
 that no longer exist.  The ISO2 column should reflect ISO 3166-1 alpha-2
 country codes, for countries that have them.  Custom codes may used in some
 circumstances.
 
-eligible_country_iso2s_for_championship stores information about which citizenships are eligible to win special cross-country championship types.
-For example, "greater_china" is a special championship type which contains 4 iso2: CN, HK, MC and TW. This means
-competitors from China, Hong Kong, Macau and Taiwan are eligible to win a competition with championship
-type "greater_china".
+eligible_country_iso2s_for_championship stores information about which citizenships are eligible
+to win special cross-country championship types. For example, "greater_china" is a special
+championship type which contains 4 iso2: CN, HK, MC and TW. This means competitors from China,
+Hong Kong, Macau and Taiwan are eligible to win a competition with championship type "greater_china".
+
+Scrambles stores all scrambles. For 3x3x3 multi-blindfolded scrambles, a "|" will be used as
+replacement of new line in tsv format.
 
 Result values of the Results table can be interpreted as follows:
 - The result values are in fields value1-value5, best and average.
