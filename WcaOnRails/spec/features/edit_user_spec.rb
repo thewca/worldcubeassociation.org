@@ -12,6 +12,10 @@ RSpec.feature "Edit user" do
     visit edit_user_path(user)
   end
 
+  def submit_form
+    find('input[type="submit"]').click
+  end
+
   scenario "entering wca id", js: true do
     sign_in admin
     navigate_to_form(new_user)
@@ -26,7 +30,7 @@ RSpec.feature "Edit user" do
 
     # Entering a valid wca id
     fill_in "WCA ID", with: new_person.wca_id
-    find('input[type="submit"]').click
+    submit_form
 
     expect(page).to have_text "Account updated"
   end
