@@ -61,10 +61,11 @@ circumstances.
 eligible_country_iso2s_for_championship stores information about which citizenships are eligible
 to win special cross-country championship types. For example, "greater_china" is a special
 championship type which contains 4 iso2: CN, HK, MC and TW. This means competitors from China,
-Hong Kong, Macau and Taiwan are eligible to win a competition with championship type "greater_china".
+Hong Kong, Macau, and Taiwan are eligible to win a competition with championship type "greater_china".
 
-Scrambles stores all scrambles. For 3x3x3 multi-blindfolded scrambles, a "|" will be used as
-replacement of new line in tsv format.
+Scrambles stores all scrambles. For 333mbf, an attempt is comprised of multiple, newline separated
+scrambles. Unfortunately, newlines don't work so well in TSV, so we use "|" as a scramble delimiter
+instead.
 
 Result values of the Results table can be interpreted as follows:
 - The result values are in fields value1-value5, best and average.
