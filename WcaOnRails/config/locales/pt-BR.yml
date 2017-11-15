@@ -1097,7 +1097,7 @@ pt-BR:
       not_found: não encontrado
       #original_hash: 49a6fe4
       already_assigned: já associado a outro usário
-      #original_hash: 51650d2
+      #original_hash: 1b9dc9b
       dob_incorrect_html: >-
         não corresponde ao nosso banco de dados. Se você informou a data de
         nascimento no formato correto (AAAA-MM-DD), por favor contate a Equipe
@@ -1114,7 +1114,7 @@ pt-BR:
       senior_has_delegate: não pode rebaixar um Delegado Senior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar uma ID da WCA porque você já tem a ID %{wca_id}'
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Não temos uma data de nascimento registrada para esta ID da WCA. Por
         favor contate a Equipe de Resultados da WCA usando <a
