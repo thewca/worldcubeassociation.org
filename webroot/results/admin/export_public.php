@@ -145,7 +145,7 @@ function exportPublic ( $sources ) {
       // Replace new lines to | for multi-blindfolded scrambles
       $niceValues = array_map( 'trim', $row );
       if ($tableName === 'Scrambles' && in_array('333mbf', $row)) {
-        $niceValues = preg_replace( '/\n+/', ' | ', $niceValues );
+        $niceValues = preg_replace( '/\n+/', '|', $niceValues );
       }
       $niceValues = preg_replace( '/\s+/', ' ', $niceValues );
 
