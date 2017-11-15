@@ -2182,32 +2182,29 @@ pt-BR:
     #original_hash: 9ac918a
     title: Sobre a WCA
     mission:
-      #original_hash: e4698d4
-      title: Missão
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          A World Cube Association regula competicões de todos os quebra-cabeças
-          chamados "Rubik", e outros quebra-cabeças que são jogados girando-se
-          os lados, os chamados "twisty puzzles". O mais famoso deles é o
-          "Rubik's Cube" (Cubo Mágico ou Cubo de Rubik), inventado pelo
-          professor Rubik, da Hungria. Alguns destes quebra-cabeças são eventos
-          oficiais da WCA.
+          A World Cube Association regula competicões de quebra-cabeças
+          mecânicos que são operados girando-se os lados, comumente chamados de
+          "twisty puzzles". O mais famoso deles é o "Rubik's Cube" (Cubo Mágico
+          ou Cubo de Rubik), inventado pelo professor Rubik, da Hungria. Alguns
+          destes quebra-cabeças são eventos oficiais da WCA.
         #original_hash: 22c3593
         '2': >-
           A World Cube Association organiza competições em todo o mundo, apoiada
           por organizações regionais, responsáveis por organizar competições em
           seus países.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          O objetivo da World Cube Association é ter <br /><strong>mais
-          competições em mais países, com mais pessoas e mais diversão, sob
-          condições iguais e justas.</strong>
-        #original_hash: bee3687
+          A Missão da World Cube Association é ter <strong>mais competições em
+          mais países, com mais pessoas e mais diversão, sob condições iguais e
+          justas.</strong>
+        #original_hash: 2b993c0
         '4': >-
-          O espírito da World Cube Association é que <br /><strong>pessoas de
-          todo o mundo se divirtam juntas numa atmosfera amigável, ajudem umas
-          às outras e se comportem com espírito esportivo.</strong>
+          O Espírito da World Cube Association é que <strong>pessoas de todo o
+          mundo se divirtam juntas numa atmosfera amigável, ajudem umas às
+          outras e se comportem com espírito esportivo.</strong>
     structure:
       #original_hash: 9482c5d
       title: Estrutura
