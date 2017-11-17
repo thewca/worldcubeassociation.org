@@ -828,6 +828,12 @@ da:
       invalid: 'Ugyldig email, WCA ID, eller kodeord'
       #original_hash: 1186218
       not_found_in_database: 'Ugyldig email, WCA ID, eller kodeord.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        Du skal bekræfte din email adresse før du kan fortsætte. Modtog du ikke
+        en bekræftelses email? Så gå hen på
+        https://www.worldcubeassociation.org/users/confirmation/new og bed om en
+        ny.
   wca:
     errors:
       messages:
@@ -1088,11 +1094,11 @@ da:
       not_found: ikke fundet
       #original_hash: 49a6fe4
       already_assigned: allerede tilknyttet til en anden bruger
-      #original_hash: 51650d2
+      #original_hash: 1b9dc9b
       dob_incorrect_html: >-
         matcher ikke vores database. Hvis du er sikker på at du giver den
         rigtige dato i den rigtige format (ÅÅÅÅ-MM-DD) så kontakt WCA Resultat
-        Holdet med <a href="%{dob_form_path}">med denne formel</a>.
+        Holdet <a href="%{dob_form_path}">med denne formel</a>.
       #original_hash: 0fbcefd
       unique: skal være unik
       #original_hash: 26f70ed
@@ -1107,7 +1113,7 @@ da:
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
         %{wca_id}
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Vi har ikke nogen fødselsdag for dette WCA ID. Kontakt venligst WCA
         Resultatholdet med <a href="%{dob_form_path}">denne formular</a>.
@@ -2166,31 +2172,29 @@ da:
     #original_hash: 9ac918a
     title: Om WCA
     mission:
-      #original_hash: e4698d4
-      title: Mål
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          World Cube Association styrer konkurrencen for alle "puzzles" markeret
-          som "Rubik's puzzles", og alle andre "puzzles" som bliver brugt ved at
-          dreje siderne de såkaldte 'twisty puzzles'. Den meste kendte af disse
-          "puzzles" er Rubiks Kuben, opfundet af professor Rubik fra Ungarn. Et
-          udvalg af disse "puzzles" er valgt som officielle discipliner af WCA.
+          World Cube Association styrer konkurrencen for alle "puzzles" der
+          bliver brugt når man drejer siderne, de såkaldte 'twisty puzzles'. Den
+          meste kendte af disse "puzzles" er Rubiks Kuben, opfundet af professor
+          Rubik fra Ungarn. Et udvalg af disse "puzzles" er valgt som officielle
+          discipliner af WCA.
         #original_hash: 22c3593
         '2': >-
           World Cube Association arrangerer konkurrencer over hele verden,
           støttet af regionale organisationer som har ansvaret for at arrangere
           konkurrencer i deres lande.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          Målet for World Cube Association er at have <br /><strong>flere
+          Missionen for World Cube Association er at have <br /><strong>flere
           konkurrencer i flere lande med flere mennesker og mere sjov, under
           retfærdige forhold.</strong>
-        #original_hash: bee3687
+        #original_hash: 2b993c0
         '4': >-
-          Målet for World Cube Association er at <br /> <strong>folk fra hele
-          verden har det sjovt sammen i en venlig atmosfære, og at hjælpe
-          hinanden og i god sportsånd.</strong>
+          Målet for World Cube Association er at <strong>folk fra hele verden
+          har det sjovt sammen i en venlig atmosfære, og at hjælpe hinanden og i
+          god sportsånd.</strong>
     structure:
       #original_hash: 9482c5d
       title: Strukturen
