@@ -22,7 +22,7 @@ RSpec.feature "Edit user" do
 
     # Entering an existing wca id
     fill_in "WCA ID", with: existing_user.wca_id
-    find('input[type="submit"]').click
+    submit_form
 
     expect(page).to have_text I18n.t('users.errors.unique',
                                      used_name: existing_user.name,
