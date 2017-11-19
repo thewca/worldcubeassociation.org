@@ -8,6 +8,7 @@ FactoryBot.define do
     countryId "USA"
     currency_code "USD"
     information "Information!"
+    registration_requirements "Requirements"
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 

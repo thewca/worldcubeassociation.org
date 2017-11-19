@@ -541,6 +541,7 @@ class CompetitionsController < ApplicationController
         :competitor_limit,
         :competitor_limit_reason,
         :remarks,
+        :registration_requirements,
         competition_events_attributes: [:id, :event_id, :_destroy],
         championships_attributes: [:id, :championship_type, :_destroy],
       ]
