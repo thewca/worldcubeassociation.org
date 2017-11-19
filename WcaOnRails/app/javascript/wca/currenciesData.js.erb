@@ -9,6 +9,11 @@
                     :subunit_to_unit => v[:subunit_to_unit]}]
   end]
 %>
+import _ from 'lodash';
 export default {
-  byIso: <%= JSON.pretty_generate(currencies_info_hash, indent: '', object_nl: '', array_nl: '', space: '', space_after: '') %>,
+  byIso: _.mapValues(<%= currencies_info_hash.to_json.html_safe %>, extend),
 };
+
+function extend(rawFormat) {
+  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+}

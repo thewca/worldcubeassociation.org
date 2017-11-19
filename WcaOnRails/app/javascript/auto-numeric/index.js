@@ -23,13 +23,13 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
   }
 
   // Reconfigure
-  $.data($element[0], "current_subunit_to_unit", entry.subunit_to_unit);
+  $.data($element[0], "current_subunit_to_unit", entry.subunitToUnit);
   let maskOptions = {
     currencySymbol: entry.symbol,
-    currencySymbolPlacement: (entry.symbol_first) ? 'p' : 's',
+    currencySymbolPlacement: entry.symbolFirst ? 'p' : 's',
     // If the currency has no subunit (subunit_to_unit is 1), then we don't need
     // decimals. For currencies with subunits we want to show decimals.
-    decimalPlaces: (entry.subunit_to_unit == 1) ? 0 : 2,
+    decimalPlaces: (entry.subunitToUnit == 1) ? 0 : 2,
     showWarnings: false,
   };
 
@@ -43,7 +43,7 @@ function applyCurrencyMask(action, $element, currencyIsoCode) {
   }
 
   // Set new val
-  autoNumericObject.set(currentVal/entry.subunit_to_unit);
+  autoNumericObject.set(currentVal/entry.subunitToUnit);
 }
 
 // Retrieve the real value, in the currency's lowest denomination
@@ -71,11 +71,11 @@ function setupCurrencyMask($element) {
 $(() => {
   $('.wca-currency-mask').each((index, element) => {
     const $element = $(element);
-    const $currency_selector = $($element.data('currencySelector'));
+    const $currencySelector = $($element.data('currencySelector'));
 
     setupCurrencyMask($element);
-    $currency_selector.change(function() {
-      applyCurrencyMask('update', $element, $currency_selector.val());
+    $currencySelector.change(function() {
+      applyCurrencyMask('update', $element, $currencySelector.val());
     });
   });
 });

@@ -1,5 +1,4 @@
   <% provide(:include_gmaps, true) %>
-  <%= javascript_pack_tag 'auto_numeric' %>
   <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).isConfirmed? : false %>
   <%= horizontal_simple_form_for @competition, html: { class: 'are-you-sure no-submit-on-enter', id: 'competition-form' } do |f| %>
     <% if @competition.persisted? %>
