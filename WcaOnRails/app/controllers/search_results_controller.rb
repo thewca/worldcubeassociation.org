@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class SearchResultsController < ApplicationController
+  SEARCH_QUERY_LIMIT = 50
   SEARCH_RESULT_LIMIT = 10
 
   def index
-    @omni_query = params[:q]
+    @omni_query = params[:q]&.slice(0...SEARCH_QUERY_LIMIT)
     if @omni_query.present?
       @competitions = Competition.search(@omni_query).page(params[:competitions_page]).per(SEARCH_RESULT_LIMIT)
       @persons = User.search(@omni_query, params: { persons_table: true }).page(params[:people_page]).per(SEARCH_RESULT_LIMIT)
