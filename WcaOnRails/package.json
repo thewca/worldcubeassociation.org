@@ -21,7 +21,7 @@
     "flag-icon-css": "^2.8.0",
     "glob": "^7.1.2",
     "js-yaml": "^3.10.0",
-    "node-sass": "^4.6.1",
+    "node-sass": "^4.7.2",
     "path-complete-extname": "^0.1.0",
     "postcss-loader": "^2.0.8",
     "postcss-smart-import": "^0.7.5",
