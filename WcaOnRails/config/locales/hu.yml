@@ -15,8 +15,8 @@ hu:
     #original_hash: 4e8bd04
     KR: Korea
   continents:
-    #original_hash: c2994db
-    Multiple Continents: Több ország
+    #original_hash: 0f138c8
+    Multiple Continents: Több kontinens
     #original_hash: 1d35114
     Africa: Afrika
     #original_hash: a173e72
@@ -168,6 +168,10 @@ hu:
       one_round: '%{time} kumulatív'
       #original_hash: c01adfa
       across_rounds: 'összesen %{time}időd van a %{rounds} fordulóra'
+    #original_hash: f030c3d
+    333fm: 1 óra
+    #original_hash: 2c2abd5
+    333mbf: 10 perc per kocka
   common:
     #original_hash: 2513cf0
     continent: Kontinens
@@ -206,19 +210,14 @@ hu:
       other: 'ez a(z) %{count} versenyszám'
     #original_hash: 51ef7d4
     search_site: Keresés az oldalon
+    #original_hash: d7decf1
+    filter: Szűrő
+    #original_hash: f6fdbe4
+    delete: Törlés
     #original_hash: d3f8f7b
     date_placeholder: ÉÉÉÉ-HH-NN
     #original_hash: 52249b5
     datetime_placeholder: 'ÉÉÉÉ-HH-NN ÓÓ:PP'
-  delegate_statuses:
-    #original_hash: 28ec02d
-    candidate_delegate: Candidate Delegate
-    #original_hash: 12ab214
-    delegate: Delegate
-    #original_hash: d463c23
-    senior_delegate: Senior Delegate
-    #original_hash: 660ee15
-    board_member: Board Member
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -241,6 +240,13 @@ hu:
       scopes: Hatáskör
       #original_hash: 3b0d449
       callback_urls: Visszahívási URL-ek
+  helpers:
+    submit:
+      competition_medium:
+        #original_hash: dc112af
+        create: Média megosztása
+        #original_hash: 4cf19ca
+        update: Média frissítése
   activerecord:
     attributes:
       user:
@@ -431,6 +437,62 @@ hu:
       vote:
         #original_hash: 153d7a5
         comment: Megjegyzés
+      competition_medium:
+        #original_hash: 1917f4f
+        competitionId: Verseny
+        #original_hash: 3deb745
+        type: Típus
+        #original_hash: c3328c3
+        text: Szöveg
+        #original_hash: d051707
+        uri: Link
+        #original_hash: 1be755a
+        submitterName: A megosztó neve
+        #original_hash: 78cdfee
+        submitterEmail: A megosztó e-mail címe
+        #original_hash: 0d31f23
+        submitterComment: A megosztó kommentje
+        #original_hash: bae7d5b
+        status: Státusz
+  enums:
+    user:
+      gender:
+        #original_hash: 3f3a489
+        m: Férfi
+        #original_hash: b7c17e9
+        f: Nő
+        #original_hash: 6e6a6f2
+        o: Egyéb
+      delegate_status:
+        #original_hash: 28ec02d
+        candidate_delegate: Candidate Delegate
+        #original_hash: 12ab214
+        delegate: Delegate
+        #original_hash: d463c23
+        senior_delegate: Senior Delegate
+        #original_hash: 660ee15
+        board_member: Board Member
+    person:
+      gender:
+        #original_hash: 3f3a489
+        m: Férfi
+        #original_hash: b7c17e9
+        f: Nő
+        #original_hash: 6e6a6f2
+        o: Egyéb
+    competition_medium:
+      status:
+        #original_hash: 61a0572
+        accepted: Elfogadva
+        #original_hash: 96f608c
+        pending: Függőben
+      type:
+        #original_hash: ee45c30
+        report: Riport
+        #original_hash: 4360c2d
+        article: Cikk
+        #original_hash: 82dabd0
+        multimedia: Multimédia
   simple_form:
     #original_hash: 5397e05
     'yes': Igen
@@ -596,13 +658,15 @@ hu:
         wca_id: ''
         #original_hash: 8723825
         dob: 'A helyes születési dátum forma: ÉÉÉÉ-HH-NN'
-        #original_hash: 2029dde
+        #original_hash: c6d8a97
         document: >-
           A személyiséged és a helyes születési dátumod igazolásához csatolnod
           kell egy képet valamilyen hivatalos dokumentumról (személyi
           igazolvány, jogosítvány, diákigazolvány, útlevél, születési anyakönyvi
           kivonat, ...), amin a neved és a születési dátumod is egyértelműen
-          szerepel.
+          szerepel és egy angolul beszélő személy is értelmezni tudja. (vagy ha
+          nincs ilyen dokumentumod, akkor lépj kapcsolatba a helyi WCA
+          delegálttal)
       post:
         #original_hash: 53c16eb
         body: >-
@@ -702,6 +766,23 @@ hu:
       vote:
         #original_hash: da39a3e
         comment: ''
+      competition_medium:
+        #original_hash: da39a3e
+        competitionId: ''
+        #original_hash: da39a3e
+        type: ''
+        #original_hash: da39a3e
+        text: ''
+        #original_hash: da39a3e
+        uri: ''
+        #original_hash: da39a3e
+        submitterName: ''
+        #original_hash: da39a3e
+        submitterEmail: ''
+        #original_hash: da39a3e
+        submitterComment: ''
+        #original_hash: da39a3e
+        status: ''
     options:
       registration:
         status:
@@ -752,6 +833,12 @@ hu:
       invalid: 'Érvénytelen e-mail cím, WCA ID vagy jelszó.'
       #original_hash: 1186218
       not_found_in_database: 'Érvénytelen e-mail cím, WCA ID vagy jelszó.'
+      #original_hash: 3f9db99
+      unconfirmed: >-
+        A folytatás előtt meg kell erősítened az e-mail címedet. Nem kaptál
+        megerősítő levelet? Keresd fel a
+        https://www.worldcubeassociation.org/users/confirmation/new oldalt és
+        kérj egy újat.
   wca:
     errors:
       messages:
@@ -762,11 +849,11 @@ hu:
     doorkeeper:
       applications:
         help:
-          #original_hash: eb5567a
+          #original_hash: 62a0113
           scopes_html: >-
             Válaszd el a scope-okat szőközökkel. Hagyj üres helyet az default
             scope-(ok)nak. Lásd <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
+            "https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">itt</a> a támogatott scope-ok listjáért.
       scopes:
         #original_hash: 1920e95
@@ -798,13 +885,6 @@ hu:
         szükségünk van néhány információra az eredmények rögzítéséhez. Kérünk,
         vedd figyelembe, hogy a születési dátumodat soha nem tesszük nyilvánossá
         a hozzájárulásod nélkül.
-      gender:
-        #original_hash: 3f3a489
-        male: Férfi
-        #original_hash: b7c17e9
-        female: Nő
-        #original_hash: 6e6a6f2
-        other_gender: Egyéb
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1033,8 +1113,10 @@ hu:
         adatokat adtad meg helyes formátumban (ÉÉÉÉ-HH-NN) kérlek, hogy lépj
         kapcsolatba a WCA Results Team-mel az <a href="%{dob_form_path}">erre
         kijelölt felületen </a>.
-      #original_hash: 0fbcefd
-      unique: egyedinek kell lennie
+      #original_hash: 71b46b4
+      unique: >-
+        már használatban van %{used_name}" felhasználó által, %{used_email}
+        e-mail címmel.
       #original_hash: 26f70ed
       dob_past: múltbeli időpontnak kell lennie
       #original_hash: f599dc5
@@ -1047,7 +1129,7 @@ hu:
       already_have_id: >-
         nem tudod WCA ID hozzárendelését kérni, mert már hozzá van rendelve egy
         WCA ID (%{wca_id}) a felhasználódhoz
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Ehhez a WCA ID-hez nincs hozzárendelve születési dátum. Kérlek lépj
         kapcsolatban a WCA Results Team-mel a <a
@@ -1574,8 +1656,10 @@ hu:
         íratni](mailto:some@email.com)
       #original_hash: c5497bc
       events: Versenyszámok
-      #original_hash: ae66391
-      unoff_events: 'Versenyszámok, amik többé nem hivatalosak'
+      #original_hash: 09b819f
+      deprecated_events: >-
+        A versenyenyhez olyan versenyszámok vannak hozzáadva, amik többé nem
+        hivatalosan és nem támogatjuk a szerkesztésüket.
       #original_hash: 815d5c3
       locked_edit_html: >-
         Ez a verseny mindenki számára látható és nem szerkeszthető. Ha valamit
@@ -1592,8 +1676,6 @@ hu:
       awaiting_confirmation_html: >-
         Tölts ki minden mezőt és kattints a Jóváhagy gombra, amikor készen
         állsz, hogy a %{board} kihirdesse.
-      #original_hash: 7586b02
-      submit_modify_value: Versenyszámok módosítása
       #original_hash: 8966fd0
       submit_create_value: Verseny létrehozása
       #original_hash: 40b0dfd
@@ -1817,8 +1899,15 @@ hu:
         nem számítanak bele a jelenlegi régió helyezéseibe.
       #original_hash: a91508f
       championship_podiums: Világverseny dobogók
-      #original_hash: 3746f3b
-      wc_podiums: Világbajnokság dobogók
+      championship_podium_levels:
+        #original_hash: 3746f3b
+        world: Világbajnoksági dobogó
+        #original_hash: d248cd7
+        continental: Kontinentális bajnoksági dobogó
+        #original_hash: aa40175
+        national: Nemzeti bajnoksági dobogó
+        #original_hash: 868be55
+        greater_china: Greater China bajnokság dobogó
       #original_hash: c32a014
       place: Helyezés
       #original_hash: ddb18c1
@@ -1977,13 +2066,15 @@ hu:
             hogy a verseny hivatalosan elismert legyen a WCA által. A WCA
             delegált segíti a szervezőket, hogy hogyan tudnak sikeres versenyt
             szervezni.
-          #original_hash: 809f53a
+          #original_hash: e5f67d2
           '4': >-
             Nézd meg ezt az <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>útmutatót</a> további
-            információkért. (Ha bármilyen ellentmondás felmerül a WCA Szabályzat
-            és ezen dokumentum között, akkor a WCA Szabályzatot kell figyelembe
-            venni.)
+            href='https://www.worldcubeassociation.org/organizer-guidelines'>a
+            WCA Versenyek Szervezői Útmutatóját</a> vagy a <a target='_blank'
+            href='https://www.cubingusa.com/cguide.php'>CubingUSA Versenyzési
+            Útmutatót</a> további információkért. (Ha bármilyen ellentmondás
+            felmerül a WCA Szabályzat és ezen dokumentum között, akkor a WCA
+            Szabályzatot kell figyelembe venni.)
       '6':
         #original_hash: 8005a61
         title: >-
@@ -2110,14 +2201,12 @@ hu:
     #original_hash: 9ac918a
     title: A WCA-ról
     mission:
-      #original_hash: e4698d4
-      title: Küldetés
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          A World Cube Association Rubik, valamint hasonló játékok, amiket
-          forgatni lehet, az úgynevezett „twisty puzzles” versenyeinek
-          irányítószerve. A leghíresebb ezek közül a Rubik-kocka, amelyet a
+          A World Cube Association olyan mechanikus játékok versenyeinek
+          irányítószerve, amiknél az elemek csoportjait egymáshoz képest
+          forgatni lehet. A leghíresebb ezek közül a Rubik-kocka, amelyet a
           magyar Rubik Ernő talált fel. Ezeknek a játékoknak egy kiválasztott
           része alkotja a WCA hivatalos versenyszámait.
         #original_hash: 22c3593
@@ -2125,12 +2214,12 @@ hu:
           A World Cube Association versenyeket szervez szerte a világon, olyan
           nemzeti szervezetek támogatásával, melyek saját országaik versenyeinek
           szervezéséért felelősek.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          A World Cube Association célja, hogy <br /><strong>minél több versenyt
-          szervezzen, minél több országban, minél több embernek, fair és egyenlő
-          esélyekkel.</strong>
-        #original_hash: bee3687
+          A World Cube Association missziója, hogy <br /><strong>minél több
+          versenyt szervezzen, minél több országban, minél több embernek, fair
+          és egyenlő esélyekkel.</strong>
+        #original_hash: 2b993c0
         '4': >-
           A World Cube Association alapeszméje, hogy <br /> <strong>emberek a
           világ minden tájáról közösen jól érezzék magukat egy barátságos
@@ -2625,13 +2714,13 @@ hu:
         egy ilyen verseny kihirdetését:
       olist1:
         #original_hash: 424c134
-        '1': A két versenyen más versenyszámokat tartanak
+        '1': A két versenyen különböző versenyszámok vannak.
         #original_hash: f7bacc5
-        '2': A két verseny más országokban található.
+        '2': A két verseny különböző országban van.
         #original_hash: 9aa4d96
         '3': >-
-          Az elmúlt 12 hónapban kevesebb, mint 13 verseny volt a versenyhelyszín
-          200 km-es körzetében.
+          Az elmúlt 12 hónapban kevesebb, mint 13 verseny volt a verseny 200
+          km-es körzetében.
       #original_hash: ab65dfb
       content2: >-
         A több helyszínen zajló FMC versenyek nem lehetnek részei más
@@ -2639,9 +2728,19 @@ hu:
       olist2:
         #original_hash: a57b541
         '1': >-
-          Ha egy helyszín 200 km-nél közelebb van egy másik normál versenyhez,
-          akkor a versenyek között legalább 5 napnak kell lennie vagy a normál
-          versenyen nem lehet FMC versenyszámot tartani.
+          Ha bármely ilyen verseny 200 km-nél közelebb van egy normás
+          versenyhez, akkor legalább 5 napnak kell lennie a 2 verseny között és
+          a másik versenyen nem lehetséges FMC versenyszám megrendezése.
+    paragraph-events:
+      #original_hash: b16c5f1
+      title: Versenyszámok kihirdetése
+      #original_hash: b6c6d26
+      content: >-
+        Minden versenyszámot, ami a versenyen megszervezésre kerül a WCA
+        delegáltnak a verseny kihirdetésekor meg kell határoznia. Ez vonatkozik
+        a "feltételes" versenyszámokra is (pl: olyan versenyszámok, amik a
+        verseny menetétől függően feltételesen kerülnek meghirdetésre). További
+        versenyszámok hozzáadását a WCA Board-nak kell jóváhagynia.
     paragraph5:
       #original_hash: 17d01de
       title: Versenyzői limitek
@@ -2727,3 +2826,57 @@ hu:
         '6': >-
           A helyszínnel kapcsolatos szervezői feladatok kezelése (pl: kulcsok,
           Wifi)
+  media:
+    common:
+      #original_hash: f9b7a97
+      view_media_page: Minden média megtekintése
+      #original_hash: b251e98
+      confirm_delete: Biztosan törölni szeretnéd ezt a média elemet?
+    new:
+      #original_hash: 65cdb28
+      title: Média közzététele
+      #original_hash: 35caed2
+      review_warning_html: >-
+        Minden média elem ellenőrzésre kerül mielőtt kirakjuk a <a
+        href="/media">minden média oldal</a>ra
+      #original_hash: 141d1d7
+      guidelines: Útmutató
+      media_guidelines:
+        #original_hash: fd6984b
+        '1': Minden média elemnek a kiválasztott versenyhez kell kapcsolódinia.
+        #original_hash: 9821119
+        '2': >-
+          Minden média elemnek helyénvalónak és tisztának kell lennie, nem
+          tartalmazhat illetlen vagy bántó tartalmat.
+        #original_hash: 5114fe4
+        '3': >-
+          A média tartalmak nem tartalmazhatnak nagy mértékben szponzori
+          jelenlétet vagy hirdetéseket.
+        #original_hash: c9d797b
+        '4': Minden média elemnek megfelelő és leíró címmel kell rendelkeznie.
+    edit:
+      #original_hash: 32c7cc0
+      title: Média szerkesztése
+      #original_hash: 6f161d0
+      validate_media_page: Minden függőben lévő média megtekintése
+    index:
+      #original_hash: 0c77aee
+      title: Média
+      #original_hash: df43670
+      validate_media: Média érvényesítése
+      #original_hash: 9f2158f
+      submit_media_html: Média elemeket <a href="/media/new">itt</a> tehetsz közzé.
+    validate:
+      #original_hash: 1e0eee6
+      title: Média érvényesítése
+    media_table:
+      #original_hash: 879e323
+      year: Év
+      #original_hash: 573da9c
+      location: 'Ország, Város'
+      #original_hash: bb54db5
+      accept: Elfogad
+      #original_hash: 66b69a8
+      confirm_accept: Biztosan el szeretnéd fogadni ezt a média elemet?
+      #original_hash: 5301648
+      edit: Szerkesztés
