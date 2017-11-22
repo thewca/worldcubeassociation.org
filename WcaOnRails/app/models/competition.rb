@@ -127,10 +127,10 @@ class Competition < ApplicationRecord
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   NEARBY_DISTANCE_KM_WARNING = 500
-  NEARBY_DISTANCE_KM_DANGER = 200
-  NEARBY_DISTANCE_KM_INFO = 200
+  NEARBY_DISTANCE_KM_DANGER = 100
+  NEARBY_DISTANCE_KM_INFO = 100
   NEARBY_DAYS_WARNING = 90
-  NEARBY_DAYS_DANGER = 28
+  NEARBY_DAYS_DANGER = 19
   NEARBY_DAYS_INFO = 365
   NEARBY_INFO_COUNT = 8
   RECENT_DAYS = 30
@@ -633,7 +633,7 @@ class Competition < ApplicationRecord
       return false
     end
     days_until = (c.start_date - self.start_date).to_i
-    self.kilometers_to(c) <= NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
+    self.kilometers_to(c) < NEARBY_DISTANCE_KM_DANGER && days_until.abs < NEARBY_DAYS_DANGER
   end
 
   def results_posted?
