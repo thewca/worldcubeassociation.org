@@ -19,7 +19,7 @@ $standAlone = getBooleanParam( 'standAlone' );
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="WCA Website Team" />
 <meta name="description" content="Official World Cube Association Competition Results" />
-<meta name="keywords" content="rubik's cube,puzzles,competition,official results,statistics,WCA" />
+<meta name="keywords" content="puzzles,competition,official results,statistics,WCA" />
 <link rel="shortcut icon" href="<?php print pathToRoot(); ?>images/wca.ico" />
 
 <?php
