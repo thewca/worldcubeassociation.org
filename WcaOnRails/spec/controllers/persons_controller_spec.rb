@@ -9,7 +9,11 @@ RSpec.describe PersonsController, type: :controller do
       expect(response.status).to eq 200
     end
 
-    context "Ajax request" do
+    # See section titled "InnoDB Full-Text Index Transaction Handling"
+    # on https://dev.mysql.com/doc/refman/5.7/en/innodb-fulltext-index.html.
+    # "a FULLTEXT search can only see committed data", which means that
+    # we cannot run these tests inside of a transaction (as is the default).
+    context "Ajax request", clean_db_with_truncation: true do
       let!(:person1) { FactoryBot.create(:person, name: "Jennifer Lawrence", countryId: "USA", wca_id: "2016LAWR01") }
       let!(:person2) { FactoryBot.create(:person, name: "Benedict Cumberbatch", countryId: "United Kingdom", wca_id: "2016CUMB01") }
       let!(:competition) { FactoryBot.create(:competition) }
