@@ -29,7 +29,7 @@ RSpec.feature "Competition events management" do
   scenario "remove event", js: true do
     within_event_panel("333") do
       click_button "Remove event"
-      accept_alert "Are you sure you want to remove all 1 round of Rubik's Cube?"
+      accept_alert "Are you sure you want to remove all 1 round of 3x3x3 Cube?"
     end
     save
     competition.reload

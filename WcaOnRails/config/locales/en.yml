@@ -40,7 +40,7 @@ en:
     "South America": "South America"
   #context: Event name
   events:
-    "333": "Rubik's Cube"
+    "333": "3x3x3 Cube"
     "444": "4x4x4 Cube"
     "555": "5x5x5 Cube"
     "222": "2x2x2 Cube"
@@ -51,16 +51,16 @@ en:
     minx: "Megaminx"
     pyram: "Pyraminx"
     sq1: "Square-1"
-    clock: "Rubik's Clock"
+    clock: "Clock"
     skewb: "Skewb"
     "666": "6x6x6 Cube"
     "777": "7x7x7 Cube"
     444bf: "4x4x4 Blindfolded"
     555bf: "5x5x5 Blindfolded"
     333mbf: "3x3x3 Multi-Blind"
-    magic: "Rubik's Magic"
+    magic: "Magic"
     mmagic: "Master Magic"
-    333mbo: "Rubik's Cube: Multiple blind old style"
+    333mbo: "3x3x3 Multi-Blind Old Style"
   #context: Round name
   rounds:
     "0":
@@ -1285,7 +1285,7 @@ en:
   logo:
     title: 'WCA Logo'
     paragraphs:
-      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a Rubik's Cube / 3x3x3 cube."
+      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
       '2': 'We have three different versions of the logo: a <a href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068 px), a <a href="/files/WCAlogo.svg">vector version</a> and a <a href="/files/WCAlogo_notext.svg">vector version without text</a>.'
       '3': '3D version of the logo, designed by Vu Minh Tan from Vietnam: <a href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).'
       '4': 'All WCA competition organizers may use the WCA logo for websites, clothing, gifts or decorations, only for official WCA competitions.<br />
