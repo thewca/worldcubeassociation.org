@@ -77,7 +77,6 @@ gem 'enum_help'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-autosize'
-  gem 'rails-assets-autoNumeric', '~> 2' # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/1900
 end
 
 group :development, :test do
