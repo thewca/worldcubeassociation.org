@@ -22,7 +22,7 @@
   <% Team.order(:rank).each do |team| %>
     <p>
       <strong><%= team.name %> (<%= team.acronym %>)</strong> - <%= mail_to team.email %><br />
-      <%= t("contact.#{team.friendly_id}.info") %><br />
+      <%= t("contact.#{team.friendly_id}.info_html") %><br />
       <%= format_team_members(team) %>
     </p>
   <% end %>
