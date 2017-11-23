@@ -1,29 +1,39 @@
 <% provide(:title, t("organizer_guidelines.title")) %>
 <div class="container">
   <h1><%= yield(:title)  %></h1>
-  <% guidelines_in_english = t("organizer_guidelines", locale: :en) %>
-  <% localized_guidelines = t("organizer_guidelines") %>
-  <% guidelines_in_english.deep_merge(localized_guidelines).each do |key, paragraph| %>
-    <% next if key == :title %>
-    <% paragraph.each do |item, content| %>
-      <% if item.to_s.start_with?("olist") %>
-        <ol>
-          <% content.each do |_, elem| %>
-            <li><%= raw(elem) %></li>
-          <% end %>
-        </ol>
-      <% elsif item.to_s.start_with?("list") %>
-        <ul>
-          <% content.each do |_, elem| %>
-            <li><%= raw(elem) %></li>
-          <% end %>
-        </ul>
-      <% elsif item.to_s.start_with?("title") %>
-        <h4><%= content %></h4>
-      <% else %>
-        <%= raw(content) %><br/>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%
+    def translate_with_structure(key)
+      data_english = t(key, locale: :en)
+      data_localized = t(key)
 
+      render_item(data_english.deep_merge(data_localized))
+    end
+
+    def render_items(items)
+      items.map { |item| content_tag(:li, render_item(item)) }.xss_aware_join
+    end
+
+    def render_item(item)
+      return item.html_safe unless item.is_a? Hash
+
+      "".html_safe.tap do |result|
+        item.each do |key, content|
+          key = key.to_s
+          if key.start_with?("olist")
+            result << content_tag(:ol, render_items(content.values))
+          elsif key.start_with?("alist")
+            result << content_tag(:ol, render_items(content.values), type: "a")
+          elsif key.start_with?("list")
+            result << content_tag(:ul, render_items(content.values))
+          elsif key.start_with?("title")
+            result << content_tag(:h4, content)
+          else
+            result << render_item(content)
+          end
+        end
+      end
+    end
+  %>
+
+  <%= translate_with_structure("organizer_guidelines") %>
 </div>
