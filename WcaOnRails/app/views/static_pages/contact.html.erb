@@ -15,7 +15,7 @@
 
   <p>
     <strong><%= t('contact.board.name_html') %></strong> - <%= mail_to "board@worldcubeassociation.org" %><br />
-    <%= t('contact.board.info') %><br />
+    <%= t('contact.board.info_html') %><br />
     <%= @board_members.order(:name).map(&:name).join(", ") %>
   </p>
 
