@@ -1263,19 +1263,19 @@ en:
     committees_and_teams_html: "<u>Committees and Teams</u>"
     board:
       name_html: "WCA Board"
-      info: "(WCA organization, delegate reports, competition approval, general inquiries)"
+      info_html: "The World Cube Association is led by the WCA Board. They are responsible for general inquiries and the WCA organization as a whole. All official competitions need the approval of the WCA Board to be announced."
     wct:
-      info: "(communications of the WCA with the community and the general public)"
+      info_html: "The WCT is in charge of overseeing and supporting communications of the WCA with the community and general public. They should be contacted if you have general questions about the WCA or their social media appearance."
     wdc:
-      info: "(independent advice to WCA board, independent investigations, counselor for important personal matters)"
+      info_html: "The WDC investigates a variety of situations and proposes solutions, including punishments when necessary.  Among other topics, these situations could be serious violations of WCA Regulations or community issues. If you have experienced any of these, feel free to approach this committee."
     wrc:
-      info: "(maintenance of the WCA Regulations)"
+      info_html: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents. The WRC regularly publishes WCA internal reports to help all WCA Delegates and improve their knowledge of the Regulations. If you would like to take part in regulation development or propose changes you can reach out to the WRC by contacting them via mail or discussions on <a href='https://github.com/thewca/wca-regulations'>GitHub</a>."
     wrt:
-      info: "(competition results, result corrections)"
+      info_html: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and person data. They are posting results of WCA competitions to the WCA website, once the WCA Delegate of the competition has sent them in. Apart from posting competition results, the WCA Results Team is also responsible for making corrections to competition results if necessary and they are in charge of administering all WCA profile pages. This includes for example changing user data, like dates of birth, according to verified requests and managing profile picture requests."
     wst:
-      info: "(maintenance of software of the WCA)"
+      info_html: "The WST is responsible for the maintenance and management of all software of the WCA. They also develop new software for various tasks within the WCA whenever needed. If you have suggestions and ideas for further website development or if you would like to report errors and bugs, feel free to contact them! The WCA website is a huge open source project on <a href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>, so if you are interested in helping to develop for the WCA, take a look there."
     wfc:
-      info: "(finances of the WCA)"
+      info_html: "The WFC is responsible for everything regarding finances within the WCA. They manage the finances and accounts of the WCA in accordance with an approved annual budget proposal, which is also their work to provide on a regular basis."
   score_tools:
     title: "WCA Score Taking tools"
     paragraphs:
