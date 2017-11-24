@@ -11,7 +11,7 @@ require_once('includes/_header.php');
 
   <dl>
     <dt><a href="events.php">Rankings</a></dt>
-    <dd>Rubik's Cube rankings, Megaminx rankings, 5x5x5 blindfolded rankings, ...</dd>
+    <dd>3x3x3 Cube rankings, Megaminx rankings, 5x5x5 blindfolded rankings, ...</dd>
 
     <dt><a href="regions.php">Records</a></dt>
     <dd>World records, European records, Canadian records, ...</dd>

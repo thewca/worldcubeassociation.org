@@ -37,7 +37,7 @@ Software created by:
 The export consists of these tables:
   Persons                                    WCA competitors
   Competitions                               WCA competitions
-  Events                                     WCA events (Rubik's Cube, Megaminx, etc)
+  Events                                     WCA events (3x3x3 Cube, Megaminx, etc)
   Results                                    WCA results per competition+event+round+person
   RanksSingle                                Best single result per competitor+event and ranks
   RanksAverage                               Best average result per competitor+event and ranks

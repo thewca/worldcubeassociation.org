@@ -77,7 +77,7 @@ function add_blindfold_333_consecutive_successes () {
   
   $lists[] = array(
     "blind_streak_3x3",
-    "Rubik's Cube Blindfolded longest success streak",
+    "3x3x3 Blindfolded longest success streak",
     "",
     "[P] Person [N] Length [t] &nbsp; [r] Best [r] Avg [r] Worst [t] When?",
     $persons
