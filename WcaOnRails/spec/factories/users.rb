@@ -79,19 +79,20 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
-      delegate_status "delegate"
+      #delegate_status "delegate"
+      DelegateInfo.new(status: "delegate")
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status "candidate_delegate"
+      #delegate_status "candidate_delegate"
     end
 
     factory :senior_delegate, traits: [:wca_id] do
-      delegate_status "senior_delegate"
+      #delegate_status "senior_delegate"
     end
 
     factory :board_member, traits: [:wca_id] do
-      delegate_status "board_member"
+      #delegate_status "board_member"
     end
 
     factory :dummy_user, traits: [:wca_id] do
