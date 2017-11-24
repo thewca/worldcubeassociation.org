@@ -49,9 +49,6 @@
 //= require extensions/bootstrap-table-mobile
 //= require autosize
 //= require jquery_plugins
-//= require autoNumeric
-//= require currencies-data
-//= require currencies
 //= require jquery.slick
 //= require_self
 //= require_tree .
@@ -224,9 +221,6 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('input.wca-autocomplete').wcaAutocomplete();
-
-  // Activate currency masks for the relevant fields
-  $('input.wca-currency-mask').wcaSetupCurrencyMask();
 
   var $tablesToFloatHeaders = $('table.floatThead');
   $tablesToFloatHeaders.floatThead({
