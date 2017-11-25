@@ -21,15 +21,11 @@ require( 'includes/_footer.php' );
 #----------------------------------------------------------------------
 function showContent () {
 #----------------------------------------------------------------------
-
-  #--- In debug mode, just calculate freshly and don't cache
-  if ( wcaDebug() ) {
-    showResults();
-    return;
-  }
-
+  global $argv;
   #--- If there's no cache or this is an update request, then freshly build the cache
-  if ( ! file_exists( 'generated/statistics.cache' ) || getBooleanParam( 'update8392' ) ) {
+  if ( $argv[1] == 'update' ) {
+    $logMessage = sprintf( "%s: Started a new computation.", wcaDate() );
+    file_put_contents( 'generated/statistics.log', "$logMessage\n", FILE_APPEND );
     $startTime = microtime_float();
     ob_start();
     showResults();
