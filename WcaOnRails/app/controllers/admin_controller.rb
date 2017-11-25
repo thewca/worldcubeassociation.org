@@ -97,4 +97,12 @@ class AdminController < ApplicationController
     end
     send_data csv, filename: "wca-voters-#{Time.now.utc.iso8601}.csv", type: :csv
   end
+
+  def update_statistics
+    Dir.chdir('../webroot/results') { `php statistics.php update >/dev/null 2>&1 &` }
+    flash[:info] = "Computation of the statistics has been started, it should take several minutes.
+                    Note that you will receive no information about the outcome,
+                    also please don't queue up multiple simultaneous statistics computations."
+    redirect_to admin_url
+  end
 end
