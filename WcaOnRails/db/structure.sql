@@ -218,7 +218,8 @@ CREATE TABLE `Persons` (
   UNIQUE KEY `index_Persons_on_id_and_subId` (`id`,`subId`),
   KEY `Persons_fk_country` (`countryId`),
   KEY `Persons_id` (`id`),
-  KEY `Persons_name` (`name`)
+  KEY `Persons_name` (`name`),
+  FULLTEXT KEY `index_Persons_on_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `RanksAverage`;
@@ -1242,4 +1243,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20170831170616'),
 ('20171006182851'),
 ('20171113154922'),
-('20171122010954');
+('20171122010954'),
+('20171122220857');
