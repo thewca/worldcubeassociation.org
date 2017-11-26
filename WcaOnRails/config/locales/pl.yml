@@ -1130,8 +1130,8 @@ pl:
         podajesz popraną datę we właściwym formacie (RRR-MM-DD), prosimy o
         kontakt z Zespołem do Spraw Wyników przy użyciu <a
         href="%{dob_form_path}">tego specjalnego formularza</a>.
-      #original_hash: 0fbcefd
-      unique: nie może się powtarzać
+      #original_hash: 71b46b4
+      unique: "jest już\_używane przez \"%{used_name}\" o adresie email %{used_email}"
       #original_hash: 26f70ed
       dob_past: musi być w przeszłości
       #original_hash: f599dc5
@@ -1144,7 +1144,7 @@ pl:
       already_have_id: >-
         nie możesz poprosić o podpięcie WCA ID ponieważ masz już WCA ID
         %{wca_id}
-      #original_hash: 2684f33
+      #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
         Nie mamy zapisanej daty urodzin dla tego WCA ID. Prosimy o kontakt z
         Zespołem do Spraw Wyników przy użyciu <a href="%{dob_form_path}">tego
@@ -2241,30 +2241,27 @@ pl:
     #original_hash: 9ac918a
     title: O WCA
     mission:
-      #original_hash: e4698d4
-      title: Misja
       paragraphs:
-        #original_hash: 16ad45e
+        #original_hash: 3e4f9b5
         '1': >-
-          World Cube Association zarządza zawodami w kostkach znanych jako
-          Kostka Rubika oraz wszystkich innych kostkach manipulowanych przez
-          obracanie ścianek, szerzej znanych jako 'twisty puzzles'.
-          Najsłynniejszą z nich jest Kostka Rubika, wymyśloną przez profesora
-          Rubika z Węgier. Określony zbiór tych kostek jest wybrany jako
-          oficjalne konkurencje WCA.
+          World Cube Association zarządza zawodami w łamigłówkach mechanicznych
+          manipulowanych poprzez przekręcanie grup elementów, szerzej znanych
+          jako 'twisty puzzles'. Najsłynniejszą z nich jest Kostka Rubika,
+          wymyśloną przez profesora Rubika z Węgier. Określony zbiór tych kostek
+          jest wybrany jako oficjalne konkurencje WCA.
         #original_hash: 22c3593
         '2': >-
           World Cube Association organizuje zawody na całym świecie, przy
           wsparciu organizacji regionalnych odpowiedzialnych za organizację
           zawodów swoich państwach.
-        #original_hash: 20e0550
+        #original_hash: 0902c4a
         '3': >-
-          Celem World Cube Association jest organizacja <br /><strong>większej
-          liczby zawodów, w większej ilości państw, z większą ilością osób i
-          zabawy, przy wzajemnej równości i uczciwości.</strong>
-        #original_hash: bee3687
+          Misją World Cube Association jest organizacja <strong>większej liczby
+          zawodów, w większej ilości państw, z większą ilością osób i zabawy,
+          przy wzajemnej równości i uczciwości.</strong>
+        #original_hash: 2b993c0
         '4': >-
-          W duchu World Cube Association jest, aby<br /> <strong>ludzie z całego
+          W Duchu World Cube Association jest, aby <strong>ludzie z całego
           świata dobrze bawili się razem w przyjaznej atmosferze, pomagając
           sobie wzajemnie i zachowując się jak prawdziwi sportowcy.</strong>
     structure:
@@ -2433,30 +2430,58 @@ pl:
     board:
       #original_hash: 90fcc48
       name_html: Zarząd WCA (WCA Board)
-      #original_hash: 7ee8e36
-      info: >-
-        (organizacja WCA, raporty delegatów, akceptacja zawodów, ogólne
-        zapytania)
+      #original_hash: 3a8b1d8
+      info_html: >-
+        World Cube Association jest kierowane przez Zarząd WCA. Jest on
+        odpowiedzialny za kwestie ogólne oraz za organizację WCA jako całość.
+        Wszystkie oficjalne zawody muszą być zatwierdzone przez Zarząd WCA przed
+        ich ogłoszeniem.
     wct:
-      #original_hash: c53144e
-      info: (komunikacja WCA ze społecznością i ogółem społeczeństwa)
+      #original_hash: 846684d
+      info_html: >-
+        WCT jest odpowiedzialny za nadzorowanie i wspieranie komunikacji WCA ze
+        społecznością oraz ogólem społeczeństwa. Należy się z nim skontaktować,
+        jeżeli masz ogólne pytania odnośnie organizacji WCA lub jej obrazu w
+        mediach.
     wdc:
-      #original_hash: 562e197
-      info: >-
-        (niezależne doradztwo dla Zarządu WCA, niezawisłe dochodzenia,
-        udzielanie rad w ważnych sprawach osobistych)
+      #original_hash: 77f119f
+      info_html: >-
+        WDC bada różne sytuacje i proponuje rozwiązania, włącznie z nakładaniem
+        kar, gdy to konieczne. Sytuacjami tymi mogą być między innymi poważne
+        naruszenia Regulaminu WCA lub problemy społecznościowe. Jeżeli spotkałeś
+        się z którąś z nich, nie wahaj się skontaktować się z tym komitetem.
     wrc:
-      #original_hash: 4a256f0
-      info: (odpowiedzialność za Regulamin WCA)
+      #original_hash: fcd3526
+      info_html: "WRC rozwiązuje problemy związane ze stosowaniem, poprawianiem i rozwojem Regulaminu WCA. Wspiera on delegatów we wszelkich niejasnościach proceduralnych podczas zawodów oraz podejmuje decyzje w spawie nierozwiązanych incydentów. WRC regularnie publikuje wewnętrzne raporty dotyczące WCA, aby pomóc wszystkim Delegatom WCA i udoskonalić ich znajomość Regulaminu. Jeżeli chciałbyś uczestnczyć w rozwoju regulaminu lub zasugerować zmiany w nim, możesz skontaktować się\_z WRC poprzez emaila lub dyskusję na <a href='https://github.com/thewca/wca-regulations'>GitHub'ie</a>."
     wrt:
-      #original_hash: 899dc9c
-      info: '(wyniki zawodów, korekty rezultatów)'
+      #original_hash: 45b0c09
+      info_html: >-
+        WRT jest odpowiedzialny za zarządzanie danymi znajdującymi się w bazach
+        danych WCA, przede wszystkim wynikami z zawodów oraz danymi osobowymi.
+        Zamieszcza on wyniki zawodów na stronie WCA, gdy tylko odpowiedni
+        Delegat WCA je prześle. Poza tym, Zespół do Spraw Wyników WCA dokonuje
+        również poprawek w wynikach zawodów, jeżeli to konieczne oraz jest
+        zobowiązany do admistrowania wszystkich profili WCA. Na to składa się
+        między innymi zmiana danych użytkowników, takich jak data urodzenia
+        zgodnie ze zweryfikowanymi prośbami oraz zarządzanie nadesłąnymi
+        zdjeciami profilowymi.
     wst:
-      #original_hash: dfbf427
-      info: (odpowiedzialność za oprogramowanie WCA)
+      #original_hash: 7de6222
+      info_html: >-
+        WST jest odpowiedzialny za utrzymanie oraz zarządzanie całym
+        oprogramowaniem WCA. Wytwarza on również nowe narzędzia do różnych zadań
+        w obrębie WCA, gdy tylko są potrzebne. Jeżeli masz sugestie i pomysły
+        związane z dalszym rozwojem strony WCA lub jeżeli chciałbyś zgłosić
+        zauważone błędy, skontaktuj się z nim! Strona WCA jest dużym projektem
+        open source na <a
+        href='https://github.com/thewca/worldcubeassociation.org'>GitHub'ie</a>,
+        zatem jeżeli jesteś zainteresowany pomocą w rozwoju WCA, zajrzyj tam.
     wfc:
-      #original_hash: 674291e
-      info: (finanse WCA)
+      #original_hash: 3ec8256
+      info_html: >-
+        WFC jest odpowiedzialny za wszystko związane z finansami w obrębie WCA.
+        Zarządza on finansami oraz kontami WCA zgodnie z zatwierdzoną propozycją
+        rocznego budżetu, której dostarczaniem zajmują się regularnie.
   score_tools:
     #original_hash: ea9d41d
     title: Narzędzia Operujące na Wynikach WCA
