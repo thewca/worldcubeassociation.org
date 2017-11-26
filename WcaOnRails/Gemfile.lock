@@ -287,7 +287,7 @@ GEM
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
-    mysql2 (0.4.9)
+    mysql2 (0.4.10)
     nenv (0.3.0)
     newrelic_rpm (4.6.0.338)
     nio4r (2.1.0)
