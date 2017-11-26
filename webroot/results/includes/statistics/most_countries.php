@@ -1,13 +1,17 @@
 <?php
 
 $persons = dbQuery("
-  SELECT    personId, count(DISTINCT competition.countryId) numberOfCountries
-  FROM      Results result, Competitions competition
-  $WHERE    competition.id = competitionId
-  AND       competition.countryId NOT REGEXP '^X[A-Z]{1}$'
-  GROUP BY  personId
-  ORDER BY  numberOfCountries DESC, personName
-  LIMIT     10
+  SELECT personId, COUNT(competition_countries_by_person.countryId) numberOfCountries
+  FROM (
+    SELECT DISTINCT personId, competition.countryId
+    FROM Results
+    JOIN Competitions competition ON competition.id = competitionId
+    WHERE competition.countryId NOT REGEXP '^X[A-Z]{1}$'
+  ) AS competition_countries_by_person
+  JOIN Persons person ON person.id = personId AND subId = 1
+  GROUP BY personId
+  ORDER BY numberOfCountries DESC, person.name
+  LIMIT 10
 ");
 
 $events = dbQuery("
